@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Northstar OS – Kirkland Margin Agent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-alt: #111827;
+      --card-bg: #020617;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-soft: #1f2937;
+      --profit-high: #22c55e;
+      --profit-mid: #eab308;
+      --risk-high: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #1e293b 0, #020617 45%, #000 100%);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .app {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      border-radius: 0.75rem;
+      background: linear-gradient(135deg, #0f172a, #020617);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.9);
+      margin-bottom: 1.5rem;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .run-btn {
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      border: none;
+      background: radial-gradient(circle at top left, #38bdf8 0, #0ea5e9 40%, #0369a1 100%);
+      color: #0b1120;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 18px 40px rgba(56, 189, 248, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, filter 0.08s ease-out;
+    }
+
+    .run-btn span.icon {
+      width: 0.6rem;
+      height: 0.6rem;
+      border-radius: 999px;
+      border: 2px solid #0f172a;
+      background: #f9fafb;
+    }
+
+    .run-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 50px rgba(56, 189, 248, 0.55);
+      filter: brightness(1.05);
+    }
+
+    .run-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.38);
+      filter: brightness(0.97);
+    }
+
+    .status {
+      margin: 0.75rem 0 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .status strong {
+      color: var(--accent);
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-card {
+      padding: 0.9rem 1rem;
+      border-radius: 0.75rem;
+      background: linear-gradient(145deg, var(--bg-alt), var(--card-bg));
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.7);
+    }
+
+    .summary-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .summary-value {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .summary-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .summary-value.profit {
+      color: var(--profit-high);
+    }
+
+    .summary-value.opportunities {
+      color: var(--accent);
+    }
+
+    .summary-value.risk {
+      color: var(--risk-high);
+    }
+
+    .table-card {
+      border-radius: 0.9rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-soft);
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.9);
+    }
+
+    .table-header {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid #1f2937;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .table-header-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .table-header-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+    }
+
+    thead tr {
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    th, td {
+      padding: 0.6rem 0.8rem;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    th {
+      text-align: left;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.78rem;
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.85);
+    }
+
+    tbody tr:hover {
+      background: rgba(30, 64, 175, 0.25);
+    }
+
+    .pill-profit-high {
+      color: var(--profit-high);
+      font-weight: 600;
+    }
+
+    .pill-profit-mid {
+      color: var(--summary-value-opportunities);
+    }
+
+    .pill-risk-low {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .pill-risk-high {
+      color: var(--risk-high);
+      font-weight: 600;
+    }
+
+    .asin-cell {
+      font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono";
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+
+    .title-cell {
+      max-width: 260px;
+    }
+
+    .title-cell span {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 900px) {
+      .summary-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+      .summary-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .table-card {
+        overflow-x: auto;
+      }
+      table {
+        min-width: 800px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="brand">
+        <div class="brand-title">Northstar OS · Kirkland Margin Agent</div>
+        <div class="brand-subtitle">
+          Live margin & risk lens on Costco → Amazon opportunities.
+        </div>
+      </div>
+      <button id="runBtn" class="run-btn">
+        <span class="icon"></span>
+        <span>Run agent · refresh live data</span>
+      </button>
+    </header>
+
+    <p id="status" class="status">
+      <strong>Status:</strong> Awaiting first run.
+    </p>
+
+    <section class="summary-row">
+      <div class="summary-card">
+        <div class="summary-label">Total monthly profit (Top 10)</div>
+        <div id="summaryProfit" class="summary-value profit">$0.00</div>
+        <div class="summary-sub">Based on current Amazon prices & Costco costs.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Opportunities</div>
+        <div id="summaryCount" class="summary-value opportunities">0</div>
+        <div class="summary-sub">Kirkland ASINs with positive margin & score.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Average risk</div>
+        <div id="summaryRisk" class="summary-value risk">–</div>
+        <div class="summary-sub">Combined seller + logistics risk across Top 10.</div>
+      </div>
+    </section>
+
+    <section class="table-card">
+      <div class="table-header">
+        <div class="table-header-title">Top 10 Kirkland opportunities</div>
+        <div class="table-header-sub">Sorted by score (monthly profit × risk penalty).</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ASIN</th>
+            <th>Title</th>
+            <th>Amazon price</th>
+            <th>Net / unit</th>
+            <th>ROI %</th>
+            <th>Monthly profit</th>
+            <th>Seller risk</th>
+            <th>Logistics risk</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000'; // TODO: replace with your backend URL
+
+    function formatCurrency(value) {
+      return '$' + value.toFixed(2);
+    }
+
+    function classifyProfit(net) {
+      if (net >= 50) return 'pill-profit-high';
+      if (net >= 25) return 'pill-profit-mid';
+      return '';
+    }
+
+    function classifyRisk(risk) {
+      if (risk <= 0.2) return 'pill-risk-low';
+      if (risk >= 0.6) return 'pill-risk-high';
+      return '';
+    }
+
+    function updateSummary(top10) {
+      const summaryProfitEl = document.getElementById('summaryProfit');
+      const summaryCountEl = document.getElementById('summaryCount');
+      const summaryRiskEl = document.getElementById('summaryRisk');
+
+      if (!top10 || top10.length === 0) {
+        summaryProfitEl.textContent = '$0.00';
+        summaryCountEl.textContent = '0';
+        summaryRiskEl.textContent = '–';
+        return;
+      }
+
+      const totalMonthlyProfit = top10.reduce((sum, item) => sum + item.monthly_profit, 0);
+      const avgRisk = top10.reduce((sum, item) => sum + (item.seller_risk + item.logistics_risk) / 2, 0) / top10.length;
+
+      summaryProfitEl.textContent = formatCurrency(totalMonthlyProfit);
+      summaryCountEl.textContent = String(top10.length);
+      summaryRiskEl.textContent = avgRisk.toFixed(2);
+    }
+
+    async function runAgent() {
+      const statusEl = document.getElementById('status');
+      const tbody = document.getElementById('resultsBody');
+
+      statusEl.innerHTML = '<strong>Status:</strong> Running agent and refreshing live data...';
+      tbody.innerHTML = '';
+
+      try {
+        // 1. Trigger backend to refresh Amazon (and optional Costco) and recompute Top 10
+        await fetch(`${API_BASE}/run-agent`, { method: 'POST' });
+
+        // 2. Fetch latest Top 10
+        const res = await fetch(`${API_BASE}/top10`);
+        const data = await res.json();
+
+        data.forEach((item, idx) => {
+          const tr = document.createElement('tr');
+
+          const profitClass = classifyProfit(item.net_profit);
+          const sellerRiskClass = classifyRisk(item.seller_risk);
+          const logisticsRiskClass = classifyRisk(item.logistics_risk);
+
+          tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td class="asin-cell">${item.asin}</td>
+            <td class="title-cell"><span title="${item.title}">${item.title}</span></td>
+            <td>${formatCurrency(item.amazon_price)}</td>
+            <td class="${profitClass}">${formatCurrency(item.net_profit)}</td>
+            <td>${item.roi_pct.toFixed(1)}%</td>
+            <td>${formatCurrency(item.monthly_profit)}</td>
+            <td class="${sellerRiskClass}">${item.seller_risk.toFixed(2)}</td>
+            <td class="${logisticsRiskClass}">${item.logistics_risk.toFixed(2)}</td>
+            <td>${item.combined_score.toFixed(2)}</td>
+          `;
+
+          tbody.appendChild(tr);
+        });
+
+        updateSummary(data);
+        statusEl.innerHTML = '<strong>Status:</strong> Agent run complete. Data is live.';
+      } catch (err) {
+        statusEl.innerHTML = '<strong>Status:</strong> Error running agent: ' + err.message;
+      }
+    }
+
+    document.getElementById('runBtn').addEventListener('click', runAgent);
+  </script>
+</body>
+</html>
