@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Northstar OS · Margin Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg: #111214;
+  --color-surface: #17181b;
+  --color-surface-2: #1d1f23;
+  --color-border: rgba(255,255,255,0.08);
+  --color-text: #e8e9ec;
+  --color-text-muted: #9a9ca1;
+  --color-primary: #2fd0a5;
+  --color-error: #e2586b;
+  --color-warning: #e0a63a;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  padding: var(--space-6);
+}
+.container { max-width: 1200px; margin: 0 auto; }
+.hero {
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-6);
+}
+.hero h1 { font-size: 1.5rem; font-weight: 700; }
+.hero p { color: var(--color-text-muted); font-size: 0.875rem; margin-top: var(--space-2); }
+.search-bar {
+  display: flex; gap: var(--space-3); margin-bottom: var(--space-6); flex-wrap: wrap;
+}
+.search-bar input[type="text"] {
+  flex: 1; min-width: 240px; padding: var(--space-3) var(--space-4);
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); color: var(--color-text); font-size: 0.875rem;
+}
+.filters {
+  display: flex; gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-6);
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-4);
+}
+.filter-item { display: flex; flex-direction: column; gap: 4px; font-size: 0.75rem; color: var(--color-text-muted); }
+.filter-item input { padding: 6px 8px; background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--radius-md); color: var(--color-text); width: 100px; }
+button {
+  cursor: pointer; border: none; border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-6); font-weight: 600; font-size: 0.875rem;
+  background: var(--color-primary); color: #08201a; transition: opacity 0.15s;
+}
+button:hover { opacity: 0.85; }
+.status { font-size: 0.875rem; color: var(--color-text-muted); margin-bottom: var(--space-4); }
+.status strong { color: var(--color-primary); }
+.kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-bottom: var(--space-6); }
+.kpi-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-4); }
+.kpi-card .label { font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-2); }
+.kpi-card .value { font-size: 1.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.kpi-card .sub { font-size: 0.75rem; color: var(--color-text-muted); margin-top: 4px; }
+.table-wrap { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
+.table-header { display: flex; justify-content: space-between; align-items: center; padding: var(--space-4); border-bottom: 1px solid var(--color-border); }
+table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+th, td { text-align: left; padding: var(--space-3) var(--space-3); border-bottom: 1px solid var(--color-border); white-space: nowrap; }
+th { color: var(--color-text-muted); font-weight: 500; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; }
+td.num { font-variant-numeric: tabular-nums; text-align: right; }
+tr.row { cursor: pointer; }
+tr.row:hover { background: var(--color-surface-2); }
+.pos { color: var(--color-primary); }
+.risk-low { color: var(--color-primary); }
+.risk-mid { color: var(--color-warning); }
+.risk-high { color: var(--color-error); }
+.title-cell { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+.pagination { display: flex; justify-content: center; gap: var(--space-2); padding: var(--space-4); }
+.pagination button { background: var(--color-surface-2); color: var(--color-text); padding: 6px 12px; font-size: 0.75rem; }
+.pagination button.active { background: var(--color-primary); color: #08201a; }
+.drawer-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  display: none; align-items: flex-start; justify-content: flex-end; z-index: 100;
+}
+.drawer-overlay.open { display: flex; }
+.drawer {
+  width: 420px; max-width: 100%; height: 100%; background: var(--color-surface);
+  border-left: 1px solid var(--color-border); padding: var(--space-6); overflow-y: auto;
+}
+.drawer h2 { font-size: 1.125rem; margin-bottom: var(--space-2); }
+.drawer .close-btn { background: var(--color-surface-2); color: var(--color-text); padding: 6px 12px; font-size: 0.75rem; float: right; }
+.drawer-section { margin-top: var(--space-6); }
+.drawer-section h3 { font-size: 0.8rem; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-2); letter-spacing: 0.03em; }
+.drawer-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.8125rem; border-bottom: 1px solid var(--color-border); }
+.flag { display: inline-block; background: var(--color-surface-2); color: var(--color-warning); font-size: 0.7rem; padding: 3px 8px; border-radius: 999px; margin: 2px; }
+@media (max-width: 768px) {
+  .kpi-row { grid-template-columns: 1fr; }
+  .drawer { width: 100%; }
+  table { font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <div>
+      <h1>Northstar OS · Margin Agent</h1>
+      <p>Live margin & risk lens on Costco → Amazon opportunities.</p>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search brand or keyword" value="Kirkland Signature" />
+    <button id="runAgentBtn">Run agent · refresh live data</button>
+  </div>
+
+  <div class="filters">
+    <div class="filter-item">Min ROI %<input type="number" id="minRoi" value="0" /></div>
+    <div class="filter-item">Min monthly profit<input type="number" id="minProfit" value="0" /></div>
+    <div class="filter-item">Max seller risk<input type="number" step="0.05" id="maxSellerRisk" value="1" /></div>
+    <div class="filter-item">Max logistics risk<input type="number" step="0.05" id="maxLogisticsRisk" value="1" /></div>
+    <div class="filter-item" style="justify-content:flex-end;"><button id="applyFiltersBtn">Apply filters</button></div>
+  </div>
+
+  <div class="status" id="statusText">Status: Idle. Click "Run agent" to fetch live data.</div>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="label">Total monthly profit</div>
+      <div class="value" id="kpiProfit">$0.00</div>
+      <div class="sub">Based on current Amazon prices & Costco costs.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Opportunities</div>
+      <div class="value" id="kpiCount">0</div>
+      <div class="sub">ASINs with positive margin & score.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Average risk</div>
+      <div class="value" id="kpiRisk">—</div>
+      <div class="sub">Combined seller + logistics risk across results.</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-header">
+      <strong>Opportunities</strong>
+      <span style="font-size:0.75rem;color:var(--color-text-muted);">Sorted by score (monthly profit × risk penalty). Click a row for details.</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>ASIN</th><th>Title</th><th class="num">Price</th><th class="num">Net/unit</th>
+          <th class="num">ROI %</th><th class="num">Monthly profit</th><th class="num">Seller risk</th>
+          <th class="num">Logistics risk</th><th class="num">Score</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</div>
+
+<div class="drawer-overlay" id="drawerOverlay">
+  <div class="drawer" id="drawer"></div>
+</div>
+
+<script>
+const API_BASE = 'http://localhost:3001';
+let currentData = [];
+let currentPage = 1;
+const pageSize = 10;
+
+function setStatus(msg) {
+  document.getElementById('statusText').innerHTML = `Status: <strong>${msg}</strong>`;
+}
+
+function riskClass(v) {
+  if (v <= 0.2) return 'risk-low';
+  if (v <= 0.5) return 'risk-mid';
+  return 'risk-high';
+}
+
+function renderKpis(data) {
+  const totalProfit = data.reduce((s, p) => s + p.monthly_profit, 0);
+  const avgRisk = data.length ? data.reduce((s, p) => s + (p.seller_risk + p.logistics_risk) / 2, 0) / data.length : null;
+  document.getElementById('kpiProfit').textContent = `$${totalProfit.toFixed(2)}`;
+  document.getElementById('kpiCount').textContent = data.length;
+  document.getElementById('kpiRisk').textContent = avgRisk !== null ? avgRisk.toFixed(2) : '—';
+}
+
+function renderTable() {
+  const start = (currentPage - 1) * pageSize;
+  const pageData = currentData.slice(start, start + pageSize);
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = pageData.map((p, i) => `
+    <tr class="row" data-asin="${p.asin}">
+      <td>${start + i + 1}</td>
+      <td>${p.asin}</td>
+      <td class="title-cell">${p.title}</td>
+      <td class="num">$${p.amazon_price.toFixed(2)}</td>
+      <td class="num pos">$${p.net_profit.toFixed(2)}</td>
+      <td class="num">${p.roi_pct.toFixed(1)}%</td>
+      <td class="num pos">$${p.monthly_profit.toFixed(2)}</td>
+      <td class="num ${riskClass(p.seller_risk)}">${p.seller_risk.toFixed(2)}</td>
+      <td class="num ${riskClass(p.logistics_risk)}">${p.logistics_risk.toFixed(2)}</td>
+      <td class="num">${p.combined_score.toFixed(2)}</td>
+    </tr>
+  `).join('');
+
+  document.querySelectorAll('tr.row').forEach(row => {
+    row.addEventListener('click', () => openDrawer(row.dataset.asin));
+  });
+
+  renderPagination();
+}
+
+function renderPagination() {
+  const totalPages = Math.max(1, Math.ceil(currentData.length / pageSize));
+  const pag = document.getElementById('pagination');
+  let html = '';
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button class="${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+  }
+  pag.innerHTML = html;
+  pag.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentPage = parseInt(btn.dataset.page);
+      renderTable();
+    });
+  });
+}
+
+async function openDrawer(asin) {
+  const res = await fetch(`${API_BASE}/asin/${asin}`);
+  if (!res.ok) return;
+  const d = await res.json();
+  const drawer = document.getElementById('drawer');
+  drawer.innerHTML = `
+    <button class="close-btn" id="closeDrawerBtn">Close</button>
+    <h2>${d.title}</h2>
+    <p style="color:var(--color-text-muted);font-size:0.8rem;">${d.asin}</p>
+
+    <div class="drawer-section">
+      <h3>Cost breakdown</h3>
+      <div class="drawer-row"><span>Amazon price</span><span>$${d.cost_breakdown.amazon_price.toFixed(2)}</span></div>
+      <div class="drawer-row"><span>Costco cost</span><span>$${d.cost_breakdown.costco_cost.toFixed(2)}</span></div>
+      <div class="drawer-row"><span>Referral fee</span><span>$${d.cost_breakdown.referral_fee.toFixed(2)}</span></div>
+      <div class="drawer-row"><span>Net profit/unit</span><span>$${d.cost_breakdown.net_profit.toFixed(2)}</span></div>
+      <div class="drawer-row"><span>ROI %</span><span>${d.cost_breakdown.roi_pct.toFixed(1)}%</span></div>
+    </div>
+
+    <div class="drawer-section">
+      <h3>Listing</h3>
+      <div class="drawer-row"><span>Buybox winner</span><span>${d.buybox.seller} (${d.buybox.is_fba ? 'FBA' : 'FBM'})</span></div>
+      <div class="drawer-row"><span>Sellers on listing</span><span>${d.sellers.length}</span></div>
+      <div class="drawer-row"><span>BSR</span><span>${d.bsr ?? 'Not available yet'}</span></div>
+      <div class="drawer-row"><span>Est. monthly units</span><span>${d.est_monthly_units}</span></div>
+    </div>
+
+    <div class="drawer-section">
+      <h3>Risk flags</h3>
+      ${d.risk_flags.length ? d.risk_flags.map(f => `<span class="flag">${f}</span>`).join('') : '<span style="color:var(--color-text-muted);font-size:0.8rem;">No flags detected</span>'}
+    </div>
+  `;
+  document.getElementById('closeDrawerBtn').addEventListener('click', closeDrawer);
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('drawerOverlay').classList.remove('open');
+}
+document.getElementById('drawerOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'drawerOverlay') closeDrawer();
+});
+
+async function fetchTop10(filters = {}) {
+  const params = new URLSearchParams(filters);
+  const res = await fetch(`${API_BASE}/top10?${params.toString()}`);
+  const data = await res.json();
+  currentData = data;
+  currentPage = 1;
+  renderKpis(data);
+  renderTable();
+}
+
+document.getElementById('runAgentBtn').addEventListener('click', async () => {
+  const query = document.getElementById('searchInput').value.trim();
+  setStatus('Running agent, this may take a moment...');
+  try {
+    await fetch(`${API_BASE}/run-agent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query })
+    });
+    await fetchTop10(getFilters());
+    setStatus('Agent run complete. Data is live.');
+  } catch (err) {
+    setStatus('Agent run failed. Check backend terminal for errors.');
+  }
+});
+
+function getFilters() {
+  return {
+    minRoi: document.getElementById('minRoi').value,
+    minProfit: document.getElementById('minProfit').value,
+    maxSellerRisk: document.getElementById('maxSellerRisk').value,
+    maxLogisticsRisk: document.getElementById('maxLogisticsRisk').value
+  };
+}
+
+document.getElementById('applyFiltersBtn').addEventListener('click', () => fetchTop10(getFilters()));
+
+fetchTop10(getFilters());
+</script>
+</body>
+</html>
