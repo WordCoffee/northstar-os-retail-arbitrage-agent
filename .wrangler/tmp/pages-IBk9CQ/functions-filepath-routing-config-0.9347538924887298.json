@@ -1,0 +1,29 @@
+{
+  "routes": [
+    {
+      "routePath": "/api/data/:filename",
+      "mountPath": "/api/data",
+      "method": "GET",
+      "module": [
+        "api/data/[filename].js:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/files",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/files.js:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/latest-deals",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/latest-deals.js:onRequestGet"
+      ]
+    }
+  ],
+  "baseURL": "/"
+}
