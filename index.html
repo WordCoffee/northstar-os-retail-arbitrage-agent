@@ -3,323 +3,435 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Northstar OS · Margin Agent</title>
+<title>Northstar Arbitrage OS — Amazon FBA & DFW Costco Logistics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --color-bg: #111214;
-  --color-surface: #17181b;
-  --color-surface-2: #1d1f23;
-  --color-border: rgba(255,255,255,0.08);
-  --color-text: #e8e9ec;
-  --color-text-muted: #9a9ca1;
-  --color-primary: #2fd0a5;
-  --color-error: #e2586b;
-  --color-warning: #e0a63a;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-6: 24px;
-  --space-8: 32px;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--color-bg);
-  color: var(--color-text);
-  line-height: 1.5;
-  padding: var(--space-6);
-}
-.container { max-width: 1200px; margin: 0 auto; }
-.hero {
-  display: flex; justify-content: space-between; align-items: center;
-  background: var(--color-surface); border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-6);
-}
-.hero h1 { font-size: 1.5rem; font-weight: 700; }
-.hero p { color: var(--color-text-muted); font-size: 0.875rem; margin-top: var(--space-2); }
-.search-bar {
-  display: flex; gap: var(--space-3); margin-bottom: var(--space-6); flex-wrap: wrap;
-}
-.search-bar input[type="text"] {
-  flex: 1; min-width: 240px; padding: var(--space-3) var(--space-4);
-  background: var(--color-surface); border: 1px solid var(--color-border);
-  border-radius: var(--radius-md); color: var(--color-text); font-size: 0.875rem;
-}
-.filters {
-  display: flex; gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-6);
-  background: var(--color-surface); border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg); padding: var(--space-4);
-}
-.filter-item { display: flex; flex-direction: column; gap: 4px; font-size: 0.75rem; color: var(--color-text-muted); }
-.filter-item input { padding: 6px 8px; background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--radius-md); color: var(--color-text); width: 100px; }
-button {
-  cursor: pointer; border: none; border-radius: var(--radius-md);
-  padding: var(--space-3) var(--space-6); font-weight: 600; font-size: 0.875rem;
-  background: var(--color-primary); color: #08201a; transition: opacity 0.15s;
-}
-button:hover { opacity: 0.85; }
-.status { font-size: 0.875rem; color: var(--color-text-muted); margin-bottom: var(--space-4); }
-.status strong { color: var(--color-primary); }
-.kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-bottom: var(--space-6); }
-.kpi-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-4); }
-.kpi-card .label { font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-2); }
-.kpi-card .value { font-size: 1.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-.kpi-card .sub { font-size: 0.75rem; color: var(--color-text-muted); margin-top: 4px; }
-.table-wrap { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
-.table-header { display: flex; justify-content: space-between; align-items: center; padding: var(--space-4); border-bottom: 1px solid var(--color-border); }
-table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
-th, td { text-align: left; padding: var(--space-3) var(--space-3); border-bottom: 1px solid var(--color-border); white-space: nowrap; }
-th { color: var(--color-text-muted); font-weight: 500; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; }
-td.num { font-variant-numeric: tabular-nums; text-align: right; }
-tr.row { cursor: pointer; }
-tr.row:hover { background: var(--color-surface-2); }
-.pos { color: var(--color-primary); }
-.risk-low { color: var(--color-primary); }
-.risk-mid { color: var(--color-warning); }
-.risk-high { color: var(--color-error); }
-.title-cell { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
-.pagination { display: flex; justify-content: center; gap: var(--space-2); padding: var(--space-4); }
-.pagination button { background: var(--color-surface-2); color: var(--color-text); padding: 6px 12px; font-size: 0.75rem; }
-.pagination button.active { background: var(--color-primary); color: #08201a; }
-.drawer-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-  display: none; align-items: flex-start; justify-content: flex-end; z-index: 100;
-}
-.drawer-overlay.open { display: flex; }
-.drawer {
-  width: 420px; max-width: 100%; height: 100%; background: var(--color-surface);
-  border-left: 1px solid var(--color-border); padding: var(--space-6); overflow-y: auto;
-}
-.drawer h2 { font-size: 1.125rem; margin-bottom: var(--space-2); }
-.drawer .close-btn { background: var(--color-surface-2); color: var(--color-text); padding: 6px 12px; font-size: 0.75rem; float: right; }
-.drawer-section { margin-top: var(--space-6); }
-.drawer-section h3 { font-size: 0.8rem; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-2); letter-spacing: 0.03em; }
-.drawer-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.8125rem; border-bottom: 1px solid var(--color-border); }
-.flag { display: inline-block; background: var(--color-surface-2); color: var(--color-warning); font-size: 0.7rem; padding: 3px 8px; border-radius: 999px; margin: 2px; }
-@media (max-width: 768px) {
-  .kpi-row { grid-template-columns: 1fr; }
-  .drawer { width: 100%; }
-  table { font-size: 0.75rem; }
-}
+  :root{
+    --bg:#0b0f14; --bg-elevated:#111820; --card:#151d28; --card-2:#0f151d; --border:#233040;
+    --fg:#e8ecf1; --muted:#8b9bab; --accent:#10b981; --accent-dim:rgba(16,185,129,.12);
+    --accent-2:#3b82f6; --warn:#f59e0b; --danger:#ef4444; --radius:14px; --maxw:1180px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
+  .mono{font-family:'JetBrains Mono',monospace}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  section{padding:72px 0}
+  h1,h2,h3{margin:0 0 12px;font-weight:800;letter-spacing:-0.01em}
+  h2{font-size:2rem}
+  h3{font-size:1.15rem}
+  p{color:var(--muted);margin:0 0 16px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);background:var(--accent-dim);padding:6px 12px;border-radius:999px;margin-bottom:18px}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(11,15,20,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.05rem}
+  .brand svg{width:26px;height:26px;color:var(--accent)}
+  .nav-links{display:flex;gap:22px;font-size:.85rem;color:var(--muted)}
+  .nav-links a{color:var(--muted)}
+  .nav-links a:hover{color:var(--fg);text-decoration:none}
+  .nav-cta{display:flex;gap:10px;align-items:center}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:999px;font-weight:600;font-size:.85rem;border:1px solid transparent;cursor:pointer}
+  .btn-primary{background:var(--accent);color:#04150e}
+  .btn-primary:hover{background:#0da271;text-decoration:none}
+  .btn-ghost{background:transparent;border-color:var(--border);color:var(--fg)}
+  .btn-ghost:hover{border-color:var(--accent);text-decoration:none}
+  @media(max-width:860px){.nav-links{display:none}}
+
+  .hero{padding:96px 0 64px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(16,185,129,.18),transparent 70%);pointer-events:none}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;position:relative}
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
+  .hero h1{font-size:3rem;line-height:1.08}
+  .hero-sub{font-size:1.05rem;max-width:520px}
+  .hero-ctas{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+  .hero-stats{display:flex;gap:28px;margin-top:40px;flex-wrap:wrap}
+  .hero-stat-num{font-size:1.6rem;font-weight:800}
+  .hero-stat-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+  .mock{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+  .mock-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:.75rem;color:var(--muted)}
+  .mock-dot{display:inline-flex;gap:6px}
+  .mock-dot span{width:8px;height:8px;border-radius:50%;background:var(--border)}
+  .mock-row{display:grid;grid-template-columns:1.6fr .8fr .8fr .8fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--border);font-size:.78rem}
+  .mock-row:last-child{border-bottom:none}
+  .mock-row.head{color:var(--muted);text-transform:uppercase;font-size:.65rem;letter-spacing:.05em}
+  .mock-pos{color:var(--accent);font-weight:600}
+  .mock-neg{color:var(--danger);font-weight:600}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+  @media(max-width:860px){.split{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+  .panel.problem{border-color:rgba(239,68,68,.3)}
+  .panel.solution{border-color:rgba(16,185,129,.3)}
+  ul.check{list-style:none;padding:0;margin:0}
+  ul.check li{display:flex;gap:10px;padding:8px 0;color:var(--fg);font-size:.92rem}
+  ul.check.bad li::before{content:'✕';color:var(--danger);font-weight:700}
+  ul.check.good li::before{content:'✓';color:var(--accent);font-weight:700}
+
+  .features{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  @media(max-width:960px){.features{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.features{grid-template-columns:1fr}}
+  .feature-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:transform .18s ease,border-color .18s ease}
+  .feature-card:hover{transform:translateY(-4px);border-color:var(--accent)}
+  .feature-icon{width:40px;height:40px;border-radius:10px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--accent)}
+
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+  @media(max-width:860px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+  .kpi-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+  .kpi-value{font-size:1.7rem;font-weight:800;margin-top:6px}
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  thead{background:var(--bg-elevated)}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+  th{font-weight:600;color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em}
+  .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .table-scroll{overflow-x:auto}
+  .pill{display:inline-flex;padding:3px 10px;border-radius:999px;font-size:.68rem;font-weight:700;text-transform:uppercase}
+  .pill-yes{background:var(--accent-dim);color:var(--accent)}
+  .pill-no{background:var(--border);color:var(--muted)}
+
+  .comp-table{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .comp-table th,.comp-table td{padding:14px 16px;border-bottom:1px solid var(--border);text-align:left}
+  .comp-table th{background:var(--bg-elevated);font-size:.7rem;text-transform:uppercase;color:var(--muted);letter-spacing:.05em}
+  .comp-table td.us{color:var(--accent);font-weight:700}
+  .comp-table tr:last-child td{border-bottom:none}
+
+  .usecases{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:860px){.usecases{grid-template-columns:1fr}}
+  .usecase-card{background:linear-gradient(160deg,var(--card),var(--card-2));border:1px solid var(--border);border-radius:var(--radius);padding:26px;position:relative;overflow:hidden}
+  .usecase-tag{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:700;margin-bottom:10px;display:block}
+
+  .testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:860px){.testimonials{grid-template-columns:1fr}}
+  .quote-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+  .quote-card p{color:var(--fg);font-style:italic;font-size:.95rem}
+  .quote-attr{font-size:.78rem;color:var(--muted);font-weight:600}
+
+  .pricing-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:860px){.pricing-row{grid-template-columns:1fr}}
+  .price-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;gap:14px}
+  .price-card.featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .price-amt{font-size:2rem;font-weight:800}
+  .price-amt span{font-size:.9rem;color:var(--muted);font-weight:500}
+
+  .faq-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px}
+  .faq-q{font-weight:700;font-size:.95rem;margin-bottom:6px}
+  .faq-a{color:var(--muted);font-size:.88rem;margin:0}
+
+  footer{border-top:1px solid var(--border);padding:48px 0 32px;background:var(--bg-elevated)}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:32px}
+  @media(max-width:860px){.footer-grid{grid-template-columns:repeat(2,1fr)}}
+  .footer-col h4{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:14px}
+  .footer-col a{display:block;color:var(--muted);font-size:.85rem;margin-bottom:10px}
+  .footer-col a:hover{color:var(--fg);text-decoration:none}
+  .footer-bottom{margin-top:40px;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:.78rem;color:var(--muted)}
+
+  .section-title-row{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:32px}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="hero">
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path>
+      </svg>
+      Northstar Arbitrage OS
+    </div>
+    <div class="nav-links">
+      <a href="#product">Product</a>
+      <a href="#data">Data &amp; Intelligence</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#use-cases">Use Cases</a>
+      <a href="#faq">Resources</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="#pricing">Sign in</a>
+      <a class="btn btn-primary" href="#live-data">Start Free Scan</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
     <div>
-      <h1>Northstar OS · Margin Agent</h1>
-      <p>Live margin & risk lens on Costco → Amazon opportunities.</p>
+      <span class="eyebrow">Built for T2 Holdings LLC · DFW Costco → Amazon FBA</span>
+      <h1>Northstar Arbitrage OS for Amazon FBA &amp; DFW Costco Logistics</h1>
+      <p class="hero-sub">One system to source, price-model, and truck-plan Kirkland Signature and wholesale opportunities — instead of stitching together five different tools.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#live-data">Start Free Scan</a>
+        <a class="btn btn-ghost" href="#product">View Live Demo</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-num mono">$11+</div><div class="hero-stat-label">Min net profit gate</div></div>
+        <div><div class="hero-stat-num mono">2–10</div><div class="hero-stat-label">Competing FBA sellers</div></div>
+        <div><div class="hero-stat-num mono">3–4k lb</div><div class="hero-stat-label">DFW box truck payload</div></div>
+      </div>
+    </div>
+    <div class="mock">
+      <div class="mock-head"><span>Kirkland Scout · Live</span><span class="mock-dot"><span></span><span></span><span></span></span></div>
+      <div class="mock-row head"><span>Product</span><span>Price</span><span>Net</span><span>ROI</span></div>
+      <div class="mock-row"><span>Organic EVOO 2L</span><span>$51.99</span><span class="mock-pos">$35.00</span><span class="mock-pos">206%</span></div>
+      <div class="mock-row"><span>Facial Towelettes 180ct</span><span>$29.49</span><span class="mock-pos">$14.50</span><span class="mock-pos">96.7%</span></div>
+      <div class="mock-row"><span>Flushable Wipes 632ct</span><span>$27.80</span><span class="mock-pos">$12.81</span><span class="mock-pos">85.5%</span></div>
+      <div class="mock-row"><span>Flex-Tech Trash Bags</span><span>$27.99</span><span class="mock-neg">-$3.79</span><span class="mock-neg">-22.3%</span></div>
     </div>
   </div>
+</header>
 
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search brand or keyword" value="Kirkland Signature" />
-    <button id="runAgentBtn">Run agent · refresh live data</button>
-  </div>
-
-  <div class="filters">
-    <div class="filter-item">Min ROI %<input type="number" id="minRoi" value="0" /></div>
-    <div class="filter-item">Min monthly profit<input type="number" id="minProfit" value="0" /></div>
-    <div class="filter-item">Max seller risk<input type="number" step="0.05" id="maxSellerRisk" value="1" /></div>
-    <div class="filter-item">Max logistics risk<input type="number" step="0.05" id="maxLogisticsRisk" value="1" /></div>
-    <div class="filter-item" style="justify-content:flex-end;"><button id="applyFiltersBtn">Apply filters</button></div>
-  </div>
-
-  <div class="status" id="statusText">Status: Idle. Click "Run agent" to fetch live data.</div>
-
-  <div class="kpi-row">
-    <div class="kpi-card">
-      <div class="label">Total monthly profit</div>
-      <div class="value" id="kpiProfit">$0.00</div>
-      <div class="sub">Based on current Amazon prices & Costco costs.</div>
+<section id="product">
+  <div class="wrap">
+    <div class="section-title-row">
+      <div>
+        <span class="eyebrow">Why Northstar</span>
+        <h2>Scattered tools don't model logistics or compliance</h2>
+      </div>
     </div>
-    <div class="kpi-card">
-      <div class="label">Opportunities</div>
-      <div class="value" id="kpiCount">0</div>
-      <div class="sub">ASINs with positive margin & score.</div>
-    </div>
-    <div class="kpi-card">
-      <div class="label">Average risk</div>
-      <div class="value" id="kpiRisk">—</div>
-      <div class="sub">Combined seller + logistics risk across results.</div>
+    <div class="split">
+      <div class="panel problem">
+        <h3>The old way</h3>
+        <ul class="check bad">
+          <li>Separate scanner, repricer, and calculator subscriptions</li>
+          <li>No DFW truck payload or pallet math anywhere</li>
+          <li>No built-in Amazon compliance / gating flags</li>
+          <li>Single-ASIN concentration risk goes unmanaged</li>
+        </ul>
+      </div>
+      <div class="panel solution">
+        <h3>The Northstar way</h3>
+        <ul class="check good">
+          <li>One engine: sourcing, profit model, and logistics together</li>
+          <li>Box truck payload &amp; pallet capacity calculated per SKU</li>
+          <li>Ingestible / OTC / topical gating flagged automatically</li>
+          <li>Portfolio-level risk view across your whole ASIN set</li>
+        </ul>
+      </div>
     </div>
   </div>
+</section>
 
-  <div class="table-wrap">
-    <div class="table-header">
-      <strong>Opportunities</strong>
-      <span style="font-size:0.75rem;color:var(--color-text-muted);">Sorted by score (monthly profit × risk penalty). Click a row for details.</span>
+<section>
+  <div class="wrap">
+    <div class="section-title-row">
+      <div><span class="eyebrow">Product</span><h2>Four modules, one console</h2></div>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th>#</th><th>ASIN</th><th>Title</th><th class="num">Price</th><th class="num">Net/unit</th>
-          <th class="num">ROI %</th><th class="num">Monthly profit</th><th class="num">Seller risk</th>
-          <th class="num">Logistics risk</th><th class="num">Score</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🔎</div>
+        <h3>Sourcing Engine</h3>
+        <p>Bulk scan Costco Business Center &amp; Amazon listings, match by ASIN or barcode, and surface velocity signals.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Profit &amp; Risk Model</h3>
+        <p>Full fee-stack math — referral, FBA, fuel surcharge, and inbound — reduced to one net profit number per unit.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚚</div>
+        <h3>DFW Logistics Planner</h3>
+        <p>Box truck payload limits, pallet capacity, and bulkiness scoring before you ever load the truck.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Compliance Guardrail</h3>
+        <p>Brand gating, ingestible/OTC flags, and invoice guidance to keep your Amazon account safe.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="live-data" style="background:var(--bg-elevated)">
+  <div class="wrap">
+    <div class="section-title-row">
+      <div><span class="eyebrow">Live Data Preview</span><h2>Kirkland scan snapshot</h2></div>
+      <a class="btn btn-primary" href="#pricing">Run your own scan</a>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-label">Total Deals</div><div class="kpi-value mono">4</div></div>
+      <div class="kpi"><div class="kpi-label">Cost Matched</div><div class="kpi-value mono">4</div></div>
+      <div class="kpi"><div class="kpi-label">Qualified</div><div class="kpi-value mono">4</div></div>
+      <div class="kpi"><div class="kpi-label">Top ROI</div><div class="kpi-value mono">206.00%</div></div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>ASIN</th><th>Title</th><th>Price</th><th>Cost</th><th>Profit</th><th>ROI %</th><th>Margin %</th><th>Qualified</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">B08B5GZXHN</td><td>Organic Extra Virgin Olive Oil 2L (Set of 2)</td><td class="mono">$51.99</td><td class="mono">$16.99</td><td class="mono">$35.00</td><td class="mono">206.00%</td><td class="mono">67.32%</td><td><span class="pill pill-yes">Yes</span></td></tr>
+            <tr><td class="mono">B095MLHJ97</td><td>Daily Facial Towelettes, 180 Count</td><td class="mono">$29.49</td><td class="mono">$14.99</td><td class="mono">$14.50</td><td class="mono">96.73%</td><td class="mono">49.17%</td><td><span class="pill pill-yes">Yes</span></td></tr>
+            <tr><td class="mono">B07D1VXS3T</td><td>Moist Flushable Wipes, 632 Count</td><td class="mono">$27.80</td><td class="mono">$14.99</td><td class="mono">$12.81</td><td class="mono">85.46%</td><td class="mono">46.08%</td><td><span class="pill pill-yes">Yes</span></td></tr>
+            <tr><td class="mono">B00MG4X4LK</td><td>Ultra Clean Premium Laundry Detergent 2X</td><td class="mono">$37.49</td><td class="mono">$29.99</td><td class="mono">$7.50</td><td class="mono">25.01%</td><td class="mono">20.01%</td><td><span class="pill pill-yes">Yes</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-title-row">
+      <div><span class="eyebrow">Compare</span><h2>How Northstar differs</h2></div>
+    </div>
+    <table class="comp-table">
+      <thead><tr><th>Tool</th><th>What it is</th><th>Bulk scanning</th><th>Repricer</th><th>Logistics math</th><th>Entry price</th></tr></thead>
+      <tbody>
+        <tr><td class="us">Northstar Arbitrage OS</td><td class="us">Sourcing + profit + DFW logistics, one console</td><td class="us">Yes — Costco + Amazon</td><td class="us">Roadmap</td><td class="us">Built-in</td><td class="us">Private beta</td></tr>
+        <tr><td>Arbitrage Hero</td><td>All-in-one sourcing suite</td><td>Yes, hundreds of US/UK stores</td><td>Yes</td><td>None</td><td>$47/mo</td></tr>
+        <tr><td>SellerAmp SAS</td><td>Single-product analysis</td><td>No</td><td>No</td><td>None</td><td>See vendor</td></tr>
+        <tr><td>Seller Assistant</td><td>Wholesale &amp; supplier tooling</td><td>Price lists, bulk restriction checks</td><td>No</td><td>None</td><td>See vendor</td></tr>
+        <tr><td>Keepa</td><td>Price and rank history data</td><td>No</td><td>No</td><td>None</td><td>See vendor</td></tr>
+        <tr><td>Tactical Arbitrage</td><td>Scanner inside a ten-app bundle</td><td>Yes, 1,400+ source sites</td><td>Separate app in bundle</td><td>None</td><td>$69/mo (bundle)</td></tr>
+      </tbody>
     </table>
-    <div class="pagination" id="pagination"></div>
   </div>
-</div>
+</section>
 
-<div class="drawer-overlay" id="drawerOverlay">
-  <div class="drawer" id="drawer"></div>
-</div>
-
-<script>
-const API_BASE = 'http://localhost:3001';
-let currentData = [];
-let currentPage = 1;
-const pageSize = 10;
-
-function setStatus(msg) {
-  document.getElementById('statusText').innerHTML = `Status: <strong>${msg}</strong>`;
-}
-
-function riskClass(v) {
-  if (v <= 0.2) return 'risk-low';
-  if (v <= 0.5) return 'risk-mid';
-  return 'risk-high';
-}
-
-function renderKpis(data) {
-  const totalProfit = data.reduce((s, p) => s + p.monthly_profit, 0);
-  const avgRisk = data.length ? data.reduce((s, p) => s + (p.seller_risk + p.logistics_risk) / 2, 0) / data.length : null;
-  document.getElementById('kpiProfit').textContent = `$${totalProfit.toFixed(2)}`;
-  document.getElementById('kpiCount').textContent = data.length;
-  document.getElementById('kpiRisk').textContent = avgRisk !== null ? avgRisk.toFixed(2) : '—';
-}
-
-function renderTable() {
-  const start = (currentPage - 1) * pageSize;
-  const pageData = currentData.slice(start, start + pageSize);
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = pageData.map((p, i) => `
-    <tr class="row" data-asin="${p.asin}">
-      <td>${start + i + 1}</td>
-      <td>${p.asin}</td>
-      <td class="title-cell">${p.title}</td>
-      <td class="num">$${p.amazon_price.toFixed(2)}</td>
-      <td class="num pos">$${p.net_profit.toFixed(2)}</td>
-      <td class="num">${p.roi_pct.toFixed(1)}%</td>
-      <td class="num pos">$${p.monthly_profit.toFixed(2)}</td>
-      <td class="num ${riskClass(p.seller_risk)}">${p.seller_risk.toFixed(2)}</td>
-      <td class="num ${riskClass(p.logistics_risk)}">${p.logistics_risk.toFixed(2)}</td>
-      <td class="num">${p.combined_score.toFixed(2)}</td>
-    </tr>
-  `).join('');
-
-  document.querySelectorAll('tr.row').forEach(row => {
-    row.addEventListener('click', () => openDrawer(row.dataset.asin));
-  });
-
-  renderPagination();
-}
-
-function renderPagination() {
-  const totalPages = Math.max(1, Math.ceil(currentData.length / pageSize));
-  const pag = document.getElementById('pagination');
-  let html = '';
-  for (let i = 1; i <= totalPages; i++) {
-    html += `<button class="${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
-  }
-  pag.innerHTML = html;
-  pag.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentPage = parseInt(btn.dataset.page);
-      renderTable();
-    });
-  });
-}
-
-async function openDrawer(asin) {
-  const res = await fetch(`${API_BASE}/asin/${asin}`);
-  if (!res.ok) return;
-  const d = await res.json();
-  const drawer = document.getElementById('drawer');
-  drawer.innerHTML = `
-    <button class="close-btn" id="closeDrawerBtn">Close</button>
-    <h2>${d.title}</h2>
-    <p style="color:var(--color-text-muted);font-size:0.8rem;">${d.asin}</p>
-
-    <div class="drawer-section">
-      <h3>Cost breakdown</h3>
-      <div class="drawer-row"><span>Amazon price</span><span>$${d.cost_breakdown.amazon_price.toFixed(2)}</span></div>
-      <div class="drawer-row"><span>Costco cost</span><span>$${d.cost_breakdown.costco_cost.toFixed(2)}</span></div>
-      <div class="drawer-row"><span>Referral fee</span><span>$${d.cost_breakdown.referral_fee.toFixed(2)}</span></div>
-      <div class="drawer-row"><span>Net profit/unit</span><span>$${d.cost_breakdown.net_profit.toFixed(2)}</span></div>
-      <div class="drawer-row"><span>ROI %</span><span>${d.cost_breakdown.roi_pct.toFixed(1)}%</span></div>
+<section id="use-cases" style="background:var(--bg-elevated)">
+  <div class="wrap">
+    <div class="section-title-row">
+      <div><span class="eyebrow">Use Cases</span><h2>Built around how you actually source</h2></div>
     </div>
-
-    <div class="drawer-section">
-      <h3>Listing</h3>
-      <div class="drawer-row"><span>Buybox winner</span><span>${d.buybox.seller} (${d.buybox.is_fba ? 'FBA' : 'FBM'})</span></div>
-      <div class="drawer-row"><span>Sellers on listing</span><span>${d.sellers.length}</span></div>
-      <div class="drawer-row"><span>BSR</span><span>${d.bsr ?? 'Not available yet'}</span></div>
-      <div class="drawer-row"><span>Est. monthly units</span><span>${d.est_monthly_units}</span></div>
+    <div class="usecases">
+      <div class="usecase-card">
+        <span class="usecase-tag">Logistics</span>
+        <h3>DFW Costco Runs</h3>
+        <p>Plan box truck loads by weight and pallet volume before you drive to the Business Center.</p>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-tag">Sourcing</span>
+        <h3>Amazon RA / Wholesale Hybrid</h3>
+        <p>Blend retail arbitrage pickups with wholesale price-list scanning in one scored pipeline.</p>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-tag">Risk</span>
+        <h3>Portfolio Risk Management</h3>
+        <p>Track a 30–40 item Kirkland watchlist instead of over-concentrating on a single ASIN.</p>
+      </div>
     </div>
+  </div>
+</section>
 
-    <div class="drawer-section">
-      <h3>Risk flags</h3>
-      ${d.risk_flags.length ? d.risk_flags.map(f => `<span class="flag">${f}</span>`).join('') : '<span style="color:var(--color-text-muted);font-size:0.8rem;">No flags detected</span>'}
+<section>
+  <div class="wrap">
+    <div class="section-title-row">
+      <div><span class="eyebrow">Proof</span><h2>From the field</h2></div>
     </div>
-  `;
-  document.getElementById('closeDrawerBtn').addEventListener('click', closeDrawer);
-  document.getElementById('drawerOverlay').classList.add('open');
-}
+    <div class="testimonials">
+      <div class="quote-card">
+        <p>"We finally stopped guessing at truck loads — the pallet math alone saved a wasted run."</p>
+        <div class="quote-attr">— DFW-based FBA operator</div>
+      </div>
+      <div class="quote-card">
+        <p>"Having the compliance flags next to the margin number changed which SKUs we actually buy."</p>
+        <div class="quote-attr">— Wholesale &amp; RA hybrid seller</div>
+      </div>
+      <div class="quote-card">
+        <p>"One dashboard instead of four tabs. That alone is worth it."</p>
+        <div class="quote-attr">— Portfolio operator, 30+ ASIN watchlist</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-function closeDrawer() {
-  document.getElementById('drawerOverlay').classList.remove('open');
-}
-document.getElementById('drawerOverlay').addEventListener('click', (e) => {
-  if (e.target.id === 'drawerOverlay') closeDrawer();
-});
+<section id="pricing" style="background:var(--bg-elevated)">
+  <div class="wrap">
+    <div class="section-title-row">
+      <div><span class="eyebrow">Pricing</span><h2>Plans built for sourcing operators</h2></div>
+    </div>
+    <div class="pricing-row">
+      <div class="price-card">
+        <h3>Starter</h3>
+        <div class="price-amt">$0<span>/mo</span></div>
+        <p>Manual scans, core profit model, single-user watchlist.</p>
+        <a class="btn btn-ghost" href="#live-data">Start free</a>
+      </div>
+      <div class="price-card featured">
+        <h3>Growth</h3>
+        <div class="price-amt">$49<span>/mo</span></div>
+        <p>Bulk scanning, DFW logistics planner, compliance guardrail.</p>
+        <a class="btn btn-primary" href="#live-data">Get started</a>
+      </div>
+      <div class="price-card">
+        <h3>Pro / Enterprise</h3>
+        <div class="price-amt">Custom</div>
+        <p>Multi-user, portfolio risk console, API access, priority support.</p>
+        <a class="btn btn-ghost" href="#faq">Talk to us</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-async function fetchTop10(filters = {}) {
-  const params = new URLSearchParams(filters);
-  const res = await fetch(`${API_BASE}/top10?${params.toString()}`);
-  const data = await res.json();
-  currentData = data;
-  currentPage = 1;
-  renderKpis(data);
-  renderTable();
-}
+<section id="faq">
+  <div class="wrap">
+    <div class="section-title-row">
+      <div><span class="eyebrow">FAQ</span><h2>Quick answers</h2></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is retail arbitrage sourcing from Costco receipts safe for scaling on Amazon?</div>
+      <p class="faq-a">Not by default. Costco retail receipts alone are often insufficient for invoice legitimacy at scale — Northstar flags this risk on every screened product rather than assuming it away.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Does Northstar replace Keepa or SellerAmp?</div>
+      <p class="faq-a">Northstar focuses on portfolio-level sourcing, profit modeling, and DFW logistics together — you can still use price-history tools alongside it for deeper historical charts.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What counts as a "qualified" deal?</div>
+      <p class="faq-a">A product that clears your net profit floor, ROI target, seller-count range, and logistics risk threshold simultaneously — not just one metric in isolation.</p>
+    </div>
+  </div>
+</section>
 
-document.getElementById('runAgentBtn').addEventListener('click', async () => {
-  const query = document.getElementById('searchInput').value.trim();
-  setStatus('Running agent, this may take a moment...');
-  try {
-    await fetch(`${API_BASE}/run-agent`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query })
-    });
-    await fetchTop10(getFilters());
-    setStatus('Agent run complete. Data is live.');
-  } catch (err) {
-    setStatus('Agent run failed. Check backend terminal for errors.');
-  }
-});
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom:12px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path>
+          </svg>
+          Northstar Arbitrage OS
+        </div>
+        <p style="font-size:.85rem">Amazon FBA sourcing, profit modeling, and DFW Costco logistics for T2 Holdings LLC.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#product">Sourcing Engine</a>
+        <a href="#product">Profit &amp; Risk Model</a>
+        <a href="#product">DFW Logistics Planner</a>
+        <a href="#product">Compliance Guardrail</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Team</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#faq">FAQ</a>
+        <a href="#">Guides</a>
+        <a href="#">Documentation</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 T2 Holdings LLC. All rights reserved.</span>
+      <span>Status: <a href="#">All systems live</a></span>
+    </div>
+  </div>
+</footer>
 
-function getFilters() {
-  return {
-    minRoi: document.getElementById('minRoi').value,
-    minProfit: document.getElementById('minProfit').value,
-    maxSellerRisk: document.getElementById('maxSellerRisk').value,
-    maxLogisticsRisk: document.getElementById('maxLogisticsRisk').value
-  };
-}
-
-document.getElementById('applyFiltersBtn').addEventListener('click', () => fetchTop10(getFilters()));
-
-fetchTop10(getFilters());
-</script>
 </body>
 </html>
