@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Dose — Today's Quote</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .daily-card{text-align:center;padding:3rem 2.5rem}
+    .daily-date{font-family:'Caveat',cursive;font-size:1.3rem;color:var(--gold);margin-bottom:1rem}
+    .daily-mark{font-family:'Playfair Display',serif;font-size:6rem;line-height:1;color:var(--gold);opacity:0.2;margin-bottom:-2rem}
+    .daily-quote{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4vw,2rem);line-height:1.45;color:var(--ink);margin-bottom:1.5rem}
+    .daily-cat{display:inline-block;margin-bottom:2rem}
+    .daily-actions{display:flex;justify-content:center;gap:0.75rem;flex-wrap:wrap}
+    .countdown{text-align:center;margin-top:2.5rem;padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .countdown h3{font-family:'Caveat',cursive;font-size:1.2rem;color:var(--muted);margin-bottom:0.5rem}
+    .countdown-time{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold)}
+    .streak-card{margin-top:1.5rem;text-align:center;padding:1.25rem;background:var(--gold-light);border:1px solid rgba(184,149,106,0.3);border-radius:var(--radius)}
+    .streak-num{font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--gold)}
+    .streak-label{font-family:'Caveat',cursive;font-size:1.1rem;color:var(--muted)}
+    .past-section{margin-top:2rem}
+    .past-section h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--ink);margin-bottom:1rem;text-align:center}
+    .past-list{display:flex;flex-direction:column;gap:0.75rem}
+    .past-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.25rem;box-shadow:var(--shadow)}
+    .past-date{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--gold);margin-bottom:0.3rem}
+    .past-text{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--ink);line-height:1.4}
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-brand"><span>*</span> Daily Dose</a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/journal.html" class="nav-link">Journal</a>
+      <a href="/daily.html" class="nav-link active">Daily</a>
+      <a href="/mood.html" class="nav-link">Mood</a>
+      <a href="/games.html" class="nav-link">Games</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="page-header">
+      <h1>Today's Quote</h1>
+      <p class="sub">the same one for everyone, today</p>
+    </div>
+
+    <div class="card daily-card">
+      <div class="daily-date" id="dailyDate"></div>
+      <div class="daily-mark">"</div>
+      <div class="daily-quote" id="dailyQuote"></div>
+      <span class="pill daily-cat" id="dailyCat"></span>
+      <div class="daily-actions">
+        <button class="btn btn-gold" id="shareDaily">
+          <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          Share Today's
+        </button>
+        <button class="btn btn-dark" id="saveDaily">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Save
+        </button>
+      </div>
+    </div>
+
+    <div class="countdown">
+      <h3>Next quote arrives in</h3>
+      <div class="countdown-time" id="countdown"></div>
+    </div>
+
+    <div class="streak-card">
+      <div class="streak-num" id="streakNum">0</div>
+      <div class="streak-label">day streak of checking in</div>
+    </div>
+
+    <div class="past-section">
+      <h3>This Week</h3>
+      <div class="past-list" id="pastList"></div>
+    </div>
+  </div>
+
+  <div class="music-bar">
+    <button class="music-btn" id="playBtn" title="Play / Pause">
+      <svg viewBox="0 0 24 24" id="playIcon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </button>
+    <span class="music-track" id="trackName">Press play for beats</span>
+    <input type="range" class="music-vol" id="volSlider" min="0" max="100" value="35">
+    <button class="music-next" id="nextBtn" title="Next track">
+      <svg viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+    </button>
+  </div>
+
+  <script src="/js/music.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1).replace(/-/g,' ');
+    const PILL = ['pill-gold','pill-rose','pill-sage','pill-navy','pill-lavender'];
+
+    $('playBtn').onclick = () => { beats.toggle(); updatePlayIcon(); };
+    $('nextBtn').onclick = () => beats.next();
+    $('volSlider').oninput = e => beats.setVolume(e.target.value / 100);
+    beats.onTrackChange = (name) => { $('trackName').innerHTML = `<em>${name}</em>`; };
+    function updatePlayIcon() {
+      $('playIcon').innerHTML = beats.isPlaying
+        ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+        : '<polygon points="5 3 19 12 5 21 5 3"/>';
+    }
+
+    function getTodayQuote(quotes) {
+      const now = new Date();
+      const seed = now.getFullYear() * 10000 + (now.getMonth()+1) * 100 + now.getDate();
+      return quotes[seed % quotes.length];
+    }
+
+    function getPastQuote(quotes, daysAgo) {
+      const d = new Date(); d.setDate(d.getDate() - daysAgo);
+      const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+      return quotes[seed % quotes.length];
+    }
+
+    async function init() {
+      let quotes = [];
+      try { const res = await fetch('/api/quotes'); quotes = await res.json(); } catch(e) {}
+      if (!quotes.length) { $('dailyQuote').textContent = 'Could not load.'; return; }
+
+      const today = getTodayQuote(quotes);
+      const now = new Date();
+      $('dailyDate').textContent = now.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+      $('dailyQuote').textContent = today.text;
+      const ci = quotes.indexOf(today);
+      $('dailyCat').textContent = cap(today.category);
+      $('dailyCat').className = 'pill daily-cat ' + PILL[ci % PILL.length];
+
+      // Streak
+      const visited = JSON.parse(localStorage.getItem('dose_visited') || '[]');
+      const todayKey = now.toISOString().slice(0,10);
+      if (!visited.includes(todayKey)) { visited.push(todayKey); localStorage.setItem('dose_visited', JSON.stringify(visited)); }
+      let streak = 0;
+      const d = new Date();
+      while (true) { const k = d.toISOString().slice(0,10); if (visited.includes(k)) { streak++; d.setDate(d.getDate()-1); } else break; }
+      $('streakNum').textContent = streak;
+
+      // Past 7 days
+      $('pastList').innerHTML = '';
+      for (let i=1; i<=6; i++) {
+        const pq = getPastQuote(quotes, i);
+        const pd = new Date(); pd.setDate(pd.getDate()-i);
+        $('pastList').innerHTML += `<div class="past-item"><div class="past-date">${pd.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</div><div class="past-text">"${pq.text}"</div></div>`;
+      }
+
+      $('shareDaily').onclick = async () => {
+        const text = `"${today.text}" — Today's Daily Dose`;
+        if (navigator.share) { try { await navigator.share({title:'Daily Dose',text}); } catch(e){} }
+        else { navigator.clipboard.writeText(text); alert('Copied!'); }
+      };
+
+      $('saveDaily').onclick = () => {
+        let favs = JSON.parse(localStorage.getItem('dose_favs')||'[]');
+        if (!favs.some(f=>f.text===today.text)) {
+          favs.unshift({...today, savedAt:Date.now()});
+          localStorage.setItem('dose_favs', JSON.stringify(favs));
+          alert('Saved to your journal!');
+        }
+      };
+
+      function updateCountdown() {
+        const now = new Date();
+        const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate()+1); tomorrow.setHours(0,0,0,0);
+        const diff = tomorrow - now;
+        $('countdown').textContent = `${Math.floor(diff/3600000)}h ${Math.floor((diff%3600000)/60000)}m ${Math.floor((diff%60000)/1000)}s`;
+      }
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
+    init();
+  </script>
+</body>
+</html>

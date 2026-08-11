@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games — Daily Dose</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .games-grid{display:flex;flex-direction:column;gap:2rem}
+    .game-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .game-header{padding:1.5rem 2rem 0;display:flex;align-items:center;justify-content:space-between}
+    .game-header h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:500}
+    .game-header .pill{font-size:0.6rem}
+    .game-body{padding:1.5rem 2rem 2rem}
+
+    /* Wheel */
+    .wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:1rem}
+    .wheel-canvas{width:280px;height:280px;cursor:pointer;border-radius:50%;box-shadow:0 0 30px rgba(184,149,106,0.15)}
+    .wheel-result{text-align:center;min-height:5rem;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .wheel-result .quote{font-family:'Playfair Display',serif;font-size:1.15rem;line-height:1.5;color:var(--ink);margin-bottom:0.75rem}
+
+    /* Memory */
+    .memory-board{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;max-width:380px;margin:0 auto}
+    .mem-card{aspect-ratio:3/4;border-radius:var(--radius-sm);cursor:pointer;position:relative;perspective:600px;min-height:80px}
+    .mem-card-inner{width:100%;height:100%;transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1);transform-style:preserve-3d;position:relative}
+    .mem-card.flipped .mem-card-inner{transform:rotateY(180deg)}
+    .mem-card.matched .mem-card-inner{transform:rotateY(180deg)}
+    .mem-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:600;text-align:center;padding:0.5rem;line-height:1.3}
+    .mem-front{background:var(--gold);color:white;font-family:'Playfair Display',serif;font-size:1.8rem}
+    .mem-back{background:var(--card);border:1.5px solid var(--border);color:var(--ink);transform:rotateY(180deg)}
+    .mem-card.matched .mem-back{border-color:var(--sage);background:var(--sage-light)}
+    .memory-stats{display:flex;justify-content:center;gap:1.5rem;margin-top:1rem;font-size:0.8rem;color:var(--muted);font-weight:500}
+    .memory-stats span{color:var(--gold);font-weight:700}
+
+    /* Typing */
+    .typing-display{font-family:'Playfair Display',serif;font-size:1.1rem;line-height:1.7;color:var(--muted);margin-bottom:1rem;padding:1rem 1.25rem;background:var(--gold-light);border-radius:var(--radius-sm);min-height:4rem}
+    .typing-display .correct{color:var(--sage)}
+    .typing-display .wrong{color:var(--rose);text-decoration:underline}
+    .typing-display .cursor{border-right:2px solid var(--gold);animation:blink 0.75s step-end infinite}
+    .typing-input{width:100%;padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:0.9rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--card);color:var(--ink);outline:none;transition:border-color 0.2s}
+    .typing-input:focus{border-color:var(--gold)}
+    .typing-stats{display:flex;justify-content:center;gap:1.5rem;margin-top:1rem;font-size:0.8rem;color:var(--muted);font-weight:500}
+    .typing-stats span{color:var(--gold);font-weight:700}
+    .typing-result{text-align:center;padding:1rem;font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--sage)}
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-brand"><span>*</span> Daily Dose</a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/journal.html" class="nav-link">Journal</a>
+      <a href="/daily.html" class="nav-link">Daily</a>
+      <a href="/mood.html" class="nav-link">Mood</a>
+      <a href="/games.html" class="nav-link active">Games</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="page-header">
+      <h1>Play & Reflect</h1>
+      <p class="sub">engaging with words in a new way</p>
+    </div>
+
+    <div class="games-grid">
+
+      <!-- ═══ SPIN THE WHEEL ═══ -->
+      <div class="game-card">
+        <div class="game-header">
+          <h2>Spin the Wheel</h2>
+          <span class="pill pill-gold">Luck</span>
+        </div>
+        <div class="game-body">
+          <div class="wheel-wrap">
+            <canvas class="wheel-canvas" id="wheelCanvas" width="560" height="560"></canvas>
+            <button class="btn btn-gold" id="spinBtn">Spin</button>
+            <div class="wheel-result" id="wheelResult"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ MEMORY MATCH ═══ -->
+      <div class="game-card">
+        <div class="game-header">
+          <h2>Memory Match</h2>
+          <span class="pill pill-sage">Focus</span>
+        </div>
+        <div class="game-body">
+          <div class="memory-board" id="memoryBoard"></div>
+          <div class="memory-stats">
+            Moves: <span id="memMoves">0</span> &nbsp;|&nbsp; Matches: <span id="memMatches">0</span>/4
+          </div>
+          <div style="text-align:center;margin-top:1rem">
+            <button class="btn btn-outline btn-sm" id="memReset">New Game</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ TYPING RACE ═══ -->
+      <div class="game-card">
+        <div class="game-header">
+          <h2>Typing Race</h2>
+          <span class="pill pill-navy">Speed</span>
+        </div>
+        <div class="game-body">
+          <div class="typing-display" id="typingDisplay"></div>
+          <input type="text" class="typing-input" id="typingInput" placeholder="Start typing here..." autocomplete="off" spellcheck="false">
+          <div class="typing-stats">
+            WPM: <span id="typeWpm">0</span> &nbsp;|&nbsp; Accuracy: <span id="typeAcc">100%</span>
+          </div>
+          <div class="typing-result" id="typeResult"></div>
+          <div style="text-align:center;margin-top:1rem">
+            <button class="btn btn-outline btn-sm" id="typeReset">New Quote</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="music-bar">
+    <button class="music-btn" id="playBtn" title="Play / Pause">
+      <svg viewBox="0 0 24 24" id="playIcon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </button>
+    <span class="music-track" id="trackName">Press play for beats</span>
+    <input type="range" class="music-vol" id="volSlider" min="0" max="100" value="35">
+    <button class="music-next" id="nextBtn" title="Next track">
+      <svg viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+    </button>
+  </div>
+
+  <script src="/js/music.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1).replace(/-/g,' ');
+
+    // Music
+    $('playBtn').onclick = () => { beats.toggle(); updatePlayIcon(); };
+    $('nextBtn').onclick = () => beats.next();
+    $('volSlider').oninput = e => beats.setVolume(e.target.value / 100);
+    beats.onTrackChange = (name) => { $('trackName').innerHTML = `<em>${name}</em>`; };
+    function updatePlayIcon() {
+      $('playIcon').innerHTML = beats.isPlaying
+        ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+        : '<polygon points="5 3 19 12 5 21 5 3"/>';
+    }
+
+    let ALL = [];
+    const COLORS = ['#b8956a','#c17b7b','#7a9b8a','#3d4f6f','#8b7bb5','#d4ad7a','#94b8a4'];
+
+    // ═══════════════════════════
+    // SPIN THE WHEEL
+    // ═══════════════════════════
+    let wheelSegments = [];
+    let spinning = false;
+
+    function buildWheel() {
+      const cats = [...new Set(ALL.map(q=>q.category))].slice(0, 8);
+      wheelSegments = cats.map((c,i) => ({
+        category: c,
+        color: COLORS[i % COLORS.length],
+        quotes: ALL.filter(q => q.category === c)
+      }));
+      drawWheel(0);
+    }
+
+    function drawWheel(rotation) {
+      const canvas = $('wheelCanvas');
+      const ctx = canvas.getContext('2d');
+      const cx = 280, cy = 280, r = 250;
+      const n = wheelSegments.length;
+      const slice = (2 * Math.PI) / n;
+
+      ctx.clearRect(0,0,560,560);
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(rotation);
+
+      wheelSegments.forEach((seg, i) => {
+        const a = i * slice - Math.PI/2;
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.arc(0, 0, r, a, a + slice);
+        ctx.closePath();
+        ctx.fillStyle = seg.color;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Label
+        ctx.save();
+        ctx.rotate(a + slice/2);
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 13px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(cap(seg.category), r * 0.6, 4);
+        ctx.restore();
+      });
+
+      // Center circle
+      ctx.beginPath();
+      ctx.arc(0,0,28,0,Math.PI*2);
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fill();
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 14px Inter';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('GO', 0, 0);
+
+      ctx.restore();
+
+      // Pointer
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - r - 10);
+      ctx.lineTo(cx - 10, cy - r - 28);
+      ctx.lineTo(cx + 10, cy - r - 28);
+      ctx.closePath();
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fill();
+    }
+
+    function spinWheel() {
+      if (spinning || !wheelSegments.length) return;
+      spinning = true;
+      $('spinBtn').disabled = true;
+      $('wheelResult').innerHTML = '';
+
+      const n = wheelSegments.length;
+      const slice = (2 * Math.PI) / n;
+      const winner = Math.floor(Math.random() * n);
+      const targetRot = (Math.PI * 2 * (5 + Math.random())) + (Math.PI/2 - winner * slice - slice/2);
+      const startRot = 0;
+      const dur = 4000;
+      const start = performance.now();
+
+      function tick(now) {
+        const t = Math.min((now - start) / dur, 1);
+        const ease = 1 - Math.pow(1 - t, 4);
+        drawWheel(startRot + (targetRot - startRot) * ease);
+        if (t < 1) requestAnimationFrame(tick);
+        else {
+          spinning = false;
+          $('spinBtn').disabled = false;
+          const seg = wheelSegments[winner];
+          const q = seg.quotes[Math.floor(Math.random() * seg.quotes.length)];
+          $('wheelResult').innerHTML = `<span class="pill pill-gold" style="margin-bottom:0.75rem">${cap(seg.category)}</span><div class="quote">"${q.text}"</div><button class="btn btn-outline btn-sm" style="margin-top:0.5rem" onclick="spinWheel()">Spin Again</button>`;
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+    $('spinBtn').onclick = spinWheel;
+
+    // ═══════════════════════════
+    // MEMORY MATCH
+    // ═══════════════════════════
+    let memCards = [], memFlipped = [], memMatched = new Set(), memMoves = 0;
+
+    function buildMemory() {
+      const cats = [...new Set(ALL.map(q=>q.category))].slice(0, 4);
+      const pairs = cats.map(c => {
+        const qs = ALL.filter(q => q.category === c);
+        const q = qs[Math.floor(Math.random() * qs.length)];
+        return { text: q.text.length > 60 ? q.text.slice(0,57)+'...' : q.text, category: c };
+      });
+      memCards = [];
+      pairs.forEach((p, i) => {
+        memCards.push({ id: i*2, pairId: i, type: 'quote', text: p.text });
+        memCards.push({ id: i*2+1, pairId: i, type: 'category', text: cap(p.category) });
+      });
+      // Shuffle
+      for (let i = memCards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [memCards[i], memCards[j]] = [memCards[j], memCards[i]];
+      }
+      memFlipped = [];
+      memMatched = new Set();
+      memMoves = 0;
+      renderMemory();
+    }
+
+    function renderMemory() {
+      $('memMoves').textContent = memMoves;
+      $('memMatches').textContent = memMatched.size;
+      $('memoryBoard').innerHTML = memCards.map((c, i) => `
+        <div class="mem-card ${memMatched.has(c.pairId)?'matched':''} ${memFlipped.includes(i)?'flipped':''}" data-idx="${i}">
+          <div class="mem-card-inner">
+            <div class="mem-face mem-front">?</div>
+            <div class="mem-face mem-back">${c.text}</div>
+          </div>
+        </div>
+      `).join('');
+
+      $('memoryBoard').querySelectorAll('.mem-card').forEach(el => {
+        el.onclick = () => flipMemCard(parseInt(el.dataset.idx));
+      });
+    }
+
+    function flipMemCard(idx) {
+      if (memFlipped.length >= 2) return;
+      if (memFlipped.includes(idx)) return;
+      if (memMatched.has(memCards[idx].pairId)) return;
+      memFlipped.push(idx);
+      renderMemory();
+
+      if (memFlipped.length === 2) {
+        memMoves++;
+        const [a, b] = memFlipped;
+        if (memCards[a].pairId === memCards[b].pairId) {
+          memMatched.add(memCards[a].pairId);
+          memFlipped = [];
+          renderMemory();
+          if (memMatched.size === 4) {
+            setTimeout(() => alert(`You matched all 4 in ${memMoves} moves!`), 300);
+          }
+        } else {
+          setTimeout(() => { memFlipped = []; renderMemory(); }, 900);
+        }
+      }
+    }
+    $('memReset').onclick = buildMemory;
+
+    // ═══════════════════════════
+    // TYPING RACE
+    // ═══════════════════════════
+    let typeQuote = '', typeStart = null, typeDone = false;
+
+    function newTypeQuote() {
+      const q = ALL[Math.floor(Math.random() * ALL.length)];
+      typeQuote = q.text;
+      typeStart = null;
+      typeDone = false;
+      $('typingInput').value = '';
+      $('typingInput').disabled = false;
+      $('typingInput').focus();
+      $('typeResult').textContent = '';
+      renderTyping('');
+    }
+
+    function renderTyping(typed) {
+      let html = '';
+      for (let i = 0; i < typeQuote.length; i++) {
+        if (i < typed.length) {
+          html += typed[i] === typeQuote[i]
+            ? `<span class="correct">${typeQuote[i]}</span>`
+            : `<span class="wrong">${typeQuote[i]}</span>`;
+        } else if (i === typed.length) {
+          html += `<span class="cursor">${typeQuote[i]}</span>`;
+        } else {
+          html += typeQuote[i];
+        }
+      }
+      $('typingDisplay').innerHTML = html;
+    }
+
+    function updateTypingStats(typed) {
+      if (!typeStart || typeDone) return;
+      const elapsed = (Date.now() - typeStart) / 1000;
+      const minutes = elapsed / 60;
+      const words = typed.length / 5;
+      const wpm = Math.round(words / minutes) || 0;
+      let correct = 0;
+      for (let i = 0; i < typed.length; i++) {
+        if (typed[i] === typeQuote[i]) correct++;
+      }
+      const acc = typed.length ? Math.round((correct / typed.length) * 100) : 100;
+      $('typeWpm').textContent = wpm;
+      $('typeAcc').textContent = acc + '%';
+    }
+
+    $('typingInput').addEventListener('input', e => {
+      const typed = e.target.value;
+      if (!typeStart && typed.length > 0) typeStart = Date.now();
+      renderTyping(typed);
+      updateTypingStats(typed);
+
+      if (typed.length >= typeQuote.length) {
+        typeDone = true;
+        $('typingInput').disabled = true;
+        const elapsed = (Date.now() - typeStart) / 1000;
+        const wpm = Math.round((typeQuote.length / 5) / (elapsed / 60));
+        let correct = 0;
+        for (let i = 0; i < typed.length; i++) {
+          if (typed[i] === typeQuote[i]) correct++;
+        }
+        const acc = Math.round((correct / typeQuote.length) * 100);
+        $('typeResult').textContent = `Done! ${wpm} WPM with ${acc}% accuracy`;
+        $('typeWpm').textContent = wpm;
+        $('typeAcc').textContent = acc + '%';
+      }
+    });
+
+    $('typeReset').onclick = newTypeQuote;
+
+    // ═══════════════════════════
+    // INIT
+    // ═══════════════════════════
+    async function init() {
+      try {
+        const res = await fetch('/api/quotes');
+        ALL = await res.json();
+      } catch(e) {}
+      buildWheel();
+      buildMemory();
+      newTypeQuote();
+    }
+    init();
+  </script>
+</body>
+</html>

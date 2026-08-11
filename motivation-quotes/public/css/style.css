@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Caveat:wght@400;500;600;700&display=swap');
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#faf9f7;--card:#ffffff;--ink:#1a1a1a;--muted:#8a8279;--border:#ebe7e1;
+  --gold:#b8956a;--gold-light:#f5ede4;--rose:#c17b7b;--rose-light:#f8eded;
+  --sage:#7a9b8a;--sage-light:#edf4f0;--navy:#3d4f6f;--navy-light:#edf0f5;
+  --lavender:#8b7bb5;--lavender-light:#f0edf8;
+  --shadow:0 2px 12px rgba(26,26,26,0.06);--shadow-lg:0 8px 32px rgba(26,26,26,0.08);
+  --radius:16px;--radius-sm:10px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#161412;--card:#201e1b;--ink:#f0ebe5;--muted:#8a8279;--border:#332f2a;
+  --gold:#d4ad7a;--gold-light:#2a241c;--rose:#d49494;--rose-light:#2a1e1e;
+  --sage:#94b8a4;--sage-light:#1e2a22;--navy:#7a8fb5;--navy-light:#1e2230;
+  --lavender:#a89bd0;--lavender-light:#221e2a;
+  --shadow:0 2px 12px rgba(0,0,0,0.2);--shadow-lg:0 8px 32px rgba(0,0,0,0.3);
+}}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;line-height:1.6;overflow-x:hidden}
+a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
+
+/* ── Splash (auto-play gate) ── */
+.splash{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s,visibility 0.8s}
+.splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.splash h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,6vw,4rem);font-weight:400;margin-bottom:0.5rem;letter-spacing:-0.02em}
+.splash p{font-family:'Caveat',cursive;font-size:1.4rem;color:var(--gold);margin-bottom:2rem}
+.splash .enter-btn{padding:0.9rem 2.5rem;font-family:'Inter',sans-serif;font-size:0.95rem;font-weight:600;border:none;border-radius:100px;background:var(--ink);color:var(--bg);cursor:pointer;transition:all 0.3s;letter-spacing:0.03em}
+.splash .enter-btn:hover{transform:scale(1.05);box-shadow:var(--shadow-lg)}
+
+/* ── Navigation ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;background:rgba(250,249,247,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+@media(prefers-color-scheme:dark){nav{background:rgba(22,20,18,0.85)}}
+.nav-brand{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:500;color:var(--ink);display:flex;align-items:center;gap:0.5rem}
+.nav-brand span{color:var(--gold)}
+.nav-links{display:flex;gap:0.25rem}
+.nav-link{padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:500;color:var(--muted);border-radius:100px;transition:all 0.2s;text-decoration:none}
+.nav-link:hover{color:var(--ink);background:var(--gold-light);text-decoration:none}
+.nav-link.active{color:var(--gold);background:var(--gold-light)}
+
+/* ── Music Bar ── */
+.music-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;height:52px;display:flex;align-items:center;justify-content:center;gap:0.75rem;background:rgba(250,249,247,0.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:0 1.5rem}
+@media(prefers-color-scheme:dark){.music-bar{background:rgba(22,20,18,0.9)}}
+.music-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--ink);color:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.music-btn:hover{transform:scale(1.1)}
+.music-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.music-track{font-size:0.75rem;color:var(--muted);font-weight:500;max-width:180px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.music-track em{color:var(--gold);font-style:normal}
+.music-vol{width:70px;accent-color:var(--gold);cursor:pointer}
+.music-next{background:none;border:none;color:var(--muted);cursor:pointer;padding:0.2rem;transition:color 0.2s;display:flex}
+.music-next:hover{color:var(--gold)}
+.music-next svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Layout ── */
+.page-wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:80px 1.5rem 90px;min-height:100vh}
+.page-header{text-align:center;margin-bottom:2.5rem}
+.page-header h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4.5vw,2.8rem);font-weight:400;line-height:1.2;margin-bottom:0.4rem;letter-spacing:-0.01em}
+.page-header .sub{font-family:'Caveat',cursive;font-size:clamp(1.1rem,2.5vw,1.35rem);color:var(--gold)}
+
+/* ── Card ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:2rem 2.5rem;position:relative;transition:transform 0.3s,box-shadow 0.3s}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:0.45rem;padding:0.65rem 1.5rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;transition:all 0.25s;text-decoration:none;letter-spacing:0.02em}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.btn-dark{background:var(--ink);color:var(--bg);box-shadow:var(--shadow)}
+.btn-dark:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--border)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.btn-gold{background:var(--gold);color:white;box-shadow:0 2px 12px rgba(184,149,106,0.3)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(184,149,106,0.4)}
+.btn-sm{padding:0.45rem 1rem;font-size:0.78rem}
+
+/* ── Pill ── */
+.pill{display:inline-block;padding:0.3rem 0.75rem;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;border-radius:100px;color:white}
+.pill-gold{background:var(--gold)}.pill-rose{background:var(--rose)}.pill-sage{background:var(--sage)}
+.pill-navy{background:var(--navy)}.pill-lavender{background:var(--lavender)}
+
+/* ── Filters ── */
+.filters{display:flex;flex-wrap:wrap;justify-content:center;gap:0.4rem;margin-bottom:2rem}
+.filter-btn{padding:0.4rem 0.9rem;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;border:1.5px solid var(--border);background:var(--card);color:var(--muted);border-radius:100px;cursor:pointer;transition:all 0.2s}
+.filter-btn:hover{border-color:var(--gold);color:var(--gold)}
+.filter-btn.active{background:var(--gold);color:white;border-color:var(--gold)}
+
+/* ── Animations ── */
+.fade-in{animation:fadeUp 0.6s ease-out both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.slide-in{animation:slideIn 0.5s ease-out both}
+@keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+.bounce-in{animation:bounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both}
+@keyframes bounceIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+.pop{animation:pop 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+.shimmer{position:relative;overflow:hidden}
+.shimmer::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(184,149,106,0.08),transparent);animation:shimmer 3s infinite}
+@keyframes shimmer{0%{left:-100%}100%{left:100%}}
+
+/* ── Quote Display ── */
+.quote-marks{font-family:'Playfair Display',serif;font-size:5rem;line-height:1;color:var(--gold);opacity:0.25;margin-bottom:-1.5rem;text-align:center}
+.quote-text{font-family:'Playfair Display',serif;font-size:clamp(1.15rem,3vw,1.65rem);line-height:1.55;color:var(--ink);text-align:center;padding:0 0.5rem}
+.quote-meta{text-align:center;margin-top:1.25rem}
+.quote-actions{display:flex;justify-content:center;gap:0.6rem;margin-top:1.5rem;flex-wrap:wrap}
+
+/* ── Counter ── */
+.counter{text-align:center;margin-top:1.25rem;font-family:'Caveat',cursive;font-size:1.05rem;color:var(--muted)}
+
+/* ── Confetti ── */
+.confetti{position:fixed;pointer-events:none;z-index:200;width:6px;height:6px;border-radius:1px;animation:confettiFall 1.2s ease-out forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0) scale(1)}100%{opacity:0;transform:translateY(250px) rotate(720deg) scale(0.2)}}
+
+/* ── Empty State ── */
+.empty{text-align:center;padding:3rem 1.5rem;color:var(--muted)}
+.empty .icon{font-size:2.5rem;margin-bottom:0.75rem}
+.empty h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.4rem}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:0.5rem 1.25rem;border-radius:100px;font-size:0.8rem;font-weight:600;z-index:200;animation:fadeUp 0.3s ease-out,confettiFall 1.5s ease-out 0.8s forwards}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+
+/* ── Responsive ── */
+@media(max-width:600px){nav{padding:0 1rem}.nav-link{padding:0.3rem 0.5rem;font-size:0.72rem}.page-wrap{padding:72px 1rem 80px}.card{padding:1.5rem}.music-bar{gap:0.4rem;padding:0 0.75rem}.music-vol{width:50px}}

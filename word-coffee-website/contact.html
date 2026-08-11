@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Word Coffee</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Word Coffee</h1>
+    <p class="tagline">Brewed for the Mind. Grounded in Purpose.</p>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="products.html">Products</a>
+      <a href="informational.html">Science</a>
+      <a href="learn-more.html">Learn More</a>
+      <a href="northstar.html">Northstar OS (secured access)</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main class="section">
+    <h2>Get in Touch</h2>
+    <p>We'd love to hear from you. Whether you have questions about our decks, want to collaborate, or need help with Northstar OS access.</p>
+
+    <form style="max-width:500px; margin:2rem auto; text-align:left; display:grid; gap:1rem;">
+      <div>
+        <label for="name" style="display:block; margin-bottom:0.5rem; font-weight:600;">Name</label>
+        <input type="text" id="name" name="name" required style="width:100%; padding:0.75rem; border:1px solid #ddd; border-radius:6px; font-size:1rem;">
+      </div>
+      <div>
+        <label for="email" style="display:block; margin-bottom:0.5rem; font-weight:600;">Email</label>
+        <input type="email" id="email" name="email" required style="width:100%; padding:0.75rem; border:1px solid #ddd; border-radius:6px; font-size:1rem;">
+      </div>
+      <div>
+        <label for="subject" style="display:block; margin-bottom:0.5rem; font-weight:600;">Subject</label>
+        <select id="subject" name="subject" style="width:100%; padding:0.75rem; border:1px solid #ddd; border-radius:6px; font-size:1rem;">
+          <option value="general">General Inquiry</option>
+          <option value="wholesale">Wholesale / Retail</option>
+          <option value="northstar">Northstar OS Access</option>
+          <option value="collab">Collaboration</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label for="message" style="display:block; margin-bottom:0.5rem; font-weight:600;">Message</label>
+        <textarea id="message" name="message" rows="5" required style="width:100%; padding:0.75rem; border:1px solid #ddd; border-radius:6px; font-size:1rem; font-family:inherit;"></textarea>
+      </div>
+      <button type="submit" style="background:#3f2e1e; color:white; padding:0.8rem 1.5rem; border:none; border-radius:5px; font-size:1rem; font-weight:bold; cursor:pointer; width:100%;">Send Message</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Word Coffee. Fuel Your Mind, One Word at a Time.</p>
+  </footer>
+</body>
+</html>
