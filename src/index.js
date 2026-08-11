@@ -1,0 +1,15 @@
+console.log('Northstar OS Retail Arbitrage Agent');
+console.log('');
+console.log('Usage:');
+console.log('  npm run pipeline          Run all three stages in sequence');
+console.log('  npm run search            Stage 1: Fetch Amazon search results via Bright Data');
+console.log('  npm run normalize         Stage 2: Normalize and dedupe the latest snapshot');
+console.log('  npm run score             Stage 3: Score deals against Costco CSV');
+console.log('');
+console.log('Other:');
+console.log('  npm run lint              Lint source files');
+console.log('  npm run format            Auto-format source files');
+console.log('  npm run check             Lint + normalize dry-run');
+console.log('  npm run normalize -- --dry-run  Preview normalization without writing output');
+console.log('');
+console.log('One-click launcher: .\\run-agent.bat');

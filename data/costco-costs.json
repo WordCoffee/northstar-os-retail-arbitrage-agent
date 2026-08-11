@@ -1,0 +1,78 @@
+const fs = require('fs');
+const path = require('path');
+require('dotenv').config();
+
+const PILOTERR_API_KEY = process.env.PILOTERR_API_KEY;
+const costcoPath = path.join(__dirname, '..', 'data', 'costco-costs.json');
+
+async function fetchCostcoCosts() {
+  if (!PILOTERR_API_KEY) {
+    console.warn('PILOTERR_API_KEY missing. Skipping Costco API fetch and keeping existing costs.');
+    console.log('data/costco-costs.json left unchanged.');
+    return;
+  }
+
+  console.log('Fetching live Costco costs via Piloterr...');
+
+  try {
+    const productsPath = path.join(__dirname, '..', 'data', 'kirkland-products.json');
+    const products = JSON.parse(fs.readFileSync(productsPath, 'utf-8'));
+    const costs = fs.existsSync(costcoPath)
+      ? JSON.parse(fs.readFileSync(costcoPath, 'utf-8'))
+      : {};
+
+    for (const p of products) {
+      if (!p?.asin || !p?.title) continue;
+      if (costs[p.asin]) continue;
+
+      try {
+        const url =
+          `https://api.piloterr.com/v2/costco/search?query=${encodeURIComponent(p.title)}&region=us`;
+
+        const resp = await fetch(url, {
+          headers: {
+            'x-api-key': PILOTERR_API_KEY,
+            Accept: 'application/json'
+          }
+        });
+
+        if (!resp.ok) {
+          console.warn(`Costco lookup failed for ${p.asin}: HTTP ${resp.status}`);
+          continue;
+        }
+
+        const json = await resp.json();
+
+        let matchedPrice = null;
+
+        if (Array.isArray(json?.results) && json.results.length > 0) {
+          matchedPrice = json.results[0]?.price ?? null;
+        } else if (Array.isArray(json) && json.length > 0) {
+          matchedPrice = json[0]?.price ?? null;
+        } else if (json?.price) {
+          matchedPrice = json.price;
+        }
+
+        if (matchedPrice !== null && matchedPrice !== undefined) {
+          costs[p.asin] = {
+            title: p.title,
+            price: Number(matchedPrice),
+            fetchedAt: new Date().toISOString()
+          };
+          console.log(`Matched ${p.asin} -> $${matchedPrice}`);
+        } else {
+          console.warn(`No Costco price found for ${p.asin}`);
+        }
+      } catch (e) {
+        console.warn(`Costco lookup failed for ${p.asin}: ${e.message}`);
+      }
+    }
+
+    fs.writeFileSync(costcoPath, JSON.stringify(costs, null, 2));
+    console.log('data/costco-costs.json updated.');
+  } catch (err) {
+    console.error('fetchCostcoCosts failed:', err);
+  }
+}
+
+fetchCostcoCosts();

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Northstar OS — Retail Arbitrage Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --bg-elevated: #111820;
+      --card: #151d28;
+      --border: #233040;
+      --fg: #e8ecf1;
+      --muted: #7a8a9a;
+      --accent: #10b981;
+      --accent-dim: rgba(16, 185, 129, 0.12);
+      --warn: #f59e0b;
+      --warn-dim: rgba(245, 158, 11, 0.12);
+      --danger: #ef4444;
+      --radius: 10px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.35);
+      --transition: 160ms ease;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.5;
+    }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Layout */
+    .app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+    header {
+      padding: 16px 24px;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; }
+    .brand svg { width: 28px; height: 28px; color: var(--accent); }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .meta { font-size: 0.8rem; color: var(--muted); display: flex; gap: 16px; align-items: center; }
+    .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .badge-success { background: var(--accent-dim); color: var(--accent); }
+    .badge-warn { background: var(--warn-dim); color: var(--warn); }
+    .badge-neutral { background: var(--border); color: var(--muted); }
+
+    main { padding: 24px; max-width: 1400px; margin: 0 auto; width: 100%; }
+
+    /* Stats grid */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .stat-value { font-size: 1.75rem; font-weight: 700; line-height: 1.1; }
+    .stat-sub { font-size: 0.75rem; color: var(--muted); }
+
+    /* Table */
+    .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    thead { background: var(--bg-elevated); }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    th { font-weight: 600; color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer; user-select: none; }
+    th:hover { color: var(--fg); }
+    tbody tr { transition: background var(--transition); }
+    tbody tr:hover { background: var(--bg-elevated); }
+    tbody tr.qualified { background: var(--accent-dim); }
+    tbody tr.qualified:hover { background: rgba(16, 185, 129, 0.18); }
+    td.mono { font-size: 0.8rem; }
+    .cell-title { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cell-title.full { max-width: none; white-space: normal; word-break: break-word; }
+    .profit-pos { color: var(--accent); }
+    .profit-neg { color: var(--danger); }
+    .pill { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+    .pill-yes { background: var(--accent-dim); color: var(--accent); }
+    .pill-no { background: var(--border); color: var(--muted); }
+    .reasons { font-size: 0.7rem; color: var(--muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Empty/Loading */
+    .empty-state { padding: 60px 24px; text-align: center; color: var(--muted); }
+    .empty-state svg { width: 64px; height: 64px; margin-bottom: 16px; opacity: 0.5; }
+    .empty-state h3 { margin: 0 0 8px; color: var(--fg); }
+    .skeleton { background: linear-gradient(90deg, var(--border) 25%, var(--bg-elevated) 50%, var(--border) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 4px; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* Footer */
+    footer { padding: 24px; text-align: center; color: var(--muted); font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 32px; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header { padding: 12px 16px; }
+      main { padding: 16px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      th, td { padding: 10px 12px; font-size: 0.8rem; }
+    }
+    @media (max-width: 480px) {
+      .stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+          <path d="M2 17l10 5 10-5"></path>
+          <path d="M2 12l10 5 10-5"></path>
+        </svg>
+        Northstar OS
+      </div>
+      <div class="header-actions">
+        <div class="meta" id="headerMeta">
+          <span>Last updated: <span class="mono" id="lastUpdated">—</span></span>
+          <span>Runs: <span class="mono" id="runCount">—</span></span>
+        </div>
+        <span class="badge badge-success" id="statusBadge">Live</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="stats" aria-label="Key metrics">
+        <div class="stat-card">
+          <div class="stat-label">Total Deals</div>
+          <div class="stat-value mono" id="statTotal">—</div>
+          <div class="stat-sub">All scored products</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Cost Matched</div>
+          <div class="stat-value mono" id="statMatched">—</div>
+          <div class="stat-sub">Products with Costco cost basis</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Qualified</div>
+          <div class="stat-value mono" id="statQualified">—</div>
+          <div class="stat-sub">Meet margin & ROI thresholds</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Top ROI</div>
+          <div class="stat-value mono" id="statTopRoi">—</div>
+          <div class="stat-sub">Best return on investment</div>
+        </div>
+      </section>
+
+      <section class="table-wrap" aria-label="Deals table">
+        <div class="table-container">
+          <table id="dealsTable">
+            <thead>
+              <tr>
+                <th data-sort="asin">ASIN</th>
+                <th data-sort="title">Title</th>
+                <th data-sort="brand">Brand</th>
+                <th data-sort="price" class="mono">Price</th>
+                <th data-sort="costBasis" class="mono">Cost</th>
+                <th data-sort="estimatedProfit" class="mono">Profit</th>
+                <th data-sort="roiPercent" class="mono">ROI %</th>
+                <th data-sort="profitMarginPercent" class="mono">Margin %</th>
+                <th data-sort="qualifies">Qualified</th>
+                <th data-sort="rating" class="mono">Rating</th>
+                <th data-sort="reviewCount" class="mono">Reviews</th>
+                <th data-sort="monthlySold" class="mono">Monthly Sold</th>
+                <th>Reasons</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <!-- rows injected here -->
+            </tbody>
+          </table>
+        </div>
+        <div id="emptyState" class="empty-state" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+          <h3>No deals found</h3>
+          <p>Run <code>npm run pipeline</code> to generate scored data.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Northstar OS Retail Arbitrage Agent — Data refreshes on each pipeline run.
+      <br>Protected by <a href="https://www.cloudflare.com/zero-trust/products/access/" target="_blank">Cloudflare Access</a>.
+    </footer>
+  </div>
+
+  <script>
+    // State
+    let deals = [];
+    let sortCol = 'roiPercent';
+    let sortDir = 'desc';
+
+    // Formatters
+    const fmtMoney = v => v == null ? '—' : '$' + v.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmtPct = v => v == null ? '—' : v.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+    const fmtNum = v => v == null ? '—' : v.toLocaleString();
+    const fmtDate = iso => iso ? new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : '—';
+
+    // Fetch data
+    async function load() {
+      try {
+        const res = await fetch('/api/latest-deals');
+        if (!res.ok) throw new Error('Failed to load');
+        const data = await res.json();
+        deals = data.rows || [];
+        renderStats(data.meta);
+        renderTable();
+        updateMeta(data.meta);
+      } catch (e) {
+        console.error(e);
+        showEmpty(true);
+      }
+    }
+
+    function updateMeta(meta) {
+      document.getElementById('lastUpdated').textContent = fmtDate(meta?.createdAt);
+      document.getElementById('runCount').textContent = meta?.runCount ?? '—';
+    }
+
+    function renderStats(meta) {
+      const total = deals.length;
+      const matched = deals.filter(d => d.costBasis != null).length;
+      const qualified = deals.filter(d => d.qualifies).length;
+      const topRoi = deals.filter(d => d.roiPercent != null).reduce((max, d) => d.roiPercent > max ? d.roiPercent : max, 0);
+
+      document.getElementById('statTotal').textContent = total.toLocaleString();
+      document.getElementById('statMatched').textContent = matched.toLocaleString();
+      document.getElementById('statQualified').textContent = qualified.toLocaleString();
+      document.getElementById('statTopRoi').textContent = fmtPct(topRoi || null);
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('tableBody');
+      const empty = document.getElementById('emptyState');
+
+      if (!deals.length) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      // Sort
+      const sorted = [...deals].sort((a, b) => {
+        const av = a[sortCol];
+        const bv = b[sortCol];
+        if (av == null && bv == null) return 0;
+        if (av == null) return 1;
+        if (bv == null) return -1;
+        const cmp = av < bv ? -1 : av > bv ? 1 : 0;
+        return sortDir === 'asc' ? cmp : -cmp;
+      });
+
+      tbody.innerHTML = sorted.map(d => `
+        <tr class="${d.qualifies ? 'qualified' : ''}">
+          <td class="mono">${d.asin || '—'}</td>
+          <td class="cell-title" title="${escapeHtml(d.title || '')}">${escapeHtml(d.title || '—')}</td>
+          <td>${escapeHtml(d.brand || '—')}</td>
+          <td class="mono">${fmtMoney(d.price)}</td>
+          <td class="mono">${fmtMoney(d.costBasis)}</td>
+          <td class="mono ${d.estimatedProfit > 0 ? 'profit-pos' : d.estimatedProfit < 0 ? 'profit-neg' : ''}">${fmtMoney(d.estimatedProfit)}</td>
+          <td class="mono ${d.roiPercent != null && d.roiPercent > 0 ? 'profit-pos' : d.roiPercent != null && d.roiPercent < 0 ? 'profit-neg' : ''}">${fmtPct(d.roiPercent)}</td>
+          <td class="mono ${d.profitMarginPercent != null && d.profitMarginPercent > 0 ? 'profit-pos' : d.profitMarginPercent != null && d.profitMarginPercent < 0 ? 'profit-neg' : ''}">${fmtPct(d.profitMarginPercent)}</td>
+          <td><span class="pill ${d.qualifies ? 'pill-yes' : 'pill-no'}">${d.qualifies ? 'Yes' : 'No'}</span></td>
+          <td class="mono">${d.rating != null ? d.rating.toFixed(1) : '—'}</td>
+          <td class="mono">${fmtNum(d.reviewCount)}</td>
+          <td class="mono">${fmtNum(d.monthlySold)}</td>
+          <td class="reasons" title="${escapeHtml(d.reasons || '')}">${escapeHtml(d.reasons || '')}</td>
+        </tr>
+      `).join('');
+
+      // Update sort indicators
+      document.querySelectorAll('th[data-sort]').forEach(th => {
+        th.classList.remove('sorted-asc', 'sorted-desc');
+        if (th.dataset.sort === sortCol) {
+          th.classList.add(sortDir === 'asc' ? 'sorted-asc' : 'sorted-desc');
+        }
+      });
+    }
+
+    function showEmpty(show) {
+      document.getElementById('emptyState').style.display = show ? 'block' : 'none';
+      document.getElementById('tableBody').innerHTML = show ? '' : document.getElementById('tableBody').innerHTML;
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": ''' })[c]);
+    }
+
+    // Sort handlers
+    document.getElementById('dealsTable').addEventListener('click', e => {
+      const th = e.target.closest('th[data-sort]');
+      if (!th) return;
+      const col = th.dataset.sort;
+      if (col === sortCol) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+      else { sortCol = col; sortDir = ['roiPercent', 'estimatedProfit', 'profitMarginPercent', 'price', 'costBasis', 'rating', 'reviewCount', 'monthlySold'].includes(col) ? 'desc' : 'asc'; }
+      renderTable();
+    });
+
+    // Initial load
+    load();
+    // Auto-refresh every 60s
+    setInterval(load, 60000);
+  </script>
+</body>
+</html>

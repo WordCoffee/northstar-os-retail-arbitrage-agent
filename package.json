@@ -1,0 +1,29 @@
+{
+  "name": "northstar-os-retail-arbitrage-agent",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "search": "node src/scrapers/amazonSearch.js",
+    "normalize": "node src/pipelines/normalizeLatestSnapshot.js",
+    "score": "node src/pipelines/scoreLatestSnapshot.js",
+    "pipeline": "npm run search && npm run normalize && npm run score",
+    "dev": "node src/index.js",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "check": "npm run lint && npm run normalize -- --dry-run",
+    "deploy": "npx wrangler pages deploy public --project-name northstar-arbitrage-dashboard"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "csv-parse": "^5.5.6",
+    "csv-stringify": "^6.8.1",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "eslint": "^10.1.0",
+    "globals": "^15.9.0",
+    "prettier": "^3.4.2",
+    "wrangler": "^4.113.0"
+  }
+}
