@@ -1,0 +1,15 @@
+:root {
+  --bg: #f7f6f2;
+  --text: #28251d;
+  --accent: #01696f;
+  --border: #d4d1ca;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); }
+header { padding: 24px 32px; border-bottom: 1px solid var(--border); }
+header h1 { color: var(--accent); }
+main { padding: 24px 32px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; font-size: 14px; }
+th { color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }

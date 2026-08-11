@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Dose</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .anim-typewriter{overflow:hidden;border-right:2px solid var(--gold);white-space:nowrap;animation:typing 2s steps(40,end),blink 0.75s step-end infinite}
+    .anim-slide-in{animation:slideIn 0.5s ease-out both}
+    .anim-bounce-in{animation:bounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both}
+    .anim-fade-scale{animation:fadeScale 0.6s ease-out both}
+    @keyframes typing{from{width:0}to{width:100%}}
+    @keyframes blink{50%{border-color:transparent}}
+    @keyframes fadeScale{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+    .fav-btn.saved{background:var(--gold)!important;color:white!important;border-color:var(--gold)!important}
+    .sparkle{position:fixed;pointer-events:none;z-index:200;width:6px;height:6px;border-radius:50%;animation:sparkleAnim 0.8s ease-out forwards}
+    @keyframes sparkleAnim{0%{transform:scale(0);opacity:1}100%{transform:scale(2);opacity:0}}
+    .quote-text-inner{min-height:3.5rem}
+  </style>
+</head>
+<body>
+
+  <!-- Splash: required for auto-play audio -->
+  <div class="splash" id="splash">
+    <h1>Daily Dose</h1>
+    <p>words that actually mean something</p>
+    <button class="enter-btn" id="enterBtn">Enter</button>
+  </div>
+
+  <nav>
+    <a href="/" class="nav-brand"><span>*</span> Daily Dose</a>
+    <div class="nav-links">
+      <a href="/" class="nav-link active">Home</a>
+      <a href="/journal.html" class="nav-link">Journal</a>
+      <a href="/daily.html" class="nav-link">Daily</a>
+      <a href="/mood.html" class="nav-link">Mood</a>
+      <a href="/games.html" class="nav-link">Games</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="page-header">
+      <h1>Your Daily Dose</h1>
+      <p class="sub">something real for right now</p>
+    </div>
+
+    <div class="card shimmer" id="quoteCard">
+      <div class="quote-marks">"</div>
+      <div class="quote-text" id="quoteText">
+        <span class="quote-text-inner">Loading something good for you...</span>
+      </div>
+      <div class="quote-meta">
+        <span class="pill pill-gold" id="quoteCat"></span>
+      </div>
+      <div class="quote-actions">
+        <button class="btn btn-dark" id="newBtn">
+          <svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></svg>
+          Another One
+        </button>
+        <button class="btn btn-outline fav-btn" id="favBtn">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Save
+        </button>
+        <button class="btn btn-outline" id="shareBtn">
+          <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          Share
+        </button>
+      </div>
+    </div>
+
+    <div class="filters" id="filters"></div>
+    <p class="counter" id="counter"></p>
+  </div>
+
+  <div class="music-bar">
+    <button class="music-btn" id="playBtn" title="Play / Pause">
+      <svg viewBox="0 0 24 24" id="playIcon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </button>
+    <span class="music-track" id="trackName">Press play for beats</span>
+    <input type="range" class="music-vol" id="volSlider" min="0" max="100" value="35">
+    <button class="music-next" id="nextBtn" title="Next track">
+      <svg viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+    </button>
+  </div>
+
+  <script src="/js/music.js"></script>
+  <script>
+    let allQuotes = [];
+    let currentCategory = null;
+    let currentQuote = null;
+    const ANIMS = ['anim-slide-in','anim-bounce-in','anim-fade-scale'];
+    const PILL = ['pill-gold','pill-rose','pill-sage','pill-navy','pill-lavender'];
+    const $ = id => document.getElementById(id);
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1).replace(/-/g,' ');
+
+    // ── Splash → auto-play ──
+    $('enterBtn').onclick = async () => {
+      $('splash').classList.add('hidden');
+      await beats.init();
+      beats.play();
+      updatePlayIcon();
+    };
+
+    // ── Music ──
+    $('playBtn').onclick = () => { beats.toggle(); updatePlayIcon(); };
+    $('nextBtn').onclick = () => beats.next();
+    $('volSlider').oninput = e => beats.setVolume(e.target.value / 100);
+    beats.onTrackChange = (name) => { $('trackName').innerHTML = `<em>${name}</em>`; };
+
+    function updatePlayIcon() {
+      $('playIcon').innerHTML = beats.isPlaying
+        ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+        : '<polygon points="5 3 19 12 5 21 5 3"/>';
+    }
+
+    // ── Quotes ──
+    async function loadQuotes() {
+      try {
+        const res = await fetch('/api/quotes');
+        allQuotes = await res.json();
+        renderFilters();
+        updateCounter();
+        newQuote();
+      } catch(e) { $('quoteText').innerHTML = '<span class="quote-text-inner">Couldn\'t load quotes. Try refreshing!</span>'; }
+    }
+
+    function renderFilters() {
+      const cats = [...new Set(allQuotes.map(q => q.category))].sort();
+      $('filters').innerHTML = '';
+      const all = mkFilter('All', null); all.classList.add('active');
+      $('filters').appendChild(all);
+      cats.forEach(c => $('filters').appendChild(mkFilter(cap(c), c)));
+    }
+
+    function mkFilter(label, cat) {
+      const b = document.createElement('button');
+      b.className = 'filter-btn';
+      b.textContent = label;
+      b.onclick = () => { currentCategory = cat; document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); newQuote(); updateCounter(); };
+      return b;
+    }
+
+    function showQuote(q) {
+      const inner = $('quoteText').querySelector('.quote-text-inner') || $('quoteText');
+      const anim = ANIMS[Math.floor(Math.random()*ANIMS.length)];
+      inner.className = 'quote-text-inner ' + anim;
+      inner.textContent = q.text;
+      const ci = allQuotes.findIndex(x=>x.text===q.text);
+      $('quoteCat').textContent = cap(q.category);
+      $('quoteCat').className = 'pill ' + PILL[ci % PILL.length];
+      createSparkles();
+    }
+
+    async function newQuote() {
+      try {
+        const url = currentCategory ? `/api/quote/${currentCategory}` : '/api/quote';
+        const res = await fetch(url);
+        currentQuote = await res.json();
+        showQuote(currentQuote);
+        checkFav();
+      } catch(e) { $('quoteText').innerHTML = '<span class="quote-text-inner">Try again!</span>'; }
+    }
+
+    function updateCounter() {
+      const n = currentCategory ? allQuotes.filter(q=>q.category===currentCategory).length : allQuotes.length;
+      $('counter').textContent = `${n} reminder${n!==1?'s':''}${currentCategory ? ` in "${cap(currentCategory)}"` : ''} waiting for you`;
+    }
+
+    // ── Favorites ──
+    function getFavs() { return JSON.parse(localStorage.getItem('dose_favs') || '[]'); }
+    function checkFav() {
+      if (!currentQuote) return;
+      const saved = getFavs().some(f => f.text === currentQuote.text);
+      $('favBtn').classList.toggle('saved', saved);
+    }
+    $('favBtn').onclick = () => {
+      if (!currentQuote) return;
+      let favs = getFavs();
+      const idx = favs.findIndex(f => f.text === currentQuote.text);
+      if (idx >= 0) favs.splice(idx, 1); else favs.unshift({ ...currentQuote, savedAt: Date.now() });
+      localStorage.setItem('dose_favs', JSON.stringify(favs));
+      checkFav();
+    };
+
+    // ── Share ──
+    $('shareBtn').onclick = async () => {
+      if (!currentQuote) return;
+      const text = `"${currentQuote.text}"`;
+      if (navigator.share) { try { await navigator.share({ title: 'Daily Dose', text }); } catch(e) {} }
+      else { navigator.clipboard.writeText(text).then(() => showToast('Copied!')); }
+    };
+
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast'; t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(), 1500);
+    }
+
+    // ── Sparkles ──
+    function createSparkles() {
+      const card = $('quoteCard');
+      const r = card.getBoundingClientRect();
+      const cx = r.left + r.width/2, cy = r.top + r.height/2;
+      const colors = ['var(--gold)','var(--rose)','var(--sage)','var(--navy)','var(--lavender)'];
+      for (let i=0; i<10; i++) {
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        const a = (i/10)*Math.PI*2;
+        const d = 50 + Math.random()*70;
+        s.style.left = (cx + Math.cos(a)*d) + 'px';
+        s.style.top = (cy + Math.sin(a)*d) + 'px';
+        s.style.background = colors[i%colors.length];
+        s.style.animationDelay = (Math.random()*0.3)+'s';
+        document.body.appendChild(s);
+        setTimeout(()=>s.remove(), 900);
+      }
+    }
+
+    // ── Confetti ──
+    function confetti() {
+      const colors = ['#b8956a','#c17b7b','#7a9b8a','#3d4f6f','#8b7bb5'];
+      for (let i=0; i<30; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random()*100+'vw';
+        c.style.top = '-10px';
+        c.style.background = colors[i%colors.length];
+        c.style.animationDuration = (0.8+Math.random()*0.8)+'s';
+        c.style.animationDelay = (Math.random()*0.4)+'s';
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(), 2000);
+      }
+    }
+
+    // ── Keyboard ──
+    document.addEventListener('keydown', e => {
+      if (e.code==='Space' && document.activeElement===document.body) { e.preventDefault(); newQuote(); }
+    });
+
+    $('newBtn').onclick = newQuote;
+    loadQuotes();
+  </script>
+</body>
+</html>

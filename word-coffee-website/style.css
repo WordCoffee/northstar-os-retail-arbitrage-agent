@@ -1,0 +1,214 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #f5ebe0, #fff);
+  color: #333;
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+header {
+  background-color: #3f2e1e;
+  color: white;
+  text-align: center;
+  padding: 3rem 2rem;
+  background-image: url('https://images.unsplash.com/photo-1607082349566-18734255b30d');
+  background-size: cover;
+  background-position: center;
+}
+
+header h1 {
+  font-size: 3.2rem;
+  margin: 0;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.tagline {
+  font-size: 1.4rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+nav {
+  margin-top: 1.5rem;
+}
+
+nav a {
+  display: inline-block;
+  margin: 0 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background-color: rgba(0, 0, 0, 0.35);
+  border-radius: 6px;
+  font-weight: bold;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Northstar nav highlight */
+.nav-northstar {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #10b981 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 4px;
+  padding: 6px 12px !important;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+.nav-northstar:hover {
+  background: rgba(16, 185, 129, 0.2) !important;
+}
+
+.section {
+  max-width: 900px;
+  padding: 4rem 2rem;
+  margin: auto;
+  text-align: center;
+}
+
+.section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.2rem;
+  color: #3f2e1e;
+}
+
+.section p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.hero-image {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  margin: 2rem 0;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.button-container a {
+  background-color: #3f2e1e;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.button-container a:hover {
+  background-color: #6b4b2a;
+}
+
+footer {
+  background-color: #3f2e1e;
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 4rem;
+}
+
+/* Northstar page specific styles */
+.subtitle {
+  color: #10b981;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.capability-card {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.capability-card h4 {
+  margin-top: 0;
+  color: #1a1a1a;
+}
+
+.pipeline-steps {
+  padding-left: 1.5rem;
+  line-height: 2;
+  text-align: left;
+  max-width: 700px;
+  margin: 1.5rem auto;
+}
+
+.pipeline-steps code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.notice-box {
+  background: #fff8e1;
+  border-left: 4px solid #f59e0b;
+  padding: 1.5rem;
+  border-radius: 0 8px 8px 0;
+  margin: 2rem auto;
+  max-width: 800px;
+  text-align: left;
+}
+
+.notice-box p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.feature-list {
+  text-align: left;
+  max-width: 600px;
+  margin: 1.5rem auto;
+  padding-left: 1.5rem;
+}
+
+.feature-list li {
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2.2rem;
+  }
+  .tagline {
+    font-size: 1.1rem;
+  }
+  nav a {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  .section {
+    padding: 2rem 1rem;
+  }
+  .section h2 {
+    font-size: 1.8rem;
+  }
+  .capabilities-grid {
+    grid-template-columns: 1fr;
+  }
+}

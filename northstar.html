@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Northstar OS | Word Coffee</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Northstar OS — Retail arbitrage intelligence platform. Automated Amazon search, Costco cost-basis matching, ROI scoring, and deal export.">
+  <style>
+    /* Northstar specific styles */
+    .auth-container {
+      max-width: 480px;
+      margin: 4rem auto;
+      padding: 3rem;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(63, 46, 30, 0.15);
+      text-align: center;
+    }
+    
+    .auth-header {
+      margin-bottom: 2rem;
+    }
+    
+    .auth-header .icon {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 1rem;
+      color: #3f2e1e;
+    }
+    
+    .auth-header h1 {
+      font-size: 2rem;
+      color: #3f2e1e;
+      margin-bottom: 0.5rem;
+    }
+    
+    .auth-header p {
+      color: #8a7a6a;
+      font-size: 1.1rem;
+    }
+    
+    .password-hint {
+      background: #fef3e8;
+      border: 1px solid #f5e6d3;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      color: #3f2e1e;
+    }
+    
+    .password-hint strong {
+      color: #3f2e1e;
+    }
+    
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .auth-form .form-group {
+      text-align: left;
+    }
+    
+    .auth-form label {
+      display: block;
+      font-weight: 600;
+      color: #3f2e1e;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .auth-form input[type="password"] {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #e8ddd4;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.1em;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+    
+    .auth-form input[type="password"]:focus {
+      outline: none;
+      border-color: #3f2e1e;
+      box-shadow: 0 0 0 3px rgba(63, 46, 30, 0.15);
+    }
+    
+    .auth-form button {
+      width: 100%;
+      padding: 1rem;
+      background: #3f2e1e;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    
+    .auth-form button:hover {
+      background: #5a452f;
+    }
+    
+    .auth-form button:active {
+      transform: scale(0.98);
+    }
+    
+    .auth-form button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .auth-error {
+      color: #c0392b;
+      background: #fdf2f2;
+      border: 1px solid #fadbd8;
+      padding: 1rem;
+      border-radius: 8px;
+      display: none;
+      font-size: 0.9rem;
+    }
+    
+    .auth-error.visible {
+      display: block;
+    }
+    
+    .dashboard-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: #3f2e1e;
+      color: #fff;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.1s;
+    }
+    
+    .dashboard-link:hover {
+      background: #5a452f;
+      transform: translateY(-2px);
+    }
+    
+    .dashboard-link .arrow {
+      transition: transform 0.2s;
+    }
+    
+    .dashboard-link:hover .arrow {
+      transform: translateX(4px);
+    }
+    
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+      text-align: left;
+    }
+    
+    .info-card {
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    
+    .info-card h4 {
+      color: #3f2e1e;
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+    }
+    
+    .info-card p {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    .unlocked-view {
+      display: none;
+    }
+    
+    .unlocked-view.visible {
+      display: block;
+    }
+    
+    .locked-view.hidden {
+      display: none;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+    
+    @media (max-width: 640px) {
+      .auth-container {
+        margin: 2rem 1rem;
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Word Coffee</h1>
+    <p class="tagline">Brewed for the Mind. Grounded in Purpose.</p>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="products.html">Products</a>
+      <a href="informational.html">Science</a>
+      <a href="learn-more.html">Learn More</a>
+      <a href="contact.html">Contact</a>
+      <a href="northstar.html" class="nav-northstar">Northstar OS (secured access)</a>
+    </nav>
+  </header>
+
+  <main class="section">
+    <div class="auth-container fade-in">
+      <!-- Locked View - Password Entry -->
+      <div id="lockedView" class="locked-view">
+        <div class="auth-header">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <h1>Northstar OS</h1>
+          <p>Retail Arbitrage Intelligence Platform</p>
+        </div>
+        
+        <div class="password-hint">
+          <strong>Test Password:</strong> <code style="background: #f5e6d3; padding: 0.25rem 0.5rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace;">northstar</code>
+          <br><small>Enter the password above to access the Northstar OS dashboard.</small>
+        </div>
+        
+        <div id="authError" class="auth-error"></div>
+        
+        <form id="authForm" class="auth-form">
+          <div class="form-group">
+            <label for="passwordInput">Access Code</label>
+            <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+          </div>
+          <button type="submit" id="submitBtn">Unlock Dashboard</button>
+        </form>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #eee;">
+          <p style="color: #8a7a6a; margin-bottom: 1rem; font-size: 0.9rem;">What you'll unlock:</p>
+          <div class="info-cards">
+            <div class="info-card">
+              <h4>🔍 Retail Arbitrage Agent</h4>
+              <p>Professional dashboard for Kirkland/Kirkland Signature product analysis with real-time Amazon data and Costco cost-basis matching.</p>
+            </div>
+            <div class="info-card">
+              <h4>📊 Live Deal Scoring</h4>
+              <p>ROI, profit margin, and seller rank analysis with configurable thresholds. Qualified deals highlighted automatically.</p>
+            </div>
+            <div class="info-card">
+              <h4>🔄 Pipeline Controls</h4>
+              <p>Re-run the Search → Normalize → Score pipeline with custom filters and keywords directly from the dashboard.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Unlocked View - Dashboard Access -->
+      <div id="unlockedView" class="unlocked-view">
+        <div class="auth-header">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #10b981;">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            <path d="M12 17v-5"></path>
+            <path d="M9 14h6"></path>
+          </svg>
+          <h1>Access Granted</h1>
+          <p>Welcome to Northstar OS</p>
+        </div>
+        
+        <p style="color: #8a7a6a; margin-bottom: 2rem;">Your retail arbitrage intelligence platform is ready.</p>
+        
+        <a href="/northstar-dashboard.html" class="dashboard-link">
+          <span>Launch Retail Arbitrage Dashboard</span>
+          <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="m12 5 7 7-7 7"></path>
+          </svg>
+        </a>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #eee;">
+          <p style="color: #8a7a6a; font-size: 0.9rem;">Session will remain active until browser is closed.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Word Coffee. Fuel Your Mind, One Word at a Time.</p>
+  </footer>
+
+  <script>
+    const PASSWORD = 'northstar';
+    const lockedView = document.getElementById('lockedView');
+    const unlockedView = document.getElementById('unlockedView');
+    const authForm = document.getElementById('authForm');
+    const passwordInput = document.getElementById('passwordInput');
+    const authError = document.getElementById('authError');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // Check if already authenticated (sessionStorage)
+    if (sessionStorage.getItem('northstar_auth') === 'true') {
+      showUnlocked();
+    }
+    
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const password = passwordInput.value.trim();
+      
+      if (!password) {
+        showError('Please enter the access code');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Verifying...';
+      authError.classList.remove('visible');
+      
+      // Simulate verification delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      if (password.toLowerCase() === PASSWORD) {
+        sessionStorage.setItem('northstar_auth', 'true');
+        showUnlocked();
+      } else {
+        showError('Invalid access code. The test password is: northstar');
+        passwordInput.value = '';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Unlock Dashboard';
+        passwordInput.focus();
+      }
+    });
+    
+    function showError(message) {
+      authError.textContent = message;
+      authError.classList.add('visible');
+      passwordInput.style.borderColor = '#c0392b';
+    }
+    
+    function showUnlocked() {
+      lockedView.classList.add('hidden');
+      unlockedView.classList.add('visible');
+    }
+    
+    // Clear error on input
+    passwordInput.addEventListener('input', () => {
+      authError.classList.remove('visible');
+      passwordInput.style.borderColor = '';
+    });
+    
+    // Focus on load
+    passwordInput.focus();
+  </script>
+</body>
+</html>

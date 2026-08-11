@@ -1,12 +1,7 @@
-name = "northstar-arbitrage-dashboard"
-compatibility_date = "2024-07-22"
-pages_build_output_dir = "public"
 
-[build]
-command = ""
-cwd = "."
+compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2026-01-01"
 
 [[kv_namespaces]]
-binding = "DATA"
-id = "your-kv-namespace-id"
-preview_id = "your-preview-kv-namespace-id"
+binding = "DEALS_KV"
+id = "dfb0374956e1410bbd0f6e8d1ac520e3"

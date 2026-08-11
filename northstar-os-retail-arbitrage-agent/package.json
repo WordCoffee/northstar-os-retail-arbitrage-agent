@@ -1,0 +1,23 @@
+{
+  "name": "northstar-os-retail-arbitrage-agent",
+  "version": "1.0.0",
+  "description": "Automated Amazon retail arbitrage scanner: scrapes listings via Bright Data, scores deals, stores results, and serves a dashboard UI.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "search": "node src/scrapers/amazonSearch.js",
+    "scan": "node src/index.js",
+    "server": "node src/ui/server.js",
+    "dev": "node --watch src/ui/server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "node-cron": "^3.0.3",
+    "cors": "^2.8.5"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}
