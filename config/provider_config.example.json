@@ -1,0 +1,15 @@
+{
+  "keepa": {
+    "enabled": true,
+    "marketplace": "US",
+    "environment_variable": "KEEPA_API_KEY",
+    "mode": "offline_design_only"
+  },
+  "dataforseo": {
+    "enabled": true,
+    "marketplace": "US",
+    "login_environment_variable": "DATAFORSEO_LOGIN",
+    "password_environment_variable": "DATAFORSEO_PASSWORD",
+    "mode": "offline_design_only"
+  }
+}
