@@ -92,6 +92,18 @@ DEFAULT_REQUEST_DELAY_SECONDS = 2.0
 DEFAULT_DELIVERY_ZIP = "75201"
 DEFAULT_BUSINESS_CENTER = "Dallas Business Center"
 
+# Typed failure classification (Batch 08 contract). The 5 client-side
+# failure states are exhaustive for the Costco/Unwrangle client; "success"
+# is the only non-failure state. These values are added to the result
+# dicts as `failure_type` so callers can distinguish auth/not_found/
+# rate_limit/transport/malformed without parsing the `data_gaps` string.
+FAILURE_TYPE_AUTH_ERROR = "auth_error"
+FAILURE_TYPE_RATE_LIMITED = "rate_limited"
+FAILURE_TYPE_NOT_FOUND = "not_found"
+FAILURE_TYPE_TRANSPORT_ERROR = "transport_error"
+FAILURE_TYPE_MALFORMED_RESPONSE = "malformed_response"
+FAILURE_TYPE_SUCCESS = "success"
+
 _BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 
 _PACK_PATTERN = re.compile(
@@ -277,6 +289,7 @@ def _search_openwebninja(query: str) -> Dict[str, Any]:
         "search": query,
         "page": 1,
         "success": False,
+        "failure_type": FAILURE_TYPE_TRANSPORT_ERROR,  # updated below on first success path
         "no_of_pages": 1,
         "total_results": None,
         "result_count": 0,
@@ -287,6 +300,7 @@ def _search_openwebninja(query: str) -> Dict[str, Any]:
 
     api_key = os.getenv("OPENWEBNINJA_API_KEY")
     if not api_key:
+        result["failure_type"] = FAILURE_TYPE_AUTH_ERROR
         result["data_gaps"].append("OpenWebNinja API key is not configured.")
         return result
 
@@ -296,24 +310,41 @@ def _search_openwebninja(query: str) -> Dict[str, Any]:
     try:
         resp = requests.get(OPENWEBNINJA_URL, params=params, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
     except requests.exceptions.Timeout:
+        result["failure_type"] = FAILURE_TYPE_TRANSPORT_ERROR
         result["data_gaps"].append("OpenWebNinja request timed out.")
         return result
     except requests.exceptions.RequestException:
+        result["failure_type"] = FAILURE_TYPE_TRANSPORT_ERROR
         result["data_gaps"].append("OpenWebNinja request failed at the network level.")
         return result
 
     result["http_status"] = resp.status_code
+    if resp.status_code in (401, 403):
+        result["failure_type"] = FAILURE_TYPE_AUTH_ERROR
+        result["data_gaps"].append(f"OpenWebNinja API returned HTTP {resp.status_code} (auth rejected).")
+        return result
+    if resp.status_code == 404:
+        result["failure_type"] = FAILURE_TYPE_NOT_FOUND
+        result["data_gaps"].append("OpenWebNinja API returned HTTP 404 (not found).")
+        return result
+    if resp.status_code == 429:
+        result["failure_type"] = FAILURE_TYPE_RATE_LIMITED
+        result["data_gaps"].append("OpenWebNinja API returned HTTP 429 (rate limited).")
+        return result
     if resp.status_code != 200:
+        result["failure_type"] = FAILURE_TYPE_TRANSPORT_ERROR
         result["data_gaps"].append(f"OpenWebNinja API returned HTTP {resp.status_code}.")
         return result
 
     try:
         payload = resp.json()
     except (json.JSONDecodeError, ValueError):
+        result["failure_type"] = FAILURE_TYPE_MALFORMED_RESPONSE
         result["data_gaps"].append("OpenWebNinja response was not valid JSON.")
         return result
 
     if not isinstance(payload, dict):
+        result["failure_type"] = FAILURE_TYPE_MALFORMED_RESPONSE
         result["data_gaps"].append("OpenWebNinja response had an unexpected structure.")
         return result
 
@@ -325,10 +356,12 @@ def _search_openwebninja(query: str) -> Dict[str, Any]:
         if result["total_results"] is None:
             result["total_results"] = data_block.get("total_products")
     if not isinstance(raw_products, list):
+        result["failure_type"] = FAILURE_TYPE_MALFORMED_RESPONSE
         result["data_gaps"].append("OpenWebNinja response was missing products.")
         return result
 
     result["success"] = True
+    result["failure_type"] = FAILURE_TYPE_SUCCESS
     fetched_at = _now_iso()
     location = _location()
     for raw in raw_products:
@@ -350,6 +383,7 @@ def _search_unwrangle(query: str, page: int) -> Dict[str, Any]:
         "search": query,
         "page": page,
         "success": False,
+        "failure_type": FAILURE_TYPE_TRANSPORT_ERROR,  # updated below on first success path
         "no_of_pages": None,
         "total_results": None,
         "result_count": 0,
@@ -360,6 +394,7 @@ def _search_unwrangle(query: str, page: int) -> Dict[str, Any]:
 
     api_key = os.getenv("UNWRANGLE_API_KEY")
     if not api_key:
+        result["failure_type"] = FAILURE_TYPE_AUTH_ERROR
         result["data_gaps"].append("Unwrangle API key is not configured.")
         return result
 
@@ -373,37 +408,57 @@ def _search_unwrangle(query: str, page: int) -> Dict[str, Any]:
     try:
         resp = requests.get(UNWRANGLE_URL, params=params, timeout=REQUEST_TIMEOUT_SECONDS)
     except requests.exceptions.Timeout:
+        result["failure_type"] = FAILURE_TYPE_TRANSPORT_ERROR
         result["data_gaps"].append("Unwrangle request timed out.")
         return result
     except requests.exceptions.RequestException:
+        result["failure_type"] = FAILURE_TYPE_TRANSPORT_ERROR
         result["data_gaps"].append("Unwrangle request failed at the network level.")
         return result
 
     result["http_status"] = resp.status_code
+    if resp.status_code in (401, 403):
+        result["failure_type"] = FAILURE_TYPE_AUTH_ERROR
+        result["data_gaps"].append(f"Unwrangle API returned HTTP {resp.status_code} (auth rejected).")
+        return result
+    if resp.status_code == 404:
+        result["failure_type"] = FAILURE_TYPE_NOT_FOUND
+        result["data_gaps"].append("Unwrangle API returned HTTP 404 (not found).")
+        return result
+    if resp.status_code == 429:
+        result["failure_type"] = FAILURE_TYPE_RATE_LIMITED
+        result["data_gaps"].append("Unwrangle API returned HTTP 429 (rate limited).")
+        return result
     if resp.status_code != 200:
+        result["failure_type"] = FAILURE_TYPE_TRANSPORT_ERROR
         result["data_gaps"].append(f"Unwrangle API returned HTTP {resp.status_code}.")
         return result
 
     try:
         payload = resp.json()
     except (json.JSONDecodeError, ValueError):
+        result["failure_type"] = FAILURE_TYPE_MALFORMED_RESPONSE
         result["data_gaps"].append("Unwrangle response was not valid JSON.")
         return result
 
     if not isinstance(payload, dict):
+        result["failure_type"] = FAILURE_TYPE_MALFORMED_RESPONSE
         result["data_gaps"].append("Unwrangle response had an unexpected structure.")
         return result
 
     if payload.get("success") is not True:
+        result["failure_type"] = FAILURE_TYPE_MALFORMED_RESPONSE
         result["data_gaps"].append("Unwrangle reported request failure (success is false).")
         return result
 
     raw_results = payload.get("results")
     if not isinstance(raw_results, list):
+        result["failure_type"] = FAILURE_TYPE_MALFORMED_RESPONSE
         result["data_gaps"].append("Unwrangle response was missing results.")
         return result
 
     result["success"] = True
+    result["failure_type"] = FAILURE_TYPE_SUCCESS
     result["no_of_pages"] = payload.get("no_of_pages")
     result["total_results"] = payload.get("total_results")
     fetched_at = _now_iso()
@@ -690,6 +745,7 @@ def refresh_product_details(item_ids) -> Dict[str, Any]:
     if not _detail_enabled():
         return {
             "status": "disabled",
+            "failure_type": FAILURE_TYPE_NOT_FOUND,  # surface as "feature not available" (closest typed bucket)
             "message": "COSTCO_CATALOG_DETAIL_ENABLED is not 1; no requests were made.",
             "item_ids_requested": len(ids),
             "fetched": 0,
@@ -698,13 +754,19 @@ def refresh_product_details(item_ids) -> Dict[str, Any]:
     if catalog_source() != "UNWRANGLE":
         return {
             "status": "data_gap",
+            "failure_type": FAILURE_TYPE_NOT_FOUND,
             "message": "Product-detail refresh is only implemented for UNWRANGLE; current source: %s." % catalog_source(),
             "item_ids_requested": len(ids),
             "fetched": 0,
         }
     api_key = os.getenv("UNWRANGLE_API_KEY")
     if not api_key:
-        return {"status": "failed", "message": "Unwrangle API key is not configured.", "fetched": 0}
+        return {
+            "status": "failed",
+            "failure_type": FAILURE_TYPE_AUTH_ERROR,
+            "message": "Unwrangle API key is not configured.",
+            "fetched": 0,
+        }
 
     fetched = []
     failures = []
@@ -713,21 +775,38 @@ def refresh_product_details(item_ids) -> Dict[str, Any]:
         try:
             resp = requests.get(UNWRANGLE_URL, params=params, timeout=REQUEST_TIMEOUT_SECONDS)
         except requests.exceptions.Timeout:
-            failures.append({"item_id": item_id, "reason": "timeout"})
+            failures.append({"item_id": item_id, "reason": "timeout",
+                             "failure_type": FAILURE_TYPE_TRANSPORT_ERROR})
             break
         except requests.exceptions.RequestException:
-            failures.append({"item_id": item_id, "reason": "network_error"})
+            failures.append({"item_id": item_id, "reason": "network_error",
+                             "failure_type": FAILURE_TYPE_TRANSPORT_ERROR})
             break
-        if resp.status_code in (401, 403, 429) or resp.status_code >= 500:
-            failures.append({"item_id": item_id, "reason": "http_%d" % resp.status_code})
+        if resp.status_code in (401, 403):
+            failures.append({"item_id": item_id, "reason": "http_%d" % resp.status_code,
+                             "failure_type": FAILURE_TYPE_AUTH_ERROR})
+            break
+        if resp.status_code == 404:
+            failures.append({"item_id": item_id, "reason": "http_404",
+                             "failure_type": FAILURE_TYPE_NOT_FOUND})
+            break
+        if resp.status_code == 429:
+            failures.append({"item_id": item_id, "reason": "http_429",
+                             "failure_type": FAILURE_TYPE_RATE_LIMITED})
+            break
+        if resp.status_code >= 500:
+            failures.append({"item_id": item_id, "reason": "http_%d" % resp.status_code,
+                             "failure_type": FAILURE_TYPE_TRANSPORT_ERROR})
             break
         if resp.status_code != 200:
-            failures.append({"item_id": item_id, "reason": "http_%d" % resp.status_code})
+            failures.append({"item_id": item_id, "reason": "http_%d" % resp.status_code,
+                             "failure_type": FAILURE_TYPE_TRANSPORT_ERROR})
             continue
         try:
             payload = resp.json()
         except (json.JSONDecodeError, ValueError):
-            failures.append({"item_id": item_id, "reason": "invalid_json"})
+            failures.append({"item_id": item_id, "reason": "invalid_json",
+                             "failure_type": FAILURE_TYPE_MALFORMED_RESPONSE})
             break
         raw = payload.get("result") if isinstance(payload, dict) else None
         if isinstance(raw, dict) and (raw.get("id") or raw.get("item_number") or raw.get("name")):
@@ -736,7 +815,8 @@ def refresh_product_details(item_ids) -> Dict[str, Any]:
                 record["costco_item_id"] = item_id
             fetched.append(record)
         else:
-            failures.append({"item_id": item_id, "reason": "no_result"})
+            failures.append({"item_id": item_id, "reason": "no_result",
+                             "failure_type": FAILURE_TYPE_NOT_FOUND})
         if len(ids) > 1:
             time.sleep(_request_delay())
 
