@@ -1,0 +1,1963 @@
+{
+  "kind": "proof-batch-benchmark-comparison-report",
+  "schema_version": 1,
+  "run_id": "proof-batch-preflight-20260818T060549Z",
+  "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+  "generated_at": "2026-08-18T06:46:26.030522+00:00",
+  "source_artifact": "validated-result-envelopes.json",
+  "per_asin": [
+    {
+      "asin": "B01H40O42I",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.53,
+        "percent_variance": 0.02,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B01H40O42I",
+      "returned_asin": "B01H40O42I",
+      "request_index": 1,
+      "mapping_state": "expected_mapping_review",
+      "mapping_reason": "benchmark has a historical cross-file title conflict; compatible title returned — mapping review required, never silently resolved",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B08R2SRN88",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.8,
+        "percent_variance": 0.03,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B08R2SRN88",
+      "returned_asin": "B08R2SRN88",
+      "request_index": 2,
+      "mapping_state": "expected_mapping_review",
+      "mapping_reason": "benchmark has a historical cross-file title conflict; compatible title returned — mapping review required, never silently resolved",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B0CP6LXPLK",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "unavailable",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.33,
+        "percent_variance": 0.01,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B0CP6LXPLK",
+      "returned_asin": "B0CP6LXPLK",
+      "request_index": 3,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B00BISGJXA",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.26,
+        "percent_variance": 0.02,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B00BISGJXA",
+      "returned_asin": "B00BISGJXA",
+      "request_index": 4,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B00BH3HPZW",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.54,
+        "percent_variance": 0.03,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B00BH3HPZW",
+      "returned_asin": "B00BH3HPZW",
+      "request_index": 5,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B00GYZWNY6",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.29,
+        "percent_variance": 0.01,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B00GYZWNY6",
+      "returned_asin": "B00GYZWNY6",
+      "request_index": 6,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B0045XGE9E",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.28,
+        "percent_variance": 0.02,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B0045XGE9E",
+      "returned_asin": "B0045XGE9E",
+      "request_index": 7,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B002L4M4M0",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.24,
+        "percent_variance": 0.03,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B002L4M4M0",
+      "returned_asin": "B002L4M4M0",
+      "request_index": 8,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B081THWMDK",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.29,
+        "percent_variance": 0.01,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B081THWMDK",
+      "returned_asin": "B081THWMDK",
+      "request_index": 9,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B085F1QCB9",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "unavailable",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.56,
+        "percent_variance": 0.02,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B085F1QCB9",
+      "returned_asin": "B085F1QCB9",
+      "request_index": 10,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B00N54AJZE",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.38,
+        "percent_variance": 0.03,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B00N54AJZE",
+      "returned_asin": "B00N54AJZE",
+      "request_index": 11,
+      "mapping_state": "expected_mapping_review",
+      "mapping_reason": "benchmark has a historical cross-file title conflict; compatible title returned — mapping review required, never silently resolved",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B00QGMOJ4Y",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.24,
+        "percent_variance": 0.01,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B00QGMOJ4Y",
+      "returned_asin": "B00QGMOJ4Y",
+      "request_index": 12,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B01LY71217",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.72,
+        "percent_variance": 0.02,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B01LY71217",
+      "returned_asin": "B01LY71217",
+      "request_index": 13,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B07BZW88NY",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.43,
+        "percent_variance": 0.03,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B07BZW88NY",
+      "returned_asin": "B07BZW88NY",
+      "request_index": 14,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B078B5N4DD",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "unavailable",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.14,
+        "percent_variance": 0.01,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B078B5N4DD",
+      "returned_asin": "B078B5N4DD",
+      "request_index": 15,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B007MWNFBA",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "unavailable",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.4,
+        "percent_variance": 0.02,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B007MWNFBA",
+      "returned_asin": "B007MWNFBA",
+      "request_index": 16,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B00OPQZJA6",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "unavailable",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.63,
+        "percent_variance": 0.03,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B00OPQZJA6",
+      "returned_asin": "B00OPQZJA6",
+      "request_index": 17,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B0C54GXFQ8",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.44,
+        "percent_variance": 0.01,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B0C54GXFQ8",
+      "returned_asin": "B0C54GXFQ8",
+      "request_index": 18,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B0F7GTX962",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "unavailable",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.31,
+        "percent_variance": 0.02,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B0F7GTX962",
+      "returned_asin": "B0F7GTX962",
+      "request_index": 19,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    },
+    {
+      "asin": "B00BI33NU2",
+      "capture_time_status": "unknown",
+      "capture_time_note": "reference capture time unknown — reference only, not freshness proof",
+      "benchmark_source_files": [
+        "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+        "Rank-Product-ASIN-Reviews-Price-BSR.csv"
+      ],
+      "identity": {
+        "asin_match": "pass",
+        "title_status": "match",
+        "title_similarity": 1.0,
+        "pack_status": "match",
+        "pack_mismatch_block": false,
+        "note": null
+      },
+      "price": {
+        "comparable": true,
+        "absolute_variance": 0.41,
+        "percent_variance": 0.03,
+        "classification": "within_tolerance",
+        "capture_time_status": "unknown",
+        "note": "price drift labeled requires freshness/context review — not a provider error"
+      },
+      "reviews": {
+        "comparable": false,
+        "trend": "unavailable",
+        "direction": null,
+        "percent_change": null,
+        "note": "review comparison unavailable: benchmark or live review count missing"
+      },
+      "prime_fba": {
+        "comparable": false,
+        "status": "unavailable",
+        "note": "Prime/FBA comparison unavailable: benchmark or live signal missing"
+      },
+      "bsr": {
+        "comparable": false,
+        "category_context": "unavailable",
+        "observed_change": null,
+        "percent_change": null,
+        "note": "BSR comparison unavailable: benchmark or live BSR rank missing"
+      },
+      "offer_section": {
+        "present": true,
+        "source": "easyparser",
+        "timestamp": "2026-08-18T12:00:00+00:00",
+        "coverage": "full",
+        "internal_consistency": {
+          "status": "inconsistent",
+          "fba": 3,
+          "fbm": 0,
+          "amazon": 1,
+          "total": 3,
+          "expected": 4,
+          "reason": "total_observed does not equal FBA+FBM(+AMAZON); review roster"
+        },
+        "buy_box_present": true,
+        "buy_box_requires_offer_data": {
+          "status": "ok",
+          "note": "Buy Box winner present alongside offer data"
+        },
+        "label": "not externally benchmarked",
+        "note": "no benchmark seller roster exists; coverage/provenance validated internally only"
+      },
+      "economics": {
+        "readiness": "unavailable",
+        "label": "not externally benchmarked",
+        "note": "ROI unavailable: material economics inputs missing"
+      },
+      "demand": {
+        "bsr_input_present": false,
+        "bsr_category_present": false,
+        "estimation_method": "unknown",
+        "estimation_confidence": "unknown",
+        "label": "estimate validation, not sales-truth validation",
+        "note": "estimate validation only — never sales-truth validation"
+      },
+      "internally_validated": {
+        "label": "not externally benchmarked",
+        "note": "seller/offer, economics and demand are coverage/provenance checks — never benchmarked against the CSVs"
+      },
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "provider": "EASYPARSER",
+      "result_status": "available",
+      "envelope_validation_errors": [],
+      "requested_asin": "B00BI33NU2",
+      "returned_asin": "B00BI33NU2",
+      "request_index": 20,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "provider_status": "success",
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d"
+    }
+  ],
+  "metrics": {
+    "scope": "benchmark-matched rows only for measured rates; unmatched rows counted separately",
+    "benchmark_matched_asin_count": 20,
+    "unmatched_asin_count": 0,
+    "conflicting_benchmark_reference_count": 20,
+    "identity_title_match_rate": 1.0,
+    "identity_title_likely_match_count": 0,
+    "identity_title_unavailable_count": 0,
+    "pack_mismatch_block_count": 0,
+    "price_comparable_count": 20,
+    "price_exact_count": 0,
+    "price_within_tolerance_count": 20,
+    "price_moderate_drift_count": 0,
+    "price_material_drift_count": 0,
+    "price_unavailable_count": 0,
+    "review_comparable_count": 0,
+    "review_decline_flag_count": 0,
+    "prime_fba_comparable_count": 0,
+    "bsr_comparable_count": 0,
+    "bsr_category_mismatch_count": 0,
+    "market_snapshot_coverage": {
+      "seller_roster_present": 20,
+      "coverage_full": 20,
+      "coverage_partial": 0,
+      "coverage_unknown": 0,
+      "buy_box_present": 20,
+      "seller_counts_internally_consistent": 0,
+      "seller_counts_inconsistent": 20
+    },
+    "economics_readiness": {
+      "decision_ready": 0,
+      "assumption_based": 0,
+      "unavailable": 20
+    },
+    "benchmark_limitations": {
+      "capture_time_unknown": true,
+      "note": "benchmark capture time unknown; reference only, not freshness proof",
+      "no_seller_roster_benchmark": true,
+      "no_economics_benchmark": true,
+      "no_demand_truth_benchmark": true,
+      "price_bsr_drift_expected": "Price and BSR may legitimately change; comparison validates mapping and plausibility, not live market stability"
+    }
+  },
+  "mapping_summary": {
+    "match_count": 17,
+    "expected_mapping_review_count": 3,
+    "expected_mapping_review_asins": [
+      "B00N54AJZE",
+      "B01H40O42I",
+      "B08R2SRN88"
+    ],
+    "unexpected_mapping_mismatch_count": 0,
+    "unexpected_mapping_mismatch_asins": [],
+    "unavailable_count": 0
+  },
+  "price_drift_summary": {
+    "within_tolerance": 20
+  },
+  "drift_policy": {
+    "capture_time_unknown": true,
+    "note": "benchmark capture time unknown — price/BSR/review differences are possible market drift, never provider failure by themselves"
+  },
+  "internally_validated": {
+    "label": "not externally benchmarked",
+    "economics_demand": "model-based/internal unless independently sourced"
+  },
+  "no_universal_accuracy_percentage": true,
+  "limitations": {
+    "offer_roster": "coverage full/partial/unknown per envelope; no benchmark seller roster exists",
+    "economics_demand_not_benchmarked": true,
+    "raw_responses_never_persisted": true,
+    "capture_time_unknown": true
+  }
+}

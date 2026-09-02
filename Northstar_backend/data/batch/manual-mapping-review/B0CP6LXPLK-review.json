@@ -1,0 +1,31 @@
+{
+  "asin": "B0CP6LXPLK",
+  "benchmark_mutation_recommendation": null,
+  "benchmark_title": "Minoxidil Extra Strength (6-mo)",
+  "benchmark_title_variants": null,
+  "conclusion_about_correct_source": null,
+  "failure_manifest_sha256": "42069974d7a86e2fb50093938c44f50e606726a94e0065bbf81572f10cd510d6",
+  "failure_run_directory": "data/batch/live-validation-runs/proof-batch-preflight-attempt-2-20260819T030931Z",
+  "identity_status": "manual_resolution_required",
+  "live_returned_title": null,
+  "live_returned_title_note": "Not retained: the live run hard-stopped on a scrubbed failure manifest with no result envelope, so no returned title is safely available in local evidence.",
+  "mapping_outcome": "unexpected_mapping_mismatch",
+  "next_required_evidence": [
+    "Amazon listing title and product page identity from a manually reviewed source",
+    "pack count/strength/volume comparison",
+    "brand/manufacturer comparison",
+    "UPC/EAN if available",
+    "screenshot or documented human verification timestamp",
+    "a future trusted paid-provider result, if acquired"
+  ],
+  "provider_validation_status": "unresolved_nonconflict_mapping_mismatch",
+  "purchase_authorization": null,
+  "purchase_status": "blocked",
+  "reason": "Non-conflict ASIN returned an incompatible title; benchmark/provider/listing identity unresolved.",
+  "source_preflight_run_ids": [
+    "proof-batch-preflight-20260818T060549Z",
+    "proof-batch-preflight-attempt-2-20260819T030931Z"
+  ],
+  "status": "manual_resolution_required",
+  "title_conflict": false
+}

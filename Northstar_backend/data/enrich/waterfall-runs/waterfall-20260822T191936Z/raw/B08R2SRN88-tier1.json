@@ -1,0 +1,450 @@
+{
+  "post": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0351 sec.",
+    "cost": 0.0015,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221919-2329-0192-0000-f70365a6ce95",
+        "status_code": 20100,
+        "status_message": "Task Created.",
+        "time": "0.0037 sec.",
+        "cost": 0.0015,
+        "result_count": 0,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_post"
+        ],
+        "data": {
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B08R2SRN88",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "se_type": "asin",
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": null
+      }
+    ]
+  },
+  "get": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0618 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221919-2329-0192-0000-f70365a6ce95",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "0.0114 sec.",
+        "cost": 0,
+        "result_count": 1,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_get",
+          "advanced",
+          "08221919-2329-0192-0000-f70365a6ce95"
+        ],
+        "data": {
+          "se_type": "asin",
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B08R2SRN88",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": [
+          {
+            "asin": "B08R2SRN88",
+            "type": "asin",
+            "se_domain": "amazon.com",
+            "location_code": 2840,
+            "language_code": "en_US",
+            "check_url": "https://www.amazon.com/dp/B08R2SRN88?language=en_US",
+            "datetime": "2026-08-22 19:20:05 +00:00",
+            "item_types": [
+              "amazon_product_info"
+            ],
+            "items_count": 1,
+            "items": [
+              {
+                "type": "amazon_product_info",
+                "rank_group": 1,
+                "rank_absolute": 1,
+                "position": "right",
+                "xpath": "/html[1]/body[1]/div[1]",
+                "title": "Kirkland Signature Aller-Flo Fluticasone Propionate (Glucorticoid) 5 Bottles x 120 Metered Sprays 0.54 Fl OZ per Bottle (15.8 mL x 5) 2.70 OZ Total (79 mL Total) 600 Total Sprays Total, 1-Pack",
+                "details": "Product details Product Dimensions\n:\n4 x 6 x 1 inches; 2.7 ounces\nItem model number\n:\nB08R2SRN88\nDate First Available\n:\nDecember 20, 2020\nManufacturer\n:\nKIRKLAND SIGNATURE\nASIN\n:\nB08R2SRN88\nBest Sellers Rank:  #3,595 in Health & Household ( See Top 100 in Health & Household )  #40 in Allergy Medicine\nCustomer Reviews:   4.8  4.8 out of 5 stars (11,909)",
+                "image_url": "https://m.media-amazon.com/images/I/81nEqUctm+L._AC_SX300_SY300_QL70_FMwebp_.jpg",
+                "author": "Brand: KIRKLAND",
+                "data_asin": "B08R2SRN88",
+                "parent_asin": null,
+                "product_asins": null,
+                "price_from": 26.8,
+                "price_to": null,
+                "percentage_discount": null,
+                "currency": "USD",
+                "is_amazon_choice": false,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.8,
+                  "votes_count": 11909,
+                  "rating_max": 5
+                },
+                "is_newer_model_available": false,
+                "is_prime_video": false,
+                "applicable_vouchers": null,
+                "newer_model": null,
+                "categories": [
+                  {
+                    "category": "Health & Household",
+                    "url": "https://amazon.com/health-personal-care-nutrition-fitness/b/ref=dp_bc_1?ie=UTF8&node=3760901"
+                  },
+                  {
+                    "category": "Health Care",
+                    "url": "https://amazon.com/Health-Care-Products-Personal/b/ref=dp_bc_2?ie=UTF8&node=3760941"
+                  },
+                  {
+                    "category": "Over-the-Counter Medication",
+                    "url": "https://amazon.com/Medications-Treatments/b/ref=dp_bc_3?ie=UTF8&node=10079990011"
+                  },
+                  {
+                    "category": "Allergy, Sinus & Asthma",
+                    "url": "https://amazon.com/Allergy-Sinus-Asthma-Medicine/b/ref=dp_bc_4?ie=UTF8&node=3760951"
+                  },
+                  {
+                    "category": "Allergy Medicine",
+                    "url": "https://amazon.com/Allergy-Medicine/b/ref=dp_bc_5?ie=UTF8&node=3760991"
+                  }
+                ],
+                "product_information": [
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Important information",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": "Ingredients",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Fluticasone Propionate(Glucocorticoid) 50 mcg"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "product_information_rows",
+                        "title": "Legal Disclaimer",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Statements regarding dietary supplements have not been evaluated by the FDA and are not intended to diagnose, treat, cure, or prevent any disease or health condition."
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Product Description",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": null,
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "KIRKLAND SIGNATURE Aller-Flo Fluticasone Propionate (Glucorticoid) 5 Bottles x 120 Metered Sprays 0.54 Fl OZ per Bottle (15.8 mL x 5) 2.70 OZ Total (79 mL Total) 600 Total Sprays Total, 1-Pack"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Product details",
+                    "body": {
+                      "Product Dimensions": "4 x 6 x 1 inches; 2.7 ounces",
+                      "Item model number": "B08R2SRN88",
+                      "Date First Available": "December 20, 2020",
+                      "Manufacturer": "KIRKLAND SIGNATURE",
+                      "ASIN": "B08R2SRN88",
+                      "Best Sellers Rank": "#3,595 in Health & Household ( See Top 100 in Health & Household )  #40 in Allergy Medicine",
+                      "Customer Reviews": "4.8  4.8 out of 5 stars (11,909)"
+                    }
+                  }
+                ],
+                "product_images_list": [
+                  "https://m.media-amazon.com/images/I/81nEqUctm+L._AC_SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/91LcZwk5shL._AC_SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/81O5B8yWTWL._AC_SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/71udGXAOoWL._AC_SL1500_.jpg"
+                ],
+                "product_videos_list": null,
+                "description": "About this item  Compare to Flonase Allergy Relief Active Ingredient\nFluticasone Propionate(Glucocorticoid) 50 mcg.\nIndoor/Outdoor Allergy Relief\nNon-Drowsy\n5 Bottles, 120 Sprays Each\nShow more",
+                "is_available": true,
+                "top_local_reviews": [
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[1]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 7, 2026",
+                    "helpful_votes": 1,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "L. Oldenburg",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHVU2NNKYU36HAGZZMEVOILI4HDA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Good, cheap OTC alternative to prescription fluticasone",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R113KYA1VTITU4/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "These nasal sprays contain the same ingredients as my prescription ones did. Since my medical carrier no longer supports the nasal sprays I needed to get OTC ones. These work well and last a long time. I have bought a second set. It helps me to sleep more easily (allergies) and I have no side effects. The only negative that I can think of is that it’s a small container and if you have severe hand arthritis, it might be difficult to use this spray.",
+                    "publication_date": "2026-08-07 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[2]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 5, 2026",
+                    "helpful_votes": 1,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Common1",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGRIBU26P4X33IT4NEMDDVMHMYTA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Golden goose",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3BTXGYWWMDDWN/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "No question, definitely one of best items sold on Amazon. Anyone who uses and purchases understands the ridiculous price of FLONASE in big box stores. It's a non negotiable necessity. Must have for any allergy sufferers out there. Buy this and you'll thank yourself later. EXCELLENT price for wonderful product. Very very happy with this purchase!",
+                    "publication_date": "2026-07-05 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[3]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 17, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "kalo1997",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AFAEXN62EFMANWQMCROUOK6KSRPQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Works very well -- and fast!",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3JWHFF95LSX2A/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "This pump-spray works just as well as more expensive brands. It works very fast and lasts. Very good value!",
+                    "publication_date": "2026-08-17 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[4]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 6, 2026",
+                    "helpful_votes": 1,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "random person",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AH566YST7R5A4Y3A6GQDYCROJLVQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "My daily snort",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R30XF7KE016VU1/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "I've been using this Kirkland brand flonase for several years now, works great and is cost effective. No weird smells or taste from the solution. The bottle is nearly completely empty when the pump stops picking up fluid so there's hardly any wastage. I have absolutely horrible allergies and it helps me so much! If you have nosebleeds from it, you're likely spraying it in your nose wrong and please look up info on proper nasal spray use.",
+                    "publication_date": "2026-07-06 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[5]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 8, 2026",
+                    "helpful_votes": 1,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Angie Friesl",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHCMOF7HKM2OQIVTGYHQDZTETHLQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Really works!",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1YZMUYLJQVFRA/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "I’ve been using this for years & love it!🥰 Really works in allergy season or occasional stuffiness! Great price too!",
+                    "publication_date": "2026-08-08 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[6]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on June 12, 2026",
+                    "helpful_votes": 1,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Walshrd",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGFJZEORWWPWRCZKL4NPHXEIIZUA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Quality product.  Small bottles.  Half price of Flonase",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3276ZE4Z74CSF/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Smaller-sized bottles.  If these were the larger bottles, this would be a 5-star review.  No matter, this is a quality product and is sold by many many others.  Shop for price.  The price on this offering is good.  You should know that this product is identical to Flonase which doubly priced.",
+                    "publication_date": "2026-06-12 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 4,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[7]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 16, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Christine Cunningham",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHCBMIFEPBUJ5KKUJARRJCES6SOQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Effective product.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R8EW86OB6PSYM/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Seems to work as well as Flonase -- great value pricing.",
+                    "publication_date": "2026-08-16 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[8]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 31, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Patricia Hall",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AERRPTXGSHVH7YQWKHVBO3ZCBI4A?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Money saver for allergic rhinitis",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/RRCDG4SJKV92O/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Works as well as brand name Fluticason, Flonase.",
+                    "publication_date": "2026-07-31 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  }
+                ],
+                "top_global_reviews": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

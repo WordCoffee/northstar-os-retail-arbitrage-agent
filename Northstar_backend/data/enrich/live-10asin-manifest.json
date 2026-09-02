@@ -1,0 +1,135 @@
+﻿{
+    "kind":  "live-10asin-manifest",
+    "schema_version":  1,
+    "purpose":  "easyparser_offer_validation_truth_meter",
+    "frozen_at_utc":  "2026-08-22T03:59:33Z",
+    "note":  "Snapshot ground-truth from operator-supplied Amazon CSVs; values are capture-time references, NOT guaranteed current. Pure data - no code, no secrets.",
+    "sources":  [
+                    "data/benchmarks/raw/BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+                    "data/benchmarks/raw/Rank-Product-ASIN-Reviews-Price-BSR.csv"
+                ],
+    "canonical_asin_order":  [
+                                 "B01H40O42I",
+                                 "B08R2SRN88",
+                                 "B0CP6LXPLK",
+                                 "B00BISGJXA",
+                                 "B00BH3HPZW",
+                                 "B00GYZWNY6",
+                                 "B0045XGE9E",
+                                 "B002L4M4M0",
+                                 "B081THWMDK",
+                                 "B085F1QCB9"
+                             ],
+    "asins":  [
+                  {
+                      "position":  1,
+                      "asin":  "B01H40O42I",
+                      "product_title_csv":  "Aller-Flo Fluticasone (Pack of 5)",
+                      "product_title_bsr_csv":  "Aller-Flo (Pack of 5)",
+                      "title_cross_file_conflict":  true,
+                      "price_csv":  26.74,
+                      "reviews_csv":  11114,
+                      "prime_fba_flag_csv":  "Yes",
+                      "bsr_text_csv":  "Not listed on page"
+                  },
+                  {
+                      "position":  2,
+                      "asin":  "B08R2SRN88",
+                      "product_title_csv":  "Aller-Flo Fluticasone (5 Bottles/600 sprays)",
+                      "product_title_bsr_csv":  "Aller-Flo (5 Bottles/600 sprays)",
+                      "title_cross_file_conflict":  true,
+                      "price_csv":  26.8,
+                      "reviews_csv":  11898,
+                      "prime_fba_flag_csv":  "Yes",
+                      "bsr_text_csv":  "#3,567 in Health \u0026 Householdamazon"
+                  },
+                  {
+                      "position":  3,
+                      "asin":  "B0CP6LXPLK",
+                      "product_title_csv":  "Minoxidil Extra Strength (6-mo)",
+                      "product_title_bsr_csv":  "Minoxidil Extra Strength (6-mo)",
+                      "title_cross_file_conflict":  false,
+                      "price_csv":  33.12,
+                      "reviews_csv":  1434,
+                      "prime_fba_flag_csv":  "Yes",
+                      "bsr_text_csv":  "#2,300 in Beauty \u0026 Personal Care; #15 in Hair Regrowth Treatmentsamazon"
+                  },
+                  {
+                      "position":  4,
+                      "asin":  "B00BISGJXA",
+                      "product_title_csv":  "Stool Softener 100mg (400ct)",
+                      "product_title_bsr_csv":  "Stool Softener 100mg (400ct)",
+                      "title_cross_file_conflict":  false,
+                      "price_csv":  12.75,
+                      "reviews_csv":  18629,
+                      "prime_fba_flag_csv":  "Yes",
+                      "bsr_text_csv":  "#4,960 in Health \u0026 Householdamazon"
+                  },
+                  {
+                      "position":  5,
+                      "asin":  "B00BH3HPZW",
+                      "product_title_csv":  "Fiber Capsules (360ct)",
+                      "product_title_bsr_csv":  "Fiber Capsules (360ct)",
+                      "title_cross_file_conflict":  false,
+                      "price_csv":  17.84,
+                      "reviews_csv":  4799,
+                      "prime_fba_flag_csv":  "Yes",
+                      "bsr_text_csv":  "#6,602 in Health \u0026 Household; #32 in Dietary Fiber Nutritional Supplementsamazon"
+                  },
+                  {
+                      "position":  6,
+                      "asin":  "B00GYZWNY6",
+                      "product_title_csv":  "Glucosamine 1500/Chondroitin 1200 (220ct)",
+                      "product_title_bsr_csv":  "Glucosamine 1500/Chondroitin 1200 (220ct)",
+                      "title_cross_file_conflict":  false,
+                      "price_csv":  29.25,
+                      "reviews_csv":  5183,
+                      "prime_fba_flag_csv":  "Yes",
+                      "bsr_text_csv":  "#6,562 in Health \u0026 Household; #8 in Chondroitin Supplementsamazon"
+                  },
+                  {
+                      "position":  7,
+                      "asin":  "B0045XGE9E",
+                      "product_title_csv":  "Sleep Aid Doxylamine (2pk/192ct)",
+                      "product_title_bsr_csv":  "Sleep Aid Doxylamine (2pk/192ct)",
+                      "title_cross_file_conflict":  false,
+                      "price_csv":  13.84,
+                      "reviews_csv":  4966,
+                      "prime_fba_flag_csv":  "Yes",
+                      "bsr_text_csv":  "#7,570 in Health \u0026 Household; #13 in OTC Sleep Aidsamazon"
+                  },
+                  {
+                      "position":  8,
+                      "asin":  "B002L4M4M0",
+                      "product_title_csv":  "Sleep Aid Doxylamine (96ct)",
+                      "product_title_bsr_csv":  "Sleep Aid Doxylamine (96ct)",
+                      "title_cross_file_conflict":  false,
+                      "price_csv":  7.93,
+                      "reviews_csv":  6270,
+                      "prime_fba_flag_csv":  "Yes",
+                      "bsr_text_csv":  "#14,653 in Health \u0026 Household; #24 in OTC Sleep Aidsamazon"
+                  },
+                  {
+                      "position":  9,
+                      "asin":  "B081THWMDK",
+                      "product_title_csv":  "Stretch Tite Food Wrap (2pk)",
+                      "product_title_bsr_csv":  "Stretch Tite Food Wrap (2pk)",
+                      "title_cross_file_conflict":  false,
+                      "price_csv":  28.79,
+                      "reviews_csv":  967,
+                      "prime_fba_flag_csv":  "Yes",
+                      "bsr_text_csv":  "Not listed on page"
+                  },
+                  {
+                      "position":  10,
+                      "asin":  "B085F1QCB9",
+                      "product_title_csv":  "Compactor Trash Bag",
+                      "product_title_bsr_csv":  "Compactor Trash Bag",
+                      "title_cross_file_conflict":  false,
+                      "price_csv":  28.07,
+                      "reviews_csv":  588,
+                      "prime_fba_flag_csv":  "No (Amazon-shipped, non-Prime badge)",
+                      "bsr_text_csv":  "#11,435 in Health \u0026 Household; #163 in Trash Bagsamazon"
+                  }
+              ]
+}

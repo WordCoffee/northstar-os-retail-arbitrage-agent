@@ -1,0 +1,11 @@
+﻿mode:                  preflight (exactly one Easyparser OFFER request)
+asin:                  B0BMX67KY7
+data_status:           partial
+offers_returned:       11
+offers_complete:       False
+buy_box_price:         36.15
+buy_box_seller:        CopperRoad
+credits_used:          16
+credits_remaining:     84
+requests_used:         1
+saved:                 partial

@@ -1,0 +1,100 @@
+{
+  "kind": "validation-preflight-plan",
+  "run_id": "data-validation-20asin-live-001",
+  "generated_at": "2026-08-20T02:24:49.970347+00:00",
+  "mode": "standard_queue",
+  "hard_cap_cents": 100,
+  "reserved_max_cost_cents": 100,
+  "within_budget": true,
+  "totals": {
+    "asin_count": 20,
+    "manual_review_only": 3,
+    "cache_hit": 0,
+    "retrieve_existing_task": 0,
+    "eligible_to_submit": 10,
+    "blocked": 7,
+    "total_reserved_cents": 100
+  },
+  "per_asin": [
+    {
+      "asin": "B01H40O42I",
+      "classification": "manual_review_only"
+    },
+    {
+      "asin": "B08R2SRN88",
+      "classification": "manual_review_only"
+    },
+    {
+      "asin": "B0CP6LXPLK",
+      "classification": "eligible_to_submit"
+    },
+    {
+      "asin": "B00BISGJXA",
+      "classification": "eligible_to_submit"
+    },
+    {
+      "asin": "B00BH3HPZW",
+      "classification": "eligible_to_submit"
+    },
+    {
+      "asin": "B00GYZWNY6",
+      "classification": "eligible_to_submit"
+    },
+    {
+      "asin": "B0045XGE9E",
+      "classification": "eligible_to_submit"
+    },
+    {
+      "asin": "B002L4M4M0",
+      "classification": "eligible_to_submit"
+    },
+    {
+      "asin": "B081THWMDK",
+      "classification": "eligible_to_submit"
+    },
+    {
+      "asin": "B085F1QCB9",
+      "classification": "eligible_to_submit"
+    },
+    {
+      "asin": "B00N54AJZE",
+      "classification": "manual_review_only"
+    },
+    {
+      "asin": "B00QGMOJ4Y",
+      "classification": "eligible_to_submit"
+    },
+    {
+      "asin": "B01LY71217",
+      "classification": "eligible_to_submit"
+    },
+    {
+      "asin": "B07BZW88NY",
+      "classification": "blocked"
+    },
+    {
+      "asin": "B078B5N4DD",
+      "classification": "blocked"
+    },
+    {
+      "asin": "B007MWNFBA",
+      "classification": "blocked"
+    },
+    {
+      "asin": "B00OPQZJA6",
+      "classification": "blocked"
+    },
+    {
+      "asin": "B0C54GXFQ8",
+      "classification": "blocked"
+    },
+    {
+      "asin": "B0F7GTX962",
+      "classification": "blocked"
+    },
+    {
+      "asin": "B00BI33NU2",
+      "classification": "blocked"
+    }
+  ]
+}

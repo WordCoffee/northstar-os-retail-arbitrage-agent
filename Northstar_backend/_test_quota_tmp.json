@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-09-02T07:21:26.279951+00:00",
+  "apps": {
+    "RAPIDAPI_BDC": {
+      "discovery": {
+        "used": 0,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": null
+      },
+      "enrichment": {
+        "used": 2,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": "2026-09-02T07:21:26.240629+00:00"
+      }
+    },
+    "RAPIDAPI_REALTIME": {
+      "discovery": {
+        "used": 0,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": null
+      },
+      "enrichment": {
+        "used": 0,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": null
+      }
+    },
+    "RAPIDAPI_AXESSO": {
+      "discovery": {
+        "used": 0,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": null
+      },
+      "enrichment": {
+        "used": 1,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": "2026-09-02T07:21:26.279945+00:00"
+      }
+    },
+    "RAPIDAPI_PRICING": {
+      "discovery": {
+        "used": 0,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": null
+      },
+      "enrichment": {
+        "used": 0,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": null
+      }
+    },
+    "RAPIDAPI_ONLINE": {
+      "discovery": {
+        "used": 0,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": null
+      },
+      "enrichment": {
+        "used": 0,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": null
+      }
+    },
+    "RAPIDAPI_SCOUT": {
+      "discovery": {
+        "used": 0,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": null
+      },
+      "enrichment": {
+        "used": 0,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": null
+      }
+    },
+    "DATAFORSEO": {
+      "discovery": {
+        "used": 0,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": null
+      },
+      "enrichment": {
+        "used": 3,
+        "limit": null,
+        "remaining": null,
+        "exhausted": false,
+        "last_reset": null,
+        "updated_at": "2026-09-02T07:21:26.274337+00:00"
+      }
+    }
+  }
+}

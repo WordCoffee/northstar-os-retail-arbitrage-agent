@@ -1,0 +1,511 @@
+{
+  "disclaimer": "Estimated from modeled monthly sales and the observed Buy Box landed price (or the listing price already in the candidate record); not a forecast. Estimated from modeled total sales and observed seller competition; not a forecast of your actual Buy Box share or earnings.",
+  "generated_at": "2026-08-25T13:07:05.551343+00:00",
+  "results": [
+    {
+      "asin": "B00AQ0LMTC",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 518.0,
+      "estimated_monthly_sales": 20,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (10)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature vitamins supplements :: B00AQ0LMTC",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B01NCRITAE",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 1958.6,
+      "estimated_monthly_sales": 70,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (19)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature vitamins supplements :: B01NCRITAE",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B015WRSJCQ",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 439.8,
+      "estimated_monthly_sales": 20,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (18)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature vitamins supplements :: B015WRSJCQ",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B00P8ZAWK0",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 685.72,
+      "estimated_monthly_sales": 28,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (14)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature vitamins supplements :: B00P8ZAWK0",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B07881PTTX",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 617.8,
+      "estimated_monthly_sales": 20,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (16)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature vitamins supplements :: B07881PTTX",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B005ECOBBI",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 756.42,
+      "estimated_monthly_sales": 42,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (7)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature vitamins supplements :: B005ECOBBI",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B001UB44SM",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 649.4,
+      "estimated_monthly_sales": 20,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (23)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature trash bags :: B001UB44SM",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B01M7Y0NEX",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 3680.04,
+      "estimated_monthly_sales": 156,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (10)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature trash bags :: B01M7Y0NEX",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B00MPYTSGG",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 335.8,
+      "estimated_monthly_sales": 20,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (18)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature vitamins supplements :: B00MPYTSGG",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B002VLZHLS",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 419.8,
+      "estimated_monthly_sales": 20,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (24)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature vitamins supplements :: B002VLZHLS",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B08R2SRN88",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 19108.4,
+      "estimated_monthly_sales": 713,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (56)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature :: B08R2SRN88",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B01H40O42I",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 18812.03,
+      "estimated_monthly_sales": 697,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (36)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature :: B01H40O42I",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B07H4YC1GC",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 537.6,
+      "estimated_monthly_sales": 20,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (12)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature paper towels :: B07H4YC1GC",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B01LNBDORK",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 585.4,
+      "estimated_monthly_sales": 20,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (18)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature trash bags :: B01LNBDORK",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B01KW9KWW4",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 3532.14,
+      "estimated_monthly_sales": 93,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (47)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature :: B01KW9KWW4",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B00NPQZ20O",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 1090.6,
+      "estimated_monthly_sales": 28,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "low_est_demand",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (21)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature :: B00NPQZ20O",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B00SWZUC8U",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": null,
+      "estimated_monthly_sales": null,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": null,
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "high_observed_competition"
+      ],
+      "seller_share_basis": null,
+      "seller_share_confidence": null,
+      "title": "Kirkland Signature :: B00SWZUC8U",
+      "total_completeness_score": 33
+    },
+    {
+      "asin": "B014K3BF24",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": null,
+      "estimated_monthly_sales": null,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": null,
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "high_observed_competition"
+      ],
+      "seller_share_basis": null,
+      "seller_share_confidence": null,
+      "title": "Kirkland Signature :: B014K3BF24",
+      "total_completeness_score": 33
+    },
+    {
+      "asin": "B00GYZWNY6",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 10914.15,
+      "estimated_monthly_sales": 377,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (66)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature :: B00GYZWNY6",
+      "total_completeness_score": 50
+    },
+    {
+      "asin": "B00YGMN122",
+      "estimated_fba_seller_monthly_profit": null,
+      "estimated_fbm_seller_monthly_profit": null,
+      "estimated_monthly_profit_pool": null,
+      "estimated_monthly_revenue": 3512.96,
+      "estimated_monthly_sales": 176,
+      "estimated_observed_seller_monthly_profit": null,
+      "monthly_revenue_basis": "candidate_amazon_price",
+      "opportunity_score": null,
+      "portfolio_category": "research_queue",
+      "portfolio_next_step": "find_costco_match",
+      "portfolio_readiness": "needs_costco_mapping",
+      "risk_flags": [
+        "weak_match",
+        "high_observed_competition",
+        "low_est_seller_share"
+      ],
+      "seller_share_basis": "complete returned offer set (29)",
+      "seller_share_confidence": "medium",
+      "title": "Kirkland Signature :: B00YGMN122",
+      "total_completeness_score": 50
+    }
+  ],
+  "row_count": 20,
+  "summary": {
+    "by_category": {
+      "research_queue": 20
+    },
+    "by_readiness": {
+      "needs_costco_mapping": 20
+    },
+    "estimated_fba_seller_monthly_profit": {
+      "rows_with_value": 0,
+      "sum": null
+    },
+    "estimated_fbm_seller_monthly_profit": {
+      "rows_with_value": 0,
+      "sum": null
+    },
+    "estimated_monthly_profit_pool": {
+      "rows_with_value": 0,
+      "sum": null
+    },
+    "estimated_monthly_revenue": {
+      "rows_with_value": 18,
+      "sum": 68154.66
+    },
+    "estimated_observed_seller_monthly_profit": {
+      "rows_with_value": 0,
+      "sum": null
+    },
+    "risk_flag_counts": {
+      "high_observed_competition": 19,
+      "low_est_demand": 13,
+      "low_est_seller_share": 18,
+      "weak_match": 20
+    }
+  }
+}

@@ -1,0 +1,11 @@
+﻿mode:                  preflight (exactly one Easyparser OFFER request)
+asin:                  B07H3TXVR7
+data_status:           available
+offers_returned:       1
+offers_complete:       True
+buy_box_price:         34.0
+buy_box_seller:        Fitline Supply
+credits_used:          19
+credits_remaining:     81
+requests_used:         1
+saved:                 available

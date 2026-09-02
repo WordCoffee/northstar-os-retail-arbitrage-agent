@@ -1,0 +1,20 @@
+{
+  "kind": "proof-batch-failure-manifest",
+  "schema_version": 1,
+  "run_id": "proof-batch-preflight-attempt-2-20260819T030931Z",
+  "preflight_fingerprint": "65466f56d9fffddd8ccc45273773146e42e172046c52511c18d6b2e9ff1c7778",
+  "generated_at": "2026-08-19T03:20:11.779549+00:00",
+  "stage": "map(B0CP6LXPLK)",
+  "stop_reason": "mapping_incompatible",
+  "asin": "B0CP6LXPLK",
+  "budget": {
+    "allowed_requests": 20,
+    "requests_used": 3,
+    "retries_used": 0,
+    "credits_estimated_used": 24.0,
+    "credits_reported_used": 24,
+    "credits_actual_status": "reported_by_provider",
+    "max_credits": 100
+  },
+  "note": "scrubbed failure record — no secrets, no raw response bodies, no normalized results"
+}

@@ -1,0 +1,376 @@
+{
+  "asin": "B00GYZWNY6",
+  "title": "Kirkland Extra Strength Glucosamine 1500 mg Chondroitin 1200 mg 220 Tablets",
+  "source": "easyparser",
+  "data_status": "partial",
+  "observed_at": "2026-08-22T08:08:38.737Z",
+  "fetched_at": "2026-08-22T08:08:37.941029+00:00",
+  "buy_box": {
+    "available": true,
+    "seller_name": "RCB SUPPLIES",
+    "seller_id": "A1DMGFCDYYOO2N",
+    "fulfillment": "FBM",
+    "price": 28.95,
+    "shipping": null,
+    "landed_price": null,
+    "condition": {
+      "is_new": true,
+      "title": "New"
+    },
+    "prime": false,
+    "note": null
+  },
+  "offers": [
+    {
+      "position": 0,
+      "buybox_winner": true,
+      "price": {
+        "raw": "$28.95",
+        "symbol": "$",
+        "value": "28.95"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1DMGFCDYYOO2N",
+      "seller_name": "RCB SUPPLIES",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 84,
+      "seller_ratings_total": 520,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Wednesday, August 26.",
+      "shipping_is_free": true,
+      "ships_from": "RCB SUPPLIES",
+      "minimum_order_quantity": null,
+      "maximum_order_quantity": null
+    },
+    {
+      "position": 1,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$28.95",
+        "symbol": "$",
+        "value": "28.95"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1H42LJ94Z41NY",
+      "seller_name": "Topinlineshop",
+      "seller_rating": "3.5",
+      "seller_positive_percentage": 55,
+      "seller_ratings_total": 2832,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery August 28 - September 3.",
+      "shipping_is_free": true,
+      "ships_from": "Topinlineshop",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 1
+    },
+    {
+      "position": 2,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$28.95",
+        "symbol": "$",
+        "value": "28.95"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1QR79PAU8VK6I",
+      "seller_name": "BabyLuck",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 69,
+      "seller_ratings_total": 5807,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Wednesday, September 2.",
+      "shipping_is_free": true,
+      "ships_from": "BabyLuck",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 2
+    },
+    {
+      "position": 3,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$28.95",
+        "symbol": "$",
+        "value": "28.95"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AZOYUJDIOGAQL",
+      "seller_name": "Healthy Town",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 92,
+      "seller_ratings_total": 795,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Monday, August 31.",
+      "shipping_is_free": true,
+      "ships_from": "Healthy Town",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 4,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.24",
+        "symbol": "$",
+        "value": "29.24"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A36GAY9JP2KTNA",
+      "seller_name": "Jumble junction",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 69,
+      "seller_ratings_total": 524,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Wednesday, September 2.",
+      "shipping_is_free": true,
+      "ships_from": "Jumble junction",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 15
+    },
+    {
+      "position": 5,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A4CEFNWJLBEMD",
+      "seller_name": "EzShop \ud83c\uddfa\ud83c\uddf8",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 97,
+      "seller_ratings_total": 1435,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Thursday, August 27 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 10
+    },
+    {
+      "position": 6,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A3MXOWHAKH72V9",
+      "seller_name": "Nilogie Accessory",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 4018,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Friday, August 28 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 7
+    },
+    {
+      "position": 7,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A119MICOGEUS26",
+      "seller_name": "3 Elements Co",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 97,
+      "seller_ratings_total": 2050,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Thursday, August 27 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 6
+    },
+    {
+      "position": 8,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1LIPVZNKVK9LN",
+      "seller_name": "LITTLE ONLINE STORE",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 9233,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Thursday, August 27 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 9,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AU1Z30ZMSIKOL",
+      "seller_name": "primers",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 100,
+      "seller_ratings_total": 10744,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery    on orders over $35 shipped by Amazon.",
+      "shipping_is_free": null,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 2
+    },
+    {
+      "position": 10,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2KHYF5CYWLFH1",
+      "seller_name": "Speedy Ships",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 10869,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Friday, August 28 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    }
+  ],
+  "offers_returned": 11,
+  "offers_complete": false,
+  "seller_counts": {
+    "observed_total": 11,
+    "claimed_total": 63,
+    "fba_observed": 6,
+    "fbm_observed": 5,
+    "amazon_observed": 0,
+    "counts_from_observed": true
+  },
+  "credits_used": 13,
+  "credits_remaining": 87,
+  "missing_fields": [
+    "upc",
+    "ean",
+    "gtin",
+    "item_weight_lbs",
+    "package_weight_lbs",
+    "package_dimensions_in",
+    "brand",
+    "browse_node_id",
+    "amazon_category",
+    "fba_fee",
+    "monthly_sales_estimate",
+    "sales_rank"
+  ],
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ],
+  "stages": {
+    "detail": "done",
+    "offers": "partial",
+    "sales": "not_requested"
+  },
+  "attempts": 1,
+  "last_error": null,
+  "retry_eligible": false,
+  "freshness": {
+    "offers_fresh_until": "2026-08-29T08:08:37.941059+00:00",
+    "sales_fresh_until": "2026-09-21T08:08:37.941059+00:00",
+    "identity_fresh_until": "2026-11-20T08:08:37.941059+00:00"
+  }
+}

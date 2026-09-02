@@ -1,0 +1,451 @@
+{
+  "post": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0095 sec.",
+    "cost": 0.0015,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221933-2329-0192-0000-7ae9470acea0",
+        "status_code": 20100,
+        "status_message": "Task Created.",
+        "time": "0.0036 sec.",
+        "cost": 0.0015,
+        "result_count": 0,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_post"
+        ],
+        "data": {
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B00BH3HPZW",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "se_type": "asin",
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": null
+      }
+    ]
+  },
+  "get": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0625 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221933-2329-0192-0000-7ae9470acea0",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "0.0109 sec.",
+        "cost": 0,
+        "result_count": 1,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_get",
+          "advanced",
+          "08221933-2329-0192-0000-7ae9470acea0"
+        ],
+        "data": {
+          "se_type": "asin",
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B00BH3HPZW",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": [
+          {
+            "asin": "B00BH3HPZW",
+            "type": "asin",
+            "se_domain": "amazon.com",
+            "location_code": 2840,
+            "language_code": "en_US",
+            "check_url": "https://www.amazon.com/dp/B00BH3HPZW?language=en_US",
+            "datetime": "2026-08-22 19:33:06 +00:00",
+            "item_types": [
+              "amazon_product_info"
+            ],
+            "items_count": 1,
+            "items": [
+              {
+                "type": "amazon_product_info",
+                "rank_group": 1,
+                "rank_absolute": 1,
+                "position": "right",
+                "xpath": "/html[1]/body[1]/div[1]",
+                "title": "Fiber Capsules Kirkland Therapy for Regularity/Fiber Supplement, 360 capsules - Compare to the Active Ingredient in Metamucil Capsules",
+                "details": "Product details Product Dimensions\n:\n3 x 3 x 3 inches; 9.6 ounces\nItem model number\n:\nSM598848C\nDate First Available\n:\nFebruary 17, 2013\nManufacturer\n:\nKirkland Signature\nASIN\n:\nB00BH3HPZW\nBest Sellers Rank:  #7,151 in Health & Household ( See Top 100 in Health & Household )  #34 in Dietary Fiber Nutritional Supplements\n#797 in Sales & Deals\nCustomer Reviews:   4.6  4.6 out of 5 stars (4,800)",
+                "image_url": "https://m.media-amazon.com/images/I/61CK+ttgkXL._AC_SY300_SX300_QL70_FMwebp_.jpg",
+                "author": "Brand: KIRKLAND",
+                "data_asin": "B00BH3HPZW",
+                "parent_asin": "B0D1GSH19Z",
+                "product_asins": [
+                  "B00BH3HPZW"
+                ],
+                "price_from": 17.59,
+                "price_to": null,
+                "percentage_discount": null,
+                "currency": "USD",
+                "is_amazon_choice": true,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.6,
+                  "votes_count": 4800,
+                  "rating_max": 5
+                },
+                "is_newer_model_available": false,
+                "is_prime_video": false,
+                "applicable_vouchers": null,
+                "newer_model": null,
+                "categories": [
+                  {
+                    "category": "Health & Household",
+                    "url": "https://amazon.com/health-personal-care-nutrition-fitness/b/ref=dp_bc_1?ie=UTF8&node=3760901"
+                  },
+                  {
+                    "category": "Vitamins, Minerals & Supplements",
+                    "url": "https://amazon.com/Vitamins-Minerals-Supplements/b/ref=dp_bc_2?ie=UTF8&node=23675621011"
+                  },
+                  {
+                    "category": "Digestive Supplements",
+                    "url": "https://amazon.com/Digestive-Nutritional-Supplements/b/ref=dp_bc_3?ie=UTF8&node=6942464011"
+                  },
+                  {
+                    "category": "Dietary Fibers",
+                    "url": "https://amazon.com/Dietary-Fiber-Nutritional-Supplements/b/ref=dp_bc_4?ie=UTF8&node=3762131"
+                  }
+                ],
+                "product_information": [
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Important information",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": "Ingredients",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Caramel Color, Gelatin, Iron Oxide, Polysorbate 80, Shellac."
+                          }
+                        ]
+                      },
+                      {
+                        "type": "product_information_rows",
+                        "title": "Legal Disclaimer",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Statements regarding dietary supplements have not been evaluated by the FDA and are not intended to diagnose, treat, cure, or prevent any disease or health condition."
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Product Description",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": null,
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Fiber Capsules Kirkland Therapy for Regularity/Fiber Supplement, 360 capsules - Compare to the Active Ingredient in Metamucil Capsules"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Product details",
+                    "body": {
+                      "Product Dimensions": "3 x 3 x 3 inches; 9.6 ounces",
+                      "Item model number": "SM598848C",
+                      "Date First Available": "February 17, 2013",
+                      "Manufacturer": "Kirkland Signature",
+                      "ASIN": "B00BH3HPZW",
+                      "Best Sellers Rank": "#7,151 in Health & Household ( See Top 100 in Health & Household )  #34 in Dietary Fiber Nutritional Supplements\n #797 in Sales & Deals",
+                      "Customer Reviews": "4.6  4.6 out of 5 stars (4,800)"
+                    }
+                  }
+                ],
+                "product_images_list": [
+                  "https://m.media-amazon.com/images/I/61CK+ttgkXL._AC_SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/614jqrMI7UL._AC_SL1434_.jpg",
+                  "https://m.media-amazon.com/images/I/61-yMf8MQyL._AC_SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/61UKNFm3ycL._AC_SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/71TGrKwzFpL._AC_SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/71L2lTn8BfL._AC_SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/71qcPMCymoL._AC_SL1500_.jpg"
+                ],
+                "product_videos_list": null,
+                "description": "About this item  Fiber supplement/laxative\nDaily source of soluble fiber\nBulk forming laxative\nShow more",
+                "is_available": true,
+                "top_local_reviews": [
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[1]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 8, 2026",
+                    "helpful_votes": 2,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "William J. Heard",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGJRXBTLEELOPAB2OOXO2N3ASOVA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Good product at a good price.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/RKH81DD42P5JI/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "I've been using these capsules for years, work great and at a reasonable price.",
+                    "publication_date": "2026-07-08 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[2]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 26, 2026",
+                    "helpful_votes": 1,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Wilson J.",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AFM3GEHTHAKPY2DRJICGAHRAVNBA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Great price.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1M0N2V7WEHCOJ/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "This helps my regularity, this is a great fiber supplement.",
+                    "publication_date": "2026-07-26 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[3]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on June 25, 2026",
+                    "helpful_votes": 4,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Thomas Meyer",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGILA4TWVLBOMSCHEFRF3AX5VFNQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Great great for GLP1 users",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/RHC73CQ57QETL/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "We are taking GLP1 and this has helped, let’s say,  keep us going every day.  Pills are a bit large but easy to swallow.  the only negative is each serving is five pills.  They also sell them in our local Kirkland store.",
+                    "publication_date": "2026-06-25 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[4]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 8, 2026",
+                    "helpful_votes": 2,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Judy Murphy",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/6599f280-6dc1-42f1-8a24-a81da341806b._CR0%2C0%2C405%2C405_UX460_SX48_.jpg",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AFBKATLZ7JRN57WQQR56P2NYEVFQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "When you gotta go you gotta go!!!",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3EMZ8V68W4C9H/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Works just like Metamucil but much cheaper in price.",
+                    "publication_date": "2026-07-08 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[5]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 10, 2026",
+                    "helpful_votes": 2,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "C Chas",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHT6MROUPYJPN2EJFEK3DHGFFKJA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Fiber capsules",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3AUWFHVKKEOEJ/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Works as well as Metamucil.",
+                    "publication_date": "2026-07-10 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 4,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[6]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 3, 2026",
+                    "helpful_votes": 3,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "K. Williams",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AEPNHS2D5RGFFN3QLG6VXE7KE7OQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Great supplement",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R38G3FVMS3DOUA/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "We have this on Subscription; it’s a great daily supplement",
+                    "publication_date": "2026-07-03 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[7]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 7, 2026",
+                    "helpful_votes": 2,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Marlene Snyder",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHS3LBI7ROGV6RIBVYU6PP5K6G4A?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Fiber",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2XX7WX1YCX7BG/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "These fiber capsules I have worked for me. They are easy going down and has helped my digestive system.",
+                    "publication_date": "2026-07-07 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[8]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 3, 2026",
+                    "helpful_votes": 3,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Bern",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AEFCXG7GTXJGWX6NZZQGTZONWO4Q?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Work great and big savings over buying from the Metamucil firm.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3SIXR112EDEPJ/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Work great and a big savings by Kirkland instead of buying from Metamucil firm. Well packaged.",
+                    "publication_date": "2026-07-03 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  }
+                ],
+                "top_global_reviews": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

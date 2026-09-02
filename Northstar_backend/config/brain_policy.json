@@ -1,0 +1,15 @@
+{
+  "live_provider_calls_default": false,
+  "allow_live_calls_without_explicit_approval": false,
+  "allow_fabricated_defaults": false,
+  "allow_benchmark_as_live_data": false,
+  "require_variation_match": true,
+  "require_verified_fee_inputs": true,
+  "require_verified_landed_cogs": true,
+  "require_verified_bsr_for_velocity": true,
+  "require_invoice_review_for_purchase_authorization": true,
+  "min_roi_target_pct": 20.0,
+  "max_api_envelope_usd": 0.25,
+  "ui_is_cache_only": true,
+  "purchase_authorization_default": false
+}

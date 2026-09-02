@@ -1,0 +1,750 @@
+{
+  "kind": "proof-batch-preflight",
+  "schema_version": 1,
+  "run_id": "proof-batch-preflight-attempt-2-20260819T030931Z",
+  "generated_at": "2026-08-19T03:09:31.040352+00:00",
+  "purpose": "provider_data_contract_validation",
+  "hard_caps": {
+    "max_asins": 20,
+    "max_requests": 20,
+    "max_requests_note": "exact number required by the approved provider plan (Easyparser OFFER: 1 request per ASIN; Keepa not approved in this preflight)",
+    "max_credits": null,
+    "max_credits_note": "must be explicitly entered and approved by human — no default spending authorization"
+  },
+  "selection": {
+    "selected_count": 20,
+    "max_selected_count": 20,
+    "asins": [
+      {
+        "asin": "B01H40O42I",
+        "source_rank": 1,
+        "title": "Aller-Flo Fluticasone (Pack of 5)",
+        "title_conflict": true,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 26.74,
+        "reviews": 11114,
+        "prime_fba": "yes",
+        "bsr_rank_number": null,
+        "bsr_category": null,
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": "cross-file title disagreement — canonical title kept per CANONICAL_RULES; mapping review required before any use",
+        "benchmark_fields_present": [
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [
+          "bsr_category",
+          "bsr_rank_number"
+        ],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 15.49,
+          "cached_reviews_count": 11114,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B08R2SRN88",
+        "source_rank": 2,
+        "title": "Aller-Flo Fluticasone (5 Bottles/600 sprays)",
+        "title_conflict": true,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 26.8,
+        "reviews": 11898,
+        "prime_fba": "yes",
+        "bsr_rank_number": 3567,
+        "bsr_category": "Health & Household",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": "cross-file title disagreement — canonical title kept per CANONICAL_RULES; mapping review required before any use",
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 15.49,
+          "cached_reviews_count": 11898,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B0CP6LXPLK",
+        "source_rank": 3,
+        "title": "Minoxidil Extra Strength (6-mo)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 33.12,
+        "reviews": 1434,
+        "prime_fba": "yes",
+        "bsr_rank_number": 2300,
+        "bsr_category": "Beauty & Personal Care",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": false,
+          "cached_amazon_price": null,
+          "cached_reviews_count": null,
+          "cache_note": "not present in the local scanner cache"
+        }
+      },
+      {
+        "asin": "B00BISGJXA",
+        "source_rank": 4,
+        "title": "Stool Softener 100mg (400ct)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 12.75,
+        "reviews": 18629,
+        "prime_fba": "yes",
+        "bsr_rank_number": 4960,
+        "bsr_category": "Health & Household",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 11.49,
+          "cached_reviews_count": 18629,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B00BH3HPZW",
+        "source_rank": 5,
+        "title": "Fiber Capsules (360ct)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 17.84,
+        "reviews": 4799,
+        "prime_fba": "yes",
+        "bsr_rank_number": 6602,
+        "bsr_category": "Health & Household",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 17.84,
+          "cached_reviews_count": 4799,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B00GYZWNY6",
+        "source_rank": 6,
+        "title": "Glucosamine 1500/Chondroitin 1200 (220ct)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 29.25,
+        "reviews": 5183,
+        "prime_fba": "yes",
+        "bsr_rank_number": 6562,
+        "bsr_category": "Health & Household",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 28.95,
+          "cached_reviews_count": 5183,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B0045XGE9E",
+        "source_rank": 7,
+        "title": "Sleep Aid Doxylamine (2pk/192ct)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 13.84,
+        "reviews": 4966,
+        "prime_fba": "yes",
+        "bsr_rank_number": 7570,
+        "bsr_category": "Health & Household",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 12.39,
+          "cached_reviews_count": 4966,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B002L4M4M0",
+        "source_rank": 8,
+        "title": "Sleep Aid Doxylamine (96ct)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 7.93,
+        "reviews": 6270,
+        "prime_fba": "yes",
+        "bsr_rank_number": 14653,
+        "bsr_category": "Health & Household",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": false,
+          "cached_amazon_price": null,
+          "cached_reviews_count": null,
+          "cache_note": "not present in the local scanner cache"
+        }
+      },
+      {
+        "asin": "B081THWMDK",
+        "source_rank": 9,
+        "title": "Stretch Tite Food Wrap (2pk)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 28.79,
+        "reviews": 967,
+        "prime_fba": "yes",
+        "bsr_rank_number": null,
+        "bsr_category": null,
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [
+          "bsr_category",
+          "bsr_rank_number"
+        ],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 26.98,
+          "cached_reviews_count": 967,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B085F1QCB9",
+        "source_rank": 10,
+        "title": "Compactor Trash Bag",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 28.07,
+        "reviews": 588,
+        "prime_fba": "no",
+        "bsr_rank_number": 11435,
+        "bsr_category": "Health & Household",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 28.07,
+          "cached_reviews_count": 588,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B00N54AJZE",
+        "source_rank": 11,
+        "title": "Stool Softener 100mg (400ct, alt listing)",
+        "title_conflict": true,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 12.69,
+        "reviews": 1665,
+        "prime_fba": "yes",
+        "bsr_rank_number": 19009,
+        "bsr_category": "Health & Household",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": "cross-file title disagreement — canonical title kept per CANONICAL_RULES; mapping review required before any use",
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": false,
+          "cached_amazon_price": null,
+          "cached_reviews_count": null,
+          "cache_note": "not present in the local scanner cache"
+        }
+      },
+      {
+        "asin": "B00QGMOJ4Y",
+        "source_rank": 12,
+        "title": "Purified Drinking Water (40ct)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 23.99,
+        "reviews": 2358,
+        "prime_fba": "no",
+        "bsr_rank_number": 11009,
+        "bsr_category": "Grocery & Gourmet Food",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 23.99,
+          "cached_reviews_count": 2358,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B01LY71217",
+        "source_rank": 13,
+        "title": "13-Gal Trash Bags (200ct)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 35.99,
+        "reviews": 4319,
+        "prime_fba": "no",
+        "bsr_rank_number": null,
+        "bsr_category": null,
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [
+          "bsr_category",
+          "bsr_rank_number"
+        ],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 35.99,
+          "cached_reviews_count": 4319,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B07BZW88NY",
+        "source_rank": 14,
+        "title": "Sleep Aid (192ct, alt)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 14.25,
+        "reviews": 6515,
+        "prime_fba": "yes",
+        "bsr_rank_number": 15119,
+        "bsr_category": "Health & Household",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 12.44,
+          "cached_reviews_count": 6515,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B078B5N4DD",
+        "source_rank": 15,
+        "title": "Minoxidil for Men (1-mo)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 13.97,
+        "reviews": 5844,
+        "prime_fba": "no",
+        "bsr_rank_number": 13364,
+        "bsr_category": "Beauty & Personal Care",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": false,
+          "cached_amazon_price": null,
+          "cached_reviews_count": null,
+          "cache_note": "not present in the local scanner cache"
+        }
+      },
+      {
+        "asin": "B007MWNFBA",
+        "source_rank": 16,
+        "title": "Stretch Tite Wrap (single)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 19.99,
+        "reviews": 4665,
+        "prime_fba": "yes",
+        "bsr_rank_number": null,
+        "bsr_category": null,
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [
+          "bsr_category",
+          "bsr_rank_number"
+        ],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 14.99,
+          "cached_reviews_count": 4665,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B00OPQZJA6",
+        "source_rank": 17,
+        "title": "Walnuts (48oz)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 20.99,
+        "reviews": 3544,
+        "prime_fba": "no",
+        "bsr_rank_number": 8127,
+        "bsr_category": "Grocery & Gourmet Food",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 20.98,
+          "cached_reviews_count": 3544,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B0C54GXFQ8",
+        "source_rank": 18,
+        "title": "Performance Plus Golf Balls (24ct)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 43.99,
+        "reviews": 679,
+        "prime_fba": "yes",
+        "bsr_rank_number": null,
+        "bsr_category": null,
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [
+          "bsr_category",
+          "bsr_rank_number"
+        ],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 43.99,
+          "cached_reviews_count": 679,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B0F7GTX962",
+        "source_rank": 19,
+        "title": "Minoxidil (6-mo bundle)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 15.49,
+        "reviews": 135,
+        "prime_fba": "no",
+        "bsr_rank_number": 21943,
+        "bsr_category": "Beauty & Personal Care",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": true,
+          "cached_amazon_price": 14.99,
+          "cached_reviews_count": 135,
+          "cache_note": "scanner search-page cache only — does NOT satisfy offer/BSR provider requests; enrichment requests still planned"
+        }
+      },
+      {
+        "asin": "B00BI33NU2",
+        "source_rank": 20,
+        "title": "Ultra Strength Antacid (265ct)",
+        "title_conflict": false,
+        "price_conflict": false,
+        "review_conflict": false,
+        "price": 13.65,
+        "reviews": 3121,
+        "prime_fba": "yes",
+        "bsr_rank_number": 17252,
+        "bsr_category": "Health & Household",
+        "capture_time_status": "unknown",
+        "observation_count": 2,
+        "conflict_note": null,
+        "benchmark_fields_present": [
+          "bsr_category",
+          "bsr_rank_number",
+          "price",
+          "prime_fba",
+          "reviews"
+        ],
+        "benchmark_fields_unavailable": [],
+        "local_cache": {
+          "in_scanner_search_cache": false,
+          "cached_amazon_price": null,
+          "cached_reviews_count": null,
+          "cache_note": "not present in the local scanner cache"
+        }
+      }
+    ]
+  },
+  "benchmark_summary": {
+    "total_canonical_asins": 47,
+    "validation_set_count": 20,
+    "matched_count": 20,
+    "unmatched_count": 0,
+    "title_conflict_count": 3,
+    "title_conflict_asins": [
+      "B01H40O42I",
+      "B08R2SRN88",
+      "B00N54AJZE"
+    ],
+    "price_conflict_count": 0,
+    "review_conflict_count": 0,
+    "benchmark_fields_unavailable": {
+      "price": 0,
+      "reviews": 0,
+      "prime_fba": 0,
+      "bsr_rank_number": 5,
+      "bsr_category": 5
+    },
+    "capture_time_note": "reference capture time unknown — price/BSR/review differences may be legitimate market drift and must not automatically be called provider errors"
+  },
+  "cache_and_snapshot_state": {
+    "scanner_search_cache": {
+      "file": "data/scanner-search-cache.json",
+      "fetched_at": "2026-08-18T01:43:46.384271+00:00",
+      "source": "brightdata",
+      "schema_version": 1,
+      "candidate_count": 230
+    },
+    "market_snapshot_store": {
+      "file": "data/amazon-market-snapshots.json",
+      "present": false
+    },
+    "enriched_offer_cache": {
+      "file": "data/enriched-offer-cache.json",
+      "present": false
+    },
+    "seller_offer_cache": {
+      "file": "data/seller-offer-cache.json",
+      "present": false
+    },
+    "freshness_policy": {
+      "offers_fresh_days": 7,
+      "sales_fresh_days": 30,
+      "identity_fresh_days": 90,
+      "note": "only a fresh market-snapshot row (offers <=7d, sales <=30d, identity <=90d per market_snapshot_store) may skip its provider request; no snapshot rows exist locally"
+    },
+    "expected_cache_skips": 0
+  },
+  "provider_plan": {
+    "providers": [
+      {
+        "provider": "EASYPARSER",
+        "status": "planned",
+        "fields_owned": [
+          "offer/seller roster",
+          "offer price",
+          "shipping",
+          "fulfillment",
+          "Buy Box when available"
+        ],
+        "requests_per_asin": 1,
+        "credit_estimate_per_asin": 5,
+        "credit_estimate_source": "documented_estimate"
+      },
+      {
+        "provider": "KEEPA",
+        "status": "not_approved_not_available",
+        "fields_owned": [
+          "BSR/category/history"
+        ],
+        "requests_per_asin": 0,
+        "credit_estimate_per_asin": null,
+        "credit_estimate_source": "unknown",
+        "note": "BSR/category/history ONLY if separately approved AND available; no Keepa client exists in this project — credit estimate null: requires provider plan confirmation"
+      },
+      {
+        "provider": "COSTCO_CACHE",
+        "status": "planned_zero_cost",
+        "fields_owned": [
+          "discovery cost only — NOT purchase-authorized COGS"
+        ],
+        "requests_per_asin": 0,
+        "credit_estimate_per_asin": 0,
+        "credit_estimate_source": "zero_cost_cache",
+        "note": "no local Costco discovery cache rows exist in this environment"
+      },
+      {
+        "provider": "SELLER_CENTRAL_MANUAL",
+        "status": "manual_zero_cost",
+        "fields_owned": [
+          "eligibility",
+          "restrictions",
+          "invoice legitimacy",
+          "actual fees"
+        ],
+        "requests_per_asin": 0,
+        "credit_estimate_per_asin": 0,
+        "credit_estimate_source": "manual_input"
+      }
+    ],
+    "requested_fields_per_asin": [
+      "market_offers"
+    ],
+    "request_count_per_asin": 1,
+    "request_count_total": 20,
+    "keepa_credit_estimate": null,
+    "keepa_credit_estimate_note": "requires provider confirmation — never guessed",
+    "easyparser_credit_estimate_total": 100,
+    "easyparser_credit_estimate_source": "documented_estimate"
+  },
+  "stop_conditions": [
+    "hard request cap (20) or human-entered credit cap reached — stop immediately",
+    "provider response/error (HTTP or provider failure)",
+    "schema validation failure (intel_schema.validate_snapshot) for any returned envelope",
+    "wrong ASIN returned (returned ASIN != requested ASIN)",
+    "product/title/pack mapping mismatch (title mismatch for a non-conflict ASIN, or pack mismatch block); pre-registered title_conflict ASINs route to expected_mapping_review; BSR/category difference is a report flag, never a hard stop",
+    "malformed or impossible field values (invalid numeric/currency parse, forbidden zeros, negative price)",
+    "unexpected secret-like key in provider output",
+    "persistence failure (atomic snapshot write failed)",
+    "cache-only containment failure (provider call outside the explicit guarded run)",
+    "credit estimate/budget-stop enforcement failure"
+  ],
+  "human_confirmation": "HUMAN CONFIRMATION REQUIRED — NO LIVE CALLS EXECUTED"
+}

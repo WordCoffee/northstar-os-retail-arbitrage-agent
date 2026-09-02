@@ -1,0 +1,376 @@
+{
+  "asin": "B081THWMDK",
+  "title": "Kirkland Signature Stretch Tite Plastic Food Wrap 11 7/8 Inch X 750 SQ. FT. Pack 2",
+  "source": "easyparser",
+  "data_status": "partial",
+  "observed_at": "2026-08-22T08:08:59.709Z",
+  "fetched_at": "2026-08-22T08:08:58.959018+00:00",
+  "buy_box": {
+    "available": true,
+    "seller_name": "Fiorenzo LLC",
+    "seller_id": "A36X4560LWOSG6",
+    "fulfillment": "FBM",
+    "price": 23.29,
+    "shipping": null,
+    "landed_price": null,
+    "condition": {
+      "is_new": true,
+      "title": "New"
+    },
+    "prime": false,
+    "note": null
+  },
+  "offers": [
+    {
+      "position": 0,
+      "buybox_winner": true,
+      "price": {
+        "raw": "$23.29",
+        "symbol": "$",
+        "value": "23.29"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A36X4560LWOSG6",
+      "seller_name": "Fiorenzo LLC",
+      "seller_rating": "3.5",
+      "seller_positive_percentage": 66,
+      "seller_ratings_total": 510,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Saturday, August 29.",
+      "shipping_is_free": true,
+      "ships_from": "Fiorenzo LLC",
+      "minimum_order_quantity": null,
+      "maximum_order_quantity": null
+    },
+    {
+      "position": 1,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$25.99",
+        "symbol": "$",
+        "value": "25.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A3CAKGSM7HSYP7",
+      "seller_name": "ZayouA Store LLC",
+      "seller_rating": "3.5",
+      "seller_positive_percentage": 64,
+      "seller_ratings_total": 28,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery August 28 - September 3.",
+      "shipping_is_free": true,
+      "ships_from": "ZayouA Store LLC",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 1
+    },
+    {
+      "position": 2,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.90",
+        "symbol": "$",
+        "value": "26.90"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1WIB6HVB4455K",
+      "seller_name": "iEATWORLD",
+      "seller_rating": "3.5",
+      "seller_positive_percentage": 65,
+      "seller_ratings_total": 1806,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Wednesday, August 26.",
+      "shipping_is_free": true,
+      "ships_from": "iEATWORLD",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 3,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.90",
+        "symbol": "$",
+        "value": "26.90"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1M27ZJQOSM8MS",
+      "seller_name": "Chicken Adobo",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 68,
+      "seller_ratings_total": 233,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Wednesday, August 26.",
+      "shipping_is_free": true,
+      "ships_from": "Chicken Adobo",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 4,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.90",
+        "symbol": "$",
+        "value": "26.90"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AIC8ZY9YLS9OP",
+      "seller_name": "Health Force",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 85,
+      "seller_ratings_total": 6825,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Monday, August 31.",
+      "shipping_is_free": true,
+      "ships_from": "Health Force",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 19
+    },
+    {
+      "position": 5,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.95",
+        "symbol": "$",
+        "value": "26.95"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1S3X3XUPLO5OG",
+      "seller_name": "BETTERCO",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 89,
+      "seller_ratings_total": 1561,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery September 4 - 20 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 1
+    },
+    {
+      "position": 6,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.98",
+        "symbol": "$",
+        "value": "26.98"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A7ZISECZKNYFR",
+      "seller_name": "Wholesale Americas",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 95,
+      "seller_ratings_total": 1992,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Tuesday, August 25.",
+      "shipping_is_free": true,
+      "ships_from": "Wholesale Americas",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 7,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.98",
+        "symbol": "$",
+        "value": "26.98"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1CZLFDPGP5GBR",
+      "seller_name": "OCD BARGAIN",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 78,
+      "seller_ratings_total": 3782,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Saturday, August 29.",
+      "shipping_is_free": true,
+      "ships_from": "OCD BARGAIN",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 8,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.99",
+        "symbol": "$",
+        "value": "26.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A118IUCY3IMP6Z",
+      "seller_name": "PRIME-EXPRES'S",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 72,
+      "seller_ratings_total": 392,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery August 27 - 31.",
+      "shipping_is_free": true,
+      "ships_from": "PRIME-EXPRES'S",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 9,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.99",
+        "symbol": "$",
+        "value": "26.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AS3HOSV4DF0UG",
+      "seller_name": "TheNewMall",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 85,
+      "seller_ratings_total": 318384,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery August 26 - 28.",
+      "shipping_is_free": true,
+      "ships_from": "TheNewMall",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 10,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$27.69",
+        "symbol": "$",
+        "value": "27.69"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AMX9T244H02DU",
+      "seller_name": "Everest & Best LLC",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 100,
+      "seller_ratings_total": 697,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery August 30 - September 4 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 1
+    }
+  ],
+  "offers_returned": 11,
+  "offers_complete": false,
+  "seller_counts": {
+    "observed_total": 11,
+    "claimed_total": 32,
+    "fba_observed": 2,
+    "fbm_observed": 9,
+    "amazon_observed": 0,
+    "counts_from_observed": true
+  },
+  "credits_used": 15,
+  "credits_remaining": 85,
+  "missing_fields": [
+    "upc",
+    "ean",
+    "gtin",
+    "item_weight_lbs",
+    "package_weight_lbs",
+    "package_dimensions_in",
+    "brand",
+    "browse_node_id",
+    "amazon_category",
+    "fba_fee",
+    "monthly_sales_estimate",
+    "sales_rank"
+  ],
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ],
+  "stages": {
+    "detail": "done",
+    "offers": "partial",
+    "sales": "not_requested"
+  },
+  "attempts": 1,
+  "last_error": null,
+  "retry_eligible": false,
+  "freshness": {
+    "offers_fresh_until": "2026-08-29T08:08:58.959064+00:00",
+    "sales_fresh_until": "2026-09-21T08:08:58.959064+00:00",
+    "identity_fresh_until": "2026-11-20T08:08:58.959064+00:00"
+  }
+}

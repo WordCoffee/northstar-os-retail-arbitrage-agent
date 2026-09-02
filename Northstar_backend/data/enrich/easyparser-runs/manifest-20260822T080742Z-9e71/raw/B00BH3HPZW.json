@@ -1,0 +1,30 @@
+{
+  "source": "easyparser",
+  "asin": null,
+  "provider_asin": null,
+  "request_id": null,
+  "title": null,
+  "offer_count": null,
+  "offers_returned_count": 0,
+  "buy_box_price": null,
+  "buy_box_price_raw": null,
+  "buy_box_seller": null,
+  "buy_box_seller_id": null,
+  "buy_box_is_fba": null,
+  "buy_box_is_fbm": null,
+  "buy_box_is_prime": null,
+  "buy_box_condition": null,
+  "observed_fba_offer_count": 0,
+  "observed_fbm_offer_count": 0,
+  "observed_amazon_offer_count": 0,
+  "offers": [],
+  "request_zip_code": null,
+  "observed_at": null,
+  "credits_used": null,
+  "credits_remaining": null,
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific.",
+    "Easyparser API returned HTTP 500."
+  ]
+}

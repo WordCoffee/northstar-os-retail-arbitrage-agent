@@ -1,0 +1,11 @@
+﻿mode:                  preflight (exactly one Easyparser OFFER request)
+asin:                  B0CHTNWWLJ
+data_status:           partial
+offers_returned:       11
+offers_complete:       False
+buy_box_price:         43.38
+buy_box_seller:        DesiGabbar
+credits_used:          17
+credits_remaining:     83
+requests_used:         1
+saved:                 partial

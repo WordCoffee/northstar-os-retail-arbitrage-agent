@@ -1,0 +1,365 @@
+{
+  "kind": "validation-run-manifest",
+  "schema_version": "validation-manifest-1",
+  "run_id": "data-validation-20asin-live-001",
+  "generated_at": "2026-08-20T02:24:49.716142+00:00",
+  "status": "planned",
+  "mode": "standard_queue",
+  "providers": [
+    "BRIGHTDATA",
+    "DATAFORSEO"
+  ],
+  "max_asins": 20,
+  "max_tasks_per_asin": 2,
+  "hard_cap_cents": 100,
+  "source_reference": {
+    "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\data\\batch\\proof-batch-preflight-20260818T060549Z.json",
+    "sha256": "bba540ac20b8b3da7f70d9c1a8275b2967b5474240c84a82d71856a2eb591965",
+    "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+    "selected_count": 20
+  },
+  "asins": [
+    {
+      "asin": "B01H40O42I",
+      "source_rank": 1,
+      "title": "Aller-Flo Fluticasone (Pack of 5)",
+      "title_conflict": true,
+      "manual_review_only": true,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B08R2SRN88",
+      "source_rank": 2,
+      "title": "Aller-Flo Fluticasone (5 Bottles/600 sprays)",
+      "title_conflict": true,
+      "manual_review_only": true,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B0CP6LXPLK",
+      "source_rank": 3,
+      "title": "Minoxidil Extra Strength (6-mo)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B00BISGJXA",
+      "source_rank": 4,
+      "title": "Stool Softener 100mg (400ct)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B00BH3HPZW",
+      "source_rank": 5,
+      "title": "Fiber Capsules (360ct)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B00GYZWNY6",
+      "source_rank": 6,
+      "title": "Glucosamine 1500/Chondroitin 1200 (220ct)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B0045XGE9E",
+      "source_rank": 7,
+      "title": "Sleep Aid Doxylamine (2pk/192ct)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B002L4M4M0",
+      "source_rank": 8,
+      "title": "Sleep Aid Doxylamine (96ct)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B081THWMDK",
+      "source_rank": 9,
+      "title": "Stretch Tite Food Wrap (2pk)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B085F1QCB9",
+      "source_rank": 10,
+      "title": "Compactor Trash Bag",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B00N54AJZE",
+      "source_rank": 11,
+      "title": "Stool Softener 100mg (400ct, alt listing)",
+      "title_conflict": true,
+      "manual_review_only": true,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B00QGMOJ4Y",
+      "source_rank": 12,
+      "title": "Purified Drinking Water (40ct)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B01LY71217",
+      "source_rank": 13,
+      "title": "13-Gal Trash Bags (200ct)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B07BZW88NY",
+      "source_rank": 14,
+      "title": "Sleep Aid (192ct, alt)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B078B5N4DD",
+      "source_rank": 15,
+      "title": "Minoxidil for Men (1-mo)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B007MWNFBA",
+      "source_rank": 16,
+      "title": "Stretch Tite Wrap (single)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B00OPQZJA6",
+      "source_rank": 17,
+      "title": "Walnuts (48oz)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B0C54GXFQ8",
+      "source_rank": 18,
+      "title": "Performance Plus Golf Balls (24ct)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B0F7GTX962",
+      "source_rank": 19,
+      "title": "Minoxidil (6-mo bundle)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    },
+    {
+      "asin": "B00BI33NU2",
+      "source_rank": 20,
+      "title": "Ultra Strength Antacid (265ct)",
+      "title_conflict": false,
+      "manual_review_only": false,
+      "expected_validation_plan": {
+        "dataforseo": [
+          "product",
+          "seller_offer"
+        ],
+        "brightdata": [
+          "product"
+        ]
+      },
+      "max_reservation_cents": 10
+    }
+  ],
+  "purchase_authorization": null,
+  "notes": "References (does not mutate) the canonical 20-ASIN source. Manual-review ASINs remain manual_review_only."
+}

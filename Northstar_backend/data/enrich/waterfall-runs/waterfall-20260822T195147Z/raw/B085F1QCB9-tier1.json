@@ -1,0 +1,469 @@
+{
+  "post": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0134 sec.",
+    "cost": 0.0015,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221956-2329-0192-0000-d1881ac30f60",
+        "status_code": 20100,
+        "status_message": "Task Created.",
+        "time": "0.0037 sec.",
+        "cost": 0.0015,
+        "result_count": 0,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_post"
+        ],
+        "data": {
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B085F1QCB9",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "se_type": "asin",
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": null
+      }
+    ]
+  },
+  "get": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0196 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221956-2329-0192-0000-d1881ac30f60",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "0.0099 sec.",
+        "cost": 0,
+        "result_count": 1,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_get",
+          "advanced",
+          "08221956-2329-0192-0000-d1881ac30f60"
+        ],
+        "data": {
+          "se_type": "asin",
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B085F1QCB9",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": [
+          {
+            "asin": "B085F1QCB9",
+            "type": "asin",
+            "se_domain": "amazon.com",
+            "location_code": 2840,
+            "language_code": "en_US",
+            "check_url": "https://www.amazon.com/dp/B085F1QCB9?language=en_US",
+            "datetime": "2026-08-22 19:56:30 +00:00",
+            "item_types": [
+              "amazon_product_info"
+            ],
+            "items_count": 1,
+            "items": [
+              {
+                "type": "amazon_product_info",
+                "rank_group": 1,
+                "rank_absolute": 1,
+                "position": "right",
+                "xpath": "/html[1]/body[1]/div[1]",
+                "title": "KIRKLAND SIGNATURE Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size, New Edition",
+                "details": "Product details Package Dimensions\n:\n9.49 x 9.13 x 4.8 inches; 7.96 pounds\nItem model number\n:\n70BG23\nDate First Available\n:\nMarch 3, 2020\nManufacturer\n:\nKIRKLAND\nASIN\n:\nB085F1QCB9\nBest Sellers Rank:  #11,996 in Health & Household ( See Top 100 in Health & Household )  #184 in Trash Bags\nCustomer Reviews:   4.8  4.8 out of 5 stars (601)",
+                "image_url": "https://m.media-amazon.com/images/I/71Fc-dtdmrL._AC_SY300_SX300_QL70_FMwebp_.jpg",
+                "author": "Brand: KIRKLAND",
+                "data_asin": "B085F1QCB9",
+                "parent_asin": null,
+                "product_asins": null,
+                "price_from": 28.07,
+                "price_to": null,
+                "percentage_discount": null,
+                "currency": "USD",
+                "is_amazon_choice": false,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.8,
+                  "votes_count": 601,
+                  "rating_max": 5
+                },
+                "is_newer_model_available": false,
+                "is_prime_video": false,
+                "applicable_vouchers": null,
+                "newer_model": null,
+                "categories": [
+                  {
+                    "category": "Health & Household",
+                    "url": "https://amazon.com/health-personal-care-nutrition-fitness/b/ref=dp_bc_1?ie=UTF8&node=3760901"
+                  },
+                  {
+                    "category": "Household Supplies",
+                    "url": "https://amazon.com/Household-Supplies-Products/b/ref=dp_bc_2?ie=UTF8&node=15342811"
+                  },
+                  {
+                    "category": "Paper & Plastic",
+                    "url": "https://amazon.com/Paper-Plastic-Household-Supplies/b/ref=dp_bc_3?ie=UTF8&node=15342841"
+                  },
+                  {
+                    "category": "Trash, Compost & Lawn Bags",
+                    "url": "https://amazon.com/b/ref=dp_bc_4?ie=UTF8&node=16284867011"
+                  },
+                  {
+                    "category": "Trash Bags",
+                    "url": "https://amazon.com/trash-bags/b/ref=dp_bc_5?ie=UTF8&node=15342971"
+                  }
+                ],
+                "product_information": [
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Measurements",
+                    "body": {
+                      "Capacity": "18 gallons",
+                      "Unit Count": "70 Count",
+                      "Number of Items": "1",
+                      "Item Weight": "3.61 kg"
+                    }
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Materials & Care",
+                    "body": {
+                      "Material Features": "Heavy Duty",
+                      "Material Type": "Plastic 18 gal drawstring secure fit"
+                    }
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Style",
+                    "body": {
+                      "Color": "Blue",
+                      "Item Form": "Secure fit drawstring 70 bags"
+                    }
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Additional details",
+                    "body": {
+                      "Scent": "Unscented"
+                    }
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Item details",
+                    "body": {
+                      "Brand Name": "KIRKLAND",
+                      "Recommended Uses For Product": "Kitchen Waste",
+                      "Manufacturer": "KIRKLAND",
+                      "UPC": "365628754606",
+                      "Included Components": "Please see the Packaging",
+                      "Item Type Name": "Trash Bag",
+                      "Best Sellers Rank": "#11,996 in Health & Household ( See Top 100 in Health & Household )\n #184 in Trash Bags",
+                      "ASIN": "B085F1QCB9",
+                      "Customer Reviews": "4.8 out of 5 stars"
+                    }
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Product details",
+                    "body": {
+                      "Package Dimensions": "9.49 x 9.13 x 4.8 inches; 7.96 pounds",
+                      "Item model number": "70BG23",
+                      "Date First Available": "March 3, 2020",
+                      "Manufacturer": "KIRKLAND",
+                      "ASIN": "B085F1QCB9",
+                      "Best Sellers Rank": "#11,996 in Health & Household ( See Top 100 in Health & Household )  #184 in Trash Bags",
+                      "Customer Reviews": "4.8  4.8 out of 5 stars (601)"
+                    }
+                  },
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Product Description",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": null,
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "White Drawstring Capacity: 18 Gallon Thickness: 2.0 mil Dimensions: 25.625” x 28” Made with 20% post-consumer recycled plastics Made in USA"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "product_images_list": [
+                  "https://m.media-amazon.com/images/I/71Fc-dtdmrL._AC_SL1187_.jpg"
+                ],
+                "product_videos_list": null,
+                "description": "About this item  Durable Plastic Construction: Made from thick plastic material for long-lasting use.\nSecure Fit Drawstring: Drawstring closure securely fits trash bags to prevent leaks.\nFull Size Trash Bags: Each bag measures 18 gallons to accommodate large trash items.\nTrash Bag Compactor: Compacts trash bags into a smaller size for easy storage.\nKirkland Signature Brand: From the trusted Kirkland Signature brand for quality and affordability.\n  See more product details",
+                "is_available": true,
+                "top_local_reviews": [
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[1]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 28, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Michael Baker",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AE7TFC2VIPURNFQTQB5ID72B2B2A?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Love these compact bags. Heavy duty:)",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/RJKEIU0BBHSM6/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Excellent Quality, Durability, ease in use and Fit",
+                    "publication_date": "2026-07-28 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[2]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on June 16, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "grateful",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AH6Q2AFJEPW6AZOWQXS77WX6T5GQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Strong and easy to use.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/RLDGA3SWXTJS2/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "These trash bags are strong and easy to use.  They fit my 18 gal trash can perfectly.  Very happy with them.",
+                    "publication_date": "2026-06-16 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[3]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on May 20, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Marvin E Johnson",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGQYZOOHJG56QOJJIZPUIIQYJA2Q?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Construction strong and durable!",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R9X1Y86UOYCKA/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Great price with quick delivery of outstanding, thick, strong bags!",
+                    "publication_date": "2026-05-20 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[4]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 24, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Rosie Munzner",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGSLUFS2LZEFN7SWQEQ6WIJJX7UQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "WORKED, GREAT PRICE",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1AMZN190VPKIE/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "GREAT QUALITY, USED FOR YEARS",
+                    "publication_date": "2026-07-24 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[5]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 7, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Nikki_2_Times",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/adb053cf-2949-452d-9741-95c0af4cda9c._CR0%2C1%2C331%2C331_UX460_SX48_.jpg",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AFIR5HLY6QC4EUKASMIRWOLSDQ2Q?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Great value",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/RZ83TEDFH355L/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Nice thick plastic. fits our compactor well and usually stays in place. drawstring is strong. no rips. Great value for the price. no leaks",
+                    "publication_date": "2026-07-07 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[6]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 24, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "a nurse",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AF6J772YDCSSYGVU3O7OPHW2IOEA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "I've been using these for years with complete satisfaction",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3PS55S7MTPKXG/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Sturdy, does lot break, can put in liquids. Pretty easy to put on with my old hands.  Like drawstring feature.  Wish they came in gray or black as our condo association requires. I have to make sure it goes into the black bag I usually put out.",
+                    "publication_date": "2026-07-24 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[7]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 5, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Tom B",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AEL33RYIBDDCNQE62BYWOKCASKYQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Nice product",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1KC6UC2KSQ4YG/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "These work well, nice HD plastic.  We let our Costco card expire, one of the few items I still needed.",
+                    "publication_date": "2026-08-05 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[8]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on June 14, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Amazon Customer",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGC3UHXDMACZ3LYBL2FTCCIQTM7A?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Quality is good",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3TDIT1JZU67EF/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Very durable compared to store bought.",
+                    "publication_date": "2026-06-14 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 4,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  }
+                ],
+                "top_global_reviews": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

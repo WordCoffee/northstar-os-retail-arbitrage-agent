@@ -1,0 +1,27 @@
+{
+  "kind": "dataforseo-submission-repair",
+  "run_id": "data-validation-20asin-live-001",
+  "generated_at": "2026-08-20T04:51:35.903976+00:00",
+  "offline_only": true,
+  "provider_calls_made": 0,
+  "rows_processed": 10,
+  "rows_repaired": 10,
+  "rows_unchanged": 0,
+  "rows_missing_envelope": 0,
+  "before": {
+    "manual_review_required": 3,
+    "submitted": 10,
+    "planned": 10,
+    "budget_rejected": 7
+  },
+  "after": {
+    "manual_review_required": 3,
+    "provider_rejected_invalid_path": 10,
+    "planned": 10,
+    "budget_rejected": 7
+  },
+  "reserved_cents_before": 100,
+  "reserved_cents_after": 50,
+  "actual_cost_cents_before": 50,
+  "actual_cost_cents_after": 0
+}
