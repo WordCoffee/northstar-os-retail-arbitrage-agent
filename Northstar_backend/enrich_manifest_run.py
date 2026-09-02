@@ -705,9 +705,13 @@ def main(argv=None):
 
     p_status = sub.add_parser("status", help="validate manifest + env only (zero network)")
     p_status.add_argument("--manifest", required=True)
+    p_status.add_argument("--provider", choices=["rapidapi", "dataforseo"],
+                          default="rapidapi", help="live provider to report (zero network)")
 
     p_dry = sub.add_parser("dry-run", help="validate + print plan (zero writes, zero network)")
     p_dry.add_argument("--manifest", required=True)
+    p_dry.add_argument("--provider", choices=["rapidapi", "dataforseo"],
+                       default="rapidapi", help="live provider to plan (zero network)")
 
     p_run = sub.add_parser("run", help="execute the live loop (requires --live + finite caps)")
     p_run.add_argument("--manifest", required=True)

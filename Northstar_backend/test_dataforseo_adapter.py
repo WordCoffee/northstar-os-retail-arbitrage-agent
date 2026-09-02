@@ -145,7 +145,7 @@ VALID_GET = {
         "id": "task-created-1",
         "status_code": 20000,
         "status_message": "Ok.",
-        "path": ["v3", "merchant", "amazon", "products", "task_get"],
+        "path": ["v3", "merchant", "amazon", "products", "task_get", "advanced"],
         "result": [{
             "asin": SHORTLIST_ASIN,
             "title": "Kirkland K-Cups",
@@ -166,7 +166,9 @@ class DataForSEOContractTests(unittest.TestCase):
         self.assertTrue(v["accepted"])
         self.assertEqual(v["classification"], "submitted")
         self.assertEqual(v["task_id"], "task-created-1")
-        self.assertEqual(v["provider_cost_cents"], 5)
+        # provider_cost_cents holds the raw provider cost in USD (float),
+        # never integer cents (see proof_batch_contracts._cost_cents contract).
+        self.assertEqual(v["provider_cost_cents"], 0.05)
         self.assertTrue(v["path_match"])
         self.assertEqual(v["request_state"], "submitted")
 
@@ -227,7 +229,8 @@ class DataForSEOContractTests(unittest.TestCase):
         v = evaluate_dataforseo_labs_live(payload, "related_keywords")
         self.assertTrue(v["accepted"])
         self.assertEqual(v["classification"], "retrieved")
-        self.assertEqual(v["provider_cost_cents"], 5)
+        # provider_cost_cents holds the raw provider cost in USD (float).
+        self.assertEqual(v["provider_cost_cents"], 0.05)
 
     def test_labs_zero_cost_rejected(self):
         payload = {

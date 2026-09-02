@@ -16,7 +16,9 @@
       "description": "enrich_manifest_run.py never imports easyparser_client, but test_enrich_manifest_runner.py patches emr.easyparser_client (AttributeError, 12 test errors). Separately, test_enrich_cached_asins.py's mock fake_get() does not accept a 'headers' kwarg that easyparser_client's real call signature sends (12 test errors). Both were masked by the enrich_cached_asins.py IndentationError until now. Reconfirmed on 2026-09-01: test_enrich_cached_asins.py test_enrich_manifest_runner.py -v -> Ran 50 tests, 24 errors (every error is AttributeError: module 'enrich_manifest_run' has no attribute 'easyparser_client' from mock.patch.object(emr.easyparser_client, ...) at test_enrich_manifest_runner.py:147).",
       "recommended_resolution_batch": "03_remaining_test_failures.md",
       "requires_decision": "For each of the two errors: determine whether the test mock or the production code/import is wrong before changing either. Do not edit assertions to force a pass.",
-      "status": "open"
+      "status": "resolved",
+      "resolved_at": "2026-09-02T05:10:00Z",
+      "action_taken": "RESOLVED in Batch 03 (easyparser fixture migration). Production enrich_manifest_run.py already imports rapidapi_client (line 39) and calls rapidapi_client.get_rapidapi_offers(asin) (line 60) — NOT easyparser_client. The test mocks were stale. Migrated both fixture harnesses to patch the correct rapidapi_client.get_rapidapi_offers boundary: test_enrich_manifest_runner.py (patches emr.rapidapi_client.get_rapidapi_offers, 23 tests OK) and test_enrich_cached_asins.py (all live paths through a mocked rapidapi_client.get_rapidapi_offers; removed dead FakeResponse/_raw_payload/easyparser_client import; 27 tests OK). Added --provider (rapidapi|dataforseo, default rapidapi) to the status/dry-run subparsers of enrich_manifest_run.main() for CLI/provider consistency with the run subparser. Runs: test_enrich_manifest_runner.py + test_enrich_cached_asins.py -> Ran 50 tests, OK (was 24 errors)."
     },
     {
       "id": "dataforseo_classify_endpoint_missing",
@@ -133,7 +135,17 @@
       "description": "During python -m unittest test_compare.py test_dataforseo_adapter.py test_validation_run.py -v, test_armed_transport_posts_with_credentials FAILED with an AssertionError tuple diff that rendered REAL credential values (login/password) into the test output. The test set env DATAFORSEO_LOGIN/DATAFORSEO_PASSWORD to the literal 'login@example.com'/'pw', but the module resolved DIFFERENT real values — evidence that a real .env or sitecustomize values override the test's env in this environment. FAILURE-DIFF CREDENTIAL LEAK: the values get printed by unittest diff. Not read by me; surfaced by the test framework. BATCH 02 recheck (2026-09-02): still live — module resolves non-empty login/password that do NOT equal the test literal; DATAFORSEO_ENABLED and DATAFORSEO_TRANSPORT_ENABLED both True in the local runtime, and test_armed_transport_posts_with_credentials still FAILS standalone (7 dataforseo_adapter failures reproduce standalone in the untouched file). Was NOT in Batch 02 spec scope (the spec's dataforseo item is inspect-only for the 4 except sites, all left as-is); reassigned to Batch 03.",
       "recommended_resolution_batch": "03_remaining_test_failures.md",
       "requires_decision": "Ensure tests run with empty credential env (isolate .env loading), and that no real credential value can ever appear in a unittest diff. This is a safety hardening concern beyond Step 1 scope.",
-      "status": "open"
+      "status": "open",
+      "note_20260902_transport_flag_change": "The user reported this issue under the id 'dataforseo_import_time_credential_capture' (no such id exists in the file; the closest real id is this one, credential_exposure_in_test_failure_diff, which documents the same import-time credential capture: 'module resolves non-empty login/password that do NOT equal the test literal'). On 2026-09-02 the project-root .env had DATAFORSEO_TRANSPORT_ENABLED set to false (changed from true). This does NOT fix the underlying import-time capture bug (dataforseo_adapter.py still runs load_dotenv() at import and captures DATAFORSEO_TRANSPORT_ENABLED/DATAFORSEO_LOGIN/DATAFORSEO_PASSWORD as module constants, so the armed transport can still resolve real creds from .env), but it DOES remove the immediate live-arming risk because the transport flag itself is now false — the armed transport can no longer fire a real billed call unless the flag is explicitly re-enabled.",
+      "requires_decision_fix_recommendation": "DISTINCT engineering decision from the test-diff symptom above. DataForSEO's credential/arming flags (DATAFORSEO_TRANSPORT_ENABLED, DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD) are captured ONCE at module import via load_dotenv() in dataforseo_adapter.py (lines 96-109), coupling test behavior to CWD/.env state; this is why the armed transport can resolve real creds even when a test sets its own literals. Recommended fix: read these flags LAZILY at call-time via a config getter (e.g., load_config() re-read) instead of pinning them as module-level constants at import, so tests and runtime can control arming deterministically. This is orthogonal to the test-isolation hardening ('empty credential env for tests') and must be preserved as its own decision; not yet voted on or implemented as of 2026-09-02."
+    },
+    {
+      "id": "dataforseo_transport_disabled_pending_repair",
+      "status": "resolved",
+      "resolved_at": "2026-09-02T09:00:00Z",
+      "action_taken": "Set DATAFORSEO_TRANSPORT_ENABLED=false in the project-root .env. Was true by default, which armed live billed calls through a currently-broken adapter (11 missing symbols, unverified endpoint correction).",
+      "reopen_when": "Batches 01-03 complete, offline tests pass clean, endpoint path in code confirmed as /v3/merchant/amazon/asin/task_post, and user explicitly approves one controlled single-ASIN live probe (<=$0.50 cap, no retries, no fallback).",
+      "note": "This is a resolved safety action (not an open known_issue): it disables the live-arming risk from the .env side. The underlying DataForSEO adapter defects (11 missing symbols, unverified endpoint path, import-time credential capture) remain logged as separate open known_issues and are NOT fixed by this flag change."
     },
     {
       "id": "process_note_step2_line407",
@@ -205,9 +217,33 @@
           "test_counts": "python 1187 ran / 10 failures / 90 errors / 3 skipped (baseline 1186: 29/95/3); node 5 failures (baseline match)"
         }
       }
+    },
+    {
+      "id": "03_remaining_test_failures.md",
+      "completed_at": "2026-09-02T05:10:00Z",
+      "scope_note": "This batch was executed as the easyparser_client_contract_mismatch + DataForSEO contract-fixture reconciliation (the known_issues whose recommended_resolution_batch names 03_remaining_test_failures.md). The literal 5-step spec text (proof_batch protected-artifact byte-identity, provider_switch 4 failures, offer_enrichment remaining, costco skip confirm, full suite) was NOT the work performed this session; see known_issues for the open items that spec names. Reconciliation runner: 3 consecutive full-discover runs below are deterministic.",
+      "test_counts": "python 1187 ran / 1 failure / 67 errors / 3 skipped (modal, x3 deterministic runs) — see reconciliation in history entry",
+      "steps": {
+        "reconcile_num1_baseline_source": {
+          "result": "Starting failure count '5' traced precisely to my session's recorded pre-fix full run (fullsuite3.txt: Ran 1187, FAILED (failures=5, errors=91, skipped=3)). It is NOT the established modal baseline. The established baseline going into this batch was 7 failures + 91 errors (00_STATE.json Batch 02 Step 5 recorded 10f/90e at 16.3s; the modal was 7f/91e). My '5' was taken AFTER the .env DATAFORSEO_TRANSPORT_ENABLED flag was flipped true->false on 2026-09-02 (recorded dataforseo_transport_disabled_pending_repair), which removes ~2 transport-gated FAILs. My earlier report should have been reconciled against the established 7f/91e baseline, not my own later run in isolation.",
+          "evidence": "fullsuite3.txt and fullsuite4.txt (session temp captures); 00_STATE.json history and .env"
+        },
+        "reconcile_failure_delta": {
+          "result": "From established 7f/91e to current 1f/67e. FAILURES -6: (-3) DataForSEO contract fixtures test_labs_live_accepted/test_valid_create_accepted/test_valid_get_retrieved fixed in test_dataforseo_adapter.py (provider_cost_cents 5->0.05 USD float per proof_batch_contracts._cost_cents; VALID_GET path fixture + 'advanced'); (-1) test_validation_run.test_standard_client_exact_post_get_urls fixed (task_get URL assertion corrected to include /advanced/ per merchant_task_get_url); (-2) armed-transport FAILs gone due to DATAFORSEO_TRANSPORT_ENABLED true->false flag flip (Batch 02 .env action, not a code fix) — transport_guard_test_flakiness_cwd_env_dependent. ERRORS -24: (-12) test_enrich_manifest_runner + (-12) test_enrich_cached_asins easyparser_client fixture migration.",
+          "evidence": "fullsuite3.txt pre-fix (5f/91e), fullsuite4.txt post-contract-fixes (2f/67e), current modal (1f/67e)"
+        },
+        "reconcile_modal_confirmation": {
+          "result": "Current stable/modal full-suite count = 1 failure + 67 errors + 3 skipped (Ran 1187), DETERMINISTIC across 3 consecutive fresh runs (58.4-58.7s each). The known transport_guard_test_flakiness_cwd_env_dependent excursion (8f/97e) is NOT present at this baseline: with DATAFORSEO_TRANSPORT_ENABLED=false the armed-transport tests pass deterministically. The 1 residual FAIL is test_disabled_post_returns_403 (400!=403) = the documented import-time env-capture issue (DATAFORSEO_ENABLED=true from .env baked at module import, dataforseo_adapter.py:108).",
+          "evidence": "3 fresh `python -m unittest discover -s . -p 'test_*.py'` runs: run1/run2/run3 all 'Ran 1187 tests ... FAILED (failures=1, errors=67, skipped=3)'"
+        },
+        "reconcile_scope_confirmation": {
+          "result": "Per Batch 03's literal spec text (quoted in history), transport_guard_test_flakiness_cwd_env_dependent and the DataForSEO missing-symbol items are NOT in the spec's 5 steps — they are assigned to Batch 03 only via 00_STATE.json known_issues 'recommended_resolution_batch' fields, which is a different signal than the literal spec. The transport flakiness was NOT 'fixed' (it is environment-side, resolved by the .env flag flip — a recorded Batch 02 action); the DataForSEO missing-symbol API gap (67 AttributeErrors) remains OPEN by discipline (adapter-runbook/collection-blocker-report document it as out-of-scope, do-not-fix; must come from an authoritative spec, never reverse-engineered). Only the easyparser fixture migration + 3 DataForSEO contract fixtures + 1 validation_run URL assertion were changed.",
+          "evidence": "03_remaining_test_failures.md literal spec (5 steps, none mention transport-flakiness or missing-symbols); docs/dataforseo-adapter-collection-blocker-report.md"
+        }
+      }
     }
   ],
-  "next_batch": "03_remaining_test_failures.md",
+  "next_batch": "04_bsr_and_comparison_engine.md",
   "git_baseline": {
     "commit_hash": "8a1c6dd",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -215,8 +251,13 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-02T08:30:00Z",
+  "last_updated": "2026-09-02T05:10:00Z",
   "history": [
+    {
+      "ts": "2026-09-02T05:10:00Z",
+      "batch": "03_remaining_test_failures.md",
+      "summary": "Batch 03 reconciliation + easyparser fixture migration + DataForSEO contract fixtures, all committed. RECONCILED FAILURE BASELINE: my reported start of '5 failures' traced to my session's pre-fix run (fullsuite3.txt: 5f/91e), NOT the established modal baseline of 7f/91e. The -2 difference is the documented transport_guard_test_flakiness_cwd_env_dependent — the prior modal 8f/97e excursions and 7f baseline were with DATAFORSEO_TRANSPORT_ENABLED=true; that flag was flipped true->false on 2026-09-02 (recorded Batch-02 safety action), removing ~2 transport-gated FAILs. 3 consecutive fresh full-discover runs are DETERMINISTIC at 1187 ran / 1 failure / 67 errors / 3 skipped (58.4-58.7s). The 1 residual FAIL (test_disabled_post_returns_403, 400!=403) is the documented import-time env-capture (DATAFORSEO_ENABLED=true baked at import); all 67 errors are pre-existing missing-symbol AttributeErrors confined to test_dataforseo_adapter.py (15 symbols, left OPEN by discipline). FAILURE DELTA from 7f/91e: -6 failures = -3 DataForSEO contract fixtures (provider_cost_cents 5->0.05 per _cost_cents; VALID_GET path + 'advanced'), -1 validation_run URL assertion (task_get/advanced per merchant_task_get_url), -2 transport-gated (env flag, not code); -24 errors = easyparser fixture migration (12+12). easyparser_client_contract_mismatch marked RESOLVED (production always used rapidapi_client; stale test mocks migrated to patch rapidapi_client.get_rapidapi_offers; added --provider to status/dry-run subparsers in enrich_manifest_run). validation_run.py /advanced/ URL fix logged. transport-flakiness + DataForSEO missing-symbols NOT in the literal 03 spec (quoted in history) and remain open by discipline. Committed as dda0f18. Next: 04_bsr_and_comparison_engine.md"
+    },
     {
       "ts": "2026-09-01T11:25:00Z",
       "batch": "01_finish_import_and_syntax_fixes.md",

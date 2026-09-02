@@ -1,7 +1,7 @@
-"""Offline tests for the controlled Easyparser batch enrichment CLI.
+"""Offline tests for the controlled batch enrichment CLI.
 
 Zero network: every live path is exercised through a mocked
-easyparser_client.requests.get, and cache/store/report paths are pointed
+rapidapi_client.get_rapidapi_offers, and cache/store/report paths are pointed
 at temp locations. Covers dry-run/status zero-network guarantees, live
 cap refusals (--live / --limit / --max-requests / --max-credits),
 preflight one-request rules, mocked batch runs (10 and 234 ASINs),
@@ -19,7 +19,7 @@ from contextlib import redirect_stdout
 from unittest.mock import patch
 
 import amazon_search
-import easyparser_client
+import rapidapi_client
 import market_snapshot_store as store
 import enrich_cached_asins as cli
 
@@ -34,7 +34,7 @@ def _result(asin, offer_count=12, offers=None, gaps=None, credits_used=1,
             buy_box_price=None, buy_box_seller=None):
     offers = offers if offers is not None else []
     return {
-        "source": "easyparser",
+        "source": "rapidapi",
         "asin": asin,
         "title": "Kirkland Test Item " + asin,
         "offer_count": offer_count,
@@ -83,50 +83,60 @@ def _offer(price, fba=False, fbm=False, buybox=False):
     }
 
 
-class FakeResponse:
-    def __init__(self, payload, status_code=200):
-        self.payload = payload
-        self.status_code = status_code
-
-    def json(self):
-        return self.payload
-
-
-def _raw_payload(asin, offer_count=1, offers=None, credits_used=1,
-                 credits_remaining=999):
-    """Raw Easyparser provider response (what get_easyparser_offers parses)."""
-    offers = offers if offers is not None else []
-    return {
-        "request_info": {
-            "success": True,
-            "credits_used": credits_used,
-            "credits_remaining": credits_remaining,
-            "address": {"zipCode": "75201"},
-        },
-        "request_metadata": {
-            "created_at": "2026-08-17T06:59:33+00:00",
-            "processed_at": "2026-08-17T06:59:34+00:00",
-        },
-        "result": {
-            "product": {
-                "asin": asin,
-                "title": "Kirkland Test Item " + asin,
-                "offer_count": offer_count,
-            },
-            "offer": {"offer_results": offers},
-        },
-    }
-
-
 def _ok_response(asin, offer_count=1, offers=None, credits_used=1, credits_remaining=999):
-    return FakeResponse(
-        _raw_payload(asin, offer_count, offers, credits_used, credits_remaining),
-        status_code=200,
-    )
+    """Return a normalized rapidapi offer dict (mock boundary output)."""
+    offers = offers if offers is not None else []
+    d = _result(asin, offer_count=offer_count, offers=offers,
+                credits_used=credits_used, credits_remaining=credits_remaining)
+    d["source"] = "rapidapi"
+    d["provider_endpoint"] = "/products/%s/offers" % asin
+    # Mirror get_rapidapi_offers buy-box extraction: pick the flagged winner.
+    buy_box = next((o for o in offers if o.get("buybox_winner") is True),
+                   offers[0] if offers else None)
+    if buy_box is not None:
+        price = buy_box.get("price")
+        if isinstance(price, dict):
+            price = price.get("value")
+        d["buy_box_price"] = price
+        d["buy_box_price_raw"] = buy_box.get("price")
+        d["buy_box_seller"] = buy_box.get("seller_name")
+        d["buy_box_seller_id"] = buy_box.get("seller_id")
+        d["buy_box_is_fba"] = buy_box.get("is_fba")
+        d["buy_box_is_fbm"] = buy_box.get("is_fbm")
+        d["buy_box_condition"] = buy_box.get("condition")
+    return d
 
 
 def _http_error_response(status_code=500):
-    return FakeResponse({"error": "boom"}, status_code=status_code)
+    """Return a normalized error dict: no offers + an HTTP error gap."""
+    return {
+        "source": "rapidapi",
+        "asin": None,
+        "provider_asin": None,
+        "request_id": None,
+        "title": None,
+        "offer_count": None,
+        "offers_returned_count": 0,
+        "buy_box_price": None,
+        "buy_box_price_raw": None,
+        "buy_box_seller": None,
+        "buy_box_seller_id": None,
+        "buy_box_is_fba": None,
+        "buy_box_is_fbm": None,
+        "buy_box_is_prime": None,
+        "buy_box_condition": None,
+        "observed_fba_offer_count": 0,
+        "observed_fbm_offer_count": 0,
+        "observed_amazon_offer_count": 0,
+        "offers": [],
+        "request_zip_code": None,
+        "observed_at": None,
+        "credits_used": None,
+        "credits_remaining": None,
+        "cost_usd": None,
+        "provider_endpoint": None,
+        "data_gaps": ["RapidAPI offers API returned HTTP %s." % status_code],
+    }
 
 
 class CliEnvTests(unittest.TestCase):
@@ -176,11 +186,11 @@ class CliEnvTests(unittest.TestCase):
     def mock_get(self, response_fn):
         calls = []
 
-        def fake_get(url, params=None, timeout=None):
-            calls.append(params.get("asin"))
-            return response_fn(params.get("asin"))
+        def fake_get(asin):
+            calls.append(asin)
+            return response_fn(asin)
 
-        patcher = patch.object(easyparser_client.requests, "get", side_effect=fake_get)
+        patcher = patch.object(rapidapi_client, "get_rapidapi_offers", side_effect=fake_get)
         patcher.start()
         self.addCleanup(patcher.stop)
         return calls
@@ -189,7 +199,7 @@ class CliEnvTests(unittest.TestCase):
 class ZeroNetworkTests(CliEnvTests):
     def test_dry_run_zero_network(self):
         self.write_cache(10)
-        with patch.object(easyparser_client.requests, "get",
+        with patch.object(rapidapi_client.requests, "get",
                           side_effect=AssertionError("network call in dry-run")):
             code, out = self.run_cli(["--mode", "dry-run", "--limit", "10"])
         self.assertEqual(code, 0)
@@ -222,7 +232,7 @@ class ZeroNetworkTests(CliEnvTests):
         self.write_cache(3)
         snap = store.build_snapshot("B000000000", _result("B000000000", offer_count=1, offers=[_offer(10)]))
         store.save_snapshot("B000000000", snap)
-        with patch.object(easyparser_client.requests, "get",
+        with patch.object(rapidapi_client.requests, "get",
                           side_effect=AssertionError("network call in status")):
             code, out = self.run_cli(["--mode", "status"])
         self.assertEqual(code, 0)
@@ -340,7 +350,22 @@ class PreflightTests(CliEnvTests):
             before = f.read()
 
         def timeout_response(asin):
-            raise easyparser_client.requests.exceptions.Timeout("t")
+            # get_rapidapi_offers never raises on a timeout; it returns a
+            # normalized dict with a "timed out" error gap.
+            return {
+                "source": "rapidapi", "asin": asin, "provider_asin": asin,
+                "request_id": None, "title": None, "offer_count": None,
+                "offers_returned_count": 0, "buy_box_price": None,
+                "buy_box_price_raw": None, "buy_box_seller": None,
+                "buy_box_seller_id": None, "buy_box_is_fba": None,
+                "buy_box_is_fbm": None, "buy_box_is_prime": None,
+                "buy_box_condition": None, "observed_fba_offer_count": 0,
+                "observed_fbm_offer_count": 0, "observed_amazon_offer_count": 0,
+                "offers": [], "request_zip_code": None, "observed_at": None,
+                "credits_used": None, "credits_remaining": None,
+                "cost_usd": None, "provider_endpoint": None,
+                "data_gaps": ["RapidAPI offers request timed out."],
+            }
 
         calls = self.mock_get(timeout_response)
         code, out = self.run_cli(["--mode", "preflight", "--live", "--asin", "B0AAAAAAAA",
@@ -456,14 +481,13 @@ class BatchTests(CliEnvTests):
         self.write_cache(3)
         calls = []
 
-        def fake_get(url, params=None, timeout=None):
-            asin = params.get("asin")
+        def fake_get(asin):
             calls.append(asin)
             if asin == "B000000000" and len([c for c in calls if c == asin]) == 1:
                 return _http_error_response(500)
             return _ok_response(asin, offer_count=1, offers=[_offer(10)])
 
-        with patch.object(easyparser_client.requests, "get", side_effect=fake_get):
+        with patch.object(rapidapi_client, "get_rapidapi_offers", side_effect=fake_get):
             code, out = self.run_cli(["--mode", "batch", "--live", "--limit", "3",
                                       "--max-requests", "10", "--max-credits", "50",
                                       "--retries", "1"])
