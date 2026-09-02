@@ -241,9 +241,37 @@
           "evidence": "03_remaining_test_failures.md literal spec (5 steps, none mention transport-flakiness or missing-symbols); docs/dataforseo-adapter-collection-blocker-report.md"
         }
       }
+    },
+    {
+      "id": "04_bsr_and_comparison_engine.md",
+      "completed_at": "2026-09-02T05:30:00Z",
+      "scope_note": "Core BSR evidence contract (intel_schema.py), normalized snapshot contract (intel_schema.py/normalized_snapshot.py), and offline comparison engine (benchmark_validation.py) were ALREADY IMPLEMENTED. This batch added missing fixture-based test coverage for the BSR schema and normalization pipeline.",
+      "test_counts": "python 1255 ran / 1 failure / 67 errors / 3 skipped (+68 new tests: test_intel_schema 40, test_normalized_snapshot 28, test_benchmark_validation 37 existing)",
+      "steps": {
+        "step1_bsr_evidence_contract": {
+          "result": "CONFIRMED ALREADY IMPLEMENTED: intel_schema.py normalize_bsr() returns all required fields (bsr_primary_rank, bsr_primary_category, bsr_secondary_rank, bsr_secondary_category, bsr_raw, bsr_capture_status, bsr_source, bsr_captured_at) with BSR_STATUSES enum (verified, missing_live, missing_csv_reference, provider_not_supported, parse_error, identity_conflict, unavailable). Raw BSR string preserved. No inference from price/reviews/category. Never converts absent to rank 0.",
+          "test_counts": "test_intel_schema.NormalizeBsrTests 8 tests + BsrFieldCompletenessTests 4 tests"
+        },
+        "step2_normalized_snapshot_contract": {
+          "result": "CONFIRMED ALREADY IMPLEMENTED: intel_schema.py fixture_minimal() provides valid all-null placeholder with all required sections (identity, cost, fees, demand, market, economics, provenance). validate_snapshot() enforces: nulls for unknown, ZERO_FORBIDDEN fields never 0, provenance on populated values. normalized_snapshot.py normalizes raw provider responses into this shape with fail-closed gates (missing ASIN/price, identity conflict, provider rejection, secret detection, BSR parse error).",
+          "test_counts": "test_intel_schema.SnapshotValidationTests 17 tests + SnapshotShapeTests 7 tests + SnapshotFromFixtureTests 2 tests"
+        },
+        "step3_offline_comparison_engine": {
+          "result": "CONFIRMED ALREADY IMPLEMENTED: benchmark_validation.py compare_benchmark_record() produces identity_match_status, title_similarity, pack_match, price delta (abs+pct), reviews delta, fulfillment match, BSR comparison (same-category only), overall disposition (matched, normal_market_drift, provider_field_gap, mapping_conflict, insufficient_data, needs_manual_review). Price drift within tolerance = normal_market_drift. BSR compared only when same category. Benchmark CSV never overwritten.",
+          "test_counts": "test_benchmark_validation.py 37 existing tests (IdentityTests 6, PriceTests 6, ReviewTests 4, PrimeFbaTests 3, BsrTests 3, OfferSectionTests 4, EconomicsDemandTests 7, BatchMetricsTests 3, ContainmentTests 1)"
+        },
+        "step4_offline_tests_added": {
+          "result": "ADDED missing fixture-based tests: test_intel_schema.py (40 tests) covering normalize_bsr (full capture primary/secondary, missing_live, unavailable, parse_error, status enums, raw preservation), bsr_field_completeness (verified/partial/status propagation), validate_snapshot (fixture_minimal valid, zero-forbidden, provenance, status exemptions, schema/asin/ingested_at/sources/facts validation, buy_box/offer constraints), snapshot_from_fixture, snapshot shape verification. test_normalized_snapshot.py (28 tests) covering normalize_live_snapshot (full capture, missing ASIN, wrong ASIN, missing price, provider rejection, secret detection, identity conflict, BSR parse error, missing BSR OK, pack conflict, unsupported provider, try_normalize variants, provenance, seller counts, coverage, buy_box, pack_match unavailable), extraction helpers, pack_match logic. All fixture-based, zero network, zero provider calls.",
+          "test_counts": "test_intel_schema 40 tests + test_normalized_snapshot 28 tests = 68 new tests"
+        },
+        "step5_run_and_report": {
+          "result": "Full suite: 1255 tests ran, 1 failure + 67 errors + 3 skipped. The 1 failure (test_disabled_post_returns_403) and 67 errors are all pre-existing, confined to test_dataforseo_adapter.py (import-time env-capture + missing-symbol API gap). No protected files (CSV/benchmark/cache/catalog) modified — only new test files and a 1-line bug fix in normalized_snapshot.py:_pack_match (list->set conversion for & operator).",
+          "test_counts": "1255 ran / 1f / 67e / 3s (deterministic)"
+        }
+      }
     }
   ],
-  "next_batch": "04_bsr_and_comparison_engine.md",
+  "next_batch": "05_ui_evidence_polish.md",
   "git_baseline": {
     "commit_hash": "8a1c6dd",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -251,8 +279,13 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-02T05:10:00Z",
+  "last_updated": "2026-09-02T05:30:00Z",
   "history": [
+    {
+      "ts": "2026-09-02T05:30:00Z",
+      "batch": "04_bsr_and_comparison_engine.md",
+      "summary": "Batch 04 complete. Core BSR evidence contract (intel_schema.py normalize_bsr), normalized snapshot contract (intel_schema.py fixture_minimal/validate_snapshot, normalized_snapshot.py), and offline comparison engine (benchmark_validation.py compare_benchmark_record) were ALREADY FULLY IMPLEMENTED. This batch added 68 missing fixture-based tests: test_intel_schema.py (40 tests for BSR normalization, field completeness, snapshot validation, shape) + test_normalized_snapshot.py (28 tests for normalization pipeline, extraction helpers, pack matching). Fixed 1 bug in normalized_snapshot.py:_pack_match (list->set conversion for & operator). Full suite: 1255 tests ran / 1 failure / 67 errors / 3 skipped (deterministic). All failures/errors pre-existing in test_dataforseo_adapter.py only. No protected files modified. Committed as f16aaf5. Next: 05_ui_evidence_polish.md"
+    },
     {
       "ts": "2026-09-02T05:10:00Z",
       "batch": "03_remaining_test_failures.md",
