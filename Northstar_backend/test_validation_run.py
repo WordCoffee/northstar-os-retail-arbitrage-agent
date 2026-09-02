@@ -493,9 +493,11 @@ class ValidationRunTests(unittest.TestCase):
         }])
         method, url = calls[1]
         self.assertEqual(method, "GET")
+        # Production task_get URL includes the /advanced/ segment
+        # (see proof_batch_contracts.merchant_task_get_url).
         self.assertEqual(
             url,
-            "https://api.dataforseo.com/v3/merchant/amazon/products/task_get/task-1")
+            "https://api.dataforseo.com/v3/merchant/amazon/products/task_get/advanced/task-1")
         self.assertEqual(url.count("task-1"), 1)
         self.assertNotIn("/live/", url)
 

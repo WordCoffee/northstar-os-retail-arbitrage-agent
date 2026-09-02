@@ -3,7 +3,8 @@
 Every test is mocked and zero-network:
 - sitecustomize.py blocks real ``requests`` during pytest runs;
 - each run test additionally patches
-  ``enrich_manifest_run.easyparser_client.get_easyparser_offers``;
+  ``enrich_manifest_run.rapidapi_client.get_rapidapi_offers`` (the live client
+  the runner actually dispatches to for the default rapidapi provider);
 - the explicit containment test patches ``requests.api.get`` to raise, then
   runs status + dry-run end-to-end proving zero transport calls;
 - ``amazon_search.load_cached_candidates`` is spied to prove the runner
@@ -71,10 +72,10 @@ def valid_manifest_obj():
 
 def fake_result(asin, title="Widget Offer Set", n_offers=1, offer_count=None,
                 credits_used=5, credits_remaining=995, gap=None):
-    """Mirror easyparser_client.get_easyparser_offers shapes (success + default failure)."""
+    """Mirror rapidapi_client.get_rapidapi_offers normalized shapes (success + default failure)."""
     if gap is not None:
         return {
-            "source": "easyparser", "asin": asin, "provider_asin": None,
+            "source": "rapidapi", "asin": asin, "provider_asin": None,
             "request_id": None, "title": None, "offer_count": None,
             "offers_returned_count": 0, "buy_box_price": None,
             "buy_box_price_raw": None, "buy_box_seller": None,
@@ -84,35 +85,36 @@ def fake_result(asin, title="Widget Offer Set", n_offers=1, offer_count=None,
             "observed_fbm_offer_count": 0, "observed_amazon_offer_count": 0,
             "offers": [], "request_zip_code": None, "observed_at": None,
             "credits_used": None, "credits_remaining": None,
+            "cost_usd": None, "provider_endpoint": "/products/%s/offers" % asin,
             "data_gaps": [gap],
         }
     offers = []
     for i in range(n_offers):
         offers.append({
             "position": i + 1, "buybox_winner": i == 0,
-            "price": {"value": 10.0}, "condition": "New",
-            "seller": {"id": "A%d" % i, "name": "Amazon.com"},
-            "seller_type": {"fba": True, "fbm": False, "sba": False},
+            "price": 10.0, "condition": "New",
+            "seller_id": "A%d" % i, "seller_name": "Amazon.com",
             "is_prime": True, "is_fba": True, "is_fbm": False,
-            "fulfilled_by_amazon": True, "shipping_text": "",
-            "shipping_is_free": True, "ships_from": "Amazon",
+            "fulfillment": "Amazon", "ships_from": "Amazon",
             "minimum_order_quantity": 1, "maximum_order_quantity": None,
+            "quantity_available": 10,
         })
     return {
-        "source": "easyparser", "asin": asin, "provider_asin": asin,
+        "source": "rapidapi", "asin": asin, "provider_asin": asin,
         "request_id": "req-%s" % asin, "title": title,
         "offer_count": n_offers if offer_count is None else offer_count,
         "offers_returned_count": len(offers),
-        "buy_box_price": 10.0, "buy_box_price_raw": {"value": 10.0},
+        "buy_box_price": 10.0, "buy_box_price_raw": 10.0,
         "buy_box_seller": "Amazon.com", "buy_box_seller_id": "A0",
         "buy_box_is_fba": True, "buy_box_is_fbm": False,
-        "buy_box_is_prime": True, "buy_box_condition": "New",
+        "buy_box_condition": "New",
         "observed_fba_offer_count": len(offers),
         "observed_fbm_offer_count": 0,
         "observed_amazon_offer_count": len(offers),
         "offers": offers, "request_zip_code": "75201",
         "observed_at": "2026-08-22T00:00:00Z",
         "credits_used": credits_used, "credits_remaining": credits_remaining,
+        "cost_usd": None, "provider_endpoint": "/products/%s/offers" % asin,
         "data_gaps": [],
     }
 
@@ -144,7 +146,7 @@ class Base(unittest.TestCase):
             calls.append(asin)
             return fn(asin)
 
-        p = mock.patch.object(emr.easyparser_client, "get_easyparser_offers", wrapper)
+        p = mock.patch.object(emr.rapidapi_client, "get_rapidapi_offers", wrapper)
         p.start()
         self.addCleanup(p.stop)
         return calls
