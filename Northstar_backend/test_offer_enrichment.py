@@ -174,22 +174,28 @@ class EasyparserMappingTests(unittest.TestCase):
         self.assertIsNotNone(result["enriched_at"])
 
     def test_extracts_asin_from_url(self):
-        mock_get = patch.object(offer_enrichment, "get_rapidapi_offers", return_value=easyparser_payload()).start()
+        # .start() returns the MOCK, not the patch — hold the patcher to be
+        # able to stop it; calling .stop() on the mock is a silent no-op that
+        # leaks a patched get_rapidapi_offers into later module runs.
+        get_patcher = patch.object(offer_enrichment, "get_rapidapi_offers",
+                                   return_value=easyparser_payload())
+        mock_get = get_patcher.start()
         try:
             with enrichment_mode("RAPIDAPI"):
                 offer_enrichment.get_scanner_offer("https://www.amazon.com/dp/B000000001")
         finally:
-            mock_get.stop()
+            get_patcher.stop()
         mock_get.assert_called_once_with("B000000001")
 
     def test_invalid_asin_falls_back_to_placeholder(self):
-        mock_get = patch.object(offer_enrichment, "get_rapidapi_offers").start()
+        get_patcher = patch.object(offer_enrichment, "get_rapidapi_offers")
+        mock_get = get_patcher.start()
         try:
             with enrichment_mode("RAPIDAPI"):
                 with patch.object(offer_enrichment, "get_offer_data", return_value=offline_shape()) as mock_offline:
                     result = offer_enrichment.get_scanner_offer("not-an-asin")
         finally:
-            mock_get.stop()
+            get_patcher.stop()
         mock_get.assert_not_called()
         self.assertEqual(result, offline_shape("invalid_asin"))
 
@@ -207,13 +213,14 @@ class EasyparserMappingTests(unittest.TestCase):
 
 class AutoModeTests(unittest.TestCase):
     def test_auto_uses_rapidapi_when_complete(self):
-        mock_bd = patch.object(offer_enrichment, "enrich_product").start()
+        bd_patcher = patch.object(offer_enrichment, "enrich_product")
+        mock_bd = bd_patcher.start()
         try:
             with patch.object(offer_enrichment, "get_rapidapi_offers", return_value=easyparser_payload()):
                 with enrichment_mode("AUTO"):
                     result = offer_enrichment.get_scanner_offer("B000000001")
         finally:
-            mock_bd.stop()
+            bd_patcher.stop()
         mock_bd.assert_not_called()
         self.assertEqual(result["offer_data_provider"], "easyparser")
         self.assertEqual(result["enrichment_status"], "complete")
@@ -589,13 +596,15 @@ class EnrichmentCacheTests(unittest.TestCase):
     def test_fresh_cache_hit_skips_provider_call(self):
         with self._cache_enabled():
             offer_enrichment._cache_offer("B000000001", self._cached_shape())
-        mock_provider = patch.object(offer_enrichment, "get_rapidapi_offers").start()
+        # Hold the patcher (not the mock) so .stop() actually restores.
+        provider_patcher = patch.object(offer_enrichment, "get_rapidapi_offers")
+        mock_provider = provider_patcher.start()
         try:
             with self._cache_enabled():
                 with enrichment_mode("RAPIDAPI"):
                     result = offer_enrichment.get_scanner_offer("B000000001")
         finally:
-            mock_provider.stop()
+            provider_patcher.stop()
         mock_provider.assert_not_called()
         self.assertEqual(result["offer_data_provider"], "easyparser")
         self.assertEqual(result["enrichment_status"], "complete")
@@ -606,13 +615,14 @@ class EnrichmentCacheTests(unittest.TestCase):
             offer_enrichment._cache_offer(
                 "B000000009", self._cached_shape(asin="B000000009", provider="chocodata", status="partial")
             )
-        mock_provider = patch.object(offer_enrichment, "_fetch_chocodata_product").start()
+        provider_patcher = patch.object(offer_enrichment, "_fetch_chocodata_product")
+        mock_provider = provider_patcher.start()
         try:
             with self._cache_enabled():
                 with enrichment_mode("CHOCODATA"):
                     result = offer_enrichment.get_scanner_offer("B000000009")
         finally:
-            mock_provider.stop()
+            provider_patcher.stop()
         mock_provider.assert_not_called()
         self.assertEqual(result["offer_data_provider"], "chocodata")
         self.assertEqual(result["enrichment_status"], "partial")
@@ -629,35 +639,41 @@ class EnrichmentCacheTests(unittest.TestCase):
         cache["B000000001"]["cached_at"] = (datetime.now(timezone.utc) - timedelta(hours=25)).isoformat()
         with open(_TEST_CACHE_PATH, "w", encoding="utf-8") as f:
             json.dump(cache, f)
-        mock_provider = patch.object(offer_enrichment, "get_rapidapi_offers", return_value=easyparser_payload()).start()
+        provider_patcher = patch.object(offer_enrichment, "get_rapidapi_offers",
+                                        return_value=easyparser_payload())
+        mock_provider = provider_patcher.start()
         try:
             with self._cache_enabled():
                 with enrichment_mode("RAPIDAPI"):
                     result = offer_enrichment.get_scanner_offer("B000000001")
         finally:
-            mock_provider.stop()
+            provider_patcher.stop()
         mock_provider.assert_called_once()
         self.assertEqual(result["amazon_price"], 48.87)
 
     def test_cache_disabled_when_ttl_is_zero(self):
         offer_enrichment._cache_offer("B000000001", self._cached_shape())
-        mock_provider = patch.object(offer_enrichment, "get_rapidapi_offers", return_value=easyparser_payload()).start()
+        provider_patcher = patch.object(offer_enrichment, "get_rapidapi_offers",
+                                        return_value=easyparser_payload())
+        mock_provider = provider_patcher.start()
         try:
             with enrichment_mode("RAPIDAPI"):
                 result = offer_enrichment.get_scanner_offer("B000000001")
         finally:
-            mock_provider.stop()
+            provider_patcher.stop()
         mock_provider.assert_called_once()
         self.assertEqual(result["amazon_price"], 48.87)
 
     def test_failed_fetch_is_never_cached(self):
-        mock_provider = patch.object(offer_enrichment, "get_rapidapi_offers", return_value=failed_easyparser_payload()).start()
+        provider_patcher = patch.object(offer_enrichment, "get_rapidapi_offers",
+                                        return_value=failed_easyparser_payload())
+        mock_provider = provider_patcher.start()
         try:
             with self._cache_enabled():
                 with enrichment_mode("RAPIDAPI"):
                     result = offer_enrichment.get_scanner_offer("B000000001")
         finally:
-            mock_provider.stop()
+            provider_patcher.stop()
         self.assertEqual(result["enrichment_status"], "provider_rejected")
         self.assertIsNone(offer_enrichment._cached_offer("B000000001"))
 
