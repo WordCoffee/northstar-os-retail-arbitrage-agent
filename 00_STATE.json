@@ -394,9 +394,37 @@
           "test_counts": "1300 ran / 1f / 67e / 3s"
         }
       }
+    },
+    {
+      "id": "09_costco_credential_diagnostic.md",
+      "completed_at": "2026-09-02T10:00:00Z",
+      "scope_note": "Costco/Unwrangle credential diagnostic (offline only, NO live call per spec). Read costco_api_client.py and identified required env vars: COSTCO_CATALOG_SOURCE (UNWRANGLE for item 424976 retry), UNWRANGLE_API_KEY (query-string auth), COSTCO_CATALOG_DETAIL_ENABLED=1 (for refresh_product_details). Auth format: Unwrangle uses ?api_key=... query string (NOT Bearer). Read existing failure-manifest.json (run 20260828T021658Z, status=failed, reason=http_403, provider=UNWRANGLE_COSTCO, platform=costco_business_detail), raw/refresh_product_details_raw.json (reason='http_403'), and manifest-review.md (fingerprint e325264fa989758d93c11b72eb7c12d833e7800dc28611bac7ed6ed8bd7de3db, 15 items frozen). Ranked root causes a-e with evidence; provided operator remediation checklist with safe presence-only PowerShell commands. NO live call attempted, NO .env values read, NO Costco code touched.",
+      "test_counts": "No code changes; no tests added. State file + checkpoint summary only.",
+      "steps": {
+        "step1_required_configuration": {
+          "result": "IDENTIFIED required env vars (names only, never values): COSTCO_CATALOG_SOURCE (UNWRANGLE for item 424976), UNWRANGLE_API_KEY (query-string auth ?api_key=... for https://data.unwrangle.com/api/getter/), COSTCO_CATALOG_DETAIL_ENABLED=1 (for Layer-2 product-detail refresh). Auth format: Unwrangle = query string, OpenWebNinja = X-API-Key header. Provider dispatch: COSTCO_CATALOG_SOURCE selects OPENWEBNINJA | UNWRANGLE | OFF (default OFF = local CSV only, zero network). Optional: COSTCO_CATALOG_MAX_PAGES (default 1, hard cap 20), COSTCO_CATALOG_REQUEST_DELAY_SECONDS (default 2.0), COSTCO_DELIVERY_ZIP (default 75201), COSTCO_BUSINESS_CENTER (default 'Dallas Business Center'), COSTCO_API_COST_BUFFER_PERCENT (default 10.0), COSTCO_FRESHNESS_THRESHOLD_DAYS (default 8). For item 424976 specifically (Adult 50+ Mature Multi Vitamins, 400 Tablets), client invokes costco_business_detail platform.",
+          "evidence": "costco_api_client.py:131 (source), 187 (detail_enabled), 301 (openwebninja key), 395/762 (unwrangle key), 370/712 (query-string auth), 293 (openwebninja header auth), 83/2043 (status() helper)"
+        },
+        "step2_prior_failure_artifacts": {
+          "result": "READ failure-manifest.json (line 6: 'provider returned HTTP 403 (authentication/authorization rejected) on first requested item 424976 (reason=http_403)'), raw/refresh_product_details_raw.json (status=failed, fetched=0, failures=[{item_id:424976, reason:http_403}]), manifest-review.md (fingerprint e325264fa989758d93c11b72eb7c12d833e7800dc28611bac7ed6ed8bd7de3db, 15 frozen items), normalized/items.json (empty: completed_count=0). NO MODIFICATION. The HTTP 403 indicates the request reached Unwrangle (a network-level block would not return 403; a malformed request would return 400/422). 14 items remain unattempted per stop-on-block policy.",
+          "evidence": "data/costco-discovery-runs/20260828T021658Z/failure-manifest.json, raw/refresh_product_details_raw.json, manifest-review.md, normalized/items.json"
+        },
+        "step3_root_cause_ranking": {
+          "result": "RANKED root causes a-e by likelihood: (a) UNWRANGLE_API_KEY not set in launching process (empty query string sent, Unwrangle returns 403) — MOST LIKELY; (b) wrong variable name (e.g., UNWRANGLE_KEY instead of UNWRANGLE_API_KEY) — plausible, same observable outcome; (c) credential invalid/expired/malformed — plausible; (d) plan does not include costco_business_detail endpoint — less likely (some plans grant search but not detail); (e) egress/network block — least likely (would return connection error, not 403). The failure-manifest's 'authentication/authorization rejected' message is the client's data_gaps text; it does NOT confirm any specific cause — distinguishing (a)/(b)/(c)/(d) requires operator verification per Step 4.",
+          "evidence": "failure-manifest.json line 6; refresh_product_details_raw.json line 8"
+        },
+        "step4_remediation_checklist": {
+          "result": "PROVIDED presence-only PowerShell check commands (if ($env:VAR) { 'SET' } else { 'NOT SET' } for UNWRANGLE_API_KEY, OPENWEBNINJA_API_KEY, COSTCO_CATALOG_SOURCE, COSTCO_CATALOG_DETAIL_ENABLED). Alternative Python check (python -c 'import os; print(...)') and client-internal status() check (python -c 'import costco_api_client; print(costco_api_client.status())' returns api_key_configured boolean). Per-cause remediation: (a) set the var in the launching PowerShell session; (b) verify exact name UNWRANGLE_API_KEY case-sensitive; (c) check Unwrangle dashboard for active key, re-copy without whitespace, regenerate if expired; (d) verify costco_business_detail platform is enabled for the plan (or accept that the 15-item run cannot proceed via Unwrangle and switch to OpenWebNinja for search-only which does not return per-item records); (e) test with curl from the same session; if proxy is rewriting, whitelist data.unwrangle.com.",
+          "evidence": "This state file entry"
+        },
+        "step5_report_and_stop": {
+          "result": "REPORTED. NO live provider call attempted in this batch, not even a 'test' one. NO .env values read. NO Costco code touched. State clearly stated: 'Batch 10 (single-item live retry) requires the operator to resolve the credential/config issue outside this session, then explicitly approve Batch 10.' Per the operator's directive in this session, Batch 10 is NOT to be executed under any circumstances without explicit per-batch approval — even if the diagnostic suggests a resolution.",
+          "test_counts": "N/A (offline-only diagnostic, no code/test changes)"
+        }
+      }
     }
   ],
-  "next_batch": "09_costco_credential_diagnostic.md",
+  "next_batch": "10_costco_single_item_retry_LIVE.md",
   "git_baseline": {
     "commit_hash": "8a1c6dd",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -404,8 +432,13 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-02T08:30:00Z",
+  "last_updated": "2026-09-02T10:00:00Z",
   "history": [
+    {
+      "ts": "2026-09-02T10:00:00Z",
+      "batch": "09_costco_credential_diagnostic.md",
+      "summary": "Batch 09 complete. Costco/Unwrangle credential diagnostic (offline only, NO live call per spec). Read costco_api_client.py and identified required env vars: COSTCO_CATALOG_SOURCE=UNWRANGLE, UNWRANGLE_API_KEY (query-string auth), COSTCO_CATALOG_DETAIL_ENABLED=1. Auth format: Unwrangle uses ?api_key=... query string (NOT Bearer). Read existing failure-manifest.json (run 20260828T021658Z, status=failed, reason=http_403, provider=UNWRANGLE_COSTCO, platform=costco_business_detail, item 424976), raw/refresh_product_details_raw.json, and manifest-review.md (fingerprint e325264fa989758d93c11b72eb7c12d833e7800dc28611bac7ed6ed8bd7de3db, 15 items frozen). Ranked root causes a-e by likelihood: (a) UNWRANGLE_API_KEY not set MOST LIKELY; (b) wrong variable name; (c) credential invalid/expired; (d) plan does not include costco_business_detail; (e) egress/network block LEAST LIKELY. Provided presence-only PowerShell check commands and per-cause human remediation checklist. NO live call attempted, NO .env values read, NO Costco code touched. Hard stopped before Batch 10 per operator directive. Operator must resolve credential/config issue outside this session, then explicitly approve Batch 10 (which itself requires the approval to explicitly state the fix is in place). Committed as 9123d3c. next_batch -> 10_costco_single_item_retry_LIVE.md (pointer only; not authorized)."
+    },
     {
       "ts": "2026-09-02T08:30:00Z",
       "batch": "07_docs_and_runbook.md",
