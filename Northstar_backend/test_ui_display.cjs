@@ -222,9 +222,9 @@ assert(html.includes('T2 Holdings') && html.includes('Northstar OS') && html.inc
 const scoutTableHtml = html.slice(html.indexOf('id="scoutTable"'), html.indexOf('</table>', html.indexOf('id="scoutTable"')) + 8);
 const headers = (scoutTableHtml.match(/<th scope="col"[^>]*>([^<]+)/g) || []).map((h) => h.replace(/<[^>]+>/g, '').replace('sticky-col', '').trim());
 assert(JSON.stringify(headers) === JSON.stringify(
-    ['Product', 'ASIN', 'Amazon Price', 'Costco COGS', 'FBA Fee', 'Net Profit', 'ROI', 'Competition', 'Est. Monthly Sales', 'Tier', 'Status', 'Action']
-), 'scout table headers exactly 12: Product, ASIN, Amazon Price, Costco COGS, FBA Fee, Net Profit, ROI, Competition, Est. Monthly Sales, Tier, Status, Action');
-assert(scoutTableHtml.includes('colspan="12"'), 'scout table has colspan="12" header row');
+    ['Product', 'ASIN', 'Amazon Price', 'Costco COGS', 'FBA Fee', 'Net Profit', 'ROI', 'Competition', 'Est. Monthly Sales', 'Tier', 'Status', 'Gate', 'Action']
+), 'scout table headers exactly 13: Product, ASIN, Amazon Price, Costco COGS, FBA Fee, Net Profit, ROI, Competition, Est. Monthly Sales, Tier, Status, Gate, Action');
+assert(scoutTableHtml.includes('colspan="13"'), 'scout table has colspan="13" header row');
 assert(!scoutTableHtml.includes('Weight'), 'no Weight column in scout table');
 assert(scoutTableHtml.includes('data-sort="name_asc"'), 'Product header is sortable asc (name_asc)');
 assert(scoutTableHtml.includes('data-sort="asin_asc"'), 'ASIN header is sortable asc (asin_asc)');
@@ -1218,13 +1218,14 @@ assert(vm.runInContext('NS.loadColVisibility().sales', context) === true, 'col-v
 vm.runInContext('NS.setColVisible("asin", false)', context);
 assert(vm.runInContext('NS.loadColVisibility().asin', context) === false, 'col-vis: setColVisible asin=false persists');
 
-/* getVisibleColCount: 2 fixed (Status, Action) + visible from COLUMN_VISIBLE_DEFAULTS */
+/* getVisibleColCount: 2 fixed (Status, Action) + visible from COLUMN_VISIBLE_DEFAULTS.
+   With Gate column: 11 data columns + 2 fixed = 13 total when all visible. */
 vm.runInContext('NS.setColVisible("asin", true); NS.setColVisible("fba", true); NS.setColVisible("competition", true); NS.setColVisible("sales", true); NS.setColVisible("tier", true)', context);
-assert(vm.runInContext('NS.getVisibleColCount()', context) === 12, 'col-vis: getVisibleColCount=12 when all 10 visible + 2 fixed');
+assert(vm.runInContext('NS.getVisibleColCount()', context) === 13, 'col-vis: getVisibleColCount=13 when all 11 visible + 2 fixed');
 vm.runInContext('NS.setColVisible("asin", false)', context);
-assert(vm.runInContext('NS.getVisibleColCount()', context) === 11, 'col-vis: getVisibleColCount=11 with ASIN hidden');
+assert(vm.runInContext('NS.getVisibleColCount()', context) === 12, 'col-vis: getVisibleColCount=12 with ASIN hidden');
 vm.runInContext('NS.setColVisible("sales", false)', context);
-assert(vm.runInContext('NS.getVisibleColCount()', context) === 10, 'col-vis: getVisibleColCount=10 with ASIN+sales hidden');
+assert(vm.runInContext('NS.getVisibleColCount()', context) === 11, 'col-vis: getVisibleColCount=11 with ASIN+sales hidden');
 
 /* resetColVisibility restores defaults */
 vm.runInContext('NS.resetColVisibility()', context);

@@ -269,9 +269,37 @@
           "test_counts": "1255 ran / 1f / 67e / 3s (deterministic)"
         }
       }
+    },
+    {
+      "id": "05_ui_evidence_polish.md",
+      "completed_at": "2026-09-02T06:30:00Z",
+      "scope_note": "UI evidence & safety polish. Authorization Gate verified intact (4 states, correct precedence). Scout table column contract updated from 12 to 13 columns to include the Authorization Gate column (Gate) — test assertions updated to match implementation. BSR display honesty already implemented (benchmark vs live BSR distinguished in dossier with explanatory notes for missing_live/provider_not_supported). Zero live-call paths verified (all interaction tests show zero fetch calls).",
+      "test_counts": "node test_ui_display.cjs: ALL PASS (was 5 failures on column contract drift). python suite: 1255 ran / 1f / 67e / 3s (unchanged, pre-existing dataforseo only).",
+      "steps": {
+        "step1_authorization_gate": {
+          "result": "CONFIRMED INTACT: NS.authorizationGate() implements 4 states with correct precedence (blocked > authorized > invoice_pending > needs_review > default needs_review). All 6 gate tests pass: pack_mismatch=>blocked, portfolio_readiness blocked_mismatch/insufficient_data=>blocked, cost_is_purchase_authorized+invoice_confirmed=>authorized, costco_online+candidate_pack=>invoice_pending, unavailable basis+unknown pack=>invoice_pending, provisional/unavailable economics/stale=>needs_review. Empty object defaults to needs_review (never silently promoted to invoice_pending).",
+          "evidence": "Last 6 UI test assertions all PASS"
+        },
+        "step2_scout_column_contract": {
+          "result": "RESOLVED: Table has 13 columns (Gate column added between Status and Action). Updated test assertions: headers array now 13 items including 'Gate'; colspan updated from 12 to 13; getVisibleColCount expectations updated from 12/11/10 to 13/12/11 (11 data + 2 fixed). All column tests now PASS.",
+          "evidence": "scout table headers exactly 13 PASS; colspan=13 PASS; getVisibleColCount=13/12/11 PASS"
+        },
+        "step3_bsr_display_honesty": {
+          "result": "ALREADY IMPLEMENTED: Dossier renders benchmark BSR (bsrBenchText) and live BSR (bsrLiveText) in separate columns with explanatory note (bsrNote) for missing_live, missing_csv_reference, provider_not_supported states. Never shows blank-as-zero; missing BSR states explicitly labeled. Table does not display BSR directly (dossier only).",
+          "evidence": "static/index.html lines 4815-4847: bsrBenchText, bsrLiveText, bsrNote with states missing_csv_reference, provider_not_supported, missing_live"
+        },
+        "step4_no_live_call_paths": {
+          "result": "CONFIRMED: All interaction test phases report zero fetch calls. Phase 10 (p10): 'zero fetch calls across all interaction tests'. Phase 19 (p19): 'zero fetch calls across all proposal interactions'. Phase 20 (p20): 'zero fetch calls across all Proof Batch + proposal interactions'. Phase 18 (Focus): 'zero fetch calls during all Focus interactions'. No button, filter, or control triggers network.",
+          "evidence": "UI test output: p10/p15/p18/p19/p20 all report zero fetch calls"
+        },
+        "step5_tests_and_report": {
+          "result": "node test_ui_display.cjs: ALL PASS (updated from 5 column-contract failures). python -m unittest discover: 1255 ran / 1f / 67e / 3s (stable, pre-existing dataforseo only). No protected files modified.",
+          "test_counts": "UI: ALL PASS. Python: 1255/1f/67e/3s"
+        }
+      }
     }
   ],
-  "next_batch": "05_ui_evidence_polish.md",
+  "next_batch": "06_master_brain_gateway_groundwork.md",
   "git_baseline": {
     "commit_hash": "8a1c6dd",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -279,8 +307,13 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-02T05:30:00Z",
+  "last_updated": "2026-09-02T06:30:00Z",
   "history": [
+    {
+      "ts": "2026-09-02T06:30:00Z",
+      "batch": "05_ui_evidence_polish.md",
+      "summary": "Batch 05 complete. Authorization Gate verified intact (4 states, correct precedence). Scout table column contract resolved: updated test assertions from 12 to 13 columns to include Authorization Gate column. BSR display honesty already implemented (benchmark vs live BSR distinguished in dossier). Zero live-call paths confirmed (all interaction phases report zero fetch calls). node test_ui_display.cjs: ALL PASS (was 5 failures on column drift). python suite: 1255 ran / 1f / 67e / 3s (stable). Committed as ce2c89f. Next: 06_master_brain_gateway_groundwork.md"
+    },
     {
       "ts": "2026-09-02T05:30:00Z",
       "batch": "04_bsr_and_comparison_engine.md",
