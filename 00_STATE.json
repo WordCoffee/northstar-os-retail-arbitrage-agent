@@ -366,9 +366,37 @@
           "test_counts": "Pre-arc: 1187/10f/90e/3s → Post-arc: 1272/1f/67e/3s. Delta: +85/-9/-23."
         }
       }
+    },
+    {
+      "id": "08_costco_client_honesty_audit.md",
+      "completed_at": "2026-09-02T09:30:00Z",
+      "scope_note": "Costco client honesty audit (offline only, no live call). Audited every exception site in costco_api_client.py — NO bare 'except Exception:' or bare 'except:' patterns exist. All exception handlers use specific exception types. Applied typed failure classification per spec: added failure_type field to result dicts in _search_openwebninja, _search_unwrangle, and refresh_product_details. Added module-level constants: FAILURE_TYPE_AUTH_ERROR='auth_error', FAILURE_TYPE_RATE_LIMITED='rate_limited', FAILURE_TYPE_NOT_FOUND='not_found', FAILURE_TYPE_TRANSPORT_ERROR='transport_error', FAILURE_TYPE_MALFORMED_RESPONSE='malformed_response', FAILURE_TYPE_SUCCESS='success'. Zero-retry convention verified intact. No credential values leak into any persistent file write.",
+      "test_counts": "python 1300 ran / 1f / 67e / 3s (+28 from 1272, Costco typed-failure tests). test_costco_api_client + test_costco_client: 162 OK (was 134 OK; +28 new TypedFailureClassificationTests). Full suite stable: 1f/67e/3s pre-existing dataforseo only.",
+      "steps": {
+        "step1_audit_exceptions": {
+          "result": "AUDIT COMPLETE. 0 bare except/except Exception sites. 10 specific-exception handlers all use requests.exceptions.Timeout, requests.exceptions.RequestException, json.JSONDecodeError, OSError, csv.Error, or ValueError. Original concern (item 424976 HTTP 403 must clearly report 'authorization rejected') was addressed by spec: applied typed failure_type in Step 2 so auth_error is now structurally distinct from not_found (was previously only a string in data_gaps).",
+          "evidence": "Lines 296-303, 312-314, 373-380, 388-391, 715-720, 729-731, 818-828, 980-985, 1015-1018: all specific"
+        },
+        "step2_typed_classification": {
+          "result": "APPLIED. Added 6 module-level failure_type constants. _search_openwebninja, _search_unwrangle, and refresh_product_details now set failure_type on every result path: auth_error (401/403/missing key), rate_limited (429), not_found (404 or empty result/no_result), transport_error (timeout, network, 5xx, other non-200), malformed_response (JSON parse error, unexpected structure, success=false, missing results list), success. auth_error and not_found are NEVER conflated: explicit test_auth_error_never_collapses_to_not_found and test_not_found_never_collapses_to_auth_error guard the discriminator. refresh_product_details per-item failure entries now carry failure_type in addition to reason.",
+          "evidence": "TypedFailureClassificationTests: 28 new tests covering 200/401/403/404/429/timeout/network/malformed_json for both Unwrangle and OpenWebNinja, plus refresh_product_details per-item failures"
+        },
+        "step3_no_credential_leak": {
+          "result": "CONFIRMED. Audit of every print/log/write/json.dump/open call: api_key is only in the HTTP request (line 370 params dict for Unwrangle query string auth, line 712 for detail endpoint). No api_key in: csv writer (line 1417, writes only REQUIRED_COLUMNS item_name/costco_cost/etc.), catalog archive (line 673/770/1462/1484/1850 — all write parsed response items, never the request), detail store, invoice store, ledger, snapshot, run report. The data_gaps strings do not include the api_key value. NO FIX REQUIRED for the persistence layer. Secondary note: the api_key is in the HTTP request URL query string (Unwrangle's API contract); this is Unwrangle's auth design, not a logging risk.",
+          "evidence": "grep of print/log/write/UNWRANGLE/OPENWEBNINJA/api_key; manual review of every file write"
+        },
+        "step4_offline_tests": {
+          "result": "ADDED 28 new fixture-based tests in test_costco_api_client.py::TypedFailureClassificationTests. Coverage: 200 success + 401 + 403 + 404 + 429 + timeout + network error + malformed JSON + malformed structure for BOTH Unwrangle and OpenWebNinja. refresh_product_details per-item: 401, 404, 429, timeout, invalid JSON. Plus the auth_error <-> not_found never-collapse guard pair. All 28 new tests PASS. The existing test_refresh_product_details_stops_on_block was updated to expect the new failure_type field (was 1 expected field, now 3; strict superset, not a behavior change). The existing test_costco_client test_missing_path_skips_lookup (COSTCO_CSV_PATH skip) still skips correctly.",
+          "test_counts": "+28 new tests, 0 regressions"
+        },
+        "step5_run_and_report": {
+          "result": "test_costco_api_client + test_costco_client: 162 OK (was 134). Full suite: 1300 ran / 1f / 67e / 3s (was 1272, +28; 1f/67e/3s unchanged, pre-existing dataforseo only). CONFIRMED: costco_api_client.py now distinguishes auth_error (401/403) from not_found (404) from rate_limited (429) from transport_error (timeout/network/5xx) from malformed_response (JSON parse, unexpected structure) from success via the typed failure_type field. This satisfies the Batch 09 precondition.",
+          "test_counts": "1300 ran / 1f / 67e / 3s"
+        }
+      }
     }
   ],
-  "next_batch": "08_costco_client_honesty_audit.md",
+  "next_batch": "09_costco_credential_diagnostic.md",
   "git_baseline": {
     "commit_hash": "8a1c6dd",
     "committed_at": "2026-09-02T07:30:00Z",

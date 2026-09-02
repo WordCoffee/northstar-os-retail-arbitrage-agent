@@ -321,6 +321,306 @@ class ProviderDispatchTests(unittest.TestCase):
         self.assertTrue(any("off" in g for g in result["data_gaps"]))
 
 
+class TypedFailureClassificationTests(unittest.TestCase):
+    """Batch 08: every result dict carries a typed `failure_type` so callers
+    can distinguish auth_error from not_found from rate_limited from
+    transport_error from malformed_response without parsing the
+    data_gaps string. Zero network: all responses are mocked."""
+
+    # ----- Unwrangle search -----
+    def _unwrangle_env(self, key=""):
+        env = {"UNWRANGLE_API_KEY": key, "COSTCO_CATALOG_SOURCE": "UNWRANGLE"}
+        return env
+
+    def test_unwrangle_missing_key_is_auth_error(self):
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="")):
+            with mock.patch("costco_api_client.requests.get") as mock_get:
+                result = cac._search_unwrangle("kirkland", 1)
+        mock_get.assert_not_called()
+        self.assertEqual(result["failure_type"], "auth_error")
+        self.assertFalse(result["success"])
+        self.assertIsNone(result["http_status"])
+
+    def test_unwrangle_http_200_success(self):
+        page = make_page([make_result()])
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse(page, status_code=200)):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "success")
+        self.assertTrue(result["success"])
+        self.assertEqual(result["http_status"], 200)
+        self.assertEqual(result["result_count"], 1)
+
+    def test_unwrangle_http_401_is_auth_error(self):
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=401)):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "auth_error")
+        self.assertEqual(result["http_status"], 401)
+        self.assertFalse(result["success"])
+
+    def test_unwrangle_http_403_is_auth_error(self):
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=403)):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "auth_error")
+        self.assertEqual(result["http_status"], 403)
+        self.assertFalse(result["success"])
+
+    def test_unwrangle_http_404_is_not_found(self):
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=404)):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "not_found")
+        self.assertEqual(result["http_status"], 404)
+        self.assertFalse(result["success"])
+
+    def test_unwrangle_http_429_is_rate_limited(self):
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=429)):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "rate_limited")
+        self.assertEqual(result["http_status"], 429)
+        self.assertFalse(result["success"])
+
+    def test_unwrangle_timeout_is_transport_error(self):
+        def timeout_get(url, params=None, timeout=None):
+            raise cac.requests.exceptions.Timeout("t")
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get", side_effect=timeout_get):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "transport_error")
+        self.assertFalse(result["success"])
+
+    def test_unwrangle_network_error_is_transport_error(self):
+        def net_get(url, params=None, timeout=None):
+            raise cac.requests.exceptions.ConnectionError("dns")
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get", side_effect=net_get):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "transport_error")
+        self.assertFalse(result["success"])
+
+    def test_unwrangle_malformed_json_is_malformed_response(self):
+        class BadJson:
+            status_code = 200
+            def json(self):
+                raise ValueError("not json")
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get", return_value=BadJson()):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "malformed_response")
+        self.assertEqual(result["http_status"], 200)
+        self.assertFalse(result["success"])
+
+    def test_unwrangle_success_false_is_malformed_response(self):
+        page = make_page([make_result()], success=False)
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse(page, status_code=200)):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "malformed_response")
+        self.assertEqual(result["http_status"], 200)
+        self.assertFalse(result["success"])
+
+    def test_unwrangle_results_not_list_is_malformed_response(self):
+        page = make_page([make_result()])
+        page["results"] = "not a list"
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse(page, status_code=200)):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "malformed_response")
+        self.assertEqual(result["http_status"], 200)
+        self.assertFalse(result["success"])
+
+    # ----- OpenWebNinja search -----
+    def _openwebninja_env(self, key=""):
+        return {"OPENWEBNINJA_API_KEY": key, "COSTCO_CATALOG_SOURCE": "OPENWEBNINJA"}
+
+    def test_openwebninja_missing_key_is_auth_error(self):
+        with mock.patch.dict("os.environ", self._openwebninja_env(key="")):
+            with mock.patch("costco_api_client.requests.get") as mock_get:
+                result = cac._search_openwebninja("kirkland")
+        mock_get.assert_not_called()
+        self.assertEqual(result["failure_type"], "auth_error")
+        self.assertFalse(result["success"])
+
+    def test_openwebninja_http_200_success(self):
+        product = {
+            "item_product_name": "Kirkland Honey",
+            "item_number": "12345",
+            "id": "12345",
+            "item_location_pricing_listPrice": 19.99,
+            "item_location_pricing_salePrice": 19.99,
+            "item_location_availability": "in stock",
+            "Brand_attr": ["Kirkland"],
+        }
+        payload = {"total_products": 1, "products": [product]}
+        with mock.patch.dict("os.environ", self._openwebninja_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse(payload, status_code=200)):
+                result = cac._search_openwebninja("kirkland")
+        self.assertEqual(result["failure_type"], "success")
+        self.assertTrue(result["success"])
+        self.assertEqual(result["http_status"], 200)
+        self.assertEqual(result["result_count"], 1)
+
+    def test_openwebninja_http_401_is_auth_error(self):
+        with mock.patch.dict("os.environ", self._openwebninja_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=401)):
+                result = cac._search_openwebninja("kirkland")
+        self.assertEqual(result["failure_type"], "auth_error")
+        self.assertEqual(result["http_status"], 401)
+
+    def test_openwebninja_http_403_is_auth_error(self):
+        with mock.patch.dict("os.environ", self._openwebninja_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=403)):
+                result = cac._search_openwebninja("kirkland")
+        self.assertEqual(result["failure_type"], "auth_error")
+        self.assertEqual(result["http_status"], 403)
+
+    def test_openwebninja_http_404_is_not_found(self):
+        with mock.patch.dict("os.environ", self._openwebninja_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=404)):
+                result = cac._search_openwebninja("kirkland")
+        self.assertEqual(result["failure_type"], "not_found")
+        self.assertEqual(result["http_status"], 404)
+
+    def test_openwebninja_http_429_is_rate_limited(self):
+        with mock.patch.dict("os.environ", self._openwebninja_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=429)):
+                result = cac._search_openwebninja("kirkland")
+        self.assertEqual(result["failure_type"], "rate_limited")
+        self.assertEqual(result["http_status"], 429)
+
+    def test_openwebninja_timeout_is_transport_error(self):
+        def timeout_get(url, params=None, headers=None, timeout=None):
+            raise cac.requests.exceptions.Timeout("t")
+        with mock.patch.dict("os.environ", self._openwebninja_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get", side_effect=timeout_get):
+                result = cac._search_openwebninja("kirkland")
+        self.assertEqual(result["failure_type"], "transport_error")
+
+    def test_openwebninja_malformed_json_is_malformed_response(self):
+        class BadJson:
+            status_code = 200
+            def json(self):
+                raise ValueError("not json")
+        with mock.patch.dict("os.environ", self._openwebninja_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get", return_value=BadJson()):
+                result = cac._search_openwebninja("kirkland")
+        self.assertEqual(result["failure_type"], "malformed_response")
+        self.assertEqual(result["http_status"], 200)
+
+    def test_openwebninja_missing_products_is_malformed_response(self):
+        payload = {"total_products": 0, "data": {}}
+        with mock.patch.dict("os.environ", self._openwebninja_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse(payload, status_code=200)):
+                result = cac._search_openwebninja("kirkland")
+        self.assertEqual(result["failure_type"], "malformed_response")
+        self.assertEqual(result["http_status"], 200)
+        self.assertFalse(result["success"])
+
+    # ----- Auth vs not_found are NEVER conflated (Batch 08 hard requirement) -----
+    def test_auth_error_never_collapses_to_not_found(self):
+        """An HTTP 401/403 must NEVER be reported as not_found, even if
+        the response body is empty. The two states must remain
+        distinguishable in the failure_type discriminator."""
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=401)):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "auth_error")
+        self.assertNotEqual(result["failure_type"], "not_found")
+
+    def test_not_found_never_collapses_to_auth_error(self):
+        """An HTTP 404 must NEVER be reported as auth_error."""
+        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=404)):
+                result = cac._search_unwrangle("kirkland", 1)
+        self.assertEqual(result["failure_type"], "not_found")
+        self.assertNotEqual(result["failure_type"], "auth_error")
+
+    # ----- product-detail refresh also carries typed failure -----
+    def test_refresh_product_details_missing_unwrangle_key_is_auth_error(self):
+        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
+                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
+                                            "UNWRANGLE_API_KEY": ""}):
+            with mock.patch("costco_api_client.requests.get") as mock_get:
+                result = cac.refresh_product_details(["424976"])
+        mock_get.assert_not_called()
+        self.assertEqual(result["failure_type"], "auth_error")
+        self.assertEqual(result["fetched"], 0)
+
+    def test_refresh_product_details_http_401_is_auth_error(self):
+        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
+                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
+                                            "UNWRANGLE_API_KEY": "abc"}):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=401)):
+                result = cac.refresh_product_details(["424976"])
+        self.assertEqual(result["status"], "failed")
+        self.assertEqual(len(result["failures"]), 1)
+        self.assertEqual(result["failures"][0]["failure_type"], "auth_error")
+        self.assertEqual(result["failures"][0]["item_id"], "424976")
+
+    def test_refresh_product_details_http_404_is_not_found(self):
+        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
+                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
+                                            "UNWRANGLE_API_KEY": "abc"}):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=404)):
+                result = cac.refresh_product_details(["424976"])
+        self.assertEqual(len(result["failures"]), 1)
+        self.assertEqual(result["failures"][0]["failure_type"], "not_found")
+
+    def test_refresh_product_details_http_429_is_rate_limited(self):
+        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
+                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
+                                            "UNWRANGLE_API_KEY": "abc"}):
+            with mock.patch("costco_api_client.requests.get",
+                            return_value=FakeResponse({}, status_code=429)):
+                result = cac.refresh_product_details(["424976"])
+        self.assertEqual(len(result["failures"]), 1)
+        self.assertEqual(result["failures"][0]["failure_type"], "rate_limited")
+
+    def test_refresh_product_details_timeout_is_transport_error(self):
+        def timeout_get(url, params=None, timeout=None):
+            raise cac.requests.exceptions.Timeout("t")
+        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
+                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
+                                            "UNWRANGLE_API_KEY": "abc"}):
+            with mock.patch("costco_api_client.requests.get", side_effect=timeout_get):
+                result = cac.refresh_product_details(["424976"])
+        self.assertEqual(len(result["failures"]), 1)
+        self.assertEqual(result["failures"][0]["failure_type"], "transport_error")
+
+    def test_refresh_product_details_invalid_json_is_malformed_response(self):
+        class BadJson:
+            status_code = 200
+            def json(self):
+                raise ValueError("not json")
+        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
+                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
+                                            "UNWRANGLE_API_KEY": "abc"}):
+            with mock.patch("costco_api_client.requests.get", return_value=BadJson()):
+                result = cac.refresh_product_details(["424976"])
+        self.assertEqual(len(result["failures"]), 1)
+        self.assertEqual(result["failures"][0]["failure_type"], "malformed_response")
+
+
 class OpenWebNinjaRefreshTests(unittest.TestCase):
     def setUp(self):
         self.tmpdir = tempfile.TemporaryDirectory()
@@ -1027,7 +1327,9 @@ class ProductDetailLayerTests(unittest.TestCase):
             with mock.patch("costco_api_client.requests.get", return_value=FakeResponse({}, status_code=429)):
                 report = cac.refresh_product_details(["5", "6"])
         self.assertEqual(report["status"], "failed")
-        self.assertEqual(report["failures"], [{"item_id": "5", "reason": "http_429"}])
+        # Batch 08: failure entries now carry typed failure_type (rate_limited for 429)
+        self.assertEqual(report["failures"],
+                         [{"item_id": "5", "reason": "http_429", "failure_type": "rate_limited"}])
         self.assertEqual(report["fetched"], 0)
         self.assertFalse(os.path.exists(self.detail_path))
 
