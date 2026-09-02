@@ -1,6 +1,15 @@
 {
   "known_issues": [
     {
+      "id": "orphaned_brain_orchestrator_missing_policy_config",
+      "discovered_in": "Batch 06 reconciliation (operator review of Batch 06 spec divergence)",
+      "discovered_at": "2026-09-02T08:45:00Z",
+      "description": "brain_orchestrator.py exists (created 2026-08-22, predates this repair arc) and imports/references config/brain_policy.json, which does not exist anywhere in the repo. It is not referenced by 00_MASTER_INSTRUCTIONS.md or any batch file. It appears to be orphaned/dead code from an earlier design exploration, separate from the Batch 06 master_brain_gateway.py that was actually built to spec.",
+      "recommended_resolution_batch": "none yet — flag for operator decision: delete, or build the missing brain_policy.json and wire it up as a future enhancement",
+      "requires_decision": "Operator must decide: (a) delete brain_orchestrator.py as orphaned dead code, OR (b) treat it as a future enhancement, build the missing config/brain_policy.json, and integrate it with the Batch 06 master_brain_gateway.py (which would require an additional spec since the current Batch 06 spec is satisfied by the standalone gateway). No batch in the current 01-11 sequence names brain_orchestrator.py as in-scope.",
+      "status": "open"
+    },
+    {
       "id": "ui_scout_table_column_model_mismatch",
       "discovered_in": "Batch 01, Step 5 regression run",
       "discovered_at": "2026-09-01T11:25:00Z",
@@ -221,8 +230,8 @@
     {
       "id": "03_remaining_test_failures.md",
       "completed_at": "2026-09-02T05:10:00Z",
-      "scope_note": "Batch 03 reconciliation + easyparser fixture migration + DataForSEO contract-fixture reconciliation. The LITERAL 5-step spec text was NOT the work performed in this session; the 5 steps were ALREADY resolved by prior work (Batch 01 Step 5 for the tearDown issue, Batch 02 Step 2-3 for offer_enrichment and provider_switch). The 03 reconciliation runner confirmed all 5 spec steps pass today. This entry records both: (a) the reconciliation verifying the literal spec is satisfied, and (b) the easyparser+DataForSEO-contract work that was actually performed in the session. See 'literal_spec_reconciliation' step for the per-step evidence.",
-      "test_counts": "python 1187 ran / 1 failure / 67 errors / 3 skipped (modal, x3 deterministic runs) — see reconciliation in history entry",
+      "scope_note": "Batch 03 literal 5-step spec was INDEPENDENTLY RE-VERIFIED per operator request. The literal spec (proof_batch byte-identity, provider_switch 4 failures, offer_enrichment remaining, costco skip confirmation, full suite) was checked end-to-end against the current repo: ALL 4 EXECUTABLE STEPS (1-4) ARE ALREADY SATISFIED by prior work in Batches 01-02. The session's actual code work (easyparser fixture migration + 3 DataForSEO contract fixture fixes + 1 validation_run URL fix) addressed the easyparser_client_contract_mismatch known_issue — a PARALLEL TRACK that the known_issue's recommended_resolution_batch field assigned to Batch 03, but which is NOT the literal 5-step spec text. No step was silently skipped; the literal spec was re-verified and found satisfied.",
+      "test_counts": "python 1187 ran / 1 failure / 67 errors / 3 skipped (modal, x3 deterministic runs). Step 1: test_proof_batch_run + test_proof_batch_easyparser_adapter + test_proof_batch -> 166 OK. Step 2: test_provider_switch -> 8 OK (4 named failures all pass). Step 3: test_offer_enrichment -> 57 OK (12 Batch 02 failures resolved). Step 4: 3 skipped, 1 for COSTCO_CSV_PATH (spec's exact case) + 2 for snapshot store (unrelated, also benign byte-identity guards). Step 5: full suite 1187/1f/67e/3s modal. See 'literal_spec_reconciliation' step for per-step evidence.",
       "steps": {
         "literal_spec_reconciliation": {
           "result": "Batch 03 literal 5-step spec was reassessed post-session per operator request. ALL 5 STEPS ALREADY RESOLVED by prior work (Batches 01-02). Evidence: (Step 1) `python -m unittest test_proof_batch_run test_proof_batch_easyparser_adapter test_proof_batch -v` -> Ran 166 tests OK (3 byte-identity assertions + tearDown all pass; no protected file changes). (Step 2) `python -m unittest test_provider_switch -v` -> Ran 8 tests OK (4 named failures: test_offers_honest_gaps, test_rapidapi_mode_maps, test_missing_key_returns_gap_not_raises, test_parse_bsr_variants — ALL pass; resolved by Batch 02 Step 3 leaked-patch fix). (Step 3) `python -m unittest test_offer_enrichment -v` -> Ran 57 tests OK (all 12 original failures from Batch 02 Step 2 already resolved). (Step 4) Full suite shows 3 skipped tests for documented reasons: COSTCO_CSV_PATH not set (real costco csv missing) — NOT masking real failures. (Step 5) Full suite 1187 ran / 1f / 67e / 3s (modal, deterministic). The 1 failure + 67 errors are the pre-existing DataForSEO import-time env-capture + 15 missing-symbol API gap (all in test_dataforseo_adapter.py, left OPEN by discipline per docs/dataforseo-adapter-collection-blocker-report.md).",
