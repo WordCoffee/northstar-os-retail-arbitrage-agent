@@ -1,0 +1,25 @@
+{
+  "pack_id": "northstar-provider",
+  "version": "1.0.0",
+  "description": "Northstar provider integrations — Bright Data, RapidAPI, DataForSEO, Chocodata, Unwrangle, Scavio.",
+  "applies_to": ["NORTHSTAR_OS_PROVIDER"],
+  "rules": [
+    "Bright Data Web Unlocker (zone northstaros): 1 credit/request, free tier 5k/mo shared pool, hard stop at 0 when unfunded.",
+    "Chocodata: /amazon/search = 5 credits/call, free 1k credits on signup. SCANNER_SEARCH_SOURCE=CHOCODATA supported.",
+    "Unwrangle: 1 credit/ASIN (US), 10 credits/search page (up to 96 products). COSTCO_CATALOG_SOURCE=UNWRANGLE supported.",
+    "DataForSEO: Merchant Standard queue only (products/asin/sellers). Labs Live gated (DATAFORSEO_LABS_AUTO_SUBMIT). Adapter OFFLINE BY DEFAULT.",
+    "RapidAPI (Easyparser): ~5 credits/ASIN for OFFER operation. Per-ASIN enrichment only for scoreable rows (Costco cost exists + exact fingerprint).",
+    "Scavio: transport_error classification, bare print-and-swallow removed. 1 credit/ASIN estimate.",
+    "All live enrichment credit-gated: only runs where row can score (Costco cost + exact/invoice-confirmed fingerprint).",
+    "Enrichment caches: enriched-offer-cache.json (24h TTL), seller-offer-cache.json (24h TTL). Offline placeholders never cached."
+  ],
+  "references": [
+    "Northstar_backend/bright_data_client.py",
+    "Northstar_backend/rapidapi_client.py",
+    "Northstar_backend/chocodata_client.py",
+    "Northstar_backend/unwrangle_client.py",
+    "Northstar_backend/dataforseo_adapter.py",
+    "Northstar_backend/scavio_client.py",
+    "Northstar_backend/docs/dataforseo-adapter-runbook.md"
+  ]
+}

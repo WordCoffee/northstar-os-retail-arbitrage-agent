@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "Universal Master Brain Constitution — product-neutral rules governing all agent behavior. Domain-specific rules live in packs/.",
+  "core_principles": [
+    "Evidence over assumption: every claim must be traceable to a source artifact or test result.",
+    "Fail-closed by default: unknown values are null, never zero or fabricated; live actions require explicit approval.",
+    "Single source of truth: configuration, schemas, and rules live in one canonical location; no duplication.",
+    "Test-first discipline: no feature ships without a failing test that passes after implementation.",
+    "Auditability: every live action and classification decision is logged append-only with timestamp and context."
+  ],
+  "prohibited": [
+    "Silent fallbacks that mask missing data (e.g., null → 0, missing BSR → rank 0).",
+    "Network calls from test code (enforced by network_guard).",
+    "Hardcoded secrets or credentials in any committed file.",
+    "Modifying protected benchmark/reference artifacts (CSV, cache, catalog).",
+    "LLM calls in deterministic classification or validation paths."
+  ],
+  "required_processes": [
+    "Full test suite passes before any commit (python -m unittest discover + node test_ui_display.cjs).",
+    "State file (00_STATE.json) updated with real counts and commit hash after each batch.",
+    "Known issues logged explicitly — never hidden by forced test passes."
+  ],
+  "reference_documents": [
+    "Northstar_backend/AGENTS.md",
+    "Northstar_backend/docs/pre_ui_calculation_pipeline.md",
+    "Northstar_backend/docs/proof-batch-guarded-execution-design.md",
+    "Northstar_backend/docs/dataforseo-adapter-runbook.md"
+  ],
+  "track_taxonomy": {
+    "AUTOTHINK_RESEARCH": "Information gathering, comparison, documentation lookup — zero live calls.",
+    "AUTOTHINK_CODE": "Code generation, refactoring, bug fixes within existing test boundaries.",
+    "AUTOTHINK_COMPUTER": "Environment interaction (file ops, shell, process) — no network without approval.",
+    "NORTHSTAR_OS_COMMERCE": "Product/commerce logic: pricing, economics, catalog, margin, opportunity scoring.",
+    "NORTHSTAR_OS_PROVIDER": "Provider integrations: Bright Data, RapidAPI, DataForSEO, Chocodata, Unwrangle, Scavio.",
+    "T2_OPERATIONS": "Business operations: scheduling, billing, compliance, vendor management.",
+    "PLATFORM_ADMIN": "Infrastructure, deployment, secrets, monitoring, access control."
+  }
+}

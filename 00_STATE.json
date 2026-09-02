@@ -297,9 +297,37 @@
           "test_counts": "UI: ALL PASS. Python: 1255/1f/67e/3s"
         }
       }
+    },
+    {
+      "id": "06_master_brain_gateway_groundwork.md",
+      "completed_at": "2026-09-02T07:00:00Z",
+      "scope_note": "Master Brain Gateway groundwork (offline, additive only). Created shared/master-brain/constitution.json (universal rules), 5 domain packs (t2-holdings-operations, northstar-os-commerce, northstar-provider, autothink-engineering, platform-admin). Created master_brain_gateway.py: deterministic keyword/pattern-based task classifier (action verb > domain keyword > fallback) and append-only JSONL audit logger. ZERO LLM calls, ZERO network calls.",
+      "test_counts": "python 1272 ran / 1f / 67e / 3s (+17 new tests: test_master_brain_gateway.py covers classifier action verbs, domain keywords, priority ordering, edge cases, all 7 tracks reachable; audit log append-only, all 7 tracks accepted, metadata preserved, missing/corrupt log handling). All failures/errors pre-existing dataforseo only.",
+      "steps": {
+        "step1_constitution_scaffold": {
+          "result": "CREATED shared/master-brain/constitution.json (version 1.0.0) with 5 core principles, 5 prohibited patterns, 3 required processes, 4 reference documents, 7-track taxonomy. CREATED 5 domain packs in shared/master-brain/packs/: t2-holdings-operations.json, northstar-os-commerce.json, northstar-provider.json, autothink-engineering.json, platform-admin.json. Each pack references existing T2/Kirkland rules in Northstar_backend/AGENTS.md and docs/ — no duplication.",
+          "evidence": "shared/master-brain/constitution.json + 5 packs"
+        },
+        "step2_deterministic_classifier": {
+          "result": "IMPLEMENTED master_brain_gateway.classify_task() with two-phase priority: Phase 1 action verb (AUTOTHINK_CODE > AUTOTHINK_COMPUTER > AUTOTHINK_RESEARCH) wins; Phase 2 domain keyword (PLATFORM_ADMIN > NORTHSTAR_OS_PROVIDER > T2_OPERATIONS > NORTHSTAR_OS_COMMERCE) only if no action verb. Pure re patterns, no LLM, no network, no external deps. Invalid input falls back to AUTOTHINK_RESEARCH.",
+          "evidence": "test_master_brain_gateway.ClassifierTests: 10 test methods covering action verbs, domain keywords, priority ordering, all 7 tracks reachable, edge cases"
+        },
+        "step3_append_only_audit_log": {
+          "result": "IMPLEMENTED master_brain_gateway.write_audit_entry() with JSONL append-only writes (mode 'a' preserves prior entries, never overwrites). Entry shape: timestamp (ISO UTC), track, files_touched (list), live_action_requested (bool), approval_status (not_requested|pending|approved|denied), metadata (dict). read_audit_log() reads line-by-line, skips corrupt JSON lines, returns empty list for missing files. Default log path: shared/master-brain/audit.log.jsonl.",
+          "evidence": "test_master_brain_gateway.AuditLogTests: 7 test methods covering single entry, append-only, invalid track rejection, all 7 tracks, metadata, missing file, corrupt line handling"
+        },
+        "step4_offline_tests": {
+          "result": "CREATED test_master_brain_gateway.py with 17 tests across 2 test classes. ClassifierTests (10): action verb tests for research/code/computer, domain keyword tests for commerce/provider/ops/admin, priority ordering, edge cases, all tracks reachable. AuditLogTests (7): write+read, append-only, invalid track, all tracks, metadata, missing file, corrupt line. All 17 PASS.",
+          "test_counts": "17 tests, all PASS"
+        },
+        "step5_run_and_report": {
+          "result": "Full suite: 1272 tests ran (was 1255; +17 new), 1 failure + 67 errors + 3 skipped (unchanged, pre-existing dataforseo only). Zero live calls, zero secret exposure (no creds in module). No protected files modified (CSV/benchmark/cache/catalog untouched).",
+          "test_counts": "1272 ran / 1f / 67e / 3s (+17 from 1255)"
+        }
+      }
     }
   ],
-  "next_batch": "06_master_brain_gateway_groundwork.md",
+  "next_batch": "07_docs_and_runbook.md",
   "git_baseline": {
     "commit_hash": "8a1c6dd",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -307,8 +335,13 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-02T06:30:00Z",
+  "last_updated": "2026-09-02T07:00:00Z",
   "history": [
+    {
+      "ts": "2026-09-02T07:00:00Z",
+      "batch": "06_master_brain_gateway_groundwork.md",
+      "summary": "Batch 06 complete. Master Brain Gateway groundwork (offline, additive). Created shared/master-brain/constitution.json (universal rules) + 5 domain packs (t2-holdings-operations, northstar-os-commerce, northstar-provider, autothink-engineering, platform-admin) referencing existing rules without duplication. Created master_brain_gateway.py: deterministic keyword/pattern-based task classifier (action verb > domain keyword > fallback) and append-only JSONL audit logger. ZERO LLM calls, ZERO network calls. test_master_brain_gateway.py: 17 new tests (10 classifier + 7 audit log) all PASS. Full suite: 1272 ran / 1f / 67e / 3s (+17 from 1255). Committed as 881c2a5. Next: 07_docs_and_runbook.md"
+    },
     {
       "ts": "2026-09-02T06:30:00Z",
       "batch": "05_ui_evidence_polish.md",

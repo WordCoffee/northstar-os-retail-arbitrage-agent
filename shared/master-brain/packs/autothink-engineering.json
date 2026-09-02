@@ -1,0 +1,19 @@
+{
+  "pack_id": "autothink-engineering",
+  "version": "1.0.0",
+  "description": "Autothink engineering rules — code generation, refactoring, testing, network safety.",
+  "applies_to": ["AUTOTHINK_RESEARCH", "AUTOTHINK_CODE", "AUTOTHINK_COMPUTER"],
+  "rules": [
+    "Deterministic task classifier: keyword/pattern-based only (no LLM calls, no network).",
+    "Network guard: all test processes blocked from network via network_guard.py (NS_ALLOW_NETWORK=1 escapes, never in CI).",
+    "Test discipline: one change at a time, test after each edit, full pipeline verification, lint before commit.",
+    "PowerShell safety: use ; not &&, quote paths with spaces, Get-Content not cat/head/tail, Select-Object -First N for head.",
+    "No git in this repo — changes are manual; commit only after batch completion with state file update.",
+    "Audit logger: append-only JSONL (timestamp, classified track, files touched, live action requested, approval status)."
+  ],
+  "references": [
+    "Northstar_backend/network_guard.py",
+    "Northstar_backend/test_network_guard.py",
+    "Northstar_backend/AGENTS.md"
+  ]
+}

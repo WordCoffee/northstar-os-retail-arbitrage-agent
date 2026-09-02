@@ -1,0 +1,18 @@
+{
+  "pack_id": "t2-holdings-operations",
+  "version": "1.0.0",
+  "description": "T2 Holdings operational rules — scheduling, billing, vendor management, compliance.",
+  "applies_to": ["T2_OPERATIONS"],
+  "rules": [
+    "Weekly Costco catalog refresh runs Sunday 03:00 via Windows Task Scheduler (NorthstarCostcoCatalogRefresh).",
+    "Zero automatic retries after provider block/rate-limit (401/403/429); next scheduled run is the natural retry.",
+    "All live provider calls require explicit human approval token (one-run, finite caps).",
+    "Costco Business Center invoices are the sole source of purchase-authorized COGS (cost_status=invoice_confirmed).",
+    "Discovery/catalog costs are estimated only; never authorize purchase without invoice confirmation + Amazon listing checks."
+  ],
+  "references": [
+    "Northstar_backend/costco_api_client.py",
+    "Northstar_backend/refresh-costco-catalog.ps1",
+    "Northstar_backend/docs/dataforseo-adapter-runbook.md"
+  ]
+}
