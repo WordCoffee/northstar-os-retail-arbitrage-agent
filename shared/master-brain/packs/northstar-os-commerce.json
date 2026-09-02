@@ -1,0 +1,22 @@
+{
+  "pack_id": "northstar-os-commerce",
+  "version": "1.0.0",
+  "description": "Northstar OS commerce logic — pricing, economics, catalog, margin, opportunity scoring.",
+  "applies_to": ["NORTHSTAR_OS_COMMERCE"],
+  "rules": [
+    "All unit economics computed backend-side before render (fee_engine.py, demand_estimator.py, competition_analytics.py, portfolio_analytics.py).",
+    "Economics confidence tiers: estimated (estimated_fee_stack), provisional (needs_fee_verification — FBA fee EXCLUDED), unavailable (missing_amazon_price | missing_costco_cogs).",
+    "Pack/Variant Match gate: estimated economics require exact product-equivalence fingerprint (brand, formula/flavor, net weight, pack/count, UPC/EAN).",
+    "Costco cost basis hierarchy: invoice_confirmed > costco_online > estimated > unavailable. Fuzzy matches = candidate_match (research only).",
+    "Profit tiering + ROI/margin gating apply ONLY to 'estimated' confidence rows.",
+    "Category resolution: browse node → verified; breadcrumb-only → inferred ('confirm in Seller Central'); none → default Everything Else 15% (default_category note)."
+  ],
+  "references": [
+    "Northstar_backend/amazon_us_fee_rules_2026.py",
+    "Northstar_backend/fee_engine.py",
+    "Northstar_backend/demand_estimator.py",
+    "Northstar_backend/competition_analytics.py",
+    "Northstar_backend/portfolio_analytics.py",
+    "Northstar_backend/docs/pre_ui_calculation_pipeline.md"
+  ]
+}

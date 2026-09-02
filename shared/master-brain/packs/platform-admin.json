@@ -1,0 +1,19 @@
+{
+  "pack_id": "platform-admin",
+  "version": "1.0.0",
+  "description": "Platform administration — infrastructure, deployment, secrets, monitoring, access control.",
+  "applies_to": ["PLATFORM_ADMIN"],
+  "rules": [
+    "Secrets management: .env in project root (gitignored); no .env/.key/.pem inside Northstar_backend/.",
+    "Cloudflare Workers deployment via wrangler.toml; KV bindings for scored data/CSVs.",
+    "Windows Task Scheduler for Costco catalog refresh (interactive logon, Limited run level, StartWhenAvailable).",
+    "Log files: data/costco-refresh.log, data/enrich/brain-runs/audit.log.jsonl.",
+    "Protected artifacts never overwritten: scanner-search-cache, costco-items.csv, benchmark CSVs, enriched caches.",
+    "Audit log: append-only JSONL with timestamp, track, files touched, live action requested, approval status."
+  ],
+  "references": [
+    "Northstar_backend/wrangler.toml",
+    "Northstar_backend/refresh-costco-catalog.ps1",
+    "Northstar_backend/data/enrich/brain-runs/audit.log.jsonl"
+  ]
+}
