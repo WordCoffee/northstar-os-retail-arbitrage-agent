@@ -1,0 +1,19 @@
+{
+  "kind": "validation-authorization",
+  "schema_version": "validation-auth-1",
+  "run_id": "data-validation-20asin-live-001",
+  "created_at": "2026-08-20T02:27:19.450555+00:00",
+  "operator_intent": "data-validation-20asin-live-001",
+  "providers": [
+    "BRIGHTDATA",
+    "DATAFORSEO"
+  ],
+  "selected_asin_count": 20,
+  "expected_max_paid_tasks": 40,
+  "reserved_max_cost_cents": 100,
+  "permitted_queue_mode": "standard_queue",
+  "run_status": "authorized",
+  "manifest_fingerprint": "f65e39c477fd4ff23df1bcc60e97b95a84d82c283c3c12b7a189f8e2721eb618",
+  "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+  "config_schema_version": "dataforseo-config-1"
+}

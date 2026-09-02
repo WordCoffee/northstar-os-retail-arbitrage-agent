@@ -1,0 +1,1018 @@
+{
+  "post": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0096 sec.",
+    "cost": 0.0015,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08222000-2329-0309-0000-140069f79dfb",
+        "status_code": 20100,
+        "status_message": "Task Created.",
+        "time": "0.0037 sec.",
+        "cost": 0.0015,
+        "result_count": 0,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "sellers",
+          "task_post"
+        ],
+        "data": {
+          "api": "merchant",
+          "function": "sellers",
+          "asin": "B085F1QCB9",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "se_type": "sellers",
+          "se": "amazon",
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": null
+      }
+    ]
+  },
+  "get": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0143 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08222000-2329-0309-0000-140069f79dfb",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "0.0105 sec.",
+        "cost": 0,
+        "result_count": 1,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "sellers",
+          "task_get",
+          "advanced",
+          "08222000-2329-0309-0000-140069f79dfb"
+        ],
+        "data": {
+          "se_type": "sellers",
+          "se": "amazon",
+          "api": "merchant",
+          "function": "sellers",
+          "asin": "B085F1QCB9",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": [
+          {
+            "asin": "B085F1QCB9",
+            "type": "sellers",
+            "se_domain": "amazon.com",
+            "location_code": 2840,
+            "language_code": "en_US",
+            "check_url": "https://www.amazon.com/dp/B085F1QCB9/ref=olp_aod_redir_impl1?_encoding=UTF8&aod=1",
+            "datetime": "2026-08-22 20:00:54 +00:00",
+            "title": "KIRKLAND SIGNATURE Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size, New Edition",
+            "image": "https://m.media-amazon.com/images/I/51GaoTEuAgL.jpg",
+            "item_types": [
+              "amazon_seller_main_item",
+              "amazon_seller_item"
+            ],
+            "items_count": 24,
+            "items": [
+              {
+                "type": "amazon_seller_main_item",
+                "rank_group": 1,
+                "rank_absolute": 1,
+                "position": "left",
+                "xpath": "/#document",
+                "seller_name": "OM Trading NC",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A1A7M7KE3GO4GO&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_0",
+                "ships_from": "OM Trading NC",
+                "price": {
+                  "current": 28.07,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$28.07"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.8,
+                  "votes_count": 601,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-09-02T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-26T00:00:00+00:00",
+                  "fastest_delivery_date_to": "2026-08-27T00:00:00+00:00",
+                  "delivery_message": "FREE delivery Wednesday, September 2. Details Or fastest delivery August 26 - 27. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 1,
+                "rank_absolute": 2,
+                "position": "left",
+                "xpath": "/span[1]/span[1]/span[1]/div[1]/div[1]/div[4]/div[1]",
+                "seller_name": "AllyDayi",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=AFCVFBP8X6XIQ&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_1",
+                "ships_from": "AllyDayi",
+                "price": {
+                  "current": 29.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$29.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 44603,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-27T00:00:00+00:00",
+                  "delivery_date_to": "2026-08-31T00:00:00+00:00",
+                  "fastest_delivery_date_from": null,
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery August 27 - 31. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 2,
+                "rank_absolute": 3,
+                "position": "left",
+                "xpath": "/span[1]/span[1]/span[1]/div[1]/div[1]/div[4]/div[2]",
+                "seller_name": "DTNK Group",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A38WI7QLGHH1LV&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_2",
+                "ships_from": "DTNK Group",
+                "price": {
+                  "current": 30.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$30.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 5,
+                  "votes_count": 128,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-31T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": null,
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery Monday, August 31. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 3,
+                "rank_absolute": 4,
+                "position": "left",
+                "xpath": "/span[1]/span[1]/span[1]/div[1]/div[1]/div[4]/div[3]/div[1]",
+                "seller_name": "GocBepViet, LLC",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=ABBM3WMZUZY5R&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_3",
+                "ships_from": "GocBepViet, LLC",
+                "price": {
+                  "current": 31.89,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$31.89"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 346,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-29T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-26T00:00:00+00:00",
+                  "fastest_delivery_date_to": "2026-08-28T00:00:00+00:00",
+                  "delivery_message": "FREE delivery Saturday, August 29. Details Or fastest delivery August 26 - 28. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 4,
+                "rank_absolute": 5,
+                "position": "left",
+                "xpath": "/span[1]/span[1]/span[1]/div[1]/div[1]/div[4]/div[3]/div[2]",
+                "seller_name": "YoKool",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A1G87YSLZJUKUI&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_4",
+                "ships_from": "YoKool",
+                "price": {
+                  "current": 31.9,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$31.90"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 5,
+                  "votes_count": 82884,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-31T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": null,
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery Monday, August 31. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 5,
+                "rank_absolute": 6,
+                "position": "left",
+                "xpath": "/span[1]/span[1]/span[1]/div[1]/div[1]/div[4]/div[3]/div[3]",
+                "seller_name": "SYCgifts",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=AAJCIDLYK77AF&isAmazonFulfilled=1&asin=B085F1QCB9&ref_=olp_merch_name_5",
+                "ships_from": "Amazon.com",
+                "price": {
+                  "current": 31.95,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$31.95"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 942,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-09-01T00:00:00+00:00",
+                  "delivery_date_to": "2026-09-08T00:00:00+00:00",
+                  "fastest_delivery_date_from": "2026-09-01T00:00:00+00:00",
+                  "fastest_delivery_date_to": "2026-09-05T00:00:00+00:00",
+                  "delivery_message": "FREE delivery September 1 - 8 on orders shipped by Amazon over $35 Or fastest delivery September 1 - 5",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 6,
+                "rank_absolute": 7,
+                "position": "left",
+                "xpath": "/span[1]/span[1]/span[1]/div[1]/div[1]/div[4]/div[3]/div[4]",
+                "seller_name": "Bweagle",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A8XJ0NEBYK1XM&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_6",
+                "ships_from": "Bweagle",
+                "price": {
+                  "current": 31.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$31.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 9424,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-27T00:00:00+00:00",
+                  "delivery_date_to": "2026-08-31T00:00:00+00:00",
+                  "fastest_delivery_date_from": "2026-08-26T00:00:00+00:00",
+                  "fastest_delivery_date_to": "2026-08-28T00:00:00+00:00",
+                  "delivery_message": "FREE delivery August 27 - 31. Details Or fastest delivery August 26 - 28. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 7,
+                "rank_absolute": 8,
+                "position": "left",
+                "xpath": "/span[1]/span[1]/span[1]/div[1]/div[1]/div[4]/div[3]/div[5]",
+                "seller_name": "Nature_Products",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A1NA3IKUVEP9VN&isAmazonFulfilled=1&asin=B085F1QCB9&ref_=olp_merch_name_7",
+                "ships_from": "Amazon.com",
+                "price": {
+                  "current": 31.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$31.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 9920,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-09-06T00:00:00+00:00",
+                  "delivery_date_to": "2026-09-14T00:00:00+00:00",
+                  "fastest_delivery_date_from": "2026-09-06T00:00:00+00:00",
+                  "fastest_delivery_date_to": "2026-09-12T00:00:00+00:00",
+                  "delivery_message": "FREE delivery September 6 - 14 on orders shipped by Amazon over $35 Or fastest delivery September 6 - 12",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 8,
+                "rank_absolute": 9,
+                "position": "left",
+                "xpath": "/span[1]/span[1]/span[1]/div[1]/div[1]/div[4]/div[3]/div[6]",
+                "seller_name": "OCD BARGAIN",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A1CZLFDPGP5GBR&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_8",
+                "ships_from": "OCD BARGAIN",
+                "price": {
+                  "current": 32.4,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$32.40"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4,
+                  "votes_count": 3782,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-09-01T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": null,
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery Tuesday, September 1. Order within 1 hr 29 mins. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 9,
+                "rank_absolute": 10,
+                "position": "left",
+                "xpath": "/span[1]/span[1]/span[1]/div[1]/div[1]/div[4]/div[3]/div[7]",
+                "seller_name": "Lone Star AI Hub",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A1DAJZJGC4E7DU&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_9",
+                "ships_from": "Lone Star AI Hub",
+                "price": {
+                  "current": 32.88,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$32.88"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 328,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-09-03T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-31T00:00:00+00:00",
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery Thursday, September 3. Details Or fastest delivery August 31 - September 1. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 10,
+                "rank_absolute": 11,
+                "position": "left",
+                "xpath": "/span[1]/span[1]/span[1]/div[1]/div[1]/div[4]/div[3]/div[8]",
+                "seller_name": "Wholesale Americas",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A7ZISECZKNYFR&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_10",
+                "ships_from": "Wholesale Americas",
+                "price": {
+                  "current": 32.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$32.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 5,
+                  "votes_count": 1994,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-28T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-26T00:00:00+00:00",
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery Friday, August 28. Details Or fastest delivery Wednesday, August 26. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 11,
+                "rank_absolute": 12,
+                "position": "left",
+                "xpath": "/div[1]/div[1]",
+                "seller_name": "Wholebasket",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A126KCOQ6DZGCW&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_11",
+                "ships_from": "Wholebasket",
+                "price": {
+                  "current": 32.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$32.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4,
+                  "votes_count": 3009,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-09-01T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-25T00:00:00+00:00",
+                  "fastest_delivery_date_to": "2026-08-27T00:00:00+00:00",
+                  "delivery_message": "FREE delivery Tuesday, September 1. Details Or fastest delivery August 25 - 27. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 12,
+                "rank_absolute": 13,
+                "position": "left",
+                "xpath": "/div[1]/div[2]",
+                "seller_name": "Chicken Adobo",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A1M27ZJQOSM8MS&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_12",
+                "ships_from": "Chicken Adobo",
+                "price": {
+                  "current": 32.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$32.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4,
+                  "votes_count": 233,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-28T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-25T00:00:00+00:00",
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery Friday, August 28. Details Or fastest delivery Tuesday, August 25. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 13,
+                "rank_absolute": 14,
+                "position": "left",
+                "xpath": "/div[1]/div[3]",
+                "seller_name": "iEATWORLD",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A1WIB6HVB4455K&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_13",
+                "ships_from": "iEATWORLD",
+                "price": {
+                  "current": 32.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$32.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 3.5,
+                  "votes_count": 1806,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-28T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-25T00:00:00+00:00",
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery Friday, August 28. Details Or fastest delivery Tuesday, August 25. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 14,
+                "rank_absolute": 15,
+                "position": "left",
+                "xpath": "/div[1]/div[4]",
+                "seller_name": "Laalli's village",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A1NSC0QJMBUH5E&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_14",
+                "ships_from": "Laalli's village",
+                "price": {
+                  "current": 33.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$33.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 3.5,
+                  "votes_count": 112,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-28T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": null,
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery Friday, August 28. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 15,
+                "rank_absolute": 16,
+                "position": "left",
+                "xpath": "/div[1]/div[5]",
+                "seller_name": "Brocery",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=AKJDC3PC6IGEO&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_15",
+                "ships_from": "Brocery",
+                "price": {
+                  "current": 33.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$33.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 3.5,
+                  "votes_count": 1839,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-31T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-25T00:00:00+00:00",
+                  "fastest_delivery_date_to": "2026-08-27T00:00:00+00:00",
+                  "delivery_message": "FREE delivery Monday, August 31. Details Or fastest delivery August 25 - 27. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 16,
+                "rank_absolute": 17,
+                "position": "left",
+                "xpath": "/div[1]/div[6]",
+                "seller_name": "Health Force",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=AIC8ZY9YLS9OP&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_16",
+                "ships_from": "Health Force",
+                "price": {
+                  "current": 33.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$33.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 6825,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-31T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-25T00:00:00+00:00",
+                  "fastest_delivery_date_to": "2026-08-26T00:00:00+00:00",
+                  "delivery_message": "FREE delivery Monday, August 31. Details Or fastest delivery August 25 - 26. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 17,
+                "rank_absolute": 18,
+                "position": "left",
+                "xpath": "/div[1]/div[7]",
+                "seller_name": "New Bon Achat",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A9V4BI8ZNU8WQ&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_17",
+                "ships_from": "New Bon Achat",
+                "price": {
+                  "current": 34,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$34.00"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4,
+                  "votes_count": 342,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-27T00:00:00+00:00",
+                  "delivery_date_to": "2026-08-31T00:00:00+00:00",
+                  "fastest_delivery_date_from": "2026-08-26T00:00:00+00:00",
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery August 27 - 31. Details Or fastest delivery Wednesday, August 26. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 18,
+                "rank_absolute": 19,
+                "position": "left",
+                "xpath": "/div[1]/div[8]",
+                "seller_name": "Hippie Hair",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A13UBTLUDKYU77&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_18",
+                "ships_from": "Hippie Hair",
+                "price": {
+                  "current": 34.95,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$34.95"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4,
+                  "votes_count": 9,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-26T00:00:00+00:00",
+                  "delivery_date_to": "2026-08-27T00:00:00+00:00",
+                  "fastest_delivery_date_from": null,
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery August 26 - 27. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 19,
+                "rank_absolute": 20,
+                "position": "left",
+                "xpath": "/div[1]/div[9]",
+                "seller_name": "Daily Essential Finds",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A3FXLDNWGO4ZLV&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_19",
+                "ships_from": "Daily Essential Finds",
+                "price": {
+                  "current": 34.97,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$34.97"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 1964,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-09-01T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-26T00:00:00+00:00",
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery Tuesday, September 1. Details Or fastest delivery Wednesday, August 26. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 20,
+                "rank_absolute": 21,
+                "position": "left",
+                "xpath": "/div[1]/div[10]",
+                "seller_name": "TheBlissMall",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=A202IKRCIBSC7S&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_20",
+                "ships_from": "TheBlissMall",
+                "price": {
+                  "current": 39.95,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$39.95"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 220,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-28T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-26T00:00:00+00:00",
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "FREE delivery August 28 - September 3. Details Or fastest delivery Wednesday, August 26. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 21,
+                "rank_absolute": 22,
+                "position": "left",
+                "xpath": "/div[1]/div[1]",
+                "seller_name": "GocBepViet, LLC",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=ABBM3WMZUZY5R&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_21",
+                "ships_from": "GocBepViet, LLC",
+                "price": {
+                  "current": 31.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$31.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 346,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-29T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-26T00:00:00+00:00",
+                  "fastest_delivery_date_to": "2026-08-28T00:00:00+00:00",
+                  "delivery_message": "FREE delivery Saturday, August 29. Details Or fastest delivery August 26 - 28. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 22,
+                "rank_absolute": 23,
+                "position": "left",
+                "xpath": "/div[1]/div[2]",
+                "seller_name": "GocBepViet, LLC",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=ABBM3WMZUZY5R&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_22",
+                "ships_from": "GocBepViet, LLC",
+                "price": {
+                  "current": 31.99,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$31.99"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 346,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-31T00:00:00+00:00",
+                  "delivery_date_to": null,
+                  "fastest_delivery_date_from": "2026-08-26T00:00:00+00:00",
+                  "fastest_delivery_date_to": "2026-08-28T00:00:00+00:00",
+                  "delivery_message": "FREE delivery Monday, August 31. Details Or fastest delivery August 26 - 28. Details",
+                  "delivery_price": null
+                }
+              },
+              {
+                "type": "amazon_seller_item",
+                "rank_group": 23,
+                "rank_absolute": 24,
+                "position": "left",
+                "xpath": "/div[1]/div[3]",
+                "seller_name": "GocBepViet, LLC",
+                "seller_url": "http://amazon.com/gp/aag/main?ie=UTF8&seller=ABBM3WMZUZY5R&isAmazonFulfilled=0&asin=B085F1QCB9&ref_=olp_merch_name_23",
+                "ships_from": "GocBepViet, LLC",
+                "price": {
+                  "current": 27.97,
+                  "regular": null,
+                  "max_value": null,
+                  "currency": "USD",
+                  "is_price_range": false,
+                  "displayed_price": "$27.97"
+                },
+                "percentage_discount": null,
+                "applicable_vouchers": null,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 346,
+                  "rating_max": 5
+                },
+                "condition": "New",
+                "condition_description": null,
+                "delivery_info": {
+                  "delivery_date_from": "2026-08-26T00:00:00+00:00",
+                  "delivery_date_to": "2026-08-27T00:00:00+00:00",
+                  "fastest_delivery_date_from": null,
+                  "fastest_delivery_date_to": null,
+                  "delivery_message": "$14.89 delivery August 26 - 27. Details",
+                  "delivery_price": {
+                    "current": 14.89,
+                    "regular": null,
+                    "max_value": null,
+                    "currency": "USD",
+                    "is_price_range": false,
+                    "displayed_price": "$14.89"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "kind": "easyparser-manifest-run-preflight",
+  "run_id": "manifest-20260822T080742Z-9e71",
+  "generated_at": "2026-08-22T08:07:42.720018+00:00",
+  "manifest_path": "data/enrich/live-10asin-manifest.json",
+  "frozen_manifest_sha256": "30c12dd70b37b898f859fc3f814a500568e0d14ad981b3d21a18e4dc77b11301",
+  "caps": {
+    "max_requests": 10,
+    "max_credits": 80
+  },
+  "planned_asin_order": [
+    "B01H40O42I",
+    "B08R2SRN88",
+    "B0CP6LXPLK",
+    "B00BISGJXA",
+    "B00BH3HPZW",
+    "B00GYZWNY6",
+    "B0045XGE9E",
+    "B002L4M4M0",
+    "B081THWMDK",
+    "B085F1QCB9"
+  ],
+  "provider": "easyparser_offer",
+  "retries_supported": false
+}

@@ -1,0 +1,11 @@
+﻿mode:                  preflight (exactly one Easyparser OFFER request)
+asin:                  B00F4MD808
+data_status:           partial
+offers_returned:       11
+offers_complete:       False
+buy_box_price:         14.88
+buy_box_seller:        Topinlineshop
+credits_used:          18
+credits_remaining:     82
+requests_used:         1
+saved:                 partial

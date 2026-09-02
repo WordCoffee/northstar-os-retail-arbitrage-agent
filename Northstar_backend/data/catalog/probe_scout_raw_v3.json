@@ -1,0 +1,14 @@
+{
+  "status": 206,
+  "rate_limit": {
+    "X-RateLimit-rapid-free-plans-hard-limit-Limit": "500000",
+    "X-RateLimit-rapid-free-plans-hard-limit-Remaining": "499995",
+    "X-RateLimit-rapid-free-plans-hard-limit-Reset": "2567837",
+    "X-RateLimit-Requests-Limit": "100",
+    "X-RateLimit-Requests-Remaining": "95",
+    "X-RateLimit-Requests-Reset": "2567837"
+  },
+  "body": {
+    "error": "Invalid Search Query in the request."
+  }
+}

@@ -1,0 +1,543 @@
+{
+  "provider": "real-time-amazon-data",
+  "generated_at": "2026-08-24T00:46:39.523819",
+  "asins": {
+    "B00F4MD808": {
+      "schema_version": 1,
+      "asin": "B00F4MD808",
+      "ingested_at": "2026-08-17T12:00:00+00:00",
+      "sources": {},
+      "facts": {
+        "identity": {
+          "name": null,
+          "pack_match": null,
+          "upc_or_ean": null,
+          "net_weight_lbs": null
+        },
+        "cost": {
+          "costco_cost": null,
+          "cost_status": "unavailable",
+          "source": null,
+          "paid_cost_invoice": null
+        },
+        "fees": {
+          "referral_fee": null,
+          "referral_fee_confidence": "unavailable",
+          "fba_fee": null,
+          "fba_fee_status": "unavailable",
+          "prep_cost_per_unit": null,
+          "inbound_cost_per_unit": null,
+          "packaging_cost_per_unit": null,
+          "return_reserve_rate": null
+        },
+        "demand": {
+          "estimated_monthly_sales": null,
+          "sales_estimation_method": "unknown",
+          "sales_estimation_confidence": "unknown"
+        },
+        "market": {
+          "amazon_price": 14.88,
+          "bsr": {
+            "bsr_raw": "#18,945 in Health & Household (See Top 100 in Health & Household)  #101 in Calcium Mineral Supplements",
+            "bsr_primary_rank": 18945,
+            "bsr_primary_category": "Health & Household (See Top 100 in Health & Household)",
+            "bsr_secondary_rank": 101,
+            "bsr_secondary_category": "Calcium Mineral Supplements",
+            "bsr_capture_status": "verified",
+            "bsr_source": "rapidapi_realtime",
+            "bsr_captured_at": null
+          },
+          "buy_box": {
+            "available": true,
+            "price": 14.88,
+            "seller_name": "Topinlineshop",
+            "seller_id": "A1H42LJ94Z41NY",
+            "fulfillment": null,
+            "source": "rapidapi_realtime",
+            "observed_at": null
+          },
+          "seller_counts": {
+            "total_observed": 11,
+            "fba_observed": null,
+            "fbm_observed": null,
+            "amazon_observed": 0,
+            "claimed_total": 26
+          },
+          "coverage": {
+            "offer_list_available": true,
+            "offers_complete_status": "partial",
+            "coverage_reason": "returned 11 of 26 claimed offers"
+          },
+          "offers": [
+            {
+              "seller_name": "Topinlineshop",
+              "seller_id": "A1H42LJ94Z41NY",
+              "price": 14.88,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "Topinlineshop"
+            },
+            {
+              "seller_name": "Deal HunterS",
+              "seller_id": "A2QAHMNCSD1MYY",
+              "price": 14.88,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "Deal HunterS"
+            },
+            {
+              "seller_name": "Topinlineshop",
+              "seller_id": "A1H42LJ94Z41NY",
+              "price": 14.88,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "Topinlineshop"
+            },
+            {
+              "seller_name": "Jumble junction",
+              "seller_id": "A36GAY9JP2KTNA",
+              "price": 14.88,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "Jumble junction"
+            },
+            {
+              "seller_name": "BETTERCO",
+              "seller_id": "A1S3X3XUPLO5OG",
+              "price": 11.9,
+              "original_price": 13.2,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "BETTERCO"
+            },
+            {
+              "seller_name": "KVJ JOY",
+              "seller_id": "A1TSTAYA95GWH5",
+              "price": 16.95,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "KVJ JOY"
+            },
+            {
+              "seller_name": "AAtopseller",
+              "seller_id": "A2OSINGH8C4BW6",
+              "price": 16.99,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "AAtopseller"
+            },
+            {
+              "seller_name": "OM Trading NC",
+              "seller_id": "A1A7M7KE3GO4GO",
+              "price": 16.99,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "OM Trading NC"
+            },
+            {
+              "seller_name": "Mahaekart LLC",
+              "seller_id": "A2KWAQF55IDIAP",
+              "price": 16.99,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "Mahaekart LLC"
+            },
+            {
+              "seller_name": "RCB SUPPLIES",
+              "seller_id": "A1DMGFCDYYOO2N",
+              "price": 17.58,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "RCB SUPPLIES"
+            },
+            {
+              "seller_name": "\u2705B GOOD",
+              "seller_id": "A37VQNOY4HFIHX",
+              "price": 17.9,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "\u2705B GOOD"
+            }
+          ]
+        },
+        "economics": {
+          "net_profit": null,
+          "roi_pct": null,
+          "economics_confidence": "unavailable",
+          "economics_status": "missing_market_or_cost_inputs"
+        },
+        "provenance": {
+          "market.amazon_price": "rapidapi_realtime"
+        }
+      }
+    },
+    "B0BMX67KY7": {
+      "schema_version": 1,
+      "asin": "B0BMX67KY7",
+      "ingested_at": "2026-08-17T12:00:00+00:00",
+      "sources": {},
+      "facts": {
+        "identity": {
+          "name": null,
+          "pack_match": null,
+          "upc_or_ean": null,
+          "net_weight_lbs": null
+        },
+        "cost": {
+          "costco_cost": null,
+          "cost_status": "unavailable",
+          "source": null,
+          "paid_cost_invoice": null
+        },
+        "fees": {
+          "referral_fee": null,
+          "referral_fee_confidence": "unavailable",
+          "fba_fee": null,
+          "fba_fee_status": "unavailable",
+          "prep_cost_per_unit": null,
+          "inbound_cost_per_unit": null,
+          "packaging_cost_per_unit": null,
+          "return_reserve_rate": null
+        },
+        "demand": {
+          "estimated_monthly_sales": null,
+          "sales_estimation_method": "unknown",
+          "sales_estimation_confidence": "unknown"
+        },
+        "market": {
+          "amazon_price": 35.5,
+          "bsr": {
+            "bsr_raw": "#4,725 in Baby (See Top 100 in Baby)  #70 in Diaper Wipes & Refills",
+            "bsr_primary_rank": 4725,
+            "bsr_primary_category": "Baby (See Top 100 in Baby)",
+            "bsr_secondary_rank": 70,
+            "bsr_secondary_category": "Diaper Wipes & Refills",
+            "bsr_capture_status": "verified",
+            "bsr_source": "rapidapi_realtime",
+            "bsr_captured_at": null
+          },
+          "buy_box": {
+            "available": true,
+            "price": 35.5,
+            "seller_name": "TopNotch Deal",
+            "seller_id": "AT9GOHPMWNX5O",
+            "fulfillment": null,
+            "source": "rapidapi_realtime",
+            "observed_at": null
+          },
+          "seller_counts": {
+            "total_observed": 11,
+            "fba_observed": null,
+            "fbm_observed": null,
+            "amazon_observed": 0,
+            "claimed_total": 14
+          },
+          "coverage": {
+            "offer_list_available": true,
+            "offers_complete_status": "partial",
+            "coverage_reason": "returned 11 of 14 claimed offers"
+          },
+          "offers": [
+            {
+              "seller_name": "TopNotch Deal",
+              "seller_id": "AT9GOHPMWNX5O",
+              "price": 35.5,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "TopNotch Deal"
+            },
+            {
+              "seller_name": "OM Trading NC",
+              "seller_id": "A1A7M7KE3GO4GO",
+              "price": 35.5,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "OM Trading NC"
+            },
+            {
+              "seller_name": "DesiGabbar",
+              "seller_id": "A2M3PFPY4TCXC4",
+              "price": 35.8,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "DesiGabbar"
+            },
+            {
+              "seller_name": "ZayouA Store LLC",
+              "seller_id": "A3CAKGSM7HSYP7",
+              "price": 35.8,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "ZayouA Store LLC"
+            },
+            {
+              "seller_name": "CopperRoad",
+              "seller_id": "ATZSMO46D146",
+              "price": 36.15,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "CopperRoad"
+            },
+            {
+              "seller_name": "GocBepViet, LLC",
+              "seller_id": "ABBM3WMZUZY5R",
+              "price": 36.29,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "GocBepViet, LLC"
+            },
+            {
+              "seller_name": "SunshineShopper",
+              "seller_id": "A3EWEWD0ZJ39V0",
+              "price": 37.99,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "SunshineShopper"
+            },
+            {
+              "seller_name": "Best Deal Retail Corp.",
+              "seller_id": "A3LZ2YK3S5QCFO",
+              "price": 37.99,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "Best Deal Retail Corp."
+            },
+            {
+              "seller_name": "Carpe Diem Trading, Inc",
+              "seller_id": "A27KK2YF6LMTBF",
+              "price": 39.99,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "Carpe Diem Trading, Inc"
+            },
+            {
+              "seller_name": "DTNK Group",
+              "seller_id": "A38WI7QLGHH1LV",
+              "price": 40.99,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "DTNK Group"
+            },
+            {
+              "seller_name": "New depot",
+              "seller_id": "A3FJ2OXB5QJX1F",
+              "price": 41.0,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "New depot"
+            }
+          ]
+        },
+        "economics": {
+          "net_profit": null,
+          "roi_pct": null,
+          "economics_confidence": "unavailable",
+          "economics_status": "missing_market_or_cost_inputs"
+        },
+        "provenance": {
+          "market.amazon_price": "rapidapi_realtime"
+        }
+      }
+    },
+    "B0CHTNWWLJ": {
+      "schema_version": 1,
+      "asin": "B0CHTNWWLJ",
+      "ingested_at": "2026-08-17T12:00:00+00:00",
+      "sources": {},
+      "facts": {
+        "identity": {
+          "name": null,
+          "pack_match": null,
+          "upc_or_ean": null,
+          "net_weight_lbs": null
+        },
+        "cost": {
+          "costco_cost": null,
+          "cost_status": "unavailable",
+          "source": null,
+          "paid_cost_invoice": null
+        },
+        "fees": {
+          "referral_fee": null,
+          "referral_fee_confidence": "unavailable",
+          "fba_fee": null,
+          "fba_fee_status": "unavailable",
+          "prep_cost_per_unit": null,
+          "inbound_cost_per_unit": null,
+          "packaging_cost_per_unit": null,
+          "return_reserve_rate": null
+        },
+        "demand": {
+          "estimated_monthly_sales": null,
+          "sales_estimation_method": "unknown",
+          "sales_estimation_confidence": "unknown"
+        },
+        "market": {
+          "amazon_price": 43.38,
+          "bsr": {
+            "bsr_raw": "#28,634 in Health & Household (See Top 100 in Health & Household)  #65 in Psyllium Nutritional Supplement",
+            "bsr_primary_rank": 28634,
+            "bsr_primary_category": "Health & Household (See Top 100 in Health & Household)",
+            "bsr_secondary_rank": 65,
+            "bsr_secondary_category": "Psyllium Nutritional Supplement",
+            "bsr_capture_status": "verified",
+            "bsr_source": "rapidapi_realtime",
+            "bsr_captured_at": null
+          },
+          "buy_box": {
+            "available": true,
+            "price": 43.38,
+            "seller_name": "DesiGabbar",
+            "seller_id": "A2M3PFPY4TCXC4",
+            "fulfillment": null,
+            "source": "rapidapi_realtime",
+            "observed_at": null
+          },
+          "seller_counts": {
+            "total_observed": 11,
+            "fba_observed": 2,
+            "fbm_observed": 0,
+            "amazon_observed": 0,
+            "claimed_total": 31
+          },
+          "coverage": {
+            "offer_list_available": true,
+            "offers_complete_status": "partial",
+            "coverage_reason": "returned 11 of 31 claimed offers"
+          },
+          "offers": [
+            {
+              "seller_name": "DesiGabbar",
+              "seller_id": "A2M3PFPY4TCXC4",
+              "price": 43.38,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "DesiGabbar"
+            },
+            {
+              "seller_name": "PRIME-EXPRES'S",
+              "seller_id": "A118IUCY3IMP6Z",
+              "price": 43.38,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "PRIME-EXPRES'S"
+            },
+            {
+              "seller_name": "DesiGabbar",
+              "seller_id": "A2M3PFPY4TCXC4",
+              "price": 44.49,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "DesiGabbar"
+            },
+            {
+              "seller_name": "Geekzany",
+              "seller_id": "AWYG6DR3G9BMW",
+              "price": 40.87,
+              "original_price": 43.49,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "Geekzany"
+            },
+            {
+              "seller_name": "Zerbert",
+              "seller_id": "ABUX1LH52S4Z6",
+              "price": 43.38,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": true,
+              "ships_from": "Amazon.com"
+            },
+            {
+              "seller_name": "BabyLuck",
+              "seller_id": "A1QR79PAU8VK6I",
+              "price": 43.38,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "BabyLuck"
+            },
+            {
+              "seller_name": "Cheapees",
+              "seller_id": "A2RUDGROS07HUS",
+              "price": 43.38,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "Cheapees"
+            },
+            {
+              "seller_name": "ShippedFast",
+              "seller_id": "A3EPGNAQUGG6DD",
+              "price": 43.38,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": true,
+              "ships_from": "Amazon.com"
+            },
+            {
+              "seller_name": "Reliable & Fast",
+              "seller_id": "A2MB1HYHOIIEQC",
+              "price": 43.38,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "Reliable & Fast"
+            },
+            {
+              "seller_name": "Loong & Sons",
+              "seller_id": "A38ZPEG9OLAOCB",
+              "price": 47.49,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "Loong & Sons"
+            },
+            {
+              "seller_name": "DTNK Group",
+              "seller_id": "A38WI7QLGHH1LV",
+              "price": 47.49,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": null,
+              "ships_from": "DTNK Group"
+            }
+          ]
+        },
+        "economics": {
+          "net_profit": null,
+          "roi_pct": null,
+          "economics_confidence": "unavailable",
+          "economics_status": "missing_market_or_cost_inputs"
+        },
+        "provenance": {
+          "market.amazon_price": "rapidapi_realtime"
+        }
+      }
+    }
+  }
+}

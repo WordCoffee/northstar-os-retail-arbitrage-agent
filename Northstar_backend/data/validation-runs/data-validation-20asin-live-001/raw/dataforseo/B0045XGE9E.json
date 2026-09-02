@@ -1,0 +1,34 @@
+{
+  "provider": "DATAFORSEO",
+  "asin": "B0045XGE9E",
+  "stored_at": "2026-08-20T03:07:48.786769+00:00",
+  "payload_hash": "e1a8346d46b5bd8815f8b54227703c342bab7528c678206ebcfad2bc25054052",
+  "payload": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0358 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 1,
+    "tasks": [
+      {
+        "id": "08200307-2329-0455-0000-3fb3928cfd06",
+        "status_code": 40402,
+        "status_message": "Invalid Path.",
+        "time": "0.0000 sec.",
+        "cost": 0,
+        "result_count": 0,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "product_info",
+          "task_post"
+        ],
+        "data": null,
+        "result": null
+      }
+    ]
+  }
+}

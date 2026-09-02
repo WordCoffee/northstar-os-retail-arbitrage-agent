@@ -1,0 +1,17 @@
+﻿{
+  "run_id": "20260828T021658Z",
+  "authorized_fingerprint": "e325264fa989758d93c11b72eb7c12d833e7800dc28611bac7ed6ed8bd7de3db",
+  "status": "failed",
+  "provider": "UNWRANGLE_COSTCO",
+  "message": "status=failed; provider returned HTTP 403 (authentication/authorization rejected) on first requested item 424976 (reason=http_403). Run halted immediately per client stop-on-block policy (retries=0). completed=0, failed=1, unattempted=14.",
+  "requested": 15,
+  "attempted": 1,
+  "completed": 0,
+  "failed": 1,
+  "unattempted": 14,
+  "failed_item_ids": [ "424976" ],
+  "unattempted_item_ids": [ "926628", "1586629", "1349614", "1493188", "1665191", "690843", "393914", "98268", "98501", "98211", "1089787", "87507", "1652990", "1755436" ],
+  "retry_policy": "retries=0; no retry performed; remaining item IDs not processed",
+  "scrubbed": true,
+  "generated_at": "2026-08-28T02:59:48Z"
+}

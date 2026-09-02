@@ -1,0 +1,467 @@
+{
+  "post": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0101 sec.",
+    "cost": 0.0015,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221955-2329-0192-0000-37ee95270b1c",
+        "status_code": 20100,
+        "status_message": "Task Created.",
+        "time": "0.0037 sec.",
+        "cost": 0.0015,
+        "result_count": 0,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_post"
+        ],
+        "data": {
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B002L4M4M0",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "se_type": "asin",
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": null
+      }
+    ]
+  },
+  "get": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0164 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221955-2329-0192-0000-37ee95270b1c",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "0.0089 sec.",
+        "cost": 0,
+        "result_count": 1,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_get",
+          "advanced",
+          "08221955-2329-0192-0000-37ee95270b1c"
+        ],
+        "data": {
+          "se_type": "asin",
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B002L4M4M0",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": [
+          {
+            "asin": "B002L4M4M0",
+            "type": "asin",
+            "se_domain": "amazon.com",
+            "location_code": 2840,
+            "language_code": "en_US",
+            "check_url": "https://www.amazon.com/dp/B002L4M4M0?language=en_US",
+            "datetime": "2026-08-22 19:55:55 +00:00",
+            "item_types": [
+              "amazon_product_info"
+            ],
+            "items_count": 1,
+            "items": [
+              {
+                "type": "amazon_product_info",
+                "rank_group": 1,
+                "rank_absolute": 1,
+                "position": "right",
+                "xpath": "/html[1]/body[1]/div[1]",
+                "title": "KIRKLAND SIGNATURE Sleep Aid Doxylamine Succinate 25 Mg X Tabs (53201812) No Flavor 96 Count, Packaging May Vary",
+                "details": "Product details Product Dimensions\n:\n1.5 x 1.5 x 3 inches; 1.12 ounces\nItem model number\n:\n53201812\nDate First Available\n:\nAugust 11, 2009\nManufacturer\n:\nKIRKLAND SIGNATURE\nASIN\n:\nB002L4M4M0\nBest Sellers Rank:  #13,885 in Health & Household ( See Top 100 in Health & Household )  #23 in OTC Medicinal Sleep Aids\nCustomer Reviews:   4.5  4.5 out of 5 stars (6,270)",
+                "image_url": "https://m.media-amazon.com/images/I/71LwgKPlhdL._AC_SY300_SX300_QL70_FMwebp_.jpg",
+                "author": "Brand: KIRKLAND",
+                "data_asin": "B002L4M4M0",
+                "parent_asin": "B0DM2MLBWW",
+                "product_asins": [
+                  "B002L4M4M0"
+                ],
+                "price_from": 7.93,
+                "price_to": null,
+                "percentage_discount": null,
+                "currency": "USD",
+                "is_amazon_choice": false,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.5,
+                  "votes_count": 6270,
+                  "rating_max": 5
+                },
+                "is_newer_model_available": false,
+                "is_prime_video": false,
+                "applicable_vouchers": null,
+                "newer_model": null,
+                "categories": [
+                  {
+                    "category": "Health & Household",
+                    "url": "https://amazon.com/health-personal-care-nutrition-fitness/b/ref=dp_bc_1?ie=UTF8&node=3760901"
+                  },
+                  {
+                    "category": "Health Care",
+                    "url": "https://amazon.com/Health-Care-Products-Personal/b/ref=dp_bc_2?ie=UTF8&node=3760941"
+                  },
+                  {
+                    "category": "Over-the-Counter Medication",
+                    "url": "https://amazon.com/Medications-Treatments/b/ref=dp_bc_3?ie=UTF8&node=10079990011"
+                  },
+                  {
+                    "category": "Sleep Aids",
+                    "url": "https://amazon.com/OTC-Medicinal-Sleep-Aids/b/ref=dp_bc_4?ie=UTF8&node=23675625011"
+                  }
+                ],
+                "product_information": [
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Important information",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": "Safety Information",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "children under 12 years of age: do not use"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "product_information_rows",
+                        "title": "Ingredients",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Active Ingredients (in each tablet) Doxylamine Succinate 25 mg. Inactive ingredients dibasic calcium phosphate, FD&C blue no. 1 aluminum lake, magnesium stearate, microcrystalline cellulose, sodium starch glycolate"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "product_information_rows",
+                        "title": "Directions",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "adults and children 12 years of age and over: take one tablet 30 minutes before going to bed; take once daily or as directed by a doctor"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "product_information_rows",
+                        "title": "Legal Disclaimer",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Statements regarding dietary supplements have not been evaluated by the FDA and are not intended to diagnose, treat, cure, or prevent any disease or health condition."
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Product Description",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": null,
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Kirkland Signature Sleep aid doxylamine succinate 25 mg x 96 tabs. The active ingredient in Sleep Aid, is doxylamine succinate in each tablet, and may be used as a nighttime sleep aid. Helps to reduce difficulty in falling asleep. Clinically tested, proven effective."
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Product details",
+                    "body": {
+                      "Product Dimensions": "1.5 x 1.5 x 3 inches; 1.12 ounces",
+                      "Item model number": "53201812",
+                      "Date First Available": "August 11, 2009",
+                      "Manufacturer": "KIRKLAND SIGNATURE",
+                      "ASIN": "B002L4M4M0",
+                      "Best Sellers Rank": "#13,885 in Health & Household ( See Top 100 in Health & Household )  #23 in OTC Medicinal Sleep Aids",
+                      "Customer Reviews": "4.5  4.5 out of 5 stars (6,270)"
+                    }
+                  }
+                ],
+                "product_images_list": [
+                  "https://m.media-amazon.com/images/I/71LwgKPlhdL._AC_SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/71sTC99wtUL._AC_SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/61ao5Qv9XoL._AC_SL1329_.jpg"
+                ],
+                "product_videos_list": null,
+                "description": "About this item  Kirkland Signature Sleep aid doxylamine succinate 25 mg x 96 Tabs\nThe package dimension of the product is 3.3cmL x 3.6cmW x 10.5cmH\nShow more",
+                "is_available": true,
+                "top_local_reviews": [
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[1]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 16, 2018",
+                    "helpful_votes": 77,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Loakes13",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGVGCTTUX3W7OYY2DI5CATMHJEPA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Finally relief from a loud neighborhood and snoring BF!",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2FONXPJ6S11SI/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "My boyfriend and I recently moved to an apartment in the middle of a bar/night club district in Downtown Cleveland. It's very, very loud on the weekends, and surprisingly, some weekdays as well. I have now discovered that my boyfriend will sleep through practically anything and also is a chronic loud snorer. Having trouble adjusting from a quiet, dead end suburban street and a bed to myself to a bustling metropolitan area with obnoxious drunks yelling, motorcycles throttling, the occasional food truck running 30 feet below our window, and a boyfriend who sounds like he is revving up a chainsaw in his sleep, I decided that I needed to experiment with products that would help me fall asleep and stay asleep. Earplugs felt uncomfortable in my ears and didn't mask all the noise. A white noise app just made it sound like my boyfriend was snoring through the middle of a fake thunderstorm. A fan made the room too cold and wasn't loud enough anyway. Melatonin didn't phase me one bit. Benadryl gave me a groggy hangover the whole next day. ZzzQuil made me have nightmares - like, terrifying, wake up yelling and sweating nightmares. So I started researching different active ingredients in sleep aids and reading reviews on both Amazon and Reddit. This one was decently priced, contained ingredients different than what I had already tried, and was rated highly. It is the generic form of Unisom. The first few days using this, I indeed woke up a couple times in the middle of the night and felt groggy the next morning. I decided to split the pill in half and take a half dose about 1-2 hours before bedtime. It now works perfectly for me - by the time I'm headed to bed I can barely keep my eyes open and I'm only waking up once or twice and falling back asleep pretty easily. I used to wake up 5-6 times a night, sometimes up to every half hour, and have trouble falling back asleep. This supplement has made me sleep sounder and, in turn, I feel better overall during the day. I used to come home from work and take a nap at 5 PM because I was so tired, but now I feel awake, my skin has cleared up, it's easier to lose weight, and I don't feel as stressed out. It even knocked me out for half of an 11-hour drive to the Outer Banks, something I've never been able to sleep through before. The only downsides of this medication are that sometimes when I don't take it (traveling, a late night out, forgetfulness) I find it difficult to fall asleep, but I don't think it's bad/often enough that it's habit-forming. Another downside is that I do not know the long-term effects of taking an antihistamine sleeping pill. Everyone will react differently to different medications - if you're trying this one, perhaps start with half a dose and understand that you may feel groggy while your body gets \"used to it\". For reference - I am a 125 lb female, which is perhaps why the full dose was too strong for me.",
+                    "publication_date": "2018-07-16 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[2]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 12, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "John K",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGBJQCHYZXTEW5AMKZF3FZKSZLDQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Sweet dreams !",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2M8IS7HH296TS/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Works for me , have been my go to sleep aid  for years now . Minimal hang over . Most nights a half tab does the job , and I am not a small man . Take one half hour to an hour before you hit the sack .",
+                    "publication_date": "2026-08-12 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[3]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on June 19, 2026",
+                    "helpful_votes": 4,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Jim Humphrey",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AENEYI7WPFWDK4Q5QSU6MRUJOSTQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "It seems to work.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3EOXOZJICLO6J/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "First of all, I’m an insomniac. Nothing works great. I started using Unisom with Doxylamine succinate. It worked fairly well, but is a bit expensive. After looking it up on Amazon, I found this Kirkland brand with the same dose and at a much better price. It works at the same level that Unisom did and keeps me away from difenhydramine (sp?). That stuff causes early dementia. Don’t take it!  But yes I do recommend this sleep aid.",
+                    "publication_date": "2026-06-19 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[4]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on October 28, 2015",
+                    "helpful_votes": 60,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "KittyFox",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/e32fa283-0a1d-4f3b-95bd-cfe6bcec5931._CR0%2C0%2C480%2C480_SX460_SX48_.jpg",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AG4A7CGLJLMJWSDYT36UNUU43ATA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "A relief and a gateway to sleepyness, please read my comment.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R38JYAI224KRBV/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "I have terrible insomnia and use a Benzo drug called Serax, to sleep. I don't like using it too often because Benzo's are addictive. A friend of mine suggested this sleep aid, because it's basically Unisom under the Kirkland drug store name.  It's non addictive and it's also an antihistamine. So if you have allergies it may be helpful, but it does make you sleepy. Sometimes I can just take half and it makes me sleepy but then sometimes I need two pills to actually make me sleep.  I don't use them daily, only about one or twice a week.  The one thing I don't like about these are they make me groggy the next day, and it takes almost the full day to shake that off. I try to use them only on weekends so it doesn't interfere with my weekly schedule for work and outings. It didn't make me sleepy within and hour, it took awhile. I take it at 9 pm and I'm only asleep at 11:30-midnight. So I think it depends on the person for ability to make you fall asleep, each time I use it seems a little different. If I use it many days in a row, it seems like it stops working, but that could be because of my type of insomnia.  If you get used to a drug and have to take more every few months, this may happen to you as well. Sometimes it gives me a headache the following day, I never get headaches normally.  It's a good product when you're having a bout of insomnia. Sometimes I also have hives or itching hands from anxiety and stress, and the antihistamine properties really helps me with that, I need only about 1/4 of the pill when I get hives or itchiness. I think it's a very helpful medication, definitely worth a try. Insomnia can make us desperate, and I've tried taking medications, working out to wear myself out, and even alcohol shots before bed, nothing really worked, but most times this helps me feel sleepy. I never feel sleepy and if you're like me, you know how wonderful it can feel when suddenly you feel sleepy.  It also makes me dream more than usual, I've never had bad dreams with this, only funny and strangely adventurous dreams, but it makes taking this pill even more worth it, I enjoy dreaming and journaling them afterwards. Worth a try in my opinion. Way cheaper than prescription medication, and no risk for addiction.",
+                    "publication_date": "2015-10-28 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 4,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[5]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 25, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Jso",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AE3P7LMFASRFBTI6SEYCZVO3USZQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Great Sleeping Aid",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1LYQ250ZX3EKO/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "I take half of a half and it makes me sleep thru the night",
+                    "publication_date": "2026-07-25 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[6]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on May 7, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Judy V.",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHMUHTU26KNPHLZF7HKYHDZQI4LQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "It has an antihistamine in it.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2FG2YYP9I2SFW/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "These work for me, but I can only take 1/2 tablet and within a hour I am tired. I do however wake up during the night ,but fall back to sleep. They are as good as nominee at a much lower price.",
+                    "publication_date": "2026-05-07 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[7]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 5, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Msbeffers",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AH3DIYRNVXGZWT6KXVLAMRZVWFOA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Good product",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3NUZIQNN1F4V1/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "This stuff helps me sleep better than anything I’ve ever tried. It’s a great value.",
+                    "publication_date": "2026-07-05 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[8]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 22, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Marshel1969",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/3c4d0258-5f3a-45aa-b635-e893f74c969f._CR128%2C0%2C243%2C243_SX460_SX48_.jpg",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHUQKK7SHQBOECFCTUVMUUY3TKJQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Not for everyone…..",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/RO7Y85CTDLGFF/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "True insomnia patients need not buy.",
+                    "publication_date": "2026-07-22 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 3,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  }
+                ],
+                "top_global_reviews": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

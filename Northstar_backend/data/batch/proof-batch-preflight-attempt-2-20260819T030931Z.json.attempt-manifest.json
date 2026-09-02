@@ -1,0 +1,17 @@
+{
+  "kind": "proof-batch-attempt-manifest",
+  "schema_version": 1,
+  "attempt_number": 2,
+  "new_run_id": "proof-batch-preflight-attempt-2-20260819T030931Z",
+  "new_preflight_path": "data/batch/proof-batch-preflight-attempt-2-20260819T030931Z.json",
+  "new_canonical_fingerprint": "65466f56d9fffddd8ccc45273773146e42e172046c52511c18d6b2e9ff1c7778",
+  "supersedes_run_id": "proof-batch-preflight-20260818T060549Z",
+  "prior_failure_manifest_path": "data/batch/live-validation-runs/proof-batch-preflight-20260818T060549Z/failure-manifest.json",
+  "prior_failure_manifest_sha256": "d67bf5f33ce46a558f4285dd339fb9f93bcd0de775f213ec0dd21dd00cee3c28",
+  "prior_attempt_request_count": 1,
+  "prior_attempt_estimated_credits": 3,
+  "prior_attempt_provider_reported_credits": 3,
+  "mapping_policy_version": "known_title_conflict_review_v2",
+  "reason_for_new_attempt": "Attempt 1 stopped at a pre-registered historical benchmark title conflict; policy corrected offline and verified.",
+  "generated_at": "2026-08-19T03:09:31.041436+00:00"
+}

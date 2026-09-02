@@ -1,0 +1,230 @@
+﻿{
+    "run_id":  "20260828T021658Z",
+    "generated_at":  "2026-08-28T02:16:58Z",
+    "manifest_fingerprint_sha256":  "e325264fa989758d93c11b72eb7c12d833e7800dc28611bac7ed6ed8bd7de3db",
+    "provider":  "UNWRANGLE_COSTCO",
+    "max_requests":  15,
+    "retries":  0,
+    "evidence_class_on_success":  "live_verified",
+    "sourcing_status":  "discovery_only",
+    "purchase_authorized":  false,
+    "note":  "Costco discovery pricing does NOT establish invoice-backed sourcing; prices are research-only evidence until a Business Center invoice confirms them.",
+    "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+    "items":  [
+                  {
+                      "item_id":  "424976",
+                      "requested_title":  "Adult 50+ Mature Multi Vitamins \u0026 Minerals, 400 Tablets",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "400 Tablets",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B00P8ZAWK0",
+                                           "B00NPQZ20O",
+                                           "B00YGMN122"
+                                       ]
+                  },
+                  {
+                      "item_id":  "926628",
+                      "requested_title":  "Fish Oil 1000 mg, 400 Softgels",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "400 Softgels",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B002VLZHLS"
+                                       ]
+                  },
+                  {
+                      "item_id":  "1586629",
+                      "requested_title":  "Aller-Flo 50 mcg Allergy Spray, 720 Metered Sprays, 5 bottles",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "5 bottles (720 sprays)",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B08R2SRN88",
+                                           "B01H40O42I"
+                                       ]
+                  },
+                  {
+                      "item_id":  "1349614",
+                      "requested_title":  "OPTIFIBER, 26.8 Ounces, 190 Servings",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "190 Servings",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B01KW9KWW4"
+                                       ]
+                  },
+                  {
+                      "item_id":  "1493188",
+                      "requested_title":  "Baby Wipes Fragrance Free, 900-count",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "900-count (9x100ct)",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B00SWZUC8U",
+                                           "B014K3BF24"
+                                       ]
+                  },
+                  {
+                      "item_id":  "1665191",
+                      "requested_title":  "Glucosamine \u0026 Chondroitin, 280 Tablets",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "280 Tablets",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B00GYZWNY6"
+                                       ]
+                  },
+                  {
+                      "item_id":  "690843",
+                      "requested_title":  "Quick Dissolve B-12 5000 mcg, 300 Tablets",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "300 Tablets",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B00AQ0LMTC"
+                                       ]
+                  },
+                  {
+                      "item_id":  "393914",
+                      "requested_title":  "Extra Strength D3 50 mcg (2000 IU), 600 Softgels",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "600 Softgels",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B01NCRITAE"
+                                       ]
+                  },
+                  {
+                      "item_id":  "98268",
+                      "requested_title":  "Vitamin C 1000 mg, 500 Tablets",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "500 Tablets",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B015WRSJCQ"
+                                       ]
+                  },
+                  {
+                      "item_id":  "98501",
+                      "requested_title":  "Chewable Vitamin C 500 mg, 500 Tablets",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "500 Tablets",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B07881PTTX",
+                                           "B00MPYTSGG"
+                                       ]
+                  },
+                  {
+                      "item_id":  "98211",
+                      "requested_title":  "Vitamin E 180 mg (400 IU), 500 Softgels",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "500 Softgels",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B005ECOBBI"
+                                       ]
+                  },
+                  {
+                      "item_id":  "1089787",
+                      "requested_title":  "Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "200 count",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B001UB44SM"
+                                       ]
+                  },
+                  {
+                      "item_id":  "87507",
+                      "requested_title":  "10-Gallon Wastebasket Liner, Clear, 500-count",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "500 count",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B01M7Y0NEX"
+                                       ]
+                  },
+                  {
+                      "item_id":  "1652990",
+                      "requested_title":  "Premoistened Flushable Wipes, Fragrance Free, 640-count",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "640-count",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B07H4YC1GC"
+                                       ]
+                  },
+                  {
+                      "item_id":  "1755436",
+                      "requested_title":  "18-Gallon Compactor \u0026 Kitchen Trash Bag, 70-count",
+                      "requested_brand":  "Kirkland Signature",
+                      "requested_pack":  "70-count",
+                      "upc_or_ean":  null,
+                      "lookup_method":  "item_number",
+                      "inclusion_status":  "eligible",
+                      "ambiguity_status":  "none",
+                      "source_locator":  "data/catalog/costco_master_price_capture_20260825T142621Z.csv (Costco candidate item number / title / pack), derived from operator-supplied seed mappings.",
+                      "mapped_asins":  [
+                                           "B01LNBDORK"
+                                       ]
+                  }
+              ]
+}

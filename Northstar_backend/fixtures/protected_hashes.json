@@ -1,0 +1,42 @@
+{
+  "data/scanner-search-cache.json": {
+    "sha256": "400005608c5ec5eae24fad6567324f6feadd0d87d6aeb7bc8d739b80be53671c",
+    "bytes": 95074
+  },
+  "data/scanner-search-cache.brightdata-20260817-065933-20260817-021812.json": {
+    "sha256": "ab21124e7f94296d98dcdf68eb5f90e270aa24e27c767a9286755151fc3b2535",
+    "bytes": 99138
+  },
+  "data/benchmarks/raw/BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv": {
+    "sha256": "ffb25c8284126dcfcd577171af4ab8ac5099ae484b72fcd718e2dfade20fe9da",
+    "bytes": 3406
+  },
+  "data/benchmarks/raw/Rank-Product-ASIN-Reviews-Price-BSR.csv": {
+    "sha256": "ae85c5d72f2ebe2d15e8558ce29ad86ae4c8015fc10105e111595533db09368b",
+    "bytes": 2338
+  },
+  "data/benchmarks/manifest.json": {
+    "sha256": "bd7ffc77416246ed229c707e6afbfdb5caeb6b3c36af450e919bfa6728a3c664",
+    "bytes": 1402
+  },
+  "data/benchmarks/asin_benchmark_reference.json": {
+    "sha256": "7d54978753dac7ba7f874022bcae02f63642f01c9196251cf54b25a317eec5dc",
+    "bytes": 87764
+  },
+  "finance.py": {
+    "sha256": "1a6a5d29e854ca1c9c023abf00d33a9d8f90febd1d5c2a017df36feb2339d8e7",
+    "bytes": 9057
+  },
+  "pricing.py": {
+    "sha256": "be810f8c9d7f1b2984af1473a8d5c192d8b5979bd618ad735ad04fffa3160042",
+    "bytes": 3942
+  },
+  "fee_engine.py": {
+    "sha256": "cdebd26fcc0d8a9a9bf54e1109ec978051ab52b56d94262cacea8eebf8b5a4f8",
+    "bytes": 22119
+  },
+  "product_analysis.py": {
+    "sha256": "e6c3b3b80d069fff5efaadec9bc66867969652cfcd3f3d2a691210a62404c9f0",
+    "bytes": 22750
+  }
+}

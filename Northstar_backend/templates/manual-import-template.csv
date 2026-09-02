@@ -1,0 +1,4 @@
+asin,title,amazon_url,amazon_price,amazon_shipping,buy_box_price,buy_box_shipping,estimated_monthly_sales,monthly_sales_estimated,total_sellers,fba_seller_count,fbm_seller_count,buy_box_seller_name,buy_box_fulfillment,referral_fee,fba_fee,weight_lbs,upc,gtin,ean,pack_count,unit_count,weight,volume,product_form,variant,flavor,scent,observed_at,source
+B0FICT0011,Kirkland Signature Mixed Nuts 40 oz,https://www.amazon.com/dp/B0FICT0011,27.99,0.0,27.99,0.0,500,true,5,3,1,Example Seller C,FBA,,8.10,2.5,012345678912,1,,, ,,,,,,2026-08-12T09:00:00Z,manual_import
+B0FICT0012,Kirkland Signature Paper Towels 12 rolls,https://www.amazon.com/dp/B0FICT0012,32.99,,32.99,,800,true,4,2,1,Example Seller D,FBM,,9.25,4.0,012345678929,1,,,,,,,2026-08-12T09:05:00Z,manual_import
+B0FICT0013,Kirkland Signature Fish Oil 400 softgels,https://www.amazon.com/dp/B0FICT0013,30.99,,30.99,,400,,3,2,0,Example Seller E,Amazon,,6.90,1.5,012345678936,1,,,,,,,2026-08-12T09:10:00Z,manual_import

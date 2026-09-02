@@ -1,0 +1,65 @@
+{
+  "asin": "B00BISGJXA",
+  "title": null,
+  "source": "easyparser",
+  "data_status": "failed",
+  "observed_at": null,
+  "fetched_at": "2026-08-22T08:08:13.284800+00:00",
+  "buy_box": {
+    "available": false,
+    "seller_name": null,
+    "seller_id": null,
+    "fulfillment": "Unknown",
+    "price": null,
+    "shipping": null,
+    "landed_price": null,
+    "condition": null,
+    "prime": null,
+    "note": null
+  },
+  "offers": [],
+  "offers_returned": 0,
+  "offers_complete": false,
+  "seller_counts": {
+    "observed_total": 0,
+    "claimed_total": null,
+    "fba_observed": 0,
+    "fbm_observed": 0,
+    "amazon_observed": 0,
+    "counts_from_observed": true
+  },
+  "credits_used": null,
+  "credits_remaining": null,
+  "missing_fields": [
+    "upc",
+    "ean",
+    "gtin",
+    "item_weight_lbs",
+    "package_weight_lbs",
+    "package_dimensions_in",
+    "brand",
+    "browse_node_id",
+    "amazon_category",
+    "fba_fee",
+    "monthly_sales_estimate",
+    "sales_rank"
+  ],
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific.",
+    "Easyparser API returned HTTP 500."
+  ],
+  "stages": {
+    "detail": "failed",
+    "offers": "failed",
+    "sales": "not_requested"
+  },
+  "attempts": 1,
+  "last_error": "Easyparser API returned HTTP 500.",
+  "retry_eligible": true,
+  "freshness": {
+    "offers_fresh_until": "2026-08-29T08:08:13.284859+00:00",
+    "sales_fresh_until": "2026-09-21T08:08:13.284859+00:00",
+    "identity_fresh_until": "2026-11-20T08:08:13.284859+00:00"
+  }
+}

@@ -1,0 +1,548 @@
+{
+  "schema_version": 1,
+  "kind": "enrichment_results",
+  "generated_at": "2026-08-25T06:16:52.646414+00:00",
+  "count": 20,
+  "results": [
+    {
+      "asin": "B00AQ0LMTC",
+      "source_query": "Kirkland Signature vitamins supplements",
+      "discovery_price": 25.9,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B01NCRITAE",
+      "source_query": "Kirkland Signature vitamins supplements",
+      "discovery_price": 27.98,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B015WRSJCQ",
+      "source_query": "Kirkland Signature vitamins supplements",
+      "discovery_price": 21.99,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B00P8ZAWK0",
+      "source_query": "Kirkland Signature vitamins supplements",
+      "discovery_price": 24.49,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B07881PTTX",
+      "source_query": "Kirkland Signature vitamins supplements",
+      "discovery_price": 30.89,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B005ECOBBI",
+      "source_query": "Kirkland Signature vitamins supplements",
+      "discovery_price": 18.01,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B001UB44SM",
+      "source_query": "Kirkland Signature trash bags",
+      "discovery_price": 32.47,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B01M7Y0NEX",
+      "source_query": "Kirkland Signature trash bags",
+      "discovery_price": 23.59,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B00MPYTSGG",
+      "source_query": "Kirkland Signature vitamins supplements",
+      "discovery_price": 16.79,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B002VLZHLS",
+      "source_query": "Kirkland Signature vitamins supplements",
+      "discovery_price": 20.99,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B08R2SRN88",
+      "source_query": "Kirkland Signature",
+      "discovery_price": 26.8,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B01H40O42I",
+      "source_query": "Kirkland Signature",
+      "discovery_price": 26.99,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B07H4YC1GC",
+      "source_query": "Kirkland Signature paper towels",
+      "discovery_price": 26.88,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B01LNBDORK",
+      "source_query": "Kirkland Signature trash bags",
+      "discovery_price": 29.27,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B01KW9KWW4",
+      "source_query": "Kirkland Signature",
+      "discovery_price": 37.98,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B00NPQZ20O",
+      "source_query": "Kirkland Signature",
+      "discovery_price": 38.95,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B00SWZUC8U",
+      "source_query": "Kirkland Signature",
+      "discovery_price": 36.9,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B014K3BF24",
+      "source_query": "Kirkland Signature",
+      "discovery_price": 27.59,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B00GYZWNY6",
+      "source_query": "Kirkland Signature",
+      "discovery_price": 28.95,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    },
+    {
+      "asin": "B00YGMN122",
+      "source_query": "Kirkland Signature",
+      "discovery_price": 19.96,
+      "bsr": {
+        "bsr_raw": null,
+        "bsr_primary_rank": null,
+        "bsr_primary_category": null,
+        "bsr_secondary_rank": null,
+        "bsr_secondary_category": null,
+        "bsr_capture_status": "unavailable",
+        "bsr_source": "dataforseo",
+        "bsr_captured_at": null
+      },
+      "buy_box_price": null,
+      "buy_box_seller": null,
+      "offers_returned_count": 0,
+      "offers": [],
+      "credits_used": 0,
+      "cost_usd": 0.0,
+      "data_gaps": [
+        "DataForSEO asin task missing current price (price_from)",
+        "BSR not present in DataForSEO product_information",
+        "DataForSEO sellers task does not flag a Buy Box winner"
+      ],
+      "accepted": true
+    }
+  ]
+}

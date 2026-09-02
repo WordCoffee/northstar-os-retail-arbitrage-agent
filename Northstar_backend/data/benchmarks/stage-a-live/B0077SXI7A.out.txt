@@ -1,0 +1,11 @@
+﻿mode:                  preflight (exactly one Easyparser OFFER request)
+asin:                  B0077SXI7A
+data_status:           partial
+offers_returned:       11
+offers_complete:       False
+buy_box_price:         28.9
+buy_box_seller:        Loong & Sons
+credits_used:          20
+credits_remaining:     80
+requests_used:         1
+saved:                 partial

@@ -1,0 +1,487 @@
+{
+  "post": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0105 sec.",
+    "cost": 0.0015,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221934-2329-0192-0000-ddc930a1496f",
+        "status_code": 20100,
+        "status_message": "Task Created.",
+        "time": "0.0035 sec.",
+        "cost": 0.0015,
+        "result_count": 0,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_post"
+        ],
+        "data": {
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B0CP6LXPLK",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "se_type": "asin",
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": null
+      }
+    ]
+  },
+  "get": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0304 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221934-2329-0192-0000-ddc930a1496f",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "0.0109 sec.",
+        "cost": 0,
+        "result_count": 1,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_get",
+          "advanced",
+          "08221934-2329-0192-0000-ddc930a1496f"
+        ],
+        "data": {
+          "se_type": "asin",
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B0CP6LXPLK",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": [
+          {
+            "asin": "B0CP6LXPLK",
+            "type": "asin",
+            "se_domain": "amazon.com",
+            "location_code": 2840,
+            "language_code": "en_US",
+            "check_url": "https://www.amazon.com/dp/B0CP6LXPLK?language=en_US",
+            "datetime": "2026-08-22 19:35:06 +00:00",
+            "item_types": [
+              "amazon_product_info"
+            ],
+            "items_count": 1,
+            "items": [
+              {
+                "type": "amazon_product_info",
+                "rank_group": 1,
+                "rank_absolute": 1,
+                "position": "right",
+                "xpath": "/html[1]/body[1]/div[1]",
+                "title": "Minoxidil Liquid Extra Strength Hair Regrowth Treatment for Men, 5% Topical Solution, 6 Months Supply - Dropper Applicator and Bonus Free Instructional Guide Included",
+                "details": "Product details Product Dimensions\n:\n5.75 x 5.25 x 2.5 inches; 1.1 pounds\nManufacturer\n:\nKirkland Signature\nASIN\n:\nB0CP6LXPLK\nBest Sellers Rank:  #1,869 in Beauty & Personal Care ( See Top 100 in Beauty & Personal Care )  #12 in Hair Regrowth Treatments\nCustomer Reviews:   4.4  4.4 out of 5 stars (1,442)",
+                "image_url": "https://m.media-amazon.com/images/I/61l8KIX62DL._SY300_SX300_QL70_FMwebp_.jpg",
+                "author": "Brand: KIRKLAND",
+                "data_asin": "B0CP6LXPLK",
+                "parent_asin": null,
+                "product_asins": null,
+                "price_from": 33.1,
+                "price_to": null,
+                "percentage_discount": null,
+                "currency": "USD",
+                "is_amazon_choice": true,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.4,
+                  "votes_count": 1442,
+                  "rating_max": 5
+                },
+                "is_newer_model_available": false,
+                "is_prime_video": false,
+                "applicable_vouchers": null,
+                "newer_model": null,
+                "categories": [
+                  {
+                    "category": "Beauty & Personal Care",
+                    "url": "https://amazon.com/Beauty-Makeup-Skin-Hair-Products/b/ref=dp_bc_1?ie=UTF8&node=3760911"
+                  },
+                  {
+                    "category": "Hair Care",
+                    "url": "https://amazon.com/Hair-Care-Products-Beauty/b/ref=dp_bc_2?ie=UTF8&node=11057241"
+                  },
+                  {
+                    "category": "Hair Loss Products",
+                    "url": "https://amazon.com/Hair-Loss-Products/b/ref=dp_bc_3?ie=UTF8&node=10898755011"
+                  },
+                  {
+                    "category": "Hair Regrowth Treatments",
+                    "url": "https://amazon.com/Hair-Regrowth-Treatments/b/ref=dp_bc_4?ie=UTF8&node=11057581"
+                  }
+                ],
+                "product_information": [
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Important information",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": "Safety Information",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "For external use only. Keep out of reach of children. Discontinue use if irritation occurs."
+                          }
+                        ]
+                      },
+                      {
+                        "type": "product_information_rows",
+                        "title": "Ingredients",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Minoxidil"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Product description",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": null,
+                        "rows": [
+                          {
+                            "type": "product_information_image_row",
+                            "alt": "Minoxidil Hair Growth Treatment",
+                            "url": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/c118b03e-e4e7-44c0-927f-0d049359976e.__CR0,0,1500,928_PT0_SX970_V1___.png"
+                          },
+                          {
+                            "type": "product_information_image_row",
+                            "alt": "Minoxidil Hair Growth Treatment",
+                            "url": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/d9c9ed14-8bd8-4f73-9ad9-1d7649cba89a.__CR0,0,1500,928_PT0_SX970_V1___.png"
+                          },
+                          {
+                            "type": "product_information_image_row",
+                            "alt": "Minoxidil Hair Growth Treatment",
+                            "url": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/c0addefa-bcdc-4480-9d60-224cf1d0e2fe.__CR0,0,1500,928_PT0_SX970_V1___.png"
+                          },
+                          {
+                            "type": "product_information_image_row",
+                            "alt": "Minoxidil Hair Growth Treatment",
+                            "url": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/88936d54-8b41-4fb9-b401-a41becc9b3dc.__CR0,0,1500,928_PT0_SX970_V1___.png"
+                          },
+                          {
+                            "type": "product_information_image_row",
+                            "alt": "Minoxidil Hair Growth Treatment",
+                            "url": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/f38afdda-cd8c-49f4-ab99-fe9585fa17d3.__CR0,0,1500,928_PT0_SX970_V1___.png"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Product details",
+                    "body": {
+                      "Product Dimensions": "5.75 x 5.25 x 2.5 inches; 1.1 pounds",
+                      "Manufacturer": "Kirkland Signature",
+                      "ASIN": "B0CP6LXPLK",
+                      "Best Sellers Rank": "#1,869 in Beauty & Personal Care ( See Top 100 in Beauty & Personal Care )  #12 in Hair Regrowth Treatments",
+                      "Customer Reviews": "4.4  4.4 out of 5 stars (1,442)"
+                    }
+                  }
+                ],
+                "product_images_list": [
+                  "https://m.media-amazon.com/images/I/91GAN5UG6qL._SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/81UaK7EE1wL._SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/81MKAlA8AdL._SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/81ZRu56CgmL._SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/810xtIaS9sL._SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/81p0czNKPBL._SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/81AmlM8JnrL._SL1500_.jpg"
+                ],
+                "product_videos_list": null,
+                "description": "About this item  REVITALIZE YOUR CONFIDENCE: Minoxidil 5%, the go-to choice for men seeking a reliable hair growth treatment, breathes new life into your hair, delivering a fuller, thicker look that boosts your confidence every day.\nDERMATOLOGIST-BACKED ASSURANCE: Embrace the endorsement of dermatologists who trust our product for its safety and proven effectiveness. Join the countless individuals relying on our expertise for a hair regrowth solution that truly works.\nGENEROUS 6-MONTH SUPPLY: Commit to consistent progress with a generous 6-month supply, ensuring you have the sustained support needed for visible improvements. Watch as your hair undergoes a remarkable transformation with our extended treatment plan.\nPRECISION IN EVERY DROP: Elevate your application experience with our dropper applicator, ensuring not a drop of our potent formula goes to waste. Enjoy the convenience of mess-free and precise application, making your journey to fuller hair hassle-free. Bonus Free Instructional Guide Included\nPROVEN RESULTS, UNMATCHED CONFIDENCE: Unleash the power of proven results! With our 6-month supply of Minoxidil 5%, witness a steady and continuous progress in hair growth. Don't just hope for improvements; choose a product that confidently guarantees visible and lasting results.\nShow more",
+                "is_available": true,
+                "top_local_reviews": [
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[1]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 9, 2026",
+                    "helpful_votes": 1,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Diego Gaona",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/0b7e83ef-6054-4e0e-908f-dabf97a27e58._CR0%2C0%2C1126%2C1126_SX460_SX48_.jpg",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHJMYF5RTWJKEMB73J73OZPDSZPA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Important to know",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1621E0GCFCJFC/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Well, I started using this product and I my scalp and hair is getting better. Stop falling and started getting thicker",
+                    "publication_date": "2026-08-09 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[2]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 16, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Siamnatee",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/f7c4ad7d-2751-44e2-af56-04dabd677fc2._CR0%2C0%2C1062%2C1062_SX460_SX48_.jpg",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHEF73IJSKAOV4EZT63JMDUBY6FA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Great product",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2KK550QDIFIOM/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Great product . Fast delivery",
+                    "publication_date": "2026-08-16 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[3]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 16, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Tevon bannister",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AEK3IP2VUCLBZFOSCFTHU5GDSKAA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Minoxidil",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1E9ZY4VRK6GTH/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "It’s a great product",
+                    "publication_date": "2026-08-16 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[4]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 12, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "AHMAD MUNAJIB",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGXOMNCXLKKZIBT2NKHFUCTNONNQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Very good",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1UTJET0WMBG5M/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Happy to buy this product",
+                    "publication_date": "2026-07-12 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[5]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 6, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Tony",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AEWDPGHYWIRGU3LMCBGDQPD6HQHA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Beard Growth",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R37DT5Y7P306E4/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Package was damaged but product still looked to be good",
+                    "publication_date": "2026-08-06 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 4,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[6]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 12, 2026",
+                    "helpful_votes": 1,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Orlando Guardia Calvo",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AH5C4ZRPVHSUD4DBG2LXFCDUTS5Q?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Excelentes resultados",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1RLVW0WF6OLYX/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Muy buen producto. La verdad sí noté resultados excelentes y bastante notables después de usarlo durante un tiempo. He visto una mejora clara en las zonas donde lo estoy aplicando y el cambio se nota bastante. Lo único que sí noté fue algo de resequedad y en ciertas ocasiones un poco de picazón, pero en mi caso fue algo manejable. Fuera de eso, estoy muy satisfecho con los resultados y definitivamente lo volvería a comprar. Es la primera vez que lo compro aquí, pero ya lo he usado antes. Es importante saber que es de uso diario, al dejarse de utilizar los resultados empiezan a desaparecer gradualmente.",
+                    "publication_date": "2026-08-12 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[7]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 19, 2026",
+                    "helpful_votes": null,
+                    "images": [
+                      {
+                        "type": "images_element",
+                        "alt": "Ester",
+                        "url": null,
+                        "image_url": "https://m.media-amazon.com/images/I/61c6PAj9AIL._SY500_.jpg"
+                      },
+                      {
+                        "type": "images_element",
+                        "alt": "Ester",
+                        "url": null,
+                        "image_url": "https://m.media-amazon.com/images/I/61ig-9jcRnL._SY500_.jpg"
+                      },
+                      {
+                        "type": "images_element",
+                        "alt": "Ester",
+                        "url": null,
+                        "image_url": "https://m.media-amazon.com/images/I/71wUxc9VVlL._SY500_.jpg"
+                      }
+                    ],
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Estefany",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHY7EA3IKY6K4PD5NB3AWEE373OQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Ester",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/REI0B0GMY6SFF/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Me encanto el producto,Llego a Tiempo y en buenas condiciones.ya lo habia comprado anteriormentente y si funciona me trabajo un regalo de la Marca Pantene.",
+                    "publication_date": "2026-08-19 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[8]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 17, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Jesús ayala",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/a8a226c4-b53e-4295-b8e0-24a37aaddc0d._CR187%2C0%2C1125%2C1125_SX460_SX48_.jpg",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGGTIOGI6BPEXLKSFI2GBYUIHQJQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Que llego muy rápido mi pedido y en buen estado",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3GJT9LUL3PXU5/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Muy rápido y eficaz",
+                    "publication_date": "2026-08-17 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  }
+                ],
+                "top_global_reviews": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

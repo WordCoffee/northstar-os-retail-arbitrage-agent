@@ -1,0 +1,9 @@
+2026-08-22T19:31:38.965576+00:00 [probe] B01H40O42I -> POST asin task
+2026-08-22T19:31:39.606696+00:00 [probe] POST accepted task_id=08221931-2329-0192-0000-692da3ce9ec2; polling GET
+2026-08-22T19:32:00.072254+00:00 [probe] GET ready; proceeding with remaining 9 ASINs
+2026-08-22T19:32:08.268383+00:00 [tier1] B01H40O42I READY title='Kirkland Signature Kirkland Aller-Flo Fluticasone Propionate (Glucorticoid), 0.54 Fl Oz (Pack of 5)' price=15.79
+2026-08-22T19:32:16.386557+00:00 [tier1] B08R2SRN88 READY title='Kirkland Signature Aller-Flo Fluticasone Propionate (Glucorticoid) 5 Bottles x 120 Metered Sprays 0.54 Fl OZ per Bottle (15.8 mL x 5) 2.70 OZ Total (79 mL Total) 600 Total Sprays Total, 1-Pack' price=26.8
+2026-08-22T19:32:30.771728+00:00 [tier1] B0CP6LXPLK READY title='Minoxidil Liquid Extra Strength Hair Regrowth Treatment for Men, 5% Topical Solution, 6 Months Supply - Dropper Applicator and Bonus Free Instructional Guide Included' price=33.1
+2026-08-22T19:32:58.427613+00:00 [tier1] B00BISGJXA READY title='Kirkland Signature Stool Softener 100 mg, 400 Softgels' price=12.5
+2026-08-22T19:33:06.243765+00:00 [tier1] B00BH3HPZW READY title='Fiber Capsules Kirkland Therapy for Regularity/Fiber Supplement, 360 capsules - Compare to the Active Ingredient in Metamucil Capsules' price=17.59
+2026-08-22T19:34:00.428915+00:00 [tier1] B00GYZWNY6 READY title='Kirkland Extra Strength Glucosamine 1500 mg Chondroitin 1200 mg 220 Tablets' price=29.25

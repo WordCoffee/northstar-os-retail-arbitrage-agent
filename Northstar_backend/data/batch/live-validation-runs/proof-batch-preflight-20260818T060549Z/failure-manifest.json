@@ -1,0 +1,20 @@
+{
+  "kind": "proof-batch-failure-manifest",
+  "schema_version": 1,
+  "run_id": "proof-batch-preflight-20260818T060549Z",
+  "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+  "generated_at": "2026-08-19T02:34:33.171875+00:00",
+  "stage": "map(B01H40O42I)",
+  "stop_reason": "mapping_incompatible",
+  "asin": "B01H40O42I",
+  "budget": {
+    "allowed_requests": 20,
+    "requests_used": 1,
+    "retries_used": 0,
+    "credits_estimated_used": 3.0,
+    "credits_reported_used": 3,
+    "credits_actual_status": "reported_by_provider",
+    "max_credits": 100
+  },
+  "note": "scrubbed failure record — no secrets, no raw response bodies, no normalized results"
+}

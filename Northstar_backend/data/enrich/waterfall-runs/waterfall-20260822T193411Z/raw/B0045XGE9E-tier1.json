@@ -1,0 +1,449 @@
+{
+  "post": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0716 sec.",
+    "cost": 0.0015,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221936-2329-0192-0000-e7ac2e71c433",
+        "status_code": 20100,
+        "status_message": "Task Created.",
+        "time": "0.0038 sec.",
+        "cost": 0.0015,
+        "result_count": 0,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_post"
+        ],
+        "data": {
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B0045XGE9E",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "se_type": "asin",
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": null
+      }
+    ]
+  },
+  "get": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0145 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221936-2329-0192-0000-e7ac2e71c433",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "0.0115 sec.",
+        "cost": 0,
+        "result_count": 1,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_get",
+          "advanced",
+          "08221936-2329-0192-0000-e7ac2e71c433"
+        ],
+        "data": {
+          "se_type": "asin",
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B0045XGE9E",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": [
+          {
+            "asin": "B0045XGE9E",
+            "type": "asin",
+            "se_domain": "amazon.com",
+            "location_code": 2840,
+            "language_code": "en_US",
+            "check_url": "https://www.amazon.com/dp/B0045XGE9E?language=en_US",
+            "datetime": "2026-08-22 19:36:06 +00:00",
+            "item_types": [
+              "amazon_product_info"
+            ],
+            "items_count": 1,
+            "items": [
+              {
+                "type": "amazon_product_info",
+                "rank_group": 1,
+                "rank_absolute": 1,
+                "position": "right",
+                "xpath": "/html[1]/body[1]/div[1]",
+                "title": "Kirkland Signature Sleep Aid Doxylamine Succinate 25 Mg, 2 pack (192 Tablets)",
+                "details": "Product details Product Dimensions\n:\n3 x 2 x 5 inches; 1.6 ounces\nItem model number\n:\n1995\nDate First Available\n:\nSeptember 28, 2010\nManufacturer\n:\nKirkland\nASIN\n:\nB0045XGE9E\nBest Sellers Rank:  #7,384 in Health & Household ( See Top 100 in Health & Household )  #13 in OTC Medicinal Sleep Aids\nCustomer Reviews:   4.6  4.6 out of 5 stars (4,972)",
+                "image_url": "https://m.media-amazon.com/images/I/61wPtN2uHPL._AC_SY300_SX300_QL70_FMwebp_.jpg",
+                "author": "Brand: KIRKLAND",
+                "data_asin": "B0045XGE9E",
+                "parent_asin": "B0DM2LT2F8",
+                "product_asins": [
+                  "B0045XGE9E"
+                ],
+                "price_from": 12.39,
+                "price_to": 15.99,
+                "percentage_discount": 23,
+                "currency": "USD",
+                "is_amazon_choice": false,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.6,
+                  "votes_count": 4972,
+                  "rating_max": 5
+                },
+                "is_newer_model_available": false,
+                "is_prime_video": false,
+                "applicable_vouchers": null,
+                "newer_model": null,
+                "categories": [
+                  {
+                    "category": "Health & Household",
+                    "url": "https://amazon.com/health-personal-care-nutrition-fitness/b/ref=dp_bc_1?ie=UTF8&node=3760901"
+                  },
+                  {
+                    "category": "Health Care",
+                    "url": "https://amazon.com/Health-Care-Products-Personal/b/ref=dp_bc_2?ie=UTF8&node=3760941"
+                  },
+                  {
+                    "category": "Over-the-Counter Medication",
+                    "url": "https://amazon.com/Medications-Treatments/b/ref=dp_bc_3?ie=UTF8&node=10079990011"
+                  },
+                  {
+                    "category": "Sleep Aids",
+                    "url": "https://amazon.com/OTC-Medicinal-Sleep-Aids/b/ref=dp_bc_4?ie=UTF8&node=23675625011"
+                  }
+                ],
+                "product_information": [
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Important information",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": "Ingredients",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "sleep aid"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "product_information_rows",
+                        "title": "Legal Disclaimer",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Statements regarding dietary supplements have not been evaluated by the FDA and are not intended to diagnose, treat, cure, or prevent any disease or health condition."
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Product Description",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": null,
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Kirkland Signature Sleep aid doxylamine succinate 25-mg 96 tabs, 2 Pack"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Product details",
+                    "body": {
+                      "Product Dimensions": "3 x 2 x 5 inches; 1.6 ounces",
+                      "Item model number": "1995",
+                      "Date First Available": "September 28, 2010",
+                      "Manufacturer": "Kirkland",
+                      "ASIN": "B0045XGE9E",
+                      "Best Sellers Rank": "#7,384 in Health & Household ( See Top 100 in Health & Household )  #13 in OTC Medicinal Sleep Aids",
+                      "Customer Reviews": "4.6  4.6 out of 5 stars (4,972)"
+                    }
+                  }
+                ],
+                "product_images_list": [
+                  "https://m.media-amazon.com/images/I/61wPtN2uHPL._AC_SL1000_.jpg",
+                  "https://m.media-amazon.com/images/I/91GOGUrJoJL._AC_SL1500_.jpg",
+                  "https://m.media-amazon.com/images/I/31lph0MKi8L._AC_.jpg",
+                  "https://m.media-amazon.com/images/I/51S7LFoWnLL._AC_SL1050_.jpg",
+                  "https://m.media-amazon.com/images/I/51EkCPqudHL._AC_SL1050_.jpg"
+                ],
+                "product_videos_list": null,
+                "description": "About this item  Fall asleep fast\nCompare to the active ingredient in Unisom\n1 tablet per dose\nSafe and effective\nShow more",
+                "is_available": true,
+                "top_local_reviews": [
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[1]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 14, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Terry Larsen",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AF7I6KI7E4A6R4HOJWHEIHRHJ5TA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Kirkland Sleep Aid",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2QATVAT5MNRZC/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Good product! Helps me to sleep gently with no side effects or after effects.",
+                    "publication_date": "2026-08-14 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[2]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on June 8, 2026",
+                    "helpful_votes": 3,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Devin",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGLS2GQQPST32NCBMCTGAVM6NUNQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Works Well",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/RILOY0MDXWJTD/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "This stuff works great! The best sleep aide you can get without a prescription by far. Excellent value for the money. Ive been using it for years and always go back to it.",
+                    "publication_date": "2026-06-08 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[3]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on May 23, 2026",
+                    "helpful_votes": 8,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Angel",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHKXXKLW7OHH2TD52I7ZUWCYLKDQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Better than prescription.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2CV1XMWU2MDE/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "I only sleep four hours a night then I wake up and I can’t go back to sleep. I have been taking this for years. This stuff is a lifesaver. I think  I would end up having a nervous breakdown without it.  You cannot take it every day,  your body will get used to it. I take it every other day or every two days.  I only need a half a tab and I will sleep 8 to 9 hours. Once in a while, I will take a full tab. I can’t even get out of bed in the morning. I will sleep about 10 hours on a full tab. This works better than anything I have ever used.  I don’t get any bad side effects from it. Maybe a little dried throat in the morning.",
+                    "publication_date": "2026-05-23 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[4]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 21, 2026",
+                    "helpful_votes": 1,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Hippie Dippie Girl",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHOPQFFI7DXNG3KXW3QBAD3I7GTQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Pretty good",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2CI1OCNI3THMO/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "I’ve been using these often for a few years.  They work really well and I wake up without any groin..",
+                    "publication_date": "2026-07-21 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[5]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on March 21, 2026",
+                    "helpful_votes": 2,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Sue Thomas",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AG75BUED6MOOK4HSSBAMW2OEWQKQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Works too well, drowsy all day",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2SOFRIZEGTLK0/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "This actually works a little too well and I don't take them anymore. I have tried so many aids to help fall asleep, this works great the problem is the next day I felt tired and drained all day! I took it at 7pm fell asleep by 8 pm, slept through til 6 am but needed a nap ALL DAY! I tried a half a tablet the next time and it was the same effect.",
+                    "publication_date": "2026-03-21 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[6]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 16, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "MR",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AFWTPIYKS6DILOR4JWVKVYMR3ZZQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Best price",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R9J2XETAJB1TW/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Cheaper then Costco, good quality,  only need \"1/2 a pill\" per night",
+                    "publication_date": "2026-08-16 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 4,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[7]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 3, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "jenniffer queipo tejera",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/7c7c0343-65cc-47ce-92b4-3985163a1106._CR0%2C79%2C843%2C843_SX460_SX48_.jpg",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AFHSDPRP7FJBECEGHW2JMYJ6TSPA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Muy buena compra",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/RLWB79MED53CP/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "⭐⭐⭐⭐⭐ Hola ¡Excelente compra! El producto llegó antes de la fecha estimada, muy bien empacado y exactamente como se describe. La calidad superó mis expectativas y se nota que está bien fabricado. Es fácil de usar, cumple perfectamente su función y ofrece una muy buena relación calidad-precio. Después de probarlo varios días, puedo decir que funciona de maravilla y volvería a comprarlo sin dudar. Lo recomiendo totalmente a cualquiera que esté pensando en adquirirlo.",
+                    "publication_date": "2026-08-03 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[8]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 23, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Erica",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGFPR6CRB7UD3GZTV7ZG2YR7UGVQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Great For Sleep",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3NLW6DU179SX5/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Work great - can take 1/2 of a pill too.",
+                    "publication_date": "2026-07-23 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  }
+                ],
+                "top_global_reviews": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

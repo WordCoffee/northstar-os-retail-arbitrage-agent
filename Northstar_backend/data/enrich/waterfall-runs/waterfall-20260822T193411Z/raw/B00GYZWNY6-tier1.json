@@ -1,0 +1,434 @@
+{
+  "post": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0436 sec.",
+    "cost": 0.0015,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221935-2329-0192-0000-6b7abd631d84",
+        "status_code": 20100,
+        "status_message": "Task Created.",
+        "time": "0.0034 sec.",
+        "cost": 0.0015,
+        "result_count": 0,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_post"
+        ],
+        "data": {
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B00GYZWNY6",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "se_type": "asin",
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": null
+      }
+    ]
+  },
+  "get": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0148 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221935-2329-0192-0000-6b7abd631d84",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "0.0100 sec.",
+        "cost": 0,
+        "result_count": 1,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_get",
+          "advanced",
+          "08221935-2329-0192-0000-6b7abd631d84"
+        ],
+        "data": {
+          "se_type": "asin",
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B00GYZWNY6",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": [
+          {
+            "asin": "B00GYZWNY6",
+            "type": "asin",
+            "se_domain": "amazon.com",
+            "location_code": 2840,
+            "language_code": "en_US",
+            "check_url": "https://www.amazon.com/dp/B00GYZWNY6?language=en_US",
+            "datetime": "2026-08-22 19:35:59 +00:00",
+            "item_types": [
+              "amazon_product_info"
+            ],
+            "items_count": 1,
+            "items": [
+              {
+                "type": "amazon_product_info",
+                "rank_group": 1,
+                "rank_absolute": 1,
+                "position": "right",
+                "xpath": "/html[1]/body[1]/div[1]",
+                "title": "Kirkland Extra Strength Glucosamine 1500 mg Chondroitin 1200 mg 220 Tablets",
+                "details": "Product details Product Dimensions\n:\n2.56 x 3.15 x 2.95 inches; 10.58 ounces\nItem model number\n:\nB00GYZWNY6\nDate First Available\n:\nNovember 28, 2013\nManufacturer\n:\nKIRKLAND Signature\nASIN\n:\nB00GYZWNY6\nBest Sellers Rank:  #7,111 in Health & Household ( See Top 100 in Health & Household )  #9 in Chondroitin Nutritional Supplements\n#11 in Chondroitin & Glucosamine Combination Nutritional Supplements\nCustomer Reviews:   4.7  4.7 out of 5 stars (5,192)",
+                "image_url": "https://m.media-amazon.com/images/I/41MjUA36JDL._AC_SY300_SX300_QL70_FMwebp_.jpg",
+                "author": "Brand: KIRKLAND",
+                "data_asin": "B00GYZWNY6",
+                "parent_asin": null,
+                "product_asins": null,
+                "price_from": 29.25,
+                "price_to": null,
+                "percentage_discount": null,
+                "currency": "USD",
+                "is_amazon_choice": false,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.7,
+                  "votes_count": 5192,
+                  "rating_max": 5
+                },
+                "is_newer_model_available": false,
+                "is_prime_video": false,
+                "applicable_vouchers": null,
+                "newer_model": null,
+                "categories": [
+                  {
+                    "category": "Health & Household",
+                    "url": "https://amazon.com/health-personal-care-nutrition-fitness/b/ref=dp_bc_1?ie=UTF8&node=3760901"
+                  },
+                  {
+                    "category": "Vitamins, Minerals & Supplements",
+                    "url": "https://amazon.com/Vitamins-Minerals-Supplements/b/ref=dp_bc_2?ie=UTF8&node=23675621011"
+                  },
+                  {
+                    "category": "Chondroitin & Glucosamine",
+                    "url": "https://amazon.com/Chondroitin-Glucosamine-Nutritional-Supplements/b/ref=dp_bc_3?ie=UTF8&node=3773391"
+                  },
+                  {
+                    "category": "Chondroitin",
+                    "url": "https://amazon.com/Chondroitin-Nutritional-Supplements/b/ref=dp_bc_4?ie=UTF8&node=3773401"
+                  }
+                ],
+                "product_information": [
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Important information",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": "Legal Disclaimer",
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Statements regarding dietary supplements have not been evaluated by the FDA and are not intended to diagnose, treat, cure, or prevent any disease or health condition."
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Product Description",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": null,
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Add Kirkland Signature Extra Strength Glucosamine 1500 mg & Chondroitin 1200 mg to your daily regimen to help support healthy joints. It is an extra strength formulation which delivers the suggested daily dosage in just two tablets. Consider Kirkland Signature Extra Strength Glucosamine 1500 mg & Chondroitin 1200 mg, which: Cushions joints and supports movement Helps promote healthy cartilage"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Product details",
+                    "body": {
+                      "Product Dimensions": "2.56 x 3.15 x 2.95 inches; 10.58 ounces",
+                      "Item model number": "B00GYZWNY6",
+                      "Date First Available": "November 28, 2013",
+                      "Manufacturer": "KIRKLAND Signature",
+                      "ASIN": "B00GYZWNY6",
+                      "Best Sellers Rank": "#7,111 in Health & Household ( See Top 100 in Health & Household )  #9 in Chondroitin Nutritional Supplements\n #11 in Chondroitin & Glucosamine Combination Nutritional Supplements",
+                      "Customer Reviews": "4.7  4.7 out of 5 stars (5,192)"
+                    }
+                  }
+                ],
+                "product_images_list": [
+                  "https://m.media-amazon.com/images/I/41MjUA36JDL._AC_.jpg",
+                  "https://m.media-amazon.com/images/I/71cdZXcbeIL._AC_SL1050_.jpg"
+                ],
+                "product_videos_list": null,
+                "description": "About this item  Glucosamine HCI 1500 mg and Chondroitin Sulfate 1200 mg\nHelps Lubricate and Cushion Joints\nHelps Protect Cartilage\nNo Preservatives, No Gluten and No Lactose\nUSP Verified\nDuring the summer months products may arrive warm but Amazon stores and ships products in accordance with manufacturers' recommendations, when provided.\nShow more",
+                "is_available": true,
+                "top_local_reviews": [
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[1]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 6, 2026",
+                    "helpful_votes": 1,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "One of our best customers.  R.S.",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/fe93970f-aa0e-44aa-b9e6-a9ca644e25e7._CR44%2C0%2C412%2C412_SX460_SX48_.jpg",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AFMGUKFQEXHYS7CQ24WPJYUKQVGA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "All of these things that claim to help your health are expensive….",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1OIDBLCO0L48O/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "So you should try to buy just one product like this and don’t buy all kinds of supplements because you won’t know what’s doing anything for you and what’s just going out of your body with no benefit. I’ve been on this for I think a couple years and both my knees were hurting when I got on it. This is not a miracle cure. I’m not saying it’s that way, but after staying on this most of my knee pain went away!  I stopped at for part of the year and it’s like I had built up. I don’t know if his cartilage or whatever with this supplement but after being offered for a while I started feeling my knees again, just a little bit so that’s the last time I’m getting off of this lol it’s proven to me that it works at least as far as my amateur experiment. I just wish they made these more affordable for people and that they had a better way of policing supplements that are useless and getting them off the market. I think you’re going to be very happy for this, but you have to realize it took you a long time to catch your joints in tough shape, it’s going to take longer to get them better, but you can make it happen and you’ll be very happy that you did. My knees were not excruciating, but I knew that I was going to have to do something about them and I decided this was worth a try and that was a great decision.",
+                    "publication_date": "2026-08-06 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[2]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 6, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Amazon Customer",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHQQ3XHZ4LJLMRJ6NFHKAAMDHCTA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Healthy joints",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2TWOIC7XE7MAG/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "There’s no odor easy to swallow. Helps with my knee and joint pains good price for the product in the corner you get.",
+                    "publication_date": "2026-08-06 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[3]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on February 22, 2026",
+                    "helpful_votes": 33,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "costrow",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AFS4DYJOWGHQCGHYHIHFLVU6DJGA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "They work",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R10QAAU6Q42O0K/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "I have been taking these about 12 to 15 years.  Before Costco sold these my East Indian MD/Acupuncturist was able to get me a similar formulation for a rotator cuff injury and knee/hip issues from walking on a treadmill.  These problems were just getting worse and worse - esp the shoulder- and all the other docs could do was offer pain pills and surgeries.  After 1 acupuncture session followed by this supp combo at the right dosage the pain stopped radiating and a week or2 later I couldn’t tell which shoulder had had the problem because the pain was gone.  Since then I have taken daily.  A few years ago I decided to use a diff brand and the agonizing shoulder pain returned along with the knee and burning hip issue so I went back to the Kirkland.  I tried the one also with the MSM and it was worthless.  I still have 2 giant bottles with this sitting around. I take 2 of the Kirkland about an hour before I start walking and you can actually feel the padding effect as you walk. I go about 1 mildly painful walk and then the supplement moves down to my feet and ankles.  At that point - zero pain.  This isn’t a pain pill you can just take when in pain  - you need to use daily to work.  Also not all Glucosamin and Chondroitin works the same.  Only this brand (without MSM) and the one sold by Vitamin Shoppe worked for me.  So far after 18 years I’ve avoided surgery and pain pills for my shoulder, knee & hips. When the give to dogs they go from being unable to manage stairs to going back to normal which is why Costco sells so much for dogs.  Dogs have no placebo effect. ***The pills are large so I pour some olive oil in a small cup and dunk them before taking and they go right down easily. The research that shows no effect clearly wasn’t done with the proper supplement.  Take a look at the thousands of positive reviews.",
+                    "publication_date": "2026-02-22 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[4]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on June 7, 2026",
+                    "helpful_votes": 2,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Great grandma",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AG44CNKLEYWPHIRQQTETRUMBQ6EQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Works great",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R16VOKBALKV080/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "With so many tablets I don’t have to order as much",
+                    "publication_date": "2026-06-07 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[5]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 17, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "JoAnn M.",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHPIVMXJ3QHEAONT3N5HAJS3AAUQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "The about for the price",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2VSLXTJ17L5QJ/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Good price",
+                    "publication_date": "2026-07-17 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 4,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[6]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 8, 2026",
+                    "helpful_votes": 4,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Amazon Customer",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHSCSOFK2IRBCF52RSON5FV6AYXA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Great product",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2OREQU5QGL7YT/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Very good product felt better in just two days. The pain on my knees eased up some. my feet aren’t as swollen as they were so if you guys got bad knees , joint pain, swelling on the legs and knees and feet this product is for you.",
+                    "publication_date": "2026-07-08 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[7]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 1, 2026",
+                    "helpful_votes": 2,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Miamiac",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AENIKVYND2CIO3PIRDR73T7VTRMA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Fantastic value and brand trust",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1VIZSNL8UDD99/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Kirkland is Costco brand, which I trust.  This is a slightly smaller bottle then the 330 bottle purchased in the store, for about the same price per pill.  Good value and better than competitors, especially other pharmacy store brands, not just name brands.  This is 1/3rd the price of name brands.",
+                    "publication_date": "2026-08-01 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[45]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[8]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 20, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Cb",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AEXXRX4KEJ43OPATFX4Q4ZOERPAA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Convenient Daily Supplement",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1SEZF8819CYNY/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "The large 220-tablet bottle is convenient for keeping a supply on hand. The tablets are easy to incorporate into my daily routine, and the packaging is simple and practical. Overall, a convenient option for anyone looking for this type of supplement.",
+                    "publication_date": "2026-08-20 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  }
+                ],
+                "top_global_reviews": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

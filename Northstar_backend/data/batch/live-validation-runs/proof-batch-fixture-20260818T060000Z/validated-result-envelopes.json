@@ -1,0 +1,2672 @@
+{
+  "kind": "proof-batch-validated-results",
+  "schema_version": 1,
+  "run_id": "proof-batch-preflight-20260818T060549Z",
+  "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+  "generated_at": "2026-08-18T06:46:25.921414+00:00",
+  "adapter": "fixture",
+  "synthetic_fixture": true,
+  "envelope_count": 20,
+  "envelopes": [
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B01H40O42I",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B01H40O42I",
+        "ingested_at": "2026-08-18T06:46:25.909236+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Aller-Flo Fluticasone (Pack of 5)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 27.2748,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-1-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 27.27,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-1-0",
+                "condition": "New"
+              },
+              {
+                "price": 27.82,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-1-1",
+                "condition": "New"
+              },
+              {
+                "price": 28.37,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-1-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B01H40O42I",
+      "request_index": 1,
+      "mapping_state": "expected_mapping_review",
+      "mapping_reason": "benchmark has a historical cross-file title conflict; compatible title returned — mapping review required, never silently resolved",
+      "credits_used_reported": 5,
+      "credits_used_estimated": 5.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B08R2SRN88",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B08R2SRN88",
+        "ingested_at": "2026-08-18T06:46:25.917472+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Aller-Flo Fluticasone (5 Bottles/600 sprays)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 27.604000000000003,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-2-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 27.6,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-2-0",
+                "condition": "New"
+              },
+              {
+                "price": 28.16,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-2-1",
+                "condition": "New"
+              },
+              {
+                "price": 28.71,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-2-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B08R2SRN88",
+      "request_index": 2,
+      "mapping_state": "expected_mapping_review",
+      "mapping_reason": "benchmark has a historical cross-file title conflict; compatible title returned — mapping review required, never silently resolved",
+      "credits_used_reported": 10,
+      "credits_used_estimated": 10.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B0CP6LXPLK",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B0CP6LXPLK",
+        "ingested_at": "2026-08-18T06:46:25.917709+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Minoxidil Extra Strength (6-mo)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 33.4512,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-3-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 33.45,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-3-0",
+                "condition": "New"
+              },
+              {
+                "price": 34.12,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-3-1",
+                "condition": "New"
+              },
+              {
+                "price": 34.79,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-3-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B0CP6LXPLK",
+      "request_index": 3,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 15,
+      "credits_used_estimated": 15.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B00BISGJXA",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B00BISGJXA",
+        "ingested_at": "2026-08-18T06:46:25.917949+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Stool Softener 100mg (400ct)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 13.005,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-4-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 13.01,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-4-0",
+                "condition": "New"
+              },
+              {
+                "price": 13.27,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-4-1",
+                "condition": "New"
+              },
+              {
+                "price": 13.53,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-4-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B00BISGJXA",
+      "request_index": 4,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 20,
+      "credits_used_estimated": 20.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B00BH3HPZW",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B00BH3HPZW",
+        "ingested_at": "2026-08-18T06:46:25.918146+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Fiber Capsules (360ct)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 18.3752,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-5-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 18.38,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-5-0",
+                "condition": "New"
+              },
+              {
+                "price": 18.74,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-5-1",
+                "condition": "New"
+              },
+              {
+                "price": 19.11,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-5-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B00BH3HPZW",
+      "request_index": 5,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 25,
+      "credits_used_estimated": 25.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B00GYZWNY6",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B00GYZWNY6",
+        "ingested_at": "2026-08-18T06:46:25.918340+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Glucosamine 1500/Chondroitin 1200 (220ct)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 29.5425,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-6-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 29.54,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-6-0",
+                "condition": "New"
+              },
+              {
+                "price": 30.13,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-6-1",
+                "condition": "New"
+              },
+              {
+                "price": 30.72,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-6-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B00GYZWNY6",
+      "request_index": 6,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 30,
+      "credits_used_estimated": 30.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B0045XGE9E",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B0045XGE9E",
+        "ingested_at": "2026-08-18T06:46:25.918563+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Sleep Aid Doxylamine (2pk/192ct)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 14.1168,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-7-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 14.12,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-7-0",
+                "condition": "New"
+              },
+              {
+                "price": 14.4,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-7-1",
+                "condition": "New"
+              },
+              {
+                "price": 14.68,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-7-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B0045XGE9E",
+      "request_index": 7,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 35,
+      "credits_used_estimated": 35.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B002L4M4M0",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B002L4M4M0",
+        "ingested_at": "2026-08-18T06:46:25.918746+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Sleep Aid Doxylamine (96ct)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 8.1679,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-8-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 8.17,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-8-0",
+                "condition": "New"
+              },
+              {
+                "price": 8.33,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-8-1",
+                "condition": "New"
+              },
+              {
+                "price": 8.49,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-8-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B002L4M4M0",
+      "request_index": 8,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 40,
+      "credits_used_estimated": 40.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B081THWMDK",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B081THWMDK",
+        "ingested_at": "2026-08-18T06:46:25.918927+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Stretch Tite Food Wrap (2pk)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 29.0779,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-9-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 29.08,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-9-0",
+                "condition": "New"
+              },
+              {
+                "price": 29.66,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-9-1",
+                "condition": "New"
+              },
+              {
+                "price": 30.24,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-9-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B081THWMDK",
+      "request_index": 9,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 45,
+      "credits_used_estimated": 45.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B085F1QCB9",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B085F1QCB9",
+        "ingested_at": "2026-08-18T06:46:25.919114+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Compactor Trash Bag",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 28.6314,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-10-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 28.63,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-10-0",
+                "condition": "New"
+              },
+              {
+                "price": 29.2,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-10-1",
+                "condition": "New"
+              },
+              {
+                "price": 29.78,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-10-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B085F1QCB9",
+      "request_index": 10,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 50,
+      "credits_used_estimated": 50.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B00N54AJZE",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B00N54AJZE",
+        "ingested_at": "2026-08-18T06:46:25.919284+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Stool Softener 100mg (400ct, alt listing)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 13.0707,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-11-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 13.07,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-11-0",
+                "condition": "New"
+              },
+              {
+                "price": 13.33,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-11-1",
+                "condition": "New"
+              },
+              {
+                "price": 13.59,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-11-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B00N54AJZE",
+      "request_index": 11,
+      "mapping_state": "expected_mapping_review",
+      "mapping_reason": "benchmark has a historical cross-file title conflict; compatible title returned — mapping review required, never silently resolved",
+      "credits_used_reported": 55,
+      "credits_used_estimated": 55.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B00QGMOJ4Y",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B00QGMOJ4Y",
+        "ingested_at": "2026-08-18T06:46:25.919467+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Purified Drinking Water (40ct)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 24.229899999999997,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-12-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 24.23,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-12-0",
+                "condition": "New"
+              },
+              {
+                "price": 24.71,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-12-1",
+                "condition": "New"
+              },
+              {
+                "price": 25.2,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-12-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B00QGMOJ4Y",
+      "request_index": 12,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 60,
+      "credits_used_estimated": 60.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B01LY71217",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B01LY71217",
+        "ingested_at": "2026-08-18T06:46:25.919646+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "13-Gal Trash Bags (200ct)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 36.7098,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-13-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 36.71,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-13-0",
+                "condition": "New"
+              },
+              {
+                "price": 37.44,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-13-1",
+                "condition": "New"
+              },
+              {
+                "price": 38.18,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-13-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B01LY71217",
+      "request_index": 13,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 65,
+      "credits_used_estimated": 65.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B07BZW88NY",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B07BZW88NY",
+        "ingested_at": "2026-08-18T06:46:25.919821+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Sleep Aid (192ct, alt)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 14.6775,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-14-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 14.68,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-14-0",
+                "condition": "New"
+              },
+              {
+                "price": 14.97,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-14-1",
+                "condition": "New"
+              },
+              {
+                "price": 15.26,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-14-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B07BZW88NY",
+      "request_index": 14,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 70,
+      "credits_used_estimated": 70.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B078B5N4DD",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B078B5N4DD",
+        "ingested_at": "2026-08-18T06:46:25.919996+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Minoxidil for Men (1-mo)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 14.1097,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-15-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 14.11,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-15-0",
+                "condition": "New"
+              },
+              {
+                "price": 14.39,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-15-1",
+                "condition": "New"
+              },
+              {
+                "price": 14.67,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-15-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B078B5N4DD",
+      "request_index": 15,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 75,
+      "credits_used_estimated": 75.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B007MWNFBA",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B007MWNFBA",
+        "ingested_at": "2026-08-18T06:46:25.920171+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Stretch Tite Wrap (single)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 20.389799999999997,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-16-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 20.39,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-16-0",
+                "condition": "New"
+              },
+              {
+                "price": 20.8,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-16-1",
+                "condition": "New"
+              },
+              {
+                "price": 21.21,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-16-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B007MWNFBA",
+      "request_index": 16,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 80,
+      "credits_used_estimated": 80.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B00OPQZJA6",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B00OPQZJA6",
+        "ingested_at": "2026-08-18T06:46:25.920345+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Walnuts (48oz)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 21.619699999999998,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-17-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 21.62,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-17-0",
+                "condition": "New"
+              },
+              {
+                "price": 22.05,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-17-1",
+                "condition": "New"
+              },
+              {
+                "price": 22.48,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-17-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B00OPQZJA6",
+      "request_index": 17,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 85,
+      "credits_used_estimated": 85.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B0C54GXFQ8",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B0C54GXFQ8",
+        "ingested_at": "2026-08-18T06:46:25.920511+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Performance Plus Golf Balls (24ct)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 44.4299,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-18-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 44.43,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-18-0",
+                "condition": "New"
+              },
+              {
+                "price": 45.32,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-18-1",
+                "condition": "New"
+              },
+              {
+                "price": 46.21,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-18-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B0C54GXFQ8",
+      "request_index": 18,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 90,
+      "credits_used_estimated": 90.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B0F7GTX962",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B0F7GTX962",
+        "ingested_at": "2026-08-18T06:46:25.920692+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Minoxidil (6-mo bundle)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 15.799800000000001,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-19-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 15.8,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-19-0",
+                "condition": "New"
+              },
+              {
+                "price": 16.12,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-19-1",
+                "condition": "New"
+              },
+              {
+                "price": 16.43,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-19-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B0F7GTX962",
+      "request_index": 19,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 95,
+      "credits_used_estimated": 95.0
+    },
+    {
+      "envelope_schema_version": 1,
+      "run_id": "proof-batch-preflight-20260818T060549Z",
+      "asin": "B00BI33NU2",
+      "provider": "EASYPARSER",
+      "requested_fields": [
+        "market_offers"
+      ],
+      "provider_status": "success",
+      "result_status": "available",
+      "captured_at": "2026-08-18T12:00:00+00:00",
+      "snapshot": {
+        "schema_version": 1,
+        "asin": "B00BI33NU2",
+        "ingested_at": "2026-08-18T06:46:25.920979+00:00",
+        "sources": {
+          "easyparser": {
+            "kind": "normalized_provider_result"
+          }
+        },
+        "facts": {
+          "identity": {
+            "name": "Ultra Strength Antacid (265ct)",
+            "pack_match": null,
+            "upc_or_ean": null,
+            "net_weight_lbs": null
+          },
+          "cost": {
+            "costco_cost": null,
+            "cost_status": "unavailable",
+            "source": null
+          },
+          "fees": {
+            "fba_fee": null,
+            "fba_fee_status": "unavailable",
+            "referral_fee": null,
+            "fee_provenance": null
+          },
+          "demand": {
+            "estimated_monthly_sales": null,
+            "sales_estimation_method": "unknown",
+            "sales_estimation_confidence": "unknown",
+            "bsr": null,
+            "bsr_category": null
+          },
+          "market": {
+            "amazon_price": null,
+            "buy_box": {
+              "available": true,
+              "price": 14.0595,
+              "seller_name": "Amazon.com",
+              "seller_id": "SELLER-20-0",
+              "fulfillment": "Amazon",
+              "condition": "New",
+              "source": "easyparser",
+              "observed_at": "2026-08-18T12:00:00+00:00"
+            },
+            "seller_counts": {
+              "total_observed": 3,
+              "claimed_total": 3,
+              "fba_observed": 3,
+              "fbm_observed": 0,
+              "amazon_observed": 1
+            },
+            "coverage": {
+              "offer_list_available": true,
+              "offers_complete_status": "full",
+              "coverage_reason": "SYNTHETIC FIXTURE — not live provider data"
+            },
+            "offers": [
+              {
+                "price": 14.06,
+                "fulfillment": "FBA",
+                "is_buy_box_winner": true,
+                "seller_name": "Amazon.com",
+                "seller_id": "SELLER-20-0",
+                "condition": "New"
+              },
+              {
+                "price": 14.34,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 1",
+                "seller_id": "SELLER-20-1",
+                "condition": "New"
+              },
+              {
+                "price": 14.62,
+                "fulfillment": "FBA",
+                "seller_name": "Fixture Seller 2",
+                "seller_id": "SELLER-20-2",
+                "condition": "New"
+              }
+            ]
+          },
+          "economics": {
+            "net_profit": null,
+            "roi_pct": null,
+            "economics_confidence": "unavailable",
+            "economics_status": "model_based_values_not_merged_into_provider_data"
+          },
+          "provenance": {
+            "market.seller_counts": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.offers": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "market.coverage": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            },
+            "identity.name": {
+              "source": "easyparser",
+              "fetched_at": "2026-08-18T12:00:00+00:00"
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "EASYPARSER",
+        "coverage": "full"
+      },
+      "error": null,
+      "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+      "requested_asin": "B00BI33NU2",
+      "request_index": 20,
+      "mapping_state": "match",
+      "mapping_reason": "ASIN exact match and title/pack compatible",
+      "credits_used_reported": 100,
+      "credits_used_estimated": 100.0
+    }
+  ]
+}

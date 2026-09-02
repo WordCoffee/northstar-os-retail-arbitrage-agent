@@ -1,0 +1,65 @@
+{
+  "kind": "proof-batch-run-manifest",
+  "schema_version": 1,
+  "run_id": "proof-batch-preflight-20260818T060549Z",
+  "preflight_fingerprint": "eb21a9877ce5b27c2aed55fe835d2a8712fbc28a44d2082ce30b6262b6b7478d",
+  "preflight_path": "data/batch/proof-batch-preflight-20260818T060549Z.json",
+  "preflight_run_id": "proof-batch-preflight-20260818T060549Z",
+  "generated_at": "2026-08-18T06:46:25.941299+00:00",
+  "provider": "EASYPARSER",
+  "requested_fields": [
+    "market_offers"
+  ],
+  "adapter": "fixture",
+  "synthetic_fixture": true,
+  "asins": [
+    "B01H40O42I",
+    "B08R2SRN88",
+    "B0CP6LXPLK",
+    "B00BISGJXA",
+    "B00BH3HPZW",
+    "B00GYZWNY6",
+    "B0045XGE9E",
+    "B002L4M4M0",
+    "B081THWMDK",
+    "B085F1QCB9",
+    "B00N54AJZE",
+    "B00QGMOJ4Y",
+    "B01LY71217",
+    "B07BZW88NY",
+    "B078B5N4DD",
+    "B007MWNFBA",
+    "B00OPQZJA6",
+    "B0C54GXFQ8",
+    "B0F7GTX962",
+    "B00BI33NU2"
+  ],
+  "counts": {
+    "selected": 20,
+    "available": 20,
+    "partial": 0,
+    "provider_error": 0,
+    "unavailable": 0,
+    "expected_mapping_review": 3,
+    "match": 17
+  },
+  "budget": {
+    "allowed_requests": 20,
+    "requests_used": 20,
+    "retries_used": 0,
+    "credits_estimated_used": 100.0,
+    "credits_reported_used": 100,
+    "credits_actual_status": "reported_by_provider",
+    "max_credits": 100
+  },
+  "stop_reason": "completed",
+  "persistence": {
+    "results_file": "validated-result-envelopes.json",
+    "atomic_replace": true,
+    "read_back_validated": true
+  },
+  "honesty": {
+    "actual_credit_total": 100,
+    "actual_credit_note": "reported by provider"
+  }
+}

@@ -1,0 +1,345 @@
+{
+  "source": "easyparser",
+  "asin": "B08R2SRN88",
+  "provider_asin": "B08R2SRN88",
+  "request_id": null,
+  "title": "Kirkland Signature Aller-Flo Fluticasone Propionate (Glucorticoid) 5 Bottles x 120 Metered Sprays 0.54 Fl OZ per Bottle (15.8 mL x 5) 2.70 OZ Total (79 mL Total) 600 Total Sprays Total, 1-Pack",
+  "offer_count": 54,
+  "offers_returned_count": 11,
+  "buy_box_price": 15.79,
+  "buy_box_price_raw": {
+    "raw": "$15.79",
+    "symbol": "$",
+    "value": "15.79"
+  },
+  "buy_box_seller": "America Strong",
+  "buy_box_seller_id": "AFZOHYJ1O89LO",
+  "buy_box_is_fba": false,
+  "buy_box_is_fbm": true,
+  "buy_box_is_prime": false,
+  "buy_box_condition": {
+    "is_new": true,
+    "title": "New"
+  },
+  "observed_fba_offer_count": 5,
+  "observed_fbm_offer_count": 6,
+  "observed_amazon_offer_count": 0,
+  "offers": [
+    {
+      "position": 0,
+      "buybox_winner": true,
+      "price": {
+        "raw": "$15.79",
+        "symbol": "$",
+        "value": "15.79"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AFZOHYJ1O89LO",
+      "seller_name": "America Strong",
+      "seller_rating": "3.0",
+      "seller_positive_percentage": 50,
+      "seller_ratings_total": 6358,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "$9.99 delivery Thursday, August 27.",
+      "shipping_is_free": null,
+      "ships_from": "America Strong",
+      "minimum_order_quantity": null,
+      "maximum_order_quantity": null
+    },
+    {
+      "position": 1,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$25.63",
+        "symbol": "$",
+        "value": "25.63"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2F7ADFOHFHNGH",
+      "seller_name": "EAST COST TRADING NJ",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 89,
+      "seller_ratings_total": 920,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Monday, August 31.",
+      "shipping_is_free": true,
+      "ships_from": "EAST COST TRADING NJ",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 19
+    },
+    {
+      "position": 2,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$25.64",
+        "symbol": "$",
+        "value": "25.64"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "ABXRQ9QPBOCKC",
+      "seller_name": "Beyond Essentials LLC",
+      "seller_rating": "2.5",
+      "seller_positive_percentage": 40,
+      "seller_ratings_total": 613,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Friday, September 4.",
+      "shipping_is_free": true,
+      "ships_from": "Beyond Essentials LLC",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 3,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$25.93",
+        "symbol": "$",
+        "value": "25.93"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A3LZ2YK3S5QCFO",
+      "seller_name": "Best Deal Retail Corp.",
+      "seller_rating": "3.5",
+      "seller_positive_percentage": 62,
+      "seller_ratings_total": 1263,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Friday, September 4.",
+      "shipping_is_free": true,
+      "ships_from": "Best Deal Retail Corp.",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 9
+    },
+    {
+      "position": 4,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$25.93",
+        "symbol": "$",
+        "value": "25.93"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AZOYUJDIOGAQL",
+      "seller_name": "Healthy Town",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 92,
+      "seller_ratings_total": 795,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Monday, August 31.",
+      "shipping_is_free": true,
+      "ships_from": "Healthy Town",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 5,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.80",
+        "symbol": "$",
+        "value": "26.80"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2S1U80T7THEEO",
+      "seller_name": "Great Mart",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 97,
+      "seller_ratings_total": 6852,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Thursday, August 27 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 29
+    },
+    {
+      "position": 6,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.80",
+        "symbol": "$",
+        "value": "26.80"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1DMGFCDYYOO2N",
+      "seller_name": "RCB SUPPLIES",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 84,
+      "seller_ratings_total": 520,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Wednesday, August 26.",
+      "shipping_is_free": true,
+      "ships_from": "RCB SUPPLIES",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 7,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.80",
+        "symbol": "$",
+        "value": "26.80"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2KHYF5CYWLFH1",
+      "seller_name": "Speedy Ships",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 10869,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Thursday, August 27 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 8,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.80",
+        "symbol": "$",
+        "value": "26.80"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AU1Z30ZMSIKOL",
+      "seller_name": "primers",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 100,
+      "seller_ratings_total": 10744,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery    on orders over $35 shipped by Amazon.",
+      "shipping_is_free": null,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 4
+    },
+    {
+      "position": 9,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.80",
+        "symbol": "$",
+        "value": "26.80"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A3MXOWHAKH72V9",
+      "seller_name": "Nilogie Accessory",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 4018,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Thursday, August 27 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 28
+    },
+    {
+      "position": 10,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.80",
+        "symbol": "$",
+        "value": "26.80"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A293W6RCT5FH7C",
+      "seller_name": "Buy Better",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 100,
+      "seller_ratings_total": 18905,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery September 1 - 6 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 21
+    }
+  ],
+  "request_zip_code": "19805",
+  "observed_at": "2026-08-22T08:07:55.295Z",
+  "credits_used": 11,
+  "credits_remaining": 89,
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ]
+}

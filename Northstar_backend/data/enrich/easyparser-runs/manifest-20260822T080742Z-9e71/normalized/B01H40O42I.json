@@ -1,0 +1,376 @@
+{
+  "asin": "B01H40O42I",
+  "title": "Kirkland Signature Kirkland Aller-Flo Fluticasone Propionate (Glucorticoid), 0.54 Fl Oz (Pack of 5)",
+  "source": "easyparser",
+  "data_status": "partial",
+  "observed_at": "2026-08-22T08:07:47.403Z",
+  "fetched_at": "2026-08-22T08:07:46.593351+00:00",
+  "buy_box": {
+    "available": true,
+    "seller_name": "America Strong",
+    "seller_id": "AFZOHYJ1O89LO",
+    "fulfillment": "FBM",
+    "price": 15.79,
+    "shipping": null,
+    "landed_price": null,
+    "condition": {
+      "is_new": true,
+      "title": "New"
+    },
+    "prime": false,
+    "note": null
+  },
+  "offers": [
+    {
+      "position": 0,
+      "buybox_winner": true,
+      "price": {
+        "raw": "$15.79",
+        "symbol": "$",
+        "value": "15.79"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AFZOHYJ1O89LO",
+      "seller_name": "America Strong",
+      "seller_rating": "3.0",
+      "seller_positive_percentage": 50,
+      "seller_ratings_total": 6358,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "$9.99 delivery Thursday, August 27.",
+      "shipping_is_free": null,
+      "ships_from": "America Strong",
+      "minimum_order_quantity": null,
+      "maximum_order_quantity": null
+    },
+    {
+      "position": 1,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$25.77",
+        "symbol": "$",
+        "value": "25.77"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2F7ADFOHFHNGH",
+      "seller_name": "EAST COST TRADING NJ",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 89,
+      "seller_ratings_total": 920,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Monday, August 31.",
+      "shipping_is_free": true,
+      "ships_from": "EAST COST TRADING NJ",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 2,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$25.92",
+        "symbol": "$",
+        "value": "25.92"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AZOYUJDIOGAQL",
+      "seller_name": "Healthy Town",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 92,
+      "seller_ratings_total": 795,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Monday, August 31.",
+      "shipping_is_free": true,
+      "ships_from": "Healthy Town",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 3,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$25.99",
+        "symbol": "$",
+        "value": "25.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AEZHQ962GNY8P",
+      "seller_name": "Zin SN Recorded {Next Day available}",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 74,
+      "seller_ratings_total": 751,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery August 28 - September 3.",
+      "shipping_is_free": true,
+      "ships_from": "Zin SN Recorded {Next Day available}",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 6
+    },
+    {
+      "position": 4,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.00",
+        "symbol": "$",
+        "value": "26.00"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1JN163WRU1LSI",
+      "seller_name": "Dovira Care",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 100,
+      "seller_ratings_total": 703,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Friday, August 28.",
+      "shipping_is_free": true,
+      "ships_from": "Dovira Care",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 5
+    },
+    {
+      "position": 5,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.40",
+        "symbol": "$",
+        "value": "26.40"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2KHYF5CYWLFH1",
+      "seller_name": "Speedy Ships",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 10869,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery    on orders over $35 shipped by Amazon.",
+      "shipping_is_free": null,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 1
+    },
+    {
+      "position": 6,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.99",
+        "symbol": "$",
+        "value": "26.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A3A0TTNL5Z1ADY",
+      "seller_name": "Irish Fresh",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 2402,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery    on orders over $35 shipped by Amazon.",
+      "shipping_is_free": null,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 22
+    },
+    {
+      "position": 7,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.99",
+        "symbol": "$",
+        "value": "26.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A24EQKMQPTSKKH",
+      "seller_name": "Elife",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 100,
+      "seller_ratings_total": 10006,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Thursday, August 27 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 23
+    },
+    {
+      "position": 8,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.99",
+        "symbol": "$",
+        "value": "26.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1DMGFCDYYOO2N",
+      "seller_name": "RCB SUPPLIES",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 84,
+      "seller_ratings_total": 520,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Wednesday, August 26.",
+      "shipping_is_free": true,
+      "ships_from": "RCB SUPPLIES",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 9,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.99",
+        "symbol": "$",
+        "value": "26.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A293W6RCT5FH7C",
+      "seller_name": "Buy Better",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 100,
+      "seller_ratings_total": 18905,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery September 4 - 25 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 3
+    },
+    {
+      "position": 10,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$27.65",
+        "symbol": "$",
+        "value": "27.65"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1S3X3XUPLO5OG",
+      "seller_name": "BETTERCO",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 89,
+      "seller_ratings_total": 1561,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Thursday, August 27 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    }
+  ],
+  "offers_returned": 11,
+  "offers_complete": false,
+  "seller_counts": {
+    "observed_total": 11,
+    "claimed_total": 35,
+    "fba_observed": 5,
+    "fbm_observed": 6,
+    "amazon_observed": 0,
+    "counts_from_observed": true
+  },
+  "credits_used": 10,
+  "credits_remaining": 90,
+  "missing_fields": [
+    "upc",
+    "ean",
+    "gtin",
+    "item_weight_lbs",
+    "package_weight_lbs",
+    "package_dimensions_in",
+    "brand",
+    "browse_node_id",
+    "amazon_category",
+    "fba_fee",
+    "monthly_sales_estimate",
+    "sales_rank"
+  ],
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ],
+  "stages": {
+    "detail": "done",
+    "offers": "partial",
+    "sales": "not_requested"
+  },
+  "attempts": 1,
+  "last_error": null,
+  "retry_eligible": false,
+  "freshness": {
+    "offers_fresh_until": "2026-08-29T08:07:46.593401+00:00",
+    "sales_fresh_until": "2026-09-21T08:07:46.593401+00:00",
+    "identity_fresh_until": "2026-11-20T08:07:46.593401+00:00"
+  }
+}

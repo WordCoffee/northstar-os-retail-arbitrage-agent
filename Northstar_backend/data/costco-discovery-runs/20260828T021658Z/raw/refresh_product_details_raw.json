@@ -1,0 +1,13 @@
+﻿{
+  "status": "failed",
+  "item_ids_requested": 15,
+  "fetched": 0,
+  "failures": [
+    {
+      "item_id": "424976",
+      "reason": "http_403"
+    }
+  ],
+  "detail_count": 0,
+  "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\data\\costco-discovery-runs\\20260828T021658Z\\normalized\\costco-product-detail.json"
+}

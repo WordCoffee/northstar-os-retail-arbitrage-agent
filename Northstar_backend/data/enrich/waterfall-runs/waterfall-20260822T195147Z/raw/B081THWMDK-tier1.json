@@ -1,0 +1,454 @@
+{
+  "post": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0162 sec.",
+    "cost": 0.0015,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221955-2329-0192-0000-d537bc63160e",
+        "status_code": 20100,
+        "status_message": "Task Created.",
+        "time": "0.0040 sec.",
+        "cost": 0.0015,
+        "result_count": 0,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_post"
+        ],
+        "data": {
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B081THWMDK",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "se_type": "asin",
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": null
+      }
+    ]
+  },
+  "get": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0285 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08221955-2329-0192-0000-d537bc63160e",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "0.0191 sec.",
+        "cost": 0,
+        "result_count": 1,
+        "path": [
+          "v3",
+          "merchant",
+          "amazon",
+          "asin",
+          "task_get",
+          "advanced",
+          "08221955-2329-0192-0000-d537bc63160e"
+        ],
+        "data": {
+          "se_type": "asin",
+          "api": "merchant",
+          "function": "asin",
+          "se": "amazon",
+          "asin": "B081THWMDK",
+          "language_code": "en_US",
+          "location_code": 2840,
+          "device": "desktop",
+          "os": "windows"
+        },
+        "result": [
+          {
+            "asin": "B081THWMDK",
+            "type": "asin",
+            "se_domain": "amazon.com",
+            "location_code": 2840,
+            "language_code": "en_US",
+            "check_url": "https://www.amazon.com/dp/B081THWMDK?language=en_US",
+            "datetime": "2026-08-22 19:56:12 +00:00",
+            "item_types": [
+              "amazon_product_info"
+            ],
+            "items_count": 1,
+            "items": [
+              {
+                "type": "amazon_product_info",
+                "rank_group": 1,
+                "rank_absolute": 1,
+                "position": "right",
+                "xpath": "/html[1]/body[1]/div[1]",
+                "title": "Kirkland Signature Stretch Tite Plastic Food Wrap 11 7/8 Inch X 750 SQ. FT. Pack 2",
+                "details": "Product information\nItem details\nBrand Name\tKIRKLAND\nRecommended Uses For Product\tFood Preservation, Food Storage\nUnit Count\t2 Square Feet\nManufacturer\tKirkland Signature\nNumber of Packs\t2\nUPC\t748427902490 748427902483 352609523009\nNumber of Items\t2\nIncluded Components\tPlease see the Packaging\nItem Weight\t2.3 pounds\nItem Type Name\tPlastic wrap\nModel Number\t748427902483\nManufacturer Part Number\t748427902483\nBest Sellers Rank\t#16,560 in Health & Household ( See Top 100 in Health & Household )\n#10 in Household Plastic Wrap\nASIN\tB081THWMDK\nCustomer Reviews\t4.7 out of 5 stars\nWarranty & Support\nFeedback\nMaterials & Care\nMaterial Type\tPlastic\nMeasurements\nSize\t2 pack\nItem Dimensions L x W\t11.87\"L x 11\"W\nPackage Size Name\t2 pack",
+                "image_url": "https://m.media-amazon.com/images/I/810wtsSnezL._AC_SX300_SY300_QL70_FMwebp_.jpg",
+                "author": "Brand: KIRKLAND",
+                "data_asin": "B081THWMDK",
+                "parent_asin": null,
+                "product_asins": null,
+                "price_from": 26.9,
+                "price_to": null,
+                "percentage_discount": null,
+                "currency": "USD",
+                "is_amazon_choice": false,
+                "rating": {
+                  "type": "rating_element",
+                  "position": "left",
+                  "rating_type": "Max5",
+                  "value": 4.7,
+                  "votes_count": 968,
+                  "rating_max": 5
+                },
+                "is_newer_model_available": false,
+                "is_prime_video": false,
+                "applicable_vouchers": [
+                  {
+                    "type": "amazon_applicable_vouchers_item",
+                    "text": "Save 5%",
+                    "fixed_discount": null,
+                    "fixed_discount_currency": null,
+                    "percentage_discount": 5,
+                    "important_details": null
+                  }
+                ],
+                "newer_model": null,
+                "categories": [
+                  {
+                    "category": "Health & Household",
+                    "url": "https://amazon.com/health-personal-care-nutrition-fitness/b/ref=dp_bc_1?ie=UTF8&node=3760901"
+                  },
+                  {
+                    "category": "Household Supplies",
+                    "url": "https://amazon.com/Household-Supplies-Products/b/ref=dp_bc_2?ie=UTF8&node=15342811"
+                  },
+                  {
+                    "category": "Paper & Plastic",
+                    "url": "https://amazon.com/Paper-Plastic-Household-Supplies/b/ref=dp_bc_3?ie=UTF8&node=15342841"
+                  },
+                  {
+                    "category": "Disposable Food Storage",
+                    "url": "https://amazon.com/Disposable-Food-Storage-Products/b/ref=dp_bc_4?ie=UTF8&node=15377691"
+                  },
+                  {
+                    "category": "Plastic Wrap",
+                    "url": "https://amazon.com/b/ref=dp_bc_5?ie=UTF8&node=16284873011"
+                  }
+                ],
+                "product_information": [
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Item details",
+                    "body": {
+                      "Brand Name": "KIRKLAND",
+                      "Recommended Uses For Product": "Food Preservation, Food Storage",
+                      "Unit Count": "2 Square Feet",
+                      "Manufacturer": "Kirkland Signature",
+                      "Number of Packs": "2",
+                      "UPC": "748427902490 748427902483 352609523009",
+                      "Number of Items": "2",
+                      "Included Components": "Please see the Packaging",
+                      "Item Weight": "2.3 pounds",
+                      "Item Type Name": "Plastic wrap",
+                      "Model Number": "748427902483",
+                      "Manufacturer Part Number": "748427902483",
+                      "Best Sellers Rank": "#16,560 in Health & Household ( See Top 100 in Health & Household )\n #10 in Household Plastic Wrap",
+                      "ASIN": "B081THWMDK",
+                      "Customer Reviews": "4.7 out of 5 stars"
+                    }
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Materials & Care",
+                    "body": {
+                      "Material Type": "Plastic"
+                    }
+                  },
+                  {
+                    "type": "product_information_details_item",
+                    "section_name": "Measurements",
+                    "body": {
+                      "Size": "2 pack",
+                      "Item Dimensions L x W": "11.87\"L x 11\"W",
+                      "Package Size Name": "2 pack"
+                    }
+                  },
+                  {
+                    "type": "product_information_extended_item",
+                    "section_name": "Product Description",
+                    "contents": [
+                      {
+                        "type": "product_information_rows",
+                        "title": null,
+                        "rows": [
+                          {
+                            "type": "product_information_text_row",
+                            "text": "Kirkland Signature Stretch Tite Plastic Food Wrap 11 7/8 Inch X 750 SQ. FT. Pack 2"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "product_images_list": [
+                  "https://m.media-amazon.com/images/I/810wtsSnezL._AC_SL1500_.jpg"
+                ],
+                "product_videos_list": null,
+                "description": "About this item  Super-Strong, unsurpassed cling properties ensure a tight, secure wrap to seal in freshness\nProtects the freshness and taste of your food longer\nA better performing wrap in a sturdy, easy-to-use, reliable package that will stand up through the entire use of the product\nReliable - clings to metal, glass, trays and itself\nOptional slide cover included, Inside roll core\n  See more product details",
+                "is_available": true,
+                "top_local_reviews": [
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[1]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on February 5, 2024",
+                    "helpful_votes": 11,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Just Jill",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AFFRPY2FBQVM6SQ64YBX3NEFDZ3A?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "SAVES MONEY: 1 Roll last nearly a YEAR",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/RCLVRYSDVMXZR/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "(Scroll all the way day for an easy way to reheat rice back to the fresh made state.) You WILL save money and frustration using better wrap. My sister once told me that this is “so expense” and that she buys hers from the dollar store. I laughed, because she’s forever complaining about the wrap she uses, and she’s definitely not paying less in the long run. I’ll address some of her many complains on her brand below. But here’s what I love about this wrap. The box: The lid makes this easy to pull out. I never have to find a torn end that’s disappeared into the roll. But also, there is a child safe blade on these. When you open the box, you pull the plastic box strip from the center and slide it onto the box. The blade is attached on that strip and just slides back and forth for ease of use. Also, the box is not much bigger than your average dollar store box so this fits nicely under my counter. Because the box weights more, and is better made, it never tears and I can wrap things without ever having to pick up the box. Just pull the wrap right over the dish, slide the blade, and go. One 750 ft roll of Kirkland lasts me nearly a year; I ordered my last 2-pack in March 2022 and ran out in early January of 2024. Here are some issues she has with dollar tree wrap: *The role is WAY smaller, so she buys it way more often. *She has scratched herself on the lame blade that’s attached to the box. *Not only a small roll, but she has to use a LOT MORE product. *She is always complaining about how frustrating it is to use her wrap, it will tear or get tangled, then she has to find the beginning and wastes product every time this happens, *She often has to use a second layer due to holes, or to make it more sturdy for travel or for meat and often goes all the way around the dish because she can’t get a seal. *It doesn’t work well in the micro, melts easily. *Can be tricky to get the right suction on the thing you’re covering. *It’s easy to accidentally poke holes into it while trying to wrap stuff. *The last bit of ANY wrap left on the role of any brand is always a little wonky, so the more often you’re replacing the roll, the more often you’re wasting that last bit of product from the end of the roll. There is a saying, “Penny wise, pound foolish.” It means you are paying less for something in the moment but spending WAY more for the item then you needed to if you’d spent a little more for a better version. TIP TO REHEAT RICE This wrap is perfect for reheating rice from the refrigerator but I also FREEZE leftover rice, then just thaw it and use this method. Easy…once you use this a couple times, you never need directions again. 1. Put rice in a GLASS bowl. 2. Add just a teaspoon of water. 3. Cover so edges of bowl are sealed. 4. Microwave until the wrap forms that stretchy bubble top from the steam and the bottom of the bowl is hot. For me that’s 1 1/2 to 2 minutes. 5. Let set for 5 minutes or so, don’t touch the cover. It set for 10-15 minutes. 6. Carefully remove the wrap. Your rice will look terrible, all smashed down. 7. JUST STIR IT, preferably with a fork, and it’s as good as fresh made. The water and steam reconstitute that little bit of dryness that happens.",
+                    "publication_date": "2024-02-05 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[2]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on June 5, 2026",
+                    "helpful_votes": 1,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Kate S",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/67d52497-e52a-44aa-ba6a-82e294a5436f._CR0%2C0%2C499%2C499_SX460_SX48_.jpg",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGGZFS274MXCNR3KN4XACMJPUMGA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "If you like Saran Wrap, you'll love this.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3QUZYP1JQ7F6J/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "This was my first purchase of this product. I chose it for two reasons. It is a much better value than the Saran Wrap, that I have been faithful to for several decades, and the customer reviews. I was not disappointed. But I was surprised! Curiosity got the best of me so I decided to go ahead and open a box. I read the destructions on how to set it up and then saw a little note on the box \"Slider cutter inside roll\". Ohhhh, I've always wondered if those were as cool as they looked. After a little wrastlin', akin to putting a cat in a wash tub, I got it mounted on the box and gave it a whirl. It cut like a dream. Steaks were on sale today so I ran to town and picked up about 16 lbs of ribeye. I always wrap my steaks individually in cling wrap before putting them in a Ziploc and then into the freezer. The way the wrap just pulled out, layed flat and cut so easily, made for much faster work than fighting that box of Saran Wrap. And no tangled plastic either. I wrapped 24 steaks pretty quickly, nice and air tight. It sealed exceptionally well to itself and was easy to handle. I'll definitely be buying more when I use up these two rolls. I'd call the material a medium weight wrap, very similar to Saran Wrap, only without the attitude. Maybe just a tad thicker. Sorry, no photo. It's already put up in the top of the cupboard and I'm not going to climb up there and drag it down for a photo opportunity..",
+                    "publication_date": "2026-06-05 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[3]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 1, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Connor Brown",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AFPC2WAQGUNPGZZUVC57UP57PFOQ?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "The razor cutter was very nice.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R3SEO7C6T32AQF/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "These last forever, stick well, and the razor cutter is a lot nicer than I was expecting.",
+                    "publication_date": "2026-08-01 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[4]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 10, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Annie",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AEXKNED7ZC75PHO52FFY4KJ2XS6A?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Easy to tear and clings to bowls, dish’s , food etc.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/RXNBSH41H4WW0/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Love this wrap, really clings and lasts forever. Not flimsy and keeps food fresh.",
+                    "publication_date": "2026-08-10 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[5]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on August 16, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "patsy",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AEE4DIZP47XMEL5Q7WSYHXTXTXKA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "This product supports kitchen efficiency",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1SYR3TKKIZLK0/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "I love this product! I never have to worry about it tearing crooked or me cutting my fingers. It is quick and efficient and, in a kitchen where I'm constantly moving, it is a Time Saver as well as a money saver!",
+                    "publication_date": "2026-08-16 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[6]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on April 29, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Kambiz SOLOUKI",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AGQMPRYVN4DBKH3KRYWABI6PKLJA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Good",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R1HVEW4XRSSMYT/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "Good",
+                    "publication_date": "2026-04-29 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 4,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[7]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on July 14, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "Nathan Rider",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SX48_.png",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AHZ5KBZQEXGWDDH7G6VGZLLCFO2A?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Great purchase, just reinforce",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R2YO2CYYOL7TPC/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "We love this product, and when we quit our Costco membership were sad to not have this product.  We were very pleased to see it Amazon.  Protip: you should wrap duct tape around the box after assembling, to reinforce the sides, it will need it.  I use blue non glossy tape and completely cover ever exposed part of the box, and then decorate it.  That serves two purposes: reinforcement and aesthetics, since this will be sitting out on the counter for a year.",
+                    "publication_date": "2026-07-14 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  },
+                  {
+                    "type": "amazon_review_item",
+                    "rank_group": 0,
+                    "rank_absolute": 0,
+                    "position": "left",
+                    "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[36]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[4]/div[2]/div[1]/ul[1]/li[8]/span[1]/div[1]/div[1]",
+                    "verified": true,
+                    "subtitle": "Reviewed in the United States on May 20, 2026",
+                    "helpful_votes": null,
+                    "images": null,
+                    "videos": null,
+                    "user_profile": {
+                      "name": "WendyF",
+                      "avatar": "https://m.media-amazon.com/images/S/amazon-avatars-global/549f6949-8dc7-4509-ac97-33a2cf232b54._CR3%2C0%2C200%2C200_UX460_SX48_.jpg",
+                      "url": "https://amazon.com/gp/profile/amzn1.account.AH3QTLVNUDWHQZOJ453ESG7VW5UA?ref=cm_cr_dp_d_bdcrb_top",
+                      "reviews_count": null,
+                      "locations": "US"
+                    },
+                    "title": "Plastic wrap that I love… Seriously? Yep.",
+                    "url": "https://amazon.com/portal/customer-reviews/srp/-/R5BHB54HA72DB/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8",
+                    "review_text": "My friend bought me this a few years ago from Costco. I have ordered from Amazon over and over ever since. I love this plastic wrap. I know that sounds crazy… it’s stupid plastic wrap.:) The key, to me, is the zipper that allows it to cut off easily. No more annoying ripping it off, no more getting it all messed up, now you just pull it out run the zipper thing across the front, and it falls right off. So worth the price and it lasts forever.",
+                    "publication_date": "2026-05-20 00:00:00 +00:00",
+                    "rating": {
+                      "rating_type": "Max5",
+                      "value": 5,
+                      "votes_count": null,
+                      "rating_max": 5
+                    }
+                  }
+                ],
+                "top_global_reviews": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

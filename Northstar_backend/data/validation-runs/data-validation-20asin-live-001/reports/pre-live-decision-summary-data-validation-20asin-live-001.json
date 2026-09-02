@@ -1,0 +1,89 @@
+{
+  "audit": {
+    "run_id": "data-validation-20asin-live-001",
+    "audit_date": "2026-08-20",
+    "audit_type": "offline",
+    "provider_calls_made": 0,
+    "live_tasks_submitted": 0,
+    "live_tasks_retrieved": 0,
+    "live_tasks_retried": 0
+  },
+  "key_finding": {
+    "summary": "All 10 DataForSEO task_post submissions were rejected at the task level (HTTP 200 envelope, status_code=40402, 'Invalid Path.', cost=0, result=null, tasks_error=1). Recorded remote_task_ids reference rejected responses, not created tasks; the retrieval HTTP 404 is fully explained. Provider spend for this run: 0 cents.",
+    "provider_confirmed_cost_cents": 0,
+    "ledger_recorded_cost_cents": 50,
+    "ledger_cost_basis": "local estimate only (reserved 5 + actual 5 per submitted row); not confirmed provider spend",
+    "retrieval_attempt_count_ledger": 0,
+    "retrieval_failure_bookkeeping": "pre-fix uncaught GuardError aborted the loop before ledger updates; DataForSeoGuardError fix now catches per-row"
+  },
+  "evidence_summary": {
+    "asins_total": 20,
+    "asins_submitted": 10,
+    "asins_manual_review": 3,
+    "asins_budget_rejected": 7,
+    "benchmark_present": 20,
+    "benchmark_price_conflicts_vs_cache": 10,
+    "benchmark_title_conflicts": 3,
+    "scanner_cache_present": 16,
+    "scanner_cache_miss": 4,
+    "normalized_records": 0,
+    "comparison_records": 0,
+    "cost_basis_available": 0,
+    "upc_available": 0,
+    "bsr_available": 0,
+    "fba_fee_available": 0,
+    "seller_offer_data_available": 0
+  },
+  "decisions": [
+    {
+      "id": "D1",
+      "name": "resubmit_dataforseo_batch",
+      "verdict": "NO-GO (blocked)",
+      "rationale": "task_post endpoint path rejected by provider at task level (40402 Invalid Path.) for all 10 submissions; no provider tasks exist; recorded remote_task_ids are from rejected responses.",
+      "conditions_to_lift": [
+        "correct task_post path confirmed with provider",
+        "single-ASIN preflight task_post returns status_code 20000 with cost > 0",
+        "fresh explicit approval token issued for the corrected path"
+      ]
+    },
+    {
+      "id": "D2",
+      "name": "retrieve_existing_tasks",
+      "verdict": "NO-GO",
+      "rationale": "Nothing exists provider-side to retrieve; task_get on the recorded (rejected) task IDs returns HTTP 404. Do not spend retrieval attempts on invalid IDs.",
+      "conditions_to_lift": [
+        "D1 succeeds first",
+        "retrieval-only gate (per-ID task_get allowlist) remains the only permitted live operation"
+      ]
+    },
+    {
+      "id": "D3",
+      "name": "bright_data_live_scan",
+      "verdict": "NO-GO (deferred)",
+      "rationale": "Fail-closed containment verified (zero-call-by-default, strict flags, cache-only scans), but the live path has no monetary/credit cap, no approval token, and no run manifest.",
+      "conditions_to_lift": [
+        "explicit credit/cost ceiling env added",
+        "approval token added",
+        "run manifest added",
+        "re-audit before any live scan"
+      ]
+    },
+    {
+      "id": "D4",
+      "name": "offline_reconciliation",
+      "verdict": "GO (conditional)",
+      "rationale": "Zero provider calls; benchmark + scanner cache support price/title/reviews/prime evidence for all 20 ASINs. Blocked only on cost basis: all Costco data files are absent locally.",
+      "conditions_to_lift": [
+        "import Costco invoice-confirmed rows or supply costco-items.csv first",
+        "hold the 10 price conflicts and 3 benchmark title conflicts for review",
+        "reconcile per the Pack/Variant gate before any purchase decision"
+      ]
+    }
+  ],
+  "artifact_paths": [
+    "data/validation-runs/data-validation-20asin-live-001/reports/pre-live-evidence-audit-data-validation-20asin-live-001.md",
+    "data/validation-runs/data-validation-20asin-live-001/reports/pre-live-data-gap-register-data-validation-20asin-live-001.csv",
+    "data/validation-runs/data-validation-20asin-live-001/reports/pre-live-decision-summary-data-validation-20asin-live-001.json"
+  ],
+  "terminal_status_line": "OFFLINE PRE-LIVE AUDIT COMPLETE — NO PROVIDER CALLS MADE — NO LIVE TASKS SUBMITTED, RETRIEVED, OR RETRIED."
+}
