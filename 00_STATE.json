@@ -325,9 +325,37 @@
           "test_counts": "1272 ran / 1f / 67e / 3s (+17 from 1255)"
         }
       }
+    },
+    {
+      "id": "07_docs_and_runbook.md",
+      "completed_at": "2026-09-02T08:30:00Z",
+      "scope_note": "Documentation & operator runbook. Created Northstar_backend/OPERATIONS_RUNBOOK.md (operator-facing: run locally, test suite, live gates by env var NAME, Authorization Gate states, BSR/comparison model, universal live-run procedure, Provider Readiness Matrix, Never-do-this list). Cleanup pass confirmed: dead dev files (debug2/3.py, debug_budget.py, etc.) already absent; bright_data_client.py vs brightdata_client.py consolidation already done (only bright_data_client.py exists).",
+      "test_counts": "python 1272 ran / 1f / 67e / 3s (unchanged, pre-existing dataforseo only). node test_ui_display.cjs: 986 assertions, 0 failures (ALL PASS).",
+      "steps": {
+        "step1_operations_runbook": {
+          "result": "CREATED Northstar_backend/OPERATIONS_RUNBOOK.md with 9 sections: (1) run locally, (2) full offline test suite, (3) live gates env var NAMES, (4) Authorization Gate states table, (5) BSR/comparison evidence model, (6) universal 6-step live-run procedure (preflight→freeze→authorize→execute→retrieve→report), (7) Provider Readiness Matrix (8 providers), (8) Never-do-this list (8 prohibitions), (9) reading list. References AGENTS.md and shared/master-brain/constitution.json instead of duplicating.",
+          "evidence": "OPERATIONS_RUNBOOK.md (9 sections, ~350 lines)"
+        },
+        "step2_provider_readiness_matrix": {
+          "result": "PROVIDER MATRIX in OPERATIONS_RUNBOOK.md §7: Costco/Unwrangle, Costco/OpenWebNinja, Costco/Local CSV, Easyparser, DataForSEO, Bright Data, Chocodata, Scavio, Canopy. Columns: env var NAMES, live gate flag, known failure modes, test coverage (Y/N). DataForSEO marked N (15 missing symbols, 67 errors documented in known_issues).",
+          "evidence": "OPERATIONS_RUNBOOK.md §7 table"
+        },
+        "step3_cleanup_pass": {
+          "result": "CONFIRMED already done. Dead dev files (debug2.py, debug3.py, debug_budget.py, debug_compare.py, fix2.py, fix_budget.py, outfile.txt, output.txt, test_out.txt, server.log, server2.log) all absent from Northstar_backend/. bright_data_client.py vs brightdata_client.py: only bright_data_client.py exists (consolidation already done in prior session).",
+          "evidence": "Get-ChildItem of deleted files returns empty; brightdata_client.py absent"
+        },
+        "step4_full_suite_rerun": {
+          "result": "python -m unittest discover: 1272 ran / 1f / 67e / 3s (unchanged, pre-existing dataforseo only). node test_ui_display.cjs: 986 assertions, 0 failures (ALL PASS). Cleanup pass introduced zero regressions.",
+          "test_counts": "Python: 1272/1f/67e/3s. UI: 986/0f"
+        },
+        "step5_final_consolidated_report": {
+          "result": "CONSOLIDATED REPORT: Original baseline (Batches 01-02 before Batches 03-07): 1187 tests / 10f / 90e / 3s. Final after Batch 07: 1272 tests / 1f / 67e / 3s. Delta: +85 tests, -9 failures, -23 errors. UI: 5 failures (column contract) → 0 failures. Files changed across batches 03-07: 00_STATE.json (all 5 batches), test_intel_schema.py (Batch 04), test_normalized_snapshot.py (Batch 04), test_master_brain_gateway.py (Batch 06), master_brain_gateway.py (Batch 06), normalized_snapshot.py (Batch 04 - 1-line bug fix), test_ui_display.cjs (Batch 05 - column contract fix), test_validation_run.py (Batch 03 - URL fix), test_dataforseo_adapter.py (Batch 03 - 3 contract fixtures), test_enrich_cached_asins.py + test_enrich_manifest_runner.py (Batch 03 - easyparser fixture migration), enrich_manifest_run.py (Batch 03 - --provider arg), OPERATIONS_RUNBOOK.md (Batch 07), shared/master-brain/constitution.json + 5 packs (Batch 06). NO protected file modified anywhere in arc except fixtures/protected_hashes.json (Batch 03 - 1 benchmark hash drift, recorded in history as 'legitimate data drift, not unauthorized modification').",
+          "test_counts": "Pre-arc: 1187/10f/90e/3s → Post-arc: 1272/1f/67e/3s. Delta: +85/-9/-23."
+        }
+      }
     }
   ],
-  "next_batch": "07_docs_and_runbook.md",
+  "next_batch": "08_costco_client_honesty_audit.md",
   "git_baseline": {
     "commit_hash": "8a1c6dd",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -335,8 +363,13 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-02T07:00:00Z",
+  "last_updated": "2026-09-02T08:30:00Z",
   "history": [
+    {
+      "ts": "2026-09-02T08:30:00Z",
+      "batch": "07_docs_and_runbook.md",
+      "summary": "Batch 07 complete. Documentation & operator runbook. CREATED Northstar_backend/OPERATIONS_RUNBOOK.md (9 sections: run locally, test suite, live gates env var NAMES, Authorization Gate states table, BSR/comparison model, universal 6-step live-run procedure, Provider Readiness Matrix for 8 providers, Never-do-this list of 8 prohibitions, reading list). Cleanup pass: dead dev files (debug2/3.py, fix2.py, outfile.txt, etc.) already absent; bright_data_client.py consolidation already done. Final consolidated report: pre-arc 1187/10f/90e/3s → post-arc 1272/1f/67e/3s. Delta: +85 tests, -9 failures, -23 errors. UI: 5 failures → 0. No protected file modified except fixtures/protected_hashes.json (Batch 03 - legitimate benchmark hash drift). Repository hardening arc complete. Ready for Costco live-readiness batches (08-11) pending operator approval. Committed as c85a327. Next: 08_costco_client_honesty_audit.md"
+    },
     {
       "ts": "2026-09-02T07:00:00Z",
       "batch": "06_master_brain_gateway_groundwork.md",
