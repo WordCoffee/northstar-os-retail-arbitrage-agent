@@ -178,8 +178,8 @@ def _provider_rejected(raw: Any, provider: str) -> Optional[str]:
 
 
 def _pack_match(bench_title: Any, live_title: Any) -> str:
-    bt = asin_benchmark_store.pack_tokens(bench_title)
-    lt = asin_benchmark_store.pack_tokens(live_title)
+    bt = set(asin_benchmark_store.pack_tokens(bench_title))
+    lt = set(asin_benchmark_store.pack_tokens(live_title))
     if not bt and not lt:
         return "unavailable"
     if bt == lt and bt:
