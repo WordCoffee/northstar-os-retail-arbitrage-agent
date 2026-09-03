@@ -1,6 +1,14 @@
 {
   "known_issues": [
     {
+      "id": "unwrangle_costco_platform_string_bug",
+      "discovered_in": "Batch 10 gating review (root-cause diagnosis of item 424976 HTTP 403?prepared), confirmed code-read-only in 2026-09-03 session",
+      "discovered_at": "2026-09-03T00:00:00Z",
+      "description": "costco_api_client.py sent invalid Unwrangle platform strings to data.unwrangle.com/api/getter/. UNWRANGLE_DETAIL_PLATFORM was 'costco_business_detail' (Unwrangle documents 'costco_detail' for product/listing detail) and UNWRANGLE_PLATFORM was 'costco_business_search' (Unwrangle documents 'costco_search' for search). The detail value is the root-cause candidate for the item 424976 HTTP 403: Unwrangle rejects unknown platform values with an authentication/authorization error. Verified by code-read-only search: 'costco_business_detail'/'costco_business_search' appear nowhere in Unwrangle's documented Costco endpoints (costco_search, costco_category, costco_reviews, costco_detail); they existed only in this repo's code/docs.",
+      "resolution": "Changed UNWRANGLE_DETAIL_PLATFORM 'costco_business_detail' -> 'costco_detail' and UNWRANGLE_PLATFORM 'costco_business_search' -> 'costco_search' in Northstar_backend/costco_api_client.py (lines 82-83). Updated the 4 deliberate test assertions that hardcoded the old values in test_costco_api_client.py (make_page, normalized_page, search platform assert, refresh_product_details platform assert) and the README.md layer-2 doc reference. Added an explicit COSTCO_CATALOG_DETAIL_ENABLED='0' default to ProductDetailLayerTests._env() so the disabled-path test is deterministic when the flag is loaded from .env. Full suite unchanged from documented baseline: 1300 ran / 1f / 67e / 3s (all failures/errors pre-existing in test_dataforseo_adapter.py only). This is a CODE fix only; NO live call made. Batch 10 remains UNAUTHORIZED; the corrected platform string is ready to be exercised only after fresh operator approval that names it.",
+      "status": "resolved"
+    },
+    {
       "id": "orphaned_brain_orchestrator_missing_policy_config",
       "discovered_in": "Batch 06 reconciliation (operator review of Batch 06 spec divergence)",
       "discovered_at": "2026-09-02T08:45:00Z",
@@ -432,8 +440,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-02T10:00:00Z",
+  "last_updated": "2026-09-03T00:00:00Z",
   "history": [
+    {
+      "ts": "2026-09-03T00:00:00Z",
+      "activity": "root_cause_code_fix_autonomous",
+      "batch": "none (Batch 10 still UNAUTHORIZED)",
+      "summary": "Platform-string root-cause fix applied autonomously (Autonomous Zone: scoped code/tests/docs, no credentials, no live calls, no money). RESOLVED known_issue unwrangle_costco_platform_string_bug: corrected UNWRANGLE_PLATFORM 'costco_business_search' -> 'costco_search' and UNWRANGLE_DETAIL_PLATFORM 'costco_business_detail' -> 'costco_detail' in Northstar_backend/costco_api_client.py. Updated 4 deliberate test assertions in test_costco_api_client.py and the README.md layer-2 doc. Added test-isolation fix to ProductDetailLayerTests._env() (default COSTCO_CATALOG_DETAIL_ENABLED='0'). Costco-focused suite: 162 tests OK (was 161 OK + 1 pre-existing env leak before isolation fix). Full suite: 1300 ran / 1f / 67e / 3s - all failures/errors pre-existing and confined to test_dataforseo_adapter.py (missing _transport_enabled/_credentials symbols), identical to the documented Batch 08 baseline. NO live Unwrangle call made. Batch 10 (single-item 424976 live call) remains NOT authorized; next_batch unchanged: 10_costco_single_item_retry_LIVE.md (pointer only). Operator must send fresh, explicit approval naming Batch 10 before any live call."
+    },
     {
       "ts": "2026-09-02T10:00:00Z",
       "batch": "09_costco_credential_diagnostic.md",

@@ -36,7 +36,7 @@ def make_result(item_id="10189101", name="Kirkland Signature Organic K-Cups Vari
 def make_page(results, success=True, no_of_pages=1, total_results=None):
     return {
         "success": success,
-        "platform": "costco_business_search",
+        "platform": "costco_search",
         "search": "kirkland",
         "page": 1,
         "total_results": total_results or len(results),
@@ -70,7 +70,7 @@ def normalized_page(items, no_of_pages=1):
     return {
         "success": True,
         "source": "unwrangle",
-        "platform": "costco_business_search",
+        "platform": "costco_search",
         "search": "kirkland",
         "page": 1,
         "no_of_pages": no_of_pages,
@@ -112,7 +112,7 @@ class SearchPageTests(unittest.TestCase):
         p = calls[0]["params"]
         self.assertEqual(calls[0]["url"], "https://data.unwrangle.com/api/getter/")
         self.assertEqual(calls[0]["timeout"], 60)
-        self.assertEqual(p["platform"], "costco_business_search")
+        self.assertEqual(p["platform"], "costco_search")
         self.assertEqual(p["search"], "kirkland")
         self.assertEqual(p["page"], "1")
         self.assertTrue(p["api_key"])
@@ -1240,6 +1240,12 @@ class ProductDetailLayerTests(unittest.TestCase):
             "COSTCO_CATALOG_SOURCE": "UNWRANGLE",
             "UNWRANGLE_API_KEY": "key-123",
             "COSTCO_CATALOG_REQUEST_DELAY_SECONDS": "0",
+            # Explicitly default the detail flag to OFF so tests that expect
+            # "disabled" are deterministic even when COSTCO_CATALOG_DETAIL_ENABLED=1
+            # is present in the launching process env (e.g. loaded from .env).
+            # Tests that need it enabled pass COSTCO_CATALOG_DETAIL_ENABLED="1"
+            # via the **overrides param (see the *_fetches_and_writes/*_stops tests).
+            "COSTCO_CATALOG_DETAIL_ENABLED": "0",
         }
         env.update(overrides)
         return env
@@ -1315,7 +1321,7 @@ class ProductDetailLayerTests(unittest.TestCase):
         self.assertEqual(report["status"], "ok")
         self.assertEqual(report["fetched"], 1)
         self.assertEqual(len(calls), 1)
-        self.assertEqual(calls[0]["platform"], "costco_business_detail")
+        self.assertEqual(calls[0]["platform"], "costco_detail")
         self.assertEqual(calls[0]["item"], "5")
         with open(self.detail_path, "r", encoding="utf-8") as f:
             records = json.load(f)

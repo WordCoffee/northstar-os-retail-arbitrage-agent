@@ -79,8 +79,8 @@ import costco_client
 _ASIN_RE = re.compile(r"^[A-Za-z0-9]{10}$")
 
 UNWRANGLE_URL = "https://data.unwrangle.com/api/getter/"
-UNWRANGLE_PLATFORM = "costco_business_search"
-UNWRANGLE_DETAIL_PLATFORM = "costco_business_detail"
+UNWRANGLE_PLATFORM = "costco_search"
+UNWRANGLE_DETAIL_PLATFORM = "costco_detail"
 OPENWEBNINJA_URL = "https://api.openwebninja.com/realtime-costco-data/search"
 CREDITS_PER_PAGE = 10
 REQUEST_TIMEOUT_SECONDS = 60
