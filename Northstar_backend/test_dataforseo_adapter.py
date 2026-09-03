@@ -633,6 +633,17 @@ class DataForSEORouteTests(unittest.TestCase):
         os.environ.pop("DATAFORSEO_ENABLED", None)
         import main
         self.main = main
+        # ``import main`` transitively imports modules (amazon_search,
+        # bright_data_client, ...) that each call ``load_dotenv()`` at import
+        # time, which re-populates DataForSEO env vars from the repo .env and
+        # would leak into this isolated route context. Re-isolate by popping
+        # them AFTER the import so the tests see a clean, disabled default
+        # (assertions below are unchanged and still enforced).
+        _df_env_keys = ("DATAFORSEO_ENABLED", "DATAFORSEO_TRANSPORT_ENABLED",
+                        "DATAFORSEO_LOGIN", "DATAFORSEO_PASSWORD",
+                        "DATAFORSEO_LABS_AUTO_SUBMIT")
+        for _k in _df_env_keys:
+            os.environ.pop(_k, None)
 
     def _post_request(self, **body):
         from pydantic import BaseModel

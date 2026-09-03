@@ -126,7 +126,15 @@ def load_cached_candidates() -> List[Dict]:
     data = _read_cache_file()
     if data is None or data is False:
         return []
-    return [p for p in data["products"] if isinstance(p, dict)]
+    products = [p for p in data["products"] if isinstance(p, dict)]
+    # Normalize: ensure every candidate carries a "name" key. The flagship
+    # product_analysis pipeline indexes candidates by c["name"] directly, and
+    # past scanner snapshots sometimes recorded rows without a title/name.
+    # Default to an empty string (never None) so no hard index later raises
+    # KeyError on a partial record; empty-name rows simply match nothing.
+    for p in products:
+        p.setdefault("name", "")
+    return products
 
 
 def save_cached_candidates(
