@@ -312,7 +312,7 @@ The Costco side of the equation is a three-layer catalog
 2. **Layer 2 — `costco_product_detail`** (`data/costco-product-detail.json`):
    per-item detail records fetched only for Costco item IDs that are
    potential Amazon matches (`details refresh --item-ids I,J`, UNWRANGLE
-   `costco_business_detail`, gated by `COSTCO_CATALOG_DETAIL_ENABLED=1`;
+   `costco_detail`, gated by `COSTCO_CATALOG_DETAIL_ENABLED=1`;
    OPENWEBNINJA is a documented data gap) or imported offline (`details
    import --path X`). Research only — `cost_status = "detail_only"`: an
    exact fingerprint here enables net/ROI but never authorizes a buy.
