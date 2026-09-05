@@ -4293,6 +4293,28 @@
         .sc-radar-svg .radar-unknown-label { font-size: 8px; fill: var(--text-faint); }
         .sc-radar-note { font-size: 10.5px; color: var(--text-faint); line-height: 1.5; margin: 8px 0 0; text-align: center; }
 
+        /* ---------------- Orbital Market Mapping ---------------- */
+        .sc-orbital { padding: 14px 16px; }
+        .sc-orbital svg { display: block; width: 100%; max-width: 360px; height: auto; margin: 0 auto; }
+        .sc-orbital .orbit-ring { fill: none; stroke: var(--border-strong); stroke-width: 1; stroke-dasharray: 3 4; }
+        .sc-orbital .orbit-sun { stroke: var(--accent); stroke-width: 1.5; filter: drop-shadow(0 0 10px rgba(139, 123, 255, 0.35)); }
+        .sc-orbital .orbit-sun-mono { fill: #ffffff; font-size: 13px; font-weight: 800; letter-spacing: 0.06em; }
+        .sc-orbital .orbit-sun-price { fill: var(--text-muted); font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
+        .sc-orbital .orbit-node { stroke: transparent; stroke-width: 1.5; transition: stroke 0.15s ease, opacity 0.15s ease; cursor: default; }
+        .sc-orbital .orbit-node.hot { fill: #f97316; }
+        .sc-orbital .orbit-node.mid { fill: #e3b341; }
+        .sc-orbital .orbit-node.cool { fill: #8b7bff; }
+        .sc-orbital .orbit-node.bb { stroke: #3ddc97; stroke-width: 2.2; }
+        .sc-orbital .orbit-node:hover { stroke: #ffffff; opacity: 0.92; }
+        .sc-orbital .orbit-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; margin-top: 10px; font-size: 10px; color: var(--text-faint); }
+        .sc-orbital .ol-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+        .sc-orbital .ol-dot.hot { background: #f97316; opacity: 0.9; }
+        .sc-orbital .ol-dot.size { background: linear-gradient(90deg, #8b7bff, #e3b341); }
+        .sc-orbital .ol-dot.bb { background: transparent; box-shadow: inset 0 0 0 2px #3ddc97; }
+        .sc-orbital .orbit-note { font-size: 11px; color: var(--text-faint); line-height: 1.55; background: rgba(124, 58, 237, 0.06); border: 1px dashed var(--border-strong); border-radius: 8px; padding: 10px 12px; margin-top: 8px; }
+        .sc-orbital .orbit-name { margin: 8px 0 0; text-align: center; font-size: 11px; font-weight: 600; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .sh-chip { display: inline-block; font-size: 8.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); border: 1px solid var(--border-strong); border-radius: 999px; padding: 1px 7px; margin-left: 6px; vertical-align: 2px; }
+
         /* ---------------- Active Confidence Signals ---------------- */
         .sc-pulse-ring { position: relative; }
         @keyframes scPulse {
@@ -7471,6 +7493,128 @@
             return bbCard + body;
         };
 
+        /* ----------------------- Orbital Market Mapping ------------------------
+         * Real offer roster -> orbit. Proximity = real landed price relative to
+         * the cheapest seller (closer = hotter price competition). Dot size =
+         * real seller feedback count (presence proxy, labelled). Buy Box winner
+         * gets a green ring. When fewer than two priced offers exist, an honest
+         * note is rendered instead of a fabricated orbit. Pure string building:
+         * safe in the UI contract sandbox. */
+        NS.sellerOrbitCache = {};
+
+        function scOrbLanding(o) {
+            return o.price + (o.shipping_free ? 0 : (isNum(o.shipping) ? o.shipping : 0));
+        }
+        function scOrbInitials(name, asin) {
+            var s = String(name || '').trim().split(/\s+/).filter(function (w) { return w; })
+                .map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase();
+            if (!s && asin) s = String(asin).slice(0, 2).toUpperCase();
+            return s || '?';
+        }
+
+        NS.scOrbitalHtml = function (sd, p) {
+            var esc = NS.escapeHtml;
+            var offers = (sd && Array.isArray(sd.offers)) ? sd.offers : [];
+            var priced = [];
+            for (var i = 0; i < offers.length; i++) {
+                var o = offers[i] || {};
+                if (isNum(o.price) && o.price > 0) priced.push(o);
+            }
+            var name = String((p && p.name) || (sd && sd.buy_box && sd.buy_box.seller_name) || 'Target listing');
+            var asin = (p && p.asin) || '';
+            var sunPrice = isNum(p && p.amazon_price) ? p.amazon_price
+                : ((sd && sd.buy_box && isNum(sd.buy_box.price)) ? sd.buy_box.price
+                    : (priced.length ? Math.min.apply(null, priced.map(scOrbLanding)) : null));
+            var initials = scOrbInitials(name, asin);
+
+            if (priced.length < 2) {
+                var note = priced.length === 1
+                    ? 'Only one priced competitor was returned \u2014 an orbit needs at least two priced offers to plot real price pressure.'
+                    : 'No priced offer roster was returned \u2014 the competitor orbit cannot be plotted yet.';
+                return '<div class="orbit-note"><b>Competitor orbit</b> \u2014 ' + note + '</div>';
+            }
+
+            var lands = priced.map(scOrbLanding);
+            var baseline = Math.min.apply(null, lands);
+            var fbVals = [];
+            for (var i = 0; i < priced.length; i++) if (isNum(priced[i].feedback_count)) fbVals.push(priced[i].feedback_count);
+            var fbMin = fbVals.length ? Math.min.apply(null, fbVals) : 0;
+            var fbMax = fbVals.length ? Math.max.apply(null, fbVals) : 0;
+
+            var hash = 0;
+            var hashSrc = asin || name;
+            for (var i = 0; i < hashSrc.length; i++) hash = (hash * 31 + hashSrc.charCodeAt(i)) | 0;
+            var gid = 'orbG' + Math.abs(hash % 1000000);
+
+            var cx = 170, cy = 162, R1 = 46, R2 = 118;
+            var n = priced.length;
+            var parts = [];
+
+            parts.push('<defs><radialGradient id="' + gid + '" cx="35%" cy="32%" r="72%">' +
+                '<stop offset="0%" stop-color="#a78bfa"/><stop offset="55%" stop-color="#6d28d9"/>' +
+                '<stop offset="100%" stop-color="#2e1065"/></radialGradient></defs>');
+            parts.push('<circle class="orbit-ring" cx="' + cx + '" cy="' + cy + '" r="' + R1 + '"/>');
+            parts.push('<circle class="orbit-ring" cx="' + cx + '" cy="' + cy + '" r="' + Math.round((R1 + R2) / 2) + '"/>');
+            parts.push('<circle class="orbit-ring" cx="' + cx + '" cy="' + cy + '" r="' + R2 + '"/>');
+            parts.push('<circle class="orbit-sun" cx="' + cx + '" cy="' + cy + '" r="30" fill="url(#' + gid + ')"/>');
+            parts.push('<text class="orbit-sun-mono" x="' + cx + '" y="' + (cy - 1) + '" text-anchor="middle" dominant-baseline="middle">' + esc(initials) + '</text>');
+            parts.push('<text class="orbit-sun-price" x="' + cx + '" y="' + (cy + 25) + '" text-anchor="middle">' + (isNum(sunPrice) ? esc(NS.fmt(sunPrice)) : 'price \u2014') + '</text>');
+
+            for (var i = 0; i < n; i++) {
+                var o = priced[i];
+                var comp = Math.min(1, Math.max(0, baseline / scOrbLanding(o)));
+                var r = R2 - comp * (R2 - R1);
+                var a = -Math.PI / 2 + (2 * Math.PI * i) / n;
+                var px = cx + r * Math.cos(a);
+                var py = cy + r * Math.sin(a);
+                var size = 4;
+                if (isNum(o.feedback_count) && fbMax > fbMin) size = 4 + ((o.feedback_count - fbMin) / (fbMax - fbMin)) * 9;
+                var cls = comp >= 0.8 ? 'hot' : (comp >= 0.5 ? 'mid' : 'cool');
+                var rowCls = 'orbit-node ' + cls + (o.is_buy_box_winner === true ? ' bb' : '');
+                var who = esc(String(o.seller_name || (o.seller_id ? 'Seller ' + o.seller_id : 'Seller')));
+                var meta = (o.fulfillment ? ' \u00b7 ' + esc(String(o.fulfillment)) : '') +
+                    (isNum(o.feedback_count) ? ' \u00b7 ' + esc(NS.fmtInt(o.feedback_count)) + ' feedback' : '') +
+                    (o.is_buy_box_winner === true ? ' \u00b7 Buy Box' : '');
+                parts.push('<circle class="' + rowCls + '" cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="' + size.toFixed(1) + '">' +
+                    '<title>' + who + ' \u2014 ' + esc(NS.fmt(scOrbLanding(o))) + meta + '</title></circle>');
+            }
+
+            var svg = '<svg viewBox="0 0 340 300" role="img" aria-label="Market competitor orbit for ' + esc(name) + '">' + parts.join('') + '</svg>';
+            var legend = '<div class="orbit-legend">' +
+                '<span><i class="ol-dot hot"></i>Closer to sun = cheaper price (hotter competition)</span>' +
+                '<span><i class="ol-dot size"></i>Dot size = seller feedback count (presence proxy)</span>' +
+                '<span><i class="ol-dot bb"></i>Green ring = Buy Box winner</span>' +
+                '</div>';
+            return svg + legend + '<div class="orbit-name">' + esc(name) + '</div>';
+        };
+
+        NS.scOrbitalHolderHtml = function (p) {
+            var esc = NS.escapeHtml;
+            var name = String((p && p.name) || 'Product listing');
+            var asin = (p && p.asin) || '';
+            var initials = scOrbInitials(name, asin);
+            var price = isNum(p && p.amazon_price) ? p.amazon_price : null;
+            var svg = '<svg viewBox="0 0 340 300" role="img" aria-label="Competitor orbit placeholder for ' + esc(name) + '">' +
+                '<circle class="orbit-ring" cx="170" cy="162" r="46"/>' +
+                '<circle class="orbit-ring" cx="170" cy="162" r="82"/>' +
+                '<circle class="orbit-ring" cx="170" cy="162" r="118"/>' +
+                '<circle class="orbit-sun" cx="170" cy="162" r="30"/>' +
+                '<text class="orbit-sun-mono" x="170" y="161" text-anchor="middle" dominant-baseline="middle">' + esc(initials) + '</text>' +
+                '<text class="orbit-sun-price" x="170" y="189" text-anchor="middle">' + (isNum(price) ? esc(NS.fmt(price)) : 'price \u2014') + '</text>' +
+                '</svg>';
+            return svg +
+                '<div class="orbit-note"><b>Competitor orbit</b> \u2014 load Seller Detail to plot the real offer roster around this target. Orbit proximity and dot size always come from loaded offers; nothing is fabricated.</div>' +
+                '<div class="orbit-name">' + esc(name) + '</div>';
+        };
+
+        NS.scOrbitalPanelHtml = function (p) {
+            var esc = NS.escapeHtml;
+            var asin = (p && p.asin) || '';
+            var cached = asin ? (NS.sellerOrbitCache[asin] || null) : null;
+            var body = cached ? NS.scOrbitalHtml(cached, p) : NS.scOrbitalHolderHtml(p);
+            return '<div class="sc-orbital" id="scOrbital-' + esc(asin || 'none') + '">' + body + '</div>';
+        };
+
         NS.loadSellerDetails = function (btn) {
             var asin = btn.getAttribute('data-seller-asin');
             if (!asin) return;
@@ -7490,6 +7634,16 @@
                     card.innerHTML = NS.sellerDetailHtml(d);
                     btn.setAttribute('aria-expanded', 'true');
                     if (state) state.textContent = NS.sellerStateText(d);
+                    NS.sellerOrbitCache[asin] = d;
+                    var oc = el('scOrbital-' + asin);
+                    if (oc) {
+                        var found = null;
+                        try {
+                            var rows = (typeof NS.visibleRows === 'function') ? NS.visibleRows() : [];
+                            for (var i = 0; i < rows.length; i++) { if (rows[i] && rows[i].asin === asin) { found = rows[i]; break; } }
+                        } catch (e2) { /* orbit degrades to buy-box-derived sun */ }
+                        oc.innerHTML = NS.scOrbitalHtml(d, found);
+                    }
                 })
                 .catch(function (e) {
                     card.innerHTML = '';
@@ -9683,6 +9837,8 @@
                 if (p.asin) {
                     html += '<div class="sheet-section"><div class="sh-header"><span>Seller Detail</span></div>' +
                         NS.sellerSectionHtml(p) + '</div>';
+                    html += '<div class="sheet-section"><div class="sh-header"><span>Market Orbit <span class="sh-chip">orbital mapping</span></span></div>' +
+                        NS.scOrbitalPanelHtml(p) + '</div>';
                 }
             } else if (segment === 'verify') {
                 html += '<div class="sheet-section"><div class="sh-header"><span>Verification Flags</span></div>';
