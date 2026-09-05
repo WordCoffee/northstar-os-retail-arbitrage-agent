@@ -436,10 +436,11 @@
     {
       "id": "10_costco_single_item_retry_LIVE.md",
       "blocked_at": "2026-09-05T09:22:54Z",
-      "reason": "Live HTTP 403 (auth_error) on exactly ONE outbound Unwrangle costco_detail request for item 424976 — the only request permitted by this batch. Credential/config issue is NOT resolved despite the operator's confirmation that the fix is in place. Per Batch 10 Step 5, do NOT proceed to Batch 11.",
-      "evidence": "CLI result status=failed, item_ids_requested=1, fetched=0, failures=[{item_id:424976, reason:http_403, failure_type:auth_error}]. Run-dir retry evidence persisted additively under data/costco-discovery-runs/20260828T021658Z/: raw/refresh_product_details_424976_retry_20260905T0922Z.json and normalized/items_424976_retry_20260905T0922Z.json. All client gates passed (COSTCO_CATALOG_DETAIL_ENABLED set, source UNWRANGLE, UNWRANGLE_API_KEY configured), so http_403 is a genuine Unwrangle server rejection of the request (platform=costco_detail, item=424976) — NOT a client-side missing-key short-circuit (that path returns message='Unwrangle API key is not configured' with no http code).",
-      "retry_policy": "Zero retries performed, per batch spec. next_batch left unchanged at 10_costco_single_item_retry_LIVE.md pending operator action. Batch 11 not started and must not start until a fresh live call returns a non-403.",
-      "recommended_next": "Re-run Batch 09 diagnostic with the new 403 evidence: verify the UNWRANGLE_API_KEY value is valid/unexpired and that the Unwrangle plan includes the costco_detail platform (a valid key on a search-only plan still returns 403)."
+      "root_cause_confirmed_at": "2026-09-05T09:31:34Z",
+      "reason": "Live HTTP 403 on Unwrangle costco_detail (Batch 10, item 424976) AND on a separate operator-authorized diagnostic costco_search call. ROOT CAUSE CONFIRMED by the diagnostic response body: Unwrangle reports 'Your credits quota has been consumed, please buy more credits to continue.' — the account's credit quota is exhausted. The key is VALID (Unwrangle answered with a billing/quota error, not an auth rejection) and the platform string is correct (costco_detail/costco_search — the code fix in 3ddd1ec is confirmed in place). Per Batch 10 Step 5, do NOT proceed to Batch 11.",
+      "evidence": "Batch 10 CLI result: status=failed, failures=[{item_id:424976, reason:http_403, failure_type:auth_error}]; run-dir evidence raw/refresh_product_details_424976_retry_20260905T0922Z.json + normalized/items_424976_retry_20260905T0922Z.json. Diagnostic (2026-09-05, exactly ONE costco_search live call, search=minoxidil, page=1, same client code path _search_unwrangle): EXACT HTTP STATUS 403, body {\"detail\":\"Your credits quota has been consumed, please buy more credits to continue.\"} (api_key redacted); request URL https://data.unwrangle.com/api/getter/?platform=costco_search&search=minoxidil&page=1&api_key=REDACTED. All client gates passed on both calls; the missing-key short-circuit ('Unwrangle API key is not configured', no http code) did NOT trigger — both 403s are genuine Unwrangle server responses.",
+      "retry_policy": "Zero retries on both calls. next_batch unchanged at 10_costco_single_item_retry_LIVE.md. Batch 11 not started and must not start until Unwrangle returns non-403.",
+      "recommended_next": "Operator-side only; NO code change needed. Replenish/add credits on the Unwrangle account in its dashboard/billing (or resolve why the claimed 5,000/month free-tier quota reads exhausted). Then approve Batch 10 again with the explicit 'fix in place' statement — the client code path and platform strings are confirmed correct."
     }
   ],
   "confirmed_facts": [
@@ -488,8 +489,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-05T09:22:54Z",
+  "last_updated": "2026-09-05T09:31:34Z",
   "history": [
+    {
+      "ts": "2026-09-05T09:31:34Z",
+      "activity": "unwrangle_costco_search_diagnostic",
+      "batch": "none (operator-authorized standalone diagnostic — separate live action, NOT a Batch 10/11 retry)",
+      "summary": "Exactly ONE live costco_search call: search=minoxidil, page=1, platform=costco_search, same client code path (_search_unwrangle via the real requests.get), UNWRANGLE_API_KEY used by the client but never read/printed/logged (redacted in all output). RESULT: EXACT HTTP STATUS 403, response body {\"detail\":\"Your credits quota has been consumed, please buy more credits to continue.\"} (api_key redacted). ROOT CAUSE CONFIRMED: the Unwrangle account's credit quota is exhausted. The key is VALID — Unwrangle returned a billing/quota error, not an auth rejection — and the platform strings are correct, so the costco_detail 403 from Batch 10 and this costco_search 403 share the same cause: insufficient credits on the account. NOT an invalid/expired key and NOT a costco_detail-specific platform restriction. Zero retries. Zero repo file writes (diagnostic driver lives outside the repo). No Batch 10/11 execution — operator instructed report and stop. blocked_batches entry for 10 updated with root_cause_confirmed."
+    },
     {
       "ts": "2026-09-05T09:22:54Z",
       "activity": "batch_10_costco_single_item_retry",
