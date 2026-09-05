@@ -1,0 +1,54 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_validation_98501",
+  "requested_at": "2026-09-05T23:47:50Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "url": "https://www.costco.com/.product.98501.html",
+  "http_status": 200,
+  "failure_type": null,
+  "reason": null,
+  "retries": 0,
+  "stop_on_block": "sequential_batch",
+  "scrubbed": true,
+  "probe_note": "Validation pass \u2014 provisional JSON-LD/title extraction; parser not built. identity/provisional fields are NOT parsed production fields.",
+  "expected": {
+    "requested_title": "Chewable Vitamin C 500 mg, 500 Tablets",
+    "requested_brand": "Kirkland Signature",
+    "requested_pack": "500 Tablets"
+  },
+  "match_evidence": {
+    "jaccard_title_overlap": 0.667,
+    "brand_hit": true,
+    "pack_hit": true,
+    "jsonld_name": "Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets",
+    "title_tag": "Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets | Costco",
+    "jsonld_price": 17.99,
+    "fixture_sha256": "854e38789f662236efb46b69d21085e5d7b44feeb806d09258d0b2b71478c8e4",
+    "fixture_path": "fixtures/brightdata_costco/98501.html",
+    "html_bytes": 3240809
+  },
+  "item": {
+    "requested_item_id": "98501",
+    "returned_costco_item_id": "98501",
+    "exact_title": "Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets",
+    "brand": "Kirkland Signature",
+    "listed_price": 17.99,
+    "currency": "USD",
+    "unit_price": null,
+    "quantity_or_pack": "500 tablets",
+    "size_or_weight": null,
+    "UPC_GTIN_EAN": null,
+    "availability": null,
+    "product_url": "https://www.costco.com/.product.98501.html",
+    "captured_at": "2026-09-05T23:47:50Z",
+    "identity_match_status": "probable_match",
+    "missing_fields": [
+      "unit_price",
+      "size_or_weight",
+      "UPC_GTIN_EAN",
+      "availability"
+    ]
+  }
+}

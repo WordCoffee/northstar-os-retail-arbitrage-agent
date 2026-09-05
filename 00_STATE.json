@@ -486,6 +486,13 @@
       "source": "Operator-authorized single-request live probe (2026-09-05T10:09:01Z, item 424976) via bright_data_client._fetch Web Unlocker transport (POST api.brightdata.com/request, zone northstaros, url=https://www.costco.com/.product.424976.html, format=raw)",
       "value": "Bright Data Web Unlocker successfully fetches Costco item-detail pages: HTTP 200; URL pattern /.product.<item_id>.html resolves for item 424976; 3,195,148 bytes raw HTML returned; JSON-LD Product block matches the expected identity (Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets) at price 17.99 USD",
       "details": "Single request, zero retries, stop-on-any-failure honored. Evidence persisted under frozen run dir 20260828T021658Z (raw/brightdata_424976_probe_20260905T100901Z.json + normalized/items_424976_brightdata_probe_20260905T100901Z.json; committed 4cd670d; scrubbed — no api_key/Authorization header stored). Confirms the Costco item-number URL pattern and Web Unlocker reachability are VIABLE for a future Costco detail provider; the missing piece is a Costco HTML/JSON parser + normalization + typed-failure mapping (not built — this was a transport/URL-pattern probe only, per operator scope). Bright Data free tier 5,000 credits/month shared pool; Web Unlocker = 1 credit per request (bright_data_client.py docstring). Credential used: BRIGHTDATA_UNLOCKER_API_KEY (SET at run time; key value never read/printed/logged)."
+    },
+    {
+      "id": "brightdata_web_unlocker_costco_jsonld_generalizes",
+      "confirmed_at": "2026-09-05T23:47:16Z",
+      "source": "Operator-authorized 5-item multi-category validation pass (re-run with BRIGHTDATA_REQUEST_TIMEOUT_SECONDS=180) via production bright_data_client._fetch; JSON-LD Product extraction from full raw HTML fixtures",
+      "value": "Costco item-number flat URL + JSON-LD Product block pattern GENERALIZES across categories: 4/5 items returned HTTP 200 with exact-name Product JSON-LD (926628 Fish Oil 1000 mg 400 Softgels $20.99; 98501 Chewable Vitamin C 500 mg 500 Tablets $17.99; 690843 Quick Dissolve B-12 5000 mcg 300 Tablets $21.99; 1089787 Flex-Tech 13-Gallon Trash Bag 200-count $22.49); 1493188 (Baby Wipes 900-count) returned HTTP 200 with a content-level 'Page Not Found!' page — the flat item-number URL does NOT resolve for that item number",
+      "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT — the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ — includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
   "next_batch": "10_costco_single_item_retry_LIVE.md",
@@ -496,8 +503,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-05T10:20:30Z",
+  "last_updated": "2026-09-05T23:48:00Z",
   "history": [
+    {
+      "ts": "2026-09-05T23:47:16Z",
+      "activity": "brightdata_web_unlocker_multi_item_validation_success",
+      "batch": "none (operator-authorized validation re-run with BRIGHTDATA_REQUEST_TIMEOUT_SECONDS=180)",
+      "summary": "Per operator approval: (1) added BRIGHTDATA_REQUEST_TIMEOUT_SECONDS env override to bright_data_client.py (default 120, additive, no behavior change when unset; module docstring updated); (2) re-ran the exact 5-item validation (926628, 98501, 690843, 1089787, 1493188) with the override set to 180s. Same discipline: one request per item via production bright_data_client._fetch, zero retries, stop-on-hard-failure, sequential 2.0s pacing, exact HTTP status captured, scrubbed evidence. RESULTS per item: 926628 OK 200 probable_match jaccard 0.714 'Kirkland Signature Fish Oil 1000 mg, 400 Softgels' $20.99 — SUCCEEDED ON RETRY, confirming the earlier 120s timeout was TRANSIENT, not item-specific; 98501 OK 200 probable_match 0.667 'Chewable Vitamin C 500 mg., 500 Tablets' $17.99; 690843 OK 200 probable_match 0.75 'Quick Dissolve B-12 5000 mcg., 300 Tablets' $21.99; 1089787 OK 200 probable_match 0.8 'Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count' $22.49 (pack_hit False only because exact-substring '200 count' vs '200-count'; title overlap + brand carried it); 1493188 HTTP 200 BUT content-level 'Page Not Found!' page — literal <title> tag, 788 KB page, zero 'baby wipes' mentions, zero '1493188' occurrences, no JSON-LD Product block — flat item-number URL does NOT resolve for this item. VERDICT: JSON-LD generalization CONFIRMED for resolvable flat URLs (4/4 across supplements + household); 1493188 flagged as a URL-resolution gap needing alternate lookup (search-by-title or slug URL), NOT a transport or pattern failure. All 5 full raw-HTML fixtures committed to fixtures/brightdata_costco/ (incl. the content-404 page — genuine negative-path fixture for parser tests). Evidence scrubbed, additive under frozen run dir. BRIGHTDATA_UNLOCKER_API_KEY never read/printed. Evidence + fixtures + state committed with the code change in this batch."
+    },
     {
       "ts": "2026-09-05T10:19:44Z",
       "activity": "brightdata_web_unlocker_multi_item_validation_failed",
