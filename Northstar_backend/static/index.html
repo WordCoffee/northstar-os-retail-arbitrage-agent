@@ -4356,6 +4356,57 @@
         @media (max-width: 520px) {
             .sc-masonry-cards { column-count: 1; }
         }
+
+        /* ---------------- Refresh double-confirmation gate ---------------- */
+        .sc-refresh-notice {
+            display: block;
+            max-width: 620px;
+            margin: 10px 0 0;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            border: 1px solid var(--border-strong);
+            background: rgba(139, 123, 255, 0.08);
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .sc-refresh-notice.ok { border-color: rgba(61, 220, 151, 0.45); background: rgba(61, 220, 151, 0.08); color: #3ddc97; }
+        .sc-refresh-notice.warn { border-color: rgba(217, 164, 65, 0.5); background: rgba(217, 164, 65, 0.09); color: #d9a441; }
+        .sc-confirm { position: fixed; inset: 0; z-index: 500; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .sc-confirm[hidden] { display: none; }
+        .sc-confirm-backdrop { position: absolute; inset: 0; background: rgba(5, 8, 18, 0.62); backdrop-filter: blur(4px); }
+        .sc-confirm-panel {
+            position: relative;
+            width: min(430px, 92vw);
+            background: rgba(16, 20, 34, 0.92);
+            border: 1px solid var(--border-strong);
+            border-radius: 16px;
+            padding: 20px 22px;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+            animation: scConfirmIn 0.16s ease-out;
+        }
+        .sc-confirm-chip {
+            display: inline-block;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            border: 1px solid rgba(139, 123, 255, 0.45);
+            border-radius: 999px;
+            padding: 2px 9px;
+            margin-bottom: 10px;
+        }
+        .sc-confirm-panel h3 { margin: 0 0 8px; font-size: 15px; font-weight: 700; color: var(--text-strong); }
+        .sc-confirm-panel p { margin: 0 0 16px; font-size: 12.5px; line-height: 1.6; color: var(--text-muted); }
+        .sc-confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .sc-confirm-actions .btn { min-width: 108px; }
+        .sc-confirm-actions .btn.confirm-ok { background: linear-gradient(135deg, #7c5cff 0%, #5a9cff 100%); border-color: transparent; color: #ffffff; font-weight: 700; }
+        @keyframes scConfirmIn {
+            from { opacity: 0; transform: translateY(6px) scale(0.985); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
         @media (prefers-reduced-motion: reduce) {
             .sc-mesh, .sc-thermal .th-point, .intel-metric, .sc-prism-face,
             .sc-sent-dot, .status-pill .dot, .badge.pos, .badge.live, .badge.verified,
@@ -4462,6 +4513,19 @@
         </nav>
 
         <div class="scrim" id="scrim" hidden></div>
+
+        <div class="sc-confirm" id="scConfirm" hidden aria-live="polite">
+            <div class="sc-confirm-backdrop" aria-hidden="true"></div>
+            <div class="sc-confirm-panel" role="dialog" aria-modal="true" aria-labelledby="scConfirmTitle">
+                <span class="sc-confirm-chip" id="scConfirmStep">Step 1 of 2</span>
+                <h3 id="scConfirmTitle">Refresh catalog with a live scan?</h3>
+                <p id="scConfirmText">Refresh pulls fresh product data from the external provider instead of reusing the last cached snapshot. That is exactly why a double confirmation exists &mdash; one accidental click is not enough to run it.</p>
+                <div class="sc-confirm-actions">
+                    <button class="btn ghost" type="button" id="scConfirmCancel">Cancel</button>
+                    <button class="btn confirm-ok" type="button" id="scConfirmOk">Continue</button>
+                </div>
+            </div>
+        </div>
 
         <div class="main">
             <header class="topbar">
@@ -4585,6 +4649,8 @@
                             Refresh
                         </button>
                     </div>
+
+                    <div class="sc-refresh-notice" id="scRefreshNotice" role="status" hidden></div>
 
                     <!-- ======== FOCUS GRID ======== -->
                     <div class="focus-grid" id="focusGrid" hidden>
@@ -8253,6 +8319,132 @@
         }
         NS.loadScanner = loadScanner;
 
+        /* ---------- refresh double-confirmation gate ----------
+         * "Refresh" is a LIVE data operation: it POSTs to the backend
+         * refresh route which (gate on) pulls fresh data from the external
+         * provider — not just the last snapshot. Two explicit confirmations
+         * are required so one accidental press can never trigger it. The POST
+         * itself stays fail-closed server-side (live_gate returns 403 until
+         * live is enabled), so with the gate off no provider call can ever be
+         * made. Booting the page still auto-loads the last scan without any
+         * of this — refresh is strictly opt-in. */
+        NS.refreshConfirmStage = 0;          /* 0 = closed, 1 = first ask, 2 = final ask */
+        NS.refreshNotice = null;
+        NS.refreshNoticeType = null;
+
+        NS.setRefreshLoading = function (on) {
+            ['csRefreshBtn', 'refreshBtn'].forEach(function (id) {
+                var b = el(id);
+                if (!b) return;
+                if (on) { b.disabled = true; b.classList.add('loading'); }
+                else { b.disabled = false; b.classList.remove('loading'); }
+            });
+        };
+
+        NS.closeRefreshConfirm = function () {
+            NS.refreshConfirmStage = 0;
+            var panel = el('scConfirm');
+            if (panel) panel.hidden = true;
+        };
+
+        NS.scRefreshConfirmRender = function () {
+            var title = el('scConfirmTitle');
+            var text = el('scConfirmText');
+            var ok = el('scConfirmOk');
+            var step = el('scConfirmStep');
+            if (NS.refreshConfirmStage === 2) {
+                if (title) title.textContent = 'Final confirmation \u2014 run a live refresh?';
+                if (text) text.textContent = 'This calls the external data provider (consuming paid credits when the server-side live gate is enabled) and replaces the current catalog. If the gate is off, the server refuses with no provider call. Choose Cancel if this click was accidental.';
+                if (ok) ok.textContent = 'Yes, run live refresh';
+                if (step) step.textContent = 'Step 2 of 2';
+            } else {
+                if (title) title.textContent = 'Refresh catalog with a live scan?';
+                if (text) text.textContent = 'Refresh pulls fresh product data from the external provider instead of reusing the last cached snapshot. That is exactly why a double confirmation exists \u2014 one accidental click is not enough to run it.';
+                if (ok) ok.textContent = 'Continue';
+                if (step) step.textContent = 'Step 1 of 2';
+            }
+        };
+
+        NS.confirmRefresh = function (e) {
+            if (e && e.preventDefault) e.preventDefault();
+            NS.setRefreshLoading(false);
+            NS.refreshConfirmStage = 1;
+            NS.scRefreshConfirmRender();
+            var panel = el('scConfirm');
+            if (panel) panel.hidden = false;
+        };
+
+        NS.scRefreshConfirmOk = function () {
+            if (NS.refreshConfirmStage === 1) {
+                NS.refreshConfirmStage = 2;
+                NS.scRefreshConfirmRender();
+                return;
+            }
+            if (NS.refreshConfirmStage === 2) {
+                NS.setRefreshLoading(true);
+                NS.closeRefreshConfirm();
+                NS.runLiveRefresh();
+            }
+        };
+
+        NS.scRefreshConfirmCancel = function () {
+            NS.setRefreshLoading(false);
+            NS.closeRefreshConfirm();
+        };
+
+        NS.showRefreshNotice = function (text, type) {
+            var n = el('scRefreshNotice');
+            if (!n) return;
+            NS.refreshNotice = text;
+            NS.refreshNoticeType = (type === 'warn') ? 'warn' : 'ok';
+            n.textContent = text;
+            n.className = 'sc-refresh-notice ' + NS.refreshNoticeType;
+            n.hidden = false;
+            if (n.setAttribute) n.setAttribute('role', 'status');
+        };
+
+        NS.hideRefreshNotice = function () {
+            var n = el('scRefreshNotice');
+            if (n) n.hidden = true;
+        };
+
+        NS.runLiveRefresh = function () {
+            fetch('/api/kirkland/refresh', { method: 'POST' })
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    if (data && data.status === 'ok' && typeof data.candidates_returned === 'number') {
+                        NS.showRefreshNotice('Live refresh completed \u2014 ' + data.candidates_returned + ' candidate' +
+                            (data.candidates_returned === 1 ? '' : 's') + ' pulled. Reloading the catalog view.', 'ok');
+                        loadScanner();
+                    } else if (data && data.detail) {
+                        NS.showRefreshNotice('Live refresh refused \u2014 ' + String(data.detail), 'warn');
+                    } else {
+                        NS.showRefreshNotice('Live refresh returned an unexpected response; nothing was executed.', 'warn');
+                    }
+                })
+                .catch(function (err) {
+                    NS.showRefreshNotice('Live refresh failed (' + ((err && err.message) || 'network error') + '); nothing was executed.', 'warn');
+                })
+                .finally(function () {
+                    NS.setRefreshLoading(false);
+                });
+        };
+
+        /* Dialog bindings are element-level only — the page keeps exactly
+         * one document-level keydown, attached by init(). */
+        (function bindRefreshConfirm() {
+            var ok = el('scConfirmOk');
+            var cancel = el('scConfirmCancel');
+            var panel = el('scConfirm');
+            var notice = el('scRefreshNotice');
+            if (ok && ok.addEventListener) ok.addEventListener('click', NS.scRefreshConfirmOk);
+            if (cancel && cancel.addEventListener) cancel.addEventListener('click', NS.scRefreshConfirmCancel);
+            if (panel && panel.addEventListener) panel.addEventListener('keydown', function (e) {
+                if (e && e.key === 'Escape') NS.scRefreshConfirmCancel();
+            });
+            if (notice && notice.addEventListener) notice.addEventListener('click', function () { NS.hideRefreshNotice(); });
+        })();
+
         /* ---------- calculator prefill handoff ---------- */
         var calcPrefill = null;
         NS.analyzeProduct = function (asin) {
@@ -9191,7 +9383,7 @@
             if (reset) reset.addEventListener('click', resetFilters);
 
             var refresh = el('refreshBtn');
-            if (refresh) refresh.addEventListener('click', loadScanner);
+            if (refresh) refresh.addEventListener('click', NS.confirmRefresh);
 
             var debounced = function () {
                 clearTimeout(searchTimer);
@@ -9367,7 +9559,7 @@
 
             /* Control strip: refresh */
             var csRefresh = el('csRefreshBtn');
-            if (csRefresh) csRefresh.addEventListener('click', loadScanner);
+            if (csRefresh) csRefresh.addEventListener('click', NS.confirmRefresh);
 
             /* Control strip: column visibility (table mode) */
             var csCol = el('csColBtn');

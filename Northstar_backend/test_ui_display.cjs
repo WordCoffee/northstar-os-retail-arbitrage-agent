@@ -212,6 +212,28 @@ const filtersFor = (overrides) => {
 };
 
 /* ================================================================
+ * Phase 1b — previous run auto-loads every session (no refresh)
+ * ================================================================ */
+/* The key product data changes rarely, so every page load must render the
+ * last known scan from the local snapshot instantly — no refresh tap needed,
+ * no provider round-trip. The follow-up GET is the cache-only scanner route
+ * (zero provider calls); staleness is surfaced honestly, never erased. */
+store['t2.kirklandScout.scan.v1'] = JSON.stringify({
+    saved_at: '2026-09-03T07:00:00Z',
+    payload: {
+        status: 'ok',
+        generated_at: '2026-09-03T07:00:00Z',
+        summary: { cache_status: 'fresh_snapshot', scanner_mode: 'cache_only', enrichment_source: 'off' },
+        products: [P({ name: 'Last Run Product', asin: 'B0AUTO0001' })],
+    },
+});
+vm.runInContext('NS.loadScanner()', context);
+assert(els.tableBody.innerHTML.includes('Last Run Product'), 'autoload: last run renders instantly from the local snapshot');
+assert(vm.runInContext('scoutState.dataFromCache', context) === true, 'autoload: state is honestly flagged as from-cache');
+assert(els.resultCount.textContent.includes('1 of 1'), 'autoload: result counter reflects the cached snapshot');
+assert(!els.tableBody.innerHTML.includes('skeleton'), 'autoload: no loading skeleton when a snapshot exists');
+
+/* ================================================================
  * Phase 2 — structure, theme shell, honest states
  * ================================================================ */
 /* Brand contract updated 2026-09-04 with the Retail Arbitrage UI redesign
@@ -1581,6 +1603,99 @@ assert(scopedRules.includes('.port-table') && !scopedRules.includes('.seller-det
 
 /* Reduced-motion covers all animated elements */
 assert(scopedRules.split('prefers-reduced-motion').length >= 2, 'cx: reduced-motion rule present for tool animations');
+
+/* ================================================================
+ * Phase 9c — Refresh = LIVE pull behind a DOUBLE confirmation
+ * ================================================================ */
+/* Refresh is a live data operation (POST /api/kirkland/refresh). A single
+ * stray click must never trigger it: the UI requires two explicit steps and
+ * the server stays fail-closed (403) until the live gate is enabled. */
+const priorFetch = context.fetch;
+const refreshCalls = [];
+let refreshRes = () => ({ ok: true, json: () => ({ status: 'ok', candidates_returned: 5, live_allowed: true }) });
+const scannerRes = () => ({ ok: true, json: () => ({ status: 'ok', generated_at: '2026-09-05T10:00:00Z', summary: { cache_status: 'snapshot', scanner_mode: 'cache_only' }, products: [P({ name: 'Refreshed Product', asin: 'B0REFRESH01' })] }) });
+context.fetch = (url) => { refreshCalls.push(url); return T(() => (url === '/api/kirkland/refresh' ? refreshRes() : scannerRes())); };
+assert(typeof vm.runInContext('NS.confirmRefresh', context) === 'function', 'refresh: double-confirm entry point is wired on the namespace');
+
+setState([P()], 'ok', 'ready');
+refreshCalls.length = 0;
+
+/* ONE accidental click on the control-strip Refresh: dialog opens, no call */
+click('csRefreshBtn');
+assert(getEl('scConfirm').hidden === false, 'refresh: control-strip refresh opens the confirmation dialog');
+assert(els.scConfirmTitle.textContent.includes('Refresh catalog with a live scan?'), 'refresh: step 1 names the live scan');
+assert(els.scConfirmStep.textContent.includes('Step 1 of 2'), 'refresh: dialog shows a two-stage meter');
+assert(refreshCalls.length === 0, 'refresh: no request after the first click alone');
+
+/* step 1 -> step 2 still issues nothing */
+click('scConfirmOk');
+assert(refreshCalls.length === 0, 'refresh: step 2 still issues no request');
+assert(els.scConfirmTitle.textContent.includes('Final confirmation'), 'refresh: step 2 is the final confirmation');
+assert(els.scConfirmOk.textContent.includes('run live refresh'), 'refresh: final button explicitly says it runs a live refresh');
+
+/* Cancel from the final stage: closed, nothing executed */
+click('scConfirmCancel');
+assert(getEl('scConfirm').hidden === true, 'refresh: cancel closes the dialog from the final stage');
+assert(refreshCalls.length === 0, 'refresh: cancel executes nothing');
+
+/* full double confirmation executes exactly one live pull, then reloads */
+refreshCalls.length = 0;
+setState([P()], 'ok', 'ready');
+click('csRefreshBtn');
+click('scConfirmOk');
+click('scConfirmOk');
+assert(refreshCalls.length === 2 && refreshCalls[0] === '/api/kirkland/refresh', 'refresh: POST /api/kirkland/refresh issued right after the second confirmation');
+assert(getEl('scConfirm').hidden === true, 'refresh: dialog dismissed the moment the run begins');
+assert(refreshCalls[1] === 'http://127.0.0.1:8000/api/kirkland/scanner', 'refresh: catalog reloads via the cache-only scanner endpoint');
+assert(els.tableBody.innerHTML.includes('Refreshed Product'), 'refresh: fresh data renders after a successful live pull');
+assert(els.scRefreshNotice.textContent.includes('Live refresh completed') && els.scRefreshNotice.textContent.includes('5 candidates'), 'refresh: completion notice carries the real candidate count');
+assert(els.scRefreshNotice.className.indexOf('ok') !== -1, 'refresh: completion notice styled as ok');
+assert(vm.runInContext('scoutState.dataFromCache', context) === false, 'refresh: live data replaces the cache view');
+
+/* toolbar "Refresh scan" goes through the same double gate */
+refreshCalls.length = 0;
+setState([P()], 'ok', 'ready');
+click('refreshBtn');
+assert(getEl('scConfirm').hidden === false, 'refresh: toolbar refresh also opens the dialog');
+assert(refreshCalls.length === 0, 'refresh: toolbar refresh never fires on a single click');
+click('scConfirmCancel');
+assert(refreshCalls.length === 0, 'refresh: toolbar refresh cancel fires nothing');
+
+/* retry stays instant: a plain cache-only reload, never a live pull */
+refreshCalls.length = 0;
+setState([P()], 'error', 'ready');
+click('retryBtn');
+assert(getEl('scConfirm').hidden === true, 'refresh: retry never opens the confirm dialog');
+assert(refreshCalls.indexOf('/api/kirkland/refresh') === -1, 'refresh: retry performs no live POST');
+assert(refreshCalls.indexOf('http://127.0.0.1:8000/api/kirkland/scanner') !== -1, 'refresh: retry is a plain cache-only scanner reload');
+
+/* server fails closed (gate off): honest refusal notice, nothing swapped */
+refreshCalls.length = 0;
+refreshRes = () => ({ ok: false, status: 403, json: () => ({ detail: 'Live refresh is disabled: set SCANNER_LIVE_ALLOWED and approve the live gate before running live scans.' }) });
+setState([P()], 'ok', 'ready');
+click('csRefreshBtn');
+click('scConfirmOk');
+click('scConfirmOk');
+assert(refreshCalls[0] === '/api/kirkland/refresh', 'refresh: gate-refusal path still issues the POST');
+assert(refreshCalls.length === 1, 'refresh: refused run performs no follow-up scanner GET');
+assert(els.scRefreshNotice.textContent.includes('refused') && els.scRefreshNotice.textContent.includes('SCANNER_LIVE_ALLOWED'), 'refresh: fail-closed refusal surfaced with the exact server note');
+assert(els.scRefreshNotice.className.indexOf('warn') !== -1, 'refresh: refusal styled as a warning');
+assert(els.tableBody.innerHTML.includes('Kirkland Test Product'), 'refresh: cached data stays in place after a refusal');
+
+/* network failure: warn notice, no swap, buttons restored */
+refreshCalls.length = 0;
+refreshRes = () => { throw new Error('network unreachable'); };
+setState([P()], 'ok', 'ready');
+click('csRefreshBtn');
+click('scConfirmOk');
+click('scConfirmOk');
+assert(els.scRefreshNotice.textContent.includes('failed'), 'refresh: network failure surfaced as a warning');
+assert(els.scRefreshNotice.className.indexOf('warn') !== -1, 'refresh: failure styled as a warning');
+assert(els.csRefreshBtn.disabled === false && els.refreshBtn.disabled === false, 'refresh: refresh buttons restored after failure');
+
+/* restore the earlier fetch tracker for the remainder of the suite */
+refreshRes = () => ({ ok: true, json: () => SELLER_FIXTURE_PARTIAL });
+context.fetch = priorFetch;
 
 /* ================================================================
  * Phase 10 — inspection lifecycle, sales honesty, high-confidence
