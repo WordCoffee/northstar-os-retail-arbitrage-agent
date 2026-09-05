@@ -489,8 +489,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-05T09:31:34Z",
+  "last_updated": "2026-09-05T09:41:46Z",
   "history": [
+    {
+      "ts": "2026-09-05T09:41:46Z",
+      "activity": "unwrangle_costco_search_diagnostic_rerun",
+      "batch": "none (operator-authorized standalone diagnostic — repeat of the 09:31:34Z run after account-side action may have been taken)",
+      "summary": "Operator re-authorized the same single costco_search diagnostic (search=minoxidil, page=1, same client code path, api_key redacted, zero retries). RESULT: IDENTICAL to the 09:31:34Z run — EXACT HTTP STATUS 403, body {\"detail\":\"Your credits quota has been consumed, please buy more credits to continue.\"} (api_key redacted). Confirms the Unwrangle account's credit quota was STILL exhausted at run time; no change in account state between the two diagnostics. Root cause unchanged: exhausted credit quota — valid key, correct platform strings. No Batch 10/11 execution (operator: report and stop)."
+    },
     {
       "ts": "2026-09-05T09:31:34Z",
       "activity": "unwrangle_costco_search_diagnostic",
