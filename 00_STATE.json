@@ -432,6 +432,16 @@
       }
     }
   ],
+  "blocked_batches": [
+    {
+      "id": "10_costco_single_item_retry_LIVE.md",
+      "blocked_at": "2026-09-05T09:22:54Z",
+      "reason": "Live HTTP 403 (auth_error) on exactly ONE outbound Unwrangle costco_detail request for item 424976 — the only request permitted by this batch. Credential/config issue is NOT resolved despite the operator's confirmation that the fix is in place. Per Batch 10 Step 5, do NOT proceed to Batch 11.",
+      "evidence": "CLI result status=failed, item_ids_requested=1, fetched=0, failures=[{item_id:424976, reason:http_403, failure_type:auth_error}]. Run-dir retry evidence persisted additively under data/costco-discovery-runs/20260828T021658Z/: raw/refresh_product_details_424976_retry_20260905T0922Z.json and normalized/items_424976_retry_20260905T0922Z.json. All client gates passed (COSTCO_CATALOG_DETAIL_ENABLED set, source UNWRANGLE, UNWRANGLE_API_KEY configured), so http_403 is a genuine Unwrangle server rejection of the request (platform=costco_detail, item=424976) — NOT a client-side missing-key short-circuit (that path returns message='Unwrangle API key is not configured' with no http code).",
+      "retry_policy": "Zero retries performed, per batch spec. next_batch left unchanged at 10_costco_single_item_retry_LIVE.md pending operator action. Batch 11 not started and must not start until a fresh live call returns a non-403.",
+      "recommended_next": "Re-run Batch 09 diagnostic with the new 403 evidence: verify the UNWRANGLE_API_KEY value is valid/unexpired and that the Unwrangle plan includes the costco_detail platform (a valid key on a search-only plan still returns 403)."
+    }
+  ],
   "confirmed_facts": [
     {
       "id": "unwrangle_costco_detail_credit_cost",
@@ -478,8 +488,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-05T09:20:42Z",
+  "last_updated": "2026-09-05T09:22:54Z",
   "history": [
+    {
+      "ts": "2026-09-05T09:22:54Z",
+      "activity": "batch_10_costco_single_item_retry",
+      "batch": "10_costco_single_item_retry_LIVE.md",
+      "summary": "Batch 10 executed with fresh operator approval explicitly stating the credential/config fix is in place. Pre-flight passed (UNWRANGLE_API_KEY/COSTCO_CATALOG_SOURCE/COSTCO_CATALOG_DETAIL_ENABLED all SET; frozen manifest 20260828T021658Z intact, fingerprint e325264fa989758d93c11b72eb7c12d833e7800dc28611bac7ed6ed8bd7de3db). Exactly ONE outbound Unwrangle request executed (python costco_api_client.py details refresh --item-ids 424976): platform=costco_detail, item=424976. RESULT: status=failed, HTTP 403, failure_type=auth_error, reason=http_403, fetched=0, detail_count=0. The 403 is a genuine Unwrangle server rejection (all client gates passed; a missing key would short-circuit with 'Unwrangle API key is not configured' and no http code). Identity fields NOT returned; no provider cost/credits reported (no successful response). Retry evidence persisted additively in the same frozen run dir: raw/refresh_product_details_424976_retry_20260905T0922Z.json + normalized/items_424976_retry_20260905T0922Z.json. NOT added to completed_batches; added to blocked_batches; next_batch unchanged. VERDICT per Batch 10 Step 5: 'Credential/config issue NOT resolved. Do not proceed to Batch 11. Recommend re-running Batch 09's diagnostic with the new error evidence.' Batch 11 NOT auto-continued (its condition — Batch 10 success — was false). Circuit breaker honored: zero retries, immediate halt."
+    },
     {
       "ts": "2026-09-05T09:20:42Z",
       "activity": "confirmed_facts_unwrangle_credit_pricing",

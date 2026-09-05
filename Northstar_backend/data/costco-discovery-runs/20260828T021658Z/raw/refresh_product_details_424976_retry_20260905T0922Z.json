@@ -1,0 +1,30 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "batch_10_single_item_retry",
+  "requested_at": "2026-09-05T09:22:54Z",
+  "provider": "UNWRANGLE_COSTCO",
+  "platform": "costco_detail",
+  "endpoint": "https://data.unwrangle.com/api/getter/",
+  "item_ids_requested": [
+    "424976"
+  ],
+  "http_status": 403,
+  "failure_type": "auth_error",
+  "reason": "http_403",
+  "retries": 0,
+  "stop_on_block": "halted_run",
+  "scrubbed": true,
+  "cli_report": {
+    "status": "failed",
+    "item_ids_requested": 1,
+    "fetched": 0,
+    "failures": [
+      {
+        "item_id": "424976",
+        "reason": "http_403",
+        "failure_type": "auth_error"
+      }
+    ],
+    "detail_count": 0
+  }
+}
