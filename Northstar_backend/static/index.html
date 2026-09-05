@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Northstar OS — Kirkland Product Scout</title>
+    <title>Northstar OS — Retail Arbitrage Intelligence</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -3621,18 +3621,313 @@
     /* ======== END APPLE-INSPIRED OVERRIDE ======== */
 
     </style>
+    <style id="ns-theme-v2">
+        /* ==================================================================
+         * NORTHSTAR OS — DESIGN SYSTEM v2
+         * Overlay layer (layered after the base stylesheet). Every rule here
+         * deliberately overrides the base look-and-feel; the base stylesheet
+         * stays in place as the safety net so every existing class continues
+         * to render. Keep tokens in sync with the fee tables that mirror
+         * fee_calculator.py (see Profit Calculator view + its JS module).
+         * ================================================================== */
+
+        /* ---------------- tokens: dark theme ---------------- */
+        :root {
+            --bg-app: #0a0f1f;
+            --bg-panel: #101830;
+            --bg-raised: #182142;
+            --bg-hover: #223059;
+            --border: #223156;
+            --border-strong: #33446f;
+            --text-hi: #eef1fb;
+            --text: #c2cbe2;
+            --text-muted: #7e8bb2;
+            --text-faint: #5a6994;
+            --accent: #8b7bff;
+            --accent-hi: #a99bff;
+            --accent-soft: rgba(139, 123, 255, 0.14);
+            --pos: #3ddc97;
+            --pos-soft: rgba(61, 220, 151, 0.13);
+            --warn: #e3b341;
+            --warn-soft: rgba(227, 179, 65, 0.13);
+            --neg: #f27c6a;
+            --neg-soft: rgba(242, 124, 106, 0.13);
+            --info: #6aa3e8;
+            --info-soft: rgba(106, 163, 232, 0.13);
+            --neutral-soft: rgba(126, 139, 178, 0.14);
+            --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --grad: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            --grad-soft: linear-gradient(135deg, rgba(124, 58, 237, 0.16), rgba(79, 70, 229, 0.16));
+            --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+        }
+
+        /* ---------------- tokens: light theme ---------------- */
+        html[data-theme="light"] {
+            --bg-app: #f2f3f9;
+            --bg-panel: #ffffff;
+            --bg-raised: #eef0f7;
+            --bg-hover: #e7eaf4;
+            --border: #e2e6f0;
+            --border-strong: #c7cfe2;
+            --text-hi: #0f172a;
+            --text: #3b4a66;
+            --text-muted: #66748f;
+            --text-faint: #93a0b8;
+            --accent: #5b53e8;
+            --accent-hi: #463dcf;
+            --accent-soft: rgba(91, 83, 232, 0.1);
+            --pos: #0f9d6e;
+            --pos-soft: rgba(15, 157, 110, 0.11);
+            --warn: #b07d13;
+            --warn-soft: rgba(176, 125, 19, 0.11);
+            --neg: #d6453c;
+            --neg-soft: rgba(214, 69, 60, 0.11);
+            --info: #3e78c0;
+            --info-soft: rgba(62, 120, 192, 0.11);
+            --neutral-soft: rgba(102, 116, 143, 0.12);
+            --shadow: 0 1px 3px rgba(23, 30, 76, 0.08), 0 1px 2px rgba(23, 30, 76, 0.03);
+        }
+
+        html { color-scheme: dark; }
+        html[data-theme="light"] { color-scheme: light; }
+
+        /* ---------------- app shell ---------------- */
+        .app-shell::before {
+            content: "";
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: var(--grad); z-index: 2000;
+        }
+        button { font-family: var(--font); }
+        body { -webkit-font-smoothing: antialiased; }
+
+        /* ---------------- sidebar (dark navy in both themes) ---------------- */
+        .sidebar {
+            background: linear-gradient(180deg, #171042 0%, #100b31 55%, #0b0826 100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .brand { padding: 20px 16px 14px; }
+        .brand-mark {
+            width: 38px; height: 38px; border-radius: 11px;
+            background: var(--grad);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 20px -6px rgba(124, 58, 237, 0.6);
+            transition: transform 0.15s ease;
+        }
+        .brand:hover .brand-mark { transform: rotate(-6deg) scale(1.04); }
+        .brand-mark svg { width: 22px; height: 22px; stroke: #ffffff; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+        .brand-name { color: #ffffff; font-weight: 800; letter-spacing: -0.01em; font-size: 15px; }
+        .brand-sub { color: #b7c2ff; font-weight: 600; font-size: 11px; letter-spacing: 0.03em; }
+        .brand-context { color: #8f9ad6; font-size: 11px; }
+        .nav-section { color: #7f8bc8 !important; }
+        .nav-item { color: #b9c1e8; border-radius: 9px; margin: 2px 10px; }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.06); color: #ffffff; }
+        .nav-item.active {
+            background: var(--grad);
+            color: #ffffff;
+            box-shadow: 0 8px 18px -8px rgba(124, 58, 237, 0.7);
+        }
+        .nav-item.active::before { background: #ffffff; }
+        .sidebar-foot { color: #8f9ad6; font-size: 11px; }
+
+        /* ---------------- nav rail ---------------- */
+        .nav-rail {
+            background: linear-gradient(180deg, #141037 0%, #0d0a28 100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .nr-brand-name { color: #ffffff; }
+        .nr-brand-sub { color: #9aa5e8; }
+        .nr-btn { color: #aab3de; }
+        .nr-btn:hover { color: #ffffff; background: rgba(255, 255, 255, 0.07); }
+        .nr-btn.active { color: #ffffff; background: var(--grad); box-shadow: 0 6px 16px -6px rgba(124, 58, 237, 0.6); }
+        .nr-foot { color: #7f8bc8; }
+
+        /* ---------------- topbar ---------------- */
+        .topbar {
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+        .page-title-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+        .crumb {
+            display: flex; align-items: center; gap: 7px;
+            font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em;
+            color: var(--text-muted); margin-bottom: 2px;
+        }
+        .crumb .crumb-sep { color: var(--text-faint); }
+        .crumb strong { color: var(--accent); font-weight: 700; }
+        .page-title { font-size: 21px; font-weight: 800; letter-spacing: -0.01em; }
+        .last-scan { color: var(--text-muted); }
+
+        /* ---------------- content ---------------- */
+        .content { padding: 18px 22px 40px; }
+
+        /* ---------------- shared surface radius ---------------- */
+        .intel-metric, .control-strip, .table-wrap, .calc-group, .calc-results,
+        .focus-card, .proof-panel, .ws-stream, .opp-strip, .ns-preview-card,
+        .inspection-sheet, .drawer-panel {
+            border-radius: var(--radius);
+        }
+
+        /* ---------------- intel strip -> KPI cards ---------------- */
+        .intel-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            padding: 0 0 14px;
+            border: none;
+            background: transparent;
+        }
+        .intel-metric {
+            position: relative;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .intel-metric::before {
+            content: "";
+            position: absolute; left: 0; top: 12px; bottom: 12px; width: 3px;
+            border-radius: 3px; background: var(--grad); opacity: 0.85;
+        }
+        .intel-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); }
+        .intel-value { font-size: 25px; font-weight: 800; color: var(--text-hi); letter-spacing: -0.01em; margin-top: 2px; }
+        .intel-sub { color: var(--text-faint); font-size: 11px; }
+
+        /* ---------------- control strip ---------------- */
+        .control-strip {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 10px 12px;
+        }
+        .cs-search { background: var(--bg-raised); border: 1px solid var(--border); border-radius: 999px; padding: 0 12px; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+        .cs-search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+        .cs-qf-btn, .cs-btn { border-radius: 999px; font-weight: 600; transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease; }
+        .cs-qf-btn.active, .cs-btn.active { background: var(--grad); color: #ffffff; border-color: transparent; }
+        .cs-count { border-radius: 999px; }
+
+        /* ---------------- table ---------------- */
+        #scoutTable thead th {
+            background: var(--bg-raised);
+            text-transform: uppercase;
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+        }
+        #scoutTable tbody tr { transition: background 0.1s ease; }
+        #scoutTable tbody tr:hover { background: var(--bg-hover); }
+        .table-note { color: var(--text-faint); }
+
+        /* ---------------- badges & buttons ---------------- */
+        .badge { border-radius: 999px; font-weight: 600; }
+        .btn { border-radius: var(--radius-sm); font-weight: 600; transition: transform 0.08s ease, filter 0.15s ease, box-shadow 0.15s ease; }
+        .btn:hover { filter: brightness(1.06); }
+        .btn:active { transform: translateY(1px); }
+        .f-control, .f-toggle {
+            border-radius: var(--radius-sm);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .f-control:focus, .f-toggle:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+        /* ---------------- calc / results surfaces ---------------- */
+        .calc-group, .calc-results {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 18px;
+        }
+        .calc-group-title, .calc-results-title { font-size: 14px; font-weight: 800; letter-spacing: 0.01em; }
+        .result-row .r-label { color: var(--text-muted); }
+        .result-total { border-top: 1px dashed var(--border-strong); margin-top: 6px; padding-top: 10px; }
+        .result-total .r-value { color: var(--accent); }
+        .result-note { color: var(--text-faint); font-size: 11px; }
+
+        /* ---------------- prefill chip ---------------- */
+        .prefill-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; }
+        .prefill-chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--accent-soft); color: var(--accent);
+            border-radius: 999px;
+            padding: 5px 12px; font-size: 12px; font-weight: 600;
+        }
+        .prefill-btn {
+            background: transparent; border: 1px solid var(--border-strong); color: var(--text);
+            border-radius: 999px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: border-color 0.12s ease, color 0.12s ease;
+        }
+        .prefill-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ---------------- profit calculator ---------------- */
+        .pc-layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; align-items: start; }
+        .pc-dims { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .pc-error {
+            margin-top: 10px; padding: 8px 12px; border-radius: var(--radius-sm);
+            background: var(--neg-soft); color: var(--neg); font-size: 12.5px; font-weight: 600;
+        }
+        .pc-error[hidden] { display: none; }
+        .r-sub { display: block; font-size: 10.5px; color: var(--text-faint); font-weight: 400; margin-top: 1px; }
+        .r-label { line-height: 1.35; }
+        .pc-net-row { border-radius: var(--radius-sm); margin-top: 8px; padding: 4px 8px; }
+        .pc-net-row .r-label { font-weight: 700; }
+        .pc-net-row.pc-pos { background: var(--pos-soft); color: var(--pos); }
+        .pc-net-row.pc-neg { background: var(--neg-soft); color: var(--neg); }
+        .pc-pos { color: var(--pos); }
+        .pc-neg { color: var(--neg); }
+        .pc-status-badges { margin-top: 10px; display: flex; gap: 6px; }
+        .pc-ref { margin-top: 16px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+        .pc-ref summary { cursor: pointer; padding: 12px 16px; font-weight: 700; font-size: 13px; color: var(--text); border-radius: var(--radius); }
+        .pc-ref[open] summary { border-bottom: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0; }
+        .pc-ref .fee-notes { padding: 0 16px; color: var(--text-faint); font-size: 12px; margin: 10px 0; }
+        .pc-fees { width: calc(100% - 32px); border-collapse: collapse; margin: 10px 16px 16px; }
+        .pc-fees th { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); padding: 6px 8px; border-bottom: 1px solid var(--border); }
+        .pc-fees td { padding: 6px 8px; font-size: 12.5px; border-bottom: 1px solid var(--border); color: var(--text); }
+        .pc-fees tr:last-child td { border-bottom: none; }
+        .pc-fees .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+        /* ---------------- surface polish ---------------- */
+        .focus-card, .proof-panel, .ws-stream, .opp-strip, .ns-preview-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+        .inspection-sheet, .drawer-panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            box-shadow: 0 24px 60px rgba(4, 6, 22, 0.35);
+        }
+        .ns-preview-card .ns-preview-title { font-weight: 700; }
+        .ns-preview-card .ns-preview-meta { color: var(--text-muted); }
+
+        /* ---------------- responsive ---------------- */
+        @media (max-width: 1080px) {
+            .pc-layout { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 900px) {
+            .intel-strip { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 560px) {
+            .intel-strip { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
     <div class="app-shell">
         <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
             <div class="brand">
                 <div class="brand-mark">
-                    <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2l2.6 5.4L20 6.5l-2 5.5 2 5.5-5.4-.9L12 22l-2.6-5.4L4 16.5l2-5.5-2-5.5 5.4.9L12 2z"/><path d="M12 7l1.2 2.5L16 10l-2.8 1.2L12 14l-1.2-2.8L8 10l2.8-.5L12 7z"/></svg>
                 </div>
                 <div class="brand-text">
-                    <div class="brand-name">T2 Holdings</div>
-                    <div class="brand-sub">Northstar OS</div>
-                    <div class="brand-context">Kirkland Product Scout</div>
+                    <div class="brand-name">Northstar OS</div>
+                    <div class="brand-sub">Retail Arbitrage</div>
+                    <div class="brand-context">Amazon FBA sourcing suite</div>
                 </div>
             </div>
             <nav class="nav" aria-label="Views">
@@ -3644,6 +3939,10 @@
                 <button class="nav-item" id="nav-calculator" data-view="calculator" type="button">
                     <svg aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>
                     <span>Margin Calculator</span>
+                </button>
+                <button class="nav-item" id="nav-profit" data-view="profit" type="button">
+                    <svg aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M15 9h-4a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4H9"/><path d="M12 6v2m0 8v2"/></svg>
+                    <span>Profit Calculator</span>
                 </button>
                 <button class="nav-item" id="nav-risk" data-view="risk" type="button">
                     <svg aria-hidden="true"><path d="M12 3l8 4v5c0 4.5-3.2 8.2-8 9-4.8-.8-8-4.5-8-9V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
@@ -3658,18 +3957,18 @@
                     <span>Portfolio</span>
                 </button>
             </nav>
-            <div class="sidebar-foot">Internal sourcing tool · Estimates only</div>
+            <div class="sidebar-foot">Northstar OS · Service: Retail Arbitrage</div>
         </aside>
 
         <!-- ======== NAV RAIL — slim icon-first navigation ======== -->
         <nav class="nav-rail" id="navRail" aria-label="Primary navigation">
             <div class="nr-brand">
                 <div class="nr-mark">
-                    <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2l2.6 5.4L20 6.5l-2 5.5 2 5.5-5.4-.9L12 22l-2.6-5.4L4 16.5l2-5.5-2-5.5 5.4.9L12 2z"/></svg>
                 </div>
                 <div class="nr-brand-text">
-                    <div class="nr-brand-name">T2 Holdings</div>
-                    <div class="nr-brand-sub">Northstar OS</div>
+                    <div class="nr-brand-name">Northstar OS</div>
+                    <div class="nr-brand-sub">Retail Arbitrage</div>
                 </div>
             </div>
             <div class="nr-items">
@@ -3680,6 +3979,10 @@
                 <button class="nr-btn" id="nr-calculator" data-view="calculator" type="button" aria-label="Margin Calculator">
                     <svg aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>
                     <span class="nr-btn-label">Margin Calculator</span>
+                </button>
+                <button class="nr-btn" id="nr-profit" data-view="profit" type="button" aria-label="Profit Calculator">
+                    <svg aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M15 9h-4a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4H9"/><path d="M12 6v2m0 8v2"/></svg>
+                    <span class="nr-btn-label">Profit Calculator</span>
                 </button>
                 <button class="nr-btn" id="nr-risk" data-view="risk" type="button" aria-label="Risk Engine">
                     <svg aria-hidden="true"><path d="M12 3l8 4v5c0 4.5-3.2 8.2-8 9-4.8-.8-8-4.5-8-9V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
@@ -3707,6 +4010,7 @@
                     <svg aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
                 </button>
                 <div class="page-title-wrap">
+                    <div class="crumb"><span>Services</span><span class="crumb-sep">/</span><strong>Retail Arbitrage</strong></div>
                     <div class="page-title" id="pageTitle">Product Scout</div>
                     <div class="page-context" id="pageContext">Kirkland sourcing candidates ranked from market data and Costco COGS</div>
                 </div>
@@ -4401,6 +4705,119 @@
                             <p class="result-note" id="cCalcNote">Fill in sale price and source cost to see results. This is a manual estimate, not a Scout recommendation and not an approval to resell.</p>
                         </div>
                     </div>
+                </section>
+
+                <!-- ==================== PROFIT CALCULATOR ====================
+                     Mirrors fee_calculator.py — keep tables in sync with
+                     REFERRAL_RATES / PRICE_SWITCH_CATEGORIES /
+                     FBA_STANDARD_SIZE_TIER_TABLE (see JS module below).
+                     ========================================================== -->
+                <section class="view" id="view-profit" aria-label="Profit Calculator" hidden>
+                    <div class="calc-callout">FBA fee + net-profit model. Tables mirror <code>fee_calculator.py</code> (Amazon US, 2026 schedules). <strong>APPROXIMATE</strong> — verify against Amazon Seller Central before making real pricing decisions.</div>
+                    <div class="prefill-bar" id="pcPrefillBar">
+                        <span class="prefill-chip">Example: Kirkland Minoxidil · Health &amp; Personal Care · 2.0 lb standard size</span>
+                        <button class="prefill-btn" type="button" id="pcUseExample">Use example values</button>
+                    </div>
+                    <div class="pc-layout">
+                        <div class="calc-group">
+                            <h3 class="calc-group-title">Product &amp; fees</h3>
+                            <div class="field">
+                                <label for="pcCategory">Amazon category</label>
+                                <div class="field-row">
+                                    <select class="f-control" id="pcCategory"></select>
+                                </div>
+                                <p class="field-hint">Referral % by category. Health &amp; Personal Care / Beauty: 8% at/below $10, 15% above.</p>
+                            </div>
+                            <div class="field">
+                                <label for="pcPrice">Amazon sale price ($)</label>
+                                <div class="field-row">
+                                    <input type="number" class="f-control" id="pcPrice" min="0" step="0.01" inputmode="decimal" placeholder="37.99" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="pcCost">Landed cost / COGS ($)</label>
+                                <div class="field-row">
+                                    <input type="number" class="f-control" id="pcCost" min="0" step="0.01" inputmode="decimal" placeholder="17.99" autocomplete="off">
+                                </div>
+                                <p class="field-hint">Required to show net profit / margin. Missing → N/A (never invented).</p>
+                            </div>
+                            <div class="field">
+                                <label for="pcWeight">Package weight (oz)</label>
+                                <div class="field-row">
+                                    <input type="number" class="f-control" id="pcWeight" min="0" step="0.1" inputmode="decimal" placeholder="32" autocomplete="off">
+                                </div>
+                                <p class="field-hint">Converted to lb for the standard-size fulfillment tier.</p>
+                            </div>
+                            <div class="field">
+                                <label for="pcDimL">Dimensions (in) — optional oversize check</label>
+                                <div class="pc-dims">
+                                    <input type="number" class="f-control" id="pcDimL" min="0" step="0.1" inputmode="decimal" placeholder="L" aria-label="Length in inches" autocomplete="off">
+                                    <input type="number" class="f-control" id="pcDimW" min="0" step="0.1" inputmode="decimal" placeholder="W" aria-label="Width in inches" autocomplete="off">
+                                    <input type="number" class="f-control" id="pcDimH" min="0" step="0.1" inputmode="decimal" placeholder="H" aria-label="Height in inches" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <button class="btn" type="button" id="pcCalcBtn">Calculate</button>
+                            </div>
+                            <div class="pc-error" id="pcError" hidden></div>
+                        </div>
+                        <div class="calc-results">
+                            <h3 class="calc-results-title">Fee breakdown</h3>
+                            <div class="result-row">
+                                <span class="r-label">Sale price</span>
+                                <span class="r-value" id="pcSale">—</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="r-label">Referral fee<span class="r-sub" id="pcReferralNote"></span></span>
+                                <span class="r-value" id="pcReferral">—</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="r-label">Fulfillment fee<span class="r-sub" id="pcFulfillmentNote"></span></span>
+                                <span class="r-value" id="pcFulfillment">—</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="r-label">Storage fee<span class="r-sub">out of scope</span></span>
+                                <span class="r-value" id="pcStorage">$0.00</span>
+                            </div>
+                            <div class="result-row result-total">
+                                <span class="r-label">Total fees</span>
+                                <span class="r-value" id="pcTotal">—</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="r-label">Amazon payout<span class="r-sub">sale price − total fees</span></span>
+                                <span class="r-value" id="pcPayout">—</span>
+                            </div>
+                            <div class="result-row pc-net-row" id="pcNetRow">
+                                <span class="r-label">Net profit / unit</span>
+                                <span class="r-value" id="pcNet">—</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="r-label">Net margin</span>
+                                <span class="r-value" id="pcMargin">—</span>
+                            </div>
+                            <div class="pc-status-badges">
+                                <span class="badge neutral" id="pcStatusBadge">—</span>
+                            </div>
+                            <p class="result-note" id="pcNote">Enter sale price and weight to see a breakdown. Missing values stay N/A — never invented.</p>
+                        </div>
+                    </div>
+                    <details class="pc-ref">
+                        <summary>Fee schedule reference (2026)</summary>
+                        <p class="fee-notes">FBA standard-size all-in rates (US, 2026) incl. fuel/logistics surcharge. Envelope: ≤ 20 lb, every side ≤ 18 × 14 × 8 in. Oversize → not estimated (N/A).</p>
+                        <table class="pc-fees">
+                            <thead><tr><th>Weight tier (lb)</th><th class="num">Fulfillment fee</th></tr></thead>
+                            <tbody>
+                                <tr><td>0 – 0.5</td><td class="num">$4.75</td></tr>
+                                <tr><td>0.5 – 1</td><td class="num">$5.25</td></tr>
+                                <tr><td>1 – 2</td><td class="num">$6.10</td></tr>
+                                <tr><td>2 – 3</td><td class="num">$7.10</td></tr>
+                                <tr><td>3 – 5</td><td class="num">$8.20</td></tr>
+                                <tr><td>5 – 10</td><td class="num">$9.90</td></tr>
+                                <tr><td>10 – 20</td><td class="num">$12.50</td></tr>
+                                <tr><td>20+ (standard max)</td><td class="num">$15.00</td></tr>
+                            </tbody>
+                        </table>
+                    </details>
                 </section>
 
                 <!-- ==================== RISK ENGINE ==================== -->
@@ -7497,19 +7914,226 @@
         }
         NS.renderPortfolio = renderPortfolio;
 
+        /* ================================================================
+         * Profit Calculator — mirrors fee_calculator.py (KEEP IN SYNC).
+         *   REFERRAL_RATES               -> PC_REFERRAL_RATES
+         *   PRICE_SWITCH_CATEGORIES      -> PC_PRICE_SWITCH
+         *   FBA_STANDARD_SIZE_TIER_TABLE -> PC_FBA_TIERS
+         *   STANDARD_MAX_WEIGHT_LBS      -> PC_MAX_WEIGHT_LBS
+         *   STANDARD_MAX_DIMENSIONS_IN   -> PC_MAX_DIMS
+         * ================================================================ */
+        var PC_REFERRAL_RATES = {
+            'Health & Personal Care': 0.15,
+            'Beauty': 0.15,
+            'Home & Kitchen': 0.15,
+            'Tools & Home Improvement': 0.15,
+            'Sports & Outdoors': 0.15,
+            'Pet Supplies': 0.15,
+            'Toys & Games': 0.15,
+            'Everything Else': 0.15,
+            'Grocery & Gourmet Food': 0.15,
+            'Automotive & Powersports': 0.12,
+            'Business, Industrial & Scientific': 0.12,
+            'Consumer Electronics': 0.08,
+            'Computers': 0.08,
+            'Baby Products': 0.15
+        };
+        var PC_PRICE_SWITCH = { 'Health & Personal Care': 10.0, 'Beauty': 10.0 };
+        var PC_DEFAULT_CATEGORY = 'Everything Else';
+        var PC_FBA_TIERS = [
+            [0.5, 4.75],
+            [1.0, 5.25],
+            [2.0, 6.10],
+            [3.0, 7.10],
+            [5.0, 8.20],
+            [10.0, 9.90],
+            [20.0, 12.50],
+            [Infinity, 15.00]
+        ];
+        var PC_MAX_WEIGHT_LBS = 20.0;
+        var PC_MAX_DIMS = [18.0, 14.0, 8.0];
+        var _pcReady = false;
+        var _pcKirkSet = false;
+
+        function pcRound2(n) { return Math.round((n + Number.EPSILON) * 100) / 100; }
+        function pcPos(v) { return typeof v === 'number' && isFinite(v) && v > 0; }
+
+        function pcReferral(salePrice, category) {
+            var resolved = PC_REFERRAL_RATES[category] !== undefined ? category : PC_DEFAULT_CATEGORY;
+            if (!pcPos(salePrice)) return { fee: null, rate: null, category: resolved, note: 'No sale price — unavailable.' };
+            var rate = PC_REFERRAL_RATES[resolved];
+            var thr = PC_PRICE_SWITCH[resolved];
+            var eff, note;
+            if (thr !== undefined && salePrice <= thr) { eff = 0.08; note = resolved + ' · 8% at/below $' + thr.toFixed(2); }
+            else { eff = rate; note = resolved + ' · ' + Math.round(rate * 100) + '% of sale price'; }
+            return { fee: pcRound2(salePrice * eff), rate: eff, category: resolved, note: note };
+        }
+
+        function pcFulfillment(weightOz, dims) {
+            if (!pcPos(weightOz)) return { fee: null, tier: null, note: 'No weight — unavailable.' };
+            var lb = weightOz / 16;
+            if (dims && dims.some(function (d) { return d > 0; })) {
+                var sides = dims.slice().sort(function (a, b) { return a - b; });
+                var max = PC_MAX_DIMS.slice().sort(function (a, b) { return a - b; });
+                if (sides.some(function (d, i) { return d > max[i]; })) return { fee: null, tier: 'oversize', note: 'Oversize — outside standard-size table' };
+            }
+            if (lb > PC_MAX_WEIGHT_LBS) return { fee: null, tier: 'oversize', note: 'Over 20 lb — outside standard-size table' };
+            var tier = null;
+            for (var i = 0; i < PC_FBA_TIERS.length; i++) { if (lb <= PC_FBA_TIERS[i][0]) { tier = PC_FBA_TIERS[i]; break; } }
+            return { fee: pcRound2(tier[1]), tier: 'standard', weightLb: lb, note: 'Standard-size · ' + (isFinite(tier[0]) ? lb.toFixed(2) + ' lb ≤ ' + tier[0] + ' lb' : lb.toFixed(2) + ' lb') + ' band' };
+        }
+
+        function pcCalculate(category, weightOz, dims, salePrice, landedCost) {
+            var sale = pcPos(salePrice) ? salePrice : null;
+            var ref = pcReferral(sale, category);
+            var fulf = pcFulfillment(weightOz, dims);
+            var storage = 0.0; // out of scope
+            var totalFees = null;
+            if (sale !== null && ref.fee !== null && fulf.fee !== null) totalFees = pcRound2(ref.fee + fulf.fee + storage);
+            var net = null, margin = null;
+            if (sale !== null && pcPos(landedCost) && totalFees !== null) {
+                net = pcRound2(sale - landedCost - totalFees);
+                margin = sale !== 0 ? pcRound2((net / sale) * 100) : null;
+            }
+            return {
+                salePrice: sale !== null ? pcRound2(sale) : null,
+                referral: ref.fee,
+                referralNote: ref.note,
+                fulfillment: fulf.fee,
+                fulfillmentTier: fulf.tier,
+                fulfillmentNote: fulf.note,
+                storage: storage,
+                totalFees: totalFees,
+                net: net,
+                margin: margin
+            };
+        }
+
+        function pcMoney(v) {
+            if (v === null || v === undefined || !isFinite(v)) return '—';
+            return '$' + v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function pcPopulate() {
+            var sel = el('pcCategory');
+            if (!sel) return;
+            sel.innerHTML = '';
+            Object.keys(PC_REFERRAL_RATES).forEach(function (cat) {
+                var opt = document.createElement('option');
+                var pct = Math.round(PC_REFERRAL_RATES[cat] * 100);
+                var sw = PC_PRICE_SWITCH[cat] !== undefined ? ' · 8% under $' + PC_PRICE_SWITCH[cat].toFixed(0) : '';
+                opt.value = cat;
+                opt.textContent = cat + ' (' + pct + '%' + sw + ')';
+                sel.appendChild(opt);
+            });
+            sel.value = 'Health & Personal Care';
+        }
+
+        function pcReadInputs() {
+            var dims = [];
+            var dl = parseFloat((el('pcDimL') || {}).value);
+            var dw = parseFloat((el('pcDimW') || {}).value);
+            var dh = parseFloat((el('pcDimH') || {}).value);
+            [dl, dw, dh].forEach(function (d) { if (!isNaN(d) && isFinite(d) && d > 0) dims.push(d); });
+            return {
+                category: (el('pcCategory') || {}).value,
+                weightOz: parseFloat((el('pcWeight') || {}).value),
+                dims: dims,
+                salePrice: parseFloat((el('pcPrice') || {}).value),
+                landedCost: parseFloat((el('pcCost') || {}).value)
+            };
+        }
+
+        function pcRender() {
+            var input = pcReadInputs();
+            var r = pcCalculate(input.category, input.weightOz, input.dims, input.salePrice, input.landedCost);
+            if (el('pcSale')) el('pcSale').textContent = pcMoney(r.salePrice);
+            if (el('pcReferral')) { el('pcReferral').textContent = pcMoney(r.referral); el('pcReferralNote').textContent = r.referralNote || ''; }
+            if (el('pcFulfillment')) { el('pcFulfillment').textContent = pcMoney(r.fulfillment); el('pcFulfillmentNote').textContent = r.fulfillmentNote || ''; }
+            if (el('pcStorage')) el('pcStorage').textContent = pcMoney(r.storage);
+            if (el('pcTotal')) el('pcTotal').textContent = pcMoney(r.totalFees);
+            var payout = null;
+            if (r.totalFees !== null && r.salePrice !== null) payout = pcRound2(r.salePrice - r.totalFees);
+            if (el('pcPayout')) el('pcPayout').textContent = pcMoney(payout);
+
+            var netEl = el('pcNet'), marginEl = el('pcMargin'), badgeEl = el('pcStatusBadge'), noteEl = el('pcNote'), netRow = el('pcNetRow');
+            if (r.net !== null && netEl && netRow) {
+                netEl.textContent = pcMoney(r.net);
+                netEl.classList.remove('pc-pos', 'pc-neg');
+                netEl.classList.add(r.net >= 0 ? 'pc-pos' : 'pc-neg');
+                netRow.classList.remove('pc-pos', 'pc-neg');
+                netRow.classList.add(r.net >= 0 ? 'pc-pos' : 'pc-neg');
+                if (marginEl) marginEl.textContent = (r.margin !== null ? r.margin.toFixed(2) + '%' : '—');
+                if (badgeEl) {
+                    badgeEl.textContent = r.net > 0 ? 'Profitable' : r.net < 0 ? 'Loss' : 'Break-even';
+                    badgeEl.className = 'badge ' + (r.net > 0 ? 'pos' : r.net < 0 ? 'neg' : 'neutral');
+                }
+                if (noteEl) noteEl.textContent = (r.net >= 0 ? 'Positive per-unit economics.' : 'Loss per unit — reconsider this deal.') + ' APPROXIMATE — verify against Seller Central.';
+            } else if (netEl && netRow) {
+                netEl.textContent = '—';
+                netEl.classList.remove('pc-pos', 'pc-neg');
+                netRow.classList.remove('pc-pos', 'pc-neg');
+                if (marginEl) marginEl.textContent = '—';
+                if (badgeEl) { badgeEl.textContent = 'N/A'; badgeEl.className = 'badge neutral'; }
+                if (noteEl) {
+                    if (r.salePrice === null) noteEl.textContent = 'Enter a valid sale price to see fee economics.';
+                    else if (r.fulfillment === null) noteEl.textContent = 'Fulfillment fee unavailable — ' + (r.fulfillmentNote || 'check weight / dimensions');
+                    else noteEl.textContent = 'Enter a landed cost to see net profit and margin.';
+                }
+            }
+        }
+
+        function pcRun(showErrors) {
+            var err = el('pcError');
+            if (err) { err.hidden = true; err.textContent = ''; }
+            var input = pcReadInputs();
+            var msg = null;
+            if (isNaN(input.salePrice) || !isFinite(input.salePrice) || input.salePrice <= 0) msg = 'Enter a valid sale price greater than 0.';
+            else if (isNaN(input.weightOz) || !isFinite(input.weightOz) || input.weightOz <= 0) msg = 'Enter a valid package weight greater than 0 oz (needed for the fulfillment fee).';
+            if (msg && showErrors && err) { err.textContent = msg; err.hidden = false; }
+            pcRender();
+        }
+
+        function pcSetKirk() {
+            _pcKirkSet = true;
+            var s = el('pcCategory'); if (s) s.value = 'Health & Personal Care';
+            var w = el('pcWeight'); if (w) w.value = '32';   // 2.0 lb
+            var dl = el('pcDimL'); if (dl) dl.value = '8';
+            var dw = el('pcDimW'); if (dw) dw.value = '5';
+            var dh = el('pcDimH'); if (dh) dh.value = '4';
+            var p = el('pcPrice'); if (p) p.value = '37.99';
+            var c = el('pcCost'); if (c) c.value = '17.99';
+            var err = el('pcError'); if (err) { err.hidden = true; err.textContent = ''; }
+        }
+
+        function initProfitCalc() {
+            if (!_pcReady) {
+                _pcReady = true;
+                pcPopulate();
+                var btn = el('pcCalcBtn');
+                if (btn) btn.addEventListener('click', function () { pcRun(true); });
+                var example = el('pcUseExample');
+                if (example) example.addEventListener('click', function () { pcSetKirk(); pcRender(); });
+            }
+            if (!_pcKirkSet) pcSetKirk();
+            pcRender();
+        }
+        NS.initProfitCalc = initProfitCalc;
+
         /* ---------- navigation ---------- */
         var VIEW_META = {
             scout: { title: 'Product Scout', context: 'Kirkland sourcing candidates ranked from market data and Costco COGS' },
             calculator: { title: 'Margin Calculator', context: 'Manual unit-economics model — values do not alter Scout source-cost data' },
+            profit: { title: 'Profit Calculator', context: 'FBA fee + net-profit model mirroring fee_calculator.py (Amazon US 2026 schedules)' },
             risk: { title: 'Risk Engine', context: 'Internal scenario tool — scores depend on your assumptions' },
             cycle: { title: 'Cycle Planner', context: 'Batch and replenishment planning from calculator assumptions' },
             portfolio: { title: 'Portfolio', context: 'Demo / scenario portfolio until connected to live scanner data' },
         };
 
         function openView(view) {
-            var allowed = ['scout', 'calculator', 'risk', 'cycle', 'portfolio'];
+            var allowed = ['scout', 'calculator', 'profit', 'risk', 'cycle', 'portfolio'];
             if (allowed.indexOf(view) === -1) view = 'scout';
-            var views = ['scout', 'calculator', 'risk', 'cycle', 'portfolio'];
+            var views = ['scout', 'calculator', 'profit', 'risk', 'cycle', 'portfolio'];
             views.forEach(function (v) {
                 var section = el('view-' + v);
                 if (section) { section.hidden = (v !== view); }
@@ -7535,6 +8159,7 @@
             var afBar = el('controlActiveFilters');
             if (afBar) afBar.style.display = view === 'scout' ? '' : 'none';
             if (view === 'calculator') applyCalcPrefill();
+            if (view === 'profit') initProfitCalc();
             if (view === 'risk') renderRisk();
             if (view === 'cycle') renderCycle();
             if (view === 'portfolio') renderPortfolio();
@@ -7559,7 +8184,7 @@
         function initTheme() {
             var stored = null;
             try { stored = localStorage.getItem(THEME_KEY); } catch (e) { /* noop */ }
-            applyTheme(stored === 'light' || stored === 'dark' ? stored : 'dark');
+            applyTheme(stored === 'light' || stored === 'dark' ? stored : 'light');
         }
 
         /* ---------- filter panel wiring ---------- */
@@ -7824,7 +8449,7 @@
             var theme = el('themeToggle');
             if (theme) theme.addEventListener('click', toggleTheme);
 
-            ['scout', 'calculator', 'risk', 'cycle', 'portfolio'].forEach(function (v) {
+            ['scout', 'calculator', 'profit', 'risk', 'cycle', 'portfolio'].forEach(function (v) {
                 var nav = el('nav-' + v);
                 if (nav) nav.addEventListener('click', function () { openView(v); });
             });
@@ -8018,7 +8643,7 @@
             });
 
             /* Nav rail */
-            ['scout', 'calculator', 'risk', 'cycle', 'portfolio'].forEach(function (v) {
+            ['scout', 'calculator', 'profit', 'risk', 'cycle', 'portfolio'].forEach(function (v) {
                 var nr = el('nr-' + v);
                 if (nr) nr.addEventListener('click', function () { openView(v); });
             });
