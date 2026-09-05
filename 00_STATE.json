@@ -440,8 +440,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-05T00:00:00Z",
+  "last_updated": "2026-09-05T00:30:00Z",
   "history": [
+    {
+      "ts": "2026-09-05T00:30:00Z",
+      "activity": "retail_arbitrage_ui_orbital_market_mapping",
+      "batch": "none (autonomous build — Batch 10 still UNAUTHORIZED)",
+      "summary": "Completed section 3 of the Spatial Command Center: Orbital Market Mapping in the inspection sheet Market segment (NS.scOrbitalPanelHtml -> scOrbital-{asin}). Target product is the sun (real name/price/monogram + radial gradient); competitor dots orbit with proximity = real landed price vs cheapest returned offer (hot/mid/cool ramp) and dot size = real seller feedback_count normalized across the roster, explicitly labeled as a presence proxy rather than market share; Buy Box winner gets a green ring; SVG <title> tooltips carry real price/feedback/fulfillment. NS.sellerOrbitCache keeps the loaded roster per-ASIN for the session so the Market tab re-plots the same real orbit; loadSellerDetails refreshes the orbit after the real /api/products/{asin}/offers fetch (guarded visibleRows lookup). Honesty: <2 priced offers -> explicit note; unloaded -> placeholder sun + dashed rings + load prompt; sellerDetailHtml output untouched so the s7 null-fixture (no >0< / .00) contract is preserved. Added contract assertions to test_ui_display.cjs (orbit plots real 2-offer fixture, thin roster declines, presence-proxy legend, p16 cached orbit + uncached wait-state). VERIFICATION: node test_ui_display.cjs ALL UI DISPLAY TESTS PASSED; new Function() parse OK; no weight_asc; full pytest 1319 passed / 3 skipped / 35 subtests (unchanged); protected_hashes 2 passed. Committed as e790b30 (build + tests) on top of 4bf0d82/d9d8e94."
+    },
     {
       "ts": "2026-09-05T00:00:00Z",
       "activity": "retail_arbitrage_ui_spatial_command_center",
