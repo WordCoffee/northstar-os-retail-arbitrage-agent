@@ -3916,62 +3916,502 @@
             .intel-strip { grid-template-columns: 1fr; }
         }
     </style>
+    <style id="ns-theme-v3-spatial">
+        /* ==================================================================
+         * NORTHSTAR OS — SPATIAL COMMAND CENTER (v3 overlay)
+         * Layered after ns-theme-v2. Immersive layer: dynamic ambient mesh,
+         * glassmorphism surfaces, floating Command Omnibar + Tool Dock,
+         * orbital sentiment, risk radar, thermal topography, Data X-Ray
+         * masonry, tactile faders, and confidence pulse signals.
+         *
+         * Every rule here is PRESENTATION ONLY — no element ids are removed
+         * and no JS contract is changed. The base and v2 stylesheets stay in
+         * place as the safety net.
+         * ================================================================== */
+
+        /* ---------------- ambient mesh layer ---------------- */
+        .sc-mesh {
+            position: fixed;
+            inset: -10%;
+            z-index: 0;
+            pointer-events: none;
+            transition: background 1.4s ease;
+            will-change: background;
+        }
+        .app-shell { background: transparent; }
+        .main { background: transparent; }
+        .content { position: relative; z-index: 1; }
+
+        /* readability veil between mesh and text — translucent, mesh bleeds */
+        html:not([data-theme="light"]) .sc-veil {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(120% 90% at 50% 8%, rgba(9, 12, 28, 0.42) 0%, rgba(7, 10, 24, 0.66) 100%);
+            pointer-events: none;
+        }
+        html[data-theme="light"] .sc-veil {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(120% 90% at 50% 8%, rgba(242, 243, 249, 0.42) 0%, rgba(230, 233, 244, 0.66) 100%);
+            pointer-events: none;
+        }
+
+        /* ---------------- floating Command Omnibar ---------------- */
+        .sc-omnibar {
+            position: fixed;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 90;
+            width: min(1180px, calc(100vw - 24px));
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 8px 12px 8px 14px;
+            border-radius: 18px;
+            box-sizing: border-box;
+            -webkit-backdrop-filter: blur(18px) saturate(150%);
+            backdrop-filter: blur(18px) saturate(150%);
+            box-shadow: 0 18px 44px -18px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transition: box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        html:not([data-theme="light"]) .sc-omnibar {
+            background: rgba(16, 24, 48, 0.62);
+            border: 1px solid rgba(139, 123, 255, 0.22);
+        }
+        html[data-theme="light"] .sc-omnibar {
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(79, 70, 229, 0.16);
+        }
+        .sc-omnibar:focus-within { box-shadow: 0 18px 44px -16px rgba(124, 58, 237, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+        .sc-omni-brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .sc-omni-mark {
+            width: 34px; height: 34px; border-radius: 11px;
+            background: var(--grad);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 20px -6px rgba(124, 58, 237, 0.65);
+        }
+        .sc-omni-mark svg { width: 19px; height: 19px; stroke: #ffffff; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+        .sc-omni-name { font-size: 14px; font-weight: 800; letter-spacing: -0.01em; color: var(--text-hi); line-height: 1.15; white-space: nowrap; }
+        .sc-omni-sub { font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+        .sc-omni-context { font-size: 9px; color: var(--text-faint); line-height: 1.2; white-space: nowrap; }
+
+        .sc-omni-search {
+            position: relative;
+            flex: 1 1 260px;
+            min-width: 180px;
+            display: flex; align-items: center; gap: 8px;
+            border-radius: 999px;
+            padding: 0 12px;
+            height: 38px;
+            transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+        html:not([data-theme="light"]) .sc-omni-search { background: rgba(9, 13, 31, 0.55); border: 1px solid rgba(139, 123, 255, 0.2); }
+        html[data-theme="light"] .sc-omni-search { background: rgba(13, 17, 40, 0.04); border: 1px solid rgba(79, 70, 229, 0.18); }
+        .sc-omni-search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+        .sc-omni-search-icon { width: 15px; height: 15px; stroke: var(--text-muted); fill: none; stroke-width: 2; stroke-linecap: round; flex-shrink: 0; }
+        .sc-omni-search input {
+            flex: 1; min-width: 0; border: none; outline: none; background: transparent;
+            color: var(--text-hi); font-size: 13px; font-family: var(--font);
+        }
+        .sc-omni-search input::placeholder { color: var(--text-muted); }
+        .sc-omni-hint {
+            flex-shrink: 0;
+            padding: 1px 7px; border-radius: 6px;
+            font-size: 11px; font-weight: 700; color: var(--text-muted);
+            background: var(--accent-soft); border: 1px solid var(--border-strong);
+        }
+        .sc-omni-suggest {
+            position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+            z-index: 110; border-radius: 14px; overflow: hidden;
+            -webkit-backdrop-filter: blur(18px) saturate(150%);
+            backdrop-filter: blur(18px) saturate(150%);
+            box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+            max-height: 320px; overflow-y: auto;
+        }
+        html:not([data-theme="light"]) .sc-omni-suggest { background: rgba(18, 27, 54, 0.92); border: 1px solid rgba(139, 123, 255, 0.2); }
+        html[data-theme="light"] .sc-omni-suggest { background: rgba(255, 255, 255, 0.96); border: 1px solid rgba(79, 70, 229, 0.16); }
+        .sc-suggest-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 14px; cursor: pointer; font-size: 12.5px; color: var(--text);
+            transition: background 0.12s ease;
+        }
+        .sc-suggest-item:hover, .sc-suggest-item.sel { background: var(--accent-soft); color: var(--text-hi); }
+        .sc-suggest-item svg { width: 15px; height: 15px; stroke: var(--accent); fill: none; stroke-width: 1.8; flex-shrink: 0; }
+        .sc-suggest-kind { margin-left: auto; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); flex-shrink: 0; }
+
+        .sc-omni-sentiment {
+            display: flex; align-items: center; gap: 7px;
+            flex-shrink: 0;
+            padding: 5px 12px; border-radius: 999px;
+            font-size: 11px; font-weight: 700; color: var(--text-muted);
+            border: 1px solid var(--border-strong); background: var(--accent-soft);
+            white-space: nowrap;
+            transition: color 0.5s ease, border-color 0.5s ease;
+        }
+        .sc-sent-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); box-shadow: 0 0 0 0 rgba(61, 220, 151, 0.55); transition: background 0.5s ease; }
+        .sc-sent-dot.pulse-pos { animation: scPulse 2.6s ease-out infinite; background: var(--pos); }
+        .sc-sent-dot.pulse-warn { animation: scPulseWarn 2.6s ease-out infinite; background: #d9a441; }
+        .sc-sent-dot.pulse-neutral { background: var(--accent); }
+
+        .sc-omni-nav { display: flex; align-items: center; gap: 3px; flex-wrap: nowrap; }
+        .sc-nav-pill {
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 7px 11px; border-radius: 999px;
+            background: transparent; border: 1px solid transparent;
+            color: var(--text-muted); font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: background 0.14s ease, color 0.14s ease, box-shadow 0.14s ease;
+            white-space: nowrap;
+        }
+        .sc-nav-pill svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .sc-nav-pill:hover { color: var(--text-hi); background: var(--accent-soft); }
+        .sc-nav-pill.active { background: var(--grad); color: #ffffff; box-shadow: 0 8px 18px -8px rgba(124, 58, 237, 0.7); }
+        .sc-nav-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+        /* ---------------- Contextual Tool Dock (bottom, hover-expand) ---------------- */
+        .sc-dock {
+            position: fixed;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 85;
+            display: flex; align-items: center; gap: 10px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            -webkit-backdrop-filter: blur(16px) saturate(150%);
+            backdrop-filter: blur(16px) saturate(150%);
+            box-shadow: 0 16px 40px -14px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+        html:not([data-theme="light"]) .sc-dock { background: rgba(16, 24, 48, 0.6); border: 1px solid rgba(139, 123, 255, 0.18); }
+        html[data-theme="light"] .sc-dock { background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(79, 70, 229, 0.14); }
+        .sc-dock-chip {
+            flex-shrink: 0; padding: 5px 10px; border-radius: 999px;
+            font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--accent); background: var(--accent-soft);
+        }
+        .sc-dock-items { display: flex; align-items: center; gap: 4px; overflow: hidden; max-width: 0; opacity: 0; pointer-events: none; transition: max-width 0.35s ease, opacity 0.25s ease; }
+        .sc-dock:hover .sc-dock-items, .sc-dock:focus-within .sc-dock-items, .sc-dock.sc-dock-open .sc-dock-items { max-width: 620px; opacity: 1; pointer-events: auto; }
+        .sc-dock-items .nr-btn { width: 40px; height: 40px; border-radius: 50%; position: relative; }
+        .sc-dock-items .nr-btn:hover { background: var(--accent-soft); color: var(--text-hi); }
+        .sc-dock-items .nr-btn.active { background: var(--grad); color: #fff; box-shadow: 0 6px 16px -6px rgba(124, 58, 237, 0.6); }
+        .sc-dock-items .nr-btn .nr-btn-label {
+            position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+            padding: 4px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; white-space: nowrap;
+            opacity: 0; pointer-events: none; transition: opacity 0.15s ease;
+            -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+        }
+        html:not([data-theme="light"]) .sc-dock-items .nr-btn .nr-btn-label { background: rgba(16, 24, 48, 0.94); color: var(--text-hi); border: 1px solid var(--border-strong); }
+        html[data-theme="light"] .sc-dock-items .nr-btn .nr-btn-label { background: rgba(255, 255, 255, 0.96); color: var(--text); border: 1px solid var(--border); }
+        .sc-dock-items .nr-btn:hover .nr-btn-label { opacity: 1; }
+        .sc-dock .nr-btn svg { width: 17px; height: 17px; }
+        .sc-dock .sc-dock-open { transform: translateX(0); }
+
+        /* ---------------- main column offset under the omnibar ---------------- */
+        .main { padding-top: 72px; }
+        .topbar { position: relative; }
+        .topbar #sidebarToggle { display: none; }
+        html:not([data-theme="light"]) .topbar { background: transparent; border-bottom: 1px solid rgba(139, 123, 255, 0.12); box-shadow: none; }
+        html[data-theme="light"] .topbar { background: transparent; border-bottom: 1px solid rgba(79, 70, 229, 0.1); box-shadow: none; }
+
+        /* ---------------- glassmorphism surfaces ---------------- */
+        html:not([data-theme="light"]) .intel-metric,
+        html:not([data-theme="light"]) .control-strip,
+        html:not([data-theme="light"]) .table-wrap,
+        html:not([data-theme="light"]) .calc-group,
+        html:not([data-theme="light"]) .calc-results,
+        html:not([data-theme="light"]) .sc-masonry,
+        html:not([data-theme="light"]) .opp-strip,
+        html:not([data-theme="light"]) .prefill-bar .prefill-chip,
+        html:not([data-theme="light"]) .sc-faders {
+            background: rgba(20, 28, 56, 0.58);
+            border: 1px solid rgba(139, 123, 255, 0.16);
+            -webkit-backdrop-filter: blur(14px) saturate(150%);
+            backdrop-filter: blur(14px) saturate(150%);
+            box-shadow: 0 14px 34px -18px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.045);
+        }
+        html[data-theme="light"] .intel-metric,
+        html[data-theme="light"] .control-strip,
+        html[data-theme="light"] .table-wrap,
+        html[data-theme="light"] .calc-group,
+        html[data-theme="light"] .calc-results,
+        html[data-theme="light"] .sc-masonry,
+        html[data-theme="light"] .opp-strip,
+        html[data-theme="light"] .sc-faders {
+            background: rgba(255, 255, 255, 0.66);
+            border: 1px solid rgba(79, 70, 229, 0.12);
+            -webkit-backdrop-filter: blur(14px) saturate(150%);
+            backdrop-filter: blur(14px) saturate(150%);
+            box-shadow: 0 14px 30px -16px rgba(30, 30, 80, 0.18);
+        }
+        html:not([data-theme="light"]) #scoutTable thead th { background: rgba(30, 40, 78, 0.5); }
+        html:not([data-theme="light"]) #scoutTable tbody tr:hover { background: rgba(139, 123, 255, 0.08); }
+        html:not([data-theme="light"]) .calc-group-title,
+        html:not([data-theme="light"]) .calc-results-title { border-bottom-color: rgba(139, 123, 255, 0.14); }
+
+        /* ---------------- fluid numerics + data glow ---------------- */
+        .intel-value, .kpi-value, .r-value, .sm-value, .sc-fader-val, .sc-radar-note, .opp-metrics b {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.01em;
+        }
+        .intel-value { text-shadow: 0 0 18px rgba(139, 123, 255, 0.28); }
+        .intel-value.sc-glow { text-shadow: 0 0 22px rgba(61, 220, 151, 0.55); color: var(--pos); }
+        .intel-value.sc-glow-warn { text-shadow: 0 0 22px rgba(217, 164, 65, 0.55); color: var(--warn); }
+
+        /* ---------------- Interactive KPI prisms ---------------- */
+        .intel-metric { perspective: 900px; transform-style: preserve-3d; transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease; will-change: transform; }
+        .intel-metric:hover { z-index: 3; }
+        .sc-prism-face {
+            position: absolute; inset: 0;
+            border-radius: inherit;
+            padding: 12px 14px;
+            opacity: 0; transform: rotateX(-62deg) scale(0.98); transform-origin: center top;
+            transition: opacity 0.2s ease, transform 0.28s ease;
+            pointer-events: none;
+            font-size: 10px; line-height: 1.5; color: var(--text-muted);
+            border: none;
+            -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+        }
+        html:not([data-theme="light"]) .sc-prism-face { background: rgba(16, 24, 48, 0.92); }
+        html[data-theme="light"] .sc-prism-face { background: rgba(255, 255, 255, 0.94); }
+        .intel-metric:hover .sc-prism-face { opacity: 1; transform: rotateX(0) scale(1); }
+        .sc-prism-face .sc-spark { display: block; width: 100%; height: 24px; margin: 6px 0 4px; }
+        .sc-prism-face .sc-spark polyline { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linejoin: round; }
+        .sc-prism-face .sc-spark-label { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); }
+
+        /* ---------------- Thermal Profit Topography (behind opp-strip) ---------------- */
+        .opp-strip { position: relative; overflow: hidden; }
+        .sc-thermal { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5; }
+        .opp-head, .opp-list-grid { position: relative; z-index: 1; }
+        .sc-thermal .th-point {
+            position: absolute; border-radius: 50%;
+            transform: translate(-50%, -50%);
+            filter: blur(5px);
+            transition: opacity 0.4s ease;
+        }
+
+        /* ---------------- Data X-Ray masonry grid ---------------- */
+        .sc-masonry { margin-top: 16px; padding: 16px; border-radius: var(--radius); }
+        .sc-masonry-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+        .sc-masonry-title { font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color: var(--text-hi); }
+        .sc-masonry-sub { font-size: 11px; color: var(--text-muted); }
+        .sc-masonry-cards { column-count: 4; column-gap: 14px; }
+        .sc-masonry-card {
+            break-inside: avoid; margin: 0 0 14px;
+            border-radius: 14px; overflow: hidden; position: relative;
+            border: 1px solid var(--border);
+            -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+            box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.5);
+            cursor: pointer; transition: transform 0.16s ease, box-shadow 0.2s ease;
+        }
+        html:not([data-theme="light"]) .sc-masonry-card { background: rgba(24, 33, 70, 0.7); }
+        html[data-theme="light"] .sc-masonry-card { background: rgba(255, 255, 255, 0.75); }
+        .sc-masonry-card:hover { transform: translateY(-3px); box-shadow: 0 18px 34px -16px rgba(124, 58, 237, 0.4); }
+        .sc-masonry-tile {
+            height: 118px; position: relative;
+            display: flex; align-items: center; justify-content: center;
+            transition: filter 0.2s ease;
+        }
+        .sc-masonry-tile .sc-tile-mono {
+            width: 52px; height: 52px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 19px; font-weight: 800; color: #ffffff;
+            letter-spacing: -0.02em; box-shadow: 0 10px 22px -8px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.35);
+        }
+        .sc-masonry-card .sc-card-body { padding: 10px 12px 12px; position: relative; z-index: 1; }
+        .sc-card-name { font-size: 12.5px; font-weight: 700; color: var(--text-hi); line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .sc-card-asin { font-size: 10.5px; color: var(--text-faint); margin-top: 3px; letter-spacing: 0.03em; }
+        .sc-card-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+        .sc-card-stat { background: var(--accent-soft); border-radius: 8px; padding: 6px 8px; text-align: left; }
+        .sc-card-stat .s-label { font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); font-weight: 700; }
+        .sc-card-stat .s-val { font-size: 12px; font-weight: 800; color: var(--text-hi); font-variant-numeric: tabular-nums; }
+        .sc-card-badge { display: inline-flex; margin-top: 8px; }
+        /* Data X-Ray overlay */
+        .sc-xray {
+            position: absolute; inset: 0; z-index: 2;
+            display: flex; flex-direction: column; justify-content: center; gap: 4px;
+            padding: 14px;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.18s ease;
+        }
+        html:not([data-theme="light"]) .sc-xray { background: rgba(8, 12, 26, 0.55); }
+        html[data-theme="light"] .sc-xray { background: rgba(255, 255, 255, 0.55); }
+        .sc-xray .x-ray-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); font-weight: 700; }
+        .sc-xray .x-ray-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--text-hi); font-variant-numeric: tabular-nums; padding: 2px 0; border-bottom: 1px dashed var(--border-strong); }
+        .sc-xray .x-ray-row.net-pos { color: var(--pos); }
+        .sc-xray .x-ray-row.net-neg { color: var(--neg); }
+        .sc-masonry-card:hover .sc-masonry-tile { filter: brightness(0.35); }
+        .sc-masonry-card:hover .sc-xray { opacity: 1; }
+        .sc-masonry-empty { padding: 34px 16px; text-align: center; color: var(--text-muted); }
+        .sc-masonry-empty-title { font-size: 14px; font-weight: 800; color: var(--text-hi); }
+        .sc-masonry-empty-sub { font-size: 12px; margin-top: 4px; }
+
+        /* ---------------- Tactile Margin Console ---------------- */
+        .sc-faders {
+            display: grid; grid-template-columns: repeat(3, minmax(120px, 1fr)) 1.6fr;
+            gap: 14px; align-items: end;
+            margin: 14px 0 18px; padding: 14px 16px;
+            border-radius: var(--radius);
+        }
+        .sc-fader { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .sc-fader-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+        .sc-fader-track { position: relative; width: 26px; height: 108px; }
+        .sc-fader-input {
+            position: absolute; left: 50%; top: 50%;
+            width: 108px; height: 26px; margin: 0;
+            transform: translate(-50%, -50%) rotate(-90deg);
+            -webkit-appearance: none; appearance: none;
+            background: transparent; cursor: pointer; outline: none;
+        }
+        .sc-fader-input::-webkit-slider-runnable-track {
+            height: 8px; border-radius: 999px;
+            background: linear-gradient(90deg, var(--accent-soft), rgba(139, 123, 255, 0.55));
+            border: 1px solid var(--border-strong);
+        }
+        .sc-fader-input::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 18px; height: 18px; border-radius: 50%; margin-top: -6px;
+            background: var(--grad); border: 2px solid #ffffff;
+            box-shadow: 0 4px 10px -3px rgba(124, 58, 237, 0.7);
+            transition: transform 0.1s ease;
+        }
+        .sc-fader-input:hover::-webkit-slider-thumb { transform: scale(1.15); }
+        .sc-fader-input::-moz-range-track { height: 8px; border-radius: 999px; background: var(--accent-soft); border: 1px solid var(--border-strong); }
+        .sc-fader-input::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--grad); border: 2px solid #ffffff; }
+        .sc-fader-val { font-size: 14px; font-weight: 800; color: var(--text-hi); font-variant-numeric: tabular-nums; }
+        .sc-fader-note { font-size: 10.5px; color: var(--text-faint); line-height: 1.5; align-self: center; padding-bottom: 6px; }
+        /* result-total scales physically with size */
+        .result-total .r-value { display: inline-block; transform-origin: right center; transition: transform 0.12s ease, color 0.2s ease; }
+
+        /* ---------------- Risk/Reward Radar Web ---------------- */
+        .sc-risk-radar { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border-strong); }
+        .sc-radar-svg { width: 100%; max-width: 250px; height: auto; display: block; margin: 0 auto; }
+        .sc-radar-svg .grid-ring { fill: none; stroke: var(--border-strong); stroke-width: 1; stroke-dasharray: 3 3; }
+        .sc-radar-svg .grid-spoke { stroke: var(--border-strong); stroke-width: 1; opacity: 0.7; }
+        .sc-radar-svg .radar-axis-label { font-size: 9px; font-weight: 700; fill: var(--text-muted); letter-spacing: 0.04em; }
+        .sc-radar-svg .radar-shape { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.8; stroke-linejoin: round; }
+        .sc-radar-svg .radar-vertex { fill: var(--accent); }
+        .sc-radar-svg .radar-unknown { stroke: var(--text-faint); stroke-width: 1; stroke-dasharray: 2 3; opacity: 0.8; }
+        .sc-radar-svg .radar-unknown-label { font-size: 8px; fill: var(--text-faint); }
+        .sc-radar-note { font-size: 10.5px; color: var(--text-faint); line-height: 1.5; margin: 8px 0 0; text-align: center; }
+
+        /* ---------------- Active Confidence Signals ---------------- */
+        .sc-pulse-ring { position: relative; }
+        @keyframes scPulse {
+            0% { box-shadow: 0 0 0 0 rgba(61, 220, 151, 0.5); }
+            70% { box-shadow: 0 0 0 9px rgba(61, 220, 151, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(61, 220, 151, 0); }
+        }
+        @keyframes scPulseWarn {
+            0% { box-shadow: 0 0 0 0 rgba(217, 164, 65, 0.5); }
+            70% { box-shadow: 0 0 0 9px rgba(217, 164, 65, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(217, 164, 65, 0); }
+        }
+        @keyframes scPulseAccent {
+            0% { box-shadow: 0 0 0 0 rgba(139, 123, 255, 0.55); }
+            70% { box-shadow: 0 0 0 9px rgba(139, 123, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 123, 255, 0); }
+        }
+        .status-pill:not(.loading) .dot { animation: scPulse 2.6s ease-out infinite; border-radius: 50%; }
+        .status-pill:not(.loading) .dot.ok, .sc-omni-sentiment .sc-sent-dot.pulse-pos { animation: scPulse 2.6s ease-out infinite; }
+        .status-pill.loading .dot { animation: scPulseAccent 1.6s ease-out infinite; }
+        .badge.pos, .badge.live, .badge.verified { animation: scPulse 2.8s ease-out infinite; }
+
+        /* ---------------- mobile / reduced motion ---------------- */
+        @media (max-width: 1024px) {
+            .sc-omni-nav .sc-nav-pill span { display: none; }
+            .sc-nav-pill { padding: 8px 10px; }
+            .sc-faders { grid-template-columns: repeat(3, 1fr); }
+            .sc-fader-note { grid-column: 1 / -1; }
+            .sc-masonry-cards { column-count: 3; }
+        }
+        @media (max-width: 760px) {
+            .sc-omnibar { top: 6px; flex-wrap: wrap; gap: 8px; padding: 8px 10px; border-radius: 14px; }
+            .sc-omni-sub, .sc-omni-hint, .sc-omni-sentiment, .sc-omni-context { display: none; }
+            .sc-omni-search { order: 3; flex-basis: 100%; }
+            .main { padding-top: 92px; }
+            .sc-masonry-cards { column-count: 2; }
+            .sc-dock { bottom: 10px; }
+        }
+        @media (max-width: 520px) {
+            .sc-masonry-cards { column-count: 1; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .sc-mesh, .sc-thermal .th-point, .intel-metric, .sc-prism-face,
+            .sc-sent-dot, .status-pill .dot, .badge.pos, .badge.live, .badge.verified,
+            .result-total .r-value, .sc-nav-pill, .sc-dock-items, .sc-omnibar,
+            .sc-omni-suggest { animation: none !important; transition: none !important; }
+        }
+    </style>
 </head>
 <body>
+    <div class="sc-mesh" id="scMesh" aria-hidden="true"></div>
+    <div class="sc-veil" aria-hidden="true"></div>
     <div class="app-shell">
-        <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
-            <div class="brand">
-                <div class="brand-mark">
-                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2l2.6 5.4L20 6.5l-2 5.5 2 5.5-5.4-.9L12 22l-2.6-5.4L4 16.5l2-5.5-2-5.5 5.4.9L12 2z"/><path d="M12 7l1.2 2.5L16 10l-2.8 1.2L12 14l-1.2-2.8L8 10l2.8-.5L12 7z"/></svg>
+        <!-- ================================================================
+             COMMAND OMNIBAR — floating spotlight-style primary navigation.
+             The old 236px sidebar and slim icon rail are gone; navigation is
+             consolidated into a centralized top command bar. The same nav-*
+             ids are carried here so openView(), the boot bindings, and the
+             UI contract suite keep working untouched.
+             ================================================================ -->
+        <header class="sc-omnibar" id="scOmnibar" aria-label="Command omnibar">
+            <div class="sc-omni-brand">
+                <div class="sc-omni-mark">
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2l2.6 5.4L20 6.5l-2 5.5 2 5.5-5.4-.9L12 22l-2.6-5.4L4 16.5l2-5.5-2-5.5 5.4.9L12 2z"/></svg>
                 </div>
-                <div class="brand-text">
-                    <div class="brand-name">Northstar OS</div>
-                    <div class="brand-sub">Retail Arbitrage</div>
-                    <div class="brand-context">Amazon FBA sourcing suite</div>
+                <div class="sc-omni-text">
+                    <div class="sc-omni-name">Northstar OS</div>
+                    <div class="sc-omni-sub">Retail Arbitrage</div>
+                    <div class="sc-omni-context">Amazon FBA sourcing suite</div>
                 </div>
             </div>
-            <nav class="nav" aria-label="Views">
-                <div class="nav-section">Workspace</div>
-                <button class="nav-item active" id="nav-scout" data-view="scout" type="button" aria-current="page">
+            <div class="sc-omni-search">
+                <svg class="sc-omni-search-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 3a8 8 0 1 0 0 16 8 8 0 0 0 0-16z"/><path d="m21 21-4.3-4.3"/></svg>
+                <input id="scOmniInput" type="text" role="combobox" aria-expanded="false" aria-controls="scOmniSuggest"
+                       placeholder="Search ASINs, keywords, or run a command… (go risk · open calculator · cycle · portfolio)"
+                       autocomplete="off" aria-label="Search products or run a command">
+                <kbd class="sc-omni-hint" aria-hidden="true">/</kbd>
+                <div class="sc-omni-suggest" id="scOmniSuggest" hidden></div>
+            </div>
+            <div class="sc-omni-sentiment" id="scSentiment" title="Live market sentiment from the visible candidate set — not a recommendation">
+                <span class="sc-sent-dot" id="scSentDot" aria-hidden="true"></span>
+                <span id="scSentimentLabel">Sentiment: —</span>
+            </div>
+            <nav class="sc-omni-nav" aria-label="Views">
+                <button class="sc-nav-pill active" id="nav-scout" data-view="scout" type="button" aria-current="page">
                     <svg aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="m15 9-2.5 3.5L9 15l2.5-3.5L15 9z"/></svg>
                     <span>Product Scout</span>
                 </button>
-                <button class="nav-item" id="nav-calculator" data-view="calculator" type="button">
+                <button class="sc-nav-pill" id="nav-calculator" data-view="calculator" type="button">
                     <svg aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>
                     <span>Margin Calculator</span>
                 </button>
-                <button class="nav-item" id="nav-profit" data-view="profit" type="button">
+                <button class="sc-nav-pill" id="nav-profit" data-view="profit" type="button">
                     <svg aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M15 9h-4a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4H9"/><path d="M12 6v2m0 8v2"/></svg>
                     <span>Profit Calculator</span>
                 </button>
-                <button class="nav-item" id="nav-risk" data-view="risk" type="button">
+                <button class="sc-nav-pill" id="nav-risk" data-view="risk" type="button">
                     <svg aria-hidden="true"><path d="M12 3l8 4v5c0 4.5-3.2 8.2-8 9-4.8-.8-8-4.5-8-9V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
                     <span>Risk Engine</span>
                 </button>
-                <button class="nav-item" id="nav-cycle" data-view="cycle" type="button">
+                <button class="sc-nav-pill" id="nav-cycle" data-view="cycle" type="button">
                     <svg aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
                     <span>Cycle Planner</span>
                 </button>
-                <button class="nav-item" id="nav-portfolio" data-view="portfolio" type="button">
+                <button class="sc-nav-pill" id="nav-portfolio" data-view="portfolio" type="button">
                     <svg aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
                     <span>Portfolio</span>
                 </button>
             </nav>
-            <div class="sidebar-foot">Northstar OS · Service: Retail Arbitrage</div>
-        </aside>
+        </header>
 
-        <!-- ======== NAV RAIL — slim icon-first navigation ======== -->
-        <nav class="nav-rail" id="navRail" aria-label="Primary navigation">
-            <div class="nr-brand">
-                <div class="nr-mark">
-                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2l2.6 5.4L20 6.5l-2 5.5 2 5.5-5.4-.9L12 22l-2.6-5.4L4 16.5l2-5.5-2-5.5 5.4.9L12 2z"/></svg>
-                </div>
-                <div class="nr-brand-text">
-                    <div class="nr-brand-name">Northstar OS</div>
-                    <div class="nr-brand-sub">Retail Arbitrage</div>
-                </div>
-            </div>
-            <div class="nr-items">
+        <!-- ================================================================
+             CONTEXTUAL TOOL DOCK — bottom-anchored floating dock that expands
+             only on hover/focus. Carries the same nr-* ids as the old rail so
+             openView() keeps toggling active states across both nav surfaces.
+             ================================================================ -->
+        <nav class="sc-dock" id="scDock" aria-label="Quick tool dock">
+            <span class="sc-dock-chip" aria-hidden="true">Tools</span>
+            <div class="sc-dock-items">
                 <button class="nr-btn" id="nr-scout" data-view="scout" type="button" aria-current="page" aria-label="Product Scout">
                     <svg aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="m15 9-2.5 3.5L9 15l2.5-3.5L15 9z"/></svg>
                     <span class="nr-btn-label">Product Scout</span>
@@ -3996,9 +4436,6 @@
                     <svg aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
                     <span class="nr-btn-label">Portfolio</span>
                 </button>
-            </div>
-            <div class="nr-foot">
-                <div class="nr-foot-status"><span class="nr-foot-dot"></span> Internal tool</div>
             </div>
         </nav>
 
@@ -4109,6 +4546,7 @@
                             Table
                         </button>
                         <button class="cs-btn" id="csViewFocus" type="button" aria-pressed="false" aria-label="Focus mode">Focus</button>
+                        <button class="cs-btn" id="csViewMasonry" type="button" aria-pressed="false" aria-label="Masonry grid view with Data X-Ray">Masonry</button>
                         <button class="cs-btn" id="csColBtn" type="button" aria-expanded="false" aria-controls="colPanel" style="display:none;">
                             Columns
                         </button>
@@ -4540,6 +4978,7 @@
                     </div>
 
                     <div class="opp-strip" id="oppStrip" hidden>
+                        <div class="sc-thermal" id="thermalField" aria-hidden="true"></div>
                         <div class="opp-head">
                             <button class="ns-collapsible-header" id="oppToggle" type="button" aria-expanded="true" aria-controls="oppList">
                                 <span class="opp-title">Top opportunities</span>
@@ -4605,12 +5044,47 @@
                         </table>
                     </div>
 
+                    <!-- ======== DATA X-RAY MASONRY GRID (spatial overlay mode) ======== -->
+                    <section class="sc-masonry" id="scMasonry" aria-label="Masonry product grid with Data X-Ray" hidden>
+                        <div class="sc-masonry-head">
+                            <span class="sc-masonry-title">Data X-Ray Masonry</span>
+                            <span class="sc-masonry-sub">Each tile maps the current visible set — hover to X-ray FBA fee, Net Profit and ROI over the product.</span>
+                        </div>
+                        <div class="sc-masonry-cards" id="scMasonryCards"></div>
+                        <div class="sc-masonry-empty" id="scMasonryEmpty" hidden>
+                            <div class="sc-masonry-empty-title">No products to display</div>
+                            <div class="sc-masonry-empty-sub">Adjust filters or run a scan to see candidates in the masonry grid.</div>
+                        </div>
+                    </section>
+
                     <p class="table-note">Scout ranking uses Costco source cost and ranks by net profit, ROI, seller competition, demand, and Buy Box price stability. Only Pass products are qualified candidates. When a verified FBA fee is unavailable, the product stays visible in the Needs Fee Verification review state: its FBA Fee, Net Profit, and ROI cells show Unavailable and it is never counted in qualified KPIs — never shown as $0 and never fabricated. Monthly sales and FBA seller counts may be estimates or unknown. Estimated and unknown values are labeled as such and are never treated as zero. No result here is a recommendation to buy or an approval to resell.</p>
                 </section>
 
                 <!-- ==================== MARGIN CALCULATOR ==================== -->
                 <section class="view" id="view-calculator" aria-label="Margin Calculator" hidden>
                     <div class="calc-callout">Manual unit-economics calculator. Values entered here do not alter Scout source-cost data.</div>
+
+                    <!-- ======== TACTILE MARGIN CONSOLE — vertical faders drive the same
+                         real fields as the numeric inputs (bidirectional, no new data).
+                         Faders scale the ROI readout to give a physical feel. ======== -->
+                    <div class="sc-faders" id="calcFaders" aria-label="Tactile margin console">
+                        <div class="sc-fader">
+                            <label class="sc-fader-label" for="cFaderCost">Source cost</label>
+                            <input type="range" class="sc-fader-input" id="cFaderCost" min="0" max="50" step="0.5" value="0" aria-describedby="cFaderCostVal">
+                            <output class="sc-fader-val" id="cFaderCostVal" for="cFaderCost">$0.00</output>
+                        </div>
+                        <div class="sc-fader">
+                            <label class="sc-fader-label" for="cFaderPrice">Sale price</label>
+                            <input type="range" class="sc-fader-input" id="cFaderPrice" min="0" max="100" step="1" value="0" aria-describedby="cFaderPriceVal">
+                            <output class="sc-fader-val" id="cFaderPriceVal" for="cFaderPrice">$0.00</output>
+                        </div>
+                        <div class="sc-fader">
+                            <label class="sc-fader-label" for="cFaderFba">FBA fee</label>
+                            <input type="range" class="sc-fader-input" id="cFaderFba" min="0" max="25" step="0.25" value="0" aria-describedby="cFaderFbaVal">
+                            <output class="sc-fader-val" id="cFaderFbaVal" for="cFaderFba">$0.00</output>
+                        </div>
+                        <div class="sc-fader-note">Faders write into the same Source cost / Sale price / FBA fee fields above — type in either surface and the other stays in sync.</div>
+                    </div>
 
                     <div class="prefill-bar" id="calcPrefillBar" hidden>
                         <span class="prefill-chip" id="calcPrefillChip"></span>
@@ -4855,6 +5329,14 @@
                             <h3 class="calc-results-title">Directional risk</h3>
                             <div class="risk-gauge">
                                 <span class="risk-badge neutral" id="riskBadge">—</span>
+                            </div>
+                            <!-- ======== RISK/REWARD RADAR WEB — 5-axis radar derived ONLY
+                                 from the scenario inputs below. Axes without a data source
+                                 (Amazon Dominance, Trend) are left at the center, never
+                                 guessed. ======== -->
+                            <div class="sc-risk-radar" id="riskRadar">
+                                <svg class="sc-radar-svg" id="riskRadarSvg" viewBox="0 0 220 220" role="img" aria-label="Five-axis risk radar web"></svg>
+                                <p class="sc-radar-note" id="riskRadarNote">Enter scenario assumptions above to map the radar. Axes without a data source stay at the centre — never guessed.</p>
                             </div>
                             <ul class="risk-reasons" id="riskReasons"></ul>
                             <p class="result-note" id="riskNote">Enter scenario assumptions to score. The score is directional only — it is not a recommendation or an approval to buy.</p>
@@ -7519,6 +8001,7 @@
                 fc.textContent = String(n);
                 fc.className = 'filter-count' + (n === 0 ? ' zero' : '');
             }
+            if (typeof NS.scRefresh === 'function') NS.scRefresh();
         }
         NS.renderScout = renderScout;
 
@@ -9571,6 +10054,608 @@
          * finish parsing. Binding during parse would silently skip every
          * listener that targets those nodes (tabs, X close, overlay
          * click, sort popover) — exactly the reported dead controls. */
+        /* ==================================================================
+         * NORTHSTAR OS — SPATIAL COMMAND CENTER ENGINE (SC module)
+         * ------------------------------------------------------------------
+         * Additive presentation layer for the v3 spatial redesign. It reads
+         * ONLY existing app state (scoutState, currentFilters, sortKey,
+         * currentViewMode, visibleRows(), the risk/calculator inputs) and
+         * derives every visualization from REAL fields — no new data, no
+         * provider calls, no credentials, no fabricated history. Axes or
+         * metrics with no data source are shown as "no data", never guessed.
+         *
+         * Sandbox-safe: every DOM access is defensive so the module is a
+         * no-op inside the UI contract suite's element stubs, and it never
+         * registers a second document-level keydown listener.
+         * ================================================================== */
+        (function () {
+            var SC = {
+                masonryOpen: false,
+                sentiment: { score: 0.5, label: 'Neutral' },
+            };
+            NS.scModule = SC;
+
+            function isNum(v) { return typeof v === 'number' && isFinite(v); }
+            function clamp(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+            function lerp(a, b, t) { return a + (b - a) * t; }
+            function round2(n) { return Math.round(n * 100) / 100; }
+            function lerpColor(c1, c2, t) {
+                function comp(c) { return [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]; }
+                var a = comp(c1), b = comp(c2);
+                function hx(n) { return (n < 16 ? '0' : '') + n.toString(16); }
+                return '#' + hx(Math.round(lerp(a[0], b[0], t))) + hx(Math.round(lerp(a[1], b[1], t))) + hx(Math.round(lerp(a[2], b[2], t)));
+            }
+            function hashString(s) {
+                var h = 2166136261;
+                if (!s) return 0;
+                for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+                return h >>> 0;
+            }
+            function visibleRowsSafe() {
+                try { return NS.visibleRows ? NS.visibleRows() : []; } catch (e) { return []; }
+            }
+
+            /* ---------------- dynamic ambient mesh + market sentiment ---------------- */
+            function scComputeSentiment() {
+                var rows = visibleRowsSafe();
+                if (!rows || rows.length === 0) return { score: 0.5, label: 'Neutral', rows: 0 };
+                var pass = 0, roiSum = 0, roiN = 0, econ = 0;
+                rows.forEach(function (p) {
+                    if (p.verdict === 'Pass') pass++;
+                    if (isNum(p.roi_pct)) { roiSum += p.roi_pct; roiN++; }
+                    if (isNum(p.net_profit)) econ++;
+                });
+                var passShare = pass / rows.length;
+                var avgRoi = roiN ? roiSum / roiN : 0;
+                var score = clamp(passShare * 0.55 + clamp(avgRoi / 100, 0, 1) * 0.3 + (econ / rows.length) * 0.15, 0, 1);
+                var label;
+                if (score >= 0.7) label = 'Strong opportunity';
+                else if (score >= 0.45) label = 'Neutral';
+                else label = 'Saturated / risky';
+                return { score: score, label: label, rows: rows.length, passShare: passShare, avgRoi: avgRoi };
+            }
+
+            function scRefreshMesh() {
+                var mesh = el('scMesh');
+                var sent = scComputeSentiment();
+                SC.sentiment = sent;
+                var t = sent.score;
+                var tone = t >= 0.5 ? lerpColor('#8b7bff', '#3ddc97', (t - 0.5) * 2) : lerpColor('#d9a441', '#8b7bff', t * 2);
+                if (mesh) {
+                    mesh.style.background =
+                        'radial-gradient(56% 44% at 22% 16%, ' + tone + '33 0%, transparent 60%),' +
+                        'radial-gradient(50% 40% at 78% 26%, ' + tone + '2e 0%, transparent 60%),' +
+                        'radial-gradient(44% 36% at 30% 78%, rgba(124,58,237,0.30) 0%, transparent 62%),' +
+                        'radial-gradient(52% 42% at 70% 82%, ' + tone + '24 0%, transparent 60%)';
+                }
+                var dot = el('scSentDot');
+                var dotCls = sent.score >= 0.7 ? 'pulse-pos' : (sent.score <= 0.45 ? 'pulse-warn' : 'pulse-neutral');
+                if (dot) dot.className = 'sc-sent-dot ' + dotCls;
+                var lbl = el('scSentimentLabel');
+                if (lbl) lbl.textContent = 'Sentiment: ' + sent.label + (sent.rows ? ' — ' + sent.rows + ' visible' : '');
+                var chip = el('scSentiment');
+                if (chip) {
+                    if (sent.score >= 0.7) { chip.style.color = 'var(--pos)'; chip.style.borderColor = 'rgba(61,220,151,0.4)'; }
+                    else if (sent.score <= 0.45) { chip.style.color = '#d9a441'; chip.style.borderColor = 'rgba(217,164,65,0.4)'; }
+                    else { chip.style.color = ''; chip.style.borderColor = ''; }
+                }
+                scRefreshGlow(sent);
+            }
+
+            function scRefreshGlow(sent) {
+                var q = el('kpiQualified'), a = el('kpiAvgProfit'), c = el('kpiCandidates');
+                var qv = parseFloat((q && String(q.textContent !== undefined ? q.textContent : '').replace(/[^0-9.\-]/g, '')) || 'NaN');
+                var av = parseFloat((a && String(a.textContent !== undefined ? a.textContent : '').replace(/[^0-9.\-]/g, '')) || 'NaN');
+                if (q) {
+                    if (isNum(qv) && qv > 0) { q.style.boxShadow = '0 0 24px -6px rgba(61,220,151,0.55)'; q.style.color = 'var(--pos)'; }
+                    else { q.style.boxShadow = ''; q.style.color = ''; }
+                }
+                if (a) {
+                    if (isNum(av) && av >= 5) { a.style.boxShadow = '0 0 24px -6px rgba(61,220,151,0.5)'; a.style.color = 'var(--pos)'; }
+                    else if (isNum(av) && av < 0) { a.style.boxShadow = ''; a.style.color = 'var(--warn)'; }
+                    else { a.style.boxShadow = ''; a.style.color = ''; }
+                }
+            }
+
+            /* ---------------- thermal profit topography ---------------- */
+            function scRenderThermal() {
+                var field = el('thermalField');
+                var rows = visibleRowsSafe();
+                if (!rows || rows.length === 0) { if (field) field.innerHTML = ''; return; }
+                var withEcon = rows.filter(function (p) { return isNum(p.net_profit) && isNum(p.monthly_sales_estimate); });
+                if (withEcon.length < 2) { if (field) field.innerHTML = ''; return; }
+                var maxNet = -Infinity, minNet = Infinity, maxSales = 0;
+                withEcon.forEach(function (p) {
+                    if (p.net_profit > maxNet) maxNet = p.net_profit;
+                    if (p.net_profit < minNet) minNet = p.net_profit;
+                    if (p.monthly_sales_estimate > maxSales) maxSales = p.monthly_sales_estimate;
+                });
+                var span = (maxNet - minNet) || 1;
+                var html = withEcon.map(function (p, i) {
+                    var nx = (p.net_profit - minNet) / span;
+                    var heat = clamp((p.net_profit / span) * 0.6 + Math.log(1 + p.monthly_sales_estimate) / Math.log(1 + maxSales) * 0.4, 0, 1);
+                    var x = ((i + 0.5) / withEcon.length) * 100;
+                    var y = (1 - nx) * 80 + 8;
+                    var color = heat >= 0.66 ? '#f97316' : (heat >= 0.33 ? '#e3b341' : '#8b7bff');
+                    var size = 6 + heat * 16;
+                    return '<span class="th-point" style="left:' + x.toFixed(1) + '%;top:' + y.toFixed(1) + '%;width:' + size.toFixed(1) + 'px;height:' + size.toFixed(1) + 'px;background:' + color + ';opacity:' + (0.35 + heat * 0.5).toFixed(2) + '"></span>';
+                }).join('');
+                if (field) field.innerHTML = html;
+            }
+
+            /* ---------------- Data X-Ray masonry grid ---------------- */
+            function masonryCardHtml(p) {
+                var tileHue = hashString(p.asin || p.name || 'x') % 360;
+                var initials = (p.name || '?').trim().split(/\s+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase();
+                if (!initials) initials = (p.asin || '?').slice(0, 2);
+                var net = isNum(p.net_profit);
+                var netCls = net ? (p.net_profit >= 0 ? 'net-pos' : 'net-neg') : '';
+                var fbaText = isNum(p.fba_sellers) ? String(p.fba_sellers) : 'Unknown';
+                var salesText = isNum(p.monthly_sales_estimate) ? NS.fmtSales(p.monthly_sales_estimate) : 'Unknown';
+                return '<article class="sc-masonry-card" data-asin="' + NS.escapeHtml(p.asin || '') + '" tabindex="0" role="button" aria-label="' + NS.escapeHtml(p.name || 'Product') + '">' +
+                    '<div class="sc-masonry-tile" style="background:linear-gradient(140deg, hsl(' + tileHue + ' 66% 56%), hsl(' + ((tileHue + 40) % 360) + ' 62% 36%));">' +
+                    '<span class="sc-tile-mono">' + NS.escapeHtml(initials) + '</span>' +
+                    '</div>' +
+                    '<div class="sc-xray" aria-hidden="true">' +
+                    '<span class="x-ray-label">Data X-Ray</span>' +
+                    '<span class="x-ray-row"><span>FBA fee</span><b>' + (isNum(p.fba_fee) ? NS.fmt(p.fba_fee) : '—') + '</b></span>' +
+                    '<span class="x-ray-row ' + netCls + '"><span>Net profit</span><b>' + (net ? NS.fmt(p.net_profit) : '—') + '</b></span>' +
+                    '<span class="x-ray-row"><span>ROI</span><b>' + (isNum(p.roi_pct) ? NS.fmtPct(p.roi_pct) : '—') + '</b></span>' +
+                    '</div>' +
+                    '<div class="sc-card-body">' +
+                    '<div class="sc-card-name" title="' + NS.escapeHtml(p.name || '') + '">' + NS.escapeHtml(p.name || 'Unknown product') + '</div>' +
+                    '<div class="sc-card-asin">' + NS.escapeHtml(p.asin || '') + '</div>' +
+                    '<div class="sc-card-stats">' +
+                    '<span class="sc-card-stat"><span class="s-label">Price</span><span class="s-val">' + (isNum(p.amazon_price) ? NS.fmt(p.amazon_price) : '—') + '</span></span>' +
+                    '<span class="sc-card-stat"><span class="s-label">Cost</span><span class="s-val">' + (isNum(p.costco_cost) ? NS.fmt(p.costco_cost) : '—') + '</span></span>' +
+                    '<span class="sc-card-stat"><span class="s-label">Sales</span><span class="s-val">' + NS.escapeHtml(salesText) + '</span></span>' +
+                    '</div>' +
+                    '<span class="sc-card-badge"><span class="badge ' + NS.statusClass(p.verdict) + '">' + NS.statusLabel(p.verdict) + '</span></span>' +
+                    '</div>' +
+                    '</article>';
+            }
+
+            function scRestoreSurface() {
+                var stream = el('streamView'), table = el('tableWrap'), opp = el('oppStrip'), focus = el('focusGrid');
+                var g = (typeof currentViewMode !== 'undefined') ? currentViewMode : 'gallery';
+                var isFocus = g === 'focus';
+                if (isFocus) {
+                    if (focus) focus.hidden = false;
+                    if (opp) opp.style.display = '';
+                } else {
+                    var isStream = (g === 'gallery' || g === 'list');
+                    if (stream) stream.style.display = isStream ? '' : 'none';
+                    if (table) table.style.display = g === 'table' ? '' : 'none';
+                    if (opp) opp.style.display = '';
+                    if (focus) focus.hidden = true;
+                }
+            }
+
+            function scMasonryRefresh() {
+                var grid = el('scMasonry');
+                if (!grid) return;
+                var rows = visibleRowsSafe();
+                var inFocus = (typeof currentViewMode !== 'undefined') && currentViewMode === 'focus';
+                var show = SC.masonryOpen && !inFocus;
+                grid.hidden = !show;
+                if (!show) { scRestoreSurface(); return; }
+                var stream = el('streamView'), table = el('tableWrap'), opp = el('oppStrip'), focus = el('focusGrid');
+                if (stream) stream.style.display = 'none';
+                if (table) table.style.display = 'none';
+                if (opp) opp.style.display = 'none';
+                if (focus) focus.hidden = true;
+                var cards = el('scMasonryCards'), empty = el('scMasonryEmpty');
+                if (!rows || rows.length === 0) {
+                    if (cards) cards.innerHTML = '';
+                    if (empty) empty.hidden = false;
+                    return;
+                }
+                if (empty) empty.hidden = true;
+                if (cards) cards.innerHTML = rows.map(function (p) { return masonryCardHtml(p); }).join('');
+            }
+
+            function scToggleMasonry() {
+                SC.masonryOpen = !SC.masonryOpen;
+                scMasonryRefresh();
+                var btn = el('csViewMasonry');
+                if (btn) {
+                    btn.setAttribute('aria-pressed', SC.masonryOpen ? 'true' : 'false');
+                    btn.classList.toggle('active', SC.masonryOpen);
+                }
+            }
+
+            function scUpdateMasonryButton() {
+                var btn = el('csViewMasonry');
+                if (!btn) return;
+                var inFocus = (typeof currentViewMode !== 'undefined') && currentViewMode === 'focus';
+                btn.style.display = inFocus ? 'none' : '';
+            }
+
+            function scBindMasonry() {
+                var btn = el('csViewMasonry');
+                if (btn && btn.addEventListener) btn.addEventListener('click', function () {
+                    scToggleMasonry();
+                    if (typeof NS.renderScout === 'function') NS.renderScout();
+                });
+                var grid = el('scMasonry');
+                if (grid && grid.addEventListener) grid.addEventListener('click', function (e) {
+                    var card = e.target && e.target.closest ? e.target.closest('.sc-masonry-card') : null;
+                    if (!card) return;
+                    var asin = card.getAttribute('data-asin');
+                    if (!asin) return;
+                    var prod = null;
+                    var rows = visibleRowsSafe();
+                    for (var i = 0; i < rows.length; i++) { if (rows[i].asin === asin) prod = rows[i]; }
+                    if (prod && typeof NS.openSheet === 'function') NS.openSheet(prod, card);
+                });
+            }
+
+            /* ---------------- interactive KPI prisms (real current-set values) ---------------- */
+            function scSparkHtml(nets) {
+                if (!nets || nets.length < 2) return '';
+                var min = Math.min.apply(null, nets), max = Math.max.apply(null, nets);
+                var span = (max - min) || 1;
+                var w = 100, h = 30;
+                var pts = nets.map(function (n, i) {
+                    var x = (i / (nets.length - 1)) * w;
+                    var y = h - 3 - ((n - min) / span) * (h - 6);
+                    return x.toFixed(1) + ',' + y.toFixed(1);
+                });
+                return '<svg class="sc-spark" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true"><polyline points="' + pts.join(' ') + '"/></svg>';
+            }
+
+            function scPrismFaceFor(kpiId, rows) {
+                var pass = 0, nfv = 0, def = 0, other = 0, netSum = 0, netN = 0, nets = [];
+                (rows || []).forEach(function (p) {
+                    var v = p.verdict;
+                    if (v === 'Pass') pass++;
+                    else if (v === 'Needs Fee Verification') nfv++;
+                    else if (v === 'Needs Mapping Verification') def++;
+                    else other++;
+                    if (isNum(p.net_profit)) { netSum += p.net_profit; netN++; nets.push(p.net_profit); }
+                });
+                if (kpiId === 'kpiCandidates') {
+                    return '<span class="sc-spark-label">Current set composition (visible, real votes)</span>' + scSparkHtml(nets) +
+                        pass + ' Pass · ' + (def + nfv) + ' needs review · ' + other + ' other';
+                }
+                if (kpiId === 'kpiQualified') {
+                    return '<span class="sc-spark-label">Pass share of visible set</span>' + scSparkHtml(nets) +
+                        (rows.length ? Math.round((pass / rows.length) * 100) : 0) + '% of ' + rows.length + ' visible candidates are Pass';
+                }
+                if (kpiId === 'kpiAvgProfit') {
+                    return '<span class="sc-spark-label">Visible net-profit profile ($/unit — real values, not history)</span>' + scSparkHtml(nets) +
+                        (netN ? 'Mean $' + (netSum / netN).toFixed(2) + ' across ' + netN + ' computed candidates' : 'No computed unit economics');
+                }
+                if (kpiId === 'kpiBest') {
+                    var top = rows && rows.length ? rows[0] : null;
+                    return '<span class="sc-spark-label">Top of current sort</span>' +
+                        (top ? NS.escapeHtml(top.name || '—') + ' · ' + (isNum(top.net_profit) ? 'net ' + NS.fmt(top.net_profit) : 'economics unavailable') : 'No visible candidates');
+                }
+                return '';
+            }
+
+            function scRefreshPrisms() {
+                if (typeof document === 'undefined' || typeof document.createElement !== 'function' || typeof document.querySelectorAll !== 'function') return;
+                var cards = document.querySelectorAll('.intel-metric');
+                var rows = visibleRowsSafe();
+                for (var i = 0; i < cards.length; i++) {
+                    var card = cards[i];
+                    if (!card || !card.querySelector) continue;
+                    var val = card.querySelector('.intel-value');
+                    var id = '';
+                    if (val && val.getAttribute) id = val.getAttribute('id') || '';
+                    var face = card.querySelector('.sc-prism-face');
+                    if (!face && document.createElement) {
+                        face = document.createElement('div');
+                        face.className = 'sc-prism-face';
+                        if (card.appendChild) card.appendChild(face);
+                    }
+                    if (face && face.innerHTML !== undefined) face.innerHTML = scPrismFaceFor(id, rows);
+                }
+            }
+
+            /* ---------------- tactile margin console ---------------- */
+            function scScaleRoi() {
+                var roi = el('cRoi');
+                if (!roi) return;
+                var txt = String(roi.textContent !== undefined ? roi.textContent : '').replace(/[^0-9.\-]/g, '');
+                var v = parseFloat(txt);
+                if (isNum(v)) {
+                    var scale = clamp(1 + Math.abs(v) / 400, 1, 1.35);
+                    roi.style.transform = 'scale(' + scale.toFixed(3) + ')';
+                    roi.style.color = v >= 25 ? 'var(--pos)' : (v < 0 ? 'var(--neg)' : '');
+                } else {
+                    roi.style.transform = '';
+                    roi.style.color = '';
+                }
+            }
+
+            function scSyncFaders() {
+                var map = [['cFaderCost', 'cCogs'], ['cFaderPrice', 'cPrice'], ['cFaderFba', 'cFbaFee']];
+                for (var i = 0; i < map.length; i++) {
+                    var f = el(map[i][0]), t = el(map[i][1]), out = el(map[i][0] + 'Val');
+                    if (!f || !t) continue;
+                    var v = parseFloat(String(t.value !== undefined ? t.value : '').replace(/[^0-9.\-]/g, ''));
+                    if (!isNum(v)) v = parseFloat(f.value) || 0;
+                    v = clamp(v, parseFloat(f.min) || 0, parseFloat(f.max) || 100);
+                    f.value = String(v);
+                    if (out) out.textContent = NS.fmt(v);
+                }
+                scScaleRoi();
+            }
+
+            function scBindFaders() {
+                var map = [['cFaderCost', 'cCogs'], ['cFaderPrice', 'cPrice'], ['cFaderFba', 'cFbaFee']];
+                map.forEach(function (pair) {
+                    var f = el(pair[0]);
+                    if (f && f.addEventListener) f.addEventListener('input', function () {
+                        var t = el(pair[1]), out = el(pair[0] + 'Val');
+                        var v = parseFloat(f.value) || 0;
+                        if (t) t.value = String(round2(v));
+                        if (out) out.textContent = NS.fmt(v);
+                        if (typeof NS.renderCalcResults === 'function') NS.renderCalcResults();
+                    });
+                    var t = el(pair[1]);
+                    if (t && t.addEventListener) t.addEventListener('input', scSyncFaders);
+                });
+            }
+
+            /* ---------------- command omnibar ---------------- */
+            var SC_VIEW_KEYWORDS = { scout: 'scout', calculator: 'calculator', margin: 'calculator', profit: 'profit', risk: 'risk', cycle: 'cycle', portfolio: 'portfolio' };
+            var scOmniState = { sel: 0, items: [] };
+
+            function scNavTarget(q) {
+                var s = String(q || '').trim().toLowerCase().replace(/^(go|open|show|nav)\s+/, '').replace(/\s+/g, ' ');
+                if (SC_VIEW_KEYWORDS[s]) return SC_VIEW_KEYWORDS[s];
+                var words = s.split(' ');
+                for (var i = 0; i < words.length; i++) { if (SC_VIEW_KEYWORDS[words[i]]) return SC_VIEW_KEYWORDS[words[i]]; }
+                return null;
+            }
+
+            function scOmniClear() {
+                var input = el('scOmniInput'), list = el('scOmniSuggest');
+                if (input) input.value = '';
+                if (list) { list.hidden = true; list.innerHTML = ''; }
+                if (input && input.setAttribute) input.setAttribute('aria-expanded', 'false');
+                scOmniState.items = [];
+                scOmniState.sel = 0;
+            }
+
+            function scRenderSuggest() {
+                var input = el('scOmniInput'), list = el('scOmniSuggest');
+                if (!input || !list) return;
+                var q = input.value.trim();
+                if (!q) { list.hidden = true; list.innerHTML = ''; input.setAttribute('aria-expanded', 'false'); scOmniState.items = []; return; }
+                var items = [];
+                var target = scNavTarget(q);
+                if (target) {
+                    items.push({ kind: 'open ' + target, label: 'Go to ' + target, view: target });
+                } else if (/^B0[A-Z0-9]{8}$/i.test(q)) {
+                    items.push({ kind: 'ASIN focus', label: q.toUpperCase() + ' — open in Scout', asin: q.toUpperCase() });
+                } else {
+                    items.push({ kind: 'search', label: 'Search Scout for “' + q + '”', search: q });
+                }
+                var rows = visibleRowsSafe();
+                var ql = q.toLowerCase();
+                var found = 0;
+                for (var i = 0; i < rows.length && found < 5; i++) {
+                    var p = rows[i];
+                    var hit = (p.name && p.name.toLowerCase().indexOf(ql) !== -1) || (p.asin && String(p.asin).toLowerCase().indexOf(ql) !== -1);
+                    if (hit) { items.push({ kind: 'product', label: (p.name || p.asin || 'Product'), asin: p.asin, product: p }); found++; }
+                }
+                scOmniState.items = items.slice(0, 8);
+                list.innerHTML = scOmniState.items.map(function (it, i) {
+                    var icon = it.view
+                        ? '<svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 4.5-3.2 8.2-8 9-4.8-.8-8-4.5-8-9V7l8-4z"/></svg>'
+                        : '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>';
+                    return '<div class="sc-suggest-item' + (i === 0 ? ' sel' : '') + '" data-sci="' + i + '">' + icon + '<span class="sc-suggest-text">' + NS.escapeHtml(it.label) + '</span><span class="sc-suggest-kind">' + NS.escapeHtml(it.kind) + '</span></div>';
+                }).join('');
+                list.hidden = false;
+                input.setAttribute('aria-expanded', 'true');
+                scOmniState.sel = 0;
+            }
+
+            function scRunOmni(value) {
+                var q = String(value !== undefined ? value : (el('scOmniInput') ? el('scOmniInput').value : '')).trim();
+                if (!q) return;
+                var target = scNavTarget(q);
+                if (target) { scOmniClear(); if (typeof NS.openView === 'function') NS.openView(target); return; }
+                var asin = q.toUpperCase();
+                if (/^B0[A-Z0-9]{8}$/.test(asin)) {
+                    scOmniClear();
+                    if (typeof NS.openView === 'function') NS.openView('scout');
+                } else {
+                    scOmniClear();
+                    if (typeof NS.openView === 'function') NS.openView('scout');
+                }
+                var search = el('csSearch');
+                if (search) {
+                    search.value = /^B0[A-Z0-9]{8}$/.test(asin) ? asin : q;
+                    var f = currentFilters || defaultFilters();
+                    f.search = search.value;
+                    syncFilterInputs();
+                    saveFilters(f);
+                    renderScout();
+                }
+            }
+
+            function scOmniMove(delta) {
+                var items = scOmniState.items;
+                if (!items.length) return;
+                scOmniState.sel = (scOmniState.sel + delta + items.length) % items.length;
+                var list = el('scOmniSuggest');
+                if (list && list.querySelectorAll) {
+                    var nodes = list.querySelectorAll('.sc-suggest-item');
+                    for (var i = 0; i < nodes.length; i++) nodes[i].classList.toggle('sel', i === scOmniState.sel);
+                }
+            }
+
+            function scBindOmnibar() {
+                var input = el('scOmniInput'), list = el('scOmniSuggest');
+                if (!input) return;
+                input.addEventListener('input', scRenderSuggest);
+                input.addEventListener('keydown', function (e) {
+                    if (!e || !e.key) return;
+                    if (e.key === 'Enter') {
+                        if (e.preventDefault) e.preventDefault();
+                        var it = scOmniState.items[scOmniState.sel];
+                        if (it && it.product) scRunOmni(it.asin || it.search);
+                        else scRunOmni();
+                        return;
+                    }
+                    if (e.key === 'Escape') { scOmniClear(); return; }
+                    if (e.key === 'ArrowDown') { if (e.preventDefault) e.preventDefault(); scOmniMove(1); return; }
+                    if (e.key === 'ArrowUp') { if (e.preventDefault) e.preventDefault(); scOmniMove(-1); return; }
+                });
+                if (list && list.addEventListener) list.addEventListener('click', function (e) {
+                    var node = e.target && e.target.closest ? e.target.closest('.sc-suggest-item') : null;
+                    if (!node) return;
+                    var idx = parseInt(node.getAttribute('data-sci'), 10);
+                    var it = scOmniState.items[idx];
+                    if (!it) return;
+                    if (it.view) { if (typeof NS.openView === 'function') NS.openView(it.view); scOmniClear(); }
+                    else if (it.asin) scRunOmni(it.asin);
+                    else if (it.search) scRunOmni(it.search);
+                });
+            }
+
+            /* ---------------- risk/reward radar web ---------------- */
+            var SC_RADAR_AXES = { sales: 'Sales Velocity', fba: 'Competition', profit: 'Margin', dominance: 'Amazon Dominance', trend: 'Trend' };
+
+            function scRenderRadar() {
+                var svg = el('riskRadarSvg');
+                if (!svg) return;
+                var salesRaw = parseFloat((el('rSales') || {}).value || '');
+                var fbaRaw = parseFloat((el('rFba') || {}).value || '');
+                var profitRaw = parseFloat((el('rProfit') || {}).value || '');
+                var sales = isNum(salesRaw) ? clamp(salesRaw / 200, 0, 1) : null;
+                var fba = isNum(fbaRaw) ? (1 - clamp(fbaRaw / 6, 0, 1)) : null;
+                var profit = isNum(profitRaw) ? clamp(profitRaw / 15, 0, 1) : null;
+                var values = [sales, fba, profit, null, null];
+                scDrawRadar(svg, values);
+                var note = el('riskRadarNote');
+                if (note) {
+                    var label = [];
+                    if (sales !== null) label.push('Sales ' + Math.round(sales * 100) + '%');
+                    if (fba !== null) label.push('Competition ' + Math.round(fba * 100) + '% (inverse of FBA sellers)');
+                    if (profit !== null) label.push('Margin ' + Math.round(profit * 100) + '%');
+                    note.textContent = label.length
+                        ? label.join(' · ') + ' — plotted from your scenario inputs. Amazon Dominance and Trend have no data source in this scenario tool and stay at the centre rather than being guessed.'
+                        : 'Enter scenario assumptions above to map the radar. Axes without a data source stay at the centre — never guessed.';
+                }
+            }
+
+            function scDrawRadar(svg, values) {
+                var cx = 110, cy = 110, R = 74;
+                var n = values.length;
+                var angle = function (i) { return (Math.PI * 2 * i) / n - Math.PI / 2; };
+                var pt = function (i, r) { return [(cx + r * Math.cos(angle(i))).toFixed(1), (cy + r * Math.sin(angle(i))).toFixed(1)].join(','); };
+                var parts = [];
+                [0.33, 0.66, 1].forEach(function (f) {
+                    var pts = [];
+                    for (var i = 0; i < n; i++) pts.push(pt(i, R * f));
+                    parts.push('<polygon class="grid-ring" points="' + pts.join(' ') + '"/>');
+                });
+                for (var i = 0; i < n; i++) {
+                    var outer = pt(i, R).split(',');
+                    parts.push('<line class="grid-spoke" x1="' + cx + '" y1="' + cy + '" x2="' + outer[0] + '" y2="' + outer[1] + '"/>');
+                }
+                var legend = Object.keys(SC_RADAR_AXES);
+                for (var i = 0; i < n; i++) {
+                    var p = pt(i, R + 22).split(',');
+                    var ax = parseFloat(p[0]);
+                    var anchor = ax < cx - 4 ? 'end' : (ax > cx + 4 ? 'start' : 'middle');
+                    parts.push('<text class="radar-axis-label" x="' + p[0] + '" y="' + p[1] + '" text-anchor="' + anchor + '" dominant-baseline="middle">' + NS.escapeHtml(legend[i]) + '</text>');
+                }
+                var shapePts = [];
+                for (var i = 0; i < n; i++) {
+                    var v = values[i];
+                    if (v === null) {
+                        shapePts.push(pt(i, 0));
+                        var mid = pt(i, R * 0.6).split(',');
+                        parts.push('<line class="radar-unknown" x1="' + cx + '" y1="' + cy + '" x2="' + pt(i, R).split(',')[0] + '" y2="' + pt(i, R).split(',')[1] + '"/>');
+                        parts.push('<text class="radar-unknown-label" x="' + mid[0] + '" y="' + mid[1] + '" text-anchor="middle" dominant-baseline="middle">no data</text>');
+                    } else {
+                        shapePts.push(pt(i, R * v));
+                    }
+                }
+                parts.push('<polygon class="radar-shape" points="' + shapePts.join(' ') + '"/>');
+                for (var i = 0; i < n; i++) {
+                    if (values[i] !== null) {
+                        var vp = pt(i, R * values[i]).split(',');
+                        parts.push('<circle class="radar-vertex" r="2.4" cx="' + vp[0] + '" cy="' + vp[1] + '"/>');
+                    }
+                }
+                svg.setAttribute('aria-label', 'Five-axis risk radar: ' + legend.join(', '));
+                svg.innerHTML = parts.join('');
+            }
+
+            function scBindRadar() {
+                ['rSales', 'rFba', 'rProfit'].forEach(function (id) {
+                    var n = el(id);
+                    if (n && n.addEventListener) n.addEventListener('input', scRenderRadar);
+                });
+            }
+
+            /* ---------------- tool dock (touch fallback) ---------------- */
+            function scBindDock() {
+                var dock = el('scDock');
+                if (dock && dock.addEventListener) dock.addEventListener('click', function (e) {
+                    var isBtn = e && e.target && e.target.closest ? !!e.target.closest('.nr-btn') : false;
+                    if (!isBtn) dock.classList.toggle('sc-dock-open');
+                });
+            }
+
+            /* ---------------- orchestration ---------------- */
+            function scRefresh() {
+                try {
+                    scRefreshMesh();
+                    scRefreshPrisms();
+                    scRenderThermal();
+                    scMasonryRefresh();
+                    scUpdateMasonryButton();
+                } catch (e) { /* presentation hooks must never break the scout render */ }
+            }
+            NS.scRefresh = scRefresh;
+
+            function initSC() {
+                scBindOmnibar();
+                scBindFaders();
+                scBindMasonry();
+                scBindRadar();
+                scBindDock();
+                scRefresh();
+            }
+
+            if (NS && typeof NS.openView === 'function') {
+                var _scOpenView = NS.openView;
+                NS.openView = function (v) {
+                    var r = _scOpenView ? _scOpenView(v) : undefined;
+                    if (v === 'risk') scRenderRadar();
+                    if (v === 'calculator') scSyncFaders();
+                    return r;
+                };
+            }
+            if (NS && typeof NS.renderCalcResults === 'function') {
+                var _scRenderCalc = NS.renderCalcResults;
+                NS.renderCalcResults = function () {
+                    var r = _scRenderCalc ? _scRenderCalc() : undefined;
+                    scSyncFaders();
+                    return r;
+                };
+            }
+
+            (function scBoot() {
+                if (typeof document === 'undefined' || typeof document.addEventListener !== 'function') return;
+                function onReady() { initSC(); }
+                if (typeof document.readyState === 'string' && document.readyState !== 'loading') {
+                    onReady();
+                } else {
+                    document.addEventListener('DOMContentLoaded', onReady);
+                }
+            })();
+        })();
+
         function boot() {
             if (typeof document === 'undefined') return;
             if (document.readyState === 'loading' && typeof document.addEventListener === 'function') {
