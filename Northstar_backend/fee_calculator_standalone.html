@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Northstar OS · FBA Fee Calculator</title>
+<!--
+  ============================================================================
+  Northstar OS — Standalone Amazon FBA Fee Calculator (offline, self-contained)
+
+  Product-grade single-file tool (style inspired by Helium 10 / professional
+  Amazon seller SaaS). No server, no build step, no CDN, no external deps —
+  double-click to open in any browser. Everything runs locally in the page.
+
+  DEFAULT STATE (test note): the form pre-loads the Kirkland Minoxidil example
+  so a working result is visible immediately on open:
+      category : Health & Personal Care (15% above $10)
+      weight   : 32 oz (2.0 lb standard-size)
+      dims     : 8 x 5 x 4 in
+      price    : $37.99        landed cost: $17.99
+      => referral $5.70 · fulfillment $6.10 · total $11.80 · payout $26.19
+         · net $8.20 · margin 21.58%
+  (The real recorded net is $7.52 / payout $25.51; the +$0.68 variance is a
+  documented 2.0 lb fulfillment assumption — see test_fee_calculator.py.)
+
+  SYNC WARNING: the referral percentages and fulfillment weight tiers below
+  are hard-coded and MUST be kept in sync with the canonical Python source in
+  fee_calculator.py (REFERRAL_RATES, PRICE_SWITCH_CATEGORIES,
+  FBA_STANDARD_SIZE_TIER_TABLE, STANDARD_MAX_WEIGHT_LBS,
+  STANDARD_MAX_DIMENSIONS_IN). If fee_calculator.py changes, update the
+  REFERRAL_RATES / FBA_TIERS objects in the embedded script here too.
+  ============================================================================
+-->
+<style>
+  :root {
+    --bg: #eef0f4;
+    --card: #ffffff;
+    --border: #e4e7ee;
+    --border-strong: #d3d8e2;
+    --text: #16202e;
+    --text-2: #5a677a;
+    --text-3: #8b95a7;
+    --accent: #4f46e5;
+    --accent-2: #7c3aed;
+    --accent-ink: #ffffff;
+    --grad: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+    --navy: #0f172a;
+    --ok: #15803d;
+    --ok-bg: #e8f5ec;
+    --warn: #b45309;
+    --warn-bg: #fff7e0;
+    --warn-border: #e8c45a;
+    --danger: #dc2626;
+    --danger-bg: #fdecea;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 24px rgba(16, 24, 40, 0.06);
+    --shadow-lg: 0 12px 40px rgba(16, 24, 40, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:
+      radial-gradient(1200px 400px at 50% -120px, rgba(124, 58, 237, 0.10), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    line-height: 1.45;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    background: var(--navy);
+    color: #fff;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .mark {
+    width: 40px; height: 40px;
+    border-radius: 11px;
+    background: var(--grad);
+    display: grid; place-items: center;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+    flex: none;
+  }
+  .brand .mark svg { width: 22px; height: 22px; }
+  .brand .names { line-height: 1.15; }
+  .brand .names .name {
+    font-weight: 700; font-size: 0.95rem; letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .brand .names .tag { font-size: 0.78rem; color: #a5b4d0; }
+  .topbar .pill-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.75rem; font-weight: 600;
+    color: #d6def0; background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 6px 12px; border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+  .pill svg { width: 13px; height: 13px; }
+
+  /* ---------- App shell ---------- */
+  .shell { flex: 1; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 40px; }
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(340px, 420px) 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  @media (max-width: 880px) { .layout { grid-template-columns: 1fr; } }
+
+  /* ---------- Cards ---------- */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px;
+  }
+  .card h2 {
+    margin: 0 0 4px;
+    font-size: 1rem; font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .card .card-sub { margin: 0 0 18px; font-size: 0.82rem; color: var(--text-3); }
+
+  /* ---------- Form ---------- */
+  .row { margin-bottom: 15px; }
+  .row:last-child { margin-bottom: 0; }
+  .row label {
+    display: flex; align-items: baseline; justify-content: space-between;
+    font-size: 0.80rem; font-weight: 600; color: var(--text-2);
+    margin-bottom: 6px; letter-spacing: 0.01em;
+  }
+  .row label .hint { font-weight: 500; color: var(--text-3); font-size: 0.74rem; }
+  .input-wrap { position: relative; }
+  .input-wrap .adorn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    color: var(--text-3); font-size: 0.92rem; font-weight: 550;
+    pointer-events: none; z-index: 1;
+  }
+  .input-wrap .adorn.left { left: 12px; }
+  .input-wrap .adorn.right { right: 12px; }
+  .input-wrap input,
+  .input-wrap select {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: #fff;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    appearance: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    font-family: inherit;
+  }
+  .input-wrap.select { position: relative; }
+  .input-wrap.select::after {
+    content: "";
+    position: absolute; right: 14px; top: 50%;
+    width: 8px; height: 8px;
+    border-right: 2px solid var(--text-3);
+    border-bottom: 2px solid var(--text-3);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+  .input-wrap input.pad-left { padding-left: 26px; }
+  .input-wrap input.pad-right { padding-right: 34px; }
+  .input-wrap input:focus, .input-wrap select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.16);
+  }
+  .dims { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+  .btn {
+    margin-top: 18px;
+    width: 100%; height: 46px;
+    border: none; border-radius: 10px;
+    background: var(--grad);
+    color: var(--accent-ink);
+    font-size: 0.98rem; font-weight: 650;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(79, 70, 229, 0.32);
+    transition: transform 0.08s, box-shadow 0.15s, filter 0.15s;
+    font-family: inherit;
+  }
+  .btn:hover { filter: brightness(1.06); box-shadow: 0 8px 22px rgba(79, 70, 229, 0.4); }
+  .btn:active { transform: translateY(1px); }
+
+  /* ---------- Results ---------- */
+  .results { position: sticky; top: 20px; }
+  @media (max-width: 880px) { .results { position: static; } }
+
+  .hero {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+    background: linear-gradient(180deg, #fafbff, #f4f6ff);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+  }
+  .hero .hero-label { font-size: 0.78rem; font-weight: 600; color: var(--text-2); letter-spacing: 0.02em; }
+  .hero .hero-value { font-size: 2.1rem; font-weight: 750; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.05; }
+  .hero .hero-value.pos { color: var(--ok); }
+  .hero .hero-value.neg { color: var(--danger); }
+  .hero .hero-value.na { color: var(--text-3); }
+  .hero .badges { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 0.76rem; font-weight: 650; letter-spacing: 0.01em;
+    padding: 5px 11px; border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+  }
+  .badge.pos { color: var(--ok); background: var(--ok-bg); }
+  .badge.neutral { color: var(--text-2); background: #eef1f6; }
+  .badge.neg { color: var(--danger); background: var(--danger-bg); }
+  .badge svg { width: 12px; height: 12px; }
+
+  .row-list { display: grid; grid-template-columns: 1fr auto; gap: 2px 18px; }
+  .rl { display: contents; }
+  .rl .k { color: var(--text-2); font-size: 0.88rem; padding: 7px 0; }
+  .rl .k .k-sub { display: block; font-size: 0.74rem; color: var(--text-3); margin-top: 1px; }
+  .rl .v { text-align: right; font-size: 0.92rem; font-weight: 600; font-variant-numeric: tabular-nums; padding: 7px 0; }
+  .rl .v.na { color: var(--text-3); font-weight: 500; font-style: italic; }
+  .rl.divider { border-top: 1px dashed var(--border-strong); margin-top: 6px; padding-top: 4px; }
+  .rl:hover .k { color: var(--text); }
+  .rl .k.total, .rl .v.total { font-weight: 700; color: var(--text); font-size: 0.95rem; }
+  .rl .v.payout { color: var(--accent); }
+  .rl .v.neg { color: var(--danger); }
+
+  .margin-meter { margin-top: 16px; }
+  .margin-meter .mm-head { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-2); margin-bottom: 6px; font-weight: 600; }
+  .mm-track { height: 8px; border-radius: 999px; background: #eceff5; overflow: hidden; }
+  .mm-fill { height: 100%; border-radius: 999px; background: var(--grad); transition: width 0.3s ease; }
+  .mm-fill.neg { background: var(--danger); }
+
+  /* ---------- Fee schedule reference ---------- */
+  details.ref {
+    margin-top: 18px;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
+  details.ref summary {
+    cursor: pointer; list-style: none;
+    font-size: 0.82rem; font-weight: 650; color: var(--accent);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  details.ref summary::-webkit-details-marker { display: none; }
+  details.ref summary::before {
+    content: ""; width: 7px; height: 7px;
+    border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent);
+    transform: rotate(45deg) translateY(-1px);
+    transition: transform 0.15s;
+  }
+  details.ref[open] summary::before { transform: rotate(-135deg) translateY(-2px); }
+  .fee-notes { font-size: 0.76rem; color: var(--text-3); margin: 10px 0 6px; line-height: 1.5; }
+  table.fees { width: 100%; border-collapse: collapse; font-size: 0.80rem; }
+  table.fees th {
+    text-align: left; font-weight: 650; color: var(--text-2);
+    padding: 6px 8px; border-bottom: 1px solid var(--border-strong);
+    font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  table.fees td { padding: 6px 8px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+  table.fees tr:last-child td { border-bottom: none; }
+  table.fees td.num { text-align: right; font-weight: 600; }
+
+  /* ---------- Disclaimer & footer ---------- */
+  .notice {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-left: 5px solid var(--warn-border);
+    color: var(--warn);
+    border-radius: 10px;
+    padding: 13px 16px;
+    margin-bottom: 22px;
+    font-size: 0.85rem;
+    box-shadow: var(--shadow);
+  }
+  .notice svg { flex: none; width: 18px; height: 18px; margin-top: 1px; }
+  .notice strong { font-weight: 700; }
+  .error-box {
+    margin-top: 14px;
+    background: var(--danger-bg);
+    border: 1px solid #ef9a9a;
+    border-left: 5px solid #e57373;
+    color: #7a2017;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.84rem;
+  }
+  footer {
+    border-top: 1px solid var(--border);
+    background: #fff;
+  }
+  footer .wrap {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px; flex-wrap: wrap;
+    padding-top: 18px; padding-bottom: 18px;
+    font-size: 0.78rem; color: var(--text-3);
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="mark" aria-hidden="true">
+      <!-- 4-point star mark -->
+      <svg viewBox="0 0 24 24" fill="#ffffff">
+        <path d="M12 2c.9 5.2 4.8 9.1 10 10-5.2.9-9.1 4.8-10 10-.9-5.2-4.8-9.1-10-10 5.2-.9 9.1-4.8 10-10z"/>
+      </svg>
+    </div>
+    <div class="names">
+      <div class="name">Northstar OS</div>
+      <div class="tag">Amazon FBA Fee Calculator</div>
+    </div>
+  </div>
+  <div class="pill-group">
+    <span class="pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 6.5C17 4.5 14.8 3 12 3S7 4.5 7 6.5 9 9.5 12 10s5 1.5 5 3.5-2.2 3.5-5 3.5-5-1.5-5-3.5"/></svg>
+      US Marketplace
+    </span>
+    <span class="pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      Fee schedule 2026
+    </span>
+  </div>
+</header>
+
+<div class="shell">
+  <div class="wrap">
+
+    <div class="notice" role="status">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>
+      </svg>
+      <div>
+        <strong>APPROXIMATE — verify against Seller Central</strong> before relying on this
+        for real pricing decisions. Fulfillment fees use a fixed 2026 standard-size
+        weight-tier schedule; referral fees are flat by category. Fee schedules change,
+        and actual fees can differ. Storage fees are out of scope (shown as $0.00).
+      </div>
+    </div>
+
+    <div class="layout">
+
+      <!-- ======================= FORM ======================= -->
+      <section class="card">
+        <h2>Product details</h2>
+        <p class="card-sub">Enter one unit's economics to estimate landed fees.</p>
+
+        <div class="row">
+          <label for="category">Category
+            <span class="hint">Referral % by category</span>
+          </label>
+          <div class="input-wrap select">
+            <select id="category"></select>
+          </div>
+        </div>
+
+        <div class="row">
+          <label for="salePrice">Sale price <span class="hint">USD</span></label>
+          <div class="input-wrap">
+            <span class="adorn left">$</span>
+            <input id="salePrice" type="number" step="0.01" min="0" inputmode="decimal" class="pad-left">
+          </div>
+        </div>
+
+        <div class="row">
+          <label for="landedCost">Landed cost / COGS <span class="hint">USD</span></label>
+          <div class="input-wrap">
+            <span class="adorn left">$</span>
+            <input id="landedCost" type="number" step="0.01" min="0" inputmode="decimal" class="pad-left">
+          </div>
+        </div>
+
+        <div class="row">
+          <label for="weightOz">Package weight <span class="hint">oz → lbs</span></label>
+          <div class="input-wrap">
+            <input id="weightOz" type="number" step="0.1" min="0" inputmode="decimal" class="pad-right">
+            <span class="adorn right">oz</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <label>Dimensions <span class="hint">optional — oversize check</span></label>
+          <div class="dims">
+            <div class="input-wrap">
+              <input id="dimL" type="number" step="0.1" min="0" inputmode="decimal" placeholder="L in">
+            </div>
+            <div class="input-wrap">
+              <input id="dimW" type="number" step="0.1" min="0" inputmode="decimal" placeholder="W in">
+            </div>
+            <div class="input-wrap">
+              <input id="dimH" type="number" step="0.1" min="0" inputmode="decimal" placeholder="H in">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn" type="button" id="calcBtn">Calculate</button>
+        <div id="errorBox" class="error-box" style="display:none;"></div>
+      </section>
+
+      <!-- ======================= RESULTS ======================= -->
+      <section class="card results">
+        <h2>Fee breakdown</h2>
+        <p class="card-sub">Estimated per-unit economics — local calculation.</p>
+
+        <div class="hero">
+          <div>
+            <div class="hero-label">Net profit per unit</div>
+            <div class="hero-value na" id="netHero">—</div>
+          </div>
+          <div class="badges">
+            <span class="badge neutral" id="marginBadge">Margin —</span>
+            <span class="badge neutral" id="statusBadge">—</span>
+          </div>
+        </div>
+
+        <div class="row-list" id="rowList">
+          <div class="rl">
+            <span class="k">Sale price</span>
+            <span class="v" id="rPrice">—</span>
+          </div>
+          <div class="rl">
+            <span class="k">Referral fee<span class="k-sub" id="rReferralNote"></span></span>
+            <span class="v" id="rReferral">—</span>
+          </div>
+          <div class="rl">
+            <span class="k">Fulfillment fee<span class="k-sub" id="rFulfillmentNote"></span></span>
+            <span class="v" id="rFulfillment">—</span>
+          </div>
+          <div class="rl">
+            <span class="k">Storage fee <span class="k-sub">out of scope</span></span>
+            <span class="v" id="rStorage">—</span>
+          </div>
+          <div class="rl divider">
+            <span class="k total">Total fees</span>
+            <span class="v total" id="rTotal">—</span>
+          </div>
+          <div class="rl">
+            <span class="k">Amazon payout<span class="k-sub">sale price − total fees</span></span>
+            <span class="v payout" id="rPayout">—</span>
+          </div>
+        </div>
+
+        <div class="margin-meter">
+          <div class="mm-head">
+            <span>Net margin</span>
+            <span id="mmLabel">—</span>
+          </div>
+          <div class="mm-track"><div class="mm-fill" id="mmFill" style="width:0%"></div></div>
+        </div>
+
+        <details class="ref">
+          <summary>Fee schedule reference</summary>
+          <p class="fee-notes">
+            FBA standard-size all-in rates (US, 2026) incl. fuel/logistics surcharge.
+            Envelope: ≤ 20 lb, every side ≤ 18 × 14 × 8 in. Oversize → not estimated (N/A).
+            Referral: Health &amp; Personal Care / Beauty are 8% at or below $10, 15% above.
+          </p>
+          <table class="fees">
+            <thead><tr><th>Weight tier (lbs)</th><th class="num">Fulfillment fee</th></tr></thead>
+            <tbody>
+              <tr><td>0 – 0.5</td><td class="num">$4.75</td></tr>
+              <tr><td>0.5 – 1</td><td class="num">$5.25</td></tr>
+              <tr><td>1 – 2</td><td class="num">$6.10</td></tr>
+              <tr><td>2 – 3</td><td class="num">$7.10</td></tr>
+              <tr><td>3 – 5</td><td class="num">$8.20</td></tr>
+              <tr><td>5 – 10</td><td class="num">$9.90</td></tr>
+              <tr><td>10 – 20</td><td class="num">$12.50</td></tr>
+              <tr><td>20+ (standard max)</td><td class="num">$15.00</td></tr>
+            </tbody>
+          </table>
+        </details>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Northstar OS · merchant tooling · fee tables v2026.1</span>
+    <span>All calculations run locally — nothing leaves your browser.</span>
+  </div>
+</footer>
+
+<script>
+"use strict";
+
+/* ===========================================================================
+ * Fee tables — MUST stay in sync with fee_calculator.py.
+ *   fee_calculator.py REFERRAL_RATES                -> REFERRAL_RATES
+ *   fee_calculator.py PRICE_SWITCH_CATEGORIES       -> PRICE_SWITCH_CATEGORIES
+ *   fee_calculator.py FBA_STANDARD_SIZE_TIER_TABLE  -> FBA_TIERS
+ *   fee_calculator.py STANDARD_MAX_WEIGHT_LBS       -> STANDARD_MAX_WEIGHT_LBS
+ *   fee_calculator.py STANDARD_MAX_DIMENSIONS_IN    -> STANDARD_MAX_DIMENSIONS_IN
+ * If fee_calculator.py changes, update these to match.
+ * ==========================================================================*/
+
+// Flat referral % by category (Amazon US, 2026).
+const REFERRAL_RATES = {
+  "Health & Personal Care": 0.15,
+  "Beauty": 0.15,
+  "Home & Kitchen": 0.15,
+  "Tools & Home Improvement": 0.15,
+  "Sports & Outdoors": 0.15,
+  "Pet Supplies": 0.15,
+  "Toys & Games": 0.15,
+  "Everything Else": 0.15,
+  "Grocery & Gourmet Food": 0.15,
+  "Automotive & Powersports": 0.12,
+  "Business, Industrial & Scientific": 0.12,
+  "Consumer Electronics": 0.08,
+  "Computers": 0.08,
+  "Baby Products": 0.15
+};
+
+// Health & Personal Care / Beauty: 8% at/below $10, 15% above.
+const PRICE_SWITCH_CATEGORIES = {
+  "Health & Personal Care": 10.0,
+  "Beauty": 10.0
+};
+
+const DEFAULT_CATEGORY = "Everything Else";
+
+// FBA standard-size fulfillment fees, all-in, by max weight (lb) -> fee (USD).
+const FBA_TIERS = [
+  [0.5, 4.75],
+  [1.0, 5.25],
+  [2.0, 6.10],
+  [3.0, 7.10],
+  [5.0, 8.20],
+  [10.0, 9.90],
+  [20.0, 12.50],
+  [Infinity, 15.00]
+];
+const STANDARD_MAX_WEIGHT_LBS = 20.0;
+const STANDARD_MAX_DIMENSIONS_IN = [18.0, 14.0, 8.0];
+
+function round2(n) { return Math.round((n + Number.EPSILON) * 100) / 100; }
+function isPosNum(v) { return typeof v === "number" && isFinite(v) && v > 0; }
+
+/* ---- Referral fee (mirrors calculate_referral_fee) ---------------------- */
+function referralFee(salePrice, category) {
+  const resolved = REFERRAL_RATES[category] !== undefined ? category : DEFAULT_CATEGORY;
+  if (!isPosNum(salePrice)) {
+    return { fee: null, rate: null, category: resolved, note: "No sale price — unavailable." };
+  }
+  const rate = REFERRAL_RATES[resolved];
+  const threshold = PRICE_SWITCH_CATEGORIES[resolved];
+  let effective, note;
+  if (threshold !== undefined && salePrice <= threshold) {
+    effective = 0.08;
+    note = resolved + " · 8% at/below $" + threshold.toFixed(2);
+  } else {
+    effective = rate;
+    note = resolved + " · " + Math.round(rate * 100) + "% of sale price";
+  }
+  return { fee: round2(salePrice * effective), rate: effective, category: resolved, note: note };
+}
+
+/* ---- Fulfillment fee (mirrors calculate_fulfillment_fee) ---------------- */
+function fulfillmentFee(weightOz, dims) {
+  if (!isPosNum(weightOz)) {
+    return { fee: null, tier: null, note: "No weight — unavailable." };
+  }
+  const lb = weightOz / 16;
+  if (dims && dims.some((d) => d > 0)) {
+    const sides = dims.slice().sort((a, b) => a - b);
+    const max = STANDARD_MAX_DIMENSIONS_IN.slice().sort((a, b) => a - b);
+    if (sides.some((d, i) => d > max[i])) {
+      return { fee: null, tier: "oversize", note: "Oversize — outside standard-size table" };
+    }
+  }
+  if (lb > STANDARD_MAX_WEIGHT_LBS) {
+    return { fee: null, tier: "oversize", note: "Over 20 lb — outside standard-size table" };
+  }
+  const tier = FBA_TIERS.find(([maxWeight]) => lb <= maxWeight);
+  return {
+    fee: round2(tier[1]),
+    tier: "standard",
+    weightLb: lb,
+    note: "Standard-size · " + (Number.isFinite(tier[0]) ? (lb + " lb ≤ " + tier[0] + " lb") : (lb + " lb")) + " band"
+  };
+}
+
+/* ---- Full breakdown (mirrors calculate_fba_fees) ------------------------- */
+function calculate(category, weightOz, dims, salePrice, landedCost) {
+  const sale = isPosNum(salePrice) ? salePrice : null;
+  const ref = referralFee(sale, category);
+  const fulf = fulfillmentFee(weightOz, dims);
+
+  const storage = 0.0; // out of scope
+
+  let totalFees = null;
+  if (sale !== null && ref.fee !== null && fulf.fee !== null) {
+    totalFees = round2(ref.fee + fulf.fee + storage);
+  }
+
+  let net = null, margin = null;
+  if (sale !== null && isPosNum(landedCost) && totalFees !== null) {
+    net = round2(sale - landedCost - totalFees);
+    margin = sale !== 0 ? round2((net / sale) * 100) : null;
+  }
+
+  return {
+    salePrice: sale !== null ? round2(sale) : null,
+    referral: ref.fee,
+    referralNote: ref.note,
+    fulfillment: fulf.fee,
+    fulfillmentTier: fulf.tier,
+    fulfillmentNote: fulf.note,
+    storage: storage,
+    totalFees: totalFees,
+    net: net,
+    margin: margin
+  };
+}
+
+/* ---- Formatting helpers ------------------------------------------------- */
+function money(v) {
+  if (v === null || v === undefined || !isFinite(v)) return '<span class="na">N/A</span>';
+  return "$" + v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function plainMoney(v) {
+  if (v === null || v === undefined || !isFinite(v)) return null;
+  return "$" + v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+/* ---- Category dropdown -------------------------------------------------- */
+function populateCategories(selected) {
+  const sel = document.getElementById("category");
+  sel.innerHTML = "";
+  Object.keys(REFERRAL_RATES).forEach((cat) => {
+    const opt = document.createElement("option");
+    const pct = Math.round(REFERRAL_RATES[cat] * 100);
+    const sw = PRICE_SWITCH_CATEGORIES[cat] !== undefined ? "  · 8% under $" + PRICE_SWITCH_CATEGORIES[cat].toFixed(0) : "";
+    opt.value = cat;
+    opt.textContent = cat + "  (" + pct + "%" + sw + ")";
+    sel.appendChild(opt);
+  });
+  sel.value = REFERRAL_RATES[selected] !== undefined ? selected : DEFAULT_CATEGORY;
+}
+
+/* ---- Render ------------------------------------------------------------- */
+function render(r) {
+  const setHTML = (id, val) => document.getElementById(id).innerHTML = val;
+  const setText = (id, val) => document.getElementById(id).textContent = val;
+
+  setHTML("rPrice", money(r.salePrice));
+  setText("rReferralNote", r.referralNote || "");
+  setHTML("rReferral", money(r.referral));
+  setText("rFulfillmentNote", r.fulfillmentNote || "");
+  setHTML("rFulfillment", money(r.fulfillment));
+  setHTML("rStorage", money(r.storage));
+  setHTML("rTotal", money(r.totalFees));
+
+  let payout = null;
+  if (r.totalFees !== null && r.salePrice !== null) payout = round2(r.salePrice - r.totalFees);
+  setHTML("rPayout", money(payout));
+
+  const netEl = document.getElementById("netHero");
+  const marginBadge = document.getElementById("marginBadge");
+  const statusBadge = document.getElementById("statusBadge");
+  const mmFill = document.getElementById("mmFill");
+  const mmLabel = document.getElementById("mmLabel");
+
+  if (r.net !== null) {
+    const netTxt = plainMoney(r.net);
+    netEl.textContent = netTxt;
+    netEl.classList.remove("na", "pos", "neg");
+    netEl.classList.add(r.net > 0 ? "pos" : r.net < 0 ? "neg" : "na");
+
+    marginBadge.className = "badge " + (r.margin >= 0 ? "pos" : "neg");
+    marginBadge.textContent = (r.margin !== null ? r.margin.toFixed(2) : "—") + "% margin";
+
+    statusBadge.className = "badge " + (r.net > 0 ? "pos" : r.net < 0 ? "neg" : "neutral");
+    statusBadge.textContent = r.net > 0 ? "Profitable" : r.net < 0 ? "Loss" : "Break-even";
+
+    const fill = r.margin !== null ? Math.min(Math.max(r.margin, -100), 100) : 0;
+    mmFill.style.width = Math.max(0, fill) + "%";
+    mmFill.classList.toggle("neg", fill < 0);
+    mmLabel.textContent = (r.margin !== null ? r.margin.toFixed(2) + "%" : "—") +
+      (r.margin >= 0 ? " of sale price" : " (loss)");
+  } else {
+    netEl.textContent = "—";
+    netEl.className = "hero-value na";
+    marginBadge.className = "badge neutral";
+    marginBadge.textContent = "Margin —";
+    statusBadge.className = "badge neutral";
+    statusBadge.textContent = "—";
+    mmFill.style.width = "0%";
+    mmFill.classList.remove("neg");
+    mmLabel.textContent = "—";
+  }
+}
+
+/* ---- Main handler -------------------------------------------------------- */
+function runCalculate(showErrors) {
+  const errBox = document.getElementById("errorBox");
+  errBox.style.display = "none";
+  errBox.textContent = "";
+
+  const category = document.getElementById("category").value;
+  const weightOz = parseFloat(document.getElementById("weightOz").value);
+  const l = parseFloat(document.getElementById("dimL").value);
+  const w = parseFloat(document.getElementById("dimW").value);
+  const h = parseFloat(document.getElementById("dimH").value);
+  const salePrice = parseFloat(document.getElementById("salePrice").value);
+  const landedCost = parseFloat(document.getElementById("landedCost").value);
+
+  const dims = [];
+  [l, w, h].forEach((d) => { if (!isNaN(d) && isFinite(d) && d > 0) dims.push(d); });
+
+  if (isNaN(salePrice) || !isFinite(salePrice) || salePrice <= 0) {
+    if (showErrors) {
+      errBox.textContent = "Enter a valid sale price greater than 0.";
+      errBox.style.display = "block";
+    }
+    render(calculate(category, weightOz, dims, NaN, landedCost));
+    return;
+  }
+  if ((isNaN(weightOz) || !isFinite(weightOz) || weightOz <= 0) && showErrors) {
+    errBox.textContent = "Enter a valid package weight greater than 0 oz (needed for the fulfillment fee).";
+    errBox.style.display = "block";
+  }
+
+  render(calculate(category, weightOz, dims, salePrice, landedCost));
+}
+
+/* ---- Wiring + default state (Kirkland Minoxidil) ------------------------- */
+document.getElementById("calcBtn").addEventListener("click", function () { runCalculate(true); });
+
+populateCategories("Health & Personal Care");
+document.getElementById("weightOz").value = "32";      // 2.0 lb
+document.getElementById("dimL").value = "8";
+document.getElementById("dimW").value = "5";
+document.getElementById("dimH").value = "4";
+document.getElementById("salePrice").value = "37.99";
+document.getElementById("landedCost").value = "17.99";
+
+runCalculate(false); // show a working result immediately on load
+</script>
+</body>
+</html>
