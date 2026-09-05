@@ -479,6 +479,13 @@
       "source": "Unwrangle plan documentation (confirmed by operator)",
       "value": "$99/month for 100,000 credits",
       "details": "Reference for future scaling beyond free-tier capacity, if/when the 5,000/month free tier is ever exhausted."
+    },
+    {
+      "id": "brightdata_web_unlocker_costco_item_page_viable",
+      "confirmed_at": "2026-09-05T10:09:01Z",
+      "source": "Operator-authorized single-request live probe (2026-09-05T10:09:01Z, item 424976) via bright_data_client._fetch Web Unlocker transport (POST api.brightdata.com/request, zone northstaros, url=https://www.costco.com/.product.424976.html, format=raw)",
+      "value": "Bright Data Web Unlocker successfully fetches Costco item-detail pages: HTTP 200; URL pattern /.product.<item_id>.html resolves for item 424976; 3,195,148 bytes raw HTML returned; JSON-LD Product block matches the expected identity (Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets) at price 17.99 USD",
+      "details": "Single request, zero retries, stop-on-any-failure honored. Evidence persisted under frozen run dir 20260828T021658Z (raw/brightdata_424976_probe_20260905T100901Z.json + normalized/items_424976_brightdata_probe_20260905T100901Z.json; committed 4cd670d; scrubbed — no api_key/Authorization header stored). Confirms the Costco item-number URL pattern and Web Unlocker reachability are VIABLE for a future Costco detail provider; the missing piece is a Costco HTML/JSON parser + normalization + typed-failure mapping (not built — this was a transport/URL-pattern probe only, per operator scope). Bright Data free tier 5,000 credits/month shared pool; Web Unlocker = 1 credit per request (bright_data_client.py docstring). Credential used: BRIGHTDATA_UNLOCKER_API_KEY (SET at run time; key value never read/printed/logged)."
     }
   ],
   "next_batch": "10_costco_single_item_retry_LIVE.md",
@@ -489,8 +496,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-05T09:41:46Z",
+  "last_updated": "2026-09-05T10:10:30Z",
   "history": [
+    {
+      "ts": "2026-09-05T10:09:01Z",
+      "activity": "brightdata_web_unlocker_costco_probe_424976",
+      "batch": "none (operator-authorized standalone single-request diagnostic probe — Bright Data pivot evaluation, separate from Batch 10/11)",
+      "summary": "EXACTLY ONE Bright Data Web Unlocker request via the production bright_data_client._fetch transport (POST api.brightdata.com/request, zone=northstaros, url=https://www.costco.com/.product.424976.html, format=raw; BRIGHTDATA_UNLOCKER_API_KEY used by the client, never read/printed/logged; evidence scrubbed; zero retries). RESULT: HTTP 200, URL pattern /.product.424976.html RESOLVED, 3,195,148 bytes raw HTML returned. Provisional sniff (no parser built — transport probe only): <title> 'Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets | Costco'; JSON-LD Product block {'@type':'Product','price':17.99,'name':'Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets'}; kirkland_signature hits=81, mature_multi hits=26, count '400 Tablets', item_id '424976' present 97x. identity_match_status = probable_match (matches expected identity exactly). CORRECTION NOTE: the probe's initial page_not_found heuristic misfired on the literal '404' inside a JS chunk filename (8404-73dac6937120109a.js) in the page head — verified false positive, corrected in the persisted evidence (documented in both files). Evidence persisted additively under frozen run dir: raw/brightdata_424976_probe_20260905T100901Z.json + normalized/items_424976_brightdata_probe_20260905T100901Z.json; committed 4cd670d. 1 request = 1 credit (Web Unlocker 1 credit/request, 5,000/mo free tier). CONFIRMS Bright Data Web Unlocker is a viable transport/URL path for Costco item-detail; the Costco parser + normalization + typed-failure mapping still need building (Autonomous Zone, code only) before it could replace Unwrangle's costco_detail role. No Batch 10/11 execution (Unwrangle still blocked on exhausted credits; unchanged)."
+    },
     {
       "ts": "2026-09-05T09:41:46Z",
       "activity": "unwrangle_costco_search_diagnostic_rerun",
