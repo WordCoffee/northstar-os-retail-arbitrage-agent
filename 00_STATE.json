@@ -496,8 +496,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-05T10:10:30Z",
+  "last_updated": "2026-09-05T10:20:30Z",
   "history": [
+    {
+      "ts": "2026-09-05T10:19:44Z",
+      "activity": "brightdata_web_unlocker_multi_item_validation_failed",
+      "batch": "none (operator-authorized standalone multi-item validation pass, 3-5 items — Bright Data JSON-LD generalization probe, separate from Batch 10/11)",
+      "summary": "Operator-authorized 5-item Bright Data Web Unlocker validation pass (926628, 98501, 690843, 1089787, 1493188) to confirm the JSON-LD Product pattern generalizes and to collect full-HTML test fixtures. Same discipline: one request per item via production bright_data_client._fetch, zero retries, stop-on-block, sequential 2.0s pacing, exact HTTP status captured, evidence scrubbed, BRIGHTDATA_UNLOCKER_API_KEY never read/printed. RESULT: item 1 (926628, https://www.costco.com/.product.926628.html) FAILED with transport_error — 'HTTPSConnectionPool(host=api.brightdata.com, port=443): Read timed out. (read timeout=120)' — NO HTTP response (http_status=0). CIRCUIT BREAKER HONORED: halted immediately at item 1; items 98501/690843/1089787/1493188 NOT fetched; zero retries; no fixtures written (no HTML captured). Failure persisted under frozen run dir: raw/brightdata_validation_926628_20260905T101944Z.json + normalized/items_926628_brightdata_validation_20260905T101944Z.json (committed with this entry). Note: the earlier single-item probe (424976, 10:09:01Z) succeeded HTTP 200 through the same transport, so this timeout is consistent with a transient/rate-side Web Unlocker read timeout rather than an auth/credit/path problem. JSON-LD generalization NOT yet confirmed. Per circuit breaker, no automatic retry — awaiting fresh operator approval to re-run (optionally with a longer read timeout)."
+    },
     {
       "ts": "2026-09-05T10:09:01Z",
       "activity": "brightdata_web_unlocker_costco_probe_424976",
