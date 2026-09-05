@@ -432,6 +432,44 @@
       }
     }
   ],
+  "confirmed_facts": [
+    {
+      "id": "unwrangle_costco_detail_credit_cost",
+      "confirmed_at": "2026-09-05T09:20:42Z",
+      "source": "https://docs.unwrangle.com/costco-product-data-api/ (official Unwrangle documentation, confirmed by operator)",
+      "value": "10 credits per successful request",
+      "details": "Unwrangle costco_detail platform charges 10 credits per successful request — the same per-request rate as costco_search. Overrides the prior unknown: the Full-Catalog Pre-Flight Readiness Report previously listed 'costco_detail per-call credit cost unconfirmed' as a NOT-READY item (4b/8).",
+      "resolves": "full-catalog pre-flight NOT-READY item 4b/8 (cost per costco_detail request now confirmed)"
+    },
+    {
+      "id": "unwrangle_costco_search_credit_cost",
+      "confirmed_at": "2026-09-05T09:20:42Z",
+      "source": "https://docs.unwrangle.com/costco-search-results-api/ (official Unwrangle documentation, confirmed by operator)",
+      "value": "10 credits per request",
+      "details": "costco_search platform = 10 credits per request. Consistent with the client constant CREDITS_PER_PAGE = 10 already in costco_api_client.py."
+    },
+    {
+      "id": "unwrangle_free_tier",
+      "confirmed_at": "2026-09-05T09:20:42Z",
+      "source": "Unwrangle signup/plan documentation (confirmed by operator)",
+      "value": "5,000 credits/month free tier; no credit card required to register and start using them",
+      "details": "Free tier capacity is sufficient for the entire current full-catalog scope (see full_catalog_budget_implication)."
+    },
+    {
+      "id": "full_catalog_budget_implication",
+      "confirmed_at": "2026-09-05T09:20:42Z",
+      "source": "calculation over confirmed rates (10 credits/request) + costco_api_client hard page cap (20)",
+      "value": "full 186-item costco_detail pull = ~1,860 credits; combined with 200-credit worst-case search-refresh cap (20 pages x 10 credits) total worst case = ~2,060 credits",
+      "details": "1,860 + 200 = 2,060 credits worst case, comfortably inside the 5,000/month free tier. No paid plan upgrade needed for this scope."
+    },
+    {
+      "id": "unwrangle_paid_tier_reference",
+      "confirmed_at": "2026-09-05T09:20:42Z",
+      "source": "Unwrangle plan documentation (confirmed by operator)",
+      "value": "$99/month for 100,000 credits",
+      "details": "Reference for future scaling beyond free-tier capacity, if/when the 5,000/month free tier is ever exhausted."
+    }
+  ],
   "next_batch": "10_costco_single_item_retry_LIVE.md",
   "git_baseline": {
     "commit_hash": "8a1c6dd",
@@ -440,8 +478,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-05T02:00:00Z",
+  "last_updated": "2026-09-05T09:20:42Z",
   "history": [
+    {
+      "ts": "2026-09-05T09:20:42Z",
+      "activity": "confirmed_facts_unwrangle_credit_pricing",
+      "batch": "none (record-only; Batch 10 approval granted in the same operator message)",
+      "summary": "Confirmed facts logged to new top-level 'confirmed_facts' section (operator-supplied, from official Unwrangle docs): (1) costco_detail = 10 credits per successful request (https://docs.unwrangle.com/costco-product-data-api/); (2) costco_search = 10 credits per request (https://docs.unwrangle.com/costco-search-results-api/); (3) free tier 5,000 credits/month, no credit card required; (4) full-catalog budget implication: 186-item costco_detail pull = ~1,860 credits + 200-credit worst-case search cap = ~2,060 credits total worst case, inside the 5,000/month free tier — no paid upgrade needed for this scope; (5) paid tier reference $99/month for 100,000 credits for future scaling. Resolves the 'costco_detail per-call credit cost unconfirmed' item from the Full-Catalog Pre-Flight Readiness Report (4b/8). That report is a chat deliverable with no on-disk file, so this state entry is the authoritative record of the resolution. No code changes (record-only)."
+    },
     {
       "ts": "2026-09-05T02:00:00Z",
       "activity": "retail_arbitrage_ui_refresh_double_confirmation",
