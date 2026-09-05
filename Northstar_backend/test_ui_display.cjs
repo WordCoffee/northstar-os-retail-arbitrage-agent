@@ -1409,6 +1409,17 @@ assert(cardOut.includes('1,000'), 'seller: feedback count rendered');
 assert(els['sellerState-B0TEST0001'].textContent.includes('partial'), 'seller: status text reports partial roster');
 assert(sellerBtn.getAttribute('aria-expanded') === 'true', 'seller: Load button marked expanded after successful load');
 
+/* orbital market mapping: plots the real two-offer roster after load */
+const orbitOut = els['scOrbital-B0TEST0001'].innerHTML;
+assert(orbitOut.includes('orbit-node') && orbitOut.includes('orbit-sun'), 'seller: market orbit plots the real offer roster after Load');
+assert(orbitOut.includes('$24.00') && orbitOut.includes('Some Seller'), 'seller: orbit nodes derive from real landed prices');
+assert(orbitOut.includes('Buy Box') && orbitOut.includes('feedback count'), 'seller: orbit labels buy-box winner and the presence proxy');
+
+/* orbital honesty when the roster cannot support an orbit */
+const orbitThin = vm.runInContext('NS.scOrbitalHtml({ buy_box: { price: 20 }, offers: [{ seller_name: "Solo", price: 20 }] }, null)', context);
+assert(orbitThin.includes('at least two priced offers'), 'seller: single-offer roster honestly declines to plot');
+assert(!orbitThin.includes('>0<') && !orbitThin.includes('$0.00'), 'seller: thin orbit never fabricates zeros');
+
 /* cached indicator */
 sellerRes = () => ({ ok: true, json: () => Object.assign({}, SELLER_FIXTURE_PARTIAL, { offer_data_cached: true }) });
 context.__sellerBtn = sellerBtn;
@@ -2235,6 +2246,11 @@ assert(ecHtml.includes('Completeness \u2014 Economics') && ecHtml.includes('ROI 
 vm.runInContext('renderSheetContent("market", ' + JSON.stringify(sheetPart) + ')', context);
 const mkHtml = els.sheetContent.innerHTML;
 assert(mkHtml.includes('Completeness \u2014 Market') && mkHtml.includes('Market / offer coverage'), 'p16: Market segment shows coverage state');
+assert(mkHtml.includes('Market Orbit') && /scOrbital-[A-Z0-9]+/.test(mkHtml), 'p16: market segment renders the orbital mapping section');
+assert(mkHtml.includes('orbit-node') && mkHtml.includes('$24.00'), 'p16: cached real offer roster shown as an orbit');
+vm.runInContext('renderSheetContent("market", ' + JSON.stringify(compProd({ asin: 'B0TEST0099' })) + ')', context);
+const mkHold = els.sheetContent.innerHTML;
+assert(mkHold.includes('load Seller Detail to plot'), 'p16: uncached orbit panel honestly waits for a real roster');
 vm.runInContext('renderSheetContent("verify", ' + JSON.stringify(sheetPart) + ')', context);
 const vfHtml = els.sheetContent.innerHTML;
 assert(vfHtml.includes('Missing inputs') && vfHtml.includes('Next action') && vfHtml.includes('Needs mapping: pack/variant fingerprint must be exact or invoice-confirmed'), 'p16: Verify segment shows next action and missing inputs');
