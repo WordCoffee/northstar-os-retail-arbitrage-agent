@@ -1,0 +1,54 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_validation_690843",
+  "requested_at": "2026-09-05T23:49:16Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "url": "https://www.costco.com/.product.690843.html",
+  "http_status": 200,
+  "failure_type": null,
+  "reason": null,
+  "retries": 0,
+  "stop_on_block": "sequential_batch",
+  "scrubbed": true,
+  "probe_note": "Validation pass \u2014 provisional JSON-LD/title extraction; parser not built. identity/provisional fields are NOT parsed production fields.",
+  "expected": {
+    "requested_title": "Quick Dissolve B-12 5000 mcg, 300 Tablets",
+    "requested_brand": "Kirkland Signature",
+    "requested_pack": "300 Tablets"
+  },
+  "match_evidence": {
+    "jaccard_title_overlap": 0.75,
+    "brand_hit": true,
+    "pack_hit": true,
+    "jsonld_name": "Kirkland Signature Quick Dissolve B-12 5000 mcg., 300 Tablets",
+    "title_tag": "Kirkland Signature Quick Dissolve B-12 5000 mcg., 300 Tablets | Costco",
+    "jsonld_price": 21.99,
+    "fixture_sha256": "ca7a8b5c22ecda870435958dc017e089bd0c2b3f2532694d2fed667491cf6812",
+    "fixture_path": "fixtures/brightdata_costco/690843.html",
+    "html_bytes": 3183975
+  },
+  "item": {
+    "requested_item_id": "690843",
+    "returned_costco_item_id": "690843",
+    "exact_title": "Kirkland Signature Quick Dissolve B-12 5000 mcg., 300 Tablets",
+    "brand": "Kirkland Signature",
+    "listed_price": 21.99,
+    "currency": "USD",
+    "unit_price": null,
+    "quantity_or_pack": "300 tablets",
+    "size_or_weight": null,
+    "UPC_GTIN_EAN": null,
+    "availability": null,
+    "product_url": "https://www.costco.com/.product.690843.html",
+    "captured_at": "2026-09-05T23:49:16Z",
+    "identity_match_status": "probable_match",
+    "missing_fields": [
+      "unit_price",
+      "size_or_weight",
+      "UPC_GTIN_EAN",
+      "availability"
+    ]
+  }
+}

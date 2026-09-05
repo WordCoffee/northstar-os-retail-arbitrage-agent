@@ -1,0 +1,24 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_validation_98501",
+  "requested_at": "2026-09-05T23:47:50Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.98501.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head><meta name=\"emotion-insertion-point\" content=\"\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"preload\" as=\"image\" href=\"https://gdx-assets.costco.com/adobe/assets/urn:aaid:aem:4e1c1f3e-4559-4e18-bceb-5ddbd1bea4b2/as/98501-847__1.avif?width=727&amp;height=727&amp;fit=contain\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/f2f535904c592d11.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/e67c321f05c7f111.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/3e5975984ed02a83.css\" data-precedence=\"next\"><link rel=\"preload\" as=\"script\" fetchpriority=\"low\" href=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/webpack-fbae53c34594d63c.js\"><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/4bd1b696-9909f507f95988b8.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/5964-44ba562cc558ac9a.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/main-app-405dcb56de0d5e16.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/d320e741-8f572a2e531cb97c.js\" async=\"\"></script><link rel=\"preload\" href=\"https://mobilecontent.costco.com/consent-ui/costco-consent-manager.iife.js\" as=\"script\"><title>Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets | Costco</title><meta name=\"description\" content=\"Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets, Tangy Orange Taste, Supports Immune System Health\u2020, USP Verified*\"><link rel=\"canonical\" href=\"https://www.costco.com/p/-/kirkland-signature-chewable-vitamin-c-500-mg-500-tablets/100369190\"><meta property=\"og:title\" content=\"Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets\"><meta property=\"og:description\" content=\"",
+  "response_error_text_head_capped": null,
+  "fixture_sha256": "854e38789f662236efb46b69d21085e5d7b44feeb806d09258d0b2b71478c8e4",
+  "fixture_path": "fixtures/brightdata_costco/98501.html",
+  "html_bytes": 3240809
+}

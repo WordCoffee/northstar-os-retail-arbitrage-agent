@@ -15,7 +15,8 @@ endpoint — so `get_bright_data_credits_remaining()` returns None and
 
 Env: BRIGHTDATA_UNLOCKER_API_KEY (required — raises ValueError when
 missing), BRIGHTDATA_UNLOCKER_ZONE (default northstaros),
-BRIGHTDATA_REQUEST_URL, DEFAULT_MARKETPLACE.
+BRIGHTDATA_REQUEST_URL, BRIGHTDATA_REQUEST_TIMEOUT_SECONDS (default 120),
+DEFAULT_MARKETPLACE.
 
 Normalization rules (shared with every other provider):
   - missing/unparseable numeric fields are None, never 0
@@ -50,7 +51,9 @@ BRIGHTDATA_REQUEST_URL = os.getenv(
     "BRIGHTDATA_REQUEST_URL",
     "https://api.brightdata.com/request",
 )
-BRIGHTDATA_REQUEST_TIMEOUT_SECONDS = 120
+BRIGHTDATA_REQUEST_TIMEOUT_SECONDS = int(
+    os.getenv("BRIGHTDATA_REQUEST_TIMEOUT_SECONDS", "120")
+)
 DEFAULT_MARKETPLACE = os.getenv("DEFAULT_MARKETPLACE", "https://www.amazon.com")
 
 _CACHE: Dict[str, Dict] = {}

@@ -1,0 +1,59 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_validation_1493188",
+  "requested_at": "2026-09-05T23:50:57Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "url": "https://www.costco.com/.product.1493188.html",
+  "http_status": 200,
+  "failure_type": null,
+  "reason": null,
+  "retries": 0,
+  "stop_on_block": "sequential_batch",
+  "scrubbed": true,
+  "probe_note": "Validation pass \u2014 provisional JSON-LD/title extraction; parser not built. identity/provisional fields are NOT parsed production fields.",
+  "expected": {
+    "requested_title": "Baby Wipes Fragrance Free, 900-count",
+    "requested_brand": "Kirkland Signature",
+    "requested_pack": "900-count (9x100ct)"
+  },
+  "match_evidence": {
+    "jaccard_title_overlap": 0.0,
+    "brand_hit": false,
+    "pack_hit": false,
+    "jsonld_name": null,
+    "title_tag": "Page Not Found!",
+    "jsonld_price": null,
+    "fixture_sha256": "9a1f1b7794d19434add5f3b5b32f7e65a1feea40d69258f82d5f3f39fba288e5",
+    "fixture_path": "fixtures/brightdata_costco/1493188.html",
+    "html_bytes": 788245
+  },
+  "item": {
+    "requested_item_id": "1493188",
+    "returned_costco_item_id": null,
+    "exact_title": null,
+    "brand": null,
+    "listed_price": null,
+    "currency": null,
+    "unit_price": null,
+    "quantity_or_pack": null,
+    "size_or_weight": null,
+    "UPC_GTIN_EAN": null,
+    "availability": null,
+    "product_url": "https://www.costco.com/.product.1493188.html",
+    "captured_at": "2026-09-05T23:50:57Z",
+    "identity_match_status": "unverified",
+    "missing_fields": [
+      "exact_title",
+      "brand",
+      "listed_price",
+      "currency",
+      "unit_price",
+      "quantity_or_pack",
+      "size_or_weight",
+      "UPC_GTIN_EAN",
+      "availability"
+    ]
+  }
+}
