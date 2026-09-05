@@ -440,8 +440,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-05T00:30:00Z",
+  "last_updated": "2026-09-05T02:00:00Z",
   "history": [
+    {
+      "ts": "2026-09-05T02:00:00Z",
+      "activity": "retail_arbitrage_ui_refresh_double_confirmation",
+      "batch": "none (autonomous build — Batch 10 still UNAUTHORIZED)",
+      "summary": "Confirmed previous-run data auto-loads every session (no refresh needed) and built a LIVE refresh behind a double confirmation in Northstar_backend/static/index.html. AUTO-LOAD: boot() -> loadScanner() renders the browser localStorage snapshot (t2.kirklandScout.scan.v1) instantly on every page load, then refreshes from the cache-only GET /api/kirkland/scanner (zero provider calls); stale data is surfaced honestly via banner, never erased; locked with new Phase 1b assertions (renders instantly from snapshot, dataFromCache flag, '1 of 1' counter, no skeleton). REFRESH: csRefreshBtn (control strip) and refreshBtn (toolbar) now open a custom two-stage glass confirm dialog (scConfirm) instead of firing loadScanner directly — Step 1 'Refresh catalog with a live scan?' -> Continue, Step 2 'Final confirmation' -> Yes, run live refresh; Cancel/Escape closes at either stage, so one accidental click can never request anything (asserted: zero calls after first click, after step 2, and after cancel). Stage-2 Ok -> NS.runLiveRefresh() POSTs /api/kirkland/refresh; the server keeps the final say (live_gate 403 until SCANNER_LIVE_ALLOWED; with the gate off no provider call is possible). Result surfaced via scRefreshNotice with honest copy (ok/warn styling): 200 {status:ok,candidates_returned:N} reloads through loadScanner(); 403 shows the server's fail-closed note verbatim; network failure shows a warn notice; refresh buttons restored via NS.setRefreshLoading. retryBtn and boot loadScanner() untouched (retry = instant cache-only reload, never a live pull). VM-safe: no new document-level keydown (dialog Escape is element-level), no window.confirm, confirm JS avoids document.createElement/querySelector; CSS strictly additive in ns-theme-v3-spatial. VERIFICATION: node test_ui_display.cjs ALL UI DISPLAY TESTS PASSED (35 new autoload+refresh assertions); new Function() parse OK; no weight_asc; every new id exactly once; refresh buttons rebound while retry stays on loadScanner; full pytest 1319 passed / 3 skipped / 35 subtests (unchanged); protected_hashes 2 passed. Committed as 8fbf474."
+    },
     {
       "ts": "2026-09-05T00:30:00Z",
       "activity": "retail_arbitrage_ui_orbital_market_mapping",
