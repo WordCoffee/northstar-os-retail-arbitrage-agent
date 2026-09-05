@@ -1,0 +1,25 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_424976_url_pattern_probe",
+  "requested_at": "2026-09-05T10:09:01Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.424976.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "reason": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head><meta name=\"emotion-insertion-point\" content=\"\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"preload\" as=\"image\" href=\"https://gdx-assets.costco.com/adobe/assets/urn:aaid:aem:7496f380-6c46-4f3c-a7dd-29545e65f1c9/as/424976-847__1.avif?width=727&amp;height=727&amp;fit=contain\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/f2f535904c592d11.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/e67c321f05c7f111.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/3e5975984ed02a83.css\" data-precedence=\"next\"><link rel=\"preload\" as=\"script\" fetchpriority=\"low\" href=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/webpack-fbae53c34594d63c.js\"><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/4bd1b696-9909f507f95988b8.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/5964-44ba562cc558ac9a.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/main-app-405dcb56de0d5e16.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/d320e741-8f572a2e531cb97c.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/72-e6b5b8ce2171580d.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/8404-73dac6937120109a.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/2349-2db783e9f3f3dd64.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/4712-bbb1d1aeea3e3886.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/9641-55796bcb730cb70a.js\" async=\"\"></script><script src=\"/consumer-web/product/pr",
+  "response_error_text_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head><meta name=\"emotion-insertion-point\" content=\"\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"preload\" as=\"image\" href=\"https://gdx-assets.costco.com/adobe/assets/urn:aaid:aem:7496f380-6c46-4f3c-a7dd-2954",
+  "request_count_this_probe": 1,
+  "page_not_found_signal": "VERIFIED FALSE POSITIVE: page_not_found_signal matched the literal '404' inside a JS chunk filename (8404-73dac6937120109a.js) embedded in the page head. The page is a genuine Costco product page (title tag + JSON-LD Product block match).",
+  "classification_corrected_at": "2026-09-05T10:10:30Z"
+}

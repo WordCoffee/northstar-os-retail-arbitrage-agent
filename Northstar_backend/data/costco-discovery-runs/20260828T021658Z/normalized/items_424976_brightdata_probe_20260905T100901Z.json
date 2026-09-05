@@ -1,0 +1,65 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_424976_url_pattern_probe",
+  "requested_at": "2026-09-05T10:09:01Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "url": "https://www.costco.com/.product.424976.html",
+  "http_status": 200,
+  "failure_type": null,
+  "reason": null,
+  "retries": 0,
+  "stop_on_block": "single_probe_halt",
+  "scrubbed": true,
+  "request_count_this_probe": 1,
+  "probe_note": "Transport/URL-pattern probe ONLY \u2014 no Costco parser built yet. Title/brand/pack above are provisional HTML sniffs, not parsed fields.",
+  "sniff_evidence": {
+    "html_length": 3195148,
+    "title_tag": "Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets | Costco",
+    "kirkland_signature_hits": 81,
+    "mature_multi_hits": 26,
+    "count_field_hits": [
+      "400 Tablets"
+    ],
+    "body_title_match_hits": 2,
+    "item_id_in_html": 97,
+    "page_not_found_signal": "VERIFIED FALSE POSITIVE: page_not_found_signal matched the literal '404' inside a JS chunk filename (8404-73dac6937120109a.js) embedded in the page head. The page is a genuine Costco product page (title tag + JSON-LD Product block match).",
+    "price_attr_candidates": [],
+    "jsonld_blocks": [
+      {
+        "@type": "BreadcrumbList",
+        "price": null,
+        "name": null
+      },
+      {
+        "@type": "Product",
+        "price": 17.99,
+        "name": "Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets"
+      }
+    ]
+  },
+  "item": {
+    "requested_item_id": "424976",
+    "returned_costco_item_id": "424976",
+    "exact_title": "Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets",
+    "brand": "Kirkland Signature",
+    "listed_price": 17.99,
+    "currency": "USD",
+    "unit_price": null,
+    "quantity_or_pack": "400 Tablets",
+    "size_or_weight": null,
+    "UPC_GTIN_EAN": null,
+    "availability": null,
+    "product_url": "https://www.costco.com/.product.424976.html",
+    "captured_at": "2026-09-05T10:09:01Z",
+    "identity_match_status": "probable_match",
+    "missing_fields": [
+      "unit_price",
+      "size_or_weight",
+      "UPC_GTIN_EAN",
+      "availability"
+    ]
+  },
+  "classification_note": "Corrected in post-processing: initial probe heuristic mislabelled identity_match_status as 'page_not_found' due to literal '404' inside a JS chunk filename; title tag + JSON-LD Product evidence proves this is the correct Kirkland Signature item. listed_price/currency taken provisionally from JSON-LD Product offers.price (17.99). No parser built; still a transport/URL-pattern/parseability probe."
+}
