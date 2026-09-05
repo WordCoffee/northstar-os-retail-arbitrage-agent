@@ -214,7 +214,12 @@ const filtersFor = (overrides) => {
 /* ================================================================
  * Phase 2 — structure, theme shell, honest states
  * ================================================================ */
-assert(html.includes('T2 Holdings') && html.includes('Northstar OS') && html.includes('Kirkland Product Scout'), 'sidebar brand: T2 Holdings / Northstar OS / Kirkland Product Scout');
+/* Brand contract updated 2026-09-04 with the Retail Arbitrage UI redesign
+   (commit 016ac58): operator directed a rebrand — "Northstar OS" is the product
+   brand, "Retail Arbitrage" is the service, "Amazon FBA sourcing suite" is the
+   context line. This replaces the old "T2 Holdings / Kirkland Product Scout"
+   chrome. Deliberate contract change, not a test relaxation. */
+assert(html.includes('Northstar OS') && html.includes('Retail Arbitrage') && html.includes('Amazon FBA sourcing suite'), 'sidebar brand: Northstar OS / Retail Arbitrage / Amazon FBA sourcing suite');
 ['Product Scout', 'Margin Calculator', 'Risk Engine', 'Cycle Planner', 'Portfolio'].forEach((label) => {
     assert(html.includes('>' + label + '</span>'), 'nav item present: ' + label);
 });
@@ -714,9 +719,19 @@ setState(full);
  * Phase 6 — Margin Calculator
  * ================================================================ */
 assert(html.includes('Manual unit-economics calculator. Values entered here do not alter Scout source-cost data.'), 'calc callout text exact');
-const calcSectionHtml = html.slice(html.indexOf('id="view-calculator"'), html.indexOf('id="view-risk"'));
+/* The Retail Arbitrage redesign (016ac58) added the Profit Calculator view
+   between the Margin Calculator and Risk Engine views. The Profit Calculator
+   legitimately has package weight/dimension inputs (pcWeight etc.), which the
+   Margin Calculator does not. Scope this slice to end before the Profit
+   Calculator so Phase 6 asserts the Margin Calculator contract only. */
+const calcSectionHtml = html.slice(html.indexOf('id="view-calculator"'), html.indexOf('id="view-profit"'));
 assert((calcSectionHtml.match(/What's this\?/g) || []).length === 7, 'tooltip ("What\'s this?") on every calc input (7 found, no weight field)');
-assert(!calcSectionHtml.includes('cWeight'), 'no weight input remains in calculator');
+assert(!calcSectionHtml.includes('cWeight'), 'no weight input remains in calculator (Margin Calculator contract)');
+/* Positive contract for the new Profit Calculator page: weight + dimensions
+   are required inputs mirroring fee_calculator.py (FBA_STANDARD_SIZE_TIER_TABLE
+   and the 20 lb / 18x14x8 standard-size envelope check). */
+const profitSectionHtml = html.slice(html.indexOf('id="view-profit"'));
+assert(profitSectionHtml.includes('id="pcWeight"') && profitSectionHtml.includes('id="pcDimL"') && profitSectionHtml.includes('id="pcDimW"') && profitSectionHtml.includes('id="pcDimH"'), 'profit calculator has weight + dimension inputs (mirrors fee_calculator.py)');
 assert(html.includes('id="cReferral"') && html.includes('value="15"'), 'referral fee defaults to 15%');
 
 const cr = (f) => vm.runInContext('NS.calcRun(' + JSON.stringify(f) + ')', context);
