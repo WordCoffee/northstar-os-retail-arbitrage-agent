@@ -27,6 +27,10 @@ Normalization rules (shared with every other provider):
     transport_error) and returns [] / {} — never raises into the scanner
     (except the missing-key ValueError contract). Provider failures are
     never reported the same way as "no data found".
+  - LAST_HTTP_STATUS mirrors the exact HTTP status of the most recent
+    response (200 on success, the status code on any responder failure, or
+    None when no HTTP response was received at all). It is reset at the
+    top of each _fetch call.
 """
 
 import os
@@ -64,6 +68,7 @@ _REQUESTS_MADE = 0
 _REQUESTS_LOCK = Lock()
 
 LAST_ERROR = None
+LAST_HTTP_STATUS: Optional[int] = None
 
 # --- Amazon search-result card patterns -------------------------------------
 _CARD_ASIN_RE = re.compile(r"^([A-Z0-9]{10})")
@@ -416,6 +421,9 @@ def _fetch(url: str) -> Optional[str]:
     when the API key is missing (contract).
     """
     global LAST_ERROR
+    global LAST_HTTP_STATUS
+
+    LAST_HTTP_STATUS = None
 
     if not BRIGHTDATA_UNLOCKER_API_KEY:
         raise ValueError("BRIGHTDATA_UNLOCKER_API_KEY not set")
@@ -424,6 +432,7 @@ def _fetch(url: str) -> Optional[str]:
     with _CACHE_LOCK:
         cached = _CACHE.get(url)
         if cached and (now - cached["ts"]) < timedelta(seconds=TTL_SECONDS):
+            LAST_HTTP_STATUS = 200  # cache hit implies a prior successful fetch
             return cached["html"]
 
     headers = {
@@ -444,7 +453,8 @@ def _fetch(url: str) -> Optional[str]:
     except RequestException as exc:
         # Typed classification: a transport failure is never reported the
         # same way as "no data found" — it is recorded as transport_error
-        # and surfaced through LAST_ERROR.
+        # and surfaced through LAST_ERROR. No response was received, so
+        # LAST_HTTP_STATUS stays None.
         LAST_ERROR = "transport_error: %s" % exc
         print(f"[Bright Data] transport_error: {exc}")
         return None
@@ -459,6 +469,7 @@ def _fetch(url: str) -> Optional[str]:
         global _REQUESTS_MADE
         _REQUESTS_MADE += 1
 
+    LAST_HTTP_STATUS = response.status_code
     if response.status_code in (401, 403):
         LAST_ERROR = "auth_error: HTTP %d" % response.status_code
         print(f"[Bright Data] auth_error: {response.status_code} {response.text[:300]}")
