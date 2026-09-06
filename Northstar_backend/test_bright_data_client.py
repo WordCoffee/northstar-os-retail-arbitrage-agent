@@ -26,6 +26,11 @@ def setUpModule():
 
 def tearDownModule():
     os.environ.pop("SCANNER_LIVE_ALLOWED", None)
+    # Never leak simulated transport state into later modules: amazon_search /
+    # product_analysis / the scanner read bright_data_client.LAST_ERROR and
+    # LAST_HTTP_STATUS to decide provider health.
+    bright_data_client.LAST_ERROR = None
+    bright_data_client.LAST_HTTP_STATUS = None
 
 
 def brightdata_card(asin, title, price=None, rating=None, reviews=None, bought=None, brand=None):
@@ -448,6 +453,57 @@ class CreditsTrackingTests(_CacheIsolated):
 
     def test_credits_remaining_none_no_rest_endpoint_for_free_tier(self):
         self.assertIsNone(bright_data_client.get_bright_data_credits_remaining())
+
+
+class HttpStatusTrackingTests(_CacheIsolated):
+    """LAST_HTTP_STATUS mirrors the exact HTTP status of the last _fetch call:
+    200 on success, the status code on any responder failure, None when no
+    HTTP response was received at all (transport failure / missing key)."""
+
+    def _fetch_once(self, side_effect, key="bd_live_test"):
+        with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", key), \
+             patch.object(bright_data_client, "requests",
+                          mock.Mock(post=mock.Mock(side_effect=side_effect))):
+            return bright_data_client._fetch("https://www.costco.com/.product.424976.html")
+
+    def _ok(self, text, status_code=200):
+        return mock.Mock(status_code=status_code, text=text)
+
+    def test_status_200_on_success(self):
+        html = "some page body"
+        result = self._fetch_once([self._ok(html)])
+        self.assertEqual(result, html)
+        self.assertEqual(bright_data_client.LAST_HTTP_STATUS, 200)
+        self.assertIsNone(bright_data_client.LAST_ERROR)
+
+    def test_status_403_on_auth_error(self):
+        result = self._fetch_once([self._ok("blocked", status_code=403)])
+        self.assertIsNone(result)
+        self.assertEqual(bright_data_client.LAST_HTTP_STATUS, 403)
+        self.assertEqual(bright_data_client.LAST_ERROR, "auth_error: HTTP 403")
+
+    def test_status_500_on_http_error(self):
+        result = self._fetch_once([self._ok("server oops", status_code=500)])
+        self.assertIsNone(result)
+        self.assertEqual(bright_data_client.LAST_HTTP_STATUS, 500)
+        self.assertEqual(bright_data_client.LAST_ERROR, "http_error: HTTP 500")
+
+    def test_status_none_on_transport_error(self):
+        with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", "bd_live_test"), \
+             patch.object(bright_data_client, "requests",
+                          mock.Mock(post=mock.Mock(side_effect=RuntimeError("boom")))):
+            result = bright_data_client._fetch("https://www.costco.com/.product.424976.html")
+        self.assertIsNone(result)
+        self.assertIsNone(bright_data_client.LAST_HTTP_STATUS)
+        self.assertEqual(bright_data_client.LAST_ERROR, "transport_error: boom")
+
+    def test_status_none_when_key_missing(self):
+        bright_data_client.LAST_HTTP_STATUS = 200
+        with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", ""):
+            with self.assertRaises(ValueError):
+                bright_data_client._fetch("https://www.costco.com/.product.424976.html")
+        # No request was even attempted — the previous status must not leak.
+        self.assertIsNone(bright_data_client.LAST_HTTP_STATUS)
 
 
 if __name__ == "__main__":
