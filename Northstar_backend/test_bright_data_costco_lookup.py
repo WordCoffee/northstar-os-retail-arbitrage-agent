@@ -265,6 +265,64 @@ class UnresolvedFromManifestTests(unittest.TestCase):
         rows = lookup._load_unresolved_titles(path)
         self.assertEqual([r["requested_title"] for r in rows], ["A"])
 
+    def test_cli_limit_caps_unresolved_expansion(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        path = os.path.join(tmp.name, "prepared.json")
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump(
+                {
+                    "items": [
+                        {"requested_title": f"T{i}", "resolution": "unresolved_needs_lookup"}
+                        for i in range(1, 6)
+                    ]
+                },
+                fh,
+            )
+        seen = {}
+
+        def fake_resolve(queries, run_dir=None, delay=None):
+            seen["queries"] = queries
+            seen["run_dir"] = run_dir
+            return {
+                "status": "completed",
+                "items_requested": len(queries),
+                "items_resolved": 0,
+                "items": [],
+                "failures": [],
+            }
+
+        with mock.patch.object(lookup, "resolve_by_search", side_effect=fake_resolve):
+            rc = lookup._cli(
+                ["resolve", "--unresolved-from", path, "--limit", "3",
+                 "--run-dir", tmp.name]
+            )
+        self.assertEqual(rc, 0)
+        self.assertEqual(seen["queries"], ["T1", "T2", "T3"])
+        self.assertEqual(seen["run_dir"], tmp.name)
+
+    def test_limit_never_caps_explicit_titles(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        seen = {}
+
+        def fake_resolve(queries, run_dir=None, delay=None):
+            seen["queries"] = queries
+            return {
+                "status": "completed",
+                "items_requested": len(queries),
+                "items_resolved": 0,
+                "items": [],
+                "failures": [],
+            }
+
+        with mock.patch.object(lookup, "resolve_by_search", side_effect=fake_resolve):
+            rc = lookup._cli(
+                ["resolve", "--title", "T7", "--limit", "0", "--run-dir", tmp.name]
+            )
+        self.assertEqual(rc, 0)
+        self.assertEqual(seen["queries"], ["T7"])
+
 
 if __name__ == "__main__":
     unittest.main()
