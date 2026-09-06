@@ -503,8 +503,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-06T02:02:00Z",
+  "last_updated": "2026-09-06T02:40:00Z",
   "history": [
+    {
+      "ts": "2026-09-06T02:40:00Z",
+      "activity": "brightdata_costco_empty_body_diagnostics_build",
+      "batch": "operator-approved build (code + tests only, no live calls): persist head excerpt + scrubbed response headers + body-size diagnostic on empty/short bodies so future no_data_found evidence is diagnosable (blocked vs genuinely absent)",
+      "summary": "Code+tests build committed locally (not pushed). bright_data_client.py: additive LAST_RESPONSE_HEADERS global + _RESPONSE_HEADER_ALLOWLIST + _scrub_response_headers (lowercased allowlist; set-cookie and credential-shaped headers never captured); reset at top of each _fetch, restored on cache hits, captured on any received response incl. non-200, cached beside html. bright_data_costco.py: HEAD_CAP_CHARS=2000 / SHORT_BODY_CHARS=512, _body_diagnostic (empty|short|normal), raw evidence now records response_headers (re-scrubbed at the persistence boundary as defense in depth) + response_body_bytes + response_body_diagnostic + response_html_head_capped on every fetched item; fail_rec also carries scrubbed response_headers; CLI per-item print appends body=<diag>. Fixtures: empty_body_98501_1493188_20260906T015531Z.html (zero-byte mirror of live run-20260906T015531Z evidence, where the unlocker returned HTTP 200 with a zero-byte body for 98501 and 1493188) + short_body_blocked_like.html (titleless interstitial under SHORT_BODY_CHARS). Tests: +7 EmptyBodyDiagnosticTests (null-first no_data_found on empty body; diagnostic fields; evidence shape matches live run; set-cookie scrubbing; short-body full head excerpt preserved; normal-body diag; empty-body soft-continues a batch) and +6 ResponseHeaderTrackingTests (capture+scrub on success, missing-headers-attr -> None, transport-error/missing-key no leak, non-200 capture, cache-hit restore). Real counts: focused pytest and unittest = 98 passed / Ran 98 tests OK; full suite python -m unittest discover = Ran 1384 tests in 59.166s OK (skipped=3) — zero regressions. No live calls made; gate untouched and fail-closed."
+    },
     {
       "ts": "2026-09-06T02:02:00Z",
       "activity": "brightdata_costco_LIVE_batch_2_approved_rerun",
