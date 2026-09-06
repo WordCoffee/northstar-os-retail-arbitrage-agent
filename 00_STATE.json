@@ -503,8 +503,15 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-06T06:16:00Z",
+  "last_updated": "2026-09-06T07:08:00Z",
   "history": [
+    {
+      "ts": "2026-09-06T07:08:00Z",
+      "activity": "brightdata_costco_stage3_chunk1_halt",
+      "batch": "operator-approved 3-chunk resume of the 158 never-attempted Stage-3 IDs (53/53/52, BRIGHTDATA_REQUEST_TIMEOUT_SECONDS=180, 90s pauses) + named final retries of 222490 and 284601 (30s apart); chunk 1 HALTS on hard failure per circuit breaker, remaining sequence RESTRAINED pending operator go-ahead",
+      "summary": "Took the operator-approved circuit-breaker framing literally for chunked execution: if any chunk halts, stop the whole sequence immediately, persist+commit, report. CHUNK 1 (run dir data/costco-discovery-runs/20260906T070502Z, 53 IDs): fetched 28 items cleanly then HALTED on item 29/53 133839 -> FAILED transport_error: HTTPSConnectionPool(host='api.brightdata.com', port=443): Read timed out. (read timeout=180). Per-chunk outcome counts (from evidence files, not CLI text): 14 probable_match, 7 no_data_found (0-byte empty bodies; identical Web-Unlocker empty-body artifact), 6 url_not_found (content-404 pages, genuine dead item numbers), 1 unverified (1300509 Nut Bars $17.99 - JSON-LD product present but identity check inconclusive), 1 transport_error halt. 24 items of chunk 1 remain untried (indexes 30-53), chunks 2 (53) and 3 (52) unrun, final retries 222490+284601 unrun. No rate-limit page observed in chunk 1 (soft rate-limit pages would surface as no_data_found with a 77-byte body; none this chunk). Pattern remains: intermittent API-layer 180s read timeouts on individual requests (the only hard-failure trigger), while per-item fetches themselves are healthy. Credits: chunk 1 = 29 attempted (28 fetch + 1 timeout). Cumulative across the entire 180-product effort: prior validation 16 + staged test Stage1 3 + Stage2 4 + probes 3 + first retry 2 + stage3-run1 2 + resume-run 1 + retry2-run 2 + chunk1 29 = 62 attempted; after the remaining 24 chunk-1 + 105 chunks 2-3 + 2 final retries = +131 => projected grand total ~193 attempted. Gates reverted and verified fail-closed after the chunk; .env untouched; evidence scrubbed and COMMITTED (6d7f0bb).",
+      "next_action": "FRESH OPERATOR GO-AHEAD REQUIRED to continue the approved sequence: (a) chunk 1 remainder (24 IDs, positions 30-53), (b) chunk 2 (53), (c) chunk 3 (52), (d) final retries 222490 then 284601 (30s apart). Operator may instead re-chunk differently given the recurring single-request API timeouts."
+    },
     {
       "ts": "2026-09-06T06:16:00Z",
       "activity": "brightdata_costco_stage3_resume_halt_and_named_retry",
