@@ -1,0 +1,25 @@
+{
+  "run_id": "lookup_20260906T053317Z",
+  "operation": "costco_search_lookup",
+  "query": "Kirkland Signature Paper Towels",
+  "requested_at": "2026-09-06T05:33:17Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_search",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/CatalogSearchDisplayView?storeId=10301&catalogId=10701&langId=-1&keyword=Kirkland%20Signature%20Paper%20Towels",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 05:33:17 GMT"
+  },
+  "response_body_bytes": 252,
+  "response_body_diagnostic": "short",
+  "response_html_head_capped": "Residential Failed (bad_endpoint): Requested site is not available for immediate residential (no KYC) access mode in accordance with robots.txt. To get full residential access for targeting this site, fill in the KYC form: https://brightdata.com/cp/kyc"
+}

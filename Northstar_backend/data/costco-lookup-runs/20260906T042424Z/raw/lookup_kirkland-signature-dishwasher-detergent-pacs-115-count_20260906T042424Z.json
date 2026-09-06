@@ -1,0 +1,27 @@
+{
+  "run_id": "lookup_20260906T042424Z",
+  "operation": "costco_search_lookup",
+  "query": "Kirkland Signature Dishwasher Detergent Pacs 115 Count",
+  "requested_at": "2026-09-06T04:24:28Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_search",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/search?query=Kirkland%20Signature%20Dishwasher%20Detergent%20Pacs%20115%20Count",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 04:25:25 GMT",
+    "content-type": "text/html;charset=UTF-8",
+    "cache-control": "no-store, no-cache"
+  },
+  "response_body_bytes": 606761,
+  "response_body_diagnostic": "normal",
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head><script async=\"\" src=\"https://mobilecontent.costco.com/consent-ui/costco-consent-manager.iife.js?_=1788668676648\" data-airgap-id=\"3\"></script>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    \n    <title>\n      Page Not Found!\n    </title>\n    <!-- START SeoMetaData.jsp -->\n<meta http-equiv=\"content-language\" content=\"en-us\">\n<meta name=\"currentBuildNumber\" content=\"3.0.105382.0\">\n<meta name=\"currentSolrBuildNumber\" content=\"3.0.33624.0\">\n<meta name=\"ServerName\" content=\"www.costco.com \">\n<meta name=\"LocalAddress\" content=\"xxx.xxx.xxx.26\">\n\n\n<meta name=\"LocalName\" content=\"TP104\" automation-id=\"metadataLocalName\">\n<meta name=\"google-site-verification\" content=\"\">\n\n\n<link rel=\"icon\" type=\"image/vnd.microsoft.icon\" href=\"/wcsstore/CostcoGLOBALSAS/images/favicon.svg\"> \n<link rel=\"shortcut icon\" type=\"image/vnd.microsoft.icon\" href=\"/wcsstore/CostcoGLOBALSAS/images/favicon.svg\">\n\n<!--  Begin QueueItScript.jspf -->\n\t\t<script type=\"text/javascript\" src=\"//static.queue-it.net/script/queueclient.min.js\"></script>\n\t\t<script data-queueit-intercept-domain=\"www.costco.com\" data-queueit-intercept=\"true\" data-queueit-c=\"costco\" type=\"text/javascript\" src=\"//static.queue-it.net/script/queueconfigloader.min.js\">\n\t\t</script><script type=\"text/javascript\" src=\"https://assets.queue-it.net/costco/integrationconfig/javascript/queueclientConfig.js?versionTimestamp=202609060004\"></script>\n\t<!--  End QueueItScript.jspf -->\n\t\t<meta name=\"description\" content=\"Shop Costco.com for electronics, computers, furniture, outdoor living, appliances, jewelry and more. Enjoy low warehouse prices on name-brand products delivered to your door.\n\">\n\t\n\t<meta name=\"keyword\" content=\"USBC, , Black Friday, Cyber Monday, Appliances, Baby, Beauty, Clothing, Luggage &amp; Handbags, Computers, Costco Direct, Electronics, Floral &amp; Gift Baskets, Furniture, Gif"
+}

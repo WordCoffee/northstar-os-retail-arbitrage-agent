@@ -1,0 +1,15 @@
+{
+  "run_id": "lookup_20260906T042424Z",
+  "operation": "costco_search_lookup",
+  "query": "Kirkland Signature, Crushed Red Pepper, 10 oz",
+  "requested_at": "2026-09-06T04:25:27Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "url": "https://www.costco.com/search?query=Kirkland%20Signature%2C%20Crushed%20Red%20Pepper%2C%2010%20oz",
+  "http_status": 200,
+  "identity_match_status": "lookup_no_results",
+  "notes": "no .product.<id>.html links found on the search page",
+  "best_candidate": null,
+  "candidate_count": 0,
+  "candidates": [],
+  "retries": 0
+}
