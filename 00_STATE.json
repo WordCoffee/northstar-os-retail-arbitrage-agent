@@ -503,8 +503,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-06T00:20:00Z",
+  "last_updated": "2026-09-06T00:50:00Z",
   "history": [
+    {
+      "ts": "2026-09-06T00:50:00Z",
+      "activity": "brightdata_costco_LIVE_batch_1_approved_run",
+      "batch": "operator-approved single live batch (6 items) — bright_data_costco.py details refresh, gate process-scoped to this one command",
+      "summary": "Approved live run executed against the frozen 20260828T021658Z run dir. Command (exactly as approved): python bright_data_costco.py details refresh --item-ids 424976 926628 98501 690843 1089787 1493188 --expected-json data/costco-discovery-runs/20260828T021658Z/costco-discovery-manifest.json. RESULTS (real, from live output): [1/6] 424976 probable_match http=200 title='Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets' price=17.99 — evidence persisted (raw/brightdata_424976_20260906T004717Z.json http_status=200 auth_header='Bearer <redacted>' scrubbed=true; normalized/items_424976_brightdata_20260906T004717Z.json). [2/6] 926628 HARD FAILURE transport_error (HTTPSConnectionPool read timeout, timeout=120), http=None -> circuit breaker HALTS batch immediately; zero retries; the remaining items (98501, 690843, 1089787, 1493188) were NEVER attempted. Failure persisted scrubbed in both raw and normalized manifests (failure_type='transport_error', http_status=0, retries=0, stop_on_block='halted_run'). Credits: 2 requests issued (1 success + 1 timed-out request), Web Unlocker 1 credit/request -> 2 credits consumed at most (timed-out request billing at Bright Data's discretion). 1493188 has NO record this run (batch halted before reaching it), so the url_not_found/no-fabricated-fields behavior remains fixture-proven (test_parse_1493188_content_404_typed_url_not_found), pending a future approved run. Gate: enabled as a process-scoped env var for the single command only; .env NEVER touched; post-run verification: CLI without the env var prints BLOCKED and exits 2 with zero calls — fail-closed confirmed restored. Next live batch requires a NEW named approval."
+    },
     {
       "ts": "2026-09-06T00:20:00Z",
       "activity": "brightdata_costco_parallel_adapter_build",
