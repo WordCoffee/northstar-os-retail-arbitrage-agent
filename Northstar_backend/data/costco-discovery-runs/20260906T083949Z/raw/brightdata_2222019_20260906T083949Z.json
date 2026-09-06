@@ -1,0 +1,28 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_2222019",
+  "requested_at": "2026-09-06T08:45:41Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.2222019.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 08:46:35 GMT",
+    "content-type": "text/html;charset=UTF-8",
+    "cache-control": "max-age=900"
+  },
+  "response_body_bytes": 697392,
+  "response_body_diagnostic": "normal",
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    \n    <script type=\"text/javascript\">Object.defineProperty(document, \"referrer\", {get : function(){ return \"\"; }})</script><script type=\"text/javascript\">\n\t\twindow.assetDomain = 'https://my.costco.com/assets/'; // Need to get from WCS property\n\t</script>\n    \n\n\t\t\t<script>\n\t\t\t\tvar isJQueryUpgraded = true;\n\t\t\t</script>\n   \t\t<!-- START SeoMetaData.jsp -->\n<meta http-equiv=\"content-language\" content=\"en-us\">\n<meta name=\"currentBuildNumber\" content=\"3.0.105382.0\">\n<meta name=\"currentSolrBuildNumber\" content=\"3.0.33624.0\">\n<meta name=\"ServerName\" content=\"www.costco.com \">\n<meta name=\"LocalAddress\" content=\"xxx.xxx.xxx.90\">\n\n\n<meta name=\"LocalName\" content=\"TP239\" automation-id=\"metadataLocalName\">\n<meta name=\"google-site-verification\" content=\"\">\n\n\n<link rel=\"icon\" type=\"image/vnd.microsoft.icon\" href=\"/wcsstore/CostcoGLOBALSAS/images/favicon.svg\"> \n<link rel=\"shortcut icon\" type=\"image/vnd.microsoft.icon\" href=\"/wcsstore/CostcoGLOBALSAS/images/favicon.svg\">\n\n<!--  Begin QueueItScript.jspf -->\n\t\t<script type=\"text/javascript\" src=\"//static.queue-it.net/script/queueclient.min.js\"></script>\n\t\t<script data-queueit-intercept-domain=\"www.costco.com\" data-queueit-intercept=\"true\" data-queueit-c=\"costco\" type=\"text/javascript\" src=\"//static.queue-it.net/script/queueconfigloader.min.js\">\n\t\t</script><script type=\"text/javascript\" src=\"https://assets.queue-it.net/costco/integrationconfig/javascript/queueclientConfig.js?versionTimestamp=202609060409\"></script>\n\t<!--  End QueueItScript.jspf --><!-- END SeoMetaData.jsp --><!-- PDP isFsaChd: false -->\n\n<meta name=\"description\" content=\"Kirkland Signature Organic Ancient Grain Granola, 35.3 oz USDA OrganicKosherWith Probiotic CulturesSupports Immune &amp; Digestive Health\">\n\n\n\t\t<link rel=\"canonical\" href=\"https://www.costco.com/kirkland"
+}

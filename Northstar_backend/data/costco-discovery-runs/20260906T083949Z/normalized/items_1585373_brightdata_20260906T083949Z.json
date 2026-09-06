@@ -1,0 +1,36 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_1585373",
+  "requested_at": "2026-09-06T08:51:06Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "url": "https://www.costco.com/.product.1585373.html",
+  "http_status": 200,
+  "failure_type": null,
+  "retries": 0,
+  "stop_on_block": "sequential_batch",
+  "scrubbed": true,
+  "item": {
+    "requested_item_id": "1585373",
+    "returned_costco_item_id": "1585373",
+    "exact_title": "Kirkland Signature Napkins, 1-Ply, 280-count, 4-pack",
+    "brand": "Kirkland Signature",
+    "listed_price": 14.99,
+    "currency": "USD",
+    "unit_price": null,
+    "quantity_or_pack": "280 count",
+    "size_or_weight": null,
+    "UPC_GTIN_EAN": null,
+    "availability": null,
+    "product_url": "https://www.costco.com/.product.1585373.html",
+    "captured_at": "2026-09-06T08:53:40Z",
+    "identity_match_status": "unverified",
+    "missing_fields": [
+      "unit_price",
+      "size_or_weight",
+      "UPC_GTIN_EAN",
+      "availability"
+    ]
+  }
+}

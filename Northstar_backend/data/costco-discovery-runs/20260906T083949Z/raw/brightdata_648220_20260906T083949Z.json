@@ -1,0 +1,28 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_648220",
+  "requested_at": "2026-09-06T08:48:59Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.648220.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 08:50:23 GMT",
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "max-age=0, no-cache, no-store"
+  },
+  "response_body_bytes": 3236550,
+  "response_body_diagnostic": "normal",
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head><meta name=\"emotion-insertion-point\" content=\"\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"preload\" as=\"image\" href=\"https://gdx-assets.costco.com/adobe/assets/urn:aaid:aem:c247124e-e5ba-4e5a-9f93-992413d55525/as/648220-847__1.avif?width=727&amp;height=727&amp;fit=contain\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/f2f535904c592d11.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/e67c321f05c7f111.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/3e5975984ed02a83.css\" data-precedence=\"next\"><link rel=\"preload\" as=\"script\" fetchpriority=\"low\" href=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/webpack-fbae53c34594d63c.js\"><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/4bd1b696-9909f507f95988b8.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/5964-44ba562cc558ac9a.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/main-app-405dcb56de0d5e16.js\" async=\"\"></script><link rel=\"preload\" href=\"https://mobilecontent.costco.com/consent-ui/costco-consent-manager.iife.js\" as=\"script\"><title>Kirkland Signature CoQ10 300 mg., 100 Softgels | Costco</title><meta name=\"description\" content=\"Kirkland Signature CoQ10 300 mg., 100 Softgels, Maintain Healthy Blood Pressure\u2020, Promote Energy Production\u2020, Helps Maintain Heart Health\u2020, USP Verified\"><link rel=\"canonical\" href=\"https://www.costco.com/p/-/kirkland-signature-coq10-300-mg-100-softgels/100029983\"><meta property=\"og:title\" content=\"Kirkland Signature CoQ10 300 mg., 100 Softgels\"><meta property=\"og:description\" content=\"Kirkland Signature CoQ10 300 mg., 100 Softgels, Maintain Healthy Blood Pressure\u2020, Promote Energy Production\u2020, Helps Maintain Hea"
+}
