@@ -1,0 +1,28 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_1485523",
+  "requested_at": "2026-09-06T20:47:14Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.1485523.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 20:47:47 GMT",
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "max-age=0, no-cache, no-store"
+  },
+  "response_body_bytes": 3534550,
+  "response_body_diagnostic": "normal",
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head><meta name=\"emotion-insertion-point\" content=\"\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"preload\" as=\"image\" href=\"https://gdx-assets.costco.com/adobe/assets/urn:aaid:aem:6a51c1d4-2cc2-4e21-a1a8-bf4146b8eeae/as/1485523-inc__1.avif?width=727&amp;height=727&amp;fit=contain\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/f2f535904c592d11.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/e67c321f05c7f111.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/3e5975984ed02a83.css\" data-precedence=\"next\"><link rel=\"preload\" as=\"script\" fetchpriority=\"low\" href=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/webpack-fbae53c34594d63c.js\"><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/4bd1b696-9909f507f95988b8.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/5964-44ba562cc558ac9a.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/main-app-405dcb56de0d5e16.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/2349-2db783e9f3f3dd64.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/9641-55796bcb730cb70a.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/8259-4356c183e3acbaa2.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/2800-4af5dece4c76cf39.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/5489-5dabe5ad15e20ea6.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/4473-bd834dba99fbab6f.js\" async=\"\"></script><link rel=\"preload\" href=\"https://mobi"
+}

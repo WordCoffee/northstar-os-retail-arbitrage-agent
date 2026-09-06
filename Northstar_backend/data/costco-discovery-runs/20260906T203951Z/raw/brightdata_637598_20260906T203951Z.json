@@ -1,0 +1,28 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_637598",
+  "requested_at": "2026-09-06T20:40:26Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.637598.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 20:43:04 GMT",
+    "content-type": "text/html;charset=UTF-8",
+    "cache-control": "no-store, no-cache"
+  },
+  "response_body_bytes": 788255,
+  "response_body_diagnostic": "normal",
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head>\n    <script id=\"tv-collections\">\n(function () {\n  let mod = adobeopt.module(\"target-597238\", {\n    initContent: function () {\n      let { modname } = mod;\n\n      // Check for Target Recs\n      if (!mod.data) {\n        mod.diag(\"No target reco object created\");\n        return;\n      }\n      // Because there are two recommendation carousels on the page,\n      // we must create a new div and use optionsOverride to point to it\n      mod.carouselPlaceholderId = \"aopt-rcmd-\" + modname;\n      const newDiv = document.createElement(\"div\");\n      newDiv.id = mod.carouselPlaceholderId;\n      const bottomContent = document.querySelector(\".bottom-content\");\n      \n      const carouselContainer = document.createElement(\"div\");\n      carouselContainer.classList.add(\"col-xs-12\");\n      carouselContainer.id = \"Target-Tv-Collections\";\n      carouselContainer.style.marginBottom = \"10px\";\n      carouselContainer.style.borderBottom = \"1px solid #ddd\";\n      carouselContainer.appendChild(newDiv);\n      bottomContent.insertBefore(carouselContainer, bottomContent.firstChild);\n\n      // Overrides instruct merkle.displayResults where to place carousel\n      mod.data.options = {\n        placementId: \"aopt-rcmd-\" + mod.modname,\n        title: \"Explore more items in this series\",\n        minDesktop: 1,\n        showReviews: false,\n        showPricePromo: true,\n      };\n    },\n  });\n})();\n</script><script id=\"dining-items\">\n(function () {\n  let mod = adobeopt.module(\"target-597359\", {\n    initContent: function () {\n      let { modname } = mod;\n\n      // Check for Target Recs\n      if (!mod.data) {\n        mod.diag(\"No target reco object created\");\n        return;\n      }\n      // Because there are two recommendation carousels on the page,\n      // we must create a new div and use optionsOverride to point to it\n      mod.carouselPlaceholderId = \"aopt-rcmd-\" + modname;\n      const newDiv = document.createElement(\"div\");\n      newDiv.id = mod.carouselPlaceho"
+}
