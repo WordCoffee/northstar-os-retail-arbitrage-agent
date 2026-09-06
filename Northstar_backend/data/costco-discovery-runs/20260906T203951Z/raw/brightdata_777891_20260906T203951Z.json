@@ -1,0 +1,28 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_777891",
+  "requested_at": "2026-09-06T20:56:54Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.777891.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 20:57:37 GMT",
+    "content-type": "text/html;charset=UTF-8",
+    "cache-control": "no-store, no-cache"
+  },
+  "response_body_bytes": 485988,
+  "response_body_diagnostic": "normal",
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    \n    <title>\n      Page Not Found!\n    </title>\n    <!-- START SeoMetaData.jsp -->\n<meta http-equiv=\"content-language\" content=\"en-us\">\n<meta name=\"currentBuildNumber\" content=\"3.0.105382.0\">\n<meta name=\"currentSolrBuildNumber\" content=\"3.0.33624.0\">\n<meta name=\"ServerName\" content=\"www.costco.com \">\n<meta name=\"LocalAddress\" content=\"xxx.xxx.xxx.89\">\n\n\n<meta name=\"LocalName\" content=\"TP238\" automation-id=\"metadataLocalName\">\n<meta name=\"google-site-verification\" content=\"\">\n\n\n<link rel=\"icon\" type=\"image/vnd.microsoft.icon\" href=\"/wcsstore/CostcoGLOBALSAS/images/favicon.svg\"> \n<link rel=\"shortcut icon\" type=\"image/vnd.microsoft.icon\" href=\"/wcsstore/CostcoGLOBALSAS/images/favicon.svg\">\n\n<!--  Begin QueueItScript.jspf -->\n\t\t<script type=\"text/javascript\" src=\"//static.queue-it.net/script/queueclient.min.js\"></script>\n\t\t<script data-queueit-intercept-domain=\"www.costco.com\" data-queueit-intercept=\"true\" data-queueit-c=\"costco\" type=\"text/javascript\" src=\"//static.queue-it.net/script/queueconfigloader.min.js\">\n\t\t</script><script type=\"text/javascript\" src=\"https://assets.queue-it.net/costco/integrationconfig/javascript/queueclientConfig.js?versionTimestamp=20260906141411\"></script>\n\t<!--  End QueueItScript.jspf -->\n\t\t<meta name=\"description\" content=\"Shop Costco.com for electronics, computers, furniture, outdoor living, appliances, jewelry and more. Enjoy low warehouse prices on name-brand products delivered to your door.\n\">\n\t\n\t<meta name=\"keyword\" content=\"USBC, , Black Friday, Cyber Monday, Appliances, Baby, Beauty, Clothing, Luggage &amp; Handbags, Computers, Costco Direct, Electronics, Floral &amp; Gift Baskets, Furniture, Gift Cards &amp; Tickets, Grocery &amp; Household Essentials, Health &amp; Personal Care, Holiday &amp; Seasonal, Home &amp; Installation Servi"
+}

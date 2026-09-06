@@ -1,0 +1,41 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_777891",
+  "requested_at": "2026-09-06T20:56:54Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "url": "https://www.costco.com/.product.777891.html",
+  "http_status": 200,
+  "failure_type": null,
+  "retries": 0,
+  "stop_on_block": "sequential_batch",
+  "scrubbed": true,
+  "item": {
+    "requested_item_id": "777891",
+    "returned_costco_item_id": null,
+    "exact_title": null,
+    "brand": null,
+    "listed_price": null,
+    "currency": null,
+    "unit_price": null,
+    "quantity_or_pack": null,
+    "size_or_weight": null,
+    "UPC_GTIN_EAN": null,
+    "availability": null,
+    "product_url": "https://www.costco.com/.product.777891.html",
+    "captured_at": "2026-09-06T20:57:38Z",
+    "identity_match_status": "url_not_found",
+    "missing_fields": [
+      "exact_title",
+      "brand",
+      "listed_price",
+      "currency",
+      "unit_price",
+      "quantity_or_pack",
+      "size_or_weight",
+      "UPC_GTIN_EAN",
+      "availability"
+    ]
+  }
+}
