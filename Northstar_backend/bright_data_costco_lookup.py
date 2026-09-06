@@ -27,6 +27,8 @@ Gating / discipline (mirrors the detail adapter exactly):
     caller-supplied run dir.
 
 Lookup URL:  https://www.costco.com/search?query=<url-encoded title>
+             (run-scope override: BRIGHTDATA_COSTCO_SEARCH_URL=<template> for
+             approved probes of alternate search endpoints; '{query}' honored)
 Candidates:  anchors/links whose href matches the Costco product URL pattern
              (a slug path ending in .product.<id>.html)
 Ranking:     Jaccard overlap of title tokens with the query (brand tokens
@@ -66,10 +68,30 @@ DEFAULT_DELAY_SECONDS = detail_adapter.DEFAULT_DELAY_SECONDS
 HEAD_CAP_CHARS = detail_adapter.HEAD_CAP_CHARS
 
 COSTCO_SEARCH_URL_TEMPLATE = "https://www.costco.com/search?query={query}"
+# Process-scoped override for approved search-endpoint probes. A probe can be
+# run against a different URL template without a code change:
+#   $env:BRIGHTDATA_COSTCO_SEARCH_URL='https://www.costco.com/search?keyword={query}'
+# Only the '{query}' format key is honored.
+SEARCH_URL_ENV = "BRIGHTDATA_COSTCO_SEARCH_URL"
 
 # Hard-failure vocabulary consistent with the detail adapter.
 HARD_FAILURE_TYPES = detail_adapter.HARD_FAILURE_TYPES
-SOFT_FAILURE_TYPES = ("lookup_no_results", "lookup_weak_match")
+SOFT_FAILURE_TYPES = (
+    "lookup_no_results",
+    "lookup_weak_match",
+    "lookup_page_not_found",
+)
+
+
+def _search_url(query: str) -> str:
+    """Build the Costco site-search URL for a query.
+
+    Defaults to COSTCO_SEARCH_URL_TEMPLATE; the operator may override the
+    template at run scope via SEARCH_URL_ENV when approving a probe of a
+    different search endpoint.
+    """
+    template = os.environ.get(SEARCH_URL_ENV, "").strip() or COSTCO_SEARCH_URL_TEMPLATE
+    return template.format(query=urllib.parse.quote(query))
 
 _PRODUCT_LINK_RE = re.compile(
     r'href=["\']([^"\']*?\.product\.\d+\.html)["\']', re.I
@@ -123,13 +145,27 @@ def parse_costco_search_page(html: str, query: str) -> Dict:
 
     Returns:
       {
-        "status": "lookup_candidate" | "lookup_weak_match" | "lookup_no_results",
+        "status": "lookup_candidate" | "lookup_weak_match" | "lookup_no_results"
+                 | "lookup_page_not_found",
         "query": <original query>,
         "candidates": [ {item_id, title, url, score}, ... ] sorted desc,
         "best": top candidate dict or None,
         "notes": str,
       }
     """
+    # A content-404 page must never masquerade as a low-score search result.
+    if detail_adapter._is_url_not_found(html):
+        return {
+            "status": "lookup_page_not_found",
+            "query": query,
+            "candidates": [],
+            "best": None,
+            "notes": (
+                "fetched page is Costco's 'Page Not Found' page, "
+                "not a search results page"
+            ),
+        }
+
     q_tokens = _norm_tokens(query)
 
     seen_ids = {}
@@ -260,7 +296,7 @@ def resolve_by_search(
             time.sleep(delay)
 
         query = (query or "").strip()
-        url = COSTCO_SEARCH_URL_TEMPLATE.format(query=urllib.parse.quote(query))
+        url = _search_url(query)
         requested_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
         html = None

@@ -106,6 +106,57 @@ class ParserTests(unittest.TestCase):
         long_q = "kirkland-signature-" + ("x" * 120)
         self.assertLessEqual(len(_key(long_q)), 60)
 
+    def test_page_not_found_is_its_own_lookup_status(self):
+        # A Costco content-404 (title "Page Not Found!") must never be parsed as
+        # an empty search page or scored as a weak match from stray links.
+        html = (
+            "<html><head><title>Page Not Found!</title></head><body>"
+            '<a href="https://www.costco.com/.product.10024438.html"> </a>'
+            "</body></html>"
+        )
+        out = parse_costco_search_page(
+            html, "Kirkland Signature Dishwasher Detergent Pacs 115 Count"
+        )
+        self.assertEqual(out["status"], "lookup_page_not_found")
+        self.assertEqual(out["candidates"], [])
+        self.assertIsNone(out["best"])
+        self.assertIn("Page Not Found", out["notes"])
+
+    def test_search_url_default_and_override(self):
+        self.assertIn(
+            "costco.com/search",
+            lookup._search_url("Kirkland Signature Coffee"),
+        )
+        self.assertIn(
+            "query=",
+            lookup._search_url("Kirkland Signature Coffee"),
+        )
+        with mock.patch.dict(
+            os.environ,
+            {"BRIGHTDATA_COSTCO_SEARCH_URL": "https://www.costco.com/search?keyword={query}"},
+        ):
+            url = lookup._search_url("Kirkland Signature Coffee K-Cup")
+        self.assertIn("keyword=", url)
+        self.assertIn("Kirkland%20Signature%20Coffee%20K-Cup", url)
+        self.assertNotIn("query=", url)
+
+    def test_search_url_override_is_honored_in_resolve(self):
+        seen = {}
+
+        def _f(url):
+            seen["url"] = url
+            return "<html><body>ok</body></html>"
+
+        with mock.patch.dict(
+            os.environ,
+            {"BRIGHTDATA_COSTCO_SEARCH_URL": "https://www.costco.com/search?keyword={query}"},
+        ):
+            with mock.patch.object(bright_data_client, "_fetch", _f):
+                resolve_by_search(
+                    ["Kirkland Signature Coffee"], run_dir="tmp-probe", delay=0.0
+                )
+        self.assertIn("keyword=", seen["url"])
+
 
 def setUpModule():
     os.environ[GATE_ENV] = "1"
@@ -233,6 +284,37 @@ class LivePathTests(unittest.TestCase):
         # failure evidence persisted
         files = os.listdir(os.path.join(self.tmp.name, "raw"))
         self.assertEqual(len(files), 1)
+
+    def test_page_not_found_is_soft_failure_keeps_going(self):
+        html_404 = (
+            "<html><head><title>Page Not Found!</title></head><body>"
+            '<a href="/.product.10024438.html"> </a></body></html>'
+        )
+        html_ok = _search_html(
+            _anchor("30055", "Kirkland Signature Paper Towels, 2-Ply, 160 Sheets, 12 Rolls",
+                    slug="kirkland-signature-paper-towels"),
+        )
+        calls = {"n": 0}
+
+        def _f(url):
+            calls["n"] += 1
+            return html_404 if calls["n"] == 1 else html_ok
+
+        with mock.patch.object(bright_data_client, "_fetch", _f):
+            summary = resolve_by_search(
+                ["Kirkland Signature Coffee",
+                 "Kirkland Signature Paper Towels, 2-Ply, 160 Sheets, 12 Individually Wrapped Rolls"],
+                run_dir=self.tmp.name,
+                delay=0.0,
+            )
+        self.assertEqual(summary["status"], "completed")
+        self.assertEqual(
+            summary["items"][0]["identity_match_status"], "lookup_page_not_found"
+        )
+        self.assertEqual(
+            summary["items"][1]["identity_match_status"], "lookup_candidate"
+        )
+        self.assertEqual(calls["n"], 2)  # soft failure did not halt batch
 
     def test_url_is_query_encoded_search_endpoint(self):
         seen = {}
