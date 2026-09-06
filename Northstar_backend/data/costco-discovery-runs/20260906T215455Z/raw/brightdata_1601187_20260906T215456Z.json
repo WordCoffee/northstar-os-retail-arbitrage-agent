@@ -1,0 +1,28 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_1601187",
+  "requested_at": "2026-09-06T22:07:46Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.1601187.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 22:08:45 GMT",
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "max-age=0, no-cache, no-store"
+  },
+  "response_body_bytes": 2413910,
+  "response_body_diagnostic": "normal",
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/f2f535904c592d11.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/e67c321f05c7f111.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/3e5975984ed02a83.css\" data-precedence=\"next\"><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/4bd1b696-9909f507f95988b8.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/5964-44ba562cc558ac9a.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/main-app-405dcb56de0d5e16.js\" async=\"\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/polyfills-42372ed130431b0a.js\" nomodule=\"\"></script><script src=\"https://cdn.intake-lr.com/logger-1.min.js\" async=\"\"></script><style type=\"text/css\">.transform-component-module_wrapper__SPB86 {\n  position: relative;\n  width: -moz-fit-content;\n  width: fit-content;\n  height: -moz-fit-content;\n  height: fit-content;\n  overflow: hidden;\n  -webkit-touch-callout: none; /* iOS Safari */\n  -webkit-user-select: none; /* Safari */\n  -khtml-user-select: none; /* Konqueror HTML */\n  -moz-user-select: none; /* Firefox */\n  -ms-user-select: none; /* Internet Explorer/Edge */\n  user-select: none;\n  margin: 0;\n  padding: 0;\n}\n.transform-component-module_content__FBWxo {\n  display: flex;\n  flex-wrap: wrap;\n  width: -moz-fit-content;\n  width: fit-content;\n  height: -moz-fit-content;\n  height: fit-content;\n  margin: 0;\n  padding: 0;\n  transform-origin: 0% 0%;\n}\n.transform-component-module_content__FBWxo img {\n  pointer-events: none;\n}\n</style><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Kirkland Signature Fully-Cooked Bacon, Hickory Wood Smoked, 1 lb | Costco</title><meta name=\"description\""
+}
