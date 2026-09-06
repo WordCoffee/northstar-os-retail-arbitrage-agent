@@ -1,0 +1,1597 @@
+{
+  "generated_at": "2026-09-06T00:00:00Z",
+  "inputs": [
+    "BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv",
+    "Rank-Product-ASIN-Reviews-Price-BSR.csv",
+    "brightdata_costco_180_prepared_manifest.json",
+    "costco-api-catalog.json",
+    "costco-items.csv"
+  ],
+  "merge": {
+    "rank_rows": 20,
+    "proxyrank_rows": 47,
+    "unique_asins": 47,
+    "asins_in_both_files": 20
+  },
+  "fetch_reconciliation": {
+    "unique_http200_ids_all_evidence": 118,
+    "http200_ids_not_in_manifest": [
+      "1493188",
+      "424976",
+      "690843",
+      "926628",
+      "98501"
+    ],
+    "manifest_items_with_evidence": 119,
+    "manifest_http200_items": 113,
+    "manifest_failed_fetch_items": 6,
+    "usable_manifest_ids_with_no_content": [
+      "1025795",
+      "1300509",
+      "1347776",
+      "1359200",
+      "1394201",
+      "1492456",
+      "1493488",
+      "1585373",
+      "1617507",
+      "1652577",
+      "1652990",
+      "1743030",
+      "1925833",
+      "1978580",
+      "1987114",
+      "1987116",
+      "2222019",
+      "284601",
+      "34777",
+      "35410",
+      "4164501",
+      "44004",
+      "553499",
+      "713160",
+      "931484",
+      "9820887"
+    ],
+    "live_status_counts": {
+      "probable_match": 70,
+      "url_not_found": 22,
+      "no_data_found": 21,
+      "transport_error": 6,
+      "unverified": 5
+    }
+  },
+  "categories": {
+    "c_needs_name_lookup": 28,
+    "catalog_resolved_not_fetched": 11,
+    "matched_dead_item": 1,
+    "a_live_confirmed_match": 4,
+    "matched_unresolved": 2,
+    "matched_failed_fetch": 1
+  },
+  "fetched_without_asin_match": [
+    {
+      "costco_id": "9090",
+      "name": "Kirkland Signature Fresh Goat Cheese, 10.5 oz, 2 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "9555",
+      "name": "Kirkland Signature Microwave Popcorn, 3.3 oz, 44 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "10597",
+      "name": "Kirkland Signature Chicken Party Wings, 7 lb avg wt",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "27664",
+      "name": "Kirkland Signature Frozen Strawberries, 6 lbs",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "33841",
+      "name": "Kirkland Signature Chicken Breasts, Boneless Skinless, 9 lb avg wt",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "34777",
+      "name": "Kirkland Signature Parmigiano Reggiano, 2 lb avg wt",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "35410",
+      "name": "Kirkland Signature Chicken Thighs, Boneless Skinless, 9 lb avg wt",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "41400",
+      "name": "Kirkland Signature Butter, Unsalted, Sticks, 1 lb, 4 ct",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "44004",
+      "name": "Kirkland Signature Tortilla Strips, 3 lbs",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "44111",
+      "name": "Kirkland Signature Butter, Salted, Block, 1 lb, 4 ct",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "46242",
+      "name": "Kirkland Signature Decaf Ground Coffee, Dark Roast, 3 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "47731",
+      "name": "Kirkland Signature Chicken Thighs, Boneless Skinless, 8 lb avg wt",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "47737",
+      "name": "Kirkland Signature Chicken Thighs, 10 lb avg wt",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "47739",
+      "name": "Kirkland Signature Chicken Drumsticks, 8 lb avg wt",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "51070",
+      "name": "Kirkland Signature Premium Chunk Chicken Breast, 12.5 oz, 6 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "52296",
+      "name": "Kirkland Signature Cat Food, Chicken and Rice Formula, 25 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "71003",
+      "name": "Kirkland Signature Extra Virgin Olive Oil, 2 Liter",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "71012",
+      "name": "Kirkland Signature Creamy Liquid Shortening, 35 lbs",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "87507",
+      "name": "Kirkland Signature Wastebasket Liners, Clear, 10 Gallon, 500 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "186626",
+      "name": "Kirkland Signature Aged Parmigiano Reggiano Cheese, Shredded, 1 lb",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "284601",
+      "name": "Kirkland Signature Whole Almonds, Baking Nuts, 3 lbs",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "384732",
+      "name": "Kirkland Signature Pure Sea Salt, Fine Grain, 30 oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "553499",
+      "name": "Kirkland Signature Sunsweet Whole Dried Plums, 56 oz",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "555000",
+      "name": "Kirkland Signature Organic Creamy Peanut Butter, 28 oz, 2 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "633564",
+      "name": "Kirkland Signature Organic Tomato Paste, 6 oz, 12 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "637598",
+      "name": "Kirkland Signature Large Eggs, Cage Free, 2 Dozen",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "648220",
+      "name": "Kirkland Signature CoQ10 Supplement, 300 mg, 100 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "756053",
+      "name": "Kirkland Signature Ground Coffee, Medium Roast, 2.5 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "777891",
+      "name": "Kirkland Signature Sea Scallops, Wild Caught, 2 lbs",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "890181",
+      "name": "Kirkland Signature Wild Alaskan Pink Salmon, 6 oz, 6 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "897971",
+      "name": "Kirkland Signature Organic Applesauce Pouch, 3.17 oz, 24 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "906410",
+      "name": "Kirkland Signature Canola Oil, 3 Quart, 2 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "906420",
+      "name": "Kirkland Signature Vegetable Oil, 3 Quart, 2 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "990551",
+      "name": "Kirkland Signature Imported Basil Pesto, 22 oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1010598",
+      "name": "Kirkland Signature Three Berry Blend, 4 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1025795",
+      "name": "Kirkland Signature Large Eggs, Cage Free, 5 Dozen",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "1032932",
+      "name": "Kirkland Signature Organic Raw Honey Bear, 24 oz, 3 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1045706",
+      "name": "Kirkland Signature Organic Coconut Oil, Virgin, 84 fl oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1048072",
+      "name": "Kirkland Signature Organic Greek Nonfat Yogurt, Plain, 3 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1076903",
+      "name": "Kirkland Signature Shelled Pistachios, Roasted & Salted, 1.5 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1178969",
+      "name": "Kirkland Signature Almond Flour, 3 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1195303",
+      "name": "Kirkland Signature Dry Roasted Macadamia Nuts, Salted, 1.5 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1201906",
+      "name": "Kirkland Signature Chicken Bakes, 8 oz, 6 ct",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "1212860",
+      "name": "Kirkland Signature Soft & Chewy Chocolate Chip Granola Bars, 0.85 oz, 64 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1217608",
+      "name": "Kirkland Signature Organic Broccoli Florets, 1 lb, 4 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1238662",
+      "name": "Kirkland Signature Normandy-Style Vegetable Blend, 5.5 lbs",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "1280819",
+      "name": "Kirkland Signature Organic Hummus, 2.5 oz, 20 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1294443",
+      "name": "Kirkland Signature Chicken Tenderloins, Boneless Skinless, 6 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1300509",
+      "name": "Kirkland Signature Nut Bars with Cocoa Drizzle & Sea Salt, 1.41 oz, 30 ct",
+      "status": "unverified"
+    },
+    {
+      "costco_id": "1343253",
+      "name": "Kirkland Signature Elegant Plastic Plate, White, 50 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1347776",
+      "name": "Kirkland Signature Wildflower Honey, 5 lbs",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "1359200",
+      "name": "Kirkland Signature Vita Rain Zero, Variety Pack, 20 fl oz, 24 ct",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "1364689",
+      "name": "Kirkland Signature Organic Whole Milk, Half Gallon, 3 ct",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "1390413",
+      "name": "Kirkland Signature Fancy Whole Cashews with Sea Salt, 2.5 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1394201",
+      "name": "Kirkland Signature Organic Coconut Water, 11.1 fl oz, 12 ct",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "1424237",
+      "name": "Kirkland Signature Grass-Fed Butter, Salted, 8 oz, 4 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1448207",
+      "name": "Kirkland Signature SAE 0W-20 Full Synthetic Motor Oil, 1 Quart, 6 ct",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "1473917",
+      "name": "Kirkland Signature Trail Mix Snack Packs, 2 oz, 28 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1474436",
+      "name": "Kirkland Signature Trail Mix, 4 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1481907",
+      "name": "Kirkland Signature Funhouse Treats, Variety Pack, 92 oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1485523",
+      "name": "Kirkland Signature All Purpose Flour, Unbleached, 10 lbs, 2 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1492456",
+      "name": "Kirkland Signature Albacore Solid White Tuna in Water, 7 oz, 8 ct",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "1528787",
+      "name": "Kirkland Signature Whole Bean Coffee, French Roast, 2.5 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1582922",
+      "name": "Kirkland Signature Organic Ghee Clarified Butter, 27 oz",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "1585373",
+      "name": "Kirkland Signature Casual Dining Paper Napkins, White, 1120 ct",
+      "status": "unverified"
+    },
+    {
+      "costco_id": "1601187",
+      "name": "Kirkland Signature Fully-Cooked Bacon, Hickory Wood Smoked, 1 lb",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1605917",
+      "name": "Kirkland Signature Pink Salt, Fine Grain, 5 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1617506",
+      "name": "Kirkland Signature Organic Whole Cashews, Unsalted, Unroasted, 40 oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1617507",
+      "name": "Kirkland Signature Fancy Whole Cashews, Unsalted, 40 oz",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "1645578",
+      "name": "Kirkland Signature Extra Fancy Mixed Nuts, Salted, 40 oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1652577",
+      "name": "Kirkland Signature Extra Fancy Mixed Nuts, Unsalted, 40 oz",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "1652990",
+      "name": "Kirkland Signature Moist Flushable Wipes, Unscented, 640 ct",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "1658550",
+      "name": "Kirkland Signature Snacking Nuts, Variety Pack, 1.6 oz, 21 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1685616",
+      "name": "Kirkland Signature Milk Chocolate Covered Almonds, 48 oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1713786",
+      "name": "Kirkland Signature Roasted Almonds with Sea Salt, 2.5 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1732802",
+      "name": "Kirkland Signature Sweet Heat Snack Mix, 24 oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1738408",
+      "name": "Kirkland Signature Large Eggs, Free Range, 2 Dozen",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "1743030",
+      "name": "Kirkland Signature Organic Whole Milk, 8 fl oz, 18 ct",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "1767102",
+      "name": "Kirkland Signature Dried Mangoes, Sweetened, 35 oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1789130",
+      "name": "Kirkland Signature Ultra Shine Dishwashing Liquid, Fresh Scent, 90 fl oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1792518",
+      "name": "Kirkland Signature In-Shell Pistachios, Roasted and Unsalted, 3 lbs",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1792990",
+      "name": "Kirkland Signature Absorbent Pads, Extra-Large, 100 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1845080",
+      "name": "Kirkland Signature Sport Drink, Variety Pack, 12 fl oz, 24 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1854959",
+      "name": "Kirkland Signature Farmed Blackened Atlantic Salmon, Boneless Skin-On, 32 oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1857160",
+      "name": "Kirkland Signature Grass-Fed Beef Sticks, 1.15 oz, 12 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1873060",
+      "name": "Kirkland Signature Mini Muffin Bites, Chocolate Chip, 20 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1888000",
+      "name": "Kirkland Signature Heavy Whipped Cream, 15 fl oz, 3 ct",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "1919858",
+      "name": "Kirkland Signature Favorites Chocolate Bag, Variety Pack, 90 oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1925833",
+      "name": "Kirkland Signature Sparkling Energy Drink, Sugar Free, Variety Pack, 12 fl oz, 24 ct",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "1975373",
+      "name": "Kirkland Signature Organic Strawberry Spread, 24 oz, 2 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "1978580",
+      "name": "Kirkland Signature Tonkotsu Ramen Broth, Pork, 32 fl oz, 4 ct",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "1987114",
+      "name": "Kirkland Signature Ultra Soft Diapers, Size 4, 198 ct",
+      "status": "unverified"
+    },
+    {
+      "costco_id": "1987116",
+      "name": "Kirkland Signature Ultra Soft Diapers, Size 6, 132 ct",
+      "status": "unverified"
+    },
+    {
+      "costco_id": "2047526",
+      "name": "Kirkland Signature Granulated Garlic, 15.5 oz",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "2222019",
+      "name": "Kirkland Signature Ancient Grains Probiotic Granola, 35.3 oz",
+      "status": "unverified"
+    },
+    {
+      "costco_id": "2322010",
+      "name": "Kirkland Signature Alkaline AA Batteries, 48 ct",
+      "status": "probable_match"
+    },
+    {
+      "costco_id": "4164501",
+      "name": "Kirkland Signature Sparkling Water, Variety Pack, 12 fl oz, 35 ct",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "7000070",
+      "name": "Kirkland Signature Sliced Bacon, Hickory Smoked, 1 lb, 4 ct",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "9262015",
+      "name": "Kirkland Signature Italian Sparkling Water, 16.9 fl oz, 24 ct",
+      "status": "url_not_found"
+    },
+    {
+      "costco_id": "9820887",
+      "name": "Kirkland Signature Cheese Pizza, 18.25 oz, 4 ct",
+      "status": "no_data_found"
+    },
+    {
+      "costco_id": "9877788",
+      "name": "Kirkland Signature Organic Tofu, Extra Firm, 16 oz, 4 ct",
+      "status": "url_not_found"
+    }
+  ],
+  "failed_fetch_without_asin_match": [
+    {
+      "costco_id": "222490",
+      "name": "Kirkland Signature Super Extra-Large Peanuts, 2.5 lbs",
+      "status": "transport_error"
+    },
+    {
+      "costco_id": "355400",
+      "name": "Kirkland Signature Ibuprofen, 500 Tablets, 2 ct",
+      "status": "transport_error"
+    },
+    {
+      "costco_id": "516822",
+      "name": "Kirkland Signature Organic Soup Stock, Chicken, 32 fl oz, 6 ct",
+      "status": "transport_error"
+    },
+    {
+      "costco_id": "841930",
+      "name": "Kirkland Signature Thai Hom Mali Jasmine Rice, Long Grain, 25 lbs",
+      "status": "transport_error"
+    },
+    {
+      "costco_id": "1014809",
+      "name": "Kirkland Signature Protein Bar, Variety Pack, 21g Protein, 2.12 oz, 20 ct",
+      "status": "transport_error"
+    }
+  ],
+  "asin_to_costco": {
+    "B01H40O42I": null,
+    "B08R2SRN88": null,
+    "B0CP6LXPLK": null,
+    "B00BISGJXA": null,
+    "B00BH3HPZW": null,
+    "B00GYZWNY6": "1665191",
+    "B0045XGE9E": null,
+    "B002L4M4M0": null,
+    "B081THWMDK": "208733",
+    "B085F1QCB9": null,
+    "B00N54AJZE": null,
+    "B00QGMOJ4Y": "782796",
+    "B01LY71217": "1300658",
+    "B07BZW88NY": null,
+    "B078B5N4DD": null,
+    "B007MWNFBA": "208733",
+    "B00OPQZJA6": "36285",
+    "B0C54GXFQ8": null,
+    "B0F7GTX962": null,
+    "B00BI33NU2": null,
+    "B00F4MD808": null,
+    "B0077SXI7A": null,
+    "B07H3TXVR7": null,
+    "B0CHTNWWLJ": null,
+    "B07Q2HHLVN": null,
+    "B0BMX67KY7": "1493488",
+    "B00UP99X1I": null,
+    "B00JW1OHWK": "32911",
+    "B01M7QUOBB": "971832",
+    "B077GS636P": "1665191",
+    "B07G6XV55T": "208733",
+    "B00JZVWE0O": "1050557",
+    "B078XMPVYP": "1147377",
+    "B0DPY44TGM": "203444",
+    "B09KFMH9BW": null,
+    "B09D4RCKS4": null,
+    "B08TQRC3F6": "2030640",
+    "B08WN9V1LC": null,
+    "B0D38DT5RX": null,
+    "B01JUD2SNO": null,
+    "B0734BGSKY": null,
+    "B00SWZUC8U": "1493488",
+    "B00DQXOSV0": "133839",
+    "B077962JKD": "1050557",
+    "B08XPSSJ5S": "203444",
+    "B01AIVTJMA": null,
+    "B01J13V6I6": null
+  },
+  "rows": [
+    {
+      "ASIN": "B01J13V6I6",
+      "Product": "33-Gal Black Trash Bags (90ct)",
+      "Rank": "",
+      "Reviews": 631,
+      "PriceUSD": 39.99,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B01LY71217",
+      "Product": "13-Gal Trash Bags (200ct)",
+      "Rank": "13",
+      "Reviews": 4319,
+      "PriceUSD": 35.99,
+      "BSR": "Not listed on page",
+      "PrimeOrFBA": "No",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "BSR-not-listed; non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "1300658",
+      "CostcoName": "Kirkland Signature Scented Kitchen Drawstring Trash Bags, Flex-Tech, White, Fresh Scent, 13 Gallon, 200 ct",
+      "MatchScore": 0.67,
+      "CostcoCostRef": 24.41,
+      "LiveStatus": "LIVE-CONFIRMED",
+      "Category": "a_live_confirmed_match",
+      "RivalIDs": "1300658; 1089787"
+    },
+    {
+      "ASIN": "B077962JKD",
+      "Product": "PB Pretzel (2pk, 52oz)",
+      "Rank": "",
+      "Reviews": 191,
+      "PriceUSD": 34.99,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "1050557",
+      "CostcoName": "Kirkland Signature Peanut Butter Filled Pretzel Nuggets, 55 oz",
+      "MatchScore": 0.5,
+      "CostcoCostRef": 12.64,
+      "LiveStatus": "not-fetched",
+      "Category": "catalog_resolved_not_fetched",
+      "RivalIDs": "1050557"
+    },
+    {
+      "ASIN": "B078XMPVYP",
+      "Product": "Organic Blue Agave (36oz)",
+      "Rank": "",
+      "Reviews": 889,
+      "PriceUSD": 9.88,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "1147377",
+      "CostcoName": "Kirkland Signature Organic Blue Agave, 36 oz, 2 ct",
+      "MatchScore": 1.0,
+      "CostcoCostRef": 11.87,
+      "LiveStatus": "LIVE-CONFIRMED",
+      "Category": "a_live_confirmed_match",
+      "RivalIDs": "1147377"
+    },
+    {
+      "ASIN": "B07H3TXVR7",
+      "Product": "Minoxidil (6-mo, orig packaging)",
+      "Rank": "",
+      "Reviews": 246,
+      "PriceUSD": 32.49,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B081THWMDK",
+      "Product": "Stretch Tite Food Wrap (2pk)",
+      "Rank": "9",
+      "Reviews": 967,
+      "PriceUSD": 28.79,
+      "BSR": "Not listed on page",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "BSR-not-listed; low-reviews(<1000)",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "208733",
+      "CostcoName": "Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",
+      "MatchScore": 0.5,
+      "CostcoCostRef": 22.87,
+      "LiveStatus": "not-fetched",
+      "Category": "catalog_resolved_not_fetched",
+      "RivalIDs": "208733"
+    },
+    {
+      "ASIN": "B085F1QCB9",
+      "Product": "Compactor Trash Bag",
+      "Rank": "10",
+      "Reviews": 588,
+      "PriceUSD": 28.07,
+      "BSR": "#11,435 in Health & Household; #163 in Trash Bagsamazon",
+      "PrimeOrFBA": "No (Amazon-shipped, non-Prime badge)",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B08TQRC3F6",
+      "Product": "Nitrile Gloves (200ct)",
+      "Rank": "",
+      "Reviews": 695,
+      "PriceUSD": 21.95,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "2030640",
+      "CostcoName": "Kirkland Signature Nitrile Exam Gloves, Small, 400 ct",
+      "MatchScore": 1.0,
+      "CostcoCostRef": 27.27,
+      "LiveStatus": "LIVE-CONFIRMED",
+      "Category": "a_live_confirmed_match",
+      "RivalIDs": "2030640; 2030644; 2030643; 2030645"
+    },
+    {
+      "ASIN": "B08WN9V1LC",
+      "Product": "Organic Hemp Hearts",
+      "Rank": "",
+      "Reviews": 858,
+      "PriceUSD": 19.99,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B08XPSSJ5S",
+      "Product": "Praline Pecans (2-pack)",
+      "Rank": "",
+      "Reviews": 111,
+      "PriceUSD": 45.49,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "203444",
+      "CostcoName": "Kirkland Signature Pecan Halves, Baking Nuts, 2 lbs",
+      "MatchScore": 0.5,
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "catalog_resolved_not_fetched",
+      "RivalIDs": "203444"
+    },
+    {
+      "ASIN": "B09D4RCKS4",
+      "Product": "Minoxidil (1-mo)",
+      "Rank": "",
+      "Reviews": 377,
+      "PriceUSD": 11.09,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "",
+      "CostcoName": "Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",
+      "MatchScore": 1.0,
+      "CostcoCostRef": "19.79",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B0BMX67KY7",
+      "Product": "Fragrance-Free Baby Wipes (900ct)",
+      "Rank": "",
+      "Reviews": 183,
+      "PriceUSD": 36.89,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "1493488",
+      "CostcoName": "Kirkland Signature Baby Wipes Fragrance Free, 900-count",
+      "MatchScore": 1.0,
+      "CostcoCostRef": "21.99",
+      "LiveStatus": "EMPTY",
+      "Category": "matched_unresolved",
+      "RivalIDs": "1493488"
+    },
+    {
+      "ASIN": "B0C54GXFQ8",
+      "Product": "Performance Plus Golf Balls (24ct)",
+      "Rank": "18",
+      "Reviews": 679,
+      "PriceUSD": 43.99,
+      "BSR": "Not listed on page",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "BSR-not-listed; low-reviews(<1000)",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B0CHTNWWLJ",
+      "Product": "Psyllium Fiber Powder (360 doses)",
+      "Rank": "",
+      "Reviews": 518,
+      "PriceUSD": 43.38,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B0D38DT5RX",
+      "Product": "Hair Regrowth Minoxidil Foam (6-mo)",
+      "Rank": "",
+      "Reviews": 51,
+      "PriceUSD": 65.8,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "",
+      "CostcoName": "Kirkland Signature Hair Regrowth Treatment Minoxidil Foam for Men, 2.11 oz, 6-count",
+      "MatchScore": 1.0,
+      "CostcoCostRef": "53.89",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B0F7GTX962",
+      "Product": "Minoxidil (6-mo bundle)",
+      "Rank": "19",
+      "Reviews": 135,
+      "PriceUSD": 15.49,
+      "BSR": "#21,943 in Beauty & Personal Care; #173 in Hair Regrowth Treatmentsamazon",
+      "PrimeOrFBA": "No",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "low-reviews(<1000); non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 2,
+      "CostcoID": "",
+      "CostcoName": "Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",
+      "MatchScore": 1.0,
+      "CostcoCostRef": "19.79",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B007MWNFBA",
+      "Product": "Stretch Tite Wrap (single)",
+      "Rank": "16",
+      "Reviews": 4665,
+      "PriceUSD": 19.99,
+      "BSR": "Not listed on page",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "BSR-not-listed",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "208733",
+      "CostcoName": "Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",
+      "MatchScore": 0.25,
+      "CostcoCostRef": 22.87,
+      "LiveStatus": "not-fetched",
+      "Category": "catalog_resolved_not_fetched",
+      "RivalIDs": "208733"
+    },
+    {
+      "ASIN": "B00F4MD808",
+      "Product": "Chewable Calcium Gummies (120ct)",
+      "Rank": "",
+      "Reviews": 2810,
+      "PriceUSD": 14.95,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B00JW1OHWK",
+      "Product": "Pure Vanilla Extract (16oz)",
+      "Rank": "",
+      "Reviews": 1065,
+      "PriceUSD": 16.99,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "32911",
+      "CostcoName": "Kirkland Signature Pure Vanilla Extract, 16 fl oz",
+      "MatchScore": 1.0,
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "catalog_resolved_not_fetched",
+      "RivalIDs": "32911"
+    },
+    {
+      "ASIN": "B00JZVWE0O",
+      "Product": "H.K Anderson PB Pretzel Nuggets (52oz)",
+      "Rank": "",
+      "Reviews": 1905,
+      "PriceUSD": 16.74,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "1050557",
+      "CostcoName": "Kirkland Signature Peanut Butter Filled Pretzel Nuggets, 55 oz",
+      "MatchScore": 0.33,
+      "CostcoCostRef": 12.64,
+      "LiveStatus": "not-fetched",
+      "Category": "catalog_resolved_not_fetched",
+      "RivalIDs": "1050557"
+    },
+    {
+      "ASIN": "B00OPQZJA6",
+      "Product": "Walnuts (48oz)",
+      "Rank": "17",
+      "Reviews": 3544,
+      "PriceUSD": 20.99,
+      "BSR": "#8,127 in Grocery & Gourmet Foodamazon",
+      "PrimeOrFBA": "No",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "36285",
+      "CostcoName": "Kirkland Signature Walnuts, Baking Nuts, 3 lbs",
+      "MatchScore": 1.0,
+      "CostcoCostRef": 15.94,
+      "LiveStatus": "not-fetched",
+      "Category": "catalog_resolved_not_fetched",
+      "RivalIDs": "36285"
+    },
+    {
+      "ASIN": "B00QGMOJ4Y",
+      "Product": "Purified Drinking Water (40ct)",
+      "Rank": "12",
+      "Reviews": 2358,
+      "PriceUSD": 23.99,
+      "BSR": "#11,009 in Grocery & Gourmet Food; #58 in Still Wateramazon",
+      "PrimeOrFBA": "No",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "782796",
+      "CostcoName": "Kirkland Signature Purified Drinking Water, 16.9 fl oz, 40 ct",
+      "MatchScore": 1.0,
+      "CostcoCostRef": 8.57,
+      "LiveStatus": "DEAD",
+      "Category": "matched_dead_item",
+      "RivalIDs": "782796; 931484; 906078"
+    },
+    {
+      "ASIN": "B00SWZUC8U",
+      "Product": "Baby Wipes Unscented (9-pack)",
+      "Rank": "",
+      "Reviews": 5451,
+      "PriceUSD": 32.4,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "1493488",
+      "CostcoName": "Kirkland Signature Baby Wipes Fragrance Free, 900-count",
+      "MatchScore": 0.67,
+      "CostcoCostRef": "21.99",
+      "LiveStatus": "EMPTY",
+      "Category": "matched_unresolved",
+      "RivalIDs": "1493488"
+    },
+    {
+      "ASIN": "B01H40O42I",
+      "Product": "Aller-Flo Fluticasone (Pack of 5)",
+      "Rank": "1",
+      "Reviews": 11114,
+      "PriceUSD": 26.74,
+      "BSR": "Not listed on page",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "BSR-not-listed",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B01M7QUOBB",
+      "Product": "Dental Chews (72ct)",
+      "Rank": "",
+      "Reviews": 4087,
+      "PriceUSD": 36.99,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "971832",
+      "CostcoName": "Kirkland Signature Dental Chews, 72 ct",
+      "MatchScore": 1.0,
+      "CostcoCostRef": 33.65,
+      "LiveStatus": "LIVE-CONFIRMED",
+      "Category": "a_live_confirmed_match",
+      "RivalIDs": "971832"
+    },
+    {
+      "ASIN": "B0734BGSKY",
+      "Product": "House Decaf Coffee (120 K-Cups)",
+      "Rank": "",
+      "Reviews": 584,
+      "PriceUSD": 52.99,
+      "BSR": "",
+      "PrimeOrFBA": "Yes",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000)",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "",
+      "CostcoName": "Kirkland Signature Coffee Organic Pacific Bold K-Cup Pod, 120-count",
+      "MatchScore": 0.6,
+      "CostcoCostRef": "37.39",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B077GS636P",
+      "Product": "Glucosamine w/ MSM (375ct)",
+      "Rank": "",
+      "Reviews": 247,
+      "PriceUSD": 20.49,
+      "BSR": "",
+      "PrimeOrFBA": "Yes",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000)",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "1665191",
+      "CostcoName": "Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",
+      "MatchScore": 0.33,
+      "CostcoCostRef": 22.32,
+      "LiveStatus": "not-fetched",
+      "Category": "catalog_resolved_not_fetched",
+      "RivalIDs": "1665191"
+    },
+    {
+      "ASIN": "B078B5N4DD",
+      "Product": "Minoxidil for Men (1-mo)",
+      "Rank": "15",
+      "Reviews": 5844,
+      "PriceUSD": 13.97,
+      "BSR": "#13,364 in Beauty & Personal Care; #103 in Hair Regrowth Treatmentsamazon",
+      "PrimeOrFBA": "No",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "",
+      "CostcoName": "Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",
+      "MatchScore": 1.0,
+      "CostcoCostRef": "19.79",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B07G6XV55T",
+      "Product": "Plastic Food Wrap (2pk, 12\"x3000)",
+      "Rank": "",
+      "Reviews": 330,
+      "PriceUSD": 61.99,
+      "BSR": "",
+      "PrimeOrFBA": "Yes",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000)",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "208733",
+      "CostcoName": "Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",
+      "MatchScore": 1.0,
+      "CostcoCostRef": 22.87,
+      "LiveStatus": "not-fetched",
+      "Category": "catalog_resolved_not_fetched",
+      "RivalIDs": "208733"
+    },
+    {
+      "ASIN": "B07Q2HHLVN",
+      "Product": "Mixed Nut Butter",
+      "Rank": "",
+      "Reviews": 2469,
+      "PriceUSD": 16.99,
+      "BSR": "",
+      "PrimeOrFBA": "No",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "non-Prime/FBA",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B09KFMH9BW",
+      "Product": "Minoxidil (6-mo)",
+      "Rank": "",
+      "Reviews": 615,
+      "PriceUSD": 27.97,
+      "BSR": "",
+      "PrimeOrFBA": "Yes",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000)",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "",
+      "CostcoName": "Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",
+      "MatchScore": 1.0,
+      "CostcoCostRef": "19.79",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B0DPY44TGM",
+      "Product": "Praline Pecans Bundle (2.5lb)",
+      "Rank": "",
+      "Reviews": 422,
+      "PriceUSD": 32.99,
+      "BSR": "",
+      "PrimeOrFBA": "Yes",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "low-reviews(<1000)",
+      "RevivalCandidate": true,
+      "ReviveSignals": 1,
+      "CostcoID": "203444",
+      "CostcoName": "Kirkland Signature Pecan Halves, Baking Nuts, 2 lbs",
+      "MatchScore": 0.5,
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "catalog_resolved_not_fetched",
+      "RivalIDs": "203444"
+    },
+    {
+      "ASIN": "B002L4M4M0",
+      "Product": "Sleep Aid Doxylamine (96ct)",
+      "Rank": "8",
+      "Reviews": 6270,
+      "PriceUSD": 7.93,
+      "BSR": "#14,653 in Health & Household; #24 in OTC Sleep Aidsamazon",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B0045XGE9E",
+      "Product": "Sleep Aid Doxylamine (2pk/192ct)",
+      "Rank": "7",
+      "Reviews": 4966,
+      "PriceUSD": 13.84,
+      "BSR": "#7,570 in Health & Household; #13 in OTC Sleep Aidsamazon",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B0077SXI7A",
+      "Product": "Fiber Capsules (2-pack)",
+      "Rank": "",
+      "Reviews": 2706,
+      "PriceUSD": 30.85,
+      "BSR": "",
+      "PrimeOrFBA": "Yes",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B00BH3HPZW",
+      "Product": "Fiber Capsules (360ct)",
+      "Rank": "5",
+      "Reviews": 4799,
+      "PriceUSD": 17.84,
+      "BSR": "#6,602 in Health & Household; #32 in Dietary Fiber Nutritional Supplementsamazon",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B00BI33NU2",
+      "Product": "Ultra Strength Antacid (265ct)",
+      "Rank": "20",
+      "Reviews": 3121,
+      "PriceUSD": 13.65,
+      "BSR": "#17,252 in Health & Household; #116 in Antacidsamazon",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B00BISGJXA",
+      "Product": "Stool Softener 100mg (400ct)",
+      "Rank": "4",
+      "Reviews": 18629,
+      "PriceUSD": 12.75,
+      "BSR": "#4,960 in Health & Householdamazon",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B00DQXOSV0",
+      "Product": "Ultra Plush Microfiber Towels (12pk)",
+      "Rank": "",
+      "Reviews": 1628,
+      "PriceUSD": 18.63,
+      "BSR": "",
+      "PrimeOrFBA": "Yes",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "133839",
+      "CostcoName": "Kirkland Signature Microfiber Towels, Blue, 36 ct",
+      "MatchScore": 0.67,
+      "CostcoCostRef": 21.11,
+      "LiveStatus": "TRANSPORT-ERROR",
+      "Category": "matched_failed_fetch",
+      "RivalIDs": "133839; 713160"
+    },
+    {
+      "ASIN": "B00GYZWNY6",
+      "Product": "Glucosamine 1500/Chondroitin 1200 (220ct)",
+      "Rank": "6",
+      "Reviews": 5183,
+      "PriceUSD": 29.25,
+      "BSR": "#6,562 in Health & Household; #8 in Chondroitin Supplementsamazon",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "1665191",
+      "CostcoName": "Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",
+      "MatchScore": 1.0,
+      "CostcoCostRef": 22.32,
+      "LiveStatus": "not-fetched",
+      "Category": "catalog_resolved_not_fetched",
+      "RivalIDs": "1665191"
+    },
+    {
+      "ASIN": "B00N54AJZE",
+      "Product": "Stool Softener 100mg (400ct, alt listing)",
+      "Rank": "11",
+      "Reviews": 1665,
+      "PriceUSD": 12.69,
+      "BSR": "#19,009 in Health & Household; #96 in Laxativesamazon",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B00UP99X1I",
+      "Product": "Vitamin E 400IU (500 softgels)",
+      "Rank": "",
+      "Reviews": 1286,
+      "PriceUSD": 20.85,
+      "BSR": "",
+      "PrimeOrFBA": "Yes",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B01AIVTJMA",
+      "Product": "Hearing Aid Batteries (48pk)",
+      "Rank": "",
+      "Reviews": 3289,
+      "PriceUSD": 16.13,
+      "BSR": "",
+      "PrimeOrFBA": "Yes",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B01JUD2SNO",
+      "Product": "Stool Softener (800ct/2-bottle)",
+      "Rank": "",
+      "Reviews": 1662,
+      "PriceUSD": 21.39,
+      "BSR": "",
+      "PrimeOrFBA": "Yes",
+      "Sources": "ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B07BZW88NY",
+      "Product": "Sleep Aid (192ct, alt)",
+      "Rank": "14",
+      "Reviews": 6515,
+      "PriceUSD": 14.25,
+      "BSR": "#15,119 in Health & Household; #25 in OTC Sleep Aidsamazon",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B08R2SRN88",
+      "Product": "Aller-Flo Fluticasone (5 Bottles/600 sprays)",
+      "Rank": "2",
+      "Reviews": 11898,
+      "PriceUSD": 26.8,
+      "BSR": "#3,567 in Health & Householdamazon",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "",
+      "MatchScore": "",
+      "CostcoCostRef": "",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    },
+    {
+      "ASIN": "B0CP6LXPLK",
+      "Product": "Minoxidil Extra Strength (6-mo)",
+      "Rank": "3",
+      "Reviews": 1434,
+      "PriceUSD": 33.12,
+      "BSR": "#2,300 in Beauty & Personal Care; #15 in Hair Regrowth Treatmentsamazon",
+      "PrimeOrFBA": "Yes",
+      "Sources": "Rank+ProxyRank",
+      "DormancyFlags": "",
+      "RevivalCandidate": false,
+      "ReviveSignals": 0,
+      "CostcoID": "",
+      "CostcoName": "Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",
+      "MatchScore": 1.0,
+      "CostcoCostRef": "19.79",
+      "LiveStatus": "not-fetched",
+      "Category": "c_needs_name_lookup",
+      "RivalIDs": ""
+    }
+  ]
+}
