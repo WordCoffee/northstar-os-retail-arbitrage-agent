@@ -1,0 +1,18 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_222490",
+  "requested_at": "2026-09-06T06:08:07Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "url": "https://www.costco.com/.product.222490.html",
+  "http_status": 0,
+  "failure_type": "transport_error",
+  "last_error": "transport_error: HTTPSConnectionPool(host='api.brightdata.com', port=443): Read timed out. (read timeout=180)",
+  "response_headers": null,
+  "reason": "transport_error",
+  "retries": 0,
+  "stop_on_block": "halted_run",
+  "scrubbed": true,
+  "item_id": "222490"
+}
