@@ -1,0 +1,36 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_555000",
+  "requested_at": "2026-09-06T08:40:28Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "url": "https://www.costco.com/.product.555000.html",
+  "http_status": 200,
+  "failure_type": null,
+  "retries": 0,
+  "stop_on_block": "sequential_batch",
+  "scrubbed": true,
+  "item": {
+    "requested_item_id": "555000",
+    "returned_costco_item_id": "555000",
+    "exact_title": "Kirkland Signature Organic Peanut Butter, 28 oz, 2-count",
+    "brand": "Kirkland Signature",
+    "listed_price": 11.69,
+    "currency": "USD",
+    "unit_price": null,
+    "quantity_or_pack": "28 oz",
+    "size_or_weight": null,
+    "UPC_GTIN_EAN": null,
+    "availability": null,
+    "product_url": "https://www.costco.com/.product.555000.html",
+    "captured_at": "2026-09-06T08:41:13Z",
+    "identity_match_status": "probable_match",
+    "missing_fields": [
+      "unit_price",
+      "size_or_weight",
+      "UPC_GTIN_EAN",
+      "availability"
+    ]
+  }
+}
