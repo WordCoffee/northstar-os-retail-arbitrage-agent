@@ -1,0 +1,28 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_1474436",
+  "requested_at": "2026-09-06T07:30:58Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.1474436.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 07:32:55 GMT",
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "max-age=0, no-cache, no-store"
+  },
+  "response_body_bytes": 3603330,
+  "response_body_diagnostic": "normal",
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head><script data-aopt-id=\"target-543905\">\n    (function() {\n        let mod = adobeopt.module('pdpPriceUpdateMod', {\n            sendProductInfo: function(params) {\n                let trackProps = {\n                    mbox: 'mboxPdpPriceUpdate',\n                    params: params,\n                };\n                trackProps.success = function() {\n                    mod.log('success');\n                };\n                trackProps.error = function() {\n                    mod.log('failure');\n                };\n                adobe.target.getOffer(trackProps);\n                mod.log('update', params);\n            },\n            updateProductInfo: function() {\n                const path = window.location.pathname;\n\n                function getProdIdFromUrl() {\n                    const match = path.match(/\\d{8,}/) || [];\n                    const productId = match[0] || '0';\n                    return productId;\n                }\n                // Initialize variables for product update\n                let prodId = '';\n                let inventory = 1;\n                let isMultiSKU = false;\n                let price = '';\n                let dmerch = '';\n\n                const outOfStockStr = 'https://schema.org/OutOfStock';\n                const inStockStr = 'https://schema.org/InStock';\n                const pstIsoString = new Date().toLocaleString('sv-SE',\n                                                               {\n                                                                 timeZone: 'America/Los_Angeles',\n                                                                 hour12: false,\n                                                               }).replace(' ', 'T');\n                // Check for invalid PDP\n                if (\n                    document\n                    .querySelector('[data-testid=\"product-not-available-page\"]')\n                    ?.checkVisibility() == true\n                ) {\n       "
+}
