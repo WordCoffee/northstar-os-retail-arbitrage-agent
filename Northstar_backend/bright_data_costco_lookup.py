@@ -416,6 +416,13 @@ def _cli(argv=None):
         default=None,
         help="prepared manifest; every unresolved_needs_lookup title is looked up",
     )
+    resolve.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="cap on how many unresolved-from titles are looked up (first N in "
+        "manifest order); explicit --title queries are never capped",
+    )
     resolve.add_argument("--run-dir", default=None)
     resolve.add_argument("--delay", type=float, default=None)
 
@@ -425,9 +432,15 @@ def _cli(argv=None):
         parser.error("only 'resolve' is implemented")
 
     queries = list(args.title or [])
+    unresolved = []
     if args.unresolved_from:
-        for row in _load_unresolved_titles(args.unresolved_from):
-            queries.append(row["requested_title"])
+        unresolved = [
+            row["requested_title"]
+            for row in _load_unresolved_titles(args.unresolved_from)
+        ]
+    if args.limit is not None:
+        unresolved = unresolved[: max(0, args.limit)]
+    queries = queries + unresolved
 
     if not queries:
         parser.error("provide --title or --unresolved-from")
