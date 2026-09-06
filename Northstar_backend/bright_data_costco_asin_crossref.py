@@ -35,7 +35,8 @@ def _load_csv(path):
         return list(csv.DictReader(fh))
 
 def _int(s):
-    return int(re.sub(r"[^\d]", "", s or "")) if re.search(r"\d", s or "") else None
+    s = str(s or "")
+    return int(re.sub(r"[^\d]", "", s)) if re.search(r"\d", s) else None
 
 def _price(s):
     try:
@@ -75,6 +76,42 @@ for row in _load_csv(PROXY_CSV):
         rec["reviews"] = _int(row.get("Reviews"))
     if rec["price"] is None:
         rec["price"] = _price(row.get("Price"))
+
+# ---------------------------------------------------------------------------
+# 1b. (optional) merge live-discovered Kirkland ASINs from an Amazon search
+#     manifest (kirkland_discovery.py output). Only ADDS ASINs absent from the
+#     benchmark CSVs -- benchmark metadata is never overwritten by weaker
+#     search-card fields. No-op when KIRKLAND_DISCOVERY_ASINS is unset, so the
+#     existing 47-ASIN outputs are byte-for-byte unchanged with no env set.
+# ---------------------------------------------------------------------------
+DISCOVERY_MANIFEST = os.getenv("KIRKLAND_DISCOVERY_ASINS")
+INPUT_FILES = [RANK_CSV, PROXY_CSV, ITEMS_CSV, CATALOG_JSON, MANIFEST]
+discovery_added = 0
+if DISCOVERY_MANIFEST and os.path.exists(DISCOVERY_MANIFEST):
+    try:
+        with open(DISCOVERY_MANIFEST, encoding="utf-8") as _fh:
+            _dm = json.load(_fh)
+        for _c in (_dm.get("candidates") or []):
+            _a = (_c.get("asin") or "").strip()
+            if not _a or _a in merged:
+                continue
+            _name = (_c.get("name") or _c.get("title") or "").strip()
+            if not _name:
+                continue
+            merged[_a] = {
+                "asin": _a,
+                "product_rank": "", "product_proxy": _name, "rank_rank": "",
+                "reviews": _int(_c.get("reviews_count")),
+                "price": _price(_c.get("amazon_price")),
+                "bsr": "", "prime_fba": "",
+                "sources": ["Discovery"],
+            }
+            discovery_added += 1
+        INPUT_FILES.append(DISCOVERY_MANIFEST)
+        print("DISCOVERY manifest: %s -> new ASINs merged: %d" % (
+            os.path.basename(DISCOVERY_MANIFEST), discovery_added))
+    except Exception as _e:
+        print("DISCOVERY manifest load failed: %s" % _e)
 
 LOW_REVIEWS_THRESHOLD = 1000
 for rec in merged.values():
@@ -162,8 +199,9 @@ def alias_tokens(product_txt):
                     if "cup" in text.split():
                         return {"coffee", "cup"}
                     return None
-                # 'chew' must not fire on 'chewable'
-                if part == "chew" and "chewable" in flat:
+                # 'chew' must not fire on 'chewable' or 'chewy' (e.g. protein bars),
+                # which would otherwise mis-route chew-family alias matches.
+                if part == "chew" and ("chewable" in flat or "chewy" in flat):
                     continue
                 return toks
     return None
@@ -383,7 +421,7 @@ for r in rows:
 
 payload = {
     "generated_at": "2026-09-06T00:00:00Z",
-    "inputs": sorted({os.path.basename(p) for p in (RANK_CSV, PROXY_CSV, ITEMS_CSV, CATALOG_JSON, MANIFEST)}),
+    "inputs": sorted({os.path.basename(p) for p in INPUT_FILES}),
     "merge": {
         "rank_rows": len(_load_csv(RANK_CSV)),
         "proxyrank_rows": len(_load_csv(PROXY_CSV)),
