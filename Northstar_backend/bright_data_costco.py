@@ -574,6 +574,24 @@ def refresh_product_details(
 
 
 # --- CLI -------------------------------------------------------------------
+def _expand_item_ids(tokens):
+    """Accept both space- and comma-separated Costco item IDs.
+
+    --item-ids is nargs='+', so a comma-separated list arrives as ONE token
+    (e.g. "2322010,384732") and would otherwise build a malformed flat-URL
+    request. Split on commas and flatten, keeping order and deduping nothing
+    (duplicate item numbers are harmless; the batch would simply fetch one
+    twice).
+    """
+    out = []
+    for tok in tokens or []:
+        for part in str(tok).split(","):
+            part = part.strip()
+            if part:
+                out.append(part)
+    return out
+
+
 def _cli(argv=None):
     parser = argparse.ArgumentParser(
         prog="bright_data_costco.py",
@@ -614,7 +632,7 @@ def _cli(argv=None):
         return 2
 
     summary = refresh_product_details(
-        item_ids=args.item_ids,
+        item_ids=_expand_item_ids(args.item_ids),
         manifest_path=args.expected_json,
         run_dir=args.run_dir,
         delay=args.delay,

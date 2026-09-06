@@ -741,6 +741,43 @@ class CliTests(unittest.TestCase):
         self.assertEqual(kwargs["manifest_path"], "manifest.json")
         self.assertEqual(kwargs["delay"], 2.5)
 
+    def test_cli_expands_comma_separated_item_ids(self):
+        canned = {
+            "status": "completed",
+            "provider": "BRIGHTDATA_WEB_UNLOCKER",
+            "run_id": "20260828T021658Z",
+            "items_requested": 4,
+            "items_fetched": 4,
+            "items_failed": 0,
+            "items": [],
+            "failures": [],
+            "evidence_paths": [],
+        }
+        with patch.object(bright_data_costco, "_gate_enabled", return_value=True), \
+             patch.object(bright_data_costco, "refresh_product_details",
+                          return_value=canned) as mock_refresh:
+            code = bright_data_costco._cli(
+                ["details", "refresh",
+                 "--item-ids", "2322010,384732,1343253,1493488",
+                 "--run-dir", "data/costco-discovery-runs/probe-ts"]
+            )
+        self.assertEqual(code, 0)
+        _, kwargs = mock_refresh.call_args
+        self.assertEqual(
+            kwargs["item_ids"], ["2322010", "384732", "1343253", "1493488"]
+        )
+        self.assertEqual(kwargs["run_dir"], "data/costco-discovery-runs/probe-ts")
+
+    def test_expand_item_ids_mixed_separators(self):
+        self.assertEqual(
+            bright_data_costco._expand_item_ids(
+                ["1,2", "3", "4,5,6"]
+            ),
+            ["1", "2", "3", "4", "5", "6"],
+        )
+        self.assertEqual(bright_data_costco._expand_item_ids([]), [])
+        self.assertEqual(bright_data_costco._expand_item_ids([" 7, 8 "]), ["7", "8"])
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
