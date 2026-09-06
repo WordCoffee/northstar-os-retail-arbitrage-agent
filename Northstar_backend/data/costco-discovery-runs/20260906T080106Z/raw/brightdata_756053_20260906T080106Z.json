@@ -1,0 +1,28 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_756053",
+  "requested_at": "2026-09-06T08:20:12Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.756053.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 08:20:44 GMT",
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "max-age=0, no-cache, no-store"
+  },
+  "response_body_bytes": 3536385,
+  "response_body_diagnostic": "normal",
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head><meta name=\"emotion-insertion-point\" content=\"\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"preload\" as=\"image\" href=\"https://gdx-assets.costco.com/adobe/assets/urn:aaid:aem:09896d80-013f-4fe0-9c31-472a652ed8c9/as/100449422-847__1.avif?width=727&amp;height=727&amp;fit=contain\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/f2f535904c592d11.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/e67c321f05c7f111.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/3e5975984ed02a83.css\" data-precedence=\"next\"><link rel=\"preload\" as=\"script\" fetchpriority=\"low\" href=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/webpack-fbae53c34594d63c.js\"><script src=\"https://apps.bazaarvoice.com/vendorsChunk/swat_reviews_chunks/6.49.15/vendors-2b4841d6.adfaddb1cf7dc0ad2bcd.js\" data-airgap-id=\"57\"></script><script src=\"https://apps.bazaarvoice.com/vendorsChunk/swat_reviews_chunks/6.49.15/vendors-49d0a293.81d6cdebd9bc6c97c8e5.js\" data-airgap-id=\"56\"></script><script src=\"https://apps.bazaarvoice.com/vendorsChunk/swat_reviews_chunks/6.49.15/swat_reviews_app-9a8b795a.abfa0271d15ab86a6f76.js\" data-airgap-id=\"54\"></script><script src=\"https://apps.bazaarvoice.com/vendorsChunk/swat_reviews_chunks/6.49.15/swat_reviews_app-45ae2c02.25e5323beca7d820abf9.js\" data-airgap-id=\"53\"></script><script src=\"https://apps.bazaarvoice.com/vendorsChunk/swat_reviews_chunks/6.49.15/swat_reviews_app-8f6cd0a0.975478902975bc00a0fa.js\" data-airgap-id=\"52\"></script><script src=\"https://apps.bazaarvoice.com/vendorsChunk/swat_reviews_chunks/6.49.15/swat_reviews_app-99b7dba2.0d024748289ed6d5b94f.js\" data-airgap-id=\"51\"></script><script src=\"https://apps.bazaarvoice.com/vendorsChunk/swat_reviews_chunks/6.49.15/swat_reviews_app-7d359d29.6cd677766b8343fccbb"
+}

@@ -1,0 +1,28 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_1987114",
+  "requested_at": "2026-09-06T08:31:31Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.1987114.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 08:32:02 GMT",
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "max-age=0, no-cache, no-store"
+  },
+  "response_body_bytes": 3640245,
+  "response_body_diagnostic": "normal",
+  "response_html_head_capped": "<!doctype html>\n<html lang=\"en-us\"><head><style class=\"vjs-styles-defaults\">\n      .video-js {\n        width: 300px;\n        height: 150px;\n      }\n\n      .vjs-fluid:not(.vjs-audio-only-mode) {\n        padding-top: 56.25%\n      }\n    </style><style class=\"vjs-styles-dimensions\">\n      .vjs_video_558-dimensions {\n        width: 300px;\n        height: 168.75px;\n      }\n\n      .vjs_video_558-dimensions.vjs-fluid:not(.vjs-audio-only-mode) {\n        padding-top: 56.25%;\n      }\n    </style><style class=\"vjs-styles-dimensions\">\n      .vjs_video_3-dimensions {\n        width: 300px;\n        height: 168.75px;\n      }\n\n      .vjs_video_3-dimensions.vjs-fluid:not(.vjs-audio-only-mode) {\n        padding-top: 56.25%;\n      }\n    </style><meta name=\"emotion-insertion-point\" content=\"\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"preload\" as=\"image\" href=\"https://gdx-assets.costco.com/adobe/assets/urn:aaid:aem:69b37ea0-2b48-4637-b63b-2771db8762f0/as/4201002177-847_sizethree_1.avif?width=727&amp;height=727&amp;fit=contain\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/f2f535904c592d11.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/e67c321f05c7f111.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/3e5975984ed02a83.css\" data-precedence=\"next\"><link rel=\"stylesheet\" href=\"/consumer-web/product/prd/details-usbc/_next/static/css/9f4a642dce89a32a.css\" data-precedence=\"next\" data-airgap-id=\"88\"><link rel=\"preload\" as=\"script\" fetchpriority=\"low\" href=\"/consumer-web/product/prd/details-usbc/_next/static/chunks/webpack-fbae53c34594d63c.js\"><script src=\"https://apps.bazaarvoice.com/vendorsChunk/swat_reviews_chunks/6.49.15/swat_reviews_app-99b7dba2.0d024748289ed6d5b94f.js\" data-airgap-id=\"105\"></script><script src=\"/consumer-web/product/prd/details-usbc/_next/static/chunks"
+}
