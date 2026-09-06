@@ -1,0 +1,36 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_9090",
+  "requested_at": "2026-09-06T22:11:02Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "url": "https://www.costco.com/.product.9090.html",
+  "http_status": 200,
+  "failure_type": null,
+  "retries": 0,
+  "stop_on_block": "sequential_batch",
+  "scrubbed": true,
+  "item": {
+    "requested_item_id": "9090",
+    "returned_costco_item_id": "9090",
+    "exact_title": "Kirkland Signature Fresh Goat Cheese, 10.5 oz, 2-count",
+    "brand": "Kirkland Signature",
+    "listed_price": 7.99,
+    "currency": "USD",
+    "unit_price": null,
+    "quantity_or_pack": "5 oz",
+    "size_or_weight": null,
+    "UPC_GTIN_EAN": null,
+    "availability": null,
+    "product_url": "https://www.costco.com/.product.9090.html",
+    "captured_at": "2026-09-06T22:12:01Z",
+    "identity_match_status": "probable_match",
+    "missing_fields": [
+      "unit_price",
+      "size_or_weight",
+      "UPC_GTIN_EAN",
+      "availability"
+    ]
+  }
+}

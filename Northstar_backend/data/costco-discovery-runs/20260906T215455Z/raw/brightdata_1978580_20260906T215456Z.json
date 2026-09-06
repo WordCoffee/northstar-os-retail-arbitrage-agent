@@ -1,0 +1,26 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_1978580",
+  "requested_at": "2026-09-06T21:57:15Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/.product.1978580.html",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "failure_type": null,
+  "last_error": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 21:58:36 GMT"
+  },
+  "response_body_bytes": 0,
+  "response_body_diagnostic": "empty",
+  "response_html_head_capped": ""
+}
