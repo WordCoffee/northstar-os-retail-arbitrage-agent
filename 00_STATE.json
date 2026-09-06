@@ -503,8 +503,14 @@
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
-  "last_updated": "2026-09-06T00:50:00Z",
+  "last_updated": "2026-09-06T02:02:00Z",
   "history": [
+    {
+      "ts": "2026-09-06T02:02:00Z",
+      "activity": "brightdata_costco_LIVE_batch_2_approved_rerun",
+      "batch": "operator-approved re-run of the 5 incomplete items (926628 98501 690843 1089787 1493188) with BRIGHTDATA_REQUEST_TIMEOUT_SECONDS=180; gate + timeout process-scoped to this one command only; .env untouched",
+      "summary": "Approved re-run executed against the frozen 20260828T021658Z run dir. Command (exactly as approved): BRIGHTDATA_COSTCO_DETAIL_ENABLED=1 BRIGHTDATA_REQUEST_TIMEOUT_SECONDS=180 python bright_data_costco.py details refresh --item-ids 926628 98501 690843 1089787 1493188 --expected-json data/costco-discovery-runs/20260828T021658Z/costco-discovery-manifest.json. RESULTS (real, from live run ts 20260906T015531Z): [1/5] 926628 probable_match http=200 'Kirkland Signature Fish Oil 1000 mg, 400 Softgels' $20.99 pack '400 softgels' — the batch-1 timeout on 926628 is RESOLVED via the 180s timeout override. [2/5] 98501 no_data_found http=200 (empty response body, head-cap len 0; previously matched $17.99 in the b657698 validation run). [3/5] 690843 probable_match http=200 'Kirkland Signature Quick Dissolve B-12 5000 mcg., 300 Tablets' $21.99 pack '300 tablets'. [4/5] 1089787 probable_match http=200 'Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count' $22.49 pack '200 count'. [5/5] 1493188 no_data_found http=200 (empty response body, head-cap len 0; typed no_data_found NOT url_not_found because no <title> existed in the empty body, so content-404 detection could not fire; all 9 product fields null — zero fabricated fields). Circuit breaker: NOT triggered (zero hard failures, all 5 http 200, per-item retries=0, batch completed). Credits: 5 requests = 5 credits. Evidence: 10 files (raw + normalized per item) under the frozen run dir, all scrubbed (auth_header 'Bearer <redacted>'). Gate verified fail-closed post-run (CLI BLOCKED exit 2, zero calls); .env untouched. NOTE: the Web Unlocker intermittently returns empty http-200 bodies for 98501 and 1493188; the live url_not_found typing for 1493188 remains unobserved (fixture-proven only); follow-up = empty-body head-capture diagnostics and alternate slug/search lookup."
+    },
     {
       "ts": "2026-09-06T00:50:00Z",
       "activity": "brightdata_costco_LIVE_batch_1_approved_run",
