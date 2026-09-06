@@ -1,0 +1,27 @@
+{
+  "run_id": "lookup_20260906T042424Z",
+  "operation": "costco_search_lookup",
+  "query": "Krikland Signature Ultra Clean Premium Laundry Detergent with 2X Concentrate",
+  "requested_at": "2026-09-06T04:24:24Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_search",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/search?query=Krikland%20Signature%20Ultra%20Clean%20Premium%20Laundry%20Detergent%20with%202X%20Concentrate",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": 200,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": {
+    "server": "nginx",
+    "date": "Sun, 06 Sep 2026 04:24:26 GMT",
+    "content-type": "text/html;charset=UTF-8",
+    "cache-control": "no-store, no-cache"
+  },
+  "response_body_bytes": 160736,
+  "response_body_diagnostic": "normal",
+  "response_html_head_capped": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en-us\">\r\n  <head>\r\n    <meta charset=\"utf-8\">\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n    \r\n    <title>\r\n      Page Not Found!\r\n    </title>\r\n    <!-- START SeoMetaData.jsp -->\r\n<meta http-equiv=\"content-language\" content=\"en-us\"/>\r\n<meta name=\"currentBuildNumber\" content=\"3.0.105382.0\" />\r\n<meta name=\"currentSolrBuildNumber\" content=\"3.0.33624.0\" />\r\n<meta name=\"ServerName\" content=\"www.costco.com \" />\r\n<meta name=\"LocalAddress\" content=\"xxx.xxx.xxx.27\" />\r\n\n\n<meta name=\"LocalName\" content=\"TP105\" automation-id=\"metadataLocalName\"/>\r\n<meta name=\"google-site-verification\" content=\"\" />\r\n\r\n\r\n<link rel=\"icon\"  type=\"image/vnd.microsoft.icon\" href=\"/wcsstore/CostcoGLOBALSAS/images/favicon.svg\" type=\"image/x-icon\"> \r\n<link rel=\"shortcut icon\"  type=\"image/vnd.microsoft.icon\" href=\"/wcsstore/CostcoGLOBALSAS/images/favicon.svg\" type=\"image/x-icon\">\r\n\r\n<!--  Begin QueueItScript.jspf -->\n\t\t<script type=\"text/javascript\" src=\"//static.queue-it.net/script/queueclient.min.js\"></script>\n\t\t<script\n\t\t data-queueit-intercept-domain=\"www.costco.com\"\n\t\t data-queueit-intercept=\"true\"\n\t\t data-queueit-c =\"costco\"\n\t\t type=\"text/javascript\" src=\"//static.queue-it.net/script/queueconfigloader.min.js\">\n\t\t</script>\n\t<!--  End QueueItScript.jspf -->\r\n\t\t<meta name=\"description\" content=\"Shop Costco.com for electronics, computers, furniture, outdoor living, appliances, jewelry and more. Enjoy low warehouse prices on name-brand products delivered to your door.\n\"/>\r\n\t\r\n\t<meta name=\"keyword\" content=\"USBC, , Black Friday, Cyber Monday, Appliances, Baby, Beauty, Clothing, Luggage &amp; Handbags, Computers, Costco Direct, Electronics, Floral &amp; Gift Baskets, Furniture, Gift Cards &amp; Tickets, Grocery &amp; Household Essentials, Health &amp; Personal Care, Holiday &amp; Seasonal, Home &amp; Installation Services, Home &amp; Kitchen, Home Improvement, Jewelry &amp; Watch"
+}

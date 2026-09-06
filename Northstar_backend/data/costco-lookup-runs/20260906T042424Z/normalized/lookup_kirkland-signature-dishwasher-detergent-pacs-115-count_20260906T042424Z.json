@@ -1,0 +1,27 @@
+{
+  "run_id": "lookup_20260906T042424Z",
+  "operation": "costco_search_lookup",
+  "query": "Kirkland Signature Dishwasher Detergent Pacs 115 Count",
+  "requested_at": "2026-09-06T04:24:28Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "url": "https://www.costco.com/search?query=Kirkland%20Signature%20Dishwasher%20Detergent%20Pacs%20115%20Count",
+  "http_status": 200,
+  "identity_match_status": "lookup_weak_match",
+  "notes": "no candidate clears 0.30; top 'None' at 0.00",
+  "best_candidate": {
+    "item_id": "10024438",
+    "title": null,
+    "url": "/.product.10024438.html",
+    "score": 0.0
+  },
+  "candidate_count": 1,
+  "candidates": [
+    {
+      "item_id": "10024438",
+      "title": null,
+      "url": "/.product.10024438.html",
+      "score": 0.0
+    }
+  ],
+  "retries": 0
+}
