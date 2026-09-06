@@ -31,6 +31,11 @@ Normalization rules (shared with every other provider):
     response (200 on success, the status code on any responder failure, or
     None when no HTTP response was received at all). It is reset at the
     top of each _fetch call.
+  - LAST_RESPONSE_HEADERS mirrors a scrubbed allowlist snapshot of the most
+    recent response's headers (lowercased; set-cookie and anything outside
+    the allowlist is never captured). None when no response or headers
+    exist. It is reset at the top of each _fetch call and restored on
+    cache hits, so a writer can diagnose empty/short bodies in evidence.
 """
 
 import os
@@ -69,6 +74,44 @@ _REQUESTS_LOCK = Lock()
 
 LAST_ERROR = None
 LAST_HTTP_STATUS: Optional[int] = None
+LAST_RESPONSE_HEADERS: Optional[Dict[str, str]] = None
+
+# Header allowlist snapshot for scrubbed evidence: benign diagnostic headers
+# only. set-cookie and anything credential-shaped are excluded by
+# construction, so raw evidence never carries cookies or identity values.
+_RESPONSE_HEADER_ALLOWLIST = frozenset((
+    "cache-control",
+    "content-length",
+    "content-type",
+    "date",
+    "retry-after",
+    "server",
+    "x-brightdata-credits-remaining",
+    "x-brightdata-zone-cost",
+    "x-request-id",
+))
+
+
+def _scrub_response_headers(headers) -> Optional[Dict[str, str]]:
+    """Snapshot a benign allowlist of a response's headers (lowercased).
+
+    Returns None when the response exposes no usable headers. Values are
+    coerced to str; empty values and any header outside the allowlist are
+    never persisted. Robust to proxy/mock objects that auto-create header
+    attributes without real mappings.
+    """
+    if not headers:
+        return None
+    try:
+        items = list(headers.items())
+    except (AttributeError, TypeError, ValueError):
+        return None
+    captured = {}
+    for key, value in items:
+        lkey = str(key).lower()
+        if lkey in _RESPONSE_HEADER_ALLOWLIST and value not in (None, ""):
+            captured[lkey] = str(value)
+    return captured or None
 
 # --- Amazon search-result card patterns -------------------------------------
 _CARD_ASIN_RE = re.compile(r"^([A-Z0-9]{10})")
@@ -422,8 +465,10 @@ def _fetch(url: str) -> Optional[str]:
     """
     global LAST_ERROR
     global LAST_HTTP_STATUS
+    global LAST_RESPONSE_HEADERS
 
     LAST_HTTP_STATUS = None
+    LAST_RESPONSE_HEADERS = None
 
     if not BRIGHTDATA_UNLOCKER_API_KEY:
         raise ValueError("BRIGHTDATA_UNLOCKER_API_KEY not set")
@@ -433,6 +478,7 @@ def _fetch(url: str) -> Optional[str]:
         cached = _CACHE.get(url)
         if cached and (now - cached["ts"]) < timedelta(seconds=TTL_SECONDS):
             LAST_HTTP_STATUS = 200  # cache hit implies a prior successful fetch
+            LAST_RESPONSE_HEADERS = cached.get("response_headers")
             return cached["html"]
 
     headers = {
@@ -470,6 +516,9 @@ def _fetch(url: str) -> Optional[str]:
         _REQUESTS_MADE += 1
 
     LAST_HTTP_STATUS = response.status_code
+    LAST_RESPONSE_HEADERS = _scrub_response_headers(
+        getattr(response, "headers", None)
+    )
     if response.status_code in (401, 403):
         LAST_ERROR = "auth_error: HTTP %d" % response.status_code
         print(f"[Bright Data] auth_error: {response.status_code} {response.text[:300]}")
@@ -482,7 +531,11 @@ def _fetch(url: str) -> Optional[str]:
     html = response.text or ""
     LAST_ERROR = None
     with _CACHE_LOCK:
-        _CACHE[url] = {"ts": datetime.now(), "html": html}
+        _CACHE[url] = {
+            "ts": datetime.now(),
+            "html": html,
+            "response_headers": LAST_RESPONSE_HEADERS,
+        }
     return html
 
 

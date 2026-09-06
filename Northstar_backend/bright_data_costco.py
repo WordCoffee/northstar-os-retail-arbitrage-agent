@@ -21,7 +21,14 @@ Discipline (mirrors Batch 08/10):
       url_not_found  — HTTP 200 but content-level "Page Not Found!" page
       no_data_found  — HTTP 200 but no Product JSON-LD and no parseable title
     These produce normalized records with NO fabricated fields (all null-first).
-  - exact HTTP status recorded via bright_data_client.LAST_HTTP_STATUS
+  - exact HTTP status via bright_data_client.LAST_HTTP_STATUS, plus a scrubbed
+    response-headers snapshot via LAST_RESPONSE_HEADERS when the transport
+    supplies one. Raw evidence on EVERY fetched item — including empty or
+    unusually short bodies — records response_body_bytes,
+    response_body_diagnostic ('empty' | 'short' | 'normal'), and
+    response_html_head_capped, so future no_data_found items are diagnosable
+    (unlocker empty body vs anti-bot/challenge interstitial) instead of just
+    'zero bytes'.
 
 Normalization contract (identical field vocabulary to the Batch 10
 normalized/items.json records): requested_item_id, returned_costco_item_id,
@@ -63,6 +70,11 @@ DEFAULT_RUN_DIR = os.path.join("data", "costco-discovery-runs", RUN_ID)
 GATE_ENV = "BRIGHTDATA_COSTCO_DETAIL_ENABLED"
 DELAY_ENV = "BRIGHTDATA_REQUEST_DELAY_SECONDS"
 DEFAULT_DELAY_SECONDS = 2.0
+
+# Evidence diagnostics for empty/short response bodies (design input: make
+# future no_data_found evidence diagnosable — blocked vs genuinely absent).
+HEAD_CAP_CHARS = 2000
+SHORT_BODY_CHARS = 512
 
 COSTCO_ITEM_URL_TEMPLATE = "https://www.costco.com/.product.{item_id}.html"
 
@@ -185,6 +197,24 @@ def _is_url_not_found(html) -> bool:
     if not m:
         return False
     return bool(_PAGE_NOT_FOUND_RE.search(m.group(1) or ""))
+
+
+def _body_diagnostic(html) -> str:
+    """Classify a response body's size for evidence diagnostics.
+
+    'empty'  — zero bytes returned (HTTP 200 with no content: the unlocker
+               delivered nothing, as seen live for 98501/1493188 in run
+               20260906T015531Z);
+    'short'  — unusually short (< SHORT_BODY_CHARS): possible anti-bot /
+               challenge / consent interstitial, not a real product page;
+    'normal' — long enough to be a plausible real page.
+    """
+    n = len(html or "")
+    if n == 0:
+        return "empty"
+    if n < SHORT_BODY_CHARS:
+        return "short"
+    return "normal"
 
 
 def _extract_count_pack(text) -> Optional[str]:
@@ -448,6 +478,9 @@ def refresh_product_details(
                 "http_status": http_status if http_status is not None else 0,
                 "failure_type": failure_type,
                 "last_error": last_error or (str(raise_exc) if raise_exc else None),
+                "response_headers": bright_data_client._scrub_response_headers(
+                    bright_data_client.LAST_RESPONSE_HEADERS
+                ),
                 "reason": (
                     f"http_{http_status}" if http_status is not None else failure_type
                 ),
@@ -489,7 +522,12 @@ def refresh_product_details(
             "last_error": last_error,
             "retries": 0,
             "scrubbed": True,
-            "response_html_head_capped": (html or "")[:2000],
+            "response_headers": bright_data_client._scrub_response_headers(
+                bright_data_client.LAST_RESPONSE_HEADERS
+            ),
+            "response_body_bytes": len((html or "").encode("utf-8")),
+            "response_body_diagnostic": _body_diagnostic(html),
+            "response_html_head_capped": (html or "")[:HEAD_CAP_CHARS],
         }
         norm_record = {
             "run_id": RUN_ID,
@@ -513,7 +551,7 @@ def refresh_product_details(
         print(
             f"[{idx + 1}/{total}] item {item_id} {status_marker} "
             f"http={http_status} title={item.get('exact_title')} "
-            f"price={item.get('listed_price')}"
+            f"price={item.get('listed_price')} body={_body_diagnostic(html)}"
         )
 
     return {

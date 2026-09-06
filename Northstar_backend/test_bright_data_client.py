@@ -31,6 +31,7 @@ def tearDownModule():
     # LAST_HTTP_STATUS to decide provider health.
     bright_data_client.LAST_ERROR = None
     bright_data_client.LAST_HTTP_STATUS = None
+    bright_data_client.LAST_RESPONSE_HEADERS = None
 
 
 def brightdata_card(asin, title, price=None, rating=None, reviews=None, bought=None, brand=None):
@@ -119,6 +120,7 @@ class _CacheIsolated(unittest.TestCase):
     def setUp(self):
         bright_data_client._CACHE.clear()
         bright_data_client.LAST_ERROR = None
+        bright_data_client.LAST_RESPONSE_HEADERS = None
 
 
 class SearchProductsTests(_CacheIsolated):
@@ -504,6 +506,80 @@ class HttpStatusTrackingTests(_CacheIsolated):
                 bright_data_client._fetch("https://www.costco.com/.product.424976.html")
         # No request was even attempted — the previous status must not leak.
         self.assertIsNone(bright_data_client.LAST_HTTP_STATUS)
+
+
+class ResponseHeaderTrackingTests(_CacheIsolated):
+    """LAST_RESPONSE_HEADERS mirrors a scrubbed, lowercased allowlist snapshot
+    of the most recent response's headers: captured on any received response
+    (success or non-200), None when no response/headers exist, reset at the
+    top of every _fetch, and restored on cache hits. set-cookie and anything
+    outside the allowlist are never captured."""
+
+    def _fetch_once(self, side_effect, key="bd_live_test"):
+        with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", key), \
+             patch.object(bright_data_client, "requests",
+                          mock.Mock(post=mock.Mock(side_effect=side_effect))):
+            return bright_data_client._fetch("https://www.costco.com/.product.424976.html")
+
+    def _ok(self, text, status_code=200, headers=None):
+        return mock.Mock(status_code=status_code, text=text, headers=headers)
+
+    def test_headers_captured_on_success_scrubbed(self):
+        result = self._fetch_once([self._ok(
+            "some page",
+            headers={"Content-Type": "text/html", "Content-Length": "128",
+                     "Set-Cookie": "sessionid=secret"},
+        )])
+        self.assertEqual(result, "some page")
+        self.assertEqual(
+            bright_data_client.LAST_RESPONSE_HEADERS,
+            {"content-type": "text/html", "content-length": "128"},
+        )
+
+    def test_headers_none_without_headers_attribute(self):
+        result = self._fetch_once([mock.Mock(status_code=200, text="some page")])
+        self.assertEqual(result, "some page")
+        self.assertIsNone(bright_data_client.LAST_RESPONSE_HEADERS)
+
+    def test_headers_none_on_transport_error_no_leak(self):
+        bright_data_client.LAST_RESPONSE_HEADERS = {"content-type": "text/html"}
+        with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", "bd_live_test"), \
+             patch.object(bright_data_client, "requests",
+                          mock.Mock(post=mock.Mock(side_effect=RuntimeError("boom")))):
+            result = bright_data_client._fetch("https://www.costco.com/.product.424976.html")
+        self.assertIsNone(result)
+        self.assertIsNone(bright_data_client.LAST_HTTP_STATUS)
+        self.assertIsNone(bright_data_client.LAST_RESPONSE_HEADERS)
+
+    def test_headers_none_when_key_missing(self):
+        bright_data_client.LAST_RESPONSE_HEADERS = {"content-type": "text/html"}
+        with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", ""):
+            with self.assertRaises(ValueError):
+                bright_data_client._fetch("https://www.costco.com/.product.424976.html")
+        self.assertIsNone(bright_data_client.LAST_RESPONSE_HEADERS)
+
+    def test_headers_captured_on_non_200_responder(self):
+        result = self._fetch_once([self._ok(
+            "rate limited", status_code=429,
+            headers={"Retry-After": "30", "Content-Type": "application/json"},
+        )])
+        self.assertIsNone(result)
+        self.assertEqual(
+            bright_data_client.LAST_RESPONSE_HEADERS,
+            {"retry-after": "30", "content-type": "application/json"},
+        )
+
+    def test_cache_hit_restores_captured_headers(self):
+        self._fetch_once([self._ok("page", headers={"Content-Type": "text/html"})])
+        self.assertEqual(bright_data_client.LAST_RESPONSE_HEADERS,
+                         {"content-type": "text/html"})
+        # Pretend the consumer read/cleared the snapshot; the same-URL cache
+        # hit must restore it without touching the network.
+        bright_data_client.LAST_RESPONSE_HEADERS = None
+        self._fetch_once([RuntimeError("must not reach the network")])
+        self.assertEqual(bright_data_client.LAST_RESPONSE_HEADERS,
+                         {"content-type": "text/html"})
+        self.assertEqual(bright_data_client.LAST_HTTP_STATUS, 200)
 
 
 if __name__ == "__main__":

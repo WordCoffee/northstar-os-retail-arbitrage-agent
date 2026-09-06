@@ -63,12 +63,14 @@ def _expected(item_id, title, pack):
     }
 
 
-def _mock_fetch(html, status=200, last_error=None, raise_err=None):
+def _mock_fetch(html, status=200, last_error=None, raise_err=None,
+                last_headers=None):
     """A _fetch replacement that updates the live globals like the real one."""
 
     def _call(url):
         bright_data_client.LAST_HTTP_STATUS = status
         bright_data_client.LAST_ERROR = last_error
+        bright_data_client.LAST_RESPONSE_HEADERS = last_headers
         if raise_err is not None:
             raise raise_err
         return html
@@ -88,6 +90,7 @@ def tearDownModule():
     # LAST_HTTP_STATUS to decide provider health.
     bright_data_client.LAST_ERROR = None
     bright_data_client.LAST_HTTP_STATUS = None
+    bright_data_client.LAST_RESPONSE_HEADERS = None
 
 
 # ---------------------------------------------------------------------------
@@ -564,6 +567,136 @@ class PersistenceTests(unittest.TestCase):
                 self.assertEqual(norm["item"]["exact_title"],
                                  "Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets")
                 self.assertEqual(norm["item"]["listed_price"], 17.99)
+
+
+# ---------------------------------------------------------------------------
+# Empty-body diagnostics (fixture-backed from live run 20260906T015531Z)
+# ---------------------------------------------------------------------------
+class EmptyBodyDiagnosticTests(unittest.TestCase):
+    """Live run 20260906T015531Z returned HTTP 200 with a ZERO-BYTE body for
+    98501 and 1493188 (raw evidence recorded response_html_head_capped: "").
+    The parser must keep emitting a null-first no_data_found record, and raw
+    evidence must now carry body-bytes + a diagnostic (empty | short | normal)
+    + a scrubbed header snapshot so blocked vs genuinely-absent is
+    distinguish-able instead of just 'zero bytes'.
+
+    The empty fixture mirror (empty_body_98501_1493188_20260906T015531Z.html)
+    is intentionally a zero-byte file — that is exactly what the unlocker
+    delivered; the short fixture mimics an anti-bot/consent interstitial.
+    """
+
+    def _run(self, html, last_headers=None, item_ids=("98501",), status=200):
+        with patch.object(
+            bright_data_client,
+            "_fetch",
+            new=_mock_fetch(html, status=status, last_error=None,
+                            last_headers=last_headers),
+        ):
+            with tempfile.TemporaryDirectory() as tmp:
+                summary = refresh_product_details(
+                    list(item_ids), run_dir=tmp, delay=0
+                )
+                raw_path = [p for p in summary["evidence_paths"] if "raw" in p][0]
+                norm_path = [p for p in summary["evidence_paths"]
+                             if "normalized" in p][0]
+                with open(raw_path, encoding="utf-8") as fh:
+                    raw = json.load(fh)
+                with open(norm_path, encoding="utf-8") as fh:
+                    norm = json.load(fh)
+        return summary, raw, norm
+
+    def test_empty_body_stays_no_data_found_null_first(self):
+        """The 98501/1493188 empty-body capture must NOT fabricate anything."""
+        summary, raw, norm = self._run(
+            _fixture("empty_body_98501_1493188_20260906T015531Z")
+        )
+        self.assertEqual(summary["status"], "completed")
+        item = norm["item"]
+        self.assertEqual(item["identity_match_status"], "no_data_found")
+        for field in ("returned_costco_item_id", "exact_title", "brand",
+                      "listed_price", "currency", "unit_price",
+                      "quantity_or_pack", "size_or_weight", "UPC_GTIN_EAN",
+                      "availability"):
+            self.assertIsNone(item[field], field)
+
+    def test_empty_body_raw_evidence_diagnostic_fields(self):
+        summary, raw, norm = self._run(
+            _fixture("empty_body_98501_1493188_20260906T015531Z")
+        )
+        self.assertEqual(raw["http_status"], 200)
+        self.assertEqual(raw["response_html_head_capped"], "")
+        self.assertEqual(raw["response_body_bytes"], 0)
+        self.assertEqual(raw["response_body_diagnostic"], "empty")
+        self.assertEqual(raw["scrubbed"], True)
+        self.assertIsNone(raw["response_headers"])
+
+    def test_empty_body_evidence_shape_matches_live_run(self):
+        """Same shape/facts as raw/brightdata_1493188_20260906T015531Z.json
+        (http 200, zero-byte body) — now with the diagnosable fields added."""
+        summary, raw, norm = self._run(
+            _fixture("empty_body_98501_1493188_20260906T015531Z")
+        )
+        self.assertEqual(raw["run_id"], bright_data_costco.RUN_ID)
+        self.assertEqual(raw["http_status"], 200)
+        self.assertEqual(raw["response_html_head_capped"], "")
+        self.assertEqual(raw["response_body_bytes"], 0)
+        self.assertEqual(raw["response_body_diagnostic"], "empty")
+        self.assertEqual(raw["auth_header"], "Bearer <redacted>")
+
+    def test_response_headers_captured_from_transport_scrubbed(self):
+        """set-cookie must never survive into evidence."""
+        headers = {
+            "content-type": "text/html",
+            "content-length": "0",
+            "set-cookie": "sessionid=secret",
+        }
+        summary, raw, norm = self._run(
+            _fixture("empty_body_98501_1493188_20260906T015531Z"),
+            last_headers=headers,
+        )
+        self.assertEqual(
+            raw["response_headers"],
+            {"content-type": "text/html", "content-length": "0"},
+        )
+
+    def test_short_body_blocked_like_head_excerpt_persisted(self):
+        """A short interstitial must keep its full head excerpt so an operator
+        can tell 'blocked/challenged' from genuinely-absent content."""
+        body = _fixture("short_body_blocked_like")
+        self.assertTrue(0 < len(body) < bright_data_costco.SHORT_BODY_CHARS)
+        summary, raw, norm = self._run(body)
+        item = norm["item"]
+        self.assertEqual(item["identity_match_status"], "no_data_found")
+        self.assertEqual(raw["response_body_diagnostic"], "short")
+        self.assertEqual(raw["response_html_head_capped"], body)
+        self.assertEqual(raw["response_body_bytes"], len(body.encode("utf-8")))
+
+    def test_normal_body_diagnostic_normal(self):
+        summary, raw, norm = self._run(_fixture("926628"))
+        self.assertEqual(raw["response_body_diagnostic"], "normal")
+        html = _fixture("926628")
+        self.assertEqual(raw["response_body_bytes"], len(html.encode("utf-8")))
+        self.assertEqual(raw["response_html_head_capped"],
+                         html[:bright_data_costco.HEAD_CAP_CHARS])
+
+    def test_empty_body_is_soft_failure_batch_continues(self):
+        def route(url):
+            bright_data_client.LAST_HTTP_STATUS = 200
+            bright_data_client.LAST_ERROR = None
+            bright_data_client.LAST_RESPONSE_HEADERS = None
+            if url.endswith("98501.html"):
+                return _fixture("empty_body_98501_1493188_20260906T015531Z")
+            return _fixture("926628")
+
+        with patch.object(bright_data_client, "_fetch", new=route), \
+             tempfile.TemporaryDirectory() as tmp:
+            summary = refresh_product_details(
+                ["98501", "926628"], run_dir=tmp, delay=0
+            )
+        self.assertEqual(summary["status"], "completed")
+        self.assertEqual(summary["items_fetched"], 2)
+        self.assertEqual(summary["items_soft_failed"], 1)
+        self.assertEqual(summary["items_failed"], 0)
 
 
 # ---------------------------------------------------------------------------
