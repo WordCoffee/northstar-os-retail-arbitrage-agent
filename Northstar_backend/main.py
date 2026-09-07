@@ -5,6 +5,8 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Any, Dict, List, Optional
+import os
+import json
 import re
 from datetime import datetime, timezone
 
@@ -542,6 +544,194 @@ def get_kirkland_scanner():
         },
         "products": products,
     }
+
+
+# ---------------------------------------------------------------------------
+# Kirkland Discovery API — high-velocity product discovery with BSR-based
+# sales estimation, category filtering, and Costco cross-reference.
+# ---------------------------------------------------------------------------
+
+import kirkland_discovery as kd
+
+DISCOVERY_CACHE = os.path.join(BASE_DIR, "data", "kirkland-discovery.json")
+DISCOVERY_META_CACHE = os.path.join(BASE_DIR, "data", "kirkland-discovery-meta.json")
+
+
+class DiscoveryFilters(BaseModel):
+    min_monthly_sales: int = 500
+    categories: List[str] = []  # empty = all non-food
+    exclude_categories: List[str] = []
+    match_quality: List[str] = ["exact", "invoice_confirmed", "high_confidence", "candidate"]
+    cost_basis: List[str] = ["invoice_confirmed", "costco_online", "estimated", "candidate_match"]
+    min_profit: Optional[float] = None
+    min_roi: Optional[float] = None
+    max_price: Optional[float] = None
+
+
+@app.get("/api/kirkland/discovery")
+def get_kirkland_discovery(
+    min_monthly_sales: int = 500,
+    category: Optional[str] = None,
+    match_quality: Optional[str] = None,
+    cost_basis: Optional[str] = None,
+    min_profit: Optional[float] = None,
+    min_roi: Optional[float] = None,
+    max_price: Optional[float] = None,
+):
+    """
+    Get Kirkland product discovery results with filtering.
+    
+    All data is from cached discovery runs — zero live API calls.
+    Results auto-load from local JSON cache on server start.
+    """
+    # Load cached discovery
+    if not os.path.exists(DISCOVERY_CACHE):
+        raise HTTPException(
+            status_code=404,
+            detail="Discovery cache not found. Run discovery pipeline first (python kirkland_discovery.py)."
+        )
+    
+    with open(DISCOVERY_CACHE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    products = data.get("qualified_products", [])
+    all_products = data.get("all_kirkland_products", [])
+    
+    # Apply filters
+    filtered = []
+    for p in all_products:
+        # Monthly sales filter
+        sales = p.get("monthly_sales_estimate")
+        if sales is None or sales < min_monthly_sales:
+            continue
+        
+        # Category filter
+        if category:
+            p_cat = p.get("normalized_category") or p.get("category")
+            if not p_cat or p_cat != category:
+                continue
+        
+        # Match quality filter
+        if match_quality:
+            qualities = [q.strip() for q in match_quality.split(",")]
+            if p.get("match_quality") not in qualities:
+                continue
+        
+        # Cost basis filter
+        if cost_basis:
+            bases = [b.strip() for b in cost_basis.split(",")]
+            if p.get("costco_cost_basis") not in bases:
+                continue
+        
+        # Profit filter
+        if min_profit is not None:
+            profit = p.get("net_profit") or p.get("projected_net_profit")
+            if profit is None or profit < min_profit:
+                continue
+        
+        # ROI filter
+        if min_roi is not None:
+            roi = p.get("roi_pct") or p.get("projected_roi_pct")
+            if roi is None or roi < min_roi:
+                continue
+        
+        # Max price filter
+        if max_price is not None:
+            price = p.get("amazon_price")
+            if price is None or price > max_price:
+                continue
+        
+        filtered.append(p)
+    
+    # Sort by monthly sales desc
+    filtered.sort(key=lambda x: x.get("monthly_sales_estimate") or 0, reverse=True)
+    
+    # Get unique categories for filter UI
+    categories = sorted(set(
+        c for c in (
+            p.get("normalized_category") or p.get("category")
+            for p in all_products
+            if p.get("monthly_sales_estimate") and p.get("monthly_sales_estimate") >= min_monthly_sales
+            and not kd.is_food_category(p.get("category")) and not kd.is_food_by_title(p.get("name"))
+        )
+        if c
+    ))
+    
+    return {
+        "meta": data.get("meta", {}),
+        "filters_applied": {
+            "min_monthly_sales": min_monthly_sales,
+            "category": category,
+            "match_quality": match_quality,
+            "cost_basis": cost_basis,
+            "min_profit": min_profit,
+            "min_roi": min_roi,
+            "max_price": max_price,
+        },
+        "categories": categories,
+        "products": filtered,
+        "total_available": len(all_products),
+        "total_filtered": len(filtered),
+    }
+
+
+@app.post("/api/kirkland/discovery/run")
+def run_kirkland_discovery(filters: DiscoveryFilters):
+    """
+    Trigger a fresh discovery run with custom filters.
+    Uses cached scanner data only (zero live calls unless explicitly enabled).
+    """
+    result = kd.run_discovery(
+        use_cache_only=True,
+        min_sales=filters.min_monthly_sales,
+        excluded_cats=filters.exclude_categories,
+        included_cats=filters.categories,
+    )
+    return {
+        "status": "ok" if result.get("qualified_count", 0) > 0 else "completed",
+        "summary": result.get("meta", {}),
+    }
+
+
+@app.get("/api/kirkland/discovery/categories")
+def get_discovery_categories():
+    """Get all available categories from discovery cache for filter UI."""
+    if not os.path.exists(DISCOVERY_CACHE):
+        return {"categories": []}
+    
+    with open(DISCOVERY_CACHE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    all_products = data.get("all_kirkland_products", [])
+    categories = {}
+    
+    for p in all_products:
+        sales = p.get("monthly_sales_estimate")
+        if not sales or sales < 500:
+            continue
+        if kd.is_food_category(p.get("category")) or kd.is_food_by_title(p.get("name")):
+            continue
+        cat = p.get("normalized_category") or p.get("category") or "Unknown"
+        if cat not in categories:
+            categories[cat] = 0
+        categories[cat] += 1
+    
+    return {
+        "categories": [
+            {"name": cat, "count": count}
+            for cat, count in sorted(categories.items(), key=lambda x: -x[1])
+        ]
+    }
+
+
+@app.get("/api/kirkland/discovery/meta")
+def get_discovery_meta():
+    """Get discovery metadata (timestamp, counts, etc.) without full product list."""
+    if not os.path.exists(DISCOVERY_META_CACHE):
+        return {"status": "not_found"}
+    
+    with open(DISCOVERY_META_CACHE, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 @app.get("/api/products/{asin}/canopy")

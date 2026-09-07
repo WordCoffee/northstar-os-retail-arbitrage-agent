@@ -1,0 +1,12 @@
+{
+  "total_candidates_scanned": 232,
+  "kirkland_products_found": 138,
+  "food_excluded": 0,
+  "qualified_count": 2,
+  "with_bsr_estimate": 84,
+  "with_costco_match": 11,
+  "min_sales_threshold": 500,
+  "generated_at": "2026-09-07T21:06:45.660606+00:00",
+  "cache_source": "brightdata",
+  "cache_fetched_at": "2026-08-18T01:43:46.384271+00:00"
+}
