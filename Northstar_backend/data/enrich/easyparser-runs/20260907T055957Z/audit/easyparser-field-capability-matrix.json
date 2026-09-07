@@ -1,0 +1,39 @@
+{
+  "run_id": "20260907T055957Z",
+  "kind": "easyparser-field-capability-matrix",
+  "generated_at_utc": "2026-09-07T05:59:57Z",
+  "basis": "existing easyparser_client.py normalized contract + prior live run manifest-20260822T080742Z-9e71 raw/normalized evidence; not_verified = not evidenced locally",
+  "fields": [
+    {"field": "title", "capability": "live_supplied", "source": "result.product.title / normalized title", "verified_by": ["prior_raw", "client_code"]},
+    {"field": "asin_identity", "capability": "live_supplied", "source": "result.product.asin / provider_asin; mismatch => mapping_error + rejected", "verified_by": ["client_code", "tests_21_22"]},
+    {"field": "buy_box_price", "capability": "live_supplied", "source": "buy_box.price (raw/value)", "verified_by": ["prior_raw", "client_code"]},
+    {"field": "buy_box_seller", "capability": "live_supplied", "source": "buy_box_seller / buy_box_seller_id", "verified_by": ["prior_raw"]},
+    {"field": "buy_box_fulfillment", "capability": "live_supplied", "source": "buy_box_is_fba / buy_box_is_fbm", "verified_by": ["prior_raw"]},
+    {"field": "buy_box_prime", "capability": "live_supplied", "source": "buy_box_is_prime", "verified_by": ["prior_raw"]},
+    {"field": "buy_box_condition", "capability": "live_supplied", "source": "buy_box_condition.is_new/title", "verified_by": ["prior_raw"]},
+    {"field": "offer_count", "capability": "live_supplied", "source": "offer_count / offers_returned_count", "verified_by": ["prior_raw"]},
+    {"field": "per_offer_price", "capability": "live_supplied", "source": "offer.price raw/value", "verified_by": ["prior_raw"]},
+    {"field": "per_offer_seller", "capability": "live_supplied", "source": "seller_id/name/rating/ratings_total/positive_pct", "verified_by": ["prior_raw"]},
+    {"field": "per_offer_fulfillment", "capability": "live_supplied", "source": "is_fba/is_fbm/is_sba/fulfilled_by_amazon", "verified_by": ["prior_raw"]},
+    {"field": "per_offer_shipping", "capability": "live_supplied", "source": "shipping_text / shipping_is_free / ships_from", "verified_by": ["prior_raw"]},
+    {"field": "per_offer_prime", "capability": "live_supplied", "source": "is_prime", "verified_by": ["prior_raw"]},
+    {"field": "buybox_winner_flag", "capability": "live_supplied", "source": "offer.buybox_winner", "verified_by": ["prior_raw"]},
+    {"field": "offer_condition", "capability": "live_supplied", "source": "offer.condition.is_new/title", "verified_by": ["client_code"]},
+    {"field": "observed_offer_counts", "capability": "live_supplied", "source": "observed_fba/fbm/amazon_offer_count", "verified_by": ["prior_raw"]},
+    {"field": "request_time", "capability": "live_supplied", "source": "observed_at / request_metadata", "verified_by": ["prior_raw"]},
+    {"field": "credits_used_remaining", "capability": "live_supplied", "source": "request_info.credits_used / credits_remaining", "verified_by": ["prior_ledger"]},
+    {"field": "amazon_bsr_sales_rank", "capability": "not_supplied", "note": "comparison uses 'provider does not supply BSR'", "verified_by": ["prior_run_comparison"]},
+    {"field": "review_count", "capability": "not_supplied", "note": "reviews_live = 'Unknown' (never zero-filled)", "verified_by": ["prior_run_comparison"]},
+    {"field": "upc_ean_gtin", "capability": "not_supplied", "note": "store REQUIRED_FIELD_CATALOG records as missing until parsed live", "verified_by": ["store_code"]},
+    {"field": "brand", "capability": "not_supplied", "note": "no brand field in OFFER normalized contract", "verified_by": ["client_code"]},
+    {"field": "monthly_sales_velocity", "capability": "not_supplied", "note": "sales stage stays not_requested", "verified_by": ["store_code"]}
+  ],
+  "request_shape_guarantees": {
+    "max_asins_per_request": 1,
+    "retries": 0,
+    "automatic_polling": false,
+    "hard_request_cap": 10,
+    "hard_credit_cap_applied": true,
+    "mapping_error_rejection": true
+  }
+}

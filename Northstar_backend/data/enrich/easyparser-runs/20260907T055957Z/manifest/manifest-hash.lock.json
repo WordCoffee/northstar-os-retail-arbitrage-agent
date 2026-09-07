@@ -1,0 +1,7 @@
+{
+  "run_dir": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\data\\enrich\\easyparser-runs\\20260907T055957Z",
+  "manifest_canonical_sha256": "sha256:899660a639af659e40631d53e2e668f973ded75100881ca234f603c2e415fc5c",
+  "manifest_file_sha256": "sha256:a1dd163a77e6b9fd0b1cf194bcf91a5ceb13bd171ec354dcc0ae03e619d7132a",
+  "built_at_utc": "2026-09-07T05:59:57Z",
+  "note": "canonical_sha256 = content hash over sort-keys JSON without the sha field; file_sha256 = byte hash of the frozen file on disk. The runner records its own byte hash in preflight.json."
+}

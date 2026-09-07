@@ -1,0 +1,49 @@
+{
+  "run_id": "20260907T055957Z",
+  "kind": "easyparser-run-environment-presence-report",
+  "generated_at_utc": "2026-09-07T05:59:57Z",
+  "method": "presence-only booleans; no credential value read, printed, or written",
+  "checks": [
+    {
+      "variable": "EASYPARSER_API_KEY",
+      "shell_environment_present": false,
+      "post_load_dotenv_present": true,
+      "notes": "Present in the repo .env via the existing easyparser_client load_dotenv() path (the exact path the live run executes). Confirmed by production `status` output 'provider config resolves: YES' and a boolean-only probe. Value never read or printed."
+    },
+    {
+      "variable": "SCANNER_LIVE_ALLOWED",
+      "shell_environment_present": false,
+      "required_for_this_run": false,
+      "notes": "Not consumed by enrich_manifest_run.py; its live gate is the --live flag plus finite --max-requests/--max-credits caps."
+    },
+    {
+      "variable": "SCANNER_OFFER_ENRICHMENT",
+      "shell_environment_present": false,
+      "required_for_this_run": false,
+      "notes": "Provider-switch token for offer_enrichment.py, which stays untouched and still degrades EASYPARSER to OFF. Not part of this run's path."
+    },
+    {
+      "variable": "SCANNER_MARKET_SNAPSHOT_PATH",
+      "shell_environment_present": false,
+      "required_for_this_run": false,
+      "notes": "Shared-snapshot-store knob. The manifest runner never writes the shared snapshot store; it writes only its immutable run dir."
+    },
+    {
+      "variable": "RAPIDAPI_API_KEY",
+      "shell_environment_present": false,
+      "required_for_this_run": false,
+      "notes": "Not used; the live pull is Easyparser-only."
+    },
+    {
+      "variable": "DATAFORSEO_TRANSPORT_ENABLED",
+      "shell_environment_present": false,
+      "required_for_this_run": false,
+      "notes": "Not used; DataForSEO is explicitly excluded from this mission."
+    }
+  ],
+  "summary": {
+    "easyparser_live_credentials_present": true,
+    "live_gate_type": "flag_based_live_plus_finite_caps",
+    "blocked_by_missing_credentials": false
+  }
+}

@@ -119,6 +119,55 @@ def fake_result(asin, title="Widget Offer Set", n_offers=1, offer_count=None,
     }
 
 
+def fake_easyparser_result(asin, title="Easyparser Test Offer", credits_used=10,
+                           credits_remaining=90, gap=None, provider_asin=None):
+    """Mirror easyparser_client.get_easyparser_offers normalized shapes."""
+
+    def base():
+        return {
+            "source": "easyparser", "asin": asin, "request_id": "req-ez-%s" % asin,
+            "title": title, "offer_count": 1, "offers_returned_count": 1,
+            "buy_box_price": 10.0, "buy_box_price_raw": 10.0,
+            "buy_box_seller": "Seller A", "buy_box_seller_id": "SELLERID1",
+            "buy_box_is_fba": True, "buy_box_is_fbm": False,
+            "buy_box_is_prime": True, "buy_box_condition": {"is_new": True, "title": "New"},
+            "observed_fba_offer_count": 1, "observed_fbm_offer_count": 0,
+            "observed_amazon_offer_count": 0,
+            "offers": [{
+                "position": 0, "buybox_winner": True,
+                "price": 10.0, "condition": "New",
+                "seller_id": "SELLERID1", "seller_name": "Seller A",
+                "is_prime": True, "is_fba": True, "is_fbm": False,
+                "fulfilled_by_amazon": True, "shipping_text": "FREE delivery",
+                "shipping_is_free": True, "ships_from": "Amazon",
+                "minimum_order_quantity": None, "maximum_order_quantity": None,
+            }],
+            "request_zip_code": "75201", "observed_at": "2026-09-07T00:00:00Z",
+            "credits_used": credits_used, "credits_remaining": credits_remaining,
+            "data_gaps": [],
+        }
+
+    r = base()
+    r["provider_asin"] = provider_asin if provider_asin is not None else asin
+    if gap is not None:
+        r["title"] = None
+        r["offer_count"] = None
+        r["offers_returned_count"] = 0
+        r["buy_box_price"] = None
+        r["buy_box_seller"] = None
+        r["buy_box_is_fba"] = None
+        r["buy_box_is_fbm"] = None
+        r["buy_box_is_prime"] = None
+        r["observed_fba_offer_count"] = 0
+        r["observed_fbm_offer_count"] = 0
+        r["observed_amazon_offer_count"] = 0
+        r["offers"] = []
+        r["credits_used"] = None
+        r["credits_remaining"] = None
+        r["data_gaps"] = [gap]
+    return r
+
+
 class Base(unittest.TestCase):
     def setUp(self):
         tmp = tempfile.TemporaryDirectory()
@@ -147,6 +196,18 @@ class Base(unittest.TestCase):
             return fn(asin)
 
         p = mock.patch.object(emr.rapidapi_client, "get_rapidapi_offers", wrapper)
+        p.start()
+        self.addCleanup(p.stop)
+        return calls
+
+    def install_easyparser_client(self, fn):
+        calls = []
+
+        def wrapper(asin):
+            calls.append(asin)
+            return fn(asin)
+
+        p = mock.patch.object(emr.easyparser_client, "get_easyparser_offers", wrapper)
         p.start()
         self.addCleanup(p.stop)
         return calls
@@ -497,6 +558,76 @@ class GateAndContainmentTests(Base):
         self.assertEqual((rc1, rc2, rc3), (2, 2, 2))
         self.assertEqual(calls, [])
         self.assertFalse(os.path.isdir(self.runs_root))
+
+
+class EasyparserProviderTests(Base):
+    """Offline proof that the easyparser provider route is bounded to the
+    frozen 10-ASIN manifest, zero-retry, and mapping-error safe."""
+
+    def test_21_easyparser_exactly_10_calls_canonical_order_zero_retry(self):
+        path = self.write_manifest()
+        calls = self.install_easyparser_client(lambda a: fake_easyparser_result(a))
+        rc = emr.main(["run", "--live", "--provider", "easyparser",
+                       "--manifest", path, "--max-requests", "10", "--max-credits", "200"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(calls, CANONICAL)            # exact manifest order
+        self.assertEqual(len(calls), len(set(calls)))  # zero retries: no repeat call
+        ledger = self.read_ledger(self.single_run_dir())
+        self.assertEqual([e["asin"] for e in ledger], CANONICAL)
+        self.assertTrue(all(e["outcome"] == "available" for e in ledger))
+        self.assertTrue(all(e["mapping_error"] is False for e in ledger))
+
+    def test_22_mapping_error_rejected_recorded_not_retried(self):
+        path = self.write_manifest()
+
+        def wrong(asin):
+            if asin == CANONICAL[4]:
+                return fake_easyparser_result(asin, provider_asin="B0ZZZZZZZZZ",
+                                              title="Something Else")
+            return fake_easyparser_result(asin)
+
+        calls = self.install_easyparser_client(wrong)
+        rc = emr.main(["run", "--live", "--provider", "easyparser",
+                       "--manifest", path, "--max-requests", "10", "--max-credits", "200"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(calls), 10)              # no retry on mapping error
+        ledger = self.read_ledger(self.single_run_dir())
+        target = [e for e in ledger if e["asin"] == CANONICAL[4]]
+        self.assertEqual(len(target), 1)
+        self.assertTrue(target[0]["mapping_error"])
+        self.assertEqual(target[0]["outcome"], "unavailable")
+        run_dir = self.single_run_dir()
+        raw = json.load(open(os.path.join(run_dir, "raw", CANONICAL[4] + ".json"),
+                             encoding="utf-8"))
+        self.assertTrue(raw["mapping_error"])
+        self.assertEqual(raw["provider_asin"], "B0ZZZZZZZZZ")
+        others = [e for e in ledger if e["asin"] != CANONICAL[4]]
+        self.assertTrue(all(e["outcome"] == "available" for e in others))
+
+    def test_23_easyparser_status_and_dry_run_zero_network(self):
+        def boom(*a, **k):
+            raise AssertionError("real network transport was called")
+
+        with mock.patch.object(requests.api, "get", boom), \
+             mock.patch.object(requests.api, "post", boom), \
+             mock.patch.object(requests.api, "request", boom):
+            path = self.write_manifest()
+            self.assertEqual(emr.main(["status", "--provider", "easyparser",
+                                       "--manifest", path]), 0)
+            self.assertEqual(emr.main(["dry-run", "--provider", "easyparser",
+                                       "--manifest", path]), 0)
+
+    def test_24_easyparser_request_cap_enforced(self):
+        path = self.write_manifest()
+        calls = self.install_easyparser_client(lambda a: fake_easyparser_result(a))
+        rc = emr.main(["run", "--live", "--provider", "easyparser",
+                       "--manifest", path, "--max-requests", "3", "--max-credits", "200"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(calls), 3)               # cap stops before call 4
+        self.assertEqual(calls, CANONICAL[:3])
+        ledger = self.read_ledger(self.single_run_dir())
+        skipped = [e for e in ledger if e["outcome"] == "skipped_cap"]
+        self.assertEqual(len(skipped), 7)
 
 
 if __name__ == "__main__":
