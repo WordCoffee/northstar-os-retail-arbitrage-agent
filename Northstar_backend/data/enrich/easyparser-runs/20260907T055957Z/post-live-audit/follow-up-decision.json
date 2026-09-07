@@ -1,0 +1,37 @@
+{
+  "decision": "approve only after budget patch",
+  "options_considered": [
+    {
+      "option": "skip B085F1QCB9",
+      "pros": "zero further spend/risk; run stays a documented 9/10",
+      "cons": "manifest stays incomplete; Compactor Trash Bag omits live pricing"
+    },
+    {
+      "option": "approve only after budget patch",
+      "pros": "fixes soft-cap overshoot before any further spend; adds offline guard test; then one request completes the manifest within a hard cap",
+      "cons": "requires code change + fresh operator approval before execution"
+    },
+    {
+      "option": "approve B085F1QCB9 under a newly calculated hard cap",
+      "pros": "immediate 1-request completion under a fresh cap",
+      "cons": "current runner has only a pre-request (soft) cap; a fresh cap does not fix the enforcement gap"
+    }
+  ],
+  "recommendation_rationale": "The budget enforcement gap is real (225 reported vs 200 cap; soft pre-request cap only). Running a follow-up under an unpatched runner does not add failure risk for a single request, but the operator's own bar is 'never exceeds the configured hard cap'. Patch the worst-case reservation guard + add one offline test, then approve the single B085F1QCB9 request under the patched cap (worst case observed 29/reported \u2192 reserve 30; 1-request cap 40; total spent after follow-up \u2264 40, well under 200).",
+  "execution_conditions": [
+    "Fresh, explicit operator approval for the 1-request follow-up (Hard Stop Zone: no inherited consent).",
+    "Patch from budget-enforcement-audit.md \u00a75 lands first (worst-case pre-check + offline test: 6 mocked requests @30 credits, cap 200 \u2192 stops at 180, never exceeding).",
+    "Exactly 1 request for B085F1QCB9; max_credits for that run = 40; zero retries; no other ASIN included.",
+    "Provider-reported credits_used/remaining recorded verbatim (credit_basis='reported'), as today.",
+    "No existing run artifacts are touched; the follow-up writes its own new immutable run directory."
+  ],
+  "estimated_follow_up_cost": "~29 provider-reported credits (21-29 observed range; worst case reserved 30)",
+  "reconciled_facts": {
+    "nine_records_internally_consistent": true,
+    "credits_225_reconciled_as_recorded": true,
+    "credits_225_independently_verifiable": false,
+    "budget_cap_trustworthy_as_hard_cap": false,
+    "budget_cap_trustworthy_as_trip_wire": true,
+    "b085f1qcb9_should_remain_unqueried_until": "fresh operator approval AND budget patch lands"
+  }
+}
