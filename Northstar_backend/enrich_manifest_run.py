@@ -8,9 +8,15 @@ easyparser_client, one GET per ASIN, zero retries). Other runners
 (enrich_cached_asins / offer_enrichment) still refuse the easyparser token.
 
 Live controls mirror ``enrich_cached_asins``: an explicit ``--live`` flag
-plus finite ``--max-requests`` / ``--max-credits`` caps checked BEFORE every
-call. Automatic retry is structurally impossible: there is no ``--retries``
-flag and the loop never invokes the client twice for the same ASIN.
+plus finite ``--max-requests`` / ``--max-credits`` caps. The credit cap is a
+**worst-case pre-request reservation plus post-call stop**: before each call
+the runner refuses when ``credits_used + WORST_CASE_REQUEST_CREDITS >
+max_credits``, i.e. it never issues a request whose worst-case cost could
+push the run past the cap. It is NOT a true hard spend cap: a single in-flight
+call can still consume more than expected, after which no further request is
+issued (post-call stop). Automatic retry is structurally impossible: there is
+no ``--retries`` flag and the loop never invokes the client twice for the same
+ASIN.
 
 Every run writes ONLY to a unique immutable directory under
 ``data/enrich/manifest-runs/<run-id>/`` and appends one audit line to
@@ -42,6 +48,16 @@ import rapidapi_client
 import dataforseo_adapter
 import easyparser_client
 from enrich_cached_asins import ESTIMATED_CREDITS_PER_ASIN
+
+# Worst-case per-request credit reservation for the pre-call guard. 30 covers
+# the observed Easyparser OFFER range (21-29 reported per request in the
+# 20260907T055957Z run) and no provider-confirmed stricter maximum exists in
+# project configuration (the only related constant,
+# proof_batch_contracts.ESTIMATED_CREDITS_PER_REQUEST = 5.0, is an estimate).
+# Before each call the guard refuses when credits_used + this reservation
+# would exceed max_credits; after each call provider-reported usage is
+# recorded verbatim (never replaced by this reservation).
+WORST_CASE_REQUEST_CREDITS = 30
 
 
 def _fetch_offers(asin, provider):
@@ -590,7 +606,7 @@ def _run(args):
         if budget["requests_used"] >= caps["max_requests"]:
             stop_reason = "max_requests"
             break
-        if budget["credits_used"] >= caps["max_credits"]:
+        if budget["credits_used"] + WORST_CASE_REQUEST_CREDITS > caps["max_credits"]:
             stop_reason = "max_credits"
             break
 

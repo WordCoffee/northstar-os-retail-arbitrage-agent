@@ -341,11 +341,15 @@ class SelectionAndCapsTests(Base):
         rc = emr.main(["run", "--live", "--manifest", path,
                        "--max-requests", "10", "--max-credits", "6"])
         self.assertEqual(rc, 0)
-        self.assertEqual(len(calls), 2)             # 4 + 4 = 8 >= 6 stops call 3
+        # Worst-case reservation (30) already exceeds the 6-credit cap, so the
+        # guard refuses EVERY call up front: zero provider calls.
+        self.assertEqual(len(calls), 0)
         run_dir = self.single_run_dir()
         ledger = self.read_ledger(run_dir)
         skipped = [e for e in ledger if e["outcome"] == "skipped_cap"]
-        self.assertEqual(len(skipped), 8)
+        invoked = [e for e in ledger if not e["skipped"]]
+        self.assertEqual(len(skipped), 10)
+        self.assertEqual(len(invoked), 0)
         with open(os.path.join(run_dir, "run-summary.md"), encoding="utf-8") as f:
             self.assertIn("max_credits", f.read())
 
@@ -628,6 +632,157 @@ class EasyparserProviderTests(Base):
         ledger = self.read_ledger(self.single_run_dir())
         skipped = [e for e in ledger if e["outcome"] == "skipped_cap"]
         self.assertEqual(len(skipped), 7)
+
+
+class WorstCaseBudgetGuardTests(EasyparserProviderTests):
+    """Offline proof of the worst-case pre-request credit reservation.
+
+    Guard under test: ``emr.WORST_CASE_REQUEST_CREDITS = 30`` and the loop's
+    ``if budget["credits_used"] + WORST_CASE_REQUEST_CREDITS >
+    caps["max_credits"]: stop`` check BEFORE every call. Provider-reported
+    costs are recorded verbatim after the call; the reservation is never used
+    as the recorded value.
+    """
+
+    def test_25_cap_200_cost_30_stops_after_6_requests_at_180(self):
+        path = self.write_manifest()
+        calls = self.install_easyparser_client(
+            lambda a: fake_easyparser_result(a, credits_used=30))
+        rc = emr.main(["run", "--live", "--provider", "easyparser",
+                       "--manifest", path, "--max-requests", "10", "--max-credits", "200"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(calls), 6)               # 6*30 = 180; 180+30 > 200 refuses 7th
+        self.assertEqual(calls, CANONICAL[:6])
+        ledger = self.read_ledger(self.single_run_dir())
+        invoked = [e for e in ledger if not e["skipped"]]
+        skipped = [e for e in ledger if e["skipped"]]
+        self.assertEqual(len(invoked), 6)
+        self.assertEqual(len(skipped), 4)             # remaining manifest never called
+        self.assertEqual([e["credits_this_call"] for e in invoked], [30] * 6)
+        self.assertEqual([e["outcome"] for e in invoked], ["available"] * 6)
+        self.assertAlmostEqual(sum(e["credits_this_call"] for e in invoked), 180.0)
+        idx = self.index_lines()[0]
+        self.assertAlmostEqual(idx["credits_used"], 180.0)
+
+    def test_26_seventh_request_refused_before_any_provider_call(self):
+        path = self.write_manifest()
+        calls = self.install_easyparser_client(
+            lambda a: fake_easyparser_result(a, credits_used=30))
+        emr.main(["run", "--live", "--provider", "easyparser",
+                  "--manifest", path, "--max-requests", "10", "--max-credits", "200"])
+        self.assertEqual(len(calls), 6)
+        self.assertNotIn(CANONICAL[6], calls)          # 7th ASIN: no provider call
+        ledger = self.read_ledger(self.single_run_dir())
+        target = [e for e in ledger if e["asin"] == CANONICAL[6]]
+        self.assertEqual(len(target), 1)
+        self.assertEqual(target[0]["outcome"], "skipped_cap")
+        self.assertTrue(target[0]["skipped"])
+        self.assertEqual(target[0]["credits_this_call"], 0)
+        self.assertIsNone(target[0]["credit_basis"])
+
+    def test_27_cap_40_permits_one_request_with_worst_case_30(self):
+        path = self.write_manifest()
+        calls = self.install_easyparser_client(
+            lambda a: fake_easyparser_result(a, credits_used=30))
+        rc = emr.main(["run", "--live", "--provider", "easyparser",
+                       "--manifest", path, "--max-requests", "10", "--max-credits", "40"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(calls), 1)               # 0+30 <= 40; 30+30 > 40 refuses 2nd
+        self.assertEqual(calls, CANONICAL[:1])
+        ledger = self.read_ledger(self.single_run_dir())
+        invoked = [e for e in ledger if not e["skipped"]]
+        self.assertEqual(len(invoked), 1)
+        self.assertEqual(invoked[0]["credits_this_call"], 30)
+        self.assertEqual(len([e for e in ledger if e["skipped"]]), 9)
+
+    def test_28_cap_below_worst_case_refuses_before_first_call(self):
+        path = self.write_manifest()
+        calls = self.install_easyparser_client(
+            lambda a: fake_easyparser_result(a, credits_used=30))
+        rc = emr.main(["run", "--live", "--provider", "easyparser",
+                       "--manifest", path, "--max-requests", "10", "--max-credits", "25"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(calls), 0)               # 0 + 30 > 25: nothing issued
+        ledger = self.read_ledger(self.single_run_dir())
+        self.assertEqual(len([e for e in ledger if e["outcome"] == "skipped_cap"]), 10)
+        run_dir = self.single_run_dir()
+        with open(os.path.join(run_dir, "run-summary.md"), encoding="utf-8") as f:
+            self.assertIn("max_credits", f.read())
+
+    def test_29_reported_cost_29_recorded_as_29_not_30(self):
+        path = self.write_manifest()
+        calls = self.install_easyparser_client(
+            lambda a: fake_easyparser_result(a, credits_used=29))
+        rc = emr.main(["run", "--live", "--provider", "easyparser",
+                       "--manifest", path, "--max-requests", "10", "--max-credits", "200"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(calls), 6)               # 6*29 = 174; 174+30 > 200 refuses 7th
+        ledger = self.read_ledger(self.single_run_dir())
+        invoked = [e for e in ledger if not e["skipped"]]
+        self.assertEqual([e["credits_this_call"] for e in invoked], [29] * 6)
+        self.assertTrue(all(e["credit_basis"] == "reported" for e in invoked))
+        self.assertAlmostEqual(
+            sum(e["credits_this_call"] for e in invoked), 174.0)   # NOT 30*6=180
+        idx = self.index_lines()[0]
+        self.assertAlmostEqual(idx["credits_used"], 174.0)
+
+    def test_30_cost_above_30_recorded_honestly_then_run_stops(self):
+        path = self.write_manifest()
+        calls = self.install_easyparser_client(
+            lambda a: fake_easyparser_result(a, credits_used=35))
+        rc = emr.main(["run", "--live", "--provider", "easyparser",
+                       "--manifest", path, "--max-requests", "10", "--max-credits", "40"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(calls), 1)               # 0+30 <= 40; 35+30 > 40 refuses 2nd
+        ledger = self.read_ledger(self.single_run_dir())
+        invoked = [e for e in ledger if not e["skipped"]]
+        self.assertEqual(len(invoked), 1)
+        self.assertEqual(invoked[0]["credits_this_call"], 35)       # honest, not 30
+        self.assertEqual(invoked[0]["credit_basis"], "reported")
+        self.assertAlmostEqual(self.index_lines()[0]["credits_used"], 35.0)
+        self.assertEqual(len([e for e in ledger if e["skipped"]]), 9)
+
+    def test_31_no_automatic_retry_under_cap_pressure(self):
+        path = self.write_manifest()
+        calls = self.install_easyparser_client(
+            lambda a: fake_easyparser_result(a, credits_used=30))
+        emr.main(["run", "--live", "--provider", "easyparser",
+                  "--manifest", path, "--max-requests", "10", "--max-credits", "200"])
+        self.assertEqual(len(calls), 6)
+        self.assertEqual(len(calls), len(set(calls)))      # zero repeats
+        self.assertEqual(sorted(calls), sorted(CANONICAL[:6]))
+        # skipped ASINs were never called (no late retry burst after stop)
+        self.assertNotIn(CANONICAL[6], calls)
+        self.assertNotIn(CANONICAL[9], calls)
+
+    def test_32_request_count_never_exceeds_manifest_limit(self):
+        path = self.write_manifest()
+        ids = iter(["manifest-budget-A", "manifest-budget-B"])
+        with mock.patch.object(emr, "make_run_id", lambda: next(ids)):
+            c1 = self.install_easyparser_client(
+                lambda a: fake_easyparser_result(a, credits_used=5))
+            rc = emr.main(["run", "--live", "--provider", "easyparser",
+                           "--manifest", path, "--max-requests", "10", "--max-credits", "100"])
+            self.assertEqual(rc, 0)
+            self.assertEqual(len(c1), 10)                   # exactly the manifest size
+            led1 = self.read_ledger(os.path.join(self.runs_root, "manifest-budget-A"))
+            self.assertEqual(len([e for e in led1 if not e["skipped"]]), 10)
+
+            c2 = self.install_easyparser_client(
+                lambda a: fake_easyparser_result(a, credits_used=30))
+            rc2 = emr.main(["run", "--live", "--provider", "easyparser",
+                            "--manifest", path, "--max-requests", "10", "--max-credits", "200"])
+            self.assertEqual(rc2, 0)
+            self.assertEqual(len(c2), 6)                    # reservation refuses 7th
+            led2 = self.read_ledger(os.path.join(self.runs_root, "manifest-budget-B"))
+            invoked2 = [e for e in led2 if not e["skipped"]]
+            skipped2 = [e for e in led2 if e["skipped"]]
+            self.assertEqual(len(invoked2), 6)
+            self.assertEqual(len(skipped2), 4)
+            # every manifest ASIN appears exactly once across the ledger
+            self.assertEqual(len(led2), 10)
+            self.assertLessEqual(len(c1), 10)
+            self.assertLessEqual(len(c2), 10)
 
 
 if __name__ == "__main__":
