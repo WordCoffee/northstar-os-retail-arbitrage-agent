@@ -503,7 +503,7 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-07T12:05:00Z",
+    "last_updated":  "2026-09-07T12:40:00Z",
     "history":  [
                     {
                         "ts":  "2026-09-06T22:05:00Z",
@@ -737,6 +737,13 @@
                         "batch":  "master-brain-20260907",
                         "summary":  "Reviewed every file in C:\\Users\\T2Hol\\Desktop\\All AI Chat Markdowns (16+ markdown chats: master vision session, local setup, AutoThink PPC service, ads/PPC analysis, FBA 2026 compliance, listing optimizer, retail arbitrage chats 1+2, Word Coffee brand docs) via 4 parallel extraction passes. Consolidated into master-brain/: README.md (knowledge architecture + per-subscriber profile loading model), northstar-os-master-plan.md (full Northstar OS Services + Northstar AutoThink breakdown: master brain, TaskRouter, 4+6 agent roster, model stack, costs/timelines, operating constitution, delegation flow, implemented tooling), profiles/t2-holdings-tyrone-johnson.md (T2/Tyrone master seed profile: identity, all brands Word Coffee/Kirkland/Neck Nirvana/Mogra, judgment signals, economic thresholds, prior brainstormed ideas, Word Coffee voice block). All credentials referenced by name only.",
                         "next_action":  "Profiles/ dir ready for future subscribers; brain loads only the active subscriber\u0027s profile. Pending operator decisions unchanged: B085F1QCB9 follow-up and Costco Step-2 retry."
+                    },
+                    {
+                        "ts":  "2026-09-07T12:40:00Z",
+                        "activity":  "master_brain_profile_loader_wiring",
+                        "batch":  "master-brain-20260907",
+                        "summary":  "Wired the Master Brain to actually LOAD at session start. Added Northstar_backend/master_brain_profiles.py: priority-ordered pluggable identity resolver chain (two_step_auth \u003e login_session \u003e ip_address = future slots returning no-match; local_default = active bootstrap via NORTHSTAR_PROFILE env or manifest default), canonical profile manifest (master-brain/profiles/manifest.json: t2-holdings-tyrone-johnson = master seed/default), fail-closed loader (unknown ids / path traversal / non-md rejected, never fabricates), sha256+line-count integrity, append-only profile-load audit into shared/master-brain/audit.log.jsonl via existing gateway, bootstrap() one-call session start, CLI (--list/--resolve/--load/--bootstrap). AGENTS.md section 0.1 now directs every future session to load the platform brain and the resolved subscriber\u0027s profile only (future identity = login/IP/2FA). master-brain/README.md documents the implemented wiring. Full offline suite 1456 ran/3 skipped/OK (+44 new tests, zero regressions).",
+                        "next_action":  "Per-subscriber onboarding path ready: add profiles/\u003cid\u003e.md + manifest entry, wire future login/IP/2FA resolvers. Pending operator decisions unchanged: B085F1QCB9 follow-up and Costco Step-2 retry."
                     }
                 ]
 }

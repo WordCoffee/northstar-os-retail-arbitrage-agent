@@ -11,6 +11,25 @@ Before taking any other action in this project, confirm you have read this entir
 file and `00_STATE.json` (for current batch/next_batch/known_issues). If either is
 missing or unreadable, STOP and report — do not proceed with partial context.
 
+### 0.1 Master Brain bootstrap (silent, every session, after §0)
+The Master Brain's knowledge and the requesting subscriber's profile are loaded
+through the profile loader — never skipped:
+
+1. **Platform brain (always, shared):** read `master-brain/README.md` (architecture
+   + profile-loading model) and `master-brain/northstar-os-master-plan.md`
+   (full Northstar OS + AutoThink breakdown — agents, capabilities, constitution).
+2. **Resolve the active subscriber (who is asking):** run
+   `python Northstar_backend/master_brain_profiles.py --resolve`. Identity today =
+   `NORTHSTAR_PROFILE` env override or the manifest default (T2 master seed).
+   Future identity sources — login session, IP address, two-step (2FA) — are
+   plug-in slots in `master_brain_profiles.py` and will resolve before the
+   default once wired.
+3. **Load ONLY the resolved profile's markdown file** (the path the loader
+   returns). No other profile may be loaded this session. Unknown ids fail
+   closed — never fabricate a profile.
+4. Optionally record the load: `python Northstar_backend/master_brain_profiles.py
+   --bootstrap` (resolve + load + audit append-only, no credentials).
+
 ## 1. Vision
 T2 Holdings LLC — a high-velocity Amazon FBA portfolio (Kirkland Minoxidil,
 Word Coffee, and scalable additions) built on a 10-asset diversified strategy.
