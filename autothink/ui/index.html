@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Northstar OS AutoThink</title>
+<style>
+  :root {
+    --bg: #0a0a12;
+    --panel: rgba(20, 20, 30, 0.75);
+    --panel-border: #3a3a4a;
+    --grad: linear-gradient(135deg, #ff00cc, #3333ff, #00ffcc, #ff9900);
+    --gold: #ffd700;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg);
+    color: #f2f2f7;
+    font-family: -apple-system, system-ui, "Segoe UI", sans-serif;
+    overflow: hidden;
+  }
+  #galaxy {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  header {
+    position: fixed;
+    top: 18px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 2;
+    pointer-events: none;
+  }
+  h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.5px;
+  }
+  .edge-text-main {
+    background-image: var(--grad);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: edgeShift 6s ease infinite;
+  }
+  @keyframes edgeShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  main {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 24px;
+    gap: 16px;
+  }
+  #output {
+    width: 100%;
+    max-width: 760px;
+    flex: 1 1 auto;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 160px;
+    max-height: 52vh;
+    overflow-y: auto;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    backdrop-filter: blur(6px);
+    transition: background 0.4s, backdrop-filter 0.4s, border-color 0.4s, box-shadow 0.4s;
+  }
+  #output.loading-active {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-color: rgba(255, 255, 255, 0.04) !important;
+    box-shadow: none !important;
+  }
+  .composer {
+    width: 100%;
+    max-width: 760px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  #query {
+    flex: 1 1 240px;
+    min-width: 0;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--panel-border);
+    background: rgba(20, 20, 30, 0.85);
+    color: #fff;
+    font-size: 1rem;
+  }
+  #query.loading-active { background: transparent !important; border-color: rgba(255,255,255,0.04) !important; }
+  select, button.run {
+    padding: 14px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--panel-border);
+    background: rgba(20, 20, 30, 0.85);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  button.run.loading-active { background: transparent !important; border-color: rgba(255,255,255,0.04) !important; }
+  button.run:hover, select:hover { border-color: #6a6a8a; }
+  .quick-widget {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 5;
+    width: 116px;
+    height: 116px;
+    border-radius: 16px;
+    border: 2px solid #2a2a3a;
+    background: rgba(15, 15, 26, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  .quick-widget .edge-text {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    background-image: var(--grad);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: edgeShift 6s ease infinite;
+  }
+  .quick-expand {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 1rem;
+    color: #bbb;
+  }
+  .quick-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    background: rgba(8, 8, 16, 0.96);
+    display: none;
+    flex-direction: column;
+    padding: 32px;
+  }
+  .quick-overlay.open { display: flex; }
+  .qfHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .qfHeader h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    background-image: var(--grad);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  .qfClose, .qfCloseBtn { cursor: pointer; font-size: 1.6rem; color: #ccc; }
+  .qfBody {
+    flex: 1 1 auto;
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 18px;
+    overflow-y: auto;
+    color: #cfcfe0;
+  }
+  .achievement-toast {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 30;
+    background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 14px 20px;
+    min-width: 280px;
+    box-shadow: 0 8px 30px rgba(255, 215, 0, 0.4);
+    transform: translateX(400px);
+    transition: transform 0.4s ease;
+  }
+  .achievement-toast.show { transform: translateX(0); }
+  .achTitle { color: var(--gold); font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+  .achName { color: #fff; font-weight: 700; font-size: 1.05rem; margin-bottom: 2px; }
+  .achDesc { color: #aaa; font-size: 0.8rem; }
+  .sound-toggle {
+    position: fixed;
+    top: 22px;
+    right: 22px;
+    z-index: 6;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--panel-border);
+    background: rgba(20, 20, 30, 0.85);
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  @media (max-width: 600px) {
+    h1 { font-size: 1.6rem; }
+    .composer { flex-direction: column; }
+    #query, select, button.run { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .edge-text-main, .quick-widget .edge-text { animation-duration: 12s; }
+  }
+</style>
+</head>
+<body>
+  <canvas id="galaxy"></canvas>
+
+  <header>
+    <h1 class="edge-text-main">Northstar OS AutoThink</h1>
+  </header>
+
+  <main>
+    <div id="output" class="output"></div>
+    <div class="composer">
+      <input id="query" placeholder="Enter your command..." autocomplete="off" />
+      <select id="provider">
+        <option value="local">Local (Ollama)</option>
+        <option value="cloud">Cloud (gpt-4o)</option>
+      </select>
+      <select id="model" title="Model">
+        <option value="">default</option>
+      </select>
+      <button class="run" id="runBtn">Run</button>
+    </div>
+  </main>
+
+  <div id="quickWidget" class="quick-widget" title="Quick">
+    <div class="edge-text">QUICK</div>
+    <div id="quickExpandBtn" class="quick-expand" title="Expand">&#x2922;</div>
+  </div>
+
+  <div id="quickOverlay" class="quick-overlay">
+    <div class="qfHeader">
+      <h3>Quick - Expanded</h3>
+      <span class="qfClose" id="quickClose">&times;</span>
+    </div>
+    <div class="qfBody">
+      <p>Quick utility surface. Connected to the AutoThink brain.</p>
+      <p>Drop in two ASINs or campaigns, record a voice memo, or replay today's session — wire these to the Master Brain Gateway in a later sprint.</p>
+    </div>
+    <button class="run" id="quickRun" style="align-self:flex-start">Generate</button>
+  </div>
+
+  <div id="achievementToast" class="achievement-toast">
+    <div class="achTitle">Achievement Unlocked</div>
+    <div class="achName" id="achName"></div>
+    <div class="achDesc" id="achDesc"></div>
+  </div>
+
+  <button id="soundToggle" class="sound-toggle" title="Toggle sound">&#9834;</button>
+
+<script>
+(function () {
+  "use strict";
+
+  var galaxy = document.getElementById("galaxy");
+  var ctx = galaxy.getContext("2d");
+  var W = 0, H = 0;
+  function resize() {
+    W = galaxy.width = window.innerWidth;
+    H = galaxy.height = window.innerHeight;
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var drift = reduced ? 0.08 : 0.25;
+
+  var ORB_COUNT = 80;
+  var orbs = [];
+  function makeOrb() {
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 2.2 + 1.4,
+      vx: (Math.random() - 0.5) * drift,
+      vy: (Math.random() - 0.5) * drift,
+      tx: 0, ty: 0,
+      targeted: false,
+      exploding: false
+    };
+  }
+  for (var i = 0; i < ORB_COUNT; i++) orbs.push(makeOrb());
+
+  var dotOrbs = [];
+  for (var d = 0; d < 3; d++) {
+    dotOrbs.push({ x: W / 2, y: H / 2, r: 6, phase: d * 2.1, tx: W / 2, ty: H / 2 });
+  }
+
+  var loading = false;
+  var active = false;
+
+  function buildLetterTargets() {
+    var off = document.createElement("canvas");
+    off.width = W; off.height = H;
+    var c = off.getContext("2d");
+    var fontSize = Math.min(W / 9, 130);
+    c.fillStyle = "#fff";
+    c.font = "900 " + fontSize + "px -apple-system, system-ui, sans-serif";
+    c.textAlign = "center";
+    c.textBaseline = "middle";
+    var tw = c.measureText("LOADING").width;
+    c.fillText("LOADING", W / 2, H / 2);
+    var data = c.getImageData(0, 0, W, H).data;
+    var pts = [];
+    var step = 5;
+    for (var y = 0; y < H; y += step) {
+      for (var x = 0; x < W; x += step) {
+        if (data[(y * W + x) * 4 + 3] > 128) pts.push({ x: x, y: y });
+      }
+    }
+    return { pts: pts, tw: tw };
+  }
+
+  function sampleArr(arr, n) {
+    var res = [];
+    if (arr.length === 0) { for (var z = 0; z < n; z++) res.push({ x: W / 2, y: H / 2 }); return res; }
+    if (n <= arr.length) {
+      var shuffled = arr.slice().sort(function () { return Math.random() - 0.5; });
+      for (var i = 0; i < n; i++) res.push(shuffled[i]);
+      return res;
+    }
+    for (var j = 0; j < arr.length; j++) res.push(arr[j]);
+    for (var k = arr.length; k < n; k++) res.push(arr[Math.floor(Math.random() * arr.length)]);
+    return res;
+  }
+
+  function startLoading() {
+    loading = true;
+    var t = buildLetterTargets();
+    var targets = sampleArr(t.pts, orbs.length);
+    for (var i = 0; i < orbs.length; i++) {
+      if (i < targets.length) { orbs[i].tx = targets[i].x; orbs[i].ty = targets[i].y; orbs[i].targeted = true; }
+      else { orbs[i].targeted = false; }
+    }
+    var baseX = W / 2 + t.tw / 2 + 26;
+    for (var p = 0; p < dotOrbs.length; p++) {
+      dotOrbs[p].tx = baseX + p * 26;
+      dotOrbs[p].ty = H / 2;
+    }
+  }
+
+  function stopLoading() {
+    loading = false;
+    for (var i = 0; i < orbs.length; i++) {
+      orbs[i].vx = (Math.random() - 0.5) * 7;
+      orbs[i].vy = (Math.random() - 0.5) * 7;
+      orbs[i].exploding = true;
+      orbs[i].targeted = false;
+    }
+    for (var p = 0; p < dotOrbs.length; p++) {
+      dotOrbs[p].vx = (Math.random() - 0.5) * 7;
+      dotOrbs[p].vy = (Math.random() - 0.5) * 7;
+      dotOrbs[p].exploding = true;
+    }
+    setTimeout(function () {
+      for (var k = 0; k < orbs.length; k++) {
+        orbs[k].vx = (Math.random() - 0.5) * drift;
+        orbs[k].vy = (Math.random() - 0.5) * drift;
+        orbs[k].exploding = false;
+      }
+      for (var q = 0; q < dotOrbs.length; q++) {
+        dotOrbs[q].vx = (Math.random() - 0.5) * drift;
+        dotOrbs[q].vy = (Math.random() - 0.5) * drift;
+        dotOrbs[q].exploding = false;
+      }
+    }, 900);
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < orbs.length; i++) {
+      var o = orbs[i];
+      if (loading && o.targeted) {
+        o.x += (o.tx - o.x) * 0.08;
+        o.y += (o.ty - o.y) * 0.08;
+      } else if (o.exploding) {
+        o.x += o.vx; o.y += o.vy;
+      } else {
+        o.x += o.vx; o.y += o.vy;
+        if (o.x < 0) o.x = W; if (o.x > W) o.x = 0;
+        if (o.y < 0) o.y = H; if (o.y > H) o.y = 0;
+      }
+      ctx.beginPath();
+      ctx.fillStyle = "#ffffff";
+      ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    var now = Date.now() / 300;
+    for (var p = 0; p < dotOrbs.length; p++) {
+      var dt = dotOrbs[p];
+      if (loading) {
+        dt.x += (dt.tx - dt.x) * 0.08;
+        dt.y += (dt.ty - dt.y) * 0.08;
+        var pulse = Math.sin(now + dt.phase) > 0;
+        ctx.beginPath();
+        ctx.fillStyle = pulse ? "#ffffff" : "#000000";
+        ctx.arc(dt.x, dt.y, dt.r, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (dt.exploding) {
+        dt.x += dt.vx; dt.y += dt.vy;
+      } else {
+        dt.x += dt.vx; dt.y += dt.vy;
+        if (dt.x < 0) dt.x = W; if (dt.x > W) dt.x = 0;
+        if (dt.y < 0) dt.y = H; if (dt.y > H) dt.y = 0;
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  var output = document.getElementById("output");
+  var query = document.getElementById("query");
+  var provider = document.getElementById("provider");
+  var model = document.getElementById("model");
+  var runBtn = document.getElementById("runBtn");
+
+  function populateModels(models) {
+    var list = models && models.length ? models : [];
+    model.innerHTML = '<option value="">default</option>';
+    for (var i = 0; i < list.length; i++) {
+      var opt = document.createElement("option");
+      opt.value = list[i];
+      opt.textContent = list[i];
+      model.appendChild(opt);
+    }
+  }
+
+  function refreshProviderState() {
+    var isCloud = provider.value === "cloud";
+    model.disabled = isCloud;
+    model.title = isCloud ? "Cloud provider uses its configured default model" : "Local Ollama model";
+  }
+
+  fetch("/api/autothink/models")
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      populateModels(d.models || []);
+      if (d && !d.local_available) {
+        output.textContent = "NOTE: Ollama is not reachable at localhost:11434 — local commands will return a fallback message. Start Ollama, then refresh.";
+        output.scrollTop = output.scrollHeight;
+      }
+    })
+    .catch(function () {
+      output.textContent = "AutoThink backend not reachable. Is the server running on port 8100?";
+    });
+
+  provider.addEventListener("change", function () { playBlip(); track("expand"); refreshProviderState(); });
+  refreshProviderState();
+
+  async function run() {
+    if (active) return;
+    var q = query.value.trim();
+    if (!q) return;
+    active = true;
+    var previousEmpty = !output.textContent.trim();
+    output.classList.add("loading-active");
+    query.classList.add("loading-active");
+    runBtn.classList.add("loading-active");
+    startLoading();
+    playBlip();
+    var prefix = "> " + q + "\n\n";
+    try {
+      var resp = await fetch("/api/autothink/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: q, provider: provider.value, model: model.value || null })
+      });
+      var data = await resp.json();
+      if (!resp.ok) {
+        throw new Error((data && data.detail) || ("HTTP " + resp.status));
+      }
+      var block = prefix + (data.content || "(empty response)");
+      if (!data.ok) {
+        block += "\n\n[provider: " + (data.provider || "?") + " — " + (data.reason || "error") + "]";
+      } else if (data.provider || data.task_class) {
+        block += "\n\n— " + (data.task_class || "task") + " | " + (data.provider || "?") + " | " + (data.model || "?");
+      }
+      output.textContent += (previousEmpty ? "" : "\n\n") + block;
+    } catch (err) {
+      output.textContent += (previousEmpty ? "" : "\n\n") + prefix + "[ERROR] " + err.message + "\nIs the AutoThink backend running on port 8100?";
+    }
+    output.scrollTop = output.scrollHeight;
+    stopLoading();
+    output.classList.remove("loading-active");
+    query.classList.remove("loading-active");
+    runBtn.classList.remove("loading-active");
+    active = false;
+    track("command");
+  }
+
+  runBtn.addEventListener("click", run);
+  query.addEventListener("keydown", function (e) { if (e.key === "Enter") run(); });
+
+  var quickWidget = document.getElementById("quickWidget");
+  var quickOverlay = document.getElementById("quickOverlay");
+  var quickClose = document.getElementById("quickClose");
+  var quickRun = document.getElementById("quickRun");
+  function openQuick() {
+    quickOverlay.classList.add("open");
+    playBlip();
+    track("expand");
+  }
+  function closeQuick() { quickOverlay.classList.remove("open"); playBlip(); }
+  quickWidget.addEventListener("click", openQuick);
+  quickClose.addEventListener("click", function (e) { e.stopPropagation(); closeQuick(); });
+  quickRun.addEventListener("click", function () { playBlip(); track("quick"); });
+
+  var ACHIEVEMENTS = [
+    { id: "cmd_1", name: "Action!", desc: "Ran your first command", threshold: 1, type: "command" },
+    { id: "cmd_5", name: "Assistant Director", desc: "Ran 5 commands", threshold: 5, type: "command" },
+    { id: "cmd_10", name: "Rolling Camera", desc: "Ran 10 commands", threshold: 10, type: "command" },
+    { id: "cmd_20", name: "Storyboard Artist", desc: "Ran 20 commands", threshold: 20, type: "command" },
+    { id: "cmd_30", name: "Second Unit Director", desc: "Ran 30 commands", threshold: 30, type: "command" },
+    { id: "cmd_50", name: "Set Runner", desc: "Ran 50 commands", threshold: 50, type: "command" },
+    { id: "cmd_75", name: "Scene Stealer", desc: "Ran 75 commands", threshold: 75, type: "command" },
+    { id: "cmd_100", name: "Feature Director", desc: "Ran 100 commands", threshold: 100, type: "command" },
+    { id: "cmd_150", name: "Studio Regular", desc: "Ran 150 commands", threshold: 150, type: "command" },
+    { id: "cmd_200", name: "Double Feature", desc: "Ran 200 commands - Double Kill!", threshold: 200, type: "command" },
+    { id: "cmd_250", name: "Franchise Builder", desc: "Ran 250 commands", threshold: 250, type: "command" },
+    { id: "cmd_300", name: "Triple Feature", desc: "Ran 300 commands - Triple Kill!", threshold: 300, type: "command" },
+    { id: "cmd_400", name: "Box Office Regular", desc: "Ran 400 commands", threshold: 400, type: "command" },
+    { id: "cmd_500", name: "Half-K Auteur", desc: "Ran 500 commands", threshold: 500, type: "command" },
+    { id: "cmd_750", name: "Prestige Filmmaker", desc: "Ran 750 commands", threshold: 750, type: "command" },
+    { id: "cmd_1000", name: "Legendary Director", desc: "Ran 1000 commands - Killtacular!", threshold: 1000, type: "command" },
+    { id: "streak_2", name: "Call Sheet Regular", desc: "Active 2 days in a row", threshold: 2, type: "streak" },
+    { id: "streak_3", name: "On Location", desc: "Active 3 days in a row", threshold: 3, type: "streak" },
+    { id: "streak_5", name: "Shooting Schedule Master", desc: "Active 5 days in a row", threshold: 5, type: "streak" },
+    { id: "streak_7", name: "Weekly Wrap", desc: "Active 7 days in a row", threshold: 7, type: "streak" },
+    { id: "streak_14", name: "Two-Week Shoot", desc: "Active 14 days in a row", threshold: 14, type: "streak" },
+    { id: "streak_30", name: "Full Production Cycle", desc: "Active 30 days in a row", threshold: 30, type: "streak" },
+    { id: "streak_60", name: "Award Season Veteran", desc: "Active 60 days in a row", threshold: 60, type: "streak" },
+    { id: "streak_100", name: "Century Director", desc: "Active 100 days in a row", threshold: 100, type: "streak" },
+    { id: "quick_1", name: "Quick Cut", desc: "Used Quick for the first time", threshold: 1, type: "quick" },
+    { id: "quick_10", name: "Editing Bay Regular", desc: "Used Quick 10 times", threshold: 10, type: "quick" },
+    { id: "quick_25", name: "Montage Master", desc: "Used Quick 25 times", threshold: 25, type: "quick" },
+    { id: "quick_50", name: "Final Cut Pro", desc: "Used Quick 50 times", threshold: 50, type: "quick" },
+    { id: "expand_1", name: "Wide Shot", desc: "Expanded Quick to fullscreen", threshold: 1, type: "expand" },
+    { id: "expand_5", name: "Director's View", desc: "Expanded Quick 5 times", threshold: 5, type: "expand" },
+    { id: "expand_10", name: "IMAX Mode", desc: "Expanded Quick 10 times", threshold: 10, type: "expand" },
+    { id: "voice_1", name: "ADR Session", desc: "Used voice capture for the first time", threshold: 1, type: "voice" },
+    { id: "voice_5", name: "Voice Actor", desc: "Used voice capture 5 times", threshold: 5, type: "voice" },
+    { id: "resume_1", name: "Character Study", desc: "Generated your first resume", threshold: 1, type: "resume" },
+    { id: "resume_5", name: "Method Actor", desc: "Generated 5 resumes", threshold: 5, type: "resume" },
+    { id: "first_frame", name: "First Frame", desc: "Opened the director's chair", threshold: 1, type: "command" },
+    { id: "trailer", name: "Trailer Drop", desc: "Launched a session", threshold: 1, type: "command" },
+    { id: "premiere", name: "Premiere Night", desc: "Ran your first command of the day", threshold: 1, type: "command" },
+    { id: "oscar", name: "Oscar Buzz", desc: "Reached 100 commands", threshold: 1, type: "command" },
+    { id: "standing", name: "Standing Ovation", desc: "Completed a task", threshold: 1, type: "command" },
+    { id: "curtain", name: "Curtain Call", desc: "Closed a session cleanly", threshold: 1, type: "command" },
+    { id: "blooper", name: "Blooper Reel", desc: "Triggered a retry", threshold: 1, type: "command" },
+    { id: "cameo", name: "Cameo Appearance", desc: "Used a provider switch", threshold: 1, type: "command" },
+    { id: "dailies", name: "Dailies Review", desc: "Reopened past output", threshold: 1, type: "command" },
+    { id: "wrapparty", name: "Wrap Party", desc: "Finished a long session", threshold: 1, type: "command" },
+    { id: "clapper", name: "Clapperboard", desc: "Started a scene", threshold: 1, type: "command" },
+    { id: "greenscreen", name: "Green Screen", desc: "Switched contexts", threshold: 1, type: "command" },
+    { id: "foley", name: "Foley Artist", desc: "Heard the chiptune", threshold: 1, type: "command" },
+    { id: "score", name: "Score Composer", desc: "Enabled background music", threshold: 1, type: "command" },
+    { id: "vfx", name: "VFX Supervisor", desc: "Saw the orb explosion", threshold: 1, type: "command" }
+  ];
+
+  var LS_KEY = "northstaractivity";
+  function loadAct() { try { return JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch (e) { return {}; } }
+  function saveAct(a) { try { localStorage.setItem(LS_KEY, JSON.stringify(a)); } catch (e) {} }
+  var activity = loadAct();
+  activity.commands = activity.commands || 0;
+  activity.quick = activity.quick || 0;
+  activity.expand = activity.expand || 0;
+  activity.voice = activity.voice || 0;
+  activity.resume = activity.resume || 0;
+  activity.unlocked = activity.unlocked || [];
+  activity.streak = activity.streak || { count: 0, last: null };
+
+  function ensureStreak() {
+    var today = new Date().toDateString();
+    if (activity.streak.last === today) return;
+    var yest = new Date(Date.now() - 86400000).toDateString();
+    if (activity.streak.last === yest) activity.streak.count += 1;
+    else activity.streak.count = 1;
+    activity.streak.last = today;
+  }
+
+  function valueFor(type) {
+    if (type === "streak") return activity.streak.count;
+    if (type === "quick") return activity.quick;
+    if (type === "expand") return activity.expand;
+    if (type === "voice") return activity.voice;
+    if (type === "resume") return activity.resume;
+    return activity.commands;
+  }
+
+  var toast = document.getElementById("achievementToast");
+  var achName = document.getElementById("achName");
+  var achDesc = document.getElementById("achDesc");
+  var toastTimer = null;
+  function showAchievement(a) {
+    achName.textContent = a.name;
+    achDesc.textContent = a.desc;
+    toast.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove("show"); }, 3800);
+  }
+
+  function checkAchievements() {
+    for (var i = 0; i < ACHIEVEMENTS.length; i++) {
+      var a = ACHIEVEMENTS[i];
+      if (activity.unlocked.indexOf(a.id) !== -1) continue;
+      if (valueFor(a.type) >= a.threshold) {
+        activity.unlocked.push(a.id);
+        saveAct(activity);
+        showAchievement(a);
+      }
+    }
+  }
+
+  function track(type) {
+    if (type === "command") { activity.commands++; ensureStreak(); }
+    else if (type === "quick") activity.quick++;
+    else if (type === "expand") activity.expand++;
+    else if (type === "voice") activity.voice++;
+    else if (type === "resume") activity.resume++;
+    saveAct(activity);
+    checkAchievements();
+  }
+
+  var soundOn = true;
+  var audioCtx = null, masterGain = null, musicTimer = null;
+  var melody = [262, 330, 392, 523, 392, 330, 294, 392, 262, 330, 392, 523, 587, 523, 392, 330];
+  var melodyIdx = 0;
+
+  function initAudio() {
+    if (audioCtx) return;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    audioCtx = new AC();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.06;
+    masterGain.connect(audioCtx.destination);
+  }
+  function playNote(freq, dur) {
+    if (!audioCtx || !soundOn) return;
+    var o = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    o.type = "square";
+    o.frequency.value = freq;
+    var t = audioCtx.currentTime;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.08, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(masterGain);
+    o.start(t); o.stop(t + dur + 0.02);
+  }
+  function playBlip() {
+    if (!audioCtx || !soundOn) return;
+    var o = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    o.type = "square";
+    var t = audioCtx.currentTime;
+    o.frequency.setValueAtTime(680, t);
+    o.frequency.exponentialRampToValueAtTime(200, t + 0.12);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.07, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.14);
+    o.connect(g); g.connect(masterGain);
+    o.start(t); o.stop(t + 0.16);
+  }
+  function startMusic() {
+    if (!audioCtx || musicTimer) return;
+    musicTimer = setInterval(function () {
+      playNote(melody[melodyIdx % melody.length], 0.18);
+      melodyIdx++;
+    }, 220);
+  }
+  function stopMusic() { if (musicTimer) { clearInterval(musicTimer); musicTimer = null; } }
+
+  function firstGesture() {
+    initAudio();
+    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+    if (soundOn) startMusic();
+    document.removeEventListener("click", firstGesture);
+    document.removeEventListener("keydown", firstGesture);
+  }
+  document.addEventListener("click", firstGesture);
+  document.addEventListener("keydown", firstGesture);
+
+  var soundToggle = document.getElementById("soundToggle");
+  soundToggle.addEventListener("click", function (e) {
+    e.stopPropagation();
+    soundOn = !soundOn;
+    soundToggle.textContent = soundOn ? "♪" : "✕";
+    if (soundOn) { initAudio(); if (audioCtx && audioCtx.state === "suspended") audioCtx.resume(); startMusic(); }
+    else stopMusic();
+  });
+})();
+</script>
+</body>
+</html>
