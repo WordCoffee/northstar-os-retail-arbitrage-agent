@@ -1,14 +1,14 @@
 ASIN,Product,Rank,Reviews,PriceUSD,BSR,PrimeOrFBA,Sources,DormancyFlags,RevivalCandidate,ReviveSignals,CostcoID,CostcoName,MatchScore,CostcoCostRef,LiveStatus,Category,RivalIDs
 B01J13V6I6,33-Gal Black Trash Bags (90ct),,631,39.99,,No,ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,,,,,not-fetched,c_needs_name_lookup,
 B01LY71217,13-Gal Trash Bags (200ct),13,4319,35.99,Not listed on page,No,Rank+ProxyRank,BSR-not-listed; non-Prime/FBA,True,2,1300658,"Kirkland Signature Scented Kitchen Drawstring Trash Bags, Flex-Tech, White, Fresh Scent, 13 Gallon, 200 ct",0.67,24.41,LIVE-CONFIRMED,a_live_confirmed_match,1300658; 1089787
-B077962JKD,"PB Pretzel (2pk, 52oz)",,191,34.99,,No,ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,1050557,"Kirkland Signature Peanut Butter Filled Pretzel Nuggets, 55 oz",0.5,12.64,not-fetched,catalog_resolved_not_fetched,1050557
+B077962JKD,"PB Pretzel (2pk, 52oz)",,191,34.99,,No,ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,1050557,"Kirkland Signature Peanut Butter Filled Pretzel Nuggets, 55 oz",0.5,12.64,UNVERIFIED,matched_unresolved,1050557
 B078XMPVYP,Organic Blue Agave (36oz),,889,9.88,,No,ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,1147377,"Kirkland Signature Organic Blue Agave, 36 oz, 2 ct",1.0,11.87,LIVE-CONFIRMED,a_live_confirmed_match,1147377
 B07H3TXVR7,"Minoxidil (6-mo, orig packaging)",,246,32.49,,No,ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,,,,,not-fetched,c_needs_name_lookup,
-B081THWMDK,Stretch Tite Food Wrap (2pk),9,967,28.79,Not listed on page,Yes,Rank+ProxyRank,BSR-not-listed; low-reviews(<1000),True,2,208733,"Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",0.5,22.87,not-fetched,catalog_resolved_not_fetched,208733
+B081THWMDK,Stretch Tite Food Wrap (2pk),9,967,28.79,Not listed on page,Yes,Rank+ProxyRank,BSR-not-listed; low-reviews(<1000),True,2,208733,"Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",0.5,22.87,EMPTY,matched_unresolved,208733
 B085F1QCB9,Compactor Trash Bag,10,588,28.07,"#11,435 in Health & Household; #163 in Trash Bagsamazon","No (Amazon-shipped, non-Prime badge)",Rank+ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,,,,,not-fetched,c_needs_name_lookup,
 B08TQRC3F6,Nitrile Gloves (200ct),,695,21.95,,No,ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,2030640,"Kirkland Signature Nitrile Exam Gloves, Small, 400 ct",1.0,27.27,LIVE-CONFIRMED,a_live_confirmed_match,2030640; 2030644; 2030643; 2030645
 B08WN9V1LC,Organic Hemp Hearts,,858,19.99,,No,ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,,,,,not-fetched,c_needs_name_lookup,
-B08XPSSJ5S,Praline Pecans (2-pack),,111,45.49,,No,ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,203444,"Kirkland Signature Pecan Halves, Baking Nuts, 2 lbs",0.5,,not-fetched,catalog_resolved_not_fetched,203444
+B08XPSSJ5S,Praline Pecans (2-pack),,111,45.49,,No,ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,203444,"Kirkland Signature Pecan Halves, Baking Nuts, 2 lbs",0.5,,UNVERIFIED,matched_unresolved,203444
 B09D4RCKS4,Minoxidil (1-mo),,377,11.09,,No,ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,,"Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",1.0,19.79,not-fetched,c_needs_name_lookup,
 B0BMX67KY7,Fragrance-Free Baby Wipes (900ct),,183,36.89,,No,ProxyRank,low-reviews(<1000); non-Prime/FBA,True,2,1493488,"Kirkland Signature Baby Wipes Fragrance Free, 900-count",1.0,21.99,EMPTY,matched_unresolved,1493488
 B0C54GXFQ8,Performance Plus Golf Balls (24ct),18,679,43.99,Not listed on page,Yes,Rank+ProxyRank,BSR-not-listed; low-reviews(<1000),True,2,,,,,not-fetched,c_needs_name_lookup,
@@ -19,24 +19,23 @@ B003FGTTUI,"Signature Extra Virgin Olive Oil Toscano (from Tuscany), 1 Liter",,2
 B004885T38,USDA Organic,,525,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B00596SDLS,Signature Chopped Onions 332g,,248,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B005D1K7CW,Maximum Strength Vitamin D3 600 Softgels (Pack of 2),,403,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B005ECO8VG,"Signature Coarse Black Pepper, 12.7 oz.",,234,,,,Discovery,low-reviews(<1000),True,1,164998,"Kirkland Signature Coarse Ground Malabar Black Pepper, 12.7 oz",1.0,,not-fetched,catalog_resolved_not_fetched,164998; 164981
-B007MWNFBA,Stretch Tite Wrap (single),16,4665,19.99,Not listed on page,Yes,Rank+ProxyRank,BSR-not-listed,True,1,208733,"Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",0.25,22.87,not-fetched,catalog_resolved_not_fetched,208733
+B005ECO8VG,"Signature Coarse Black Pepper, 12.7 oz.",,234,,,,Discovery,low-reviews(<1000),True,1,164998,"Kirkland Signature Coarse Ground Malabar Black Pepper, 12.7 oz",1.0,,DEAD,matched_dead_item,164998; 164981
+B007MWNFBA,Stretch Tite Wrap (single),16,4665,19.99,Not listed on page,Yes,Rank+ProxyRank,BSR-not-listed,True,1,208733,"Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",0.25,22.87,EMPTY,matched_unresolved,208733
 B008M2VYOE,"Signature Quit Smoking Nicotine Gum, 4 mg (380 Pieces)",,693,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B00BCXRFHK,"Pacific Bold K-Cups, 100 Count",,587,,,,Discovery,low-reviews(<1000),True,1,,"Kirkland Signature Coffee Organic Pacific Bold K-Cup Pod, 120-count",1.0,37.39,not-fetched,c_needs_name_lookup,
-B00BPFX2I6,Signature 100% Colombian Dark Roast Decaffeinated Ground Coffee - 1.36kg,,336,,,,Discovery,low-reviews(<1000),True,1,25484,"Kirkland Signature Colombian Ground Coffee, Dark Roast, 1.75 oz, 42 ct",0.83,40.91,not-fetched,catalog_resolved_not_fetched,25484; 46242
-B00BTKX3YU,"Signature Men's 4 Boxer Briefs (X-Large, Black)",,211,,,,Discovery,low-reviews(<1000),True,1,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.5,20.89,not-fetched,c_needs_name_lookup,
+B00BPFX2I6,Signature 100% Colombian Dark Roast Decaffeinated Ground Coffee - 1.36kg,,336,,,,Discovery,low-reviews(<1000),True,1,25484,"Kirkland Signature Colombian Ground Coffee, Dark Roast, 1.75 oz, 42 ct",0.83,40.91,UNVERIFIED,matched_unresolved,25484; 46242
 B00D8LTKLS,"Signature Omega-3 Fish Oil Concentrate, 400 Softgels | 1000 mg Fish Oil, 30% Omega-3s (300 mg)",,232,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B00E570WAC,Boiled 198gx8 cans KIRKLAND Signature of Kirkland Signature tuna,,3,,,,Discovery,low-reviews(<1000),True,1,1492456,"Kirkland Signature Albacore Solid White Tuna in Water, 7 oz, 8 ct",0.5,22.21,EMPTY,matched_unresolved,1492456
 B00EA1PFEG,Signature 100% Wild Alaskan Salmon Oil 90 EPA 110 DHA 1200mg - 320 Enteric Coated Softgels,,711,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B00F4MD808,Chewable Calcium Gummies (120ct),,2810,14.95,,No,ProxyRank,non-Prime/FBA,True,1,,,,,not-fetched,c_needs_name_lookup,
-B00GNC3ZAQ,"Signature Crystal Clear Disposable Cutlery, 360 Pieces (Pack of 2)",,24,,,,Discovery,low-reviews(<1000),True,1,12648,"Kirkland Signature Crystal Clear Cutlery Assortment, Clear, 360 ct",0.6,18.91,not-fetched,catalog_resolved_not_fetched,12648
-B00JW1OHWK,Pure Vanilla Extract (16oz),,1065,16.99,,No,ProxyRank,non-Prime/FBA,True,1,32911,"Kirkland Signature Pure Vanilla Extract, 16 fl oz",1.0,,not-fetched,catalog_resolved_not_fetched,32911
-B00JZVWE0O,H.K Anderson PB Pretzel Nuggets (52oz),,1905,16.74,,No,ProxyRank,non-Prime/FBA,True,1,1050557,"Kirkland Signature Peanut Butter Filled Pretzel Nuggets, 55 oz",0.33,12.64,not-fetched,catalog_resolved_not_fetched,1050557
+B00GNC3ZAQ,"Signature Crystal Clear Disposable Cutlery, 360 Pieces (Pack of 2)",,24,,,,Discovery,low-reviews(<1000),True,1,12648,"Kirkland Signature Crystal Clear Cutlery Assortment, Clear, 360 ct",0.6,18.91,UNVERIFIED,matched_unresolved,12648
+B00JW1OHWK,Pure Vanilla Extract (16oz),,1065,16.99,,No,ProxyRank,non-Prime/FBA,True,1,32911,"Kirkland Signature Pure Vanilla Extract, 16 fl oz",1.0,,UNVERIFIED,matched_unresolved,32911
+B00JZVWE0O,H.K Anderson PB Pretzel Nuggets (52oz),,1905,16.74,,No,ProxyRank,non-Prime/FBA,True,1,1050557,"Kirkland Signature Peanut Butter Filled Pretzel Nuggets, 55 oz",0.33,12.64,UNVERIFIED,matched_unresolved,1050557
 B00LWE9144,"Signature B-12 5000 mcg, 300 Tablets (2 Pack)",,706,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B00MZ7XHBK,Breakfast Blend Coffee Pods 25 Count for Keurig Brewer Caffeinated Coffee,,666,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B00NB7NHFY,"Vitamin C with Rose Hips and Citrus Bioflavonoid Complex (1000 mg), 1000-Count ((1000mg Tablets))",,29,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B00O2P44EC,"Signature Quit Lozenges 2mg., 270 Pieces",,888,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B00OPQZJA6,Walnuts (48oz),17,3544,20.99,"#8,127 in Grocery & Gourmet Foodamazon",No,Rank+ProxyRank,non-Prime/FBA,True,1,36285,"Kirkland Signature Walnuts, Baking Nuts, 3 lbs",1.0,15.94,not-fetched,catalog_resolved_not_fetched,36285
+B00OPQZJA6,Walnuts (48oz),17,3544,20.99,"#8,127 in Grocery & Gourmet Foodamazon",No,Rank+ProxyRank,non-Prime/FBA,True,1,36285,"Kirkland Signature Walnuts, Baking Nuts, 3 lbs",1.0,15.94,UNVERIFIED,matched_unresolved,36285
 B00OTJB6XI,"Signature Quick Dissolve B-12 5000 mcg., 300 Tablets (2 Pack)",,108,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B00QGMOJ4Y,Purified Drinking Water (40ct),12,2358,23.99,"#11,009 in Grocery & Gourmet Food; #58 in Still Wateramazon",No,Rank+ProxyRank,non-Prime/FBA,True,1,782796,"Kirkland Signature Purified Drinking Water, 16.9 fl oz, 40 ct",1.0,8.57,DEAD,matched_dead_item,782796; 931484; 906078
 B00SWZUC8U,Baby Wipes Unscented (9-pack),,5451,32.4,,No,ProxyRank,non-Prime/FBA,True,1,1493488,"Kirkland Signature Baby Wipes Fragrance Free, 900-count",0.67,21.99,EMPTY,matched_unresolved,1493488
@@ -49,7 +48,7 @@ B01G2LY6EQ,"Signature Aller-Fex - 180mg , 150 Tablet Kirkland-um",,120,,,,Discov
 B01GZ7HQI0,USDA Organic,,265,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B01H40O42I,Aller-Flo Fluticasone (Pack of 5),1,11114,26.74,Not listed on page,Yes,Rank+ProxyRank,BSR-not-listed,True,1,,,,,not-fetched,c_needs_name_lookup,
 B01H5XHCTQ,"Signature Breakfast Blend K-cup, 120 Count",,221,,,,Discovery,low-reviews(<1000),True,1,,"Kirkland Signature Coffee Organic Pacific Bold K-Cup Pod, 120-count",0.5,37.39,not-fetched,c_needs_name_lookup,
-B01JKSYFNK,"Signature Glucosamine & Chondroitin, 220 Tablets (2 Pack)",,209,,,,Discovery,low-reviews(<1000),True,1,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",1.0,22.32,not-fetched,catalog_resolved_not_fetched,1665191
+B01JKSYFNK,"Signature Glucosamine & Chondroitin, 220 Tablets (2 Pack)",,209,,,,Discovery,low-reviews(<1000),True,1,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",1.0,22.32,UNVERIFIED,matched_unresolved,1665191
 B01LBAFCDM,"wcaqZ, COQ10 300 mg 100 Softgels (Pack of 2)",,603,,,,Discovery,low-reviews(<1000),True,1,648220,"Kirkland Signature CoQ10 Supplement, 300 mg, 100 ct",0.5,24.85,LIVE-CONFIRMED,a_live_confirmed_match,648220; 98268; 1665191
 B01M7QUOBB,Dental Chews (72ct),,4087,36.99,,No,ProxyRank,non-Prime/FBA,True,1,971832,"Kirkland Signature Dental Chews, 72 ct",1.0,33.65,LIVE-CONFIRMED,a_live_confirmed_match,971832
 B01N9SOK2Y,Signature Natural Body Wash 27 Fl Oz (Pack of 1),,648,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
@@ -64,15 +63,13 @@ B0721V2T2X,Signature Mature Adult Multi Vitamin Tablets - 400 Count (2 Pack),,26
 B07235JRDM,"Signature AllerClear, 365 Tablets (2 Pack)",,276,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B072FSTWC9,"Signature Vitamin D3 1000 IU, 360 Tablets",,279,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0734BGSKY,House Decaf Coffee (120 K-Cups),,584,52.99,,Yes,ProxyRank,low-reviews(<1000),True,1,,"Kirkland Signature Coffee Organic Pacific Bold K-Cup Pod, 120-count",0.6,37.39,not-fetched,c_needs_name_lookup,
-B074SWYPWH,"Signature, Colombian ncZFD Coffee Supremo Bean 3 Pounds (Pack of 4)",,600,,,,Discovery,low-reviews(<1000),True,1,120296,"Kirkland Signature Colombian Supremo Whole Bean Coffee, Medium Roast, 3 lbs",0.67,24.85,not-fetched,catalog_resolved_not_fetched,120296
+B074SWYPWH,"Signature, Colombian ncZFD Coffee Supremo Bean 3 Pounds (Pack of 4)",,600,,,,Discovery,low-reviews(<1000),True,1,120296,"Kirkland Signature Colombian Supremo Whole Bean Coffee, Medium Roast, 3 lbs",0.67,24.85,UNVERIFIED,matched_unresolved,120296
 B075DKFDNB,"Signature Steak Strips Extra Thick Cut zBKgEf, 24 oz Total",,44,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B075XP6PGK,"Signature Premium Big Roll Paper Towels, 24 Rolls, 160 Sheets Each, 3840 Sheets Total, Thick and Strong, C-Fold, Wipe Surface",,107,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B076CRVCTH,Kirkland Albacore Solid White Tuna in Water - Pack of 4 Cans (Each can 190g / 7oz),,389,,,,Discovery,low-reviews(<1000),True,1,1492456,"Kirkland Signature Albacore Solid White Tuna in Water, 7 oz, 8 ct",0.86,22.21,EMPTY,matched_unresolved,1492456
-B076ZFG1ZH,"Signature 100% Colombian Coffee, 9 LB",,17,,,,Discovery,low-reviews(<1000),True,1,25484,"Kirkland Signature Colombian Ground Coffee, Dark Roast, 1.75 oz, 42 ct",1.0,40.91,not-fetched,catalog_resolved_not_fetched,25484; 120296
-B077GS636P,Glucosamine w/ MSM (375ct),,247,20.49,,Yes,ProxyRank,low-reviews(<1000),True,1,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",0.33,22.32,not-fetched,catalog_resolved_not_fetched,1665191
+B076ZFG1ZH,"Signature 100% Colombian Coffee, 9 LB",,17,,,,Discovery,low-reviews(<1000),True,1,25484,"Kirkland Signature Colombian Ground Coffee, Dark Roast, 1.75 oz, 42 ct",1.0,40.91,UNVERIFIED,matched_unresolved,25484; 120296
+B077GS636P,Glucosamine w/ MSM (375ct),,247,20.49,,Yes,ProxyRank,low-reviews(<1000),True,1,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",0.33,22.32,UNVERIFIED,matched_unresolved,1665191
 B077MHYZLB,"Signature dCPnFB Fancy Mixed Nuts, 40 Ounce (2 Pack)",,293,,,,Discovery,low-reviews(<1000),True,1,1645578,"Kirkland Signature Extra Fancy Mixed Nuts, Salted, 40 oz",0.5,19.79,LIVE-CONFIRMED,a_live_confirmed_match,1645578; 1652577
-B077NNTH62,"Signature Men's Athletic Sock, 8 Count",,346,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B077SN37K5,"Kirkland Signature Men’s Athletic Sock 8-pair, White (White, 13+)",,459,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0781TX2R6,"Signature gcPnev Milk Chocolate, Raisins, 54 Ounce (3 Pack)",,92,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0786RVL9D,"Signature DnRbYi Nitrile Exam Multi-Purpose Medium Gloves Latex-Free, 400 Count, (467120)",,671,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07886L38V,"SIGNATURE Trail Mix Snack Pack, 3.52 Lb",,622,,,,Discovery,low-reviews(<1000),True,1,1473917,"Kirkland Signature Trail Mix Snack Packs, 2 oz, 28 ct",1.0,22.1,LIVE-CONFIRMED,a_live_confirmed_match,1473917; 1474436; 1732802
@@ -85,38 +82,33 @@ B078J5FSYJ,"Signature Sliced Peaches, 24oz Glass Jar (Pack of 2, Total of 48 Oz)
 B0792C4QLL,Signature Premium Dishwasher Detergent Pacs: Lemon Citrus Scent - 2 Count (230 Pacs) + Bonus Gift,,115,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0797ZFMY3,USDA Organic,,97,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B079BF8SW9,Signature Chocolate Roasted Almonds & Chocolate Raisin Bundle - Includes Kirkland Signature Milk Chocolate Roasted Almonds (3.0 LB) & Milk Chocolate Raisin (3.4 LB),,459,,,,Discovery,low-reviews(<1000),True,1,1685616,"Kirkland Signature Milk Chocolate Covered Almonds, 48 oz",0.5,23.97,LIVE-CONFIRMED,a_live_confirmed_match,1685616
-B079BKWK6L,Signature Pecan and Walnuts Bundle - Includes Kirkland Signature Pecan Halves (2.0 LB) and Walnuts (3 LB),,826,,,,Discovery,low-reviews(<1000),True,1,36285,"Kirkland Signature Walnuts, Baking Nuts, 3 lbs",0.25,15.94,not-fetched,catalog_resolved_not_fetched,36285
+B079BKWK6L,Signature Pecan and Walnuts Bundle - Includes Kirkland Signature Pecan Halves (2.0 LB) and Walnuts (3 LB),,826,,,,Discovery,low-reviews(<1000),True,1,36285,"Kirkland Signature Walnuts, Baking Nuts, 3 lbs",0.25,15.94,UNVERIFIED,matched_unresolved,36285
 B079QDJP3J,"Signature Protein Bars Chocolate Chip Cookie Dough, 20-count 2.12OZ",,740,,,,Discovery,low-reviews(<1000),True,1,1014809,"Kirkland Signature Protein Bar, Variety Pack, 21g Protein, 2.12 oz, 20 ct",0.33,29.47,TRANSPORT-ERROR,matched_failed_fetch,1014809
 B079ZYB4CK,Signature Made in USA 10 Gallon Clear Wastebasket Liner Bags for Trash Can 500 Count (2 Pack),,188,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07BT3CVHW,"Flushable Wipe- Kirkland Signature Moist Flushable Wipes, 180 Wipes (Pack of 3)",,458,,,,Discovery,low-reviews(<1000),True,1,1652990,"Kirkland Signature Moist Flushable Wipes, Unscented, 640 ct",1.0,19.79,EMPTY,matched_unresolved,1652990
 B07C4YLGFH,"Signature Protein Bars Chocolate Brownie 2.12 oz, 20-count",,402,,,,Discovery,low-reviews(<1000),True,1,1014809,"Kirkland Signature Protein Bar, Variety Pack, 21g Protein, 2.12 oz, 20 ct",0.5,29.47,TRANSPORT-ERROR,matched_failed_fetch,1014809
-B07C73SLH1,Signature Glucosamine HCI (Pack of 2) Extra Strength with MSM (375 Count X 2),,923,,,,Discovery,low-reviews(<1000),True,1,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",0.25,22.32,not-fetched,catalog_resolved_not_fetched,1665191
+B07C73SLH1,Signature Glucosamine HCI (Pack of 2) Extra Strength with MSM (375 Count X 2),,923,,,,Discovery,low-reviews(<1000),True,1,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",0.25,22.32,UNVERIFIED,matched_unresolved,1665191
 B07CGFSQR6,"Signature Fish Oil 1000 mg, 400 Softgels (2 Pack)",,441,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07CHRV2PR,Signature Ultra High Pile Premium Microfiber Towels,,324,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B07CV65X35,"Signature 4 Stretch Cotton Boxer Briefs Comfort Fit, Black/Gray, Large",,32,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07CV95R82,"Signature AllerClear, 365 Tablets (2 Pack)",,572,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B07G6XV55T,"Plastic Food Wrap (2pk, 12""x3000)",,330,61.99,,Yes,ProxyRank,low-reviews(<1000),True,1,208733,"Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",1.0,22.87,not-fetched,catalog_resolved_not_fetched,208733
+B07G6XV55T,"Plastic Food Wrap (2pk, 12""x3000)",,330,61.99,,Yes,ProxyRank,low-reviews(<1000),True,1,208733,"Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",1.0,22.87,EMPTY,matched_unresolved,208733
 B07GDWR1BX,USDA Organic,,442,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07HM87SNH,Signature Shampoo & Conditioner Bundle - One Professional Salon Formula Moisture Shampoo + Two Conditioners (33.8 Fl. Oz Each),,24,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07KFTSSY5,Ito En Matcha Blend Japanese Green Tea-200 ct 1.5g tea bags,,277,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07Q2HHLVN,Mixed Nut Butter,,2469,16.99,,No,ProxyRank,non-Prime/FBA,True,1,,,,,not-fetched,c_needs_name_lookup,
-B07R9NNDFB,"Signature Men's Crew Neck T-Shirts 100% Cotton (Pack of 6) (White,Large)",,292,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07T17TKGJ,USDA Organic,,616,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07V71MHQT,Signature Mediterranean Sea Salt Grinder with Refill,,449,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07V7X7TF5,"Bulk Pack Protein Bars (Kirkland Signature, Chocolate Chip Cookie Dough, 20-Pack)",,214,,,,Discovery,low-reviews(<1000),True,1,1014809,"Kirkland Signature Protein Bar, Variety Pack, 21g Protein, 2.12 oz, 20 ct",0.29,29.47,TRANSPORT-ERROR,matched_failed_fetch,1014809
 B07VBB1NZG,"Signature Organic Medium Blend Roast, Recyclable K Cup Pods, 3 lb, 120 Count",,866,,,,Discovery,low-reviews(<1000),True,1,,"Kirkland Signature Coffee Organic Pacific Bold K-Cup Pod, 120-count",0.43,37.39,not-fetched,c_needs_name_lookup,
 B07W19KKGQ,"SIGNATURE Signature Cold Brew Colombian Coffee, 11 Fl Oz (Pack of 12)",,807,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07WRTCTBB,Physical Gift Card - $50,,903,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B07WX6JWJ7,"Signature Men's Crew Neck T-Shirts 100% Cotton (Pack of 6) (White, Small)",,143,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B07XLZXQRP,"Signature Bath Tissue, 2-Ply, 425 sheets, 30 rolls",,663,,,,Discovery,low-reviews(<1000),True,1,,"Kirkland Signature Bath Tissue, 2-Ply, 380 Sheets, 30 Rolls",1.0,27.49,not-fetched,c_needs_name_lookup,
 B081TP43B2,"Signature 680 Thread Count Sheet Set (Queen, White)",,116,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B082HD5KL6,USDA Organic,,121,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0849K24NC,"Signature Men's Boxer Brief, 4-Pack - Black-Gray Large",,242,,,,Discovery,low-reviews(<1000),True,1,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.5,20.89,not-fetched,c_needs_name_lookup,
-B084KVXWCS,Signature Nature's Domain Puppy Formula Chicken & Pea Dog Food 20 lb.,,283,,,,Discovery,low-reviews(<1000),True,1,1936927,"Kirkland Signature Nature's Domain Dog Food, Salmon & Sweet Potato, 25 lbs",0.56,35.96,not-fetched,catalog_resolved_not_fetched,1936927; 1936934
+B084KVXWCS,Signature Nature's Domain Puppy Formula Chicken & Pea Dog Food 20 lb.,,283,,,,Discovery,low-reviews(<1000),True,1,1936927,"Kirkland Signature Nature's Domain Dog Food, Salmon & Sweet Potato, 25 lbs",0.56,35.96,EMPTY,matched_unresolved,1936927; 1936934
 B0876DGYN1,"Signature Bar Soap with Shea Butter, 4.5 Ounce (15 Count)",,255,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B088TBSXHJ,Signature Water Filter Cartridge Pack of 10,,98,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B089KWPFK7,"Signature Protein bar Energy Variety Pack, (Family Bundle)",,53,,,,Discovery,low-reviews(<1000),True,1,1014809,"Kirkland Signature Protein Bar, Variety Pack, 21g Protein, 2.12 oz, 20 ct",0.5,29.47,TRANSPORT-ERROR,matched_failed_fetch,1014809
-B089XK85BB,"Signature Men's Boxer Brief, 4-Pack Gray Medium",,57,,,,Discovery,low-reviews(<1000),True,1,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.6,20.89,not-fetched,c_needs_name_lookup,
 B08B5GZXHN,USDA Organic,,505,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B08K63J3YR,"Signature Quit 2 Nicotine Polacrilex Lozenges, Cherry Flavor, 270 Count",,262,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B08NRCPTN4,"Signature Men Multivitamin, 365 Tablets",,33,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
@@ -129,72 +121,37 @@ B09KMH36RF,mens Modern,,783,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetch
 B09T34C8P7,"Kirkland Signature Vacuum Sealing Bags, Assortment Pack (8122017)",,82,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B09TM8L9L5,"Signature Liquid Body Wash, Natural Citrus, 27 fl oz, 2-count",,218,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0B983X1CR,"Signature Keto Snack Mix, 24 Ounce",,209,,,,Discovery,low-reviews(<1000),True,1,1473917,"Kirkland Signature Trail Mix Snack Packs, 2 oz, 28 ct",0.5,22.1,LIVE-CONFIRMED,a_live_confirmed_match,1473917; 1732802
-B0BMK2SYLL,"Kirkland Signature Glucosamine & Chondroitin, 280 Tablets",,306,,,,Discovery,low-reviews(<1000),True,1,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",1.0,22.32,not-fetched,catalog_resolved_not_fetched,1665191
+B0BMK2SYLL,"Kirkland Signature Glucosamine & Chondroitin, 280 Tablets",,306,,,,Discovery,low-reviews(<1000),True,1,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",1.0,22.32,UNVERIFIED,matched_unresolved,1665191
 B0C54FYHQ2,"Signature Golf Balls 3-Piece Urethane Cover, 12 Golf Balls",,198,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0C6B3RSB8,Signature Black Label Premier Cashews (38 Ounce),,106,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0C8LQ1HDF,Signature Three-Piece Golf Ball Urethane Cover Performance Plus,,276,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0CB71V975,"Signature S'more Caramel Cluster, 26.3 Ounce",,531,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0CDJCPQZ7,"Signature Canned Cat Food, Chunks in Gravy, Variety, 3 Ounce (40 Count)",,52,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0CG2QBDYP,"Signature Women Extra-Fine Merino Wool Blend Crew Sock, 4-pair",,183,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0CX9DJWCT,Signature Men's Boxer Brief Pima Cotton 4 Pack,,20,,,,Discovery,low-reviews(<1000),True,1,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.6,20.89,not-fetched,c_needs_name_lookup,
 B0CXB5MJ42,Bundle Compatible with Kirkland Signature Flex-Tech 13 Gallon Kitchen Garbage Bags with Drawstring Closure - 200 Count Pack of Tall Trash Bags for Kitchen with Keychain,,99,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0CY7VHJTG,"Signature Ultra Shine Plant Based Dish Soap, 90 Fluid Ounce",,33,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0CYDQJXP8,"Signature Men's Boxer Brief Pima Cotton 4 Pack, Black, 3X-Large",,19,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0D2DQFWVZ,"Bundle, Compatible with Kirkland Premium Paper Towels, Strong, Thick, and Absorbent Bulk Paper Towels 6 Rolls, 160 Sheets Per Roll 2-Ply and Multi-Purpose Key Chain, White",,75,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0D2JDMCZX,"Kirkland Men's Crew Neck White T-Shirts Pack of 6, Black, Medium",,9,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0D3J5XZGL,"Bundle, Compatible with Kirkland Pure Creamy Smooth Almond Butter, Made from Roasted Almond, 2 pack of Kirkland Almond Butter and Multi-Purpose Key Chain",,39,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0D3J7YF8W,Physical Gift Card - $100,,903,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0D5BZB2K3,"Kirkland Signature Professional Salon Formula Moisture Conditioner 33.8fl oz 1 litter. Bundle 1 PCS cup, Assorted",,6,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0D91KYL2J,"Signature 3-Piece Golf Balls, Version 2.0, Yellow, 24-Pack | URETHANE COVER — Tour-level urethane construction delivers exceptional greenside spin and precise short game control.",,78,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0D9TMNL59,Signature Womens Hiking Pants - Travel Pants Women,,47,,,,Discovery,low-reviews(<1000),True,1,,Kirkland Signature Women's Travel Pant,0.75,19.79,not-fetched,c_needs_name_lookup,
-B0DG48FJ3J,"Signature Ladies' Extra-Fine Merino Wool Crew Socks, Blue, 4 Pairs",,331,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0DG4C2KFW,"Signature Ladies' Extra-Fine Merino Wool Crew Socks, Multi-Color, 4 Pairs",,379,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0DJL1HJ39,USDA Organic,,99,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0DK9QXVXF,"Signature Men's Athletic Full Cushion Sock With Arch Support, 8 Count (US, Alpha, Large, Regular, Regular, White)",,56,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0DK9R5B2K,"Signature Men's Athletic Full Cushion Sock With Arch Support, 8 Count (US, Alpha, X-Large, Regular, Regular, White)",,22,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0DMH7CHST,"Signature Turmeric with Black Pepper, 1000mg (320 Count)",,181,,,,Discovery,low-reviews(<1000),True,1,164981,"Kirkland Signature Fine Ground Black Pepper, 12.3 oz",0.67,,not-fetched,catalog_resolved_not_fetched,164981; 164998
-B0DMPL4YWP,"Signature Men's Athletic Full Cushion Sock With Arch Support, 8 Count (US, Alpha, X-Large, Regular, Regular, Black)",,14,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0DMPPC936,"Signature Men's Athletic Full Cushion Sock With Arch Support, 8 Count (US, Alpha, Large, Regular, Regular, Black)",,57,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0DPY44TGM,Praline Pecans Bundle (2.5lb),,422,32.99,,Yes,ProxyRank,low-reviews(<1000),True,1,203444,"Kirkland Signature Pecan Halves, Baking Nuts, 2 lbs",0.5,,not-fetched,catalog_resolved_not_fetched,203444
-B0DPY5W5P7,"Kirkland Signature Super Extra-Large Peanuts, 2.5 lbs.Item 222490. Bundle Sillicone Collapsible Cup 200 mL - 2 items.",,157,,,,Discovery,low-reviews(<1000),True,1,1050557,"Kirkland Signature Peanut Butter Filled Pretzel Nuggets, 55 oz",0.14,12.64,not-fetched,catalog_resolved_not_fetched,1050557
-B0DTX3GB18,"Kirkland Signature Pecan Halves, Baking Nuts, 2 lbs Item 203444. Bundle with MORALZA Silicone Collapsible Cup 200ml - 2 Items.",,223,,,,Discovery,low-reviews(<1000),True,1,203444,"Kirkland Signature Pecan Halves, Baking Nuts, 2 lbs",0.29,,not-fetched,catalog_resolved_not_fetched,203444
-B0DXCHPK49,Signature Women's Moisture Wicking Lightweight Jogger Pant with Pockets,,33,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
+B0DMH7CHST,"Signature Turmeric with Black Pepper, 1000mg (320 Count)",,181,,,,Discovery,low-reviews(<1000),True,1,164981,"Kirkland Signature Fine Ground Black Pepper, 12.3 oz",0.67,,UNVERIFIED,matched_unresolved,164981; 164998
+B0DPY44TGM,Praline Pecans Bundle (2.5lb),,422,32.99,,Yes,ProxyRank,low-reviews(<1000),True,1,203444,"Kirkland Signature Pecan Halves, Baking Nuts, 2 lbs",0.5,,UNVERIFIED,matched_unresolved,203444
+B0DPY5W5P7,"Kirkland Signature Super Extra-Large Peanuts, 2.5 lbs.Item 222490. Bundle Sillicone Collapsible Cup 200 mL - 2 items.",,157,,,,Discovery,low-reviews(<1000),True,1,1050557,"Kirkland Signature Peanut Butter Filled Pretzel Nuggets, 55 oz",0.14,12.64,UNVERIFIED,matched_unresolved,1050557
+B0DTX3GB18,"Kirkland Signature Pecan Halves, Baking Nuts, 2 lbs Item 203444. Bundle with MORALZA Silicone Collapsible Cup 200ml - 2 Items.",,223,,,,Discovery,low-reviews(<1000),True,1,203444,"Kirkland Signature Pecan Halves, Baking Nuts, 2 lbs",0.29,,UNVERIFIED,matched_unresolved,203444
 B0DY566TJ7,"Kirkland Signature Cashew Clusters, 2 lbs Item 440493 Bundle with MORALZA Silicone Collapsible Cup 200ml - 2 Items",,79,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0DY6LD83H,Signature Women's 4-Way Stretch Ankle Pants,,11,,,,Discovery,low-reviews(<1000),True,1,,Kirkland Signature Women's Travel Pant,0.5,19.79,not-fetched,c_needs_name_lookup,
 B0F45WF91C,"Signature Minoxidil Topical Solution USP 5%, Extra Strength Hair Regrowth Treatment for Men, 6 Months Supply, Total 12 Fl Oz",,19,,,,Discovery,low-reviews(<1000),True,1,,"Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",0.67,19.79,not-fetched,c_needs_name_lookup,
 B0F6PZ194C,"Signature Polarized Sunglasses with Anti-reflective Lenses, 100% UV Protection",,12,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0F7G1SDHD,Signature Women's Totally Shaping Comfort Stretch High-Rise Super Skinny Jeans,,12,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0F88TL5CC,Signature Men's Classic 5 Pocket Stretch Jeans,,23,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0FB3X2GZT,Signature Women's Travel Pant - Utility Pocket - Elastic Waistband,,86,,,,Discovery,low-reviews(<1000),True,1,,Kirkland Signature Women's Travel Pant,0.5,19.79,not-fetched,c_needs_name_lookup,
 B0FGLKYHZF,Signature Men's Moisture Wicking Lounge Short,,12,,,,Discovery,low-reviews(<1000),True,1,,Kirkland Signature Men's Lounge Short,0.6,13.19,not-fetched,c_needs_name_lookup,
 B0FJ2XH3X9,"Signature Chicken Jerky Dog Treat, 48 Ounce | Premium USA-Made Jerky with Real Chicken #1, No Wheat/Corn/Soy/Glycerin, No Artificial Additives - Easy-Tear 3lb Resealable",,33,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0FP1KGHLD,Signature Men's Comfort Stretch Straight Fit Classic 5 Pocket Denim Jean,,24,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0FP4BK6CM,"Signature European Cookies with Belgian Chocolate, Holiday Gift Tin, Assorted Varieties, 49.4 oz",,35,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0FPFMT1MS,"Minoxidil for Men Liquid, Extra Strength Hair Regrowth Treatment 5%, 6 Months Supply - Upgraded Dropper Applicator and Bonus Free Guide Included",,132,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0FXTFW29W,"Signature Women's Extra-Fine Merino Wool, 4 Pairs, Fits Shoe Sizes 6-10.5, Assorted Colors",,15,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0FY3V7SZN,"Signature Men's Crew Neck Lightweight Tagless Tee Shirt - 6-Pack (US, Alpha, Medium, Regular, Regular, White)",,9,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GCKKFBVF,"Signature Men's Midweight Active Hoodie – Moisture-Wicking, 4-Way Stretch",,2,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0GD2N6VTD,"Chewy Protein Bars, Peanut Butter & Semisweet Chocolate Chip – Quality Kirkland – Gluten Free, 10g Protein, 1.41 oz, 42 Count",,11,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GD8CH5BX,"Signature Men's Moisture Wicking Active Jogger Pant, Tapered Leg Opening with Zippers",,6,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GDT4FKYM,Signature Women's Stretch Brushed Mini Flare Yoga Pant with Pockets,,10,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GDZHNC81,Signature Men's Stretch Comfort Tapered Fit Brushed 5 Pocket Pant,,7,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GDZJBMZ6,Signature Men's Stretch Comfort Tapered Fit Brushed 5 Pocket Pant,,7,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GDZSPGQJ,Signature Men's Stretch Comfort Tapered Fit Brushed 5 Pocket Pant,,7,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0GFX39SWD,"Kirkland Signature Extra Large Absorbent Pads, 76cm x 58cm - 100 Pack",,10,,,,Discovery,low-reviews(<1000),True,1,1792990,"Kirkland Signature Absorbent Pads, Extra-Large, 100 ct",0.75,22.76,LIVE-CONFIRMED,a_live_confirmed_match,1792990
-B0GJ72ZLNN,Signature Women's 3/4 Sleeve V- Neck Cotton Slub Tee,,4,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GJ746DTS,Signature Women's 3/4 Sleeve V- Neck Cotton Slub Tee,,4,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GJN13XY7,Signature Women's Quick Dry Stretch Pull On Ankle Pant,,23,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GJN1V423,Signature Women's Quick Dry Stretch Pull On Ankle Pant,,23,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GJN7B98M,Signature Women's Quick Dry Stretch Pull On Ankle Pant,,23,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GR6TDV4H,Signature Men's Short Sleeve Pima Cotton Tee Shirt,,12,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GR75Z4QP,Signature Men's Short Sleeve Pima Cotton Tee Shirt,,12,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0GSBTGG64,USDA Organic,,36,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GVVJXVX6,Signature Women's Short Sleeve Scoop Neck Pima Cotton T-Shirt,,1,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0GVVWYDMK,Signature Women's Short Sleeve Scoop Neck Pima Cotton T-Shirt,,1,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
-B0H1YM3YTK,Signature Women's Travel Pant,,21,,,,Discovery,low-reviews(<1000),True,1,,Kirkland Signature Women's Travel Pant,1.0,19.79,not-fetched,c_needs_name_lookup,
-B0H1Z2D2Y1,Signature Women's Travel Pant,,21,,,,Discovery,low-reviews(<1000),True,1,,Kirkland Signature Women's Travel Pant,1.0,19.79,not-fetched,c_needs_name_lookup,
-B0H1Z32VYW,Signature Women's Travel Pant,,21,,,,Discovery,low-reviews(<1000),True,1,,Kirkland Signature Women's Travel Pant,1.0,19.79,not-fetched,c_needs_name_lookup,
-B0H1ZDDKDW,Signature Women's Travel Pant,,21,,,,Discovery,low-reviews(<1000),True,1,,Kirkland Signature Women's Travel Pant,1.0,19.79,not-fetched,c_needs_name_lookup,
 B0H2788M9Z,"Golf Balls 24-Pack Urethane 3-Piece Tour Performance V3.0 | USGA conforming, 338 dimple design, high energy core, 85-105 mph swing speeds, consistent flight, two dozen pack",,4,,,,Discovery,low-reviews(<1000),True,1,,,,,not-fetched,c_needs_name_lookup,
 B0007L6NLC,"Signature Vitamin C 1000 mg., 500 Tablets",,1018,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B000UIEIBY,Signature Nighttime Sleep Aid 25mg - 96 Tablets,,1385,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
@@ -202,55 +159,98 @@ B001UB5YB8,Signature Drawstring Trash Bags - 33 Gallon - Xl Size - (90 count),,1
 B002L4M4M0,Sleep Aid Doxylamine (96ct),8,6270,7.93,"#14,653 in Health & Household; #24 in OTC Sleep Aidsamazon",Yes,Rank+ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B0036DEALS,Signature Aller-tec 10mg Tablets - 365 ct,,3804,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B0045XGE9E,Sleep Aid Doxylamine (2pk/192ct),7,4966,13.84,"#7,570 in Health & Household; #13 in OTC Sleep Aidsamazon",Yes,Rank+ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
-B0048LR5P0,Signature Food Wrap Premium,,1088,,,,Discovery,,False,0,208733,"Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",1.0,22.87,not-fetched,catalog_resolved_not_fetched,208733
+B0048LR5P0,Signature Food Wrap Premium,,1088,,,,Discovery,,False,0,208733,"Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",1.0,22.87,EMPTY,matched_unresolved,208733
 B005C4ZVQW,"Signature Nighttime Sleep Aid (Doxylamine Succinate 25 Mg), 96 Tablets (Pack of 4)",,1548,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
-B005O33LJA,Kirkland Signature Men's Crew Neck T-Shirts 100% Cotton (Pack of 6),,4400,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
-B005P2OZ68,Signature Men's Crew Neck T-Shirts 100% Cotton (Pack of 6),,4400,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
+B005O33LJA,Kirkland Signature Men's Crew Neck T-Shirts 100% Cotton (Pack of 6),,4400,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B005P2OZ68,Signature Men's Crew Neck T-Shirts 100% Cotton (Pack of 6),,4400,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
 B006VRNEFO,"Signature Daily Multi, 500 Tablets",,1769,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B0077SXI7A,Fiber Capsules (2-pack),,2706,30.85,,Yes,ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B00BH3HPZW,Fiber Capsules (360ct),5,4799,17.84,"#6,602 in Health & Household; #32 in Dietary Fiber Nutritional Supplementsamazon",Yes,Rank+ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B00BI33NU2,Ultra Strength Antacid (265ct),20,3121,13.65,"#17,252 in Health & Household; #116 in Antacidsamazon",Yes,Rank+ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B00BISGJXA,Stool Softener 100mg (400ct),4,18629,12.75,"#4,960 in Health & Householdamazon",Yes,Rank+ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
+B00BTKX3YU,"Signature Men's 4 Boxer Briefs (X-Large, Black)",,211,,,,Discovery,genuine_no_costco_source,False,0,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.5,20.89,not-fetched,c_needs_name_lookup,
 B00C1RGR1Q,"Vitamin C (500 mg), 500-Count, Tangy Orange, Chewable Tablets",,5392,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B00DQXOSV0,Ultra Plush Microfiber Towels (12pk),,1628,18.63,,Yes,ProxyRank,,False,0,133839,"Kirkland Signature Microfiber Towels, Blue, 36 ct",0.67,21.11,TRANSPORT-ERROR,matched_failed_fetch,133839; 713160
 B00EXPSLK4,"Signature Fast Acting Lactase, (2 Pack), 360 Ct Caplets",,1619,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
-B00EXPTGHG,Diphenhydramine HCI 25 Mg - Kirkland Brand - Allergy Medicine and AntihistamineCompare to Active Ingredient of Benadryl® Allergy Generic - 600 Count Personal Healthcare / Health Care,,8034,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
-B00GYZWNY6,Glucosamine 1500/Chondroitin 1200 (220ct),6,5183,29.25,"#6,562 in Health & Household; #8 in Chondroitin Supplementsamazon",Yes,Rank+ProxyRank,,False,0,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",1.0,22.32,not-fetched,catalog_resolved_not_fetched,1665191
+B00EXPTGHG,Diphenhydramine HCI 25 Mg - Kirkland Brand - Allergy Medicine and AntihistamineCompare to Active Ingredient of Benadryl® Allergy Generic - 600 Count Personal Healthcare / Health Care,,8034,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B00GYZWNY6,Glucosamine 1500/Chondroitin 1200 (220ct),6,5183,29.25,"#6,562 in Health & Household; #8 in Chondroitin Supplementsamazon",Yes,Rank+ProxyRank,,False,0,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",1.0,22.32,UNVERIFIED,matched_unresolved,1665191
 B00N54AJZE,"Stool Softener 100mg (400ct, alt listing)",11,1665,12.69,"#19,009 in Health & Household; #96 in Laxativesamazon",Yes,Rank+ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B00NPQZ20O,"Signature Adult 50+ Multi Vitamins & Minerals, 400 Tablets (2 Pack)",,5658,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B00O2P7CGY,"Signature Quit Lozenges 4mg, 270 Pieces",,1400,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
-B00RNFPU5U,Signature Men's Boxer Brief Pima Cotton 4 Pack,,2316,,,,Discovery,,False,0,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.6,20.89,not-fetched,c_needs_name_lookup,
+B00RNFPU5U,Signature Men's Boxer Brief Pima Cotton 4 Pack,,2316,,,,Discovery,genuine_no_costco_source,False,0,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.6,20.89,not-fetched,c_needs_name_lookup,
 B00T4WXPRU,Men Hair Loss Regrowth Revitalizes Hair Follicles 5% Minoxidil Topical Solution 3 Months Supply Size 3 X 2 Fl. Oz (60 Ml) Original,,2358,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B00UP99X1I,Vitamin E 400IU (500 softgels),,1286,20.85,,Yes,ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B00YGMN122,"Signature Adults 50+ Mature Multi, 400 Tablets 1",,2932,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B01AIVTJMA,Hearing Aid Batteries (48pk),,3289,16.13,,Yes,ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
-B01CZ637O2,"Signature Glucosamine with MSM, 375 Tablets",,2988,,,,Discovery,,False,0,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",0.5,22.32,not-fetched,catalog_resolved_not_fetched,1665191
+B01CZ637O2,"Signature Glucosamine with MSM, 375 Tablets",,2988,,,,Discovery,,False,0,1665191,"Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",0.5,22.32,UNVERIFIED,matched_unresolved,1665191
 B01GRGIC9G,3 MONTHS Kirkland Extra Strength Minoxidil Topical Solution USP 5% Hair Regrowth,,1394,,,,Discovery,,False,0,,"Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",0.83,19.79,not-fetched,c_needs_name_lookup,
 B01JUD2SNO,Stool Softener (800ct/2-bottle),,1662,21.39,,Yes,ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B01M0PDFA9,"SIGNATURE One Per Day Super B-Complex with Electrolytes,Tablet, 1000 Count (Pack of 2)",,1478,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B071HGCTC1,"Triple Action Joint Health Type II Collagen, Boron and HA - 110 Count",,1254,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B077KT98GB,Signature Dental Chews (3),,4088,,,,Discovery,,False,0,971832,"Kirkland Signature Dental Chews, 72 ct",1.0,33.65,LIVE-CONFIRMED,a_live_confirmed_match,971832
 B077KX1JBV,Signature Dental Chews (4),,4088,,,,Discovery,,False,0,971832,"Kirkland Signature Dental Chews, 72 ct",1.0,33.65,LIVE-CONFIRMED,a_live_confirmed_match,971832
+B077NNTH62,"Signature Men's Athletic Sock, 8 Count",,346,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
 B077QX9WKZ,Signature Dental Chews (2),,4088,,,,Discovery,,False,0,971832,"Kirkland Signature Dental Chews, 72 ct",1.0,33.65,LIVE-CONFIRMED,a_live_confirmed_match,971832
-B0784S6ZCJ,"Signature Men’s Athletic Sock 8-pair, White (White, 8-12) | Athletic Sock 8p",,1120,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
+B077SN37K5,"Kirkland Signature Men’s Athletic Sock 8-pair, White (White, 13+)",,459,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0784S6ZCJ,"Signature Men’s Athletic Sock 8-pair, White (White, 8-12) | Athletic Sock 8p",,1120,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
 B078GWNQ7L,Minoxidil 5% Topical Solution Extra Strength Hair Regrowth Treatment for Men Dropper Applicator Included (1 month to 24 month supplies available) (1 month supply),,1942,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B078S1PCZW,"Signature Moist Flushable Wipes, 632 Wipes",,3803,,,,Discovery,,False,0,1652990,"Kirkland Signature Moist Flushable Wipes, Unscented, 640 ct",1.0,19.79,EMPTY,matched_unresolved,1652990
 B079H6NR6P,Signature Super Premium Maintenance Cat Food,,1942,,,,Discovery,,False,0,52296,"Kirkland Signature Cat Food, Chicken and Rice Formula, 25 lbs",0.5,29.69,LIVE-CONFIRMED,a_live_confirmed_match,52296
 B07BQGW1M2,"Signature Bath Tissue, 2-Ply, 425, 2 Pack (30 count)",,1187,,,,Discovery,,False,0,,"Kirkland Signature Bath Tissue, 2-Ply, 380 Sheets, 30 Rolls",1.0,27.49,not-fetched,c_needs_name_lookup,
 B07BZW88NY,"Sleep Aid (192ct, alt)",14,6515,14.25,"#15,119 in Health & Household; #25 in OTC Sleep Aidsamazon",Yes,Rank+ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
+B07CV65X35,"Signature 4 Stretch Cotton Boxer Briefs Comfort Fit, Black/Gray, Large",,32,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
 B07D1VXS3T,"Signature Kirkland signature moist flushable wipes 632 wipes, 632 count, White",,3803,,,,Discovery,,False,0,1652990,"Kirkland Signature Moist Flushable Wipes, Unscented, 640 ct",0.75,19.79,EMPTY,matched_unresolved,1652990
-B07K6187NB,Signature Men's Crew Neck Tee 100% Combed Heavyweight Cotton T-Shirts (Pack of 6),,2095,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
+B07K6187NB,Signature Men's Crew Neck Tee 100% Combed Heavyweight Cotton T-Shirts (Pack of 6),,2095,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
 B07N798Y1J,"Signature Calcium Citrate Magnesium and Zinc, 500 Tablets",,3752,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B07NK887R7,"Minoxidil Foam for Men 5% Extra Strength, Hair Regrowth Treatment, Topical Hair Loss Treatment, Unscented, 3 Month Supply (3 Cans)",,,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
-B07NNNJCS4,Kirkland Signature Men's Crew Neck Tee 100% Combed Heavyweight Cotton T-Shirts (Pack of 6),,2095,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
+B07NNNJCS4,Kirkland Signature Men's Crew Neck Tee 100% Combed Heavyweight Cotton T-Shirts (Pack of 6),,2095,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
 B07PJTG9QF,"Signature QNKDQK Extra Fancy Unsalted Mixed Nuts 2.5 (LB), 2 Pack of 40 Ounce, 99451458768",,1022,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
+B07R9NNDFB,"Signature Men's Crew Neck T-Shirts 100% Cotton (Pack of 6) (White,Large)",,292,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
 B07SRK81GT,"Signature Acid Controller 20mg, 250 Count Tablets",,6432,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
+B07WX6JWJ7,"Signature Men's Crew Neck T-Shirts 100% Cotton (Pack of 6) (White, Small)",,143,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
 B07Z6QRQML,"LIMITED EDITITON Kirkland Signature with Belgian Chocolate, 49.4 Ounce",,3448,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
-B08D72CS37,Signature Men's Boxer Brief Pima Cotton 4 Pack,,2316,,,,Discovery,,False,0,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.6,20.89,not-fetched,c_needs_name_lookup,
+B0849K24NC,"Signature Men's Boxer Brief, 4-Pack - Black-Gray Large",,242,,,,Discovery,genuine_no_costco_source,False,0,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.5,20.89,not-fetched,c_needs_name_lookup,
+B089XK85BB,"Signature Men's Boxer Brief, 4-Pack Gray Medium",,57,,,,Discovery,genuine_no_costco_source,False,0,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.6,20.89,not-fetched,c_needs_name_lookup,
+B08D72CS37,Signature Men's Boxer Brief Pima Cotton 4 Pack,,2316,,,,Discovery,genuine_no_costco_source,False,0,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.6,20.89,not-fetched,c_needs_name_lookup,
 B08FPMQYCW,Signature Diapers Size 1 (Up to 14 Pounds) 192 Count W/Exclusive Health and Outdoors Wipes,,1447,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B08R2SRN88,Aller-Flo Fluticasone (5 Bottles/600 sprays),2,11898,26.8,"#3,567 in Health & Householdamazon",Yes,Rank+ProxyRank,,False,0,,,,,not-fetched,c_needs_name_lookup,
+B0CG2QBDYP,"Signature Women Extra-Fine Merino Wool Blend Crew Sock, 4-pair",,183,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
 B0CP6LXPLK,Minoxidil Extra Strength (6-mo),3,1434,33.12,"#2,300 in Beauty & Personal Care; #15 in Hair Regrowth Treatmentsamazon",Yes,Rank+ProxyRank,,False,0,,"Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",1.0,19.79,not-fetched,c_needs_name_lookup,
-B0GVVQD4W2,Signature Women's Pull-On Lightweight Crop Pant with Pockets,,,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
+B0CX9DJWCT,Signature Men's Boxer Brief Pima Cotton 4 Pack,,20,,,,Discovery,genuine_no_costco_source,False,0,,"Kirkland Signature Men's Boxer Brief, 4-pack",0.6,20.89,not-fetched,c_needs_name_lookup,
+B0CYDQJXP8,"Signature Men's Boxer Brief Pima Cotton 4 Pack, Black, 3X-Large",,19,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0D2JDMCZX,"Kirkland Men's Crew Neck White T-Shirts Pack of 6, Black, Medium",,9,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0D9TMNL59,Signature Womens Hiking Pants - Travel Pants Women,,47,,,,Discovery,genuine_no_costco_source,False,0,,Kirkland Signature Women's Travel Pant,0.75,19.79,not-fetched,c_needs_name_lookup,
+B0DG48FJ3J,"Signature Ladies' Extra-Fine Merino Wool Crew Socks, Blue, 4 Pairs",,331,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0DG4C2KFW,"Signature Ladies' Extra-Fine Merino Wool Crew Socks, Multi-Color, 4 Pairs",,379,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0DK9QXVXF,"Signature Men's Athletic Full Cushion Sock With Arch Support, 8 Count (US, Alpha, Large, Regular, Regular, White)",,56,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0DK9R5B2K,"Signature Men's Athletic Full Cushion Sock With Arch Support, 8 Count (US, Alpha, X-Large, Regular, Regular, White)",,22,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0DMPL4YWP,"Signature Men's Athletic Full Cushion Sock With Arch Support, 8 Count (US, Alpha, X-Large, Regular, Regular, Black)",,14,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0DMPPC936,"Signature Men's Athletic Full Cushion Sock With Arch Support, 8 Count (US, Alpha, Large, Regular, Regular, Black)",,57,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0DXCHPK49,Signature Women's Moisture Wicking Lightweight Jogger Pant with Pockets,,33,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0FB3X2GZT,Signature Women's Travel Pant - Utility Pocket - Elastic Waistband,,86,,,,Discovery,genuine_no_costco_source,False,0,,Kirkland Signature Women's Travel Pant,0.5,19.79,not-fetched,c_needs_name_lookup,
+B0FP1KGHLD,Signature Men's Comfort Stretch Straight Fit Classic 5 Pocket Denim Jean,,24,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0FXTFW29W,"Signature Women's Extra-Fine Merino Wool, 4 Pairs, Fits Shoe Sizes 6-10.5, Assorted Colors",,15,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0FY3V7SZN,"Signature Men's Crew Neck Lightweight Tagless Tee Shirt - 6-Pack (US, Alpha, Medium, Regular, Regular, White)",,9,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GCKKFBVF,"Signature Men's Midweight Active Hoodie – Moisture-Wicking, 4-Way Stretch",,2,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GD8CH5BX,"Signature Men's Moisture Wicking Active Jogger Pant, Tapered Leg Opening with Zippers",,6,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GDT4FKYM,Signature Women's Stretch Brushed Mini Flare Yoga Pant with Pockets,,10,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GDZHNC81,Signature Men's Stretch Comfort Tapered Fit Brushed 5 Pocket Pant,,7,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GDZJBMZ6,Signature Men's Stretch Comfort Tapered Fit Brushed 5 Pocket Pant,,7,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GDZSPGQJ,Signature Men's Stretch Comfort Tapered Fit Brushed 5 Pocket Pant,,7,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GJ72ZLNN,Signature Women's 3/4 Sleeve V- Neck Cotton Slub Tee,,4,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GJ746DTS,Signature Women's 3/4 Sleeve V- Neck Cotton Slub Tee,,4,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GJN13XY7,Signature Women's Quick Dry Stretch Pull On Ankle Pant,,23,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GJN1V423,Signature Women's Quick Dry Stretch Pull On Ankle Pant,,23,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GJN7B98M,Signature Women's Quick Dry Stretch Pull On Ankle Pant,,23,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GR6TDV4H,Signature Men's Short Sleeve Pima Cotton Tee Shirt,,12,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GR75Z4QP,Signature Men's Short Sleeve Pima Cotton Tee Shirt,,12,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GVVJXVX6,Signature Women's Short Sleeve Scoop Neck Pima Cotton T-Shirt,,1,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GVVQD4W2,Signature Women's Pull-On Lightweight Crop Pant with Pockets,,,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0GVVWYDMK,Signature Women's Short Sleeve Scoop Neck Pima Cotton T-Shirt,,1,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,
+B0H1YM3YTK,Signature Women's Travel Pant,,21,,,,Discovery,genuine_no_costco_source,False,0,,Kirkland Signature Women's Travel Pant,1.0,19.79,not-fetched,c_needs_name_lookup,
+B0H1Z2D2Y1,Signature Women's Travel Pant,,21,,,,Discovery,genuine_no_costco_source,False,0,,Kirkland Signature Women's Travel Pant,1.0,19.79,not-fetched,c_needs_name_lookup,
+B0H1Z32VYW,Signature Women's Travel Pant,,21,,,,Discovery,genuine_no_costco_source,False,0,,Kirkland Signature Women's Travel Pant,1.0,19.79,not-fetched,c_needs_name_lookup,
+B0H1ZDDKDW,Signature Women's Travel Pant,,21,,,,Discovery,genuine_no_costco_source,False,0,,Kirkland Signature Women's Travel Pant,1.0,19.79,not-fetched,c_needs_name_lookup,
 B0H8H1XC3S,"(6 Pack) Minoxidil for Men Hair Regrowth Treatment, Liquid Extra Strength 5% Topical Solution, 6 Months Supply - Dropper Applicator and Microneedle Roller Included - Minoxidil Kirkland",,,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
 B0HB1GT3CK,"Signature Golf Ball v3.0, 3-Piece Urethane Cover, 24 Count | Neon Yellow, 2 Boxes of 12, Urethane Cover, Performance Design, v3.0 Technology",,,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
-B0HHGCBTKQ,"Signature Men's Merino Wool Blend Socks, 4 Pairs, Size 7-13",,,,,,Discovery,,False,0,,,,,not-fetched,c_needs_name_lookup,
+B0HHGCBTKQ,"Signature Men's Merino Wool Blend Socks, 4 Pairs, Size 7-13",,,,,,Discovery,genuine_no_costco_source,False,0,,,,,not-fetched,genuine_no_costco_source,

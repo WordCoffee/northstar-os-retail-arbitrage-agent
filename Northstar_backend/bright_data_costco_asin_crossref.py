@@ -128,6 +128,44 @@ for rec in merged.values():
     rec["revive_signals"] = len(flags)
 
 # ---------------------------------------------------------------------------
+# Apparel reclassification (operator-approved): ASINs whose titles indicate
+# clothing/apparel AND whose brand field != "Kirkland Signature" are
+# reclassified as "genuine_no_costco_source" (genuine Kirkland products
+# with no Costco catalog equivalent), and removed from revival-candidate
+# ranking since low reviews reflect size/color fragmentation, not weakness.
+# ---------------------------------------------------------------------------
+APPAREL_KEYS = [
+    r"\bshirt\b", r"\btee\b", r"\bt-?shirt\b", r"\bpant\b", r"\bjean\b",
+    r"\blegging\b", r"\bjogger\b", r"\bsock\b", r"\bboxer\b", r"\bbrief\b",
+    r"\bunderwear\b", r"\bhoodie\b", r"\bsweatshirt\b", r"\bsweater\b",
+    r"\bjacket\b", r"\bvest\b", r"\bcoat\b", r"\bbikini\b", r"\bswim\b",
+    r"\bshorts\b", r"\bcrew\s*neck\b", r"\bv-?neck\b", r"\bpima\b",
+    r"\bmerino\b", r"\bwool\b", r"\bflannel\b", r"\bthermal\b",
+    r"\bbase\s*layer\b", r"\btight\b", r"\byoga\b", r"\bactive\b",
+    r"\bathletic\b", r"\bsports\b", r"\bgolf\s+glove\b", r"\bcap\b",
+    r"\bhat\b", r"\bbeanie\b", r"\bscarf\b", r"\bmitten\b", r"\bglove\b",
+    r"\bsleeve\b", r"\btank\b", r"\bcamisole\b", r"\bbra\b",
+    r"\blingerie\b", r"\bpajama\b", r"\bsleepwear\b", r"\brobe\b",
+    r"\bslipper\b", r"\bshoe\b", r"\bsneaker\b", r"\bboot\b",
+    r"\bsandal\b", r"\bloafer\b", r"\bclog\b", r"\bhiking\b",
+    r"\bwomens?\s+pant\b", r"\bwomens?\s+legging\b", r"\bmens?\s+pant\b",
+    r"\bmens?\s+shirt\b", r"\bmens?\s+tee\b",
+]
+_APPAREL_RX = [re.compile(k, re.I) for k in APPAREL_KEYS]
+
+def _is_apparel(title: str) -> bool:
+    t = (title or "").lower()
+    return any(rx.search(t) for rx in _APPAREL_RX)
+
+for rec in merged.values():
+    brand = rec.get("brand") or ""
+    if rec.get("sources") == ["Discovery"] and _is_apparel(rec["product_proxy"]) and brand != "Kirkland Signature":
+        rec["_apparel_reclass"] = True
+        rec["revival_candidate"] = False
+        rec["revive_signals"] = 0
+        rec["dormancy_flags"] = ["genuine_no_costco_source"]
+
+# ---------------------------------------------------------------------------
 # 2. Costco catalog corpus (+ unresolved lane)
 # ---------------------------------------------------------------------------
 def norm(s):
@@ -327,7 +365,11 @@ for rec in merged.values():
     best, rivals = match_asin(rec)
     if best is None:
         rec["match"] = None
-        rec["category"] = "c_needs_name_lookup"
+        # Apparel reclass: genuine Kirkland products with no Costco source
+        if rec.get("_apparel_reclass"):
+            rec["category"] = "genuine_no_costco_source"
+        else:
+            rec["category"] = "c_needs_name_lookup"
         rec["rivals"] = []
     else:
         item = best["item"]
