@@ -1,0 +1,1 @@
+"""AutoThink audit package — append-only execution records."""
