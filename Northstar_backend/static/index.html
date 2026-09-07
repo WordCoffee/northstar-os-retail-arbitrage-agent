@@ -4798,6 +4798,25 @@
                                 <label class="f-check"><input type="checkbox" id="fIncludeUnknownSales" checked> Include unknown sales</label>
                             </div>
                             <div class="f-field">
+                                <label for="fCategory">Amazon category</label>
+                                <select class="f-control" id="fCategory">
+                                    <option value="all" selected>All categories</option>
+                                    <option value="Health & Household">Health & Household</option>
+                                    <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+                                    <option value="Home & Kitchen">Home & Kitchen</option>
+                                    <option value="Home Improvement">Home Improvement</option>
+                                    <option value="Automotive">Automotive</option>
+                                    <option value="Baby Products">Baby Products</option>
+                                    <option value="Pet Supplies">Pet Supplies</option>
+                                    <option value="Sports & Outdoors">Sports & Outdoors</option>
+                                    <option value="Office Products">Office Products</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Tools & Home Improvement">Tools & Home Improvement</option>
+                                    <option value="Toys & Games">Toys & Games</option>
+                                    <option value="Books">Books</option>
+                                </select>
+                            </div>
+                            <div class="f-field">
                                 <label for="fMaxFba">Maximum FBA sellers</label>
                                 <input type="number" class="f-control" id="fMaxFba" min="0" step="1" inputmode="numeric" placeholder="Unlimited">
                                 <label class="f-check"><input type="checkbox" id="fIncludeUnknownFba" checked> Include unknown FBA seller count</label>
@@ -6616,11 +6635,20 @@
                 riskFlag: 'all',
                 portCat: 'all',
                 portReadiness: 'all',
+                category: 'all',
                 minEstUnits: null,
                 minEstRev: null,
                 minEstPool: null,
             };
         }
+
+        // Category list for filter (matches API categories)
+        var CATEGORIES = [
+            'all', 'Health & Household', 'Beauty & Personal Care', 'Home & Kitchen',
+            'Home Improvement', 'Automotive', 'Baby Products', 'Pet Supplies',
+            'Sports & Outdoors', 'Office Products', 'Electronics', 'Tools & Home Improvement',
+            'Toys & Games', 'Books'
+        ];
 
         NS.defaultFilters = defaultFilters;
         NS.resetFilters = resetFilters;
@@ -6857,6 +6885,7 @@
             if (filters.costBasis !== 'all') count++;
             if (filters.econ !== 'all') count++;
             if (filters.readiness !== 'all') count++;
+            if (filters.category !== 'all') count++;
             return count;
         }
         NS.filterCount = filterCount;
@@ -6886,6 +6915,7 @@
             out.riskFlag = ['all', 'any', 'none'].indexOf(raw.riskFlag) !== -1 ? raw.riskFlag : d.riskFlag;
             out.portCat = ['all', 'core_replenishable', 'test_buy_candidate', 'watchlist', 'research_queue', 'avoid_mismatch'].indexOf(raw.portCat) !== -1 ? raw.portCat : d.portCat;
             out.portReadiness = ['all', 'complete_opportunity', 'economics_ready', 'needs_seller_data', 'needs_offer_snapshot', 'needs_bsr_category', 'needs_price_or_cost', 'needs_fee_verification', 'needs_identity_verification', 'needs_costco_mapping', 'stale_market_data', 'blocked_mismatch', 'insufficient_data'].indexOf(raw.portReadiness) !== -1 ? raw.portReadiness : d.portReadiness;
+            out.category = CATEGORIES.indexOf(raw.category) !== -1 ? raw.category : d.category;
             out.minEstUnits = (raw.minEstUnits === null || raw.minEstUnits === undefined) ? null : (isNum(raw.minEstUnits) ? raw.minEstUnits : null);
             out.minEstRev = (raw.minEstRev === null || raw.minEstRev === undefined) ? null : (isNum(raw.minEstRev) ? raw.minEstRev : null);
             out.minEstPool = (raw.minEstPool === null || raw.minEstPool === undefined) ? null : (isNum(raw.minEstPool) ? raw.minEstPool : null);
@@ -6950,6 +6980,10 @@
                 }
                 if (filters.readiness !== 'all') {
                     if ((p.opportunity_readiness || 'insufficient_data') !== filters.readiness) return false;
+                }
+                if (filters.category !== 'all') {
+                    var cat = p.normalized_category || p.category;
+                    if (!cat || cat !== filters.category) return false;
                 }
                 if (filters.hasBsr !== 'all') {
                     var hasBsr = isNum(p.bsr) || isNum(p.sales_rank);
@@ -9040,6 +9074,7 @@
             var rf = el('fRiskFlag'); if (rf) rf.value = f.riskFlag;
             var pc = el('fPortCat'); if (pc) pc.value = f.portCat;
             var pr = el('fPortReadiness'); if (pr) pr.value = f.portReadiness;
+            var cat = el('fCategory'); if (cat) cat.value = f.category;
             var mu = el('fMinEstUnits'); if (mu) mu.value = isNum(f.minEstUnits) ? f.minEstUnits : '';
             var mr = el('fMinEstRev'); if (mr) mr.value = isNum(f.minEstRev) ? f.minEstRev : '';
             var mp = el('fMinEstPool'); if (mp) mp.value = isNum(f.minEstPool) ? f.minEstPool : '';
@@ -9076,6 +9111,7 @@
             var rf = el('fRiskFlag'); if (rf) f.riskFlag = rf.value;
             var pc = el('fPortCat'); if (pc) f.portCat = pc.value;
             var pr = el('fPortReadiness'); if (pr) f.portReadiness = pr.value;
+            var cat = el('fCategory'); if (cat) f.category = cat.value;
             var mu = el('fMinEstUnits'); if (mu) f.minEstUnits = num(mu, null);
             var mr = el('fMinEstRev'); if (mr) f.minEstRev = num(mr, null);
             var mp = el('fMinEstPool'); if (mp) f.minEstPool = num(mp, null);
@@ -10262,6 +10298,43 @@
             }
         }
 
+        /* ---------- category loading from discovery API ---------- */
+        function loadCategoriesFromAPI() {
+            var select = el('fCategory');
+            if (!select) return;
+            
+            // First populate with static categories as fallback
+            if (select.options.length <= 1) {
+                CATEGORIES.forEach(function (cat) {
+                    var opt = document.createElement('option');
+                    opt.value = cat;
+                    opt.textContent = cat === 'all' ? 'All categories' : cat;
+                    select.appendChild(opt);
+                });
+            }
+            
+            // Try to load from discovery API
+            fetch('/api/kirkland/discovery/categories')
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.categories && data.categories.length) {
+                        // Clear existing options except "All categories"
+                        while (select.options.length > 1) {
+                            select.remove(1);
+                        }
+                        data.categories.forEach(function (c) {
+                            var opt = document.createElement('option');
+                            opt.value = c.name;
+                            opt.textContent = c.name + ' (' + c.count + ')';
+                            select.appendChild(opt);
+                        });
+                    }
+                })
+                .catch(function () {
+                    // Silently fall back to static categories
+                });
+        }
+        
         /* ---------- init ---------- */
         function init() {
             currentFilters = loadFilters();
@@ -10273,6 +10346,7 @@
             initColResize();
             NS.applyColWidths(loadColWidths());
             applyColVisibility();
+            loadCategoriesFromAPI();
             openView('scout');
             loadScanner();
             /* --- Product Stream + Inspection Sheet wiring --- */
