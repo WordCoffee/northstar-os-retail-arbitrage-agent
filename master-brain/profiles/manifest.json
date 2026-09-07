@@ -1,0 +1,23 @@
+{
+  "$schema": "profiles-manifest-v1",
+  "description": "Canonical index of Northstar OS subscriber profiles. The brain loads ONLY the active subscriber's profile, resolved by master_brain_profiles.py. Unknown ids fail closed.",
+  "default_profile": "t2-holdings-tyrone-johnson",
+  "profiles": [
+    {
+      "id": "t2-holdings-tyrone-johnson",
+      "file": "t2-holdings-tyrone-johnson.md",
+      "kind": "master_seed",
+      "owner": "T2 Holdings LLC",
+      "principal": "Tyrone Johnson (co-owner Tyler Edwards)",
+      "active": true,
+      "default": true,
+      "description": "T2 master seed profile — merged with the Master Brain for development. Loads the full T2 identity, all brands (Word Coffee, Kirkland arbitrage, Neck Nirvana, Mogra Organics), judgment signals, economic thresholds, and prior brainstormed ideas.",
+      "loaded_by": [
+        "local_default (active now)",
+        "login_session (future)",
+        "ip_address (future, weak factor)",
+        "two_step_auth (future, strong factor)"
+      ]
+    }
+  ]
+}
