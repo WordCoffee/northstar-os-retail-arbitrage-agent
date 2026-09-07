@@ -1,0 +1,376 @@
+{
+  "asin": "B00BH3HPZW",
+  "title": "Fiber Capsules Kirkland Therapy for Regularity/Fiber Supplement, 360 capsules - Compare to the Active Ingredient in Metamucil Capsules",
+  "source": "easyparser",
+  "data_status": "partial",
+  "observed_at": "2026-09-07T06:18:34.420Z",
+  "fetched_at": "2026-09-07T06:18:36.203009+00:00",
+  "buy_box": {
+    "available": true,
+    "seller_name": "Loong & Sons",
+    "seller_id": "A38ZPEG9OLAOCB",
+    "fulfillment": "FBA",
+    "price": 17.66,
+    "shipping": null,
+    "landed_price": null,
+    "condition": {
+      "is_new": true,
+      "title": "New"
+    },
+    "prime": true,
+    "note": null
+  },
+  "offers": [
+    {
+      "position": 0,
+      "buybox_winner": true,
+      "price": {
+        "raw": "$17.66",
+        "symbol": "$",
+        "value": "17.66"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A38ZPEG9OLAOCB",
+      "seller_name": "Loong & Sons",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 1198,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": null,
+      "maximum_order_quantity": null
+    },
+    {
+      "position": 1,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$16.91",
+        "symbol": "$",
+        "value": "16.91"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1A7M7KE3GO4GO",
+      "seller_name": "OM Trading NC",
+      "seller_rating": "3.0",
+      "seller_positive_percentage": 44,
+      "seller_ratings_total": 4238,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Tuesday, September 15.",
+      "shipping_is_free": true,
+      "ships_from": "OM Trading NC",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 2,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$16.91",
+        "symbol": "$",
+        "value": "16.91"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2F7ADFOHFHNGH",
+      "seller_name": "EAST COST TRADING NJ",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 90,
+      "seller_ratings_total": 926,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Tuesday, September 15.",
+      "shipping_is_free": true,
+      "ships_from": "EAST COST TRADING NJ",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 21
+    },
+    {
+      "position": 3,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$17.20",
+        "symbol": "$",
+        "value": "17.20"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2RXZNSEPZM6J6",
+      "seller_name": "Office&Grocery",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 69,
+      "seller_ratings_total": 1803,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Thursday, September 17.",
+      "shipping_is_free": true,
+      "ships_from": "Office&Grocery",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 4,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$17.49",
+        "symbol": "$",
+        "value": "17.49"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1H42LJ94Z41NY",
+      "seller_name": "Topinlineshop",
+      "seller_rating": "3.5",
+      "seller_positive_percentage": 55,
+      "seller_ratings_total": 2857,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Thursday, September 17.",
+      "shipping_is_free": true,
+      "ships_from": "Topinlineshop",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 19
+    },
+    {
+      "position": 5,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$17.49",
+        "symbol": "$",
+        "value": "17.49"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A3LF0AJ7J2NTSF",
+      "seller_name": "sm usa",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 71,
+      "seller_ratings_total": 273,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery September 15 - 16.",
+      "shipping_is_free": true,
+      "ships_from": "sm usa",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 6,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$17.60",
+        "symbol": "$",
+        "value": "17.60"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1S3X3XUPLO5OG",
+      "seller_name": "BETTERCO",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 90,
+      "seller_ratings_total": 1565,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery September 15 - 17.",
+      "shipping_is_free": true,
+      "ships_from": "BETTERCO",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 7,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$17.66",
+        "symbol": "$",
+        "value": "17.66"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2KHYF5CYWLFH1",
+      "seller_name": "Speedy Ships",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 10886,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 14
+    },
+    {
+      "position": 8,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$17.66",
+        "symbol": "$",
+        "value": "17.66"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2S1U80T7THEEO",
+      "seller_name": "Great Mart",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 96,
+      "seller_ratings_total": 6865,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 9,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$17.66",
+        "symbol": "$",
+        "value": "17.66"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A3MXOWHAKH72V9",
+      "seller_name": "Nilogie Accessory",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 4023,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery    on orders over $35 shipped by Amazon.",
+      "shipping_is_free": null,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 10,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$17.70",
+        "symbol": "$",
+        "value": "17.70"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A7GTEJ5J4JILL",
+      "seller_name": "Arezzo G",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 87,
+      "seller_ratings_total": 226,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 7
+    }
+  ],
+  "offers_returned": 11,
+  "offers_complete": false,
+  "seller_counts": {
+    "observed_total": 11,
+    "claimed_total": 66,
+    "fba_observed": 5,
+    "fbm_observed": 6,
+    "amazon_observed": 0,
+    "counts_from_observed": true
+  },
+  "credits_used": 25,
+  "credits_remaining": 75,
+  "missing_fields": [
+    "upc",
+    "ean",
+    "gtin",
+    "item_weight_lbs",
+    "package_weight_lbs",
+    "package_dimensions_in",
+    "brand",
+    "browse_node_id",
+    "amazon_category",
+    "fba_fee",
+    "monthly_sales_estimate",
+    "sales_rank"
+  ],
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ],
+  "stages": {
+    "detail": "done",
+    "offers": "partial",
+    "sales": "not_requested"
+  },
+  "attempts": 1,
+  "last_error": null,
+  "retry_eligible": false,
+  "freshness": {
+    "offers_fresh_until": "2026-09-14T06:18:36.203040+00:00",
+    "sales_fresh_until": "2026-10-07T06:18:36.203040+00:00",
+    "identity_fresh_until": "2026-12-06T06:18:36.203040+00:00"
+  }
+}

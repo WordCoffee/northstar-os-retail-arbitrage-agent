@@ -1,0 +1,345 @@
+{
+  "source": "easyparser",
+  "asin": "B00GYZWNY6",
+  "provider_asin": "B00GYZWNY6",
+  "request_id": null,
+  "title": "Kirkland Extra Strength Glucosamine 1500 mg Chondroitin 1200 mg 220 Tablets",
+  "offer_count": 68,
+  "offers_returned_count": 11,
+  "buy_box_price": 29.25,
+  "buy_box_price_raw": {
+    "raw": "$29.25",
+    "symbol": "$",
+    "value": "29.25"
+  },
+  "buy_box_seller": "ONE WORLD EXPRESS",
+  "buy_box_seller_id": "A2CV0ZIZUNKP6C",
+  "buy_box_is_fba": true,
+  "buy_box_is_fbm": false,
+  "buy_box_is_prime": true,
+  "buy_box_condition": {
+    "is_new": true,
+    "title": "New"
+  },
+  "observed_fba_offer_count": 8,
+  "observed_fbm_offer_count": 3,
+  "observed_amazon_offer_count": 0,
+  "offers": [
+    {
+      "position": 0,
+      "buybox_winner": true,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2CV0ZIZUNKP6C",
+      "seller_name": "ONE WORLD EXPRESS",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 93,
+      "seller_ratings_total": 1683,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": null,
+      "maximum_order_quantity": null
+    },
+    {
+      "position": 1,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$28.95",
+        "symbol": "$",
+        "value": "28.95"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1H42LJ94Z41NY",
+      "seller_name": "Topinlineshop",
+      "seller_rating": "3.5",
+      "seller_positive_percentage": 55,
+      "seller_ratings_total": 2857,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery September 10 - 14.",
+      "shipping_is_free": true,
+      "ships_from": "Topinlineshop",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 9
+    },
+    {
+      "position": 2,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$28.95",
+        "symbol": "$",
+        "value": "28.95"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1QR79PAU8VK6I",
+      "seller_name": "BabyLuck",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 69,
+      "seller_ratings_total": 5821,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Friday, September 18.",
+      "shipping_is_free": true,
+      "ships_from": "BabyLuck",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 2
+    },
+    {
+      "position": 3,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$28.95",
+        "symbol": "$",
+        "value": "28.95"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AZOYUJDIOGAQL",
+      "seller_name": "Healthy Town",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 91,
+      "seller_ratings_total": 813,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Wednesday, September 16.",
+      "shipping_is_free": true,
+      "ships_from": "Healthy Town",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 4,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.24",
+        "symbol": "$",
+        "value": "29.24"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A23H80GA3GIFM9",
+      "seller_name": "Zenobiaa Inc",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 91,
+      "seller_ratings_total": 96,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery    on orders over $35 shipped by Amazon.",
+      "shipping_is_free": null,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 1
+    },
+    {
+      "position": 5,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A3A0TTNL5Z1ADY",
+      "seller_name": "Irish Fresh",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 100,
+      "seller_ratings_total": 2406,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 6,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AU1Z30ZMSIKOL",
+      "seller_name": "primers",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 10748,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery    on orders over $35 shipped by Amazon.",
+      "shipping_is_free": null,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 1
+    },
+    {
+      "position": 7,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1LIPVZNKVK9LN",
+      "seller_name": "LITTLE ONLINE STORE",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 9245,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 8,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1EJR9W6ZLM1UY",
+      "seller_name": "ULTRA DISCOUNTED",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 98,
+      "seller_ratings_total": 8151,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery September 14 - 17 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 9,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A3MXOWHAKH72V9",
+      "seller_name": "Nilogie Accessory",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 4023,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 10,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.25",
+        "symbol": "$",
+        "value": "29.25"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AUOEVI0LXSY3X",
+      "seller_name": "WQBuy (Record SN)",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 94,
+      "seller_ratings_total": 3309,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery September 22 - October 9 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 15
+    }
+  ],
+  "request_zip_code": "19805",
+  "observed_at": "2026-09-07T06:18:40.078Z",
+  "credits_used": 26,
+  "credits_remaining": 74,
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ]
+}
