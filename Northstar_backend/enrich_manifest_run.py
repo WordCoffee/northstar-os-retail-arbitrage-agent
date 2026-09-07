@@ -2,8 +2,10 @@
 
 This runner enriches EXACTLY the ASINs listed in an approved manifest. It
 never falls back to scanner-cache ordering and selects its live client via
-``--provider`` (rapidapi | dataforseo; default rapidapi). Easyparser is
-DEPRECATED and DISABLED and degrades to the offline placeholder.
+``--provider`` (rapidapi | dataforseo | easyparser; default rapidapi).
+Easyparser is enabled for THIS runner only (capped manifest runs through
+easyparser_client, one GET per ASIN, zero retries). Other runners
+(enrich_cached_asins / offer_enrichment) still refuse the easyparser token.
 
 Live controls mirror ``enrich_cached_asins``: an explicit ``--live`` flag
 plus finite ``--max-requests`` / ``--max-credits`` caps checked BEFORE every
@@ -38,25 +40,39 @@ from datetime import datetime, timezone
 import market_snapshot_store as store
 import rapidapi_client
 import dataforseo_adapter
+import easyparser_client
 from enrich_cached_asins import ESTIMATED_CREDITS_PER_ASIN
 
 
 def _fetch_offers(asin, provider):
-    """Dispatch the live client by provider (Easyparser disabled)."""
+    """Dispatch the live client by provider.
+
+    Easyparser is enabled for capped manifest runs (this runner only) and
+    dispatches one GET per ASIN with zero internal retries. A provider
+    response whose provider_asin does not equal the requested ASIN is
+    marked mapping_error and rejected; the raw response is still persisted
+    for evidence.
+    """
     if provider == "dataforseo":
         return dataforseo_adapter.get_dataforseo_offers(asin)
     if provider == "easyparser":
-        # Deprecated/disabled: never call the network.
-        return {
-            "source": "easyparser",
-            "asin": asin,
-            "data_status": "unavailable",
-            "offer_data_status": "provider_error",
-            "offer_data_note": "Easyparser deprecated/disabled",
-            "offers": [],
-            "credits_used": 0,
-            "credits_remaining": None,
-        }
+        result = easyparser_client.get_easyparser_offers(asin)
+        if not isinstance(result, dict):
+            result = {
+                "source": "easyparser",
+                "asin": asin,
+                "offers": [],
+                "data_gaps": ["unexpected response structure"],
+            }
+        got = result.get("provider_asin")
+        if isinstance(got, str) and got.upper() != asin.upper():
+            result["mapping_error"] = True
+            result.setdefault("data_gaps", []).insert(
+                0,
+                "mapping_error: provider returned ASIN %s for requested %s; "
+                "result rejected" % (got, asin),
+            )
+        return result
     return rapidapi_client.get_rapidapi_offers(asin)
 
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -481,7 +497,8 @@ def _run_status(args):
     key_resolves = _provider_key_resolves(args.provider)
     print("provider: %s" % args.provider)
     print("provider config resolves: %s" % ("YES" if key_resolves else "NO"))
-    print("Easyparser is deprecated/disabled")
+    if args.provider == "easyparser":
+        print("easyparser: enabled for capped manifest runs (1 GET/ASIN, zero retries)")
     print("network calls made by status: 0")
     return 0
 
@@ -510,6 +527,8 @@ def _provider_key_resolves(provider):
         from dataforseo_adapter import DATAFORSEO_ENABLED
         return bool(DATAFORSEO_ENABLED) and bool(os.getenv("DATAFORSEO_LOGIN")) \
             and bool(os.getenv("DATAFORSEO_PASSWORD"))
+    if provider == "easyparser":
+        return bool(os.getenv("EASYPARSER_API_KEY"))
     return bool(os.getenv("RAPIDAPI_API_KEY"))
 
 
@@ -628,6 +647,10 @@ def _run(args):
         _atomic_write(os.path.join(run_dir, "raw", "%s.json" % asin), result)
         try:
             snap = store.build_snapshot(asin, result, prior_attempts=0)
+            if result.get("mapping_error"):
+                snap["data_status"] = store.DATA_STATUS_UNAVAILABLE
+                snap.setdefault("data_gaps", []).append(
+                    "mapping_error: provider-returned ASIN differs from requested; result rejected")
         except Exception as e:  # normalization must never kill the run
             provider_warnings.append("normalization fallback for %s: %s" % (asin, e))
             snap = {"asin": asin, "source": result.get("source") or "unknown",
@@ -648,6 +671,7 @@ def _run(args):
             "request_id": result.get("request_id"),
             "duration_sec": round(finished - started, 3),
             "data_status_raw": snap.get("data_status"),
+            "mapping_error": bool(result.get("mapping_error")),
         })
         live_results[asin] = result
         outcomes[asin] = outcome
@@ -705,18 +729,18 @@ def main(argv=None):
 
     p_status = sub.add_parser("status", help="validate manifest + env only (zero network)")
     p_status.add_argument("--manifest", required=True)
-    p_status.add_argument("--provider", choices=["rapidapi", "dataforseo"],
+    p_status.add_argument("--provider", choices=["rapidapi", "dataforseo", "easyparser"],
                           default="rapidapi", help="live provider to report (zero network)")
 
     p_dry = sub.add_parser("dry-run", help="validate + print plan (zero writes, zero network)")
     p_dry.add_argument("--manifest", required=True)
-    p_dry.add_argument("--provider", choices=["rapidapi", "dataforseo"],
+    p_dry.add_argument("--provider", choices=["rapidapi", "dataforseo", "easyparser"],
                        default="rapidapi", help="live provider to plan (zero network)")
 
     p_run = sub.add_parser("run", help="execute the live loop (requires --live + finite caps)")
     p_run.add_argument("--manifest", required=True)
-    p_run.add_argument("--provider", choices=["rapidapi", "dataforseo"],
-                        default="rapidapi", help="live provider (Easyparser deprecated/disabled)")
+    p_run.add_argument("--provider", choices=["rapidapi", "dataforseo", "easyparser"],
+                        default="rapidapi", help="live provider (Easyparser enabled for capped manifest runs)")
     p_run.add_argument("--live", action="store_true")
     p_run.add_argument("--max-requests", type=int, default=None)
     p_run.add_argument("--max-credits", type=int, default=None)

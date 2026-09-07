@@ -1,0 +1,30 @@
+{
+  "run_id": "20260907T055957Z",
+  "kind": "easyparser-final-readiness-report",
+  "generated_at_utc": "2026-09-07T05:59:57Z",
+  "readiness": "READY_FOR_OPERATOR_APPROVAL",
+  "checks": [
+    {"item": "frozen_manifest", "status": "pass", "detail": "kind live-10asin-manifest; 10 ASINs exact + canonical order; no dups; no out-of-set ASIN; required CSV fields present; caps 10/0; polling false; purchase_authorized false; sha256 recorded (canonical + file)."},
+    {"item": "truth_baseline", "status": "pass", "detail": "all 10 ASINs present in BOTH truth CSVs; prices/reviews parsed from raw strings; zero conflicts; raw strings preserved."},
+    {"item": "provider_route", "status": "pass", "detail": "existing easyparser_client OFFER route (realtime.easyparser.com/v1/request); 1 GET/ASIN; zero retries; no polling; prior live evidence retained."},
+    {"item": "easyparser_credentials", "status": "pass", "detail": "EASYPARSER_API_KEY resolves True via the exact live code path (load_dotenv); boolean-only verification; no value read/printed."},
+    {"item": "cli_accepts_frozen_manifest", "status": "pass", "detail": "enrich_manifest_run.py re-enabled for easyparser (narrow Phase 7 patch); status smoke test ACCEPTED with zero network."},
+    {"item": "request_cap_and_retries", "status": "pass", "detail": "max_requests=10 enforced; no --retries flag; offline tests prove exactly-10 single-call execution and no repeat call on failure or mapping error."},
+    {"item": "budget", "status": "pass", "detail": "cap 200 credits; local-evidence max 150; USD not locally verified (documented); run halts early if provider reports higher credits."},
+    {"item": "local_state", "status": "pass", "detail": "no shared-slot overwrite risk; unique immutable run dirs; prior run preserved."},
+    {"item": "offline_tests", "status": "pass", "detail": "1417 Python tests OK (skipped=3); manifest-runner 27 OK; UI display all pass; zero network during prep."},
+    {"item": "protected_files", "status": "pass", "detail": "finance.py, pricing.py, product_analysis.py, fee_engine.py, truth CSVs, prior raw evidence, failure manifests, .env untouched."}
+  ],
+  "remaining_gate": {
+    "type": "single_operator_permission",
+    "exact_reply_required": "LIVE NOW",
+    "billing_note": "up to 10 Easyparser requests; expected <=150 provider-reported credits (cap 200); USD not locally verified."
+  },
+  "post_run_artifacts_planned": [
+    "live/raw/<ASIN>.json", "live/normalized/<ASIN>.json", "live/request-log.jsonl",
+    "live/live-run-metadata.json", "live/live-failure-manifest.json",
+    "review/live-vs-amazon-truth-comparison.csv (ASIN-joined, truth side from truth/amazon-truth-baseline.json)",
+    "review/live-vs-amazon-truth-comparison.md", "review/discrepancy-report.csv",
+    "review/run-summary.json + .md", "review/operator-final-report.md"
+  ]
+}

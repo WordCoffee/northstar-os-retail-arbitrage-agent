@@ -1,0 +1,29 @@
+{
+  "run_id": "20260907T055957Z",
+  "kind": "offline-test-report",
+  "generated_at_utc": "2026-09-07T05:59:57Z",
+  "python_suite": {
+    "command": "python -m unittest discover -s . -p \"test_*.py\"",
+    "pre_change": {"ran": 1413, "failures": 0, "errors": 0, "skipped": 3, "result": "OK"},
+    "post_change": {"ran": 1417, "failures": 0, "errors": 0, "skipped": 3, "result": "OK"},
+    "delta": "+4 new tests (easyparser provider), 0 regressions"
+  },
+  "manifest_runner_module": {
+    "command": "python -m unittest test_enrich_manifest_runner",
+    "ran": 27,
+    "failures": 0,
+    "errors": 0,
+    "result": "OK"
+  },
+  "ui_display_test": {
+    "command": "node test_ui_display.cjs",
+    "result": "ALL UI DISPLAY TESTS PASSED"
+  },
+  "offline_status_smoke": {
+    "command": "python enrich_manifest_run.py status --provider easyparser --manifest data/enrich/easyparser-runs/20260907T055957Z/manifest/live-10asin-manifest.json",
+    "result": "ACCEPTED, 10 asins, provider config resolves: YES, network calls made by status: 0",
+    "exit_code": 0
+  },
+  "network_calls_made": 0,
+  "secrets_in_output": false
+}
