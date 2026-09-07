@@ -1,0 +1,14 @@
+{
+  "kind": "easyparser-live-failure-manifest",
+  "run_id": "20260907T055957Z",
+  "cli_run_id": "manifest-20260907T061811Z-98b7",
+  "stage": "post-live reconciliation",
+  "hard_failures": 0,
+  "mapping_errors": 0,
+  "halted_secret": false,
+  "skipped_cap_asins": [
+    "B085F1QCB9"
+  ],
+  "failure_mode_notes": "No hard failures. Stop reason was max_credits (provider-reported credits); skipped_cap handled per spec: no provider call made, no automatic retry.",
+  "scrubbed": "no secrets, no credential values, no raw response bodies"
+}

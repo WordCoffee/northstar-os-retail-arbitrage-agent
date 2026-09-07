@@ -1,0 +1,345 @@
+{
+  "source": "easyparser",
+  "asin": "B081THWMDK",
+  "provider_asin": "B081THWMDK",
+  "request_id": null,
+  "title": "Kirkland Signature Stretch Tite Plastic Food Wrap 11 7/8 Inch X 750 SQ. FT. Pack 2",
+  "offer_count": 30,
+  "offers_returned_count": 11,
+  "buy_box_price": 23.98,
+  "buy_box_price_raw": {
+    "raw": "$23.98",
+    "symbol": "$",
+    "value": "23.98"
+  },
+  "buy_box_seller": "Fiorenzo LLC",
+  "buy_box_seller_id": "A36X4560LWOSG6",
+  "buy_box_is_fba": false,
+  "buy_box_is_fbm": true,
+  "buy_box_is_prime": false,
+  "buy_box_condition": {
+    "is_new": true,
+    "title": "New"
+  },
+  "observed_fba_offer_count": 1,
+  "observed_fbm_offer_count": 10,
+  "observed_amazon_offer_count": 0,
+  "offers": [
+    {
+      "position": 0,
+      "buybox_winner": true,
+      "price": {
+        "raw": "$23.98",
+        "symbol": "$",
+        "value": "23.98"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A36X4560LWOSG6",
+      "seller_name": "Fiorenzo LLC",
+      "seller_rating": "3.5",
+      "seller_positive_percentage": 67,
+      "seller_ratings_total": 526,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Wednesday, September 16.",
+      "shipping_is_free": true,
+      "ships_from": "Fiorenzo LLC",
+      "minimum_order_quantity": null,
+      "maximum_order_quantity": null
+    },
+    {
+      "position": 1,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.90",
+        "symbol": "$",
+        "value": "26.90"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AIC8ZY9YLS9OP",
+      "seller_name": "Health Force",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 85,
+      "seller_ratings_total": 6830,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Wednesday, September 16.",
+      "shipping_is_free": true,
+      "ships_from": "Health Force",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 19
+    },
+    {
+      "position": 2,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.98",
+        "symbol": "$",
+        "value": "26.98"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1CZLFDPGP5GBR",
+      "seller_name": "OCD BARGAIN",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 78,
+      "seller_ratings_total": 3788,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Tuesday, September 15.",
+      "shipping_is_free": true,
+      "ships_from": "OCD BARGAIN",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 3,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.99",
+        "symbol": "$",
+        "value": "26.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A118IUCY3IMP6Z",
+      "seller_name": "PRIME-EXPRES'S",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 69,
+      "seller_ratings_total": 396,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery September 14 - 16.",
+      "shipping_is_free": true,
+      "ships_from": "PRIME-EXPRES'S",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 4,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$26.99",
+        "symbol": "$",
+        "value": "26.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AS3HOSV4DF0UG",
+      "seller_name": "TheNewMall",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 85,
+      "seller_ratings_total": 318589,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery September 10 - 14.",
+      "shipping_is_free": true,
+      "ships_from": "TheNewMall",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 5,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$27.99",
+        "symbol": "$",
+        "value": "27.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1QR79PAU8VK6I",
+      "seller_name": "BabyLuck",
+      "seller_rating": "4.0",
+      "seller_positive_percentage": 69,
+      "seller_ratings_total": 5821,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Monday, September 21.",
+      "shipping_is_free": true,
+      "ships_from": "BabyLuck",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 20
+    },
+    {
+      "position": 6,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$27.99",
+        "symbol": "$",
+        "value": "27.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "ABBM3WMZUZY5R",
+      "seller_name": "GocBepViet, LLC",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 89,
+      "seller_ratings_total": 347,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Tuesday, September 15.",
+      "shipping_is_free": true,
+      "ships_from": "GocBepViet, LLC",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 7,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$28.45",
+        "symbol": "$",
+        "value": "28.45"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1S3X3XUPLO5OG",
+      "seller_name": "BETTERCO",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 90,
+      "seller_ratings_total": 1565,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Sunday, September 13 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 7
+    },
+    {
+      "position": 8,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$28.99",
+        "symbol": "$",
+        "value": "28.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A7ZISECZKNYFR",
+      "seller_name": "Wholesale Americas",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 95,
+      "seller_ratings_total": 2007,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Wednesday, September 9.",
+      "shipping_is_free": true,
+      "ships_from": "Wholesale Americas",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 9,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$24.31",
+        "symbol": "$",
+        "value": "24.31"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AWYG6DR3G9BMW",
+      "seller_name": "Geekzany",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 94,
+      "seller_ratings_total": 11384,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "$4.99 delivery Wednesday, September 16.",
+      "shipping_is_free": null,
+      "ships_from": "Geekzany",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 10
+    },
+    {
+      "position": 10,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$29.31",
+        "symbol": "$",
+        "value": "29.31"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A29HMAWZ42K5A",
+      "seller_name": "Najd LLC",
+      "seller_rating": "3.5",
+      "seller_positive_percentage": 65,
+      "seller_ratings_total": 162,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Friday, September 11.",
+      "shipping_is_free": true,
+      "ships_from": "Najd LLC",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    }
+  ],
+  "request_zip_code": "19805",
+  "observed_at": "2026-09-07T06:18:53.414Z",
+  "credits_used": 29,
+  "credits_remaining": 71,
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ]
+}

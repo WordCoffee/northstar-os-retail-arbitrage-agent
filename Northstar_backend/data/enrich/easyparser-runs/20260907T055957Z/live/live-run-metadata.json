@@ -1,0 +1,57 @@
+{
+  "kind": "easyparser-live-run-metadata",
+  "prep_run_id": "20260907T055957Z",
+  "cli_run_id": "manifest-20260907T061811Z-98b7",
+  "executed_at_utc": "2026-09-07T06:18:16Z..06:18:55Z",
+  "provider": "easyparser",
+  "endpoint": "https://realtime.easyparser.com/v1/request (OFFER, one GET per ASIN)",
+  "approval": {
+    "required_reply": "LIVE NOW",
+    "operator_reply_received": "live now",
+    "matched_as": "LIVE NOW (literal phrase, case-insensitive)",
+    "approved_by_operator": true
+  },
+  "frozen_manifest": "data/enrich/easyparser-runs/20260907T055957Z/manifest/live-10asin-manifest.json",
+  "manifest_sha256_canonical": "sha256:899660a639af659e40631d53e2e668f973ded75100881ca234f603c2e415fc5c",
+  "caps": {
+    "max_requests": 10,
+    "max_credits": 200
+  },
+  "requests_made": 9,
+  "requests_remaining_authorized_pool": 0,
+  "stop_reason": "max_credits",
+  "credits_reported_used": 225,
+  "credits_remaining_series": [
+    79,
+    78,
+    77,
+    76,
+    75,
+    74,
+    73,
+    72,
+    71
+  ],
+  "credit_metadata_inconsistency_note": "Provider-reported credits_used (21-29/request) and credits_remaining series (100 to 71) are not self-consistent; both are provider-reported metadata only, recorded verbatim, not reconciled locally.",
+  "outcomes": {
+    "B01H40O42I": "partial",
+    "B08R2SRN88": "partial",
+    "B0CP6LXPLK": "partial",
+    "B00BISGJXA": "partial",
+    "B00BH3HPZW": "partial",
+    "B00GYZWNY6": "partial",
+    "B0045XGE9E": "partial",
+    "B002L4M4M0": "partial",
+    "B081THWMDK": "partial",
+    "B085F1QCB9": "skipped_cap"
+  },
+  "mapping_errors": [],
+  "discrepancies": {
+    "title_label_only_prime_mismatch": 2,
+    "major_price_delta_prime_mismatch": 2,
+    "moderate_price_delta_prime_mismatch": 2,
+    "title_label_only": 3,
+    "skipped_no_call": 1
+  },
+  "purchase_authorized": false
+}

@@ -1,0 +1,11 @@
+asin,discrepancy_class,detail,review_required,evidence
+B01H40O42I,title_label_only_prime_mismatch,Title matches semantically; CSV Prime/FBA=Yes but live buy box is FBM today.,information only; listing/prime status changed,buy_box_is_fbm=FBM
+B08R2SRN88,title_label_only_prime_mismatch,Title matches semantically; CSV Prime/FBA=Yes but live buy box is FBM today.,information only; listing/prime status changed,buy_box_is_fbm=FBM
+B0CP6LXPLK,major_price_delta_prime_mismatch,"price delta -53.8% (csv 33.12, live 15.29)",human review before any reliance,buy_box_price live vs truth numeric
+B00BISGJXA,moderate_price_delta_prime_mismatch,"price delta -12.4% (csv 12.75, live 11.17)",human review before any reliance,buy_box_price live vs truth numeric
+B00BH3HPZW,title_label_only,Strict Jaccard title label; semantic review confirms same product.,none,live title matches CSV product
+B00GYZWNY6,title_label_only,Strict Jaccard title label; semantic review confirms same product.,none,live title matches CSV product
+B0045XGE9E,moderate_price_delta_prime_mismatch,"price delta -10.5% (csv 13.84, live 12.39)",human review before any reliance,buy_box_price live vs truth numeric
+B002L4M4M0,title_label_only,Strict Jaccard title label; semantic review confirms same product.,none,live title matches CSV product
+B081THWMDK,major_price_delta_prime_mismatch,"price delta -16.7% (csv 28.79, live 23.98)",human review before any reliance,buy_box_price live vs truth numeric
+B085F1QCB9,skipped_no_call,No provider call made; credit cap reached before this ASIN.,operator decision to approve 1 follow-up request (not automatic),ledger seq 10 skipped_cap

@@ -1,0 +1,376 @@
+{
+  "asin": "B0CP6LXPLK",
+  "title": "Minoxidil Liquid Extra Strength Hair Regrowth Treatment for Men, 5% Topical Solution, 6 Months Supply - Dropper Applicator and Bonus Free Instructional Guide Included",
+  "source": "easyparser",
+  "data_status": "partial",
+  "observed_at": "2026-09-07T06:18:23.278Z",
+  "fetched_at": "2026-09-07T06:18:25.035222+00:00",
+  "buy_box": {
+    "available": true,
+    "seller_name": "America Strong",
+    "seller_id": "AFZOHYJ1O89LO",
+    "fulfillment": "FBM",
+    "price": 15.29,
+    "shipping": null,
+    "landed_price": null,
+    "condition": {
+      "is_new": true,
+      "title": "New"
+    },
+    "prime": false,
+    "note": null
+  },
+  "offers": [
+    {
+      "position": 0,
+      "buybox_winner": true,
+      "price": {
+        "raw": "$15.29",
+        "symbol": "$",
+        "value": "15.29"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AFZOHYJ1O89LO",
+      "seller_name": "America Strong",
+      "seller_rating": "3.0",
+      "seller_positive_percentage": 50,
+      "seller_ratings_total": 6393,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "$14.99 delivery September 9 - 11.",
+      "shipping_is_free": null,
+      "ships_from": "America Strong",
+      "minimum_order_quantity": null,
+      "maximum_order_quantity": null
+    },
+    {
+      "position": 1,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$32.48",
+        "symbol": "$",
+        "value": "32.48"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A293W6RCT5FH7C",
+      "seller_name": "Buy Better",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 100,
+      "seller_ratings_total": 18919,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Tuesday, September 15.",
+      "shipping_is_free": true,
+      "ships_from": "Buy Better",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 12
+    },
+    {
+      "position": 2,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$32.49",
+        "symbol": "$",
+        "value": "32.49"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A3LSDO8C9FZOBZ",
+      "seller_name": "Martin's Merchandise",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 98,
+      "seller_ratings_total": 1845,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery September 10 - 11.",
+      "shipping_is_free": true,
+      "ships_from": "Martin's Merchandise",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 2
+    },
+    {
+      "position": 3,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$32.70",
+        "symbol": "$",
+        "value": "32.70"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1JREHAIG4OUYH",
+      "seller_name": "Elvis Ventures",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 96,
+      "seller_ratings_total": 87,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 2
+    },
+    {
+      "position": 4,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$32.96",
+        "symbol": "$",
+        "value": "32.96"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "AFZOHYJ1O89LO",
+      "seller_name": "America Strong",
+      "seller_rating": "3.0",
+      "seller_positive_percentage": 50,
+      "seller_ratings_total": 6393,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 5,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$33.15",
+        "symbol": "$",
+        "value": "33.15"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A269N201SWOEB6",
+      "seller_name": "Dushav",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 99,
+      "seller_ratings_total": 97919,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 2
+    },
+    {
+      "position": 6,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$33.71",
+        "symbol": "$",
+        "value": "33.71"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A30LAQF0C761OP",
+      "seller_name": "FlexiMart Prime",
+      "seller_rating": "5.0",
+      "seller_positive_percentage": 100,
+      "seller_ratings_total": 647,
+      "is_prime": true,
+      "is_fba": true,
+      "is_fbm": false,
+      "is_sba": false,
+      "fulfilled_by_amazon": true,
+      "shipping_text": "FREE delivery Saturday, September 12 on orders shipped by Amazon over $35",
+      "shipping_is_free": true,
+      "ships_from": "Amazon.com",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 2
+    },
+    {
+      "position": 7,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$34.88",
+        "symbol": "$",
+        "value": "34.88"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1DAJZJGC4E7DU",
+      "seller_name": "Lone Star AI Hub",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 82,
+      "seller_ratings_total": 335,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Tuesday, September 15.",
+      "shipping_is_free": true,
+      "ships_from": "Lone Star AI Hub",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    },
+    {
+      "position": 8,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$38.95",
+        "symbol": "$",
+        "value": "38.95"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A20OB713QNND7O",
+      "seller_name": "MDS Inc",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 91,
+      "seller_ratings_total": 1169,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Monday, September 14.",
+      "shipping_is_free": true,
+      "ships_from": "MDS Inc",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 2
+    },
+    {
+      "position": 9,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$39.95",
+        "symbol": "$",
+        "value": "39.95"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A1M0RAJTDTZ2P1",
+      "seller_name": "Beauty-Online",
+      "seller_rating": "4.5",
+      "seller_positive_percentage": 91,
+      "seller_ratings_total": 709,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery Thursday, September 24.",
+      "shipping_is_free": true,
+      "ships_from": "Beauty-Online",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 5
+    },
+    {
+      "position": 10,
+      "buybox_winner": false,
+      "price": {
+        "raw": "$49.99",
+        "symbol": "$",
+        "value": "49.99"
+      },
+      "condition": {
+        "is_new": true,
+        "title": "New"
+      },
+      "seller_id": "A2P2IJIHIM72EW",
+      "seller_name": "Bright Vision Co",
+      "seller_rating": "3.5",
+      "seller_positive_percentage": 58,
+      "seller_ratings_total": 148,
+      "is_prime": false,
+      "is_fba": false,
+      "is_fbm": true,
+      "is_sba": false,
+      "fulfilled_by_amazon": null,
+      "shipping_text": "FREE delivery September 15 - 21.",
+      "shipping_is_free": true,
+      "ships_from": "Bright Vision Co",
+      "minimum_order_quantity": 1,
+      "maximum_order_quantity": 30
+    }
+  ],
+  "offers_returned": 11,
+  "offers_complete": false,
+  "seller_counts": {
+    "observed_total": 11,
+    "claimed_total": 14,
+    "fba_observed": 4,
+    "fbm_observed": 7,
+    "amazon_observed": 0,
+    "counts_from_observed": true
+  },
+  "credits_used": 23,
+  "credits_remaining": 77,
+  "missing_fields": [
+    "upc",
+    "ean",
+    "gtin",
+    "item_weight_lbs",
+    "package_weight_lbs",
+    "package_dimensions_in",
+    "brand",
+    "browse_node_id",
+    "amazon_category",
+    "fba_fee",
+    "monthly_sales_estimate",
+    "sales_rank"
+  ],
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ],
+  "stages": {
+    "detail": "done",
+    "offers": "partial",
+    "sales": "not_requested"
+  },
+  "attempts": 1,
+  "last_error": null,
+  "retry_eligible": false,
+  "freshness": {
+    "offers_fresh_until": "2026-09-14T06:18:25.035280+00:00",
+    "sales_fresh_until": "2026-10-07T06:18:25.035280+00:00",
+    "identity_fresh_until": "2026-12-06T06:18:25.035280+00:00"
+  }
+}

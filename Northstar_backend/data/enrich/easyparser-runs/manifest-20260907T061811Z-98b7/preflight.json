@@ -1,0 +1,25 @@
+{
+  "kind": "manifest-run-preflight",
+  "run_id": "manifest-20260907T061811Z-98b7",
+  "generated_at": "2026-09-07T06:18:11.950264+00:00",
+  "manifest_path": "data/enrich/easyparser-runs/20260907T055957Z/manifest/live-10asin-manifest.json",
+  "frozen_manifest_sha256": "a1dd163a77e6b9fd0b1cf194bcf91a5ceb13bd171ec354dcc0ae03e619d7132a",
+  "caps": {
+    "max_requests": 10,
+    "max_credits": 200
+  },
+  "planned_asin_order": [
+    "B01H40O42I",
+    "B08R2SRN88",
+    "B0CP6LXPLK",
+    "B00BISGJXA",
+    "B00BH3HPZW",
+    "B00GYZWNY6",
+    "B0045XGE9E",
+    "B002L4M4M0",
+    "B081THWMDK",
+    "B085F1QCB9"
+  ],
+  "provider": "easyparser",
+  "retries_supported": false
+}

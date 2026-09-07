@@ -1,0 +1,101 @@
+{
+  "kind": "easyparser-run-summary",
+  "prep_run_id": "20260907T055957Z",
+  "cli_run_id": "manifest-20260907T061811Z-98b7",
+  "generated_at_utc": "2026-09-07T06:19:00Z",
+  "provider": "easyparser",
+  "requests": {
+    "cap": 10,
+    "made": 9,
+    "skipped_cap": 1
+  },
+  "credits": {
+    "reported_used": 225,
+    "cap": 200,
+    "stop_reason": "max_credits"
+  },
+  "outcomes": {
+    "partial": 9,
+    "skipped_cap": 1
+  },
+  "discrepancy_classes": {
+    "title_label_only_prime_mismatch": 2,
+    "major_price_delta_prime_mismatch": 2,
+    "moderate_price_delta_prime_mismatch": 2,
+    "title_label_only": 3,
+    "skipped_no_call": 1
+  },
+  "per_asin": [
+    {
+      "asin": "B01H40O42I",
+      "outcome": "partial",
+      "title_review": "match_confirmed_semantically",
+      "price_delta_pct": 0.0093,
+      "discrepancy_class": "title_label_only_prime_mismatch"
+    },
+    {
+      "asin": "B08R2SRN88",
+      "outcome": "partial",
+      "title_review": "match_confirmed_semantically",
+      "price_delta_pct": 0.0,
+      "discrepancy_class": "title_label_only_prime_mismatch"
+    },
+    {
+      "asin": "B0CP6LXPLK",
+      "outcome": "partial",
+      "title_review": "match_confirmed_semantically",
+      "price_delta_pct": -0.5383,
+      "discrepancy_class": "major_price_delta_prime_mismatch"
+    },
+    {
+      "asin": "B00BISGJXA",
+      "outcome": "partial",
+      "title_review": "match_confirmed_semantically",
+      "price_delta_pct": -0.1239,
+      "discrepancy_class": "moderate_price_delta_prime_mismatch"
+    },
+    {
+      "asin": "B00BH3HPZW",
+      "outcome": "partial",
+      "title_review": "match_confirmed_semantically",
+      "price_delta_pct": -0.0101,
+      "discrepancy_class": "title_label_only"
+    },
+    {
+      "asin": "B00GYZWNY6",
+      "outcome": "partial",
+      "title_review": "match_confirmed_semantically",
+      "price_delta_pct": 0.0,
+      "discrepancy_class": "title_label_only"
+    },
+    {
+      "asin": "B0045XGE9E",
+      "outcome": "partial",
+      "title_review": "match_confirmed_semantically",
+      "price_delta_pct": -0.1048,
+      "discrepancy_class": "moderate_price_delta_prime_mismatch"
+    },
+    {
+      "asin": "B002L4M4M0",
+      "outcome": "partial",
+      "title_review": "match_confirmed_semantically",
+      "price_delta_pct": 0.0,
+      "discrepancy_class": "title_label_only"
+    },
+    {
+      "asin": "B081THWMDK",
+      "outcome": "partial",
+      "title_review": "match_confirmed_semantically",
+      "price_delta_pct": -0.1671,
+      "discrepancy_class": "major_price_delta_prime_mismatch"
+    },
+    {
+      "asin": "B085F1QCB9",
+      "outcome": "skipped_cap",
+      "title_review": "no_live_data",
+      "price_delta_pct": null,
+      "discrepancy_class": "skipped_no_call"
+    }
+  ],
+  "purchase_authorized": false
+}
