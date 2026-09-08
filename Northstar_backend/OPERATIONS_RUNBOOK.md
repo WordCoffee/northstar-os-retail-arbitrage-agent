@@ -87,12 +87,16 @@ The following env vars control live behavior; the operator must set them
 ### Costco catalog source
 | Env var | Effect |
 |---------|--------|
-| `COSTCO_CATALOG_SOURCE` | `OFF` (default, local CSV only, zero network) \| `OPENWEBNINJA` \| `UNWRANGLE` |
+| `COSTCO_CATALOG_SOURCE` | `OFF` (default, local CSV only, zero network) \| `OPENWEBNINJA` (legacy `UNWRANGLE` value maps to `OFF`; Unwrangle removed 2026-09 — no free tier, paid from $99/mo) |
 | `COSTCO_CATALOG_MAX_PAGES` | Cap on pages fetched per query |
 | `COSTCO_CATALOG_REQUEST_DELAY_SECONDS` | Rate-limit sleep between requests (default 2.0) |
 | `COSTCO_DELIVERY_ZIP` | Delivery ZIP for catalog lookup (default 75201) |
 | `COSTCO_BUSINESS_CENTER` | Business center label (default "Dallas Business Center") |
 | `COSTCO_CATALOG_DETAIL_ENABLED` | `1` to enable layer-2 detail refresh (gated) |
+| `BRIGHTDATA_COSTCO_DETAIL_ENABLED` | `1` to arm Bright Data Web Unlocker (primary) for detail pulls |
+| `BRIGHTDATA_UNLOCKER_API_KEY` | Web Unlocker key (presence check only — never log the value) |
+| `FIRECRAWL_COSTCO_DETAIL_ENABLED` | `1` to arm Firecrawl (fallback) for detail pulls |
+| `FIRECRAWL_API_KEY` | Firecrawl API key (presence check only — never log the value) |
 | `COSTCO_FRESHNESS_THRESHOLD_DAYS` | Stale threshold (default 8) |
 
 ### Enrichment modes
@@ -245,8 +249,9 @@ Repair is read-only against the preserved envelope store
 
 | Provider | Env var NAMES (not values) | Live gate flag | Known failure modes | Test coverage |
 |----------|----------------------------|----------------|---------------------|----------------|
-| **Costco/Unwrangle** | `COSTCO_CATALOG_SOURCE=UNWRANGLE`, `COSTCO_CATALOG_MAX_PAGES`, `COSTCO_CATALOG_REQUEST_DELAY_SECONDS`, `COSTCO_DELIVERY_ZIP`, `COSTCO_BUSINESS_CENTER` | `COSTCO_CATALOG_SOURCE=UNWRANGLE` enables | 401/403 blocked, 429 rate-limited, search-page credit 10 | Y (`test_costco_api_client.py`, 66 tests) |
-| **Costco/OpenWebNinja** | `COSTCO_CATALOG_SOURCE=OPENWEBNINJA`, `OPENWEBNINJA_API_KEY` | `COSTCO_CATALOG_SOURCE=OPENWEBNINJA` enables | 401/403 blocked, 429 rate-limited, 100 req/mo free tier | Y (same file, 66 tests) |
+| **Costco/OpenWebNinja** | `COSTCO_CATALOG_SOURCE=OPENWEBNINJA`, `OPENWEBNINJA_API_KEY` | `COSTCO_CATALOG_SOURCE=OPENWEBNINJA` enables | 401/403 blocked, 429 rate-limited, 100 req/mo free tier | Y (`test_costco_api_client.py`, 105 tests) |
+| **Costco detail / Bright Data** (primary) | `BRIGHTDATA_COSTCO_DETAIL_ENABLED`, `BRIGHTDATA_UNLOCKER_API_KEY`, `COSTCO_CATALOG_DETAIL_ENABLED=1` | detail flag + `BRIGHTDATA_COSTCO_DETAIL_ENABLED=1` + key presence | 1 credit/request, 5k/mo free tier; HTTP 401/403 auth, 429 rate-limit, 5xx http_error, timeout transport_error | Y (`test_firecrawl_costco.py`, `test_costco_live_runner.py`, `test_costco_api_client.py`) |
+| **Costco detail / Firecrawl** (fallback, failover) | `FIRECRAWL_COSTCO_DETAIL_ENABLED`, `FIRECRAWL_API_KEY`, `COSTCO_CATALOG_DETAIL_ENABLED=1` | detail flag + `FIRECRAWL_COSTCO_DETAIL_ENABLED=1` + key presence | free tier 1,000 pages/mo (renews monthly, no card, 2 concurrent); HTTP 402 = credits_exhausted, 401/403 auth, 429 rate-limit, 5xx http_error, timeout transport_error | Y (same three files) |
 | **Costco/Local CSV** | `COSTCO_CATALOG_SOURCE=OFF` (default) | `OFF` always | none (zero network) | Y |
 | **Easyparser (RapidAPI)** | `SCANNER_OFFER_ENRICHMENT=EASYPARSER`, `SCANNER_OFFER_CACHE_PATH`, `SCANNER_OFFER_CACHE_TTL_HOURS` | `SCANNER_OFFER_ENRICHMENT=EASYPARSER` enables | API key not configured, invalid ASIN, HTTP 5xx | Y (`test_easyparser_client.py`, `test_offer_enrichment.py`, `test_enrich_cached_asins.py`) |
 | **DataForSEO** | `DATAFORSEO_TRANSPORT_ENABLED`, `DATAFORSEO_LOGIN`, `DATAFORSEO_PASSWORD`, `SCANNER_LIVE_ALLOWED` | `DATAFORSEO_TRANSPORT_ENABLED=true` AND `SCANNER_LIVE_ALLOWED=true` both required | 40402 invalid path, 401 auth, 402 budget, 40400 invalid params | N (15 missing symbols, 67 errors in `test_dataforseo_adapter.py`; documented in `00_STATE.json` known_issues) |
@@ -254,6 +259,69 @@ Repair is read-only against the preserved envelope store
 | **Chocodata** | `SCANNER_OFFER_ENRICHMENT=CHOCODATA`, `CHOCODATA_API_KEY` | `SCANNER_OFFER_ENRICHMENT=CHOCODATA` enables | credits exhausted (5 credits/ASIN), 1k free on signup, no card | Y (`test_offer_enrichment.py`, `test_provider_switch.py`) |
 | **Scavio** | (uses internal client; gated by `SCANNER_LIVE_ALLOWED`) | integrated | transport_error classification (bare print-and-swallow removed in Batch 02) | Y (`test_scavio_client.py`, `test_offer_enrichment.py`) |
 | **Canopy** | (uses internal client) | integrated | network-level failure, invalid response | Y (`test_canopy_route.py`) |
+
+---
+
+## 7A. Costco item-detail pulls (single-item retry and full pull)
+
+Two entry points for product-detail pulls; both are fail-closed and neither
+executes without a fresh, named operator approval naming the exact provider,
+item set, and budget quantity (Hard Stop Zone, Section 3).
+
+### Entry point 1 — legacy path (backward compatible)
+```powershell
+# costco_api_client.py delegates to the unified runner; legacy gate must be on
+$env:COSTCO_CATALOG_DETAIL_ENABLED="1"
+python costco_api_client.py details refresh --item-ids 424976
+python costco_api_client.py details refresh --item-ids 424976 `
+  --provider BRIGHTDATA_WEB_UNLOCKER --provider-budget BRIGHTDATA_WEB_UNLOCKER=50
+```
+
+### Entry point 2 — unified runner (recommended)
+```powershell
+# 1) Status (zero network)
+python costco_live_runner.py status
+
+# 2) Build the full-pull manifest from the master price-capture CSV (zero network)
+python costco_live_runner.py build-manifest `
+  --from-csv data/catalog/costco_master_price_capture_20260825T142621Z.csv `
+  --out data/catalog/costco_detail_manifest.json
+
+# 3) Dry-run the full pull (zero network; prints plan + estimated credits)
+python costco_live_runner.py full-pull `
+  --manifest data/catalog/costco_detail_manifest.json --dry-run
+
+# 4) Execute the full pull — LIVE AUTHORIZED, needs fresh named approval
+python costco_live_runner.py full-pull `
+  --manifest data/catalog/costco_detail_manifest.json `
+  --provider-budget BRIGHTDATA_WEB_UNLOCKER=50,FIRECRAWL=50
+```
+
+### Failover / budget semantics (tested, `test_costco_live_runner.py`)
+- Auto mode starts on the first enabled + configured provider (Bright Data
+  primary, Firecrawl fallback).
+- A HARD failure switches to the next provider AND STAYS there (persistent
+  cursor — never flip-flops back).
+- A hard failure on the LAST provider halts the batch (circuit breaker):
+  persist what already succeeded, record the failure in a scrubbed manifest,
+  report, stop. No silent retries.
+- Soft per-item failures (`url_not_found` / `no_data_found`) continue and never
+  switch providers.
+- `--provider-budget NAME=N,...` caps items per provider; budget-exhausted items
+  are `skipped` (`budget_exhausted`), never dropped.
+
+### Credit math (tiers verified 2026-09)
+- Bright Data Web Unlocker: 5,000 credits/mo free tier, 1 credit per request page.
+- Firecrawl: 1,000 pages/mo recurring on the $0 plan (renews monthly, no card,
+  2 concurrent requests).
+- Budget example BrightData=50 / Firecrawl=50 → one full pull consumes ≤ 100
+  credits total across the two free tiers.
+
+### Manifest coverage note
+Rows in the master capture CSV without a Costco item number (~446) land in
+`pending_lookup` and are resolved separately by the gated
+`bright_data_costco_lookup.py` step — which needs its OWN named live approval
+before it runs.
 
 ---
 
