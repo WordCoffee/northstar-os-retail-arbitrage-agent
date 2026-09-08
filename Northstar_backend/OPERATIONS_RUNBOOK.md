@@ -287,14 +287,48 @@ python costco_live_runner.py build-manifest `
   --from-csv data/catalog/costco_master_price_capture_20260825T142621Z.csv `
   --out data/catalog/costco_detail_manifest.json
 
+# 2a) Dry-run the resolve-then-backfill chain (zero network) BEFORE any live call:
+#       - resolve loads the manifest's pending_lookup rows (no item number)
+#       - backfill folds STRONG lookups (score >= 0.50) into a NEW CSV copy
+python bright_data_costco_lookup.py resolve `
+  --unresolved-from data/catalog/costco_detail_manifest.json --limit 3
+python bright_data_costco_backfill.py `
+  --csv data/catalog/costco_master_price_capture_20260825T142621Z.csv --dry-run
+
 # 3) Dry-run the full pull (zero network; prints plan + estimated credits)
 python costco_live_runner.py full-pull `
   --manifest data/catalog/costco_detail_manifest.json --dry-run
+
+# 3b) Rebuild the manifest from the backfilled CSV once lookups have filled
+#     item numbers (rows without ids stay in pending_lookup, never fabricated)
+python costco_live_runner.py build-manifest `
+  --from-csv data/catalog/costco_master_price_capture_20260825T142621Z_backfilled.csv `
+  --out data/catalog/costco_detail_manifest.json
 
 # 4) Execute the full pull — LIVE AUTHORIZED, needs fresh named approval
 python costco_live_runner.py full-pull `
   --manifest data/catalog/costco_detail_manifest.json `
   --provider-budget BRIGHTDATA_WEB_UNLOCKER=50,FIRECRAWL=50
+```
+
+### Resolve → backfill chain (gated lookup, then offline backfill)
+```powershell
+# 1) LIVE (gated approval): search-lookup every title without an item number.
+#    1 Web Unlocker credit per title; runs sequentially with a rate-limit delay.
+python bright_data_costco_lookup.py resolve `
+  --unresolved-from data/catalog/costco_detail_manifest.json
+#    (chunk instead with --limit N, e.g. --limit 90, to bound each batch)
+
+# 2) OFFLINE: fold strong matches (lookup_candidate, score >= 0.50) into a
+#    NEW CSV copy. Weak/no-result/page-not-found titles are REPORTED only —
+#    nothing is ever fabricated into the CSV (fail-closed).
+python bright_data_costco_backfill.py `
+  --csv data/catalog/costco_master_price_capture_20260825T142621Z.csv `
+  --out data/catalog/costco_master_price_capture_<ts>_backfilled.csv `
+  --report-json data/catalog/backfill-<ts>.json
+#    (--lookup-root defaults to data/costco-lookup-runs; --dry-run previews)
+
+# 3) Rebuild + re-plan, then pull (steps 3b / 4 above).
 ```
 
 ### Failover / budget semantics (tested, `test_costco_live_runner.py`)
@@ -319,9 +353,10 @@ python costco_live_runner.py full-pull `
 
 ### Manifest coverage note
 Rows in the master capture CSV without a Costco item number (~446) land in
-`pending_lookup` and are resolved separately by the gated
-`bright_data_costco_lookup.py` step — which needs its OWN named live approval
-before it runs.
+`pending_lookup` and are resolved by the gated lookup step, then folded back
+with `bright_data_costco_backfill.py` (strong matches only) before the
+manifest is rebuilt — that whole chain needs its own named live approval for
+the lookup step before it runs.
 
 ---
 
