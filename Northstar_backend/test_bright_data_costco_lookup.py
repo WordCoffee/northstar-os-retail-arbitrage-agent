@@ -347,6 +347,34 @@ class UnresolvedFromManifestTests(unittest.TestCase):
         rows = lookup._load_unresolved_titles(path)
         self.assertEqual([r["requested_title"] for r in rows], ["A"])
 
+    def test_loads_pending_lookup_fallback_from_build_manifest(self):
+        """build-manifest emits unresolved rows under pending_lookup (from the
+        master capture CSV), not as items[] with a resolution flag — the
+        --unresolved-from path must treat those as needing a live lookup."""
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        path = os.path.join(tmp.name, "built.json")
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump(
+                {
+                    "items": [
+                        {"item_id": "424976", "requested_title": "Already Resolved"}
+                    ],
+                    "pending_lookup": [
+                        {"asin": "B00U6I4YLM", "amazon_title": "Kirkland B-12 300 ct",
+                         "reason": "no_costco_item_number"},
+                        {"asin": "B00UP99X1I", "amazon_title": "Kirkland Vitamin E 500",
+                         "reason": "no_costco_item_number"},
+                    ],
+                },
+                fh,
+            )
+        rows = lookup._load_unresolved_titles(path)
+        self.assertEqual(
+            [r["requested_title"] for r in rows],
+            ["Kirkland B-12 300 ct", "Kirkland Vitamin E 500"],
+        )
+
     def test_cli_limit_caps_unresolved_expansion(self):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
