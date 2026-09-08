@@ -1499,6 +1499,84 @@ class ResolveCostcoCostTests(unittest.TestCase):
         self.assertIn("INV-350", result["match_reason"])
         self.assertNotEqual(result["match_quality"], "invoice_confirmed")
 
+    def test_mismatch_detail_rows_never_surface_candidate_costs(self):
+        """Regression: a broad product-detail store must NOT flood every
+        Amazon title with the first unrelated row's cost. A detail record
+        that fingerprints as MISMATCH (known conflict) or UNKNOWN (no
+        evidence) is never surfaced as a candidate cost — the resolver
+        returns None over silently passing a failed match."""
+        self._write_json_store(self.detail_path, [
+            {"costco_item_id": "87507",
+             "item_name": "Kirkland Signature 10-Gallon Wastebasket Liner, Clear, 500-count",
+             "current_price": 14.99},
+            {"costco_item_id": "1089787",
+             "item_name": "Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count",
+             "current_price": 22.49},
+        ])
+        with open(self.csv_path, "w", newline="", encoding="utf-8") as f:
+            f.write("item_name,costco_cost\n")
+        # No dimensionally-confirmed or candidate match exists for this title.
+        result = self._resolve("Kirkland Signature Organic Olive Oil 2 Liter")
+        self.assertIsNone(result)
+
+    def test_candidate_detail_surfaces_cost_best_similarity_wins(self):
+        """A genuine one-sided-evidence detail record (quality candidate)
+        surfaces its cost for research only. When multiple candidates exist,
+        the strongest normalized title identity wins — not the first row in
+        store order."""
+        self._write_json_store(self.detail_path, [
+            # Weaker candidate (store order first, but lower similarity).
+            {"costco_item_id": "A",
+             "item_name": "Kirkland Signature Disposable Nitrile Gloves, 400 ct", "current_price": 19.99},
+            # Stronger candidate (closer title identity).
+            {"costco_item_id": "B",
+             "item_name": "Kirkland Signature Nitrile Health Care Gloves 400 ct", "current_price": 21.99},
+        ])
+        with open(self.csv_path, "w", newline="", encoding="utf-8") as f:
+            f.write("item_name,costco_cost\n")
+        result = self._resolve("Kirkland Signature Nitrile Gloves, Health Care")
+        self.assertIsNotNone(result)
+        self.assertEqual(result["match_quality"], "candidate")
+        self.assertEqual(result["costco_cost_basis"], "candidate_match")
+        self.assertEqual(result["costco_cost"], 21.99)
+        self.assertEqual(result["source"], "product_detail")
+
+    def test_equal_count_zero_shared_identity_never_surfaces(self):
+        """Regression: an accidental equal pack count (100 = 100) with zero
+        shared product-identity tokens must NOT surface as a research
+        candidate. Baby Wipes vs Absorbent Pads share no core word, so the
+        resolver returns None rather than a misleading $19.99 cost."""
+        self._write_json_store(self.detail_path, [
+            {"costco_item_id": "PADS",
+             "item_name": "Kirkland Signature Extra-Large Absorbent Pads, 30 in L X 23 in W, 100-count",
+             "current_price": 19.99},
+        ])
+        with open(self.csv_path, "w", newline="", encoding="utf-8") as f:
+            f.write("item_name,costco_cost\n")
+        result = self._resolve("Baby Wipes Unscented, 100 Count (Pack of 9)")
+        self.assertIsNone(result)
+
+    def test_one_sided_evidence_descriptor_noise_surfaces_candidate(self):
+        """A mismatch caused purely by extra marketing words on one side
+        (health care / food service / home uses) with count evidence on the
+        other and shared identity (nitrile gloves) is a genuine research
+        candidate — surfaced at candidate_match, never authorizing."""
+        self._write_json_store(self.detail_path, [
+            {"costco_item_id": "2043",
+             "item_name": "Kirkland Signature Nitrile Exam Gloves, 400-count, Size Medium",
+             "current_price": 21.99},
+        ])
+        with open(self.csv_path, "w", newline="", encoding="utf-8") as f:
+            f.write("item_name,costco_cost\n")
+        result = self._resolve(
+            "Kirkland Signature Nitrile Gloves, Box of 200, Medium for Health Care, Food Service, Home other uses."
+        )
+        self.assertIsNotNone(result)
+        self.assertEqual(result["match_quality"], "candidate")
+        self.assertEqual(result["costco_cost_basis"], "candidate_match")
+        self.assertEqual(result["costco_cost"], 21.99)
+        self.assertEqual(result["source"], "product_detail")
+
     def test_invoice_exact_is_purchase_authorized(self):
         """Only an exact fingerprint match on an invoice row may carry
         match_quality invoice_confirmed and cost_is_purchase_authorized."""

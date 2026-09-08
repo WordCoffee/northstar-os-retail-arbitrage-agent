@@ -175,6 +175,34 @@ def _best_csv_row(name: str) -> Tuple[Optional[Dict], float]:
     return best, best_ratio
 
 
+def _blocked_csv_probe(name: str) -> Optional[Dict[str, Any]]:
+    """Diagnostic-only surface for a CSV row that fingerprints as a known
+    conflict (mismatch).
+
+    resolve_costco_cost intentionally returns None for hard identity
+    conflicts so the discovery pipeline never passes a failed match as a
+    cost. The coverage report, however, needs to SEE those blocked rows
+    (their reason drives the blocked_mismatch readiness) without ever
+    treating them as a cost basis. This probe reuses the same fuzzy-gate
+    and fingerprint the CSV layer uses, and returns a cost-less mismatch
+    record when the row genuinely conflicts.
+    """
+    best, ratio = _best_csv_row(name)
+    if best is None or ratio < costco_client.MATCH_RATIO_THRESHOLD:
+        return None
+    eq = costco_client.product_equivalence(name, best.get("item_name") or "")
+    if eq.get("match_quality") != "mismatch":
+        return None
+    return {
+        "match_quality": "mismatch",
+        "match_reason": eq.get("match_reason") or "Known identity conflict (CSV row).",
+        "item_name": best.get("item_name"),
+        "costco_cost": None,
+        "cost_status": "blocked_mismatch",
+        "source": "csv:diagnostic",
+    }
+
+
 def _load_ledger() -> Dict[str, str]:
     """Verified ASIN -> costco item_name ledger (read-only)."""
     raw = os.getenv("COSTCO_AMAZON_MAPPING_PATH")
@@ -255,6 +283,11 @@ def analyze_candidates(cache_path: Optional[str] = None) -> Dict[str, Any]:
             amazon_upc=c.get("upc") or c.get("ean"),
             amazon_brand=c.get("brand"),
         )
+        if match is None:
+            # Hard conflicts must not fabricate costs, but the report still
+            # needs to surface them as blocked (with reasons) rather than
+            # silently reading "no candidate".
+            match = _blocked_csv_probe(name)
         quality = match.get("match_quality") if match else None
         layer = match.get("source") if match else "none"
 

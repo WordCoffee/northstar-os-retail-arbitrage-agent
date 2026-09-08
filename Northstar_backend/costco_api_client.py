@@ -1213,6 +1213,84 @@ def _ledger_cost(target_name: str) -> Optional[Dict[str, Any]]:
     return None
 
 
+_HARD_CONFLICT_MARKERS = (
+    "Net weight differs",
+    "Pack/count differs",
+    "UPC/EAN differs",
+    "Unit dimension differs",
+    "Brand differs",
+)
+
+
+def _dimensions_agree(amazon_name: str, costco_item_name: str) -> bool:
+    """True when both titles carry equal fingerprint evidence in at least
+    one dimension (net weight/volume or pack count). Shared equal dimension
+    evidence is the strongest title-only signal that both titles describe
+    the same pack — it is what lets a core/formula word difference be read
+    as marketing-copy variance rather than a proven different product."""
+    a_w = set(costco_client._weight_fingerprint(amazon_name))
+    c_w = set(costco_client._weight_fingerprint(costco_item_name))
+    a_c = set(costco_client._count_fingerprint(amazon_name))
+    c_c = set(costco_client._count_fingerprint(costco_item_name))
+    return bool(
+        (a_w and c_w and a_w == c_w) or (a_c and c_c and a_c == c_c)
+    )
+
+
+def _research_surfacing_candidate(
+    amazon_name: str, record_item_name: str, eq: Dict[str, Any]
+) -> bool:
+    """Research-view eligibility for a non-exact pair.
+
+    Only pairs that are plausible renamings of the same product may surface
+    their cost in the research view, always as candidate_match (never
+    purchase-authorizing):
+      - quality "candidate": no known conflict, one side carries evidence;
+      - quality "mismatch": tolerated ONLY when every hard identity check
+        passes (no weight/pack/UPC/brand/cross-dimension conflict), the two
+        titles share at least one product-identity core token, AND either a
+        fingerprint dimension agrees between the titles or one side carries
+        fingerprint evidence the other lacks entirely. Core/formula word
+        differences that survive these guards are marketing-copy variance,
+        not a proven different product.
+    Quality "unknown" and any pair carrying a hard identity conflict never
+    surface — surfacing those would silently pass a failed match.
+    """
+    mq = eq.get("match_quality")
+    if mq == "unknown":
+        return False
+    reason = eq.get("match_reason") or ""
+    if any(marker in reason for marker in _HARD_CONFLICT_MARKERS):
+        return False
+    if mq == "candidate":
+        return True
+    if mq != "mismatch":
+        return False
+
+    # Core/formula wording conflict: tolerable only with shared product
+    # identity plus non-conflicting dimension evidence.
+    a_core = costco_client._core_tokens(amazon_name)
+    c_core = costco_client._core_tokens(record_item_name)
+    if not (a_core & c_core):
+        return False
+    a_w = set(costco_client._weight_fingerprint(amazon_name))
+    c_w = set(costco_client._weight_fingerprint(record_item_name))
+    a_c = set(costco_client._count_fingerprint(amazon_name))
+    c_c = set(costco_client._count_fingerprint(record_item_name))
+    dimensions_agree = _dimensions_agree(amazon_name, record_item_name)
+    evidence_on_one_side = bool(
+        (not (a_w or a_c) and bool(c_w or c_c))
+        or (not (c_w or c_c) and bool(a_w or a_c))
+    )
+    if dimensions_agree:
+        return True
+    # One-sided evidence (count/weight on exactly one title) is only a
+    # research signal when the titles share MULTIPLE identity tokens — a
+    # single generic category word (e.g. "organic") plus an accidental
+    # pack count is coincidence, not identity.
+    return evidence_on_one_side and len(a_core & c_core) >= 2
+
+
 def resolve_costco_cost(amazon_name: str, amazon_asin: Optional[str] = None,
                         amazon_upc: Optional[str] = None,
                         amazon_brand: Optional[str] = None) -> Optional[Dict[str, Any]]:
@@ -1233,9 +1311,13 @@ def resolve_costco_cost(amazon_name: str, amazon_asin: Optional[str] = None,
     "invoice_confirmed" (provenance of the paid number), and
     cost_is_purchase_authorized is always False — invoices never authorize
     or gate a high-confidence candidate.
-    Pass 2: any non-exact (candidate / mismatch / unknown) from the same
-    priority order, surfaced as candidate_match for the research view
-    only — never COGS/ROI. Returns None when no layer has any match.
+    Pass 2: research candidates from the same priority order, surfaced as
+    candidate_match for the research view only — never COGS/ROI. Eligible
+    pairs are genuine "candidate" classifications plus core-only
+    "mismatches" where a fingerprint dimension agrees between the titles.
+    Hard identity conflicts (weight/pack/UPC/brand/cross-dimension) and
+    "unknown" pairs are never surfaced as costs. Returns None when no layer
+    has any usable match.
     Never performs network calls and never invents costs.
     """
     ledger_name = ledger_lookup(amazon_asin)
@@ -1335,17 +1417,39 @@ def resolve_costco_cost(amazon_name: str, amazon_asin: Optional[str] = None,
             "layer": "csv",
         })
 
+    # Research fallback: only pairs that are plausible renamings of the same
+    # product may surface a research cost (candidate_match basis). Hard
+    # identity conflicts (weight/pack/UPC/brand/cross-dimension) and
+    # evidence-lacking "unknown" pairs never surface — those would silently
+    # pass a failed match. Core/formula word differences are tolerated at
+    # the research tier ONLY when a fingerprint dimension agrees between the
+    # titles (marketing-copy variance, not a proven different product).
+    # The strongest normalized title identity wins over store order.
+    candidates = []
     for entry in non_exact:
         eq = entry["eq"]
-        mq = eq.get("match_quality")
+        record = entry["record"]
+        if not _research_surfacing_candidate(
+            amazon_name, record.get("item_name") or "", eq
+        ):
+            continue
         if entry["layer"] == "csv":
-            cost = entry["record"].get("costco_cost")
+            cost = record.get("costco_cost")
         elif entry["layer"] == "invoice_confirmed":
-            cost = entry["record"].get("paid_cost")
+            cost = record.get("paid_cost")
         else:
-            cost = entry["record"].get("current_price")
+            cost = record.get("current_price")
         if cost is None:
             continue
+        candidates.append((entry, cost))
+
+    if candidates:
+        def _sim(item: Tuple[Dict[str, Any], Any]) -> float:
+            return costco_client._title_similarity(
+                amazon_name, item[0]["record"].get("item_name") or ""
+            )
+
+        entry, cost = max(candidates, key=_sim)
         prefix = ""
         if entry["layer"] == "invoice_confirmed":
             prefix = "Invoice %s: " % (entry["record"].get("invoice_number") or "?")
@@ -1353,10 +1457,35 @@ def resolve_costco_cost(amazon_name: str, amazon_asin: Optional[str] = None,
             "item_name": entry["record"].get("item_name"),
             "costco_cost": cost,
             "costco_cost_basis": "candidate_match",
-            "match_quality": mq,
-            "match_reason": prefix + (eq.get("match_reason") or "Exact product equivalence unverified."),
+            "match_quality": "candidate",
+            "match_reason": prefix + (entry["eq"].get("match_reason") or "Exact product equivalence unverified."),
             "cost_status": "candidate_match",
             "source": entry["layer"],
+        }
+
+    # Invoice blocked-surface: a mismatched / evidence-lacking INVOICE row is
+    # rare operator-paid evidence, so its cost is surfaced for the research
+    # view with the conflict EXPLICITLY preserved (match_quality stays
+    # mismatch; basis candidate_match) — never invoice_confirmed, never
+    # purchase-authorized. Product-detail and CSV rows are never surfaced
+    # this way: a broad store would flood unrelated costs.
+    for entry in non_exact:
+        if entry["layer"] != "invoice_confirmed":
+            continue
+        cost = entry["record"].get("paid_cost")
+        if cost is None:
+            continue
+        return {
+            "item_name": entry["record"].get("item_name"),
+            "costco_cost": cost,
+            "costco_cost_basis": "candidate_match",
+            "match_quality": entry["eq"].get("match_quality"),
+            "match_reason": "Invoice %s: %s" % (
+                entry["record"].get("invoice_number") or "?",
+                entry["eq"].get("match_reason") or "Exact product equivalence unverified.",
+            ),
+            "cost_status": "candidate_match",
+            "source": "invoice_confirmed",
         }
     return None
 

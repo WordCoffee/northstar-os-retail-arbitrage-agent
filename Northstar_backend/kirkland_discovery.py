@@ -495,6 +495,11 @@ def qualifies_for_analysis(product: Dict, costco_match: Dict) -> Dict:
     if costco_cost is None:
         reasons.append("No Costco cost basis found")
         qualifies = False
+    else:
+        quality = costco_match.get("match_quality")
+        if quality not in ("exact", "high_confidence", "invoice_confirmed"):
+            reasons.append("Costco match not fingerprint-confirmed (quality=%s)" % quality)
+            qualifies = False
     
     return {
         "qualifies": qualifies,

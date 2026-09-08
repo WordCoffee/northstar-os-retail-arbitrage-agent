@@ -183,6 +183,45 @@ class ProductEquivalenceTests(unittest.TestCase):
         )
         self.assertEqual(r["match_quality"], "exact")
 
+    def test_hyphenated_count_and_weight_parse_identically(self):
+        """'13-Gallon' and '200-count' (hyphenated) must parse to the same
+        fingerprints as their space-separated forms on the other side."""
+        a_w = costco_client._weight_fingerprint(
+            "Kirkland Signature 13 Gallon 200 Ct Carton Trash Bags"
+        )
+        c_w = costco_client._weight_fingerprint(
+            "Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count"
+        )
+        a_c = costco_client._count_fingerprint(
+            "Kirkland Signature 13 Gallon 200 Ct Carton Trash Bags"
+        )
+        c_c = costco_client._count_fingerprint(
+            "Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count"
+        )
+        self.assertEqual(a_w, c_w)
+        self.assertEqual(a_c, c_c)
+
+    def test_trash_bag_long_title_and_costco_row_are_exact(self):
+        """The real-world pair that previously failed: a long Amazon title
+        with marketing descriptors vs the short Costco catalog row. Equal
+        weight (13 gallon), equal pack (200 ct), equal core (trash) must be
+        an exact fingerprint match -- not blocked by marketing copy."""
+        r = self.eq(
+            "Kirkland Signature 13 Gallon 200 Ct Carton 100% recyclable Heavy Duty Trash Bags",
+            "Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count",
+        )
+        self.assertEqual(r["match_quality"], "exact")
+        self.assertIsNone(r["match_reason"])
+
+    def test_marketing_descriptors_do_not_force_formula_mismatch(self):
+        """Symmetric check: descriptor words alone never drive a 'formula
+        differs' mismatch when weight and pack match."""
+        r = self.eq(
+            "Kirkland Signature Heavy Duty Recyclable Carton Trash Bags 13 Gallon 200 Ct",
+            "Kirkland Signature Flex-Tech Kitchen Trash Bag, 13-Gallon, 200-count",
+        )
+        self.assertEqual(r["match_quality"], "exact")
+
     def test_flavor_swap_is_mismatch(self):
         r = self.eq(
             "Kirkland Signature Adult Formula Chicken, Rice and Vegetable Dog Food 40 lb.",
