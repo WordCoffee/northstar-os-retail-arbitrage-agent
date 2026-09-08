@@ -425,13 +425,30 @@ def _key(query: str) -> str:
 
 
 def _load_unresolved_titles(manifest_path: str) -> List[Dict]:
-    """Pull {title} rows whose offline resolution needs a live lookup."""
+    """Pull {title} rows whose offline resolution needs a live lookup.
+
+    Two manifest conventions are supported:
+    - build-manifest emits rows with no Costco item number under a top-level
+      ``pending_lookup`` list keyed off the master capture CSV (each row
+      carries ``amazon_title``); there are no ``items[]`` rows flagged
+      ``resolution == "unresolved_needs_lookup"`` in that shape.
+    - prepared manifests with an ``items[]`` list flag unresolved rows with
+      ``resolution == "unresolved_needs_lookup"``.
+
+    The items[] convention wins when present (it is more explicit); otherwise
+    the pending_lookup rows are treated as titles needing a live search.
+    """
     with open(manifest_path, encoding="utf-8-sig") as fh:
         data = json.load(fh)
     rows = []
     for it in data.get("items", []):
         if it.get("resolution") == "unresolved_needs_lookup":
             rows.append(it)
+    if not rows:
+        for it in data.get("pending_lookup", []):
+            title = it.get("amazon_title") or it.get("requested_title")
+            if title:
+                rows.append({"requested_title": title})
     return rows
 
 
