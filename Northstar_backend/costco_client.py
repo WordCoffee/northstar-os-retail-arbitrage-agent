@@ -42,12 +42,28 @@ _UNIT_WORDS = {
     "serving", "servings", "wipes", "pads", "packet", "packets",
 }
 
+# Value-neutral packaging/marketing descriptors that never establish
+# formula/flavor identity. Two Kirkland rows differing only in these words
+# describe the same formula and pack (e.g. "Flex-Tech Kitchen Trash Bags"
+# vs "Heavy Duty Recyclable Trash Bags"); excluding them from core tokens
+# prevents "formula differs" mismatches driven purely by marketing copy.
+_CORE_STOP_WORDS = {
+    "heavy", "duty", "recyclable", "disposable", "carton",
+    "flex", "tech", "kitchen", "bathroom",
+    "exam", "stretch", "tite",
+    "box", "boxes", "care", "cleaning", "health",
+    "garbage", "drawstring",
+}
+
+# Number-to-unit separator accepts whitespace or a hyphen so "13-Gallon"
+# and "200-count" parse identically to "13 gallon" / "200 count".
+_SEP = r"[\s-]*"
 _WEIGHT_RE = re.compile(
-    r"(\d+(?:\.\d+)?)\s*(fl\s*oz|oz|lb|lbs|pounds?|kg|g|grams?|mg|mcg|liters?|l|gal|gallons?|ml)\b",
+    r"(\d+(?:\.\d+)?)" + _SEP + r"(fl\s*oz|oz|lb|lbs|pounds?|kg|g|grams?|mg|mcg|liters?|l|gal|gallons?|ml)\b",
     re.IGNORECASE,
 )
 _COUNT_RE = re.compile(
-    r"(\d+(?:\.\d+)?)\s*(ct|count|pk|packs?|each|eaches|sheets?|rolls?|bags?|bars?|cans?|bottles?|pieces?|tablets?|capsules?|pills?|tabs?|servings?|wipes|pads|packets?)\b",
+    r"(\d+(?:\.\d+)?)" + _SEP + r"(ct|count|pk|packs?|each|eaches|sheets?|rolls?|bags?|bars?|cans?|bottles?|pieces?|tablets?|capsules?|pills?|tabs?|servings?|wipes|pads|packets?)\b",
     re.IGNORECASE,
 )
 _PAREN_COUNT_RE = re.compile(r"\(\s*(\d+(?:\.\d+)?)\s*(?:ct|count|pk|pack)?\s*\)", re.IGNORECASE)
@@ -76,7 +92,7 @@ def _tokens(text: str) -> List[str]:
 def _weight_fingerprint(text: str) -> List[Tuple[str, float]]:
     """All net-weight/volume dimensions as (family, canonical value)."""
     found = []
-    for raw in re.findall(r"(\d+(?:\.\d+)?)\s*(fl\s*oz|oz|lb|lbs|pounds?|kg|g|grams?|mg|mcg|liters?|l|gal|gallons?|ml)\b", text.casefold()):
+    for raw in _WEIGHT_RE.findall(text.casefold()):
         value = float(raw[0])
         unit = raw[1].replace("fl oz", "floz").strip()
         if unit in ("lb", "lbs", "pound", "pounds"):
@@ -130,12 +146,13 @@ def _upc_fingerprint(text: str) -> Optional[str]:
 
 
 def _core_tokens(text: str) -> set:
-    """Flavor / product-line tokens: brand, units, numbers, and generic
-    connectives removed. A differing core on either side means the
-    formula/flavor is known to differ (mismatch), not just unknown."""
+    """Flavor / product-line tokens: brand, units, numbers, generic
+    connectives, and value-neutral packaging descriptors removed. A
+    differing core on either side means the formula/flavor is known to
+    differ (mismatch), not just unknown."""
     core = set()
     for t in _tokens(text):
-        if t in _BRAND_WORDS or t in _STOP_WORDS or t in _UNIT_WORDS:
+        if t in _BRAND_WORDS or t in _STOP_WORDS or t in _UNIT_WORDS or t in _CORE_STOP_WORDS:
             continue
         if re.search(r"\d", t):
             continue

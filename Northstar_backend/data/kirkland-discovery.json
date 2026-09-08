@@ -3,11 +3,11 @@
     "total_candidates_scanned": 232,
     "kirkland_products_found": 138,
     "food_excluded": 0,
-    "qualified_count": 2,
+    "qualified_count": 1,
     "with_bsr_estimate": 84,
-    "with_costco_match": 11,
+    "with_costco_match": 22,
     "min_sales_threshold": 500,
-    "generated_at": "2026-09-07T21:06:45.660606+00:00",
+    "generated_at": "2026-09-08T15:08:39.718324+00:00",
     "cache_source": "brightdata",
     "cache_fetched_at": "2026-08-18T01:43:46.384271+00:00"
   },
@@ -27,41 +27,14 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": 33.65,
-      "costco_cost_basis": "candidate_match",
-      "match_quality": "candidate",
-      "match_reason": "No conflict, but weight/pack equivalence cannot be confirmed (Amazon side carries no weight/pack/UPC).",
+      "costco_cost": 36.99,
+      "costco_cost_basis": "brightdata_costco_page",
+      "match_quality": "exact",
+      "match_reason": null,
       "qualifies": true,
       "qualification_reasons": [],
       "rating": 4.6,
       "review_count": 4088,
-      "seller_count": null,
-      "fba_sellers": null,
-      "enriched_at": null
-    },
-    {
-      "asin": "B07XLZXQRP",
-      "name": "Signature Bath Tissue, 2-Ply, 425 sheets, 30 rolls",
-      "brand": "KIRKLAND",
-      "amazon_price": 39.99,
-      "product_url": "https://www.amazon.com/dp/B07XLZXQRP",
-      "category": null,
-      "category_inferred": "Home & Kitchen",
-      "normalized_category": "Home & Kitchen",
-      "bsr": null,
-      "bsr_category": null,
-      "monthly_sales_estimate": 600.0,
-      "sales_estimation_method": "provider_monthly_sales_estimate",
-      "sales_estimation_source": "amazon_search_card",
-      "sales_estimation_confidence": "higher",
-      "costco_cost": 27.49,
-      "costco_cost_basis": "candidate_match",
-      "match_quality": "mismatch",
-      "match_reason": "Pack/count differs (Amazon [(30.0, 'count'), (425.0, 'count')] vs Costco [(30.0, 'count'), (380.0, 'count')])",
-      "qualifies": true,
-      "qualification_reasons": [],
-      "rating": 4.4,
-      "review_count": 639,
       "seller_count": null,
       "fba_sellers": null,
       "enriched_at": null
@@ -83,13 +56,13 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": null,
-      "costco_cost_basis": null,
-      "match_quality": null,
-      "match_reason": null,
+      "costco_cost": 22.49,
+      "costco_cost_basis": "candidate_match",
+      "match_quality": "candidate",
+      "match_reason": "Formula/flavor differs: trash, white vs scented, trash",
       "qualifies": false,
       "qualification_reasons": [
-        "No Costco cost basis found"
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.7,
       "review_count": 4319,
@@ -146,8 +119,10 @@
       "costco_cost_basis": "candidate_match",
       "match_quality": "mismatch",
       "match_reason": "Pack/count differs (Amazon [(30.0, 'count'), (425.0, 'count')] vs Costco [(30.0, 'count'), (380.0, 'count')])",
-      "qualifies": true,
-      "qualification_reasons": [],
+      "qualifies": false,
+      "qualification_reasons": [
+        "Costco match not fingerprint-confirmed (quality=mismatch)"
+      ],
       "rating": 4.4,
       "review_count": 639,
       "seller_count": null,
@@ -169,13 +144,13 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": null,
-      "costco_cost_basis": null,
-      "match_quality": null,
-      "match_reason": null,
+      "costco_cost": 20.99,
+      "costco_cost_basis": "candidate_match",
+      "match_quality": "candidate",
+      "match_reason": "Formula/flavor differs: acids, concentrate, fatty, fish, oil, omega, softgels vs fish, oil, softgels",
       "qualifies": false,
       "qualification_reasons": [
-        "No Costco cost basis found"
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.8,
       "review_count": 1616,
@@ -204,7 +179,8 @@
       "match_reason": "Pack/count differs (Amazon [(2.0, 'count')] vs Costco [(72.0, 'count')])",
       "qualifies": false,
       "qualification_reasons": [
-        "Monthly sales estimate (200) below threshold (500)"
+        "Monthly sales estimate (200) below threshold (500)",
+        "Costco match not fingerprint-confirmed (quality=mismatch)"
       ],
       "rating": 4.6,
       "review_count": 4088,
@@ -315,10 +291,10 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": 33.65,
-      "costco_cost_basis": "candidate_match",
-      "match_quality": "candidate",
-      "match_reason": "No conflict, but weight/pack equivalence cannot be confirmed (Amazon side carries no weight/pack/UPC).",
+      "costco_cost": 36.99,
+      "costco_cost_basis": "brightdata_costco_page",
+      "match_quality": "exact",
+      "match_reason": null,
       "qualifies": true,
       "qualification_reasons": [],
       "rating": 4.6,
@@ -342,14 +318,14 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": null,
-      "costco_cost_basis": null,
-      "match_quality": null,
-      "match_reason": null,
+      "costco_cost": 26.99,
+      "costco_cost_basis": "candidate_match",
+      "match_quality": "candidate",
+      "match_reason": "Formula/flavor differs: softgels, wcaqz vs softgels",
       "qualifies": false,
       "qualification_reasons": [
         "Monthly sales estimate (400) below threshold (500)",
-        "No Costco cost basis found"
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.8,
       "review_count": 596,
@@ -490,13 +466,13 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": null,
-      "costco_cost_basis": null,
-      "match_quality": null,
-      "match_reason": null,
+      "costco_cost": 21.99,
+      "costco_cost_basis": "candidate_match",
+      "match_quality": "candidate",
+      "match_reason": "Formula/flavor differs: food, gloves, home, medium, nitrile, other, service, uses vs extra, gloves, large, nitrile, size",
       "qualifies": false,
       "qualification_reasons": [
-        "No Costco cost basis found"
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.6,
       "review_count": 695,
@@ -550,11 +526,12 @@
       "sales_estimation_confidence": "unknown",
       "costco_cost": 20.89,
       "costco_cost_basis": "candidate_match",
-      "match_quality": "mismatch",
+      "match_quality": "candidate",
       "match_reason": "Formula/flavor differs: boxer, brief, cotton, men, pima vs boxer, brief, men",
       "qualifies": false,
       "qualification_reasons": [
-        "No sales estimate available (no provider estimate, no BSR)"
+        "No sales estimate available (no provider estimate, no BSR)",
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.6,
       "review_count": 2319,
@@ -786,14 +763,13 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": null,
-      "costco_cost_basis": null,
-      "match_quality": null,
+      "costco_cost": 26.99,
+      "costco_cost_basis": "brightdata_costco_page",
+      "match_quality": "exact",
       "match_reason": null,
       "qualifies": false,
       "qualification_reasons": [
-        "Monthly sales estimate (200) below threshold (500)",
-        "No Costco cost basis found"
+        "Monthly sales estimate (200) below threshold (500)"
       ],
       "rating": 4.8,
       "review_count": 1256,
@@ -965,11 +941,12 @@
       "sales_estimation_confidence": "higher",
       "costco_cost": 20.89,
       "costco_cost_basis": "candidate_match",
-      "match_quality": "mismatch",
+      "match_quality": "candidate",
       "match_reason": "Formula/flavor differs: boxer, brief, cotton, men, pima vs boxer, brief, men",
       "qualifies": false,
       "qualification_reasons": [
-        "Monthly sales estimate (200) below threshold (500)"
+        "Monthly sales estimate (200) below threshold (500)",
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.6,
       "review_count": 2319,
@@ -1171,14 +1148,14 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": null,
-      "costco_cost_basis": null,
-      "match_quality": null,
-      "match_reason": null,
+      "costco_cost": 17.99,
+      "costco_cost_basis": "candidate_match",
+      "match_quality": "candidate",
+      "match_reason": "Formula/flavor differs: adults, mature, multi vs adult, mature, minerals, multi, vitamins",
       "qualifies": false,
       "qualification_reasons": [
         "Monthly sales estimate (200) below threshold (500)",
-        "No Costco cost basis found"
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.7,
       "review_count": 2943,
@@ -1201,14 +1178,14 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": null,
-      "costco_cost_basis": null,
-      "match_quality": null,
-      "match_reason": null,
+      "costco_cost": 39.99,
+      "costco_cost_basis": "candidate_match",
+      "match_quality": "candidate",
+      "match_reason": "No conflict, but weight/pack equivalence cannot be confirmed (Costco side carries no weight/pack/UPC).",
       "qualifies": false,
       "qualification_reasons": [
         "Monthly sales estimate (400) below threshold (500)",
-        "No Costco cost basis found"
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.8,
       "review_count": 701,
@@ -1413,11 +1390,12 @@
       "sales_estimation_confidence": "unknown",
       "costco_cost": 20.89,
       "costco_cost_basis": "candidate_match",
-      "match_quality": "mismatch",
+      "match_quality": "candidate",
       "match_reason": "Formula/flavor differs: black, boxer, briefs, medium, men vs boxer, brief, men",
       "qualifies": false,
       "qualification_reasons": [
-        "No sales estimate available (no provider estimate, no BSR)"
+        "No sales estimate available (no provider estimate, no BSR)",
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.6,
       "review_count": 210,
@@ -1562,11 +1540,12 @@
       "sales_estimation_confidence": "unknown",
       "costco_cost": 20.89,
       "costco_cost_basis": "candidate_match",
-      "match_quality": "mismatch",
+      "match_quality": "candidate",
       "match_reason": "Formula/flavor differs: black, boxer, brief, gray, large, men vs boxer, brief, men",
       "qualifies": false,
       "qualification_reasons": [
-        "No sales estimate available (no provider estimate, no BSR)"
+        "No sales estimate available (no provider estimate, no BSR)",
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.7,
       "review_count": 242,
@@ -2159,14 +2138,13 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": null,
-      "costco_cost_basis": null,
-      "match_quality": null,
+      "costco_cost": 26.99,
+      "costco_cost_basis": "brightdata_costco_page",
+      "match_quality": "exact",
       "match_reason": null,
       "qualifies": false,
       "qualification_reasons": [
-        "Monthly sales estimate (200) below threshold (500)",
-        "No Costco cost basis found"
+        "Monthly sales estimate (200) below threshold (500)"
       ],
       "rating": 4.7,
       "review_count": 36,
@@ -2459,14 +2437,14 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": null,
-      "costco_cost_basis": null,
-      "match_quality": null,
-      "match_reason": null,
+      "costco_cost": 19.99,
+      "costco_cost_basis": "candidate_match",
+      "match_quality": "candidate",
+      "match_reason": "Formula/flavor differs: absorbent, extra, large vs absorbent, extra, in, large",
       "qualifies": false,
       "qualification_reasons": [
         "Monthly sales estimate (200) below threshold (500)",
-        "No Costco cost basis found"
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.1,
       "review_count": 7,
@@ -2489,14 +2467,14 @@
       "sales_estimation_method": "provider_monthly_sales_estimate",
       "sales_estimation_source": "amazon_search_card",
       "sales_estimation_confidence": "higher",
-      "costco_cost": null,
-      "costco_cost_basis": null,
-      "match_quality": null,
-      "match_reason": null,
+      "costco_cost": 8.99,
+      "costco_cost_basis": "candidate_match",
+      "match_quality": "candidate",
+      "match_reason": "Formula/flavor differs: california, garlic, granulated vs garlic, granulated",
       "qualifies": false,
       "qualification_reasons": [
         "Monthly sales estimate (50) below threshold (500)",
-        "No Costco cost basis found"
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.6,
       "review_count": 231,
@@ -3863,14 +3841,14 @@
       "sales_estimation_method": "unknown",
       "sales_estimation_source": "unknown",
       "sales_estimation_confidence": "unknown",
-      "costco_cost": null,
-      "costco_cost_basis": null,
-      "match_quality": null,
-      "match_reason": null,
+      "costco_cost": 18.99,
+      "costco_cost_basis": "candidate_match",
+      "match_quality": "candidate",
+      "match_reason": "Formula/flavor differs: clear, crystal, cutlery vs clear, cutlery",
       "qualifies": false,
       "qualification_reasons": [
         "No sales estimate available (no provider estimate, no BSR)",
-        "No Costco cost basis found"
+        "Costco match not fingerprint-confirmed (quality=candidate)"
       ],
       "rating": 4.5,
       "review_count": 24,
