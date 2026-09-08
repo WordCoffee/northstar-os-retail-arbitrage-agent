@@ -11,41 +11,6 @@ import costco_api_client as cac
 import costco_client
 
 
-def make_result(item_id="10189101", name="Kirkland Signature Organic K-Cups Variety Pack (120ct)", price=49.99, price_reduced=None, in_stock=True):
-    result = {
-        "id": item_id,
-        "retailer_id": "9" + item_id,
-        "name": name,
-        "url": f"https://www.costcobusinessdelivery.com/{name.lower().replace(' ', '-')}.product.{item_id}.html",
-        "thumbnail": "https://bfasset.costco-static.com/U447IH35/as/img/thumb.jpg",
-        "price": price,
-        "currency": "USD",
-        "in_stock": in_stock,
-        "is_warehouse_only": False,
-        "promo": "SAVE $10 online",
-        "brand": "Kirkland Signature",
-        "model_number": "KS-1",
-        "variants": [{"id": "v1", "price": price}],
-        "variants_max_price": price,
-    }
-    if price_reduced is not None:
-        result["price_reduced"] = price_reduced
-    return result
-
-
-def make_page(results, success=True, no_of_pages=1, total_results=None):
-    return {
-        "success": success,
-        "platform": "costco_search",
-        "search": "kirkland",
-        "page": 1,
-        "total_results": total_results or len(results),
-        "no_of_pages": no_of_pages,
-        "result_count": len(results),
-        "results": results,
-    }
-
-
 def normalized_item(item_id="10189101", name="Kirkland Test Item", price=49.99, price_reduced=None, in_stock=True):
     record = {
         "item_name": name,
@@ -54,7 +19,7 @@ def normalized_item(item_id="10189101", name="Kirkland Test Item", price=49.99, 
         "regular_price": price,
         "sale_price": price_reduced,
         "price_basis": "sale" if price_reduced is not None else ("regular" if price is not None else None),
-        "cost_basis": "business_delivery_online",
+        "cost_basis": "costco_online",
         "availability": "in_stock" if in_stock else "out_of_stock",
         "promo": None,
         "variants_count": 0,
@@ -69,7 +34,7 @@ def normalized_item(item_id="10189101", name="Kirkland Test Item", price=49.99, 
 def normalized_page(items, no_of_pages=1):
     return {
         "success": True,
-        "source": "unwrangle",
+        "source": "openwebninja",
         "platform": "costco_search",
         "search": "kirkland",
         "page": 1,
@@ -88,100 +53,6 @@ class FakeResponse:
 
     def json(self):
         return self.payload
-
-
-class SearchPageTests(unittest.TestCase):
-    def _run(self, payload, status_code=200, env=None):
-        env = env or {"UNWRANGLE_API_KEY": "key-123"}
-        env["COSTCO_CATALOG_SOURCE"] = "UNWRANGLE"
-        calls = []
-
-        def fake_get(url, params=None, timeout=None):
-            calls.append({"url": url, "params": params, "timeout": timeout})
-            return FakeResponse(payload, status_code=status_code)
-
-        with mock.patch.dict("os.environ", env):
-            with mock.patch("costco_api_client.requests.get", side_effect=fake_get):
-                result = cac.search_page("kirkland", 1)
-        return result, calls
-
-    def test_success_flow_normalized(self):
-        page = make_page([make_result()])
-        result, calls = self._run(page)
-        self.assertEqual(len(calls), 1)
-        p = calls[0]["params"]
-        self.assertEqual(calls[0]["url"], "https://data.unwrangle.com/api/getter/")
-        self.assertEqual(calls[0]["timeout"], 60)
-        self.assertEqual(p["platform"], "costco_search")
-        self.assertEqual(p["search"], "kirkland")
-        self.assertEqual(p["page"], "1")
-        self.assertTrue(p["api_key"])
-
-        self.assertIs(result["success"], True)
-        self.assertEqual(result["no_of_pages"], 1)
-        self.assertEqual(result["result_count"], 1)
-        item = result["items"][0]
-        self.assertEqual(item["item_name"], "Kirkland Signature Organic K-Cups Variety Pack (120ct)")
-        self.assertEqual(item["costco_item_id"], "10189101")
-        self.assertEqual(item["regular_price"], 49.99)
-        self.assertIsNone(item["sale_price"])
-        self.assertEqual(item["price_basis"], "regular")
-        self.assertEqual(item["cost_basis"], "business_delivery_online")
-        self.assertEqual(item["availability"], "in_stock")
-        self.assertEqual(item["promo"], "SAVE $10 online")
-        self.assertEqual(item["source_url"], result["items"][0]["source_url"])
-        self.assertTrue(item["fetched_at"])
-
-    def test_sale_price_used_as_basis(self):
-        page = make_page([make_result(price_reduced=18.99)])
-        result, _ = self._run(page)
-        item = result["items"][0]
-        self.assertEqual(item["sale_price"], 18.99)
-        self.assertEqual(item["price_basis"], "sale")
-
-    def test_out_of_stock_and_warehouse_only(self):
-        page = make_page([make_result(in_stock=False)])
-        result, _ = self._run(page)
-        self.assertEqual(result["items"][0]["availability"], "out_of_stock")
-
-        page = make_page([make_result(in_stock=True)])
-        page["results"][0]["is_warehouse_only"] = True
-        result, _ = self._run(page)
-        self.assertEqual(result["items"][0]["availability"], "warehouse_only")
-
-    def test_missing_key_no_request(self):
-        result, calls = self._run(make_page([make_result()]), env={"UNWRANGLE_API_KEY": ""})
-        self.assertEqual(calls, [])
-        self.assertFalse(result["success"])
-        self.assertTrue(any("API key" in g for g in result["data_gaps"]))
-
-    def test_success_false(self):
-        result, calls = self._run(make_page([], success=False))
-        self.assertEqual(len(calls), 1)
-        self.assertFalse(result["success"])
-        self.assertTrue(any("success" in g for g in result["data_gaps"]))
-
-    def test_http_error(self):
-        result, calls = self._run({"error": "boom"}, status_code=500)
-        self.assertEqual(len(calls), 1)
-        self.assertTrue(any("HTTP 500" in g for g in result["data_gaps"]))
-
-    def test_timeout(self):
-        def timeout_get(url, params=None, timeout=None):
-            raise cac.requests.exceptions.Timeout("t")
-
-        with mock.patch.dict("os.environ", {"UNWRANGLE_API_KEY": "key-123", "COSTCO_CATALOG_SOURCE": "UNWRANGLE"}):
-            with mock.patch("costco_api_client.requests.get", side_effect=timeout_get):
-                result = cac.search_page("kirkland", 1)
-        self.assertFalse(result["success"])
-        self.assertTrue(any("timed out" in g for g in result["data_gaps"]))
-
-    def test_missing_results_list(self):
-        page = make_page([make_result()])
-        page["results"] = None
-        result, _ = self._run(page)
-        self.assertFalse(result["success"])
-        self.assertTrue(any("missing results" in g for g in result["data_gaps"]))
 
 
 def openwebninja_product(item_number="1032932", name="Kirkland Signature Organic Raw Honey, 24 oz, 3-count", sale_price=14.99, list_price=14.99, availability="in stock"):
@@ -299,18 +170,24 @@ class ProviderDispatchTests(unittest.TestCase):
     def test_openwebninja_source_dispatches_to_openwebninja(self):
         with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "OPENWEBNINJA"}):
             with mock.patch.object(cac, "_search_openwebninja", return_value={"success": True, "items": []}) as mock_ow:
-                with mock.patch.object(cac, "_search_unwrangle") as mock_uw:
-                    cac.search_page("kirkland", 1)
+                with mock.patch.object(cac, "requests") as mock_requests:
+                    result = cac.search_page("kirkland", 1)
         mock_ow.assert_called_once_with("kirkland")
-        mock_uw.assert_not_called()
+        mock_requests.get.assert_not_called()
+        self.assertTrue(result["success"])
 
-    def test_unwrangle_source_dispatches_to_unwrangle(self):
+    def test_unwrangle_source_maps_to_off(self):
+        """Legacy COSTCO_CATALOG_SOURCE=UNWRANGLE maps to OFF (provider
+        removed 2026-09); search_page returns the safe OFF shape without
+        calling any provider function or the network."""
         with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE"}):
             with mock.patch.object(cac, "_search_openwebninja") as mock_ow:
-                with mock.patch.object(cac, "_search_unwrangle", return_value={"success": True, "items": []}) as mock_uw:
-                    cac.search_page("kirkland", 1)
+                with mock.patch.object(cac, "requests") as mock_requests:
+                    result = cac.search_page("kirkland", 1)
         mock_ow.assert_not_called()
-        mock_uw.assert_called_once_with("kirkland", 1)
+        mock_requests.get.assert_not_called()
+        self.assertFalse(result["success"])
+        self.assertTrue(any("off" in g for g in result["data_gaps"]))
 
     def test_off_source_returns_safe_shape_no_network(self):
         with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "OFF"}):
@@ -326,118 +203,6 @@ class TypedFailureClassificationTests(unittest.TestCase):
     can distinguish auth_error from not_found from rate_limited from
     transport_error from malformed_response without parsing the
     data_gaps string. Zero network: all responses are mocked."""
-
-    # ----- Unwrangle search -----
-    def _unwrangle_env(self, key=""):
-        env = {"UNWRANGLE_API_KEY": key, "COSTCO_CATALOG_SOURCE": "UNWRANGLE"}
-        return env
-
-    def test_unwrangle_missing_key_is_auth_error(self):
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="")):
-            with mock.patch("costco_api_client.requests.get") as mock_get:
-                result = cac._search_unwrangle("kirkland", 1)
-        mock_get.assert_not_called()
-        self.assertEqual(result["failure_type"], "auth_error")
-        self.assertFalse(result["success"])
-        self.assertIsNone(result["http_status"])
-
-    def test_unwrangle_http_200_success(self):
-        page = make_page([make_result()])
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
-            with mock.patch("costco_api_client.requests.get",
-                            return_value=FakeResponse(page, status_code=200)):
-                result = cac._search_unwrangle("kirkland", 1)
-        self.assertEqual(result["failure_type"], "success")
-        self.assertTrue(result["success"])
-        self.assertEqual(result["http_status"], 200)
-        self.assertEqual(result["result_count"], 1)
-
-    def test_unwrangle_http_401_is_auth_error(self):
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
-            with mock.patch("costco_api_client.requests.get",
-                            return_value=FakeResponse({}, status_code=401)):
-                result = cac._search_unwrangle("kirkland", 1)
-        self.assertEqual(result["failure_type"], "auth_error")
-        self.assertEqual(result["http_status"], 401)
-        self.assertFalse(result["success"])
-
-    def test_unwrangle_http_403_is_auth_error(self):
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
-            with mock.patch("costco_api_client.requests.get",
-                            return_value=FakeResponse({}, status_code=403)):
-                result = cac._search_unwrangle("kirkland", 1)
-        self.assertEqual(result["failure_type"], "auth_error")
-        self.assertEqual(result["http_status"], 403)
-        self.assertFalse(result["success"])
-
-    def test_unwrangle_http_404_is_not_found(self):
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
-            with mock.patch("costco_api_client.requests.get",
-                            return_value=FakeResponse({}, status_code=404)):
-                result = cac._search_unwrangle("kirkland", 1)
-        self.assertEqual(result["failure_type"], "not_found")
-        self.assertEqual(result["http_status"], 404)
-        self.assertFalse(result["success"])
-
-    def test_unwrangle_http_429_is_rate_limited(self):
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
-            with mock.patch("costco_api_client.requests.get",
-                            return_value=FakeResponse({}, status_code=429)):
-                result = cac._search_unwrangle("kirkland", 1)
-        self.assertEqual(result["failure_type"], "rate_limited")
-        self.assertEqual(result["http_status"], 429)
-        self.assertFalse(result["success"])
-
-    def test_unwrangle_timeout_is_transport_error(self):
-        def timeout_get(url, params=None, timeout=None):
-            raise cac.requests.exceptions.Timeout("t")
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
-            with mock.patch("costco_api_client.requests.get", side_effect=timeout_get):
-                result = cac._search_unwrangle("kirkland", 1)
-        self.assertEqual(result["failure_type"], "transport_error")
-        self.assertFalse(result["success"])
-
-    def test_unwrangle_network_error_is_transport_error(self):
-        def net_get(url, params=None, timeout=None):
-            raise cac.requests.exceptions.ConnectionError("dns")
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
-            with mock.patch("costco_api_client.requests.get", side_effect=net_get):
-                result = cac._search_unwrangle("kirkland", 1)
-        self.assertEqual(result["failure_type"], "transport_error")
-        self.assertFalse(result["success"])
-
-    def test_unwrangle_malformed_json_is_malformed_response(self):
-        class BadJson:
-            status_code = 200
-            def json(self):
-                raise ValueError("not json")
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
-            with mock.patch("costco_api_client.requests.get", return_value=BadJson()):
-                result = cac._search_unwrangle("kirkland", 1)
-        self.assertEqual(result["failure_type"], "malformed_response")
-        self.assertEqual(result["http_status"], 200)
-        self.assertFalse(result["success"])
-
-    def test_unwrangle_success_false_is_malformed_response(self):
-        page = make_page([make_result()], success=False)
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
-            with mock.patch("costco_api_client.requests.get",
-                            return_value=FakeResponse(page, status_code=200)):
-                result = cac._search_unwrangle("kirkland", 1)
-        self.assertEqual(result["failure_type"], "malformed_response")
-        self.assertEqual(result["http_status"], 200)
-        self.assertFalse(result["success"])
-
-    def test_unwrangle_results_not_list_is_malformed_response(self):
-        page = make_page([make_result()])
-        page["results"] = "not a list"
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
-            with mock.patch("costco_api_client.requests.get",
-                            return_value=FakeResponse(page, status_code=200)):
-                result = cac._search_unwrangle("kirkland", 1)
-        self.assertEqual(result["failure_type"], "malformed_response")
-        self.assertEqual(result["http_status"], 200)
-        self.assertFalse(result["success"])
 
     # ----- OpenWebNinja search -----
     def _openwebninja_env(self, key=""):
@@ -537,88 +302,90 @@ class TypedFailureClassificationTests(unittest.TestCase):
         """An HTTP 401/403 must NEVER be reported as not_found, even if
         the response body is empty. The two states must remain
         distinguishable in the failure_type discriminator."""
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+        with mock.patch.dict("os.environ", self._openwebninja_env(key="abc")):
             with mock.patch("costco_api_client.requests.get",
                             return_value=FakeResponse({}, status_code=401)):
-                result = cac._search_unwrangle("kirkland", 1)
+                result = cac._search_openwebninja("kirkland")
         self.assertEqual(result["failure_type"], "auth_error")
         self.assertNotEqual(result["failure_type"], "not_found")
 
     def test_not_found_never_collapses_to_auth_error(self):
         """An HTTP 404 must NEVER be reported as auth_error."""
-        with mock.patch.dict("os.environ", self._unwrangle_env(key="abc")):
+        with mock.patch.dict("os.environ", self._openwebninja_env(key="abc")):
             with mock.patch("costco_api_client.requests.get",
                             return_value=FakeResponse({}, status_code=404)):
-                result = cac._search_unwrangle("kirkland", 1)
+                result = cac._search_openwebninja("kirkland")
         self.assertEqual(result["failure_type"], "not_found")
         self.assertNotEqual(result["failure_type"], "auth_error")
 
-    # ----- product-detail refresh also carries typed failure -----
-    def test_refresh_product_details_missing_unwrangle_key_is_auth_error(self):
-        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
-                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
-                                            "UNWRANGLE_API_KEY": ""}):
-            with mock.patch("costco_api_client.requests.get") as mock_get:
-                result = cac.refresh_product_details(["424976"])
-        mock_get.assert_not_called()
-        self.assertEqual(result["failure_type"], "auth_error")
-        self.assertEqual(result["fetched"], 0)
 
-    def test_refresh_product_details_http_401_is_auth_error(self):
-        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
-                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
-                                            "UNWRANGLE_API_KEY": "abc"}):
-            with mock.patch("costco_api_client.requests.get",
-                            return_value=FakeResponse({}, status_code=401)):
-                result = cac.refresh_product_details(["424976"])
-        self.assertEqual(result["status"], "failed")
-        self.assertEqual(len(result["failures"]), 1)
-        self.assertEqual(result["failures"][0]["failure_type"], "auth_error")
-        self.assertEqual(result["failures"][0]["item_id"], "424976")
+class RunnerDelegationTests(unittest.TestCase):
+    """refresh_product_details is now a thin delegator to the gated live
+    runner (costco_live_runner.py). These tests mock the runner module
+    entirely — zero network — and verify the legacy typed surface."""
 
-    def test_refresh_product_details_http_404_is_not_found(self):
-        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
-                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
-                                            "UNWRANGLE_API_KEY": "abc"}):
-            with mock.patch("costco_api_client.requests.get",
-                            return_value=FakeResponse({}, status_code=404)):
-                result = cac.refresh_product_details(["424976"])
-        self.assertEqual(len(result["failures"]), 1)
-        self.assertEqual(result["failures"][0]["failure_type"], "not_found")
+    _COMPLETED = {
+        "status": "completed", "items_fetched": 1, "items_soft_failed": 0,
+        "items_budget_skipped": 0, "providers_used": ["BRIGHTDATA_WEB_UNLOCKER"],
+        "providers_active": ["BRIGHTDATA_WEB_UNLOCKER"],
+        "failures": [], "failover_events": [], "skipped": [],
+    }
 
-    def test_refresh_product_details_http_429_is_rate_limited(self):
-        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
-                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
-                                            "UNWRANGLE_API_KEY": "abc"}):
-            with mock.patch("costco_api_client.requests.get",
-                            return_value=FakeResponse({}, status_code=429)):
-                result = cac.refresh_product_details(["424976"])
-        self.assertEqual(len(result["failures"]), 1)
-        self.assertEqual(result["failures"][0]["failure_type"], "rate_limited")
+    def _run(self, summary, gate="1", ids=None):
+        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_DETAIL_ENABLED": gate}):
+            with mock.patch("costco_live_runner.refresh_product_details",
+                            return_value=summary) as mock_run:
+                return cac.refresh_product_details(ids or ["424976"]), mock_run
 
-    def test_refresh_product_details_timeout_is_transport_error(self):
-        def timeout_get(url, params=None, timeout=None):
-            raise cac.requests.exceptions.Timeout("t")
-        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
-                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
-                                            "UNWRANGLE_API_KEY": "abc"}):
-            with mock.patch("costco_api_client.requests.get", side_effect=timeout_get):
-                result = cac.refresh_product_details(["424976"])
-        self.assertEqual(len(result["failures"]), 1)
-        self.assertEqual(result["failures"][0]["failure_type"], "transport_error")
+    def test_disabled_when_detail_flag_off(self):
+        report, mock_run = self._run(self._COMPLETED, gate="0")
+        mock_run.assert_not_called()
+        self.assertEqual(report["status"], "disabled")
+        self.assertEqual(report["fetched"], 0)
 
-    def test_refresh_product_details_invalid_json_is_malformed_response(self):
-        class BadJson:
-            status_code = 200
-            def json(self):
-                raise ValueError("not json")
-        with mock.patch.dict("os.environ", {"COSTCO_CATALOG_SOURCE": "UNWRANGLE",
-                                            "COSTCO_CATALOG_DETAIL_ENABLED": "1",
-                                            "UNWRANGLE_API_KEY": "abc"}):
-            with mock.patch("costco_api_client.requests.get", return_value=BadJson()):
-                result = cac.refresh_product_details(["424976"])
-        self.assertEqual(len(result["failures"]), 1)
-        self.assertEqual(result["failures"][0]["failure_type"], "malformed_response")
+    def test_completed_maps_to_ok(self):
+        report, mock_run = self._run(self._COMPLETED)
+        mock_run.assert_called_once_with(item_ids=["424976"], provider="auto", budgets=None)
+        self.assertEqual(report["status"], "ok")
+        self.assertEqual(report["failure_type"], "success")
+        self.assertEqual(report["fetched"], 1)
+        self.assertEqual(report["failures"], [])
+
+    def test_blocked_maps_to_auth_error(self):
+        report, _ = self._run({
+            "status": "blocked", "reason": "no costco detail provider is enabled",
+            "items_fetched": 0, "items_soft_failed": 0, "items_budget_skipped": 0,
+            "providers_used": [], "providers_active": [],
+            "failures": [], "failover_events": [], "skipped": [],
+        })
+        self.assertEqual(report["status"], "blocked")
+        self.assertEqual(report["failure_type"], "auth_error")
+        self.assertEqual(report["fetched"], 0)
+
+    def test_halted_maps_typed_failure(self):
+        report, _ = self._run({
+            "status": "halted", "items_fetched": 0, "items_soft_failed": 0,
+            "items_budget_skipped": 0, "providers_used": ["BRIGHTDATA_WEB_UNLOCKER"],
+            "providers_active": ["BRIGHTDATA_WEB_UNLOCKER"],
+            "failures": [{"item_id": "424976", "failure_type": "rate_limited"}],
+            "halted_reason": "all providers failed on item 424976: rate_limited",
+            "failover_events": [], "skipped": [],
+        })
+        self.assertEqual(report["status"], "failed")
+        self.assertEqual(report["failure_type"], "rate_limited")
+        self.assertEqual(report["failures"][0]["item_id"], "424976")
+        self.assertEqual(report["failures"][0]["failure_type"], "rate_limited")
+        self.assertEqual(report["fetched"], 0)
+
+    def test_budget_exhausted_maps_status(self):
+        report, _ = self._run({
+            "status": "budget_exhausted", "items_fetched": 0, "items_soft_failed": 0,
+            "items_budget_skipped": 3, "providers_used": ["BRIGHTDATA_WEB_UNLOCKER"],
+            "providers_active": ["BRIGHTDATA_WEB_UNLOCKER"],
+            "failures": [], "failover_events": [], "skipped": [],
+        })
+        self.assertEqual(report["status"], "budget_exhausted")
+        self.assertEqual(report["items_budget_skipped"], 3)
 
 
 class OpenWebNinjaRefreshTests(unittest.TestCase):
@@ -638,7 +405,6 @@ class OpenWebNinjaRefreshTests(unittest.TestCase):
             return normalized_page([normalized_item()])
 
         env = {
-            "UNWRANGLE_API_KEY": "",
             "OPENWEBNINJA_API_KEY": "ak-test",
             "COSTCO_CATALOG_SOURCE": "OPENWEBNINJA",
             "COSTCO_CATALOG_MAX_PAGES": "3",
@@ -661,7 +427,6 @@ class OpenWebNinjaRefreshTests(unittest.TestCase):
         with mock.patch.dict("os.environ", {
             "COSTCO_CATALOG_SOURCE": "OPENWEBNINJA",
             "OPENWEBNINJA_API_KEY": "ak-test",
-            "UNWRANGLE_API_KEY": "",
         }):
             info = cac.status()
         self.assertEqual(info["catalog_source"], "OPENWEBNINJA")
@@ -762,9 +527,9 @@ class RefreshTests(unittest.TestCase):
         with open(self.csv_path, "w", newline="", encoding="utf-8") as f:
             f.write("item_name,costco_cost\n")
 
-    def _env(self, source="UNWRANGLE", **overrides):
+    def _env(self, source="OPENWEBNINJA", **overrides):
         env = {
-            "UNWRANGLE_API_KEY": "key-123",
+            "OPENWEBNINJA_API_KEY": "key-123",
             "COSTCO_CATALOG_SOURCE": source,
             "COSTCO_CATALOG_SNAPSHOT_PATH": self.snapshot_path,
             "COSTCO_CATALOG_ARCHIVE_PATH": os.path.join(self.tmpdir.name, "discovery-archive.json"),
@@ -791,7 +556,7 @@ class RefreshTests(unittest.TestCase):
             snapshot = json.load(f)
         self.assertEqual(snapshot["query"], "kirkland")
         self.assertEqual(len(snapshot["items"]), 1)
-        self.assertEqual(snapshot["items"][0]["cost_basis"], "business_delivery_online")
+        self.assertEqual(snapshot["items"][0]["cost_basis"], "costco_online")
         self.assertTrue(snapshot["generated_at"])
 
         with open(self.csv_path, "r", encoding="utf-8") as f:
@@ -799,7 +564,10 @@ class RefreshTests(unittest.TestCase):
         self.assertEqual(lines[0], "item_name,costco_cost")
         self.assertIn("54.99", lines[1])
 
-    def test_refresh_respects_max_pages_cap(self):
+    def test_openwebninja_always_single_request_regardless_of_max_pages(self):
+        """OpenWebNinja has no documented pagination: refresh_catalog forces
+        a single page even when COSTCO_CATALOG_MAX_PAGES is set higher
+        (Unwrangle's multi-page path was removed 2026-09)."""
         calls = []
 
         def fake_search(query, page):
@@ -810,9 +578,9 @@ class RefreshTests(unittest.TestCase):
             with mock.patch.object(costco_client, "COSTCO_CSV_PATH", self.csv_path):
                 with mock.patch.object(cac, "search_page", side_effect=fake_search):
                     report = cac.refresh_catalog()
-        self.assertEqual(calls, [1, 2])
-        self.assertEqual(report["pages_fetched"], 2)
-        self.assertEqual(report["credits_estimate"], 20)
+        self.assertEqual(calls, [1])
+        self.assertEqual(report["pages_fetched"], 1)
+        self.assertEqual(report["credits_estimate"], 10)
 
     def test_disabled_source_never_calls_network(self):
         with mock.patch.dict("os.environ", self._env(source="OFF")):
@@ -876,8 +644,8 @@ class DiscoveryCatalogTests(unittest.TestCase):
 
     def _env(self, **overrides):
         env = {
-            "UNWRANGLE_API_KEY": "key-123",
-            "COSTCO_CATALOG_SOURCE": "UNWRANGLE",
+            "OPENWEBNINJA_API_KEY": "key-123",
+            "COSTCO_CATALOG_SOURCE": "OPENWEBNINJA",
             "COSTCO_CATALOG_SNAPSHOT_PATH": self.snapshot_path,
             "COSTCO_CATALOG_ARCHIVE_PATH": self.archive_path,
             "COSTCO_CATALOG_RUN_REPORT_PATH": self.run_report_path,
@@ -911,19 +679,18 @@ class DiscoveryCatalogTests(unittest.TestCase):
         self.assertNotEqual(archive["records"][0]["fetched_at"], archive["records"][1]["fetched_at"])
 
     def test_archive_records_carry_discovery_fields(self):
-        record = cac._normalize_item({
-            "id": "777",
-            "name": "Kirkland Paper Towels",
-            "url": "https://example.com/item",
-            "price": 19.99,
-            "pack_size": "12 rolls",
-            "in_stock": True,
+        record = cac._normalize_openwebninja_item({
+            "item_number": "777",
+            "item_product_name": "Kirkland Paper Towels",
+            "item_product_url": "https://example.com/item",
+            "item_location_pricing_listPrice": 19.99,
+            "Container_Size_attr": ["12 rolls"],
         }, "2026-08-13T00:00:00+00:00", {"delivery_zip": "75201", "business_center": "Dallas Business Center"})
         self.assertEqual(record["raw_title"], "Kirkland Paper Towels")
         self.assertEqual(record["pack_size"], "12 rolls")
         self.assertEqual(record["unit_count"], 12)
         self.assertEqual(record["price_status"], "regular")
-        self.assertEqual(record["source"], "business_delivery")
+        self.assertEqual(record["source"], "costco_online")
         self.assertEqual(record["cost_status"], "discovery_only")
         self.assertEqual(record["location"]["delivery_zip"], "75201")
         self.assertEqual(record["url_derived"], False)
@@ -973,7 +740,10 @@ class DiscoveryCatalogTests(unittest.TestCase):
         self.assertEqual(report["counts"]["held_for_review"], 1)
         self.assertEqual(report["held_for_review"][0]["reason"], "pack_size_conflict")
 
-    def test_rate_limit_sleeps_between_requests(self):
+    def test_openwebninja_single_request_means_no_inter_request_sleep(self):
+        """A single-page OpenWebNinja run records the configured delay in the
+        report but never sleeps — there is no inter-request gap (Unwrangle's
+        multi-page loop was removed 2026-09)."""
         calls = []
 
         def fake_search(query, page):
@@ -988,14 +758,14 @@ class DiscoveryCatalogTests(unittest.TestCase):
                 with mock.patch.object(cac, "search_page", side_effect=fake_search):
                     with mock.patch.object(cac.time, "sleep") as mock_sleep:
                         report = cac.refresh_catalog()
-        self.assertEqual(calls, [1, 2])
-        mock_sleep.assert_called_once_with(1.5)
+        self.assertEqual(calls, [1])
+        mock_sleep.assert_not_called()
         self.assertEqual(report["request_delay_seconds"], 1.5)
 
     def test_stop_on_403_preserves_archive_and_writes_report(self):
         report = self._run([{
             "success": False,
-            "source": "unwrangle",
+            "source": "openwebninja",
             "http_status": 403,
             "items": [],
             "data_gaps": ["OpenWebNinja API returned HTTP 403."],
@@ -1012,7 +782,7 @@ class DiscoveryCatalogTests(unittest.TestCase):
     def test_stop_on_429_reports_rate_limited(self):
         report = self._run([{
             "success": False,
-            "source": "unwrangle",
+            "source": "openwebninja",
             "http_status": 429,
             "items": [],
             "data_gaps": ["rate limited"],
@@ -1167,43 +937,6 @@ class StructuredPackTests(unittest.TestCase):
 
 
 class DiscoverySchemaTests(unittest.TestCase):
-    def test_unwrangle_record_carries_structured_schema(self):
-        record = cac._normalize_item({
-            "id": "777",
-            "name": "Kirkland Adult Dog Food, Chicken, 40 lb",
-            "url": "https://example.com/item",
-            "price": 49.99,
-            "pack_size": "40 lb",
-            "upc": "012345678901",
-            "brand": "Kirkland Signature",
-            "flavor": "Chicken",
-            "product_line": "Adult Dog Food",
-            "in_stock": True,
-        }, "2026-08-13T00:00:00+00:00", {"delivery_zip": "75201", "business_center": "Dallas Business Center"})
-        self.assertEqual(record["upc_or_ean"], "012345678901")
-        self.assertEqual(record["brand"], "Kirkland Signature")
-        self.assertEqual(record["product_line"], "Adult Dog Food")
-        self.assertEqual(record["formula_or_flavor"], "Chicken")
-        self.assertEqual(record["net_weight"], 40.0)
-        self.assertEqual(record["unit_of_measure"], "lb")
-        self.assertEqual(record["warehouse_or_zip"], "75201")
-        self.assertEqual(record["product_url"], "https://example.com/item")
-        self.assertEqual(record["last_seen_at"], record["fetched_at"])
-
-    def test_unwrangle_record_missing_data_is_none_not_invented(self):
-        record = cac._normalize_item({
-            "id": "778",
-            "name": "Kirkland Item",
-            "url": "https://example.com/item",
-            "price": 9.99,
-            "in_stock": True,
-        }, "2026-08-13T00:00:00+00:00", None)
-        self.assertIsNone(record["upc_or_ean"])
-        self.assertIsNone(record["brand"])
-        self.assertIsNone(record["net_weight"])
-        self.assertIsNone(record["pack_count"])
-        self.assertEqual(record["warehouse_or_zip"], "75201")
-
     def test_openwebninja_record_carries_structured_schema(self):
         record = cac._normalize_openwebninja_item({
             "item_number": "1032932",
@@ -1237,8 +970,6 @@ class ProductDetailLayerTests(unittest.TestCase):
         env = {
             "COSTCO_CATALOG_DETAIL_PATH": self.detail_path,
             "COSTCO_INVOICE_PATH": self.invoice_path,
-            "COSTCO_CATALOG_SOURCE": "UNWRANGLE",
-            "UNWRANGLE_API_KEY": "key-123",
             "COSTCO_CATALOG_REQUEST_DELAY_SECONDS": "0",
             # Explicitly default the detail flag to OFF so tests that expect
             # "disabled" are deterministic even when COSTCO_CATALOG_DETAIL_ENABLED=1
@@ -1293,47 +1024,49 @@ class ProductDetailLayerTests(unittest.TestCase):
         self.assertEqual(report["held_for_review"], 1)
 
     def test_refresh_product_details_disabled_makes_no_requests(self):
-        calls = []
-
-        def fake_get(url, params=None, timeout=None):
-            calls.append(params)
-            return FakeResponse({"result": {"id": "5", "name": "Kirkland X", "price": 5.0}})
-
+        """Legacy detail flag off -> 'disabled' before any delegation."""
         with mock.patch.dict("os.environ", self._env()):
-            with mock.patch("costco_api_client.requests.get", side_effect=fake_get):
+            with mock.patch("costco_live_runner.refresh_product_details") as mock_run:
                 report = cac.refresh_product_details(["5"])
+        mock_run.assert_not_called()
         self.assertEqual(report["status"], "disabled")
-        self.assertEqual(calls, [])
+        self.assertEqual(report["fetched"], 0)
 
-    def test_refresh_product_details_fetches_and_writes(self):
-        calls = []
-
-        def fake_get(url, params=None, timeout=None):
-            calls.append(params)
-            return FakeResponse({"result": {
-                "id": "5", "name": "Kirkland Adult Dog Food Chicken 40 lb",
-                "price": 29.99, "pack_size": "40 lb", "upc": "012345678901",
-            }})
-
+    def test_refresh_product_details_delegates_completed_to_runner(self):
+        """Gate on -> thin delegator hands off to the gated live runner and
+        maps a completed summary to the legacy ok/fetched surface. Store
+        writes are owned by the runner evidence + merge step, not here."""
+        summary = {
+            "status": "completed", "items_fetched": 1, "items_soft_failed": 0,
+            "items_budget_skipped": 0, "providers_used": ["BRIGHTDATA_WEB_UNLOCKER"],
+            "providers_active": ["BRIGHTDATA_WEB_UNLOCKER"],
+            "failures": [], "failover_events": [], "skipped": [],
+        }
         with mock.patch.dict("os.environ", self._env(COSTCO_CATALOG_DETAIL_ENABLED="1")):
-            with mock.patch("costco_api_client.requests.get", side_effect=fake_get):
+            with mock.patch("costco_live_runner.refresh_product_details",
+                            return_value=summary) as mock_run:
                 report = cac.refresh_product_details(["5"])
+        mock_run.assert_called_once_with(item_ids=["5"], provider="auto", budgets=None)
         self.assertEqual(report["status"], "ok")
         self.assertEqual(report["fetched"], 1)
-        self.assertEqual(len(calls), 1)
-        self.assertEqual(calls[0]["platform"], "costco_detail")
-        self.assertEqual(calls[0]["item"], "5")
-        with open(self.detail_path, "r", encoding="utf-8") as f:
-            records = json.load(f)
-        self.assertEqual(records[0]["costco_item_id"], "5")
-        self.assertEqual(records[0]["cost_status"], "detail_only")
+        self.assertEqual(report["providers_used"], ["BRIGHTDATA_WEB_UNLOCKER"])
 
-    def test_refresh_product_details_stops_on_block(self):
+    def test_refresh_product_details_halted_maps_typed_failure(self):
+        """A halted runner (circuit breaker) maps to failed and carries the
+        first failure's typed failure_type (Batch 08 contract)."""
+        summary = {
+            "status": "halted", "items_fetched": 0, "items_soft_failed": 0,
+            "items_budget_skipped": 0, "providers_used": ["BRIGHTDATA_WEB_UNLOCKER"],
+            "providers_active": ["BRIGHTDATA_WEB_UNLOCKER"],
+            "failures": [{"item_id": "5", "reason": "http_429", "failure_type": "rate_limited"}],
+            "halted_reason": "all providers failed on item 5: rate_limited",
+            "failover_events": [], "skipped": [],
+        }
         with mock.patch.dict("os.environ", self._env(COSTCO_CATALOG_DETAIL_ENABLED="1")):
-            with mock.patch("costco_api_client.requests.get", return_value=FakeResponse({}, status_code=429)):
+            with mock.patch("costco_live_runner.refresh_product_details",
+                            return_value=summary):
                 report = cac.refresh_product_details(["5", "6"])
         self.assertEqual(report["status"], "failed")
-        # Batch 08: failure entries now carry typed failure_type (rate_limited for 429)
         self.assertEqual(report["failures"],
                          [{"item_id": "5", "reason": "http_429", "failure_type": "rate_limited"}])
         self.assertEqual(report["fetched"], 0)
@@ -1351,8 +1084,6 @@ class InvoiceLayerTests(unittest.TestCase):
         env = {
             "COSTCO_CATALOG_DETAIL_PATH": self.detail_path,
             "COSTCO_INVOICE_PATH": self.invoice_path,
-            "COSTCO_CATALOG_SOURCE": "UNWRANGLE",
-            "UNWRANGLE_API_KEY": "key-123",
         }
         env.update(overrides)
         return env
@@ -1420,8 +1151,6 @@ class ResolveCostcoCostTests(unittest.TestCase):
         env = {
             "COSTCO_CATALOG_DETAIL_PATH": self.detail_path,
             "COSTCO_INVOICE_PATH": self.invoice_path,
-            "COSTCO_CATALOG_SOURCE": "UNWRANGLE",
-            "UNWRANGLE_API_KEY": "key-123",
         }
         env.update(overrides)
         return env

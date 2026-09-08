@@ -149,10 +149,11 @@ enrichment):
 `COSTCO_CATALOG_SOURCE` defaults to `OFF`, in which case only the local CSV
 is used and the connector performs zero network calls. Refresh is always
 explicit (CLI or scheduled), capped at `COSTCO_CATALOG_MAX_PAGES` (default 1
-request), and never runs inside the scanner. An Unwrangle Business Delivery
-source (`COSTCO_CATALOG_SOURCE=UNWRANGLE` + `UNWRANGLE_API_KEY`) is also
-supported with the same workflow (10 credits per search page, up to 96
-products/page) and labels its costs `business_delivery_online`.
+request), and never runs inside the scanner. The only live search source is
+OpenWebNinja (`COSTCO_CATALOG_SOURCE=OPENWEBNINJA` + `OPENWEBNINJA_API_KEY`),
+always a single request per query, costs labeled `costco_online`. The legacy
+Unwrangle Business Delivery source was REMOVED 2026-09 (no free tier; paid
+from $99/mo) — `COSTCO_CATALOG_SOURCE=UNWRANGLE` now maps to `OFF`.
 
 ### Discovery catalog (archive-first, append-only)
 
@@ -162,8 +163,7 @@ overwritten or mutated**. Each record captures: `item_name`, `raw_title`
 (verbatim), `costco_item_id`, `source_url` (derived as
 `https://www.costco.com/.product.<id>.html` with `url_derived: true` when
 the API sends no URL), `regular_price` / `sale_price` / `price_status`,
-`pack_size` / `unit_count`, `cost_basis` (`costco_online` for OpenWebNinja,
-`business_delivery_online` for Unwrangle), `cost_status: "discovery_only"`,
+`pack_size` / `unit_count`, `cost_basis` (`costco_online`), `cost_status: "discovery_only"`,
 `source`, `location` (delivery ZIP + Business Center), `availability`,
 `promo`, `brand`, `fetched_at`.
 
@@ -311,11 +311,13 @@ The Costco side of the equation is a three-layer catalog
    pairs are held for review.
 2. **Layer 2 — `costco_product_detail`** (`data/costco-product-detail.json`):
    per-item detail records fetched only for Costco item IDs that are
-   potential Amazon matches (`details refresh --item-ids I,J`, UNWRANGLE
-   `costco_detail`, gated by `COSTCO_CATALOG_DETAIL_ENABLED=1`;
-   OPENWEBNINJA is a documented data gap) or imported offline (`details
-   import --path X`). Research only — `cost_status = "detail_only"`: an
-   exact fingerprint here enables net/ROI but never authorizes a buy.
+   potential Amazon matches (`details refresh --item-ids I,J`; delegates to
+   the gated live runner — Bright Data Web Unlocker primary, Firecrawl
+   free-tier fallback, both behind `COSTCO_CATALOG_DETAIL_ENABLED=1` plus the
+   provider's own gate + key; legacy UNWRANGLE detail path removed 2026-09)
+   or imported offline (`details import --path X`). Research only —
+   `cost_status = "detail_only"`: an exact fingerprint here enables net/ROI
+   but never authorizes a buy.
 3. **Layer 1 — `costco_catalog_live`**: the discovery snapshot/archive
    (search pages → `data/costco-api-catalog.json`, append-only archive).
    Every normalized record carries the structured schema (`costco_item_id`,

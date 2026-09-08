@@ -1,18 +1,21 @@
 ﻿"""Kirkland Signature discovery catalog (Costco.com / Business Delivery).
 
 Only permitted/authorized access is used: the OpenWebNinja Real-Time
-Costco Data API (Costco.com US/CA, one request per query) and, when an
-Unwrangle key is configured, the Unwrangle Costco Business Delivery Search
-API (one page = up to 96 products, 10 credits per page). Select the
-provider with:
+Costco Data API (Costco.com US/CA, one request per query) for catalog
+search, and the unified gated live runner (Bright Data Web Unlocker
+primary + Firecrawl free-tier fallback — see costco_live_runner.py) for
+per-item product-detail fetches. Unwrangle was REMOVED 2026-09 (its
+no-card free tier is gone; paid plans start at $99/mo) — its search and
+detail paths were deleted from this module. Select the catalog provider
+with:
 
-    COSTCO_CATALOG_SOURCE = OPENWEBNINJA | UNWRANGLE | (unset/invalid = OFF)
+    COSTCO_CATALOG_SOURCE = OPENWEBNINJA | (unset/invalid = OFF)
 
 - OFF (default): the local CSV (data/costco-items.csv) is the only cost
   input; this module performs zero network calls.
-- OPENWEBNINJA / UNWRANGLE: `refresh_catalog()` fetches, archives, and
-  exports. Catalog builds are explicit (CLI or scheduled) and never run
-  inside the scanner.
+- OPENWEBNINJA: `refresh_catalog()` fetches, archives, and exports.
+  Catalog builds are explicit (CLI or scheduled) and never run inside the
+  scanner.
 
 Discovery catalog contract:
 
@@ -29,8 +32,8 @@ Discovery catalog contract:
   requests) and the run stops on blocks/errors (HTTP 401/403/429/5xx,
   timeouts, malformed responses); a stopped run preserves the last-good
   archive, snapshot, and CSV.
-- Every cost is labeled cost_basis="costco_online" (OpenWebNinja) or
-  "business_delivery_online" (Unwrangle) with cost_status="discovery_only":
+- Every cost is labeled cost_basis="costco_online" (OpenWebNinja) with
+  cost_status="discovery_only":
   discovery and preliminary ROI only, never invoice-confirmed and never
   purchase authorization. A margin buffer (COSTCO_API_COST_BUFFER_PERCENT,
   default 10) is baked into the exported CSV cost until a Business Center
@@ -49,8 +52,10 @@ Three-layer cost catalog:
   per-item detail fetch (costco_item_id) that is only run for items that
   are potential Amazon matches. Research only (cost_status="detail_only"):
   an exact fingerprint here enables net/ROI but never authorizes a buy.
-  Network refresh is gated by COSTCO_CATALOG_DETAIL_ENABLED=1 and is
-  UNWRANGLE-only; offline imports are always available.
+  Live network refresh runs through the unified gated runner
+  (costco_live_runner.py — BRIGHTDATA_COSTCO_DETAIL_ENABLED and/or
+  FIRECRAWL_COSTCO_DETAIL_ENABLED, operator-approved); offline imports are
+  always available.
 - Layer 3 costco_invoice_confirmed (data/costco-invoice-confirmed.json):
   Business Center invoice / order-history rows with real paid unit costs
   (cost_basis="invoice_confirmed"). Only an invoice-confirmed row that
@@ -78,9 +83,6 @@ import costco_client
 
 _ASIN_RE = re.compile(r"^[A-Za-z0-9]{10}$")
 
-UNWRANGLE_URL = "https://data.unwrangle.com/api/getter/"
-UNWRANGLE_PLATFORM = "costco_search"
-UNWRANGLE_DETAIL_PLATFORM = "costco_detail"
 OPENWEBNINJA_URL = "https://api.openwebninja.com/realtime-costco-data/search"
 CREDITS_PER_PAGE = 10
 REQUEST_TIMEOUT_SECONDS = 60
@@ -93,7 +95,7 @@ DEFAULT_DELIVERY_ZIP = "75201"
 DEFAULT_BUSINESS_CENTER = "Dallas Business Center"
 
 # Typed failure classification (Batch 08 contract). The 5 client-side
-# failure states are exhaustive for the Costco/Unwrangle client; "success"
+# failure states are exhaustive for the Costco client; "success"
 # is the only non-failure state. These values are added to the result
 # dicts as `failure_type` so callers can distinguish auth/not_found/
 # rate_limit/transport/malformed without parsing the `data_gaps` string.
@@ -129,7 +131,12 @@ def _snapshot_path() -> str:
 
 def catalog_source() -> str:
     raw = (os.getenv("COSTCO_CATALOG_SOURCE") or "").strip().upper()
-    return raw if raw in ("OPENWEBNINJA", "UNWRANGLE") else "OFF"
+    if raw == "UNWRANGLE":
+        # Unwrangle removed 2026-09 (no free tier; paid plans start at
+        # $99/mo). A legacy COSTCO_CATALOG_SOURCE=UNWRANGLE now maps to OFF
+        # so the module never reaches for the deleted Unwrangle paths.
+        return "OFF"
+    return raw if raw in ("OPENWEBNINJA",) else "OFF"
 
 
 def _buffer_percent() -> float:
@@ -252,16 +259,14 @@ def _first_int(value) -> Optional[int]:
 def search_page(query: str, page: int) -> Dict[str, Any]:
     """Fetch one catalog page from the configured provider.
 
-    Dispatches to the OpenWebNinja or Unwrangle fetch functions per
-    COSTCO_CATALOG_SOURCE. Returns the documented safe shape for every
-    outcome (missing key, network/HTTP failure, invalid JSON, success
-    false, malformed results) and never raises.
+    Dispatches to the OpenWebNinja fetch function per COSTCO_CATALOG_SOURCE.
+    Returns the documented safe shape for every outcome (missing key,
+    network/HTTP failure, invalid JSON, success false, malformed results)
+    and never raises. Unwrangle was removed (2026-09) — see catalog_source().
     """
     source = catalog_source()
     if source == "OPENWEBNINJA":
         return _search_openwebninja(query)
-    if source == "UNWRANGLE":
-        return _search_unwrangle(query, page)
     result: Dict[str, Any] = {
         "source": "off",
         "platform": None,
@@ -369,166 +374,6 @@ def _search_openwebninja(query: str) -> Dict[str, Any]:
             result["items"].append(_normalize_openwebninja_item(raw, fetched_at, location))
     result["result_count"] = len(result["items"])
     return result
-
-
-def _search_unwrangle(query: str, page: int) -> Dict[str, Any]:
-    """One Unwrangle Costco Business Delivery search page request.
-
-    One page returns up to 96 products and costs 10 credits per successful
-    page, so this is a catalog-refresh workflow â€” never per-ASIN enrichment.
-    """
-    result: Dict[str, Any] = {
-        "source": "unwrangle",
-        "platform": UNWRANGLE_PLATFORM,
-        "search": query,
-        "page": page,
-        "success": False,
-        "failure_type": FAILURE_TYPE_TRANSPORT_ERROR,  # updated below on first success path
-        "no_of_pages": None,
-        "total_results": None,
-        "result_count": 0,
-        "items": [],
-        "data_gaps": [],
-        "http_status": None,
-    }
-
-    api_key = os.getenv("UNWRANGLE_API_KEY")
-    if not api_key:
-        result["failure_type"] = FAILURE_TYPE_AUTH_ERROR
-        result["data_gaps"].append("Unwrangle API key is not configured.")
-        return result
-
-    params = {
-        "platform": UNWRANGLE_PLATFORM,
-        "search": query,
-        "page": str(page),
-        "api_key": api_key,
-    }
-
-    try:
-        resp = requests.get(UNWRANGLE_URL, params=params, timeout=REQUEST_TIMEOUT_SECONDS)
-    except requests.exceptions.Timeout:
-        result["failure_type"] = FAILURE_TYPE_TRANSPORT_ERROR
-        result["data_gaps"].append("Unwrangle request timed out.")
-        return result
-    except requests.exceptions.RequestException:
-        result["failure_type"] = FAILURE_TYPE_TRANSPORT_ERROR
-        result["data_gaps"].append("Unwrangle request failed at the network level.")
-        return result
-
-    result["http_status"] = resp.status_code
-    if resp.status_code in (401, 403):
-        result["failure_type"] = FAILURE_TYPE_AUTH_ERROR
-        result["data_gaps"].append(f"Unwrangle API returned HTTP {resp.status_code} (auth rejected).")
-        return result
-    if resp.status_code == 404:
-        result["failure_type"] = FAILURE_TYPE_NOT_FOUND
-        result["data_gaps"].append("Unwrangle API returned HTTP 404 (not found).")
-        return result
-    if resp.status_code == 429:
-        result["failure_type"] = FAILURE_TYPE_RATE_LIMITED
-        result["data_gaps"].append("Unwrangle API returned HTTP 429 (rate limited).")
-        return result
-    if resp.status_code != 200:
-        result["failure_type"] = FAILURE_TYPE_TRANSPORT_ERROR
-        result["data_gaps"].append(f"Unwrangle API returned HTTP {resp.status_code}.")
-        return result
-
-    try:
-        payload = resp.json()
-    except (json.JSONDecodeError, ValueError):
-        result["failure_type"] = FAILURE_TYPE_MALFORMED_RESPONSE
-        result["data_gaps"].append("Unwrangle response was not valid JSON.")
-        return result
-
-    if not isinstance(payload, dict):
-        result["failure_type"] = FAILURE_TYPE_MALFORMED_RESPONSE
-        result["data_gaps"].append("Unwrangle response had an unexpected structure.")
-        return result
-
-    if payload.get("success") is not True:
-        result["failure_type"] = FAILURE_TYPE_MALFORMED_RESPONSE
-        result["data_gaps"].append("Unwrangle reported request failure (success is false).")
-        return result
-
-    raw_results = payload.get("results")
-    if not isinstance(raw_results, list):
-        result["failure_type"] = FAILURE_TYPE_MALFORMED_RESPONSE
-        result["data_gaps"].append("Unwrangle response was missing results.")
-        return result
-
-    result["success"] = True
-    result["failure_type"] = FAILURE_TYPE_SUCCESS
-    result["no_of_pages"] = payload.get("no_of_pages")
-    result["total_results"] = payload.get("total_results")
-    fetched_at = _now_iso()
-    location = _location()
-    for raw in raw_results:
-        if isinstance(raw, dict):
-            result["items"].append(_normalize_item(raw, fetched_at, location))
-    result["result_count"] = len(result["items"])
-    return result
-
-
-def _normalize_item(
-    raw: Dict[str, Any],
-    fetched_at: str,
-    location: Optional[Dict[str, str]] = None,
-) -> Dict[str, Any]:
-    """Full-field internal record from one Unwrangle result.
-
-    The exported cost basis is the reduced (sale) price when present, else
-    the regular price. The margin buffer is applied at export time, not
-    here, so the snapshot keeps the raw online prices for audit.
-    """
-    regular_price = _safe_float(raw.get("price"))
-    sale_price = _safe_float(raw.get("price_reduced"))
-    availability = "in_stock" if raw.get("in_stock") is True else "out_of_stock"
-    if raw.get("is_warehouse_only") is True:
-        availability = "warehouse_only"
-
-    variants = raw.get("variants")
-    variants = variants if isinstance(variants, list) else []
-
-    name = (raw.get("name") or "").strip()
-    pack_size = raw.get("pack_size") or raw.get("size") or raw.get("quantity")
-    item_id = str(raw.get("id") or "").strip()
-    structured = _parse_structured_pack(pack_size)
-
-    return {
-        "item_name": name,
-        "raw_title": name,
-        "costco_item_id": item_id,
-        "source_url": raw.get("url"),
-        "url_derived": False,
-        "regular_price": regular_price,
-        "sale_price": sale_price,
-        "price_basis": "sale" if sale_price is not None else ("regular" if regular_price is not None else None),
-        "price_status": "sale" if sale_price is not None else ("regular" if regular_price is not None else None),
-        "pack_size": (str(pack_size).strip() if pack_size else None),
-        "unit_count": _parse_unit_count(pack_size),
-        "cost_basis": "business_delivery_online",
-        "cost_status": "discovery_only",
-        "source": "business_delivery",
-        "location": location or _location(),
-        "availability": availability,
-        "promo": raw.get("promo"),
-        "variants_count": len(variants),
-        "variants_max_price": _safe_float(raw.get("variants_max_price")),
-        "brand": raw.get("brand"),
-        "model_number": raw.get("model_number"),
-        "upc_or_ean": _first_str(raw.get("upc") or raw.get("upc_code") or raw.get("ean")),
-        "product_line": _first_str(raw.get("product_line")),
-        "formula_or_flavor": _first_str(raw.get("flavor") or raw.get("formula")),
-        "net_weight": structured["net_weight"],
-        "unit_of_measure": structured["unit_of_measure"],
-        "pack_count": structured["pack_count"],
-        "case_count": structured["case_count"],
-        "warehouse_or_zip": (location or _location()).get("delivery_zip"),
-        "product_url": raw.get("url"),
-        "fetched_at": fetched_at,
-        "last_seen_at": fetched_at,
-    }
 
 
 def _normalize_openwebninja_item(
@@ -711,7 +556,7 @@ def _normalize_detail_item(raw: Dict[str, Any], fetched_at: str) -> Dict[str, An
         "price_basis": "sale" if sale is not None else ("regular" if price is not None else None),
         "warehouse_or_zip": _delivery_zip(),
         "product_url": _first_str(raw.get("url") or raw.get("product_url")),
-        "cost_basis": "business_delivery_online" if catalog_source() == "UNWRANGLE" else "costco_online",
+        "cost_basis": "costco_online",
         "cost_status": "detail_only",
         "source": "business_delivery_detail",
         "fetched_at": fetched_at,
@@ -730,16 +575,21 @@ def _save_product_details(records: List[Dict[str, Any]]) -> str:
     return path
 
 
-def refresh_product_details(item_ids) -> Dict[str, Any]:
+def refresh_product_details(item_ids, provider="auto", budgets=None) -> Dict[str, Any]:
     """Fetch product-detail records for specific Costco item IDs (layer 2).
 
-    Gated by COSTCO_CATALOG_DETAIL_ENABLED=1 and only for item IDs that
-    are potential Amazon matches (the caller selects them). UNWRANGLE has
-    a per-item detail platform; OPENWEBNINJA has no detail endpoint here,
-    so that request is reported as a data gap, never fabricated. Requests
-    are rate-limited (COSTCO_CATALOG_REQUEST_DELAY_SECONDS) and the run
-    stops on the first block (401/403/429/5xx). Writes only the detail
-    store; never touches the discovery archive or snapshot.
+    UNWRANGLE was removed 2026-09 (no free tier; paid plans start at
+    $99/mo). This is now a thin delegator to the gated live runner
+    (costco_live_runner.py): Bright Data Web Unlocker primary, Firecrawl
+    free-tier fallback, automatic failover on hard failure. The legacy
+    COSTCO_CATALOG_DETAIL_ENABLED=1 switch is still honored (Batch-10-style
+    operator docs); provider selection additionally requires the provider's
+    own gate + key (BRIGHTDATA_COSTCO_DETAIL_ENABLED /
+    BRIGHTDATA_UNLOCKER_API_KEY and/or FIRECRAWL_COSTCO_DETAIL_ENABLED /
+    FIRECRAWL_API_KEY). Live execution additionally needs named operator
+    approval. Evidence is written to the run dir; kirkland_costco_merge.py
+    folds it into data/costco-product-detail.json (this delegator never
+    mutates the store directly).
     """
     ids = [str(i).strip() for i in (item_ids or []) if str(i).strip()]
     if not _detail_enabled():
@@ -751,86 +601,43 @@ def refresh_product_details(item_ids) -> Dict[str, Any]:
             "fetched": 0,
             "path": _detail_path(),
         }
-    if catalog_source() != "UNWRANGLE":
-        return {
-            "status": "data_gap",
-            "failure_type": FAILURE_TYPE_NOT_FOUND,
-            "message": "Product-detail refresh is only implemented for UNWRANGLE; current source: %s." % catalog_source(),
-            "item_ids_requested": len(ids),
-            "fetched": 0,
-        }
-    api_key = os.getenv("UNWRANGLE_API_KEY")
-    if not api_key:
-        return {
-            "status": "failed",
-            "failure_type": FAILURE_TYPE_AUTH_ERROR,
-            "message": "Unwrangle API key is not configured.",
-            "fetched": 0,
-        }
 
-    fetched = []
-    failures = []
-    for item_id in ids:
-        params = {"platform": UNWRANGLE_DETAIL_PLATFORM, "item": item_id, "api_key": api_key}
-        try:
-            resp = requests.get(UNWRANGLE_URL, params=params, timeout=REQUEST_TIMEOUT_SECONDS)
-        except requests.exceptions.Timeout:
-            failures.append({"item_id": item_id, "reason": "timeout",
-                             "failure_type": FAILURE_TYPE_TRANSPORT_ERROR})
-            break
-        except requests.exceptions.RequestException:
-            failures.append({"item_id": item_id, "reason": "network_error",
-                             "failure_type": FAILURE_TYPE_TRANSPORT_ERROR})
-            break
-        if resp.status_code in (401, 403):
-            failures.append({"item_id": item_id, "reason": "http_%d" % resp.status_code,
-                             "failure_type": FAILURE_TYPE_AUTH_ERROR})
-            break
-        if resp.status_code == 404:
-            failures.append({"item_id": item_id, "reason": "http_404",
-                             "failure_type": FAILURE_TYPE_NOT_FOUND})
-            break
-        if resp.status_code == 429:
-            failures.append({"item_id": item_id, "reason": "http_429",
-                             "failure_type": FAILURE_TYPE_RATE_LIMITED})
-            break
-        if resp.status_code >= 500:
-            failures.append({"item_id": item_id, "reason": "http_%d" % resp.status_code,
-                             "failure_type": FAILURE_TYPE_TRANSPORT_ERROR})
-            break
-        if resp.status_code != 200:
-            failures.append({"item_id": item_id, "reason": "http_%d" % resp.status_code,
-                             "failure_type": FAILURE_TYPE_TRANSPORT_ERROR})
-            continue
-        try:
-            payload = resp.json()
-        except (json.JSONDecodeError, ValueError):
-            failures.append({"item_id": item_id, "reason": "invalid_json",
-                             "failure_type": FAILURE_TYPE_MALFORMED_RESPONSE})
-            break
-        raw = payload.get("result") if isinstance(payload, dict) else None
-        if isinstance(raw, dict) and (raw.get("id") or raw.get("item_number") or raw.get("name")):
-            record = _normalize_detail_item(raw, _now_iso())
-            if not record.get("costco_item_id"):
-                record["costco_item_id"] = item_id
-            fetched.append(record)
-        else:
-            failures.append({"item_id": item_id, "reason": "no_result",
-                             "failure_type": FAILURE_TYPE_NOT_FOUND})
-        if len(ids) > 1:
-            time.sleep(_request_delay())
+    from costco_live_runner import refresh_product_details as _runner_refresh
 
-    if fetched:
-        fresh_ids = {r.get("costco_item_id") for r in fetched}
-        merged = [r for r in _load_product_details() if r.get("costco_item_id") not in fresh_ids]
-        merged.extend(fetched)
-        _save_product_details(merged)
+    summary = _runner_refresh(item_ids=ids, provider=provider, budgets=budgets)
+    runner_status = summary.get("status", "unknown")
+    failures = summary.get("failures") or []
+    first_failure = (failures[0] or {}).get("failure_type") if failures else None
+    if runner_status == "completed":
+        status_label = "ok"
+        failure_type = FAILURE_TYPE_SUCCESS
+        message = "Product-detail refresh completed."
+    elif runner_status == "blocked":
+        status_label = "blocked"
+        failure_type = FAILURE_TYPE_AUTH_ERROR
+        message = summary.get("reason") or "No Costco detail provider is enabled/configured."
+    elif runner_status == "budget_exhausted":
+        status_label = "budget_exhausted"
+        failure_type = first_failure or FAILURE_TYPE_SUCCESS
+        message = "All provider budgets were exhausted; remaining items skipped."
+    else:  # halted
+        status_label = "failed"
+        failure_type = first_failure or FAILURE_TYPE_TRANSPORT_ERROR
+        message = summary.get("halted_reason") or "Product-detail refresh halted."
 
     return {
-        "status": "ok" if (fetched or not failures) else "failed",
+        "status": status_label,
+        "failure_type": failure_type,
+        "message": message,
         "item_ids_requested": len(ids),
-        "fetched": len(fetched),
+        "fetched": summary.get("items_fetched", 0),
+        "items_soft_failed": summary.get("items_soft_failed", 0),
+        "items_budget_skipped": summary.get("items_budget_skipped", 0),
         "failures": failures,
+        "providers_used": summary.get("providers_used", []),
+        "providers_active": summary.get("providers_active", []),
+        "failover_events": summary.get("failover_events", []),
+        "skipped": summary.get("skipped", []),
         "detail_count": len(_load_product_details()),
         "path": _detail_path(),
     }
@@ -1803,11 +1610,10 @@ def last_run_status() -> Dict[str, Any]:
 def refresh_catalog(query: Optional[str] = None, max_pages: Optional[int] = None) -> Dict[str, Any]:
     """Fetch catalog pages, append to the discovery archive, export CSV.
 
-    Requires COSTCO_CATALOG_SOURCE=OPENWEBNINJA or UNWRANGLE; otherwise
-    returns a disabled report and performs zero network calls. Pages are
-    capped at COSTCO_CATALOG_MAX_PAGES (default 1). OpenWebNinja has no
-    documented pagination, so it is always a single request per query;
-    Unwrangle pages are 10 credits each.
+    Requires COSTCO_CATALOG_SOURCE=OPENWEBNINJA; otherwise returns a
+    disabled report and performs zero network calls. Pages are capped at
+    COSTCO_CATALOG_MAX_PAGES (default 1). OpenWebNinja has no documented
+    pagination, so it is always a single request per query.
 
     Discovery catalog contract:
 
@@ -1835,7 +1641,7 @@ def refresh_catalog(query: Optional[str] = None, max_pages: Optional[int] = None
         report = {
             "status": "disabled",
             "generated_at": _now_iso(),
-            "message": "COSTCO_CATALOG_SOURCE is not OPENWEBNINJA or UNWRANGLE; catalog refresh is off.",
+            "message": "COSTCO_CATALOG_SOURCE is not OPENWEBNINJA; catalog refresh is off.",
             "pages_fetched": 0,
             "items_fetched": 0,
             "credits_estimate": 0,
@@ -2097,7 +1903,7 @@ def _build_report(
         "run_report_path": run_report_path or _run_report_path(),
         "location": location or _location(),
         "request_delay_seconds": request_delay_seconds,
-        "cost_basis": "costco_online" if catalog_source() == "OPENWEBNINJA" else "business_delivery_online",
+        "cost_basis": "costco_online",
         "cost_status": "discovery_only",
         "cost_buffer_percent": _buffer_percent(),
         "data_gaps": gaps,
@@ -2155,7 +1961,7 @@ def export_catalog() -> Dict[str, Any]:
 
 def status() -> Dict[str, Any]:
     source = catalog_source()
-    key_env = {"OPENWEBNINJA": "OPENWEBNINJA_API_KEY", "UNWRANGLE": "UNWRANGLE_API_KEY"}.get(source)
+    key_env = {"OPENWEBNINJA": "OPENWEBNINJA_API_KEY"}.get(source)
     snapshot_path = _snapshot_path()
     archive_path = _archive_path()
     snapshot = None
@@ -2194,7 +2000,7 @@ def status() -> Dict[str, Any]:
 
 def _cli() -> None:
     parser = argparse.ArgumentParser(
-        description="Costco discovery catalog refresh (OpenWebNinja / Unwrangle)"
+        description="Costco discovery catalog refresh (OpenWebNinja search; gated live detail runner)"
     )
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("status", help="show connector status")
@@ -2206,8 +2012,12 @@ def _cli() -> None:
     details_sub = details.add_subparsers(dest="details_command", required=True)
     details_import = details_sub.add_parser("import", help="import analyst product-detail records (CSV/JSON)")
     details_import.add_argument("--path", required=True, help="CSV or JSON import file")
-    details_refresh = details_sub.add_parser("refresh", help="fetch detail records for specific Costco item IDs (UNWRANGLE, gated)")
+    details_refresh = details_sub.add_parser("refresh", help="fetch detail records for specific Costco item IDs (gated live runner)")
     details_refresh.add_argument("--item-ids", required=True, help="comma-separated Costco item IDs")
+    details_refresh.add_argument("--provider", default="auto",
+                                 help="provider: auto | BRIGHTDATA_WEB_UNLOCKER | FIRECRAWL (default: auto)")
+    details_refresh.add_argument("--provider-budget", default=None,
+                                 help="per-provider item caps, e.g. BRIGHTDATA_WEB_UNLOCKER=50,FIRECRAWL=50")
     invoices = sub.add_parser("invoices", help="layer-3 invoice-confirmed store operations")
     invoices_sub = invoices.add_subparsers(dest="invoices_command", required=True)
     invoices_import = invoices_sub.add_parser("import", help="import Business Center invoice rows (CSV/JSON)")
@@ -2237,7 +2047,11 @@ def _cli() -> None:
         if args.details_command == "import":
             report = import_product_detail(args.path)
         else:
-            report = refresh_product_details(args.item_ids.split(","))
+            report = refresh_product_details(
+                args.item_ids.split(","),
+                provider=args.provider,
+                budgets=args.provider_budget,
+            )
         print(json.dumps(report, indent=2, default=str))
         return
 

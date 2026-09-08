@@ -382,9 +382,12 @@ air-gapped.
   framing $5k–$10k); production-grade $15k–$50k+; run cost $40–$300/mo at small
   scale (bare-bones internal $40–$80/mo; active/multi-brand $100–$300/mo);
   Supabase Pro ~$25/mo; self-hosted n8n $5–10/mo (n8n Cloud ~$24/mo);
-  `costco_detail`/`costco_search` = 10 credits/request (Unwrangle free tier 5,000
-  credits/mo, no card; paid $99/mo for 100,000 credits); Bright Data free tier
-  5,000 credits/mo shared pool, 1 credit/request, hard stop at 0. Perplexity Pro
+  `costco_detail`/`costco_search` = 1 request each (OpenWebNinja search free
+  tier 100 req/mo); Costco item-detail pulls run through Bright Data Web
+  Unlocker (free tier 5,000 credits/mo shared pool, 1 credit/request, hard stop
+  at 0) with Firecrawl as the free-tier fallback (1,000 pages/mo recurring, no
+  card, 2 concurrent). Unwrangle was REMOVED 2026-09 — no free tier, paid
+  starts $99/mo (its old "5,000 free credits/mo" claim is stale). Perplexity Pro
   $5/mo API credit reportedly **discontinued Feb 2026 — do not rely on it**.
 - **Timelines:** prototype 1–2 weeks; real v1 MVP 4–8 weeks; deployment-ready
   8–12 weeks; subscription-ready 3–6 months. Blunt estimate for THIS project:
@@ -481,8 +484,10 @@ The repo already contains real, tested tooling that the agents rely on:
   JS engine so jsdom tests keep passing; no fabricated visualizations.
 - **Live-ops layer:** Bright Data Web Unlocker parallel adapter
   (`bright_data_costco.py`, gate `BRIGHTDATA_COSTCO_DETAIL_ENABLED` default 0),
-  Unwrangle Costco adapter (`costco_api_client.py`, platforms `costco_search` /
-  `costco_detail`, 10 credits/request), Easyparser Amazon enrichment runner
+  Firecrawl fallback adapter (`firecrawl_costco.py`, gate
+  `FIRECRAWL_COSTCO_DETAIL_ENABLED` default 0), unified failover/full-pull
+  runner (`costco_live_runner.py` — Bright Data primary, Firecrawl fallback,
+  provider budgets, circuit-breaker halt), Easyparser Amazon enrichment runner
   (`enrich_manifest_run.py`, `--provider easyparser`, budget guard
   `WORST_CASE_REQUEST_CREDITS=30`), typed failure taxonomy (`url_not_found`,
   `no_data_found`, `unverified`, `transport_error`, `matched_dead_item`, ...).
