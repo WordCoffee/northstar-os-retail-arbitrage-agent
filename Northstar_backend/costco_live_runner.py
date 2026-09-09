@@ -476,6 +476,15 @@ def _recent_capture_dates() -> Dict[str, str]:
     return latest
 
 
+def _fresh_run_dir() -> str:
+    """A NEW timestamped evidence run dir (same base as DEFAULT_RUN_DIR but
+    per-pull), so a full pull never mixes its evidence in with the frozen
+    discovery run directory. The merge scans the whole
+    data/costco-discovery-runs/ root, so it picks these up automatically."""
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    return os.path.join("data", "costco-discovery-runs", ts)
+
+
 def full_pull(
     manifest_path: str,
     provider: str = "auto",
@@ -490,8 +499,10 @@ def full_pull(
 
     ``skip_fresh_days`` skips items whose most recent capture in the merged
     layer-2 store is newer than N days. ``dry_run=True`` returns the plan with
-    ZERO network calls.
+    ZERO network calls. Evidence defaults to a NEW timestamped run dir per pull
+    (``--run-dir`` overrides); latest-wins per item in the merge.
     """
+    run_dir = run_dir or _fresh_run_dir()
     manifest = _load_full_pull_manifest(manifest_path)
     items = manifest.get("items") or []
     pending_lookup = manifest.get("pending_lookup") or []

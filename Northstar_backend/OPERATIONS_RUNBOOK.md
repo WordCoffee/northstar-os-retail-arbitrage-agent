@@ -312,6 +312,10 @@ python costco_live_runner.py build-manifest `
   --out data/catalog/costco_detail_manifest.json
 
 # 4) Execute the full pull — LIVE AUTHORIZED, needs fresh named approval
+#    Evidence goes to a NEW data/costco-discovery-runs/<ts>/ dir per pull
+#    (per-pull accounting stays clean; --run-dir overrides). Then merge
+#    offline: python kirkland_costco_merge.py writes/updates
+#    data/costco-product-detail.json (latest evidence wins per item).
 python costco_live_runner.py full-pull `
   --manifest data/catalog/costco_detail_manifest.json `
   --provider-budget BRIGHTDATA_WEB_UNLOCKER=50,FIRECRAWL=50

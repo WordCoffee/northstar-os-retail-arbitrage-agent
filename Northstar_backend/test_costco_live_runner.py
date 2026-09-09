@@ -462,6 +462,31 @@ class FullPullTests(unittest.TestCase):
         self.assertEqual(summary["items_fetched"], 1)
         self.assertEqual(summary["manifest_path"], manifest_path)
 
+    def test_full_pull_defaults_to_fresh_run_dir(self):
+        """Evidence for a full pull lands in a NEW timestamped run dir, never
+        the frozen discovery dir — per-pull accounting stays clean and the
+        merge scans the root automatically."""
+        captured = {}
+
+        def _capture(item_ids=None, **kwargs):
+            captured.update(kwargs)
+            return _completed("424976", BD)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest_path = self._manifest(tmp, ["424976"])
+            with mock.patch.dict("os.environ", _env()):
+                with mock.patch.object(
+                    bright_data_costco, "refresh_product_details",
+                    side_effect=_capture,
+                ):
+                    clr.full_pull(manifest_path)
+        run_dir = captured["run_dir"]
+        self.assertIsNotNone(run_dir)
+        self.assertTrue(run_dir.startswith(os.path.join("data", "costco-discovery-runs")))
+        self.assertTrue(run_dir != clr.DEFAULT_RUN_DIR)
+        # Fresh timestamp pattern YYYYMMDDTHHMMSSZ as the final path segment.
+        self.assertRegex(run_dir, r"T\d{6}Z$")
+
 
 if __name__ == "__main__":
     unittest.main()
