@@ -133,8 +133,11 @@ def _parse_budgets(spec) -> Dict[str, Optional[int]]:
     if spec is None:
         return {}
     if isinstance(spec, dict):
-        return {str(k).strip(): int(v) if v is not None else None
-                for k, v in spec.items()}
+        def _to_int(v):
+            if v is None or (isinstance(v, str) and not v.strip()):
+                return None
+            return int(v)
+        return {str(k).strip(): _to_int(v) for k, v in spec.items()}
     budgets: Dict[str, Optional[int]] = {}
     for part in str(spec).split(","):
         part = part.strip().upper()

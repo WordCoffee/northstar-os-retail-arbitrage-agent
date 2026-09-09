@@ -503,8 +503,15 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-07T12:40:00Z",
+    "last_updated":  "2026-09-08T00:00:00Z",
     "history":  [
+                    {
+                        "ts":  "2026-09-08T00:00:00Z",
+                        "activity":  "costco_full_pull_rehearsal_and_provenance_hardening",
+                        "batch":  "continue-the-build / pre-live-readiness (autonomous bundle, zero live calls)",
+                        "summary":  "Added test_full_pull_rehearsal.py: the pre-live dress rehearsal running the REAL runner + REAL adapters + REAL fixture HTML with transport mocked (bright_data_client._fetch / firecrawl requests.post) through the REAL kirkland_costco_merge into a temp product-detail store. 4 scenarios: (1) Bright Data primary only incl. content-404 soft item (does not halt, not imported); (2) mid-batch hard failure on item 3 ('690843' 403) -> real failover to Firecrawl with persistent cursor, both providers' evidence merged; (3) Firecrawl-only full chain; (4) both providers hard-fail -> circuit breaker halts, store stays empty (fail-closed). Fixes found/committed while building it (commit 3277b7f): full_pull now threads manifest_path into refresh_product_details so identity cross-checks actually run on full pulls (was 'unverified' for everything); refresh_product_details records not-yet-attempted items as skipped (reason 'halted', new items_halted_skipped count) so items_requested == items_fetched + items_failed + len(skipped); kirkland_costco_merge provenance derives source/cost_basis from the serving platform (firecrawl_scrape/firecrawl_costco_page vs brightdata_web_unlocker) instead of a hard-coded Bright Data label; _parse_budgets dict branch hardened for None/blank/numeric-string values; runbook 7A documents the rehearsal + new semantics. Full offline suite: 1495 passed / 3 skipped / 2 pre-existing test_pipeline_offline failures (unchanged baseline). Costco surface: 235 tests pass.",
+                        "next_action":  "Still gate-behind: (1) Batch 10 424976 retry via Bright Data, (2) pending_lookup (~446 incl. ~165 of the 180-list) resolution via bright_data_costco_lookup.py, (3) full-pull with operator-chosen budgets (example BRIGHTDATA_WEB_UNLOCKER=50,FIRECRAWL=50) — each needs fresh named approval; FIRECRAWL_API_KEY still not configured in env."
+                    },
                     {
                         "ts":  "2026-09-06T22:05:00Z",
                         "activity":  "brightdata_costco_stage3_final_69run_halt_midrun_finding",
