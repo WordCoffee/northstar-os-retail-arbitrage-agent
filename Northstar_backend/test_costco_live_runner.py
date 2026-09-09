@@ -283,6 +283,14 @@ class BudgetParseTests(unittest.TestCase):
     def test_dict_form(self):
         self.assertEqual(clr._parse_budgets({BD: 5, FC: None}), {BD: 5, FC: None})
 
+    def test_dict_form_blank_and_numeric_strings(self):
+        # Robustness: None, blank-string, and numeric-string values all map to a
+        # clean int-or-None; blank strings mean "unlimited" like the CLI form.
+        self.assertEqual(
+            clr._parse_budgets({BD: "50", FC: "", "FIRECRAWL": None}),
+            {BD: 50, FC: None},
+        )
+
     def test_invalid_string_raises(self):
         with self.assertRaises(ValueError):
             clr._parse_budgets("BRIGHTDATA_WEB_UNLOCKER=abc")
