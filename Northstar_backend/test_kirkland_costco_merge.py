@@ -67,7 +67,7 @@ class MergeStoreTests(unittest.TestCase):
     def _run(self):
         with mock.patch.dict(
             "os.environ",
-            {"COSTCO_CATALOG_DETAIL_PATH": self.store, "COSTCO_CATALOG_SOURCE": "UNWRANGLE"},
+            {"COSTCO_CATALOG_DETAIL_PATH": self.store},
             clear=False,
         ):
             return merge.run_merge(runs_root=self.runs)
