@@ -37,6 +37,14 @@ RUNS_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "co
 # this floor are never imported and are purged if already in the store.
 MIN_PLAUSIBLE_PRICE = 1.0
 
+# Evidence platform -> (layer-2 source, cost_basis) mapping. Provenance must
+# reflect the provider that ACTUALLY served the page (Bright Data vs the
+# Firecrawl fallback), not a hard-coded vendor label.
+SOURCE_BY_PLATFORM = {
+    "web_unlocker_costco_page": ("brightdata_web_unlocker", "brightdata_costco_page"),
+    "firecrawl_scrape": ("firecrawl_scrape", "firecrawl_costco_page"),
+}
+
 
 def _iso_now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -80,8 +88,9 @@ def latest_wins_by_item(files: List[str]) -> Dict[str, Dict[str, Any]]:
 
 
 def to_detail_record(rec: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    """Convert one normalized Bright Data evidence file into a layer-2
-    product-detail record (schema of `_normalize_detail_item`)."""
+    """Convert one normalized detail-evidence file into a layer-2
+    product-detail record (schema of `_normalize_detail_item`). Provenance
+    (source/cost_basis) follows the platform that actually served the page."""
     item = rec.get("item") or {}
     price = item.get("listed_price")
     if price is None or not isinstance(price, (int, float)) or price < MIN_PLAUSIBLE_PRICE:
@@ -91,6 +100,13 @@ def to_detail_record(rec: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         return None
     item_id = str(item.get("returned_costco_item_id") or item.get("requested_item_id") or "").strip()
     captured = item.get("captured_at") or rec.get("requested_at") or _iso_now()
+    source, cost_basis = SOURCE_BY_PLATFORM.get(
+        rec.get("platform"),
+        (
+            str(rec.get("provider") or "unknown").lower(),
+            "costco_online",
+        ),
+    )
     return {
         "item_name": name,
         "raw_title": name,
@@ -109,9 +125,9 @@ def to_detail_record(rec: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         "warehouse_or_zip": None,
         "product_url": item.get("product_url"),
         "quantity_or_pack": item.get("quantity_or_pack"),
-        "cost_basis": "brightdata_costco_page",
+        "cost_basis": cost_basis,
         "cost_status": "detail_only",
-        "source": "brightdata_web_unlocker",
+        "source": source,
         "identity_match_status": item.get("identity_match_status"),
         "fetched_at": captured,
         "last_seen_at": captured,

@@ -25,8 +25,10 @@ Failover rules (circuit breaker, never silent):
   - Provider budgets (--provider-budget NAME=N,...) cap how many items each
     provider serves; once a provider hits its budget the remaining items roll
     to the next provider. When all enabled providers are budget-exhausted,
-    remaining items are recorded as skipped (budget_exhausted) — never
-    silently dropped.
+    remaining items are recorded as skipped (budget_exhausted). When the
+    circuit breaker halts the batch, not-yet-attempted items are recorded as
+    skipped (halted) — never silently dropped. In every path
+    items_requested == items_fetched + items_failed + len(skipped).
   - SOFT per-item failures (url_not_found / no_data_found) do NOT switch
     providers and do NOT halt — they are recorded and the batch continues.
 
@@ -291,6 +293,12 @@ def refresh_product_details(
             break
 
         if halted_reason:
+            # Circuit breaker: record every NOT-yet-attempted item as explicitly
+            # skipped so items_requested == items_fetched + items_failed +
+            # len(skipped). The halted item itself is already counted in
+            # `failures` (from the last provider that tried it).
+            for _sid in ids[idx + 1:]:
+                skipped.append({"item_id": str(_sid).strip(), "reason": "halted"})
             break
         if not resolved:
             skipped.append(
@@ -322,7 +330,12 @@ def refresh_product_details(
             for it in items
             if it.get("identity_match_status") in SOFT_FAILURE_TYPES
         ),
-        "items_budget_skipped": len(skipped),
+        "items_budget_skipped": len(
+            [s for s in skipped if s.get("reason") == "budget_exhausted"]
+        ),
+        "items_halted_skipped": len(
+            [s for s in skipped if s.get("reason") == "halted"]
+        ),
         "halted_reason": halted_reason,
         "gates": provider_status(),
         "items": items,
@@ -547,6 +560,7 @@ def full_pull(
         provider=provider,
         providers=list(providers or PROVIDER_ORDER),
         budgets=budgets,
+        manifest_path=manifest_path,
         run_dir=run_dir,
         delay=delay,
     )
