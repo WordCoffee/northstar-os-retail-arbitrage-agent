@@ -282,6 +282,12 @@ python costco_api_client.py details refresh --item-ids 424976 `
 # 1) Status (zero network)
 python costco_live_runner.py status
 
+# 1a) PRE-LIVE DRESS REHEARSAL (zero network, hermetic): runs the REAL
+#     runner + REAL adapters + REAL fixture HTML (transport mocked) and the
+#     REAL merge through to a temp product-detail store. Proves the whole
+#     pull -> evidence -> merge chain before a single live call:
+python -m pytest test_full_pull_rehearsal.py -q
+
 # 2) Build the full-pull manifest from the master price-capture CSV (zero network)
 python costco_live_runner.py build-manifest `
   --from-csv data/catalog/costco_master_price_capture_20260825T142621Z.csv `
@@ -338,11 +344,18 @@ python bright_data_costco_backfill.py `
   cursor — never flip-flops back).
 - A hard failure on the LAST provider halts the batch (circuit breaker):
   persist what already succeeded, record the failure in a scrubbed manifest,
-  report, stop. No silent retries.
+  report, stop. No silent retries. Un-attempted items are never silently
+  dropped: they are recorded as `skipped` (`reason: halted`,
+  `items_halted_skipped` in the summary), so
+  items_requested == items_fetched + items_failed + len(skipped).
 - Soft per-item failures (`url_not_found` / `no_data_found`) continue and never
   switch providers.
 - `--provider-budget NAME=N,...` caps items per provider; budget-exhausted items
   are `skipped` (`budget_exhausted`), never dropped.
+- Store provenance: `kirkland_costco_merge.py` labels each row by the platform
+  that ACTUALLY served it (`brightdata_web_unlocker` /
+  `firecrawl_costco_page` for the fallback) — cost/credit accounting never
+  misattributes a Firecrawl-served row to Bright Data.
 
 ### Credit math (tiers verified 2026-09)
 - Bright Data Web Unlocker: 5,000 credits/mo free tier, 1 credit per request page.

@@ -38,7 +38,7 @@ def _item(item_id, title, price, captured_at, ts_attr="captured_at", **extra):
         "identity_match_status": "probable_match",
         "missing_fields": [],
     }
-    return {
+    rec = {
         "run_id": "test-run",
         "attempt": "brightdata_costco_%s" % item_id,
         "requested_at": "2026-09-01T00:00:00Z",
@@ -53,6 +53,8 @@ def _item(item_id, title, price, captured_at, ts_attr="captured_at", **extra):
         "scrubbed": True,
         "item": item,
     }
+    rec.update(extra)  # allow tests to override provenance fields, etc.
+    return rec
 
 
 class MergeStoreTests(unittest.TestCase):
@@ -156,6 +158,28 @@ class MergeStoreTests(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["current_price"], 21.99)
         self.assertEqual(rows[0]["item_name"], "Kirkland Signature Nitrile Exam Gloves, 400-count, Size Medium")
+
+    def test_provenance_follows_serving_platform(self):
+        """Firecrawl-served evidence must NOT be labeled as Bright Data.
+        source/cost_basis are derived from the record's platform."""
+        _evidence_file(
+            self.runs, "items_FFFF_firecrawl.json",
+            _item("FFFF", "Kirkland Signature Paper Towels, 12-pack", 29.99,
+                  "2026-09-06T00:00:00Z",
+                  platform="firecrawl_scrape", provider="FIRECRAWL"),
+        )
+        _evidence_file(
+            self.runs, "items_GGGG_brightdata.json",
+            _item("GGGG", "Kirkland Signature Plastic Wrap, 750 sq ft", 19.99,
+                  "2026-09-06T00:00:00Z"),
+        )
+        summary = self._run()
+        rows = {r["costco_item_id"]: r for r in self._load_store()}
+        self.assertEqual(summary["records_imported"], 2)
+        self.assertEqual(rows["FFFF"]["source"], "firecrawl_scrape")
+        self.assertEqual(rows["FFFF"]["cost_basis"], "firecrawl_costco_page")
+        self.assertEqual(rows["GGGG"]["source"], "brightdata_web_unlocker")
+        self.assertEqual(rows["GGGG"]["cost_basis"], "brightdata_costco_page")
 
 
 if __name__ == "__main__":
