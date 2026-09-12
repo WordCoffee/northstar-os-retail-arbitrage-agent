@@ -1,0 +1,427 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Northstar Kirkland Data Console</title>
+  <style>
+    :root {
+      --bg: #050816;
+      --panel: #101828;
+      --accent: #3b82f6;
+      --accent-soft: rgba(59,130,246,0.1);
+      --border: #1f2937;
+      --text-main: #f9fafb;
+      --text-sub: #9ca3af;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
+      color: var(--text-main);
+    }
+    .shell {
+      max-width: 1120px;
+      margin: 32px auto;
+      padding: 0 16px 48px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .brand-title {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--accent);
+    }
+    .brand-sub {
+      font-size: 14px;
+      color: var(--text-sub);
+    }
+    .tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-sub);
+      background: rgba(15,23,42,0.8);
+    }
+    main {
+      display: grid;
+      gap: 16px;
+    }
+    .panel {
+      background: linear-gradient(135deg, rgba(15,23,42,0.96), rgba(17,24,39,0.98));
+      border-radius: 18px;
+      border: 1px solid rgba(31,41,55,0.9);
+      padding: 18px 18px 16px;
+      box-shadow: 0 24px 60px rgba(15,23,42,0.95);
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .panel-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .panel-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+    .chip {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #bfdbfe;
+      border: 1px solid rgba(59,130,246,0.4);
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: minmax(0, 1fr); }
+    }
+    .field-group {
+      display: grid;
+      gap: 10px;
+    }
+    .field-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
+      gap: 10px;
+    }
+    label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+    input, select, textarea {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(31,41,55,0.9);
+      background: rgba(15,23,42,0.9);
+      padding: 8px 9px;
+      font-size: 12px;
+      color: var(--text-main);
+      font-family: inherit;
+    }
+    input::placeholder, textarea::placeholder {
+      color: #4b5563;
+    }
+    .hint {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    button {
+      border-radius: 999px;
+      border: none;
+      font-size: 12px;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-sub);
+      border: 1px solid var(--border);
+    }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 800px) {
+      .metrics-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .kpi {
+      border-radius: 12px;
+      border: 1px solid rgba(31,41,55,0.9);
+      background: rgba(15,23,42,0.9);
+      padding: 9px 10px;
+    }
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+    .kpi-value {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .kpi-sub {
+      font-size: 10px;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    thead tr {
+      background: rgba(15,23,42,0.9);
+    }
+    th, td {
+      padding: 6px 6px;
+      border-bottom: 1px solid rgba(31,41,55,0.8);
+      text-align: left;
+    }
+    th {
+      font-weight: 500;
+      color: #9ca3af;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    tbody tr:hover {
+      background: rgba(17,24,39,0.85);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 7px;
+      font-size: 10px;
+      border: 1px solid rgba(31,41,55,0.9);
+    }
+    .badge-pass { background: rgba(34,197,94,0.12); color: #bbf7d0; border-color: rgba(34,197,94,0.4); }
+    .badge-hold { background: rgba(245,158,11,0.12); color: #fed7aa; border-color: rgba(245,158,11,0.5); }
+    .badge-risk { background: rgba(239,68,68,0.1); color: #fecaca; border-color: rgba(239,68,68,0.5); }
+    .section-note {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <div class="brand-title">Northstar Arbitrage OS</div>
+        <div class="brand-sub">Kirkland Data Console . T2 Holdings LLC</div>
+      </div>
+      <span class="tag">DFW Costco to Amazon FBA . Kirkland-focused</span>
+    </header>
+
+    <main>
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Kirkland Scan Inputs</div>
+            <div class="panel-sub">Enter ASINs to pull live Amazon and Costco data.</div>
+          </div>
+          <span class="chip">Step 1 . Configure scan</span>
+        </div>
+
+        <div class="layout">
+          <div>
+            <div class="field-group">
+              <div>
+                <label for="asin-list">ASINs or URLs</label>
+                <textarea id="asin-list" rows="4" placeholder="One ASIN per line (e.g. B081THWMDK)"></textarea>
+                <div class="hint">Leave this box empty to auto-discover the best Kirkland products from your catalog, or list specific ASINs to check only those.</div>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="source-profile">Source profile</label>
+                  <select id="source-profile">
+                    <option value="dfw-costco">DFW Costco Business Center</option>
+                    <option value="costco-standard">Standard Costco warehouse</option>
+                    <option value="online-only">Online-only (Amazon + price history)</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="scan-type">Scan type</label>
+                  <select id="scan-type">
+                    <option value="kirkland-core">Kirkland core SKUs</option>
+                    <option value="kirkland-household">Kirkland household-only</option>
+                    <option value="kirkland-supplements">Kirkland supplements / OTC</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="min-profit">Min net profit $ / unit</label>
+                  <input id="min-profit" type="number" step="0.5" value="11" />
+                </div>
+                <div>
+                  <label for="min-velocity">Min monthly units</label>
+                  <input id="min-velocity" type="number" step="100" value="2000" />
+                </div>
+              </div>
+            </div>
+
+            <div class="controls">
+              <button class="btn-primary" id="run-scan">Run Kirkland Scan</button>
+              <button class="btn-ghost" id="load-sample">Load sample Kirkland set</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="metrics-row">
+              <div class="kpi">
+                <div class="kpi-label">Products scanned</div>
+                <div class="kpi-value" id="kpi-count">0</div>
+                <div class="kpi-sub">Rows returned in last scan</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-label">Avg net profit / unit</div>
+                <div class="kpi-value" id="kpi-profit">$0.00</div>
+                <div class="kpi-sub">After fees and logistics</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-label">Est. monthly units</div>
+                <div class="kpi-value" id="kpi-units">0</div>
+                <div class="kpi-sub">Summed across scan set</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-label">Pass candidates</div>
+                <div class="kpi-value" id="kpi-pass">0</div>
+                <div class="kpi-sub">Meet profit + velocity + risk gates</div>
+              </div>
+            </div>
+            <div class="section-note">Connected live to http://127.0.0.1:8000/api/kirkland/scan</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Kirkland Scan Results</div>
+            <div class="panel-sub">Live product table from your Northstar backend.</div>
+          </div>
+          <span class="chip">Step 2 . Review and select</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>ASIN</th>
+                <th>Monthly sales</th>
+                <th>Costco cost</th>
+                <th>Amazon price</th>
+                <th>Net profit</th>
+                <th>ROI %</th>
+                <th>Logistics risk</th>
+                <th>Verdict</th>
+              </tr>
+            </thead>
+            <tbody id="results-body">
+            </tbody>
+          </table>
+        </div>
+        <div class="section-note">Click Run Kirkland Scan above to populate this table from your live API.</div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const sample = ["B081THWMDK", "B0928WBZVM"];
+
+    document.getElementById("load-sample").addEventListener("click", () => {
+      document.getElementById("asin-list").value = sample.join("\n");
+    });
+
+    document.getElementById("run-scan").addEventListener("click", async () => {
+      const lines = document.getElementById("asin-list").value
+        .split(/\n+/)
+        .map(l => l.trim())
+        .filter(Boolean);
+
+      const sourceProfile = document.getElementById("source-profile").value;
+      const minProfit = parseFloat(document.getElementById("min-profit").value || "11");
+      const minVelocity = parseInt(document.getElementById("min-velocity").value || "2000", 10);
+
+      const payload = {
+        asins: lines,
+        source_profile: sourceProfile,
+        min_profit: minProfit,
+        min_velocity: minVelocity
+      };
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/api/kirkland/scan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        const products = data.products || [];
+
+        document.getElementById("kpi-count").textContent = products.length.toString();
+
+        const avgProfit = products.length
+          ? (products.reduce((sum, p) => sum + p.net_profit, 0) / products.length)
+          : 0;
+        document.getElementById("kpi-profit").textContent = "$" + avgProfit.toFixed(2);
+
+        const totalUnits = products.reduce((sum, p) => sum + p.monthly_sales, 0);
+        document.getElementById("kpi-units").textContent = totalUnits.toString();
+
+        const passCount = products.filter(p => p.verdict === "Pass").length;
+        document.getElementById("kpi-pass").textContent = passCount.toString();
+
+        const tbody = document.getElementById("results-body");
+        tbody.innerHTML = "";
+
+        for (const p of products) {
+          const tr = document.createElement("tr");
+          const verdictClass = p.verdict === "Pass" ? "badge-pass"
+            : p.verdict === "Reject" ? "badge-risk"
+            : "badge-hold";
+
+          tr.innerHTML =
+            "<td>" + p.name + "</td>" +
+            "<td>" + p.asin + "</td>" +
+            "<td>" + p.monthly_sales + "</td>" +
+            "<td>$" + p.costco_cost.toFixed(2) + "</td>" +
+            "<td>$" + p.amazon_price.toFixed(2) + "</td>" +
+            "<td>$" + p.net_profit.toFixed(2) + "</td>" +
+            "<td>" + p.roi_pct.toFixed(1) + "%</td>" +
+            "<td><span class=\"badge badge-hold\">" + p.logistics_risk + "</span></td>" +
+            "<td><span class=\"badge " + verdictClass + "\">" + p.verdict + "</span></td>";
+          tbody.appendChild(tr);
+        }
+      } catch (err) {
+        console.error("Scan error:", err);
+        alert("Could not reach the Kirkland scan API. Is uvicorn still running?");
+      }
+    });
+  </script>
+</body>
+</html>

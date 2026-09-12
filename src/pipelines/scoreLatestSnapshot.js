@@ -86,7 +86,7 @@ function inferCostBasis(row, catalogRows) {
   let bestMatch = null;
 
   for (const item of catalogRows) {
-    const catalogTitle = item.title || item.name || '';
+    const catalogTitle = item.item_name || item.title || item.name || '';
     const score = titleMatchScore(amazonTitle, catalogTitle);
     if (score > bestScore) {
       bestScore = score;
@@ -96,7 +96,7 @@ function inferCostBasis(row, catalogRows) {
 
   if (bestScore < MATCH_SCORE_THRESHOLD || !bestMatch) return null;
 
-  const price = Number(bestMatch.price || bestMatch.cost || bestMatch.unit_price);
+  const price = Number(bestMatch.costco_cost || bestMatch.price || bestMatch.cost || bestMatch.unit_price);
   return Number.isFinite(price) && price > 0 ? price : null;
 }
 

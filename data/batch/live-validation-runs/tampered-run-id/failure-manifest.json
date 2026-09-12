@@ -1,0 +1,20 @@
+{
+  "kind": "proof-batch-failure-manifest",
+  "schema_version": 1,
+  "run_id": "tampered-run-id",
+  "preflight_fingerprint": "e89fcbddadff281cf6afafd3cf584c168aa9a958d4ff1d0a5f911a33b714181e",
+  "generated_at": "2026-09-05T07:56:24.297757+00:00",
+  "stage": "fetch(B000000001)",
+  "stop_reason": "adapter_internal_error",
+  "asin": "B000000001",
+  "budget": {
+    "allowed_requests": 20,
+    "requests_used": 0,
+    "retries_used": 0,
+    "credits_estimated_used": 0.0,
+    "credits_reported_used": 0,
+    "credits_actual_status": "unavailable_estimated_only",
+    "max_credits": 100
+  },
+  "note": "scrubbed failure record — no secrets, no raw response bodies, no normalized results"
+}

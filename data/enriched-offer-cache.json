@@ -1,0 +1,260 @@
+{
+  "B00QGMOJ4Y": {
+    "offer": {
+      "amazon_price": null,
+      "buy_box_price": null,
+      "lowest_price": null,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": null,
+      "amazon_category": null,
+      "browse_node_id": null,
+      "breadcrumb": null,
+      "category_source_hint": null,
+      "title": null,
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-08-18T00:48:43.522687+00:00"
+    },
+    "cached_at": "2026-08-18T00:48:43.525234+00:00"
+  },
+  "B0H1Z32VYW": {
+    "offer": {
+      "amazon_price": 33.99,
+      "buy_box_price": 33.99,
+      "lowest_price": 33.99,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": 9.9,
+      "amazon_category": null,
+      "browse_node_id": null,
+      "breadcrumb": null,
+      "category_source_hint": null,
+      "title": "KIRKLAND Signature Women's Travel Pant",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-08-18T00:48:50.173774+00:00"
+    },
+    "cached_at": "2026-08-18T00:48:50.177768+00:00"
+  },
+  "B0H1Z2GJYY": {
+    "offer": {
+      "amazon_price": 31.99,
+      "buy_box_price": 31.99,
+      "lowest_price": 31.99,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": 5.25,
+      "amazon_category": "Clothing, Shoes & Jewelry",
+      "browse_node_id": 7141123011,
+      "breadcrumb": [
+        "Clothing, Shoes & Jewelry",
+        "Sport Specific Clothing",
+        "Hiking & Outdoor Recreation",
+        "Women",
+        "Pants"
+      ],
+      "category_source_hint": "breadcrumb",
+      "title": "KIRKLAND Signature Women's Travel Pant",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-08-18T00:48:54.086700+00:00"
+    },
+    "cached_at": "2026-08-18T00:48:54.089856+00:00"
+  },
+  "B0H1Z19FMH": {
+    "offer": {
+      "amazon_price": 37.8,
+      "buy_box_price": 37.8,
+      "lowest_price": 37.8,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": 5.25,
+      "amazon_category": "Clothing, Shoes & Jewelry",
+      "browse_node_id": 7141123011,
+      "breadcrumb": [
+        "Clothing, Shoes & Jewelry",
+        "Sport Specific Clothing",
+        "Hiking & Outdoor Recreation",
+        "Women",
+        "Pants"
+      ],
+      "category_source_hint": "breadcrumb",
+      "title": "KIRKLAND Signature Women's Travel Pant",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-08-18T00:48:57.901785+00:00"
+    },
+    "cached_at": "2026-08-18T00:48:57.904724+00:00"
+  },
+  "B0H1Z5D4LC": {
+    "offer": {
+      "amazon_price": 39.5,
+      "buy_box_price": 39.5,
+      "lowest_price": 39.5,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": null,
+      "amazon_category": "Clothing, Shoes & Jewelry",
+      "browse_node_id": 7141123011,
+      "breadcrumb": [
+        "Clothing, Shoes & Jewelry",
+        "Sport Specific Clothing",
+        "Hiking & Outdoor Recreation",
+        "Women",
+        "Pants"
+      ],
+      "category_source_hint": "breadcrumb",
+      "title": "KIRKLAND Signature Women's Travel Pant",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-08-18T00:49:00.820719+00:00"
+    },
+    "cached_at": "2026-08-18T00:49:00.823630+00:00"
+  },
+  "B0H1YR171D": {
+    "offer": {
+      "amazon_price": 45.99,
+      "buy_box_price": 45.99,
+      "lowest_price": 45.99,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": 5.25,
+      "amazon_category": "Clothing, Shoes & Jewelry",
+      "browse_node_id": 7141123011,
+      "breadcrumb": [
+        "Clothing, Shoes & Jewelry",
+        "Sport Specific Clothing",
+        "Hiking & Outdoor Recreation",
+        "Women",
+        "Pants"
+      ],
+      "category_source_hint": "breadcrumb",
+      "title": "KIRKLAND Signature Women's Travel Pant",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-08-18T01:16:48.657546+00:00"
+    },
+    "cached_at": "2026-08-18T01:16:48.660064+00:00"
+  },
+  "B0H1ZHGR7K": {
+    "offer": {
+      "amazon_price": 24.65,
+      "buy_box_price": 24.65,
+      "lowest_price": 24.65,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": 5.25,
+      "amazon_category": "Clothing, Shoes & Jewelry",
+      "browse_node_id": 7141123011,
+      "breadcrumb": [
+        "Clothing, Shoes & Jewelry",
+        "Sport Specific Clothing",
+        "Hiking & Outdoor Recreation",
+        "Women",
+        "Pants"
+      ],
+      "category_source_hint": "breadcrumb",
+      "title": "KIRKLAND Signature Women's Travel Pant",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-08-18T01:43:54.203686+00:00"
+    },
+    "cached_at": "2026-08-18T01:43:54.205976+00:00"
+  },
+  "B000000001": {
+    "offer": {
+      "amazon_price": 48.87,
+      "buy_box_price": 48.87,
+      "lowest_price": 45.87,
+      "highest_price": 53.87,
+      "total_sellers": 5,
+      "fba_sellers": 2,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": 1200,
+      "monthly_sales_estimated": true,
+      "fba_fee": 9.25,
+      "amazon_category": "Grocery & Gourmet Food",
+      "browse_node_id": 16310101,
+      "breadcrumb": [
+        "Grocery & Gourmet Food",
+        "Snack Foods"
+      ],
+      "category_source_hint": "breadcrumb",
+      "title": "Kirkland Test Item",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "complete",
+      "enriched_at": "2026-09-05T23:55:16.090910+00:00"
+    },
+    "cached_at": "2026-09-05T23:55:16.091085+00:00"
+  },
+  "B0TESTASIN": {
+    "offer": {
+      "amazon_price": 12.0,
+      "buy_box_price": 12.0,
+      "lowest_price": 12.0,
+      "highest_price": 12.0,
+      "total_sellers": 1,
+      "fba_sellers": 0,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": null,
+      "amazon_category": null,
+      "browse_node_id": null,
+      "breadcrumb": null,
+      "category_source_hint": null,
+      "title": "Test Product",
+      "offer_data_provider": "easyparser",
+      "enrichment_status": "complete",
+      "enriched_at": "2026-09-02T07:35:56.260691+00:00"
+    },
+    "cached_at": "2026-09-02T07:35:56.260826+00:00"
+  }
+}

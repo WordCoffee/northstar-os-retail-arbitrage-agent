@@ -1,0 +1,36 @@
+{
+  "run_id": "20260828T021658Z",
+  "attempt": "brightdata_costco_164981",
+  "requested_at": "2026-09-07T01:12:50Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_page",
+  "endpoint": "https://api.brightdata.com/request",
+  "url": "https://www.costco.com/.product.164981.html",
+  "http_status": 200,
+  "failure_type": null,
+  "retries": 0,
+  "stop_on_block": "sequential_batch",
+  "scrubbed": true,
+  "item": {
+    "requested_item_id": "164981",
+    "returned_costco_item_id": "164981",
+    "exact_title": "Kirkland Signature Fine Ground Black Pepper, 12.3 oz",
+    "brand": "Kirkland Signature",
+    "listed_price": 7.89,
+    "currency": "USD",
+    "unit_price": null,
+    "quantity_or_pack": "3 oz",
+    "size_or_weight": null,
+    "UPC_GTIN_EAN": null,
+    "availability": null,
+    "product_url": "https://www.costco.com/.product.164981.html",
+    "captured_at": "2026-09-07T01:13:25Z",
+    "identity_match_status": "unverified",
+    "missing_fields": [
+      "unit_price",
+      "size_or_weight",
+      "UPC_GTIN_EAN",
+      "availability"
+    ]
+  }
+}

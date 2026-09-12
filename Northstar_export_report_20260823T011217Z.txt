@@ -1,0 +1,47 @@
+﻿Northstar OS Safe Export Report
+Timestamp (UTC): 20260823T011217Z
+
+Source folders:
+  Parent : C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent
+  Backend: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_backend
+
+ZIP outputs:
+  Parent : C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_OS_Retail_Arbitrage_Agent_SAFE_20260823T011217Z.zip
+  Backend: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_backend_SAFE_20260823T011217Z.zip
+
+ZIP sizes (bytes):
+  Parent : 1687345
+  Backend: 1592885
+
+Validation:
+  Parent  archive passed: True  ()
+  Backend archive passed: True  ()
+  Both passed: True
+
+High-level folders included:
+  Parent  (Northstar OS Retail Arbitrage Agent/): Northstar_backend
+  Backend (Northstar_backend/): config, data, docs, fixtures, static, templates
+
+Excluded directory categories:
+  venv-wsl, backend-wsl, .venv, venv, env, site-packages, __pycache__,
+  node_modules, .git, .pytest_cache, .mypy_cache, .ruff_cache, dist, build,
+  coverage, htmlcov, Northstar_backend_audit_export
+  Unrelated apps (parent): motivation-quotes, northstar-os-retail-arbitrage-agent,
+  quick-draw-app, Northstar_backend_audit_export
+  Sensitive file patterns: .env, .env.*, *.pem, *.key, *.pfx, *.p12,
+  *credential*, *credentials*, *secret*, *token*, *apikey*, *api_key*
+  Existing *.zip files (no recursion), symbolic links / junctions / reparse points
+
+Counts:
+  Files copied : 750
+  Files skipped: 8
+
+Skipped-path warnings (non-sensitive filenames only):
+SKIP dir: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_backend\.pytest_cache
+SKIP dir: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_backend\venv
+SKIP dir: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_backend\venv-wsl
+SKIP dir: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_backend\__pycache__
+SKIP dir: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_backend\.pytest_cache
+SKIP dir: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_backend\venv
+SKIP dir: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_backend\venv-wsl
+SKIP dir: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_backend\__pycache__

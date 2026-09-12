@@ -1,0 +1,97 @@
+{
+  "generated_at": "2026-09-02T09:53:15.611719+00:00",
+  "mode": "offline_dry_run",
+  "asins": {
+    "B000KIRK01": {
+      "schema_version": 1,
+      "asin": "B000KIRK01",
+      "ingested_at": "2026-08-17T12:00:00+00:00",
+      "sources": {},
+      "facts": {
+        "identity": {
+          "name": null,
+          "pack_match": null,
+          "upc_or_ean": null,
+          "net_weight_lbs": null
+        },
+        "cost": {
+          "costco_cost": null,
+          "cost_status": "unavailable",
+          "source": null,
+          "paid_cost_invoice": null
+        },
+        "fees": {
+          "referral_fee": null,
+          "referral_fee_confidence": "unavailable",
+          "fba_fee": null,
+          "fba_fee_status": "unavailable",
+          "prep_cost_per_unit": null,
+          "inbound_cost_per_unit": null,
+          "packaging_cost_per_unit": null,
+          "return_reserve_rate": null
+        },
+        "demand": {
+          "estimated_monthly_sales": null,
+          "sales_estimation_method": "unknown",
+          "sales_estimation_confidence": "unknown"
+        },
+        "market": {
+          "amazon_price": 9.99,
+          "bsr": {
+            "bsr_raw": "#123 in Health",
+            "bsr_primary_rank": 123,
+            "bsr_primary_category": "Health",
+            "bsr_secondary_rank": null,
+            "bsr_secondary_category": null,
+            "bsr_capture_status": "verified",
+            "bsr_source": "rapidapi_realtime",
+            "bsr_captured_at": null
+          },
+          "buy_box": {
+            "available": true,
+            "price": 9.99,
+            "seller_name": "Amazon",
+            "seller_id": "A1",
+            "fulfillment": "FBA",
+            "source": "rapidapi_realtime",
+            "observed_at": null
+          },
+          "seller_counts": {
+            "total_observed": 1,
+            "fba_observed": 1,
+            "fbm_observed": 0,
+            "amazon_observed": 0,
+            "claimed_total": 5
+          },
+          "coverage": {
+            "offer_list_available": true,
+            "offers_complete_status": "partial",
+            "coverage_reason": "returned 1 of 5 claimed offers"
+          },
+          "offers": [
+            {
+              "seller_name": "Amazon",
+              "seller_id": null,
+              "price": 9.99,
+              "original_price": null,
+              "condition": "New",
+              "is_fba": true,
+              "ships_from": "Amazon"
+            }
+          ]
+        },
+        "economics": {
+          "net_profit": null,
+          "roi_pct": null,
+          "economics_confidence": "unavailable",
+          "economics_status": "missing_market_or_cost_inputs"
+        },
+        "provenance": {
+          "market.amazon_price": "rapidapi_realtime"
+        }
+      },
+      "validation_errors": null,
+      "validation_status": "valid"
+    }
+  }
+}

@@ -1,0 +1,2382 @@
+{
+  "schema_version": 2,
+  "kind": "costco_full_pull_manifest",
+  "generated_at": "2026-09-08T16:26:16.230829+00:00",
+  "source": "costco_master_price_capture_20260825T142621Z.csv",
+  "count": 15,
+  "pending_lookup_count": 446,
+  "items": [
+    {
+      "item_id": "1493188",
+      "requested_title": "Kirkland Signature Baby Wipes Fragrance Free, 900-count",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "900-count (9 x 100ct)",
+      "mapped_asins": [
+        "B00SWZUC8U",
+        "B014K3BF24"
+      ]
+    },
+    {
+      "item_id": "424976",
+      "requested_title": "Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "400 Tablets",
+      "mapped_asins": [
+        "B00YGMN122",
+        "B00P8ZAWK0",
+        "B00NPQZ20O"
+      ]
+    },
+    {
+      "item_id": "1586629",
+      "requested_title": "Kirkland Signature Aller-Flo 50 mcg Allergy Spray, 720 Metered Sprays",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "5 bottles (720 sprays)",
+      "mapped_asins": [
+        "B01H40O42I",
+        "B08R2SRN88"
+      ]
+    },
+    {
+      "item_id": "1089787",
+      "requested_title": "Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "200 count",
+      "mapped_asins": [
+        "B001UB44SM"
+      ]
+    },
+    {
+      "item_id": "926628",
+      "requested_title": "Kirkland Signature Fish Oil 1000 mg, 400 Softgels",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "400 Softgels",
+      "mapped_asins": [
+        "B002VLZHLS"
+      ]
+    },
+    {
+      "item_id": "98211",
+      "requested_title": "Kirkland Signature Vitamin E 180 mg (400 IU), 500 Softgels",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "500 Softgels",
+      "mapped_asins": [
+        "B005ECOBBI"
+      ]
+    },
+    {
+      "item_id": "690843",
+      "requested_title": "Kirkland Signature Quick Dissolve B-12 5000 mcg, 300 Tablets",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "300 Tablets",
+      "mapped_asins": [
+        "B00AQ0LMTC"
+      ]
+    },
+    {
+      "item_id": "98501",
+      "requested_title": "Kirkland Signature Chewable Vitamin C 500 mg, 500 Tablets",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "500 Tablets",
+      "mapped_asins": [
+        "B00MPYTSGG",
+        "B07881PTTX"
+      ]
+    },
+    {
+      "item_id": "98268",
+      "requested_title": "Kirkland Signature Vitamin C 1000 mg, 500 Tablets",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "500 Tablets",
+      "mapped_asins": [
+        "B015WRSJCQ"
+      ]
+    },
+    {
+      "item_id": "1755436",
+      "requested_title": "Kirkland Signature 18-Gallon Compactor & Kitchen Trash Bag, 70-count",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "70-count",
+      "mapped_asins": [
+        "B01LNBDORK"
+      ]
+    },
+    {
+      "item_id": "87507",
+      "requested_title": "Kirkland Signature 10-Gallon Wastebasket Liner, Clear, 500-count",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "500 count",
+      "mapped_asins": [
+        "B01M7Y0NEX"
+      ]
+    },
+    {
+      "item_id": "1652990",
+      "requested_title": "Kirkland Signature Premoistened Flushable Wipes, Fragrance Free, 640-count",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "640-count",
+      "mapped_asins": [
+        "B07H4YC1GC"
+      ]
+    },
+    {
+      "item_id": "1665191",
+      "requested_title": "Kirkland Signature Glucosamine & Chondroitin, 280 Tablets",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "280 Tablets",
+      "mapped_asins": [
+        "B00GYZWNY6"
+      ]
+    },
+    {
+      "item_id": "1349614",
+      "requested_title": "Kirkland Signature OPTIFIBER, 26.8 Ounces, 190 Servings",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "190 Servings (single)",
+      "mapped_asins": [
+        "B01KW9KWW4"
+      ]
+    },
+    {
+      "item_id": "393914",
+      "requested_title": "Kirkland Signature Extra Strength D3 50 mcg (2000 IU), 600 Softgels",
+      "requested_brand": "Kirkland Signature",
+      "requested_pack": "600 Softgels (single)",
+      "mapped_asins": [
+        "B01NCRITAE"
+      ]
+    }
+  ],
+  "pending_lookup": [
+    {
+      "asin": "B0FPFMT1MS",
+      "amazon_title": "KIRKLAND Minoxidil for Men Liquid, Extra Strength Hair Regrowth Treatment 5%, 6 Months Supply - Upgraded Dropper Applicator and Bonus Free Guide Included",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00BH3HPZW",
+      "amazon_title": "KIRKLAND Fiber Capsules Kirkland Therapy for Regularity/Fiber Supplement, 360 capsules - Compare to the Active Ingredient in Metamucil Capsules",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B085F1QCB9",
+      "amazon_title": "KIRKLAND KIRKLAND SIGNATURE Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size, New Edition",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01LY71217",
+      "amazon_title": "KIRKLAND Kirkland Signature 13 Gallon 200 Ct Carton 100% recyclable Heavy Duty Drawstring Kitchen Trash Bags Garbage Bag,White",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0077SXI7A",
+      "amazon_title": "KIRKLAND Kirkland Signature Kirkland Fiber Capsules, 2 Pack (360 Capsules Each)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B007MWNFBA",
+      "amazon_title": "KIRKLAND Kirkland Signature Stretch Tite Plastic Food Wrap Single pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B081THWMDK",
+      "amazon_title": "KIRKLAND Kirkland Signature Stretch Tite Plastic Food Wrap 11 7/8 Inch X 750 SQ. FT. Pack 2",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00F4MD808",
+      "amazon_title": "KIRKLAND Kirkland Signature Chewable Calcium with Vitamin D3 Adult Gummies, 120 ct x 1 Bottle",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00JW1OHWK",
+      "amazon_title": "Kirkland Signature Kirkland Signature Pure Vanilla Extract 16 ounce",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00OPQZJA6",
+      "amazon_title": "KIRKLAND Kirkland Signature Nuts, Walnuts,48 Ounce [Amazon-developed Certification] Compact by Design",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B09KFMH9BW",
+      "amazon_title": "KIRKLAND Kirkland Signature Minoxidil Topical Solution USP 5%, Extra Strength Hair Regrowth Treatment for Men, 6 Months Supply",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00QGMOJ4Y",
+      "amazon_title": "KIRKLAND Kirkland Signature Purified Drinking Water, 16.9 Ounce, 40 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0F7GTX962",
+      "amazon_title": "KIRKLAND Signature Minoxidil Topical Solution USP 5%, Extra Strength Hair Regrowth Treatment for Men, 6 Months Supply",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08TQRC3F6",
+      "amazon_title": "KIRKLAND Signature Nitrile Gloves, Box of 200, Medium for Health Care, Food Service, Home other uses.",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01KHC9D6C",
+      "amazon_title": "KIRKLAND Kirkland Minoxidil 5% Extra Strength Men Hair Regrowth (12 Month Supply) | 5% minoxidil topical solution for men; extra strength hair regrowth treatment; unscented; 12 month with dropper",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D38DT5RX",
+      "amazon_title": "KIRKLAND Signature Hair Regrowth Treatment Minoxidil Foam for Men, 2.11 oz, 6 Count (6 Month Supply) - 2 MicroFiber Cleaning Cloths and Comb Included",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0C54GXFQ8",
+      "amazon_title": "KIRKLAND Signature V3.0#1654518 Performance Plus 3-Piece Urethane Covered Golf Ball (2 Dozen, 24 Balls)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01J13V6I6",
+      "amazon_title": "KIRKLAND Kirkland Signature Carton is 100% recyclable 33 Gallon Black Drawstring Trash Bag 90 Count,Tear-Stop Technology",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01M7QUOBB",
+      "amazon_title": "KIRKLAND Kirkland Signature Dental Chews, 72-Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07G6XV55T",
+      "amazon_title": "Kirkland Signature Plastic Food Wrap - 6000 SQ. FT (2 Pack, 12\" x 3000 SQ. FT Each)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CHTNWWLJ",
+      "amazon_title": "KIRKLAND Kirkland Signature Sugar-Free Psyllium Fiber Supplement Powder, 360 DosesQ | 360 Doses",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07PJTG9QF",
+      "amazon_title": "KIRKLAND Kirkland Signature QNKDQK Extra Fancy Unsalted Mixed Nuts 2.5 (LB), 2 Pack of 40 Ounce, 99451458768",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DPY44TGM",
+      "amazon_title": "MORALZA Kirkland Signature Praline Pecans, 2.5 lbs. Item 1209607. Bundle with MORALZA Silicone Collapsible Cup 200ml - 2 Items.",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07VBB1NZG",
+      "amazon_title": "KIRKLAND Kirkland Signature Organic Medium Blend Roast, Recyclable K Cup Pods, 3 lb, 120 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07XLZXQRP",
+      "amazon_title": "KIRKLAND Kirkland Signature Bath Tissue, 2-Ply, 425 sheets, 30 rolls",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B077GS636P",
+      "amazon_title": "KIRKLAND Kirkland Signature Glucosamine with MSM, 375 Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00DQXOSV0",
+      "amazon_title": "KIRKLAND Kirkland Signature Ultra Plush Microfiber Towels 12 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07CHRV2PR",
+      "amazon_title": "KIRKLAND Kirkland Signature Ultra High Pile Premium Microfiber Towels",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0F45WF91C",
+      "amazon_title": "KIRKLAND Signature Minoxidil Topical Solution USP 5%, Extra Strength Hair Regrowth Treatment for Men, 6 Months Supply, Total 12 Fl Oz",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07H3TXVR7",
+      "amazon_title": "KIRKLAND Kirkland Signature Minoxidil 5% Topical Solution for Men, Unscented, Original Manufacturer Packaging 6 Month Supply",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B077962JKD",
+      "amazon_title": "KIRKLAND Kirkland Signature Peanut Butter Pretzel, 2 Pack(52 Ounce)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0BMX67KY7",
+      "amazon_title": "KIRKLAND Signature Fragrance Free Baby Wipes, 900 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D3FQ7H7B",
+      "amazon_title": "KING BUY BOX Kirkland Signature Super Extra-Large Peanuts 2.5 lbs + KING BUY BOX 1 Cup - Bundle of 2 Items",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CB71V975",
+      "amazon_title": "KIRKLAND Kirkland Signature S'more Caramel Cluster, 26.3 Ounce",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00LWE9144",
+      "amazon_title": "KIRKLAND Signature B-12 5000 mcg, 300 Tablets (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01LBAFCDM",
+      "amazon_title": "KIRKLAND wcaqZ, COQ10 300 mg 100 Softgels (Pack of 2)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0784S6ZCJ",
+      "amazon_title": "KIRKLAND Signature Men\u2019s Athletic Sock 8-pair, White (White, 8-12)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07886L38V",
+      "amazon_title": "KIRKLAND KIRKLAND SIGNATURE Trail Mix Snack Pack, 3.52 Lb",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07N798Y1J",
+      "amazon_title": "KIRKLAND Signature Calcium Citrate Magnesium and Zinc, 500 Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08XPSSJ5S",
+      "amazon_title": "KIRKLAND Kirkland Signature Praline Pecans 2.5lb (Family Bundle) Pack of 2 | Kirkland Signature Praline Pecans 2.5 Pound Bag, Family Bundle of 2 Bags, Glazed Candied Pecan Halves",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08B5GZXHN",
+      "amazon_title": "KIRKLAND Kirkland Signature Organic Extra Virgin Olive Oil 2L (2QT 3.6 fl. oz), Set of 2 USDA Organic",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B004885T38",
+      "amazon_title": "KIRKLAND Kirkland Signature Nature's Path Organic Ancient Grains with Almonds, 35.3 oz USDA Organic",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01MYGO4Y5",
+      "amazon_title": "KIRKLAND Kirkland Signature, Vitamin E 400 IU brdqt 500 Softgels (Pack of 2)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CXB5MJ42",
+      "amazon_title": "Worldwide Nutrition Bundle Compatible with Kirkland Signature Flex-Tech 13 Gallon Kitchen Garbage Bags with Drawstring Closure - 200 Count Pack of Tall Trash Bags for Kitchen with Keychain",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00G6RK1NM",
+      "amazon_title": "KIRKLAND Kirkland Signature Kirkland Signature Unsalted Cashews, 2.5 Pound",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00JI7APH4",
+      "amazon_title": "KIRKLAND Kirkland Microwave Popcorn 3.3 Ounce Bags - 8 Bags",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00O2P7CGY",
+      "amazon_title": "KIRKLAND Kirkland Signature Quit Lozenges 4mg, 270 Pieces",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B008M2VYOE",
+      "amazon_title": "KIRKLAND Kirkland Signature Quit Smoking Nicotine Gum, 4 mg (380 Pieces)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B077MHYZLB",
+      "amazon_title": "KIRKLAND Kirkland Signature dCPnFB Fancy Mixed Nuts, 40 Ounce (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08WNNF9LF",
+      "amazon_title": "KIRKLAND Kirkland Signature Pecans USDA Organic",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D2DQFWVZ",
+      "amazon_title": "Worldwide Nutrition Bundle, Compatible with Kirkland Premium Paper Towels, Strong, Thick, and Absorbent Bulk Paper Towels 6 Rolls, 160 Sheets Per Roll 2-Ply and Multi-Purpose Key Chain, White",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01FYY3M38",
+      "amazon_title": "KIRKLAND Kirkland Signature CoQ10 300 mg., 100 Softgels (3 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01N5J2998",
+      "amazon_title": "KIRKLAND Signature Extra Strength D3 50 mcg., 600 Softgels (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0721V2T2X",
+      "amazon_title": "KIRKLAND Kirkland Signature Mature Adult Multi Vitamin Tablets - 400 Count (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01EWBH2VM",
+      "amazon_title": "KIRKLAND Kirkland Signature CoQ10 300 mg, 200 Softgels",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01M0PDFA9",
+      "amazon_title": "KIRKLAND SIGNATURE One Per Day Super B-Complex with Electrolytes,Tablet, 1000 Count (Pack of 2)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0786RVL9D",
+      "amazon_title": "KIRKLAND Signature DnRbYi Nitrile Exam Multi-Purpose Medium Gloves Latex-Free, 400 Count, (467120)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08DQV8GDP",
+      "amazon_title": "KIRKLAND Signature Golf Gloves Premium Cabretta Leather, Medium/Large (4 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B077QX9WKZ",
+      "amazon_title": "KIRKLAND Kirkland Signature Dental Chews (2)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0797ZFMY3",
+      "amazon_title": "KIRKLAND Kirkland Signature Organic Extra Virgin Olive Oil, 3.6 fl. oz. USDA Organic",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B079ZYB4CK",
+      "amazon_title": "KIRKLAND Signature Made in USA 10 Gallon Clear Wastebasket Liner Bags for Trash Can 500 Count (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07DBVGJ39",
+      "amazon_title": "KIRKLAND Kirkland Signature Organic Dried Cherries, 20 Ounce",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07KFTSSY5",
+      "amazon_title": "KIRKLAND Kirkland Ito En Matcha Blend Japanese Green Tea-200 ct 1.5g tea bags",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00CCQWK6C",
+      "amazon_title": "KIRKLAND Kirkland Signature Extra Fancy Unsalted Mixed Nuts 2.5 (LB)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07C4YLGFH",
+      "amazon_title": "KIRKLAND Kirkland Signature Protein Bars Chocolate Brownie 2.12 oz, 20-count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GSBTGG64",
+      "amazon_title": "MORALZA Kirkland Signature Organic Peanut Butter, Creamy, 28 oz (2 Pack) \u2013 USDA Organic Peanut Butter. Bundle with MORALZA Silicone Collapsible Cup 200ml - 2 Items. USDA Organic",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GFX39SWD",
+      "amazon_title": "Kirkland Signature Extra Large Absorbent Pads, 76cm x 58cm - 100 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07T8BDLQX",
+      "amazon_title": "KIRKLAND Kirkland Signature Protein Bar Variety Pack 20 Count Chocolate Peanut Butter Chunk & Cookies and Cream Gluten Free 21-22g of Protein 2g Sugar No Artificial Flavors Whey Protein Isolate",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B082HD5KL6",
+      "amazon_title": "KIRKLAND Organic Seaweed Roasted 10 17g Kirkland Signature USDA Organic",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B083XP5K1G",
+      "amazon_title": "KIRKLAND Signature Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size (2-Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B072TT12DZ",
+      "amazon_title": "KIRKLAND Signature Organic Extra Virgin Olive Oil - 67 FL Ounce",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08XWCWSG7",
+      "amazon_title": "KIRKLAND Kirkland Signature Organic Balsamic Vinegar, 1 Liter (33.81 Fluid Ounce)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00EA1PFEG",
+      "amazon_title": "KIRKLAND Kirkland Signature 100% Wild Alaskan Salmon Oil 90 EPA 110 DHA 1200mg - 320 Enteric Coated Softgels",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B074SWYPWH",
+      "amazon_title": "KIRKLAND Kirkland Signature, Colombian ncZFD Coffee Supremo Bean 3 Pounds (Pack of 4)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B077QZT4BR",
+      "amazon_title": "KIRKLAND Signature Vitamin C Adult Gummies 250 mg, 180 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08TL2GD3Y",
+      "amazon_title": "KIRKLAND Kirkland Signature King Bright White 680 Thread Count Sheet Set 6 Piece Deep Pockets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B09KMH36RF",
+      "amazon_title": "KIRKLAND mens Modern",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0B983X1CR",
+      "amazon_title": "KIRKLAND Kirkland Signature Keto Snack Mix, 24 Ounce",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CG2W3KKJ",
+      "amazon_title": "KIRKLAND Signature Daily Facial Towellettes, 4.53 Pound (180 Count, 1-Box)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07HLSQ147",
+      "amazon_title": "KIRKLAND Signature Premium Dog Biscuits Chicken Meal & Rice Formula 30 LB",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01N9SOK2Y",
+      "amazon_title": "KIRKLAND Signature Natural Body Wash 27 Fl Oz (Pack of 1)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08B1J4275",
+      "amazon_title": "KIRKLAND KIRKLAND SIGNATURE Vita Rain Zero Variety Water Beverage 24/20 Fl Oz Bottles Net Wt 480 Fl Oz",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0C54FYHQ2",
+      "amazon_title": "KIRKLAND Signature Golf Balls 3-Piece Urethane Cover, 12 Golf Balls",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0C6B3RSB8",
+      "amazon_title": "KIRKLAND Kirkland Signature Black Label Premier Cashews (38 Ounce)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B081TP43B2",
+      "amazon_title": "KIRKLAND Kirkland Signature 680 Thread Count Sheet Set (Queen, White)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D9PCD56M",
+      "amazon_title": "KIRKLAND Signature Daily Makeup Remover Towelettes 180 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B078XMKRLH",
+      "amazon_title": "KIRKLAND Signature Spanish Queen Olives Stuffed With Minced Pimiento, 21oz Glass Jar (Pack of 3, Total of 63 Oz)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B089KWPFK7",
+      "amazon_title": "KIRKLAND Kirkland Signature Protein bar Energy Variety Pack, (Family Bundle)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B005D1K7CW",
+      "amazon_title": "KIRKLAND Maximum Strength Vitamin D3 600 Softgels (Pack of 2)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00NB7NHFY",
+      "amazon_title": "KIRKLAND Vitamin C with Rose Hips and Citrus Bioflavonoid Complex (1000 mg), 1000-Count ((1000mg Tablets))",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00OTJB6XI",
+      "amazon_title": "KIRKLAND Signature Quick Dissolve B-12 5000 mcg., 300 Tablets (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B073PTFT5Z",
+      "amazon_title": "KIRKLAND Kirkland Signature Daily Multi, 500 Tablets (3 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B077NNTH62",
+      "amazon_title": "KIRKLAND Signature Men's Athletic Sock, 8 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00NFU8K6S",
+      "amazon_title": "KIRKLAND Signature Extra Strength Energy Shot, Dietary Supplement: 48 Bottles Variety Pack of 2 Fl Oz",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B075PBZTR4",
+      "amazon_title": "KIRKLAND Signature Ultra High Pile Premium Microfiber Towels, 36 Pack 16x16 4 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08FPMQYCW",
+      "amazon_title": "KIRKLAND Kirkland Signature Diapers Size 1 (Up to 14 Pounds) 192 Count W/Exclusive Health and Outdoors Wipes",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0BFG4XKVM",
+      "amazon_title": "Generic Kirkland Signature Triple Blade Refill Cartridges, 18-count, 18 Count (Pack of 1), 18.0 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CDJCPQZ7",
+      "amazon_title": "KIRKLAND Kirkland Signature Canned Cat Food, Chunks in Gravy, Variety, 3 Ounce (40 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CV64JLDF",
+      "amazon_title": "KIRKLAND Kirkland Signature Sweet Heat Snack Mix, 24 oz (1 Lb 8 oz) 680g",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B09VK75PYG",
+      "amazon_title": "Kirkland Signature 680 Thread Count 6-Piece Sheet Set (Queen, Beige)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FXTFW29W",
+      "amazon_title": "KIRKLAND Signature Women's Extra-Fine Merino Wool, 4 Pairs, Fits Shoe Sizes 6-10.5, Assorted Colors",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07R9NNDFB",
+      "amazon_title": "KIRKLAND Signature Men's Crew Neck T-Shirts 100% Cotton (Pack of 6) (White,Large)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DMPL4YWP",
+      "amazon_title": "KIRKLAND Signature Men's Athletic Full Cushion Sock With Arch Support, 8 Count (US, Alpha, X-Large, Regular, Regular, Black)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FGLKYHZF",
+      "amazon_title": "KIRKLAND Signature Men's Moisture Wicking Lounge Short",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00EXPSLK4",
+      "amazon_title": "KIRKLAND Kirkland Signature Fast Acting Lactase, (2 Pack), 360 Ct Caplets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01FXMOVZ4",
+      "amazon_title": "KIRKLAND Kirkland Signature Aller-tec 10mg Tablets - 365 ct - 3 pk",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0H1Z32VYW",
+      "amazon_title": "KIRKLAND Signature Women's Travel Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0H1ZHGR7K",
+      "amazon_title": "KIRKLAND Signature Women's Travel Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B017F822E6",
+      "amazon_title": "KIRKLAND Kirkland Signature Daily Multi, 500 Tablets (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01JUD2SNO",
+      "amazon_title": "KIRKLAND Kirkland Signature Stool Softener Docusate Sodium 100 Mg, 800 Softgels/2Bottle",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0849K24NC",
+      "amazon_title": "KIRKLAND Signature Men's Boxer Brief, 4-Pack - Black-Gray Large",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0F88TL5CC",
+      "amazon_title": "KIRKLAND Signature Men's Classic 5 Pocket Stretch Jeans",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FB47R7H3",
+      "amazon_title": "KIRKLAND Signature Men\u2019s Stretch Tech Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GR6MB9WH",
+      "amazon_title": "KIRKLAND Signature Men's Short Sleeve Pima Cotton Tee Shirt",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0045XGE9E",
+      "amazon_title": "KIRKLAND Kirkland Signature Sleep Aid Doxylamine Succinate 25 Mg, 2 pack (192 Tablets)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01LBWZDCA",
+      "amazon_title": "KIRKLAND Kirkland Signature Nut Bars 30/1.4 Oz Net Wt 42.3 Oz",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B088TBSXHJ",
+      "amazon_title": "KIRKLAND Kirkland Signature Water Filter Cartridge Pack of 10",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01EN369TK",
+      "amazon_title": "KIRKLAND (Kirkland) Microfiber Towel 108 Sheets (36 Sheets x 3 Pack) 713160",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07235JRDM",
+      "amazon_title": "KIRKLAND Kirkland Signature AllerClear, 365 Tablets (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GDSX221B",
+      "amazon_title": "KIRKLAND Signature Women's Stretch Brushed Mini Flare Yoga Pant with Pockets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00G5KD56U",
+      "amazon_title": "KIRKLAND Kirkland Signature Organic Strawberry Spread, 42 Ounce USDA Organic",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07W19KKGQ",
+      "amazon_title": "KIRKLAND KIRKLAND SIGNATURE Signature Cold Brew Colombian Coffee, 11 Fl Oz (Pack of 12)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08JJV9M86",
+      "amazon_title": "KIRKLAND Kirkland Signature Women 50+ Multivitamin, 365 Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07HM87SNH",
+      "amazon_title": "KIRKLAND Signature Shampoo & Conditioner Bundle - One Professional Salon Formula Moisture Shampoo + Two Conditioners (33.8 Fl. Oz Each)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0G16FV2QL",
+      "amazon_title": "KIRKLAND KIRKLAND Signature 680 Thread Count King Sheet Set, 6-Piece, Pima Cotton, Oatmeal, Crease Control Technology.",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GJN7B98M",
+      "amazon_title": "KIRKLAND Signature Women's Quick Dry Stretch Pull On Ankle Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0F9HGHF4C",
+      "amazon_title": "KIRKLAND Signature Women's Stretch Woven Active Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GDZWHFKG",
+      "amazon_title": "KIRKLAND Signature Men's Stretch Comfort Tapered Fit Brushed 5 Pocket Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0007L6NLC",
+      "amazon_title": "KIRKLAND Signature Vitamin C 1000 mg., 500 Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00169WNLI",
+      "amazon_title": "KIRKLAND Signature Vitamin E 400 IU, 500 Softgels (Pack of 2) (Total of 1000 Softgels)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0017SURSY",
+      "amazon_title": "Kirkland Signature Premium Big Roll Paper Towels 12-roll, 80 Sheets Per Roll",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B001UB5YB8",
+      "amazon_title": "KIRKLAND Signature Drawstring Trash Bags - 33 Gallon - Xl Size - (90 count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00269UWFG",
+      "amazon_title": "KIRKLAND Signature's Cashews, 40 Ounce [Amazon-developed Certification] Compact by Design",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0027EOTKO",
+      "amazon_title": "KIRKLAND Signature Extra Virgin Olive Oil, 67.62 Ounce [Amazon-developed Certification] Compact by Design",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B002PDWYUY",
+      "amazon_title": "KIRKLAND Signature Children's Aller-Tec - 16 Oz - 2 Pk",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B002RL8FBQ",
+      "amazon_title": "KIRKLAND Signature Calcium, 600 mg+D3, 500-Count Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B002RL8FD4",
+      "amazon_title": "KIRKLAND Signature Extra Strength Glucosamine HCI 1500mg, With MSM 1500 mg, 375-Count Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B002RL8FGQ",
+      "amazon_title": "KIRKLAND Signature Fast Acting Lactase Natural Dairy Digestive Supplement, 180-Count Caplets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B002RTJ95E",
+      "amazon_title": "KIRKLAND Kirkland Signature Fish Oil 1000 mg., 400 Softgels (3 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B002S4RSEW",
+      "amazon_title": "KIRKLAND Signature Kirkland, 500 Bags, Clear",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B002TUMVGA",
+      "amazon_title": "KIRKLAND Signature Vitamin C 1000mg, with Rose Hips 500 Tabs each (pack of 2)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B003FGTTUI",
+      "amazon_title": "KIRKLAND Kirkland Signature Extra Virgin Olive Oil Toscano (from Tuscany), 1 Liter",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B003V2JBEK",
+      "amazon_title": "KIRKLAND Signature Glucosamine HCI 1500mg Chondroitin Sulfate 1200mg 220 Tablets/New Increased Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0048LR5P0",
+      "amazon_title": "KIRKLAND Kirkland Signature Food Wrap Premium",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B004CSGRS0",
+      "amazon_title": "KIRKLAND Kirkland Signature Dried Cherries, 20 Ounce",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B004EEN97E",
+      "amazon_title": "KIRKLAND Signature Mature Multi Vitamins & Minerals with Lycopene and Lutein 400 Tablets - Compare to Centrum Silver",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B005ECO5KU",
+      "amazon_title": "KIRKLAND Signature Vitamin C with Rose Hips, 1000mg",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B005O33LJA",
+      "amazon_title": "KIRKLAND Signature Men's Crew Neck T-Shirts 100% Cotton (Pack of 6)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B007889Z1C",
+      "amazon_title": "KIRKLAND Signature Calcium Citrate 500mg (500 Tablets)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B008Q90CBO",
+      "amazon_title": "KIRKLAND Kirkland Signature Chocolate Covered Raisins 1.53kg",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00BI33NU2",
+      "amazon_title": "KIRKLAND Signature Ultra Strength Antacid Calcium Carbonate 1000 MG Assorted Berry Flavors (265 Tablets)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00BOTZTDO",
+      "amazon_title": "KIRKLAND Signature Organic Extra Virgin Olive Oil 2L (2QT 3.6 fl. oz) USDA Organic [Amazon-developed Certification] Compact by Design",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00BP4UGYU",
+      "amazon_title": "KIRKLAND Signature 2 x Organic Extra Virgin Olive Oil, 2 Liters USDA Organic [Amazon-developed Certification] Compact by Design",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00BPFX2I6",
+      "amazon_title": "KIRKLAND Kirkland Signature 100% Colombian Dark Roast Decaffeinated Ground Coffee - 1.36kg",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00BPPN94S",
+      "amazon_title": "KIRKLAND Signature Compactor Bags, 18 Gallon, Smart Fit Gripping Drawstring, White, 1 Pack (70 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00BTKX3YU",
+      "amazon_title": "KIRKLAND Kirkland Signature Men's 4 Boxer Briefs (X-Large, Black)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00D1J091M",
+      "amazon_title": "KIRKLAND Signature Professional Salon Formula Moisture Shampoo or Conditioner (33.8 Oz Each) (shampoo & Conditioner Set) By 1count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00E4PZ3KE",
+      "amazon_title": "Kirkland Pure Olive Oil-101.4 oz, 2 ct",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00EI6EZDK",
+      "amazon_title": "KIRKLAND Signature Kirkland Signature Extra Strength Energy Shot Dietary Supplement (48 X 2 Fl Ounce )Total Net Wt (96 Fl Ounce ),, ()",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00EU37H7W",
+      "amazon_title": "KIRKLAND Kirkland Signature Multi-Purpose Sterile Solution for Any Soft Contact Lens, 16 Fl Oz (Pack of 3)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00EX9G9IG",
+      "amazon_title": "KIRKLAND KIRKLAND SIGNATURE Medium Roast Coffee, 2.5 Lb, Brown, 40 Ounce",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00GFC7KU0",
+      "amazon_title": "KIRKLAND Signature Drawstring Trash Bags - 33 Gallon - Xl Size - 90 Count (180 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00HK14QGQ",
+      "amazon_title": "KIRKLAND Signature Premium Big Roll Paper Towels 12-roll, 160 Sheets Per Roll",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00JGZ63WE",
+      "amazon_title": "KIRKLAND Extra Strength Vitamin D-3 2000 IU 600 Soft Gels",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00JH75F9S",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags, 13 Gallon, Pack of 2",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00JQRFOTA",
+      "amazon_title": "KIRKLAND Signature One Per Day Super B-Complex with Electrolytes,500 tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00JZVWE0O",
+      "amazon_title": "Kirkland Signature Kirkland Signature H.K Anderson Valencia Peanut Butter Filled Pretzel Nuggets: 52 Oz - Cos9",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00K7W1QAO",
+      "amazon_title": "KIRKLAND Signature Smart Closure Outdoor Lawn 50 Gallon Trash Bags, 70Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00LKCILI0",
+      "amazon_title": "KIRKLAND Starbucks Kirkland Signature Medium Roast Coffee Beans Pack of 2",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00M0DR8W8",
+      "amazon_title": "KIRKLAND Signature Adult Multi Gummies - 320 ct - 2 pk",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00MG4X4LK",
+      "amazon_title": "KIRKLAND Krikland Signature Ultra Clean Premium Laundry Detergent with 2X Concentrate",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00O374A2U",
+      "amazon_title": "KIRKLAND Signature Maximum Strength Vitamin D3 2000 I.U. , Pack of 3",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00PF44IAO",
+      "amazon_title": "KIRKLAND Signature Facial Tissue 12-pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00QCW31QU",
+      "amazon_title": "KIRKLAND Salon Formula Moisture Shampoo 33.8 Oz & Conditioner 33.8 Oz",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00QY0AREY",
+      "amazon_title": "KIRKLAND Signature Children's Complete Multivitamin Gummies, 320 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00RNFPU5U",
+      "amazon_title": "KIRKLAND Signature Men's Boxer Brief Pima Cotton 4 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00RYBCUEW",
+      "amazon_title": "KIRKLAND Signature Kirkland Signature Wild Alaskan Fish Oil 1400 mg Dietary Supplement (Netcount 230 Soft Gels),, 230Count ()",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00T478OZI",
+      "amazon_title": "KIRKLAND Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets (Pack of 3)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00U56JTPG",
+      "amazon_title": "KIRKLAND Signature Extra Virgin Olive Oil Arbequina (33.8 fl oz)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00U6I4YLM",
+      "amazon_title": "KIRKLAND Signature Quick Dissolve B-12 5000 mcg., 300 Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00UP99X1I",
+      "amazon_title": "KIRKLAND Vitamin E 400 Iu 500 Softgels Supports Healthy Immune",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00XGMJ32A",
+      "amazon_title": "KIRKLAND Signature Quick Dissolve B-12 5000 mcg., 300 Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00XH0TNRG",
+      "amazon_title": "KIRKLAND Kirkland Signature Vitamin E 180mg., 500 Softgels (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00XU9FM8S",
+      "amazon_title": "KIRKLAND Signature Krill Oil 500 Milligram 160 Softgels",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00XUFLEJS",
+      "amazon_title": "Kirkland Signature Kirkland Signature 13 Gallon Trash Bag, 400 Count, New",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B00ZY0WDDI",
+      "amazon_title": "KIRKLAND Signature Drawstring Bags (Pack of 90/ 30 X 33), 90 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B014MCM4DM",
+      "amazon_title": "KIRKLAND Signature - 5% Minoxidil for Men Hair Growth Treatment Unscented Topical Foam Aerosol - 12 Month Supply ,Kirkland-w3w3",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B014N7SEOE",
+      "amazon_title": "KIRKLAND KIRKLAND Signature Fish Oil 1000 mg., 400 Softgels (3 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0154AVVSK",
+      "amazon_title": "KIRKLAND Signature 100% Colombian Coffee Supremo Bean Dark Roast-Fine Grind, 6 Pound ,Signature-ykgj",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B015ZC8AUY",
+      "amazon_title": "KIRKLAND Signature Adult 50+ Multi Vitamins & Minerals, 400 Tablets (5 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B017FMCIWS",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags - 13 Gallon, 600 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B019VPE72G",
+      "amazon_title": "KIRKLAND Kirkland Signature 2-Ply Bath Tissue, 30 Rolls",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01AIVTJMA",
+      "amazon_title": "KIRKLAND Kirkland Signature 1.45 Volt Mercury Free Premium Quality Hearing Aid Batteries, 312 (48-Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01AJM0SL4",
+      "amazon_title": "KIRKLAND Signature Men's 3-Pack/6-Pack Crew Neck T-Shirts 100% Cotton Tagless",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01B7KZKKG",
+      "amazon_title": "KIRKLAND Signature Organic Extra Virgin Olive Oil, 67.68 Fluid Ounce USDA Organic",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01BL9RVK0",
+      "amazon_title": "KIRKLAND Kirkland Signature Easy to Use, Streak Free Premium Dishwasher Pacs, Automatic Dishwasher Detergent",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01CZ637O2",
+      "amazon_title": "KIRKLAND Kirkland Signature Glucosamine with MSM, 375 Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01FFI8I50",
+      "amazon_title": "KIRKLAND (Kirkland) Microfiber Towel 144 Sheets (36 Sheets x 4 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01FFV68KO",
+      "amazon_title": "KIRKLAND Signature Greek Extra Virgin Olive Oil, 2L",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01FV4WBJC",
+      "amazon_title": "KIRKLAND Kirkland Signature Sleep Aid, 192 Tablets (3 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01IQ9O05C",
+      "amazon_title": "KIRKLAND Kirkland Signature 100% Colombian Coffee, 3 Pound",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01IROP25I",
+      "amazon_title": "KIRKLAND Kirkland Signature 100 Mg Stool Softener, 400 Softgels (Pack of 3)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01J956TJC",
+      "amazon_title": "KIRKLAND Signature Adult 50+ Multi Vitamins & Minerals, 400 Tablets (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01KR9IDQ6",
+      "amazon_title": "KIRKLAND Kirkland Signature OPTIFIBER, 25.6 Ounces 190 Servings (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01LYN07EU",
+      "amazon_title": "KIRKLAND Signature 100 Percent Colombian Coffee Supremo Bean Dark Roast-Fine Grind, 3 Pound (Pack of 6)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01M24GDRJ",
+      "amazon_title": "KIRKLAND Kirkland Signature DMzZf, Crystal Clear Cutlery 360 Count (Pack of 2)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01MG5JQ73",
+      "amazon_title": "KIRKLAND Signature urglw, COQ10 300 mg 100 Softgels (Pack of 4)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01MYFJ91V",
+      "amazon_title": "KIRKLAND Signature hsfuEFq Drawstring Kitchen Trash Bags - 13 Gallon, 200 Count (3 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01MYFWGU2",
+      "amazon_title": "KIRKLAND Signature Bath Tissue, 2-Ply - 425 - 30 ct (90 Rolls)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01N6WFA0X",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags - 13 Gallon - 200 Count (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01N7ZWWE5",
+      "amazon_title": "Kirkland Signature Bath Tissue, 2-Ply - 425 - 30 ct (60 Rolls)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01NABAG3F",
+      "amazon_title": "KIRKLAND Signature Vitamin C 250 mg., 360 Adult Gummies",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B01NCOTNVU",
+      "amazon_title": "KIRKLAND Signature GInVUtV Drawstring Kitchen Trash Bags - 13 Gallon, 600 Bags",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B06XB3QD1Z",
+      "amazon_title": "KIRKLAND Signature Vitamin E 180mg., 500 Softgels (3 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B06XKCN4RH",
+      "amazon_title": "KIRKLAND Signature Bath Tissue, 2-Ply - 425 - 30 ct (Bath Tissue - 60 Ct)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B06XPZ5Q85",
+      "amazon_title": "KIRKLAND Kirkland Signature Dried Natural Cherries 20 Ounce (20 Ounce Bags (2 Pack))",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B06XTVHCD2",
+      "amazon_title": "KIRKLAND Signature Drawstring Trash Bags - 33 Gallon - Xl Size - (90 count) (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B06ZZM1FD3",
+      "amazon_title": "KIRKLAND Signature Drawstring EaajpF Kitchen Trash Bags - 13 Gallon",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B071P7TRSN",
+      "amazon_title": "KIRKLAND Kirkland Signature Sleep Aid, 192 Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0721V33WJ",
+      "amazon_title": "KIRKLAND Signature Calcium 600 mg. with Vitamin D3, 500 Tablets (4 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B072FSTWC9",
+      "amazon_title": "KIRKLAND Signature Vitamin D3 1000 IU, 360 Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0734BGSKY",
+      "amazon_title": "KIRKLAND Kirkland Signature House Decaf Coffee 120 K-Cup Pods",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B073CDDL1X",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags - 13 Gallon, 200 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B073T51DL2",
+      "amazon_title": "KIRKLAND Signature Drawstring XkYBpm Kitchen Trash Bags - 13 Gallon, 2Pack (200 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0748WN6NW",
+      "amazon_title": "KIRKLAND Signature Drawstring Bvszxv Kitchen Trash Bags - 13 Gallon, 2Pack (200 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B074FFQCBV",
+      "amazon_title": "KIRKLAND Signature Outdoor 50 gallon Trash Bags (70 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B074MLXRJ8",
+      "amazon_title": "KIRKLAND Signature Vitamin E 180mg, 500 Softgels (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B074N8FXRP",
+      "amazon_title": "KIRKLAND Signature, Vitamin E 400 IU 500 Softgels fvKDn (Pack of 3)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B074T2CRJW",
+      "amazon_title": "KIRKLAND Signature Glucosamine with MSM, 375 Tablets (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B074ZPLDS8",
+      "amazon_title": "KIRKLAND 72 Kirkland Signature Performance Plus - Near Mint (AAAA) Grade - Recycled (Used) Golf Balls,White",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B075489D71",
+      "amazon_title": "500-Count Of 10 Gallon Kirkland Signature Clear Wastebasket Liner For Office And Home, Made In USA",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07578Z7YH",
+      "amazon_title": "KIRKLAND Signature, Extra Virgin Olive Oil, 5 Units (2 QT 3.6 FL OZ)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B075B3MVGS",
+      "amazon_title": "KIRKLAND Signature TxaTio Bath Tissue, 2-Ply, 425 Sheets Per Roll, 30 Count (Pack of 5)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B075D6XMYW",
+      "amazon_title": "KIRKLAND Kirkland Signature, Extra Virgin Olive Oil, 2 Units (2 QT 3.6 FL OZ)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B075DKFDNB",
+      "amazon_title": "Kirkland Kirkland Signature Steak Strips Extra Thick Cut zBKgEf, 24 oz Total",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B075XP6PGK",
+      "amazon_title": "KIRKLAND Signature Premium Big Roll Paper Towels, 24 Rolls, 160 Sheets Each, 3840 Sheets Total, Thick and Strong, C-Fold, Wipe Surface",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0763YRYSW",
+      "amazon_title": "KIRKLAND Signature Organic Extra Virgin Olive Oil, 2L (4 Pack) USDA Organic",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B076654WXW",
+      "amazon_title": "KIRKLAND Signature hZKjAt Organic Extra Virgin Olive Oil, 2L (5 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B076RD58VB",
+      "amazon_title": "KIRKLAND Kirkland Signature Stretch Tite Plastic Food Wrap PMYknx, 2 Packs (750 Sq ft Food Wrap)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B076V51TF1",
+      "amazon_title": "KIRKLAND Signature Daily Multi, 500 Tablets (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B076ZFG1ZH",
+      "amazon_title": "KIRKLAND Kirkland Signature 100% Colombian Coffee, 9 LB",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07764Z3KX",
+      "amazon_title": "KIRKLAND Minoxidil for Men 5% Extra Strength Hair Regrowth for Men fLsbok, 6 Month Supply by Kirkland Signature, 6 Pack (2 oz Bottle)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0779LX59Q",
+      "amazon_title": "KIRKLAND Signature lZHvnq Ultra High Pile Premium Microfiber Towels, 36 Pack, 2 Units",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B077L84XVV",
+      "amazon_title": "KIRKLAND Signature Super B-Complex (2-Pack) with Electrolytes (2 x 500 Tablets)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B077LCPQ34",
+      "amazon_title": "KIRKLAND Signature One Per Day Super B-Complex with Electrolytes,500 tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B077R2GDZT",
+      "amazon_title": "KIRKLAND Signature HMvfaX Adult Multi Gummies, 160 Count (5 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B077S44ZP1",
+      "amazon_title": "KIRKLAND Signature Super B-Complex with Electrolytes, 500 Tablets (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B077SN37K5",
+      "amazon_title": "KIRKLAND Signature Men\u2019s Athletic Sock 8-pair, White (White, 13+)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07816FB9X",
+      "amazon_title": "KIRKLAND Signature Extra Strength D3 50 mcg, 600 Softgels (5 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0783NZH39",
+      "amazon_title": "KIRKLAND Signature Super B-Complex with Electrolytes, 500 Tablets (5 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0784KSWH2",
+      "amazon_title": "KIRKLAND Signature cBlWCe Adult Multi Gummies, 4 Pack (640 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0784LHNS8",
+      "amazon_title": "KIRKLAND Signature Super B-Complex with Electrolytes, 500 Tablets (4 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07897BQ1N",
+      "amazon_title": "KIRKLAND Signature Vitamin C 250 mg., 360 Adult Gummies (4 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B078BSCMYX",
+      "amazon_title": "KIRKLAND Kirkland Signature dCDtdm Adult Multi Gummies, 160 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B078BTC2JN",
+      "amazon_title": "KIRKLAND Signature xGJNgN Childrens Complete Multivitamin Gummies, 160 Count (4 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B078BTK6PX",
+      "amazon_title": "KIRKLAND Kirkland Signature FsmJUt Childrens Complete Multivitamin Gummies, 160 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B078GDS1HG",
+      "amazon_title": "Kirkland Signature Drawstring LLVNAN Kitchen Trash Bags - 13 Gallon, 2Pack (200 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B078K2X3V5",
+      "amazon_title": "KIRKLAND Signature WAwHHC Ultra High Pile Premium Microfiber Towels, 36 Pack, 2 Units",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B078K8YBZ5",
+      "amazon_title": "KIRKLAND Signature sSzDua Ultra High Pile Premium Microfiber Towels, 36 Pack, 4 Units",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B078KSWQXB",
+      "amazon_title": "KIRKLAND KIRKLAND SIGNATURE Stretch Tite Plastic Food Wrap uZzDke, 3 Packs (750 Sq ft Food Wrap)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B078M5TZ2R",
+      "amazon_title": "KIRKLAND Signature pvlhrB Organic Extra Virgin Olive Oil, 2L (4 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B078MH9493",
+      "amazon_title": "KIRKLAND Signature eQnmKB Organic Extra Virgin Olive Oil, 2L (3 Pack) USDA Organic",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07997GK6Q",
+      "amazon_title": "KIRKLAND Signature 33 Gallon Trash Bags, 90-Count (4-Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0799CWZDM",
+      "amazon_title": "KIRKLAND Signature 18 Gallon Compactor & Kitchen Trash Bags, 70-Count (4-Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B079BKWK6L",
+      "amazon_title": "KIRKLAND Kirkland Signature Pecan and Walnuts Bundle - Includes Kirkland Signature Pecan Halves (2.0 LB) and Walnuts (3 LB)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B079JS2QYG",
+      "amazon_title": "KIRKLAND Kirkland Signature - Creamy Almond Butter, 27 Ounce - 3 Jars",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07B5W7KVG",
+      "amazon_title": "KIRKLAND Signature Ultra High Pile Premium Microfiber Towels (72-Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07BB1QY5N",
+      "amazon_title": "KIRKLAND Compactor Bags, 18 Gallon, Smart Fit Gripping Drawstring, 70 Count (3 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07BQ5DPTJ",
+      "amazon_title": "Kirkland Signature Bath Tissue, 2-Ply, 425, 3 Pack (30 count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07BRSSF3C",
+      "amazon_title": "KIRKLAND Signature Bath Tissue, 2-Ply, 425, 5 Pack (30 count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07BRZ6M4X",
+      "amazon_title": "KIRKLAND Signature Bath Tissue, 2-Ply, 425, 4 Pack (30 count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07BSYHH39",
+      "amazon_title": "KIRKLAND Kirkland Signature Starbucks Bean Coffee Medium Roast House Blend (4 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07BYD9RSY",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags - 13 Gallon - 200 Count (5 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07BZZRH97",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags - 13 Gallon - 200 Count (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07C19WQN9",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags - 13 Gallon - 200 Count (4 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07C4T1ZK7",
+      "amazon_title": "KIRKLAND KIRKLAND SIGNATURE Protein Bars Chocolate Peanut Butter Chunk 2.12 oz, 20-count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07C73SLH1",
+      "amazon_title": "KIRKLAND Kirkland Signature Glucosamine HCI (Pack of 2) Extra Strength with MSM (375 Count X 2)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07C7HNTHG",
+      "amazon_title": "KIRKLAND Signature Extra Strength D3 50 mcg, 600 Softgels (3 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07CBS6Q5R",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags - 13 Gallon - 200 Count (3 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07CGQBNKR",
+      "amazon_title": "KIRKLAND Signature Adult 50+ Multi Vitamins & Minerals, 400 Tablets (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07CH3SMS4",
+      "amazon_title": "KIRKLAND Signature Sublingual B-12 5000 mcg, 3 Bottles (300 Tablets)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07CH9Y7Y8",
+      "amazon_title": "KIRKLAND Signature Sublingual B-12 5000 mcg, 5 Bottles (300 Tablets)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07CHSZVG6",
+      "amazon_title": "KIRKLAND Vitamin C with Rose Hips and Citrus Bioflavonoid Complex (1000 mg), 3 Bottles (500 Count Tablets)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07CRLBCM3",
+      "amazon_title": "KIRKLAND Signature Adult Multi-Vitamin Gummies, 250 Gummies",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07D1VXS3T",
+      "amazon_title": "KIRKLAND Signature Kirkland signature moist flushable wipes 632 wipes, 632 count, White",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07D4MFQ75",
+      "amazon_title": "KIRKLAND Signature 10 Gallon Clear Wastebasket Liner, 3 Pack (500 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07D83C3TS",
+      "amazon_title": "KIRKLAND Signature Men's Elastic Waistband Mens Swim Short Trunks L Black Mesh Lined Trunk Grey Stripe",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07DSWXDXX",
+      "amazon_title": "KIRKLAND Signature 10 Gallon Clear Wastebasket Liner, 2 Pack (500 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07DXB77CX",
+      "amazon_title": "KIRKLAND Signature 10 Gallon Clear Wastebasket Liner, 4 Pack (500 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07DXBPQSQ",
+      "amazon_title": "KIRKLAND Signature 10 Gallon Clear Wastebasket Liner, 2 Pack (500 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07DZ9Q96N",
+      "amazon_title": "KIRKLAND Signature 10 Gallon Clear Wastebasket Liner, 2 Pack (500 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07F1VFQNJ",
+      "amazon_title": "KIRKLAND Signature Daily Multi, 500 Tablets (2 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07F1Y5VP8",
+      "amazon_title": "KIRKLAND Kirkland Signature Cashews, 3 Pack of 40 Ounce (2.5 lbs)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07F1ZLQMF",
+      "amazon_title": "KIRKLAND Signature Daily Multi Vitamins & Minerals Tablets, 500-Count Bottle (3 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07F5SWJVB",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen TRW, Trash Bags - 13 Gallon - 200 Count (2 Pack 13 Gallon 200 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07FPRWX2C",
+      "amazon_title": "KIRKLAND Signature 10 Gallon Clear Wastebasket Liner, 2 Pack (500 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07G5Z599N",
+      "amazon_title": "LostGolfBalls Kirkland Mix Used Golf Balls, Near Mint Quality, 50 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07G83BW9H",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags - 13 Gallon - 200 Count (5 Cases of 200)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07GDTN5JH",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags - 13 Gallon - 200 Count (2 Cases)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07GDWR1BX",
+      "amazon_title": "KIRKLAND Kirkland Signature USDA Organic Multivitamin, 80 Coated Tablets USDA Organic",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07H9DFC3V",
+      "amazon_title": "KIRKLAND Kirkland Signature Wild Alaskan Pink Salmon 6/6 Ounce Cans (2 Pack, Total 12 Ounce Cans, 6 Ounce Cans Each)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07HLGK46W",
+      "amazon_title": "Bulkidoki Kirkland Signature Whole Fancy Cashews Salted and Roasted, 40 oz (Pack of 4)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07J9M33J1",
+      "amazon_title": "KIRKLAND Signature 10 Gallon Clear Wastebasket Liner, 5 Pack (500 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07JH5S968",
+      "amazon_title": "KIRKLAND Signature 50 Gallon Outdoor Trash Bags 70 Units (Pack of 4)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07JH5SBSD",
+      "amazon_title": "KIRKLAND Trash Bags, 50 Gallon, 210 Count, Unscented, Polyethylene, 16\" x 22\" x 14\", Yard Waste",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07K5QPHPD",
+      "amazon_title": "KIRKLAND Signature 10 Gallon Clear Wastebasket Liner, 2 Pack (500 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07K73FTRJ",
+      "amazon_title": "KIRKLAND Signature Daily Multi, 500 Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07KQW4C8Y",
+      "amazon_title": "KIRKLAND Signature Expect More Paper Towels, 12-count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07KRC6DBP",
+      "amazon_title": "KIRKLAND SIGNATURE Drawstring Kitchen Trash Bags - 13 Gallon - 200 Count, Multicolor",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07KT958JC",
+      "amazon_title": "KIRKLAND Signature 10 Gallon Clear Wastebasket Liner, 3 Pack (500 Bags)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07L42DFN5",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags - 13 Gallon - 200 Count (.4 Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07MW37ZT8",
+      "amazon_title": "KIRKLAND Kirkland Signature HTGFD Milk Chocolate Roasted Almonds, 2 Pack 48 Ounce",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07N6YF2SF",
+      "amazon_title": "KIRKLAND Signature Wild Alaskan Fish Oil 1400 mg, 230 Softgels",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07N754R6S",
+      "amazon_title": "KIRKLAND Kirkland Signature Krill Oil 500 mg., 160 Softgels",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07N7CTW4Q",
+      "amazon_title": "KIRKLAND Signature Expect More Extra Strength D3 50 mcg, 600 Softgels",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07P5K6GK3",
+      "amazon_title": "KIRKLAND Signature Spanish Extra Virgin, 101.4 Fluid Ounce",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07PBSMWXF",
+      "amazon_title": "KIRKLAND Kirkland Signature Kirkland Signature Raw Unfiltered USA Honey (48 OZ/ 3 LBS), 48 oz(Pack of 1)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07Q2HHLVN",
+      "amazon_title": "KIRKLAND Kirkland Signature Mixed Nut Butter",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07R4G5DQQ",
+      "amazon_title": "KIRKLAND Signature Men's Golf Gloves Premium Cabretta Leather, Medium/Large, 3 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07S2NLLQC",
+      "amazon_title": "KIRKLAND Kirkland Signature Organic Raw And Unfiltered Apple Cider Vinegar",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07WMQVJCF",
+      "amazon_title": "KIRKLAND Signature Flex-tech 33 Gallon Trash Bag, 90count, 1count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B07WX6JWJ7",
+      "amazon_title": "KIRKLAND Signature Men's Crew Neck T-Shirts 100% Cotton (Pack of 6) (White, Small)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B081FGH155",
+      "amazon_title": "Kirkland Signature bfvf Bath Tissue 2-Ply - 425 Sheet, 30 Count 3 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B081FJ97RN",
+      "amazon_title": "KIRKLAND KIRKLAND SIGNATURE fvfc Bath Tissue 2-Ply - 425 Sheet, 30 Count 4 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B082LPHQXB",
+      "amazon_title": "KIRKLAND SIGNATURE Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B084GBB576",
+      "amazon_title": "KIRKLAND Kirkland Signature 680 Thread Count Sheet Set (King, Tan)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B084TTGQWC",
+      "amazon_title": "KIRKLAND King Grey Gray 680 Thread Count Kirkland Sheet Set 6 Piece Deep Pockets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08634QYFT",
+      "amazon_title": "KIRKLAND Premium Towel",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B089XK85BB",
+      "amazon_title": "KIRKLAND Signature Men's Boxer Brief, 4-Pack Gray Medium",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B089Y5JTJ3",
+      "amazon_title": "KIRKLAND Kirkland Signature Protein bar Energy Variety Pack, (Family Bundle)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08CDCBLLW",
+      "amazon_title": "KIRKLAND Signature Minoxidil Foam for Men, Total 12.66 oz, 6 cans, 2 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08CGFZNSB",
+      "amazon_title": "KIRKLAND Signature's Cashew Cluster With Almonds & Pumpkin Seeds, 32 Oz, Set of 2",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08DQYNG6D",
+      "amazon_title": "KIRKLAND Signature Golf Gloves Premium Cabretta Leather, Large (4 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08HSJKTPG",
+      "amazon_title": "KIRKLAND Kirkland Signature All Chocolate Candy Pieces Bulk Assortment for Halloween, Parties, School: 150 Pcs (5.6 lbs)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08K61BSBR",
+      "amazon_title": "KIRKLAND KIRKLAND Signature Quit 4 Nicotine Polacrilex Lozenges, Cherry Flavor, 270 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08NRCPTN4",
+      "amazon_title": "KIRKLAND Signature Men Multivitamin, 365 Tablets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08PS7YJV2",
+      "amazon_title": "KIRKLAND Kirkland Signature 3 Piece Golf Wedge Set Right Handed",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08QCKBK2V",
+      "amazon_title": "KIRKLAND Signature Flex-Tech 13-Gallon Scented Kitchen Trash Bags - 200 Count, White, KS-200x|Scent|Bin Bag-WT",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08TJ4114G",
+      "amazon_title": "KIRKLAND Kirkland Signature Ultra High Pile Premium Microfiber Towels, 36 Count (Pack of 2), Yellow - 713160",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08TQK84HP",
+      "amazon_title": "KIRKLAND Signature Men's Elastic Waistband Mesh Lined Swim Short Trunk (Black Melange Stripe",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B08ZGH9YCB",
+      "amazon_title": "KIRKLAND Signature Golf Gloves Premium Cabretta Leather, X-Large (4 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B095MLHJ97",
+      "amazon_title": "Costco Kirkland Signature Daily Facial Towelettes, 180 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B095V1QH5S",
+      "amazon_title": "KIRKLAND Signature Drawstring Kitchen Trash Bags - 13 Gallon, 200 Count (PacK of 3)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B096M76BQ8",
+      "amazon_title": "KIRKLAND SIGNATURE Drawstring Kitchen Trash Bags - 13 Gallon, 200 Count (Pack of 2)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B096MLT4B3",
+      "amazon_title": "KIRKLAND Signature Bath Tissue, 2-Ply, 380 Sheets, 30 Rolls",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B096WB59LV",
+      "amazon_title": "KIRKLAND SIGNATURE Drawstring Kitchen Trash Bags - 13 Gallon, 200-Count (Pack of 2)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0976FHJQL",
+      "amazon_title": "KIRKLAND Signature Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size 2-Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B097L7NXG7",
+      "amazon_title": "KIRKLAND SIGNATURE Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size 2 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B097XQ7STS",
+      "amazon_title": "KIRKLAND Signature Ladies' Cotton Slub Tee",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0985RGVRK",
+      "amazon_title": "KIRKLAND SIGNATURE Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size 2-Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B09883L88Q",
+      "amazon_title": "KIRKLAND SIGNATURE Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size 2 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B098DQXWHB",
+      "amazon_title": "Kirkland Signature 50-Gallon Outdoor Trash Bag With Smart Tie Closure, Black, 70-count (70-Pack)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B098MTHVBK",
+      "amazon_title": "KIRKLAND SIGNATURE Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size 2-Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B098V2LK5G",
+      "amazon_title": "KIRKLAND Compactor Bags, 18 Gallon, Smart Fit Gripping Drawstring, 70 ct 2 Pack (140 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0994V5D21",
+      "amazon_title": "KIRKLAND Signature Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size, 3-Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B09B82XJJL",
+      "amazon_title": "KIRKLAND Signature Mens Performance Shorts (Navy, 32)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B09KMNXXPF",
+      "amazon_title": "KIRKLAND Signature Ladies' Quarter Trail Socks Merino Wool",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0B5M38FTT",
+      "amazon_title": "Libreshine Bamboo Trash Bag Dispenser Holder for Costco & Sam's Club Rolls | Large 1-slot model fits many Kirkland Signature and Member's Mark bulk rolls, with top-loading and easy front access",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0BH11BFYV",
+      "amazon_title": "KIRKLAND Signature Men\u2019s Pima Polo",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0BYWDD115",
+      "amazon_title": "KIRKLAND Signature Women's 3/4 Sleeve Cotton Slub Tee Shirt",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0C8LQ1HDF",
+      "amazon_title": "KIRKLAND Signature Three-Piece Golf Ball Urethane Cover Performance Plus",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0C9MRN3L9",
+      "amazon_title": "KIRKLAND Signature Men's Swim Shorts with Comfort Waistband and Liner | Black, XXL",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CD4B5FHV",
+      "amazon_title": "KIRKLAND Signature Men's Swim Shorts with Comfort Waistband and Liner | Black, Medium",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CFWGDLYG",
+      "amazon_title": "KIRKLAND Signature Napkin, 1-Ply, 280 Count (Pack of 4)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CGJNJ5K2",
+      "amazon_title": "KIRKLAND Signature Women Slub Tee",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CJXJ6M88",
+      "amazon_title": "KIRKLAND Signature Paper Towels, 2-Ply, 160 Sheets, 12 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CL19NWTF",
+      "amazon_title": "KIRKLAND Signature RutaVm 10 Gallon Clear Plastic Trash Bags, 23 x 25 Inches, 0.34 Mil, 125/Roll, 4 Rolls/Case (500 Bags Total, bulk packaging)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CLR489VZ",
+      "amazon_title": "KIRKLAND Signature Ladies' Brushed Bike Short",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CP6LXPLK",
+      "amazon_title": "KIRKLAND Minoxidil Liquid Extra Strength Hair Regrowth Treatment for Men, 5% Topical Solution, 6 Months Supply - Dropper Applicator and Bonus Free Instructional Guide Included",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CP8GKNSR",
+      "amazon_title": "KIRKLAND Kirkland Signature Ultra Fresh Premium Fabric Softener, Spring Fresh, 187 Fl Oz",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CS6Z9SRX",
+      "amazon_title": "ComboCreations Kirkland Signature Organic K-Cups Variety Pack - Arabica, Single Serve Coffee Pods for Keurig Makers - 48 Pods in ComboCreations Box - Perfect for Holiday Gifts, Parties & Beverages",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CST9WHRN",
+      "amazon_title": "KIRKLAND Signature Compactor and Kitchen Trash Bags, White, 18 Gallon (70 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CVFGV9WW",
+      "amazon_title": "LostGolfBalls 36 Kirkland Signature Golf Balls in Mint Condition, Recycled Used Golf Balls, AAAAA Quality Quality, White",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CVFHDQ81",
+      "amazon_title": "LostGolfBalls 24 Kirkland Signature Golf Balls in Mint Condition, Recycled Used Golf Balls, AAAAA Quality Quality, White",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CX23NM2N",
+      "amazon_title": "KIRKLAND Signature Men's Crew Neck Tee 100% Combed Heavyweight Cotton T-Shirts (Pack of 6)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CX9DJWCT",
+      "amazon_title": "KIRKLAND Signature Men's Boxer Brief Pima Cotton 4 Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0CYDQJXP8",
+      "amazon_title": "KIRKLAND Signature Men's Boxer Brief Pima Cotton 4 Pack, Black, 3X-Large",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D11ZSLCX",
+      "amazon_title": "Bamboo Trash Bag Dispenser Large Garbage Bag Holder Box | Size Fit Costco Kirkland Roll, Eliminating Messy Cardboard Boxes Forever",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D2JDMCZX",
+      "amazon_title": "Kirkland Signature Kirkland Men's Crew Neck White T-Shirts Pack of 6, Black, Medium",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D34HJWFP",
+      "amazon_title": "KIRKLAND Signature Adjustable Driver,Right Handed,True Temper EvenFlow Riptide Graphite Shaft,Lamkin Crossline 360 Grip,Headcover and Wrench Included",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D5C26QDQ",
+      "amazon_title": "cup (1 PCS) Bundle with Professional Salon Formula Moisture Shampoo 33.8fl oz 1 litter (Two Bottles). compatible with Kirkland Signature",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D64NRX5W",
+      "amazon_title": "KIRKLAND Signature Refined Olive Oil, 3 L",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D6HKY9SK",
+      "amazon_title": "KIRKLAND Extra Virgin Olive Oil Terra Di Bari Bitonto P.D.O. From Italy 1 Liter",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D7J7JZD4",
+      "amazon_title": "KIRKLAND Signature Men\u2019s 5 Pocket Performance Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D91KYL2J",
+      "amazon_title": "KIRKLAND Signature 3-Piece Golf Balls, Version 2.0, Yellow, 24-Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D9B4WRQT",
+      "amazon_title": "Generic BLUE RIBBON Kirkland Signature 2-Ply Bath Tissue, 30 Rolls 380 Sheets Per Roll",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0D9P9NNP8",
+      "amazon_title": "KIRKLAND Signature Flex-Tech Drawstring White Tall Kitchen Trash Bags, 13 Gallon, 200 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DB431TC6",
+      "amazon_title": "BD Kirkland Scented Kitchen Drawstring Bags, 13 Gallon, 200 Bags",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DC4RDMQC",
+      "amazon_title": "KIRKLAND Signature Women's Long Sleeve Slub Tee Shirt",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DC5SQTVQ",
+      "amazon_title": "KIRKLAND Signature Men's Swim Shorts with Comfort Waistband and Liner",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DD8F9LMW",
+      "amazon_title": "KIRKLAND Signature Men's Performance Polo Shirt",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DG4C2KFW",
+      "amazon_title": "KIRKLAND Signature Ladies' Extra-Fine Merino Wool Crew Socks, Multi-Color, 4 Pairs",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DJBR334H",
+      "amazon_title": "KIRKLAND Signature Women's Quick-Dry High Rise Active Pants",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DL2G75WY",
+      "amazon_title": "KIRKLAND Signature Costco KS17 M50 Polarized Satin Gunmetal Grey Sunglasses",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DL8229X9",
+      "amazon_title": "KIRKLAND Signature Men's Swim Shorts",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DLKRV4XS",
+      "amazon_title": "Libreshine Large Black Bamboo Trash Bag Holder for Costco & Sam's Club | Large 1-slot dispenser fits many Kirkland Signature and Member's Mark bulk rolls; top-load and pull bags from the front",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DLKS43SQ",
+      "amazon_title": "Libreshine Large White Bamboo Trash Bag Holder for Costco & Sam's Club | Large 1-slot dispenser fits many Kirkland Signature and Member's Mark bulk rolls; top-load and pull bags from the front",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DMH7CHST",
+      "amazon_title": "KIRKLAND Signature Turmeric with Black Pepper, 1000mg (320 Count)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DP214WNP",
+      "amazon_title": "KIRKLAND Signature Women's Brushed Capri Legging",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DS6H72KK",
+      "amazon_title": "KIRKLAND Signature 50 Gallon Outdoor Trash Bag, 70 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DXCHPK49",
+      "amazon_title": "KIRKLAND Signature Women's Moisture Wicking Lightweight Jogger Pant with Pockets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DXCL4HDZ",
+      "amazon_title": "KIRKLAND Signature Men's Short Sleeve Pima Cotton Slub T-Shirt",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0DY56S3SZ",
+      "amazon_title": "KIRKLAND Signature Women's 4-Way Stretch Ankle Pants",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0F1L327HT",
+      "amazon_title": "KIRKLAND Signature Women's Moisture Wicking Lightweight Full Zip Hooded Jacket with Thumbholes",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0F2GX5ZW3",
+      "amazon_title": "KIRKLAND Signature Women's Scoop Neck Short Sleeve Pima Cotton Tee",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0F322M38J",
+      "amazon_title": "KIRKLAND Signature Ladies' Brushed Flare Legging Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0F9L6YZ9C",
+      "amazon_title": "KIRKLAND Signature Men\u2019s Regular Fit Performance Polo",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FB3WL713",
+      "amazon_title": "KIRKLAND Signature Women's Travel Pant - Utility Pocket - Elastic Waistband",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FC4TG61M",
+      "amazon_title": "KIRKLAND Signature Women's Moisture Wicking Lightweight Pintuck Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FFN89JXC",
+      "amazon_title": "KIRKLAND Signature Men's Crew Neck Comfort Cotton Tee, 6-Pack",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FGLSBQH9",
+      "amazon_title": "KIRKLAND Signature Women's 3/4 Sleeve Boatneck Cotton Slub Tee Shirt",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FNMSJBCM",
+      "amazon_title": "KIRKLAND Signature Men's Shirt Jacket \u2013 Heavyweight 2-Way Stretch Workwear, Button Closure, Long Sleeve, Casual Outerwear",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FP119Q3V",
+      "amazon_title": "KIRKLAND Signature Men's Comfort Stretch Straight Fit Classic 5 Pocket Denim Jean",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FR2NK7QB",
+      "amazon_title": "KIRKLAND Signature Men's UPF 50+ Stretch 1/2 Zip Pullover (US, Alpha, Medium, Regular, Regular, Blue)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FR2NRT5J",
+      "amazon_title": "KIRKLAND Signature Men's UPF 50+ Stretch 1/2 Zip Pullover (US, Alpha, Medium, Regular, Regular, Black)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FR2QZS15",
+      "amazon_title": "KIRKLAND Signature Men's Moisture Wicking Stretch Performance Short with Comfort Waistband (US, Numeric, 38, Regular, Regular, Blue)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FR2R5JGN",
+      "amazon_title": "KIRKLAND Signature Men's Moisture Wicking Stretch Performance Short with Comfort Waistband (US, Numeric, 34, Regular, Regular, Gray)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FR2RM35B",
+      "amazon_title": "KIRKLAND Signature Men's Moisture Wicking Stretch Performance Short with Comfort Waistband (US, Numeric, 36, Regular, Regular, Gray)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FR2S1S3Q",
+      "amazon_title": "KIRKLAND Signature Men's Moisture Wicking Stretch Performance Short with Comfort Waistband (US, Numeric, 30, Regular, Regular, Tan)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FRYG9XK6",
+      "amazon_title": "KIRKLAND Signature Unisex Crewneck Sweatshirt, Gray, Men's Medium (M)/Women's Large (L), Relaxed Fit",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FVWFFTYV",
+      "amazon_title": "KIRKLAND Signature Men's Short Sleeve Pima Cotton Polo Shirt",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FY3PDT64",
+      "amazon_title": "KIRKLAND Signature Men's Crew Neck Lightweight Tagless Tee Shirt - 6-Pack (US, Alpha, XX-Large, Regular, Regular, White)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0FY3V7SZN",
+      "amazon_title": "KIRKLAND Signature Men's Crew Neck Lightweight Tagless Tee Shirt - 6-Pack (US, Alpha, Medium, Regular, Regular, White)",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GCKKFBVF",
+      "amazon_title": "KIRKLAND Signature Men's Midweight Active Hoodie \u2013 Moisture-Wicking, 4-Way Stretch",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GCTQP1QS",
+      "amazon_title": "KIRKLAND Signature Women's Totally Shaping Comfort Stretch High-Rise Super Skinny Jeans",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GD8CH5BX",
+      "amazon_title": "KIRKLAND Signature Men's Moisture Wicking Active Jogger Pant, Tapered Leg Opening with Zippers",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GDSHGX2N",
+      "amazon_title": "KIRKLAND Signature Women's 3/4 Sleeve Boatneck Slub Tee",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GDZCHDCL",
+      "amazon_title": "KIRKLAND Signature Men's Stretch Comfort Tapered Fit Brushed 5 Pocket Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GDZJBMZ6",
+      "amazon_title": "KIRKLAND Signature Men's Stretch Comfort Tapered Fit Brushed 5 Pocket Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GH8F16GH",
+      "amazon_title": "KIRKLAND Signature Men's Brushed Fleece Full Zip Hoodie Jacket",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GJ6Z4J59",
+      "amazon_title": "KIRKLAND Signature Women's 3/4 Sleeve V- Neck Cotton Slub Tee",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GPFH3Q2V",
+      "amazon_title": "KIRKLAND KIRKLAND Signature Pima Cotton Sheet Set, Vintage Indigo, King Size, 6-Piece, 680 Thread Count, Crease Control Technology",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GR6W3SHJ",
+      "amazon_title": "KIRKLAND Signature Men's Short Sleeve Pima Cotton Tee Shirt",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GR6YQJLT",
+      "amazon_title": "KIRKLAND Signature Women's Stretch Active Full Zip Hooded Jacket with Pockets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GVVWYDMK",
+      "amazon_title": "KIRKLAND Signature Women's Short Sleeve Scoop Neck Pima Cotton T-Shirt",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GVVYYKS8",
+      "amazon_title": "KIRKLAND Signature Women's Pull-On Lightweight Crop Pant with Pockets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0GVW48D8F",
+      "amazon_title": "KIRKLAND Signature Women's Long Sleeve Lightweight Pullover Hoodie with Thumbholes",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0H1Z1P3YW",
+      "amazon_title": "KIRKLAND Signature Women's Travel Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0H1Z5D4LC",
+      "amazon_title": "KIRKLAND Signature Women's Travel Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0H2788M9Z",
+      "amazon_title": "KIRKLAND Golf Balls 24-Pack Urethane 3-Piece Tour Performance V3.0",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0H2B7LSVT",
+      "amazon_title": "KIRKLAND Signature Men\u2019s Stretch Tech Water-Resistant UPF 50+ Casual Pants",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0H56ZBZGS",
+      "amazon_title": "KIRKLAND Signature Men's Moisture Wicking Lounge Short with Pockets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0H9GL43LZ",
+      "amazon_title": "KIRKLAND Signature Men's Water Resistant Stetch 5 Pocket Pant",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0HB1GT3CK",
+      "amazon_title": "KIRKLAND Signature Golf Ball v3.0, 3-Piece Urethane Cover, 24 Count",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0HCKGRWMV",
+      "amazon_title": "KIRKLAND Signature Women's Relaxed Fit Ribbed Jogger Pant with Pockets",
+      "reason": "no_costco_item_number"
+    },
+    {
+      "asin": "B0HFXZCFNT",
+      "amazon_title": "KIRKLAND Signature Gen 3 Forged 3-Piece Wedge Set, a Three-piece Club Set that Includes a 52-Degree Gap Wedge, a 56-Degree Sand Wedge, and a 60-Degree Lob Wedge.",
+      "reason": "no_costco_item_number"
+    }
+  ]
+}

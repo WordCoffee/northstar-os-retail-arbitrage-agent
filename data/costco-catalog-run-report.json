@@ -1,0 +1,37 @@
+{
+  "status": "failed",
+  "generated_at": "2026-09-06T08:00:01.486678+00:00",
+  "stop_reason": "blocked",
+  "query": "kirkland",
+  "pages_fetched": 0,
+  "items_fetched": 0,
+  "requests_used": 0,
+  "credits_estimate": 0,
+  "csv_rows_written": 0,
+  "fetched": [],
+  "updated": [],
+  "skipped": [],
+  "held_for_review": [],
+  "failed": [
+    "Unwrangle API returned HTTP 403 (auth rejected)."
+  ],
+  "counts": {
+    "fetched": 0,
+    "updated": 0,
+    "skipped": 0,
+    "held_for_review": 0,
+    "failed": 1
+  },
+  "snapshot_path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\data\\costco-api-catalog.json",
+  "archive_path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\data/costco-discovery-catalog.json",
+  "run_report_path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\data/costco-catalog-run-report.json",
+  "location": {
+    "delivery_zip": "75201",
+    "business_center": "Dallas Business Center"
+  },
+  "request_delay_seconds": 2.0,
+  "data_gaps": [
+    "Unwrangle API returned HTTP 403 (auth rejected)."
+  ],
+  "message": "Last-good archive, snapshot, and CSV were preserved; no catalog files were overwritten."
+}
