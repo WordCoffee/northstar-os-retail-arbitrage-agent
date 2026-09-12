@@ -503,8 +503,16 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-08T00:00:00Z",
+    "last_updated":  "2026-09-12T00:00:00Z",
     "history":  [
+                    {
+                        "ts":  "2026-09-12T12:15:00Z",
+                        "activity":  "northstar_os_website_phase0_shell",
+                        "batch":  "none (autonomous build — Batch 10 still UNAUTHORIZED)",
+                        "summary":  "Built Phase 0 of the Northstar OS website — the Analyst's Desk SPA shell at Northstar_backend/static/northstar-os/ (hash-routed hub + SourceScout + ListingForge + AdPilot + SocialPulse + AutothinK workspace route). 13 files: tokens/shell/paperclip/services CSS, engine.js (router, 8-gate authorization model all off, bulletin board, paperclip assistant, global search, ink-plot charts, rotary knobs), demo-data.js (labeled demo fixtures, ZERO fetch calls), hub/sourcescout/listingforge/adpilot/socialpulse view modules chained via NS.onMount, index.html. Data-honesty contract enforced: demo badges on every view, gate banners carry data-live-gate=off and render 'Authorization required' while gated, missing values render as —, zero network surface anywhere. Existing SourceScout workbench (static/index.html + test_ui_display.cjs) untouched by the shell; the shell links out to ../index.html as the deep workbench. Commits: e42c5c1 (shell, 13 files) + e17dd1f (harness fix below). REPAIR during this batch: discovered test_ui_display.cjs was NOT green at HEAD — commit b64d5be (Kirkland discovery pipeline) added loadCategoriesFromAPI() to init(), and the VM+DOM-stub harness lacked options/appendChild/createElement, so init() threw inside the swallowed DOMContentLoaded handler and the sheet/drawer/Escape bindings never attached (11 FAILs + a hard crash at p10 keydown count). Completed the stub to mirror real DOM (default options:[], appendChild on elements, createElement on documentStub). Real counts: node tests/test_shell.cjs = 114 assertions ALL GREEN; node test_ui_display.cjs = full suite ALL UI DISPLAY TESTS PASSED exit 0 (1030 PASS lines measured). All diag scratch files deleted; no screenshots staged.",
+                        "test_counts":  "shell: 114/0f (test_shell.cjs). Workbench: ALL PASS exit 0 (test_ui_display.cjs, 1030 PASS).",
+                        "next_action":  "Continue the build: deepen service views / wire remaining complete code paths (ListingForge/AdPilot/SocialPulse gated live-feature stubs), Phase 5 AutothinK surface polish (#/autothink currently iframes ../../autothink/ui/index.html). Batch 10 remains blocked (Unwrangle credits exhausted) — do NOT run; next_batch unchanged."
+                    },
                     {
                         "ts":  "2026-09-08T00:00:00Z",
                         "activity":  "costco_full_pull_rehearsal_and_provenance_hardening",
