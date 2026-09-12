@@ -156,16 +156,18 @@
               <th scope="col" class="num">Clicks</th>
               <th scope="col" class="num">Orders</th>
               <th scope="col" class="num">ACoS</th>
-              <th scope="col">Movement</th>
+              <th scope="col" id="ap-sort-movement" data-sort="movement"><span class="sort-ind" id="ap-sort-ind"></span>Movement</th>
               <th scope="col">Zone</th>
               <th scope="col">Auto Action</th>
+              <th scope="col">Bid Δ (band rule)</th>
             </tr></thead>
             <tbody id="ap-kw-body"></tbody>
           </table>
         </div>
         <div class="panel" style="margin-top:14px">
-          <div class="panel-head"><h3>Bid Optimizer — ACoS Bands</h3><span class="hint">band → action</span></div>
+          <div class="panel-head"><h3>Bid Optimizer — ACoS Bands</h3><span class="hint">band → action · applied per keyword below</span></div>
           <div id="ap-acos-bands"></div>
+          <div id="ap-band-previews" style="margin-top:10px"></div>
         </div>
         <div class="panel" style="margin-top:14px">
           <div class="panel-head"><h3>Placement Share</h3><span class="hint">demo</span></div>
@@ -175,8 +177,17 @@
           <div class="panel-head"><h3>Guardrail Matrix</h3><span class="hint">autonomous vs needs-approval</span></div>
           <div id="ap-guardrails"></div>
         </div>
-        <div class="panel-head" style="margin-top:18px"><h3>Bulk Operations</h3><span class="hint">CSV in/out · fixture</span></div>
-        <div class="table-wrap">
+        <div class="panel-head" style="margin-top:18px"><h3>Bulk Operations</h3><span class="hint">CSV in/out · fixture sheet</span></div>
+        <div class="panel" style="margin-top:14px">
+          <div class="panel-head"><h3>CSV Dock</h3><span class="hint">fixture bulk sheet · parse &amp; annotate decisions</span></div>
+          <textarea id="ap-csv-src" class="editor" rows="4" aria-label="Bulk ops CSV source (fixture)"></textarea>
+          <div class="editor-meta">
+            <button id="ap-parse-csv" class="btn small steel">Parse sheet (demo)</button>
+            <span id="ap-bulk-count" class="char-count"></span>
+          </div>
+          <div class="notice">Nothing here is executed: bid changes and negatives are only ever <em>drafted</em>. Upload to Amazon requires explicit operator approval.</div>
+        </div>
+        <div class="table-wrap" style="margin-top:10px">
           <table id="ap-bulk" class="svc">
             <thead><tr>
               <th scope="col">SKU</th><th scope="col">Campaign</th><th scope="col">Keyword / Targeting</th>
@@ -185,7 +196,6 @@
             <tbody id="ap-bulk-body"></tbody>
           </table>
         </div>
-        <div class="notice" style="margin-top:12px">Nothing here is executed: bid changes and negatives are only ever <em>drafted</em>. Upload to Amazon requires explicit operator approval.</div>
       </section>
 
       <!-- ---------------- SOCIALPULSE ---------------- -->

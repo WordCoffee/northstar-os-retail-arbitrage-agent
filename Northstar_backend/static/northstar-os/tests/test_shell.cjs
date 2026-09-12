@@ -448,6 +448,52 @@ assert((lfAfterTerm.match(/data-backend-term=/g) || []).length === 7, 'listingfo
 assert(lfAfterTerm.includes('mom life gift cards'), 'listingforge: added term rendered in bridge');
 assert(lfAfterTerm.includes('data-fb-kind="backend_term"'), 'listingforge: term add logged as feedback signal');
 
+/* ============================================================
+ * Phase 15 — AdPilot deep: ACoS band rule engine, movement sort, CSV dock
+ * ============================================================ */
+/* band rule engine (pure): master-plan band table + low-data hold */
+assert(NS.ap.bandFor(50, 15).action === '−10 to −30% bid' && NS.ap.bandFor(50, 15).kind === 'crimson', 'adpilot: bandFor(>45%, >=10 clicks) -> -10/-30% bid');
+assert(NS.ap.bandFor(41.2, 82).action === '−5 to −10% bid' && NS.ap.bandFor(41.2, 82).band === '30–45%', 'adpilot: bandFor(41.2) -> 30-45% band -5/-10%');
+assert(NS.ap.bandFor(27.1, 640).action === '+5 to +15% bid' && NS.ap.bandFor(27.1, 640).band === '15–30%', 'adpilot: bandFor(27.1) -> 15-30% band +5/+15%');
+assert(NS.ap.bandFor(12.4, 118).action === '+15 to +30% bid' && NS.ap.bandFor(12.4, 118).band === '<15%', 'adpilot: bandFor(12.4) -> <15% band +15/+30%');
+assert(NS.ap.bandFor(50, 3).lowData === true && NS.ap.bandFor(50, 3).action.indexOf('hold') !== -1, 'adpilot: <10 clicks -> hold, never an action');
+assert(NS.ap.bandFor(null, 3).band === 'no ACoS', 'adpilot: missing ACoS reported as no-ACoS');
+
+/* harvester table carries band-rule bid delta cells; band previews render */
+NS.go('adpilot');
+const apDeep = els['ap-kw-body'].innerHTML;
+assert((apDeep.match(/data-bid-delta=/g) || []).length === 3, 'adpilot: bid-delta cells rendered for keywords with ACoS + data');
+assert((els['ap-band-previews'].innerHTML.match(/data-band-preview=/g) || []).length === 3, 'adpilot: per-keyword band previews rendered');
+assert(els['ap-band-previews'].innerHTML.includes('+30%'), 'adpilot: band preview shows +15/+30% for sub-15 ACoS keyword');
+assert(els['ap-bulk-count'].textContent.includes('3 rows parsed'), 'adpilot: bulk dock reports parsed row count');
+
+/* movement sort: asc = PROMOTED first; click desc flips DEMOTED first */
+const apBody = els['ap-kw-body'];
+const apK1 = 'data-kw="affirmation cards for women"';
+const apK4 = 'data-kw="coffee beans"';
+assert(apBody.innerHTML.indexOf(apK1) < apBody.innerHTML.indexOf(apK4), 'adpilot: movement sort defaults asc (PROMOTED first)');
+getEl('ap-sort-movement')._listeners.click.forEach((fn) => fn());
+assert(NS.ap.sortDir() === 'desc', 'adpilot: Movement header click toggles to desc');
+assert(apBody.innerHTML.indexOf(apK1) > apBody.innerHTML.indexOf(apK4), 'adpilot: desc sort puts DEMOTED keyword row first');
+assert(getEl('ap-sort-ind').textContent === '▼', 'adpilot: sort indicator reflects desc');
+getEl('ap-sort-movement')._listeners.click.forEach((fn) => fn());
+assert(NS.ap.sortDir() === 'asc' && apBody.innerHTML.indexOf(apK1) < apBody.innerHTML.indexOf(apK4), 'adpilot: second click restores asc');
+
+/* CSV dock: parser handles quoted commas and blank bids; button flow */
+const parsed = NS.ap.parseBulkCsv(getEl('ap-csv-src').value);
+assert(parsed.length === 3, 'adpilot: fixture CSV parses to 3 rows');
+assert(parsed[0].sku === 'WC-MOMS-V1' && parsed[0].bid === 1.05, 'adpilot: CSV row 1 sku/bid mapped');
+assert(parsed[0].reason === 'ACoS 27%, orders>0', 'adpilot: quoted comma preserved in reason');
+assert(parsed[1].decision === 'decrease-8pct', 'adpilot: CSV decision column mapped');
+assert(parsed[2].bid === null && parsed[2].decision === 'add-negative' && parsed[2].reason === '0 orders, repeat non-converter', 'adpilot: blank bid -> null; negative row parsed');
+getEl('ap-parse-csv')._listeners.click.forEach((fn) => fn());
+assert((els['ap-bulk-body'].innerHTML.match(/data-bulk=/g) || []).length === 3, 'adpilot: Parse button renders annotated rows');
+assert(els['ap-bulk-body'].innerHTML.includes('increase-10pct') && els['ap-bulk-body'].innerHTML.includes('add-negative'), 'adpilot: parsed decisions rendered as pills');
+const twoRowCsv = 'sku,campaign,keyword or targeting,match type,bid,decision,reason\nA,B,C,exact,0.5,increase-10pct,R\n';
+getEl('ap-csv-src').value = twoRowCsv;
+(getEl('ap-csv-src')._listeners.input || []).forEach((fn) => fn());
+assert((els['ap-bulk-body'].innerHTML.match(/data-bulk=/g) || []).length === 1, 'adpilot: CSV input edits live re-render the dock');
+
 console.log('\nShell contract complete.');
 console.log(failures === 0 ? 'ALL GREEN' : failures + ' FAILURES');
 process.exit(failures === 0 ? 0 : 1);
