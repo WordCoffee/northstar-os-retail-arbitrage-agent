@@ -139,3 +139,71 @@ tr.pinned td { background: rgba(212,175,55,.06); box-shadow: inset 2px 0 0 var(-
 .notice.warn { border-left-color: var(--gold); background: var(--gold-dim); }
 .notice.block { border-left-color: var(--crimson-bright); background: var(--crimson-dim); }
 .service-empty { color: var(--ink-faint); font-size: 12px; padding: 24px 4px; }
+
+/* ==========================================================================
+   PHASE 2–5 DEEP-DIVE COMPONENTS
+   (sub-view tabs, editors, weighted-score breakdown, calendar, lamps)
+   ========================================================================== */
+
+/* ---------- sub-view tab rail ---------- */
+.subnav { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.subnav-btn {
+  background: var(--bg-sunken); border: 1px solid var(--hairline); color: var(--ink-dim);
+  font-family: var(--font-body); font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+  padding: 6px 12px; border-radius: 999px; cursor: pointer;
+}
+.subnav-btn:hover { border-color: var(--steel-line); color: var(--ink); }
+.subnav-btn.active { background: var(--steel-dim); border-color: var(--steel-line); color: #cfe6f7; font-weight: 700; }
+.lf-panel.hidden { display: none; }
+
+/* ---------- weighted-score breakdown ---------- */
+.cat-breakdown { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+.cat-row { display: grid; grid-template-columns: 110px 64px 1fr 58px 46px; align-items: center; gap: 8px; font-size: 10px; }
+.cat-row .lbl { text-transform: uppercase; letter-spacing: .08em; color: var(--ink-dim); }
+.cat-row .dim { font-size: 9px; }
+.cat-bar { background: var(--bg-sunken); border: 1px solid var(--hairline); border-radius: 4px; height: 8px; overflow: hidden; }
+.cat-fill { height: 100%; border-radius: 4px 0 0 4px; }
+.cat-fill.steel { background: linear-gradient(90deg, #35608a, #6aa3d6); }
+.cat-fill.gold { background: linear-gradient(90deg, #6d5512, #d4af37); }
+.cat-row .val { color: var(--ink); font-variant-numeric: tabular-nums; text-align: right; }
+.cat-row .contrib { color: var(--gold); font-variant-numeric: tabular-nums; text-align: right; }
+
+/* ---------- inline editors (Studio / Keyword Bridge) ---------- */
+.editor-lbl { display: block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
+.editor {
+  width: 100%; background: var(--bg-sunken); border: 1px solid var(--hairline); color: var(--ink);
+  font-family: var(--font-body); font-size: 12px; border-radius: 6px; padding: 8px 10px; outline: none; resize: vertical;
+}
+.editor:focus { border-color: var(--gold); }
+.editor-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 8px 0; }
+.char-count { font-size: 10px; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+.char-count.ok { color: var(--steel); }
+.char-count.warn { color: var(--gold); }
+.char-count.over { color: var(--crimson-bright); }
+.bullets { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
+.bullet-row { border-left: 2px solid var(--gold-line); background: var(--bg-elevated); border-radius: 0 6px 6px 0; padding: 8px 12px; font-size: 12px; color: var(--ink); }
+.feedback-row { border-left: 2px solid var(--steel-line); background: var(--bg-elevated); border-radius: 0 6px 6px 0; padding: 9px 12px; font-size: 11px; color: var(--ink); margin-bottom: 8px; }
+
+/* ---------- SocialPulse calendar / content studio ---------- */
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.day-slot { background: var(--bg-sunken); border: 1px dashed var(--hairline); border-radius: var(--radius); padding: 10px 8px; min-height: 96px; }
+.day-slot.filled { border-style: solid; border-color: var(--gold-line); background: var(--gold-dim); }
+.day-slot .day { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+.day-slot .slot-copy { font-size: 10px; color: var(--ink); line-height: 1.5; }
+.day-slot .slot-hash { font-size: 9px; color: var(--gold); }
+.studio-console { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 10px 0; }
+.studio-console select, .studio-console input {
+  background: var(--bg-sunken); border: 1px solid var(--hairline); color: var(--ink);
+  font-family: var(--font-body); font-size: 11px; border-radius: 5px; padding: 5px 8px; outline: none;
+}
+.btn.small { padding: 4px 10px; font-size: 10px; }
+.btn.steel { background: var(--steel); color: #0d1a26; border-color: #3d6f9c; font-weight: 700; }
+
+/* ---------- AutothinK surface (lamps / quick invocation) ---------- */
+.at-lamp { display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--hairline); background: var(--bg-elevated); padding: 8px 14px; border-radius: var(--radius); font-size: 11px; }
+.lamp-dot { width: 9px; height: 9px; border-radius: 50%; background: #666; border: 1px solid #444; }
+.lamp-dot.offline { background: #7a7a7a; }
+.lamp-dot.detected { background: #9ecf8e; box-shadow: 0 0 8px rgba(126,190,90,.6); }
+.at-quick { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.at-composer-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+.at-composer { flex: 1; background: var(--bg-sunken); border: 1px solid var(--hairline); color: var(--ink); font-family: var(--font-body); font-size: 12px; border-radius: 6px; padding: 9px 12px; outline: none; }
