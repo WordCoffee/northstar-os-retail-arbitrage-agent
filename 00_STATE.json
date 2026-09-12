@@ -503,8 +503,16 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-12T12:37:00Z",
+    "last_updated":  "2026-09-12T12:56:37Z",
     "history":  [
+                    {
+                        "ts":  "2026-09-12T12:56:37Z",
+                        "activity":  "northstar_os_website_sourcescout_deep",
+                        "batch":  "none (autonomous build — Batch 10 still UNAUTHORIZED)",
+                        "summary":  "Deepened the SourceScout service view per master-brain/service-plans/04 (WRAP & EXTEND extensions 1-4) in the Analyst's Desk shell. Richer sourcing facets on top of ROI/est-monthly: Min Net Margin select (20%+ threshold computed as (amazonPrice-cost)/amazonPrice, null cost never fakes a zero) plus four sourcing-flag controls — Buy-box stable, Clean invoice path, Risk-clean only (no gate/variation/return risk), and Consumables first (a sort preference: all rows kept, non-consumables sort below). Pure predicate NS.ss.matchesFilters composes every facet + the existing global-search term; fixture rows gained honest demo attributes buyBox/invoice/riskClean/consumable (r1 Minoxidil riskClean:false — compliance risk — is the deliberate exception). Typed live-pull taxonomy panel fed by an evidence manifest from the real costco-discovery-runs (fixture): status partial, resolved 24 / requested 53, three typed failures (url_not_found x2, no_data_found x5, transport_error x1 with real details incl. the api.brightdata.com read-timeout halt); the banner renders a partial pill + per-status counts and never marks anything complete against a partial manifest (test asserts the string 'success' never appears in the rendered taxonomy). Hub global-KPI pass-through: Portfolio Overview panel renders the suite hub's kpis (Total Profit $11,483.22) into the SourceScout view. Worksheet export (CSV-demo, missing -> None) and Open full workbench link preserved; facet/export bindings now guarded so remounts never stack duplicate listeners. Workbench (static/index.html + test_ui_display.cjs) untouched.",
+                        "test_counts":  "Shell (static/northstar-os/tests/test_shell.cjs): 214 assertions ALL GREEN exit 0 (grew 195 -> 214 with Phase 18: portfolio pass-through, typed taxonomy / no-success fabrication, margin / buy-box / invoice / risk facets, composed filters, consumables-first sort, marginPct math 42/17.99 -> 57.2 and null-cost -> null). Workbench (test_ui_display.cjs): 1030 PASS exit 0 — unchanged and still green. node --check clean on demo-data.js / sourcescout.js / test_shell.cjs.",
+                        "next_action":  "Continue the build: remaining autonomous surface is the AutothinK chat UI itself (Northstar_backend/autothink/ui/index.html) per service-plans/05 (apply steel/gold space tokens, edge-text brand alignment) if the operator requests it. Batch 10 (next_batch=10_costco_single_item_retry_LIVE.md) stays blocked on exhausted Unwrangle credits — do NOT run; next_batch unchanged. No live/paid/credential actions executed."
+                    },
                     {
                         "ts":  "2026-09-12T12:37:00Z",
                         "activity":  "northstar_os_website_phases2to5_service_depths",
