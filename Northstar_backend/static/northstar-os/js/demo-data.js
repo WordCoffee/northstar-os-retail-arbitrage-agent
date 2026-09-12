@@ -61,6 +61,7 @@
           ],
           backendTerms: ['daily affirmations for women', 'mom affirmation cards', 'self care gifts for moms', 'gift for mom', 'mental health support', 'morning ritual'],
           scores: { seo: 30, conversion: 25, compliance: 20, visual: 10, rufus: 15, total: 79.6, rufusReadiness: 81 },
+          scoreRaws: { seo: 82, conversion: 76, compliance: 73, visual: 88, rufus: 84 }, /* 0-100 per category; weighted sum = 79.6 */
           compliance: [
             { rule: 'absolute_superlative', severity: 'warn', term: 'best', message: 'Avoid unverifiable "best" claims.' },
           ],
@@ -78,6 +79,7 @@
           ],
           backendTerms: ['affirmation cards for women', 'gift cards for women', 'career woman gift', 'yoga gifts for women', 'daily affirmations'],
           scores: { seo: 30, conversion: 25, compliance: 20, visual: 10, rufus: 15, total: 80.1, rufusReadiness: 84 },
+          scoreRaws: { seo: 82, conversion: 78, compliance: 74, visual: 86, rufus: 84 }, /* 0-100 per category; weighted sum = 80.1 */
           compliance: [
             { rule: 'medical_claim', severity: 'block', term: 'cures', message: 'Medical claims are prohibited on Amazon listings.' },
           ],

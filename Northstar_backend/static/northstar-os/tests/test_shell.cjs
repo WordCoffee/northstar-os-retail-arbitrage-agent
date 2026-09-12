@@ -385,6 +385,69 @@ assert(NS.knobValue(knob) === 2, 'engine: knob wheel-down decrements from closur
 openBtn._listeners.click[0]();
 assert(els['view-sourcescout'].classList.contains('active'), 'hub: open SourceScout navigates from hub card');
 
+/* ============================================================
+ * Phase 14 — ListingForge deep: scoring math, editors, bridge, feedback
+ * ============================================================ */
+/* weighted-sum scoring: fixture raws render exactly as fixture totals */
+assert(NS.lf.weightedTotal({ seo: 82, conversion: 76, compliance: 73, visual: 88, rufus: 84 }) === 79.6, 'listingforge: weightedTotal matches L1 fixture total (79.6)');
+assert(NS.lf.weightedTotal({ seo: 82, conversion: 78, compliance: 74, visual: 86, rufus: 84 }) === 80.1, 'listingforge: weightedTotal matches L2 fixture total (80.1)');
+assert(NS.lf.byteLen('abc') === 3, 'listingforge: byteLen counts ASCII');
+assert(NS.lf.byteLen('\u00e9') === 2, 'listingforge: byteLen counts 2-byte utf-8 char');
+assert(NS.lf.byteLen('\u8a00\u8bed') === 6, 'listingforge: byteLen counts 3-byte utf-8 chars');
+
+NS.go('listingforge');
+const lfDeep = els['lf-detail'].innerHTML;
+assert(lfDeep.includes('data-breakdown'), 'listingforge: scoring breakdown panel renders');
+assert((lfDeep.match(/data-cat=/g) || []).length === 5, 'listingforge: breakdown lists five weighted categories');
+assert(lfDeep.includes('data-total-badge'), 'listingforge: weighted total badge rendered');
+assert(lfDeep.includes('weight 30%') && lfDeep.includes('weight 15%'), 'listingforge: category weights disclosed');
+
+/* sub-view tabs isolate panels (stub panels) */
+const panelScoring = makeElement('lf-p-scoring');
+panelScoring.setAttribute('data-panel', 'scoring');
+const panelStudio = makeElement('lf-p-studio');
+panelStudio.setAttribute('data-panel', 'studio');
+getEl('lf-detail').querySelectorAll = (sel) => (sel === '.lf-panel[data-panel]' ? [panelScoring, panelStudio] : []);
+const lfTabsList = ['overview', 'studio', 'scoring', 'compliance', 'media', 'bridge', 'feedback'].map((t) => {
+  const b = makeElement('lf-tab-' + t, 'button');
+  b.setAttribute('data-lf-tab', t);
+  return b;
+});
+getEl('lf-tabs').querySelectorAll = (sel) => (sel === '.lf-tab[data-lf-tab]' || sel === '.lf-tab' ? lfTabsList : []);
+NS.lf.setTab('studio');
+assert(panelScoring.classList.contains('hidden'), 'listingforge: setTab(studio) hides scoring panel');
+assert(!panelStudio.classList.contains('hidden'), 'listingforge: setTab(studio) shows studio panel');
+assert(lfTabsList[1].classList.contains('active') && !lfTabsList[0].classList.contains('active'), 'listingforge: setTab(studio) marks tab active');
+NS.lf.setTab('overview');
+assert(!panelScoring.classList.contains('hidden') && !panelStudio.classList.contains('hidden'), 'listingforge: setTab(overview) reveals all panels');
+
+/* Studio title draft: char counter + save to feedback loop */
+const lfDraftTitle = getEl('lf-title-edit');
+lfDraftTitle.value = new Array(140 + 1).join('x'); /* 140 chars */
+(lfDraftTitle._listeners.input || []).forEach((fn) => fn());
+assert(getEl('lf-title-count').textContent.includes('140 / 200'), 'listingforge: title counter reflects live keystrokes');
+assert(getEl('lf-title-count').className.includes('warn'), 'listingforge: title counter warns above 131-char ideal');
+getEl('lf-title-save')._listeners.click.forEach((fn) => fn());
+const lfAfterSave = els['lf-detail'].innerHTML;
+assert(lfAfterSave.includes('data-fb-kind="title_draft"'), 'listingforge: saving a title draft seeds the feedback loop');
+assert(lfAfterSave.match(/data-feedback=/g) && (lfAfterSave.match(/data-feedback=/g) || []).length >= 1, 'listingforge: feedback row keyed by asin');
+
+/* Keyword Bridge: byte cap + duplicate detection + add */
+const lfTermInput = getEl('lf-term-input');
+lfTermInput.value = new Array(252 + 1).join('x'); /* 252 ASCII bytes > 250 cap */
+(lfTermInput._listeners.input || []).forEach((fn) => fn());
+assert(getEl('lf-term-count').textContent.includes('252 / 250 bytes'), 'listingforge: backend-term byte counter reports over-cap');
+assert(getEl('lf-term-status').textContent.includes('Over the 250-byte cap'), 'listingforge: over-cap term flagged, not added');
+lfTermInput.value = 'gift for mom'; /* exact fixture term in L1 bridge list */
+(lfTermInput._listeners.input || []).forEach((fn) => fn());
+assert(getEl('lf-term-status').textContent.includes('Duplicate'), 'listingforge: duplicate backend term detected');
+lfTermInput.value = 'mom life gift cards';
+getEl('lf-term-add')._listeners.click.forEach((fn) => fn());
+const lfAfterTerm = els['lf-detail'].innerHTML;
+assert((lfAfterTerm.match(/data-backend-term=/g) || []).length === 7, 'listingforge: new backend term appended to bridge list (6 -> 7)');
+assert(lfAfterTerm.includes('mom life gift cards'), 'listingforge: added term rendered in bridge');
+assert(lfAfterTerm.includes('data-fb-kind="backend_term"'), 'listingforge: term add logged as feedback signal');
+
 console.log('\nShell contract complete.');
 console.log(failures === 0 ? 'ALL GREEN' : failures + ' FAILURES');
 process.exit(failures === 0 ? 0 : 1);
