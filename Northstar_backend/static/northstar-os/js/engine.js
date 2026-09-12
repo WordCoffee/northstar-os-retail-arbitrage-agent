@@ -29,6 +29,12 @@
     socialpulse_publish:    { off: true, label: 'Meta / TikTok / Instagram publish' },
     socialpulse_attrib:     { off: true, label: 'Amazon Attribution generation' },
   };
+
+  // Non-secret runtime configuration (never a credential value). The
+  // AutothinK local-brain lamp reads this; defaulting to 'offline' is the
+  // honest state until the operator flips it to 'detected' after launch.
+  NS.config = { autothinkBackend: 'offline' };
+
   NS.gateState = function (name) {
     var g = NS.gates[name];
     return { name: name, off: !!(g && g.off), label: g ? g.label : name };

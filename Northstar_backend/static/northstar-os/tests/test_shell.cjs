@@ -17,7 +17,7 @@ const ROOT = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const scriptParts = [
     'engine.js', 'demo-data.js', 'hub.js', 'sourcescout.js',
-    'listingforge.js', 'adpilot.js', 'socialpulse.js',
+    'listingforge.js', 'adpilot.js', 'socialpulse.js', 'autothink.js',
 ].map((f) => fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'));
 const boot = 'window.NS.init();';
 const script = scriptParts.join('\n;\n') + '\n' + boot;
@@ -539,6 +539,39 @@ assert(els['soc-posts'].innerHTML.includes('scheduled'), 'socialpulse: scheduled
 /* data-honesty: publishing + attribution still gated after interactions */
 assert(getEl('gate-socialpulse_publish').innerHTML.includes('Authorization required'), 'socialpulse: publish gate stays OFF after studio interactions');
 assert(getEl('gate-socialpulse_attrib').innerHTML.includes('Authorization required'), 'socialpulse: attribution gate stays OFF after studio interactions');
+
+/* ============================================================
+ * Phase 17 — AutothinK surface: quick-ask prefill + backend lamp
+ * ============================================================ */
+NS.go('autothink');
+assert(els['view-autothink'].classList.contains('active'), 'autothink: route mounts workspace view (deep surface)');
+assert(html.includes('data-quick="sourcescout"') && html.includes('data-quick="socialpulse"'), 'autothink: 4 quick-ask buttons present in markup');
+assert(html.includes('no probe performed — shows configured state'), 'autothink: lamp honestly labeled as non-probed');
+
+/* local-brain lamp: configured state, no network */
+assert(getEl('at-lamp-value').textContent === 'offline', 'autothink: lamp defaults to offline (no probe performed)');
+assert(getEl('at-lamp-dot').classList.contains('offline'), 'autothink: lamp dot reflects offline state');
+NS.config.autothinkBackend = 'detected';
+NS.autothink.renderLamp();
+assert(getEl('at-lamp-value').textContent === 'detected', 'autothink: lamp reflects detected state after operator flip');
+assert(getEl('at-lamp-dot').classList.contains('detected') && !getEl('at-lamp-dot').classList.contains('offline'), 'autothink: lamp dot swaps to detected');
+
+/* quick-ask buttons prefill the composer for the Master Brain router */
+getEl('at-quick-sourcescout')._listeners.click.forEach((fn) => fn());
+assert(getEl('at-composer').value === 'Ask SourceScout: find sourcing candidates (demo prefill)', 'autothink: Ask SourceScout prefills verb + domain');
+getEl('at-quick-adpilot')._listeners.click.forEach((fn) => fn());
+assert(NS.autothink.prefill('adpilot') === 'Ask AdPilot: optimize campaign bids by band (demo prefill)', 'autothink: Ask AdPilot prefill returns deterministic copy');
+assert(getEl('at-composer').value.indexOf('Ask AdPilot:') === 0, 'autothink: composer shows the AdPilot ask');
+assert(NS.autothink.prefill('nope') === null, 'autothink: unknown service fails closed');
+
+/* copy affordance is demo-only (no live clipboard side effects asserted) */
+getEl('at-copy')._listeners.click.forEach((fn) => fn());
+assert(getEl('at-copy-note').textContent === 'Copied (demo)', 'autothink: copy button records the demo action');
+
+/* reset the non-secret lamp config back to the shipped default */
+NS.config.autothinkBackend = 'offline';
+NS.autothink.renderLamp();
+assert(getEl('at-lamp-value').textContent === 'offline', 'autothink: lamp config reset to honest offline default');
 
 console.log('\nShell contract complete.');
 console.log(failures === 0 ? 'ALL GREEN' : failures + ' FAILURES');
