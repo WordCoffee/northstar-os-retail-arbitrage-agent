@@ -1,7 +1,7 @@
 # NORTH STAR — UI DESIGN GUIDE
 **Version:** 1.0  
 **Date:** September 8, 2026  
-**Purpose:** Frontend development reference for the North Star OS and AutoThink websites.
+**Purpose:** Frontend development reference for the North Star OS and AutothinK websites.
 
 ---
 

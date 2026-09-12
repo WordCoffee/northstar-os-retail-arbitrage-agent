@@ -1,7 +1,7 @@
 # NORTH STAR AUTOTHINK — UI DESIGN GUIDE
 **Version:** 1.0  
 **Date:** September 8, 2026  
-**Purpose:** Frontend development reference for the North Star AutoThink website.
+**Purpose:** Frontend development reference for the North Star AutothinK website.
 
 ---
 
@@ -79,7 +79,7 @@
 ## 3. UNIVERSAL BRAND ELEMENTS (NORTH STAR)
 
 ### 3.1 Logo
-*   **Name:** North Star AutoThink.
+*   **Name:** North Star AutothinK.
 *   **Icon:** A stylized, glowing 8-pointed star with a hollow center.
 *   **Animation:** The star rotates slowly and "pulses" with a soft blue glow.
 

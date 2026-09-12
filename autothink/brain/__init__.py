@@ -1,1 +1,1 @@
-"""AutoThink brain package — model adapters and prompt composition."""
+"""AutothinK brain package — model adapters and prompt composition."""

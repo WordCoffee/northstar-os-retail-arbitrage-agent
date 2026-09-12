@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Northstar OS AutoThink</title>
+<title>Northstar OS AutothinK</title>
 <style>
   :root {
     --bg: #0a0a12;
@@ -232,7 +232,7 @@
   <canvas id="galaxy"></canvas>
 
   <header>
-    <h1 class="edge-text-main">Northstar OS AutoThink</h1>
+    <h1 class="edge-text-main">Northstar OS AutothinK</h1>
   </header>
 
   <main>
@@ -261,7 +261,7 @@
       <span class="qfClose" id="quickClose">&times;</span>
     </div>
     <div class="qfBody">
-      <p>Quick utility surface. Connected to the AutoThink brain.</p>
+      <p>Quick utility surface. Connected to the AutothinK brain.</p>
       <p>Drop in two ASINs or campaigns, record a voice memo, or replay today's session — wire these to the Master Brain Gateway in a later sprint.</p>
     </div>
     <button class="run" id="quickRun" style="align-self:flex-start">Generate</button>
@@ -468,7 +468,7 @@
       }
     })
     .catch(function () {
-      output.textContent = "AutoThink backend not reachable. Is the server running on port 8100?";
+      output.textContent = "AutothinK backend not reachable. Is the server running on port 8100?";
     });
 
   provider.addEventListener("change", function () { playBlip(); track("expand"); refreshProviderState(); });
@@ -504,7 +504,7 @@
       }
       output.textContent += (previousEmpty ? "" : "\n\n") + block;
     } catch (err) {
-      output.textContent += (previousEmpty ? "" : "\n\n") + prefix + "[ERROR] " + err.message + "\nIs the AutoThink backend running on port 8100?";
+      output.textContent += (previousEmpty ? "" : "\n\n") + prefix + "[ERROR] " + err.message + "\nIs the AutothinK backend running on port 8100?";
     }
     output.scrollTop = output.scrollHeight;
     stopLoading();

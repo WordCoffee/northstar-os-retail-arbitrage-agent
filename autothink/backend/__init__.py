@@ -1,1 +1,1 @@
-"""AutoThink backend package."""
+"""AutothinK backend package."""

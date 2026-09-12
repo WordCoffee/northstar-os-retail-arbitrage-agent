@@ -1,8 +1,8 @@
 """TaskRouter — deterministic classification + execution-plan selection for
-AutoThink commands.
+AutothinK commands.
 
 Reuses the Master Brain Gateway classifier (master_brain_gateway.classify_task)
-so AutoThink and Northstar OS agree on what kind of work a command is, then maps
+so AutothinK and Northstar OS agree on what kind of work a command is, then maps
 the class to an execution plan label and a human-readable plan. Pure and
 deterministic — zero network, zero LLM.
 """

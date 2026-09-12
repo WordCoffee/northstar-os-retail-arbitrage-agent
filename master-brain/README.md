@@ -10,7 +10,7 @@
 master-brain/
 ├── README.md                                        <- this file (architecture & index)
 ├── northstar-os-master-plan.md                      <- the full platform breakdown
-│                                                      (Northstar OS Services + Northstar AutoThink)
+│                                                      (Northstar OS Services + Northstar AutothinK)
 └── profiles/
     ├── manifest.json                                <- canonical index of subscriber profiles
     └── t2-holdings-tyrone-johnson.md                <- the T2 / Tyrone Johnson master seed profile
@@ -96,6 +96,6 @@ with `--identity <token>` for future factors.
 
 Consolidated 2026-09-07 from every file in
 `C:\Users\T2Hol\Desktop\All AI Chat Markdowns` (16+ markdown chats/exports covering
-the master vision session, local setup, AutoThink PPC service, ads/PPC analysis,
+the master vision session, local setup, AutothinK PPC service, ads/PPC analysis,
 FBA strategy, listing optimizer, retail arbitrage, and the full Word Coffee brand).
 All credential values were excluded — only **names** (env-var keys) appear.
