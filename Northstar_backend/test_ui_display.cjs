@@ -40,7 +40,7 @@ const makeElement = (id) => {
     const e = {
         id,
         innerHTML: '', textContent: '', className: '', value: '', checked: false,
-        hidden: false, disabled: false, style: {}, children, offsetWidth: 240,
+        hidden: false, disabled: false, style: {}, children, options: [], offsetWidth: 240,
         _listeners: listeners,
         addEventListener(type, fn) { (listeners[type] = listeners[type] || []).push(fn); },
         removeEventListener(type, fn) { listeners[type] = (listeners[type] || []).filter((f) => f !== fn); },
@@ -58,6 +58,7 @@ const makeElement = (id) => {
         closest() { return null; },
         contains(node) { return node === e || children.indexOf(node) !== -1; },
         focus() {},
+        appendChild(child) { children.push(child); return child; },
         getBoundingClientRect() { return { top: 0, bottom: 40, left: 8, width: 120, right: 128 }; },
     };
     return e;
@@ -90,6 +91,7 @@ const fireDoc = (type, target) => {
 
 const documentStub = {
     getElementById: getEl,
+    createElement: (tag) => makeElement(tag),
     querySelector: () => null,
     querySelectorAll: () => [],
     readyState: 'loading',
