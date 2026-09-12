@@ -1,0 +1,47 @@
+/* ==========================================================================
+   NORTHSTAR OS — DESIGN TOKENS  (canonical)
+   "The Analyst's Desk" — neo-skeuomorphic: high-end workspace meets digital precision.
+   Consolidated 2026-09-12 from Northstar_UI_Design_Guide.md,
+   Northstar_OS_UI_Design_Guide.md, Northstar_UI_Design_Guide.md (Analyst's Desk variant).
+   ========================================================================== */
+
+:root {
+  /* ---- palette ---- */
+  --bg:            #171412;   /* charcoal base */
+  --bg-elevated:   #1f1b18;   /* panels, cards */
+  --bg-sunken:     #12100e;   /* sidebar wells, table header */
+  --bg-hover:      #262120;   /* hover states */
+  --desk-leather:  radial-gradient(ellipse at top, #241f1b 0%, #171412 68%, #120f0d 100%);
+  --aluminum:      linear-gradient(180deg, #3d4147 0%, #2b2e33 45%, #23262b 100%);
+  --aluminum-hi:   linear-gradient(180deg, #4b5058 0%, #33373d 50%, #282b31 100%);
+
+  --gold:          #D4AF37;
+  --gold-dim:      rgba(212, 175, 55, 0.14);
+  --gold-line:     rgba(212, 175, 55, 0.45);
+  --steel:         #4682B4;
+  --steel-dim:     rgba(70, 130, 180, 0.16);
+  --steel-line:    rgba(70, 130, 180, 0.5);
+  --crimson:       #8B0000;
+  --crimson-bright:#c0392b;
+  --crimson-dim:   rgba(139, 0, 0, 0.22);
+
+  --ink:           #EAE4D8;   /* warm paper-white */
+  --ink-dim:       #A89F92;   /* secondary */
+  --ink-faint:     #6e675e;   /* tertiary */
+  --hairline:      #38322c;   /* border */
+  --hairline-soft: #2a2622;   /* subtle border */
+
+  /* ---- typography ---- */
+  --font-head: 'Playfair Display', 'Merriweather', Georgia, serif;
+  --font-body: 'Roboto Mono', 'IBM Plex Mono', 'Consolas', monospace;
+
+  /* ---- metrics ---- */
+  --radius:        8px;
+  --radius-lg:     12px;
+  --ribbon-h:      56px;
+  --drawer-w:      232px;
+  --board-w:       268px;
+  --space:         16px;
+  --shadow-card:   0 12px 28px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.04) inset;
+  --shadow-pin:    0 6px 16px rgba(0,0,0,0.5);
+}

@@ -1,0 +1,45 @@
+/* ==========================================================================
+   NORTHSTAR OS — PAPERCLIP ASSISTANT
+   Sits at the screen edge; on a Profit Spike / Rank Drop it "holds up" a
+   tiny digital note with the insight.
+   ========================================================================== */
+#paperclip {
+  position: fixed; bottom: 18px; right: 22px; z-index: 60;
+  user-select: none;
+}
+.paperclip-figure {
+  width: 46px; height: 46px;
+  background: linear-gradient(145deg, #3a4147, #262b30);
+  border-radius: 50% 50% 46% 46%;
+  border: 1px solid #5a636c;
+  box-shadow: 0 8px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.18);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative;
+}
+.paperclip-figure svg { width: 26px; height: 26px; color: #c9d2da; }
+.paperclip-figure::after {
+  content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+  border: 5px solid transparent; border-top: 6px solid #5a636c;
+}
+.pc-note {
+  position: absolute; bottom: 62px; right: 0;
+  width: 250px;
+  background: #f6eeda; color: #2c2418;
+  border: 1px solid #d8cba6;
+  border-radius: 3px 10px 10px 10px;
+  box-shadow: 0 14px 34px rgba(0,0,0,.55);
+  padding: 11px 13px; font-size: 11px; line-height: 1.55;
+  transform-origin: bottom right;
+  animation: pcPop .25s cubic-bezier(.2,.9,.3,1.3);
+  display: none;
+}
+.pc-note.show { display: block; }
+@keyframes pcPop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.pc-note .pc-kicker { display: block; font-size: 8px; letter-spacing: .16em; text-transform: uppercase; color: #9a6b1f; margin-bottom: 4px; }
+.pc-note .pc-body { display: block; }
+.pc-close {
+  position: absolute; top: 3px; right: 6px; border: none; background: none;
+  color: #9c8a66; cursor: pointer; font-size: 12px; line-height: 1;
+}
+.pc-close:hover { color: var(--crimson-bright); }
+#pc-dismissed { font-size: 9px; color: var(--ink-faint); }

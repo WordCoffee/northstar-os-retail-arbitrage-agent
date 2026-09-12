@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northstar OS — The Analyst's Desk</title>
+  <meta name="description" content="Northstar OS suite shell — SourceScout · ListingForge · AdPilot · SocialPulse · AutothinK. Demo mode: no live data, no live calls.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/shell.css">
+  <link rel="stylesheet" href="css/paperclip.css">
+  <link rel="stylesheet" href="css/services.css">
+</head>
+<body>
+
+  <!-- ===================== THE RIBBON ===================== -->
+  <header id="ribbon">
+    <div class="ribbon-brand">
+      <svg class="star-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 1.8l2.5 6.2 6.7-.4-5.1 4.4 1.8 6.5L12 15.5 6.1 18.5 7.9 12 2.8 7.6l6.7.4z"/>
+      </svg>
+      <h1>Northstar <span>OS</span><small>The Analyst's Desk</small></h1>
+    </div>
+    <div class="ribbon-stats">
+      <div class="rb-stat"><span class="lbl">Total Profit · 90d</span><span class="val">$11,483.22</span></div>
+      <div class="rb-stat"><span class="lbl">BSR Health</span><span class="val good">3 / 10 stable</span></div>
+      <div class="rb-stat"><span class="lbl">Open Gates</span><span class="val warn">8</span></div>
+      <div class="rb-stat"><span class="lbl">Mode</span><span class="val">Demo</span></div>
+    </div>
+    <input id="global-search" type="search" placeholder="Search the desk… (filters current view)" aria-label="Global search">
+  </header>
+
+  <div id="app">
+
+    <!-- ===================== THE DRAWER ===================== -->
+    <aside id="drawer" aria-label="Service drawer">
+      <div class="drawer-label">Notebooks</div>
+      <button class="nav-item" id="nav-hub" data-route="hub" aria-current="false">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Hub
+      </button>
+      <button class="nav-item" id="nav-sourcescout" data-route="sourcescout" aria-current="false">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M16.2 7.8 14 14l-6.2 2.2L10 10z"/></svg>
+        SourceScout
+      </button>
+      <button class="nav-item" id="nav-listingforge" data-route="listingforge" aria-current="false">
+        <svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg>
+        ListingForge
+      </button>
+      <button class="nav-item" id="nav-adpilot" data-route="adpilot" aria-current="false">
+        <svg viewBox="0 0 24 24"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>
+        AdPilot
+      </button>
+      <button class="nav-item" id="nav-socialpulse" data-route="socialpulse" aria-current="false">
+        <svg viewBox="0 0 24 24"><path d="M3 11l18-7-8 16-2-8z"/></svg>
+        SocialPulse
+      </button>
+      <div class="drawer-label">Workspace</div>
+      <button class="nav-item" id="nav-autothink" data-route="autothink" aria-current="false">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg>
+        AutothinK
+      </button>
+      <div id="drawer-foot"><span class="dot"></span>Demo mode — no live data, no live calls. Gates marked <span style="color:var(--gold)">Authorization required</span> stay closed until explicitly approved.</div>
+    </aside>
+
+    <!-- ===================== THE WORK SURFACE ===================== -->
+    <main id="work">
+
+      <!-- ---------------- HUB ---------------- -->
+      <section id="view-hub" class="view" data-view="hub" aria-hidden="true">
+        <h2 class="view-title">Operations Hub</h2>
+        <p class="view-sub">Portfolio overview · <span class="agent-chip">suite shell</span> · <span class="demo-badge">demo</span></p>
+        <div id="hub-kpis" class="kpi-strip"></div>
+        <div class="panel-head"><h3>Services</h3><span class="hint">four agents · one desk</span></div>
+        <div id="hub-services" class="card-grid"></div>
+      </section>
+
+      <!-- ---------------- SOURCESCOUT ---------------- -->
+      <section id="view-sourcescout" class="view" data-view="sourcescout" aria-hidden="true">
+        <h2 class="view-title">SourceScout</h2>
+        <p class="view-sub">Retail Arbitrage Agent · <span class="agent-chip">discovery</span> · <span class="demo-badge">demo</span></p>
+        <div id="ss-live-banner" class="gate-banner" data-gate="sourcescout_live_pull" data-live-gate="off"></div>
+        <p id="ss-live-meta" class="dim" style="margin:8px 0 14px"></p>
+        <div id="ss-kpis" class="kpi-strip"></div>
+        <div class="facets">
+          <div class="facet"><span class="lbl">Min ROI</span>
+            <select id="facet-roi" aria-label="Minimum ROI">
+              <option value="0">Any</option><option value="30">30%+</option><option value="50">50%+</option><option value="75">75%+</option>
+            </select>
+          </div>
+          <div class="facet"><span class="lbl">Min Est. Monthly</span>
+            <select id="facet-units" aria-label="Minimum estimated monthly sales">
+              <option value="0">Any</option><option value="50">50+</option><option value="100">100+</option><option value="200">200+</option>
+            </select>
+          </div>
+          <button id="ss-export" class="btn gold">Export Worksheet (CSV·demo)</button>
+          <button id="ss-open-workbench" class="btn ghost">Open full workbench</button>
+          <span id="ss-result-count" class="dim" style="margin-left:auto"></span>
+        </div>
+        <div class="table-wrap">
+          <table id="ss-table" class="svc">
+            <thead><tr>
+              <th scope="col"><span class="sort-ind"></span>&nbsp;</th>
+              <th scope="col">ASIN</th>
+              <th scope="col">Product</th>
+              <th scope="col" class="num">Costco COGS</th>
+              <th scope="col" class="num">Amazon Price</th>
+              <th scope="col" class="num">Net Profit</th>
+              <th scope="col" class="num">ROI</th>
+              <th scope="col">Competition</th>
+              <th scope="col" class="num">Est. Monthly</th>
+              <th scope="col">Tier</th>
+            </tr></thead>
+            <tbody id="ss-table-body"></tbody>
+          </table>
+        </div>
+        <div class="notice" style="margin-top:12px">Est. Monthly is a provider estimate, not verified sales. Rows with missing fees show “—” until fee verification (demo fixture).</div>
+      </section>
+
+      <!-- ---------------- LISTINGFORGE ---------------- -->
+      <section id="view-listingforge" class="view" data-view="listingforge" aria-hidden="true">
+        <h2 class="view-title">ListingForge</h2>
+        <p class="view-sub">Listing Optimizer Agent · <span class="agent-chip">studio</span> · <span class="demo-badge">demo</span></p>
+        <div id="lf-kpis" class="kpi-strip"></div>
+        <div class="facets">
+          <div class="facet"><span class="lbl">ASIN</span><select id="lf-asin-select" aria-label="Select listing"></select></div>
+        </div>
+        <div id="lf-detail"></div>
+      </section>
+
+      <!-- ---------------- ADPILOT ---------------- -->
+      <section id="view-adpilot" class="view" data-view="adpilot" aria-hidden="true">
+        <h2 class="view-title">AdPilot</h2>
+        <p class="view-sub">Amazon Ads Agent · <span class="agent-chip">PPC</span> · <span class="demo-badge">demo</span></p>
+        <div id="ap-kpis" class="kpi-strip"></div>
+        <div class="panel">
+          <div class="panel-head"><h3>Campaign Tiers</h3><span class="hint">4-tier spend ladder</span></div>
+          <div id="ap-tiers" class="kpi-strip"></div>
+        </div>
+        <div id="gate-adpilot_ads_read" class="gate-banner" data-gate="adpilot_ads_read" data-live-gate="off"></div>
+        <div id="gate-adpilot_bulk_exec" class="gate-banner" data-gate="adpilot_bulk_exec" data-live-gate="off"></div>
+        <div class="panel-head" style="margin-top:18px"><h3>Search Term Harvester</h3><span class="hint">auto-bid decisions · demo</span></div>
+        <div class="table-wrap">
+          <table id="ap-kw" class="svc">
+            <thead><tr>
+              <th scope="col">Search Term</th>
+              <th scope="col" class="num">Impr.</th>
+              <th scope="col" class="num">Clicks</th>
+              <th scope="col" class="num">Orders</th>
+              <th scope="col" class="num">ACoS</th>
+              <th scope="col">Movement</th>
+              <th scope="col">Zone</th>
+              <th scope="col">Auto Action</th>
+            </tr></thead>
+            <tbody id="ap-kw-body"></tbody>
+          </table>
+        </div>
+        <div class="panel" style="margin-top:14px">
+          <div class="panel-head"><h3>Bid Optimizer — ACoS Bands</h3><span class="hint">band → action</span></div>
+          <div id="ap-acos-bands"></div>
+        </div>
+        <div class="panel" style="margin-top:14px">
+          <div class="panel-head"><h3>Placement Share</h3><span class="hint">demo</span></div>
+          <div id="ap-placement-plot" class="ink-plot"></div>
+        </div>
+        <div class="panel" style="margin-top:14px">
+          <div class="panel-head"><h3>Guardrail Matrix</h3><span class="hint">autonomous vs needs-approval</span></div>
+          <div id="ap-guardrails"></div>
+        </div>
+        <div class="panel-head" style="margin-top:18px"><h3>Bulk Operations</h3><span class="hint">CSV in/out · fixture</span></div>
+        <div class="table-wrap">
+          <table id="ap-bulk" class="svc">
+            <thead><tr>
+              <th scope="col">SKU</th><th scope="col">Campaign</th><th scope="col">Keyword / Targeting</th>
+              <th scope="col">Match</th><th scope="col" class="num">Bid</th><th scope="col">Decision</th><th scope="col">Reason</th>
+            </tr></thead>
+            <tbody id="ap-bulk-body"></tbody>
+          </table>
+        </div>
+        <div class="notice" style="margin-top:12px">Nothing here is executed: bid changes and negatives are only ever <em>drafted</em>. Upload to Amazon requires explicit operator approval.</div>
+      </section>
+
+      <!-- ---------------- SOCIALPULSE ---------------- -->
+      <section id="view-socialpulse" class="view" data-view="socialpulse" aria-hidden="true">
+        <h2 class="view-title">SocialPulse</h2>
+        <p class="view-sub">Social Media Agent · <span class="agent-chip">content</span> · <span class="demo-badge">demo</span></p>
+        <div id="soc-kpis" class="kpi-strip"></div>
+        <div class="panel-head"><h3>Brand Voices</h3><span class="hint">modules</span></div>
+        <div id="soc-voices" class="card-grid"></div>
+        <div class="panel-head" style="margin-top:18px"><h3>Content Studio &amp; Calendar</h3><span class="hint">drafts · slots</span></div>
+        <div id="soc-posts" class="card-grid"></div>
+        <div class="panel-head" style="margin-top:18px"><h3>Creative Prompts</h3><span class="hint">ad / photo / video</span></div>
+        <div id="soc-creatives" class="media-grid"></div>
+        <div class="panel-head" style="margin-top:18px"><h3>Creator Outreach</h3><span class="hint">TOS-compliant templates</span></div>
+        <div id="soc-outreach" class="card-grid"></div>
+        <div id="gate-socialpulse_publish" class="gate-banner" data-gate="socialpulse_publish" data-live-gate="off"></div>
+        <div id="gate-socialpulse_attrib" class="gate-banner" data-gate="socialpulse_attrib" data-live-gate="off"></div>
+        <div class="panel-head" style="margin-top:18px"><h3>Attribution</h3><span class="hint">maas= · blended ACoS &lt; 40%</span></div>
+        <div id="soc-attribution"></div>
+      </section>
+
+      <!-- ---------------- AUTOTHINK ---------------- -->
+      <section id="view-autothink" class="view" data-view="autothink" aria-hidden="true">
+        <h2 class="view-title">Northstar AutothinK</h2>
+        <p class="view-sub">Premium build-anything layer · <span class="agent-chip">workspace</span></p>
+        <div class="panel">
+          <div class="panel-head"><h3>Workspace</h3><span class="demo-badge">your brain</span></div>
+          <p style="margin-bottom:12px">AutothinK is the premium build-anything tier of Northstar OS. The full chat workspace runs on its own backend (port 8100, local brain). Launch via <code>autothink/launch.bat</code>.</p>
+          <p class="dim" style="margin-bottom:12px">Docs: <code>master-brain/northstar-os-master-plan.md</code> §5 · <code>master-brain/service-plans/05_autothink_surface.md</code></p>
+          <a class="btn gold" href="../../autothink/ui/index.html">Open AutothinK workspace in a new tab</a>
+          <span class="dim" style="margin-left:10px">or mount inline below once running:</span>
+        </div>
+        <iframe id="at-workspace" src="../../autothink/ui/index.html" title="AutothinK workspace"
+                style="width:100%;height:560px;border:1px solid var(--hairline);border-radius:var(--radius);margin-top:14px;background:var(--bg-sunken)"></iframe>
+      </section>
+
+    </main>
+
+    <!-- ===================== THE BULLETIN BOARD ===================== -->
+    <aside id="board" aria-label="Bulletin board">
+      <div class="board-head">Pinned <span id="pin-count">0 pinned</span></div>
+      <div id="board-list"></div>
+      <div id="board-empty">Pin a row (♡) or hit “Pinned” notes here to keep deals on the board.</div>
+    </aside>
+
+  </div>
+
+  <!-- ===================== PAPERCLIP ASSISTANT ===================== -->
+  <div id="paperclip">
+    <div id="pc-note" class="pc-note">
+      <button id="pc-close" class="pc-close" aria-label="dismiss">&times;</button>
+      <span id="pc-kicker" class="pc-kicker">Insight</span>
+      <span id="pc-body" class="pc-body"></span>
+    </div>
+    <button id="paperclip-figure" class="paperclip-figure" aria-label="Paperclip assistant">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6v9a4 4 0 0 1-4 4H7a5 5 0 0 1-5-5V7a3 3 0 0 1 6 0v8a2 2 0 0 0 4 0V6a5 5 0 0 0-5-5H7"/></svg>
+    </button>
+  </div>
+
+  <!-- ===================== SCRIPTS (no network, ever) ===================== -->
+  <script src="js/engine.js"></script>
+  <script src="js/demo-data.js"></script>
+  <script src="js/hub.js"></script>
+  <script src="js/sourcescout.js"></script>
+  <script src="js/listingforge.js"></script>
+  <script src="js/adpilot.js"></script>
+  <script src="js/socialpulse.js"></script>
+  <script>NS.init();</script>
+</body>
+</html>

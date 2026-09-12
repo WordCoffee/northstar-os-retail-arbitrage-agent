@@ -1,0 +1,164 @@
+/* ==========================================================================
+   NORTHSTAR OS — SHELL LAYOUT  (Ribbon + Drawer + Work Surface + Board)
+   "The Analyst's Desk"
+   ========================================================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font-body);
+  background: var(--desk-leather);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.55;
+  overflow: hidden;
+}
+#app { display: flex; height: calc(100vh - var(--ribbon-h)); }
+
+/* ---------- THE RIBBON (top) ---------- */
+#ribbon {
+  height: var(--ribbon-h);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 18px;
+  background: linear-gradient(180deg, #26221c 0%, #1d1915 100%);
+  border-bottom: 2px solid var(--gold);
+  box-shadow: 0 2px 0 #000, 0 14px 30px rgba(0,0,0,.45);
+  position: relative;
+  z-index: 40;
+}
+.ribbon-brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.star-mark {
+  width: 30px; height: 30px; flex: 0 0 30px;
+  color: var(--steel); filter: drop-shadow(0 0 6px rgba(70,130,180,.7));
+  animation: starPulse 5s ease-in-out infinite;
+}
+@keyframes starPulse { 0%,100% { transform: rotate(0); } 50% { transform: rotate(12deg); } }
+.ribbon-brand h1 { font-family: var(--font-head); font-size: 17px; letter-spacing: .02em; color: var(--ink); }
+.ribbon-brand h1 span { color: var(--gold); }
+.ribbon-brand small { display: block; font-size: 9px; color: var(--ink-faint); letter-spacing: .18em; text-transform: uppercase; }
+.ribbon-stats { display: flex; gap: 22px; margin-left: auto; }
+.rb-stat { display: flex; flex-direction: column; line-height: 1.15; }
+.rb-stat .lbl { font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); }
+.rb-stat .val { font-size: 13px; font-weight: 600; color: var(--gold); font-variant-numeric: tabular-nums; }
+.rb-stat .val.good { color: #7fb069; }
+.rb-stat .val.warn { color: var(--gold); }
+.rb-stat .val.bad  { color: var(--crimson-bright); }
+#global-search {
+  width: 230px; height: 32px; padding: 0 12px 0 30px;
+  background: var(--bg-sunken); border: 1px solid var(--hairline);
+  border-radius: 999px; color: var(--ink); font-family: var(--font-body); font-size: 12px;
+  outline: none; transition: border-color .18s, box-shadow .18s;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2'><circle cx='11' cy='11' r='7'/><path d='m21 21-4-4'/></svg>");
+  background-repeat: no-repeat; background-position: 10px center;
+}
+#global-search:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-dim), 0 0 14px rgba(212,175,55,.25); }
+#global-search::placeholder { color: var(--ink-faint); }
+
+/* ---------- THE DRAWER (left) ---------- */
+#drawer {
+  width: var(--drawer-w); flex: 0 0 var(--drawer-w);
+  background: var(--aluminum);
+  border-right: 1px solid var(--hairline);
+  display: flex; flex-direction: column;
+  padding: 14px 10px 10px;
+  gap: 2px;
+  box-shadow: 3px 0 18px rgba(0,0,0,.35);
+  overflow-y: auto;
+}
+.drawer-label { font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-faint); margin: 10px 8px 6px; }
+.drawer-label:first-child { margin-top: 0; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border: none; border-radius: 6px;
+  background: transparent; color: var(--ink-dim);
+  font-family: var(--font-body); font-size: 12px; font-weight: 500;
+  text-align: left; cursor: pointer; width: 100%;
+  transition: background .14s, color .14s, box-shadow .14s;
+}
+.nav-item svg { width: 16px; height: 16px; flex: 0 0 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.nav-item:hover { background: rgba(0,0,0,.28); color: var(--ink); }
+.nav-item.active {
+  background: linear-gradient(180deg, rgba(212,175,55,.16), rgba(212,175,55,.06));
+  color: var(--gold);
+  box-shadow: inset 2px 0 0 var(--gold);
+}
+.nav-item[data-gated="true"] .gate-lock { margin-left: auto; font-size: 8px; color: var(--gold); letter-spacing: .08em; }
+#drawer-foot { margin-top: auto; padding: 12px 8px 2px; border-top: 1px solid var(--hairline); font-size: 9px; color: var(--ink-faint); line-height: 1.6; }
+#drawer-foot .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #7fb069; margin-right: 6px; box-shadow: 0 0 6px rgba(127,176,105,.8); }
+
+/* ---------- THE WORK SURFACE (main) ---------- */
+#work {
+  flex: 1 1 auto; overflow-y: auto; overflow-x: hidden;
+  padding: 22px 26px 40px;
+  scrollbar-width: thin; scrollbar-color: var(--hairline) transparent;
+}
+.view { display: none; animation: viewIn .22s ease; }
+.view.active { display: block; }
+@keyframes viewIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.view-title { font-family: var(--font-head); font-size: 22px; color: var(--ink); margin-bottom: 2px; }
+.view-sub { color: var(--ink-dim); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 18px; }
+.view-sub .agent-chip { color: var(--gold); }
+
+/* ---------- THE BULLETIN BOARD (right) ---------- */
+#board {
+  width: var(--board-w); flex: 0 0 var(--board-w);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 26px, rgba(90,70,40,.06) 26px 27px),
+    var(--aluminum);
+  border-left: 1px solid var(--hairline);
+  padding: 14px 12px; overflow-y: auto;
+  box-shadow: -3px 0 18px rgba(0,0,0,.35);
+}
+.board-head { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+.board-head .pin-count { color: var(--gold); font-size: 10px; }
+.pin {
+  background: #f6eeda;
+  color: #2c2418;
+  border-radius: 3px 8px 8px 8px;
+  padding: 9px 11px 10px;
+  margin-bottom: 10px; position: relative;
+  box-shadow: var(--shadow-pin), 2px 2px 0 rgba(0,0,0,.18);
+  font-size: 11px; line-height: 1.5;
+  transform: rotate(-.4deg);
+}
+.pin:nth-child(even) { transform: rotate(.5deg); }
+.pin .pin-text { display: block; }
+.pin .pin-meta { display: block; margin-top: 5px; font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: #77684c; }
+.pin .pin-x {
+  position: absolute; top: 3px; right: 5px; border: none; background: none;
+  color: #9c8a66; cursor: pointer; font-size: 11px; line-height: 1;
+}
+.pin .pin-x:hover { color: var(--crimson-bright); }
+#board-empty { font-size: 11px; color: var(--ink-faint); padding: 6px 4px; line-height: 1.7; }
+
+/* ---------- generic controls / cards ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--hairline);
+  background: linear-gradient(180deg, #2c2722, #211d19);
+  color: var(--ink); font-family: var(--font-body); font-size: 11px; font-weight: 500;
+  transition: border-color .14s, box-shadow .14s;
+}
+.btn:hover { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-dim); }
+.btn.gold { background: linear-gradient(180deg, #e3c457, #c39f2e); color: #1d160a; border-color: #a78c2a; font-weight: 700; }
+.btn.ghost { background: transparent; }
+.panel {
+  background: var(--bg-elevated);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 16px;
+}
+.panel + .panel { margin-top: 14px; }
+.panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.panel-head h3 { font-family: var(--font-head); font-size: 15px; color: var(--ink); }
+.panel-head .hint { font-size: 9px; color: var(--ink-faint); letter-spacing: .1em; text-transform: uppercase; }
+.demo-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 8px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--steel); background: var(--steel-dim);
+  border: 1px solid var(--steel-line); border-radius: 999px; padding: 3px 9px;
+}
+.keep-clean { margin: 0; }
