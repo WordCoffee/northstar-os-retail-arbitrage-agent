@@ -50,8 +50,40 @@
       '<span class="gate-state">' + (s.off ? 'Authorization required' : 'LIVE authorized') + '</span>';
   };
 
+  // ---------------- SUBSCRIBER PLAN HELPERS ----------------
+  // Reads the demo subscriber fixture (labeled demo; zero network). A plan
+  // ENTITLES a gate — it never opens one. Every gate stays `off: true` until
+  // a fresh, named operator approval executes the live action.
+  function demoSubscriber() {
+    var d = (typeof NS.DEMO === 'function') ? NS.DEMO() : null;
+    return (d && d.subscriber) ? d.subscriber : null;
+  }
+  NS.planEntitles = function (gateName) {
+    var sub = demoSubscriber();
+    if (!sub || !sub.plans) return [];
+    var names = [];
+    sub.plans.forEach(function (p) {
+      if ((p.entitled_gates || []).indexOf(gateName) !== -1) names.push(p.name);
+    });
+    return names;
+  };
+  NS.activePlan = function () {
+    var sub = demoSubscriber();
+    if (!sub || !sub.subscription) return null;
+    var pid = sub.subscription.plan;
+    var plan = null;
+    (sub.plans || []).forEach(function (p) { if (p.id === pid) plan = p; });
+    return plan; // plan object or null — never fabricated
+  };
+  NS.renderSubscriberBadge = function () {
+    var pill = $id('ribbon-plan');
+    if (!pill) return;
+    var plan = NS.activePlan();
+    pill.textContent = (plan ? plan.name : '—') + ' (demo)';
+  };
+
   // ---------------- ROUTER ----------------
-  var ROUTES = ['hub', 'sourcescout', 'listingforge', 'adpilot', 'socialpulse', 'autothink'];
+  var ROUTES = ['hub', 'sourcescout', 'listingforge', 'adpilot', 'socialpulse', 'autothink', 'account'];
   NS.currentRoute = function () {
     var h = (location.hash || '').replace(/^#\/?/, '');
     return ROUTES.indexOf(h) !== -1 ? h : 'hub';
@@ -75,6 +107,7 @@
         nav.setAttribute('aria-current', name === r ? 'page' : 'false');
       }
     });
+    NS.renderSubscriberBadge();
     if (NS.onMount) NS.onMount(r);
   };
 

@@ -96,6 +96,7 @@ body {
 .view { display: none; animation: viewIn .22s ease; }
 .view.active { display: block; }
 @keyframes viewIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .view, .view.active { animation: none; } }
 .view-title { font-family: var(--font-head); font-size: 22px; color: var(--ink); margin-bottom: 2px; }
 .view-sub { color: var(--ink-dim); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 18px; }
 .view-sub .agent-chip { color: var(--gold); }
