@@ -853,7 +853,7 @@ def post_dataforseo_validate(req: DataForSEOValidateRequest):
 
 @app.get("/api/sourcescout")
 def get_sourcescout():
-    """Sourcescout: 180 Kirkland products for the retail arbitrage dashboard."""
+    """Sourcescout: 180+ Kirkland products for the retail arbitrage dashboard."""
     import json
     from pathlib import Path
     manifest_path = Path(__file__).parent / "data" / "catalog" / "sourcescout_manifest.json"
@@ -866,5 +866,87 @@ def get_sourcescout():
         "schema_version": data.get("schema_version", "1.0"),
         "generated_at": data.get("generated_at"),
         "count": data.get("count", len(data.get("items", []))),
-        "items": data.get("items", [])
+        "items": data.get("items", []),
+        "quantity_match_summary": data.get("quantity_match_summary", {})
     }
+
+
+@app.get("/api/sourcescout/matches")
+def get_sourcescout_matches():
+    """Sourcescout: Only PASS items (Amazon quantity matches Costco SKU)."""
+    import json
+    from pathlib import Path
+    manifest_path = Path(__file__).parent / "data" / "catalog" / "sourcescout_manifest.json"
+    if not manifest_path.exists():
+        raise HTTPException(status_code=404, detail="Sourcescout manifest not found")
+    with open(manifest_path) as f:
+        data = json.load(f)
+    items = data.get("items", [])
+    matched = [item for item in items if item.get("quantity_match", {}).get("status") == "PASS"]
+    return {
+        "kind": "sourcescout_matches",
+        "schema_version": "1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "count": len(matched),
+        "items": matched,
+    }
+
+
+@app.get("/api/sourcescout/mismatches")
+def get_sourcescout_mismatches():
+    """Sourcescout: FAIL items (Amazon quantity != Costco SKU quantity)."""
+    import json
+    from pathlib import Path
+    manifest_path = Path(__file__).parent / "data" / "catalog" / "sourcescout_manifest.json"
+    if not manifest_path.exists():
+        raise HTTPException(status_code=404, detail="Sourcescout manifest not found")
+    with open(manifest_path) as f:
+        data = json.load(f)
+    items = data.get("items", [])
+    mismatched = [item for item in items if item.get("quantity_match", {}).get("status") == "FAIL"]
+    return {
+        "kind": "sourcescout_mismatches",
+        "schema_version": "1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "count": len(mismatched),
+        "items": mismatched,
+    }
+
+
+@app.get("/api/sourcescout/review")
+def get_sourcescout_review():
+    """Sourcescout: REVIEW items (Costco SKU not found or ambiguous)."""
+    import json
+    from pathlib import Path
+    manifest_path = Path(__file__).parent / "data" / "catalog" / "sourcescout_manifest.json"
+    if not manifest_path.exists():
+        raise HTTPException(status_code=404, detail="Sourcescout manifest not found")
+    with open(manifest_path) as f:
+        data = json.load(f)
+    items = data.get("items", [])
+    review = [item for item in items if item.get("quantity_match", {}).get("status") == "REVIEW"]
+    return {
+        "kind": "sourcescout_review",
+        "schema_version": "1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "count": len(review),
+        "items": review,
+    }
+
+
+@app.get("/api/sourcescout/summary")
+def get_sourcescout_summary():
+    """Sourcescout: Quantity match validation summary."""
+    import json
+    from pathlib import Path
+    manifest_path = Path(__file__).parent / "data" / "catalog" / "sourcescout_manifest.json"
+    if not manifest_path.exists():
+        raise HTTPException(status_code=404, detail="Sourcescout manifest not found")
+    with open(manifest_path) as f:
+        data = json.load(f)
+    return data.get("quantity_match_summary", {
+        "total": 0,
+        "pass": 0,
+        "fail": 0,
+        "review": 0,
+    })

@@ -18,6 +18,11 @@
     body.vr-mode { overflow: hidden; }
     /* VR controller cursor */
     a-cursor { size: 0.1; color: #fff; opacity: 0.8; }
+    /* Haptic feedback indicator */
+    .haptic-hint { color: #ffd700; font-size: 0.8; opacity: 0; transition: opacity 0.3s; }
+    .haptic-hint.visible { opacity: 1; }
+    /* Haptic pattern visualizer (debug) */
+    .haptic-pattern { position: absolute; left: 10px; top: 10px; color: #fff; background: rgba(0,0,0,0.6); padding: 8px 12px; border-radius: 4; font-size: 0.7; z-index: 100; pointer-events: none; }
   </style>
 </head>
 
@@ -29,6 +34,7 @@
     xr-manager="requiredFeatures: [local-floor]; optionalFeatures: [bounded-floor]"
     cursor="raycaster: true; fuse: true"
     embedded
+    hand-controls
   >
 
     <!-- ===================== RIBBON (as VR hologram) ===================== -->
@@ -66,74 +72,217 @@
 
     <!-- ===================== NAVIGATION: 6 TABS AS 3D BUTTONS ===================== -->
     <a-entity id="tab-nav" position="0 0 -2">
-      <!-- Tab positions in a circle -->
+      <!-- Tab positions in a circle, at eye level -->
       <a-entity id="tab-sourcescout" position="-2 1.5 -1" rotation="0 45 0">
         <a-box width="3" height="1" depth="0.5" material="color: #4A90E2; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
           <a-text value="SourceScout" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
         </a-box>
+        <!-- Haptic hint: press trigger to select -->
+        <a-entity class="haptic-hint" position="0 -0.6 0.1" text="value: Press △ to select; color:#fff; align:center"></a-entity>
       </a-entity>
       <a-entity id="tab-listingforge" position="0 1.5 -1" rotation="0 0 0">
         <a-box width="3" height="1" depth="0.5" material="color: #7ED321; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
           <a-text value="ListingForge" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
         </a-box>
+        <a-entity class="haptic-hint" position="0 -0.6 0.1" text="value: Press △ to select; color:#fff; align:center"></a-entity>
       </a-entity>
       <a-entity id="tab-adpilot" position="2 1.5 -1" rotation="0 -45 0">
         <a-box width="3" height="1" depth="0.5" material="color: #F5A623; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
           <a-text value="AdPilot" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
         </a-box>
+        <a-entity class="haptic-hint" position="0 -0.6 0.1" text="value: Press △ to select; color:#fff; align:center"></a-entity>
       </a-entity>
       <a-entity id="tab-socialpulse" position="-2.5 0.5 -1" rotation="0 50 0">
         <a-box width="3" height="1" depth="0.5" material="color: #DD2C00; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
           <a-text value="SocialPulse" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
         </a-box>
+        <a-entity class="haptic-hint" position="0 -0.6 0.1" text="value: Press △ to select; color:#fff; align:center"></a-entity>
       </a-entity>
       <a-entity id="tab-autothink" position="0 0.5 -1" rotation="0 0 0">
         <a-box width="3" height="1" depth="0.5" material="color: #1ABC9C; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
           <a-text value="AutothinK" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
         </a-box>
+        <a-entity class="haptic-hint" position="0 -0.6 0.1" text="value: Press △ to select; color:#fff; align:center"></a-entity>
       </a-entity>
       <a-entity id="tab-account" position="2.5 0.5 -1" rotation="0 -50 0">
         <a-box width="3" height="1" depth="0.5" material="color: #9B59B6; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
           <a-text value="Account" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
         </a-box>
+        <a-entity class="haptic-hint" position="0 -0.6 0.1" text="value: Press △ to select; color:#fff; align:center"></a-entity>
       </a-entity>
     </a-entity>
+
+    <!-- ===================== GLTF PRODUCT MODEL COMPONENT ===================== -->
+    <!-- Each product entity can use text labels OR a glTF model -->
+    <script>
+      // Component: product model — tries gltf-model first, falls back to text label
+      AFRAME.registerComponent('product-model', {
+        schema: {
+          asin: {type: 'string', default: ''},
+          name: {type: 'string', default: 'Product'},
+          roi: {type: 'number', default: 0},
+          verdict: {type: 'string', default: '—'},
+          profit: {type: 'number', default: 0},
+          // Path template for glTF files: '/models/product-{asin}.gltf'
+          gltfSrc: {type: 'string', default: ''}
+        },
+        init: function () {
+          const data = this.data;
+          // If a glTF source is provided and non-empty, use it
+          if (data.gltfSrc && data.gltfSrc.trim()) {
+            this.el.setAttribute('gltf-model', 'src: ' + data.gltfSrc);
+            // Also add text overlay below the model
+            this.el.setAttribute('product-text', `
+              asin: ${data.asin}
+              roi: ${data.roi}
+              verdict: ${data.verdict}
+              profit: $${data.profit}
+            `);
+          } else {
+            // No glTF — use text label fallback (existing behavior)
+            this.el.setAttribute('product-text', '');
+          }
+        }
+      });
+
+      // Component: product text overlay (used when no glTF, or as complement)
+      AFRAME.registerComponent('product-text', {
+        schema: {
+          asin: {type: 'string', default: ''},
+          roi: {type: 'number', default: 0},
+          verdict: {type: 'string', default: '—'},
+          profit: {type: 'number', default: 0}
+        },
+        init: function () {
+          const data = this.data;
+          const lines = [];
+          lines.push(data.name || 'Product');
+          if (data.asin) lines.push(`ASIN: ${data.asin}`);
+          if (data.roi !== undefined && data.roi !== null) lines.push(`ROI: ${data.roi}%`);
+          if (data.verdict) lines.push(`Verdict: ${data.verdict}`);
+          if (data.profit !== undefined && data.profit !== null) lines.push(`Profit: $${data.profit}`);
+          // Set as inner text on the entity
+          this.el.setAttribute('text', {
+            value: lines.join('\n'),
+            color: '#fff',
+            align: 'center',
+            width: 2,
+            depthTest: 'false'
+          });
+        }
+      });
+    </script>
 
     <!-- ===================== CURRENT VIEW PORTAL ===================== -->
     <!-- When a tab is selected, its view loads into this portal -->
     <a-entity id="view-portal" position="0 -1.5 -3" rotation="0 0 0">
-      <!-- Default: SourceScout view (embedded as iframe-like panel) -->
+      <!-- SourceScout: 3D product shelf with real data & glTF models -->
       <a-entity id="view-sourcescout">
-        <!-- SourceScout 3D product shelf -->
-        <a-entity position="0 0 -1" rotation="0 0 0">
-          <a-box width="2" height="2" depth="2" material="color: #eee" position="-2 0 0" cursor="raycasters: false"></a-box>
-          <a-text value="SourceScout: 232 products" position="0 1 0" color="#fff" depth-test="false"></a-text>
-        </a-entity>
-        <!-- Placeholder for actual product grid -->
-        <a-entity text="value: Loading SourceScout...; align: center; width: 4" position="0 0 1.5" depth-test="false"></a-text>
+        <!-- Dynamic product shelf loaded via API -->
       </a-entity>
 
-      <!-- Other view placeholders (hidden by default) -->
+      <!-- ListingForge: compliance + scoring visualization -->
       <a-entity id="view-listingforge" position="0 -1.5 -3" opacity="0" visible="false">
-        <a-text value="ListingForge view — coming soon in VR" color="#fff" depth-test="false"></a-text>
+        <a-entity text="value: ListingForge compliance scanner — loading data..." color="#fff" depth-test="false" align="center"></a-entity>
       </a-entity>
+
+      <!-- AdPilot: PPC campaign 3D dashboard -->
       <a-entity id="view-adpilot" position="0 -1.5 -3" opacity="0" visible="false">
-        <a-text value="AdPilot view — coming soon in VR" color="#fff" depth-test="false"></a-text>
+        <a-entity text="value: AdPilot PPC dashboard — loading data..." color="#fff" depth-test="false" align="center"></a-entity>
       </a-entity>
+
+      <!-- SocialPulse: content calendar in 3D timeline -->
       <a-entity id="view-socialpulse" position="0 -1.5 -3" opacity="0" visible="false">
-        <a-text value="SocialPulse view — coming soon in VR" color="#fff" depth-test="false"></a-text>
+        <a-entity text="value: SocialPulse content calendar — loading data..." color="#fff" depth-test="false" align="center"></a-entity>
       </a-entity>
+
+      <!-- AutothinK: workspace launch button -->
       <a-entity id="view-autothink" position="0 -1.5 -3" opacity="0" visible="false">
-        <a-text value="AutothinK workspace — launching in new tab" color="#fff" depth-test="false"></a-text>
+        <a-entity text="value: AutothinK workspace — launching in new tab" color="#fff" depth-test="false" align="center"></a-entity>
       </a-entity>
+
+      <!-- Account: plan badge + entitlement matrix -->
       <a-entity id="view-account" position="0 -1.5 -3" opacity="0" visible="false">
-        <a-text value="Account view — coming soon in VR" color="#fff" depth-test="false"></a-text>
+        <a-entity text="value: Account plan badge & gate matrix — loading..." color="#fff" depth-test="false" align="center"></a-entity>
       </a-entity>
     </a-entity>
 
+    <!-- ===================== 3D PRODUCT SHELF (SourceScout) ===================== -->
+    <!-- Populated with real data from /api/kirkland/scanner; each product
+         uses the 'product-model' component (glTF if gSF provided, else text). -->
+    <a-entity id="product-shelf" position="0 0 -1" rotation="0 0 0" visible="false">
+      <!-- Product cards in a semi-circular shelf -->
+      <!-- 24 products total: 3 rows × 8 positions (wrapped) -->
+    </a-entity>
+
+    <!-- ===================== COLLABORATION: WebRTC DataChannel Framework ===================== -->
+    <!-- In production, integrate a signaling server (Socket.io, etc.) and bind
+         the 'collab-position' events to update remote user markers in real time. -->
+    <a-entity id="collab-markers" position="0 1.7 -3" rotation="0 0 0">
+      <!-- Local user marker -->
+      <a-entity id="collab-local" position="0 1.6 -3" rotation="0 0 0" scale="0.35 0.35 0.35">
+        <a-material color="#00ff00" transparent="true" opacity="0.9"/>
+        <a-text value="YOU" color="#000" align="center" depth-test="false" width="1.5"></a-text>
+      </a-entity>
+      <!-- Remote users will be injected via signaling server -->
+      <!-- Example remote marker template:
+           <a-entity class="collab-remote" position="..." rotation="..." scale="0.3 0.3 0.3">
+             <a-material color="#ffa500" transparent="true" opacity="0.9"/>
+             <a-text value="Remote" color="#000" align="center" depth-test="false" width="1.5"></a-text>
+           </a-entity>
+      -->
+    </a-entity>
+
+    <!-- ===================== HAPTIC PATTERNS ===================== -->
+    <!-- Pre-defined haptic impulse patterns for different actions.
+         Duration (seconds) × Frequency (Hz). Adjust per device capabilities.
+         
+         Pattern library:
+           - SELECT: 0.1s @ 60Hz  — quick confirmation click
+           - GRAB:    0.2s @ 40Hz  — when picking up a product
+           - REJECT:  0.3s @ 20Hz  — when verdict = "Reject"
+           - APPROVE: 0.2s @ 50Hz  — when verdict = "Pass"
+           - NAV:     0.15s @ 30Hz — teleport or navigation trigger
+      -->
+    <script>
+      // Haptic pattern definitions — map action name to [duration, frequency]
+      const HP = {
+        select:  [0.10, 60],
+        grab:    [0.20, 40],
+        reject:  [0.30, 20],
+        approve: [0.20, 50],
+        nav:     [0.15, 30],
+        long:    [0.50, 15]
+      };
+
+      // Trigger a haptic pattern by name from anywhere in the script
+      function triggerHaptic(patternName) {
+        const pattern = HP[patternName];
+        if (!pattern) { console.warn(`Haptic pattern "${patternName}" not found`); return; }
+        const [duration, frequency] = pattern;
+        
+        // Try the global haptics component first
+        const el = document.querySelector('[haptics]');
+        if (el && el.components && el.components.haptics) {
+          el.components.haptics.trigger(duration, frequency);
+        } else {
+          // Fallback: direct WebXR hands trigger (if available)
+          const rig = document.querySelector('#vr-rig');
+          if (rig && rig.components && rig.components.hands) {
+            rig.components.hands.trigger(duration, frequency);
+          } else {
+            console.debug(`Haptic "${patternName}": duration=${duration}s, freq=${frequency}Hz (no hardware access)`);
+          }
+        }
+      }
+
+      // Alias for backward compatibility
+      window.triggerHaptic = triggerHaptic;
+    </script>
+
     <!-- ===================== CONTROLS & HELP ===================== -->
     <a-entity id="ui-controls" position="0 0 -4">
-      <a-text value="Use controllers to look around & select tabs. Press Btrigger to teleport. Menu for help." color="#aaa" depth-test="false" align="center"></a-text>
+      <a-text value="△ select | grab products (haptic + spin) | B‑trigger teleport | Menu help" color="#aaa" depth-test="false" align="center"></a-text>
     </a-entity>
 
     <!-- XR button -->
@@ -142,49 +291,326 @@
   </a-scene>
 
   <script>
-    // VR click handler — teleport / load view
-    function myClick() {
-      const selector = document.querySelector('[selected]');
-      if (!selector) return;
+    // ===================== VR SETUP & DATA LOADING =====================
+    document.addEventListener('DOMContentLoaded', () => {
+      const scene = document.querySelector('a-scene');
 
-      const id = selector.id;
-      const portal = document.getElementById('view-portal');
+      // Request VR session on button click
+      document.querySelector('a-xr-button').addEventListener('click', () => {
+        scene.enterVR();
+      });
 
-      // Hide all views
-      document.querySelectorAll('#view-portal > a-entity').forEach(el => el.setAttribute('opacity', '0'));
-      document.querySelectorAll('#view-portal > a-entity').forEach(el => el.setAttribute('visible', 'false'));
-
-      // Show selected view
-      const target = document.getElementById('view-' + id);
-      if (target) {
-        target.setAttribute('opacity', '1');
-        target.setAttribute('visible', 'true');
+      // Fallback if WebXR not supported
+      if (!navigator.xr) {
+        scene.innerHTML = '<a-text value="WebXR not supported. Open on Meta Quest browser for VR mode." color="#f00" position="0 0 -3" align="center"></a-text>';
+        return;
       }
 
-      // Special: AutothinK opens external link
-      if (id === 'autothink') {
+      // ===================== FETCH REAL DATA FROM NORTHSTAR BACKEND =====================
+      const BACKEND_BASE = 'http://127.0.0.1:8000';
+
+      // --- API 1: Scanner products (source scout) ---
+      async function loadScannerData() {
+        try {
+          const resp = await fetch(`${BACKEND_BASE}/api/kirkland/scanner`);
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const data = await resp.json();
+          return data; // { products: [...], summary: {...} }
+        } catch (err) {
+          console.error('Failed to load scanner data:', err);
+          return null;
+        }
+      }
+
+      // --- API 2: Discovery categories ---
+      async function loadDiscoveryCategories() {
+        try {
+          const resp = await fetch(`${BACKEND_BASE}/api/kirkland/discovery/categories`);
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const data = await resp.json();
+          return data; // { categories: [{name, count}], meta: {...} }
+        } catch (err) {
+          console.error('Failed to load discovery categories:', err);
+          return null;
+        }
+      }
+
+      // --- API 3: Discovery meta ---
+      async function loadDiscoveryMeta() {
+        try {
+          const resp = await fetch(`${BACKEND_BASE}/api/kirkland/discovery/meta`);
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const data = await resp.json();
+          return data; // { status, count, fetched_at, ... }
+        } catch (err) {
+          console.error('Failed to load discovery meta:', err);
+          return null;
+        }
+      }
+
+      // ===================== TAB SELECTION HANDLER =====================
+      function myClick() {
+        const selector = document.querySelector('[selected]');
+        if (!selector) return;
+
+        const id = selector.id;
+        const portal = document.getElementById('view-portal');
+
+        // Hide all views
+        document.querySelectorAll('#view-portal > a-entity').forEach(el => {
+          el.setAttribute('opacity', '0');
+          el.setAttribute('visible', 'false');
+        });
+
+        // Show selected view
+        const target = document.getElementById('view-' + id);
+        if (target) {
+          target.setAttribute('opacity', '1');
+          target.setAttribute('visible', 'true');
+        }
+
+        // Auto-load data for SourceScout (glTF products + data overlays)
+        if (id === 'sourcescout') {
+          loadAndDisplaySourceScout();
+        }
+
+        // Discovery filter UI could be added here
+        if (id === 'listingforge') {
+          // Placeholder: load compliance data from backend
+          triggerHaptic('select');
+        }
+
+        // AutothinK opens external link
+        if (id === 'autothink') {
+          setTimeout(() => {
+            window.open('http://127.0.0.1:8000/autothink/ui/index.html', '_blank');
+          }, 500);
+        }
+      }
+
+      // ===================== LOAD & DISPLAY SOURCE SCOUT glTF PRODUCTS =====================
+      async function loadAndDisplaySourceScout() {
+        // Fetch real data from three endpoints
+        const scannerData = await loadScannerData();
+        const catsData = await loadDiscoveryCategories();
+        const metaData = await loadDiscoveryMeta();
+
+        const shelfEl = document.getElementById('product-shelf');
+        if (!shelfEl) return;
+
+        // Show the shelf
+        shelfEl.setAttribute('visible', 'true');
+
+        // Clear any existing product entities (keep glTF models if already loaded)
+        const existing = shelfEl.querySelectorAll('[id^="product-"]');
+        existing.forEach(el => el.remove());
+
+        // Configure shelf: 3 rows × 8 positions = 24 product spots
+        // Radians for 8 positions around a circle
+        const angles = [...Array(8).keys()].map(i => (i * Math.PI / 4) - Math.PI / 8);
+        const radius = 1.6;
+        const hStep = 0.4; // vertical spacing between rows
+
+        // Helper: get category display name for a product
+        function getCategoryName(product) {
+          // Use discovered category if available, otherwise default
+          if (catsData && catsData.categories) {
+            const catMatch = catsData.categories.find(c => 
+              c.name.toLowerCase() === (product.category || '').toLowerCase()
+            );
+            if (catMatch) return catMatch.name;
+          }
+          return product.category || 'Unknown';
+        }
+
+        // Helper: get haptic pattern based on verdict
+        function verdictToHaptic(v) {
+          if (!v) return 'nav';
+          v = v.toLowerCase();
+          if (v === 'pass') return 'approve';
+          if (v === 'reject') return 'reject';
+          if (v === 'hold') return 'grab';
+          return 'select';
+        }
+
+        // Process products: up to 24 (3 rows × 8 positions)
+        const allProducts = (scannerData && scannerData.products) ? scannerData.products : [];
+        const limited = allProducts.slice(0, 24);
+
+        limited.forEach((product, idx) => {
+          const row = Math.floor(idx / 8);    // 0, 1, 2
+          const pos = idx % 8;                // 0..7
+          const angle = angles[pos];
+          const x = Math.sin(angle) * radius;
+          const z = Math.cos(angle) * radius;
+          const y = row * hStep; // 0, 0.4, 0.8
+
+          // Build glTF source path (placeholder — replace with actual gltf paths)
+          // Expected format: /models/product-{asin}.gltf
+          const asin = product.asin || `ASIN${idx}`;
+          const gltfSrc = `/models/product-${asin}.gltf`; // <- set to '' to use text fallback
+
+          // Create product entity with product-model component
+          const prodEl = document.createElement('a-entity');
+          prodEl.setAttribute('id', `product-${asin}`);
+          prodEl.setAttribute('product-model', `
+            asin: ${asin}
+            name: ${product.name || 'Unnamed'}
+            roi: ${product.roi_pct || 0}
+            verdict: ${product.verdict || '—'}
+            profit: ${product.net_profit || 0}
+            gltfSrc: ${gltfSrc}
+          `);
+          prodEl.setAttribute('grabbable', '');       // grab + haptic + spin
+          prodEl.setAttribute('auto-rotate', '');     // gentle spin
+          prodEl.setAttribute('product-text', '');    // populated by product-model init
+
+          // Position in shelf
+          prodEl.setAttribute('position', `${x} ${y} ${z}`);
+
+          // Add haptics component so grabbing triggers feedback
+          prodEl.setAttribute('haptics', '');         // duration/frequency from HP lib
+
+          // Shelf appends this entity
+          shelfEl.appendChild(prodEl);
+        });
+
+        // === Update UI hints based on loaded data ===
+        // Update the tab hint to reflect product count
+        const tabHint = document.querySelector('#tab-sourcescout .haptic-hint');
+        if (tabHint) {
+          const count = limited.length;
+          tabHint.setAttribute('value', `Grab products to spin + haptic. ${count} products loaded from scanner. △ to select. B‑trigger to teleport`);
+        }
+
+        // === Remote collaboration: inject initial markers ===
+        // In production, these would come from a signaling server via WebRTC/DataChannel
+        const collabEl = document.querySelector('#collab-markers');
+        if (collabEl) {
+          // Remove any previous remote markers (keep local)
+          const oldRemotes = collabEl.querySelectorAll('.collab-remote');
+          oldRemotes.forEach(el => el.remove());
+
+          // Simulate 2 remote users for demo (replace with real signaling)
+          const remoteColors = ['#ffa500', '#1e90ff'];
+          for (let i = 0; i < 2; i++) {
+            const remoteMarker = document.createElement('a-entity');
+            remoteMarker.setAttribute('class', 'collab-remote');
+            const angle = (i * Math.PI / 2) + Math.PI / 4;
+            const dist = 2.2;
+            const sx = Math.sin(angle) * dist;
+            const sz = Math.cos(angle) * dist;
+            remoteMarker.setAttribute('position', `${sx} 1.6 ${sz}`);
+            remoteMarker.setAttribute('rotation', `0 ${(i+1) * 45} 0`);
+            remoteMarker.setAttribute('scale', '0.3 0.3 0.3');
+            remoteMarker.setAttribute('material', `color: ${remoteColors[i]}; transparent: true; opacity: 0.9`);
+            const remoteName = `Remote${i+1}`;
+            remoteMarker.innerHTML = `<a-text value="${remoteName}" color="#000" align="center" depth-test="false" width="1.2"></a-text>`;
+            // Add glTF product-model component dummy so it's consistent
+            remoteMarker.setAttribute('product-model', 'asin: REMOTE; name: ' + remoteName + '; roi: 0; verdict: —; profit: 0; gltfSrc: ""');
+            collabEl.appendChild(remoteMarker);
+          }
+        }
+
+        // === Trigger a welcome haptic pattern ===
+        // Let the user feel the system is ready
         setTimeout(() => {
-          window.open('http://127.0.0.1:8000/autothink/ui/index.html', '_blank');
+          triggerHaptic('select');
         }, 500);
       }
-    }
 
-    // Tab selection via raycast
-    document.querySelectorAll('[id^="tab-"]').forEach(el => {
-      el.addEventListener('click', myClick);
+      // ===================== TELEPORTATION =====================
+      const teleportOrigin = new THREE.Vector3();
+      const teleportDirection = new THREE.Vector3();
+      const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+
+      scene.addEventListener('selectstart', (e) => {
+        const camera = scene.querySelector('[camera]');
+        if (!camera) return;
+
+        // Determine if this is a teleport vs. grab/select
+        // If the user is currently grabbing a product, don't teleport
+        const grabbedEl = document.querySelector('.grabbed');
+        if (grabbedEl) {
+          // User is holding a product — ignore teleport for now
+          return;
+        }
+
+        camera.getWorldDirection(teleportDirection);
+        teleportDirection.multiplyScalar(-100, teleportDirection);
+        teleportOrigin.copy(camera.position);
+        teleportOrigin.y = 1; // floor height
+
+        // Intersect with horizontal plane (floor)
+        plane.setFromNormal(new THREE.Vector3(0, 1, 0), -1);
+        const intersect = new THREE.Vector3();
+        if (teleportDirection.dot(plane.normal) !== 0) {
+          const t = plane.distanceToPoint(teleportOrigin) / teleportDirection.dot(plane.normal);
+          if (t > 0 && t < 150) {
+            teleportOrigin.addScaledVector(teleportDirection, t);
+          }
+        }
+        // Apply teleport
+        camera.position.copy(teleportOrigin);
+        // Give haptic feedback on teleport
+        triggerHaptic('nav');
+      });
+
+      // ===================== COLLABORATION: SIGNALING SKELETON =====================
+      // TODO: In production, replace the simulated remote users with a real
+      // WebRTC/DataChannel signaling setup. The pattern below shows the structure.
+      
+      /**
+      // Example signaling server connection (Socket.io)
+      const socket = io('http://localhost:3000');
+      
+      // When another user joins, broadcast their initial position
+      socket.on('user-joined', (userData) => {
+        const marker = document.createElement('a-entity');
+        marker.setAttribute('class', 'collab-remote');
+        marker.setAttribute('position', userData.position);
+        marker.setAttribute('rotation', userData.rotation);
+        marker.setAttribute('scale', '0.3 0.3 0.3');
+        marker.setAttribute('material', `color: ${userData.color}; transparent: true; opacity: 0.9`);
+        marker.innerHTML = `<a-text value="${userData.name}" color="#000" align="center" depth-test="false" width="1.2"></a-text>`;
+        document.querySelector('#collab-markers').appendChild(marker);
+      });
+      
+      // When a user moves, update their marker position
+      socket.on('user-moved', (userData) => {
+        const marker = document.querySelector(`[class="collab-remote"][data-id="${userData.id}"]`);
+        if (marker) {
+          marker.setAttribute('position', userData.position);
+          marker.setAttribute('rotation', userData.rotation);
+        }
+      });
+      
+      // Local user tells server their position periodically
+      setInterval(() => {
+        const camera = scene.querySelector('[camera]');
+        if (camera) {
+          const pos = camera.position;
+          socket.emit('user-position', {
+            id: localUserId,
+            position: [camera.position.x, camera.position.y, camera.position.z],
+            rotation: [camera.rotation.x, camera.rotation.y, camera.rotation.z]
+          });
+        }
+      }, 100);
+      **/
+      
+      // For now, keep the 2 simulated remote users from the initial load
+      // (they were already added in the global script section)
+
+      // ===================== INITIALIZE: AUTO-SELECT SOURCE SCOUT ON VR LOAD =====================
+      setTimeout(() => {
+        const srcTab = document.querySelector('#tab-sourcescout');
+        if (srcTab) {
+          const clickEvent = new MouseEvent('click', { bubbles: true });
+          srcTab.dispatchEvent(clickEvent);
+        }
+      }, 1000);
     });
-
-    // Auto-enter VR on supported browsers
-    document.querySelector('a-xr-button').addEventListener('click', () => {
-      const scene = document.querySelector('a-scene');
-      scene.enterVR();
-    });
-
-    // Fallback: if WebXR not supported, show 2D mode message
-    if (!navigator.xr) {
-      const scene = document.querySelector('a-scene');
-      scene.innerHTML = '<a-text value="WebXR not supported on this device. Open on Meta Quest browser for VR mode." color="#f00" position="0 0 -3" align="center"></a-text>';
-    }
   </script>
 </body>
 </html>
