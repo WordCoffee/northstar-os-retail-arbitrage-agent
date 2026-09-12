@@ -5,3 +5,13 @@ coverage/
 data/snapshots/*.json
 logs/
 .DS_Store
+
+# Northstar OS Retail Arbitrage Agent — repo-hygiene guards
+# Prevent git add -A from ever re-sweeping a WSL venv / site-packages dump
+# or a duplicate backend audit-export snapshot into the index.
+venv-wsl/
+venv*/
+*site-packages/
+__pycache__/
+*.pyc
+Northstar_backend_audit_export/
