@@ -494,6 +494,52 @@ getEl('ap-csv-src').value = twoRowCsv;
 (getEl('ap-csv-src')._listeners.input || []).forEach((fn) => fn());
 assert((els['ap-bulk-body'].innerHTML.match(/data-bulk=/g) || []).length === 1, 'adpilot: CSV input edits live re-render the dock');
 
+/* ============================================================
+ * Phase 16 — SocialPulse deep: content studio, calendar scheduling
+ * ============================================================ */
+/* deterministic voice-tagline generator (pure) */
+assert(NS.soc.generateCaption('word_coffee', 'meta').caption === 'Grab Word Coffee, not a cup.', 'socialpulse: meta channel renders exact fixture tagline');
+assert(NS.soc.generateCaption('word_coffee', 'instagram').caption === 'Fuel Your Focus.', 'socialpulse: instagram channel renders exact fixture tagline');
+assert(NS.soc.generateCaption('word_coffee', 'tiktok').caption === 'Find Your Calm in the Chaos.', 'socialpulse: tiktok channel renders exact fixture tagline');
+assert(NS.soc.generateCaption('word_coffee', 'tiktok', 1).caption === 'Brew Your Best Self.', 'socialpulse: regeneration cycles the tagline set');
+assert(NS.soc.generateCaption('nope', 'meta') === null, 'socialpulse: unknown voice fails closed');
+assert(NS.soc.generateCaption('word_coffee', 'meta').hashtags.length === 3, 'socialpulse: generated caption carries channel hashtag set');
+
+NS.go('socialpulse');
+const socCal = els['soc-calendar'].innerHTML;
+assert((socCal.match(/data-slot=/g) || []).length === 7, 'socialpulse: calendar hosts 7 week slots');
+assert((socCal.match(/class="day-slot filled"/g) || []).length === 2, 'socialpulse: fixture saved posts fill 2 day slots');
+
+/* content studio renders default caption + clickable hashtag chips */
+const csOut0 = els['soc-cs-output'].innerHTML;
+assert(csOut0.includes('Grab Word Coffee, not a cup.'), 'socialpulse: studio defaults to meta tagline');
+assert((csOut0.match(/data-hashtag=/g) || []).length === 3, 'socialpulse: generated hashtag chips render');
+assert(csOut0.includes('role="button"'), 'socialpulse: studio hashtag chips are clickable');
+
+/* regenerate cycles to the next tagline */
+getEl('soc-cs-generate')._listeners.click.forEach((fn) => fn());
+assert(els['soc-cs-output'].innerHTML.includes('Fuel Your Focus.'), 'socialpulse: regenerate steps to next voice tagline');
+
+/* schedule from studio: new post moves into first free slot, in-memory */
+getEl('soc-cs-schedule')._listeners.click.forEach((fn) => fn());
+const socCal2 = els['soc-calendar'].innerHTML;
+assert((socCal2.match(/class="day-slot filled"/g) || []).length === 3, 'socialpulse: studio caption occupies a calendar slot');
+assert(socCal2.includes('data-filled="cs4"'), 'socialpulse: studio-scheduled post tracked by id in calendar');
+assert(socCal2.includes('data-slot="Tue 8:30 AM"') && socCal2.includes('data-filled="cs4"'), 'socialpulse: scheduling picks the first free slot (Tue)');
+assert((els['soc-posts'].innerHTML.match(/data-post=/g) || []).length === 4, 'socialpulse: studio-scheduled caption appended to posts');
+
+/* draft -> calendar: p3 moves out of drafts on click */
+getEl('schedule-p3')._listeners.click.forEach((fn) => fn());
+const socCal3 = els['soc-calendar'].innerHTML;
+assert((socCal3.match(/class="day-slot filled"/g) || []).length === 4, 'socialpulse: p3 draft scheduled into calendar');
+assert(socCal3.includes('data-filled="p3"') && socCal3.includes('data-slot="Thu 9:00 AM"'), 'socialpulse: p3 lands in next free slot (Thu)');
+assert(!els['soc-posts'].innerHTML.includes('data-schedule="p3"'), 'socialpulse: scheduled draft loses its schedule button');
+assert(els['soc-posts'].innerHTML.includes('scheduled'), 'socialpulse: scheduled draft badge flips to green');
+
+/* data-honesty: publishing + attribution still gated after interactions */
+assert(getEl('gate-socialpulse_publish').innerHTML.includes('Authorization required'), 'socialpulse: publish gate stays OFF after studio interactions');
+assert(getEl('gate-socialpulse_attrib').innerHTML.includes('Authorization required'), 'socialpulse: attribution gate stays OFF after studio interactions');
+
 console.log('\nShell contract complete.');
 console.log(failures === 0 ? 'ALL GREEN' : failures + ' FAILURES');
 process.exit(failures === 0 ? 0 : 1);
