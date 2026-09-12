@@ -1,0 +1,585 @@
+{
+  "generated_at": "2026-09-12T23:24:03.302148Z",
+  "total_failures": 20,
+  "failures": [
+    {
+      "asin": "B00GYZWNY6",
+      "amazon_title": "Kirkland Extra Strength Glucosamine 1500 mg Chondroitin 1200 mg 220 Tablets",
+      "costco_title": "Kirkland Signature Glucosamine & Chondroitin, 280 Tablets",
+      "amazon_qty": "1 each of tablet",
+      "costco_qty": "280 tablet of tablet",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=280 tablet",
+      "costco_sku": {
+        "item_id": "1665191",
+        "asin": "B00GYZWNY6",
+        "requested_title": "Kirkland Signature Glucosamine & Chondroitin, 280 Tablets",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "280 Tablets",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B00GYZWNY6"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 280,
+          "unit": "tablet",
+          "unit_type": "tablet",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B00AQ0LMTC",
+      "amazon_title": "KIRKLAND Signature Quick Dissolve B-12 5000 mcg, 300 Tablets",
+      "costco_title": "Kirkland Signature Quick Dissolve B-12 5000 mcg, 300 Tablets",
+      "amazon_qty": "1 each of tablet",
+      "costco_qty": "300 tablet of tablet",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=300 tablet",
+      "costco_sku": {
+        "item_id": "690843",
+        "asin": "B00AQ0LMTC",
+        "requested_title": "Kirkland Signature Quick Dissolve B-12 5000 mcg, 300 Tablets",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "300 Tablets",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B00AQ0LMTC"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 300,
+          "unit": "tablet",
+          "unit_type": "tablet",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B01NCRITAE",
+      "amazon_title": "KIRKLAND Signature Extra Strength D3 50 mcg., 600 Softgels (2 Pack)",
+      "costco_title": "Kirkland Signature Extra Strength D3 50 mcg (2000 IU), 600 Softgels",
+      "amazon_qty": "2 pack of softgel",
+      "costco_qty": "600 softgel of softgel",
+      "mismatch_reason": "Mismatch: Amazon=2 pack vs Costco=600 softgel",
+      "costco_sku": {
+        "item_id": "393914",
+        "asin": "B01NCRITAE",
+        "requested_title": "Kirkland Signature Extra Strength D3 50 mcg (2000 IU), 600 Softgels",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "600 Softgels (single)",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B01NCRITAE"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 600,
+          "unit": "softgel",
+          "unit_type": "softgel",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B015WRSJCQ",
+      "amazon_title": "KIRKLAND Signature Vitamin C, 1000mg, 500 Tabs",
+      "costco_title": "Kirkland Signature Vitamin C 1000 mg, 500 Tablets",
+      "amazon_qty": "1 each of tablet",
+      "costco_qty": "500 tablet of tablet",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=500 tablet",
+      "costco_sku": {
+        "item_id": "98268",
+        "asin": "B015WRSJCQ",
+        "requested_title": "Kirkland Signature Vitamin C 1000 mg, 500 Tablets",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "500 Tablets",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B015WRSJCQ"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 500,
+          "unit": "tablet",
+          "unit_type": "tablet",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B07881PTTX",
+      "amazon_title": "KIRKLAND Signature Vitamin C 500mg 2-Pack or 1000 Tangy Orange Chewable Tablets",
+      "costco_title": "Kirkland Signature Chewable Vitamin C 500 mg, 500 Tablets",
+      "amazon_qty": "1 each of tablet",
+      "costco_qty": "500 tablet of tablet",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=500 tablet",
+      "costco_sku": {
+        "item_id": "98501",
+        "asin": "B07881PTTX",
+        "requested_title": "Kirkland Signature Chewable Vitamin C 500 mg, 500 Tablets",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "500 Tablets",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B00MPYTSGG",
+          "B07881PTTX"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 500,
+          "unit": "tablet",
+          "unit_type": "tablet",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B005ECOBBI",
+      "amazon_title": "KIRKLAND Signature Vitamin E 180mg, 500 Softgels",
+      "costco_title": "Kirkland Signature Vitamin E 180 mg (400 IU), 500 Softgels",
+      "amazon_qty": "1 each of softgel",
+      "costco_qty": "500 softgel of softgel",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=500 softgel",
+      "costco_sku": {
+        "item_id": "98211",
+        "asin": "B005ECOBBI",
+        "requested_title": "Kirkland Signature Vitamin E 180 mg (400 IU), 500 Softgels",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "500 Softgels",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B005ECOBBI"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 500,
+          "unit": "softgel",
+          "unit_type": "softgel",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B00MPYTSGG",
+      "amazon_title": "KIRKLAND Signature Chewable Vitamin C 500 Mg Tangy Orange Taste: 500 Tablets",
+      "costco_title": "Kirkland Signature Chewable Vitamin C 500 mg, 500 Tablets",
+      "amazon_qty": "1 each of tablet",
+      "costco_qty": "500 tablet of tablet",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=500 tablet",
+      "costco_sku": {
+        "item_id": "98501",
+        "asin": "B00MPYTSGG",
+        "requested_title": "Kirkland Signature Chewable Vitamin C 500 mg, 500 Tablets",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "500 Tablets",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B00MPYTSGG",
+          "B07881PTTX"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 500,
+          "unit": "tablet",
+          "unit_type": "tablet",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B002VLZHLS",
+      "amazon_title": "KIRKLAND Signature Fish Oil Concentrate with Omega-3 Fatty Acids, 400 Softgels, 1000mg",
+      "costco_title": "Kirkland Signature Fish Oil 1000 mg, 400 Softgels",
+      "amazon_qty": "1 each of softgel",
+      "costco_qty": "400 softgel of softgel",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=400 softgel",
+      "costco_sku": {
+        "item_id": "926628",
+        "asin": "B002VLZHLS",
+        "requested_title": "Kirkland Signature Fish Oil 1000 mg, 400 Softgels",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "400 Softgels",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B002VLZHLS"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 400,
+          "unit": "softgel",
+          "unit_type": "softgel",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B08R2SRN88",
+      "amazon_title": "KIRKLAND Kirkland Signature Aller-Flo Fluticasone Propionate (Glucorticoid) 5 Bottles x 120 Metered Sprays 0.54 Fl OZ per Bottle (15.8 mL x 5) 2.70 OZ Total (79 mL Total) 600 Total Sprays Total, 1-Pack",
+      "costco_title": "Kirkland Signature Aller-Flo 50 mcg Allergy Spray, 720 Metered Sprays",
+      "amazon_qty": "1 each of bottle",
+      "costco_qty": "5 bottle of bottle",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=5 bottle",
+      "costco_sku": {
+        "item_id": "1586629",
+        "asin": "B08R2SRN88",
+        "requested_title": "Kirkland Signature Aller-Flo 50 mcg Allergy Spray, 720 Metered Sprays",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "5 bottles (720 sprays)",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B01H40O42I",
+          "B08R2SRN88"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 5,
+          "unit": "bottle",
+          "unit_type": "bottle",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B01LNBDORK",
+      "amazon_title": "KIRKLAND Signature Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size",
+      "costco_title": "Kirkland Signature 18-Gallon Compactor & Kitchen Trash Bag, 70-count",
+      "amazon_qty": "1 each of bag",
+      "costco_qty": "70 count of item",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=70 count",
+      "costco_sku": {
+        "item_id": "1755436",
+        "asin": "B01LNBDORK",
+        "requested_title": "Kirkland Signature 18-Gallon Compactor & Kitchen Trash Bag, 70-count",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "70-count",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B01LNBDORK"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 70,
+          "unit": "count",
+          "unit_type": "item",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B01KW9KWW4",
+      "amazon_title": "KIRKLAND Kirkland Signature OPTIFIBER, 25.6 Ounces 190 Servings (2 Pack)",
+      "costco_title": "Kirkland Signature OPTIFIBER, 26.8 Ounces, 190 Servings",
+      "amazon_qty": "2 pack of item",
+      "costco_qty": "1 each of item",
+      "mismatch_reason": "Mismatch: Amazon=2 pack vs Costco=1 each",
+      "costco_sku": {
+        "item_id": "1349614",
+        "asin": "B01KW9KWW4",
+        "requested_title": "Kirkland Signature OPTIFIBER, 26.8 Ounces, 190 Servings",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "190 Servings (single)",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B01KW9KWW4"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 1,
+          "unit": "each",
+          "unit_type": "item",
+          "is_multipack": false
+        }
+      }
+    },
+    {
+      "asin": "B00NPQZ20O",
+      "amazon_title": "KIRKLAND KIRKLAND Signature Adult 50+ Multi Vitamins &amp; Minerals, 400 Tablets (2 Pack)",
+      "costco_title": "Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets",
+      "amazon_qty": "2 pack of tablet",
+      "costco_qty": "400 tablet of tablet",
+      "mismatch_reason": "Mismatch: Amazon=2 pack vs Costco=400 tablet",
+      "costco_sku": {
+        "item_id": "424976",
+        "asin": "B00NPQZ20O",
+        "requested_title": "Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "400 Tablets",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B00YGMN122",
+          "B00P8ZAWK0",
+          "B00NPQZ20O"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 400,
+          "unit": "tablet",
+          "unit_type": "tablet",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B00SWZUC8U",
+      "amazon_title": "KIRKLAND Baby Wipes Unscented, 100 Count (Pack of 9)",
+      "costco_title": "Kirkland Signature Baby Wipes Fragrance Free, 900-count",
+      "amazon_qty": "9 pack of wipe",
+      "costco_qty": "900 count of item",
+      "mismatch_reason": "Mismatch: Amazon=9 pack vs Costco=900 count",
+      "costco_sku": {
+        "item_id": "1493188",
+        "asin": "B00SWZUC8U",
+        "requested_title": "Kirkland Signature Baby Wipes Fragrance Free, 900-count",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "900-count (9 x 100ct)",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B00SWZUC8U",
+          "B014K3BF24"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 900,
+          "unit": "count",
+          "unit_type": "item",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B014K3BF24",
+      "amazon_title": "KIRKLAND Signature Baby Wipes, Ultra-Soft, Unscented, 100 Count Wipes Pack of 6",
+      "costco_title": "Kirkland Signature Baby Wipes Fragrance Free, 900-count",
+      "amazon_qty": "6 pack of wipe",
+      "costco_qty": "900 count of item",
+      "mismatch_reason": "Mismatch: Amazon=6 pack vs Costco=900 count",
+      "costco_sku": {
+        "item_id": "1493188",
+        "asin": "B014K3BF24",
+        "requested_title": "Kirkland Signature Baby Wipes Fragrance Free, 900-count",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "900-count (9 x 100ct)",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B00SWZUC8U",
+          "B014K3BF24"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 900,
+          "unit": "count",
+          "unit_type": "item",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B00YGMN122",
+      "amazon_title": "KIRKLAND Kirkland Signature Adults 50+ Mature Multi, 400 Tablets 1",
+      "costco_title": "Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets",
+      "amazon_qty": "1 each of tablet",
+      "costco_qty": "400 tablet of tablet",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=400 tablet",
+      "costco_sku": {
+        "item_id": "424976",
+        "asin": "B00YGMN122",
+        "requested_title": "Kirkland Signature Adult 50+ Mature Multi Vitamins & Minerals, 400 Tablets",
+        "requested_brand": "Kirkland Signature",
+        "requested_pack": "400 Tablets",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [
+          "B00YGMN122",
+          "B00P8ZAWK0",
+          "B00NPQZ20O"
+        ],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 400,
+          "unit": "tablet",
+          "unit_type": "tablet",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B00MG4X4LK",
+      "amazon_title": "KIRKLAND Krikland Signature Ultra Clean Premium Laundry Detergent with 2X Concentrate",
+      "costco_title": "KIRKLAND Krikland Signature Ultra Clean Premium Laundry Detergent with 2X Concentrate",
+      "amazon_qty": "1 each of item",
+      "costco_qty": "16 count of item",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=16 count",
+      "costco_sku": {
+        "item_id": "B00MG4X4LK",
+        "asin": "B00MG4X4LK",
+        "requested_title": "KIRKLAND Krikland Signature Ultra Clean Premium Laundry Detergent with 2X Concentrate",
+        "requested_brand": null,
+        "requested_pack": "",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 16,
+          "unit": "count",
+          "unit_type": "item",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B00UP99X1I",
+      "amazon_title": "KIRKLAND Vitamin E 400 Iu 500 Softgels Supports Healthy Immune",
+      "costco_title": "KIRKLAND Vitamin E 400 Iu 500 Softgels Supports Healthy Immune",
+      "amazon_qty": "1 each of softgel",
+      "costco_qty": "99 count of item",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=99 count",
+      "costco_sku": {
+        "item_id": "B00UP99X1I",
+        "asin": "B00UP99X1I",
+        "requested_title": "KIRKLAND Vitamin E 400 Iu 500 Softgels Supports Healthy Immune",
+        "requested_brand": null,
+        "requested_pack": "",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 99,
+          "unit": "count",
+          "unit_type": "item",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B078K2X3V5",
+      "amazon_title": "KIRKLAND Signature WAwHHC Ultra High Pile Premium Microfiber Towels, 36 Pack, 2 Units",
+      "costco_title": "KIRKLAND Signature WAwHHC Ultra High Pile Premium Microfiber Towels, 36 Pack, 2 Units",
+      "amazon_qty": "36 pack of item",
+      "costco_qty": "6 count of item",
+      "mismatch_reason": "Mismatch: Amazon=36 pack vs Costco=6 count",
+      "costco_sku": {
+        "item_id": "B078K2X3V5",
+        "asin": "B078K2X3V5",
+        "requested_title": "KIRKLAND Signature WAwHHC Ultra High Pile Premium Microfiber Towels, 36 Pack, 2 Units",
+        "requested_brand": null,
+        "requested_pack": "",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 6,
+          "unit": "count",
+          "unit_type": "item",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B0B983X1CR",
+      "amazon_title": "KIRKLAND Kirkland Signature Keto Snack Mix, 24 Ounce",
+      "costco_title": "KIRKLAND Kirkland Signature Keto Snack Mix, 24 Ounce",
+      "amazon_qty": "1 each of item",
+      "costco_qty": "983 count of item",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=983 count",
+      "costco_sku": {
+        "item_id": "B0B983X1CR",
+        "asin": "B0B983X1CR",
+        "requested_title": "KIRKLAND Kirkland Signature Keto Snack Mix, 24 Ounce",
+        "requested_brand": null,
+        "requested_pack": "",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 983,
+          "unit": "count",
+          "unit_type": "item",
+          "is_multipack": true
+        }
+      }
+    },
+    {
+      "asin": "B0DL8229X9",
+      "amazon_title": "KIRKLAND Signature Men&#x27;s Swim Shorts",
+      "costco_title": "KIRKLAND Signature Men&#x27;s Swim Shorts",
+      "amazon_qty": "1 each of item",
+      "costco_qty": "74061 count of item",
+      "mismatch_reason": "Mismatch: Amazon=1 each vs Costco=74061 count",
+      "costco_sku": {
+        "item_id": "B0DL8229X9",
+        "asin": "B0DL8229X9",
+        "requested_title": "KIRKLAND Signature Men&#x27;s Swim Shorts",
+        "requested_brand": null,
+        "requested_pack": "",
+        "costco_cost_reference": 0.0,
+        "resolution": "",
+        "mapped_asins": [],
+        "catalog_source_url": "",
+        "match_score": 0.0,
+        "pool": "",
+        "quantity": {
+          "count": 74061,
+          "unit": "count",
+          "unit_type": "item",
+          "is_multipack": true
+        }
+      }
+    }
+  ]
+}
