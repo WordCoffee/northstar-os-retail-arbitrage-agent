@@ -1,0 +1,44 @@
+{
+  "$schema": "subscription-plans-v1",
+  "description": "Northstar OS subscription plan catalog (beta build). Entitlements declare which live gates a plan WOULD cover for a subscriber. A plan never flips a gate: gates_always_off=true, and executing any live action additionally requires a fresh, named operator approval per action.",
+  "gates_always_off": true,
+  "currency": "USD",
+  "plans": [
+    {
+      "id": "foundation",
+      "name": "Foundation",
+      "tier": 1,
+      "price_usd_month": 0,
+      "blurb": "Free beta tier — full Services Suite in demo / read surfaces. No live gates included.",
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse"],
+      "entitled_gates": []
+    },
+    {
+      "id": "scout",
+      "name": "Scout",
+      "tier": 1,
+      "price_usd_month": 29,
+      "blurb": "Discovery + listing drafting with live read access to sourcing, enrichment, and ads analytics.",
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse"],
+      "entitled_gates": ["sourcescout_live_pull", "sourcescout_enrich", "listingforge_copy", "adpilot_ads_read"]
+    },
+    {
+      "id": "mover",
+      "name": "Mover",
+      "tier": 1,
+      "price_usd_month": 79,
+      "blurb": "Everything in Scout, plus AI media generation and attribution workflows.",
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse"],
+      "entitled_gates": ["sourcescout_live_pull", "sourcescout_enrich", "listingforge_copy", "listingforge_media", "adpilot_ads_read", "socialpulse_attrib"]
+    },
+    {
+      "id": "autothink",
+      "name": "AutothinK",
+      "tier": 2,
+      "price_usd_month": 149,
+      "blurb": "Premium build-anything layer on top of Mover — includes every service gate and the AutothinK workspace.",
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse", "autothink"],
+      "entitled_gates": ["sourcescout_live_pull", "sourcescout_enrich", "listingforge_copy", "listingforge_media", "adpilot_ads_read", "adpilot_bulk_exec", "socialpulse_publish", "socialpulse_attrib"]
+    }
+  ]
+}

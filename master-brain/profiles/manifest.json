@@ -12,6 +12,13 @@
       "active": true,
       "default": true,
       "description": "T2 master seed profile — merged with the Master Brain for development. Loads the full T2 identity, all brands (Word Coffee, Kirkland arbitrage, Neck Nirvana, Mogra Organics), judgment signals, economic thresholds, and prior brainstormed ideas.",
+      "subscription": {
+        "plan": "autothink",
+        "status": "active",
+        "since": "2026-09-12",
+        "billing": "master_seed — no external billing wired in beta",
+        "note": "T2 master seed holds the premium catalog plan. A plan only ENTITLES gates; every live gate stays off until a fresh, named operator approval executes it."
+      },
       "loaded_by": [
         "local_default (active now)",
         "login_session (future)",
