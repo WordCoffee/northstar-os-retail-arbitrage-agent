@@ -176,6 +176,32 @@
         { kind: 'video', prompt: '15s vertical: morning unbox → 30-second reset flip → gift reveal. Caption: "Words That Wake You Up."', aspect: '9:16' },
       ],
     },
+
+    subscriber: {
+      gateStateNote: 'Demo fixture mirroring master-brain/subscription-plans.json and the profiles manifest. Plans mark which live gates they WOULD cover; gates are never flipped by a plan.',
+      identity: {
+        profileId: 't2-holdings-tyrone-johnson',
+        kind: 'master_seed',
+        owner: 'T2 Holdings LLC',
+        principal: 'Tyrone Johnson (co-owner Tyler Edwards)',
+        resolver: 'local_default',
+        resolverNote: 'same pluggable resolver chain master_brain_profiles.py exposes — no live auth in beta',
+      },
+      subscription: {
+        plan: 'autothink',
+        status: 'active',
+        since: '2026-09-12',
+        billing: 'master_seed — no external billing wired in beta',
+      },
+      plans: [
+        { id: 'foundation', name: 'Foundation', tier: 1, price: 0, services: ['sourcescout', 'listingforge', 'adpilot', 'socialpulse'], entitled_gates: [], blurb: 'Free beta tier — full Services Suite in demo / read surfaces. No live gates included.' },
+        { id: 'scout', name: 'Scout', tier: 1, price: 29, services: ['sourcescout', 'listingforge', 'adpilot', 'socialpulse'], entitled_gates: ['sourcescout_live_pull', 'sourcescout_enrich', 'listingforge_copy', 'adpilot_ads_read'], blurb: 'Discovery + listing drafting with live read access to sourcing, enrichment, and ads analytics.' },
+        { id: 'mover', name: 'Mover', tier: 1, price: 79, services: ['sourcescout', 'listingforge', 'adpilot', 'socialpulse'], entitled_gates: ['sourcescout_live_pull', 'sourcescout_enrich', 'listingforge_copy', 'listingforge_media', 'adpilot_ads_read', 'socialpulse_attrib'], blurb: 'Everything in Scout, plus AI media generation and attribution workflows.' },
+        { id: 'autothink', name: 'AutothinK', tier: 2, price: 149, services: ['sourcescout', 'listingforge', 'adpilot', 'socialpulse', 'autothink'], entitled_gates: ['sourcescout_live_pull', 'sourcescout_enrich', 'listingforge_copy', 'listingforge_media', 'adpilot_ads_read', 'adpilot_bulk_exec', 'socialpulse_publish', 'socialpulse_attrib'], blurb: 'Premium build-anything layer on top of Mover — includes every service gate and the AutothinK workspace.' },
+      ],
+      gatesAlwaysOff: true,
+      honesty: 'A plan marks which live gates it WOULD cover. Gates are never flipped by a plan; executing live still requires a fresh, named operator approval per action.',
+    },
   };
 
   (typeof window !== 'undefined' ? window : globalThis).NS_DEMO = demo;

@@ -18,6 +18,7 @@ const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const scriptParts = [
     'engine.js', 'demo-data.js', 'hub.js', 'sourcescout.js',
     'listingforge.js', 'adpilot.js', 'socialpulse.js', 'autothink.js',
+    'account.js',
 ].map((f) => fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'));
 const boot = 'window.NS.init();';
 const script = scriptParts.join('\n;\n') + '\n' + boot;
@@ -70,12 +71,12 @@ const getEl = (id) => {
     return els[id];
 };
 /* view / nav singletons created up front so classList toggles persist */
-['hub', 'sourcescout', 'listingforge', 'adpilot', 'socialpulse', 'autothink'].forEach((name) => {
+['hub', 'sourcescout', 'listingforge', 'adpilot', 'socialpulse', 'autothink', 'account'].forEach((name) => {
     getEl('view-' + name);
     getEl('nav-' + name);
 });
 
-const navItems = ['hub', 'sourcescout', 'listingforge', 'adpilot', 'socialpulse', 'autothink'].map((r) => {
+const navItems = ['hub', 'sourcescout', 'listingforge', 'adpilot', 'socialpulse', 'autothink', 'account'].map((r) => {
     const n = getEl('nav-' + r);
     n.setAttribute('data-route', r);
     return n;
@@ -91,6 +92,11 @@ const gateBanners = [
     g.setAttribute('data-gate', gateName);
     return g;
 });
+
+/* at-workspace iframe: lazy-mount seeded for the harness — no src at boot */
+const atFrameHarness = getEl('at-workspace');
+atFrameHarness.setAttribute('data-src', '../../autothink/ui/index.html');
+assert(atFrameHarness.getAttribute('src') === null, 'perf: autothink iframe has no src at boot (lazy mount)');
 
 const domEvents = {};
 const windowStub = {
@@ -173,7 +179,7 @@ assert(!allJs.includes('fetch(') && !allJs.includes('XMLHttpRequest'), 'zero-net
 assert(!html.includes('fetch('), 'zero-network: shell index.html has no fetch calls');
 assert(html.includes('data-live-gate="off"'), 'honesty: shell markup carries data-live-gate="off" on gated controls');
 assert((html.match(/Authorization required/g) || []).length === 1, 'gates: "Authorization required" appears exactly once (drawer footnote), not in static banners');
-assert((html.match(/demo-badge/g) || []).length === 6, 'honesty: six demo badges in shell markup');
+assert((html.match(/demo-badge/g) || []).length === 7, 'honesty: seven demo badges in shell markup');
 
 /* all authorization gates start OFF */
 Object.keys(NS.gates).forEach((name) => {
@@ -355,7 +361,7 @@ NS.go('autothink');
 assert(els['view-autothink'].classList.contains('active'), 'autothink: route mounts workspace view');
 assert(html.includes('AutothinK'), 'autothink: brand spelled AutothinK in shell markup');
 assert(html.includes('id="at-workspace"'), 'autothink: workspace iframe present in shell');
-assert((html.match(/<button class="nav-item"/g) || []).length === 6, 'shell: drawer holds 6 nav items (hub + 4 services + autothink)');
+assert((html.match(/<button class="nav-item"/g) || []).length === 7, 'shell: drawer holds 7 nav items (hub + 4 services + autothink + account)');
 assert(html.includes("Northstar OS — The Analyst's Desk"), 'shell: document title matches Analyst\u2019s Desk');
 assert(html.includes('css/tokens.css') && html.includes('css/shell.css'), 'shell: css wired');
 
@@ -643,6 +649,66 @@ assert(els['ss-result-count'].textContent.includes('5 of 5'), 'sourcescout: clea
 assert(NS.ss.marginPct({ amazonPrice: 42, cost: 17.99 }) === 57.2, 'sourcescout: marginPct math exact (42/17.99 -> 57.2)');
 assert(NS.ss.marginPct({ amazonPrice: 21.19, cost: null }) === null, 'sourcescout: marginPct null cost -> null, never 0');
 assert(NS.ss.matchesFilters({ name: 'x', asin: 'y', roi: 80, estMonthly: 300, buyBox: true, invoice: 'clean', riskClean: true }) === true, 'sourcescout: matchesFilters passes a fully-clean row');
+
+/* ============================================================
+ * Phase 19 — Account view: subscriber identity, plan catalog,
+ *             entitlements matrix, honesty, lazy workspace
+ * ============================================================ */
+NS.go('account');
+assert(els['view-account'].classList.contains('active'), 'account: route mounts the Account view');
+assert(els['nav-account'].classList.contains('active'), 'account: Account nav highlights on route');
+assert(NS.currentRoute() === 'account', 'account: currentRoute resolves the account hash');
+
+/* active subscriber identity (demo mirror of profiles manifest) */
+const acctId = els['acct-identity'].innerHTML;
+assert(acctId.includes('data-acct="profile-id"') && acctId.includes('t2-holdings-tyrone-johnson'), 'account: profile id rendered');
+assert(acctId.includes('data-acct="resolver"') && acctId.includes('local_default'), 'account: resolver chain shown (local_default, no live auth in beta)');
+assert(acctId.includes('data-acct="plan"') && acctId.includes('AutothinK'), 'account: active plan rendered as AutothinK');
+assert(acctId.includes('data-acct="status"') && acctId.includes('data-acct="status">active'), 'account: subscription status rendered active');
+
+/* plan catalog renders all four beta tiers */
+const acctPlans = els['acct-plans'].innerHTML;
+assert((acctPlans.match(/class="plan-card/g) || []).length === 4, 'account: four plan cards render');
+assert(acctPlans.includes('data-plan="foundation"') && acctPlans.includes('data-plan="autothink"') &&
+       acctPlans.includes('data-plan="scout"') && acctPlans.includes('data-plan="mover"'), 'account: all four plan ids rendered');
+assert(acctPlans.includes('$0') && acctPlans.includes('$29') && acctPlans.includes('$79') && acctPlans.includes('$149'), 'account: plan prices render (demo)');
+assert(acctPlans.includes('>AutothinK<'), 'account: premium plan spelled AutothinK');
+assert(acctPlans.includes('your plan'), 'account: active plan card is tagged');
+
+/* entitlements matrix: all 8 gates, all OFF, active coverage marked */
+const acctMatrix = els['acct-matrix'].innerHTML;
+assert((acctMatrix.match(/data-gate="/g) || []).length === 8, 'account: entitlements matrix lists all 8 gates');
+assert((acctMatrix.match(/Authorization required/g) || []).length === 8, 'account: every gate row shows OFF live status');
+assert(acctMatrix.includes('sourcescout_live_pull') && acctMatrix.includes('socialpulse_publish'),
+       'account: typed gate ids surfaced in the matrix');
+assert((acctMatrix.match(/Entitled/g) || []).length === 8, 'account: autothink plan covers every gate as entitled');
+assert(acctMatrix.includes('Plans that entitle'), 'account: matrix exposes plan coverage column');
+
+/* honesty contract: plans never flip gates; live needs named approval */
+const acctView = html;
+assert(acctView.includes('never flipped'), 'account: honesty note — plans never flip gates');
+assert(acctView.includes('fresh, named operator approval'), 'account: live actions still need fresh named approval');
+assert(els['acct-beta-status'].innerHTML.includes('8 / 8 live gates off'), 'account: beta status reports all 8 gates off');
+
+/* plan entitlement helpers (pure, fail closed) */
+assert(NS.activePlan() && NS.activePlan().id === 'autothink', 'account: activePlan resolves to autothink');
+assert(NS.planEntitles('sourcescout_live_pull').length === 3, 'account: live-pull entitled by 3 plans');
+assert(NS.planEntitles('socialpulse_publish').length === 1 && NS.planEntitles('socialpulse_publish').indexOf('AutothinK') !== -1,
+       'account: publish gate entitled only by AutothinK');
+assert(NS.planEntitles('nope_gate').length === 0, 'account: unknown gate yields no entitlements (fail closed)');
+
+/* ribbon plan badge reflects the active subscriber */
+assert(els['ribbon-plan'].textContent.includes('AutothinK'), 'account: ribbon Plan stat shows the active plan');
+
+/* reduced-motion guard for the view entrance animation */
+const shellCss = fs.readFileSync(path.join(ROOT, 'css', 'shell.css'), 'utf8');
+assert(shellCss.includes('@keyframes viewIn'), 'account: view entrance animation keyframes defined');
+assert(shellCss.includes('prefers-reduced-motion'), 'account: reduced-motion rule disables the entrance animation');
+
+/* lazy workspace iframe: mounts once on first visit, nothing at boot */
+assert(html.includes('data-src="../../autothink/ui/index.html"'), 'perf: workspace URL deferred to data-src in markup');
+assert(!html.includes('<iframe id="at-workspace" src='), 'perf: no static src on the workspace iframe (boot stays light)');
+assert(els['at-workspace'].getAttribute('src') === '../../autothink/ui/index.html', 'perf: workspace iframe mounted once by first visit');
 
 console.log('\nShell contract complete.');
 console.log(failures === 0 ? 'ALL GREEN' : failures + ' FAILURES');

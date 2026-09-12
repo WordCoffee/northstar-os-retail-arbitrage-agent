@@ -47,6 +47,15 @@
     if (note) note.textContent = text;
   }
 
+  // Lazy workspace mount: the shell boots without an iframe fetch. The
+  // workspace mounts (once) on the first visit to the AutothinK view.
+  function mountWorkspace() {
+    var frame = document.getElementById('at-workspace');
+    if (!frame || frame.getAttribute('src')) return;
+    var lazySrc = frame.getAttribute('data-src');
+    if (lazySrc) frame.setAttribute('src', lazySrc);
+  }
+
   function bindControls() {
     Object.keys(SERVICE_NAMES).forEach(function (svc) {
       var btn = document.getElementById('at-quick-' + svc);
@@ -71,6 +80,7 @@
   }
 
   function onMount() {
+    mountWorkspace();
     renderLamp();
     bindControls();
   }
@@ -80,5 +90,5 @@
     if (route === 'autothink') onMount();
     if (prevOnMount) prevOnMount(route);
   };
-  window.NS.autothink = { prefill: prefill, renderLamp: renderLamp, serviceNames: SERVICE_NAMES };
+  window.NS.autothink = { prefill: prefill, renderLamp: renderLamp, serviceNames: SERVICE_NAMES, mountWorkspace: mountWorkspace };
 })();
