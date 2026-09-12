@@ -1,4 +1,4 @@
-# Northstar AutoThink — offline-first local brain server
+# Northstar AutothinK — offline-first local brain server
 fastapi>=0.111
 uvicorn>=0.30
 pydantic>=2.7

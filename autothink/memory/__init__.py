@@ -1,1 +1,1 @@
-"""AutoThink memory package — persistent session history."""
+"""AutothinK memory package — persistent session history."""

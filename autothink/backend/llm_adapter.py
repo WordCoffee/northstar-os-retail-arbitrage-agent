@@ -1,4 +1,4 @@
-"""UnifiedLLMAdapter — routes AutoThink queries to a local Ollama model or a
+"""UnifiedLLMAdapter — routes AutothinK queries to a local Ollama model or a
 cloud provider (gpt-4o), per the Northstar OS master plan (§5.3).
 
 Local Ollama (localhost:11434) is the default provider and the first-class
@@ -25,7 +25,7 @@ DEFAULT_LOCAL_MODEL = "qwen2.5-coder:14b"
 DEFAULT_CLOUD_MODEL = "gpt-4o"
 
 SYSTEM_PROMPT = (
-    "You are Northstar AutoThink, the premium build-anything layer of Northstar OS "
+    "You are Northstar AutothinK, the premium build-anything layer of Northstar OS "
     "— a private agent workspace for T2 Holdings LLC (Amazon FBA retail arbitrage). "
     "You plan, build, and explain end-to-end workflows for product discovery, "
     "Costco cross-referencing, FBA fee analysis, and portfolio management. "
@@ -151,7 +151,7 @@ class UnifiedLLMAdapter:
             "model": model,
             "content": (
                 f"[LOCAL FALLBACK] Ollama is unavailable ({reason}). "
-                "The AutoThink brain is still online — start it with: ollama serve"
+                "The AutothinK brain is still online — start it with: ollama serve"
             ),
             "reason": reason,
         }

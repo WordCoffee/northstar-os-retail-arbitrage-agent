@@ -1,1 +1,1 @@
-"""AutoThink offline test suite."""
+"""AutothinK offline test suite."""

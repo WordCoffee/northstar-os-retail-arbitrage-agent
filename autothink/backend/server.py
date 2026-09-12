@@ -1,4 +1,4 @@
-"""Northstar AutoThink server — FastAPI app.
+"""Northstar AutothinK server — FastAPI app.
 
 Routes:
   GET  /                                serves autothink/ui/index.html
@@ -46,7 +46,7 @@ _DATA_SOURCES = [
     if os.path.exists(p)
 ]
 
-app = FastAPI(title="Northstar OS AutoThink", version="2.0.0")
+app = FastAPI(title="Northstar OS AutothinK", version="2.0.0")
 adapter = UnifiedLLMAdapter()
 store = SessionStore()
 
@@ -132,7 +132,7 @@ def history(limit: int = 20):
 
 @app.exception_handler(Exception)
 def unhandled(_request, exc):  # pragma: no cover - defensive
-    return JSONResponse(status_code=500, content={"ok": False, "error": str(exc), "content": "[SERVER ERROR] AutoThink backend raised an unhandled exception."})
+    return JSONResponse(status_code=500, content={"ok": False, "error": str(exc), "content": "[SERVER ERROR] AutothinK backend raised an unhandled exception."})
 
 
 if __name__ == "__main__":

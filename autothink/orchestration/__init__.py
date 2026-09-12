@@ -1,1 +1,1 @@
-"""AutoThink orchestration package — task routing + audit."""
+"""AutothinK orchestration package — task routing + audit."""

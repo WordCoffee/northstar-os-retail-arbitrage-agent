@@ -1,4 +1,4 @@
-"""SessionStore — JSON-backed command history for AutoThink.
+"""SessionStore — JSON-backed command history for AutothinK.
 
 Auto-loads on server start, persists append-only, and caps history length so
 the file stays small. Pure file IO — no network, no credentials.

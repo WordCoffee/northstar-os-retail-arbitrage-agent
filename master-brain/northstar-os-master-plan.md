@@ -1,6 +1,6 @@
 # NORTHSTAR OS — MASTER PLAN (Platform Brain)
 
-> The complete breakdown of **Northstar OS** and **Northstar AutoThink**, every
+> The complete breakdown of **Northstar OS** and **Northstar AutothinK**, every
 > service/agent, capability, tech stack, operating constitution, and roadmap — as
 > consolidated 2026-09-07 from the full corpus of T2 Holdings chat/markdown exports.
 >
@@ -42,7 +42,7 @@ AI-powered services** unified under one intelligent core — the **Master Brain*
 | Tier | Offering | What it is |
 |---|---|---|
 | **Tier 1** | **NorthStar OS Services Suite** | Individually-branded purpose-built services, each backed by one dedicated agent. |
-| **Tier 2** | **NorthStar AutoThink** (capital **A**uto, capital T**hink**, rest lowercase) | Premium "build-anything" layer — comparable to Perplexity Computer / Claude Code. Describe what you want; the Master Brain automates, builds, and delivers end-to-end, pulling whichever services/agents are needed. |
+| **Tier 2** | **NorthStar AutothinK** (capital **A**uto, capital **T**hink, capital **K** — operator-confirmed spelling 2026-09-12) | Premium "build-anything" layer — comparable to Perplexity Computer / Claude Code. Describe what you want; the Master Brain automates, builds, and delivers end-to-end, pulling whichever services/agents are needed. |
 
 ---
 
@@ -175,7 +175,7 @@ placement analysis, negative-keyword hygiene.
   | 2 | Scale Broad | Explore new terms | $15/day | Dynamic Bids — Down Only |
   | 3 | Almost Winners | Validate 1–14 sales | $25/day | Dynamic Bids — Down Only |
   | 4 | Winners Exact | Scale 15+ sales | $40/day | Dynamic Bids — Down Only |
-- **AutoThink PPC bid-rule table (target ACoS 30%):**
+- **AutothinK PPC bid-rule table (target ACoS 30%):**
   | ACoS band | Rule |
   |---|---|
   | >45% AND ≥10 clicks | −10 to −30% bid |
@@ -328,7 +328,7 @@ the platform reads as a full suite from day one:
 
 ### 5.1 What it is
 
-- **NorthStar AutoThink** (capital **A**, capital **T**) — the premium,
+- **NorthStar AutothinK** (capital **A**, capital **T**, capital **K** — operator-confirmed 2026-09-12) — the premium,
   "build-anything" layer. Comparable to **Perplexity Computer** or **Claude Code**
   ("Perplexity AI's computer," Claude's "Code Work"): you tell it what you want in
   plain language and it **automates, builds, and delivers** end-to-end, pulling
@@ -344,7 +344,7 @@ the platform reads as a full suite from day one:
 |---|---|
 | Perplexity Computer | Web-grounded research agent |
 | Claude Code (and OpenCode) | Code/agent harness |
-| **NorthStar AutoThink / Northstar OS** | **Private agent workspace** — chat, tools, files, prompts, workflows — hosting a **Helium-10/Advigator-style FBA intelligence + harvesting engine** as the moat |
+| **NorthStar AutothinK / Northstar OS** | **Private agent workspace** — chat, tools, files, prompts, workflows — hosting a **Helium-10/Advigator-style FBA intelligence + harvesting engine** as the moat |
 
 Mental model:
 1. **Open WebUI / Ollama** = private operator console
@@ -513,7 +513,7 @@ The repo already contains real, tested tooling that the agents rely on:
    requests are routed instantly without invoking a full reasoning model just to
    decide "who handles this."
 4. **Design UI/UX for both tiers** — Services Suite (dashboard-style, one card per
-   service) and AutoThink (chat/prompt-style, "tell it what you want").
+   service) and AutothinK (chat/prompt-style, "tell it what you want").
 5. **Fill model gaps** (live web/research, brand-voice copywriting, lightweight
    data-parsing, embeddings/routing).
 6. **Prototype the learning loop** — capture user edits/corrections and feed them
@@ -528,6 +528,6 @@ The repo already contains real, tested tooling that the agents rely on:
 ---
 
 *Consolidated 2026-09-07 from every source in `All AI Chat Markdowns` (master
-vision session, local setup, AutoThink PPC, ads/PPC analysis, FBA 2026 compliance,
+vision session, local setup, AutothinK PPC, ads/PPC analysis, FBA 2026 compliance,
 listing optimizer, retail arbitrage chats, and Word Coffee brand docs). Credentials
 referenced by name only.*

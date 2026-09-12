@@ -190,7 +190,7 @@
 
 ## 5. PRIOR BRAINSTORMED IDEAS (keep accessible)
 
-- **AutoThink** as the premium "build-anything" tier (Perplexity Computer / Claude
+- **AutothinK** as the premium "build-anything" tier (Perplexity Computer / Claude
   Code comparable) powered by the learning Master Brain.
 - **MCP server for the Amazon Ads API** — natural-language campaign query/control
   (conceptual; needs Ads API developer access).
@@ -209,7 +209,7 @@
 - **Spatial Command Center UI** (sentiment-reactive orbs, command omnibar,
   tool dock, orbital/radar/thermal visualizations) — with strict no-fabrication
   constraint and jsdom-test preservation.
-- **Autonomous "digital clone" user model** — the whole reason AutoThink is
+- **Autonomous "digital clone" user model** — the whole reason AutothinK is
   trustworthy: the brain learns to think like the user.
 
 ---
@@ -277,4 +277,4 @@
 
 *Seed profile consolidated 2026-09-07. Credentials referenced by name only. This
 profile is the development core of the Master Brain that powers Northstar
-AutoThink; it will grow as the brain observes edits/corrections/decisions.*
+AutothinK; it will grow as the brain observes edits/corrections/decisions.*
