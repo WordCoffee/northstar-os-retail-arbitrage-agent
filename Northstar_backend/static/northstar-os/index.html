@@ -240,6 +240,24 @@
           <p class="dim" style="margin-bottom:12px">Docs: <code>master-brain/northstar-os-master-plan.md</code> §5 · <code>master-brain/service-plans/05_autothink_surface.md</code></p>
           <a class="btn gold" href="../../autothink/ui/index.html">Open AutothinK workspace in a new tab</a>
           <span class="dim" style="margin-left:10px">or mount inline below once running:</span>
+          <div class="at-lamp" style="margin-top:12px">
+            <span class="lamp-dot offline" id="at-lamp-dot"></span>
+            <span class="lamp-label">Local brain</span>
+            <span class="lamp-value offline" id="at-lamp-value">offline</span>
+            <span class="dim" style="margin-left:8px">no probe performed — shows configured state</span>
+          </div>
+          <div class="at-quick" aria-label="Ask a service">
+            <button class="subnav-btn" id="at-quick-sourcescout" data-quick="sourcescout">Ask SourceScout</button>
+            <button class="subnav-btn" id="at-quick-listingforge" data-quick="listingforge">Ask ListingForge</button>
+            <button class="subnav-btn" id="at-quick-adpilot" data-quick="adpilot">Ask AdPilot</button>
+            <button class="subnav-btn" id="at-quick-socialpulse" data-quick="socialpulse">Ask SocialPulse</button>
+          </div>
+          <div class="at-composer-row">
+            <input id="at-composer" class="at-composer" type="text" readonly aria-label="Composer prefill"
+                   placeholder="Quick-ask prefills here, then hand to the Master Brain router">
+            <button id="at-copy" class="btn small steel">Copy (demo)</button>
+            <span id="at-copy-note" class="hint"></span>
+          </div>
         </div>
         <iframe id="at-workspace" src="../../autothink/ui/index.html" title="AutothinK workspace"
                 style="width:100%;height:560px;border:1px solid var(--hairline);border-radius:var(--radius);margin-top:14px;background:var(--bg-sunken)"></iframe>
@@ -276,6 +294,7 @@
   <script src="js/listingforge.js"></script>
   <script src="js/adpilot.js"></script>
   <script src="js/socialpulse.js"></script>
+  <script src="js/autothink.js"></script>
   <script>NS.init();</script>
 </body>
 </html>
