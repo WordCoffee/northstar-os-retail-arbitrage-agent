@@ -6,11 +6,18 @@
 <title>Northstar OS AutothinK</title>
 <style>
   :root {
-    --bg: #0a0a12;
-    --panel: rgba(20, 20, 30, 0.75);
-    --panel-border: #3a3a4a;
-    --grad: linear-gradient(135deg, #ff00cc, #3333ff, #00ffcc, #ff9900);
-    --gold: #ffd700;
+    --ns-space: #050505;
+    --ns-gold: #D4AF37;
+    --ns-steel: #4682B4;
+    --ns-steel-bright: #7fb0e0;
+    --ns-crimson: #8B0000;
+    --ns-panel: rgba(10, 12, 18, 0.82);
+    --ns-panel-border: #2a2f3d;
+    --bg: var(--ns-space);
+    --panel: var(--ns-panel);
+    --panel-border: var(--ns-panel-border);
+    --grad: linear-gradient(135deg, #D4AF37, #4682B4, #f0e2ae, #8B0000);
+    --gold: #D4AF37;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; }
@@ -226,6 +233,56 @@
   @media (prefers-reduced-motion: reduce) {
     .edge-text-main, .quick-widget .edge-text { animation-duration: 12s; }
   }
+
+  /* ---------- Northstar OS chrome: identity bar, lamp, quick asks ---------- */
+  .ns-chrome {
+    position: fixed;
+    top: 16px;
+    left: 22px;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    pointer-events: none;
+    max-width: 300px;
+  }
+  .ns-brand {
+    font-size: 11px;
+    letter-spacing: 2.6px;
+    font-weight: 800;
+    color: var(--ns-gold);
+    text-transform: uppercase;
+  }
+  .ns-brand-sub { font-size: 10px; letter-spacing: 1.4px; color: var(--ns-steel-bright); text-transform: uppercase; }
+  .ns-docs { font-size: 9px; color: #8b93a7; line-height: 1.5; }
+  .ns-docs code { color: var(--ns-steel-bright); }
+  .at-lamp { display: inline-flex; align-items: center; gap: 6px; }
+  .lamp-dot { width: 9px; height: 9px; border-radius: 50%; background: #555; display: inline-block; }
+  .lamp-dot.offline { background: var(--ns-crimson); }
+  .lamp-dot.detected { background: #3fa34d; }
+  .lamp-value { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #8b93a7; }
+  .lamp-value.offline { color: #d08a8a; }
+  .lamp-value.detected { color: #7fd08a; }
+  .lamp-meta { font-size: 9px; color: #5c6477; }
+  .quick-asks {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 760px;
+  }
+  button.quick-ask {
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--ns-panel-border);
+    background: rgba(20, 24, 34, 0.85);
+    color: #d9e0ec;
+    font-size: 0.8rem;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+  }
+  button.quick-ask:hover, button.quick-ask:focus-visible { border-color: var(--ns-gold); color: var(--ns-gold); }
 </style>
 </head>
 <body>
@@ -235,8 +292,26 @@
     <h1 class="edge-text-main">Northstar OS AutothinK</h1>
   </header>
 
+  <div class="ns-chrome" aria-label="Northstar OS identity">
+    <span class="ns-brand">Northstar OS</span>
+    <span class="ns-brand-sub">Analyst's Desk · AutothinK workspace</span>
+    <div class="at-lamp">
+      <span class="lamp-dot offline" id="at-lamp-dot"></span>
+      <span class="lamp-label">Local brain</span>
+      <span class="lamp-value offline" id="at-lamp-value">offline</span>
+      <span class="lamp-meta" id="at-lamp-meta">no probe performed</span>
+    </div>
+    <span class="ns-docs">Docs: <code>master-brain/northstar-os-master-plan.md</code> §5 · <code>master-brain/service-plans/05_autothink_surface.md</code></span>
+  </div>
+
   <main>
     <div id="output" class="output"></div>
+    <div class="quick-asks" aria-label="Ask a service">
+      <button class="quick-ask" id="quickAsk-sourcescout" data-quick-ask="sourcescout">Ask SourceScout</button>
+      <button class="quick-ask" id="quickAsk-listingforge" data-quick-ask="listingforge">Ask ListingForge</button>
+      <button class="quick-ask" id="quickAsk-adpilot" data-quick-ask="adpilot">Ask AdPilot</button>
+      <button class="quick-ask" id="quickAsk-socialpulse" data-quick-ask="socialpulse">Ask SocialPulse</button>
+    </div>
     <div class="composer">
       <input id="query" placeholder="Enter your command..." autocomplete="off" />
       <select id="provider">
@@ -462,7 +537,11 @@
     .then(function (r) { return r.json(); })
     .then(function (d) {
       populateModels(d.models || []);
-      if (d && !d.local_available) {
+      if (d && d.local_available) {
+        // honest detection from the local backend's own boot health check — never fabricated
+        lampState = "detected";
+        renderLamp();
+      } else if (d && !d.local_available) {
         output.textContent = "NOTE: Ollama is not reachable at localhost:11434 — local commands will return a fallback message. Start Ollama, then refresh.";
         output.scrollTop = output.scrollHeight;
       }
@@ -470,6 +549,48 @@
     .catch(function () {
       output.textContent = "AutothinK backend not reachable. Is the server running on port 8100?";
     });
+
+  /* ---------- Northstar OS surface: local-brain lamp + quick asks ---------- */
+  var lampState = "offline"; // default: no probe performed; only the boot check may flip it
+  function renderLamp() {
+    var dot = document.getElementById("at-lamp-dot");
+    var val = document.getElementById("at-lamp-value");
+    var meta = document.getElementById("at-lamp-meta");
+    if (dot) { dot.classList.remove("offline", "detected"); dot.classList.add(lampState); }
+    if (val) { val.textContent = lampState; val.classList.remove("offline", "detected"); val.classList.add(lampState); }
+    if (meta) {
+      meta.textContent = lampState === "detected"
+        ? "detected via local boot health check"
+        : "no probe performed";
+    }
+    return lampState;
+  }
+
+  var SERVICE_ASKS = {
+    sourcescout: "find sourcing candidates",
+    listingforge: "rewrite this listing in Word Coffee voice",
+    adpilot: "optimize campaign bids by band",
+    socialpulse: "draft a social post"
+  };
+  var SERVICE_LABELS = {
+    sourcescout: "SourceScout", listingforge: "ListingForge", adpilot: "AdPilot", socialpulse: "SocialPulse"
+  };
+  function prefillAsk(svc) {
+    var text = "Ask " + (SERVICE_LABELS[svc] || svc) + ": " + (SERVICE_ASKS[svc] || "assist in the domain") + " (demo prefill)";
+    query.value = text;
+    query.focus();
+    return text;
+  }
+  function bindQuickAsks() {
+    Object.keys(SERVICE_ASKS).forEach(function (svc) {
+      var btn = document.getElementById("quickAsk-" + svc);
+      if (!btn || btn._qaBound) return;
+      btn._qaBound = true;
+      btn.addEventListener("click", function () { prefillAsk(svc); playBlip(); });
+    });
+  }
+  renderLamp();
+  bindQuickAsks();
 
   provider.addEventListener("change", function () { playBlip(); track("expand"); refreshProviderState(); });
   refreshProviderState();
