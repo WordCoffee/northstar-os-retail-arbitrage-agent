@@ -1,0 +1,76 @@
+{
+  "B00QGMOJ4Y": {
+    "payload": {
+      "asin": "B00QGMOJ4Y",
+      "offer_data_status": "available",
+      "offer_data_source": "easyparser",
+      "offer_data_fetched_at": "2026-08-14T20:39:16.713Z",
+      "offer_data_note": null,
+      "offer_data_cached": false,
+      "total_sellers": 2,
+      "fba_sellers": 0,
+      "fbm_sellers": 2,
+      "amazon_sellers": 0,
+      "buy_box": {
+        "available": true,
+        "seller_name": "M&D Wholesalers",
+        "seller_id": "A2EFW4HLL0FXRH",
+        "fulfillment": "FBM",
+        "price": 26.49,
+        "shipping": null,
+        "landed_price": null,
+        "condition": "One-time purchase",
+        "prime": false,
+        "note": null
+      },
+      "offers": [
+        {
+          "seller_name": "M&D Wholesalers",
+          "seller_id": "A2EFW4HLL0FXRH",
+          "fulfillment": "FBM",
+          "is_buy_box_winner": true,
+          "price": null,
+          "shipping": null,
+          "landed_price": null,
+          "condition": "One-time purchase",
+          "prime": false,
+          "rating": "4.0",
+          "feedback_count": 947,
+          "availability": null,
+          "shipping_free": true,
+          "shipping_text": "FREE delivery August 18 - 19."
+        },
+        {
+          "seller_name": "TheNewMall",
+          "seller_id": "AS3HOSV4DF0UG",
+          "fulfillment": "FBM",
+          "is_buy_box_winner": false,
+          "price": null,
+          "shipping": null,
+          "landed_price": null,
+          "condition": "One-time purchase",
+          "prime": false,
+          "rating": "4.5",
+          "feedback_count": 318273,
+          "availability": null,
+          "shipping_free": true,
+          "shipping_text": "FREE delivery August 17 - 19."
+        }
+      ],
+      "offers_returned": 2,
+      "offers_complete": true,
+      "offer_count": 2,
+      "buy_box_price": 26.49,
+      "request_zip_code": "19805",
+      "observed_at": "2026-08-14T20:39:16.713Z",
+      "title": "Kirkland Signature Purified Drinking Water, 16.9 Ounce, 40 Count",
+      "credits_used": 2,
+      "credits_remaining": 98,
+      "data_gaps": [
+        "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+        "Results are ZIP-code and time specific."
+      ]
+    },
+    "cached_at": "2026-08-14T20:39:14.805882+00:00"
+  }
+}

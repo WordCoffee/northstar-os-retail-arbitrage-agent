@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "kind": "kirkland_catalog_manifest",
+  "generated_at": "2026-09-02T08:25:22.931018+00:00",
+  "frozen": true,
+  "fingerprint": "db16788c3af62548d20291f8f71e84065de90a610524700a7c33e35b37851dca",
+  "count": 2,
+  "asins": [
+    {
+      "asin": "B000KIRK01",
+      "title": "Kirkland Signature Vitamin C 500mg",
+      "product_title": "Kirkland Signature Vitamin C 500mg",
+      "brand": "Kirkland Signature",
+      "product_price": null,
+      "product_star_rating": null,
+      "product_num_ratings": null,
+      "product_num_offers": null,
+      "product_url": null,
+      "source_query": "Kirkland Signature",
+      "page_found": 1,
+      "brand_match_basis": "brand_field_confirmed",
+      "brand_verify_note": null
+    },
+    {
+      "asin": "B000KIRK02",
+      "title": "Kirkland Signature Olive Oil",
+      "product_title": "Kirkland Signature Olive Oil",
+      "brand": "Kirkland Signature",
+      "product_price": null,
+      "product_star_rating": null,
+      "product_num_ratings": null,
+      "product_num_offers": null,
+      "product_url": null,
+      "source_query": "Kirkland Signature vitamins supplements",
+      "page_found": 1,
+      "brand_match_basis": "brand_field_confirmed",
+      "brand_verify_note": null
+    }
+  ],
+  "rejected_count": 2,
+  "rejected_sample": [
+    {
+      "asin": "B000NON001",
+      "title": "Amazon Brand Echo",
+      "brand": "Amazon",
+      "reason": "brand_not_kirkland_signature"
+    },
+    {
+      "asin": "B000NEAR01",
+      "title": "Kirkland-ish thing",
+      "brand": "Kirkland",
+      "reason": "brand_not_kirkland_signature"
+    }
+  ]
+}

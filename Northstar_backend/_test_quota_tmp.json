@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-02T07:21:26.279951+00:00",
+  "updated_at": "2026-09-09T04:02:42.133799+00:00",
   "apps": {
     "RAPIDAPI_BDC": {
       "discovery": {
@@ -12,12 +12,12 @@
         "updated_at": null
       },
       "enrichment": {
-        "used": 2,
+        "used": 0,
         "limit": null,
         "remaining": null,
         "exhausted": false,
         "last_reset": null,
-        "updated_at": "2026-09-02T07:21:26.240629+00:00"
+        "updated_at": null
       }
     },
     "RAPIDAPI_REALTIME": {
@@ -48,12 +48,12 @@
         "updated_at": null
       },
       "enrichment": {
-        "used": 1,
+        "used": 0,
         "limit": null,
         "remaining": null,
         "exhausted": false,
         "last_reset": null,
-        "updated_at": "2026-09-02T07:21:26.279945+00:00"
+        "updated_at": null
       }
     },
     "RAPIDAPI_PRICING": {
@@ -120,12 +120,12 @@
         "updated_at": null
       },
       "enrichment": {
-        "used": 3,
+        "used": 0,
         "limit": null,
         "remaining": null,
         "exhausted": false,
         "last_reset": null,
-        "updated_at": "2026-09-02T07:21:26.274337+00:00"
+        "updated_at": null
       }
     }
   }

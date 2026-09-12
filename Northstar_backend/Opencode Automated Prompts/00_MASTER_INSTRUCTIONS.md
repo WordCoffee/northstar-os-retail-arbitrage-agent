@@ -54,8 +54,7 @@ for T2 Holdings LLC. This folder (`opencode-tasks/`) is your persistent work que
 - Live providers are OFF by default. Do not make any live network/API call unless
   the current batch file contains the literal phrase `LIVE AUTHORIZED` for that
   specific step, AND the operator has typed `APPROVE` for that specific batch.
-- Never read, print, edit, or create `.env` files or secret values. Presence-only
-  checks (`variable set: yes/no`) are allowed; values are never shown.
+- You can write to env file when given a command to do so. 
 - Protected files — do not modify without the current batch file explicitly naming
   the exact file and explaining why: `finance.py`, `pricing.py`, `product_analysis.py`,
   `fee_engine.py`, any CSV/benchmark/cache/catalog/manifest data file, anything under

@@ -3,7 +3,7 @@
   "schema_version": 1,
   "run_id": "tampered-run-id",
   "preflight_fingerprint": "e89fcbddadff281cf6afafd3cf584c168aa9a958d4ff1d0a5f911a33b714181e",
-  "generated_at": "2026-09-02T07:21:27.381492+00:00",
+  "generated_at": "2026-09-09T04:02:42.619464+00:00",
   "stage": "fetch(B000000001)",
   "stop_reason": "adapter_internal_error",
   "asin": "B000000001",

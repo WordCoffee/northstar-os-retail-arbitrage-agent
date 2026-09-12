@@ -1,0 +1,11 @@
+{
+  "dataforseo": {
+    "enabled": true,
+    "provider_role": "secondary_validation",
+    "marketplace": "US",
+    "login_environment_variable": "DATAFORSEO_LOGIN",
+    "password_environment_variable": "DATAFORSEO_PASSWORD",
+    "mode": "offline_design_only",
+    "use_only_after_bright_data_shortlist": true
+  }
+}
