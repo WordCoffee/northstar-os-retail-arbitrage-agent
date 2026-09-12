@@ -1,0 +1,78 @@
+version: "3.9"
+
+services:
+  # ──────────────────────────────────────────────────────────────
+  # Ollama — local LLM runtime for AutothinK chat
+  # ──────────────────────────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: northstar-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # ──────────────────────────────────────────────────────────────
+  # AutothinK Backend — local brain server (port 8100)
+  # ──────────────────────────────────────────────────────────────
+  autothink:
+    build:
+      context: ./autothink
+      dockerfile: Dockerfile
+    container_name: northstar-autothink
+    ports:
+      - "8100:8100"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./autothink:/app
+      - ./autothink/ui:/app/ui:ro
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+    command: >
+      sh -c "ollama pull llama3.2:3b || true &&
+             python -m uvicorn backend.server:app --host 0.0.0.0 --port 8100 --log-level info"
+
+  # ──────────────────────────────────────────────────────────────
+  # Northstar Backend — FastAPI API + static SPA (port 8000)
+  # ──────────────────────────────────────────────────────────────
+  northstar:
+    build:
+      context: ./Northstar_backend
+      dockerfile: Dockerfile
+    container_name: northstar-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SCANNER_LIVE_ALLOWED=false
+      - DATAFORSEO_ENABLED=false
+    volumes:
+      - ./Northstar_backend:/app
+      - ./Northstar_backend/static:/app/static:ro
+      - ./Northstar_backend/data:/app/data:ro
+      - ./autothink:/app/autothink:ro   # mount for /autothink static mount
+    depends_on:
+      - autothink
+    restart: unless-stopped
+    command: >
+      sh -c "python -m uvicorn main:app --host 0.0.0.0 --port 8000 --log-level info"
+
+volumes:
+  ollama-data:

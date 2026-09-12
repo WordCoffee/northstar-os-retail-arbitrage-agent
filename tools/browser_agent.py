@@ -427,8 +427,9 @@ async def connect_takeover(verbose: bool = True):
     if verbose:
         print("CDP browser IS open — attaching and driving it in-place (Comet-style)")
     try:
-        browser = await p.chromium.connect_over_cdp("http://127.0.0.1:9222",
-                                                    timeout=10000)
+        playwright = await async_playwright().start()
+        browser = await playwright.chromium.connect_over_cdp("http://127.0.0.1:9222",
+                                                             timeout=10000)
         contexts = browser.contexts
         ctx = contexts[0] if contexts else None
         return browser, ctx, ctx.pages if ctx else []

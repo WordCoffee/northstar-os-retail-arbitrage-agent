@@ -9,6 +9,7 @@
     "score": "node src/pipelines/scoreLatestSnapshot.js",
     "pipeline": "npm run search && npm run normalize && npm run score",
     "dev": "node src/index.js",
+    "voice-server": "node server/voice-transcribe.js",
     "lint": "eslint .",
     "format": "prettier --write .",
     "check": "npm run lint && npm run normalize -- --dry-run",
@@ -18,7 +19,8 @@
     "axios": "^1.7.9",
     "csv-parse": "^5.5.6",
     "csv-stringify": "^6.8.1",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1"
   },
   "devDependencies": {
     "eslint": "^10.1.0",

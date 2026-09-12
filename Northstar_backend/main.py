@@ -63,6 +63,13 @@ STATIC_DIR = BASE_DIR / "static"
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
+# AutothinK workspace (served at /autothink/ui/index.html — resolves the
+# shell's ../../autothink/ui/index.html iframe and new-tab link from
+# /static/northstar-os/index.html)
+AUTOTHINK_DIR = BASE_DIR.parent / "autothink"
+if AUTOTHINK_DIR.exists():
+    app.mount("/autothink", StaticFiles(directory=str(AUTOTHINK_DIR)), name="autothink")
+
 
 @app.get("/", include_in_schema=False)
 def serve_scout():
@@ -843,3 +850,21 @@ def post_dataforseo_validate(req: DataForSEOValidateRequest):
     except _GuardError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
     return result
+
+@app.get("/api/sourcescout")
+def get_sourcescout():
+    """Sourcescout: 180 Kirkland products for the retail arbitrage dashboard."""
+    import json
+    from pathlib import Path
+    manifest_path = Path(__file__).parent / "data" / "catalog" / "sourcescout_manifest.json"
+    if not manifest_path.exists():
+        raise HTTPException(status_code=404, detail="Sourcescout manifest not found")
+    with open(manifest_path) as f:
+        data = json.load(f)
+    return {
+        "kind": data.get("kind", "sourcescout"),
+        "schema_version": data.get("schema_version", "1.0"),
+        "generated_at": data.get("generated_at"),
+        "count": data.get("count", len(data.get("items", []))),
+        "items": data.get("items", [])
+    }
