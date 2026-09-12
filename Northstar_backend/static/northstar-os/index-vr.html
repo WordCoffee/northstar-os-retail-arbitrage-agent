@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northstar OS — VR Analyst's Desk</title>
+  <meta name="description" content="Northstar OS VR suite — SourceScout · ListingForge · AdPilot · SocialPulse · AutothinK · Account">
+  <!-- A-Frame WebXR library -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://aframe.io/releases/1.5.0/xr-controls.min.js"></script>
+  <script src="https://aframe.io/releases/1.5.0/xr-manager.min.js"></script>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/shell.css">
+  <link rel="stylesheet" href="css/paperclip.css">
+  <link rel="stylesheet" href="css/services.css">
+  <style>
+    /* VR-specific: hide 2D overlay when in VR */
+    body.vr-mode { overflow: hidden; }
+    /* VR controller cursor */
+    a-cursor { size: 0.1; color: #fff; opacity: 0.8; }
+  </style>
+</head>
+
+<body class="vr-mode">
+
+  <!-- VRScene: A-Frame scene with XR manager -->
+  <a-scene
+    vr-mode="enterOnWebXRSupported"
+    xr-manager="requiredFeatures: [local-floor]; optionalFeatures: [bounded-floor]"
+    cursor="raycaster: true; fuse: true"
+    embedded
+  >
+
+    <!-- ===================== RIBBON (as VR hologram) ===================== -->
+    <a-entity id="ribbon-hologram" position="0 1.6 -3" rotation="0 0 0">
+      <a-plane width="12" height="2" material="transparent: true; side: double" geometry="width: 12; height: 2"/>
+      <a-entity
+        class="ribbon-brand"
+        position="0 0.2 -0.5"
+        rotation="-90 0 0"
+      >
+        <svg class="star-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 1.8l2.5 6.2 6.7-.4-5.1 4.4 1.8 6.5L12 15.5 6.1 18.5 7.9 12 2.8 7.6l6.7.4z"/>
+        </svg>
+        <a-text value="Northstar OS" position="0 0 0.1" align="center" width="4" color="#fff" depth-test="false"></a-text>
+        <a-text value="The Analyst's Desk" position="0 -0.8 0.1" align="center" width="4" color="#aaa" depth-test="false"></a-text>
+      </a-entity>
+      <a-entity class="ribbon-stats" position="0 -1.2 -0.5" rotation="-90 0 0">
+        <a-entity class="rb-stat" position="0 0 0">
+          <a-text value="Total Profit · 90d: $11,483.22" color="#fff" depth-test="false"></a-text>
+        </a-entity>
+        <a-entity class="rb-stat" position="2 0 0">
+          <a-text value="Open Gates: 8" color="#fff" depth-test="false"></a-text>
+        </a-entity>
+        <a-entity class="rb-stat" position="4 0 0">
+          <a-text value="Mode: Demo" color="#fff" depth-test="false"></a-text>
+        </a-entity>
+        <a-entity class="rb-stat" position="6 0 0">
+          <a-text value="Plan: —" color="#fff" depth-test="false"></a-text>
+        </a-entity>
+        <a-entity class="rb-stat" position="8 0 0">
+          <a-text value="BSR Health: 3/10 stable" color="#fff" depth-test="false"></a-text>
+        </a-entity>
+      </a-entity>
+    </a-entity>
+
+    <!-- ===================== NAVIGATION: 6 TABS AS 3D BUTTONS ===================== -->
+    <a-entity id="tab-nav" position="0 0 -2">
+      <!-- Tab positions in a circle -->
+      <a-entity id="tab-sourcescout" position="-2 1.5 -1" rotation="0 45 0">
+        <a-box width="3" height="1" depth="0.5" material="color: #4A90E2; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
+          <a-text value="SourceScout" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
+        </a-box>
+      </a-entity>
+      <a-entity id="tab-listingforge" position="0 1.5 -1" rotation="0 0 0">
+        <a-box width="3" height="1" depth="0.5" material="color: #7ED321; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
+          <a-text value="ListingForge" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
+        </a-box>
+      </a-entity>
+      <a-entity id="tab-adpilot" position="2 1.5 -1" rotation="0 -45 0">
+        <a-box width="3" height="1" depth="0.5" material="color: #F5A623; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
+          <a-text value="AdPilot" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
+        </a-box>
+      </a-entity>
+      <a-entity id="tab-socialpulse" position="-2.5 0.5 -1" rotation="0 50 0">
+        <a-box width="3" height="1" depth="0.5" material="color: #DD2C00; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
+          <a-text value="SocialPulse" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
+        </a-box>
+      </a-entity>
+      <a-entity id="tab-autothink" position="0 0.5 -1" rotation="0 0 0">
+        <a-box width="3" height="1" depth="0.5" material="color: #1ABC9C; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
+          <a-text value="AutothinK" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
+        </a-box>
+      </a-entity>
+      <a-entity id="tab-account" position="2.5 0.5 -1" rotation="0 -50 0">
+        <a-box width="3" height="1" depth="0.5" material="color: #9B59B6; transparent: true; opacity: 0.9" cursor="raycast" click-event="event.detail.isIntersection; myClick()">
+          <a-text value="Account" position="0 0.2 0.1" color="#fff" align="center" depth-test="false"></a-text>
+        </a-box>
+      </a-entity>
+    </a-entity>
+
+    <!-- ===================== CURRENT VIEW PORTAL ===================== -->
+    <!-- When a tab is selected, its view loads into this portal -->
+    <a-entity id="view-portal" position="0 -1.5 -3" rotation="0 0 0">
+      <!-- Default: SourceScout view (embedded as iframe-like panel) -->
+      <a-entity id="view-sourcescout">
+        <!-- SourceScout 3D product shelf -->
+        <a-entity position="0 0 -1" rotation="0 0 0">
+          <a-box width="2" height="2" depth="2" material="color: #eee" position="-2 0 0" cursor="raycasters: false"></a-box>
+          <a-text value="SourceScout: 232 products" position="0 1 0" color="#fff" depth-test="false"></a-text>
+        </a-entity>
+        <!-- Placeholder for actual product grid -->
+        <a-entity text="value: Loading SourceScout...; align: center; width: 4" position="0 0 1.5" depth-test="false"></a-text>
+      </a-entity>
+
+      <!-- Other view placeholders (hidden by default) -->
+      <a-entity id="view-listingforge" position="0 -1.5 -3" opacity="0" visible="false">
+        <a-text value="ListingForge view — coming soon in VR" color="#fff" depth-test="false"></a-text>
+      </a-entity>
+      <a-entity id="view-adpilot" position="0 -1.5 -3" opacity="0" visible="false">
+        <a-text value="AdPilot view — coming soon in VR" color="#fff" depth-test="false"></a-text>
+      </a-entity>
+      <a-entity id="view-socialpulse" position="0 -1.5 -3" opacity="0" visible="false">
+        <a-text value="SocialPulse view — coming soon in VR" color="#fff" depth-test="false"></a-text>
+      </a-entity>
+      <a-entity id="view-autothink" position="0 -1.5 -3" opacity="0" visible="false">
+        <a-text value="AutothinK workspace — launching in new tab" color="#fff" depth-test="false"></a-text>
+      </a-entity>
+      <a-entity id="view-account" position="0 -1.5 -3" opacity="0" visible="false">
+        <a-text value="Account view — coming soon in VR" color="#fff" depth-test="false"></a-text>
+      </a-entity>
+    </a-entity>
+
+    <!-- ===================== CONTROLS & HELP ===================== -->
+    <a-entity id="ui-controls" position="0 0 -4">
+      <a-text value="Use controllers to look around & select tabs. Press Btrigger to teleport. Menu for help." color="#aaa" depth-test="false" align="center"></a-text>
+    </a-entity>
+
+    <!-- XR button -->
+    <a-xr-button position="0 0 -3" margin="0.5"></a-xr-button>
+
+  </a-scene>
+
+  <script>
+    // VR click handler — teleport / load view
+    function myClick() {
+      const selector = document.querySelector('[selected]');
+      if (!selector) return;
+
+      const id = selector.id;
+      const portal = document.getElementById('view-portal');
+
+      // Hide all views
+      document.querySelectorAll('#view-portal > a-entity').forEach(el => el.setAttribute('opacity', '0'));
+      document.querySelectorAll('#view-portal > a-entity').forEach(el => el.setAttribute('visible', 'false'));
+
+      // Show selected view
+      const target = document.getElementById('view-' + id);
+      if (target) {
+        target.setAttribute('opacity', '1');
+        target.setAttribute('visible', 'true');
+      }
+
+      // Special: AutothinK opens external link
+      if (id === 'autothink') {
+        setTimeout(() => {
+          window.open('http://127.0.0.1:8000/autothink/ui/index.html', '_blank');
+        }, 500);
+      }
+    }
+
+    // Tab selection via raycast
+    document.querySelectorAll('[id^="tab-"]').forEach(el => {
+      el.addEventListener('click', myClick);
+    });
+
+    // Auto-enter VR on supported browsers
+    document.querySelector('a-xr-button').addEventListener('click', () => {
+      const scene = document.querySelector('a-scene');
+      scene.enterVR();
+    });
+
+    // Fallback: if WebXR not supported, show 2D mode message
+    if (!navigator.xr) {
+      const scene = document.querySelector('a-scene');
+      scene.innerHTML = '<a-text value="WebXR not supported on this device. Open on Meta Quest browser for VR mode." color="#f00" position="0 0 -3" align="center"></a-text>';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Voice Test</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 40px 24px;
+        }
+        .wrap { max-width: 700px; margin: 0 auto; }
+        h1 { font-size: 1.5rem; margin-bottom: 24px; }
+        .chat-sim {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .chat-sim h3 { margin-bottom: 12px; color: #94a3b8; font-size: 0.9rem; }
+        .input-area {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .input-area input {
+            flex: 1;
+            padding: 12px 16px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 14px;
+            outline: none;
+        }
+        .input-area input:focus { border-color: #3b82f6; }
+        .chat-bubble {
+            padding: 12px 16px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .instructions {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+        .instructions h3 { margin-bottom: 12px; color: #3b82f6; }
+        .instructions ul { list-style: none; padding-left: 0; }
+        .instructions li { padding: 8px 0; color: #94a3b8; border-bottom: 1px solid #334155; }
+        .instructions li:last-child { border-bottom: none; }
+        .status { font-size: 12px; color: #64748b; margin-top: 16px; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1>🎙️ Chat Voice Integration Test</h1>
+        
+        <div class="chat-sim">
+            <h3>Chat Input Demo</h3>
+            <div class="chat-bubble">
+                Hi, can you help me find profitable Kirkland products?
+            </div>
+            <div class="input-area">
+                <input type="text" id="chat-input" placeholder="Type your message..." />
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>Instructions</h3>
+            <ul>
+                <li>1. Click the <strong>blue microphone button</strong> in the input area</li>
+                <li>2. Speak clearly into your microphone</li>
+                <li>3. Click the microphone again to stop</li>
+                <li>4. Wait for transcription (appears in the input box)</li>
+                <li>5. Send the transcribed text normally</li>
+            </ul>
+        </div>
+
+        <div class="status" id="status">Ready. Voice server: http://localhost:3001</div>
+    </div>
+
+    <script type="module">
+        import { attachVoiceToChats } from './components/chat-voice.js';
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            attachVoiceToChats('.input-area', {
+                serverUrl: 'http://localhost:3001',
+                onTranscribed: (text) => {
+                    document.getElementById('status').textContent = 
+                        `Transcribed: "${text}" - pasted into chat input`;
+                },
+                onError: (err) => {
+                    document.getElementById('status').textContent = 
+                        `Error: ${err}`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
