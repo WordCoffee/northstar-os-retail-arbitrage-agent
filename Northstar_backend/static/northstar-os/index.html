@@ -80,7 +80,12 @@
         <p class="view-sub">Retail Arbitrage Agent · <span class="agent-chip">discovery</span> · <span class="demo-badge">demo</span></p>
         <div id="ss-live-banner" class="gate-banner" data-gate="sourcescout_live_pull" data-live-gate="off"></div>
         <p id="ss-live-meta" class="dim" style="margin:8px 0 14px"></p>
+        <div id="ss-live-status"></div>
         <div id="ss-kpis" class="kpi-strip"></div>
+        <div class="panel" style="margin-top:14px">
+          <div class="panel-head"><h3>Portfolio Overview</h3><span class="hint">hub global KPI pass-through (demo)</span></div>
+          <div id="ss-portfolio" class="kpi-strip"></div>
+        </div>
         <div class="facets">
           <div class="facet"><span class="lbl">Min ROI</span>
             <select id="facet-roi" aria-label="Minimum ROI">
@@ -91,6 +96,20 @@
             <select id="facet-units" aria-label="Minimum estimated monthly sales">
               <option value="0">Any</option><option value="50">50+</option><option value="100">100+</option><option value="200">200+</option>
             </select>
+          </div>
+          <div class="facet"><span class="lbl">Min Net Margin</span>
+            <select id="facet-margin" aria-label="Minimum net margin">
+              <option value="0">Any</option><option value="20">20%+</option>
+            </select>
+          </div>
+          <div class="facet" style="flex-wrap:wrap">
+            <span class="lbl">Sourcing flags</span>
+            <span class="facet-checks">
+              <span class="facet-check"><input type="checkbox" id="facet-buybox" aria-label="Buy-box stable"> Buy-box stable</span>
+              <span class="facet-check"><input type="checkbox" id="facet-invoice" aria-label="Clean invoice path"> Clean invoice</span>
+              <span class="facet-check"><input type="checkbox" id="facet-risk" aria-label="Risk-clean only"> Risk-clean</span>
+              <span class="facet-check"><input type="checkbox" id="facet-consumable" aria-label="Consumables first"> Consumables first</span>
+            </span>
           </div>
           <button id="ss-export" class="btn gold">Export Worksheet (CSV·demo)</button>
           <button id="ss-open-workbench" class="btn ghost">Open full workbench</button>

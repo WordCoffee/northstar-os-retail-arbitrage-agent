@@ -31,13 +31,25 @@
         { label: 'Live Pull', value: 'GATED', kind: 'crimson', sub: 'authorization required' },
       ],
       rows: [
-        { id: 'r1', asin: 'B0CP6LXPLK', name: "Kirkland Signature Minoxidil 5%", cost: 17.99, amazonPrice: 42.00, fbaFee: 8.43, net: 11.53, roi: 64.1, competition: 'Medium', estMonthly: 110, tier: 'Pass', status: 'ready' },
-        { id: 'r2', asin: 'B08B5GZXHN', name: 'Organic Extra Virgin Olive Oil 2L', cost: 8.99, amazonPrice: 27.03, fbaFee: 6.10, net: 7.86, roi: 87.4, competition: 'Low', estMonthly: 40, tier: 'Pass', status: 'ready' },
-        { id: 'r3', asin: 'B095MLHJ97', name: 'Kirkland Facial Towelettes 180ct', cost: 6.99, amazonPrice: 14.71, fbaFee: 4.62, net: 2.01, roi: 28.8, competition: 'High', estMonthly: 220, tier: 'Hold', status: 'needs_review' },
-        { id: 'r4', asin: 'B00MG4X4LK', name: 'Kirkland Ultra Clean Laundry Detergent', cost: null, amazonPrice: 21.19, fbaFee: 7.02, net: null, roi: null, competition: 'Medium', estMonthly: 95, tier: 'Unscored', status: 'needs_fee_verification' },
-        { id: 'r5', asin: 'B0F87RXTVC', name: 'Word Coffee — Affirmation Cards for Moms', cost: 6.10, amazonPrice: 19.99, fbaFee: 4.01, net: 7.52, roi: 45.2, competition: 'Medium', estMonthly: 300, tier: 'Pass', status: 'ready' },
+        { id: 'r1', asin: 'B0CP6LXPLK', name: "Kirkland Signature Minoxidil 5%", cost: 17.99, amazonPrice: 42.00, fbaFee: 8.43, net: 11.53, roi: 64.1, competition: 'Medium', estMonthly: 110, tier: 'Pass', status: 'ready', buyBox: true, invoice: 'clean', riskClean: false, consumable: true },
+        { id: 'r2', asin: 'B08B5GZXHN', name: 'Organic Extra Virgin Olive Oil 2L', cost: 8.99, amazonPrice: 27.03, fbaFee: 6.10, net: 7.86, roi: 87.4, competition: 'Low', estMonthly: 40, tier: 'Pass', status: 'ready', buyBox: true, invoice: 'clean', riskClean: true, consumable: true },
+        { id: 'r3', asin: 'B095MLHJ97', name: 'Kirkland Facial Towelettes 180ct', cost: 6.99, amazonPrice: 14.71, fbaFee: 4.62, net: 2.01, roi: 28.8, competition: 'High', estMonthly: 220, tier: 'Hold', status: 'needs_review', buyBox: false, invoice: 'unverified', riskClean: false, consumable: false },
+        { id: 'r4', asin: 'B00MG4X4LK', name: 'Kirkland Ultra Clean Laundry Detergent', cost: null, amazonPrice: 21.19, fbaFee: 7.02, net: null, roi: null, competition: 'Medium', estMonthly: 95, tier: 'Unscored', status: 'needs_fee_verification', buyBox: true, invoice: 'clean', riskClean: true, consumable: true },
+        { id: 'r5', asin: 'B0F87RXTVC', name: 'Word Coffee — Affirmation Cards for Moms', cost: 6.10, amazonPrice: 19.99, fbaFee: 4.01, net: 7.52, roi: 45.2, competition: 'Medium', estMonthly: 300, tier: 'Pass', status: 'ready', buyBox: true, invoice: 'clean', riskClean: true, consumable: true },
       ],
-      livePull: { status: 'gated', provider: 'Bright Data (primary) / Firecrawl (fallback)', lastRun: null, failures: [] },
+      livePull: {
+        status: 'partial',
+        provider: 'Bright Data (primary) / Firecrawl (fallback)',
+        lastRun: '2026-09-06T08:01:06Z',
+        requested: 53,
+        resolved: 24,
+        failures: [
+          { status: 'url_not_found', count: 2, detail: 'genuine content 404s (10597, 1738408)' },
+          { status: 'no_data_found', count: 5, detail: '0-byte empty-body Web-Unlocker artifact' },
+          { status: 'transport_error', count: 1, detail: 'read timeout on api.brightdata.com — halted by circuit breaker' },
+        ],
+        note: 'evidence manifest from costco-discovery-runs (fixture) — partial run, failures typed exactly as captured',
+      },
     },
 
     listingforge: {

@@ -573,6 +573,77 @@ NS.config.autothinkBackend = 'offline';
 NS.autothink.renderLamp();
 assert(getEl('at-lamp-value').textContent === 'offline', 'autothink: lamp config reset to honest offline default');
 
+/* ============================================================
+ * Phase 18 — SourceScout deep: portfolio pass-through, typed
+ *             live-pull taxonomy, richer sourcing facets
+ * ============================================================ */
+NS.go('sourcescout');
+
+/* hub global-KPI pass-through (spec extension 4) */
+const ssPortfolio = els['ss-portfolio'].innerHTML;
+assert(ssPortfolio.includes('Total Profit') && ssPortfolio.includes('$11,483.22'), 'sourcescout: portfolio overview carries hub global KPIs');
+
+/* typed live-pull failure taxonomy from the evidence manifest */
+const ssLive = els['ss-live-status'].innerHTML;
+assert(ssLive.includes('partial'), 'sourcescout: live-pull banner surfaces partial status');
+assert(ssLive.includes('resolved 24 / requested 53'), 'sourcescout: live-pull banner reports resolved/requested counts');
+assert((ssLive.match(/data-live-failure=/g) || []).length === 3, 'sourcescout: three typed failures in taxonomy');
+assert(ssLive.includes('url_not_found') && ssLive.includes('no_data_found') && ssLive.includes('transport_error'), 'sourcescout: failure taxonomy rendered');
+assert(!ssLive.includes('success'), 'sourcescout: partial manifest never marks success');
+assert(els['ss-live-meta'].textContent.includes('Bright Data'), 'sourcescout: provider meta preserved');
+
+/* sourcing facets */
+assert(els['ss-result-count'].textContent.includes('5 of 5'), 'sourcescout: all rows present with facets neutral');
+getEl('facet-margin').value = '20';
+(getEl('facet-margin')._listeners.change || []).forEach((fn) => fn());
+assert(els['ss-result-count'].textContent.includes('4 of 5'), 'sourcescout: margin>=20% excludes unscored detergent');
+getEl('facet-margin').value = '0';
+(getEl('facet-margin')._listeners.change || []).forEach((fn) => fn());
+
+getEl('facet-buybox').checked = true;
+(getEl('facet-buybox')._listeners.change || []).forEach((fn) => fn());
+assert(els['ss-result-count'].textContent.includes('4 of 5'), 'sourcescout: buy-box-stable-only excludes towelettes');
+getEl('facet-buybox').checked = false;
+(getEl('facet-buybox')._listeners.change || []).forEach((fn) => fn());
+
+getEl('facet-invoice').checked = true;
+(getEl('facet-invoice')._listeners.change || []).forEach((fn) => fn());
+assert(els['ss-result-count'].textContent.includes('4 of 5'), 'sourcescout: clean-invoice-only excludes unverified towelettes');
+getEl('facet-invoice').checked = false;
+(getEl('facet-invoice')._listeners.change || []).forEach((fn) => fn());
+
+getEl('facet-risk').checked = true;
+(getEl('facet-risk')._listeners.change || []).forEach((fn) => fn());
+assert(els['ss-result-count'].textContent.includes('3 of 5'), 'sourcescout: risk-clean-only excludes Minoxidil + towelettes');
+getEl('facet-risk').checked = false;
+(getEl('facet-risk')._listeners.change || []).forEach((fn) => fn());
+
+/* combined facets compose */
+getEl('facet-margin').value = '20';
+getEl('facet-buybox').checked = true;
+(getEl('facet-margin')._listeners.change || []).forEach((fn) => fn());
+(getEl('facet-buybox')._listeners.change || []).forEach((fn) => fn());
+assert(els['ss-result-count'].textContent.includes('3 of 5'), 'sourcescout: margin+buy-box compose (drops detergent + towelettes)');
+getEl('facet-margin').value = '0';
+getEl('facet-buybox').checked = false;
+(getEl('facet-margin')._listeners.change || []).forEach((fn) => fn());
+(getEl('facet-buybox')._listeners.change || []).forEach((fn) => fn());
+
+/* consumables-first is a sort preference — all rows stay */
+getEl('facet-consumable').checked = true;
+(getEl('facet-consumable')._listeners.change || []).forEach((fn) => fn());
+const ssCons = els['ss-table-body'].innerHTML;
+assert((ssCons.match(/class="row-card"/g) || []).length === 5, 'sourcescout: consumables-first keeps all 5 rows');
+assert(ssCons.indexOf('Facial Towelettes') > ssCons.indexOf('Word Coffee'), 'sourcescout: non-consumable sorts below consumables');
+getEl('facet-consumable').checked = false;
+(getEl('facet-consumable')._listeners.change || []).forEach((fn) => fn());
+assert(els['ss-result-count'].textContent.includes('5 of 5'), 'sourcescout: clearing all facets restores 5 rows');
+
+/* pure predicates exported; missing data never fakes a zero */
+assert(NS.ss.marginPct({ amazonPrice: 42, cost: 17.99 }) === 57.2, 'sourcescout: marginPct math exact (42/17.99 -> 57.2)');
+assert(NS.ss.marginPct({ amazonPrice: 21.19, cost: null }) === null, 'sourcescout: marginPct null cost -> null, never 0');
+assert(NS.ss.matchesFilters({ name: 'x', asin: 'y', roi: 80, estMonthly: 300, buyBox: true, invoice: 'clean', riskClean: true }) === true, 'sourcescout: matchesFilters passes a fully-clean row');
+
 console.log('\nShell contract complete.');
 console.log(failures === 0 ? 'ALL GREEN' : failures + ' FAILURES');
 process.exit(failures === 0 ? 0 : 1);

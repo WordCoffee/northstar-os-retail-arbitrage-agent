@@ -156,6 +156,11 @@ tr.pinned td { background: rgba(212,175,55,.06); box-shadow: inset 2px 0 0 var(-
 .subnav-btn.active { background: var(--steel-dim); border-color: var(--steel-line); color: #cfe6f7; font-weight: 700; }
 .lf-panel.hidden { display: none; }
 
+/* ---------- sourcing facet checkboxes ---------- */
+.facet-checks { display: inline-flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.facet-check { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: var(--ink-dim); }
+.facet-check input { accent-color: var(--gold); width: 13px; height: 13px; }
+
 /* ---------- weighted-score breakdown ---------- */
 .cat-breakdown { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
 .cat-row { display: grid; grid-template-columns: 110px 64px 1fr 58px 46px; align-items: center; gap: 8px; font-size: 10px; }
