@@ -513,8 +513,16 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-13T05:57:00Z",
+    "last_updated":  "2026-09-13T06:06:00Z",
     "history":  [
+                    {
+                        "ts":  "2026-09-13T06:06:00Z",
+                        "activity":  "offer_canonical_probe_results",
+                        "batch":  "none (operator-named: parser-level probe + 2 offer requests)",
+                        "summary":  "Harness upgraded with canonical-URL extraction plus offer-roster markers (aod-offer, Other sellers, Buying Options, offer-list); 9 offline mock tests all OK, zero network; committed 45a5ebf with code and evidence. Live results on the offer URL: firecrawl canonical www.amazon.com/clp/B00BH3HPZW, a brand landing page with zero seller and zero offer markers, so no roster. scrapedo canonical is a dp slug URL but carries an Other sellers section (other_sellers 1, offer_list 3, full seller markers), roster_distinct true, yet still zero seller-profile links and zero aod-offer rows, so per-seller IDs remain unproven. Correction to the prior report: the first offer fetches were dp-equivalent content, proven now by canonical, and firecrawl routing varies run to run (dp-like once, CLP now). Total live spend this session: 10 requests, 0 retries, 0 auth or credit failures.",
+                        "test_counts":  "test_provider_seller_probe.py: 9 ran / OK (mock-only). Live: 2 requests, 0 errors.",
+                        "next_action":  "Awaiting operator pick: (a) 1-request scrape.do render=true offer probe for the JS offer panel, (b) Browserbase browser-session probe, or (c) stop probing and design the backfill on dp plus other-sellers data without per-seller IDs. No further live calls until named."
+                    },
                     {
                         "ts":  "2026-09-13T05:57:00Z",
                         "activity":  "dotenv_decision_and_offer_probes",
