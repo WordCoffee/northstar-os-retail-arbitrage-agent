@@ -1,0 +1,71 @@
+{
+  "asin": "B0BFG4XKVM",
+  "offer_data_status": "available",
+  "offer_data_source": "easyparser",
+  "offer_data_fetched_at": "2026-09-13T06:00:47.396Z",
+  "offer_data_note": null,
+  "offer_data_cached": false,
+  "total_sellers": 2,
+  "fba_sellers": 2,
+  "fbm_sellers": 0,
+  "amazon_sellers": 0,
+  "buy_box": {
+    "available": true,
+    "seller_name": "OneGoodShop",
+    "seller_id": "A1Z2SOAK3QSUIU",
+    "fulfillment": "FBA",
+    "price": 28.99,
+    "shipping": null,
+    "landed_price": null,
+    "condition": "New",
+    "prime": true,
+    "note": null
+  },
+  "offers": [
+    {
+      "seller_name": "OneGoodShop",
+      "seller_id": "A1Z2SOAK3QSUIU",
+      "fulfillment": "FBA",
+      "is_buy_box_winner": true,
+      "price": null,
+      "shipping": null,
+      "landed_price": null,
+      "condition": "New",
+      "prime": true,
+      "rating": "5.0",
+      "feedback_count": 1795,
+      "availability": null,
+      "shipping_free": true,
+      "shipping_text": "FREE delivery Friday, September 18 on orders shipped by Amazon over $35"
+    },
+    {
+      "seller_name": "Mega City",
+      "seller_id": "AN6YH4R3NSAUN",
+      "fulfillment": "FBA",
+      "is_buy_box_winner": false,
+      "price": null,
+      "shipping": null,
+      "landed_price": null,
+      "condition": "New",
+      "prime": true,
+      "rating": "5.0",
+      "feedback_count": 5144,
+      "availability": null,
+      "shipping_free": true,
+      "shipping_text": "FREE delivery Friday, September 18 on orders shipped by Amazon over $35"
+    }
+  ],
+  "offers_returned": 2,
+  "offers_complete": true,
+  "offer_count": 2,
+  "buy_box_price": 28.99,
+  "request_zip_code": "19805",
+  "observed_at": "2026-09-13T06:00:47.396Z",
+  "title": "Kirkland Signature Triple Blade Refill Cartridges, 18-count, 18 Count (Pack of 1), 18.0 Count",
+  "credits_used": 37,
+  "credits_remaining": 63,
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ]
+}

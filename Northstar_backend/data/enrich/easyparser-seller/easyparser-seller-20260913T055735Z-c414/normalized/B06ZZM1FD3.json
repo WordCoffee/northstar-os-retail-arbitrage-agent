@@ -1,0 +1,55 @@
+{
+  "asin": "B06ZZM1FD3",
+  "offer_data_status": "available",
+  "offer_data_source": "easyparser",
+  "offer_data_fetched_at": "2026-09-13T05:59:53.550Z",
+  "offer_data_note": null,
+  "offer_data_cached": false,
+  "total_sellers": 1,
+  "fba_sellers": 0,
+  "fbm_sellers": 1,
+  "amazon_sellers": 0,
+  "buy_box": {
+    "available": true,
+    "seller_name": "Raysark products",
+    "seller_id": "AWV1YKUG77EV4",
+    "fulfillment": "FBM",
+    "price": 133.85,
+    "shipping": null,
+    "landed_price": null,
+    "condition": "New",
+    "prime": false,
+    "note": null
+  },
+  "offers": [
+    {
+      "seller_name": "Raysark products",
+      "seller_id": "AWV1YKUG77EV4",
+      "fulfillment": "FBM",
+      "is_buy_box_winner": true,
+      "price": null,
+      "shipping": null,
+      "landed_price": null,
+      "condition": "New",
+      "prime": false,
+      "rating": "3.5",
+      "feedback_count": 420,
+      "availability": null,
+      "shipping_free": true,
+      "shipping_text": "FREE delivery September 21 - 23."
+    }
+  ],
+  "offers_returned": 1,
+  "offers_complete": true,
+  "offer_count": 1,
+  "buy_box_price": 133.85,
+  "request_zip_code": "19805",
+  "observed_at": "2026-09-13T05:59:53.550Z",
+  "title": "Kirkland Signature Drawstring EaajpF Kitchen Trash Bags - 13 Gallon",
+  "credits_used": 16,
+  "credits_remaining": 84,
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ]
+}

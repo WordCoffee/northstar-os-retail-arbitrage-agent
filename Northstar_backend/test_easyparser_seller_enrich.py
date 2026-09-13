@@ -232,6 +232,34 @@ class SellerEnrichTests(unittest.TestCase):
         summary = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
         self.assertAlmostEqual(summary["credits_used"], 4.0, places=1)
 
+    def test_tee_survives_unencodable_console(self):
+        # Live run c414 resume died on a flag-emoji seller name via the
+        # cp1252 console. The UTF-8 stream must keep full fidelity while the
+        # limited stream degrades gracefully — and the batch must not die.
+        import io as _io
+        limited = _io.TextIOWrapper(_io.BytesIO(), encoding="cp1252",
+                                    errors="strict")
+        full = _io.StringIO()
+        tee = ese._Tee(limited, full)
+        tee.write("buybox=EzShop \U0001f1fa\U0001f1f8 ok\n")
+        tee.flush()
+        self.assertIn("\U0001f1fa\U0001f1f8", full.getvalue())
+        limited.seek(0)
+        self.assertIn("buybox=EzShop", limited.read())
+
+    def test_batch_survives_emoji_seller_name(self):
+        _manifest(self.manifest, ["B00BH3HPZW"])
+        payload = _payload("B00BH3HPZW")
+        payload["buy_box"] = {"seller_name": "EzShop \U0001f1fa\U0001f1f8"}
+        with patch.object(ese.offer_enrichment, "get_seller_offer_contract",
+                          return_value=payload):
+            rc = ese.run_batch(_args(self.manifest))
+        self.assertEqual(rc, 0)
+        run_dir = [d for d in ese.RUNS_BASE_DIR.iterdir() if d.is_dir()][0]
+        saved = json.loads((run_dir / "normalized" / "B00BH3HPZW.json")
+                           .read_text(encoding="utf-8"))
+        self.assertIn("\U0001f1fa", saved["buy_box"]["seller_name"])
+
 
 if __name__ == "__main__":
     unittest.main()
