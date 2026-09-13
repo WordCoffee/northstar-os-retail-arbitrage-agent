@@ -1,0 +1,51 @@
+{
+  "standard": {
+    "buy_box_seller_name": "TestSeller Inc",
+    "buy_box_fulfillment": "FBA",
+    "total_sellers": 5,
+    "other_sellers_present": false,
+    "lowest_price": 19.99
+  },
+  "fbm": {
+    "buy_box_seller_name": "FBM Seller LLC",
+    "buy_box_fulfillment": "FBM",
+    "total_sellers": 3,
+    "other_sellers_present": false,
+    "lowest_price": 24.5
+  },
+  "amazon_retail": {
+    "buy_box_seller_name": "Amazon.com",
+    "buy_box_fulfillment": "Amazon",
+    "total_sellers": 2,
+    "other_sellers_present": false,
+    "lowest_price": 15.0
+  },
+  "sparse": {
+    "buy_box_seller_name": null,
+    "buy_box_fulfillment": "Unknown",
+    "total_sellers": null,
+    "other_sellers_present": false,
+    "lowest_price": null
+  },
+  "variant_counts": {
+    "buy_box_seller_name": "Variant Seller",
+    "buy_box_fulfillment": "FBA",
+    "total_sellers": 10,
+    "other_sellers_present": false,
+    "lowest_price": null
+  },
+  "other_sellers": {
+    "buy_box_seller_name": "Main Seller",
+    "buy_box_fulfillment": "FBM",
+    "total_sellers": null,
+    "other_sellers_present": true,
+    "lowest_price": null
+  },
+  "clp": {
+    "buy_box_seller_name": null,
+    "buy_box_fulfillment": "Unknown",
+    "total_sellers": null,
+    "other_sellers_present": false,
+    "lowest_price": null
+  }
+}
