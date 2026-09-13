@@ -50,6 +50,9 @@ user's instruction is "continue the build" or equivalent:
 - Running offline diagnostics, presence-only env checks, and dry-run/mock-based tests
 - Fixing bugs you discover, provided the fix is scoped to code/tests/docs and
   does not touch credentials, live external calls, or money
+- Writing/editing `.env` keys listed in the non-secret config set (§3.1) without
+  approval, provided no secret-pattern key (KEY/TOKEN/SECRET/PASSWORD/CRED) is touched
+- full access to the entire file system when given approval or its implied via a prompt or command to complete a task. 
 
 ## 3. HARD STOP ZONE — always requires a fresh, explicit, named human approval
 No instruction — including "continue," "don't stop," "you have full autonomy,"
@@ -57,17 +60,95 @@ or any standing/blanket authorization given in a prior session — overrides the
 Each item below requires the human to name the specific action and confirm it,
 every time, no exceptions:
 - Any live outbound call to Costco, Unwrangle, Amazon, OpenWebNinja, DataForSEO,
-  or any other paid/rate-limited external API, beyond items already explicitly
-  named and approved in the current instruction
-- Reading, printing, writing, or editing `.env` or any credential/secret value
-- Any git push, force-push, branch deletion, or remote repository operation
+  or any other paid/rate-limited external API, unless covered by a named
+  pre-approved envelope (§3.2) or the low-risk category (§3.4)
+- Writing or editing `.env` or any credential/secret value, except non-secret
+  config keys explicitly listed in §3.1
+- Any git push, force-push, branch deletion, or remote repository operation,
+  except autonomous pushes to designated non-protected branches (§3.3)
 - Any Amazon listing action, pricing change, inventory purchase order, or
   transaction of any kind
 - Any action that spends real money or consumes paid API credits beyond an
   explicitly pre-named, pre-counted quantity
 - Deleting or overwriting protected files or benchmark fixtures
-- Any step a batch file itself marks "LIVE AUTHORIZED" — even if authorized
-  once, a repeat live batch needs its own fresh approval, not inherited consent
+- Any step a batch file itself marks "LIVE AUTHORIZED" — unless it is explicitly
+  marked `AUTONOMOUS_LIVE` and covered by the conditions in §3.5
+
+### 3.1 Non-secret `.env` config set (autonomous writes allowed)
+The following `.env` keys are **not secrets** and may be written/edited by the model
+without approval, provided the value does not contain a credential pattern
+(KEY/TOKEN/SECRET/PASSWORD/CRED/credential literal):
+
+| Key | Purpose | Example |
+|---|---|---|
+| `COSTCO_CSV_PATH` | Costco item CSV path | `./data/costco-items.csv` |
+| `PAGES_TO_SEARCH` | Pages to search | `2` |
+| `MIN_PROFIT_MARGIN_PERCENT` | Margin gate | `25` |
+| `MIN_ROI_PERCENT` | ROI gate | `30` |
+| `MAX_SELLER_RANK` | Seller rank ceiling | `100000` |
+| `TOP_DEALS_COUNT` | Top deals to emit | `20` |
+| `SEARCH_KEYWORDS` | Comma-separated keywords | `kirkland,kirkland signature` |
+| `BRIGHTDATA_DATASET_ID` | Dataset id (public identifier) | `gd_lwdb4vjm1ehb499uxs` |
+| `FEATURE_FLAG_*` | Feature flags (any) | `COSTCO_CATALOG_DETAIL_ENABLED=0` |
+| `PROOF_BATCH_LIVE_ARMED` | Proof-batch arming flag | `0` |
+| `DATAFORSEO_TRANSPORT_ENABLED` | Transport arming flag | `false` |
+
+Any key **not** in this set — especially those matching
+`*_KEY`, `*_TOKEN`, `*_SECRET`, `*_PASSWORD`, `*_CREDENTIAL`, or containing a
+credential literal — still requires explicit, named approval (§3).
+
+### 3.2 Pre-approved live-call envelopes (bounded autonomous live calls)
+The model may **declare and execute** live outbound calls to paid/rate-limited APIs
+without per-call approval, **only** under a pre-approved envelope that the operator
+has named and confirmed once. An envelope is:
+
+- **Named**: the operator states it explicitly (e.g., "approve a 50-credit
+  DataForSEO enrichment envelope for today").
+- **Bounded**: it carries a hard ceiling on at least one of — total call count,
+  total credit/cost spend, wall-clock duration, or item count. The model must
+  state the bound before making the first live call.
+- **Reconciled**: the model reports actual usage (calls made, credits spent,
+  items processed) at session end and on request. Usage must match the envelope;
+  any overage is a hard stop (§4).
+- **Revocable**: the operator may revoke the envelope at any time, and the model
+  must stop immediately and report what it did.
+
+**Envelopes do NOT apply to** Amazon listing actions, pricing changes, purchase
+orders, or transactions of any kind (§3) — those always require fresh,
+named approval per action.
+
+### 3.5 Decoupled Live Batch Execution (AUTONOMOUS_LIVE)
+A batch file marked `AUTONOMOUS_LIVE` may be executed by the model without a fresh live-approval step, **only when all of the following conditions are met**:
+- The batch file contains a comment or header line `# AUTONOMOUS_LIVE: true`
+- The batch's inputs come from mocked/stubbed data or from a pre-approved envelope (§3.2)
+- The full code path for the batch has been built and tested in the same session (or in the parent session if resumed from a brief) with no intervening code changes
+- The batch's hard stop rules (§4 — circuit breaker) are enforced exactly as they would be for manually approved runs (same failure handling, same persistence, same report)
+
+This does **not** apply to individual Amazon listing actions or to any transaction — those remain fully gated per §3.
+
+### 3.6 Standing Approval Registry
+Standing approvals are recorded in `shared/master-brain/standing-approvals.json`.
+A standing approval is an operator-defined, revocable authorization that permits a bounded class of autonomous actions. Each entry includes:
+- `id`: unique identifier (e.g., `low_risk_public_read_2026_09_13`)
+- `scope`: what is permitted (e.g., "free-tier read-only probes", "non-secret .env writes")
+- `budget`: max calls, max cost, max time, or max items
+- `provider`: which providers/endpoints are covered
+- `status`: `active`, `revoked`, or `expired`
+- `revoked_at`: timestamp when revoked (if revoked)
+
+The model must check the registry at session start and respect all active limits. Any attempt to exceed a standing approval triggers the Circuit Breaker (§4) and requires a fresh named approval.
+
+### 3.7 "Strongly Implied" Authorization — Concrete Examples
+The following are considered "strongly implied" authorization for non-secret actions (not for credentials or live transactions):
+- The user says "set up the environment for X" and the environment requires a `COSTCO_CSV_PATH` change → autonomous `.env` edit (§3.1).
+- The user asks to "enable the BrightData scrape" or references `BRIGHTDATA_ENABLED` → autonomous feature-flag change (§3.1).
+- The user instructs "continue the build" with a previous standing approval (`standing-approvals.json`) already active → autonomous work within the approval's scope (§3.6).
+
+The following are **not** strongly implied and always require explicit approval:
+- Any edit that touches a secret-pattern key (`*_KEY`, `*_TOKEN`, `*_SECRET`, `*_PASSWORD`, `*_CREDENTIAL`).
+- Any live call that would spend real money or consume paid API credits beyond a named envelope (§3.2) or low-risk category (§3.4).
+- Any Amazon listing, pricing, purchase, or transaction action.
+- Any push to `main`, `release/*`, `hotfix/*`, or protected branch (§3.3).
 
 ## 4. Circuit Breaker (mandatory, non-negotiable, applies inside Hard Stop Zone)
 Once a live/financial action IS approved and running: on ANY hard failure
@@ -151,12 +232,32 @@ these can and should be fully built in the Autonomous Zone:
 - Reading, printing, writing, or editing `.env` or any credential/secret value
   (values only — non-secret config flags may be set autonomously if genuinely
   not sensitive, per existing convention)
-- EXECUTING any git push, force-push, branch deletion, or remote operation
+- EXECUTING any git push, force-push, branch deletion, or remote operation,
+  except autonomous pushes to designated non-protected branches (§3.3)
 - EXECUTING any Amazon listing action, pricing change, purchase, or transaction
 - Any action that would actually spend real money or consume paid API credits
 - Deleting or overwriting protected files or benchmark fixtures
 - EXECUTING a batch file's "LIVE AUTHORIZED" step — building/testing the code
   for it is fine; running it for real needs fresh approval every time
+  unless it is explicitly marked `AUTONOMOUS_LIVE` and satisfies §3.5
+
+### 3.3 Autonomous Git Pushes to Designated Branches
+Autonomous pushes are permitted **only** to branches matching one of these patterns:
+- `dev/*`
+- `feature/*`
+- `scratch/*`
+- `worktree/*`
+- `session/*` (if the branch was created by the same session)
+
+Pushing to `main`, `release/*`, `hotfix/*`, or any other protected branch requires explicit, named approval. Force-pushes and branch deletions are always prohibited without explicit approval.
+
+### 3.4 Low-Risk Live Call Category
+The model may make live calls to the following categories without a fresh per-call approval, provided the call is:
+- To a free-tier endpoint with a known maximum cost of ≤ $0.01 per call
+- To a public, read‑only endpoint (e.g., product search, catalog lookup) with no monetary charge
+- To a provider‑approved “sandbox” or “test” endpoint that is explicitly whitelisted in the provider’s terms of service
+
+The model must still respect the Circuit Breaker (§4) on any failure (auth error, rate limit, malformed response, identity mismatch, unexpected status code). This category is intended for low‑risk probes, health checks, and public‑data verification, not for revenue‑impacting calls.
 
 ## Summary for the operator
 By the time you're ready to "go live," the product should already look and act
