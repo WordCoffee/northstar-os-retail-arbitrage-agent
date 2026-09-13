@@ -12,8 +12,8 @@ Inputs (all local, zero network, zero credentials):
     (never product_analysis.get_costco_price — that tries the live
     resolve_costco_cost API first).
 
-Economics (house definition, pricing.compute_profit):
-  profit = buy_box - COGS - 15% referral - FBA fee - 3.5% fuel - $0.35 inbound
+Economics (operator definition):
+  profit = buy_box - COGS - FBA fee (nothing else)
   FBA fee = enriched fba_fee, else estimate_fba_fee(weight_lbs); absent both
   means needs-fee (never assumed).
 
@@ -41,7 +41,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import costco_client
-from pricing import compute_profit, estimate_fba_fee
+from pricing import estimate_fba_fee
 
 BACKEND_DIR = Path(__file__).resolve().parent
 COMPLIANT_MANIFEST = BACKEND_DIR / "data" / "catalog" / "sourcescout_compliant_manifest.json"
@@ -115,12 +115,9 @@ def build_shortlist(manifest_path, run_dir, min_profit=9.0, top=90,
             else:
                 needs_fee.append({"asin": asin, "buy_box": buy_box})
                 continue
-        # COGS ceiling: max COGS that still clears min_profit. Actionable even
-        # when the CSV has no match — tells the operator which Costco price to
-        # beat, and ranks COGS-research priority by headroom.
-        referral = 0.15 * buy_box
-        fuel = 0.035 * fee
-        ceiling = buy_box - referral - fee - fuel - 0.35 - min_profit
+        # COGS ceiling: max COGS that still clears min_profit under the
+        # operator's definition (profit = buy_box - cogs - fba_fee).
+        ceiling = buy_box - fee - min_profit
         ceilings.append({"asin": asin, "buy_box": round(buy_box, 2),
                          "fba_fee": round(fee, 2), "fba_fee_basis": fee_basis,
                          "cogs_ceiling": round(ceiling, 2)})
@@ -134,12 +131,13 @@ def build_shortlist(manifest_path, run_dir, min_profit=9.0, top=90,
                                "match_quality": quality,
                                "match_reason": (cost or {}).get("match_reason")})
             continue
-        profit, roi = compute_profit(buy_box, cogs, fba_fee=fee)
+        profit = buy_box - cogs - fee
+        roi = (profit / cogs) * 100 if cogs > 0 else 0.0
         row = {
             "asin": asin, "title": (enriched.get("title") or title)[:100],
             "buy_box": round(buy_box, 2), "cogs": round(cogs, 2),
             "fba_fee": round(fee, 2), "fba_fee_basis": fee_basis,
-            "referral_rate": 0.15, "match_quality": quality,
+            "match_quality": quality,
             "profit": round(profit, 2), "roi_pct": round(roi, 1),
         }
         if profit >= min_profit:
@@ -180,8 +178,8 @@ def main(argv=None) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "definition": ("profit = buy_box - cogs - 15% referral - fba_fee - "
-                       "3.5% fuel - $0.35 inbound (pricing.compute_profit); "
+        "definition": ("profit = buy_box - cogs - fba_fee (operator definition: "
+                       "COGS and Amazon FBA fee only, no referral/fuel/inbound); "
                        "cogs trusted only on exact|high_confidence CSV match"),
         "min_profit": args.min_profit, "top": args.top,
         "counts": {k: (len(v) if isinstance(v, list) else v)
