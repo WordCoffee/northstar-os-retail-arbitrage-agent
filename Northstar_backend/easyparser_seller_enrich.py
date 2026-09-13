@@ -306,6 +306,23 @@ def run_batch(args) -> int:
             pass
 
 
+def _apply_asin_filter(order: List[str], args) -> List[str]:
+    """Restrict to an explicit allowlist (targeted gap-fill); manifest order kept."""
+    wanted = []
+    if args.only_asins:
+        wanted.extend(a.strip().upper() for a in str(args.only_asins).split(","))
+    if args.asin_file:
+        try:
+            with open(args.asin_file, "r", encoding="utf-8") as f:
+                wanted.extend(line.strip().upper() for line in f)
+        except OSError as exc:
+            return []
+    if not wanted:
+        return order
+    allowed = {a for a in wanted if ASIN_PATTERN.fullmatch(a)}
+    return [a for a in order if a in allowed]
+
+
 def _run_batch_inner(args, run_id: str, run_dir: Path, selected: List[Dict]) -> int:
     print("=== EASYPARSER LIVE SELLER ENRICHMENT (compliant PASS set only) ===")
     print("manifest: %s" % args.manifest)
@@ -314,6 +331,11 @@ def _run_batch_inner(args, run_id: str, run_dir: Path, selected: List[Dict]) -> 
     print("run dir: %s" % run_dir)
 
     order = [str(item.get("asin")).strip().upper() for item in selected]
+    order = _apply_asin_filter(order, args)
+    if not order:
+        print("error: ASIN allowlist (--only-asins/--asin-file) matched zero "
+              "PASS ASINs; refusing before any provider call")
+        return 2
     budget = {"requests_used": 0, "credits_used": 0.0, "credits_reported": 0.0,
               "provider_remaining": None}
     ledger: List[Dict] = []
@@ -451,6 +473,10 @@ def main(argv=None) -> int:
     p_batch.add_argument("--max-credits", type=int, default=None)
     p_batch.add_argument("--resume-from", default=None,
                          help="run dir name under data/enrich/easyparser-seller to resume")
+    p_batch.add_argument("--only-asins", default=None,
+                         help="comma-separated ASIN allowlist (manifest order kept)")
+    p_batch.add_argument("--asin-file", default=None,
+                         help="path to a file with one ASIN per line (allowlist)")
 
     args = parser.parse_args(argv)
     if args.cmd == "dry-run":
