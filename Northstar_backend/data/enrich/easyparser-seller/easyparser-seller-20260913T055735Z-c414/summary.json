@@ -1,0 +1,20 @@
+{
+  "run_id": "easyparser-seller-20260913T055735Z-c414",
+  "generated_at": "2026-09-13T05:58:21.294497+00:00",
+  "provider": "EASYPARSER",
+  "scope": "sourcescout_compliant_manifest PASS only",
+  "compliant_pass_count": 245,
+  "requests_used": 14,
+  "requests_cap": 58,
+  "credits_used": 119.0,
+  "credits_reported": 119.0,
+  "credits_cap": 116,
+  "provider_credits_remaining_last": 85,
+  "stop_reason": "max_credits",
+  "outcome_counts": {
+    "available": 5,
+    "partial": 9,
+    "other": 0
+  },
+  "enriched_at": "2026-09-13T05:58:21.294530+00:00"
+}
