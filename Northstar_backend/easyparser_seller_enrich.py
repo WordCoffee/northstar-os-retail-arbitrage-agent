@@ -145,14 +145,29 @@ def _atomic_write(path: Path, payload: Dict) -> None:
 
 
 class _Tee(io.TextIOBase):
-    """Mirror stdout to run.log so a killed shell never takes the only log."""
+    """Mirror stdout to run.log so a killed shell never takes the only log.
+
+    Per-stream encode fallback: seller names carry arbitrary Unicode
+    (live run c414 died on a flag-emoji seller via the cp1252 console).
+    The UTF-8 log file always keeps full fidelity; the console degrades
+    unencodable characters to ? instead of killing the batch.
+    """
 
     def __init__(self, *streams):
         self._streams = streams
 
     def write(self, data):
         for s in self._streams:
-            s.write(data)
+            try:
+                s.write(data)
+            except UnicodeEncodeError:
+                enc = getattr(s, "encoding", None) or "utf-8"
+                try:
+                    s.write(data.encode(enc, "replace").decode(enc))
+                except Exception:
+                    pass
+            except Exception:
+                pass
         return len(data)
 
     def flush(self):

@@ -1,0 +1,38 @@
+{
+  "asin": "B08TQK84HP",
+  "offer_data_status": "partial",
+  "offer_data_source": "easyparser",
+  "offer_data_fetched_at": "2026-09-13T06:00:29.669Z",
+  "offer_data_note": "Provider returned only aggregate seller counts; individual offer rows were not included in the response.",
+  "offer_data_cached": false,
+  "total_sellers": 0,
+  "fba_sellers": 0,
+  "fbm_sellers": 0,
+  "amazon_sellers": 0,
+  "buy_box": {
+    "available": false,
+    "seller_name": null,
+    "seller_id": null,
+    "fulfillment": "Unknown",
+    "price": null,
+    "shipping": null,
+    "landed_price": null,
+    "condition": null,
+    "prime": null,
+    "note": "Provider did not identify the Buy Box winner; it is never inferred from the lowest price."
+  },
+  "offers": [],
+  "offers_returned": 0,
+  "offers_complete": false,
+  "offer_count": 0,
+  "buy_box_price": null,
+  "request_zip_code": "19805",
+  "observed_at": "2026-09-13T06:00:29.669Z",
+  "title": "Kirkland Signature Men's Elastic Waistband Mesh Lined Swim Short Trunk (Black Melange Stripe",
+  "credits_used": 30,
+  "credits_remaining": 70,
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ]
+}
