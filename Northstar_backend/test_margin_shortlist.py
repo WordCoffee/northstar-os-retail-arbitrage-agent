@@ -59,10 +59,10 @@ class MarginShortlistTests(unittest.TestCase):
                 "Beta": {"match_quality": "high_confidence", "costco_cost": 10.0}}
         res, err = self._run(items, enriched, cost)
         self.assertIsNone(err)
-        # Beta: 40-10-6-5.25-0.18-0.35=18.22; Alpha: 20-8-3-5.25-0.18-0.35=3.22
+        # Beta: 40-10-5.25=24.75; Alpha: 20-8-5.25=6.75
         self.assertEqual(res["ranked_total"], 1)
         self.assertEqual(res["ranked"][0]["asin"], "B0017SURSY")
-        self.assertAlmostEqual(res["ranked"][0]["profit"], 18.22, places=2)
+        self.assertAlmostEqual(res["ranked"][0]["profit"], 24.75, places=2)
 
     def test_weight_estimated_fee_used_when_enriched_missing(self):
         items = [_item("B00BH3HPZW", "Alpha")]
@@ -133,10 +133,10 @@ class MarginShortlistTests(unittest.TestCase):
         cost = {"Alpha": {"match_quality": "exact", "costco_cost": 8.0}}
         res, err = self._run(items, enriched, cost)
         self.assertIsNone(err)
-        # profit = 20-8-3-5.25-0.18-0.35 = 3.22 < 9
+        # profit = 20-8-5.25 = 6.75 < 9
         self.assertEqual(res["ranked_total"], 0)
         self.assertEqual(len(res["below_cut"]), 1)
-        self.assertAlmostEqual(res["below_cut"][0]["profit"], 3.22, places=2)
+        self.assertAlmostEqual(res["below_cut"][0]["profit"], 6.75, places=2)
 
     def test_ceilings_computed_for_fee_complete_asins(self):
         items = [_item("B00BH3HPZW", "Alpha"), _item("B0017SURSY", "Beta")]
@@ -145,9 +145,9 @@ class MarginShortlistTests(unittest.TestCase):
                                        title="Beta")}
         res, err = self._run(items, enriched, {})
         self.assertIsNone(err)
-        # Alpha ceiling = 40-6-5.25-0.18-0.35-9 = 19.22; Beta needs-fee.
+        # Alpha ceiling = 40-5.25-9 = 25.75; Beta needs-fee.
         self.assertEqual(len(res["ceilings"]), 1)
-        self.assertAlmostEqual(res["ceilings"][0]["cogs_ceiling"], 19.22,
+        self.assertAlmostEqual(res["ceilings"][0]["cogs_ceiling"], 25.75,
                                places=2)
         self.assertEqual(len(res["needs_fee"]), 1)
 
