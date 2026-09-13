@@ -1,0 +1,29 @@
+{
+  "amazon_price": 26.99,
+  "buy_box_price": 26.99,
+  "lowest_price": 26.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 100.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": null,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Pantry Staples",
+    "Cooking & Baking",
+    "Cooking Oils, Vinegars & Sprays",
+    "Vinegars",
+    "Balsamic"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Organic Balsamic Vinegar, 1 Liter (33.81 Fluid Ounce)",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:33:44.935223+00:00"
+}

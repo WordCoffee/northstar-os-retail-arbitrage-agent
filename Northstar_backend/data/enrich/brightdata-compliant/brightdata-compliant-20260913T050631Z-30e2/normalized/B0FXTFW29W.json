@@ -1,0 +1,28 @@
+{
+  "amazon_price": 17.25,
+  "buy_box_price": 17.25,
+  "lowest_price": 17.25,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 50.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 5.25,
+  "amazon_category": "Clothing, Shoes & Jewelry",
+  "browse_node_id": 7141123011,
+  "breadcrumb": [
+    "Clothing, Shoes & Jewelry",
+    "Women",
+    "Clothing",
+    "Active",
+    "Athletic Socks"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "KIRKLAND Signature Women's Extra-Fine Merino Wool, 4 Pairs, Fits Shoe Sizes 6-10.5, Assorted Colors",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T05:07:50.488401+00:00"
+}

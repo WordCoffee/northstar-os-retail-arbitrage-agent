@@ -1,0 +1,28 @@
+{
+  "amazon_price": 25.49,
+  "buy_box_price": 25.49,
+  "lowest_price": 25.49,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 1299.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 7.1,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Household Supplies",
+    "Paper & Plastic",
+    "Disposable Food Storage",
+    "Plastic Wrap"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Stretch Tite Plastic Food Wrap 11 7/8 Inch X 750 SQ. FT. Pack 2",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:23:36.286438+00:00"
+}

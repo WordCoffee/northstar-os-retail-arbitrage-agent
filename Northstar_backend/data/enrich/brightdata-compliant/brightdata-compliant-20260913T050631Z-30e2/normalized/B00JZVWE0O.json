@@ -1,0 +1,27 @@
+{
+  "amazon_price": 16.74,
+  "buy_box_price": 16.74,
+  "lowest_price": 16.74,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 433.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 8.2,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Snacks & Sweets",
+    "Snack Foods",
+    "Pretzels"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature H.K Anderson Valencia Peanut Butter Filled Pretzel Nuggets: 52 Oz - Cos9",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:26:55.725815+00:00"
+}

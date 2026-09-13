@@ -1,0 +1,28 @@
+{
+  "amazon_price": 16.97,
+  "buy_box_price": 16.97,
+  "lowest_price": 16.97,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 5.25,
+  "amazon_category": "Clothing, Shoes & Jewelry",
+  "browse_node_id": 7141123011,
+  "breadcrumb": [
+    "Clothing, Shoes & Jewelry",
+    "Men",
+    "Clothing",
+    "Active",
+    "Active Sweatshirts"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "KIRKLAND Signature Men's UPF 50+ Stretch 1/2 Zip Pullover (US, Alpha, Medium, Regular, Regular, Blue)",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T05:07:11.382420+00:00"
+}

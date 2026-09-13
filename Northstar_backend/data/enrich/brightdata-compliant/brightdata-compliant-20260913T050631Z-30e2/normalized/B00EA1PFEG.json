@@ -1,0 +1,28 @@
+{
+  "amazon_price": 46.99,
+  "buy_box_price": 46.99,
+  "lowest_price": 46.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 100.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 4.75,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Vitamins, Minerals & Supplements",
+    "Essential Fatty Acids",
+    "Omega Oils",
+    "Omega-3"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature 100% Wild Alaskan Salmon Oil 90 EPA 110 DHA 1200mg - 320 Enteric Coated Softgels",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:26:16.632822+00:00"
+}

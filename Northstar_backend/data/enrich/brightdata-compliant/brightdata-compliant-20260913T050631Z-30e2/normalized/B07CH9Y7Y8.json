@@ -1,0 +1,28 @@
+{
+  "amazon_price": 107.49,
+  "buy_box_price": 107.49,
+  "lowest_price": 107.49,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 6.1,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Vitamins, Minerals & Supplements",
+    "Vitamins",
+    "Vitamin B",
+    "B12"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Sublingual B-12 5000 mcg, 5 Bottles (300 Tablets)",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:30:41.726752+00:00"
+}

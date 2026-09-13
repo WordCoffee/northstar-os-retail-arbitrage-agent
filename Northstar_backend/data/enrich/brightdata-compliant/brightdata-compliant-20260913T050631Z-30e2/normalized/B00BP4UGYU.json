@@ -1,0 +1,29 @@
+{
+  "amazon_price": 52.89,
+  "buy_box_price": 52.89,
+  "lowest_price": 52.89,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 9.9,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Pantry Staples",
+    "Cooking & Baking",
+    "Cooking Oils, Vinegars & Sprays",
+    "Oils",
+    "Olive"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature 2 x Organic Extra Virgin Olive Oil, 2 Liters",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:25:44.904493+00:00"
+}

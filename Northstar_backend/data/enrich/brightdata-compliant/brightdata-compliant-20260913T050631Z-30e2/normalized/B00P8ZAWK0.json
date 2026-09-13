@@ -1,0 +1,27 @@
+{
+  "amazon_price": 15.99,
+  "buy_box_price": 15.99,
+  "lowest_price": 15.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 216.5,
+  "monthly_sales_estimated": true,
+  "fba_fee": 5.25,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Vitamins, Minerals & Supplements",
+    "Vitamins",
+    "Multivitamins"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Adults, 50 plus Mature Multi Vitamins & Minerals, 400-Count Tablets",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:23:47.279096+00:00"
+}

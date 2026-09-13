@@ -1,0 +1,28 @@
+{
+  "amazon_price": 62.97,
+  "buy_box_price": 62.97,
+  "lowest_price": 62.97,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 100.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": null,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Diet & Sports Nutrition",
+    "Nutrition Bars & Drinks",
+    "Nutrition Bars",
+    "Protein Bars"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Protein bar Energy Variety Pack, (Family Bundle)",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:32:43.593636+00:00"
+}

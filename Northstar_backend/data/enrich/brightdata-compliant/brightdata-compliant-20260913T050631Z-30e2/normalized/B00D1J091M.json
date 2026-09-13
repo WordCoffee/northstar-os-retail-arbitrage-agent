@@ -1,0 +1,27 @@
+{
+  "amazon_price": 37.29,
+  "buy_box_price": 37.29,
+  "lowest_price": 37.29,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 50.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 8.2,
+  "amazon_category": "Beauty & Personal Care",
+  "browse_node_id": 3760911,
+  "breadcrumb": [
+    "Beauty & Personal Care",
+    "Hair Care",
+    "Shampoo & Conditioner",
+    "Shampoo & Conditioner Sets"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Professional Salon Formula Moisture Shampoo or Conditioner (33.8 Oz Each) (shampoo & Conditioner Set) By 1count",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:26:11.172989+00:00"
+}

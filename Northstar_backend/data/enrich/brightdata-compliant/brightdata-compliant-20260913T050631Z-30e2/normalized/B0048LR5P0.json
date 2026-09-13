@@ -1,0 +1,28 @@
+{
+  "amazon_price": 21.99,
+  "buy_box_price": 21.99,
+  "lowest_price": 21.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 100.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": null,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Household Supplies",
+    "Paper & Plastic",
+    "Disposable Food Storage",
+    "Plastic Wrap"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Food Wrap Premium",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:24:49.731978+00:00"
+}

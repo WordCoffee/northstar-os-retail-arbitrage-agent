@@ -1,0 +1,27 @@
+{
+  "amazon_price": 14.8,
+  "buy_box_price": 14.8,
+  "lowest_price": 14.8,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 50.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 6.1,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Snacks & Sweets",
+    "Snack Foods",
+    "Party Mix"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Sweet Heat Snack Mix, 24 oz (1 Lb 8 oz) 680g",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:35:33.417145+00:00"
+}

@@ -1,0 +1,22 @@
+{
+  "amazon_price": 28.9,
+  "buy_box_price": 28.9,
+  "lowest_price": 28.9,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": null,
+  "amazon_category": null,
+  "browse_node_id": null,
+  "breadcrumb": null,
+  "category_source_hint": null,
+  "title": "Kirkland Signature Men's Shirt Jacket \u2013 Heavyweight 2-Way Stretch Workwear, Button Closure, Long Sleeve, Casual Outerwear",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T05:06:59.728225+00:00"
+}

@@ -1,0 +1,28 @@
+{
+  "amazon_price": 93.5,
+  "buy_box_price": 93.5,
+  "lowest_price": 93.5,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 9.9,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Beverages",
+    "Coffee",
+    "Whole Coffee Beans",
+    "Roasted Coffee Beans"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Starbucks Bean Coffee Medium Roast House Blend (4 Bags)",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:30:32.166227+00:00"
+}

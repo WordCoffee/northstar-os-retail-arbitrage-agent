@@ -1,0 +1,28 @@
+{
+  "amazon_price": 31.98,
+  "buy_box_price": 31.98,
+  "lowest_price": 31.98,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 200.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 8.2,
+  "amazon_category": "Sports & Outdoors",
+  "browse_node_id": 3375251,
+  "breadcrumb": [
+    "Sports & Outdoors",
+    "Sports",
+    "Golf",
+    "Golf Balls",
+    "Recycled & Used Balls"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "LostGolfBalls - 36 Kirkland Signature Golf Balls in Mint Condition, Recycled Used Golf Balls, AAAAA Quality Quality, White",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:35:39.643064+00:00"
+}
