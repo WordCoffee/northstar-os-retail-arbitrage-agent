@@ -1,0 +1,29 @@
+{
+  "provider": "firecrawl",
+  "asin": "B00BH3HPZW",
+  "page": "offer",
+  "url_host": "amazon.com",
+  "outcome": "has_seller_data",
+  "http_status": 200,
+  "page_status": 200,
+  "content_bytes": 2142215,
+  "content_head": "<!DOCTYPE html><html lang=\"en-us\" class=\"a-ws a-js a-audio a-video a-canvas a-svg a-drag-drop a-geolocation a-history a-webworker a-autofocus a-input-placeholder a-textarea-placeholder a-local-storage a-gradients a-transform3d a-touch-scrolling a-text-shadow a-text-stroke a-box-shadow a-border-radius a-border-image a-opacity a-transform a-transition null\" data-19ax5a9jf=\"dingo\" data-aui-build-date",
+  "markers": {
+    "seller_markers": {
+      "seller_profile_link": 0,
+      "sold_by": 7,
+      "fulfilled_by_amazon": 0,
+      "ships_from": 6,
+      "merchant_info": 100,
+      "new_offers_count": 1,
+      "seller_rating": 8
+    },
+    "block_markers": {
+      "captcha": 0,
+      "dog_page": 0,
+      "access_denied": 0
+    }
+  },
+  "elapsed_seconds": 6.64,
+  "requests_used": 1
+}
