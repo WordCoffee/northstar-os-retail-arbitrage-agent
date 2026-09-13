@@ -1,0 +1,55 @@
+{
+  "asin": "B01NCOTNVU",
+  "offer_data_status": "available",
+  "offer_data_source": "easyparser",
+  "offer_data_fetched_at": "2026-09-13T05:58:20.421Z",
+  "offer_data_note": null,
+  "offer_data_cached": false,
+  "total_sellers": 1,
+  "fba_sellers": 0,
+  "fbm_sellers": 1,
+  "amazon_sellers": 0,
+  "buy_box": {
+    "available": true,
+    "seller_name": "Daily Market",
+    "seller_id": "A1LIC5VPVR55VZ",
+    "fulfillment": "FBM",
+    "price": 115.0,
+    "shipping": null,
+    "landed_price": null,
+    "condition": "New",
+    "prime": false,
+    "note": null
+  },
+  "offers": [
+    {
+      "seller_name": "Daily Market",
+      "seller_id": "A1LIC5VPVR55VZ",
+      "fulfillment": "FBM",
+      "is_buy_box_winner": true,
+      "price": null,
+      "shipping": null,
+      "landed_price": null,
+      "condition": "New",
+      "prime": false,
+      "rating": "3.0",
+      "feedback_count": 20298,
+      "availability": null,
+      "shipping_free": null,
+      "shipping_text": "$6.50 delivery Wednesday, September 23."
+    }
+  ],
+  "offers_returned": 1,
+  "offers_complete": true,
+  "offer_count": 1,
+  "buy_box_price": 115.0,
+  "request_zip_code": "19805",
+  "observed_at": "2026-09-13T05:58:20.421Z",
+  "title": "Kirkland Signature GInVUtV Drawstring Kitchen Trash Bags - 13 Gallon, 600 Bags",
+  "credits_used": 15,
+  "credits_remaining": 85,
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ]
+}
