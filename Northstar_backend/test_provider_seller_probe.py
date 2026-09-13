@@ -69,6 +69,34 @@ class MarkerScanTests(unittest.TestCase):
         self.assertGreater(marks["block_markers"]["captcha"], 0)
 
 
+class OfferRosterTests(unittest.TestCase):
+    DP_HTML = ('<html><head><link rel="canonical" '
+               'href="https://www.amazon.com/dp/B00BH3HPZW/ref=abc"/></head>'
+               "<body>Sold by TestSeller New (3) from $9.99</body></html>")
+    OFFER_HTML = ('<html><head><link rel="canonical" '
+                  'href="https://www.amazon.com/gp/offer-listing/B00BH3HPZW"/>'
+                  "</head><body><div class=\"aod-offer\">Sold by X</div>"
+                  "<h3>Other sellers on Amazon</h3>"
+                  "<a>See All Buying Options</a></body></html>")
+
+    def test_canonical_dp(self):
+        marks = probe.scan_markers(self.DP_HTML)
+        self.assertEqual(marks["canonical"], "www.amazon.com/dp/B00BH3HPZW/ref=abc")
+        self.assertEqual(sum(marks["offer_markers"].values()), 0)
+
+    def test_canonical_offer_and_roster_markers(self):
+        marks = probe.scan_markers(self.OFFER_HTML)
+        self.assertEqual(marks["canonical"], "www.amazon.com/gp/offer-listing/B00BH3HPZW")
+        self.assertGreater(marks["offer_markers"]["aod_offer"], 0)
+        self.assertGreater(marks["offer_markers"]["other_sellers"], 0)
+        self.assertGreater(marks["offer_markers"]["buying_options"], 0)
+
+    def test_canonical_absent_is_none(self):
+        marks = probe.scan_markers("# Title only, no html")
+        self.assertIsNone(marks["canonical"])
+        self.assertEqual(sum(marks["offer_markers"].values()), 0)
+
+
 class GateTests(unittest.TestCase):
     def test_missing_key_is_config_error(self):
         with patch.dict(os.environ, {}, clear=False):

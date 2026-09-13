@@ -87,6 +87,16 @@ _BLOCK_MARKERS = {
     "dog_page": re.compile(r"sorry, we just need to make sure|looking for something\?", re.I),
     "access_denied": re.compile(r"access denied|request blocked|are you a human", re.I),
 }
+# Offer-roster structures: present only when Amazon actually served an offer
+# list / buying-options panel (as opposed to dp-equivalent content).
+_OFFER_MARKERS = {
+    "aod_offer": re.compile(r"aod-offer", re.I),
+    "other_sellers": re.compile(r"Other sellers on Amazon", re.I),
+    "buying_options": re.compile(r"See All Buying Options|All Buying Options", re.I),
+    "offer_list": re.compile(r"aod-container|aod-list|offer-list", re.I),
+}
+_CANONICAL_TAG_RE = re.compile(r"<link[^>]*rel=[\"']canonical[\"'][^>]*>", re.I)
+_HREF_RE = re.compile(r"href=[\"']([^\"']+)[\"']", re.I)
 
 _AUTH_RE = re.compile(r"\b(auth|unauthori|forbidden|denied|invalid.{0,10}key|api.{0,10}key)\b", re.I)
 _CREDITS_RE = re.compile(r"\b(payment|credit|quota|billing|402|allowance|exhausted)\b", re.I)
@@ -258,12 +268,39 @@ FETCHERS = {
 }
 
 
+def _canonical_path(content):
+    """Extract the page's canonical URL host+path (never query/params).
+
+    Tells us which page Amazon thinks it served (dp vs offer-listing) even
+    when our HTTP layer cannot see server-side merges. Returns None when
+    no canonical tag is present (e.g., markdown-only providers).
+    """
+    if not content:
+        return None
+    tag = _CANONICAL_TAG_RE.search(content)
+    if not tag:
+        return None
+    href = _HREF_RE.search(tag.group(0))
+    if not href:
+        return None
+    url = href.group(1)
+    try:
+        from urllib.parse import urlparse
+        parts = urlparse(url)
+        host = parts.netloc or "amazon.com"
+        return "%s%s" % (host, parts.path or "/")
+    except Exception:
+        return None
+
+
 def scan_markers(content):
-    """Count seller/block marker hits in content (never returns content)."""
+    """Count seller/block/offer marker hits in content (never returns content)."""
     text = content or ""
     return {
         "seller_markers": {k: len(rx.findall(text)) for k, rx in _SELLER_MARKERS.items()},
         "block_markers": {k: len(rx.findall(text)) for k, rx in _BLOCK_MARKERS.items()},
+        "offer_markers": {k: len(rx.findall(text)) for k, rx in _OFFER_MARKERS.items()},
+        "canonical": _canonical_path(text),
     }
 
 
@@ -294,8 +331,10 @@ def preflight(provider, asin, page, run_dir):
         marks = scan_markers(content)
         blocked = any(v > 0 for v in marks["block_markers"].values())
         sellers = sum(marks["seller_markers"].values())
+        roster = sum(marks["offer_markers"].values())
         record = {"provider": provider, "asin": asin, "page": page, "url_host": "amazon.com",
                   "outcome": "blocked" if blocked else ("has_seller_data" if sellers > 0 else "no_data_found"),
+                  "roster_distinct": roster > 0,
                   "http_status": result.get("http_status"),
                   "page_status": result.get("page_status"),
                   "content_bytes": len(content), "content_head": content[:400],
