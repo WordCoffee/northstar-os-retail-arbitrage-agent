@@ -1,0 +1,71 @@
+{
+  "asin": "B0CGJNJ5K2",
+  "offer_data_status": "available",
+  "offer_data_source": "easyparser",
+  "offer_data_fetched_at": "2026-09-13T06:01:37.714Z",
+  "offer_data_note": null,
+  "offer_data_cached": false,
+  "total_sellers": 2,
+  "fba_sellers": 0,
+  "fbm_sellers": 2,
+  "amazon_sellers": 0,
+  "buy_box": {
+    "available": true,
+    "seller_name": "Saille Willow",
+    "seller_id": "A1VLUDU2BHNQSD",
+    "fulfillment": "FBM",
+    "price": 15.99,
+    "shipping": null,
+    "landed_price": null,
+    "condition": "New",
+    "prime": false,
+    "note": null
+  },
+  "offers": [
+    {
+      "seller_name": "Saille Willow",
+      "seller_id": "A1VLUDU2BHNQSD",
+      "fulfillment": "FBM",
+      "is_buy_box_winner": true,
+      "price": null,
+      "shipping": null,
+      "landed_price": null,
+      "condition": "New",
+      "prime": false,
+      "rating": "4.0",
+      "feedback_count": 40,
+      "availability": null,
+      "shipping_free": true,
+      "shipping_text": "FREE delivery September 18 - 22."
+    },
+    {
+      "seller_name": "bignameslittleprice",
+      "seller_id": "A8O3NEBXY3URT",
+      "fulfillment": "FBM",
+      "is_buy_box_winner": false,
+      "price": null,
+      "shipping": null,
+      "landed_price": null,
+      "condition": "New",
+      "prime": false,
+      "rating": "4.5",
+      "feedback_count": 24,
+      "availability": null,
+      "shipping_free": null,
+      "shipping_text": "$4.99 delivery September 18 - October 2."
+    }
+  ],
+  "offers_returned": 2,
+  "offers_complete": true,
+  "offer_count": 2,
+  "buy_box_price": 15.99,
+  "request_zip_code": "19805",
+  "observed_at": "2026-09-13T06:01:37.714Z",
+  "title": "Kirkland Signature Women Slub Tee",
+  "credits_used": 40,
+  "credits_remaining": 60,
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ]
+}

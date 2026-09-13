@@ -1,20 +1,20 @@
 {
   "run_id": "easyparser-seller-20260913T055735Z-c414",
-  "generated_at": "2026-09-13T06:00:53.924964+00:00",
+  "generated_at": "2026-09-13T06:02:28.624680+00:00",
   "provider": "EASYPARSER",
   "scope": "sourcescout_compliant_manifest PASS only",
   "compliant_pass_count": 245,
-  "requests_used": 38,
+  "requests_used": 58,
   "requests_cap": 58,
-  "credits_used": 38.0,
-  "credits_reported": 37.0,
+  "credits_used": 58.0,
+  "credits_reported": 57.0,
   "credits_cap": 116,
-  "provider_credits_remaining_last": 61,
-  "stop_reason": "error: Traceback (most recent call last): |   File \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\easyparser_seller_enrich.py\", line 472, in _run_batch_inner |     print(\"  [%3d/%3d] %s -> %-12s sellers=%s fba=%s fbm=%s buybox=%s credits=%.1f bal=%s\" % ( |     ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ |         idx, len(order), asin, status, payload.get(\"total_sellers\"), |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ |         payload.get(\"fba_sellers\"), payload.get(\"fbm_sellers\"), |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ |         buy_box.get(\"seller_name\"), credits_this_call, |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ |         budget[\"provider_remaining\"])) |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ |   File \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\easyparser_seller_enrich.py\", line 155, in write |     s.write(data) |     ~~~~~~~^^^^^^ |   File \"C:\\Python314\\Lib\\encodings\\cp1252.py\", line 19, in encode |     return codecs.charmap_encode(input,self.errors,encoding_table)[0] |            ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ | UnicodeEncodeError: 'charmap' codec can't encode characters in position 76-77: character maps to <undefined> | ",
+  "provider_credits_remaining_last": 41,
+  "stop_reason": null,
   "outcome_counts": {
-    "available": 22,
-    "partial": 16,
+    "available": 40,
+    "partial": 18,
     "other": 0
   },
-  "enriched_at": "2026-09-13T06:00:53.924974+00:00"
+  "enriched_at": "2026-09-13T06:02:28.624715+00:00"
 }

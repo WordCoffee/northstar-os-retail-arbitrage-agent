@@ -1,0 +1,71 @@
+{
+  "asin": "B0HCKGRWMV",
+  "offer_data_status": "available",
+  "offer_data_source": "easyparser",
+  "offer_data_fetched_at": "2026-09-13T06:02:27.816Z",
+  "offer_data_note": null,
+  "offer_data_cached": false,
+  "total_sellers": 2,
+  "fba_sellers": 0,
+  "fbm_sellers": 2,
+  "amazon_sellers": 0,
+  "buy_box": {
+    "available": true,
+    "seller_name": "T & L Discount Place",
+    "seller_id": "A2JQZXCKSLDIEC",
+    "fulfillment": "FBM",
+    "price": 58.97,
+    "shipping": null,
+    "landed_price": null,
+    "condition": "New",
+    "prime": false,
+    "note": null
+  },
+  "offers": [
+    {
+      "seller_name": "T & L Discount Place",
+      "seller_id": "A2JQZXCKSLDIEC",
+      "fulfillment": "FBM",
+      "is_buy_box_winner": true,
+      "price": null,
+      "shipping": null,
+      "landed_price": null,
+      "condition": "New",
+      "prime": false,
+      "rating": "3.5",
+      "feedback_count": 1816,
+      "availability": null,
+      "shipping_free": true,
+      "shipping_text": "FREE delivery September 15 - 17."
+    },
+    {
+      "seller_name": "Snowdrop Market",
+      "seller_id": "A15EHNXKQXSLL8",
+      "fulfillment": "FBM",
+      "is_buy_box_winner": false,
+      "price": null,
+      "shipping": null,
+      "landed_price": null,
+      "condition": "New",
+      "prime": false,
+      "rating": "4.0",
+      "feedback_count": 558,
+      "availability": null,
+      "shipping_free": true,
+      "shipping_text": "FREE delivery Monday, September 21."
+    }
+  ],
+  "offers_returned": 2,
+  "offers_complete": true,
+  "offer_count": 2,
+  "buy_box_price": 58.97,
+  "request_zip_code": "19805",
+  "observed_at": "2026-09-13T06:02:27.816Z",
+  "title": "KIRKLAND Signature Women's Relaxed Fit Ribbed Jogger Pant with Pockets",
+  "credits_used": 59,
+  "credits_remaining": 41,
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ]
+}

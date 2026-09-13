@@ -1,0 +1,55 @@
+{
+  "asin": "B0DL2G75WY",
+  "offer_data_status": "available",
+  "offer_data_source": "easyparser",
+  "offer_data_fetched_at": "2026-09-13T06:01:56.783Z",
+  "offer_data_note": null,
+  "offer_data_cached": false,
+  "total_sellers": 1,
+  "fba_sellers": 0,
+  "fbm_sellers": 1,
+  "amazon_sellers": 0,
+  "buy_box": {
+    "available": true,
+    "seller_name": "Number One E-Sales, LLC",
+    "seller_id": "A2IDOCD7EH047X",
+    "fulfillment": "FBM",
+    "price": 12.99,
+    "shipping": null,
+    "landed_price": null,
+    "condition": "New",
+    "prime": false,
+    "note": null
+  },
+  "offers": [
+    {
+      "seller_name": "Number One E-Sales, LLC",
+      "seller_id": "A2IDOCD7EH047X",
+      "fulfillment": "FBM",
+      "is_buy_box_winner": true,
+      "price": null,
+      "shipping": null,
+      "landed_price": null,
+      "condition": "New",
+      "prime": false,
+      "rating": "4.5",
+      "feedback_count": 148,
+      "availability": null,
+      "shipping_free": null,
+      "shipping_text": "$5.35 delivery Monday, September 21."
+    }
+  ],
+  "offers_returned": 1,
+  "offers_complete": true,
+  "offer_count": 1,
+  "buy_box_price": 12.99,
+  "request_zip_code": "19805",
+  "observed_at": "2026-09-13T06:01:56.783Z",
+  "title": "KIRKLAND Signature Costco KS17 M50 Polarized Satin Gunmetal Grey Sunglasses",
+  "credits_used": 48,
+  "credits_remaining": 52,
+  "data_gaps": [
+    "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+    "Results are ZIP-code and time specific."
+  ]
+}
