@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "description": "Standing approval registry for autonomous actions. Must be checked by the agent at session start. All entries are revocable by the operator at any time.",
+  "policy_ref": "AGENTS.md §3.6",
+  "active": [],
+  "revoked": [],
+  "template": {
+    "low_risk_public_read": {
+      "scope": "free-tier read-only probes (public data / sandbox endpoints only)",
+      "budget": {"max_calls_per_session": 10, "max_total_cost_usd": 0.01},
+      "provider": "any (restricted to admitted sandbox/whitelist endpoints only)",
+      "status": "inactive",
+      "id_example": "low_risk_public_read_YYYY-MM-DD",
+      "revoked_at": null,
+      "note": "To activate: copy into active[] with an explicit operator approval message naming the id and budget."
+    }
+  },
+  "audit_footnote": "Every addition or revocation must be committed to this repo (git add) with a message naming the approval id and action."
+}
