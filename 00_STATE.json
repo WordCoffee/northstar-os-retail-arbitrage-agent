@@ -513,8 +513,16 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-13T07:30:00Z",
+    "last_updated":  "2026-09-13T08:15:00Z",
     "history":  [
+                    {
+                        "ts":  "2026-09-13T08:15:00Z",
+                        "activity":  "seller_backfill_batch_run_1",
+                        "batch":  "245-ASIN backfill (operator-approved live run 1 of N)",
+                        "summary":  "First live batch run executed with operator approval. 60 requests made (brightdata primary), circuit breaker halted on transport_error: read timeout (120s) from api.brightdata.com on request 61. Results: 16 available, 20 partial, 24 unavailable, 17 skipped_fresh. Cache now has 120 ASINs (59 easyparser legacy + 61 brightdata new). total_sellers extraction working (counts 69, 36, 29, 28 observed); buy_box_seller_name and buy_box_fulfillment extraction NOT working on live HTML (0/61 with seller name) — patterns need refinement against real Amazon dp markup. 60 Web Unlocker credits consumed (within 5,000/mo free pool). Remaining: 125 ASINs unprocessed. Evidence: seller-offer-cache.json updated, no separate evidence dir for batch runner (uses bright_data_client internal cache).",
+                        "test_counts":  "60 live requests, 0 retries, 1 circuit breaker halt (transport_error timeout)",
+                        "next_action":  "Two paths: (A) operator approves continuation batch run for remaining 125 ASINs (same caps); (B) first refine seller name/fulfillment patterns by probing 1-2 live ASINs to capture real HTML structure, then continue. No further live calls until named approval."
+                    },
                     {
                         "ts":  "2026-09-13T07:30:00Z",
                         "activity":  "seller_backfill_build",
