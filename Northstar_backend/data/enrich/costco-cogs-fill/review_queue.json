@@ -1,0 +1,1678 @@
+{
+ "review_queue": [
+  {
+   "asin": "B08PS7YJV2",
+   "ceiling": 148.29,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.672,
+     "price": 31.99,
+     "item_id": "1292240",
+     "costco_item": "Kirkland Signature Leather Golf Glove, Right Handed, 4-pack"
+    },
+    {
+     "score": 0.65,
+     "price": 31.99,
+     "item_id": "1529106",
+     "costco_item": "Kirkland Signature Leather Golf Glove Left Handed, 4-pack"
+    }
+   ]
+  },
+  {
+   "asin": "B07CH9Y7Y8",
+   "ceiling": 92.39,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.744,
+     "price": 17.99,
+     "item_id": "690843",
+     "costco_item": "Kirkland Signature Quick Dissolve B-12 5000 mcg., 300 Tablets"
+    },
+    {
+     "score": 0.698,
+     "price": 17.99,
+     "item_id": "98501",
+     "costco_item": "Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets"
+    },
+    {
+     "score": 0.65,
+     "price": 20.99,
+     "item_id": "926628",
+     "costco_item": "Kirkland Signature Fish Oil 1000 mg, 400 Softgels"
+    }
+   ]
+  },
+  {
+   "asin": "B076ZFG1ZH",
+   "ceiling": 71.09,
+   "n_rivals": 6,
+   "options": [
+    {
+     "score": 0.734,
+     "price": 24.99,
+     "item_id": "17767",
+     "costco_item": "Kirkland Signature Colombian Coffee, Dark Roast, 3 lbs"
+    },
+    {
+     "score": 0.672,
+     "price": 54.99,
+     "item_id": "1217292",
+     "costco_item": "Kirkland Signature Organic Colombian Decaf Whole Bean Coffee, 2 lbs"
+    },
+    {
+     "score": 0.65,
+     "price": 19.99,
+     "item_id": "4165758",
+     "costco_item": "Kirkland Signature Colombian Cold Brew Coffee, 11 fl oz, 12-count"
+    }
+   ]
+  },
+  {
+   "asin": "B01CZ637O2",
+   "ceiling": 70.49,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.92,
+     "price": 16.99,
+     "item_id": "249375",
+     "costco_item": "Kirkland Signature Glucosamine with MSM, 375 Tablets"
+    }
+   ]
+  },
+  {
+   "asin": "B07CH3SMS4",
+   "ceiling": 52.91,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.744,
+     "price": 17.99,
+     "item_id": "690843",
+     "costco_item": "Kirkland Signature Quick Dissolve B-12 5000 mcg., 300 Tablets"
+    },
+    {
+     "score": 0.683,
+     "price": 17.99,
+     "item_id": "98501",
+     "costco_item": "Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets"
+    },
+    {
+     "score": 0.65,
+     "price": 20.99,
+     "item_id": "926628",
+     "costco_item": "Kirkland Signature Fish Oil 1000 mg, 400 Softgels"
+    }
+   ]
+  },
+  {
+   "asin": "B00JQRFOTA",
+   "ceiling": 48.24,
+   "n_rivals": 2,
+   "options": [
+    {
+     "score": 0.908,
+     "price": 18.49,
+     "item_id": "238120",
+     "costco_item": "Kirkland Signature Super B-Complex with Electrolytes, 500 Tablets"
+    }
+   ]
+  },
+  {
+   "asin": "B07N6YF2SF",
+   "ceiling": 46.2,
+   "n_rivals": 6,
+   "options": [
+    {
+     "score": 1.0,
+     "price": 22.49,
+     "item_id": "887498",
+     "costco_item": "Kirkland Signature Wild Alaskan Fish Oil 1400 mg, 230 Softgels"
+    }
+   ]
+  },
+  {
+   "asin": "B07HLSQ147",
+   "ceiling": 45.9,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.696,
+     "price": 26.99,
+     "item_id": "52296",
+     "costco_item": "Kirkland Signature Cat Food, Chicken and Rice Formula, 25 lbs"
+    },
+    {
+     "score": 0.694,
+     "price": 18.99,
+     "item_id": "1104304",
+     "costco_item": "Kirkland Signature Chicken Meal & Rice Formula Dog Biscuits, 15 lbs"
+    },
+    {
+     "score": 0.681,
+     "price": 37.99,
+     "item_id": "1567724",
+     "costco_item": "Kirkland Signature Dog Food, Chicken & Rice Formula, 13.2 oz, 24 ct"
+    }
+   ]
+  },
+  {
+   "asin": "B008M2VYOE",
+   "ceiling": 45.73,
+   "n_rivals": 2,
+   "options": [
+    {
+     "score": 0.662,
+     "price": 59.99,
+     "item_id": "650377",
+     "costco_item": "Kirkland Signature Quit 2 mg or 4mg, Original Gum, 380 Pieces"
+    },
+    {
+     "score": 0.657,
+     "price": 59.99,
+     "item_id": "1140957",
+     "costco_item": "Kirkland Signature Quit 2 mg or 4 mg, Ice Mint Gum, 300 Pieces"
+    }
+   ]
+  },
+  {
+   "asin": "B077LCPQ34",
+   "ceiling": 44.79,
+   "n_rivals": 2,
+   "options": [
+    {
+     "score": 0.908,
+     "price": 18.49,
+     "item_id": "238120",
+     "costco_item": "Kirkland Signature Super B-Complex with Electrolytes, 500 Tablets"
+    }
+   ]
+  },
+  {
+   "asin": "B075D6XMYW",
+   "ceiling": 42.58,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.74,
+     "price": 23.19,
+     "item_id": "71003",
+     "costco_item": "Kirkland Signature Extra Virgin Olive Oil, 2 Liter"
+    },
+    {
+     "score": 0.712,
+     "price": 20.99,
+     "item_id": "692731",
+     "costco_item": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L"
+    },
+    {
+     "score": 0.657,
+     "price": 24.69,
+     "item_id": "1249003",
+     "costco_item": "Kirkland Signature 100% Spanish Extra Virgin Olive Oil, 3 Liter"
+    }
+   ]
+  },
+  {
+   "asin": "B08B5GZXHN",
+   "ceiling": 38.74,
+   "n_rivals": 2,
+   "options": [
+    {
+     "score": 0.679,
+     "price": 20.99,
+     "item_id": "692731",
+     "costco_item": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L"
+    }
+   ]
+  },
+  {
+   "asin": "B01EWBH2VM",
+   "ceiling": 33.6,
+   "n_rivals": 6,
+   "options": [
+    {
+     "score": 0.777,
+     "price": 20.99,
+     "item_id": "926628",
+     "costco_item": "Kirkland Signature Fish Oil 1000 mg, 400 Softgels"
+    },
+    {
+     "score": 0.712,
+     "price": 15.99,
+     "item_id": "98211",
+     "costco_item": "Kirkland Signature Vitamin E 180 mg., 500 Softgels"
+    },
+    {
+     "score": 0.705,
+     "price": 22.59,
+     "item_id": "648220",
+     "costco_item": "Kirkland Signature CoQ10 Supplement, 300 mg, 100 ct"
+    },
+    {
+     "score": 0.679,
+     "price": 12.49,
+     "item_id": "393914",
+     "costco_item": "Kirkland Signature Extra Strength D3 50 mcg., 600 Softgels"
+    }
+   ]
+  },
+  {
+   "asin": "B08JJV9M86",
+   "ceiling": 29.89,
+   "n_rivals": 14,
+   "options": [
+    {
+     "score": 0.698,
+     "price": 26.99,
+     "item_id": "1174112",
+     "costco_item": "Kirkland Signature USDA Organic Multivitamin, 80 Coated Tablets"
+    },
+    {
+     "score": 0.679,
+     "price": 19.99,
+     "item_id": "416076",
+     "costco_item": "Kirkland Signature Daily Multi, 500 Tablets"
+    },
+    {
+     "score": 0.678,
+     "price": 13.49,
+     "item_id": "897980",
+     "costco_item": "Kirkland Signature Children's Multivitamin, 320 Gummies"
+    }
+   ]
+  },
+  {
+   "asin": "B0H9GL43LZ",
+   "ceiling": 28.74,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.685,
+     "price": 19.97,
+     "item_id": "1985100",
+     "costco_item": "Kirkland Signature Men's Stretch Tech Pant"
+    },
+    {
+     "score": 0.66,
+     "price": 21.99,
+     "item_id": "1905479",
+     "costco_item": "Kirkland Signature Men's Stretch Jean"
+    }
+   ]
+  },
+  {
+   "asin": "B0FVWFFTYV",
+   "ceiling": 27.51,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.667,
+     "price": 13.99,
+     "item_id": "1947955",
+     "costco_item": "Kirkland Signature Men's Pima Polo"
+    },
+    {
+     "score": 0.667,
+     "price": 13.99,
+     "item_id": "1947952",
+     "costco_item": "Kirkland Signature Men's Pima Polo"
+    }
+   ]
+  },
+  {
+   "asin": "B00U56JTPG",
+   "ceiling": 27.4,
+   "n_rivals": 5,
+   "options": [
+    {
+     "score": 0.754,
+     "price": 23.19,
+     "item_id": "71003",
+     "costco_item": "Kirkland Signature Extra Virgin Olive Oil, 2 Liter"
+    },
+    {
+     "score": 0.739,
+     "price": 20.99,
+     "item_id": "692731",
+     "costco_item": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L"
+    },
+    {
+     "score": 0.699,
+     "price": 19.99,
+     "item_id": "1789247",
+     "costco_item": "Kirkland Signature Olive Oil, 5.4 fl oz"
+    },
+    {
+     "score": 0.677,
+     "price": 24.69,
+     "item_id": "1249003",
+     "costco_item": "Kirkland Signature 100% Spanish Extra Virgin Olive Oil, 3 Liter"
+    }
+   ]
+  },
+  {
+   "asin": "B0H1Z5D4LC",
+   "ceiling": 24.74,
+   "n_rivals": 40,
+   "options": [
+    {
+     "score": 0.914,
+     "price": 17.99,
+     "item_id": "1992450",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.914,
+     "price": 9.97,
+     "item_id": "1992451",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.914,
+     "price": 9.97,
+     "item_id": "1992453",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    }
+   ]
+  },
+  {
+   "asin": "B0D9B4WRQT",
+   "ceiling": 24.49,
+   "n_rivals": 6,
+   "options": [
+    {
+     "score": 0.69,
+     "price": 24.99,
+     "item_id": "6262016",
+     "costco_item": "Kirkland Signature Bath Tissue, 2-Ply, 380 Sheets, 30 Rolls"
+    }
+   ]
+  },
+  {
+   "asin": "B003FGTTUI",
+   "ceiling": 23.77,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.742,
+     "price": 23.19,
+     "item_id": "71003",
+     "costco_item": "Kirkland Signature Extra Virgin Olive Oil, 2 Liter"
+    },
+    {
+     "score": 0.676,
+     "price": 24.69,
+     "item_id": "1249003",
+     "costco_item": "Kirkland Signature 100% Spanish Extra Virgin Olive Oil, 3 Liter"
+    },
+    {
+     "score": 0.657,
+     "price": 20.99,
+     "item_id": "692731",
+     "costco_item": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L"
+    }
+   ]
+  },
+  {
+   "asin": "B0H1Z1P3YW",
+   "ceiling": 20.74,
+   "n_rivals": 40,
+   "options": [
+    {
+     "score": 0.914,
+     "price": 17.99,
+     "item_id": "1992450",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.914,
+     "price": 9.97,
+     "item_id": "1992451",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.914,
+     "price": 9.97,
+     "item_id": "1992453",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    }
+   ]
+  },
+  {
+   "asin": "B01FFV68KO",
+   "ceiling": 20.53,
+   "n_rivals": 13,
+   "options": [
+    {
+     "score": 0.891,
+     "price": 23.19,
+     "item_id": "71003",
+     "costco_item": "Kirkland Signature Extra Virgin Olive Oil, 2 Liter"
+    },
+    {
+     "score": 0.887,
+     "price": 20.99,
+     "item_id": "692731",
+     "costco_item": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L"
+    }
+   ]
+  },
+  {
+   "asin": "B00XU9FM8S",
+   "ceiling": 20.09,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.788,
+     "price": 20.99,
+     "item_id": "926628",
+     "costco_item": "Kirkland Signature Fish Oil 1000 mg, 400 Softgels"
+    },
+    {
+     "score": 0.735,
+     "price": 22.49,
+     "item_id": "887498",
+     "costco_item": "Kirkland Signature Wild Alaskan Fish Oil 1400 mg, 230 Softgels"
+    },
+    {
+     "score": 0.69,
+     "price": 12.49,
+     "item_id": "393914",
+     "costco_item": "Kirkland Signature Extra Strength D3 50 mcg., 600 Softgels"
+    }
+   ]
+  },
+  {
+   "asin": "B0DY56S3SZ",
+   "ceiling": 19.24,
+   "n_rivals": 9,
+   "options": [
+    {
+     "score": 0.737,
+     "price": 17.99,
+     "item_id": "1992450",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.737,
+     "price": 9.97,
+     "item_id": "1992451",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.723,
+     "price": 21.99,
+     "item_id": "1905479",
+     "costco_item": "Kirkland Signature Men's Stretch Jean"
+    }
+   ]
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "ceiling": 18.74,
+   "n_rivals": 52,
+   "options": [
+    {
+     "score": 0.976,
+     "price": 19.97,
+     "item_id": "1985100",
+     "costco_item": "Kirkland Signature Men's Stretch Tech Pant"
+    },
+    {
+     "score": 0.886,
+     "price": 21.99,
+     "item_id": "1905479",
+     "costco_item": "Kirkland Signature Men's Stretch Jean"
+    }
+   ]
+  },
+  {
+   "asin": "B0DXCL4HDZ",
+   "ceiling": 18.73,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.656,
+     "price": 21.99,
+     "item_id": "1939467",
+     "costco_item": "Kirkland Signature Women's Long Sleeve Slub Tee, 2-Pack"
+    }
+   ]
+  },
+  {
+   "asin": "B008Q90CBO",
+   "ceiling": 18.3,
+   "n_rivals": 6,
+   "options": [
+    {
+     "score": 0.69,
+     "price": 21.79,
+     "item_id": "1685616",
+     "costco_item": "Kirkland Signature Milk Chocolate Covered Almonds, 48 oz"
+    },
+    {
+     "score": 0.69,
+     "price": 21.99,
+     "item_id": "1685616",
+     "costco_item": "Kirkland Signature Milk Chocolate Covered Almonds, 48 oz"
+    }
+   ]
+  },
+  {
+   "asin": "B00PF44IAO",
+   "ceiling": 16.8,
+   "n_rivals": 18,
+   "options": [
+    {
+     "score": 0.816,
+     "price": 19.99,
+     "item_id": "4165769",
+     "costco_item": "Kirkland Signature Facial Tissue, 3-Ply, 84-count, 12-pack"
+    },
+    {
+     "score": 0.788,
+     "price": 34.99,
+     "item_id": "720894",
+     "costco_item": "Kirkland Signature Facial Tissue, 2-Ply, 110-count, 30-pack"
+    }
+   ]
+  },
+  {
+   "asin": "B0GVVYYKS8",
+   "ceiling": 16.15,
+   "n_rivals": 2,
+   "options": [
+    {
+     "score": 0.689,
+     "price": 9.97,
+     "item_id": "1945283",
+     "costco_item": "Kirkland Signature Women's Lightweight Hoodie"
+    },
+    {
+     "score": 0.678,
+     "price": 9.97,
+     "item_id": "1944992",
+     "costco_item": "Kirkland Signature Women's Lightweight Short"
+    }
+   ]
+  },
+  {
+   "asin": "B0797ZFMY3",
+   "ceiling": 15.75,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.763,
+     "price": 20.99,
+     "item_id": "692731",
+     "costco_item": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L"
+    },
+    {
+     "score": 0.694,
+     "price": 24.69,
+     "item_id": "1249003",
+     "costco_item": "Kirkland Signature 100% Spanish Extra Virgin Olive Oil, 3 Liter"
+    },
+    {
+     "score": 0.687,
+     "price": 23.19,
+     "item_id": "71003",
+     "costco_item": "Kirkland Signature Extra Virgin Olive Oil, 2 Liter"
+    }
+   ]
+  },
+  {
+   "asin": "B005ECO5KU",
+   "ceiling": 15.69,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.75,
+     "price": 16.79,
+     "item_id": "98268",
+     "costco_item": "Kirkland Signature Vitamin C, 1000 mg, 500 ct"
+    },
+    {
+     "score": 0.673,
+     "price": 15.99,
+     "item_id": "98211",
+     "costco_item": "Kirkland Signature Vitamin E 180 mg., 500 Softgels"
+    },
+    {
+     "score": 0.653,
+     "price": 49.99,
+     "item_id": "31680",
+     "costco_item": "Kirkland Signature Aluminum Foil, 12\"W x 1000'L"
+    }
+   ]
+  },
+  {
+   "asin": "B0017SURSY",
+   "ceiling": 15.09,
+   "n_rivals": 6,
+   "options": [
+    {
+     "score": 0.667,
+     "price": 24.99,
+     "item_id": "6262016",
+     "costco_item": "Kirkland Signature Bath Tissue, 2-Ply, 380 Sheets, 30 Rolls"
+    }
+   ]
+  },
+  {
+   "asin": "B07886L38V",
+   "ceiling": 14.89,
+   "n_rivals": 21,
+   "options": [
+    {
+     "score": 0.782,
+     "price": 20.09,
+     "item_id": "1473917",
+     "costco_item": "Kirkland Signature Trail Mix Snack Packs, 2 oz, 28 ct"
+    },
+    {
+     "score": 0.717,
+     "price": 16.49,
+     "item_id": "1474436",
+     "costco_item": "Kirkland Signature Trail Mix, 4 lbs"
+    },
+    {
+     "score": 0.717,
+     "price": 16.99,
+     "item_id": "1474436",
+     "costco_item": "Kirkland Signature Trail Mix, 4 lbs"
+    }
+   ]
+  },
+  {
+   "asin": "B00CCQWK6C",
+   "ceiling": 14.68,
+   "n_rivals": 14,
+   "options": [
+    {
+     "score": 0.814,
+     "price": 16.99,
+     "item_id": "321063",
+     "costco_item": "Kirkland Signature Extra Fancy Mixed Nuts, 2.5 lbs"
+    }
+   ]
+  },
+  {
+   "asin": "B0H1ZHGR7K",
+   "ceiling": 14.54,
+   "n_rivals": 40,
+   "options": [
+    {
+     "score": 0.914,
+     "price": 17.99,
+     "item_id": "1992450",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.914,
+     "price": 9.97,
+     "item_id": "1992451",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.914,
+     "price": 9.97,
+     "item_id": "1992453",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    }
+   ]
+  },
+  {
+   "asin": "B0FGLSBQH9",
+   "ceiling": 13.75,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.672,
+     "price": 21.99,
+     "item_id": "1939467",
+     "costco_item": "Kirkland Signature Women's Long Sleeve Slub Tee, 2-Pack"
+    }
+   ]
+  },
+  {
+   "asin": "B09B82XJJL",
+   "ceiling": 12.74,
+   "n_rivals": 6,
+   "options": [
+    {
+     "score": 0.733,
+     "price": 11.99,
+     "item_id": "2000117",
+     "costco_item": "Kirkland Signature Men's Lounge Short"
+    },
+    {
+     "score": 0.733,
+     "price": 11.99,
+     "item_id": "2000116",
+     "costco_item": "Kirkland Signature Men's Lounge Short"
+    },
+    {
+     "score": 0.667,
+     "price": 13.99,
+     "item_id": "1947955",
+     "costco_item": "Kirkland Signature Men's Pima Polo"
+    }
+   ]
+  },
+  {
+   "asin": "B079JS2QYG",
+   "ceiling": 12.6,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.783,
+     "price": 9.49,
+     "item_id": "859695",
+     "costco_item": "Kirkland Signature Creamy Almond Butter, 27 oz"
+    },
+    {
+     "score": 0.783,
+     "price": 9.69,
+     "item_id": "859695",
+     "costco_item": "Kirkland Signature Creamy Almond Butter, 27 oz"
+    }
+   ]
+  },
+  {
+   "asin": "B0D7J7JZD4",
+   "ceiling": 11.24,
+   "n_rivals": 18,
+   "options": [
+    {
+     "score": 0.682,
+     "price": 17.99,
+     "item_id": "1992450",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.682,
+     "price": 9.97,
+     "item_id": "1992451",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.667,
+     "price": 13.99,
+     "item_id": "1947955",
+     "costco_item": "Kirkland Signature Men's Pima Polo"
+    },
+    {
+     "score": 0.651,
+     "price": 12.99,
+     "item_id": "1906681",
+     "costco_item": "Kirkland Signature Men's Cotton Jean"
+    }
+   ]
+  },
+  {
+   "asin": "B00HK14QGQ",
+   "ceiling": 10.85,
+   "n_rivals": 5,
+   "options": [
+    {
+     "score": 0.696,
+     "price": 23.99,
+     "item_id": "512599",
+     "costco_item": "Kirkland Signature Paper Towels, 2-Ply, 160 Sheets, 12 Individually Wrapped Rolls"
+    }
+   ]
+  },
+  {
+   "asin": "B003V2JBEK",
+   "ceiling": 10.74,
+   "n_rivals": 1,
+   "options": [
+    {
+     "score": 0.67,
+     "price": 20.29,
+     "item_id": "1665191",
+     "costco_item": "Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct"
+    }
+   ]
+  },
+  {
+   "asin": "B097XQ7STS",
+   "ceiling": 10.65,
+   "n_rivals": 5,
+   "options": [
+    {
+     "score": 0.723,
+     "price": 12.99,
+     "item_id": "1906681",
+     "costco_item": "Kirkland Signature Men's Cotton Jean"
+    }
+   ]
+  },
+  {
+   "asin": "B0FFN89JXC",
+   "ceiling": 10.41,
+   "n_rivals": 14,
+   "options": [
+    {
+     "score": 0.684,
+     "price": 23.99,
+     "item_id": "7771710",
+     "costco_item": "Kirkland Signature Men's Midweight Crew Tee, 6-pack"
+    },
+    {
+     "score": 0.684,
+     "price": 23.99,
+     "item_id": "7771715",
+     "costco_item": "Kirkland Signature Men's Midweight Crew Tee, 6-pack"
+    },
+    {
+     "score": 0.672,
+     "price": 26.99,
+     "item_id": "1542746",
+     "costco_item": "Kirkland Signature Men's Heavyweight Crew Tee, 6-pack"
+    },
+    {
+     "score": 0.672,
+     "price": 26.99,
+     "item_id": "1542752",
+     "costco_item": "Kirkland Signature Men's Heavyweight Crew Tee, 6-pack"
+    }
+   ]
+  },
+  {
+   "asin": "B081THWMDK",
+   "ceiling": 9.39,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.85,
+     "price": 14.99,
+     "item_id": "208721",
+     "costco_item": "Kirkland Signature Stretch-Tite Plastic Food Wrap, 11 7/8 in x 758 ft, 2-count"
+    }
+   ]
+  },
+  {
+   "asin": "B07N754R6S",
+   "ceiling": 9.13,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.778,
+     "price": 20.99,
+     "item_id": "926628",
+     "costco_item": "Kirkland Signature Fish Oil 1000 mg, 400 Softgels"
+    },
+    {
+     "score": 0.727,
+     "price": 22.49,
+     "item_id": "887498",
+     "costco_item": "Kirkland Signature Wild Alaskan Fish Oil 1400 mg, 230 Softgels"
+    },
+    {
+     "score": 0.716,
+     "price": 15.99,
+     "item_id": "98211",
+     "costco_item": "Kirkland Signature Vitamin E 180 mg., 500 Softgels"
+    },
+    {
+     "score": 0.701,
+     "price": 12.49,
+     "item_id": "393914",
+     "costco_item": "Kirkland Signature Extra Strength D3 50 mcg., 600 Softgels"
+    }
+   ]
+  },
+  {
+   "asin": "B0F9L6YZ9C",
+   "ceiling": 9.05,
+   "n_rivals": 19,
+   "options": [
+    {
+     "score": 0.681,
+     "price": 17.99,
+     "item_id": "1992450",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.681,
+     "price": 9.97,
+     "item_id": "1992451",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.66,
+     "price": 18.99,
+     "item_id": "1121686",
+     "costco_item": "Kirkland Signature Men's Boxer Brief, 4-pack"
+    },
+    {
+     "score": 0.66,
+     "price": 18.99,
+     "item_id": "1121623",
+     "costco_item": "Kirkland Signature Men's Boxer Brief, 4-pack"
+    }
+   ]
+  },
+  {
+   "asin": "B0F9HGHF4C",
+   "ceiling": 8.74,
+   "n_rivals": 14,
+   "options": [
+    {
+     "score": 0.745,
+     "price": 21.99,
+     "item_id": "1905479",
+     "costco_item": "Kirkland Signature Men's Stretch Jean"
+    },
+    {
+     "score": 0.737,
+     "price": 17.99,
+     "item_id": "1992450",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.737,
+     "price": 9.97,
+     "item_id": "1992451",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    }
+   ]
+  },
+  {
+   "asin": "B07DBVGJ39",
+   "ceiling": 8.65,
+   "n_rivals": 6,
+   "options": [
+    {
+     "score": 0.678,
+     "price": 23.19,
+     "item_id": "1582922",
+     "costco_item": "Kirkland Signature Organic Ghee Clarified Butter, 27 oz"
+    },
+    {
+     "score": 0.667,
+     "price": 22.19,
+     "item_id": "1032932",
+     "costco_item": "Kirkland Signature Organic Raw Honey Bear, 24 oz, 3 ct"
+    },
+    {
+     "score": 0.667,
+     "price": 12.49,
+     "item_id": "1984999",
+     "costco_item": "Kirkland Signature Rice Crackers, 32 oz"
+    },
+    {
+     "score": 0.65,
+     "price": 9.99,
+     "item_id": "1975373",
+     "costco_item": "Kirkland Signature Organic Strawberry Spread, 24 oz, 2 ct"
+    }
+   ]
+  },
+  {
+   "asin": "B0H56ZBZGS",
+   "ceiling": 8.6,
+   "n_rivals": 2,
+   "options": [
+    {
+     "score": 0.661,
+     "price": 11.99,
+     "item_id": "2000117",
+     "costco_item": "Kirkland Signature Men's Lounge Short"
+    },
+    {
+     "score": 0.661,
+     "price": 11.99,
+     "item_id": "2000116",
+     "costco_item": "Kirkland Signature Men's Lounge Short"
+    }
+   ]
+  },
+  {
+   "asin": "B0DC4RDMQC",
+   "ceiling": 7.95,
+   "n_rivals": 6,
+   "options": [
+    {
+     "score": 0.832,
+     "price": 21.99,
+     "item_id": "1939467",
+     "costco_item": "Kirkland Signature Women's Long Sleeve Slub Tee, 2-Pack"
+    }
+   ]
+  },
+  {
+   "asin": "B0GJ6Z4J59",
+   "ceiling": 7.45,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.694,
+     "price": 21.99,
+     "item_id": "1939467",
+     "costco_item": "Kirkland Signature Women's Long Sleeve Slub Tee, 2-Pack"
+    }
+   ]
+  },
+  {
+   "asin": "B01IQ9O05C",
+   "ceiling": 6.89,
+   "n_rivals": 5,
+   "options": [
+    {
+     "score": 0.696,
+     "price": 24.99,
+     "item_id": "17767",
+     "costco_item": "Kirkland Signature Colombian Coffee, Dark Roast, 3 lbs"
+    },
+    {
+     "score": 0.667,
+     "price": 19.99,
+     "item_id": "4165758",
+     "costco_item": "Kirkland Signature Colombian Cold Brew Coffee, 11 fl oz, 12-count"
+    }
+   ]
+  },
+  {
+   "asin": "B00G5KD56U",
+   "ceiling": 6.86,
+   "n_rivals": 2,
+   "options": [
+    {
+     "score": 0.787,
+     "price": 10.49,
+     "item_id": "421793",
+     "costco_item": "Kirkland Signature Organic Strawberry Spread, 42 oz"
+    },
+    {
+     "score": 0.752,
+     "price": 9.99,
+     "item_id": "1975373",
+     "costco_item": "Kirkland Signature Organic Strawberry Spread, 24 oz, 2 ct"
+    }
+   ]
+  },
+  {
+   "asin": "B001UB44SM",
+   "ceiling": 6.3,
+   "n_rivals": 6,
+   "options": [
+    {
+     "score": 0.691,
+     "price": 22.49,
+     "item_id": "1089787",
+     "costco_item": "Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count"
+    },
+    {
+     "score": 0.663,
+     "price": 22.19,
+     "item_id": "1300658",
+     "costco_item": "Kirkland Signature Scented Kitchen Drawstring Trash Bags, Flex-Tech, White, Fresh Scent, 13 Gallon, 200 ct"
+    }
+   ]
+  },
+  {
+   "asin": "B0DB431TC6",
+   "ceiling": 6.3,
+   "n_rivals": 1,
+   "options": [
+    {
+     "score": 0.671,
+     "price": 22.19,
+     "item_id": "1300658",
+     "costco_item": "Kirkland Signature Scented Kitchen Drawstring Trash Bags, Flex-Tech, White, Fresh Scent, 13 Gallon, 200 ct"
+    }
+   ]
+  },
+  {
+   "asin": "B0BYWDD115",
+   "ceiling": 6.24,
+   "n_rivals": 5,
+   "options": [
+    {
+     "score": 0.723,
+     "price": 21.99,
+     "item_id": "1939467",
+     "costco_item": "Kirkland Signature Women's Long Sleeve Slub Tee, 2-Pack"
+    },
+    {
+     "score": 0.653,
+     "price": 11.99,
+     "item_id": "2000117",
+     "costco_item": "Kirkland Signature Men's Lounge Short"
+    },
+    {
+     "score": 0.653,
+     "price": 11.99,
+     "item_id": "2000116",
+     "costco_item": "Kirkland Signature Men's Lounge Short"
+    }
+   ]
+  },
+  {
+   "asin": "B0GVW48D8F",
+   "ceiling": 5.71,
+   "n_rivals": 1,
+   "options": [
+    {
+     "score": 0.667,
+     "price": 9.97,
+     "item_id": "1945283",
+     "costco_item": "Kirkland Signature Women's Lightweight Hoodie"
+    }
+   ]
+  },
+  {
+   "asin": "B0GJN7B98M",
+   "ceiling": 4.98,
+   "n_rivals": 5,
+   "options": [
+    {
+     "score": 0.691,
+     "price": 19.97,
+     "item_id": "1985100",
+     "costco_item": "Kirkland Signature Men's Stretch Tech Pant"
+    },
+    {
+     "score": 0.66,
+     "price": 17.99,
+     "item_id": "1992450",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    },
+    {
+     "score": 0.66,
+     "price": 9.97,
+     "item_id": "1992451",
+     "costco_item": "Kirkland Signature Women's Travel Pant"
+    }
+   ]
+  },
+  {
+   "asin": "B007889Z1C",
+   "ceiling": 4.74,
+   "n_rivals": 12,
+   "options": [
+    {
+     "score": 0.81,
+     "price": 18.99,
+     "item_id": "588153",
+     "costco_item": "Kirkland Signature Calcium Citrate, Magnesium and Zinc, 500 Tablets"
+    },
+    {
+     "score": 0.786,
+     "price": 17.99,
+     "item_id": "98501",
+     "costco_item": "Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets"
+    },
+    {
+     "score": 0.735,
+     "price": 12.99,
+     "item_id": "389194",
+     "costco_item": "Kirkland Signature Calcium 600 mg. with Vitamin D3, 500 Tablets"
+    }
+   ]
+  },
+  {
+   "asin": "B004CSGRS0",
+   "ceiling": 4.69,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.725,
+     "price": 10.49,
+     "item_id": "968318",
+     "costco_item": "Kirkland Signature, Whole Dried Blueberries, 20 oz"
+    },
+    {
+     "score": 0.703,
+     "price": 12.49,
+     "item_id": "1984999",
+     "costco_item": "Kirkland Signature Rice Crackers, 32 oz"
+    },
+    {
+     "score": 0.689,
+     "price": 30.59,
+     "item_id": "971832",
+     "costco_item": "Kirkland Signature Dental Chews, 72 ct"
+    },
+    {
+     "score": 0.667,
+     "price": 5.99,
+     "item_id": "33149",
+     "costco_item": "Kirkland Signature Gouda Cheese, 2 lbs"
+    }
+   ]
+  },
+  {
+   "asin": "B0CP8GKNSR",
+   "ceiling": 4.14,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.697,
+     "price": 12.99,
+     "item_id": "2045021",
+     "costco_item": "Kirkland Signature Ultra Soft Fabric Softener, 257 Loads, 150 fl oz"
+    },
+    {
+     "score": 0.65,
+     "price": 17.49,
+     "item_id": "1707942",
+     "costco_item": "Kirkland Signature Ultra Fresh In-Wash Scent Boosters, Fresh, 45.9 oz"
+    }
+   ]
+  },
+  {
+   "asin": "B00BTKX3YU",
+   "ceiling": 2.7,
+   "n_rivals": 7,
+   "options": [
+    {
+     "score": 0.702,
+     "price": 18.99,
+     "item_id": "1121686",
+     "costco_item": "Kirkland Signature Men's Boxer Brief, 4-pack"
+    },
+    {
+     "score": 0.702,
+     "price": 18.99,
+     "item_id": "1121623",
+     "costco_item": "Kirkland Signature Men's Boxer Brief, 4-pack"
+    }
+   ]
+  },
+  {
+   "asin": "B0D3FQ7H7B",
+   "ceiling": 2.65,
+   "n_rivals": 5,
+   "options": [
+    {
+     "score": 0.654,
+     "price": 8.99,
+     "item_id": "222490",
+     "costco_item": "Kirkland Signature Super Extra-Large Peanuts, 2.5 lbs"
+    },
+    {
+     "score": 0.654,
+     "price": 9.09,
+     "item_id": "222490",
+     "costco_item": "Kirkland Signature Super Extra-Large Peanuts, 2.5 lbs"
+    }
+   ]
+  },
+  {
+   "asin": "B00P8ZAWK0",
+   "ceiling": 1.74,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.654,
+     "price": 26.99,
+     "item_id": "1174112",
+     "costco_item": "Kirkland Signature USDA Organic Multivitamin, 80 Coated Tablets"
+    }
+   ]
+  },
+  {
+   "asin": "B0007L6NLC",
+   "ceiling": 1.36,
+   "n_rivals": 23,
+   "options": [
+    {
+     "score": 0.905,
+     "price": 16.79,
+     "item_id": "98268",
+     "costco_item": "Kirkland Signature Vitamin C, 1000 mg, 500 ct"
+    },
+    {
+     "score": 0.889,
+     "price": 17.99,
+     "item_id": "98501",
+     "costco_item": "Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets"
+    },
+    {
+     "score": 0.86,
+     "price": 15.99,
+     "item_id": "98211",
+     "costco_item": "Kirkland Signature Vitamin E 180 mg., 500 Softgels"
+    }
+   ]
+  },
+  {
+   "asin": "B072FSTWC9",
+   "ceiling": 1.24,
+   "n_rivals": 25,
+   "options": [
+    {
+     "score": 0.8,
+     "price": 16.79,
+     "item_id": "98268",
+     "costco_item": "Kirkland Signature Vitamin C, 1000 mg, 500 ct"
+    },
+    {
+     "score": 0.778,
+     "price": 17.99,
+     "item_id": "98501",
+     "costco_item": "Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets"
+    },
+    {
+     "score": 0.71,
+     "price": 19.99,
+     "item_id": "416076",
+     "costco_item": "Kirkland Signature Daily Multi, 500 Tablets"
+    },
+    {
+     "score": 0.706,
+     "price": 16.99,
+     "item_id": "249375",
+     "costco_item": "Kirkland Signature Glucosamine with MSM, 375 Tablets"
+    }
+   ]
+  },
+  {
+   "asin": "B0GH8F16GH",
+   "ceiling": 1.24,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.678,
+     "price": 22.99,
+     "item_id": "1999459",
+     "costco_item": "Kirkland Signature Men's Softshell Bomber Jacket"
+    },
+    {
+     "score": 0.678,
+     "price": 22.99,
+     "item_id": "1999442",
+     "costco_item": "Kirkland Signature Men's Softshell Bomber Jacket"
+    },
+    {
+     "score": 0.655,
+     "price": 32.99,
+     "item_id": "1953375",
+     "costco_item": "Kirkland Signature Women's Softshell Jacket"
+    }
+   ]
+  },
+  {
+   "asin": "B01N9SOK2Y",
+   "ceiling": 0.79,
+   "n_rivals": 1,
+   "options": [
+    {
+     "score": 0.661,
+     "price": 11.99,
+     "item_id": "1366250",
+     "costco_item": "Kirkland Signature Liquid Body Wash, Natural Citrus, 27 fl oz, 2-count"
+    }
+   ]
+  },
+  {
+   "asin": "B0FC4TG61M",
+   "ceiling": 0.46,
+   "n_rivals": 2,
+   "options": [
+    {
+     "score": 0.667,
+     "price": 9.97,
+     "item_id": "1944992",
+     "costco_item": "Kirkland Signature Women's Lightweight Short"
+    },
+    {
+     "score": 0.661,
+     "price": 9.97,
+     "item_id": "1945283",
+     "costco_item": "Kirkland Signature Women's Lightweight Hoodie"
+    }
+   ]
+  },
+  {
+   "asin": "B071P7TRSN",
+   "ceiling": 0.04,
+   "n_rivals": 4,
+   "options": [
+    {
+     "score": 0.812,
+     "price": 6.99,
+     "item_id": "719940",
+     "costco_item": "Kirkland Signature Nighttime Sleep Aid, 192 Tablets"
+    }
+   ]
+  },
+  {
+   "asin": "B0CV64JLDF",
+   "ceiling": -0.3,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.78,
+     "price": 12.89,
+     "item_id": "1732802",
+     "costco_item": "Kirkland Signature Sweet Heat Snack Mix, 24 oz"
+    },
+    {
+     "score": 0.78,
+     "price": 12.99,
+     "item_id": "1732802",
+     "costco_item": "Kirkland Signature Sweet Heat Snack Mix, 24 oz"
+    }
+   ]
+  },
+  {
+   "asin": "B00JZVWE0O",
+   "ceiling": -0.46,
+   "n_rivals": 1,
+   "options": [
+    {
+     "score": 0.698,
+     "price": 11.49,
+     "item_id": "1050557",
+     "costco_item": "Kirkland Signature Peanut Butter Filled Pretzel Nuggets, 55 oz"
+    }
+   ]
+  },
+  {
+   "asin": "B00JI7APH4",
+   "ceiling": -2.76,
+   "n_rivals": 1,
+   "options": [
+    {
+     "score": 0.655,
+     "price": 18.79,
+     "item_id": "9555",
+     "costco_item": "Kirkland Signature Microwave Popcorn, 3.3 oz, 44 ct"
+    }
+   ]
+  },
+  {
+   "asin": "B07N7CTW4Q",
+   "ceiling": -3.76,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.898,
+     "price": 12.49,
+     "item_id": "393914",
+     "costco_item": "Kirkland Signature Extra Strength D3 50 mcg., 600 Softgels"
+    }
+   ]
+  },
+  {
+   "asin": "B0DD8F9LMW",
+   "ceiling": -4.26,
+   "n_rivals": 7,
+   "options": [
+    {
+     "score": 0.744,
+     "price": 13.99,
+     "item_id": "1947955",
+     "costco_item": "Kirkland Signature Men's Pima Polo"
+    },
+    {
+     "score": 0.697,
+     "price": 11.99,
+     "item_id": "2000117",
+     "costco_item": "Kirkland Signature Men's Lounge Short"
+    },
+    {
+     "score": 0.697,
+     "price": 11.99,
+     "item_id": "2000116",
+     "costco_item": "Kirkland Signature Men's Lounge Short"
+    },
+    {
+     "score": 0.652,
+     "price": 16.99,
+     "item_id": "2021294",
+     "costco_item": "Kirkland Signature Men\u2019s Athleisure Pant"
+    }
+   ]
+  },
+  {
+   "asin": "B077GS636P",
+   "ceiling": -5.11,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.92,
+     "price": 16.99,
+     "item_id": "249375",
+     "costco_item": "Kirkland Signature Glucosamine with MSM, 375 Tablets"
+    }
+   ]
+  },
+  {
+   "asin": "B0849K24NC",
+   "ceiling": -6.0,
+   "n_rivals": 7,
+   "options": [
+    {
+     "score": 0.768,
+     "price": 18.99,
+     "item_id": "1121686",
+     "costco_item": "Kirkland Signature Men's Boxer Brief, 4-pack"
+    },
+    {
+     "score": 0.768,
+     "price": 18.99,
+     "item_id": "1121623",
+     "costco_item": "Kirkland Signature Men's Boxer Brief, 4-pack"
+    }
+   ]
+  },
+  {
+   "asin": "B089XK85BB",
+   "ceiling": -7.35,
+   "n_rivals": 7,
+   "options": [
+    {
+     "score": 0.819,
+     "price": 18.99,
+     "item_id": "1121686",
+     "costco_item": "Kirkland Signature Men's Boxer Brief, 4-pack"
+    },
+    {
+     "score": 0.819,
+     "price": 18.99,
+     "item_id": "1121623",
+     "costco_item": "Kirkland Signature Men's Boxer Brief, 4-pack"
+    }
+   ]
+  },
+  {
+   "asin": "B0DG4C2KFW",
+   "ceiling": -8.85,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.762,
+     "price": 16.99,
+     "item_id": "2047600",
+     "costco_item": "Kirkland Signature Women's Extra-Fine Merino Wool Blend Crew Sock, 4-pair"
+    },
+    {
+     "score": 0.662,
+     "price": 17.49,
+     "item_id": "7771359",
+     "costco_item": "Kirkland Signature Men's Merino Wool Blend Sock, 4-pair"
+    }
+   ]
+  },
+  {
+   "asin": "B002S4RSEW",
+   "ceiling": -9.11,
+   "n_rivals": 18,
+   "options": [
+    {
+     "score": 0.659,
+     "price": 14.39,
+     "item_id": "1178969",
+     "costco_item": "Kirkland Signature Almond Flour, 3 lbs"
+    },
+    {
+     "score": 0.658,
+     "price": 16.49,
+     "item_id": "1474436",
+     "costco_item": "Kirkland Signature Trail Mix, 4 lbs"
+    },
+    {
+     "score": 0.651,
+     "price": 15.19,
+     "item_id": "1347776",
+     "costco_item": "Kirkland Signature Wildflower Honey, 5 lbs"
+    },
+    {
+     "score": 0.651,
+     "price": 20.89,
+     "item_id": "1139689",
+     "costco_item": "Kirkland Signature Tilapia Loins, 3 lbs"
+    }
+   ]
+  },
+  {
+   "asin": "B077SN37K5",
+   "ceiling": -12.03,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.793,
+     "price": 14.99,
+     "item_id": "1818860",
+     "costco_item": "Kirkland Signature Men's Athletic Sock, 8-pair"
+    }
+   ]
+  },
+  {
+   "asin": "B0784S6ZCJ",
+   "ceiling": -12.07,
+   "n_rivals": 3,
+   "options": [
+    {
+     "score": 0.786,
+     "price": 14.99,
+     "item_id": "1818860",
+     "costco_item": "Kirkland Signature Men's Athletic Sock, 8-pair"
+    }
+   ]
+  },
+  {
+   "asin": "B08B1J4275",
+   "ceiling": -20.03,
+   "n_rivals": 1,
+   "options": [
+    {
+     "score": 0.651,
+     "price": 17.99,
+     "item_id": "1359200",
+     "costco_item": "Kirkland Signature Vita Rain Zero, Variety Pack, 20 fl oz, 24 ct"
+    }
+   ]
+  }
+ ],
+ "how": "verify PACK PARITY (count/size/pack) between Amazon title and Costco item; reply with verified ASINs (+ corrected price if sale/regular differs); rivals listed where close \u2014 pick at most one"
+}
