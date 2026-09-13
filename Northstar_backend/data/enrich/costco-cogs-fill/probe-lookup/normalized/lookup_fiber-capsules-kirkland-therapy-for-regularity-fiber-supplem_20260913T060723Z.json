@@ -1,0 +1,15 @@
+{
+  "run_id": "lookup_20260913T060723Z",
+  "operation": "costco_search_lookup",
+  "query": "Fiber Capsules Kirkland Therapy for Regularity/Fiber Supplement, 360 capsules - Compare to the Active Ingredient in Metamucil Capsules",
+  "requested_at": "2026-09-13T06:07:23Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "url": "https://www.costco.com/search?query=Fiber%20Capsules%20Kirkland%20Therapy%20for%20Regularity/Fiber%20Supplement%2C%20360%20capsules%20-%20Compare%20to%20the%20Active%20Ingredient%20in%20Metamucil%20Capsules",
+  "http_status": 200,
+  "identity_match_status": "lookup_page_not_found",
+  "notes": "fetched page is Costco's 'Page Not Found' page, not a search results page",
+  "best_candidate": null,
+  "candidate_count": 0,
+  "candidates": [],
+  "retries": 0
+}
