@@ -513,8 +513,16 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-13T08:15:00Z",
+    "last_updated":  "2026-09-13T09:30:00Z",
     "history":  [
+                    {
+                        "ts":  "2026-09-13T09:30:00Z",
+                        "activity":  "seller_backfill_batch_run_2",
+                        "batch":  "245-ASIN backfill (operator-approved live run 2 of N)",
+                        "summary":  "Second live batch run completed. 141 new requests made (brightdata primary), 104 skipped fresh. Total cache now 246 ASINs (68 easyparser legacy + 178 brightdata). Results: 63 available, 33 partial, 45 unavailable. Seller name/fulfillment extraction working on pages with standard markup (e.g., B00BH3HPZW: seller=Loong & Sons, fulfillment=FBA, total=69). However, ~45 ASINs have pages with NO seller markup in raw HTML (no Sold by/Ships from/Fulfilled by/New (N) patterns) — these return unavailable honestly. Total Web Unlocker credits consumed this session: 201 (60 + 141), well within 5,000/mo free pool. All 245 manifest ASINs now have cache entries (some unavailable).",
+                        "test_counts":  "141 live requests, 0 retries, 0 circuit breaker halts. All 12 fixture tests pass. Offline test suites: 68+9+12 = 89 tests OK.",
+                        "next_action":  "Backfill effectively complete for pages with extractable data. Remaining unavailable ASINs (45) lack seller markup in raw HTML — would require JS rendering (scrape.do render=true, Browserbase session) or paid APIs. Operator decision: (a) accept current cache as complete, (b) run targeted JS-render probes on unavailable ASINs, (c) move to production use. No further live calls until named."
+                    },
                     {
                         "ts":  "2026-09-13T08:15:00Z",
                         "activity":  "seller_backfill_batch_run_1",
