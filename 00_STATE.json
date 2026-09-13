@@ -187,8 +187,10 @@
                              "discovered_in":  "Free-tier seller probe preflight (2026-09-13 session)",
                              "discovered_at":  "2026-09-13T05:36:00Z",
                              "description":  "Two divergent env files exist: project-root .env (43 keys) and Northstar_backend/.env (37 keys). Root-only keys include the 4 new probe keys (FIRECRAWL_API_KEY, SCRAPE_DO_API_KEY, BROWSERBASE_API_KEY, KEENABLE_API_KEY) plus DATAFORSEO_* and others; backend-only keys include BRIGHTDATA_COSTCO_DETAIL_API_KEY, SCANNER_LIVE_ALLOWED and 2 more. python-dotenv resolves .env from the calling file directory, so any module under Northstar_backend/ loads Northstar_backend/.env and silently misses root-only keys (this masked all 4 new keys from the probe until it pinned the repo-root .env by explicit path).",
-                             "requires_decision":  "Operator must decide: (a) mirror the 4 new keys into Northstar_backend/.env, OR (b) consolidate to a single authoritative .env, OR (c) keep repo-root authoritative and require explicit-path loading in backend modules (probe already does (c)). No credential values are recorded here; names only.",
-                             "status":  "open"
+                             "requires_decision":  "Operator must decide: (a) mirror the 4 new keys into Northstar_backend/.env, OR (b) consolidate to a single authoritative .env, OR (c) keep repo-root authoritative and require explicit-path loading in backend modules (probe already does (c)). No credential values were copied or moved; names only.",
+                             "resolution":  "Decided 2026-09-13 option (c): repo-root .env stays the single authoritative store for operator-supplied keys; NOTHING was written to either .env file. Backend modules that need root-only keys must pin the repo-root .env by explicit path (provider_seller_probe.py does this). Option (a) mirror rejected: would duplicate credential values into a second file. Option (b) consolidate rejected: risks the 4 backend-only keys live runners depend on. Revisit only on fresh named approval.",
+                             "resolved_at":  "2026-09-13T05:57:00Z",
+                             "status":  "resolved"
                          }
                      ],
     "completed_batches":  [
@@ -511,8 +513,16 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-13T05:45:30Z",
+    "last_updated":  "2026-09-13T05:57:00Z",
     "history":  [
+                    {
+                        "ts":  "2026-09-13T05:57:00Z",
+                        "activity":  "dotenv_decision_and_offer_probes",
+                        "batch":  "none (operator-named: .env decision + 2 offer probes)",
+                        "summary":  ".env decision executed as option (c): repo-root .env stays authoritative; zero writes to either .env file; backend modules pin root .env by explicit path; issue dual_dotenv_divergence_backend_shadowing closed as resolved. Offer-listing probes executed: exactly 2 requests (firecrawl + scrapedo, offer page, ASIN B00BH3HPZW, sequential, zero retries). Both HTTP 200 with large HTML (firecrawl 2142215 bytes page 200; scrapedo 2510917 bytes) and zero block markers, BUT marker profiles identical to the dp fetches (sold_by 7 and 12, ships_from 6 and 11, seller_profile_link 0), which suggests Amazon served dp-equivalent content rather than a distinct offer roster. Honest status: transport proven for the offer URL, roster extraction NOT yet proven. Evidence committed 96e0c63 (2 scrubbed probe records, no keys stored).",
+                        "test_counts":  "2 live requests, 0 errors (2 has_seller_data by markers, roster-distinctness unproven)",
+                        "next_action":  "Proposed next: parser-level probe with offer-specific markers (aod-offer, Other sellers) plus redirect-chain capture, 1 to 2 named requests, before any backfill design. No further live calls until named."
+                    },
                     {
                         "ts":  "2026-09-13T05:45:30Z",
                         "activity":  "free_tier_seller_reprobe_approved",
