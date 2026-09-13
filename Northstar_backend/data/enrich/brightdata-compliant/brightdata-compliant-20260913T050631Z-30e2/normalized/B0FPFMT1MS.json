@@ -1,0 +1,27 @@
+{
+  "amazon_price": 12.95,
+  "buy_box_price": 12.95,
+  "lowest_price": 12.95,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 5.25,
+  "amazon_category": "Beauty & Personal Care",
+  "browse_node_id": 3760911,
+  "breadcrumb": [
+    "Beauty & Personal Care",
+    "Hair Care",
+    "Hair Loss Products",
+    "Hair Regrowth Treatments"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Minoxidil for Men Liquid, Extra Strength Hair Regrowth Treatment 5%, 6 Months Supply - Upgraded Dropper Applicator and Bonus Free Guide Included",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T05:07:05.614813+00:00"
+}

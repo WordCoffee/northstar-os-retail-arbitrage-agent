@@ -1,0 +1,28 @@
+{
+  "amazon_price": 6.25,
+  "buy_box_price": 6.25,
+  "lowest_price": 6.25,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 50.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 6.1,
+  "amazon_category": "Clothing, Shoes & Jewelry",
+  "browse_node_id": 7141123011,
+  "breadcrumb": [
+    "Clothing, Shoes & Jewelry",
+    "Sport Specific Clothing",
+    "Hiking & Outdoor Recreation",
+    "Women",
+    "Socks"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "KIRKLAND Signature Ladies' Extra-Fine Merino Wool Crew Socks, Multi-Color, 4 Pairs",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:36:42.530499+00:00"
+}

@@ -1,0 +1,27 @@
+{
+  "amazon_price": 119.99,
+  "buy_box_price": 119.99,
+  "lowest_price": 119.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 8.2,
+  "amazon_category": "Home & Kitchen",
+  "browse_node_id": 1055398,
+  "breadcrumb": [
+    "Home & Kitchen",
+    "Bedding",
+    "Sheets & Pillowcases",
+    "Sheet & Pillowcase Sets"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "KIRKLAND Signature 680 Thread Count King Sheet Set, 6-Piece, Pima Cotton, Oatmeal, Crease Control Technology.",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T05:08:00.432100+00:00"
+}

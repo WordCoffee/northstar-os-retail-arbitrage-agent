@@ -1,0 +1,22 @@
+{
+  "amazon_price": 28.0,
+  "buy_box_price": 28.0,
+  "lowest_price": 28.0,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 5.25,
+  "amazon_category": null,
+  "browse_node_id": null,
+  "breadcrumb": null,
+  "category_source_hint": null,
+  "title": "KIRKLAND Signature Women's 3/4 Sleeve Boatneck Cotton Slub Tee Shirt",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T05:06:56.522911+00:00"
+}

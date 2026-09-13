@@ -1,0 +1,28 @@
+{
+  "amazon_price": 14.67,
+  "buy_box_price": 14.67,
+  "lowest_price": 14.67,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 4.75,
+  "amazon_category": "Clothing, Shoes & Jewelry",
+  "browse_node_id": 7141123011,
+  "breadcrumb": [
+    "Clothing, Shoes & Jewelry",
+    "Men",
+    "Clothing",
+    "Swim",
+    "Trunks"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Men's Elastic Waistband Mens Swim Short Trunks L Black Mesh Lined Trunk Grey Stripe",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:30:51.084340+00:00"
+}

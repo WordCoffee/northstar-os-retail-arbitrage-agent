@@ -1,0 +1,27 @@
+{
+  "amazon_price": 30.99,
+  "buy_box_price": 30.99,
+  "lowest_price": 30.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 433.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 7.1,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Snacks & Sweets",
+    "Snack Foods",
+    "Snack & Trail Mixes"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "KIRKLAND SIGNATURE Trail Mix Snack Pack, 3.52 Lb",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:30:00.886273+00:00"
+}

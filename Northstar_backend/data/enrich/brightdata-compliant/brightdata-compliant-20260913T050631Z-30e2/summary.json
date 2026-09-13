@@ -1,0 +1,20 @@
+{
+  "run_id": "brightdata-compliant-20260913T050631Z-30e2",
+  "generated_at": "2026-09-13T05:10:37.077895+00:00",
+  "provider": "BRIGHTDATA",
+  "scope": "sourcescout_compliant_manifest PASS only",
+  "compliant_pass_count": 245,
+  "requests_used": 245,
+  "requests_cap": 245,
+  "credits_used": 245.0,
+  "credits_reported": 0,
+  "credits_cap": 490,
+  "stop_reason": null,
+  "outcome_counts": {
+    "complete": 0,
+    "partial": 245,
+    "other": 0
+  },
+  "enriched_at": "2026-09-13T05:10:37.077927+00:00",
+  "credits_remaining": null
+}

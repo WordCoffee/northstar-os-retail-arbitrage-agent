@@ -1,0 +1,27 @@
+{
+  "amazon_price": 89.99,
+  "buy_box_price": 89.99,
+  "lowest_price": 89.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 9.9,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Beverages",
+    "Coffee",
+    "Ground Coffee"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature 100% Colombian Coffee, 9 LB",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:29:34.414701+00:00"
+}

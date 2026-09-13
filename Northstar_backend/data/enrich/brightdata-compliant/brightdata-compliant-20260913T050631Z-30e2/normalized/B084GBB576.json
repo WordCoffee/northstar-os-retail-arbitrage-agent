@@ -1,0 +1,27 @@
+{
+  "amazon_price": 114.5,
+  "buy_box_price": 114.5,
+  "lowest_price": 114.5,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": null,
+  "amazon_category": "Home & Kitchen",
+  "browse_node_id": 1055398,
+  "breadcrumb": [
+    "Home & Kitchen",
+    "Bedding",
+    "Sheets & Pillowcases",
+    "Sheet & Pillowcase Sets"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature 680 Thread Count Sheet Set (King, Tan)",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:32:31.567216+00:00"
+}

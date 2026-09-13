@@ -1,0 +1,28 @@
+{
+  "amazon_price": 6.98,
+  "buy_box_price": 6.98,
+  "lowest_price": 6.98,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 100.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 5.25,
+  "amazon_category": "Clothing, Shoes & Jewelry",
+  "browse_node_id": 7141123011,
+  "breadcrumb": [
+    "Clothing, Shoes & Jewelry",
+    "Men",
+    "Clothing",
+    "Active",
+    "Athletic Socks"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "KIRKLAND mens Modern",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:34:17.213949+00:00"
+}

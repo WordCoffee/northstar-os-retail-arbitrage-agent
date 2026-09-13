@@ -1,0 +1,28 @@
+{
+  "amazon_price": 15.75,
+  "buy_box_price": 15.75,
+  "lowest_price": 15.75,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 433.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 4.75,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Medical Supplies & Equipment",
+    "Mobility & Daily Living Aids",
+    "Hearing Aids, Amplifiers & Accessories",
+    "Batteries & Chargers"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature 1.45 Volt Mercury Free Premium Quality Hearing Aid Batteries, 312 (48-Pack)",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:27:47.944434+00:00"
+}

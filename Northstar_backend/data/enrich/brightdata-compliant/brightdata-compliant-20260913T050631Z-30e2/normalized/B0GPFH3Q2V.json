@@ -1,0 +1,27 @@
+{
+  "amazon_price": 119.29,
+  "buy_box_price": 119.29,
+  "lowest_price": 119.29,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 8.2,
+  "amazon_category": "Home & Kitchen",
+  "browse_node_id": 1055398,
+  "breadcrumb": [
+    "Home & Kitchen",
+    "Bedding",
+    "Sheets & Pillowcases",
+    "Sheet & Pillowcase Sets"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "KIRKLAND Signature Pima Cotton Sheet Set, Vintage Indigo, King Size, 6-Piece, 680 Thread Count, Crease Control Technology",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T05:08:54.165243+00:00"
+}

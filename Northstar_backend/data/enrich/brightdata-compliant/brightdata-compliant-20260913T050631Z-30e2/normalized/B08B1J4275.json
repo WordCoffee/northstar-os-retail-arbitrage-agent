@@ -1,0 +1,28 @@
+{
+  "amazon_price": 3.97,
+  "buy_box_price": 3.97,
+  "lowest_price": 3.97,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 100.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 15.0,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Beverages",
+    "Bottled Beverages, Water & Drink Mixes",
+    "Water",
+    "Carbonated Water"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "KIRKLAND SIGNATURE Vita Rain Zero Variety Water Beverage 24/20 Fl Oz Bottles Net Wt 480 Fl Oz",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:32:54.153342+00:00"
+}
