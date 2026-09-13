@@ -511,8 +511,16 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-13T05:38:06Z",
+    "last_updated":  "2026-09-13T05:45:30Z",
     "history":  [
+                    {
+                        "ts":  "2026-09-13T05:45:30Z",
+                        "activity":  "free_tier_seller_reprobe_approved",
+                        "batch":  "none (operator-named 2-request re-probe)",
+                        "summary":  "Re-probe approved and executed: exactly 2 requests (scrapedo + keenable, dp page, ASIN B00BH3HPZW, sequential, zero retries). scrapedo has_seller_data (HTTP 200, 2518951 bytes, sold_by 12, ships_from 11, new_offers_count 1, zero block markers, richest dp fetch of the four providers). keenable HTTP 200 but no_data_found (51 bytes markdown, correct page title only, zero seller markers, zero block markers, reachable but returns no seller data). dp comparison table now complete: firecrawl hit, scrapedo hit, browserbase hit, keenable title-only. Bright Data not probed (outside the named approval). Evidence committed 1a80bd3 (2 scrubbed probe records, no keys stored).",
+                        "test_counts":  "2 live requests, 0 transport errors after harness fix (1 has_seller_data, 1 no_data_found)",
+                        "next_action":  "Pending operator: (1) dual-.env decision (known_issue dual_dotenv_divergence_backend_shadowing); (2) offer-listing probe approval before any backfill design. No further live calls until then."
+                    },
                     {
                         "ts":  "2026-09-13T05:38:06Z",
                         "activity":  "free_tier_seller_probe_preflight",
