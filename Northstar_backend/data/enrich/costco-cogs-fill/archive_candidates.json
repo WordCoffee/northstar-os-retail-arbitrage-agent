@@ -1,0 +1,1468 @@
+{
+ "candidates": [
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.891,
+   "costco_item": "Kirkland Signature Extra Virgin Olive Oil, 2 Liter",
+   "price": 23.19,
+   "item_id": "71003"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.887,
+   "costco_item": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L",
+   "price": 20.99,
+   "item_id": "692731"
+  },
+  {
+   "asin": "B089XK85BB",
+   "score": 0.819,
+   "costco_item": "Kirkland Signature Men's Boxer Brief, 4-pack",
+   "price": 18.99,
+   "item_id": "1121686"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.8,
+   "costco_item": "Kirkland Signature Women's Travel Pant",
+   "price": 17.99,
+   "item_id": "1992450"
+  },
+  {
+   "asin": "B072FSTWC9",
+   "score": 0.8,
+   "costco_item": "Kirkland Signature Vitamin C, 1000 mg, 500 ct",
+   "price": 16.79,
+   "item_id": "98268"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.789,
+   "costco_item": "Kirkland Signature 100% Spanish Extra Virgin Olive Oil, 3 Liter",
+   "price": 24.69,
+   "item_id": "1249003"
+  },
+  {
+   "asin": "B079JS2QYG",
+   "score": 0.783,
+   "costco_item": "Kirkland Signature Creamy Almond Butter, 27 oz",
+   "price": 9.49,
+   "item_id": "859695"
+  },
+  {
+   "asin": "B07886L38V",
+   "score": 0.782,
+   "costco_item": "Kirkland Signature Trail Mix Snack Packs, 2 oz, 28 ct",
+   "price": 20.09,
+   "item_id": "1473917"
+  },
+  {
+   "asin": "B0CV64JLDF",
+   "score": 0.78,
+   "costco_item": "Kirkland Signature Sweet Heat Snack Mix, 24 oz",
+   "price": 12.89,
+   "item_id": "1732802"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.769,
+   "costco_item": "Kirkland Signature Trail Mix, 4 lbs",
+   "price": 16.49,
+   "item_id": "1474436"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.756,
+   "costco_item": "Kirkland Signature Ibuprofen, 500 Tablets, 2 ct",
+   "price": 12.39,
+   "item_id": "355400"
+  },
+  {
+   "asin": "B00G5KD56U",
+   "score": 0.752,
+   "costco_item": "Kirkland Signature Organic Strawberry Spread, 24 oz, 2 ct",
+   "price": 9.99,
+   "item_id": "1975373"
+  },
+  {
+   "asin": "B09B82XJJL",
+   "score": 0.733,
+   "costco_item": "Kirkland Signature Men's Lounge Short",
+   "price": 11.99,
+   "item_id": "2000117"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.71,
+   "costco_item": "Kirkland Signature Men's Midweight Crew Tee, 6-pack",
+   "price": 23.99,
+   "item_id": "7771710"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.707,
+   "costco_item": "Kirkland Signature Tilapia Loins, 3 lbs",
+   "price": 20.89,
+   "item_id": "1139689"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.706,
+   "costco_item": "Kirkland Signature Pan & Grill Oil, 35 lbs",
+   "price": 44.89,
+   "item_id": "71014"
+  },
+  {
+   "asin": "B01EWBH2VM",
+   "score": 0.705,
+   "costco_item": "Kirkland Signature CoQ10 Supplement, 300 mg, 100 ct",
+   "price": 22.59,
+   "item_id": "648220"
+  },
+  {
+   "asin": "B00U56JTPG",
+   "score": 0.699,
+   "costco_item": "Kirkland Signature Olive Oil, 5.4 fl oz",
+   "price": 19.99,
+   "item_id": "1789247"
+  },
+  {
+   "asin": "B00JZVWE0O",
+   "score": 0.698,
+   "costco_item": "Kirkland Signature Peanut Butter Filled Pretzel Nuggets, 55 oz",
+   "price": 11.49,
+   "item_id": "1050557"
+  },
+  {
+   "asin": "B00HK14QGQ",
+   "score": 0.696,
+   "costco_item": "Kirkland Signature Paper Towels, 2-Ply, 160 Sheets, 12 Individually Wrapped Rolls",
+   "price": 23.99,
+   "item_id": "512599"
+  },
+  {
+   "asin": "B07HLSQ147",
+   "score": 0.696,
+   "costco_item": "Kirkland Signature Cat Food, Chicken and Rice Formula, 25 lbs",
+   "price": 26.99,
+   "item_id": "52296"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.695,
+   "costco_item": "Kirkland Signature Men's Heavyweight Crew Tee, 6-pack",
+   "price": 26.99,
+   "item_id": "1542746"
+  },
+  {
+   "asin": "B00CCQWK6C",
+   "score": 0.694,
+   "costco_item": "Kirkland Signature Extra Fancy Mixed Nuts, Salted, 40 oz",
+   "price": 17.99,
+   "item_id": "1645578"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.693,
+   "costco_item": "Kirkland Signature Diaper Sizes 3-7",
+   "price": 39.99,
+   "item_id": "1987115"
+  },
+  {
+   "asin": "B001UB44SM",
+   "score": 0.691,
+   "costco_item": "Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count",
+   "price": 22.49,
+   "item_id": "1089787"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.691,
+   "costco_item": "Kirkland Signature Soybean Oil, 35 lbs",
+   "price": 43.59,
+   "item_id": "71011"
+  },
+  {
+   "asin": "B0D9B4WRQT",
+   "score": 0.69,
+   "costco_item": "Kirkland Signature Bath Tissue, 2-Ply, 380 Sheets, 30 Rolls",
+   "price": 24.99,
+   "item_id": "6262016"
+  },
+  {
+   "asin": "B008Q90CBO",
+   "score": 0.69,
+   "costco_item": "Kirkland Signature Milk Chocolate Covered Almonds, 48 oz",
+   "price": 21.79,
+   "item_id": "1685616"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.69,
+   "costco_item": "Kirkland Signature IQF Blueberries, 5 lbs",
+   "price": 13.79,
+   "item_id": "648126"
+  },
+  {
+   "asin": "B072TT12DZ",
+   "score": 0.69,
+   "costco_item": "Kirkland Signature Organic Whole Milk, 8 fl oz, 18 ct",
+   "price": 18.29,
+   "item_id": "1743030"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.69,
+   "costco_item": "Kirkland Signature Tortilla Strips, 3 lbs",
+   "price": 6.79,
+   "item_id": "44004"
+  },
+  {
+   "asin": "B0GVVYYKS8",
+   "score": 0.689,
+   "costco_item": "Kirkland Signature Women's Lightweight Hoodie",
+   "price": 9.97,
+   "item_id": "1945283"
+  },
+  {
+   "asin": "B004CSGRS0",
+   "score": 0.689,
+   "costco_item": "Kirkland Signature Dental Chews, 72 ct",
+   "price": 30.59,
+   "item_id": "971832"
+  },
+  {
+   "asin": "B072TT12DZ",
+   "score": 0.689,
+   "costco_item": "Kirkland Signature Organic Coconut Oil, Virgin, 84 fl oz",
+   "price": 17.79,
+   "item_id": "1045706"
+  },
+  {
+   "asin": "B07N6YF2SF",
+   "score": 0.684,
+   "costco_item": "Kirkland Signature Wild Alaskan Pink Salmon, 6 oz, 6 ct",
+   "price": 19.19,
+   "item_id": "890181"
+  },
+  {
+   "asin": "B00CCQWK6C",
+   "score": 0.683,
+   "costco_item": "Kirkland Signature Extra Fancy Mixed Nuts, Unsalted, 40 oz",
+   "price": 19.29,
+   "item_id": "1652577"
+  },
+  {
+   "asin": "B072FSTWC9",
+   "score": 0.682,
+   "costco_item": "Kirkland Signature Almond Flour, 3 lbs",
+   "price": 14.39,
+   "item_id": "1178969"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.682,
+   "costco_item": "Kirkland Signature Organic Pine Nuts, 1.5 lbs",
+   "price": 30.09,
+   "item_id": "941275"
+  },
+  {
+   "asin": "B07HLSQ147",
+   "score": 0.681,
+   "costco_item": "Kirkland Signature Dog Food, Chicken & Rice Formula, 13.2 oz, 24 ct",
+   "price": 37.99,
+   "item_id": "1567724"
+  },
+  {
+   "asin": "B07DBVGJ39",
+   "score": 0.678,
+   "costco_item": "Kirkland Signature Organic Ghee Clarified Butter, 27 oz",
+   "price": 23.19,
+   "item_id": "1582922"
+  },
+  {
+   "asin": "B072TT12DZ",
+   "score": 0.672,
+   "costco_item": "Kirkland Signature Organic Tofu, Extra Firm, 16 oz, 4 ct",
+   "price": 6.89,
+   "item_id": "9877788"
+  },
+  {
+   "asin": "B0DB431TC6",
+   "score": 0.671,
+   "costco_item": "Kirkland Signature Scented Kitchen Drawstring Trash Bags, Flex-Tech, White, Fresh Scent, 13 Gallon, ",
+   "price": 22.19,
+   "item_id": "1300658"
+  },
+  {
+   "asin": "B003V2JBEK",
+   "score": 0.67,
+   "costco_item": "Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",
+   "price": 20.29,
+   "item_id": "1665191"
+  },
+  {
+   "asin": "B004CSGRS0",
+   "score": 0.667,
+   "costco_item": "Kirkland Signature Gouda Cheese, 2 lbs",
+   "price": 5.99,
+   "item_id": "33149"
+  },
+  {
+   "asin": "B07DBVGJ39",
+   "score": 0.667,
+   "costco_item": "Kirkland Signature Organic Raw Honey Bear, 24 oz, 3 ct",
+   "price": 22.19,
+   "item_id": "1032932"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.667,
+   "costco_item": "Kirkland Signature Walnuts, Baking Nuts, 3 lbs",
+   "price": 14.49,
+   "item_id": "36285"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.667,
+   "costco_item": "Kirkland Signature Whole Almonds, Baking Nuts, 3 lbs",
+   "price": 15.59,
+   "item_id": "284601"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.66,
+   "costco_item": "Kirkland Signature Creamy Liquid Shortening, 35 lbs",
+   "price": 43.59,
+   "item_id": "71012"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.659,
+   "costco_item": "Kirkland Signature Wildflower Honey, 5 lbs",
+   "price": 15.19,
+   "item_id": "1347776"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.659,
+   "costco_item": "Kirkland Signature Pink Salt, Fine Grain, 5 lbs",
+   "price": 7.59,
+   "item_id": "1605917"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.659,
+   "costco_item": "Kirkland Signature Organic Hummus, 2.5 oz, 20 ct",
+   "price": 8.89,
+   "item_id": "1280819"
+  },
+  {
+   "asin": "B00JI7APH4",
+   "score": 0.655,
+   "costco_item": "Kirkland Signature Microwave Popcorn, 3.3 oz, 44 ct",
+   "price": 18.79,
+   "item_id": "9555"
+  },
+  {
+   "asin": "B0D3FQ7H7B",
+   "score": 0.654,
+   "costco_item": "Kirkland Signature Super Extra-Large Peanuts, 2.5 lbs",
+   "price": 8.99,
+   "item_id": "222490"
+  },
+  {
+   "asin": "B0D3FQ7H7B",
+   "score": 0.654,
+   "costco_item": "Kirkland Signature Super Extra-Large Peanuts, 2.5 lbs",
+   "price": 9.09,
+   "item_id": "222490"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.654,
+   "costco_item": "Kirkland Signature Nitrile Exam Gloves, Small, 400 ct",
+   "price": 24.79,
+   "item_id": "2030640"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.653,
+   "costco_item": "Kirkland Signature Vegetable Oil, 3 Quart, 2 ct",
+   "price": 15.09,
+   "item_id": "906420"
+  },
+  {
+   "asin": "B005ECO5KU",
+   "score": 0.653,
+   "costco_item": "Kirkland Signature Aluminum Foil, 12\"W x 1000'L",
+   "price": 49.99,
+   "item_id": "31680"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.651,
+   "costco_item": "Kirkland Signature, Pure Sea Salt, 30 oz",
+   "price": 3.99,
+   "item_id": "384732"
+  },
+  {
+   "asin": "B08B1J4275",
+   "score": 0.651,
+   "costco_item": "Kirkland Signature Vita Rain Zero, Variety Pack, 20 fl oz, 24 ct",
+   "price": 17.99,
+   "item_id": "1359200"
+  },
+  {
+   "asin": "B079JS2QYG",
+   "score": 0.651,
+   "costco_item": "Kirkland Signature Organic Creamy Peanut Butter, 28 oz, 2 ct",
+   "price": 11.39,
+   "item_id": "555000"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.651,
+   "costco_item": "Kirkland Signature Tempura Shrimp, 30 ct",
+   "price": 20.19,
+   "item_id": "1251702"
+  },
+  {
+   "asin": "B072TT12DZ",
+   "score": 0.649,
+   "costco_item": "Kirkland Signature Organic Lemonade, 96 fl oz, 2 ct",
+   "price": 8.19,
+   "item_id": "736083"
+  },
+  {
+   "asin": "B005ECO5KU",
+   "score": 0.648,
+   "costco_item": "Kirkland Signature Roasted Almonds with Sea Salt, 2.5 lbs",
+   "price": 14.79,
+   "item_id": "1713786"
+  },
+  {
+   "asin": "B004CSGRS0",
+   "score": 0.648,
+   "costco_item": "Kirkland Signature Roasted Turkey Breast, 20 oz, 2 ct",
+   "price": 14.79,
+   "item_id": "8443334"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.644,
+   "costco_item": "Kirkland Signature, Organic Quinoa, 4.5 lbs",
+   "price": 12.99,
+   "item_id": "1001368"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.644,
+   "costco_item": "Kirkland Signature Chicken Thighs, 10 lb avg wt",
+   "price": 1.69,
+   "item_id": "47737"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.644,
+   "costco_item": "Kirkland Signature Chicken Thighs, 10 lb avg wt",
+   "price": 1.69,
+   "item_id": "33845"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.644,
+   "costco_item": "Kirkland Signature Frozen Strawberries, 6 lbs",
+   "price": 14.79,
+   "item_id": "27664"
+  },
+  {
+   "asin": "B01N9SOK2Y",
+   "score": 0.644,
+   "costco_item": "Kirkland Signature Tonkotsu Ramen Broth, Pork, 32 fl oz, 4 ct",
+   "price": 15.59,
+   "item_id": "1978580"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.644,
+   "costco_item": "Kirkland Signature Three Berry Blend, 4 lbs",
+   "price": 13.59,
+   "item_id": "1010598"
+  },
+  {
+   "asin": "B07DBVGJ39",
+   "score": 0.644,
+   "costco_item": "Kirkland Signature Organic Large Eggs, Free Range, 2 Dozen",
+   "price": 9.49,
+   "item_id": "1068083"
+  },
+  {
+   "asin": "B07DBVGJ39",
+   "score": 0.643,
+   "costco_item": "Kirkland Signature Organic Pure Maple Syrup, 33.8 oz",
+   "price": 14.79,
+   "item_id": "679131"
+  },
+  {
+   "asin": "B072TT12DZ",
+   "score": 0.643,
+   "costco_item": "Kirkland Signature Pure Vanilla Extract, 16 fl oz",
+   "price": 11.22,
+   "item_id": "32911"
+  },
+  {
+   "asin": "B072TT12DZ",
+   "score": 0.639,
+   "costco_item": "Kirkland Signature Organic Whole Milk, Half Gallon, 3 ct",
+   "price": 13.35,
+   "item_id": "1364689"
+  },
+  {
+   "asin": "B00CCQWK6C",
+   "score": 0.639,
+   "costco_item": "Kirkland Signature Pecan Halves, Baking Nuts, 2 lbs",
+   "price": 17.19,
+   "item_id": "203444"
+  },
+  {
+   "asin": "B07BSYHH39",
+   "score": 0.638,
+   "costco_item": "Kirkland Signature Ground Coffee, Medium Roast, 2.5 lbs",
+   "price": 20.89,
+   "item_id": "756053"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.638,
+   "costco_item": "Kirkland Signature Sea Scallops, Wild Caught, 2 lbs",
+   "price": 54.99,
+   "item_id": "777891"
+  },
+  {
+   "asin": "B001UB44SM",
+   "score": 0.637,
+   "costco_item": "Kirkland Signature Wastebasket Liners, Clear, 10 Gallon, 500 ct",
+   "price": 16.19,
+   "item_id": "87507"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.637,
+   "costco_item": "Kirkland Signature Alkaline AA Batteries, 48 ct",
+   "price": 19.19,
+   "item_id": "2322010"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.636,
+   "costco_item": "Kirkland Signature Chicken Bakes, 8 oz, 6 ct",
+   "price": 16.99,
+   "item_id": "1201906"
+  },
+  {
+   "asin": "B07DBVGJ39",
+   "score": 0.636,
+   "costco_item": "Kirkland Signature Organic Blue Agave, 36 oz, 2 ct",
+   "price": 10.79,
+   "item_id": "1147377"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.636,
+   "costco_item": "Kirkland Signature Canola Oil, 3 Quart, 2 ct",
+   "price": 15.09,
+   "item_id": "906410"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.636,
+   "costco_item": "Kirkland Signature Granulated Garlic, 15.5 oz",
+   "price": 8.69,
+   "item_id": "2047526"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.633,
+   "costco_item": "Kirkland Signature Unisex Logo Crewneck",
+   "price": 9.97,
+   "item_id": "1885402"
+  },
+  {
+   "asin": "B004CSGRS0",
+   "score": 0.633,
+   "costco_item": "Kirkland Signature Imported Basil Pesto, 22 oz",
+   "price": 11.39,
+   "item_id": "990551"
+  },
+  {
+   "asin": "B076ZFG1ZH",
+   "score": 0.632,
+   "costco_item": "Kirkland Signature Whole Bean Coffee, French Roast, 2.5 lbs",
+   "price": 21.19,
+   "item_id": "1528787"
+  },
+  {
+   "asin": "B001UB44SM",
+   "score": 0.631,
+   "costco_item": "Kirkland Signature Purified Drinking Water, 1 Gallon, 6 ct",
+   "price": 10.49,
+   "item_id": "931484"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.63,
+   "costco_item": "Kirkland Signature Organic Tomato Paste, 6 oz, 12 ct",
+   "price": 11.39,
+   "item_id": "633564"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.629,
+   "costco_item": "Kirkland Signature Microfiber Towels, Blue, 36 ct",
+   "price": 19.19,
+   "item_id": "133839"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.629,
+   "costco_item": "Kirkland Signature Smoked Salmon, 12 oz, 2 ct",
+   "price": 27.69,
+   "item_id": "7070"
+  },
+  {
+   "asin": "B0C54FYHQ2",
+   "score": 0.627,
+   "costco_item": "Kirkland Signature Whole Black Peppercorns, 14.1 oz",
+   "price": 8.49,
+   "item_id": "164950"
+  },
+  {
+   "asin": "B081THWMDK",
+   "score": 0.627,
+   "costco_item": "Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",
+   "price": 20.79,
+   "item_id": "208733"
+  },
+  {
+   "asin": "B005ECO5KU",
+   "score": 0.625,
+   "costco_item": "Kirkland Signature, Crushed Red Pepper, 10 oz",
+   "price": 4.79,
+   "item_id": "522779"
+  },
+  {
+   "asin": "B00HK14QGQ",
+   "score": 0.625,
+   "costco_item": "Kirkland Signature Microfiber Towels, Yellow, 36 ct",
+   "price": 19.19,
+   "item_id": "713160"
+  },
+  {
+   "asin": "B005ECO5KU",
+   "score": 0.625,
+   "costco_item": "Kirkland Signature Fancy Whole Cashews with Sea Salt, 2.5 lbs",
+   "price": 17.49,
+   "item_id": "1390413"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.625,
+   "costco_item": "Kirkland Signature Nitrile Exam Gloves, Large, 400 ct",
+   "price": 24.79,
+   "item_id": "2030644"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.625,
+   "costco_item": "Kirkland Signature Stir Fry Vegetable Blend, 5.5 lbs",
+   "price": 11.49,
+   "item_id": "1015237"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.624,
+   "costco_item": "Kirkland Signature Ultra Soft Diapers, Size 6, 132 ct",
+   "price": 39.99,
+   "item_id": "1987116"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.624,
+   "costco_item": "Kirkland Signature Large Eggs, Cage Free, 2 Dozen",
+   "price": 3.69,
+   "item_id": "637598"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.624,
+   "costco_item": "Kirkland Signature Large Eggs, Cage Free, 5 Dozen",
+   "price": 8.49,
+   "item_id": "1025795"
+  },
+  {
+   "asin": "B07BSYHH39",
+   "score": 0.623,
+   "costco_item": "Kirkland Signature House Blend Whole Bean Coffee, Medium Roast, 2.5 lbs",
+   "price": 20.89,
+   "item_id": "1726089"
+  },
+  {
+   "asin": "B09B82XJJL",
+   "score": 0.621,
+   "costco_item": "Kirkland Signature Dried Mangoes, Sweetened, 35 oz",
+   "price": 10.19,
+   "item_id": "1767102"
+  },
+  {
+   "asin": "B004CSGRS0",
+   "score": 0.621,
+   "costco_item": "Kirkland Signature Fresh Goat Cheese, 10.5 oz, 2 ct",
+   "price": 8.99,
+   "item_id": "9090"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.62,
+   "costco_item": "Kirkland Signature Organic Sugar, Fine Granulated, 10 lbs",
+   "price": 12.99,
+   "item_id": "901991"
+  },
+  {
+   "asin": "B004CSGRS0",
+   "score": 0.62,
+   "costco_item": "Kirkland Signature Artichoke Hearts, 33 oz, 2 ct",
+   "price": 12.49,
+   "item_id": "518090"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.619,
+   "costco_item": "Kirkland Signature Funhouse Treats, Variety Pack, 92 oz",
+   "price": 25.19,
+   "item_id": "1481907"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.619,
+   "costco_item": "Kirkland Signature Nitrile Exam Gloves, Medium, 400 ct",
+   "price": 24.79,
+   "item_id": "2030643"
+  },
+  {
+   "asin": "B07HLSQ147",
+   "score": 0.619,
+   "costco_item": "Kirkland Signature Premium Chunk Chicken Breast, 12.5 oz, 6 ct",
+   "price": 14.59,
+   "item_id": "51070"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.617,
+   "costco_item": "Kirkland Signature Ground Turmeric, 12 oz",
+   "price": 4.89,
+   "item_id": "1157899"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.615,
+   "costco_item": "Kirkland Signature Cheese Pizza, 18.25 oz, 4 ct",
+   "price": 13.39,
+   "item_id": "9820887"
+  },
+  {
+   "asin": "B001UB44SM",
+   "score": 0.615,
+   "costco_item": "Kirkland Signature Whole Milk, 1 Gallon, 2 ct",
+   "price": 9.4,
+   "item_id": "2"
+  },
+  {
+   "asin": "B076ZFG1ZH",
+   "score": 0.615,
+   "costco_item": "Kirkland Signature Colombian Supremo Whole Bean Coffee, Medium Roast, 3 lbs",
+   "price": 22.59,
+   "item_id": "120296"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.614,
+   "costco_item": "Kirkland Signature Large Eggs, Free Range, 2 Dozen",
+   "price": 6.09,
+   "item_id": "1738408"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.614,
+   "costco_item": "Kirkland Signature Mini Muffin Bites, Chocolate Chip, 20 ct",
+   "price": 9.59,
+   "item_id": "1873060"
+  },
+  {
+   "asin": "B0154AVVSK",
+   "score": 0.612,
+   "costco_item": "Kirkland Signature Colombian Ground Coffee, Dark Roast, 1.75 oz, 42 ct",
+   "price": 37.19,
+   "item_id": "25484"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.611,
+   "costco_item": "Kirkland Signature Parmigiano Reggiano, 2 lb avg wt",
+   "price": 16.09,
+   "item_id": "34777"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.61,
+   "costco_item": "Kirkland Signature Dry Roasted Macadamia Nuts, Salted, 1.5 lbs",
+   "price": 17.89,
+   "item_id": "1195303"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.61,
+   "costco_item": "Kirkland Signature Absorbent Pads, Extra-Large, 100 ct",
+   "price": 20.69,
+   "item_id": "1792990"
+  },
+  {
+   "asin": "B072TT12DZ",
+   "score": 0.61,
+   "costco_item": "Kirkland Signature Organic Broccoli Florets, 1 lb, 4 ct",
+   "price": 10.89,
+   "item_id": "1217608"
+  },
+  {
+   "asin": "B0CLR489VZ",
+   "score": 0.608,
+   "costco_item": "Kirkland Signature Fine Ground Black Pepper, 12.3 oz",
+   "price": 7.59,
+   "item_id": "164981"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.608,
+   "costco_item": "Kirkland Signature French Fries, Extra-Crispy, 5 lbs, 6 ct",
+   "price": 37.79,
+   "item_id": "9879878"
+  },
+  {
+   "asin": "B072TT12DZ",
+   "score": 0.608,
+   "costco_item": "Kirkland Signature Organic Milk, 1% Low Fat, Half Gallon, 3 ct",
+   "price": 14.19,
+   "item_id": "218073"
+  },
+  {
+   "asin": "B076ZFG1ZH",
+   "score": 0.607,
+   "costco_item": "Kirkland Signature Decaf Ground Coffee, Dark Roast, 3 lbs",
+   "price": 25.79,
+   "item_id": "46242"
+  },
+  {
+   "asin": "B07DBVGJ39",
+   "score": 0.607,
+   "costco_item": "Kirkland Signature Organic Soup Stock, Chicken, 32 fl oz, 6 ct",
+   "price": 11.89,
+   "item_id": "516822"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.606,
+   "costco_item": "Kirkland Signature Organic Applesauce Pouch, 3.17 oz, 24 ct",
+   "price": 11.39,
+   "item_id": "897971"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.604,
+   "costco_item": "Kirkland Signature All Purpose Flour, Unbleached, 10 lbs, 2 ct",
+   "price": 17.89,
+   "item_id": "1485523"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.604,
+   "costco_item": "Kirkland Signature Organic No-Salt Seasoning, 14.5 oz",
+   "price": 9.69,
+   "item_id": "165041"
+  },
+  {
+   "asin": "B005ECO5KU",
+   "score": 0.602,
+   "costco_item": "Kirkland Signature Sunsweet Whole Dried Plums, 56 oz",
+   "price": 11.09,
+   "item_id": "553499"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.602,
+   "costco_item": "Kirkland Signature Ultra Soft Diapers, Size 4, 198 ct",
+   "price": 39.99,
+   "item_id": "1987114"
+  },
+  {
+   "asin": "B09B82XJJL",
+   "score": 0.602,
+   "costco_item": "Kirkland Signature Ancient Grains Probiotic Granola, 35.3 oz",
+   "price": 10.09,
+   "item_id": "2222019"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.602,
+   "costco_item": "Kirkland Signature Turkey Breast, Oven Browned, 4 lb avg wt",
+   "price": 5.09,
+   "item_id": "47500"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.6,
+   "costco_item": "Kirkland Signature Nitrile Exam Gloves, Extra Large, 400 ct",
+   "price": 24.79,
+   "item_id": "2030645"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.6,
+   "costco_item": "Kirkland Signature Freezer Gallon Plus Bags, Double Zipper, 192 ct",
+   "price": 16.39,
+   "item_id": "1843108"
+  },
+  {
+   "asin": "B07DBVGJ39",
+   "score": 0.598,
+   "costco_item": "Kirkland Signature Coffee Organic Pacific Bold K-Cup Pod, 120-count",
+   "price": 33.99,
+   "item_id": "4054232"
+  },
+  {
+   "asin": "B07DBVGJ39",
+   "score": 0.597,
+   "costco_item": "Kirkland Signature Organic Roasted Seaweed with Sesame Oil, 0.60 oz, 10 ct",
+   "price": 11.39,
+   "item_id": "1193197"
+  },
+  {
+   "asin": "B09B82XJJL",
+   "score": 0.596,
+   "costco_item": "Kirkland Signature Chicken Party Wings, 7 lb avg wt",
+   "price": 2.99,
+   "item_id": "10597"
+  },
+  {
+   "asin": "B09B82XJJL",
+   "score": 0.596,
+   "costco_item": "Kirkland Signature Chicken Party Wings, 7 lb avg wt",
+   "price": 2.99,
+   "item_id": "47725"
+  },
+  {
+   "asin": "B072FSTWC9",
+   "score": 0.596,
+   "costco_item": "Kirkland Signature Heavy Whipped Cream, 15 fl oz, 3 ct",
+   "price": 10.69,
+   "item_id": "1888000"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.595,
+   "costco_item": "Kirkland Signature Organic Greek Nonfat Yogurt, Plain, 3 lbs",
+   "price": 8.49,
+   "item_id": "1048072"
+  },
+  {
+   "asin": "B072TT12DZ",
+   "score": 0.595,
+   "costco_item": "Kirkland Signature Organic Coconut Water, 33.8 fl oz, 9 ct",
+   "price": 24.99,
+   "item_id": "1495250"
+  },
+  {
+   "asin": "B07DBVGJ39",
+   "score": 0.594,
+   "costco_item": "Kirkland Signature Organic Whole Cashews, Unsalted, Unroasted, 40 oz",
+   "price": 19.89,
+   "item_id": "1617506"
+  },
+  {
+   "asin": "B072FSTWC9",
+   "score": 0.594,
+   "costco_item": "Kirkland Signature Evaporated Milk, 12 fl oz, 12 ct",
+   "price": 13.09,
+   "item_id": "1327935"
+  },
+  {
+   "asin": "B09B82XJJL",
+   "score": 0.593,
+   "costco_item": "Kirkland Signature Baby Wipes Fragrance Free, 900-count",
+   "price": 19.99,
+   "item_id": "1493488"
+  },
+  {
+   "asin": "B01N9SOK2Y",
+   "score": 0.593,
+   "costco_item": "Kirkland Signature Purified Drinking Water, 16.9 fl oz, 40 ct",
+   "price": 7.79,
+   "item_id": "782796"
+  },
+  {
+   "asin": "B01N9SOK2Y",
+   "score": 0.593,
+   "costco_item": "Kirkland Signature Sport Drink, Variety Pack, 12 fl oz, 24 ct",
+   "price": 9.79,
+   "item_id": "1845080"
+  },
+  {
+   "asin": "B01N9SOK2Y",
+   "score": 0.593,
+   "costco_item": "Kirkland Signature Italian Sparkling Water, 16.9 fl oz, 24 ct",
+   "price": 22.99,
+   "item_id": "9262015"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.593,
+   "costco_item": "Kirkland Signature Italian Sausage and Beef Lasagna, 3 lbs, 2 ct",
+   "price": 20.89,
+   "item_id": "1321637"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.592,
+   "costco_item": "Kirkland Signature Fancy Whole Cashews, Unsalted, 40 oz",
+   "price": 17.49,
+   "item_id": "1617507"
+  },
+  {
+   "asin": "B072TT12DZ",
+   "score": 0.59,
+   "costco_item": "Kirkland Signature Organic Coconut Water, 11.1 fl oz, 12 ct",
+   "price": 13.59,
+   "item_id": "1394201"
+  },
+  {
+   "asin": "B0CLR489VZ",
+   "score": 0.59,
+   "costco_item": "Kirkland Signature Grass-Fed Butter, Salted, 8 oz, 4 ct",
+   "price": 13.59,
+   "item_id": "1424237"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.589,
+   "costco_item": "Kirkland Signature Popcorn, Sea Salt, 0.65 oz, 36 ct",
+   "price": 11.69,
+   "item_id": "3330816"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.589,
+   "costco_item": "Kirkland Signature Butter, Unsalted, Sticks, 1 lb, 4 ct",
+   "price": 10.79,
+   "item_id": "41400"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.588,
+   "costco_item": "Kirkland Signature Normandy-Style Vegetable Blend, 5.5 lbs",
+   "price": 10.79,
+   "item_id": "1238662"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.587,
+   "costco_item": "Kirkland Signature In-Shell Pistachios, Roasted and Unsalted, 3 lbs",
+   "price": 19.39,
+   "item_id": "1792518"
+  },
+  {
+   "asin": "B07886L38V",
+   "score": 0.587,
+   "costco_item": "Kirkland Signature Butter, Salted, Block, 1 lb, 4 ct",
+   "price": 10.69,
+   "item_id": "44111"
+  },
+  {
+   "asin": "B07886L38V",
+   "score": 0.587,
+   "costco_item": "Kirkland Signature Butter, Salted, Stick, 1 lb, 4 ct",
+   "price": 10.79,
+   "item_id": "41114"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.586,
+   "costco_item": "Kirkland Signature Albacore Solid White Tuna in Water, 7 oz, 8 ct",
+   "price": 20.19,
+   "item_id": "1492456"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.586,
+   "costco_item": "Kirkland Signature Freezer Quart Plus Bags, Double Zipper, 264 ct",
+   "price": 14.79,
+   "item_id": "1843112"
+  },
+  {
+   "asin": "B07886L38V",
+   "score": 0.586,
+   "costco_item": "Kirkland Signature Halal Frenched Rack of Lamb, 2 lb avg wt",
+   "price": 18.09,
+   "item_id": "18010"
+  },
+  {
+   "asin": "B0CLR489VZ",
+   "score": 0.585,
+   "costco_item": "Kirkland Signature Grass-Fed Beef Sticks, 1.15 oz, 12 ct",
+   "price": 15.99,
+   "item_id": "1857160"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.583,
+   "costco_item": "Kirkland Signature Favorites Chocolate Bag, Variety Pack, 90 oz",
+   "price": 27.39,
+   "item_id": "1919858"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.583,
+   "costco_item": "Kirkland Signature Sliced Bacon, Hickory Smoked, 1 lb, 4 ct",
+   "price": 16.79,
+   "item_id": "7000070"
+  },
+  {
+   "asin": "B076ZFG1ZH",
+   "score": 0.583,
+   "costco_item": "Kirkland Signature Espresso Blend Whole Bean Coffee, Dark Roast, 2.5 lbs",
+   "price": 21.59,
+   "item_id": "1726068"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.583,
+   "costco_item": "Kirkland Signature Halal Leg of Lamb, Boneless, 5 lb avg wt",
+   "price": 7.59,
+   "item_id": "29755"
+  },
+  {
+   "asin": "B0C54FYHQ2",
+   "score": 0.582,
+   "costco_item": "Kirkland Signature Adult Formula Lamb, Rice and Vegetable Dog Food, 25 lbs",
+   "price": 26.49,
+   "item_id": "1936932"
+  },
+  {
+   "asin": "B005ECO5KU",
+   "score": 0.581,
+   "costco_item": "Kirkland Signature Nut Bars with Cocoa Drizzle & Sea Salt, 1.41 oz, 30 ct",
+   "price": 19.19,
+   "item_id": "1300509"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.581,
+   "costco_item": "Kirkland Signature Chicken Drumsticks, 8 lb avg wt",
+   "price": 1.19,
+   "item_id": "47739"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.581,
+   "costco_item": "Kirkland Signature Chicken Drumsticks, 8 lb avg wt",
+   "price": 1.19,
+   "item_id": "33852"
+  },
+  {
+   "asin": "B01N9SOK2Y",
+   "score": 0.581,
+   "costco_item": "Kirkland Signature Ionized Alkaline Water, 33.8 fl oz, 18 ct",
+   "price": 14.99,
+   "item_id": "4165934"
+  },
+  {
+   "asin": "B07N798Y1J",
+   "score": 0.58,
+   "costco_item": "Kirkland Signature Thai Hom Mali Jasmine Rice, Long Grain, 25 lbs",
+   "price": 25.49,
+   "item_id": "841930"
+  },
+  {
+   "asin": "B07K73FTRJ",
+   "score": 0.579,
+   "costco_item": "Kirkland Signature Shelled Pistachios, Roasted & Salted, 1.5 lbs",
+   "price": 20.59,
+   "item_id": "1076903"
+  },
+  {
+   "asin": "B00BPPN94S",
+   "score": 0.577,
+   "costco_item": "Kirkland Signature Casual Dining Paper Napkins, White, 1120 ct",
+   "price": 14.19,
+   "item_id": "1585373"
+  },
+  {
+   "asin": "B09B82XJJL",
+   "score": 0.577,
+   "costco_item": "Kirkland Signature Organic Ground Saigon Cinnamon, 10.7 oz",
+   "price": 6.09,
+   "item_id": "1124845"
+  },
+  {
+   "asin": "B07886L38V",
+   "score": 0.576,
+   "costco_item": "Kirkland Signature Snacking Nuts, Variety Pack, 1.6 oz, 21 ct",
+   "price": 28.07,
+   "item_id": "1658550"
+  },
+  {
+   "asin": "B0C54FYHQ2",
+   "score": 0.576,
+   "costco_item": "Kirkland Signature Pepperoni Pizza, Artisan Crust, 21.52 oz, 4 ct",
+   "price": 16.99,
+   "item_id": "1925804"
+  },
+  {
+   "asin": "B00U56JTPG",
+   "score": 0.574,
+   "costco_item": "Kirkland Signature Ultra Shine Dishwashing Liquid, Fresh Scent, 90 fl oz",
+   "price": 10.29,
+   "item_id": "1789130"
+  },
+  {
+   "asin": "B09B82XJJL",
+   "score": 0.571,
+   "costco_item": "Kirkland Signature Aged Parmigiano Reggiano Cheese, Shredded, 1 lb",
+   "price": 22.59,
+   "item_id": "186626"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.571,
+   "costco_item": "Kirkland Signature Culinary Parchment Paper, 15\" x 164', 2 ct",
+   "price": 15.79,
+   "item_id": "1323118"
+  },
+  {
+   "asin": "B007889Z1C",
+   "score": 0.567,
+   "costco_item": "Kirkland Signature Crystal Clear Cutlery Assortment, Clear, 360 ct",
+   "price": 17.19,
+   "item_id": "12648"
+  },
+  {
+   "asin": "B0784S6ZCJ",
+   "score": 0.565,
+   "costco_item": "Kirkland Signature Elegant Plastic Plates, Variety Pack, White, 50-count",
+   "price": 15.99,
+   "item_id": "1343253"
+  },
+  {
+   "asin": "B07DBVGJ39",
+   "score": 0.565,
+   "costco_item": "Kirkland Signature Thick Sliced Bacon, Center Cut, 1.5 lbs, 2 ct",
+   "price": 13.09,
+   "item_id": "9050611"
+  },
+  {
+   "asin": "B072FSTWC9",
+   "score": 0.564,
+   "costco_item": "Kirkland Signature Liquid Egg Whites, Cage Free, 16 oz, 6 ct",
+   "price": 14.29,
+   "item_id": "1063232"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.563,
+   "costco_item": "Kirkland Signature Moist Flushable Wipes, Unscented, 640 ct",
+   "price": 17.99,
+   "item_id": "1652990"
+  },
+  {
+   "asin": "B0797ZFMY3",
+   "score": 0.563,
+   "costco_item": "Truckload Kirkland Signature Purified Drinking Water, 16.9 fl oz, 18 Pallet Minimum",
+   "price": 4.99,
+   "item_id": "906078"
+  },
+  {
+   "asin": "B0F7GTX962",
+   "score": 0.56,
+   "costco_item": "Kirkland Signature Hair Regrowth Treatment Minoxidil Foam for Men, 2.11 oz, 6-count",
+   "price": 48.99,
+   "item_id": "778152"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.56,
+   "costco_item": "Kirkland Signature Nature's Domain Dog Food, Salmon & Sweet Potato, 25 lbs",
+   "price": 32.69,
+   "item_id": "1936927"
+  },
+  {
+   "asin": "B0C54FYHQ2",
+   "score": 0.558,
+   "costco_item": "Kirkland Signature Coarse Ground Malabar Black Pepper, 12.7 oz",
+   "price": 7.99,
+   "item_id": "164998"
+  },
+  {
+   "asin": "B09VK75PYG",
+   "score": 0.557,
+   "costco_item": "Kirkland Signature Nature's Domain Dog Food, Beef & Sweet Potato, 25 lbs",
+   "price": 28.79,
+   "item_id": "1936934"
+  },
+  {
+   "asin": "B0F9L6YZ9C",
+   "score": 0.556,
+   "costco_item": "Kirkland Signature Protein Bar, Variety Pack, 21g Protein, 2.12 oz, 20 ct",
+   "price": 26.79,
+   "item_id": "1014809"
+  },
+  {
+   "asin": "B07N798Y1J",
+   "score": 0.554,
+   "costco_item": "Kirkland Signature Chicken Tenderloins, Boneless Skinless, 6 lbs",
+   "price": 22.59,
+   "item_id": "1294443"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.552,
+   "costco_item": "Kirkland Signature Sparkling Water, Variety Pack, 12 fl oz, 35 ct",
+   "price": 17.79,
+   "item_id": "4164501"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.552,
+   "costco_item": "Kirkland Signature Chicken Thighs, Boneless Skinless, 8 lb avg wt",
+   "price": 3.49,
+   "item_id": "47731"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.552,
+   "costco_item": "Kirkland Signature Chicken Thighs, Boneless Skinless, 9 lb avg wt",
+   "price": 3.49,
+   "item_id": "35410"
+  },
+  {
+   "asin": "B001UB44SM",
+   "score": 0.552,
+   "costco_item": "Kirkland Signature Thin Sliced Chicken Breasts, Boneless Skinless, 10 lbs",
+   "price": 33.79,
+   "item_id": "1055599"
+  },
+  {
+   "asin": "B00XU9FM8S",
+   "score": 0.55,
+   "costco_item": "Kirkland Signature Chicken Breast Fillets, Lightly Breaded, 48 oz",
+   "price": 15.79,
+   "item_id": "1782177"
+  },
+  {
+   "asin": "B008Q90CBO",
+   "score": 0.548,
+   "costco_item": "Kirkland Signature Soft & Chewy Chocolate Chip Granola Bars, 0.85 oz, 64 ct",
+   "price": 12.49,
+   "item_id": "1212860"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.545,
+   "costco_item": "Kirkland Signature SAE 0W-20 Full Synthetic Motor Oil, 1 Quart, 6 ct",
+   "price": 26.39,
+   "item_id": "1448207"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.545,
+   "costco_item": "Kirkland Signature Chicken Breasts, Boneless Skinless, 9 lb avg wt",
+   "price": 3.19,
+   "item_id": "33841"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.545,
+   "costco_item": "Kirkland Signature Chicken Breasts, Boneless Skinless, 9 lb avg wt",
+   "price": 3.19,
+   "item_id": "35057"
+  },
+  {
+   "asin": "B002S4RSEW",
+   "score": 0.545,
+   "costco_item": "Kirkland Signature Chicken Breasts, Boneless Skinless, 9 lb avg wt",
+   "price": 3.19,
+   "item_id": "47735"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.545,
+   "costco_item": "Kirkland Signature SAE 5W-20 Full Synthetic Motor Oil, 1 Quart, 6 ct",
+   "price": 26.39,
+   "item_id": "1448209"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.545,
+   "costco_item": "Kirkland Signature SAE 5W-30 Full Synthetic Motor Oil, 1 Quart, 6 ct",
+   "price": 26.39,
+   "item_id": "1448217"
+  },
+  {
+   "asin": "B077SN37K5",
+   "score": 0.539,
+   "costco_item": "Kirkland Signature Farmed Blackened Atlantic Salmon, Boneless Skin-On, 32 oz",
+   "price": 28.89,
+   "item_id": "1854959"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.538,
+   "costco_item": "Kirkland Signature Fully-Cooked Bacon, Hickory Wood Smoked, 1 lb",
+   "price": 14.09,
+   "item_id": "1601187"
+  },
+  {
+   "asin": "B072FSTWC9",
+   "score": 0.532,
+   "costco_item": "Kirkland Signature California In-Shell Pistachios, Roasted & Salted, 3 lbs",
+   "price": 19.39,
+   "item_id": "545345"
+  },
+  {
+   "asin": "B0F9HGHF4C",
+   "score": 0.531,
+   "costco_item": "Kirkland Signature 2% Reduced Fat Milk, Lactose-Free, Half Gallon, 3 ct",
+   "price": 14.79,
+   "item_id": "1975527"
+  },
+  {
+   "asin": "B0D91KYL2J",
+   "score": 0.53,
+   "costco_item": "Kirkland Signature Sparkling Energy Drink, Sugar Free, Variety Pack, 12 fl oz, 24 ct",
+   "price": 21.99,
+   "item_id": "1925833"
+  },
+  {
+   "asin": "B09KMNXXPF",
+   "score": 0.525,
+   "costco_item": "Kirkland Signature by Stearns &amp; Foster 14.5\" Pillow Top Lakeridge Mattress",
+   "price": 1199.99,
+   "item_id": "1722209"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.524,
+   "costco_item": "Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 ",
+   "price": 17.99,
+   "item_id": "778151"
+  }
+ ],
+ "note": "UNVERIFIED operator-review queue; nothing trusted until verified + CSV-appended"
+}
