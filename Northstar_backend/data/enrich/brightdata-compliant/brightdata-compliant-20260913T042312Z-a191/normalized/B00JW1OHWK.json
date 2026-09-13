@@ -1,0 +1,28 @@
+{
+  "amazon_price": 18.5,
+  "buy_box_price": 18.5,
+  "lowest_price": 18.5,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 866.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": null,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Pantry Staples",
+    "Cooking & Baking",
+    "Extracts",
+    "Natural"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Pure Vanilla Extract 16 ounce",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:26:52.285464+00:00"
+}

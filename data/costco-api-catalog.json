@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-09-13T07:32:01.589501+00:00",
-  "run_started_at": "2026-09-13T07:31:58.508314+00:00",
-  "query": "Kirkland sleep aid",
+  "generated_at": "2026-09-13T08:37:03.721965+00:00",
+  "run_started_at": "2026-09-13T08:37:00.024816+00:00",
+  "query": "Kirkland virgin olive",
   "pages_fetched": 1,
   "credits_estimate": 10,
-  "total_results": 2,
+  "total_results": 4,
   "items": [
     {
-      "item_name": "Kirkland Signature Nighttime Sleep Aid, 192 Tablets",
-      "raw_title": "Kirkland Signature Nighttime Sleep Aid, 192 Tablets",
-      "costco_item_id": "719940",
-      "source_url": "https://www.costco.com/.product.719940.html",
+      "item_name": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L",
+      "raw_title": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L",
+      "costco_item_id": "692731",
+      "source_url": "https://www.costco.com/.product.692731.html",
       "url_derived": true,
-      "regular_price": 6.99,
-      "sale_price": 6.99,
+      "regular_price": 20.99,
+      "sale_price": 20.99,
       "price_basis": "regular",
       "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
+      "pack_size": "2 L",
+      "unit_count": 2,
       "cost_basis": "costco_online",
       "cost_status": "discovery_only",
       "source": "costco_online",
@@ -26,7 +26,7 @@
         "business_center": "Dallas Business Center"
       },
       "availability": "in_stock",
-      "promo": "\u00a0",
+      "promo": "",
       "variants_count": 0,
       "variants_max_price": null,
       "brand": "Kirkland Signature",
@@ -34,31 +34,34 @@
       "upc_or_ean": null,
       "product_line": null,
       "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
+      "net_weight": 2.0,
+      "unit_of_measure": "l",
       "pack_count": null,
       "case_count": null,
       "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.719940.html",
-      "fetched_at": "2026-09-13T07:32:01.568834+00:00",
-      "last_seen_at": "2026-09-13T07:32:01.568834+00:00",
-      "match": "appended",
-      "matched_by": "none",
-      "costco_cost": 7.69,
-      "cost_exported_at": "2026-09-13T07:32:01.633651+00:00"
-    },
+      "product_url": "https://www.costco.com/.product.692731.html",
+      "fetched_at": "2026-09-13T08:37:03.702925+00:00",
+      "last_seen_at": "2026-09-13T08:37:03.702925+00:00",
+      "match": "updated",
+      "matched_by": "exact_title",
+      "costco_cost": 23.09,
+      "cost_exported_at": "2026-09-13T08:37:03.728592+00:00"
+    }
+  ],
+  "skipped": [],
+  "held_for_review": [
     {
-      "item_name": "Kirkland Signature Acetaminophen PM, 500 mg, 375 Gelcaps",
-      "raw_title": "Kirkland Signature Acetaminophen PM, 500 mg, 375 Gelcaps",
-      "costco_item_id": "596759",
-      "source_url": "https://www.costco.com/.product.596759.html",
+      "item_name": "Kirkland Signature Olive Oil, 3 L",
+      "raw_title": "Kirkland Signature Olive Oil, 3 L",
+      "costco_item_id": "1789247",
+      "source_url": "https://www.costco.com/.product.1789247.html",
       "url_derived": true,
-      "regular_price": 10.99,
-      "sale_price": 10.99,
+      "regular_price": 22.49,
+      "sale_price": 22.49,
       "price_basis": "regular",
       "price_status": "regular",
-      "pack_size": "375",
-      "unit_count": 375,
+      "pack_size": "3.17 qt.",
+      "unit_count": 3,
       "cost_basis": "costco_online",
       "cost_status": "discovery_only",
       "source": "costco_online",
@@ -80,17 +83,91 @@
       "pack_count": null,
       "case_count": null,
       "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.596759.html",
-      "fetched_at": "2026-09-13T07:32:01.568834+00:00",
-      "last_seen_at": "2026-09-13T07:32:01.568834+00:00",
-      "match": "appended",
-      "matched_by": "none",
-      "costco_cost": 12.09,
-      "cost_exported_at": "2026-09-13T07:32:01.665426+00:00"
+      "product_url": "https://www.costco.com/.product.1789247.html",
+      "fetched_at": "2026-09-13T08:37:03.702925+00:00",
+      "last_seen_at": "2026-09-13T08:37:03.702925+00:00",
+      "reason": "title_conflict",
+      "prior_item_name": "Kirkland Signature Olive Oil, 5.4 fl oz"
+    },
+    {
+      "item_name": "Kirkland Signature, Extra Virgin Italian Olive Oil, 2 L",
+      "raw_title": "Kirkland Signature, Extra Virgin Italian Olive Oil, 2 L",
+      "costco_item_id": "71003",
+      "source_url": "https://www.costco.com/.product.71003.html",
+      "url_derived": true,
+      "regular_price": 30.99,
+      "sale_price": 30.99,
+      "price_basis": "regular",
+      "price_status": "regular",
+      "pack_size": "2 L",
+      "unit_count": 2,
+      "cost_basis": "costco_online",
+      "cost_status": "discovery_only",
+      "source": "costco_online",
+      "location": {
+        "delivery_zip": "75201",
+        "business_center": "Dallas Business Center"
+      },
+      "availability": "in_stock",
+      "promo": "",
+      "variants_count": 0,
+      "variants_max_price": null,
+      "brand": "Kirkland Signature",
+      "model_number": null,
+      "upc_or_ean": null,
+      "product_line": null,
+      "formula_or_flavor": null,
+      "net_weight": 2.0,
+      "unit_of_measure": "l",
+      "pack_count": null,
+      "case_count": null,
+      "warehouse_or_zip": "75201",
+      "product_url": "https://www.costco.com/.product.71003.html",
+      "fetched_at": "2026-09-13T08:37:03.702925+00:00",
+      "last_seen_at": "2026-09-13T08:37:03.702925+00:00",
+      "reason": "title_conflict",
+      "prior_item_name": "Kirkland Signature Extra Virgin Olive Oil, 2 Liter"
+    },
+    {
+      "item_name": "Kirkland Signature 100% Spanish Extra Virgin Olive Oil, 3 L",
+      "raw_title": "Kirkland Signature 100% Spanish Extra Virgin Olive Oil, 3 L",
+      "costco_item_id": "1249003",
+      "source_url": "https://www.costco.com/.product.1249003.html",
+      "url_derived": true,
+      "regular_price": 28.49,
+      "sale_price": 28.49,
+      "price_basis": "regular",
+      "price_status": "regular",
+      "pack_size": "3.17 qt.",
+      "unit_count": 3,
+      "cost_basis": "costco_online",
+      "cost_status": "discovery_only",
+      "source": "costco_online",
+      "location": {
+        "delivery_zip": "75201",
+        "business_center": "Dallas Business Center"
+      },
+      "availability": "in_stock",
+      "promo": "",
+      "variants_count": 0,
+      "variants_max_price": null,
+      "brand": "Kirkland Signature",
+      "model_number": null,
+      "upc_or_ean": null,
+      "product_line": null,
+      "formula_or_flavor": null,
+      "net_weight": null,
+      "unit_of_measure": null,
+      "pack_count": null,
+      "case_count": null,
+      "warehouse_or_zip": "75201",
+      "product_url": "https://www.costco.com/.product.1249003.html",
+      "fetched_at": "2026-09-13T08:37:03.702925+00:00",
+      "last_seen_at": "2026-09-13T08:37:03.702925+00:00",
+      "reason": "title_conflict",
+      "prior_item_name": "Kirkland Signature 100% Spanish Extra Virgin Olive Oil, 3 Liter"
     }
   ],
-  "skipped": [],
-  "held_for_review": [],
   "unmatched": [],
   "stale_rows": [
     {
@@ -104,10 +181,6 @@
     {
       "item_name": "Kirkland Signature Cookie Tray, 60-count",
       "costco_cost": "25.29"
-    },
-    {
-      "item_name": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L",
-      "costco_cost": "23.09"
     },
     {
       "item_name": "Kirkland Signature Dishwasher Detergent Pacs 115 Count",
@@ -126,8 +199,8 @@
       "costco_cost": "26.39"
     },
     {
-      "item_name": "Kirkland Signature Women's Softshell Jacket",
-      "costco_cost": "36.29"
+      "item_name": "Kirkland Signature Men's Pima Polo",
+      "costco_cost": "15.39"
     },
     {
       "item_name": "Kirkland Signature Elegant Plastic Plates, Variety Pack, White, 50-count",
@@ -154,7 +227,7 @@
       "costco_cost": "19.24"
     },
     {
-      "item_name": "Kirkland Signature Flex-Tech 13-Gallon Scented Kitchen Trash Bags, 200-count",
+      "item_name": "Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count",
       "costco_cost": "24.74"
     },
     {
@@ -174,8 +247,8 @@
       "costco_cost": "10.97"
     },
     {
-      "item_name": "Kirkland Signature Men's Cotton Jean",
-      "costco_cost": "14.29"
+      "item_name": "Kirkland Signature Men's Softshell Bomber Jacket",
+      "costco_cost": "25.29"
     },
     {
       "item_name": "Kirkland Signature Hair Regrowth Treatment Minoxidil Foam for Men, 2.11 oz, 6-count",
@@ -2148,6 +2221,14 @@
     {
       "item_name": "Kirkland Signature Liquid Body Wash, Natural Citrus, 27 fl oz, 2-count",
       "costco_cost": "13.19"
+    },
+    {
+      "item_name": "Kirkland Signature Nighttime Sleep Aid, 192 Tablets",
+      "costco_cost": "7.69"
+    },
+    {
+      "item_name": "Kirkland Signature Acetaminophen PM, 500 mg, 375 Gelcaps",
+      "costco_cost": "12.09"
     }
   ],
   "data_gaps": [],

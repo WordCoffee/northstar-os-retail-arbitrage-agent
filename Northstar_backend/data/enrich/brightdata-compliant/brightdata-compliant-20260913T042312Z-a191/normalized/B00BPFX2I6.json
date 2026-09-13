@@ -1,0 +1,27 @@
+{
+  "amazon_price": 35.59,
+  "buy_box_price": 35.59,
+  "lowest_price": 35.59,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 216.5,
+  "monthly_sales_estimated": true,
+  "fba_fee": 8.2,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Beverages",
+    "Coffee",
+    "Ground Coffee"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature 100% Colombian Dark Roast Decaffeinated Ground Coffee - 1.36kg",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:25:48.602073+00:00"
+}

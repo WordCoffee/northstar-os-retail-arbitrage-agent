@@ -23,9 +23,13 @@ from typing import Dict, Optional
 
 # Pattern 1: "Sold by [Seller Name] and ships from Amazon Fulfillment"
 # This is the Buy Box winner text shown in the merchant info popover area
+# Tag-tolerant: live HTML often has <br>/<span> between tokens, so allow
+# tags or whitespace as separators (v2 fix for dirty "and ships from..."
+# names that fell through to the broad fallback).
+_SEP = r"(?:<[^>]+>|\s)+"
 _SELLER_NAME_SOLD_BY_SHIPS_RE = re.compile(
-    r'Sold by\s+([^<]+?)\s+and\s+ships\s+from\s+Amazon\s+Fulfillment',
-    re.IGNORECASE
+    r"Sold\s+by" + _SEP + r"([^<]+?)" + _SEP + r"and" + _SEP + r"ships" + _SEP + r"from" + _SEP + r"Amazon" + _SEP + r"Fulfillment",
+    re.IGNORECASE,
 )
 
 # Pattern 2: "Ships from and sold by [Seller Name]" — Amazon Retail or FBA
@@ -121,6 +125,52 @@ def _clean_text(raw: Optional[str]) -> Optional[str]:
     return " ".join(clean.split()) or None
 
 
+def _post_clean_seller_name(name: Optional[str]) -> Optional[str]:
+    """Remove fulfillment-clause remnants the broad fallback can capture.
+
+    v2 fix: broad pattern "Sold by X" with a 80-char window grabs
+    "Loong & Sons and ships from Amazon Fulfillment." when Pattern 1
+    misses due to markup. Cut any trailing fulfillment clause and
+    trailing periods so the cache stores "Loong & Sons", not the sentence.
+    """
+    if not name:
+        return None
+    cut = re.split(
+        r"\s+and\s+ships\s+from\s+.*$|\s+ships\s+from\s+.*$",
+        name,
+        flags=re.IGNORECASE,
+    )[0].strip()
+    cut = cut.rstrip(".").strip()
+    return cut or None
+
+
+# Merchant-info block: fulfillment signals are only trustworthy here.
+# Whole-page search matches carousel "Ships from X sold by Y" text for
+# OTHER products and mislabels FBA pages as FBM (v2 fix).
+_MERCHANT_BLOCK_RE = re.compile(
+    r'<(?:div|span|td)[^>]*(?:merchant-info|merchantInfo|tabular-buybox|offer-listing|aod-container)[^>]*>(.*?)</(?:div|span|td)>',
+    re.IGNORECASE | re.S,
+)
+
+
+def _fulfillment_scope(html: str) -> str:
+    """Narrow fulfillment regex scope to the merchant block when present."""
+    m = _MERCHANT_BLOCK_RE.search(html)
+    if not m:
+        return html
+    block = m.group(1)
+    # If the matched block carries no fulfillment signal (e.g. a bare
+    # aod-container with only "Other sellers" text), fall back to the
+    # full page so availability/byline markers are not lost.
+    if (
+        _FULFILLMENT_FBA_RE.search(block)
+        or _FULFILLMENT_AMAZON_RE.search(block)
+        or _FULFILLMENT_FBM_RE.search(block)
+    ):
+        return block
+    return html
+
+
 def extract_buy_box_seller(html: str) -> Optional[str]:
     """Extract Buy Box seller name from live Amazon dp markup.
 
@@ -135,42 +185,42 @@ def extract_buy_box_seller(html: str) -> Optional[str]:
     # Pattern 1: "Sold by X and ships from Amazon Fulfillment"
     match = _SELLER_NAME_SOLD_BY_SHIPS_RE.search(html)
     if match:
-        name = _clean_text(match.group(1))
+        name = _post_clean_seller_name(_clean_text(match.group(1)))
         if name:
             return name
 
     # Pattern 2: "Ships from and sold by X"
     match = _SELLER_NAME_SHIPS_FROM_SOLD_BY_RE.search(html)
     if match:
-        name = _clean_text(match.group(1))
+        name = _post_clean_seller_name(_clean_text(match.group(1)))
         if name:
             return name.rstrip(".")  # Remove trailing period from "Amazon.com."
 
     # Pattern 3: sellerProfileTriggerId
     match = _SELLER_NAME_PROFILE_TRIGGER_RE.search(html)
     if match:
-        name = _clean_text(match.group(1))
+        name = _post_clean_seller_name(_clean_text(match.group(1)))
         if name:
             return name
 
     # Pattern 4: Legacy bylineInfo with link
     match = _SELLER_NAME_BYLINE_LINK_RE.search(html)
     if match:
-        name = _clean_text(match.group(1))
+        name = _post_clean_seller_name(_clean_text(match.group(1)))
         if name:
             return name
 
     # Pattern 5: Legacy bylineInfo text
     match = _SELLER_NAME_BYLINE_TEXT_RE.search(html)
     if match:
-        name = _clean_text(match.group(1))
+        name = _post_clean_seller_name(_clean_text(match.group(1)))
         if name:
             return name
 
     # Pattern 6: Broad fallback
     match = _SELLER_NAME_BROAD_RE.search(html)
     if match:
-        name = _clean_text(match.group(1))
+        name = _post_clean_seller_name(_clean_text(match.group(1)))
         if name:
             return name
 
@@ -185,15 +235,20 @@ def extract_buy_box_fulfillment(html: str, seller_name: Optional[str]) -> str:
     - "Ships from and sold by Amazon.com" (in Buy Box area) -> Amazon Retail
     - "Ships from [Seller] and sold by [Seller]" -> FBM
     - Fallback: if seller_name is "Amazon.com" -> Amazon
+
+    v2 fix: scope regexes to the merchant-info block when present so
+    carousel text for OTHER products cannot flip an FBA page to FBM.
+    FBA wins over FBM whenever its marker is in scope.
     """
+    scope = _fulfillment_scope(html)
     # FBA: "ships from Amazon Fulfillment" or "Fulfilled by Amazon"
     # Check this FIRST - it's the most specific to the Buy Box seller
-    if _FULFILLMENT_FBA_RE.search(html):
+    if _FULFILLMENT_FBA_RE.search(scope):
         return "FBA"
 
     # Amazon Retail: explicit "Ships from and sold by Amazon.com"
     # This can appear in related product carousels, so check seller name too
-    if _FULFILLMENT_AMAZON_RE.search(html):
+    if _FULFILLMENT_AMAZON_RE.search(scope):
         # Only return Amazon if the seller name is also Amazon.com
         if isinstance(seller_name, str) and seller_name.strip().lower() == "amazon.com":
             return "Amazon"
@@ -202,8 +257,8 @@ def extract_buy_box_fulfillment(html: str, seller_name: Optional[str]) -> str:
     if isinstance(seller_name, str) and seller_name.strip().lower() == "amazon.com":
         return "Amazon"
 
-    # FBM: "Ships from X and sold by X" pattern
-    if _FULFILLMENT_FBM_RE.search(html):
+    # FBM: "Ships from X and sold by X" pattern (only when NO FBA marker)
+    if _FULFILLMENT_FBM_RE.search(scope):
         return "FBM"
 
     return "Unknown"

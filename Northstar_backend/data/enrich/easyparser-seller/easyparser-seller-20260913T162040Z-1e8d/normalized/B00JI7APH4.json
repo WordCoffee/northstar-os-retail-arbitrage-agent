@@ -1,0 +1,51 @@
+{
+  "asin": "B00JI7APH4",
+  "offer_data_status": "partial",
+  "offer_data_source": "brightdata",
+  "offer_data_fetched_at": "2026-09-13T07:32:45.012113+00:00",
+  "offer_data_note": "Seller IDs not extractable from dp page; FBA/FBM split unavailable from free sources; Total seller count not found on page",
+  "offer_data_cached": true,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fbm_sellers": null,
+  "amazon_sellers": null,
+  "buy_box": {
+    "available": true,
+    "seller_name": "ShippedFast",
+    "seller_id": null,
+    "fulfillment": "FBA",
+    "price": 10.99,
+    "shipping": null,
+    "landed_price": null,
+    "condition": null,
+    "prime": null,
+    "note": null
+  },
+  "offers": [],
+  "offers_returned": 0,
+  "offers_complete": false,
+  "offer_count": null,
+  "buy_box_price": 10.99,
+  "request_zip_code": null,
+  "observed_at": "2026-09-13T07:32:45.012139+00:00",
+  "title": "Kirkland Microwave Popcorn 3.3 Ounce Bags - 8 Bags",
+  "credits_used": 1,
+  "credits_remaining": null,
+  "data_gaps": [
+    "Seller IDs not extractable from dp page; FBA/FBM split unavailable from free sources",
+    "Total seller count not found on page"
+  ],
+  "seller_marker_counts": {
+    "byline_sold_by": 0,
+    "fallback1_sold_by": 1,
+    "fallback2_sold_by": 3,
+    "fulfilled_by_amazon": 0,
+    "ships_from_sold_by": 5,
+    "new_from_count": 0,
+    "new_offers_variants": 0,
+    "other_sellers_text": 1,
+    "aod_offer": 0,
+    "offer_list": 2,
+    "buying_options": 0
+  }
+}

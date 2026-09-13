@@ -1,0 +1,27 @@
+{
+  "amazon_price": 47.85,
+  "buy_box_price": 47.85,
+  "lowest_price": 47.85,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 100.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 5.25,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Vitamins, Minerals & Supplements",
+    "Antioxidants",
+    "CoQ10"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature CoQ10 300 mg, 200 Softgels",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:28:17.860184+00:00"
+}

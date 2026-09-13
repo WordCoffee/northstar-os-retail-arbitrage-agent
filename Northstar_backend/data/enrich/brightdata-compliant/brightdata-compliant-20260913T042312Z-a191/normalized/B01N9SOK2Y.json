@@ -1,0 +1,28 @@
+{
+  "amazon_price": 17.99,
+  "buy_box_price": 17.99,
+  "lowest_price": 17.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 100.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 8.2,
+  "amazon_category": "Beauty & Personal Care",
+  "browse_node_id": 3760911,
+  "breadcrumb": [
+    "Beauty & Personal Care",
+    "Skin Care",
+    "Body",
+    "Cleansers",
+    "Body Washes"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Natural Body Wash 27 Fl Oz (Pack of 1)",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:28:40.674271+00:00"
+}

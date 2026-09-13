@@ -1,0 +1,26 @@
+{
+  "amazon_price": 18.9,
+  "buy_box_price": 18.9,
+  "lowest_price": 18.9,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 100.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 4.75,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Pantry Staples",
+    "Sauces, Gravies & Marinades"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Organic Seaweed Roasted 10 17g Kirkland Signature",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:32:19.456743+00:00"
+}

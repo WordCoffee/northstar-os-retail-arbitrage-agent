@@ -1,0 +1,22 @@
+{
+  "amazon_price": 14.99,
+  "buy_box_price": 14.99,
+  "lowest_price": 14.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 866.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": null,
+  "amazon_category": null,
+  "browse_node_id": null,
+  "breadcrumb": null,
+  "category_source_hint": null,
+  "title": "Kirkland Signature Stretch Tite Plastic Food Wrap Single pack",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:25:14.932251+00:00"
+}

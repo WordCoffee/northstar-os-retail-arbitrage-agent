@@ -58,7 +58,10 @@ import bright_data_client
 import scrapedo_amazon
 import firecrawl_amazon
 import browserbase_amazon
-from seller_cache import build_seller_payload, get_cached_seller_detail, _cache_seller_detail, _seller_cache_path
+from seller_cache import (
+    build_seller_payload, get_cached_seller_detail, _cache_seller_detail, _seller_cache_path,
+    SELLER_STATUS_AVAILABLE, SELLER_STATUS_PARTIAL, SELLER_STATUS_UNAVAILABLE, SELLER_STATUS_PROVIDER_ERROR
+)
 
 ASIN_PATTERN = re.compile(r"^[A-Za-z0-9]{10}$")
 

@@ -1,0 +1,28 @@
+{
+  "amazon_price": 19.99,
+  "buy_box_price": 19.99,
+  "lowest_price": 19.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": null,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Health Care",
+    "Over-the-Counter Medication",
+    "Digestion & Nausea",
+    "Laxatives"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Stool Softener Docusate Sodium 100 Mg, 800 Softgels/2Bottle",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:28:28.261524+00:00"
+}

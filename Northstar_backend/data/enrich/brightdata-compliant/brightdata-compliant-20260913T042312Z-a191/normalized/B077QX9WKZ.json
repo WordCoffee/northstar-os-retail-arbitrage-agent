@@ -1,0 +1,27 @@
+{
+  "amazon_price": 73.98,
+  "buy_box_price": 73.98,
+  "lowest_price": 73.98,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 216.5,
+  "monthly_sales_estimated": true,
+  "fba_fee": null,
+  "amazon_category": "Pet Supplies",
+  "browse_node_id": 2619533011,
+  "breadcrumb": [
+    "Pet Supplies",
+    "Dogs",
+    "Treats",
+    "Cookies, Biscuits & Snacks"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Dental Chews (2)",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:29:45.069732+00:00"
+}

@@ -1,0 +1,50 @@
+{
+  "asin": "B00BH3HPZW",
+  "offer_data_status": "available",
+  "offer_data_source": "brightdata",
+  "offer_data_fetched_at": "2026-09-13T07:27:33.614215+00:00",
+  "offer_data_note": null,
+  "offer_data_cached": true,
+  "total_sellers": 69,
+  "fba_sellers": null,
+  "fbm_sellers": null,
+  "amazon_sellers": null,
+  "buy_box": {
+    "available": true,
+    "seller_name": "Loong & Sons",
+    "seller_id": null,
+    "fulfillment": "FBA",
+    "price": 17.66,
+    "shipping": null,
+    "landed_price": null,
+    "condition": null,
+    "prime": null,
+    "note": null
+  },
+  "offers": [],
+  "offers_returned": 0,
+  "offers_complete": false,
+  "offer_count": 69,
+  "buy_box_price": 17.66,
+  "request_zip_code": null,
+  "observed_at": "2026-09-13T07:27:33.614232+00:00",
+  "title": "Fiber Capsules Kirkland Therapy for Regularity/Fiber Supplement, 360 capsules - Compare to the Active Ingredient in Metamucil Capsules",
+  "credits_used": 1,
+  "credits_remaining": null,
+  "data_gaps": [
+    "Seller IDs not extractable from dp page; FBA/FBM split unavailable from free sources"
+  ],
+  "seller_marker_counts": {
+    "byline_sold_by": 0,
+    "fallback1_sold_by": 1,
+    "fallback2_sold_by": 4,
+    "fulfilled_by_amazon": 0,
+    "ships_from_sold_by": 3,
+    "new_from_count": 0,
+    "new_offers_variants": 1,
+    "other_sellers_text": 1,
+    "aod_offer": 0,
+    "offer_list": 3,
+    "buying_options": 0
+  }
+}

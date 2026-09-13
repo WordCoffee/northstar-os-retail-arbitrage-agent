@@ -1,0 +1,27 @@
+{
+  "amazon_price": 19.79,
+  "buy_box_price": 19.79,
+  "lowest_price": 19.79,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 300.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 6.1,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Produce",
+    "Dried Fruits & Vegetables",
+    "Dried Fruits"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Dried Cherries, 20 Ounce",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:24:54.972727+00:00"
+}

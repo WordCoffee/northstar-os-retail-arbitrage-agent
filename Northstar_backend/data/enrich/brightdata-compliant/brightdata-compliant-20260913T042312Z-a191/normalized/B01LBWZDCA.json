@@ -1,0 +1,22 @@
+{
+  "amazon_price": 32.99,
+  "buy_box_price": 32.99,
+  "lowest_price": 32.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 7.1,
+  "amazon_category": null,
+  "browse_node_id": null,
+  "breadcrumb": null,
+  "category_source_hint": null,
+  "title": "Kirkland Signature Nut Bars 30/1.4 Oz Net Wt 42.3 Oz",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:28:37.242865+00:00"
+}

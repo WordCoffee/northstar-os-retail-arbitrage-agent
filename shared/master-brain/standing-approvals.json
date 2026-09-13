@@ -2,7 +2,20 @@
   "version": 1,
   "description": "Standing approval registry for autonomous actions. Must be checked by the agent at session start. All entries are revocable by the operator at any time.",
   "policy_ref": "AGENTS.md §3.6",
-  "active": [],
+  "active": [
+    {
+      "id": "easyparser_brightdata_backfill_20260913",
+      "scope": "EasyParser 174 PASS + BrightData 45 gap",
+      "budget": {"max_calls_per_session": 189, "max_credits": 189},
+      "provider": "EASYPARSER / BRIGHTDATA",
+      "status": "active",
+      "approved_at": "2026-09-13T16:21:01Z",
+      "approved_by": "operator (C both in sequence, bounded envelope)",
+      "revoked_at": null,
+      "note": "Run easyparser-seller-20260913T162040Z-1e8d: 173/174 cr completed (stop=max_credits). BrightData batch: 16/45 attempted, 0 succ / 16 fail, stop=completed. No circuit breaker.",
+      "evidence_run_ids": ["easyparser-seller-20260913T162040Z-1e8d"]
+    }
+  ],
   "revoked": [],
   "template": {
     "low_risk_public_read": {
