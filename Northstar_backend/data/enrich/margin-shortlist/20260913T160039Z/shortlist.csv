@@ -1,0 +1,7 @@
+rank,asin,profit,roi_pct,buy_box,cogs,fba_fee,fba_fee_basis,match_quality,title
+1,B01CZ637O2,59.0,287.9,85.59,20.49,6.1,enriched,exact,"Kirkland Signature Glucosamine with MSM, 375 Tablets"
+2,B07N6YF2SF,28.21,104.5,61.3,26.99,6.1,enriched,exact,"Kirkland Signature Wild Alaskan Fish Oil 1400 mg, 230 Softgels"
+3,B0H1Z5D4LC,23.77,238.4,38.99,9.97,5.25,enriched,high_confidence,KIRKLAND Signature Women's Travel Pant
+4,B0H1Z1P3YW,19.77,198.3,34.99,9.97,5.25,enriched,high_confidence,KIRKLAND Signature Women's Travel Pant
+5,B0H1ZHGR7K,13.57,136.1,28.79,9.97,5.25,enriched,high_confidence,KIRKLAND Signature Women's Travel Pant
+6,B07GDWR1BX,10.55,35.5,44.99,29.69,4.75,enriched,high_confidence,"Kirkland Signature USDA Organic Multivitamin, 80 Coated Tablets"

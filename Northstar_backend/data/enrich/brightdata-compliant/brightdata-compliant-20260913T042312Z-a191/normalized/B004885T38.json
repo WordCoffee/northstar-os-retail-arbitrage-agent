@@ -1,0 +1,28 @@
+{
+  "amazon_price": 16.93,
+  "buy_box_price": 16.93,
+  "lowest_price": 16.93,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 216.5,
+  "monthly_sales_estimated": true,
+  "fba_fee": 5.25,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Pantry Staples",
+    "Cooking & Baking",
+    "Nuts & Seeds",
+    "Almonds"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Nature's Path Organic Ancient Grains with Almonds, 35.3 oz",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:24:45.446026+00:00"
+}

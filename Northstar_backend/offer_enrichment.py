@@ -309,9 +309,12 @@ def _map_brightdata_offer(data: Dict, identifier: str) -> Dict:
         {
             "amazon_price": amazon_price,
             "buy_box_price": data.get("buy_box_price"),
+            "buy_box_seller": data.get("buy_box_seller_name", data.get("buy_box_seller")),
+            "buy_box_fulfillment": data.get("buy_box_fulfillment"),
+            "other_sellers_present": data.get("other_sellers_present"),
             "lowest_price": lowest,
             "highest_price": highest,
-            "total_sellers": data.get("seller_count"),
+            "total_sellers": data.get("seller_count", data.get("total_sellers")),
             "fba_sellers": fba_sellers,
             "fba_sellers_estimated": False,
             "lowest_price_seller_type": "unknown",

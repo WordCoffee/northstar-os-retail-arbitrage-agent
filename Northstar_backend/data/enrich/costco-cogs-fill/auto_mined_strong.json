@@ -1,0 +1,257 @@
+{
+ "auto_mined": [
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.976,
+   "price": 19.97,
+   "item_id": "1985100",
+   "costco_item": "Kirkland Signature Men's Stretch Tech Pant"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.886,
+   "price": 21.99,
+   "item_id": "1905479",
+   "costco_item": "Kirkland Signature Men's Stretch Jean"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.805,
+   "price": 16.99,
+   "item_id": "2021294",
+   "costco_item": "Kirkland Signature Men\u2019s Athleisure Pant"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.8,
+   "price": 17.99,
+   "item_id": "1992450",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.8,
+   "price": 9.97,
+   "item_id": "1992451",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B0FB47R7H3",
+   "score": 0.8,
+   "price": 9.97,
+   "item_id": "1992453",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B0H1Z1P3YW",
+   "score": 0.914,
+   "price": 17.99,
+   "item_id": "1992450",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B0H1Z1P3YW",
+   "score": 0.914,
+   "price": 9.97,
+   "item_id": "1992451",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B0H1Z1P3YW",
+   "score": 0.914,
+   "price": 9.97,
+   "item_id": "1992453",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B0H1Z5D4LC",
+   "score": 0.914,
+   "price": 17.99,
+   "item_id": "1992450",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B0H1Z5D4LC",
+   "score": 0.914,
+   "price": 9.97,
+   "item_id": "1992451",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B0H1Z5D4LC",
+   "score": 0.914,
+   "price": 9.97,
+   "item_id": "1992453",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B0H1ZHGR7K",
+   "score": 0.914,
+   "price": 17.99,
+   "item_id": "1992450",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B0H1ZHGR7K",
+   "score": 0.914,
+   "price": 9.97,
+   "item_id": "1992451",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B0H1ZHGR7K",
+   "score": 0.914,
+   "price": 9.97,
+   "item_id": "1992453",
+   "costco_item": "Kirkland Signature Women's Travel Pant"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.891,
+   "price": 23.19,
+   "item_id": "71003",
+   "costco_item": "Kirkland Signature Extra Virgin Olive Oil, 2 Liter"
+  },
+  {
+   "asin": "B01FFV68KO",
+   "score": 0.887,
+   "price": 20.99,
+   "item_id": "692731",
+   "costco_item": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L"
+  },
+  {
+   "asin": "B089XK85BB",
+   "score": 0.819,
+   "price": 18.99,
+   "item_id": "1121686",
+   "costco_item": "Kirkland Signature Men's Boxer Brief, 4-pack"
+  },
+  {
+   "asin": "B089XK85BB",
+   "score": 0.819,
+   "price": 18.99,
+   "item_id": "1121623",
+   "costco_item": "Kirkland Signature Men's Boxer Brief, 4-pack"
+  },
+  {
+   "asin": "B0007L6NLC",
+   "score": 0.905,
+   "price": 16.79,
+   "item_id": "98268",
+   "costco_item": "Kirkland Signature Vitamin C, 1000 mg, 500 ct"
+  },
+  {
+   "asin": "B0007L6NLC",
+   "score": 0.889,
+   "price": 17.99,
+   "item_id": "98501",
+   "costco_item": "Kirkland Signature Chewable Vitamin C 500 mg., 500 Tablets"
+  },
+  {
+   "asin": "B0007L6NLC",
+   "score": 0.86,
+   "price": 15.99,
+   "item_id": "98211",
+   "costco_item": "Kirkland Signature Vitamin E 180 mg., 500 Softgels"
+  },
+  {
+   "asin": "B072FSTWC9",
+   "score": 0.8,
+   "price": 16.79,
+   "item_id": "98268",
+   "costco_item": "Kirkland Signature Vitamin C, 1000 mg, 500 ct"
+  },
+  {
+   "asin": "B00CCQWK6C",
+   "score": 0.814,
+   "price": 16.99,
+   "item_id": "321063",
+   "costco_item": "Kirkland Signature Extra Fancy Mixed Nuts, 2.5 lbs"
+  },
+  {
+   "asin": "B01CZ637O2",
+   "score": 0.92,
+   "price": 16.99,
+   "item_id": "249375",
+   "costco_item": "Kirkland Signature Glucosamine with MSM, 375 Tablets"
+  },
+  {
+   "asin": "B077GS636P",
+   "score": 0.92,
+   "price": 16.99,
+   "item_id": "249375",
+   "costco_item": "Kirkland Signature Glucosamine with MSM, 375 Tablets"
+  },
+  {
+   "asin": "B00JQRFOTA",
+   "score": 0.908,
+   "price": 18.49,
+   "item_id": "238120",
+   "costco_item": "Kirkland Signature Super B-Complex with Electrolytes, 500 Tablets"
+  },
+  {
+   "asin": "B077LCPQ34",
+   "score": 0.908,
+   "price": 18.49,
+   "item_id": "238120",
+   "costco_item": "Kirkland Signature Super B-Complex with Electrolytes, 500 Tablets"
+  },
+  {
+   "asin": "B07N6YF2SF",
+   "score": 1.0,
+   "price": 22.49,
+   "item_id": "887498",
+   "costco_item": "Kirkland Signature Wild Alaskan Fish Oil 1400 mg, 230 Softgels"
+  },
+  {
+   "asin": "B07N6YF2SF",
+   "score": 0.829,
+   "price": 20.99,
+   "item_id": "926628",
+   "costco_item": "Kirkland Signature Fish Oil 1000 mg, 400 Softgels"
+  },
+  {
+   "asin": "B0DC4RDMQC",
+   "score": 0.832,
+   "price": 21.99,
+   "item_id": "1939467",
+   "costco_item": "Kirkland Signature Women's Long Sleeve Slub Tee, 2-Pack"
+  },
+  {
+   "asin": "B00PF44IAO",
+   "score": 0.816,
+   "price": 19.99,
+   "item_id": "4165769",
+   "costco_item": "Kirkland Signature Facial Tissue, 3-Ply, 84-count, 12-pack"
+  },
+  {
+   "asin": "B081THWMDK",
+   "score": 0.85,
+   "price": 14.99,
+   "item_id": "208721",
+   "costco_item": "Kirkland Signature Stretch-Tite Plastic Food Wrap, 11 7/8 in x 758 ft, 2-count"
+  },
+  {
+   "asin": "B007889Z1C",
+   "score": 0.81,
+   "price": 18.99,
+   "item_id": "588153",
+   "costco_item": "Kirkland Signature Calcium Citrate, Magnesium and Zinc, 500 Tablets"
+  },
+  {
+   "asin": "B07N7CTW4Q",
+   "score": 0.898,
+   "price": 12.49,
+   "item_id": "393914",
+   "costco_item": "Kirkland Signature Extra Strength D3 50 mcg., 600 Softgels"
+  },
+  {
+   "asin": "B071P7TRSN",
+   "score": 0.812,
+   "price": 6.99,
+   "item_id": "719940",
+   "costco_item": "Kirkland Signature Nighttime Sleep Aid, 192 Tablets"
+  }
+ ],
+ "note": "Auto-mined \u22650.8 from archive (operator must verify pack parity before trust)"
+}

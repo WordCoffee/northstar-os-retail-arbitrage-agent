@@ -1,0 +1,15 @@
+{
+  "kind": "scavio_live_attempt",
+  "schema_version": "1.0",
+  "attempted_at": "2026-09-13T03:26:15.763196+00:00Z",
+  "provider": "SCAVIO",
+  "endpoint": "amazon/search",
+  "query": "Kirkland",
+  "pages_requested": 3,
+  "result": "BLOCKED_PAID_GATE",
+  "http_status": 402,
+  "provider_message": "Insufficient credits - credit balance 0. Top up at https://dashboard.scavio.dev/billing",
+  "scrubbed": true,
+  "next": "Requires operator decision: (a) top up Scavio, or (b) use pre-approved Bright Data budget, or (c) stop.",
+  "no_credential_data": true
+}

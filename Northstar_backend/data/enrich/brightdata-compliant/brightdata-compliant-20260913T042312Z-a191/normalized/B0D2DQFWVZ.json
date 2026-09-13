@@ -1,0 +1,27 @@
+{
+  "amazon_price": 24.5,
+  "buy_box_price": 24.5,
+  "lowest_price": 24.5,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 300.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": null,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Household Supplies",
+    "Paper & Plastic",
+    "Paper Towels"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Worldwide Nutrition Bundle, Compatible with Kirkland Premium Paper Towels, Strong, Thick, and Absorbent Bulk Paper Towels 6 Rolls, 160 Sheets Per Roll 2-Ply and Multi-Purpose Key Chain, White",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:35:49.802584+00:00"
+}

@@ -1,0 +1,20 @@
+{
+ "generated_at": "2026-09-13",
+ "ranked_asins": [
+  {
+   "asin": "B07GDWR1BX",
+   "title": "Kirkland Signature USDA Organic Multivitamin, 80 Coated Tablets",
+   "buy_box": 44.99,
+   "cogs": 29.69,
+   "fba_fee": 4.75,
+   "profit": 10.55,
+   "roi_pct": 35.5,
+   "match_quality": "high_confidence",
+   "sellers": null,
+   "fba_sellers": null,
+   "fbm_sellers": null,
+   "buybox_seller": null,
+   "buybox_fulfillment": null
+  }
+ ]
+}

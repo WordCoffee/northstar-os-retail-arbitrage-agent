@@ -1,0 +1,27 @@
+{
+  "amazon_price": 33.54,
+  "buy_box_price": 33.54,
+  "lowest_price": 33.54,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 6.1,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Beverages",
+    "Coffee",
+    "Single-Serve Capsules & Pods"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Organic K-Cups Variety Pack - Arabica, Single Serve Coffee Pods for Keurig Makers - 48 Pods in ComboCreations Box - Perfect for Holiday Gifts, Parties & Beverages",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:35:28.696411+00:00"
+}

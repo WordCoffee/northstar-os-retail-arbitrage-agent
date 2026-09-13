@@ -1,0 +1,27 @@
+{
+  "amazon_price": 39.99,
+  "buy_box_price": 39.99,
+  "lowest_price": 39.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 216.5,
+  "monthly_sales_estimated": true,
+  "fba_fee": null,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Vitamins, Minerals & Supplements",
+    "Herbal Supplements",
+    "Psyllium"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Sugar-Free Psyllium Fiber Supplement Powder, 360 DosesQ",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:35:17.040128+00:00"
+}

@@ -1,0 +1,50 @@
+{
+  "asin": "B085F1QCB9",
+  "offer_data_status": "available",
+  "offer_data_source": "brightdata",
+  "offer_data_fetched_at": "2026-09-13T07:29:53.330913+00:00",
+  "offer_data_note": null,
+  "offer_data_cached": true,
+  "total_sellers": 28,
+  "fba_sellers": null,
+  "fbm_sellers": null,
+  "amazon_sellers": null,
+  "buy_box": {
+    "available": true,
+    "seller_name": "Fiorenzo LLC",
+    "seller_id": null,
+    "fulfillment": "FBM",
+    "price": 27.99,
+    "shipping": null,
+    "landed_price": null,
+    "condition": null,
+    "prime": null,
+    "note": null
+  },
+  "offers": [],
+  "offers_returned": 0,
+  "offers_complete": false,
+  "offer_count": 28,
+  "buy_box_price": 27.99,
+  "request_zip_code": null,
+  "observed_at": "2026-09-13T07:29:53.330932+00:00",
+  "title": "KIRKLAND SIGNATURE Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size, New Edition",
+  "credits_used": 1,
+  "credits_remaining": null,
+  "data_gaps": [
+    "Seller IDs not extractable from dp page; FBA/FBM split unavailable from free sources"
+  ],
+  "seller_marker_counts": {
+    "byline_sold_by": 0,
+    "fallback1_sold_by": 1,
+    "fallback2_sold_by": 4,
+    "fulfilled_by_amazon": 0,
+    "ships_from_sold_by": 3,
+    "new_from_count": 0,
+    "new_offers_variants": 1,
+    "other_sellers_text": 1,
+    "aod_offer": 0,
+    "offer_list": 3,
+    "buying_options": 0
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "1292240": {
+    "url": "https://www.costco.com/.product.1292240.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1292240.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1292240.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1529106": {
+    "url": "https://www.costco.com/.product.1529106.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1529106.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1529106.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "690843": {
+    "url": "https://www.costco.com/.product.690843.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.690843.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.690843.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "98501": {
+    "url": "https://www.costco.com/.product.98501.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.98501.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.98501.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "926628": {
+    "url": "https://www.costco.com/.product.926628.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.926628.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.926628.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "17767": {
+    "url": "https://www.costco.com/.product.17767.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.17767.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.17767.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1217292": {
+    "url": "https://www.costco.com/.product.1217292.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1217292.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1217292.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "4165758": {
+    "url": "https://www.costco.com/.product.4165758.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.4165758.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.4165758.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "249375": {
+    "url": "https://www.costco.com/.product.249375.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.249375.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.249375.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "887498": {
+    "url": "https://www.costco.com/.product.887498.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.887498.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.887498.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "52296": {
+    "url": "https://www.costco.com/.product.52296.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.52296.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.52296.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1104304": {
+    "url": "https://www.costco.com/.product.1104304.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1104304.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1104304.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1567724": {
+    "url": "https://www.costco.com/.product.1567724.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1567724.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1567724.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "650377": {
+    "url": "https://www.costco.com/.product.650377.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.650377.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.650377.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1140957": {
+    "url": "https://www.costco.com/.product.1140957.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1140957.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1140957.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "238120": {
+    "url": "https://www.costco.com/.product.238120.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.238120.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.238120.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "71003": {
+    "url": "https://www.costco.com/.product.71003.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.71003.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.71003.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "692731": {
+    "url": "https://www.costco.com/.product.692731.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.692731.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.692731.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1249003": {
+    "url": "https://www.costco.com/.product.1249003.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1249003.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1249003.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1174112": {
+    "url": "https://www.costco.com/.product.1174112.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1174112.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1174112.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "416076": {
+    "url": "https://www.costco.com/.product.416076.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.416076.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.416076.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "897980": {
+    "url": "https://www.costco.com/.product.897980.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.897980.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.897980.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1985100": {
+    "url": "https://www.costco.com/.product.1985100.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1985100.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1985100.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1905479": {
+    "url": "https://www.costco.com/.product.1905479.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1905479.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1905479.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1947955": {
+    "url": "https://www.costco.com/.product.1947955.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1947955.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1947955.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1947952": {
+    "url": "https://www.costco.com/.product.1947952.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1947952.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1947952.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1789247": {
+    "url": "https://www.costco.com/.product.1789247.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1789247.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1789247.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1992450": {
+    "url": "https://www.costco.com/.product.1992450.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1992450.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1992450.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1992451": {
+    "url": "https://www.costco.com/.product.1992451.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1992451.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1992451.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "1992453": {
+    "url": "https://www.costco.com/.product.1992453.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.1992453.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.1992453.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  },
+  "6262016": {
+    "url": "https://www.costco.com/.product.6262016.html",
+    "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.costco.com/.product.6262016.html\nCall log:\n  - navigating to \"https://www.costco.com/.product.6262016.html\", waiting until \"networkidle\"\n",
+    "status": "error"
+  }
+}

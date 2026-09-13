@@ -1,0 +1,28 @@
+{
+  "amazon_price": 27.99,
+  "buy_box_price": 27.99,
+  "lowest_price": 27.99,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 1732.0,
+  "monthly_sales_estimated": true,
+  "fba_fee": 9.9,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Household Supplies",
+    "Paper & Plastic",
+    "Trash, Compost & Lawn Bags",
+    "Trash Bags"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "KIRKLAND SIGNATURE Compactor Kitchen Trash Bag with Gripping Drawstring Secure Full Size, New Edition",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:23:40.375213+00:00"
+}

@@ -1,0 +1,51 @@
+{
+  "asin": "B00BPPN94S",
+  "offer_data_status": "partial",
+  "offer_data_source": "brightdata",
+  "offer_data_fetched_at": "2026-09-13T07:32:07.593648+00:00",
+  "offer_data_note": "Seller IDs not extractable from dp page; FBA/FBM split unavailable from free sources; Buy Box seller name not found on page",
+  "offer_data_cached": true,
+  "total_sellers": 21,
+  "fba_sellers": null,
+  "fbm_sellers": null,
+  "amazon_sellers": null,
+  "buy_box": {
+    "available": true,
+    "seller_name": null,
+    "seller_id": null,
+    "fulfillment": "Unknown",
+    "price": 29.99,
+    "shipping": null,
+    "landed_price": null,
+    "condition": null,
+    "prime": null,
+    "note": null
+  },
+  "offers": [],
+  "offers_returned": 0,
+  "offers_complete": false,
+  "offer_count": 21,
+  "buy_box_price": 29.99,
+  "request_zip_code": null,
+  "observed_at": "2026-09-13T07:32:07.593666+00:00",
+  "title": "Kirkland Signature Compactor Bags, 18 Gallon, Smart Fit Gripping Drawstring, White, 1 Pack (70 Count)",
+  "credits_used": 1,
+  "credits_remaining": null,
+  "data_gaps": [
+    "Seller IDs not extractable from dp page; FBA/FBM split unavailable from free sources",
+    "Buy Box seller name not found on page"
+  ],
+  "seller_marker_counts": {
+    "byline_sold_by": 0,
+    "fallback1_sold_by": 0,
+    "fallback2_sold_by": 0,
+    "fulfilled_by_amazon": 0,
+    "ships_from_sold_by": 0,
+    "new_from_count": 0,
+    "new_offers_variants": 1,
+    "other_sellers_text": 1,
+    "aod_offer": 0,
+    "offer_list": 2,
+    "buying_options": 0
+  }
+}

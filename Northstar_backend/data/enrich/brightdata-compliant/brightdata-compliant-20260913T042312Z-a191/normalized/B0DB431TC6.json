@@ -1,0 +1,28 @@
+{
+  "amazon_price": 27.8,
+  "buy_box_price": 27.8,
+  "lowest_price": 27.8,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": 12.5,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Household Supplies",
+    "Paper & Plastic",
+    "Trash, Compost & Lawn Bags",
+    "Trash Bags"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "BD Kirkland Scented Kitchen Drawstring Bags, 13 Gallon, 200 Bags",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:36:29.332481+00:00"
+}

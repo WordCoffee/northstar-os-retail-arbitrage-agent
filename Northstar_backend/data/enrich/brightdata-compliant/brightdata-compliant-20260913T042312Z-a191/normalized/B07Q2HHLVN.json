@@ -1,0 +1,27 @@
+{
+  "amazon_price": 17.64,
+  "buy_box_price": 17.64,
+  "lowest_price": 17.64,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": 216.5,
+  "monthly_sales_estimated": true,
+  "fba_fee": 6.1,
+  "amazon_category": "Grocery & Gourmet Food",
+  "browse_node_id": 16310101,
+  "breadcrumb": [
+    "Grocery & Gourmet Food",
+    "Pantry Staples",
+    "Nut & Seed Butters",
+    "Almond Butter"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature Mixed Nut Butter",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:31:54.101209+00:00"
+}

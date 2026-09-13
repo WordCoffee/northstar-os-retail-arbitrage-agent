@@ -1,0 +1,22 @@
+{
+  "amazon_price": null,
+  "buy_box_price": null,
+  "lowest_price": null,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": null,
+  "amazon_category": null,
+  "browse_node_id": null,
+  "breadcrumb": null,
+  "category_source_hint": null,
+  "title": null,
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:33:19.941579+00:00"
+}

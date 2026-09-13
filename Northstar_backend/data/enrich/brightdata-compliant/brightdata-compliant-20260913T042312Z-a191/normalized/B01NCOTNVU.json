@@ -1,0 +1,28 @@
+{
+  "amazon_price": 115.0,
+  "buy_box_price": 115.0,
+  "lowest_price": 115.0,
+  "highest_price": null,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fba_sellers_estimated": false,
+  "lowest_price_seller_type": "unknown",
+  "highest_price_seller_type": "unknown",
+  "monthly_sales_estimate": null,
+  "monthly_sales_estimated": false,
+  "fba_fee": null,
+  "amazon_category": "Health & Household",
+  "browse_node_id": 3760901,
+  "breadcrumb": [
+    "Health & Household",
+    "Household Supplies",
+    "Paper & Plastic",
+    "Trash, Compost & Lawn Bags",
+    "Trash Bags"
+  ],
+  "category_source_hint": "breadcrumb",
+  "title": "Kirkland Signature GInVUtV Drawstring Kitchen Trash Bags - 13 Gallon, 600 Bags",
+  "offer_data_provider": "brightdata",
+  "enrichment_status": "partial",
+  "enriched_at": "2026-09-13T04:28:49.493735+00:00"
+}

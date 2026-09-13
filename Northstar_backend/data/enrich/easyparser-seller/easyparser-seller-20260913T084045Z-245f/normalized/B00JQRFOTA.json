@@ -1,0 +1,52 @@
+{
+  "asin": "B00JQRFOTA",
+  "offer_data_status": "unavailable",
+  "offer_data_source": "brightdata",
+  "offer_data_fetched_at": "2026-09-13T07:32:48.958466+00:00",
+  "offer_data_note": "Seller IDs not extractable from dp page; FBA/FBM split unavailable from free sources; Buy Box seller name not found on page; Total seller count not found on page",
+  "offer_data_cached": true,
+  "total_sellers": null,
+  "fba_sellers": null,
+  "fbm_sellers": null,
+  "amazon_sellers": null,
+  "buy_box": {
+    "available": true,
+    "seller_name": null,
+    "seller_id": null,
+    "fulfillment": "Unknown",
+    "price": 61.99,
+    "shipping": null,
+    "landed_price": null,
+    "condition": null,
+    "prime": null,
+    "note": null
+  },
+  "offers": [],
+  "offers_returned": 0,
+  "offers_complete": false,
+  "offer_count": null,
+  "buy_box_price": 61.99,
+  "request_zip_code": null,
+  "observed_at": "2026-09-13T07:32:48.958498+00:00",
+  "title": "Kirkland Signature One Per Day Super B-Complex with Electrolytes,500 tablets",
+  "credits_used": 1,
+  "credits_remaining": null,
+  "data_gaps": [
+    "Seller IDs not extractable from dp page; FBA/FBM split unavailable from free sources",
+    "Buy Box seller name not found on page",
+    "Total seller count not found on page"
+  ],
+  "seller_marker_counts": {
+    "byline_sold_by": 0,
+    "fallback1_sold_by": 0,
+    "fallback2_sold_by": 0,
+    "fulfilled_by_amazon": 0,
+    "ships_from_sold_by": 0,
+    "new_from_count": 0,
+    "new_offers_variants": 0,
+    "other_sellers_text": 0,
+    "aod_offer": 0,
+    "offer_list": 1,
+    "buying_options": 2
+  }
+}

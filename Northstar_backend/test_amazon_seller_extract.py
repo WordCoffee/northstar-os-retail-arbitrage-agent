@@ -145,6 +145,30 @@ class SellerExtractTests(unittest.TestCase):
         # None when neither
         self.assertIsNone(extract_lowest_price(html_no_price, buy_box_price=None))
 
+    def test_dirty_name_cleaned_loong(self):
+        """v2: broad-fallback remnant 'and ships from...' must be cut."""
+        html = '<div id="merchant-info">Sold by Loong & Sons and ships from Amazon Fulfillment.</div>'
+        self.assertEqual(extract_buy_box_seller(html), "Loong & Sons")
+        self.assertEqual(
+            extract_buy_box_fulfillment(html, "Loong & Sons"), "FBA"
+        )
+
+    def test_tag_tolerant_sold_by(self):
+        """v2: tags between tokens still match Pattern 1."""
+        html = '<div>Sold by <span>Loong & Sons</span><br>and ships from Amazon Fulfillment</div>'
+        self.assertEqual(extract_buy_box_seller(html), "Loong & Sons")
+
+    def test_fba_wins_over_carousel_fbm(self):
+        """v2: carousel 'Ships from X sold by Y' must not flip FBA page."""
+        html = (
+            '<div id="merchant-info">Sold by Loong & Sons '
+            "and ships from Amazon Fulfillment</div>"
+            '<div class="carousel">Ships from SellerA Sold by SellerA</div>'
+        )
+        self.assertEqual(
+            extract_buy_box_fulfillment(html, "Loong & Sons"), "FBA"
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
