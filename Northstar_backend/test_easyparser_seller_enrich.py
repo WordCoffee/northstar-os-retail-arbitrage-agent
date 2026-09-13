@@ -45,7 +45,8 @@ def _payload(asin, status="available", used=1, remaining=50):
 
 def _args(manifest, **kw):
     base = {"live": True, "manifest": str(manifest), "max_requests": 10,
-            "max_credits": 20, "resume_from": None}
+            "max_credits": 20, "resume_from": None, "only_asins": None,
+            "asin_file": None}
     base.update(kw)
     return argparse.Namespace(**base)
 
@@ -157,6 +158,29 @@ class SellerEnrichTests(unittest.TestCase):
                           side_effect=AssertionError("network on reject")):
             rc = ese.run_batch(_args(self.manifest))
         self.assertEqual(rc, 4)
+
+    def test_only_asins_filter_targets_subset_in_manifest_order(self):
+        _manifest(self.manifest, ["B00BH3HPZW", "B0017SURSY", "B003CCCCCC"])
+        calls = []
+        with patch.object(ese.offer_enrichment, "get_seller_offer_contract",
+                          side_effect=lambda a: calls.append(a) or _payload(a)):
+            rc = ese.run_batch(_args(self.manifest, only_asins="B003CCCCCC,B00BH3HPZW"))
+        self.assertEqual(rc, 0)
+        self.assertEqual(calls, ["B00BH3HPZW", "B003CCCCCC"])
+
+    def test_asin_file_filter_and_empty_match_refuses(self):
+        _manifest(self.manifest, ["B00BH3HPZW", "B0017SURSY"])
+        afile = self.tmp / "targets.txt"
+        afile.write_text("B0017SURSY\nNOTANASIN\n", encoding="utf-8")
+        with patch.object(ese.offer_enrichment, "get_seller_offer_contract",
+                          side_effect=lambda a: _payload(a)) as m:
+            rc = ese.run_batch(_args(self.manifest, asin_file=str(afile)))
+        self.assertEqual(rc, 0)
+        self.assertEqual(m.call_count, 1)
+        with patch.object(ese.offer_enrichment, "get_seller_offer_contract",
+                          side_effect=AssertionError("network on empty filter")):
+            rc = ese.run_batch(_args(self.manifest, only_asins="B999999999"))
+        self.assertEqual(rc, 2)
 
 
 if __name__ == "__main__":
