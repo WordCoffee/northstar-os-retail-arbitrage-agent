@@ -1,183 +1,19 @@
 {
-  "generated_at": "2026-09-13T06:28:06.009719+00:00",
-  "run_started_at": "2026-09-13T06:28:01.110967+00:00",
-  "query": "kirkland",
+  "generated_at": "2026-09-13T07:32:01.589501+00:00",
+  "run_started_at": "2026-09-13T07:31:58.508314+00:00",
+  "query": "Kirkland sleep aid",
   "pages_fetched": 1,
   "credits_estimate": 10,
-  "total_results": 346,
+  "total_results": 2,
   "items": [
     {
-      "item_name": "Kirkland Signature, Pure Sea Salt, 30 oz",
-      "raw_title": "Kirkland Signature, Pure Sea Salt, 30 oz",
-      "costco_item_id": "384732",
-      "source_url": "https://www.costco.com/.product.384732.html",
+      "item_name": "Kirkland Signature Nighttime Sleep Aid, 192 Tablets",
+      "raw_title": "Kirkland Signature Nighttime Sleep Aid, 192 Tablets",
+      "costco_item_id": "719940",
+      "source_url": "https://www.costco.com/.product.719940.html",
       "url_derived": true,
-      "regular_price": 3.99,
-      "sale_price": 3.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": "30 oz.",
-      "unit_count": 30,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": 30.0,
-      "unit_of_measure": "oz",
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.384732.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 4.39,
-      "cost_exported_at": "2026-09-13T06:28:06.010142+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Paper Towels, 2-Ply, 160 Sheets, 12 Individually Wrapped Rolls",
-      "raw_title": "Kirkland Signature Paper Towels, 2-Ply, 160 Sheets, 12 Individually Wrapped Rolls",
-      "costco_item_id": "512599",
-      "source_url": "https://www.costco.com/.product.512599.html",
-      "url_derived": true,
-      "regular_price": 23.99,
-      "sale_price": 23.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": "12 Pack(s)",
-      "unit_count": 12,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": 12,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.512599.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 26.39,
-      "cost_exported_at": "2026-09-13T06:28:06.010219+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature, Crushed Red Pepper, 10 oz",
-      "raw_title": "Kirkland Signature, Crushed Red Pepper, 10 oz",
-      "costco_item_id": "522779",
-      "source_url": "https://www.costco.com/.product.522779.html",
-      "url_derived": true,
-      "regular_price": 4.79,
-      "sale_price": 4.79,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": "10 oz.",
-      "unit_count": 10,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": 10.0,
-      "unit_of_measure": "oz",
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.522779.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 5.27,
-      "cost_exported_at": "2026-09-13T06:28:06.010289+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Women's Travel Pant",
-      "raw_title": "Kirkland Signature Women's Travel Pant",
-      "costco_item_id": "1992451",
-      "source_url": "https://www.costco.com/.product.1992451.html",
-      "url_derived": true,
-      "regular_price": 9.97,
-      "sale_price": 9.97,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "out of stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1992451.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 10.97,
-      "cost_exported_at": "2026-09-13T06:28:06.010358+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Diaper Sizes 3-7",
-      "raw_title": "Kirkland Signature Diaper Sizes 3-7",
-      "costco_item_id": "1987113",
-      "source_url": "https://www.costco.com/.product.1987113.html",
-      "url_derived": true,
-      "regular_price": 39.99,
-      "sale_price": 39.99,
+      "regular_price": 6.99,
+      "sale_price": 6.99,
       "price_basis": "regular",
       "price_status": "regular",
       "pack_size": null,
@@ -190,7 +26,7 @@
         "business_center": "Dallas Business Center"
       },
       "availability": "in_stock",
-      "promo": "",
+      "promo": "\u00a0",
       "variants_count": 0,
       "variants_max_price": null,
       "brand": "Kirkland Signature",
@@ -203,313 +39,26 @@
       "pack_count": null,
       "case_count": null,
       "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1987113.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "fuzzy_title",
-      "costco_cost": 43.99,
-      "cost_exported_at": "2026-09-13T06:28:06.016059+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",
-      "raw_title": "Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",
-      "costco_item_id": "778151",
-      "source_url": "https://www.costco.com/.product.778151.html",
-      "url_derived": true,
-      "regular_price": 17.99,
-      "sale_price": 17.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.778151.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 19.79,
-      "cost_exported_at": "2026-09-13T06:28:06.016133+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Coffee Organic Pacific Bold K-Cup Pod, 120-count",
-      "raw_title": "Kirkland Signature Coffee Organic Pacific Bold K-Cup Pod, 120-count",
-      "costco_item_id": "4054232",
-      "source_url": "https://www.costco.com/.product.4054232.html",
-      "url_derived": true,
-      "regular_price": 41.99,
-      "sale_price": 41.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": "120 Count(s)",
-      "unit_count": 120,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": 120,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.4054232.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 46.19,
-      "cost_exported_at": "2026-09-13T06:28:06.016200+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Men's Midweight Crew Tee, 6-pack",
-      "raw_title": "Kirkland Signature Men's Midweight Crew Tee, 6-pack",
-      "costco_item_id": "7771715",
-      "source_url": "https://www.costco.com/.product.7771715.html",
-      "url_derived": true,
-      "regular_price": 23.99,
-      "sale_price": 23.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.7771715.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 26.39,
-      "cost_exported_at": "2026-09-13T06:28:06.016265+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Bath Tissue, 2-Ply, 380 Sheets, 30 Rolls",
-      "raw_title": "Kirkland Signature Bath Tissue, 2-Ply, 380 Sheets, 30 Rolls",
-      "costco_item_id": "6262016",
-      "source_url": "https://www.costco.com/.product.6262016.html",
-      "url_derived": true,
-      "regular_price": 24.99,
-      "sale_price": 24.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": "30 Roll(s)",
-      "unit_count": 30,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": 30,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.6262016.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 27.49,
-      "cost_exported_at": "2026-09-13T06:28:06.016329+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Men's Cotton Jean",
-      "raw_title": "Kirkland Signature Men's Cotton Jean",
-      "costco_item_id": "1906681",
-      "source_url": "https://www.costco.com/.product.1906681.html",
-      "url_derived": true,
-      "regular_price": 16.99,
-      "sale_price": 12.99,
-      "price_basis": "sale",
-      "price_status": "sale",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "$4 OFF",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1906681.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "fuzzy_title",
-      "costco_cost": 14.29,
-      "cost_exported_at": "2026-09-13T06:28:06.021682+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Men's Boxer Brief, 4-pack",
-      "raw_title": "Kirkland Signature Men's Boxer Brief, 4-pack",
-      "costco_item_id": "1121623",
-      "source_url": "https://www.costco.com/.product.1121623.html",
-      "url_derived": true,
-      "regular_price": 18.99,
-      "sale_price": 18.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1121623.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 20.89,
-      "cost_exported_at": "2026-09-13T06:28:06.021754+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Forged Wedge Set",
-      "raw_title": "Kirkland Signature Forged Wedge Set",
-      "costco_item_id": "2047276",
-      "source_url": "https://www.costco.com/.product.2047276.html",
-      "url_derived": true,
-      "regular_price": 199.99,
-      "sale_price": 199.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.2047276.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
+      "product_url": "https://www.costco.com/.product.719940.html",
+      "fetched_at": "2026-09-13T07:32:01.568834+00:00",
+      "last_seen_at": "2026-09-13T07:32:01.568834+00:00",
       "match": "appended",
       "matched_by": "none",
-      "costco_cost": 219.99,
-      "cost_exported_at": "2026-09-13T06:28:06.027304+00:00"
+      "costco_cost": 7.69,
+      "cost_exported_at": "2026-09-13T07:32:01.633651+00:00"
     },
     {
-      "item_name": "Kirkland Signature Men's Heavyweight Crew Tee, 6-pack",
-      "raw_title": "Kirkland Signature Men's Heavyweight Crew Tee, 6-pack",
-      "costco_item_id": "1542752",
-      "source_url": "https://www.costco.com/.product.1542752.html",
+      "item_name": "Kirkland Signature Acetaminophen PM, 500 mg, 375 Gelcaps",
+      "raw_title": "Kirkland Signature Acetaminophen PM, 500 mg, 375 Gelcaps",
+      "costco_item_id": "596759",
+      "source_url": "https://www.costco.com/.product.596759.html",
       "url_derived": true,
-      "regular_price": 26.99,
-      "sale_price": 26.99,
+      "regular_price": 10.99,
+      "sale_price": 10.99,
       "price_basis": "regular",
       "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
+      "pack_size": "375",
+      "unit_count": 375,
       "cost_basis": "costco_online",
       "cost_status": "discovery_only",
       "source": "costco_online",
@@ -531,528 +80,93 @@
       "pack_count": null,
       "case_count": null,
       "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1542752.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 29.69,
-      "cost_exported_at": "2026-09-13T06:28:06.027379+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Baby Wipes Fragrance Free, 900-count",
-      "raw_title": "Kirkland Signature Baby Wipes Fragrance Free, 900-count",
-      "costco_item_id": "1493488",
-      "source_url": "https://www.costco.com/.product.1493488.html",
-      "url_derived": true,
-      "regular_price": 23.99,
-      "sale_price": 23.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": "900 Count(s)",
-      "unit_count": 900,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": 900,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1493488.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 26.39,
-      "cost_exported_at": "2026-09-13T06:28:06.027447+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count",
-      "raw_title": "Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count",
-      "costco_item_id": "1089787",
-      "source_url": "https://www.costco.com/.product.1089787.html",
-      "url_derived": true,
-      "regular_price": 22.49,
-      "sale_price": 22.49,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1089787.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 24.74,
-      "cost_exported_at": "2026-09-13T06:28:06.027512+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Men's Pima Polo",
-      "raw_title": "Kirkland Signature Men's Pima Polo",
-      "costco_item_id": "1947955",
-      "source_url": "https://www.costco.com/.product.1947955.html",
-      "url_derived": true,
-      "regular_price": 17.99,
-      "sale_price": 13.99,
-      "price_basis": "sale",
-      "price_status": "sale",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "$4 OFF",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1947955.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "fuzzy_title",
-      "costco_cost": 15.39,
-      "cost_exported_at": "2026-09-13T06:28:06.032878+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Men's Softshell Bomber Jacket",
-      "raw_title": "Kirkland Signature Men's Softshell Bomber Jacket",
-      "costco_item_id": "1999459",
-      "source_url": "https://www.costco.com/.product.1999459.html",
-      "url_derived": true,
-      "regular_price": 22.99,
-      "sale_price": 22.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1999459.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "fuzzy_title",
-      "costco_cost": 25.29,
-      "cost_exported_at": "2026-09-13T06:28:06.040494+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Hair Regrowth Treatment Minoxidil Foam for Men, 2.11 oz, 6-count",
-      "raw_title": "Kirkland Signature Hair Regrowth Treatment Minoxidil Foam for Men, 2.11 oz, 6-count",
-      "costco_item_id": "778152",
-      "source_url": "https://www.costco.com/.product.778152.html",
-      "url_derived": true,
-      "regular_price": 48.99,
-      "sale_price": 48.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.778152.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 53.89,
-      "cost_exported_at": "2026-09-13T06:28:06.040570+00:00"
-    },
-    {
-      "item_name": "Costco Wholesale Unisex Logo Crewneck",
-      "raw_title": "Costco Wholesale Unisex Logo Crewneck",
-      "costco_item_id": "2005921",
-      "source_url": "https://www.costco.com/.product.2005921.html",
-      "url_derived": true,
-      "regular_price": 21.99,
-      "sale_price": 21.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.2005921.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "fuzzy_title",
-      "costco_cost": 24.19,
-      "cost_exported_at": "2026-09-13T06:28:06.047648+00:00"
-    },
-    {
-      "item_name": "Costco Wholesale Unisex Logo Pant",
-      "raw_title": "Costco Wholesale Unisex Logo Pant",
-      "costco_item_id": "2005614",
-      "source_url": "https://www.costco.com/.product.2005614.html",
-      "url_derived": true,
-      "regular_price": 21.99,
-      "sale_price": 21.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.2005614.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "fuzzy_title",
-      "costco_cost": 24.19,
-      "cost_exported_at": "2026-09-13T06:28:06.054358+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature, Organic Quinoa, 4.5 lbs",
-      "raw_title": "Kirkland Signature, Organic Quinoa, 4.5 lbs",
-      "costco_item_id": "1001368",
-      "source_url": "https://www.costco.com/.product.1001368.html",
-      "url_derived": true,
-      "regular_price": 12.99,
-      "sale_price": 12.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1001368.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00"
-    },
-    {
-      "item_name": "Kirkland Signature Super Extra-Large Peanuts, 2.5 lbs",
-      "raw_title": "Kirkland Signature Super Extra-Large Peanuts, 2.5 lbs",
-      "costco_item_id": "222490",
-      "source_url": "https://www.costco.com/.product.222490.html",
-      "url_derived": true,
-      "regular_price": 8.99,
-      "sale_price": 8.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": "40 oz.",
-      "unit_count": 40,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": 40.0,
-      "unit_of_measure": "oz",
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.222490.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "match": "updated",
-      "matched_by": "exact_title",
-      "costco_cost": 9.89,
-      "cost_exported_at": "2026-09-13T06:28:06.061449+00:00"
+      "product_url": "https://www.costco.com/.product.596759.html",
+      "fetched_at": "2026-09-13T07:32:01.568834+00:00",
+      "last_seen_at": "2026-09-13T07:32:01.568834+00:00",
+      "match": "appended",
+      "matched_by": "none",
+      "costco_cost": 12.09,
+      "cost_exported_at": "2026-09-13T07:32:01.665426+00:00"
     }
   ],
   "skipped": [],
-  "held_for_review": [
-    {
-      "item_name": "Kirkland Signature Colombian Supremo Coffee, Whole Bean, 3 lbs",
-      "raw_title": "Kirkland Signature Colombian Supremo Coffee, Whole Bean, 3 lbs",
-      "costco_item_id": "120296",
-      "source_url": "https://www.costco.com/.product.120296.html",
-      "url_derived": true,
-      "regular_price": 24.99,
-      "sale_price": 24.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.120296.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "reason": "title_conflict",
-      "prior_item_name": "Kirkland Signature Colombian Supremo Whole Bean Coffee, Medium Roast, 3 lbs"
-    },
-    {
-      "item_name": "Kirkland Signature by Stearns & Foster 14.5\" Pillow Top Lakeridge Mattress",
-      "raw_title": "Kirkland Signature by Stearns & Foster 14.5\" Pillow Top Lakeridge Mattress",
-      "costco_item_id": "1722209",
-      "source_url": "https://www.costco.com/.product.1722209.html",
-      "url_derived": true,
-      "regular_price": 1199.99,
-      "sale_price": 1199.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "<p class='promo'>Buy 2+ <a href='/s?keyword=costco%20direct'>Costco Direct items</a>; Instantly save an additional $100 - $400. See Product Details</p>",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1722209.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "reason": "title_conflict",
-      "prior_item_name": "Kirkland Signature by Stearns &amp; Foster 14.5\" Pillow Top Lakeridge Mattress"
-    }
-  ],
-  "unmatched": [
-    {
-      "item_name": "Kirkland Signature, Organic Quinoa, 4.5 lbs",
-      "raw_title": "Kirkland Signature, Organic Quinoa, 4.5 lbs",
-      "costco_item_id": "1001368",
-      "source_url": "https://www.costco.com/.product.1001368.html",
-      "url_derived": true,
-      "regular_price": 12.99,
-      "sale_price": 12.99,
-      "price_basis": "regular",
-      "price_status": "regular",
-      "pack_size": null,
-      "unit_count": null,
-      "cost_basis": "costco_online",
-      "cost_status": "discovery_only",
-      "source": "costco_online",
-      "location": {
-        "delivery_zip": "75201",
-        "business_center": "Dallas Business Center"
-      },
-      "availability": "in_stock",
-      "promo": "",
-      "variants_count": 0,
-      "variants_max_price": null,
-      "brand": "Kirkland Signature",
-      "model_number": null,
-      "upc_or_ean": null,
-      "product_line": null,
-      "formula_or_flavor": null,
-      "net_weight": null,
-      "unit_of_measure": null,
-      "pack_count": null,
-      "case_count": null,
-      "warehouse_or_zip": "75201",
-      "product_url": "https://www.costco.com/.product.1001368.html",
-      "fetched_at": "2026-09-13T06:28:06.000476+00:00",
-      "last_seen_at": "2026-09-13T06:28:06.000476+00:00",
-      "reason": "pack_size_conflict"
-    }
-  ],
+  "held_for_review": [],
+  "unmatched": [],
   "stale_rows": [
     {
-      "item_name": "Krikland Signature Ultra Clean Premium Laundry Detergent with 2X Concentrate",
-      "costco_cost": "29.99"
+      "item_name": "Kirkland Signature Ultra Clean HE Liquid Laundry Detergent, 146 loads, 194 fl oz",
+      "costco_cost": "23.64"
     },
     {
       "item_name": "Kirkland Signature Whole Almonds, Baking Nuts, 3 lbs",
       "costco_cost": "17.15"
     },
     {
-      "item_name": "Kirkland Signature AA Batteries 48 Count",
-      "costco_cost": "14.99"
+      "item_name": "Kirkland Signature Cookie Tray, 60-count",
+      "costco_cost": "25.29"
     },
     {
-      "item_name": "Kirkland Signature Extra Virgin Olive Oil, 2 Liter",
-      "costco_cost": "25.51"
+      "item_name": "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L",
+      "costco_cost": "23.09"
     },
     {
       "item_name": "Kirkland Signature Dishwasher Detergent Pacs 115 Count",
       "costco_cost": "13.99"
     },
     {
+      "item_name": "Kirkland Signature, Pure Sea Salt, 30 oz",
+      "costco_cost": "4.39"
+    },
+    {
+      "item_name": "Kirkland Signature, Crushed Red Pepper, 10 oz",
+      "costco_cost": "5.27"
+    },
+    {
+      "item_name": "Kirkland Signature Paper Towels, 2-Ply, 160 Sheets, 12 Individually Wrapped Rolls",
+      "costco_cost": "26.39"
+    },
+    {
+      "item_name": "Kirkland Signature Women's Softshell Jacket",
+      "costco_cost": "36.29"
+    },
+    {
       "item_name": "Kirkland Signature Elegant Plastic Plates, Variety Pack, White, 50-count",
       "costco_cost": "17.59"
     },
     {
-      "item_name": "Kirkland Signature Women's Lightweight Hoodie",
+      "item_name": "Kirkland Signature Fabric Softener Sheets, 250-count, 2-pack",
+      "costco_cost": "13.74"
+    },
+    {
+      "item_name": "Kirkland Signature Coffee Organic Pacific Bold K-Cup Pod, 120-count",
+      "costco_cost": "46.19"
+    },
+    {
+      "item_name": "Kirkland Signature Men's Heavyweight Crew Tee, 6-pack",
+      "costco_cost": "29.69"
+    },
+    {
+      "item_name": "Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",
+      "costco_cost": "19.79"
+    },
+    {
+      "item_name": "Kirkland Signature Men's Merino Wool Blend Sock, 4-pair",
+      "costco_cost": "19.24"
+    },
+    {
+      "item_name": "Kirkland Signature Flex-Tech 13-Gallon Scented Kitchen Trash Bags, 200-count",
+      "costco_cost": "24.74"
+    },
+    {
+      "item_name": "Kirkland Signature Baby Wipes Fragrance Free, 900-count",
+      "costco_cost": "26.39"
+    },
+    {
+      "item_name": "Kirkland Signature Men's Boxer Brief, 4-pack",
+      "costco_cost": "20.89"
+    },
+    {
+      "item_name": "Kirkland Signature Women's Lightweight Short",
       "costco_cost": "10.97"
     },
     {
@@ -1060,12 +174,28 @@
       "costco_cost": "10.97"
     },
     {
-      "item_name": "Kirkland Signature Adult Formula Lamb, Rice and Vegetable Dog Food, 25 lbs",
-      "costco_cost": "29.14"
+      "item_name": "Kirkland Signature Men's Cotton Jean",
+      "costco_cost": "14.29"
+    },
+    {
+      "item_name": "Kirkland Signature Hair Regrowth Treatment Minoxidil Foam for Men, 2.11 oz, 6-count",
+      "costco_cost": "53.89"
+    },
+    {
+      "item_name": "Kirkland Signature Adult Formula Chicken, Rice and Vegetable Dog Food, 25 lbs",
+      "costco_cost": "27.49"
     },
     {
       "item_name": "Kirkland Signature by Stearns &amp; Foster 14.5\" Pillow Top Lakeridge Mattress",
       "costco_cost": "1319.99"
+    },
+    {
+      "item_name": "Costco Wholesale Unisex Logo Pant",
+      "costco_cost": "24.19"
+    },
+    {
+      "item_name": "Kirkland Signature Breaded Panko Shrimp 2.5 lbs",
+      "costco_cost": "19.79"
     },
     {
       "item_name": "Kirkland Signature Funhouse Treats, Variety Pack, 92 oz",
@@ -1120,12 +250,12 @@
       "costco_cost": "10.77"
     },
     {
-      "item_name": "Kirkland Signature SAE 0W-20 Full Synthetic Motor Oil, 1 Quart, 6 ct",
-      "costco_cost": "29.03"
+      "item_name": "Kirkland Signature 5W-20 Full Synthetic Motor Oil 5-quart, 2-pack",
+      "costco_cost": "63.79"
     },
     {
-      "item_name": "Kirkland Signature Snacking Nuts, Variety Pack, 1.6 oz, 21 ct",
-      "costco_cost": "30.88"
+      "item_name": "Kirkland Signature Snacking Nuts, Variety Pack, 1.6 oz, 30-count",
+      "costco_cost": "24.19"
     },
     {
       "item_name": "Kirkland Signature Wastebasket Liners, Clear, 10 Gallon, 500 ct",
@@ -1160,8 +290,8 @@
       "costco_cost": "3.51"
     },
     {
-      "item_name": "Kirkland Signature Trail Mix, 4 lbs",
-      "costco_cost": "18.14"
+      "item_name": "Kirkland Signature Vitamin C 250 mg., 360 Adult Gummies",
+      "costco_cost": "21.99"
     },
     {
       "item_name": "Kirkland Signature Almond Flour, 3 lbs",
@@ -1180,8 +310,8 @@
       "costco_cost": "3.84"
     },
     {
-      "item_name": "Kirkland Signature Microfiber Towels, Blue, 36 ct",
-      "costco_cost": "21.11"
+      "item_name": "Kirkland Signature Daily Dry Facial Towels, 200-count",
+      "costco_cost": "20.89"
     },
     {
       "item_name": "Kirkland Signature Wildflower Honey, 5 lbs",
@@ -1204,8 +334,8 @@
       "costco_cost": "20.67"
     },
     {
-      "item_name": "Kirkland Signature Pink Salt, Fine Grain, 5 lbs",
-      "costco_cost": "8.35"
+      "item_name": "Kirkland Signature Super Extra-Large Peanuts, 2.5 lbs",
+      "costco_cost": "9.89"
     },
     {
       "item_name": "Kirkland Signature Moist Flushable Wipes, Unscented, 640 ct",
@@ -1221,7 +351,7 @@
     },
     {
       "item_name": "Kirkland Signature Sweet Heat Snack Mix, 24 oz",
-      "costco_cost": "14.18"
+      "costco_cost": "14.29"
     },
     {
       "item_name": "Kirkland Signature In-Shell Pistachios, Roasted and Unsalted, 3 lbs",
@@ -1261,6 +391,10 @@
     },
     {
       "item_name": "Kirkland Signature Ultra Soft Diapers, Size 4, 198 ct",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Kirkland Signature Diaper Sizes 3-7",
       "costco_cost": "43.99"
     },
     {
@@ -1316,12 +450,12 @@
       "costco_cost": "15.61"
     },
     {
-      "item_name": "Kirkland Signature Vitamin C, 1000 mg, 500 ct",
-      "costco_cost": "18.47"
+      "item_name": "Kirkland Signature Vitamin E 180 mg., 500 Softgels",
+      "costco_cost": "17.59"
     },
     {
-      "item_name": "Kirkland Signature Ibuprofen, 500 Tablets, 2 ct",
-      "costco_cost": "13.63"
+      "item_name": "Kirkland Signature Daily Multi, 500 Tablets",
+      "costco_cost": "21.99"
     },
     {
       "item_name": "Kirkland Signature Organic Raw Honey Bear, 24 oz, 3 ct",
@@ -1361,7 +495,7 @@
     },
     {
       "item_name": "Kirkland Signature Milk Chocolate Covered Almonds, 48 oz",
-      "costco_cost": "23.97"
+      "costco_cost": "24.19"
     },
     {
       "item_name": "Kirkland Signature Nitrile Exam Gloves, Small, 400 ct",
@@ -1400,8 +534,8 @@
       "costco_cost": "11.98"
     },
     {
-      "item_name": "Kirkland Signature Decaf Ground Coffee, Dark Roast, 3 lbs",
-      "costco_cost": "28.37"
+      "item_name": "Kirkland Signature Colombian Coffee, Dark Roast, 3 lbs",
+      "costco_cost": "27.49"
     },
     {
       "item_name": "Kirkland Signature Normandy-Style Vegetable Blend, 5.5 lbs",
@@ -1424,8 +558,8 @@
       "costco_cost": "29.69"
     },
     {
-      "item_name": "Kirkland Signature Organic Soup Stock, Chicken, 32 fl oz, 6 ct",
-      "costco_cost": "13.08"
+      "item_name": "Kirkland Signature, Organic Soy Beverage, Plain, 32 fl oz, 12-Count",
+      "costco_cost": "20.34"
     },
     {
       "item_name": "Kirkland Signature Thai Hom Mali Jasmine Rice, Long Grain, 25 lbs",
@@ -1448,8 +582,8 @@
       "costco_cost": "17.15"
     },
     {
-      "item_name": "Kirkland Signature Ultra Shine Dishwashing Liquid, Fresh Scent, 90 fl oz",
-      "costco_cost": "11.32"
+      "item_name": "Kirkland Signature Ultra Shine Liquid Dish Soap, Fresh, 90 fl oz",
+      "costco_cost": "10.77"
     },
     {
       "item_name": "Kirkland Signature Purified Drinking Water, 1 Gallon, 6 ct",
@@ -1457,15 +591,15 @@
     },
     {
       "item_name": "Kirkland Signature Three Berry Blend, 4 lbs",
-      "costco_cost": "14.95"
+      "costco_cost": "0.01"
     },
     {
       "item_name": "Kirkland Signature Tortilla Strips, 3 lbs",
       "costco_cost": "7.47"
     },
     {
-      "item_name": "Kirkland Signature Albacore Solid White Tuna in Water, 7 oz, 8 ct",
-      "costco_cost": "22.21"
+      "item_name": "Kirkland Signature Solid White Albacore Tuna in Water, 7 oz, 8-count",
+      "costco_cost": "21.99"
     },
     {
       "item_name": "Kirkland Signature Chicken Tenderloins, Boneless Skinless, 6 lbs",
@@ -1508,8 +642,8 @@
       "costco_cost": "25.29"
     },
     {
-      "item_name": "Kirkland Signature Protein Bar, Variety Pack, 21g Protein, 2.12 oz, 20 ct",
-      "costco_cost": "29.47"
+      "item_name": "Kirkland Signature Protein Bar, Variety Pack, 2.12 oz, 20-count",
+      "costco_cost": "27.49"
     },
     {
       "item_name": "Kirkland Signature California In-Shell Pistachios, Roasted & Salted, 3 lbs",
@@ -1556,8 +690,8 @@
       "costco_cost": "5.6"
     },
     {
-      "item_name": "Kirkland Signature Ionized Alkaline Water, 33.8 fl oz, 18 ct",
-      "costco_cost": "16.49"
+      "item_name": "Kirkland Signature Moisture Shampoo, 33.8 fl oz, 1-count",
+      "costco_cost": "13.19"
     },
     {
       "item_name": "Kirkland Signature Stir Fry Vegetable Blend, 5.5 lbs",
@@ -1580,8 +714,8 @@
       "costco_cost": "29.03"
     },
     {
-      "item_name": "Kirkland Signature SAE 5W-30 Full Synthetic Motor Oil, 1 Quart, 6 ct",
-      "costco_cost": "29.03"
+      "item_name": "Kirkland Signature 5W-30 High Mileage Full Synthetic Motor Oil, 5-Quart 2-pack",
+      "costco_cost": "63.79"
     },
     {
       "item_name": "Kirkland Signature Colombian Ground Coffee, Dark Roast, 1.75 oz, 42 ct",
@@ -1592,8 +726,8 @@
       "costco_cost": "6.7"
     },
     {
-      "item_name": "Kirkland Signature Plastic Food Wrap, 12''W x 3000'L",
-      "costco_cost": "22.87"
+      "item_name": "Kirkland Signature Reynolds Foodservice Foil HD, 18 in x 500 ft",
+      "costco_cost": "59.39"
     },
     {
       "item_name": "Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",
@@ -1632,8 +766,8 @@
       "costco_cost": "23.75"
     },
     {
-      "item_name": "Kirkland Signature Nature's Domain Dog Food, Salmon & Sweet Potato, 25 lbs",
-      "costco_cost": "35.96"
+      "item_name": "Kirkland Signature Nature's Domain Turkey and Sweet Potato Dog Food, 25 lbs",
+      "costco_cost": "35.19"
     },
     {
       "item_name": "Kirkland Signature Nature's Domain Dog Food, Beef & Sweet Potato, 25 lbs",
@@ -1678,6 +812,1342 @@
     {
       "item_name": "Kirkland Signature Aluminum Foil, 12\"W x 1000'L",
       "costco_cost": "54.99"
+    },
+    {
+      "item_name": "Kirkland Signature Forged Wedge Set",
+      "costco_cost": "219.99"
+    },
+    {
+      "item_name": "Dream Plush Adjustable Wedge Pillow with Cooling Cover",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "SWISSGEAR 8097 2-piece Set 20\u201d/24\u201d Softside Spinner",
+      "costco_cost": "219.99"
+    },
+    {
+      "item_name": "Kirkland Signature Leather Golf Glove Left Handed, 4-pack",
+      "costco_cost": "35.19"
+    },
+    {
+      "item_name": "Kirkland Signature Leather Golf Glove, Right Handed, 4-pack",
+      "costco_cost": "35.19"
+    },
+    {
+      "item_name": "Kirkland Signature KS1 Left Handed Putter",
+      "costco_cost": "164.99"
+    },
+    {
+      "item_name": "Summit Cloud Six Par 3 Golf Stand Bag",
+      "costco_cost": "109.99"
+    },
+    {
+      "item_name": "WETFLY Ionic Convertible Fly & Spin Combo",
+      "costco_cost": "197.99"
+    },
+    {
+      "item_name": "SafeRacks Golf Bag and Equipment Storage Rack",
+      "costco_cost": "151.79"
+    },
+    {
+      "item_name": "Fieldline Tactical Delta 65L Internal Frame Pack",
+      "costco_cost": "76.99"
+    },
+    {
+      "item_name": "Greenworks 24V Drill & Impact Driver 2x2Ah Battery, 4Ah Battery, Charger",
+      "costco_cost": "329.99"
+    },
+    {
+      "item_name": "Copper Tech Women's Golf Glove, 2-pack",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "ALPTREK Snowshoe Kit HD 825, Medium",
+      "costco_cost": "109.99"
+    },
+    {
+      "item_name": "ThermoFlask 12 oz. Insulated Coffee Mug with Handle, 2-pack",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "Country Club Elite Golf Mats",
+      "costco_cost": "307.99"
+    },
+    {
+      "item_name": "PUMA Women's No Show Sock, 10-pair",
+      "costco_cost": "17.59"
+    },
+    {
+      "item_name": "ALPTREK Snowshoe Kit HD 821, Small",
+      "costco_cost": "109.99"
+    },
+    {
+      "item_name": "93\" Plush Bear, Blonde",
+      "costco_cost": "329.99"
+    },
+    {
+      "item_name": "Kirkland Signature Men's Tailored Fit Dress Shirt-Exact Sleeve Length",
+      "costco_cost": "31.89"
+    },
+    {
+      "item_name": "Stitch SL4 Golf Cart Bag",
+      "costco_cost": "208.99"
+    },
+    {
+      "item_name": "ALPTREK Snowshoe Kit HD 930, Large",
+      "costco_cost": "109.99"
+    },
+    {
+      "item_name": "Mytagalongs Neoprene Backpack",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Kirkland Signature Men's Traditional Fit Dress Shirt - Exact Sleeve Length",
+      "costco_cost": "31.89"
+    },
+    {
+      "item_name": "StriVectin TL Advanced Tightening Neck Cream Plus, 1 oz, 2-pack",
+      "costco_cost": "49.49"
+    },
+    {
+      "item_name": "Kirkland Signature Powder Laundry Detergent, 200 Loads, 348.8 oz",
+      "costco_cost": "27.49"
+    },
+    {
+      "item_name": "Beyond Meat Plant-Based Patties, 4 oz, 10-count",
+      "costco_cost": "1.13"
+    },
+    {
+      "item_name": "Hurom H-320 Slow Juicer",
+      "costco_cost": "472.99"
+    },
+    {
+      "item_name": "Beemster Aged Cheese, Aged 18 Months, Quarter Wheel, Approximately 6 lbs.",
+      "costco_cost": "153.99"
+    },
+    {
+      "item_name": "Kewpie Mayonnaise, 24 fl oz",
+      "costco_cost": "8.24"
+    },
+    {
+      "item_name": "Kangaroo Hanger 30-count Combo Pack",
+      "costco_cost": "38.49"
+    },
+    {
+      "item_name": "Utz Pub Crunchy Snack Mix, 44 oz",
+      "costco_cost": "9.34"
+    },
+    {
+      "item_name": "Mateo's Gourmet Salsa, Medium, 32 oz",
+      "costco_cost": "1.13"
+    },
+    {
+      "item_name": "Pura d'or Apple Cider Vinegar Thin2Thick Clarifying and Detoxing Shampoo & Conditioner Duo",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "LG 55\" Class - UA7700 Series - 4K UHD Smart TV",
+      "costco_cost": "329.99"
+    },
+    {
+      "item_name": "TCL 55\" Class - Q77K Series - 4K UHD QLED Smart TV - Allstate 3-Year Protection Plan Bundle Included for 5 Years of Total Coverage*",
+      "costco_cost": "384.99"
+    },
+    {
+      "item_name": "Del Rey Oaks 74\u201d Accent Console",
+      "costco_cost": "604.99"
+    },
+    {
+      "item_name": "Puerta Del Sol TV Console",
+      "costco_cost": "659.99"
+    },
+    {
+      "item_name": "GE ENERGY STAR 21.9 cu. ft. Fingerprint Resistant Counter-Depth French-Door Refrigerator",
+      "costco_cost": "2089.99"
+    },
+    {
+      "item_name": "LG 86\" Class - UA9000 Series - 4K UHD Smart TV - Allstate 3-Year Protection Plan Bundle Included For 5 Years of Total Coverage*",
+      "costco_cost": "769.99"
+    },
+    {
+      "item_name": "LG 65\" Class - UA7700 Series - 4K UHD Smart TV",
+      "costco_cost": "329.97"
+    },
+    {
+      "item_name": "Sony 55\" Class - BRAVIA 8 Series - 4K UHD OLED TV - Allstate 3-Year Protection Plan Bundle Included for 5 Years of Total Coverage*",
+      "costco_cost": "1649.99"
+    },
+    {
+      "item_name": "Sony 65\" Class - BRAVIA 5 Series - 4K UHD Mini LED Smart TV - Allstate 3-Year Protection Plan Bundle Included for 5 Years of Total Coverage*",
+      "costco_cost": "1649.99"
+    },
+    {
+      "item_name": "Allstate 3 Years (For TVs: $500 to $1,000)",
+      "costco_cost": "71.49"
+    },
+    {
+      "item_name": "Nature Valley Crunchy Granola Bar, Oats 'n Honey, 1.49 oz, 49-count",
+      "costco_cost": "19.79"
+    },
+    {
+      "item_name": "Gillette Ultimate Protection 6-in-1 Antiperspirant, 3.8 oz, 5-pack",
+      "costco_cost": "16.49"
+    },
+    {
+      "item_name": "TCL 65\" Class - Q77K Series - 4K UHD QLED Smart TV - Allstate 3-Year Protection Plan Bundle Included for 5 Years of Total Coverage*",
+      "costco_cost": "439.99"
+    },
+    {
+      "item_name": "TCL 55\" Class - QM6K Pro Series - 4K UHD QD-Mini LED Smart TV - Allstate 3-Year Protection Plan Bundle Included for 5 Years of Total Coverage*",
+      "costco_cost": "549.99"
+    },
+    {
+      "item_name": "MoDe Bogota 4-piece Outdoor Patio Deep Seating Set",
+      "costco_cost": "1099.99"
+    },
+    {
+      "item_name": "Del Monte, Canned Corn-Whole Kernel, 15.25 oz, 12-Count",
+      "costco_cost": "16.49"
+    },
+    {
+      "item_name": "Lovesac Modular Sectional Sofa Bundle 6 Seats/8 Square Sides with Storage and 6-Speaker Surround Sound System",
+      "costco_cost": "9459.99"
+    },
+    {
+      "item_name": "Hidden Valley Original Ranch Homestyle Dressing, 40 fl oz, 2-count",
+      "costco_cost": "16.49"
+    },
+    {
+      "item_name": "Panasonic 65\" Class - W95 Series - 4K UHD Mini-LED LCD TV",
+      "costco_cost": "549.99"
+    },
+    {
+      "item_name": "Dylan 60\u201d Accent Console",
+      "costco_cost": "1319.99"
+    },
+    {
+      "item_name": "Lovesac Modular Sectional Sofa Bundle 4 Seats/5 Square Sides with Storage and 6-Speaker Surround Sound System",
+      "costco_cost": "7479.99"
+    },
+    {
+      "item_name": "Harwood 5-piece Fabric Modular Sectional with Power Footrest",
+      "costco_cost": "1869.97"
+    },
+    {
+      "item_name": "Kirkland Signature Super B-Complex with Electrolytes, 500 Tablets",
+      "costco_cost": "20.34"
+    },
+    {
+      "item_name": "Kirkland Signature 8-In-1 Multi-Benefit Soft Chews For Dogs, 250-count",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Kirkland Signature Quit 2mg or 4mg, Cherry Lozenges, 270 Pieces",
+      "costco_cost": "69.29"
+    },
+    {
+      "item_name": "Kirkland Signature Quit, 2mg or 4mg, Mint Lozenges, 270 Pieces",
+      "costco_cost": "69.29"
+    },
+    {
+      "item_name": "Kirkland Signature Quit 2 mg or 4mg, Original Gum, 380 Pieces",
+      "costco_cost": "65.99"
+    },
+    {
+      "item_name": "Kirkland Signature Quit 2 mg or 4 mg, Ice Mint Gum, 300 Pieces",
+      "costco_cost": "65.99"
+    },
+    {
+      "item_name": "Swiffer Sweeper Heavy Duty Dry Sweeping Cloth Refills, 50-count",
+      "costco_cost": "16.49"
+    },
+    {
+      "item_name": "Ravena 30\" x 65\" Floor Mirror",
+      "costco_cost": "164.97"
+    },
+    {
+      "item_name": "Nourison Indiana Area Rug Collection, Hammond, 6'6\" x 9'6\"",
+      "costco_cost": "241.99"
+    },
+    {
+      "item_name": "Nourison Indiana Area Rug, Bloomington, 7'10\" x 9'10\"",
+      "costco_cost": "296.99"
+    },
+    {
+      "item_name": "Aspen 80\" Bookcase",
+      "costco_cost": "813.99"
+    },
+    {
+      "item_name": "Nourison Indiana Area Rug, Bloomington, 6'6\" x 9'6\"",
+      "costco_cost": "241.99"
+    },
+    {
+      "item_name": "Nourison Indiana Area Rug, Bloomington, 5'3\" x 7'3\"",
+      "costco_cost": "186.99"
+    },
+    {
+      "item_name": "Sunforgettable Total Protection Brush-On Sunscreen, SPF50 3-piece",
+      "costco_cost": "98.99"
+    },
+    {
+      "item_name": "Swiffer Sweeper Heavy Duty Wet Cloths, Lavender, 54-count",
+      "costco_cost": "25.29"
+    },
+    {
+      "item_name": "ES Robbins Chair Mat for High Pile Carpet, 45 x 53 With Lip, Clear",
+      "costco_cost": "65.99"
+    },
+    {
+      "item_name": "Jachs Men's Oxford Long Sleeve Button Up Shirt",
+      "costco_cost": "17.59"
+    },
+    {
+      "item_name": "Nourison Indiana Area Rug, Evansville, 9' x 12'",
+      "costco_cost": "472.99"
+    },
+    {
+      "item_name": "Nourison Arctic Area Rug Collection, Lumi",
+      "costco_cost": "219.99"
+    },
+    {
+      "item_name": "Kirkland Signature Ultra Soft Fabric Softener, 257 Loads, 150 fl oz",
+      "costco_cost": "14.29"
+    },
+    {
+      "item_name": "Nourison Indiana Area Rug, Evansville, 7'10\" x 9'10\"",
+      "costco_cost": "296.99"
+    },
+    {
+      "item_name": "KitchenAid 24 in. Top Control Built-In PrintShield Stainless Steel Dishwasher with Advanced ProDry System, 44 dBA",
+      "costco_cost": "1209.99"
+    },
+    {
+      "item_name": "TRINITY 18\" x 16\" x 13\" Stainless Steel Utility Sink with Pull-out Faucet",
+      "costco_cost": "285.99"
+    },
+    {
+      "item_name": "TRINITY 18\u201d x 16\u201d x 13\u201d Stainless Steel Utility Sink with Pull-out Faucet",
+      "costco_cost": "329.99"
+    },
+    {
+      "item_name": "DeWalt 8-Gallon 4 HP Stealthsonic Quiet Stainless Steel Wet Dry Vacuum",
+      "costco_cost": "109.99"
+    },
+    {
+      "item_name": "Oasis Horizontal Murphy Bed, Full Size",
+      "costco_cost": "1044.99"
+    },
+    {
+      "item_name": "Solaris Area Rug, Keela Sage, 5'3\" x 7'",
+      "costco_cost": "186.99"
+    },
+    {
+      "item_name": "Nourison Indiana Area Rug, Evansville, 5'3\" x 7'3\"",
+      "costco_cost": "186.99"
+    },
+    {
+      "item_name": "Kirkland Signature V3.0 Golf Ball, 2-dozen",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Kirkland Signature V3.0 Yellow Golf Ball, 2-dozen",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Kirkland Signature USDA Organic Multivitamin, 80 Coated Tablets",
+      "costco_cost": "29.69"
+    },
+    {
+      "item_name": "Kirkland Signature Children's Multivitamin, 320 Gummies",
+      "costco_cost": "14.84"
+    },
+    {
+      "item_name": "Kirkland Signature Adult Multivitamin, 320 Gummies",
+      "costco_cost": "18.69"
+    },
+    {
+      "item_name": "TOTO Drake 2-piece Elongated Toilet",
+      "costco_cost": "472.99"
+    },
+    {
+      "item_name": "Allied Home RDS White Duck Down Comforter",
+      "costco_cost": "164.99"
+    },
+    {
+      "item_name": "Hotel Grand White Down Comforter",
+      "costco_cost": "164.99"
+    },
+    {
+      "item_name": "Honeywell 22kW Home Standby Generator with Transfer Switch",
+      "costco_cost": "6489.99"
+    },
+    {
+      "item_name": "Yard Force 22\" Corded Electric Leaf Shredder With Accessory Kit",
+      "costco_cost": "137.49"
+    },
+    {
+      "item_name": "TOTO Drake 2-piece Elongated Toilet with C5 Washlet Bidet Seat",
+      "costco_cost": "879.99"
+    },
+    {
+      "item_name": "Farm to Home Down Alternative Comforter",
+      "costco_cost": "93.49"
+    },
+    {
+      "item_name": "DieHard 2400W Gasoline Powered Inverter Generator",
+      "costco_cost": "384.99"
+    },
+    {
+      "item_name": "Stern Pinball Star Wars Home Edition Plus",
+      "costco_cost": "4399.97"
+    },
+    {
+      "item_name": "GoFence Composite 45\u201d x 6' Trellis Fence Kit",
+      "costco_cost": "329.99"
+    },
+    {
+      "item_name": "Kohler 26kW Home Standby Generator with 200A Automatic Transfer Switch",
+      "costco_cost": "7699.99"
+    },
+    {
+      "item_name": "Fattoria Della Piana Pecorino Calabrese Cheese, Whole Wheel, Approximately 4 lbs.",
+      "costco_cost": "93.49"
+    },
+    {
+      "item_name": "Almost Heaven Saunas Aurora 3-person Indoor Sauna",
+      "costco_cost": "6269.99"
+    },
+    {
+      "item_name": "DuraLOFT Down Alternative Comforter",
+      "costco_cost": "131.99"
+    },
+    {
+      "item_name": "Disney Mickey and Friends Halloween Pumpkin House",
+      "costco_cost": "98.99"
+    },
+    {
+      "item_name": "Firman 3550W Running / 4450W Peak Gasoline Powered Generator",
+      "costco_cost": "494.99"
+    },
+    {
+      "item_name": "Hotel Grand White Down Pillow",
+      "costco_cost": "109.99"
+    },
+    {
+      "item_name": "Hotel Grand White Goose Down Comforter",
+      "costco_cost": "296.99"
+    },
+    {
+      "item_name": "GoFence Composite 42\" x 6' Mid Trellis Gate Kit",
+      "costco_cost": "989.99"
+    },
+    {
+      "item_name": "Mountain House Homestyle Outdoor Meal Kit, 8 Pouch Assortment (16 Total Servings)",
+      "costco_cost": "76.99"
+    },
+    {
+      "item_name": "Icy Hot Lidocaine Roll On, 3 pack, 6.5 fl oz Total",
+      "costco_cost": "15.39"
+    },
+    {
+      "item_name": "Marathon Jumbo Roll Bath Tissue, 2-Ply, 900 ft Rolls, 6 Rolls",
+      "costco_cost": "30.79"
+    },
+    {
+      "item_name": "Tide Plus Advanced Power with Oxi Liquid Laundry Detergent, Original, 78 Loads, 138 fl oz",
+      "costco_cost": "26.39"
+    },
+    {
+      "item_name": "Henredon Adrano Big & Tall Executive Office Chair",
+      "costco_cost": "263.99"
+    },
+    {
+      "item_name": "Doritos Tortilla Chips, Cool Ranch, 1.75 oz, 64-count",
+      "costco_cost": "54.99"
+    },
+    {
+      "item_name": "Marathon 100% Recycled Paper Towel, Brown, 1-Ply, 350 ft Rolls, 12-count",
+      "costco_cost": "40.69"
+    },
+    {
+      "item_name": "XTERRA Fitness TR85 Folding Smart Treadmill",
+      "costco_cost": "1429.99"
+    },
+    {
+      "item_name": "Guerrero 8\" Flour Tortillas, 40-count",
+      "costco_cost": "6.59"
+    },
+    {
+      "item_name": "Rana Southwest Style Linguine with Chicken and Andouille Sausage, 40 oz",
+      "costco_cost": "1.13"
+    },
+    {
+      "item_name": "Takis Rolled Tortilla Chips, Fuego, 1 oz, 50-count",
+      "costco_cost": "24.19"
+    },
+    {
+      "item_name": "La Fiesta 4.5\" Corn Tortillas, 60-count",
+      "costco_cost": "2.74"
+    },
+    {
+      "item_name": "Doritos Tortilla Chips, Cool Ranch, 1 oz, 50-count",
+      "costco_cost": "25.29"
+    },
+    {
+      "item_name": "Takis Rolled Tortilla Chips, Fuego, 3.25 oz, 40-count",
+      "costco_cost": "76.99"
+    },
+    {
+      "item_name": "Marathon Dispenser Paper Towels, 2-Ply, 450 ft Rolls, 12-count",
+      "costco_cost": "82.49"
+    },
+    {
+      "item_name": "Pecan Pieces, 5 lbs",
+      "costco_cost": "39.59"
+    },
+    {
+      "item_name": "Walnut Pieces, 5 lbs",
+      "costco_cost": "30.24"
+    },
+    {
+      "item_name": "Rug & Co. Steinway Tudor Border Area Rug",
+      "costco_cost": "329.97"
+    },
+    {
+      "item_name": "Vacaville Fruit Company, Dried Fruit & Nut Grand Pine Slatted Pine Tray, 80 oz.",
+      "costco_cost": "65.99"
+    },
+    {
+      "item_name": "Yupik Organic Pumpkin Seeds, 2.2 lbs, 4-pack",
+      "costco_cost": "60.49"
+    },
+    {
+      "item_name": "Yupik Roasted Sea Salt Blanched Marcona Almonds, 2.2 lbs, 3-pack",
+      "costco_cost": "76.99"
+    },
+    {
+      "item_name": "Ocean Spray Craisins, Whole Dried Cranberries, 64 oz",
+      "costco_cost": "13.19"
+    },
+    {
+      "item_name": "Mayorga Organic Chia Seeds, USDA Organic, NON-Gmo verified, 3lb, 2-pack",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Kirkland Signature Cranberry Walnut Round Bread",
+      "costco_cost": "8.79"
+    },
+    {
+      "item_name": "Pagoda Hand Knotted Rug Collection, Shan Border Gray",
+      "costco_cost": "3189.99"
+    },
+    {
+      "item_name": "Alder & Oak Star Yellow Jessamine Staked",
+      "costco_cost": "98.99"
+    },
+    {
+      "item_name": "Kirkland Signature Raisins, Milk Chocolate, 3.4 lb",
+      "costco_cost": "25.29"
+    },
+    {
+      "item_name": "Nestl\u00e9 Toll House, Semi-Sweet Chocolate Chip Morsels, 72 oz",
+      "costco_cost": "18.69"
+    },
+    {
+      "item_name": "Kirkland Signature Belgian Luxury Chocolates, 46-count, Assorted Colors",
+      "costco_cost": "28.59"
+    },
+    {
+      "item_name": "Reese's Peanut Butter Cups, Miniatures, 0.31 oz, 105-count",
+      "costco_cost": "16.49"
+    },
+    {
+      "item_name": "M&M's Chocolate Candy, Peanut Butter, Full Size 1.63 oz, 24-count",
+      "costco_cost": "35.19"
+    },
+    {
+      "item_name": "Reese's Peanut Butter Cups, Milk Chocolate, 1.5 oz, 36-count",
+      "costco_cost": "50.59"
+    },
+    {
+      "item_name": "Hershey's Syrup, Chocolate, 120 oz",
+      "costco_cost": "16.49"
+    },
+    {
+      "item_name": "Lindt Lindor Chocolate Truffles, Assorted Flavors, 21.2 oz",
+      "costco_cost": "21.66"
+    },
+    {
+      "item_name": "M&M's Chocolate Candy, Peanut, Full Size, 1.74 oz, 48-count",
+      "costco_cost": "63.79"
+    },
+    {
+      "item_name": "Reese's Pieces, Peanut Butter, 48 oz",
+      "costco_cost": "17.59"
+    },
+    {
+      "item_name": "Mars Minis Chocolate Candy, Variety Pack, 200-count",
+      "costco_cost": "23.09"
+    },
+    {
+      "item_name": "M&M's, Snickers and More Chocolate Candy Bars, Variety Pack, 30-count",
+      "costco_cost": "29.14"
+    },
+    {
+      "item_name": "M&M's Milk Chocolate Candy, Full Size, 1.69 oz, 48-count",
+      "costco_cost": "63.79"
+    },
+    {
+      "item_name": "Mr. Hyde Signature Pre-Workout Multi-flavor with Creatine, 72 Servings",
+      "costco_cost": "35.19"
+    },
+    {
+      "item_name": "Keebler Fudge Stripes Minis Shortbread Cookies, 2 oz, 36-count",
+      "costco_cost": "18.14"
+    },
+    {
+      "item_name": "Ethel M Chocolates Classic Collection, 2 Pack, 32 Pieces Total",
+      "costco_cost": "82.49"
+    },
+    {
+      "item_name": "M&M's Milk Chocolate Candy Minis, 1.08 oz, 24-count",
+      "costco_cost": "35.19"
+    },
+    {
+      "item_name": "Utah Truffles Dark Chocolate Truffles With Sea Salt 16 oz, 2-pack",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Hershey's Milk Chocolate With Almonds, 1.45 oz, 36-count",
+      "costco_cost": "51.36"
+    },
+    {
+      "item_name": "Ethel M Chocolates Truffles Collection, 2 Pack, 24 Pieces Total",
+      "costco_cost": "76.99"
+    },
+    {
+      "item_name": "Farberware Build-a-Board 2-piece Set",
+      "costco_cost": "49.49"
+    },
+    {
+      "item_name": "Pure Fiber 100% Viscose from Bamboo Sheet Set",
+      "costco_cost": "109.99"
+    },
+    {
+      "item_name": "Pakistani Hand Knotted Rug Collection, Classic Bukhara Chuval Black",
+      "costco_cost": "1066.99"
+    },
+    {
+      "item_name": "Bamboo Plant Collection",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "Saran Mirror",
+      "costco_cost": "428.99"
+    },
+    {
+      "item_name": "Traeger Silverton XL Pellet Grill",
+      "costco_cost": "1539.99"
+    },
+    {
+      "item_name": "TRINITY Bamboo Laundry Station",
+      "costco_cost": "109.99"
+    },
+    {
+      "item_name": "Berkshire Area Rug Collection, Leeza Taupe",
+      "costco_cost": "516.99"
+    },
+    {
+      "item_name": "Fitz and Floyd Woodgrove Serving Board",
+      "costco_cost": "65.99"
+    },
+    {
+      "item_name": "GLOBAL 5-Piece Masuta Bamboo Knife Block Set",
+      "costco_cost": "197.99"
+    },
+    {
+      "item_name": "Schmidt Brothers Cutlery Delta Series Acacia Wood 4-pack Steak Knife Set",
+      "costco_cost": "51.69"
+    },
+    {
+      "item_name": "Pure Fiber 100% Viscose from Bamboo Duvet and Sham Set",
+      "costco_cost": "109.99"
+    },
+    {
+      "item_name": "Kirkland Signature Sloped Cuddler Orthopedic Pet Bed",
+      "costco_cost": "47.29"
+    },
+    {
+      "item_name": "Eurow Nouvelle Legende Placemats, 12-count",
+      "costco_cost": "15.39"
+    },
+    {
+      "item_name": "Boxwood Collection, 3-pack",
+      "costco_cost": "104.49"
+    },
+    {
+      "item_name": "Wila Round Seagrass Wall Mirror",
+      "costco_cost": "208.99"
+    },
+    {
+      "item_name": "120-stem Ranunculus",
+      "costco_cost": "214.49"
+    },
+    {
+      "item_name": "Obeetee Layla Braided Area Rug, Tan, 5' x 7'6\"",
+      "costco_cost": "219.99"
+    },
+    {
+      "item_name": "Bostitch Premium Desktop Stapler Value Pack",
+      "costco_cost": "16.49"
+    },
+    {
+      "item_name": "Winco Cutting Board, 12\" x 18\" x 1/2\" - White",
+      "costco_cost": "8.24"
+    },
+    {
+      "item_name": "Arlington Collection 8.3\u2019 Slate Tech Pool Table by Barrington Billiards",
+      "costco_cost": "1979.99"
+    },
+    {
+      "item_name": "Northern Wild Chef's Blend Cultivated Mushrooms, King Oyster, Maitake, French Horn, 3 lbs or 5 lbs",
+      "costco_cost": "142.99"
+    },
+    {
+      "item_name": "Turkish Kitchen Towels, 6-piece Set",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Kirkland Signature Protein Bars, Chocolate Chip Cookie Dough, 40-Count (4 Pack of 10)",
+      "costco_cost": "65.99"
+    },
+    {
+      "item_name": "Greenball Grim Reaper ATV Tire",
+      "costco_cost": "146.29"
+    },
+    {
+      "item_name": "Wyatt & Ash Washable Indoor Area Rug, Oakley 7'10\" x 10'",
+      "costco_cost": "164.99"
+    },
+    {
+      "item_name": "Yardline Northport Wood Storage Shed - Do It Yourself Assembly",
+      "costco_cost": "2639.99"
+    },
+    {
+      "item_name": "NFL Chrome Hover Helmet",
+      "costco_cost": "76.99"
+    },
+    {
+      "item_name": "Kirkland Signature 2200 High Performance Furnace Filters, 4-pack",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Arlo Essential Pan Tilt Indoor Camera 2K, 3-pack",
+      "costco_cost": "87.99"
+    },
+    {
+      "item_name": "Hurley Youth Performance Pant",
+      "costco_cost": "10.97"
+    },
+    {
+      "item_name": "Oakley Thinlink Matte Black Iridium Polarized Sunglasses",
+      "costco_cost": "130.89"
+    },
+    {
+      "item_name": "Sports Research Omega-3 Krill Oil Superba2 1000mg, 90ct Softgels",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "Wyatt & Ash Washable Indoor Area Rug, Oakley 6'6\" x 9'6\"",
+      "costco_cost": "131.99"
+    },
+    {
+      "item_name": "Night Owl 10 Channel, 10 AC Plug-in 4K Camera Wi-Fi 2TB NVR Security Camera System",
+      "costco_cost": "604.99"
+    },
+    {
+      "item_name": "Greenball XC-Master Front 6-Ply ATV Tire",
+      "costco_cost": "67.09"
+    },
+    {
+      "item_name": "Simms Fabric Power Reclining Sectional with Power Headrests",
+      "costco_cost": "2969.99"
+    },
+    {
+      "item_name": "NFL Hover Helmet",
+      "costco_cost": "76.99"
+    },
+    {
+      "item_name": "NFL 12' x 12' Pagoda Canopy",
+      "costco_cost": "263.99"
+    },
+    {
+      "item_name": "Kirkland Signature Aller-Flo 50 mcg Allergy Spray, 720 Metered Sprays",
+      "costco_cost": "21.99"
+    },
+    {
+      "item_name": "Nutramax Cosequin Joint Health Supplement, 150 count, 2-pack",
+      "costco_cost": "87.99"
+    },
+    {
+      "item_name": "Nutramax Cosequin Joint Health Supplement Plus MSM and HA, 180ct Tablets, 2-pack",
+      "costco_cost": "82.49"
+    },
+    {
+      "item_name": "Head & Shoulders 2-in-1 Dandruff Shampoo and Conditioner Advanced Scalp Care with Aloe Vera, Coconut Water & Vitamins, 40 fl oz",
+      "costco_cost": "13.74"
+    },
+    {
+      "item_name": "Sports Research Advanced Multivitamin, 180 Veggie Capsules",
+      "costco_cost": "31.89"
+    },
+    {
+      "item_name": "Zesty Paws Hip and Joint Chews For Dogs, Chicken Flavor, 160-count",
+      "costco_cost": "40.69"
+    },
+    {
+      "item_name": "Kirkland Signature Ultra Soft Bath Tissue, 2-Ply, 231 Sheets, 36 Rolls",
+      "costco_cost": "27.49"
+    },
+    {
+      "item_name": "Swiffer Sweep + Mop Deluxe Sweeping Kit, 1 Sweeper + 30 Refills",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "Ziploc Slider Storage Bag, Variety Pack, 144-count",
+      "costco_cost": "16.49"
+    },
+    {
+      "item_name": "Zipfizz Multi-Vitamin Energy Hydration Drink Mix, Variety Pack, 30 Tubes",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "FitPaws CanineGym Dog Agility Kit Bundle, Cavaletti 6-count",
+      "costco_cost": "87.99"
+    },
+    {
+      "item_name": "Compagnia del Montale Balsamic Pearls, 2 Pack, 3.6 oz. Total",
+      "costco_cost": "49.49"
+    },
+    {
+      "item_name": "Ziploc Slider Storage Bag, Variety Pack, 166-count",
+      "costco_cost": "19.24"
+    },
+    {
+      "item_name": "Benadryl Allergy UltraTab Tablets, 144 Tablets",
+      "costco_cost": "25.29"
+    },
+    {
+      "item_name": "Zipfizz Multi-Vitamin Energy Hydration Drink Mix, 30 Tubes",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "RTL Premium Athletic Tape",
+      "costco_cost": "76.99"
+    },
+    {
+      "item_name": "Lubriderm Daily Moisture Lotion, Fragrance Free 24 fl oz, 2-count + 6 fl oz Travel Size",
+      "costco_cost": "17.59"
+    },
+    {
+      "item_name": "BUILT Puff Protein Bar, Variety Pack, 1.41 oz, 14-count",
+      "costco_cost": "26.39"
+    },
+    {
+      "item_name": "CASIO Privia PX-S7000HM Digital Piano with Stand, Three-Pedal System, Matching Adjustable Bench, and Accessories",
+      "costco_cost": "3519.99"
+    },
+    {
+      "item_name": "FurMe Professional Plus Pet Grooming Vacuum Kit with Carrying Case",
+      "costco_cost": "181.49"
+    },
+    {
+      "item_name": "Aleve Naproxen Sodium 220 mg Pain Reliever, Fever Reducer, 180 Liquid Gel Capsules",
+      "costco_cost": "28.59"
+    },
+    {
+      "item_name": "Adrianna Papell Women's Airflow Short",
+      "costco_cost": "10.97"
+    },
+    {
+      "item_name": "Coddle Luke Sleeper Sectional with Reversible Chaise and Storage",
+      "costco_cost": "1539.99"
+    },
+    {
+      "item_name": "Nylabone Chew Toys & NUBZ Chew Treats Gift Box, 4-count",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "Numiere Time Keeper LED Face Mask",
+      "costco_cost": "175.99"
+    },
+    {
+      "item_name": "Tsar Nicoulai Mosaic Red Box 3 (1 oz.) Farmed Caviars and 2 (1 oz.) Wild American Roes",
+      "costco_cost": "236.49"
+    },
+    {
+      "item_name": "CALPAK Evry 8-piece Luggage Bundle",
+      "costco_cost": "208.99"
+    },
+    {
+      "item_name": "Belli Biscotti Hand Painted Ceramic Jar, Italian Semi Soft Biscotti, 2-pack, 17.6 oz. total",
+      "costco_cost": "98.99"
+    },
+    {
+      "item_name": "Little Debbie Cosmic Brownies with Chocolate Chip Candy, 4 oz, 6-count",
+      "costco_cost": "8.79"
+    },
+    {
+      "item_name": "Homedics Infrared & Red Light Pain Therapy Wrap",
+      "costco_cost": "54.99"
+    },
+    {
+      "item_name": "Turkish Towel - Gentle Planet 12-piece Washcloth Set",
+      "costco_cost": "48.39"
+    },
+    {
+      "item_name": "Kirkland Signature European Cookies With Belgian Chocolate, Assortment, 49.4 oz",
+      "costco_cost": "25.29"
+    },
+    {
+      "item_name": "Nylabone Puppy Chew Toys and Small NUBZ Gift Box, 4-count",
+      "costco_cost": "24.19"
+    },
+    {
+      "item_name": "EveryWear by Saalt Women's Leakproof Underwear, 2-pack",
+      "costco_cost": "42.89"
+    },
+    {
+      "item_name": "Starburst FaveREDs Chewy Candy, Full Size, 2.07 oz, 24-count",
+      "costco_cost": "36.29"
+    },
+    {
+      "item_name": "Kirkland Signature Stretch-Tite Plastic Food Wrap, 11 7/8 in x 758 ft, 2-count",
+      "costco_cost": "16.49"
+    },
+    {
+      "item_name": "Cherry Bay Orchards No-Added-Sugar Dried Montmorency Cherries 8 oz Bag 2-pack",
+      "costco_cost": "36.29"
+    },
+    {
+      "item_name": "Kirkland Signature Super Premium Vanilla Ice Cream, 1/2 Gallon, 2-count",
+      "costco_cost": "14.29"
+    },
+    {
+      "item_name": "Raspberries, 12 oz",
+      "costco_cost": "9.89"
+    },
+    {
+      "item_name": "Made in Nature Organic Berry Fusion 24 oz, 2-pack",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Cherry Bay Orchards No-Added Sugar Dried Blueberries, 3 oz., 6-pack, 18 oz. Total",
+      "costco_cost": "38.49"
+    },
+    {
+      "item_name": "Cedar Planked Salmon Portions, 20 - 6 oz, 7.5 lb Total",
+      "costco_cost": "164.99"
+    },
+    {
+      "item_name": "Norsk Reversible Foam Flooring, 48 sq ft., 24 in. x 24 in. Foam Mats",
+      "costco_cost": "71.49"
+    },
+    {
+      "item_name": "Sun-Maid, Raisins, 2.25 lbs, 2-Count",
+      "costco_cost": "13.74"
+    },
+    {
+      "item_name": "Chocolate Covered Company, Premium Dried Fruit & Mendiant Gift Tray",
+      "costco_cost": "49.49"
+    },
+    {
+      "item_name": "Northern Wild Dried Morel Mushrooms, 1 Pack. 1 lb. Total",
+      "costco_cost": "170.49"
+    },
+    {
+      "item_name": "Calbee Shrimp Chips Baked, Original, 1 oz, 36-count",
+      "costco_cost": "23.09"
+    },
+    {
+      "item_name": "Cape Cod Kettle Cooked Chips, Original, 1 oz, 24-count",
+      "costco_cost": "13.74"
+    },
+    {
+      "item_name": "Cottonelle Fresh Care Flushable Wipes, 560 Wipes",
+      "costco_cost": "22.54"
+    },
+    {
+      "item_name": "Horizon, Organic Low-fat Milk, 8 oz, 18-Count",
+      "costco_cost": "25.29"
+    },
+    {
+      "item_name": "Depend Fresh Protection Advanced Incontinence & Postpartum Bladder Leak Underwear for Women, Ultimate Absorbency",
+      "costco_cost": "58.29"
+    },
+    {
+      "item_name": "Frito Lay Simply Variety Pack, 30-count",
+      "costco_cost": "20.89"
+    },
+    {
+      "item_name": "Cheryl's Chocolate Chip Cookie Box, 1.5 oz., 35-count",
+      "costco_cost": "38.49"
+    },
+    {
+      "item_name": "RICO Baby Wipes, 720-count",
+      "costco_cost": "26.39"
+    },
+    {
+      "item_name": "SENSODYNE Advanced Whitening Toothpaste, 6.5 oz, 4-pack",
+      "costco_cost": "35.19"
+    },
+    {
+      "item_name": "Cape Cod Kettle Cooked Potato Chips, Variety Pack, 1.5 oz, 36-count",
+      "costco_cost": "23.09"
+    },
+    {
+      "item_name": "Little Debbie Nutty Buddy Bars, 3 oz, 6-count",
+      "costco_cost": "9.89"
+    },
+    {
+      "item_name": "That's it Mini Fruit Bars, 24-count",
+      "costco_cost": "19.79"
+    },
+    {
+      "item_name": "Henckels Elan 20-piece Knife Block Set",
+      "costco_cost": "164.99"
+    },
+    {
+      "item_name": "Culver 2-piece Leather Chesterfield Set",
+      "costco_cost": "3519.99"
+    },
+    {
+      "item_name": "Columbia Men's Quarter Zip",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "Kirkland Signature KS18 M52 Polarized Sunglasses",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "Disney Adult Unisex Varsity Jacket",
+      "costco_cost": "91.29"
+    },
+    {
+      "item_name": "Classic Pinwheel Wind Spinner",
+      "costco_cost": "75.89"
+    },
+    {
+      "item_name": "West Park 2-piece Leather Set - Sofa, Loveseat",
+      "costco_cost": "3959.99"
+    },
+    {
+      "item_name": "HONEY MAID Graham Crackers, 14.4 oz, 4-count",
+      "costco_cost": "12.09"
+    },
+    {
+      "item_name": "CORE Equipment Padded Loveseat",
+      "costco_cost": "87.99"
+    },
+    {
+      "item_name": "Kutano Commercial  2-Door Sandwich/Salad Top Prep Table, Stainless Steel",
+      "costco_cost": "2419.99"
+    },
+    {
+      "item_name": "Kirkland Signature KS18 M51 Polarized Sunglasses",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "Big Train Vanilla Latte Mix, 3.5 lb",
+      "costco_cost": "26.39"
+    },
+    {
+      "item_name": "Kirkland Signature Energy Shot, 48 Bottles, 2 Ounces Each",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Hexclad Master Series 7-piece Knife Block Set",
+      "costco_cost": "494.99"
+    },
+    {
+      "item_name": "Tupperware 40-piece Meal Prep Set",
+      "costco_cost": "54.99"
+    },
+    {
+      "item_name": "Snowdonia Black Bomber Cheese, Full Wheel, Approximately 4.4 lbs.",
+      "costco_cost": "104.49"
+    },
+    {
+      "item_name": "Champion Youth Hoodie",
+      "costco_cost": "13.19"
+    },
+    {
+      "item_name": "Henckels Tri-Ply Clad Stainless Steel 12-piece Cookware Set",
+      "costco_cost": "197.97"
+    },
+    {
+      "item_name": "Tupperware 6-piece Thatsa Bowl Set",
+      "costco_cost": "38.49"
+    },
+    {
+      "item_name": "Henckels Capri Ceramic 3-piece Skillet Set",
+      "costco_cost": "109.99"
+    },
+    {
+      "item_name": "6' Nutcracker with LED Lights & Music",
+      "costco_cost": "527.99"
+    },
+    {
+      "item_name": "Chicago Bears Devin Hester Autographed Framed Blue Jersey - Beckett Authenticated",
+      "costco_cost": "472.99"
+    },
+    {
+      "item_name": "CAT LED Neck Light, 2-pack",
+      "costco_cost": "65.99"
+    },
+    {
+      "item_name": "adidas Youth Hoodie",
+      "costco_cost": "10.97"
+    },
+    {
+      "item_name": "Whirley Pop Stainless Steel Popper with 3 Popping Kits",
+      "costco_cost": "65.99"
+    },
+    {
+      "item_name": "Kansas City Steak Co. USDA Choice NY Strip Steaks 16 oz. Each (Available in 4, 8, or 12 Packs)",
+      "costco_cost": "296.99"
+    },
+    {
+      "item_name": "Kirkland Signature USDA Organic Whole Bean Blend 2 lb, 2-pack",
+      "costco_cost": "51.69"
+    },
+    {
+      "item_name": "Kansas City Steak Co. USDA Choice Combo Pack, 11.5 Lbs. Total, 12 Large Steaks (4 Strips, 4 Filet Mignon, 4 Ribeyes)",
+      "costco_cost": "439.99"
+    },
+    {
+      "item_name": "Olde Thompson Ground Nutmeg, 20.1 oz",
+      "costco_cost": "13.74"
+    },
+    {
+      "item_name": "Kansas City Steak Co. USDA Choice Ribeye Steaks 18 Oz. Each (Available in 4, 8, or 12 Packs)",
+      "costco_cost": "406.99"
+    },
+    {
+      "item_name": "Heaton Pecans Roasted Salted Pecans, Chocolate Covered Pecans, Praline Pecan Tin 2.3 lb Total",
+      "costco_cost": "54.99"
+    },
+    {
+      "item_name": "Creed Aventus Eau de Parfum, 3.3 fl oz",
+      "costco_cost": "369.59"
+    },
+    {
+      "item_name": "Royal, Basmati Rice, 20 lbs",
+      "costco_cost": "27.49"
+    },
+    {
+      "item_name": "Marianne's, Avocado Oil, 67.6 fl oz",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "Contractor's Select Contractor Bags, Extra Thick, Black, 42 Gallon, 32-count",
+      "costco_cost": "19.24"
+    },
+    {
+      "item_name": "Heaton Pecans Roasted & Salted Pecans Tin 2.5 lbs",
+      "costco_cost": "65.99"
+    },
+    {
+      "item_name": "Kansas City Steak Co. USDA Choice Filet Mignon Steaks 12 oz. Each (Available in 4, 8, or 12 Packs)",
+      "costco_cost": "494.99"
+    },
+    {
+      "item_name": "Baru Nuts, 1.5 lb",
+      "costco_cost": "17.59"
+    },
+    {
+      "item_name": "Kirkland Signature Calcium 500 mg with D3 & Zinc, 240 Adult Gummies",
+      "costco_cost": "24.19"
+    },
+    {
+      "item_name": "Gel-Fiber Pillow Inserts, 2-pack",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Vital Proteins Collagen Gummies, Raspberry 256 Count",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "Pure Fiber Velour Dream Bathrobe",
+      "costco_cost": "54.99"
+    },
+    {
+      "item_name": "Lotus Plant Power Energy Concentrate Mix, White Lotus, 64 fl oz",
+      "costco_cost": "38.49"
+    },
+    {
+      "item_name": "Greenmade 27 Gallon Storage Bin, 8-pack",
+      "costco_cost": "105.59"
+    },
+    {
+      "item_name": "Delta Adjustable Shower Head with Hand Shower",
+      "costco_cost": "153.99"
+    },
+    {
+      "item_name": "POSCA 50-count Marker Set with Carrying Case",
+      "costco_cost": "95.69"
+    },
+    {
+      "item_name": "TubShroom Universal Drain Protector & Hair Catcher Bundle",
+      "costco_cost": "21.99"
+    },
+    {
+      "item_name": "Lotus Plant Power Energy Concentrate Mix, Pink Lotus, 64 fl oz",
+      "costco_cost": "38.49"
+    },
+    {
+      "item_name": "Glitz Reversible Pet Furniture Cover with Bolster",
+      "costco_cost": "40.69"
+    },
+    {
+      "item_name": "Kohler Orime 20\" x 40\" Capsule Framed Mirror",
+      "costco_cost": "197.99"
+    },
+    {
+      "item_name": "VOLT Landscape Lighting 9-piece Path & Area Light LED Starter Kit",
+      "costco_cost": "549.99"
+    },
+    {
+      "item_name": "VOLT Low Voltage LED Outdoor Spotlight",
+      "costco_cost": "43.99"
+    },
+    {
+      "item_name": "Fortessa Grand City 20 piece Place Setting",
+      "costco_cost": "64.89"
+    },
+    {
+      "item_name": "VOLT Low Voltage LED Outdoor Spotlight 6-pack Kit with 100W Transformer",
+      "costco_cost": "384.99"
+    },
+    {
+      "item_name": "Fresh Wave Odor Removing Gel, Lavender, 7 oz, 6-count",
+      "costco_cost": "32.99"
+    },
+    {
+      "item_name": "VOLT Low Voltage LED Outdoor Spotlight 4-pack Expansion Kit",
+      "costco_cost": "197.99"
+    },
+    {
+      "item_name": "VOLT Low Voltage LED Outdoor 17-Light Kit with 150W Transformer",
+      "costco_cost": "824.99"
+    },
+    {
+      "item_name": "VOLT Premium Solid Brass Outdoor Solar Path Lights, 2-pack",
+      "costco_cost": "109.99"
+    },
+    {
+      "item_name": "Karen Neuburger Women's Notch Collar 2-piece PJ Set",
+      "costco_cost": "16.47"
+    },
+    {
+      "item_name": "InSinkErator C7000 Ultimate 1.0HP Garbage Disposer",
+      "costco_cost": "318.99"
+    },
+    {
+      "item_name": "Taylor 2-piece Digital Thermometer Set",
+      "costco_cost": "21.97"
+    },
+    {
+      "item_name": "Spice Asher Bath Towel 2-piece Set",
+      "costco_cost": "38.49"
+    },
+    {
+      "item_name": "VOLT Low Voltage LED Outdoor Path Light 6-pack Kit with 100W Transformer",
+      "costco_cost": "384.99"
+    },
+    {
+      "item_name": "VOLT Low Voltage LED Outdoor Path Light 4-pack Expansion Kit",
+      "costco_cost": "197.99"
+    },
+    {
+      "item_name": "Lea & Perrins, Worcestershire Sauce, 20 fl oz, 2-Count",
+      "costco_cost": "11.54"
+    },
+    {
+      "item_name": "VOLT Low Voltage LED Outdoor 13-Light Kit with 150W Transformer",
+      "costco_cost": "582.99"
+    },
+    {
+      "item_name": "Year & Day 8-piece Big Bowl Set",
+      "costco_cost": "87.99"
+    },
+    {
+      "item_name": "Mikasa Lemons 40-piece Dinnerware Set",
+      "costco_cost": "175.99"
+    },
+    {
+      "item_name": "Greenball Kanati Mongrel ATV Tire",
+      "costco_cost": "214.49"
+    },
+    {
+      "item_name": "Gertmenian Locksley Area Rug Collection, Judson",
+      "costco_cost": "439.99"
+    },
+    {
+      "item_name": "GE 4.5 cu. ft. Washer with Water Level Control and 7.4 cu. ft. GAS Dryer Package with Sensor Dry",
+      "costco_cost": "1715.98"
+    },
+    {
+      "item_name": "Sedona Area Rug Collection, Boynton",
+      "costco_cost": "120.99"
+    },
+    {
+      "item_name": "GE 4.5 cu. ft. Washer with Water Level Control and 7.4 cu. ft. ELECTRIC Dryer Package with Sensor Dry",
+      "costco_cost": "1605.98"
+    },
+    {
+      "item_name": "Unitex 100% Cotton Towel, White, 14 in x 17 in, 52-count",
+      "costco_cost": "25.29"
+    },
+    {
+      "item_name": "Gertmenian Locksley Area Rug Collection, Shai",
+      "costco_cost": "439.99"
+    },
+    {
+      "item_name": "Cheetos Crunchy, Original, 2 oz, 64-count",
+      "costco_cost": "50.59"
+    },
+    {
+      "item_name": "Gorilla Rack Industrial Shelving, 77\u201d x 24\u201d x 72\"",
+      "costco_cost": "307.99"
+    },
+    {
+      "item_name": "Initio Parfums Prives The Carnal Blends Side Effect, Eau de Parfum, 3.0 fl oz",
+      "costco_cost": "279.39"
+    },
+    {
+      "item_name": "Kirkland Signature, Ocean Spray Cranberry Premium 100% Juice, 96 fl oz, 2-Count",
+      "costco_cost": "10.99"
+    },
+    {
+      "item_name": "OLLY Men's Multivitamin Gummy, 200 Gummies",
+      "costco_cost": "24.19"
+    },
+    {
+      "item_name": "Kirkland Signature Extra Strength D3 50 mcg., 600 Softgels",
+      "costco_cost": "13.74"
+    },
+    {
+      "item_name": "Kirkland Signature Quick Dissolve B-12 5000 mcg., 300 Tablets",
+      "costco_cost": "19.79"
+    },
+    {
+      "item_name": "Kirkland Signature Calcium Citrate, Magnesium and Zinc, 500 Tablets",
+      "costco_cost": "20.89"
+    },
+    {
+      "item_name": "Kirkland Signature Liquid Body Wash, Natural Citrus, 27 fl oz, 2-count",
+      "costco_cost": "13.19"
     }
   ],
   "data_gaps": [],
