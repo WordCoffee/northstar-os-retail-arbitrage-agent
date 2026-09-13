@@ -12,36 +12,77 @@ Contract mirrors map_seller_offer_contract shape for seller fields:
   - other_sellers_present
   - (roster fields left null/honest: fba_sellers, fbm_sellers, amazon_sellers,
     offers[], seller_id, offers_complete)
+
+Patterns based on live Amazon dp page captures (2026-09-13).
 """
 
 import re
 from typing import Dict, Optional
 
-# --- Buy Box / byline patterns ----------------------------------------------
+# --- Buy Box seller name patterns (live Amazon dp) ----------------------------
 
-# Primary: bylineInfo contains "Sold by X" often with a link to the seller profile
-# Must handle nested tags: <div id="bylineInfo"><span>Sold by <a>Name</a></span></div>
-_SELLER_NAME_RE = re.compile(
-    r'id="bylineInfo"[^>]*>.*?Sold by\s+<a[^>]*>([^<]+)</a>', re.IGNORECASE | re.S
-)
-# Fallback 1: "Sold by Name" without link
-_SELLER_NAME_FALLBACK1_RE = re.compile(
-    r'id="bylineInfo"[^>]*>.*?Sold by\s+([^<\n]+)', re.IGNORECASE | re.S
-)
-# Fallback 2: broader "Sold by" pattern anywhere on page
-_SELLER_NAME_FALLBACK2_RE = re.compile(
-    r'Sold\s+by\s+([A-Za-z0-9][^<\n]{1,80})', re.IGNORECASE
+# Pattern 1: "Sold by [Seller Name] and ships from Amazon Fulfillment"
+# This is the Buy Box winner text shown in the merchant info popover area
+_SELLER_NAME_SOLD_BY_SHIPS_RE = re.compile(
+    r'Sold by\s+([^<]+?)\s+and\s+ships\s+from\s+Amazon\s+Fulfillment',
+    re.IGNORECASE
 )
 
-# Fulfillment: "Fulfilled by Amazon" / "Ships from Amazon" / "Ships from X"
+# Pattern 2: "Ships from and sold by [Seller Name]" — Amazon Retail or FBA
+_SELLER_NAME_SHIPS_FROM_SOLD_BY_RE = re.compile(
+    r'Ships\s+from\s+and\s+sold\s+by\s+([^<.\n]+)',
+    re.IGNORECASE
+)
+
+# Pattern 3: sellerProfileTriggerId link contains the seller name
+# <a id='sellerProfileTriggerId' ...>Loong & Sons</a>
+_SELLER_NAME_PROFILE_TRIGGER_RE = re.compile(
+    r"id=['\"]sellerProfileTriggerId['\"][^>]*>([^<]+)</a>",
+    re.IGNORECASE
+)
+
+# Pattern 4: Legacy bylineInfo with "Sold by <a>Name</a>" (older page format)
+_SELLER_NAME_BYLINE_LINK_RE = re.compile(
+    r'id="bylineInfo"[^>]*>.*?Sold by\s+<a[^>]*>([^<]+)</a>',
+    re.IGNORECASE | re.S
+)
+
+# Pattern 5: Legacy bylineInfo "Sold by Name" without link
+_SELLER_NAME_BYLINE_TEXT_RE = re.compile(
+    r'id="bylineInfo"[^>]*>.*?Sold by\s+([^<\n]+)',
+    re.IGNORECASE | re.S
+)
+
+# Pattern 6: Broad "Sold by" fallback (last resort)
+_SELLER_NAME_BROAD_RE = re.compile(
+    r'Sold\s+by\s+([A-Za-z0-9&][^<\n]{1,80})',
+    re.IGNORECASE
+)
+
+
+# --- Fulfillment patterns (live Amazon dp) ------------------------------------
+
+# FBA: "ships from Amazon Fulfillment" or "Fulfilled by Amazon"
 _FULFILLMENT_FBA_RE = re.compile(
-    r'Fulfilled\s+by\s+Amazon', re.IGNORECASE
-)
-_FULFILLMENT_FBM_RE = re.compile(
-    r'Ships\s+from.*?Sold\s+by', re.IGNORECASE | re.S
+    r'(?:ships\s+from\s+Amazon\s+Fulfillment|Fulfilled\s+by\s+Amazon)',
+    re.IGNORECASE
 )
 
-# --- Total sellers count patterns (expanded to cover variants) --------------
+# Amazon Retail: "Ships from and sold by Amazon.com"
+_FULFILLMENT_AMAZON_RE = re.compile(
+    r'Ships\s+from\s+and\s+sold\s+by\s+Amazon\.com',
+    re.IGNORECASE
+)
+
+# FBM: "Ships from [Seller] and sold by [Seller]" — both same seller
+# Also catches "Ships from [X] Sold by [Y]" patterns
+_FULFILLMENT_FBM_RE = re.compile(
+    r'Ships\s+from\s+[^<\n]*\s+sold\s+by',
+    re.IGNORECASE | re.S
+)
+
+
+# --- Total sellers count patterns (expanded to cover variants) ----------------
 
 # Primary: "New (N) from $X" — exact pattern from current parser
 _OFFERS_NEW_FROM_RE = re.compile(
@@ -61,7 +102,7 @@ _OFFERS_NEW_FROM_VARIANT4 = re.compile(
     r"\((\d+)\)\s*new", re.IGNORECASE
 )
 
-# --- Other sellers presence (offer-listing / aod) ---------------------------
+# --- Other sellers presence (offer-listing / aod) -----------------------------
 
 _OTHER_SELLERS_RE = re.compile(
     r"Other\s+sellers\s+on\s+Amazon", re.IGNORECASE
@@ -81,39 +122,90 @@ def _clean_text(raw: Optional[str]) -> Optional[str]:
 
 
 def extract_buy_box_seller(html: str) -> Optional[str]:
-    """Extract Buy Box seller name from byline or nearby markup."""
-    # Primary: bylineInfo with "Sold by <a>Name</a>"
-    match = _SELLER_NAME_RE.search(html)
+    """Extract Buy Box seller name from live Amazon dp markup.
+
+    Priority order based on live page observations:
+    1. "Sold by X and ships from Amazon Fulfillment" (most common FBA)
+    2. "Ships from and sold by X" (Amazon Retail or FBA)
+    3. sellerProfileTriggerId link (popover trigger)
+    4. Legacy bylineInfo with link
+    5. Legacy bylineInfo text
+    6. Broad "Sold by" fallback
+    """
+    # Pattern 1: "Sold by X and ships from Amazon Fulfillment"
+    match = _SELLER_NAME_SOLD_BY_SHIPS_RE.search(html)
     if match:
         name = _clean_text(match.group(1))
         if name:
             return name
-    # Fallback 1: bylineInfo with "Sold by Name" (no link)
-    match = _SELLER_NAME_FALLBACK1_RE.search(html)
+
+    # Pattern 2: "Ships from and sold by X"
+    match = _SELLER_NAME_SHIPS_FROM_SOLD_BY_RE.search(html)
+    if match:
+        name = _clean_text(match.group(1))
+        if name:
+            return name.rstrip(".")  # Remove trailing period from "Amazon.com."
+
+    # Pattern 3: sellerProfileTriggerId
+    match = _SELLER_NAME_PROFILE_TRIGGER_RE.search(html)
     if match:
         name = _clean_text(match.group(1))
         if name:
             return name
-    # Fallback 2: broader "Sold by" pattern anywhere
-    match = _SELLER_NAME_FALLBACK2_RE.search(html)
+
+    # Pattern 4: Legacy bylineInfo with link
+    match = _SELLER_NAME_BYLINE_LINK_RE.search(html)
     if match:
         name = _clean_text(match.group(1))
         if name:
             return name
+
+    # Pattern 5: Legacy bylineInfo text
+    match = _SELLER_NAME_BYLINE_TEXT_RE.search(html)
+    if match:
+        name = _clean_text(match.group(1))
+        if name:
+            return name
+
+    # Pattern 6: Broad fallback
+    match = _SELLER_NAME_BROAD_RE.search(html)
+    if match:
+        name = _clean_text(match.group(1))
+        if name:
+            return name
+
     return None
 
 
 def extract_buy_box_fulfillment(html: str, seller_name: Optional[str]) -> str:
-    """Determine Buy Box fulfillment: Amazon | FBA | FBM | Unknown."""
-    # Amazon Retail (not FBA/FBM)
-    if isinstance(seller_name, str) and seller_name.strip().lower() == "amazon.com":
-        return "Amazon"
-    # Fulfilled by Amazon
+    """Determine Buy Box fulfillment: Amazon | FBA | FBM | Unknown.
+
+    Logic based on live page text (order matters - check most specific first):
+    - "ships from Amazon Fulfillment" / "Fulfilled by Amazon" -> FBA
+    - "Ships from and sold by Amazon.com" (in Buy Box area) -> Amazon Retail
+    - "Ships from [Seller] and sold by [Seller]" -> FBM
+    - Fallback: if seller_name is "Amazon.com" -> Amazon
+    """
+    # FBA: "ships from Amazon Fulfillment" or "Fulfilled by Amazon"
+    # Check this FIRST - it's the most specific to the Buy Box seller
     if _FULFILLMENT_FBA_RE.search(html):
         return "FBA"
-    # Ships from X / Sold by Y (FBM pattern)
+
+    # Amazon Retail: explicit "Ships from and sold by Amazon.com"
+    # This can appear in related product carousels, so check seller name too
+    if _FULFILLMENT_AMAZON_RE.search(html):
+        # Only return Amazon if the seller name is also Amazon.com
+        if isinstance(seller_name, str) and seller_name.strip().lower() == "amazon.com":
+            return "Amazon"
+
+    # Also check seller name directly
+    if isinstance(seller_name, str) and seller_name.strip().lower() == "amazon.com":
+        return "Amazon"
+
+    # FBM: "Ships from X and sold by X" pattern
     if _FULFILLMENT_FBM_RE.search(html):
         return "FBM"
+
     return "Unknown"
 
 
@@ -174,11 +266,15 @@ def extract_lowest_price(html: str, buy_box_price: Optional[float]) -> Optional[
 def extract_seller_markers(html: str) -> Dict[str, int]:
     """Count all seller-related marker hits (for diagnostics/evidence)."""
     return {
-        "byline_sold_by": len(_SELLER_NAME_RE.findall(html)),
-        "fallback1_sold_by": len(_SELLER_NAME_FALLBACK1_RE.findall(html)),
-        "fallback2_sold_by": len(_SELLER_NAME_FALLBACK2_RE.findall(html)),
-        "fulfilled_by_amazon": len(_FULFILLMENT_FBA_RE.findall(html)),
-        "ships_from_sold_by": len(_FULFILLMENT_FBM_RE.findall(html)),
+        "sold_by_ships_from": len(_SELLER_NAME_SOLD_BY_SHIPS_RE.findall(html)),
+        "ships_from_sold_by": len(_SELLER_NAME_SHIPS_FROM_SOLD_BY_RE.findall(html)),
+        "seller_profile_trigger": len(_SELLER_NAME_PROFILE_TRIGGER_RE.findall(html)),
+        "byline_link": len(_SELLER_NAME_BYLINE_LINK_RE.findall(html)),
+        "byline_text": len(_SELLER_NAME_BYLINE_TEXT_RE.findall(html)),
+        "broad_sold_by": len(_SELLER_NAME_BROAD_RE.findall(html)),
+        "fulfillment_fba": len(_FULFILLMENT_FBA_RE.findall(html)),
+        "fulfillment_amazon": len(_FULFILLMENT_AMAZON_RE.findall(html)),
+        "fulfillment_fbm": len(_FULFILLMENT_FBM_RE.findall(html)),
         "new_from_count": len(_OFFERS_NEW_FROM_RE.findall(html)),
         "new_offers_variants": sum(
             len(rx.findall(html))

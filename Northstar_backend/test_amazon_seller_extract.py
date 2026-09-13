@@ -81,10 +81,11 @@ class SellerExtractTests(unittest.TestCase):
             markers = result.get("marker_counts")
             self.assertIsInstance(markers, dict, f"{name}: marker_counts missing")
             expected_keys = (
-                "byline_sold_by", "fallback1_sold_by", "fallback2_sold_by",
-                "fulfilled_by_amazon", "ships_from_sold_by", "new_from_count",
-                "new_offers_variants", "other_sellers_text", "aod_offer",
-                "offer_list", "buying_options"
+                "sold_by_ships_from", "ships_from_sold_by", "seller_profile_trigger",
+                "byline_link", "byline_text", "broad_sold_by",
+                "fulfillment_fba", "fulfillment_amazon", "fulfillment_fbm",
+                "new_from_count", "new_offers_variants", "other_sellers_text",
+                "aod_offer", "offer_list", "buying_options"
             )
             for k in expected_keys:
                 self.assertIn(k, markers, f"{name}: marker {k} missing")
