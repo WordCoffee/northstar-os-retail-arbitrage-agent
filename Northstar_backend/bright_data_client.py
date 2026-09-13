@@ -51,6 +51,7 @@ from dotenv import load_dotenv
 
 from kirkland_filter import is_genuine_kirkland_candidate
 from pricing import estimate_fba_fee
+from amazon_seller_extract import extract_seller_data
 
 load_dotenv()
 
@@ -340,7 +341,8 @@ def _parse_product_page(html: str, asin: str) -> Dict:
     from the 'New (N) from $X' line, weight from the Item Weight detail
     row (-> FBA fee estimate via pricing.estimate_fba_fee), best-seller
     rank, rating, review count, monthly-sales signal, brand and image.
-    Anything missing stays None (never 0).
+    Buy Box seller name + fulfillment from byline. Anything missing stays
+    None (never 0).
     """
     title_match = _PRODUCT_TITLE_RE.search(html)
     title = _clean_text(title_match.group(1)) if title_match else None
@@ -373,15 +375,10 @@ def _parse_product_page(html: str, asin: str) -> Dict:
     if image_match:
         image_url = image_match.group(1)
 
-    total_sellers = None
-    lowest = None
-    offers_match = _OFFERS_NEW_FROM_RE.search(html)
-    if offers_match:
-        total_sellers = int(offers_match.group(1))
-        try:
-            lowest = float(offers_match.group(2).replace(",", ""))
-        except ValueError:
-            lowest = None
+    # --- Seller data extraction (shared parser) ----------------------------
+    seller_data = extract_seller_data(html, buy_box_price=price)
+    total_sellers = seller_data["total_sellers"]
+    lowest = seller_data["lowest_price"]
     if lowest is None and price is not None:
         lowest = price
 
@@ -450,6 +447,11 @@ def _parse_product_page(html: str, asin: str) -> Dict:
         "breadcrumb": breadcrumb,
         "category_source_hint": category_source_hint,
         "product_url": f"{DEFAULT_MARKETPLACE.rstrip('/')}/dp/{asin}",
+        # --- New seller fields (shared parser) ----------------------------
+        "buy_box_seller_name": seller_data["buy_box_seller_name"],
+        "buy_box_fulfillment": seller_data["buy_box_fulfillment"],
+        "other_sellers_present": seller_data["other_sellers_present"],
+        "seller_marker_counts": seller_data["marker_counts"],
     }
 
 
