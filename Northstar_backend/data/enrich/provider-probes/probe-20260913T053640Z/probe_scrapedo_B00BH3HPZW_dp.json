@@ -1,0 +1,10 @@
+{
+  "provider": "scrapedo",
+  "asin": "B00BH3HPZW",
+  "page": "dp",
+  "url_host": "amazon.com",
+  "outcome": "transport_error",
+  "detail": "transport_error: ValueError",
+  "elapsed_seconds": 5.2,
+  "requests_used": 1
+}
