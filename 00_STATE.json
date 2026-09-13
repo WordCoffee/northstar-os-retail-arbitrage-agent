@@ -513,8 +513,16 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-13T06:06:00Z",
+    "last_updated":  "2026-09-13T07:30:00Z",
     "history":  [
+                    {
+                        "ts":  "2026-09-13T07:30:00Z",
+                        "activity":  "seller_backfill_build",
+                        "batch":  "none (autonomous build — live run pending approval)",
+                        "summary":  "Built the complete seller data backfill system (autonomous zone, zero live calls). Components: amazon_seller_extract.py (shared dp parser: Buy Box seller name, fulfillment, total_sellers with 5 pattern variants, other_sellers_present, lowest_price); 4 free-tier transport adapters (scrapedo_amazon.py, firecrawl_amazon.py, browserbase_amazon.py + existing bright_data_client) with identical gated patterns (config/auth/http/transport/rate/credits/malformed hard failures, url_not_found/no_data_found soft, circuit breaker, evidence persistence); seller_cache.py writing data/seller-offer-cache.json in map_seller_offer_contract shape (honest nulls, no fabricated FBA/FBM split or per-seller roster); enrich_seller_data.py bounded runner (status/dry-run/preflight/batch, --max-requests/--max-credits caps, PASS-set manifest, fallback chain brightdata->scrapedo->firecrawl->browserbase, circuit breaker halt on hard failure). Fixture tests: 12 tests all OK (standard, fbm, amazon_retail, sparse, variant_counts, other_sellers, clp + independent pattern tests). bright_data_client._parse_product_page upgraded to emit new seller fields. Probe evidence from earlier session (10 requests) confirmed scrapedo richest dp fetch, firecrawl inconsistent routing (CLP vs dp), browserbase viable, keenable title-only — informs fallback ordering. No live calls made this build session — batch run still requires fresh named approval.",
+                        "test_counts":  "test_amazon_seller_extract: 12/12 OK (mock-only); test_provider_seller_probe: 9/9 OK; test_intel_schema + test_normalized_snapshot: 68/68 OK",
+                        "next_action":  "Pending operator: named approval for ~245-ASIN batch run (--mode batch --live --provider brightdata --limit 245 --max-requests 245 --max-credits 245). Estimated spend: ~245 Web Unlocker credits (within 5,000/mo free pool), fallback within scrape.do/Firecrawl/Browserbase free tiers. No further live calls until approved."
+                    },
                     {
                         "ts":  "2026-09-13T06:06:00Z",
                         "activity":  "offer_canonical_probe_results",
