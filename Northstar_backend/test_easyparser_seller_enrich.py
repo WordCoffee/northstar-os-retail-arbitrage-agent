@@ -182,6 +182,56 @@ class SellerEnrichTests(unittest.TestCase):
             rc = ese.run_batch(_args(self.manifest, only_asins="B999999999"))
         self.assertEqual(rc, 2)
 
+    def test_cumulative_counter_accounted_by_balance_delta(self):
+        # Live run c414 proved credits_used is cumulative (2,3,4...) while the
+        # balance falls 1/call. Budget must total true spend (3.0), not the
+        # sum of the counter (9.0), and must not trip caps early.
+        _manifest(self.manifest, ["B00BH3HPZW", "B0017SURSY", "B003CCCCCC"])
+        seq = [_payload("B00BH3HPZW", used=12, remaining=88),
+               _payload("B0017SURSY", used=13, remaining=87),
+               _payload("B003CCCCCC", used=14, remaining=86)]
+        with patch.object(ese.offer_enrichment, "get_seller_offer_contract",
+                          side_effect=seq) as m:
+            rc = ese.run_batch(_args(self.manifest, max_requests=10, max_credits=100))
+        self.assertEqual(rc, 0)
+        self.assertEqual(m.call_count, 3)
+        run_dir = [d for d in ese.RUNS_BASE_DIR.iterdir() if d.is_dir()][0]
+        summary = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
+        self.assertEqual(summary["stop_reason"], None)
+        self.assertAlmostEqual(summary["credits_used"], 3.0, places=1)
+
+    def test_resume_recomputes_prefixed_bad_ledger(self):
+        # A ledger written by the pre-fix bug (credits_this_call 12,13,14)
+        # must replay to truthful spend (1.0 + 1 + 1) via balance deltas so
+        # the resume continues instead of tripping max_credits instantly.
+        _manifest(self.manifest, ["B00BH3HPZW", "B0017SURSY", "B003CCCCCC",
+                                  "B004DDDDDD"])
+        with patch.object(ese.offer_enrichment, "get_seller_offer_contract",
+                          side_effect=lambda a: _payload(a)):
+            ese.run_batch(_args(self.manifest, max_requests=10, max_credits=1000))
+        run_id = [d for d in ese.RUNS_BASE_DIR.iterdir() if d.is_dir()][0].name
+        run_dir = ese.RUNS_BASE_DIR / run_id
+        rows = [json.loads(line) for line in
+                (run_dir / "ledger.jsonl").read_text(encoding="utf-8").splitlines()]
+        bad = []
+        for i, row in enumerate(rows):
+            row["credits_this_call"] = float(12 + i)
+            row["credit_basis"] = "reported"
+            row["credits_remaining"] = 50 - i
+            bad.append(row)
+        (run_dir / "ledger.jsonl").write_text(
+            "\n".join(json.dumps(r) for r in bad) + "\n", encoding="utf-8")
+        with patch.object(ese.offer_enrichment, "get_seller_offer_contract",
+                          side_effect=lambda a: _payload(a, remaining=46)) as m:
+            rc = ese.run_batch(_args(self.manifest, max_requests=10,
+                                     max_credits=1000, resume_from=run_id))
+        self.assertEqual(rc, 0)
+        # 4 rows replay (first estimated 1.0 + deltas), 0 new calls needed
+        # only if files exist for all 4 — they do, so zero new provider calls.
+        self.assertEqual(m.call_count, 0)
+        summary = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
+        self.assertAlmostEqual(summary["credits_used"], 4.0, places=1)
+
 
 if __name__ == "__main__":
     unittest.main()

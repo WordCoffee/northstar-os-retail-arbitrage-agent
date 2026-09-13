@@ -323,6 +323,44 @@ def _apply_asin_filter(order: List[str], args) -> List[str]:
     return [a for a in order if a in allowed]
 
 
+def _is_num(v) -> bool:
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
+
+
+def _charge_call(budget: Dict, payload: Dict):
+    """Truthful per-call spend against the budget.
+
+    Easyparser's credits_used is a CUMULATIVE account counter (live run
+    c414 showed 2.0, 3.0, ... 15.0 while the balance fell exactly 1/call),
+    so summing it inflates the budget and trips max_credits early (phantom
+    119.0 vs true 14). When the provider reports credits_remaining, spend
+    is the balance drop (exact); otherwise fall back to the reported value
+    or the flat estimate. Returns (credits_this_call, credit_kind).
+    """
+    remaining = payload.get("credits_remaining")
+    prev = budget.get("prev_remaining")
+    if _is_num(remaining):
+        budget["provider_remaining"] = remaining
+        if _is_num(prev):
+            delta = prev - remaining
+            budget["prev_remaining"] = remaining
+            if delta < 0:
+                return 0.0, "balance-delta"  # stale cache re-serve: no new spend
+            budget["credits_used"] += float(delta)
+            budget["credits_reported"] += float(delta)
+            return float(delta), "balance-delta"
+        budget["prev_remaining"] = remaining
+        budget["credits_used"] += ESTIMATED_CREDITS_PER_ASIN
+        return ESTIMATED_CREDITS_PER_ASIN, "estimated"
+    used = payload.get("credits_used")
+    if _is_num(used) and used > 0:
+        budget["credits_used"] += float(used)
+        budget["credits_reported"] += float(used)
+        return float(used), "reported"
+    budget["credits_used"] += ESTIMATED_CREDITS_PER_ASIN
+    return ESTIMATED_CREDITS_PER_ASIN, "estimated"
+
+
 def _run_batch_inner(args, run_id: str, run_dir: Path, selected: List[Dict]) -> int:
     print("=== EASYPARSER LIVE SELLER ENRICHMENT (compliant PASS set only) ===")
     print("manifest: %s" % args.manifest)
@@ -337,7 +375,7 @@ def _run_batch_inner(args, run_id: str, run_dir: Path, selected: List[Dict]) -> 
               "PASS ASINs; refusing before any provider call")
         return 2
     budget = {"requests_used": 0, "credits_used": 0.0, "credits_reported": 0.0,
-              "provider_remaining": None}
+              "provider_remaining": None, "prev_remaining": None}
     ledger: List[Dict] = []
     stop_reason: Optional[str] = None
 
@@ -347,20 +385,43 @@ def _run_batch_inner(args, run_id: str, run_dir: Path, selected: List[Dict]) -> 
     if ledger_path.exists():
         try:
             with open(ledger_path, "r", encoding="utf-8") as f:
-                for line in f:
-                    line = line.strip()
-                    if line:
-                        row = json.loads(line)
-                        ledger.append(row)
-                        budget["requests_used"] += 1
-                        try:
-                            budget["credits_used"] += float(row.get("credits_this_call") or 0)
-                        except (TypeError, ValueError):
-                            pass
-            print("resumed: %d ledger rows replayed" % len(ledger))
+                rows = [json.loads(line) for line in f if line.strip()]
         except (OSError, ValueError) as exc:
             print("error: existing ledger.jsonl unreadable, refusing to continue blind: %s" % exc)
             return 3
+        for row in rows:
+            ledger.append(row)
+            budget["requests_used"] += 1
+        if rows and all(_is_num(r.get("credits_remaining")) for r in rows):
+            # Balance-delta recompute: truthful even for ledgers written by
+            # the pre-fix cumulative-sum bug (run c414 stored 2.0..15.0).
+            # The first row has no prior balance, so it keeps the estimate.
+            budget["credits_used"] = ESTIMATED_CREDITS_PER_ASIN
+            budget["credits_reported"] = 0.0
+            prev = None
+            for row in rows:
+                cur = row.get("credits_remaining")
+                if prev is not None:
+                    step = float(max(0, prev - cur))
+                    budget["credits_used"] += step
+                    budget["credits_reported"] += step
+                prev = cur
+            budget["provider_remaining"] = rows[-1]["credits_remaining"]
+            budget["prev_remaining"] = rows[-1]["credits_remaining"]
+            print("resumed: %d rows replayed (balance-delta recompute: %.1f credits)"
+                  % (len(rows), budget["credits_used"]))
+        else:
+            for row in rows:
+                try:
+                    budget["credits_used"] += float(row.get("credits_this_call") or 0)
+                except (TypeError, ValueError):
+                    pass
+            rems = [r.get("credits_remaining") for r in rows
+                    if _is_num(r.get("credits_remaining"))]
+            if rems:
+                budget["provider_remaining"] = rems[-1]
+                budget["prev_remaining"] = rems[-1]
+            print("resumed: %d ledger rows replayed" % len(rows))
 
     try:
         with open(ledger_path, "a", encoding="utf-8") as ledger_f:
@@ -382,19 +443,7 @@ def _run_batch_inner(args, run_id: str, run_dir: Path, selected: List[Dict]) -> 
                 started = time.monotonic()
                 payload = offer_enrichment.get_seller_offer_contract(asin)
                 budget["requests_used"] += 1
-                used = payload.get("credits_used")
-                credit_kind = "estimated"
-                credits_this_call = ESTIMATED_CREDITS_PER_ASIN
-                if isinstance(used, (int, float)) and not isinstance(used, bool) and used > 0:
-                    budget["credits_used"] += float(used)
-                    budget["credits_reported"] += float(used)
-                    credits_this_call = float(used)
-                    credit_kind = "reported"
-                else:
-                    budget["credits_used"] += ESTIMATED_CREDITS_PER_ASIN
-                remaining = payload.get("credits_remaining")
-                if isinstance(remaining, (int, float)) and not isinstance(remaining, bool):
-                    budget["provider_remaining"] = remaining
+                credits_this_call, credit_kind = _charge_call(budget, payload)
 
                 elapsed = round(time.monotonic() - started, 3)
                 status = payload.get("offer_data_status") or "unknown"
