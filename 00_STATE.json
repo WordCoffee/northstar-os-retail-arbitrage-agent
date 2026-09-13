@@ -181,6 +181,14 @@
                              "recommended_resolution_batch":  null,
                              "requires_decision":  "None — verified compliant with spec scope (test-only, isolation-only).",
                              "status":  "closed"
+                         },
+                         {
+                             "id":  "dual_dotenv_divergence_backend_shadowing",
+                             "discovered_in":  "Free-tier seller probe preflight (2026-09-13 session)",
+                             "discovered_at":  "2026-09-13T05:36:00Z",
+                             "description":  "Two divergent env files exist: project-root .env (43 keys) and Northstar_backend/.env (37 keys). Root-only keys include the 4 new probe keys (FIRECRAWL_API_KEY, SCRAPE_DO_API_KEY, BROWSERBASE_API_KEY, KEENABLE_API_KEY) plus DATAFORSEO_* and others; backend-only keys include BRIGHTDATA_COSTCO_DETAIL_API_KEY, SCANNER_LIVE_ALLOWED and 2 more. python-dotenv resolves .env from the calling file directory, so any module under Northstar_backend/ loads Northstar_backend/.env and silently misses root-only keys (this masked all 4 new keys from the probe until it pinned the repo-root .env by explicit path).",
+                             "requires_decision":  "Operator must decide: (a) mirror the 4 new keys into Northstar_backend/.env, OR (b) consolidate to a single authoritative .env, OR (c) keep repo-root authoritative and require explicit-path loading in backend modules (probe already does (c)). No credential values are recorded here; names only.",
+                             "status":  "open"
                          }
                      ],
     "completed_batches":  [
@@ -503,8 +511,16 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-12T14:47:24Z",
+    "last_updated":  "2026-09-13T05:38:06Z",
     "history":  [
+                    {
+                        "ts":  "2026-09-13T05:38:06Z",
+                        "activity":  "free_tier_seller_probe_preflight",
+                        "batch":  "none (autonomous build + operator-named live preflight)",
+                        "summary":  "Operator named-approval executed: wrote 4 provider keys to project-root .env (FIRECRAWL/SCRAPE_DO/BROWSERBASE/KEENABLE names only, values never printed) and ran a 4-request live preflight (1 ASIN B00BH3HPZW x dp page x 4 providers, sequential, zero retries). Results: firecrawl has_seller_data (HTTP 200, page 200, 2353215 bytes, sold_by 7, ships_from 6, new_offers_count 1, zero block markers); browserbase has_seller_data (HTTP 200, page 200, 902774 bytes, sold_by 3, ships_from 3, new_offers_count 1, zero block markers); scrapedo + keenable transport_error ValueError from a harness defect (_get returned a bare Response instead of a tuple, so results unpacked after the request fired, about 1 credit each likely consumed with zero evidence captured). Defect fixed (tuple contract), proven by 6 new offline mock tests (test_provider_seller_probe.py, all OK, zero network). Re-probe of scrapedo and keenable NOT run, pending fresh named approval (2 requests). Evidence committed 2fd4e18 (harness + tests + 4 scrubbed probe records, no keys stored).",
+                        "test_counts":  "test_provider_seller_probe.py: 6 ran / OK (mock-only, zero network)",
+                        "next_action":  "Pending operator: (1) name approval for 2-request re-probe (scrapedo + keenable, dp page, same ASIN); (2) decide dual-.env question (known_issue dual_dotenv_divergence_backend_shadowing); (3) name approval for offer-listing page probes before any backfill design. No further live calls until then."
+                    },
                     {
                         "ts":  "2026-09-12T14:47:24Z",
                         "activity":  "northstar_os_website_subscriber_ready_beta",
