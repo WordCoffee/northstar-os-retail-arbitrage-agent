@@ -24,6 +24,14 @@ OLLAMA_TAGS_ENDPOINT = f"{OLLAMA_BASE_URL}/api/tags"
 DEFAULT_LOCAL_MODEL = "qwen2.5-coder:14b"
 DEFAULT_CLOUD_MODEL = "gpt-4o"
 
+# Generation guardrails for long automation prompts. These override the
+# Modelfile defaults at request time so the AutothinK surface is never
+# capped by a small num_predict or a 16k context window once the model is
+# rebuilt with matching values. num_ctx must not exceed the rebuilt
+# model's context (qwen2.5-coder:14b supports 32768).
+NUM_PREDICT = int(os.environ.get("AUTOTHINK_NUM_PREDICT", "8192"))
+NUM_CTX = int(os.environ.get("AUTOTHINK_NUM_CTX", "32768"))
+
 SYSTEM_PROMPT = (
     "You are Northstar AutothinK, the premium build-anything layer of Northstar OS "
     "— a private agent workspace for T2 Holdings LLC (Amazon FBA retail arbitrage). "
@@ -41,7 +49,7 @@ class UnifiedLLMAdapter:
         self,
         local_model: str = DEFAULT_LOCAL_MODEL,
         cloud_model: str = DEFAULT_CLOUD_MODEL,
-        timeout_s: float = 120.0,
+        timeout_s: float = 600.0,
         system_prompt: str = SYSTEM_PROMPT,
     ):
         self.local_model = local_model
@@ -96,26 +104,66 @@ class UnifiedLLMAdapter:
             {"role": "system", "content": self.system_prompt},
             {"role": "user", "content": query},
         ]
+        # Streamed generation with explicit generation guardrails. Streaming
+        # lets the backend consume tokens as they arrive instead of waiting
+        # for one giant non-streaming body, which is what pushed long
+        # automation responses past the old 120s read timeout into an
+        # "[LOCAL FALLBACK]" stop. num_predict/num_ctx are honored at request
+        # time, independent of the Modelfile defaults.
+        request_json = {
+            "model": model,
+            "messages": messages,
+            "stream": True,
+            "options": {
+                "num_predict": NUM_PREDICT,
+                "num_ctx": NUM_CTX,
+            },
+        }
         try:
             resp = requests.post(
                 OLLAMA_CHAT_ENDPOINT,
-                json={"model": model, "messages": messages, "stream": False},
+                json=request_json,
+                stream=True,
                 timeout=self.timeout_s,
             )
             if resp.status_code != 200:
                 return self._local_fallback(query, model, reason=f"ollama http {resp.status_code}")
-            payload = resp.json()
-            content = payload.get("message", {}).get("content", "")
-            if not content.strip():
-                return self._local_fallback(query, model, reason="empty model response")
+            content_parts: List[str] = []
+            prompt_tokens = None
+            completion_tokens = None
+            total_duration = None
+            done_seen = False
+            for line in resp.iter_lines(decode_unicode=True):
+                if not line:
+                    continue
+                try:
+                    chunk = json.loads(line)
+                except ValueError:
+                    # Tolerate keep-alive / heartbeats that are not JSON.
+                    continue
+                if not isinstance(chunk, dict):
+                    continue
+                msg = chunk.get("message")
+                if isinstance(msg, dict) and msg.get("content"):
+                    content_parts.append(str(msg["content"]))
+                if chunk.get("done"):
+                    done_seen = True
+                    prompt_tokens = chunk.get("prompt_eval_count")
+                    completion_tokens = chunk.get("eval_count")
+                    total_duration = chunk.get("total_duration")
+                    break
+            content = "".join(content_parts).strip() if content_parts else ""
+            if not content:
+                reason = "empty model response" + ("" if done_seen else " (no done frame)")
+                return self._local_fallback(query, model, reason=reason)
             return {
                 "ok": True,
                 "provider": "local",
                 "model": model,
                 "content": content,
-                "prompt_tokens": payload.get("prompt_eval_count"),
-                "completion_tokens": payload.get("eval_count"),
-                "elapsed_ms": payload.get("total_duration", 0) / 1_000_000,
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "elapsed_ms": (total_duration or 0) / 1_000_000,
             }
         except requests.RequestException as exc:
             return self._local_fallback(query, model, reason=str(exc))
