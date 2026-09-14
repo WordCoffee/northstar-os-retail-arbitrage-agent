@@ -1,0 +1,18 @@
+{
+  "provider": "unwrangle",
+  "platform": "amazon_detail",
+  "asin": "B00BH3HPZW",
+  "request_format": "GT https://data.unwrangle.com/api/getter/?platform=amazon_detail&asin=B00BH3HPZW&country_code=us&api_key=REDACTED",
+  "endpoint": "https://data.unwrangle.com/api/getter/",
+  "outcome": "provider_rejected",
+  "failure_class": "auth_error",
+  "http_status": 403,
+  "failure_detail": "HTTP 403",
+  "body_detail": "not captured by client (client reads status code only; Unwrangle billing/quota rejections carry {\"detail\": \"Your credits quota has been consumed, please buy more credits to continue.\"} per 2026-09-05 costco diagnostics)",
+  "diagnosis": "REQUEST SHAPE IS CORRECT per Unwrangle docs (https://docs.unwrangle.com/amazon-product-data-api/): platform=amazon_detail with asin+country_code+api_key is the documented ASIN-based form; the same shape was NOT the root cause here (unlike the costco_business_detail platform-string bug already fixed). A 403 is classified auth_error by the client, but Unwrangle uses the same status for exhausted-credit-quota billing rejections, which the account already exhibited twice on 2026-09-05 (costco_detail and costco_search diagnostics, body recorded in 00_STATE.json confirmed_facts). Today's amazon_detail 403 is consistent with that same account-level credit-quota state. Key validity unknown-until-quota-checked; platform string confirmed valid.",
+  "credits_charged": 0,
+  "retries": 0,
+  "requests_used": 1,
+  "operator_action_needed": "Replenish Unwrangle credits in dashboard OR confirm account quota status, then re-approve a 1-credit amazon_detail smoke call to re-test. No code change is indicated by this diagnostic.",
+  "probed_at": "2026-09-14T20:43:00Z"
+}

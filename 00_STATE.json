@@ -190,7 +190,16 @@
                              "requires_decision":  "Operator must decide: (a) mirror the 4 new keys into Northstar_backend/.env, OR (b) consolidate to a single authoritative .env, OR (c) keep repo-root authoritative and require explicit-path loading in backend modules (probe already does (c)). No credential values were copied or moved; names only.",
                              "resolution":  "Decided 2026-09-13 option (c): repo-root .env stays the single authoritative store for operator-supplied keys; NOTHING was written to either .env file. Backend modules that need root-only keys must pin the repo-root .env by explicit path (provider_seller_probe.py does this). Option (a) mirror rejected: would duplicate credential values into a second file. Option (b) consolidate rejected: risks the 4 backend-only keys live runners depend on. Revisit only on fresh named approval.",
                              "resolved_at":  "2026-09-13T05:57:00Z",
-                             "status":  "resolved"
+                             "status":  "resolved"                         },
+                         {
+                             "id":  "unwrangle_amazon_detail_403_quota_rejection",
+                             "discovered_in":  "SourceScout seller-roster enrich provider selection (2026-09-14 operator-authorized 1-credit diagnostic, ASIN B00BH3HPZW)",
+                             "discovered_at":  "2026-09-14T20:43:00Z",
+                             "description":  "Unwrangle amazon_detail returns exact HTTP 403 on operator-approved single-request diagnostics, multiple times (2026-09-05 costco_detail and costco_search; 2026-09-14 amazon_detail on B00BH3HPZW). Request shape verified correct against official docs (https://docs.unwrangle.com/amazon-product-data-api/): platform=amazon_detail + asin + country_code=us + api_key as query string is the documented ASIN-based form; amazon_detail is a documented platform string. The client classifies 403 as auth_error, but the 2026-09-05 costco diagnostics captured the response body confirming the cause is account-level credit-exhaustion (NOT an invalid key and NOT a platform-string bug; the separately-fixed costco_business_* platform bug is Costco-path only and does not apply here).",
+                             "requires_decision":  "Operator must replenish Unwrangle credits (dashboard/billing) or confirm quota state, then provide a fresh named approval for ONE 1-credit amazon_detail smoke call (B00BH3HPZW) to validate the corrected path. No code change is indicated by the 2026-09-14 diagnostic.",
+                             "evidence":  "probe-20260914T2043Z_unwrangle_amazon_detail_B00BH3HPZW.json (provider-probes/); 2026-09-14 history entry; prior quota evidence in confirmed_facts (2026-09-05 diagnostics)",
+                             "status":  "open",
+                             "status_updated_at":  "2026-09-14T20:43:00Z"
                          }
                      ],
     "completed_batches":  [
@@ -513,8 +522,16 @@
                          "files_changed":  508,
                          "process_fix":  "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
                      },
-    "last_updated":  "2026-09-13T09:30:00Z",
+    "last_updated":  "2026-09-14T20:43:00Z",
     "history":  [
+                        {
+                            "ts":  "2026-09-14T20:43:00Z",
+                            "activity":  "autothink_fix_easyparser_completion_unwrangle_diag",
+                            "batch":  "Operator-approved: run the model-fix plan + Easyparser 72-ASIN completion + Unwrangle diagnostic",
+                            "summary":  "(1) Autothink long-prompt fix EXECUTED and verified: Modelfile rebuilt with num_ctx 32768 / num_predict 8192 and stop </s> removed (identity b855c62bc9d4); llm_adapter.py now sends explicit options (num_predict 8192 / num_ctx 32768), streams via iter_lines SSE consumption with a 600s timeout; smoke test on a 900-word-plan prompt produced eval_count=1017, finish_reason=stop, no truncation (previously hard-capped at 4096 tokens); autothink test suite 22/22 OK; committed f086c39 (Modelfile + adapter + test). (2) Easyparser seller-roster completion: RECONCILED the earlier 72-remaining claim to 1 actual gap (union of all three prior seller runs covered 244/245 PASS ASINs). Ran the single remaining ASIN B0HFXZCFNT under envelope easyparser-gap-1-b0hfxzcfnt (max 1 request / 2 credits, balance-stop armed): outcome=partial (sellers=0 fba=0 fbm=0 buybox=None), credits_used=1, provider balance now 31; run easyparser-seller-20260914T202021Z-1912 persisted; Easyparser coverage now 245/245 PASS ASINs. (3) Unwrangle diagnostic (envelope unwrangle-diag-b00bh3hpzw, exactly 1 call / 1 credit / 0 retries): _fetch_unwrangle_amazon_detail(B00BH3HPZW) returned failure_class=auth_error status=403. Request shape verified correct against official docs (platform=amazon_detail + asin + country_code=us + api_key is the documented ASIN-based form; NOT a platform-string bug like the prior costco_business_* issue). 403 is consistent with the account-level credit-quota exhaustion already confirmed by 2026-09-05 costco diagnostics (body recorded in confirmed_facts). Recorded as new known_issue unwrangle_amazon_detail_403_quota_rejection + evidence probe-20260914T2043Z_unwrangle_amazon_detail_B00BH3HPZW.json. NO code change indicated; operator must replenish Unwrangle credits before any re-probe.",
+                            "test_counts":  "autothink 22 tests OK; long-prompt smoke eval_count=1017 finish=stop; live: 1 Easyparser request (1 credit) + 1 Unwrangle request (0 credits charged), 0 retries, 0 circuit-breaker halts",
+                            "next_action":  "Operator decisions: (a) replenish Unwrangle credits then approve a fresh 1-credit amazon_detail smoke call; (b) top up Easyparser if future re-enrichment needed (balance 31); (c) B0HFXZCFNT remains partial (provider-side no seller roster) — optionally re-probe later. Model fix complete; optional OLLAMA_MAX_LOADED_MODELS=1 and OpenCode maxTokens=8192 guidance noted for operator."
+                        },
                     {
                         "ts":  "2026-09-13T09:30:00Z",
                         "activity":  "seller_backfill_batch_run_2",

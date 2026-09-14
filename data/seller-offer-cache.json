@@ -19785,60 +19785,42 @@
   "B0HFXZCFNT": {
     "payload": {
       "asin": "B0HFXZCFNT",
-      "offer_data_status": "unavailable",
-      "offer_data_source": "brightdata",
-      "offer_data_fetched_at": "2026-09-13T08:56:09.383084+00:00",
-      "offer_data_note": "Seller IDs not extractable from dp page; FBA/FBM split unavailable from free sources; Buy Box seller name not found on page; Total seller count not found on page",
+      "offer_data_status": "partial",
+      "offer_data_source": "easyparser",
+      "offer_data_fetched_at": "2026-09-14T20:20:25.262Z",
+      "offer_data_note": "Provider returned only aggregate seller counts; individual offer rows were not included in the response.",
       "offer_data_cached": false,
-      "total_sellers": null,
-      "fba_sellers": null,
-      "fbm_sellers": null,
-      "amazon_sellers": null,
+      "total_sellers": 0,
+      "fba_sellers": 0,
+      "fbm_sellers": 0,
+      "amazon_sellers": 0,
       "buy_box": {
-        "available": true,
+        "available": false,
         "seller_name": null,
         "seller_id": null,
         "fulfillment": "Unknown",
-        "price": 279.0,
+        "price": null,
         "shipping": null,
         "landed_price": null,
         "condition": null,
         "prime": null,
-        "note": null
+        "note": "Provider did not identify the Buy Box winner; it is never inferred from the lowest price."
       },
       "offers": [],
       "offers_returned": 0,
       "offers_complete": false,
-      "offer_count": null,
-      "buy_box_price": 279.0,
-      "request_zip_code": null,
-      "observed_at": "2026-09-13T08:56:09.383110+00:00",
+      "offer_count": 0,
+      "buy_box_price": null,
+      "request_zip_code": "19805",
+      "observed_at": "2026-09-14T20:20:25.262Z",
       "title": "Kirkland Signature Gen 3 Forged 3-Piece Wedge Set, a Three-piece Club Set that Includes a 52-Degree Gap Wedge, a 56-Degree Sand Wedge, and a 60-Degree Lob Wedge.",
-      "credits_used": 1,
-      "credits_remaining": null,
+      "credits_used": 69,
+      "credits_remaining": 31,
       "data_gaps": [
-        "Seller IDs not extractable from dp page; FBA/FBM split unavailable from free sources",
-        "Buy Box seller name not found on page",
-        "Total seller count not found on page"
-      ],
-      "seller_marker_counts": {
-        "sold_by_ships_from": 0,
-        "ships_from_sold_by": 0,
-        "seller_profile_trigger": 0,
-        "byline_link": 0,
-        "byline_text": 0,
-        "broad_sold_by": 0,
-        "fulfillment_fba": 0,
-        "fulfillment_amazon": 0,
-        "fulfillment_fbm": 0,
-        "new_from_count": 0,
-        "new_offers_variants": 0,
-        "other_sellers_text": 0,
-        "aod_offer": 0,
-        "offer_list": 0,
-        "buying_options": 0
-      }
+        "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+        "Results are ZIP-code and time specific."
+      ]
     },
-    "cached_at": "2026-09-13T08:56:09.385561+00:00"
+    "cached_at": "2026-09-14T20:20:22.928259+00:00"
   }
 }
