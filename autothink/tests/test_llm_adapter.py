@@ -5,6 +5,7 @@ Credential presence is toggled via env var without ever reading a value.
 """
 
 import os
+import json
 import unittest
 from unittest import mock
 
@@ -14,27 +15,46 @@ import backend.llm_adapter as la
 from backend.llm_adapter import UnifiedLLMAdapter
 
 
+class _FakeStreamResponse:
+    """Minimal requests.Response stand-in for a streamed Ollama chat."""
+
+    status_code = 200
+
+    def __init__(self, lines):
+        self._lines = lines
+
+    def iter_lines(self, decode_unicode=True):
+        for item in self._lines:
+            if isinstance(item, dict):
+                yield json.dumps(item)
+            else:
+                yield item
+
+
 class AdapterTests(unittest.TestCase):
     def setUp(self):
         self.adapter = UnifiedLLMAdapter(local_model="qwen2.5-coder:14b", timeout_s=5)
 
     @mock.patch("backend.llm_adapter.requests.post")
     def test_local_generate_success(self, mock_post):
-        mock_post.return_value.status_code = 200
-        mock_post.return_value.json.return_value = {
-            "message": {"content": "Hello from Ollama"},
-            "prompt_eval_count": 12,
-            "eval_count": 8,
-            "total_duration": 1_250_000,
-        }
+        mock_post.return_value = _FakeStreamResponse([
+            {"message": {"content": "Hello "}},
+            {"message": {"content": "from Ollama"}},
+            {"done": True, "prompt_eval_count": 12, "eval_count": 8,
+             "total_duration": 1_250_000},
+        ])
         result = self.adapter.generate("Hi there", provider="local")
         self.assertTrue(result["ok"])
         self.assertEqual(result["provider"], "local")
         self.assertEqual(result["content"], "Hello from Ollama")
         self.assertEqual(result["prompt_tokens"], 12)
+        self.assertEqual(result["completion_tokens"], 8)
         mocked_call = mock_post.call_args
         self.assertEqual(mocked_call.kwargs["json"]["model"], "qwen2.5-coder:14b")
-        self.assertFalse(mocked_call.kwargs["json"]["stream"])
+        self.assertTrue(mocked_call.kwargs["json"]["stream"])
+        self.assertEqual(mocked_call.kwargs["json"]["options"]["num_predict"], la.NUM_PREDICT)
+        self.assertEqual(mocked_call.kwargs["json"]["options"]["num_ctx"], la.NUM_CTX)
+        self.assertTrue(mocked_call.kwargs["stream"])
 
     @mock.patch("backend.llm_adapter.requests.post")
     def test_local_generate_http_error_fallback(self, mock_post):
