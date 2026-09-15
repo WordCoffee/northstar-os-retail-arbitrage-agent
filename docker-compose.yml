@@ -74,5 +74,68 @@ services:
     command: >
       sh -c "python -m uvicorn main:app --host 0.0.0.0 --port 8000 --log-level info"
 
+  # ──────────────────────────────────────────────────────────────
+  # PostgreSQL — shared data layer (production)
+  # ──────────────────────────────────────────────────────────────
+  postgres:
+    image: supabase/postgres:15.1.1.78
+    container_name: northstar-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=northstar
+      - POSTGRES_USER=northstar
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-northstar_dev}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U northstar"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ──────────────────────────────────────────────────────────────
+  # Redis — caching + rate limiting
+  # ──────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: northstar-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ──────────────────────────────────────────────────────────────
+  # n8n — workflow automation
+  # ──────────────────────────────────────────────────────────────
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: northstar-n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=northstar
+      - DB_POSTGRESDB_USER=northstar
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:-northstar_dev}
+    volumes:
+      - n8n-data:/home/node/.n8n
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   ollama-data:
+  postgres-data:
+  redis-data:
+  n8n-data:

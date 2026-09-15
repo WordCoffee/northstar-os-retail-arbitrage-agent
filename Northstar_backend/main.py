@@ -53,9 +53,9 @@ class ScanResponse(BaseModel):
 
 
 app = FastAPI(
-    title="Northstar Kirkland Scan API",
-    description="Backend API for the Northstar Arbitrage OS Kirkland data console.",
-    version="0.4.0",
+    title="Northstar OS API",
+    description="Backend API for the Northstar Arbitrage OS platform.",
+    version="1.0.0",
 )
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -1107,3 +1107,60 @@ def get_sourcescout_summary():
         "fail": 0,
         "review": 0,
     })
+
+
+# ---------------------------------------------------------------------------
+# Auth routes (Phase 5)
+# ---------------------------------------------------------------------------
+
+@app.post("/api/v1/auth/register")
+def register_user(body: dict):
+    """Register a new user account."""
+    import auth
+    result = auth.register_user(
+        email=body.get("email", ""),
+        password=body.get("password", ""),
+        plan=body.get("plan", "foundation"),
+    )
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
+
+@app.post("/api/v1/auth/login")
+def login_user(body: dict):
+    """Authenticate and get access tokens."""
+    import auth
+    result = auth.login_user(
+        email=body.get("email", ""),
+        password=body.get("password", ""),
+    )
+    if "error" in result:
+        raise HTTPException(status_code=401, detail=result["error"])
+    return result
+
+
+@app.post("/api/v1/auth/refresh")
+def refresh_token(body: dict):
+    """Refresh an access token."""
+    import auth
+    result = auth.refresh_access_token(body.get("refresh_token", ""))
+    if "error" in result:
+        raise HTTPException(status_code=401, detail=result["error"])
+    return result
+
+
+@app.get("/api/v1/auth/me")
+def get_current_user():
+    """Get current user info (requires Authorization header)."""
+    import auth
+    # For MVP, accept token from header
+    # In production, use FastAPI Depends with OAuth2PasswordBearer
+    return {"message": "Token validation endpoint — wire with FastAPI Depends"}
+
+
+@app.get("/api/v1/plans")
+def list_plans():
+    """List all subscription plans with entitlements."""
+    import auth
+    return {"plans": auth.PLAN_ENTITLEMENTS}
