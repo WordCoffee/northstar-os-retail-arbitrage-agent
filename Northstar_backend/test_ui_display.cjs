@@ -251,9 +251,9 @@ assert(html.includes('Northstar OS') && html.includes('Retail Arbitrage') && htm
 const scoutTableHtml = html.slice(html.indexOf('id="scoutTable"'), html.indexOf('</table>', html.indexOf('id="scoutTable"')) + 8);
 const headers = (scoutTableHtml.match(/<th scope="col"[^>]*>([^<]+)/g) || []).map((h) => h.replace(/<[^>]+>/g, '').replace('sticky-col', '').trim());
 assert(JSON.stringify(headers) === JSON.stringify(
-    ['Product', 'ASIN', 'Amazon Price', 'Costco COGS', 'FBA Fee', 'Net Profit', 'ROI', 'Competition', 'Est. Monthly Sales', 'Tier', 'Status', 'Gate', 'Action']
-), 'scout table headers exactly 13: Product, ASIN, Amazon Price, Costco COGS, FBA Fee, Net Profit, ROI, Competition, Est. Monthly Sales, Tier, Status, Gate, Action');
-assert(scoutTableHtml.includes('colspan="13"'), 'scout table has colspan="13" header row');
+    ['Product', 'ASIN', 'Amazon Price', 'Costco COGS', 'FBA Fee', 'Net Profit', 'ROI', 'Score', 'Competition', 'Sellers', 'Buy Box', 'Est. Monthly Sales', 'Tier', 'Status', 'Gate', 'Action']
+), 'scout table headers exactly 16: Product, ASIN, Amazon Price, Costco COGS, FBA Fee, Net Profit, ROI, Score, Competition, Sellers, Buy Box, Est. Monthly Sales, Tier, Status, Gate, Action');
+assert(scoutTableHtml.includes('colspan="16"'), 'scout table has colspan="16" header row');
 assert(!scoutTableHtml.includes('Weight'), 'no Weight column in scout table');
 assert(scoutTableHtml.includes('data-sort="name_asc"'), 'Product header is sortable asc (name_asc)');
 assert(scoutTableHtml.includes('data-sort="asin_asc"'), 'ASIN header is sortable asc (asin_asc)');
@@ -491,6 +491,14 @@ assert(f.length === 2 && f[0].asin === 'B000000001', 'minProfit filter keeps onl
 f = vm.runInContext('NS.filterProducts(' + JSON.stringify(pool) + ', ' + JSON.stringify(filtersFor({ minRoi: 100 })) + ')', context);
 assert(f.length === 1 && f[0].asin === 'B000000001', 'minROI filter');
 
+f = vm.runInContext('NS.filterProducts(' + JSON.stringify(pool) + ', ' + JSON.stringify(filtersFor({ maxRoi: 95 })) + ')', context);
+assert(f.length === 3 && !f.some((p) => p.asin === 'B000000001'), 'maxROI filter caps high ROI, keeps the rest');
+
+f = vm.runInContext('NS.filterProducts(' + JSON.stringify(pool) + ', ' + JSON.stringify(filtersFor({ minRoi: 50, maxRoi: 100 })) + ')', context);
+assert(f.length === 1 && f[0].asin === 'B000000002', 'min+max ROI band filter');
+
+assert(vm.runInContext('NS.defaultFilters().maxRoi', context) === null, 'defaultFilters: maxRoi is null (no default ROI cap)');
+
 f = vm.runInContext('NS.filterProducts(' + JSON.stringify(pool) + ', ' + JSON.stringify(filtersFor({ minSales: 1000, includeUnknownSales: true })) + ')', context);
 assert(f.length === 2 && f.some((p) => p.asin === 'B000000003'), 'unknown sales included when toggle on (never treated as zero)');
 
@@ -575,9 +583,9 @@ assert(sorted[0].net_profit === 25, 'unknown sort key falls back to profit_desc'
 /* localStorage defensive restore */
 vm.runInContext(`localStorage.setItem('t2.kirklandScout.filters.v2', '{not valid json'); var f1 = NS.defaultFilters(); currentFilters = loadFilters();`, context);
 assert(JSON.stringify(vm.runInContext('currentFilters', context)) === JSON.stringify(vm.runInContext('NS.defaultFilters()', context)), 'corrupt localStorage filters revert to defaults');
-vm.runInContext(`localStorage.setItem('t2.kirklandScout.filters.v2', '{"minProfit":"oops","minRoi":15,"tier":"banana","includeUnknownSales":false}'); currentFilters = loadFilters();`, context);
+vm.runInContext(`localStorage.setItem('t2.kirklandScout.filters.v2', '{"minProfit":"oops","minRoi":15,"maxRoi":"banana","tier":"banana","includeUnknownSales":false}'); currentFilters = loadFilters();`, context);
 const restored = vm.runInContext('currentFilters', context);
-assert(restored.minProfit === null && restored.minRoi === 15 && restored.tier === 'all' && restored.includeUnknownSales === false, 'defensive sanitization of bad stored filter values');
+assert(restored.minProfit === null && restored.minRoi === 15 && restored.maxRoi === null && restored.tier === 'all' && restored.includeUnknownSales === false, 'defensive sanitization of bad stored filter values');
 
 /* permissive defaults: no thresholds active, everything visible */
 f = vm.runInContext('NS.filterProducts(' + JSON.stringify(pool) + ', NS.defaultFilters())', context);
@@ -1258,13 +1266,14 @@ vm.runInContext('NS.setColVisible("asin", false)', context);
 assert(vm.runInContext('NS.loadColVisibility().asin', context) === false, 'col-vis: setColVisible asin=false persists');
 
 /* getVisibleColCount: 2 fixed (Status, Action) + visible from COLUMN_VISIBLE_DEFAULTS.
-   With Gate column: 11 data columns + 2 fixed = 13 total when all visible. */
+   With Score/Sellers/Buy Box columns: 14 data columns + 2 fixed = 16 total when all visible. */
+vm.runInContext('NS.resetColVisibility()', context);
 vm.runInContext('NS.setColVisible("asin", true); NS.setColVisible("fba", true); NS.setColVisible("competition", true); NS.setColVisible("sales", true); NS.setColVisible("tier", true)', context);
-assert(vm.runInContext('NS.getVisibleColCount()', context) === 13, 'col-vis: getVisibleColCount=13 when all 11 visible + 2 fixed');
+assert(vm.runInContext('NS.getVisibleColCount()', context) === 16, 'col-vis: getVisibleColCount=16 when all 14 visible + 2 fixed');
 vm.runInContext('NS.setColVisible("asin", false)', context);
-assert(vm.runInContext('NS.getVisibleColCount()', context) === 12, 'col-vis: getVisibleColCount=12 with ASIN hidden');
+assert(vm.runInContext('NS.getVisibleColCount()', context) === 15, 'col-vis: getVisibleColCount=15 with ASIN hidden');
 vm.runInContext('NS.setColVisible("sales", false)', context);
-assert(vm.runInContext('NS.getVisibleColCount()', context) === 11, 'col-vis: getVisibleColCount=11 with ASIN+sales hidden');
+assert(vm.runInContext('NS.getVisibleColCount()', context) === 14, 'col-vis: getVisibleColCount=14 with ASIN+sales hidden');
 
 /* resetColVisibility restores defaults */
 vm.runInContext('NS.resetColVisibility()', context);
@@ -1297,6 +1306,30 @@ vm.runInContext('NS.applyColVisibility()', context);
 const rowHtml4c = els.tableBody.innerHTML;
 assert(rowHtml4c.includes('prod-asin') && rowHtml4c.includes('B400000040'), 'col-vis: ASIN visible under product name even when ASIN column hidden');
 vm.runInContext('NS.resetColVisibility()', context);
+setState(full);
+
+/* ================================================================
+ * Scout triage columns: Score, Sellers, Buy Box
+ * ================================================================ */
+const scoreInfoOpp = vm.runInContext('NS.scoutScore({ opportunity_score: 75.4, data_completeness_score: 60, opportunity_score_reasons: ["economics (roi 214%, net $43.85)"] })', context);
+assert(scoreInfoOpp.value === 75 && scoreInfoOpp.kind === 'opportunity', 'score: opportunity score wins when present');
+const scoreInfoComp = vm.runInContext('NS.scoutScore({ amazon_price: null, data_completeness_score: 40 })', context);
+assert(scoreInfoComp.value === 40 && scoreInfoComp.kind === 'completeness', 'score: falls back to completeness when price missing');
+assert(vm.runInContext('NS.scoutScore({})', context) === null, 'score: null when no score computable');
+assert(vm.runInContext('NS.sellersCell({ total_sellers: 12, fba_sellers: 3 })', context) === '12 total · 3 FBA', 'sellers: total + FBA counts');
+assert(vm.runInContext('NS.sellersCell({ total_sellers: 5 })', context) === '5 total', 'sellers: total only');
+assert(vm.runInContext('NS.sellersCell({ fba_sellers: 0 })', context) === '0 FBA', 'sellers: FBA only');
+assert(vm.runInContext('NS.sellersCell({})', context) === null, 'sellers: null without counts');
+const bbFba = vm.runInContext('NS.buyBoxCell({ buy_box_seller: "Amazon.com", buy_box_fulfillment: "FBA", buy_box_source: "observed" })', context);
+assert(bbFba.includes('Amazon.com') && bbFba.includes('>FBA<') && bbFba.includes('badge pos'), 'buybox: FBA winner renders FBA badge');
+const bbFbm = vm.runInContext('NS.buyBoxCell({ buy_box_seller: "M&D Wholesalers", buy_box_fulfillment: "fbm" })', context);
+assert(bbFbm.includes('M&amp;D Wholesalers') && bbFbm.includes('>FBM<'), 'buybox: FBM winner renders FBM badge + escaped name');
+assert(vm.runInContext('NS.buyBoxCell({})', context) === null, 'buybox: null without winner');
+setState([FE({ asin: 'B500000001', name: 'Triage Row', opportunity_score: 68, data_completeness_score: 90, total_sellers: 9, fba_sellers: 2, buy_box_seller: 'Amazon.com', buy_box_fulfillment: 'FBA', buy_box_source: 'observed' })], 'ok', 'ready');
+const triageHtml = els.tableBody.innerHTML;
+assert(triageHtml.includes('data-col="score"') && triageHtml.includes('>68</b>'), 'score column renders opportunity score value');
+assert(triageHtml.includes('9 total · 2 FBA'), 'sellers column renders total + FBA counts');
+assert(triageHtml.includes('buybox-seller') && triageHtml.includes('>FBA<'), 'buybox column renders winner + FBA badge');
 setState(full);
 
 /* ================================================================

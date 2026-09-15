@@ -4790,7 +4790,11 @@
                             </div>
                             <div class="f-field">
                                 <label for="fMinRoi">Minimum ROI (%)</label>
-                                <input type="number" class="f-control" id="fMinRoi" min="0" step="1" inputmode="decimal" placeholder="20">
+                                <input type="number" class="f-control" id="fMinRoi" step="1" inputmode="decimal" placeholder="20">
+                            </div>
+                            <div class="f-field">
+                                <label for="fMaxRoi">Maximum ROI (%)</label>
+                                <input type="number" class="f-control" id="fMaxRoi" step="1" inputmode="decimal" placeholder="None">
                             </div>
                             <div class="f-field">
                                 <label for="fMinSales">Minimum monthly sales</label>
@@ -5031,6 +5035,12 @@
                                 <label class="col-vis-check"><input type="checkbox" id="colVis-cost" data-col-vis="cost" checked> Costco COGS</label>
                                 <label class="col-vis-check"><input type="checkbox" id="colVis-net" data-col-vis="net" checked> Net Profit</label>
                                 <label class="col-vis-check"><input type="checkbox" id="colVis-roi" data-col-vis="roi" checked> ROI</label>
+                                <label class="col-vis-check"><input type="checkbox" id="colVis-score" data-col-vis="score" checked> Score</label>
+                            </div>
+                            <div class="col-group">
+                                <div class="col-group-label">Market (visible by default)</div>
+                                <label class="col-vis-check"><input type="checkbox" id="colVis-sellers" data-col-vis="sellers" checked> Sellers</label>
+                                <label class="col-vis-check"><input type="checkbox" id="colVis-buybox" data-col-vis="buybox" checked> Buy Box</label>
                             </div>
                             <div class="col-group">
                                 <div class="col-group-label">Advanced (hidden by default)</div>
@@ -5075,6 +5085,18 @@
                             <div class="f-field">
                                 <label for="colInput-sales">Est. Monthly Sales (px)</label>
                                 <input type="number" class="f-control" id="colInput-sales" min="80" max="240" step="10" inputmode="numeric">
+                            </div>
+                            <div class="f-field">
+                                <label for="colInput-score">Score (px)</label>
+                                <input type="number" class="f-control" id="colInput-score" min="70" max="220" step="10" inputmode="numeric">
+                            </div>
+                            <div class="f-field">
+                                <label for="colInput-sellers">Sellers (px)</label>
+                                <input type="number" class="f-control" id="colInput-sellers" min="80" max="240" step="10" inputmode="numeric">
+                            </div>
+                            <div class="f-field">
+                                <label for="colInput-buybox">Buy Box (px)</label>
+                                <input type="number" class="f-control" id="colInput-buybox" min="100" max="320" step="10" inputmode="numeric">
                             </div>
                         </div>
                         <div class="filter-actions">
@@ -5129,7 +5151,16 @@
                                         <span class="sort-indicator" aria-hidden="true"></span>
                                         <span class="col-resize" role="separator" aria-orientation="vertical" tabindex="0" data-col="roi" aria-label="Resize ROI column width" title="Drag to resize. Keyboard: Arrow Left/Right 10px, Home/End to limits."></span>
                                     </th>
+                                    <th scope="col" class="num col-resizable" id="colHead-score" data-col="score" title="Opportunity score when computable, else data completeness score">Score
+                                        <span class="col-resize" role="separator" aria-orientation="vertical" tabindex="0" data-col="score" aria-label="Resize Score column width" title="Drag to resize. Keyboard: Arrow Left/Right 10px, Home/End to limits."></span>
+                                    </th>
                                     <th scope="col" data-col="competition">Competition</th>
+                                    <th scope="col" class="num col-resizable" id="colHead-sellers" data-col="sellers" title="Total sellers and FBA seller count from local market snapshots">Sellers
+                                        <span class="col-resize" role="separator" aria-orientation="vertical" tabindex="0" data-col="sellers" aria-label="Resize Sellers column width" title="Drag to resize. Keyboard: Arrow Left/Right 10px, Home/End to limits."></span>
+                                    </th>
+                                    <th scope="col" class="col-resizable" id="colHead-buybox" data-col="buybox" title="Current Buy Box winner and whether it is fulfilled by Amazon (FBA) or a merchant (FBM)">Buy Box
+                                        <span class="col-resize" role="separator" aria-orientation="vertical" tabindex="0" data-col="buybox" aria-label="Resize Buy Box column width" title="Drag to resize. Keyboard: Arrow Left/Right 10px, Home/End to limits."></span>
+                                    </th>
                                     <th scope="col" class="num col-resizable col-sortable" id="colHead-sales" data-col="sales" data-sort="sales_desc" title="Est. Monthly Sales is a provider estimate, not verified sales">Est. Monthly Sales
                                         <span class="sort-indicator" aria-hidden="true"></span>
                                         <span class="col-resize" role="separator" aria-orientation="vertical" tabindex="0" data-col="sales" aria-label="Resize Est. Monthly Sales column width" title="Drag to resize. Keyboard: Arrow Left/Right 10px, Home/End to limits."></span>
@@ -5142,7 +5173,7 @@
                             </thead>
                             <tbody id="tableBody">
                                 <tr>
-                                    <td colspan="13" class="state-block">
+                                    <td colspan="16" class="state-block">
                                         <div class="skeleton" style="width:60%; height:14px; margin:0 auto 8px;"></div>
                                         <div class="skeleton" style="width:40%; height:14px; margin:0 auto;"></div>
                                     </td>
@@ -5164,7 +5195,7 @@
                         </div>
                     </section>
 
-                    <p class="table-note">Scout ranking uses Costco source cost and ranks by net profit, ROI, seller competition, demand, and Buy Box price stability. Only Pass products are qualified candidates. When a verified FBA fee is unavailable, the product stays visible in the Needs Fee Verification review state: its FBA Fee, Net Profit, and ROI cells show Unavailable and it is never counted in qualified KPIs — never shown as $0 and never fabricated. Monthly sales and FBA seller counts may be estimates or unknown. Estimated and unknown values are labeled as such and are never treated as zero. No result here is a recommendation to buy or an approval to resell.</p>
+                    <p class="table-note">Scout ranking uses Costco source cost and ranks by net profit, ROI, seller competition, demand, and Buy Box price stability. Only Pass products are qualified candidates. When a verified FBA fee is unavailable, the product stays visible in the Needs Fee Verification review state with provisional economics (fee excluded) — flagged, never shown as $0 and never fabricated. Candidate-matched COGS rows keep their computed economics as provisional (mapping verification required); rows below the ROI minimum stay visible flagged for triage; rows missing price or Costco cost honestly show Unavailable. Monthly sales and FBA seller counts may be estimates or unknown. Estimated and unknown values are labeled as such and are never treated as zero. No result here is a recommendation to buy or an approval to resell.</p>
                 </section>
 
                 <!-- ==================== MARGIN CALCULATOR ==================== -->
@@ -6611,12 +6642,72 @@
             return null;
         };
 
+        /* Score column: the opportunity score when the row can be ranked
+         * (price + cost present), otherwise the data completeness score so
+         * every row still carries a 0-100 figure for triage. Never a
+         * fabricated number: both values are computed server-side. */
+        NS.scoutScore = function (p) {
+            var score = p.opportunity_score;
+            if (isNum(score)) {
+                return {
+                    value: Math.round(Number(score)),
+                    kind: 'opportunity',
+                    title: (p.opportunity_score_reasons || []).join(' · ') ||
+                        'Opportunity score (economics, sales velocity, competition, match)',
+                };
+            }
+            if (isNum(p.data_completeness_score)) {
+                return {
+                    value: Math.round(Number(p.data_completeness_score)),
+                    kind: 'completeness',
+                    title: 'Data completeness score — opportunity score needs price and COGS to rank this row',
+                };
+            }
+            return null;
+        };
+
+        /* Sellers column: total sellers + FBA seller count. */
+        NS.sellersCell = function (p) {
+            var total = p.total_sellers;
+            var fba = p.fba_sellers;
+            if (isNum(total) && isNum(fba)) {
+                return total + ' total · ' + fba + ' FBA';
+            }
+            if (isNum(total)) return total + ' total';
+            if (isNum(fba)) return fba + ' FBA';
+            return null;
+        };
+
+        /* Buy Box column: winner name + FBA/FBM fulfillment badge.
+         * buy_box_seller / buy_box_fulfillment resolve server-side from
+         * observed snapshot -> market snapshot -> local seller cache. */
+        NS.buyBoxCell = function (p) {
+            var seller = p.buy_box_seller;
+            if (!seller) return null;
+            var fulfillment = String(p.buy_box_fulfillment || '').toUpperCase();
+            var badge;
+            if (fulfillment === 'FBA') {
+                badge = '<span class="badge pos" title="Fulfilled by Amazon">FBA</span>';
+            } else if (fulfillment === 'FBM') {
+                badge = '<span class="badge neutral" title="Fulfilled by Merchant">FBM</span>';
+            } else {
+                /* fulfillment not reported — winner name only, never a
+                 * fabricated badge */
+                badge = '';
+            }
+            var source = p.buy_box_source;
+            var title = 'Buy Box winner' + (source ? ' (source: ' + source + ')' : '');
+            return '<span class="buybox-seller" title="' + NS.escapeHtml(title) + '">' +
+                NS.escapeHtml(seller) + '</span>' + badge;
+        };
+
         /* ---------- filters ---------- */
         function defaultFilters() {
             return {
                 search: '',
                 minProfit: null,
                 minRoi: null,
+                maxRoi: null,
                 minSales: null,
                 includeUnknownSales: true,
                 maxFba: null,
@@ -6670,7 +6761,8 @@
          * expand to 640px so long titles become readable. */
         var COLUMN_DEFAULTS = {
             product: 280, asin: 110, price: 110, cost: 110,
-            fba: 100, net: 110, roi: 90, sales: 110,
+            fba: 100, net: 110, roi: 90, score: 80,
+            sellers: 90, buybox: 170, sales: 110,
         };
         var COLUMN_BOUNDS = {
             product: { min: 160, max: 640 },
@@ -6680,6 +6772,9 @@
             fba: { min: 80, max: 240 },
             net: { min: 80, max: 240 },
             roi: { min: 70, max: 220 },
+            score: { min: 70, max: 220 },
+            sellers: { min: 80, max: 240 },
+            buybox: { min: 100, max: 320 },
             sales: { min: 80, max: 240 },
         };
 
@@ -6690,6 +6785,7 @@
         var COLUMN_VISIBLE_DEFAULTS = {
             product: true, asin: false, price: true, cost: true,
             fba: false, net: true, roi: true, competition: false,
+            score: true, sellers: true, buybox: true,
             sales: false, tier: false, gate: true,
         };
         var COLUMN_VISIBLE_KEY = 't2.kirklandScout.columns.v1.visible';
@@ -6875,6 +6971,7 @@
             if (filters.search) count++;
             if (isNum(filters.minProfit)) count++;
             if (isNum(filters.minRoi)) count++;
+            if (isNum(filters.maxRoi)) count++;
             if (isNum(filters.minSales)) count++;
             if (!filters.includeUnknownSales) count++;
             if (isNum(filters.maxFba)) count++;
@@ -6897,6 +6994,7 @@
             out.search = typeof raw.search === 'string' ? raw.search : d.search;
             out.minProfit = (raw.minProfit === null || raw.minProfit === undefined) ? null : (isNum(raw.minProfit) ? raw.minProfit : d.minProfit);
             out.minRoi = (raw.minRoi === null || raw.minRoi === undefined) ? null : (isNum(raw.minRoi) ? raw.minRoi : d.minRoi);
+            out.maxRoi = (raw.maxRoi === null || raw.maxRoi === undefined) ? null : (isNum(raw.maxRoi) ? raw.maxRoi : d.maxRoi);
             out.minSales = (raw.minSales === null || raw.minSales === undefined) ? null : (isNum(raw.minSales) ? raw.minSales : d.minSales);
             out.includeUnknownSales = typeof raw.includeUnknownSales === 'boolean' ? raw.includeUnknownSales : d.includeUnknownSales;
             out.maxFba = (raw.maxFba === null || raw.maxFba === undefined) ? null : (isNum(raw.maxFba) ? raw.maxFba : null);
@@ -6949,6 +7047,9 @@
                 }
                 if (isNum(filters.minRoi)) {
                     if (!isNum(p.roi_pct) || p.roi_pct < filters.minRoi) return false;
+                }
+                if (isNum(filters.maxRoi)) {
+                    if (!isNum(p.roi_pct) || p.roi_pct > filters.maxRoi) return false;
                 }
                 if (isNum(filters.minSales)) {
                     if (!isNum(p.monthly_sales_estimate)) {
@@ -8078,11 +8179,11 @@
             }
 
             if (scoutState.status === 'loading') {
-                tbody.innerHTML = '<tr><td colspan="13" class="state-block"><div class="skeleton" style="width:60%;height:14px;margin:0 auto 8px;"></div><div class="skeleton" style="width:40%;height:14px;margin:0 auto;"></div><div class="skeleton" style="width:50%;height:14px;margin:8px auto 0;"></div></td></tr>';
+                tbody.innerHTML = '<tr><td colspan="16" class="state-block"><div class="skeleton" style="width:60%;height:14px;margin:0 auto 8px;"></div><div class="skeleton" style="width:40%;height:14px;margin:0 auto;"></div><div class="skeleton" style="width:50%;height:14px;margin:8px auto 0;"></div></td></tr>';
                 return;
             }
             if (scoutState.status === 'error' || scoutState.status === 'upstream_unavailable') {
-                tbody.innerHTML = '<tr><td colspan="13" class="state-block">' +
+                tbody.innerHTML = '<tr><td colspan="16" class="state-block">' +
                     '<svg class="state-icon" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>' +
                     '<div class="state-title">Live product data is temporarily unavailable.</div>' +
                     '<div class="state-sub">' + (scoutState.upstreamHint || 'No sourcing recommendation is being displayed. Try again shortly.') + '</div>' +
@@ -8101,7 +8202,7 @@
                         ? 'The scan found candidates, but none matched the Costco catalog. Widen the search or add item_name,costco_cost rows to data/costco-items.csv.'
                         : 'Add item_name,costco_cost rows to data/costco-items.csv, then refresh the scan.')
                     : 'Adjust or reset the Scout Filters to widen the view.';
-                tbody.innerHTML = '<tr><td colspan="13" class="state-block">' +
+                tbody.innerHTML = '<tr><td colspan="16" class="state-block">' +
                     '<svg class="state-icon" aria-hidden="true"><path d="M8 12h8M12 8v8"/></svg>' +
                     '<div class="state-title">' + NS.escapeHtml(msg) + '</div>' +
                     '<div class="state-sub">' + NS.escapeHtml(sub) + '</div>' +
@@ -8146,6 +8247,21 @@
                 }
                 var packBadge = NS.packMatchBadge(p);
                 var comp = NS.competitionCell(p);
+                var scoreInfo = NS.scoutScore(p);
+                var scoreCellHtml;
+                if (scoreInfo) {
+                    var scoreKindChip = scoreInfo.kind === 'opportunity'
+                        ? '<span class="badge neutral opp-kind" title="Opportunity score">opp</span>'
+                        : '<span class="badge neutral opp-kind" title="Data completeness score">complete</span>';
+                    scoreCellHtml = '<span class="score-val" title="' + NS.escapeHtml(scoreInfo.title) + '"><b>' + scoreInfo.value + '</b>' + scoreKindChip + '</span>';
+                } else {
+                    scoreCellHtml = '<span class="unknown">—</span>';
+                }
+                var sellersText = NS.sellersCell(p);
+                var buyBoxHtml = NS.buyBoxCell(p);
+                var belowMinRoi = p.roi_below_minimum === true
+                    ? ' <span class="badge warn" title="Estimated ROI is below the minimum threshold — kept visible for triage">below min ROI</span>'
+                    : '';
                 var gateInfo = NS.authorizationGate(p);
                 var gateCls = { ok: 'pos', warn: 'warn', review: 'review', blocked: 'neg' }[gateInfo.severity] || 'neutral';
                 var prov = '';
@@ -8170,9 +8286,16 @@
                     '<td class="num val' + hiddenCls('cost') + '" data-col="cost">' + (isNum(p.costco_cost) ? NS.fmt(p.costco_cost) : costUnavail) + '</td>' +
                     '<td class="num val' + hiddenCls('fba') + '" data-col="fba">' + (isNum(p.fba_fee) ? NS.fmt(p.fba_fee) : feeUnavail) + '</td>' +
                     '<td class="num ' + netClass + hiddenCls('net') + '" data-col="net">' + (isNum(net) ? NS.fmt(net) : unavail) + econChip + packBadge + econNote + '</td>' +
-                    '<td class="num val' + hiddenCls('roi') + '" data-col="roi">' + (isNum(p.roi_pct) ? NS.fmtPct(p.roi_pct) : unavail) + '</td>' +
+                    '<td class="num val' + hiddenCls('roi') + '" data-col="roi">' + (isNum(p.roi_pct) ? NS.fmtPct(p.roi_pct) : unavail) + belowMinRoi + '</td>' +
+                    '<td class="num val' + hiddenCls('score') + '" data-col="score">' + scoreCellHtml + '</td>' +
                     '<td data-col="competition"><span class="comp-label">' + NS.escapeHtml(comp || 'Unknown') + '</span>' +
                     '<span class="comp-badge badge ' + NS.competitionClass(fba) + '">' + NS.escapeHtml(NS.competitionLabel(fba)) + '</span></td>' +
+                    '<td class="num val' + hiddenCls('sellers') + '" data-col="sellers">' + (sellersText
+                        ? '<span class="comp-label" title="Total sellers · FBA sellers (local market snapshots)">' + NS.escapeHtml(sellersText) + '</span>'
+                        : '<span class="unknown" title="Seller counts not reported">—</span>') + '</td>' +
+                    '<td class="val' + hiddenCls('buybox') + '" data-col="buybox">' + (buyBoxHtml
+                        ? buyBoxHtml
+                        : '<span class="unknown" title="Buy Box winner not reported">—</span>') + '</td>' +
                     '<td class="num' + hiddenCls('sales') + '" data-col="sales" title="Est. Monthly Sales is a provider estimate, not verified sales"><span class="val">' + salesText + '</span>' + salesChip + '</td>' +
                     '<td data-col="tier"><span class="badge tier neutral">' + NS.tierLabel(p.profit_tier) + '</span></td>' +
                     '<td data-col="status"><span class="badge ' + NS.statusClass(p.verdict) + '">' + NS.statusLabel(p.verdict) + '</span>' + NS.completenessChip(p) + '</td>' +
@@ -9056,6 +9179,7 @@
             var v = el('fSearch'); if (v) v.value = f.search;
             var p = el('fMinProfit'); if (p) p.value = isNum(f.minProfit) ? f.minProfit : '';
             var r = el('fMinRoi'); if (r) r.value = isNum(f.minRoi) ? f.minRoi : '';
+            var rmx = el('fMaxRoi'); if (rmx) rmx.value = isNum(f.maxRoi) ? f.maxRoi : '';
             var s = el('fMinSales'); if (s) s.value = isNum(f.minSales) ? f.minSales : '';
             var us = el('fIncludeUnknownSales'); if (us) us.checked = !!f.includeUnknownSales;
             var mf = el('fMaxFba'); if (mf) mf.value = isNum(f.maxFba) ? f.maxFba : '';
@@ -9092,6 +9216,7 @@
             };
             var p = el('fMinProfit'); if (p) f.minProfit = num(p, null);
             var r = el('fMinRoi'); if (r) f.minRoi = num(r, null);
+            var rmx = el('fMaxRoi'); if (rmx) f.maxRoi = num(rmx, null);
             var s = el('fMinSales'); if (s) f.minSales = num(s, null);
             var mf = el('fMaxFba'); if (mf) f.maxFba = num(mf, null);
             var us = el('fIncludeUnknownSales'); if (us) f.includeUnknownSales = us.checked;
@@ -9239,6 +9364,7 @@
                 search: 'Search',
                 minProfit: 'Min profit',
                 minRoi: 'Min ROI',
+                maxRoi: 'Max ROI',
                 minSales: 'Min sales',
                 includeUnknownSales: 'Include unknown sales',
                 maxFba: 'Max FBA',
@@ -9425,7 +9551,7 @@
                 clearTimeout(searchTimer);
                 searchTimer = setTimeout(applyFiltersAndRender, 200);
             };
-            ['fSearch', 'fMinProfit', 'fMinRoi', 'fMinSales', 'fMaxFba', 'fMinEstUnits', 'fMinEstRev', 'fMinEstPool'].forEach(function (id) {
+            ['fSearch', 'fMinProfit', 'fMinRoi', 'fMaxRoi', 'fMinSales', 'fMaxFba', 'fMinEstUnits', 'fMinEstRev', 'fMinEstPool'].forEach(function (id) {
                 var node = el(id);
                 if (node) node.addEventListener('input', debounced);
             });

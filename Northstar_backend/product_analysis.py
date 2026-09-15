@@ -17,14 +17,25 @@ from pricing import estimate_fba_fee, screen_by_profit_tier, estimate_financial_
 from fee_engine import (
     calculate_unit_economics,
     ECON_ESTIMATED,
+    ECON_PROVISIONAL,
     ECON_UNAVAILABLE,
     ECON_STATUS_NEEDS_FEE_VERIFICATION,
 )
 
 load_dotenv()
 
-MIN_PROFIT_MARGIN_PERCENT = float(os.getenv("MIN_PROFIT_MARGIN_PERCENT", "0"))
-MIN_ROI_PERCENT = float(os.getenv("MIN_ROI_PERCENT", "0"))
+# ROI/margin gates are OFF by default: there is no minimum or maximum
+# unless the operator explicitly sets these env vars (unset/empty -> None).
+MIN_PROFIT_MARGIN_PERCENT = (
+    float(os.getenv("MIN_PROFIT_MARGIN_PERCENT"))
+    if os.getenv("MIN_PROFIT_MARGIN_PERCENT") not in (None, "")
+    else None
+)
+MIN_ROI_PERCENT = (
+    float(os.getenv("MIN_ROI_PERCENT"))
+    if os.getenv("MIN_ROI_PERCENT") not in (None, "")
+    else None
+)
 
 # Mirrors the existing server-side catalog-screen rule in main.build_result
 # (ScanRequest defaults: min_profit 11.0, min_velocity 2000).
@@ -275,26 +286,42 @@ def analyze_kirkland_products() -> Dict:
         # COGS from a Business Center invoice) pass the same way an exact
         # fingerprint does, and high_confidence rows (strong title
         # identity, no known conflict) pass with the research cost.
-        # Candidate/fuzzy matches may still surface as research candidates
-        # but are downgraded to unavailable economics (status
-        # mapping_verification_required) with the candidate cost basis —
-        # no Tier, no Pass/Scale eligibility. A row with no Costco cost at
-        # all keeps its honest missing_costco_cogs status instead of the
-        # mapping-verification label.
+        # Candidate/fuzzy matches stay visible as research candidates with
+        # their computed price + COGS economics surfaced as **provisional**
+        # (status mapping_verification_required; verdict stays None and
+        # cost_is_purchase_authorized stays False): the numbers are
+        # directional research estimates that must be re-verified against
+        # the exact Costco item before any purchase — never nulled, never
+        # hidden. If fee-engine economics were already unavailable (e.g.
+        # missing Amazon price) the honest unavailable state is preserved
+        # under the same mapping-verification status. A row with no Costco
+        # cost at all keeps its honest missing_costco_cogs status instead
+        # of the mapping-verification label.
         match_quality = costco.get("match_quality") or "unknown"
         if match_quality not in PURCHASE_GATE_MATCH_QUALITIES and costco_cost is not None:
             match_reason = costco.get("match_reason") or (
                 "Exact product equivalence (weight/pack/flavor) unverified."
             )
-            economics["economics_confidence"] = ECON_UNAVAILABLE
-            economics["economics_status"] = "mapping_verification_required"
-            economics["economics_note"] = (
+            mapping_note = (
                 "COGS is a candidate match only — " + match_reason
                 + " Verify the exact item (weight, pack, flavor) at Costco "
                 "before purchase."
             )
-            economics["net_profit"] = None
-            economics["roi_pct"] = None
+            if _is_number(economics.get("net_profit")):
+                # Computable economics surface as provisional: the fee
+                # engine's own note (estimated fee stack / fee excluded)
+                # is preserved and the mapping-verification warning is
+                # appended so the row never reads as final.
+                economics["economics_confidence"] = ECON_PROVISIONAL
+                economics["economics_status"] = "mapping_verification_required"
+                note = economics.get("economics_note") or ""
+                economics["economics_note"] = (
+                    (note + " " if note else "") + mapping_note
+                )
+            else:
+                economics["economics_confidence"] = ECON_UNAVAILABLE
+                economics["economics_status"] = "mapping_verification_required"
+                economics["economics_note"] = mapping_note
 
         # Manual-import provenance: high-confidence rows from a manual
         # import stay visible and scoreable research candidates, with the
@@ -317,18 +344,33 @@ def analyze_kirkland_products() -> Dict:
             else None
         )
 
-        # ROI / margin gating applies to estimated economics only:
+        # ROI/margin gating applies to estimated economics only:
         # provisional rows are already flagged for fee verification and must
         # never be dropped by a threshold they cannot truthfully satisfy.
-        if (
+        # By default there is NO minimum or maximum ROI/margin: a threshold
+        # exists only when the operator configures MIN_ROI_PERCENT or
+        # MIN_PROFIT_MARGIN_PERCENT. Estimated rows are never silently
+        # dropped either: every product stays visible so the operator can
+        # triage it, and a shortfall against a *configured* threshold is
+        # flagged (roi_below_minimum) so the UI and downstream tooling can
+        # call it out honestly.
+        below_configured_min = (
             economics["economics_confidence"] == ECON_ESTIMATED
-            and _is_number(roi_pct)
             and (
-                roi_pct < MIN_ROI_PERCENT
-                or (profit_margin_pct is not None and profit_margin_pct < MIN_PROFIT_MARGIN_PERCENT)
+                (
+                    MIN_ROI_PERCENT is not None
+                    and _is_number(roi_pct)
+                    and roi_pct < MIN_ROI_PERCENT
+                )
+                or (
+                    MIN_PROFIT_MARGIN_PERCENT is not None
+                    and profit_margin_pct is not None
+                    and profit_margin_pct < MIN_PROFIT_MARGIN_PERCENT
+                )
             )
-        ):
-            continue
+        )
+        if below_configured_min:
+            economics["roi_below_minimum"] = True
 
         profile = estimate_financial_profile(
             amazon_price=amazon_price,

@@ -549,8 +549,16 @@
                                  "before_after_ab":  "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
                              }
                   }
-    ,    "last_updated":  "2026-09-15T01:47:40Z",
+    ,    "last_updated":  "2026-09-15T22:00:00Z",
     "history":  [
+                     {
+                         "ts":  "2026-09-15T22:00:00Z",
+                         "activity":  "scout_roi_threshold_removal_max_roi_filter_cogs_gap_ledger",
+                         "batch":  "autonomous (operator-directed Scout workbench + COGS gap fix)",
+                         "summary":  "Two parallel workstreams completed. (1) ROI/Margin threshold removal + Max ROI filter: MIN_ROI_PERCENT and MIN_PROFIT_MARGIN_PERCENT default to None (no threshold when env unset); roi_below_minimum flag only set when an actual threshold is configured; Min ROI allows negative values (removed min=0). New Max ROI filter field wired through all filter machinery. Backend test test_no_roi_threshold_by_default_never_flags confirms None-default never flags. UI tests: maxRoi filter, min+max band, defensive sanitization. (2) COGS gap ledger expansion: root cause was fingerprint treating Amazon marketing words as formula differences. Imported 14 new ASIN ledger entries (29 total). Result: 13 rows flipped from missing_costco_cogs to having real economics; B0FPFMT1MS now cost $19.79 | net -$14.89 | ROI -75.2% | score 22.5. Server verified: 245 products, 118 with cost, 128 missing (36 no local match). All tests green: python 36 OK, UI ALL PASS. Full suite baseline unchanged (1548/3f/3e/1s). Zero live/paid calls.",
+                         "test_counts":  "test_product_analysis 36 OK; test_ui_display.cjs ALL PASS; full suite 1548/3f/3e/1s",
+                         "next_action":  "128 no-cost rows remain (36 no local match, ~92 conservative fingerprint). Docs + full suite regression deferred."
+                     },
                      {
                          "ts":  "2026-09-15T01:47:40Z",
                          "activity":  "northstar_qwen3_rev1_build_and_fleet_trim",
