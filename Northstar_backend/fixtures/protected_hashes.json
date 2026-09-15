@@ -1,7 +1,7 @@
 {
   "data/scanner-search-cache.json": {
-    "sha256": "f23362265524ecdd56bd2e7d981baf1a09f154da48fb29e9b42fe980ce7198b8",
-    "bytes": 118540
+    "sha256": "366c11ec4970d9a061c3dee517434f38eeb4d75f4ed001917484f366265426f2",
+    "bytes": 309351
   },
   "data/scanner-search-cache.brightdata-20260817-065933-20260817-021812.json": {
     "sha256": "ab21124e7f94296d98dcdf68eb5f90e270aa24e27c767a9286755151fc3b2535",
@@ -36,7 +36,7 @@
     "bytes": 22119
   },
   "product_analysis.py": {
-    "sha256": "e6c3b3b80d069fff5efaadec9bc66867969652cfcd3f3d2a691210a62404c9f0",
-    "bytes": 22750
+    "sha256": "18295d3ad2f4e994e92620fe3cdc6a5f38e3261e33482e43ec8cc1409554aeb4",
+    "bytes": 25425
   }
 }

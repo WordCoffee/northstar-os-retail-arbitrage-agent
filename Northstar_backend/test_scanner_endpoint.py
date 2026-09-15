@@ -205,7 +205,8 @@ class TestScannerEndpoint(unittest.TestCase):
                         p.stop()
 
     def test_health_works(self):
-        self.assertEqual(main.health(), {"status": "ok"})
+        result = main.health()
+        self.assertEqual(result["status"], "ok")
 
     def test_response_shape_and_allowlisted_keys_only(self):
         candidates = [fake_candidate("B000000001", "Alpha", 48.87)]

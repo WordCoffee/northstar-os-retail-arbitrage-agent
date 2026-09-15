@@ -63,6 +63,9 @@ STATIC_DIR = BASE_DIR / "static"
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
+# Northstar OS services suite shell (Analyst's Desk SPA)
+NORTHSTAR_OS_DIR = STATIC_DIR / "northstar-os"
+
 # AutothinK workspace (served at /autothink/ui/index.html — resolves the
 # shell's ../../autothink/ui/index.html iframe and new-tab link from
 # /static/northstar-os/index.html)
@@ -74,6 +77,12 @@ if AUTOTHINK_DIR.exists():
 @app.get("/", include_in_schema=False)
 def serve_scout():
     return FileResponse(STATIC_DIR / "index.html")
+
+
+@app.get("/northstar-os/", include_in_schema=False)
+@app.get("/northstar-os", include_in_schema=False)
+def serve_northstar_os():
+    return FileResponse(NORTHSTAR_OS_DIR / "index.html")
 
 
 app.add_middleware(
@@ -303,6 +312,7 @@ SCANNER_ALLOWED_KEYS = (
     "economics_confidence",
     "economics_status",
     "economics_note",
+    "roi_below_minimum",
     # Opportunity analytics (cache-only, read-only; display + exports only).
     "match_evidence",
     "verification_tasks",
@@ -331,6 +341,12 @@ SCANNER_ALLOWED_KEYS = (
     "snapshot_buy_box_price",
     "snapshot_buy_box_fulfillment",
     "snapshot_buy_box_seller",
+    # Buy Box resolution for the Scout table (computed by the scanner
+    # endpoint): observed snapshot first, then market snapshot, then the
+    # local seller-offer cache — never a live call.
+    "buy_box_seller",
+    "buy_box_fulfillment",
+    "buy_box_source",
     # Offline demand model (Phase 3, read-only, cache-only).
     "estimated_monthly_sales",
     "sales_estimate_low",
@@ -408,6 +424,86 @@ def _is_number(value) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool)
 
 
+def _clean_buy_box_value(value):
+    """Treat absent or literal 'Unknown' seller/fulfillment values as
+    missing — never display a fabricated value."""
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text or text.lower() == "unknown":
+        return None
+    return text
+
+
+_SCANNER_SELLER_CACHE = None
+
+
+def _buy_box_from_seller_cache(asin):
+    """Cache-only Buy Box fallback from data/seller-offer-cache.json.
+
+    Local snapshot only — zero network. Used when a scanner row carries no
+    observed/snapshot Buy Box winner so the Scout table can still show who
+    owns the Buy Box and under which fulfillment. The cache entry's
+    payload.buy_box is the normalized provider result from the last offline
+    probe run for that ASIN.
+    """
+    global _SCANNER_SELLER_CACHE
+    if _SCANNER_SELLER_CACHE is None:
+        try:
+            with open(offer_enrichment._seller_cache_path(), "r", encoding="utf-8") as f:
+                data = json.load(f)
+            _SCANNER_SELLER_CACHE = data if isinstance(data, dict) else {}
+        except (OSError, json.JSONDecodeError):
+            _SCANNER_SELLER_CACHE = {}
+    if not asin:
+        return None
+    entry = _SCANNER_SELLER_CACHE.get(asin) or {}
+    if not isinstance(entry, dict):
+        return None
+    payload = entry.get("payload") or {}
+    if not isinstance(payload, dict):
+        return None
+    buy_box = payload.get("buy_box") or {}
+    if not isinstance(buy_box, dict):
+        return None
+    seller = _clean_buy_box_value(buy_box.get("seller_name"))
+    if not seller:
+        return None
+    return {
+        "buy_box_seller": seller,
+        "buy_box_fulfillment": _clean_buy_box_value(buy_box.get("fulfillment")),
+        "buy_box_source": "seller_cache",
+    }
+
+
+def _resolve_buy_box(record: dict) -> dict:
+    """Buy Box winner for the Scout table: observed snapshot first, then
+    market snapshot, then the local seller-offer cache — never a live
+    call. Returns {buy_box_seller, buy_box_fulfillment, buy_box_source}."""
+    seller = _clean_buy_box_value(
+        record.get("observed_buy_box_seller") or record.get("snapshot_buy_box_seller")
+    )
+    if seller:
+        fulfillment = _clean_buy_box_value(
+            record.get("observed_buy_box_fulfillment")
+            or record.get("snapshot_buy_box_fulfillment")
+        )
+        return {
+            "buy_box_seller": seller,
+            "buy_box_fulfillment": fulfillment,
+            "buy_box_source": (
+                "observed"
+                if _clean_buy_box_value(record.get("observed_buy_box_seller"))
+                else "snapshot"
+            ),
+        }
+    return _buy_box_from_seller_cache(record.get("asin")) or {
+        "buy_box_seller": None,
+        "buy_box_fulfillment": None,
+        "buy_box_source": None,
+    }
+
+
 def _clean_scanner_product(record: dict) -> dict:
     return {key: record.get(key) for key in SCANNER_ALLOWED_KEYS}
 
@@ -466,7 +562,65 @@ def _scanner_sort_key(product: dict) -> tuple:
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    """Basic liveness probe — returns 200 when the server is up."""
+    return {"status": "ok", "service": "northstar-backend", "version": "1.0.0"}
+
+
+@app.get("/health/detailed")
+def health_detailed():
+    """Detailed readiness probe — checks data files, provider key presence,
+    and model availability. Used by Docker healthcheck and monitoring."""
+    checks = {}
+
+    # Data file presence
+    data_dir = BASE_DIR / "data"
+    for fname in ["costco-items.csv", "costco-api-catalog.json", "seller-offer-cache.json"]:
+        fpath = data_dir / fname
+        checks[f"file_{fname}"] = "ok" if fpath.exists() else "missing"
+
+    # Provider key presence (name only, never values)
+    provider_status = {}
+    provider_keys = {
+        "BRIGHTDATA_UNLOCKER_API_KEY": "bright_data",
+        "OPENWEBNINJA_API_KEY": "openwebninja",
+        "EASYPARSER_API_KEY": "easyparser",
+        "CHOCODATA_API_KEY": "chocodata",
+        "SCRAPE_DO_API_KEY": "scrapedo",
+        "FIRECRAWL_API_KEY": "firecrawl",
+        "BROWSERBASE_API_KEY": "browserbase",
+        "KEENABLE_API_KEY": "keenable",
+        "UNWRANGLE_API_KEY": "unwrangle",
+    }
+    for env_key, provider_name in provider_keys.items():
+        provider_status[provider_name] = "configured" if os.environ.get(env_key) else "not_configured"
+
+    # Scanner state
+    scanner_status = "cache_only"
+    try:
+        if live_gate.live_enabled():
+            scanner_status = "live_allowed"
+    except Exception:
+        pass
+
+    # Test suite status (read from last run if available)
+    test_status_file = BASE_DIR / "data" / ".last_test_status"
+    test_status = "unknown"
+    if test_status_file.exists():
+        try:
+            test_status = test_status_file.read_text().strip()
+        except Exception:
+            pass
+
+    return {
+        "status": "ok",
+        "service": "northstar-backend",
+        "version": "1.0.0",
+        "checks": checks,
+        "providers": provider_status,
+        "scanner_mode": scanner_status,
+        "test_status": test_status,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
 
 
 @app.get("/api/kirkland/scanner")
@@ -485,6 +639,9 @@ def get_kirkland_scanner():
         # computable; genuine zero only from evaluated evidence; category
         # scores null where category inputs are absent.
         p["completeness"] = completeness_score.compute_scanner_completeness(r)
+        # Buy Box resolution (observed snapshot -> market snapshot ->
+        # local seller cache). Never a live call.
+        p.update(_resolve_buy_box(r))
         products.append(p)
     products.sort(key=_scanner_sort_key)
 
