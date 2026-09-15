@@ -208,10 +208,12 @@ class AnalyzeWithoutFeeTests(unittest.TestCase):
         self.assertEqual(len(result["all_results"]), 1)
         self.assertEqual(result["all_results"][0]["amazon_price"], 48.87)
 
-    def test_candidate_match_row_has_no_estimated_economics_or_tier(self):
-        """A candidate-only COGS match surfaces as a research candidate but
-        must not be purchase-eligible: unavailable economics with
-        mapping_verification_required, no net/ROI, no tier, no verdict."""
+    def test_candidate_match_row_keeps_provisional_economics_no_tier(self):
+        """A candidate-only COGS match surfaces as a research candidate with
+        its computed price + COGS economics visible as **provisional**
+        (mapping_verification_required, no tier, no verdict, never
+        purchase-authorized): the numbers are directional research
+        estimates to triage, not final — never nulled, never hidden."""
         result = self.run_scan(
             [fake_candidate("B000000001", "Kirkland Item", 48.87)],
             costco_rows=[fake_costco(match_quality="candidate", match_reason="Pack/count cannot be confirmed.")],
@@ -220,19 +222,22 @@ class AnalyzeWithoutFeeTests(unittest.TestCase):
         p = result["all_results"][0]
         self.assertEqual(p["pack_match"], "candidate")
         self.assertEqual(p["costco_cost_basis"], "candidate_match")
-        self.assertEqual(p["economics_confidence"], "unavailable")
+        self.assertEqual(p["economics_confidence"], "provisional")
         self.assertEqual(p["economics_status"], "mapping_verification_required")
         self.assertIn("candidate match only", p["economics_note"])
         self.assertIn("Pack/count cannot be confirmed", p["economics_note"])
-        self.assertIsNone(p["net_profit"])
-        self.assertIsNone(p["roi_pct"])
+        # Computed economics stay visible for triage — provisional, never nulled.
+        self.assertIsNotNone(p["net_profit"])
+        self.assertIsNotNone(p["roi_pct"])
         self.assertIsNone(p["profit_tier"])
         self.assertIsNone(p["verdict"])
+        self.assertIs(p["cost_is_purchase_authorized"], False)
 
     def test_mismatch_row_is_blocked_with_reason(self):
         """The three misleading shortlist rows (flavor/weight/pack swaps)
-        must classify as mismatch: cost present for research, economics
-        unavailable, no tier, no verdict."""
+        must classify as mismatch: cost present for research with computed
+        economics surfaced as provisional (mapping_verification_required),
+        no tier, no verdict."""
         result = self.run_scan(
             [fake_candidate("B000000001", "Kirkland Adult Formula Chicken, Rice and Vegetable Dog Food 40 lb", 88.99)],
             costco_rows=[fake_costco(match_quality="mismatch", match_reason="Net weight differs (40 vs 25 lb); Formula/flavor differs (chicken vs lamb).")],
@@ -240,9 +245,10 @@ class AnalyzeWithoutFeeTests(unittest.TestCase):
         p = result["all_results"][0]
         self.assertEqual(p["pack_match"], "mismatch")
         self.assertEqual(p["costco_cost_basis"], "candidate_match")
-        self.assertEqual(p["economics_confidence"], "unavailable")
+        self.assertEqual(p["economics_confidence"], "provisional")
         self.assertEqual(p["economics_status"], "mapping_verification_required")
-        self.assertIsNone(p["net_profit"])
+        self.assertIsNotNone(p["net_profit"])
+        self.assertIsNotNone(p["roi_pct"])
         self.assertIsNone(p["profit_tier"])
         self.assertIsNone(p["verdict"])
 
@@ -564,6 +570,74 @@ class AnalyzeWithoutFeeTests(unittest.TestCase):
         p = result["all_results"][0]
         self.assertEqual(p["economics_confidence"], "provisional")
         self.assertIsNotNone(p["roi_pct"])
+
+    def test_negative_roi_estimated_row_kept_and_flagged(self):
+        """Estimated rows below the ROI minimum are never silently dropped:
+        they stay visible for operator triage with roi_below_minimum=True."""
+        candidates = [fake_candidate("B000000001", "Kirkland Item", 48.87)]
+        patches = [
+            patch.object(product_analysis, "search_kirkland_products", return_value=candidates),
+            patch.object(offer_enrichment, "get_scanner_offer", return_value=fake_offer()),
+            patch.object(product_analysis, "get_costco_price", return_value=fake_costco()),
+            patch.object(
+                product_analysis,
+                "calculate_unit_economics",
+                return_value=fake_economics(
+                    net=-5.0, roi=-25.0,
+                    confidence="estimated", status="estimated_fee_stack",
+                ),
+            ),
+            patch.object(product_analysis, "estimate_financial_profile", return_value=fake_profile()),
+            patch.object(product_analysis, "MIN_ROI_PERCENT", 0.0),
+            patch.object(product_analysis, "MIN_PROFIT_MARGIN_PERCENT", 0.0),
+        ]
+        for p in patches:
+            p.start()
+        try:
+            result = product_analysis.analyze_kirkland_products()
+        finally:
+            for p in reversed(patches):
+                p.stop()
+        self.assertEqual(len(result["all_results"]), 1)
+        p = result["all_results"][0]
+        self.assertEqual(p["economics_confidence"], "estimated")
+        self.assertEqual(p["net_profit"], -5.0)
+        self.assertEqual(p["roi_pct"], -25.0)
+        self.assertIs(p.get("roi_below_minimum"), True)
+
+    def test_no_roi_threshold_by_default_never_flags(self):
+        """With no configured MIN_ROI/MIN_MARGIN (None = the unset default),
+        negative-ROI estimated rows stay visible and are NOT flagged:
+        there is no minimum or maximum ROI unless the operator sets one."""
+        candidates = [fake_candidate("B000000001", "Kirkland Item", 48.87)]
+        patches = [
+            patch.object(product_analysis, "search_kirkland_products", return_value=candidates),
+            patch.object(offer_enrichment, "get_scanner_offer", return_value=fake_offer()),
+            patch.object(product_analysis, "get_costco_price", return_value=fake_costco()),
+            patch.object(
+                product_analysis,
+                "calculate_unit_economics",
+                return_value=fake_economics(
+                    net=-5.0, roi=-25.0,
+                    confidence="estimated", status="estimated_fee_stack",
+                ),
+            ),
+            patch.object(product_analysis, "estimate_financial_profile", return_value=fake_profile()),
+            patch.object(product_analysis, "MIN_ROI_PERCENT", None),
+            patch.object(product_analysis, "MIN_PROFIT_MARGIN_PERCENT", None),
+        ]
+        for p in patches:
+            p.start()
+        try:
+            result = product_analysis.analyze_kirkland_products()
+        finally:
+            for p in reversed(patches):
+                p.stop()
+        self.assertEqual(len(result["all_results"]), 1)
+        p = result["all_results"][0]
+        self.assertEqual(p["economics_confidence"], "estimated")
+        self.assertEqual(p["roi_pct"], -25.0)
+        self.assertNotIn("roi_below_minimum", p)
 
     def test_sort_handles_mixed_null_and_numeric_profits(self):
         candidates = [
