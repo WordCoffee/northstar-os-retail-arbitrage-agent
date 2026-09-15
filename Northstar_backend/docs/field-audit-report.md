@@ -66,7 +66,9 @@ preview, gallery, stream, sheet, drawer, calculator prefill).
 ### Flow
 `fee_engine.calculate_unit_economics` (net/cogs * 100; `None` when price
 or COGS missing) -> `product_analysis` pack/variant gate (non-exact ->
-`None`, status `mapping_verification_required`) -> record -> allowlist ->
+computed net/ROI kept as `provisional`, status
+`mapping_verification_required`, tier/verdict stay None; `None` only when
+price or COGS missing) -> record -> allowlist ->
 UI (table, dossier g1, preview, gallery, stream, sheet, drawer;
 opportunity strip; Risk Engine is manual-input only).
 

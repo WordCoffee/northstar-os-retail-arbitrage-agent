@@ -101,12 +101,17 @@ With the Costco discovery last run **stale/blocked/rate-limited** (per
 `data/costco-catalog-run-report.json` surfaced by the STALE banner), the
 majority of the 221 candidates have no usable COGS (or only a
 `candidate_match`), so `economics_status` is `missing_costco_cogs` /
-`mapping_verification_required` → net/ROI/verdict all null → Unscored.
-Rows that do resolve to an exact cost but lack a verified FBA fee are
-honestly labeled Needs Fee Verification. **0 qualified is the correct,
-honest output for that dataset** — qualification is not "not wired"; it is
-gated on inputs that are currently stale or unverified. The repair is not
-in the scoring path but in (a) refreshing/confirming Costco data for
+`mapping_verification_required`. Rows with `candidate_match` COGS keep
+their **computed price + COGS economics visible as provisional**
+(net/ROI surfaced for triage — never nulled, never hidden); rows with no
+Costco cost at all show honest `missing_costco_cogs` -> net/ROI
+Unavailable. Verdict stays None ("Unscored") until identity and fee are
+verified. Rows that do resolve to an exact cost but lack a verified FBA
+fee are honestly labeled Needs Fee Verification. **0 qualified is the
+correct, honest output for that dataset** — qualification is not "not
+wired"; it is gated on inputs that are currently stale or unverified. The
+repair is not in the scoring path but in (a) refreshing/confirming Costco
+data for
 finalists and (b) enriching a handful of finalists with fee + offer data.
 
 ---

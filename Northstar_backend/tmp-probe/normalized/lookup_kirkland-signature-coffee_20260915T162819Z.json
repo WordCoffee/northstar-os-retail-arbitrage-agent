@@ -1,0 +1,15 @@
+{
+  "run_id": "lookup_20260915T162819Z",
+  "operation": "costco_search_lookup",
+  "query": "Kirkland Signature Coffee",
+  "requested_at": "2026-09-15T16:28:19Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "url": "https://www.costco.com/search?keyword=Kirkland%20Signature%20Coffee",
+  "http_status": null,
+  "identity_match_status": "lookup_no_results",
+  "notes": "no .product.<id>.html links found on the search page",
+  "best_candidate": null,
+  "candidate_count": 0,
+  "candidates": [],
+  "retries": 0
+}

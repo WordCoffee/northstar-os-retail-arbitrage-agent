@@ -276,3 +276,92 @@ SELECT
     ) AS composite_score
 FROM products p
 ORDER BY composite_score DESC;
+
+
+-- =========================================================================
+-- View: Profitable Products
+-- Products sorted by net profit, for the SourceScout shortlist.
+-- =========================================================================
+CREATE VIEW IF NOT EXISTS v_profitable_products AS
+SELECT
+    asin,
+    title,
+    brand,
+    category,
+    amazon_price,
+    costco_cost,
+    fba_fee_estimate,
+    net_profit,
+    roi_pct,
+    bsr_rank,
+    monthly_sales_estimate,
+    review_count,
+    rating,
+    seller_count,
+    risk_score,
+    authorization_status,
+    CASE
+        WHEN net_profit >= 11 AND roi_pct >= 30 THEN 'A_pass'
+        WHEN net_profit >= 6 AND roi_pct >= 20 THEN 'B_good'
+        WHEN net_profit >= 0 THEN 'C_marginal'
+        ELSE 'D_negative'
+    END AS deal_tier,
+    CASE
+        WHEN seller_count IS NULL THEN 'unknown'
+        WHEN seller_count <= 3 THEN 'low'
+        WHEN seller_count <= 10 THEN 'medium'
+        ELSE 'high'
+    END AS competition,
+    last_enriched_at,
+    updated_at
+FROM products
+WHERE costco_cost IS NOT NULL
+  AND amazon_price IS NOT NULL
+  AND authorization_status != 'declined'
+ORDER BY net_profit DESC;
+
+
+-- =========================================================================
+-- View: Enrichment Coverage
+-- Data completeness audit per product.
+-- =========================================================================
+CREATE VIEW IF NOT EXISTS v_enrichment_coverage AS
+SELECT
+    asin,
+    title,
+    CASE WHEN title IS NOT NULL AND title != '' THEN 1 ELSE 0 END AS has_title,
+    CASE WHEN brand IS NOT NULL AND brand != '' THEN 1 ELSE 0 END AS has_brand,
+    CASE WHEN category IS NOT NULL AND category != '' THEN 1 ELSE 0 END AS has_category,
+    CASE WHEN amazon_price IS NOT NULL THEN 1 ELSE 0 END AS has_amazon_price,
+    CASE WHEN buy_box_price IS NOT NULL THEN 1 ELSE 0 END AS has_buy_box_price,
+    CASE WHEN costco_cost IS NOT NULL THEN 1 ELSE 0 END AS has_costco_cost,
+    CASE WHEN fba_fee_estimate IS NOT NULL THEN 1 ELSE 0 END AS has_fba_fee,
+    CASE WHEN bsr_rank IS NOT NULL THEN 1 ELSE 0 END AS has_bsr,
+    CASE WHEN monthly_sales_estimate IS NOT NULL THEN 1 ELSE 0 END AS has_sales_est,
+    CASE WHEN review_count IS NOT NULL THEN 1 ELSE 0 END AS has_reviews,
+    CASE WHEN rating IS NOT NULL THEN 1 ELSE 0 END AS has_rating,
+    CASE WHEN seller_count IS NOT NULL THEN 1 ELSE 0 END AS has_sellers,
+    CASE WHEN net_profit IS NOT NULL THEN 1 ELSE 0 END AS has_profit,
+    CASE WHEN risk_score IS NOT NULL THEN 1 ELSE 0 END AS has_risk,
+    ROUND(
+        (CASE WHEN title IS NOT NULL AND title != '' THEN 1 ELSE 0 END +
+         CASE WHEN brand IS NOT NULL AND brand != '' THEN 1 ELSE 0 END +
+         CASE WHEN category IS NOT NULL AND category != '' THEN 1 ELSE 0 END +
+         CASE WHEN amazon_price IS NOT NULL THEN 1 ELSE 0 END +
+         CASE WHEN buy_box_price IS NOT NULL THEN 1 ELSE 0 END +
+         CASE WHEN costco_cost IS NOT NULL THEN 1 ELSE 0 END +
+         CASE WHEN fba_fee_estimate IS NOT NULL THEN 1 ELSE 0 END +
+         CASE WHEN bsr_rank IS NOT NULL THEN 1 ELSE 0 END +
+         CASE WHEN monthly_sales_estimate IS NOT NULL THEN 1 ELSE 0 END +
+         CASE WHEN review_count IS NOT NULL THEN 1 ELSE 0 END +
+         CASE WHEN rating IS NOT NULL THEN 1 ELSE 0 END +
+         CASE WHEN seller_count IS NOT NULL THEN 1 ELSE 0 END +
+         CASE WHEN net_profit IS NOT NULL THEN 1 ELSE 0 END +
+         CASE WHEN risk_score IS NOT NULL THEN 1 ELSE 0 END +
+         CASE WHEN last_enriched_at IS NOT NULL THEN 1 ELSE 0 END
+        ) * 100.0 / 15, 1
+    ) AS completeness_pct,
+    data_sources,
+    last_enriched_at
+FROM products
+ORDER BY completeness_pct ASC;

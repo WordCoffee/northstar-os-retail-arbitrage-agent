@@ -289,12 +289,16 @@ mocked example rows offline with `python examples_fee_engine.py`.
 Estimated economics require a hard product-equivalence fingerprint match
 (`costco_client.product_equivalence()`): brand, product line/formula,
 flavor, net weight, pack/count, and UPC/EAN when the catalog row carries
-one. A fuzzy name match may still surface a research candidate, but it
-sets `costco_cost_basis = candidate_match`,
+one. A fuzzy name match may still surface a research candidate: it sets
+`costco_cost_basis = candidate_match`,
 `economics_status = mapping_verification_required`, and `pack_match`
 (`exact | invoice_confirmed | candidate | mismatch | unknown`) in the UI —
-with net profit, ROI, tier, and verdict all null. Nothing below `exact`
-(or `invoice_confirmed`) is ever Tier/Pass/Scale eligible.
+with the computed price + COGS economics kept visible as **provisional**
+(net profit and ROI surfaced for triage — never nulled, never hidden;
+tier and verdict stay null). Rows with no Costco cost at all keep
+`missing_costco_cogs`. Nothing below `exact`
+(or `invoice_confirmed`) is ever Tier/Pass/Scale eligible, and only
+`invoice_confirmed` authorizes a purchase.
 
 ### Three-layer Costco cost catalog
 
