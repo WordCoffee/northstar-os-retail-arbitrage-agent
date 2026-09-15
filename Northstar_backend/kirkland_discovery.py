@@ -706,6 +706,89 @@ def load_discovery_meta() -> Optional[Dict]:
 
 
 # ---------------------------------------------------------------------------
+# Compatibility layer — discover() and build_manifest() used by pipeline_dry_run
+# and test_pipeline_offline. These wrap the older search-based interface.
+# ---------------------------------------------------------------------------
+
+_SEARCH_QUERIES = [
+    "Kirkland Signature",
+    "Kirkland Signature vitamins supplements",
+]
+
+
+def _is_genuine_kirkland(product: Dict) -> bool:
+    """Check if product is genuinely Kirkland Signature branded."""
+    brand = (product.get("brand") or "").strip().lower()
+    title = (product.get("title") or product.get("product_title") or "").strip().lower()
+    return brand == "kirkland signature" or "kirkland signature" in title
+
+
+def discover(search_fn, max_pages: int = 1) -> tuple:
+    """Run discovery using a search function with pagination + dedup + brand filter.
+
+    Args:
+        search_fn: Callable(query: str, page: int) -> list of product dicts.
+        max_pages: Maximum pages to fetch per query.
+
+    Returns:
+        (seen, rejected) where:
+          seen     – dict of {asin: product_dict} (deduplicated, Kirkland only)
+          rejected – list of dicts with {asin, reason} for filtered-out products
+    """
+    seen: Dict[str, Dict] = {}
+    rejected: List[Dict[str, Any]] = []
+
+    for query in _SEARCH_QUERIES:
+        for page in range(1, max_pages + 1):
+            try:
+                products = search_fn(query, page) or []
+            except Exception:
+                break
+            if not products:
+                break
+            for p in products:
+                asin = (p.get("asin") or "").strip()
+                if not asin:
+                    continue
+                if asin in seen:
+                    continue  # dedup across queries and within query
+                if _is_genuine_kirkland(p):
+                    seen[asin] = p
+                else:
+                    rejected.append({"asin": asin, "reason": "brand_not_kirkland_signature"})
+
+    return seen, rejected
+
+
+def build_manifest(seen: Dict[str, Dict], rejected: List[Dict]) -> tuple:
+    """Build a discovery manifest from seen/rejected.
+
+    Returns:
+        (manifest_dict, manifest_file_path)
+    """
+    import hashlib
+    fingerprint_raw = json.dumps(
+        sorted(seen.keys()), sort_keys=True
+    )
+    fingerprint = hashlib.sha256(fingerprint_raw.encode()).hexdigest()[:16]
+
+    manifest = {
+        "fingerprint": fingerprint,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "qualified_count": len(seen),
+        "rejected_count": len(rejected),
+        "asins": list(seen.keys()),
+    }
+
+    manifest_path = os.path.join(CACHE_DIR, "discovery-manifest.json")
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2)
+
+    return manifest, manifest_path
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 

@@ -128,7 +128,8 @@ class LiveContainmentTests(unittest.TestCase):
     # --- health and static assets ---
 
     def test_health_zero_provider_calls(self):
-        self.assertEqual(main.health(), {"status": "ok"})
+        result = main.health()
+        self.assertEqual(result["status"], "ok")
         self.assert_zero_provider_calls()
 
     def test_static_mount_serves_disk_only_zero_provider_calls(self):
