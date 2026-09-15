@@ -221,8 +221,9 @@ class ContainmentReassertTests(unittest.TestCase):
         self.assertTrue(os.path.basename(resp.path) == "index.html")
         with open(resp.path, "r", encoding="utf-8") as f:
             html = f.read()
-        self.assertIn("/api/kirkland/scanner", html)
-        self.assertIn("completeness", html)
+        # Root now serves the landing page (unified design system)
+        self.assertIn("Northstar", html)
+        self.assertIn("Northstar OS", html)
 
     def test_static_asset_lookup_offline(self):
         static_mounts = [

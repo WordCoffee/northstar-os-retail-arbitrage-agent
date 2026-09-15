@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Started — Northstar OS</title>
+  <link rel="stylesheet" href="../northstar-os/css/tokens.css">
+  <link rel="stylesheet" href="../northstar-os/css/components.css">
+  <link rel="stylesheet" href="../northstar-os/css/layout.css">
+  <style>
+    body { background: var(--desk-leather); display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: auto; }
+    .auth-container { width: 100%; max-width: 480px; padding: var(--sp-6); }
+    .auth-card {
+      background: var(--bg-elevated); border: 1px solid var(--hairline);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden;
+    }
+    .auth-header {
+      text-align: center; padding: var(--sp-8) var(--sp-6) var(--sp-5);
+      border-bottom: 1px solid var(--hairline-soft);
+    }
+    .auth-header svg { width: 40px; height: 40px; color: var(--steel); filter: drop-shadow(0 0 8px rgba(70,130,180,.6)); margin-bottom: var(--sp-3); }
+    .auth-header h1 { font-family: var(--font-head); font-size: 22px; color: var(--ink); margin: 0 0 var(--sp-1); }
+    .auth-header h1 span { color: var(--gold); }
+    .auth-header p { font-size: 13px; color: var(--ink-faint); margin: 0; }
+    .auth-body { padding: var(--sp-6); }
+    .auth-footer {
+      text-align: center; padding: var(--sp-4) var(--sp-6);
+      border-top: 1px solid var(--hairline-soft); background: var(--bg-sunken);
+    }
+    .auth-footer p { font-size: 12px; color: var(--ink-faint); margin: 0; }
+    .auth-footer a { color: var(--gold); text-decoration: none; }
+    .auth-error {
+      background: var(--crimson-dim); border: 1px solid rgba(192,57,43,.5);
+      border-radius: var(--radius); padding: var(--sp-3) var(--sp-4);
+      font-size: 12px; color: #e08a80; margin-bottom: var(--sp-4); display: none;
+    }
+    .auth-success {
+      background: var(--green-dim); border: 1px solid var(--green-line);
+      border-radius: var(--radius); padding: var(--sp-3) var(--sp-4);
+      font-size: 12px; color: #9ecf8e; margin-bottom: var(--sp-4); display: none;
+    }
+    .plan-select { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-2); margin-top: var(--sp-2); }
+    .plan-option {
+      background: var(--bg-sunken); border: 1px solid var(--hairline);
+      border-radius: var(--radius); padding: var(--sp-3); text-align: center;
+      cursor: pointer; transition: border-color var(--duration-normal);
+    }
+    .plan-option:hover { border-color: var(--steel-line); }
+    .plan-option.selected { border-color: var(--gold); background: var(--gold-dim); }
+    .plan-option input { display: none; }
+    .plan-option .plan-name { font-size: 11px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+    .plan-option .plan-price { font-size: 10px; color: var(--ink-dim); }
+    .plan-option.featured { border-color: var(--gold-line); }
+    .plan-option.featured .plan-name { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.8l2.5 6.2 6.7-.4-5.1 4.4 1.8 6.5L12 15.5 6.1 18.5 7.9 12 2.8 7.6l6.7.4z"/></svg>
+        <h1>Northstar <span>OS</span></h1>
+        <p>Create your free account</p>
+      </div>
+
+      <div class="auth-body">
+        <div class="auth-error" id="error-msg"></div>
+        <div class="auth-success" id="success-msg"></div>
+
+        <form id="register-form" onsubmit="return handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label" for="name">Full Name</label>
+            <input class="form-input" type="text" id="name" name="name" placeholder="Jane Smith" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-input" type="password" id="password" name="password" placeholder="At least 8 characters" required minlength="8" autocomplete="new-password">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="plan">Choose Your Plan</label>
+            <div class="plan-select">
+              <label class="plan-option selected" onclick="selectPlan(this, 'foundation')">
+                <input type="radio" name="plan" value="foundation" checked>
+                <div class="plan-name">Foundation</div>
+                <div class="plan-price">Free</div>
+              </label>
+              <label class="plan-option" onclick="selectPlan(this, 'scout')">
+                <input type="radio" name="plan" value="scout">
+                <div class="plan-name">Scout</div>
+                <div class="plan-price">$29/mo</div>
+              </label>
+              <label class="plan-option featured" onclick="selectPlan(this, 'mover')">
+                <input type="radio" name="plan" value="mover">
+                <div class="plan-name">Mover</div>
+                <div class="plan-price">$79/mo</div>
+              </label>
+              <label class="plan-option" onclick="selectPlan(this, 'autothink')">
+                <input type="radio" name="plan" value="autothink">
+                <div class="plan-name">AutothinK</div>
+                <div class="plan-price">$149/mo</div>
+              </label>
+            </div>
+          </div>
+
+          <label class="form-check" style="margin-bottom:var(--sp-4);">
+            <input type="checkbox" name="terms" required> I agree to the <a href="#" style="color:var(--gold);text-decoration:none;"> Terms of Service</a>
+          </label>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="submit-btn">Create Account</button>
+        </form>
+      </div>
+
+      <div class="auth-footer">
+        <p>Already have an account? <a href="/static/auth/login.html">Sign in</a></p>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:var(--sp-4);font-size:12px;">
+      <a href="/landing" style="color:var(--ink-faint);text-decoration:none;">← Back to Northstar OS</a>
+    </p>
+  </div>
+
+  <script>
+    function selectPlan(el, plan) {
+      document.querySelectorAll('.plan-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const errDiv = document.getElementById('error-msg');
+      const succDiv = document.getElementById('success-msg');
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const plan = document.querySelector('input[name="plan"]:checked').value;
+
+      errDiv.style.display = 'none';
+      succDiv.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Creating account...';
+
+      try {
+        const resp = await fetch('/api/v1/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, name, plan })
+        });
+        const data = await resp.json();
+
+        if (!resp.ok) {
+          throw new Error(data.detail || data.error || 'Registration failed');
+        }
+
+        // Auto-login after registration
+        const loginResp = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const loginData = await loginResp.json();
+
+        if (loginData.access_token) {
+          localStorage.setItem('northstar_token', loginData.access_token);
+          localStorage.setItem('northstar_user', JSON.stringify({ email, name }));
+          window.location.href = '/static/northstar-os/index.html';
+        } else {
+          succDiv.textContent = 'Account created! Redirecting to login...';
+          succDiv.style.display = 'block';
+          setTimeout(() => window.location.href = '/static/auth/login.html', 1500);
+        }
+      } catch (err) {
+        errDiv.textContent = err.message;
+        errDiv.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      }
+      return false;
+    }
+  </script>
+
+</body>
+</html>

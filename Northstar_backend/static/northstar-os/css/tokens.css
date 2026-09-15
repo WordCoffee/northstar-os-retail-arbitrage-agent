@@ -1,9 +1,10 @@
 /* ==========================================================================
-   NORTHSTAR OS — DESIGN TOKENS  (canonical)
+   NORTHSTAR OS — DESIGN TOKENS  (canonical, extended)
    "The Analyst's Desk" — neo-skeuomorphic: high-end workspace meets digital precision.
-   Consolidated 2026-09-12 from Northstar_UI_Design_Guide.md,
-   Northstar_OS_UI_Design_Guide.md, Northstar_UI_Design_Guide.md (Analyst's Desk variant).
+   Extended with semantic aliases, spacing scale, and transition tokens.
    ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Roboto+Mono:wght@300;400;500;600;700&display=swap');
 
 :root {
   /* ---- palette ---- */
@@ -18,30 +19,66 @@
   --gold:          #D4AF37;
   --gold-dim:      rgba(212, 175, 55, 0.14);
   --gold-line:     rgba(212, 175, 55, 0.45);
+  --gold-bright:   #e3c457;
   --steel:         #4682B4;
   --steel-dim:     rgba(70, 130, 180, 0.16);
   --steel-line:    rgba(70, 130, 180, 0.5);
   --crimson:       #8B0000;
   --crimson-bright:#c0392b;
   --crimson-dim:   rgba(139, 0, 0, 0.22);
+  --green:         #7fb069;
+  --green-dim:     rgba(127, 176, 105, 0.14);
+  --green-line:    rgba(127, 176, 105, 0.4);
 
-  --ink:           #EAE4D8;   /* warm paper-white */
-  --ink-dim:       #A89F92;   /* secondary */
-  --ink-faint:     #6e675e;   /* tertiary */
+  --ink:           #EAE4D8;   /* warm paper-white (primary text) */
+  --ink-dim:       #A89F92;   /* secondary text */
+  --ink-faint:     #6e675e;   /* tertiary / muted */
   --hairline:      #38322c;   /* border */
   --hairline-soft: #2a2622;   /* subtle border */
+
+  /* ---- semantic aliases ---- */
+  --text-primary:   var(--ink);
+  --text-secondary: var(--ink-dim);
+  --text-muted:     var(--ink-faint);
+  --surface:        var(--bg-elevated);
+  --surface-hover:  var(--bg-hover);
+  --border:         var(--hairline);
+  --border-subtle:  var(--hairline-soft);
 
   /* ---- typography ---- */
   --font-head: 'Playfair Display', 'Merriweather', Georgia, serif;
   --font-body: 'Roboto Mono', 'IBM Plex Mono', 'Consolas', monospace;
 
+  /* ---- spacing scale (4px base) ---- */
+  --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 20px;  --sp-6: 24px;  --sp-7: 28px;  --sp-8: 32px;
+  --sp-9: 36px;  --sp-10: 40px; --sp-11: 44px; --sp-12: 48px;
+
   /* ---- metrics ---- */
   --radius:        8px;
+  --radius-sm:     4px;
   --radius-lg:     12px;
+  --radius-xl:     16px;
+  --radius-full:   999px;
   --ribbon-h:      56px;
   --drawer-w:      232px;
+  --drawer-w-collapsed: 60px;
   --board-w:       268px;
   --space:         16px;
   --shadow-card:   0 12px 28px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.04) inset;
   --shadow-pin:    0 6px 16px rgba(0,0,0,0.5);
+  --shadow-sm:     0 2px 8px rgba(0,0,0,0.3);
+  --shadow-lg:     0 20px 40px rgba(0,0,0,0.6);
+
+  /* ---- transitions ---- */
+  --ease-out:      cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-slow: 350ms;
+
+  /* ---- z-index scale ---- */
+  --z-drawer: 30;
+  --z-ribbon: 40;
+  --z-modal:  50;
+  --z-toast:  60;
 }

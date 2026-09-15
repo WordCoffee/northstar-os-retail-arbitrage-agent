@@ -108,7 +108,9 @@ class LiveContainmentTests(unittest.TestCase):
         self.assertTrue(os.path.basename(resp.path) == "index.html")
         with open(resp.path, "r", encoding="utf-8") as f:
             html = f.read()
-        self.assertIn("/api/kirkland/scanner", html)
+        # Root now serves the landing page (unified design)
+        self.assertIn("Northstar", html)
+        self.assertIn("Northstar OS", html)
         self.assert_zero_provider_calls()
 
     def test_root_ui_debug_serves_ui_with_zero_provider_calls(self):

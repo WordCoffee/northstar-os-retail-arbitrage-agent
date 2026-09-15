@@ -1,0 +1,85 @@
+/* ==========================================================================
+   NORTHSTAR OS — RESPONSIVE LAYOUT
+   Page containers, grids, sidebar layouts, mobile utilities.
+   ========================================================================== */
+
+/* ---------- Page Container ---------- */
+.page-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--sp-6);
+}
+
+/* ---------- Responsive Grids ---------- */
+.grid { display: grid; gap: var(--sp-4); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-auto { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .page-container { padding: 0 var(--sp-4); }
+}
+
+/* ---------- Sidebar Layout ---------- */
+.sidebar-layout { display: flex; min-height: calc(100vh - var(--ribbon-h)); }
+.sidebar-layout .sidebar { width: var(--drawer-w); flex: 0 0 var(--drawer-w); }
+.sidebar-layout .content { flex: 1; min-width: 0; padding: var(--sp-6); overflow-y: auto; }
+
+/* ---------- Flex Utilities ---------- */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.gap-1 { gap: var(--sp-1); } .gap-2 { gap: var(--sp-2); } .gap-3 { gap: var(--sp-3); }
+.gap-4 { gap: var(--sp-4); } .gap-6 { gap: var(--sp-6); } .gap-8 { gap: var(--sp-8); }
+.flex-1 { flex: 1; }
+
+/* ---------- Responsive Visibility ---------- */
+.hide-mobile { display: block; }
+.show-mobile { display: none; }
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+}
+
+/* ---------- Responsive Shell (SPA) ---------- */
+@media (max-width: 1200px) {
+  #board { display: none; }
+  :root { --board-w: 0px; }
+}
+@media (max-width: 900px) {
+  #drawer {
+    width: var(--drawer-w-collapsed);
+    padding: var(--sp-3) var(--sp-2);
+  }
+  .nav-item span { display: none; }
+  .drawer-label { display: none; }
+  #drawer-foot { display: none; }
+  :root { --drawer-w: var(--drawer-w-collapsed); }
+}
+@media (max-width: 768px) {
+  #drawer { display: none; }
+  .ribbon-stats { display: none; }
+  #global-search { width: 100%; }
+  #ribbon { gap: var(--sp-2); padding: 0 var(--sp-3); }
+  #work { padding: var(--sp-4); }
+  .view-title { font-size: 18px; }
+}
+
+/* ---------- Responsive Table ---------- */
+@media (max-width: 1024px) {
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-wrap::after {
+    content: ''; position: sticky; right: 0; top: 0; bottom: 0; width: 32px;
+    background: linear-gradient(90deg, transparent, var(--bg-elevated));
+    pointer-events: none; float: right;
+  }
+}

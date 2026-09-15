@@ -126,7 +126,14 @@ if AUTOTHINK_DIR.exists():
 
 @app.get("/", include_in_schema=False)
 def serve_scout():
-    return FileResponse(STATIC_DIR / "index.html")
+    """Root serves the landing page."""
+    return FileResponse(STATIC_DIR / "landing" / "index.html")
+
+
+@app.get("/landing", include_in_schema=False)
+def serve_landing():
+    """Landing page."""
+    return FileResponse(STATIC_DIR / "landing" / "index.html")
 
 
 @app.get("/northstar-os/", include_in_schema=False)
@@ -135,12 +142,9 @@ def serve_northstar_os():
     return FileResponse(NORTHSTAR_OS_DIR / "index.html")
 
 
-@app.get("/landing", include_in_schema=False)
-def serve_landing():
-    """Serve the landing page."""
-    landing = STATIC_DIR / "landing" / "index.html"
-    if landing.exists():
-        return FileResponse(landing)
+@app.get("/workbench", include_in_schema=False)
+def serve_workbench():
+    """Full research workbench."""
     return FileResponse(STATIC_DIR / "index.html")
 
 
