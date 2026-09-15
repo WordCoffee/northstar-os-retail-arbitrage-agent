@@ -8,12 +8,12 @@
     "bytes": 99138
   },
   "data/benchmarks/raw/BSR-proxyrank-Product-ASIN-Reviews-Price-PrimeFBA.csv": {
-    "sha256": "ffb25c8284126dcfcd577171af4ab8ac5099ae484b72fcd718e2dfade20fe9da",
-    "bytes": 3406
+    "sha256": "4fb75d329b6f2329945f13abe06a694d5bf598c350e5d166639324885b8fefa0",
+    "bytes": 3453
   },
   "data/benchmarks/raw/Rank-Product-ASIN-Reviews-Price-BSR.csv": {
-    "sha256": "ae85c5d72f2ebe2d15e8558ce29ad86ae4c8015fc10105e111595533db09368b",
-    "bytes": 2338
+    "sha256": "ca5cd6172f2bedac97bf7f547b1fb73dc64c98de043fa462ee2b911d153df87b",
+    "bytes": 2358
   },
   "data/benchmarks/manifest.json": {
     "sha256": "bd7ffc77416246ed229c707e6afbfdb5caeb6b3c36af450e919bfa6728a3c664",
@@ -24,16 +24,16 @@
     "bytes": 87764
   },
   "finance.py": {
-    "sha256": "1a6a5d29e854ca1c9c023abf00d33a9d8f90febd1d5c2a017df36feb2339d8e7",
-    "bytes": 9057
+    "sha256": "d4617329d4d263fc1c567bfa1fc703cb0e71be8fb49337a869a2d15209c9b6a2",
+    "bytes": 9330
   },
   "pricing.py": {
-    "sha256": "be810f8c9d7f1b2984af1473a8d5c192d8b5979bd618ad735ad04fffa3160042",
-    "bytes": 3942
+    "sha256": "5ba29773eb9abd1eb24e478a1da854b680806c120d22b965f3da3373e984f72e",
+    "bytes": 4053
   },
   "fee_engine.py": {
-    "sha256": "cdebd26fcc0d8a9a9bf54e1109ec978051ab52b56d94262cacea8eebf8b5a4f8",
-    "bytes": 22119
+    "sha256": "a4445d5647016661df424339eaf2d8dfdffe903194ef1b27a8b056e5283f4837",
+    "bytes": 22663
   },
   "product_analysis.py": {
     "sha256": "18295d3ad2f4e994e92620fe3cdc6a5f38e3261e33482e43ec8cc1409554aeb4",

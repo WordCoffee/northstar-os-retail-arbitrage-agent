@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In — Northstar OS</title>
+  <link rel="stylesheet" href="../northstar-os/css/tokens.css">
+  <link rel="stylesheet" href="../northstar-os/css/components.css">
+  <link rel="stylesheet" href="../northstar-os/css/layout.css">
+  <style>
+    body { background: var(--desk-leather); display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: auto; }
+    .auth-container { width: 100%; max-width: 420px; padding: var(--sp-6); }
+    .auth-card {
+      background: var(--bg-elevated); border: 1px solid var(--hairline);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden;
+    }
+    .auth-header {
+      text-align: center; padding: var(--sp-8) var(--sp-6) var(--sp-5);
+      border-bottom: 1px solid var(--hairline-soft);
+    }
+    .auth-header svg { width: 40px; height: 40px; color: var(--steel); filter: drop-shadow(0 0 8px rgba(70,130,180,.6)); margin-bottom: var(--sp-3); }
+    .auth-header h1 { font-family: var(--font-head); font-size: 22px; color: var(--ink); margin: 0 0 var(--sp-1); }
+    .auth-header h1 span { color: var(--gold); }
+    .auth-header p { font-size: 13px; color: var(--ink-faint); margin: 0; }
+    .auth-body { padding: var(--sp-6); }
+    .auth-footer {
+      text-align: center; padding: var(--sp-4) var(--sp-6);
+      border-top: 1px solid var(--hairline-soft); background: var(--bg-sunken);
+    }
+    .auth-footer p { font-size: 12px; color: var(--ink-faint); margin: 0; }
+    .auth-footer a { color: var(--gold); text-decoration: none; }
+    .auth-footer a:hover { text-decoration: underline; }
+    .auth-error {
+      background: var(--crimson-dim); border: 1px solid rgba(192,57,43,.5);
+      border-radius: var(--radius); padding: var(--sp-3) var(--sp-4);
+      font-size: 12px; color: #e08a80; margin-bottom: var(--sp-4); display: none;
+    }
+    .auth-success {
+      background: var(--green-dim); border: 1px solid var(--green-line);
+      border-radius: var(--radius); padding: var(--sp-3) var(--sp-4);
+      font-size: 12px; color: #9ecf8e; margin-bottom: var(--sp-4); display: none;
+    }
+    .form-divider { display: flex; align-items: center; gap: var(--sp-3); margin: var(--sp-5) 0; }
+    .form-divider::before, .form-divider::after { content: ''; flex: 1; height: 1px; background: var(--hairline-soft); }
+    .form-divider span { font-size: 10px; color: var(--ink-faint); letter-spacing: .1em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.8l2.5 6.2 6.7-.4-5.1 4.4 1.8 6.5L12 15.5 6.1 18.5 7.9 12 2.8 7.6l6.7.4z"/></svg>
+        <h1>Northstar <span>OS</span></h1>
+        <p>Sign in to your account</p>
+      </div>
+
+      <div class="auth-body">
+        <div class="auth-error" id="error-msg"></div>
+        <div class="auth-success" id="success-msg"></div>
+
+        <form id="login-form" onsubmit="return handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-input" type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-4);">
+            <label class="form-check"><input type="checkbox" name="remember"> Remember me</label>
+            <a href="#" style="font-size:12px;color:var(--gold);text-decoration:none;">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="submit-btn">Sign In</button>
+        </form>
+
+        <div class="form-divider"><span>or</span></div>
+
+        <a href="/static/auth/register.html" class="btn btn-block" style="justify-content:center;">Create a Free Account</a>
+      </div>
+
+      <div class="auth-footer">
+        <p>By signing in you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:var(--sp-4);font-size:12px;">
+      <a href="/landing" style="color:var(--ink-faint);text-decoration:none;">← Back to Northstar OS</a>
+    </p>
+  </div>
+
+  <script>
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const errDiv = document.getElementById('error-msg');
+      const succDiv = document.getElementById('success-msg');
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      errDiv.style.display = 'none';
+      succDiv.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+
+      try {
+        const resp = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await resp.json();
+
+        if (!resp.ok) {
+          throw new Error(data.detail || data.error || 'Invalid credentials');
+        }
+
+        if (data.access_token) {
+          localStorage.setItem('northstar_token', data.access_token);
+          localStorage.setItem('northstar_user', JSON.stringify({ email }));
+          window.location.href = '/static/northstar-os/index.html';
+        }
+      } catch (err) {
+        errDiv.textContent = err.message;
+        errDiv.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+      }
+      return false;
+    }
+  </script>
+
+</body>
+</html>
