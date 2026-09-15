@@ -1,7 +1,8 @@
+from contextlib import asynccontextmanager
 from pathlib import Path
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Any, Dict, List, Optional
@@ -19,6 +20,16 @@ import offer_enrichment
 import live_gate
 import completeness_score
 from canopy_client import get_canopy_product
+
+# Phase 6: Production infrastructure
+from logging_config import setup_logging, get_logger
+from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
+from rate_limiter import RateLimitMiddleware
+from auth_deps import get_current_user, require_plan
+
+# Initialize structured logging
+setup_logging()
+logger = get_logger("main")
 
 
 class ScanRequest(BaseModel):
@@ -52,14 +63,53 @@ class ScanResponse(BaseModel):
     products: List[ProductResult]
 
 
-app = FastAPI(
-    title="Northstar OS API",
-    description="Backend API for the Northstar Arbitrage OS platform.",
-    version="1.0.0",
-)
+# --- Lifespan (startup / shutdown) ---
 
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
+
+
+@asynccontextmanager
+async def lifespan(app):
+    """Startup / shutdown lifecycle."""
+    logger.info("Northstar OS v1.0.0 starting up")
+    logger.info(f"Base directory: {BASE_DIR}")
+
+    try:
+        from data_layer import get_database
+        db = get_database()
+        logger.info(f"Database initialized: {db.db_type}")
+    except Exception as e:
+        logger.warning(f"Database init skipped: {e}")
+
+    try:
+        import httpx
+        resp = httpx.get("http://localhost:11434/api/tags", timeout=3)
+        if resp.status_code == 200:
+            models = resp.json().get("models", [])
+            logger.info(f"Ollama: {len(models)} models available")
+        else:
+            logger.warning("Ollama not responding")
+    except Exception:
+        logger.warning("Ollama not reachable — AI features will use fallback")
+
+    logger.info("Northstar OS ready ✨")
+    yield
+    logger.info("Northstar OS shutting down")
+
+
+app = FastAPI(
+    title="Northstar OS API",
+    description=(
+        "AI-powered Amazon arbitrage intelligence platform. "
+        "Five services sharing a unified data layer with local-first AI."
+    ),
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
+    lifespan=lifespan,
+)
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
@@ -85,12 +135,33 @@ def serve_northstar_os():
     return FileResponse(NORTHSTAR_OS_DIR / "index.html")
 
 
+@app.get("/landing", include_in_schema=False)
+def serve_landing():
+    """Serve the landing page."""
+    landing = STATIC_DIR / "landing" / "index.html"
+    if landing.exists():
+        return FileResponse(landing)
+    return FileResponse(STATIC_DIR / "index.html")
+
+
+# --- Middleware stack (order matters: outermost runs first) ---
+
+# 1. Security headers
+app.add_middleware(SecurityHeadersMiddleware)
+
+# 2. Request tracing (adds X-Request-ID and X-Response-Time)
+app.add_middleware(RequestTracingMiddleware)
+
+# 3. Rate limiting
+app.add_middleware(RateLimitMiddleware, window_seconds=60)
+
+# 4. CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=get_cors_origins(),
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
 )
 
 
@@ -1151,12 +1222,20 @@ def refresh_token(body: dict):
 
 
 @app.get("/api/v1/auth/me")
-def get_current_user():
-    """Get current user info (requires Authorization header)."""
-    import auth
-    # For MVP, accept token from header
-    # In production, use FastAPI Depends with OAuth2PasswordBearer
-    return {"message": "Token validation endpoint — wire with FastAPI Depends"}
+async def get_me(user: dict = Depends(get_current_user)):
+    """Get current user info via JWT token."""
+    if user.get("is_demo"):
+        return {
+            "mode": "demo",
+            "user": user,
+            "message": "Unauthenticated demo access. Register for full features.",
+        }
+    return {
+        "id": user.get("id"),
+        "email": user.get("email"),
+        "plan": user.get("plan"),
+        "name": user.get("name"),
+    }
 
 
 @app.get("/api/v1/plans")
@@ -1164,3 +1243,6 @@ def list_plans():
     """List all subscription plans with entitlements."""
     import auth
     return {"plans": auth.PLAN_ENTITLEMENTS}
+
+
+

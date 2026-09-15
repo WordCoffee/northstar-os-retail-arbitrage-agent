@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northstar OS — AI-Powered Amazon Arbitrage Intelligence</title>
+    <meta name="description" content="Costco-to-Amazon arbitrage intelligence platform. AI agents that find, score, and track profitable products.">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --accent: #10b981;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --border: #334155;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* Nav */
+        nav { padding: 20px 0; border-bottom: 1px solid var(--border); }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; color: var(--accent); }
+        .logo span { color: var(--text); }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .btn { padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* Hero */
+        .hero { padding: 100px 0 80px; text-align: center; }
+        .hero h1 { font-size: 56px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+        .hero h1 .gradient { background: linear-gradient(135deg, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 20px; color: var(--muted); max-width: 600px; margin: 0 auto 40px; }
+        .hero-cta { display: flex; gap: 16px; justify-content: center; }
+        .hero-cta .btn { padding: 14px 32px; font-size: 16px; }
+
+        /* Stats */
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding: 60px 0; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 36px; font-weight: 700; color: var(--accent); }
+        .stat-label { color: var(--muted); margin-top: 4px; }
+
+        /* Features */
+        .features { padding: 80px 0; }
+        .features h2 { text-align: center; font-size: 36px; margin-bottom: 60px; }
+        .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+        .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px; transition: transform 0.2s, border-color 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+        .feature-icon { font-size: 32px; margin-bottom: 16px; }
+        .feature-card h3 { font-size: 20px; margin-bottom: 8px; }
+        .feature-card p { color: var(--muted); font-size: 15px; }
+
+        /* Pricing */
+        .pricing { padding: 80px 0; background: var(--surface); }
+        .pricing h2 { text-align: center; font-size: 36px; margin-bottom: 16px; }
+        .pricing .subtitle { text-align: center; color: var(--muted); margin-bottom: 48px; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .price-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 32px; text-align: center; }
+        .price-card.featured { border-color: var(--primary); position: relative; }
+        .price-card.featured::before { content: "MOST POPULAR"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 4px 16px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+        .price-card h3 { font-size: 20px; margin-bottom: 8px; }
+        .price { font-size: 42px; font-weight: 800; margin: 16px 0; }
+        .price span { font-size: 16px; font-weight: 400; color: var(--muted); }
+        .price-card ul { list-style: none; text-align: left; margin: 24px 0; }
+        .price-card ul li { padding: 8px 0; color: var(--muted); font-size: 14px; }
+        .price-card ul li::before { content: "✓ "; color: var(--accent); font-weight: 700; }
+        .price-card .btn { width: 100%; }
+
+        /* CTA */
+        .cta-section { padding: 100px 0; text-align: center; }
+        .cta-section h2 { font-size: 36px; margin-bottom: 16px; }
+        .cta-section p { color: var(--muted); margin-bottom: 32px; }
+
+        /* Footer */
+        footer { padding: 40px 0; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: 14px; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .stats, .feature-grid, .pricing-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">North<span>star</span> OS</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#docs">Docs</a>
+                <a href="/static/northstar-os/index.html" class="btn btn-outline">Open App</a>
+                <button class="btn btn-primary" onclick="window.location.href='/api/v1/auth/register'">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>AI-Powered<br><span class="gradient">Amazon Arbitrage</span><br>Intelligence</h1>
+            <p>From Costco shelf to Amazon listing — AI agents that find, score, optimize, and track profitable products. Your data stays local.</p>
+            <div class="hero-cta">
+                <a href="/static/northstar-os/index.html" class="btn btn-primary">Launch Dashboard</a>
+                <a href="#features" class="btn btn-outline">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+            <div class="stat">
+                <div class="stat-value">5</div>
+                <div class="stat-label">AI Agents</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Local & Private</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">$0</div>
+                <div class="stat-label">LLM API Costs</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">Automated Monitoring</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Five Agents, One Platform</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>SourceScout</h3>
+                    <p>Finds profitable Costco-to-Amazon arbitrage opportunities. Tracks BSR, pricing, seller counts, and COGS verification.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✍️</div>
+                    <h3>ListingForge</h3>
+                    <p>AI-generated titles, bullets, descriptions, and backend keywords. Rufus AI readiness scoring. Brand voice enforcement.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>AdPilot</h3>
+                    <p>Amazon PPC optimization with four-tier campaign structure. Automated bid management, negative keywords, budget allocation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>SocialPulse</h3>
+                    <p>Brand-aware content generation across Instagram, TikTok, Facebook. Amazon Attribution tracking. Influencer outreach.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>AutothinK</h3>
+                    <p>Natural language AI workspace. Ask questions, run analysis, orchestrate all agents. Your data never leaves your machine.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Private by Design</h3>
+                    <p>Local LLM via Ollama. No data sent to cloud APIs. Memory Bank learns your preferences over time. Full audit trail.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>Simple, Transparent Pricing</h2>
+            <p class="subtitle">Start free, upgrade when you're ready. No hidden fees.</p>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3>Foundation</h3>
+                    <div class="price">$0<span>/mo</span></div>
+                    <ul>
+                        <li>Dashboard access</li>
+                        <li>Read-only data</li>
+                        <li>Basic analytics</li>
+                        <li>Community support</li>
+                    </ul>
+                    <button class="btn btn-outline">Get Started</button>
+                </div>
+                <div class="price-card featured">
+                    <h3>Scout</h3>
+                    <div class="price">$29<span>/mo</span></div>
+                    <ul>
+                        <li>Everything in Foundation</li>
+                        <li>SourceScout live data</li>
+                        <li>Product enrichment</li>
+                        <li>Listing copy generation</li>
+                        <li>Ads read-only</li>
+                    </ul>
+                    <button class="btn btn-primary">Start Free Trial</button>
+                </div>
+                <div class="price-card">
+                    <h3>Mover</h3>
+                    <div class="price">$79<span>/mo</span></div>
+                    <ul>
+                        <li>Everything in Scout</li>
+                        <li>Media generation</li>
+                        <li>Social attribution</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <button class="btn btn-outline">Start Free Trial</button>
+                </div>
+                <div class="price-card">
+                    <h3>AutothinK</h3>
+                    <div class="price">$149<span>/mo</span></div>
+                    <ul>
+                        <li>Everything in Mover</li>
+                        <li>AI workspace</li>
+                        <li>Bulk operations</li>
+                        <li>Social publishing</li>
+                        <li>Voice interface</li>
+                    </ul>
+                    <button class="btn btn-outline">Start Free Trial</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Scale Your Amazon Business?</h2>
+            <p>Join the future of retail arbitrage intelligence. Your data stays local. Your edge stays sharp.</p>
+            <button class="btn btn-primary" style="padding: 14px 40px; font-size: 18px;">Get Started Free</button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Northstar OS © 2026 — Built with local AI for Amazon sellers who value privacy.</p>
+        </div>
+    </footer>
+</body>
+</html>
