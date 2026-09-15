@@ -607,38 +607,31 @@ class DataRefreshOrchestrator:
         max_workers: int,
         tasks: Optional[List[Tuple[str, Callable]]] = None,
     ) -> None:
-        """Execute refresh tasks, optionally in parallel."""
+        """Execute refresh tasks.
+
+        Tasks are run serially because they all read from files and write to
+        the same SQLite database. Parallel execution with a shared SQLite
+        connection causes locking errors. When PostgreSQL is configured,
+        parallel execution would be safe.
+        """
         if tasks is None:
             tasks = _REFRESH_TASKS
 
-        if len(tasks) == 1:
-            name, fn = tasks[0]
-            result = fn(self.db, since=None)
-            self.results.append(result)
-            return
-
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            future_map = {}
-            for name, fn in tasks:
-                future = executor.submit(fn, self.db, since=None)
-                future_map[future] = name
-
-            for future in as_completed(future_map):
-                name = future_map[future]
-                try:
-                    result = future.result(timeout=300)
-                    self.results.append(result)
-                    log.info(
-                        f"[{name}] {result.status} - "
-                        f"imported={result.records_imported} "
-                        f"updated={result.records_updated} "
-                        f"failed={result.records_failed}"
-                    )
-                except Exception as exc:
-                    result = RefreshResult(name)
-                    result.mark_failed(f"Thread exception: {exc}")
-                    self.results.append(result)
-                    log.error(f"[{name}] Failed: {exc}")
+        for name, fn in tasks:
+            try:
+                result = fn(self.db, since=None)
+                self.results.append(result)
+                log.info(
+                    f"[{name}] {result.status} - "
+                    f"imported={result.records_imported} "
+                    f"updated={result.records_updated} "
+                    f"failed={result.records_failed}"
+                )
+            except Exception as exc:
+                result = RefreshResult(name)
+                result.mark_failed(f"Exception: {exc}")
+                self.results.append(result)
+                log.error(f"[{name}] Failed: {exc}")
 
     def _get_recently_refreshed_tasks(self) -> set:
         """Return set of task names refreshed within the incremental gap."""

@@ -279,19 +279,9 @@ def migrate_costco_api_catalog(db: DataLayer) -> MigrationResult:
                 "data_sources": json.dumps(["costco_api_catalog"]),
             }
 
-            # Map additional fields
+            # Map additional fields (only those in the products schema)
             if item.get("costco_item_id"):
                 product_data["cost_basis_source"] = "costco_online"
-            if item.get("pack_size"):
-                product_data.setdefault("weight_lbs", None)
-            if item.get("upc_or_ean"):
-                product_data["upc"] = item["upc_or_ean"]
-            if item.get("source_url"):
-                product_data["costco_url"] = item["source_url"]
-            if item.get("availability"):
-                product_data["availability"] = item["availability"]
-            if item.get("product_url"):
-                product_data["product_url"] = item["product_url"]
 
             if asin:
                 product_data["asin"] = asin
@@ -349,10 +339,6 @@ def migrate_seller_offer_cache(db: DataLayer) -> MigrationResult:
             title = payload.get("title")
             if title:
                 product_data["title"] = title
-
-            # Seller breakdown
-            if payload.get("fba_sellers") is not None:
-                product_data["fba_sellers"] = payload["fba_sellers"]
 
             # Enriched timestamp
             fetched_at = payload.get("offer_data_fetched_at")
@@ -437,12 +423,11 @@ def migrate_market_snapshots(db: DataLayer) -> MigrationResult:
     snap_path = _DATA_DIR / "amazon-market-snapshots.json"
 
     if not snap_path.exists():
-        # Also check Northstar_backend/data/
         snap_path = _BACKEND_DIR / "data" / "amazon-market-snapshots.json"
-        if not snap_path.exists():
-            result.errors.append("File not found: amazon-market-snapshots.json")
-            result.mark_finished()
-            return result
+    if not snap_path.exists():
+        result.errors.append("File not found: amazon-market-snapshots.json")
+        result.mark_finished()
+        return result
 
     snap_data = _load_json(snap_path)
     asins_data = snap_data.get("asins", {})
@@ -561,7 +546,6 @@ def migrate_asin_mapping(db: DataLayer) -> MigrationResult:
                 "asin": asin,
                 "title": costco_title.strip(),
                 "brand": _extract_brand(costco_title),
-                "costco_product_title": costco_title.strip(),
                 "data_sources": json.dumps(["costco_amazon_mapping"]),
             }
 
@@ -617,7 +601,6 @@ def migrate_review_queue(db: DataLayer) -> MigrationResult:
             if best_costco_item:
                 product_data["title"] = best_costco_item
                 product_data["brand"] = _extract_brand(best_costco_item)
-                product_data["costco_product_title"] = best_costco_item
 
             _safe_upsert_product(products_db, product_data, result, f"review:{idx}")
 
