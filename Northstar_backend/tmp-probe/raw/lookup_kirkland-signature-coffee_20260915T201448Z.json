@@ -1,0 +1,22 @@
+{
+  "run_id": "lookup_20260915T201448Z",
+  "operation": "costco_search_lookup",
+  "query": "Kirkland Signature Coffee",
+  "requested_at": "2026-09-15T20:14:48Z",
+  "provider": "BRIGHTDATA_WEB_UNLOCKER",
+  "platform": "web_unlocker_costco_search",
+  "endpoint": "https://api.brightdata.com/request",
+  "payload": {
+    "zone": "northstaros",
+    "url": "https://www.costco.com/search?keyword=Kirkland%20Signature%20Coffee",
+    "format": "raw"
+  },
+  "auth_header": "Bearer <redacted>",
+  "http_status": null,
+  "retries": 0,
+  "scrubbed": true,
+  "response_headers": null,
+  "response_body_bytes": 28,
+  "response_body_diagnostic": "short",
+  "response_html_head_capped": "<html><body>ok</body></html>"
+}

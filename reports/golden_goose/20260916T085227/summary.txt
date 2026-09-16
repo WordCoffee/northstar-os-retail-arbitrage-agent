@@ -1,0 +1,16 @@
+Golden Goose Finder Report
+========================================
+Generated: 2026-09-16T08:52:27.341426+00:00
+Report version: 1.0
+
+Summary: 5 evaluated | HIGH 1 | MEDIUM 1 | LOW 3 | REJECTED 0
+Avg profit/unit: $9.63 | Avg ROI: 8569.3%
+Best: B00EN7UEH2 (Zyrtec Allergy Relief 24hr (70 Count)) | tier HIGH | $17.57/unit | composite 0.8262
+Top tags: bulk_goldmine x5, high_margin x5, high_velocity x4, low_competition x2, trending_up x5
+
+--- Ranked opportunities (5) ---
+1. B00EN7UEH2 | HIGH | Zyrtec Allergy Relief 24hr (70 Count) | $17.57 net/unit | ROI 10937.0% | ~4500/mo | 1 FBA
+2. B00N2Y1THA | LOW | Nicorette Nicotine Lozenge 2mg Mint (20 Count) | $8.40 net/unit | ROI 4201.2% | ~1800/mo | 1 FBA
+3. B005DK1FOI | LOW | Nature Made Vitamin D3 2000 IU (60 Softgels) | $5.23 net/unit | ROI 10062.0% | ~5800/mo | 2 FBA
+4. B01ETY8ZIA | MEDIUM | Tide PODS Original Scent (42 Count) | $10.89 net/unit | ROI 5520.9% | ~3900/mo | 3 FBA
+5. B00GOHEWCU | LOW | Advil Liqui-Gels 200mg (100 Count) | $6.06 net/unit | ROI 12125.3% | ~3200/mo | None FBA

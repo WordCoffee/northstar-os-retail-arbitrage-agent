@@ -117,31 +117,37 @@ def is_individual_listing(
     """Determine if an Amazon listing is for an individual / small pack.
 
     Heuristics:
-      - Title with a count >= _MULTI_PACK_THRESHOLD is considered multi-pack
-      - If wholesale pack count is known, listing's implied count >= that
-        means it's also a multi-pack (e.g., another 200-count listing)
+      - Literal multi-pack phrases ("multi-pack", "pack of N", "N x M")
+        always reject the listing.
+      - If the wholesale pack count is known, the listing is an individual
+        pack when its implied count is SMALLER than the club pack (e.g. an
+        Amazon 60-count bottle IS the individual listing for a club
+        500-count). Same-or-larger counts are another multi-pack → reject.
+      - When the wholesale pack count is unknown, fall back to a generous
+        absolute ceiling (>= 100) as a bulk/value-listing warning.
     """
     title = amazon_match.title
     if not title:
         return True  # can't tell; let it through
 
-    # Extract count from Amazon listing
+    # Literal multi-pack phrase: always reject regardless of count context.
+    if re.search(r"\bmulti[- ]?pack\b|\bpack\s+of\s+\d+|\b\d+\s*x\s*\d+\b", title, re.I):
+        return False
+
     amazon_count = _quick_count(title)
 
-    # Check for strong multi-pack signals in title
-    if _MULTI_PACK_SIGNALS.search(title):
-        # Only reject if the detected count is large (>= threshold)
-        if amazon_count is not None and amazon_count >= _MULTI_PACK_THRESHOLD:
-            return False
-        # Also reject multi-pack / pack-of N phrases
-        if re.search(r"\bmulti[- ]?pack\b|\bpack\s+of\s+\d+", title, re.I):
-            return False
-
-    # If we know the wholesale pack count, check if the Amazon listing
-    # implies a comparable or larger count
+    # Relative check: known wholesale pack count → the listing must be
+    # meaningfully smaller (<= half the club pack) to be an individual pack.
     if wholesale_pack_count is not None and wholesale_pack_count > 1:
         if amazon_count is not None and amazon_count >= wholesale_pack_count:
             return False
+        if amazon_count is not None and amazon_count > wholesale_pack_count / 2:
+            return False
+        return True
+
+    # Unknown wholesale context: generous absolute bulk ceiling.
+    if amazon_count is not None and amazon_count >= 100:
+        return False
 
     return True
 
@@ -289,25 +295,36 @@ def get_mock_amazon_matches(wholesale_product: WholesaleProduct) -> list[AmazonM
 
     Generates 2–5 matches per wholesale product with realistic ASINs,
     prices, BSR values, FBA seller counts, and review data.
+
+    Pricing model: Amazon individual/small-packs sell at a per-unit premium
+    over wholesale per-unit COGS — e.g. Costco sells 500ct Advil for $24.99
+    ($0.05/unit) while Amazon sells a 60ct bottle at ~$7.99 ($0.13/unit).
+    The mock therefore prices a SMALL PACK (not a single count) at
+    ``unit_cogs × small_pack_count × markup``.
     """
     brand = wholesale_product.brand
     title = wholesale_product.product_title
     pack = wholesale_product.pack_count or 1
     expected_unit = wholesale_product.wholesale_price / max(pack, 1)
+    small_count = _small_pack_count(pack)
 
     # Determine product type from title for mock title generation
     product_type = _extract_product_type(title)
     strength = _extract_strength(title)
+    suffix = f", {strength}" if strength else ""
+
+    def _price(markup: float) -> float:
+        """Individual-pack price = unit COGS × small count × Amazon markup."""
+        return round(expected_unit * small_count * markup, 2)
 
     matches: list[AmazonMatch] = []
 
     # --- Best match: brand match, individual pack, good price ---
-    suffix = f", {strength}" if strength else ""
     matches.append(AmazonMatch(
         asin="B0" + _stable_hash(brand + "best")[:8],
-        title=f"{brand} {product_type}{suffix}, 1 Count",
+        title=f"{brand} {product_type}{suffix}, {small_count} Count",
         brand=brand,
-        amazon_price=round(expected_unit * 2.5, 2),
+        amazon_price=_price(2.5),
         amazon_category="Health & Household",
         bsr=_stable_int(brand + "best", 500, 15000),
         review_rating=4.5,
@@ -321,9 +338,9 @@ def get_mock_amazon_matches(wholesale_product: WholesaleProduct) -> list[AmazonM
     # --- Second match: slightly different size/variation ---
     matches.append(AmazonMatch(
         asin="B0" + _stable_hash(brand + "v2")[:8],
-        title=f"{brand} {product_type}{suffix}, Small Pack",
+        title=f"{brand} {product_type}{suffix}, {small_count * 2} Count",
         brand=brand,
-        amazon_price=round(expected_unit * 2.0, 2),
+        amazon_price=_price(2.0),
         amazon_category="Health & Household",
         bsr=_stable_int(brand + "v2", 2000, 40000),
         review_rating=4.3,
@@ -336,9 +353,9 @@ def get_mock_amazon_matches(wholesale_product: WholesaleProduct) -> list[AmazonM
     # --- Third match: higher price, more reviews ---
     matches.append(AmazonMatch(
         asin="B0" + _stable_hash(brand + "v3")[:8],
-        title=f"{brand} {product_type}{suffix}, Value Size",
+        title=f"{brand} {product_type}{suffix}, {small_count} Count Value",
         brand=brand,
-        amazon_price=round(expected_unit * 3.5, 2),
+        amazon_price=_price(3.5),
         amazon_category="Health & Household",
         bsr=_stable_int(brand + "v3", 1000, 25000),
         review_rating=4.6,
@@ -351,9 +368,9 @@ def get_mock_amazon_matches(wholesale_product: WholesaleProduct) -> list[AmazonM
     # --- Possible non-brand match (competitor / generic) ---
     matches.append(AmazonMatch(
         asin="B0" + _stable_hash(brand + "generic")[:8],
-        title=f"Generic {product_type}{suffix}, 1 Count",
+        title=f"Generic {product_type}{suffix}, {small_count} Count",
         brand="Generic",
-        amazon_price=round(expected_unit * 1.8, 2),
+        amazon_price=_price(1.8),
         amazon_category="Health & Household",
         bsr=_stable_int(brand + "gen", 10000, 80000),
         review_rating=4.0,
@@ -369,7 +386,7 @@ def get_mock_amazon_matches(wholesale_product: WholesaleProduct) -> list[AmazonM
         asin="B0" + _stable_hash(brand + "mp")[:8],
         title=f"{brand} {product_type}{suffix}, {mp_count} Count",
         brand=brand,
-        amazon_price=round(expected_unit * mp_count * 1.8, 2),
+        amazon_price=_price(mp_count * 1.8),
         amazon_category="Health & Household",
         bsr=_stable_int(brand + "mp", 3000, 30000),
         review_rating=4.4,
@@ -380,6 +397,23 @@ def get_mock_amazon_matches(wholesale_product: WholesaleProduct) -> list[AmazonM
     ))
 
     return matches
+
+
+def _small_pack_count(pack_count: int) -> int:
+    """Derive a realistic Amazon small-pack count from the wholesale pack.
+
+    Real-world small packs are roughly 1/4 to 1/5 of the club pack, but
+    clamped to sensible consumer sizes (e.g. 4–60 per unit for OTC/vitamins;
+    whole-item categories like a 30 lb dog food bag stay at 1).
+    """
+    if pack_count <= 1:
+        return 1
+    small = max(4, pack_count // 4)
+    # Round to a friendly consumer count (10s / 20s / 25s / 30s / 60s / 90s)
+    for target in (10, 20, 25, 30, 40, 60, 90, 100, 120, 150, 200, 250):
+        if small <= target:
+            return target
+    return round(small / 10) * 10
 
 
 # ---------------------------------------------------------------------------
