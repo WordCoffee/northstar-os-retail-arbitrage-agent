@@ -43,51 +43,67 @@ from typing import Any, Dict, List, Optional
 
 # ---------------------------------------------------------------------------
 # Data models (shared with the sibling economics module).
+#
+# Preferred source: the sibling module `breakdown_economics` (main.py already
+# imports from it). Until that module lands, identical local fallback
+# definitions keep this scorer importable and testable standalone. Both
+# shapes follow the documented `BreakdownEconomics` contract; consumers only
+# read attributes (duck-typed), so either class works at runtime.
 # ---------------------------------------------------------------------------
 
+try:  # pragma: no cover - sibling may not be present on this import path
+    from .breakdown_economics import BreakdownEconomics, IndividualListing, WholesalePack
 
-@dataclass
-class WholesalePack:
-    """The multi-pack wholesale unit bought at Costco / Sam's Club."""
+    _MODELS_FROM_SIBLING = True
+except ImportError:  # pragma: no cover
+    try:
+        from breakdown_economics import BreakdownEconomics, IndividualListing, WholesalePack
 
-    wholesale_price: float
-    pack_count: int
-    brand: str
-    category_slug: Optional[str]
-    # Optional reporting enrichments filled by the sourcing module when known.
-    source_store: Optional[str] = None
-    wholesale_pack_title: Optional[str] = None
+        _MODELS_FROM_SIBLING = True
+    except ImportError:
 
+        @dataclass
+        class WholesalePack:
+            """The multi-pack wholesale unit bought at Costco / Sam's Club."""
 
-@dataclass
-class IndividualListing:
-    """The Amazon listing the pack breaks down into."""
+            wholesale_price: float
+            pack_count: int
+            brand: str
+            category_slug: Optional[str]
+            # Optional reporting enrichments filled by the sourcing module when known.
+            source_store: Optional[str] = None
+            wholesale_pack_title: Optional[str] = None
 
-    asin: str
-    title: str
-    amazon_price: Optional[float]
-    bsr: Optional[int] = None
-    review_rating: Optional[float] = None
-    review_count: Optional[int] = None
-    fba_sellers: Optional[int] = None
-    monthly_sales_estimate: Optional[float] = None
+        @dataclass
+        class IndividualListing:
+            """The Amazon listing the pack breaks down into."""
 
+            asin: str
+            title: str
+            amazon_price: Optional[float]
+            bsr: Optional[int] = None
+            review_rating: Optional[float] = None
+            review_count: Optional[int] = None
+            fba_sellers: Optional[int] = None
+            monthly_sales_estimate: Optional[float] = None
 
-@dataclass
-class BreakdownEconomics:
-    """Full breakdown economics for one wholesale pack -> individual listing."""
+        @dataclass
+        class BreakdownEconomics:
+            """Full breakdown economics for one wholesale pack -> individual listing."""
 
-    wholesale: WholesalePack
-    individual: IndividualListing
-    unit_cogs: Optional[float]
-    net_profit_per_unit: Optional[float]
-    net_profit_per_costco_pack: Optional[float]
-    roi_per_unit: Optional[float]
-    roi_per_costco_pack: Optional[float]
-    profit_margin_pct: Optional[float]
-    total_amazon_fees: Optional[float]
-    economics_confidence: str = "unavailable"  # estimated | provisional | unavailable
-    economics_notes: List[str] = field(default_factory=list)
+            wholesale: WholesalePack
+            individual: IndividualListing
+            unit_cogs: Optional[float]
+            net_profit_per_unit: Optional[float]
+            net_profit_per_costco_pack: Optional[float]
+            roi_per_unit: Optional[float]
+            roi_per_costco_pack: Optional[float]
+            profit_margin_pct: Optional[float]
+            total_amazon_fees: Optional[float]
+            economics_confidence: str = "unavailable"  # estimated | provisional | unavailable
+            economics_notes: List[str] = field(default_factory=list)
+
+        _MODELS_FROM_SIBLING = False
 
 
 # ---------------------------------------------------------------------------

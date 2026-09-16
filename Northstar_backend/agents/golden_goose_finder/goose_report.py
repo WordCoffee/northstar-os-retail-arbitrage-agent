@@ -129,8 +129,8 @@ def _opportunity_entry(o: ScoredOpportunity) -> Dict[str, Any]:
             "bsr": ind.bsr,
         },
         "sourcing_data": {
-            "source_store": ws.source_store or "Unknown",
-            "wholesale_pack_title": ws.wholesale_pack_title or ws.brand,
+            "source_store": (getattr(ws, "source_store", None) or "Unknown"),
+            "wholesale_pack_title": getattr(ws, "wholesale_pack_title", None) or ws.brand,
             "wholesale_cost": _round2(ws.wholesale_price),
             "pack_count": ws.pack_count,
             "unit_cogs": _round2(eco.unit_cogs),
@@ -413,8 +413,8 @@ def export_to_scout_panel(scored: List[ScoredOpportunity]) -> List[Dict[str, Any
             "estMonthly": _sales_estimate(eco),
             "tier": _panel_tier(o.tier),
             "status": "scored",
-            "sourceStore": ws.source_store or "Unknown",
-            "wholesalePack": ws.wholesale_pack_title or ws.brand or "Unknown",
+            "sourceStore": getattr(ws, "source_store", None) or "Unknown",
+            "wholesalePack": getattr(ws, "wholesale_pack_title", None) or ws.brand or "Unknown",
             "packCount": ws.pack_count,
             "tags": list(o.opportunity_tags),
         })

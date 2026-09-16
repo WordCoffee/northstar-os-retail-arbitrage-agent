@@ -27,6 +27,9 @@ def make_individual(**overrides: Any) -> IndividualListing:
     return IndividualListing(**data)
 
 
+_OPTIONAL_WS_FIELDS = {"source_store", "wholesale_pack_title"}
+
+
 def make_wholesale(**overrides: Any) -> WholesalePack:
     data: Dict[str, Any] = dict(
         wholesale_price=24.99,
@@ -37,7 +40,14 @@ def make_wholesale(**overrides: Any) -> WholesalePack:
         wholesale_pack_title="Kirkland Signature Laundry Detergent Pods 152 ct",
     )
     data.update(overrides)
-    return WholesalePack(**data)
+    core = {k: v for k, v in data.items() if k not in _OPTIONAL_WS_FIELDS}
+    ws = WholesalePack(**core)
+    # Optional reporting fields may not exist on the sibling model; attach
+    # them only when the active class supports them.
+    for opt in _OPTIONAL_WS_FIELDS:
+        if opt in data and hasattr(ws, opt):
+            setattr(ws, opt, data[opt])
+    return ws
 
 
 _IND_FIELDS = {
