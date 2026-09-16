@@ -1,0 +1,181 @@
+{
+  "meta": {
+    "generated_at": "2026-09-16T08:24:02.784036+00:00",
+    "pipeline_version": "0.1.0",
+    "mode": "mock",
+    "elapsed_seconds": 0.002,
+    "categories_scanned": [
+      "vitamins_supplements"
+    ],
+    "stores_scanned": [
+      "Costco",
+      "Sam's Club"
+    ],
+    "filters": {
+      "roi_floor": 10.0,
+      "min_monthly_sales": 500,
+      "max_results": 100
+    }
+  },
+  "summary": {
+    "total_opportunities": 5,
+    "high_tier_count": 0,
+    "medium_tier_count": 0,
+    "low_tier_count": 0,
+    "reject_count": 5,
+    "estimated_monthly_profit": 0,
+    "average_roi_pct": 0
+  },
+  "opportunities": [
+    {
+      "rank": 1,
+      "composite_score": 40.0,
+      "tier": "REJECT",
+      "passes_all_filters": false,
+      "scoring_notes": [
+        "Negative profit \u2014 not viable"
+      ],
+      "opportunity_tags": [
+        "loss-leader",
+        "high-breakdown"
+      ],
+      "wholesale_title": "Nature Made Vitamin D3 2000 IU, 500 Softgels",
+      "amazon_asin": "B0bf2b53d2",
+      "amazon_title": "Nature Made Vitamin Softgels, 2000 IU, 1 Count",
+      "brand": "Nature Made",
+      "source_store": "Costco",
+      "category_slug": "vitamins",
+      "pack_count": 500,
+      "wholesale_price": 19.99,
+      "unit_cogs": 0.04,
+      "amazon_price": 0.1,
+      "total_amazon_fees": 4.51,
+      "net_profit_per_unit": -4.45,
+      "roi_per_unit": -11130.6,
+      "profit_margin_pct": -4450.0,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": 651,
+      "fba_sellers": 3
+    },
+    {
+      "rank": 2,
+      "composite_score": 40.0,
+      "tier": "REJECT",
+      "passes_all_filters": false,
+      "scoring_notes": [
+        "Negative profit \u2014 not viable"
+      ],
+      "opportunity_tags": [
+        "loss-leader",
+        "high-breakdown"
+      ],
+      "wholesale_title": "Emergen-C Vitamin C Supplement 1000mg, 90 Count",
+      "amazon_asin": "B0c5d83415",
+      "amazon_title": "Emergen-C Vitamin Supplement, 1000mg, 1 Count",
+      "brand": "Emergen-C",
+      "source_store": "Costco",
+      "category_slug": "vitamins",
+      "pack_count": 90,
+      "wholesale_price": 24.99,
+      "unit_cogs": 0.28,
+      "amazon_price": 0.69,
+      "total_amazon_fees": 4.6,
+      "net_profit_per_unit": -4.19,
+      "roi_per_unit": -1509.0,
+      "profit_margin_pct": -607.2,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": 2887,
+      "fba_sellers": null
+    },
+    {
+      "rank": 3,
+      "composite_score": 40.0,
+      "tier": "REJECT",
+      "passes_all_filters": false,
+      "scoring_notes": [
+        "Negative profit \u2014 not viable"
+      ],
+      "opportunity_tags": [
+        "loss-leader",
+        "high-breakdown"
+      ],
+      "wholesale_title": "Centrum Multivitamin Adults, 500 Tablets",
+      "amazon_asin": "B07c9feca6",
+      "amazon_title": "Centrum Multivitamin Adults Tablets, 1 Count",
+      "brand": "Centrum",
+      "source_store": "Costco",
+      "category_slug": "vitamins",
+      "pack_count": 500,
+      "wholesale_price": 29.99,
+      "unit_cogs": 0.06,
+      "amazon_price": 0.15,
+      "total_amazon_fees": 4.52,
+      "net_profit_per_unit": -4.43,
+      "roi_per_unit": -7385.8,
+      "profit_margin_pct": -2953.3,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": 425,
+      "fba_sellers": 3
+    },
+    {
+      "rank": 4,
+      "composite_score": 40.0,
+      "tier": "REJECT",
+      "passes_all_filters": false,
+      "scoring_notes": [
+        "Negative profit \u2014 not viable"
+      ],
+      "opportunity_tags": [
+        "loss-leader",
+        "high-breakdown"
+      ],
+      "wholesale_title": "Nature's Bounty Vitamin B12 5000mcg, 200 Softgels",
+      "amazon_asin": "B0979e8f3c",
+      "amazon_title": "Nature's Bounty Vitamin mcg Softgels, 5000mcg, 1 Count",
+      "brand": "Nature's Bounty",
+      "source_store": "Costco",
+      "category_slug": "vitamins",
+      "pack_count": 200,
+      "wholesale_price": 17.99,
+      "unit_cogs": 0.09,
+      "amazon_price": 0.22,
+      "total_amazon_fees": 4.53,
+      "net_profit_per_unit": -4.4,
+      "roi_per_unit": -4891.6,
+      "profit_margin_pct": -2000.0,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": 764,
+      "fba_sellers": 3
+    },
+    {
+      "rank": 5,
+      "composite_score": 40.0,
+      "tier": "REJECT",
+      "passes_all_filters": false,
+      "scoring_notes": [
+        "Negative profit \u2014 not viable"
+      ],
+      "opportunity_tags": [
+        "loss-leader",
+        "high-breakdown"
+      ],
+      "wholesale_title": "Olly Restful Sleep Gummies 50mg, 140 Count",
+      "amazon_asin": "B01ec06d2e",
+      "amazon_title": "Olly Restful Sleep Gummies, 50mg, 1 Count",
+      "brand": "Olly",
+      "source_store": "Costco",
+      "category_slug": "vitamins",
+      "pack_count": 140,
+      "wholesale_price": 22.99,
+      "unit_cogs": 0.16,
+      "amazon_price": 0.41,
+      "total_amazon_fees": 4.56,
+      "net_profit_per_unit": -4.31,
+      "roi_per_unit": -2624.6,
+      "profit_margin_pct": -1051.2,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": 2692,
+      "fba_sellers": 1
+    }
+  ]
+}

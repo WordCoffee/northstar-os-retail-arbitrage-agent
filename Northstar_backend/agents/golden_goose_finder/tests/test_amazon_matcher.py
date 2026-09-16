@@ -111,8 +111,16 @@ class TestIsIndividualListing:
         m = _make_amazon(title="")
         assert is_individual_listing(m, 200) is True
 
-    def test_parenthetical_count_filtered(self):
+    def test_parenthetical_count_validated(self):
+        # A 50-count listing with a 100-count wholesale pack is an
+        # individual/smaller pack — passes the relative filter.
         m = _make_amazon(title="Product (50 ct)")
+        assert is_individual_listing(m, 100) is True
+
+    def test_parenthetical_count_near_wholesale_rejected(self):
+        # A 60-count listing against a 100-count wholesale pack is NOT a
+        # meaningfully smaller pack — reject.
+        m = _make_amazon(title="Product (60 ct)")
         assert is_individual_listing(m, 100) is False
 
     def test_no_wholesale_count_falls_through(self):

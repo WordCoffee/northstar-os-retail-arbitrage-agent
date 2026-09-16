@@ -1,0 +1,406 @@
+{
+  "report_version": "1.0",
+  "generated_at": "2026-09-16T08:49:41.247702+00:00",
+  "run_metadata": {
+    "mode": "mock-harness",
+    "helpers_dispatched": 5,
+    "wholesale_found": 5,
+    "amazon_matches": 5,
+    "economics_evaluated": 5,
+    "disposed": []
+  },
+  "summary": {
+    "total_evaluated": 5,
+    "high": 1,
+    "medium": 1,
+    "low": 3,
+    "rejected": 0,
+    "avg_profit": 9.63,
+    "avg_roi": 8569.29,
+    "best_opportunity": {
+      "asin": "B00EN7UEH2",
+      "product_title": "Zyrtec Allergy Relief 24hr (70 Count)",
+      "brand": "Zyrtec",
+      "category": "otc_health",
+      "gating_status": "APPROVED",
+      "amazon_metrics": {
+        "est_monthly_sales": 4500,
+        "review_rating": 4.8,
+        "review_count": 67200,
+        "current_fba_sellers": 1,
+        "buy_box_price": 22.99,
+        "bsr": 980
+      },
+      "sourcing_data": {
+        "source_store": "Sam's Club",
+        "wholesale_pack_title": "Zyrtec Allergy Relief 24hr Tablets (pack of 4 bottles, 70ct each)",
+        "wholesale_cost": 44.98,
+        "pack_count": 280,
+        "unit_cogs": 0.16
+      },
+      "financial_breakdown": {
+        "resale_price": 22.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 3.91,
+        "total_costs_per_unit": 4.07,
+        "net_profit_per_unit": 17.57,
+        "net_profit_per_costco_pack": 4919.48,
+        "roi_percentage": 10937.03,
+        "roi_per_costco_pack_pct": 10937.03,
+        "profit_margin_pct": 76.42,
+        "breakeven_price": 4.07
+      },
+      "scoring": {
+        "composite_score": 0.8262,
+        "profit_score": 0.7025,
+        "demand_score": 0.9713,
+        "competition_score": 0.75,
+        "listing_health_score": 1.0,
+        "tier": "HIGH",
+        "tags": [
+          "low_competition",
+          "high_margin",
+          "high_velocity",
+          "trending_up",
+          "bulk_goldmine"
+        ]
+      },
+      "economics_confidence": "provisional",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "No package weight available for the individual unit — FBA fulfillment fee is EXCLUDED from these numbers. Verify in the Amazon Revenue Calculator before purchasing.",
+        "PROVISIONAL — the FBA fulfillment fee is not verified and is EXCLUDED from the net profit / breakeven figures above. All other costs (referral, repackaging, inbound, prep, return reserve) are included.",
+        "Profit: $17.57/unit -> 0.70 (floor $10.00)",
+        "Demand: ~4500/mo -> 0.97 (medium confidence)",
+        "Competition: 1 FBA seller -> 0.75",
+        "Listing health: rating 4.8, 67200 reviews -> 1.00",
+        "Composite: 0.8262 -> HIGH",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    },
+    "top_tags": {
+      "low_competition": 2,
+      "high_margin": 5,
+      "high_velocity": 4,
+      "trending_up": 5,
+      "bulk_goldmine": 5
+    }
+  },
+  "opportunities": [
+    {
+      "asin": "B00EN7UEH2",
+      "product_title": "Zyrtec Allergy Relief 24hr (70 Count)",
+      "brand": "Zyrtec",
+      "category": "otc_health",
+      "gating_status": "APPROVED",
+      "amazon_metrics": {
+        "est_monthly_sales": 4500,
+        "review_rating": 4.8,
+        "review_count": 67200,
+        "current_fba_sellers": 1,
+        "buy_box_price": 22.99,
+        "bsr": 980
+      },
+      "sourcing_data": {
+        "source_store": "Sam's Club",
+        "wholesale_pack_title": "Zyrtec Allergy Relief 24hr Tablets (pack of 4 bottles, 70ct each)",
+        "wholesale_cost": 44.98,
+        "pack_count": 280,
+        "unit_cogs": 0.16
+      },
+      "financial_breakdown": {
+        "resale_price": 22.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 3.91,
+        "total_costs_per_unit": 4.07,
+        "net_profit_per_unit": 17.57,
+        "net_profit_per_costco_pack": 4919.48,
+        "roi_percentage": 10937.03,
+        "roi_per_costco_pack_pct": 10937.03,
+        "profit_margin_pct": 76.42,
+        "breakeven_price": 4.07
+      },
+      "scoring": {
+        "composite_score": 0.8262,
+        "profit_score": 0.7025,
+        "demand_score": 0.9713,
+        "competition_score": 0.75,
+        "listing_health_score": 1.0,
+        "tier": "HIGH",
+        "tags": [
+          "low_competition",
+          "high_margin",
+          "high_velocity",
+          "trending_up",
+          "bulk_goldmine"
+        ]
+      },
+      "economics_confidence": "provisional",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "No package weight available for the individual unit — FBA fulfillment fee is EXCLUDED from these numbers. Verify in the Amazon Revenue Calculator before purchasing.",
+        "PROVISIONAL — the FBA fulfillment fee is not verified and is EXCLUDED from the net profit / breakeven figures above. All other costs (referral, repackaging, inbound, prep, return reserve) are included.",
+        "Profit: $17.57/unit -> 0.70 (floor $10.00)",
+        "Demand: ~4500/mo -> 0.97 (medium confidence)",
+        "Competition: 1 FBA seller -> 0.75",
+        "Listing health: rating 4.8, 67200 reviews -> 1.00",
+        "Composite: 0.8262 -> HIGH",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    },
+    {
+      "asin": "B00N2Y1THA",
+      "product_title": "Nicorette Nicotine Lozenge 2mg Mint (20 Count)",
+      "brand": "Nicorette",
+      "category": "otc_health",
+      "gating_status": "APPROVED",
+      "amazon_metrics": {
+        "est_monthly_sales": 1800,
+        "review_rating": 4.7,
+        "review_count": 8900,
+        "current_fba_sellers": 1,
+        "buy_box_price": 11.99,
+        "bsr": 4200
+      },
+      "sourcing_data": {
+        "source_store": "Costco",
+        "wholesale_pack_title": "Nicorette Nicotine Lozenge 2mg Mint (200 Count)",
+        "wholesale_cost": 39.99,
+        "pack_count": 200,
+        "unit_cogs": 0.2
+      },
+      "financial_breakdown": {
+        "resale_price": 11.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 2.04,
+        "total_costs_per_unit": 2.24,
+        "net_profit_per_unit": 8.4,
+        "net_profit_per_costco_pack": 1680.05,
+        "roi_percentage": 4201.18,
+        "roi_per_costco_pack_pct": 4201.18,
+        "profit_margin_pct": 70.06,
+        "breakeven_price": 2.24
+      },
+      "scoring": {
+        "composite_score": 0.6838,
+        "profit_score": 0.4672,
+        "demand_score": 0.731,
+        "competition_score": 0.75,
+        "listing_health_score": 1.0,
+        "tier": "LOW",
+        "tags": [
+          "low_competition",
+          "high_margin",
+          "trending_up",
+          "bulk_goldmine"
+        ]
+      },
+      "economics_confidence": "provisional",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "No package weight available for the individual unit — FBA fulfillment fee is EXCLUDED from these numbers. Verify in the Amazon Revenue Calculator before purchasing.",
+        "PROVISIONAL — the FBA fulfillment fee is not verified and is EXCLUDED from the net profit / breakeven figures above. All other costs (referral, repackaging, inbound, prep, return reserve) are included.",
+        "Profit: $8.40/unit -> 0.47 (floor $10.00)",
+        "Demand: ~1800/mo -> 0.73 (medium confidence)",
+        "Competition: 1 FBA seller -> 0.75",
+        "Listing health: rating 4.7, 8900 reviews -> 1.00",
+        "Composite: 0.6838 -> LOW",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    },
+    {
+      "asin": "B005DK1FOI",
+      "product_title": "Nature Made Vitamin D3 2000 IU (60 Softgels)",
+      "brand": "Nature Made",
+      "category": "otc_health",
+      "gating_status": "APPROVED",
+      "amazon_metrics": {
+        "est_monthly_sales": 5800,
+        "review_rating": 4.8,
+        "review_count": 42100,
+        "current_fba_sellers": 2,
+        "buy_box_price": 7.99,
+        "bsr": 1100
+      },
+      "sourcing_data": {
+        "source_store": "Costco",
+        "wholesale_pack_title": "Nature Made Vitamin D3 2000 IU (250 Softgels)",
+        "wholesale_cost": 12.99,
+        "pack_count": 250,
+        "unit_cogs": 0.05
+      },
+      "financial_breakdown": {
+        "resale_price": 7.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 1.36,
+        "total_costs_per_unit": 1.41,
+        "net_profit_per_unit": 5.23,
+        "net_profit_per_costco_pack": 1307.06,
+        "roi_percentage": 10062.05,
+        "roi_per_costco_pack_pct": 10062.05,
+        "profit_margin_pct": 65.43,
+        "breakeven_price": 1.41
+      },
+      "scoring": {
+        "composite_score": 0.6585,
+        "profit_score": 0.3815,
+        "demand_score": 1.0,
+        "competition_score": 0.5,
+        "listing_health_score": 1.0,
+        "tier": "LOW",
+        "tags": [
+          "high_margin",
+          "high_velocity",
+          "trending_up",
+          "bulk_goldmine"
+        ]
+      },
+      "economics_confidence": "provisional",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "No package weight available for the individual unit — FBA fulfillment fee is EXCLUDED from these numbers. Verify in the Amazon Revenue Calculator before purchasing.",
+        "PROVISIONAL — the FBA fulfillment fee is not verified and is EXCLUDED from the net profit / breakeven figures above. All other costs (referral, repackaging, inbound, prep, return reserve) are included.",
+        "Profit: $5.23/unit -> 0.38 (floor $10.00)",
+        "Demand: ~5800/mo -> 1.00 (medium confidence)",
+        "Competition: 2 FBA sellers -> 0.50",
+        "Listing health: rating 4.8, 42100 reviews -> 1.00",
+        "Composite: 0.6585 -> LOW",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    },
+    {
+      "asin": "B01ETY8ZIA",
+      "product_title": "Tide PODS Original Scent (42 Count)",
+      "brand": "Tide",
+      "category": "otc_health",
+      "gating_status": "APPROVED",
+      "amazon_metrics": {
+        "est_monthly_sales": 3900,
+        "review_rating": 4.7,
+        "review_count": 31900,
+        "current_fba_sellers": 3,
+        "buy_box_price": 14.99,
+        "bsr": 1850
+      },
+      "sourcing_data": {
+        "source_store": "Sam's Club",
+        "wholesale_pack_title": "Tide PODS Laundry Detergent (152 Count)",
+        "wholesale_cost": 29.99,
+        "pack_count": 152,
+        "unit_cogs": 0.2
+      },
+      "financial_breakdown": {
+        "resale_price": 14.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 2.55,
+        "total_costs_per_unit": 2.75,
+        "net_profit_per_unit": 10.89,
+        "net_profit_per_costco_pack": 1655.72,
+        "roi_percentage": 5520.91,
+        "roi_per_costco_pack_pct": 5520.91,
+        "profit_margin_pct": 72.67,
+        "breakeven_price": 2.75
+      },
+      "scoring": {
+        "composite_score": 0.6311,
+        "profit_score": 0.5301,
+        "demand_score": 0.9322,
+        "competition_score": 0.25,
+        "listing_health_score": 1.0,
+        "tier": "MEDIUM",
+        "tags": [
+          "high_margin",
+          "high_velocity",
+          "trending_up",
+          "bulk_goldmine"
+        ]
+      },
+      "economics_confidence": "provisional",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "No package weight available for the individual unit — FBA fulfillment fee is EXCLUDED from these numbers. Verify in the Amazon Revenue Calculator before purchasing.",
+        "PROVISIONAL — the FBA fulfillment fee is not verified and is EXCLUDED from the net profit / breakeven figures above. All other costs (referral, repackaging, inbound, prep, return reserve) are included.",
+        "Profit: $10.89/unit -> 0.53 (floor $10.00)",
+        "Demand: ~3900/mo -> 0.93 (medium confidence)",
+        "Competition: 3 FBA sellers -> 0.25",
+        "Listing health: rating 4.7, 31900 reviews -> 1.00",
+        "Composite: 0.6311 -> MEDIUM",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    },
+    {
+      "asin": "B00GOHEWCU",
+      "product_title": "Advil Liqui-Gels 200mg (100 Count)",
+      "brand": "Advil",
+      "category": "otc_health",
+      "gating_status": "UNKNOWN",
+      "amazon_metrics": {
+        "est_monthly_sales": 3200,
+        "review_rating": 4.8,
+        "review_count": 14800,
+        "current_fba_sellers": null,
+        "buy_box_price": 8.99,
+        "bsr": 2100
+      },
+      "sourcing_data": {
+        "source_store": "Costco",
+        "wholesale_pack_title": "Advil Pain Reliever 200mg Liqui-Gels (500 Count)",
+        "wholesale_cost": 24.99,
+        "pack_count": 500,
+        "unit_cogs": 0.05
+      },
+      "financial_breakdown": {
+        "resale_price": 8.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 1.53,
+        "total_costs_per_unit": 1.58,
+        "net_profit_per_unit": 6.06,
+        "net_profit_per_costco_pack": 3030.11,
+        "roi_percentage": 12125.29,
+        "roi_per_costco_pack_pct": 12125.29,
+        "profit_margin_pct": 67.41,
+        "breakeven_price": 1.58
+      },
+      "scoring": {
+        "composite_score": 0.5872,
+        "profit_score": 0.4075,
+        "demand_score": 0.8782,
+        "competition_score": 0.3,
+        "listing_health_score": 1.0,
+        "tier": "LOW",
+        "tags": [
+          "high_margin",
+          "high_velocity",
+          "trending_up",
+          "bulk_goldmine"
+        ]
+      },
+      "economics_confidence": "provisional",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "No package weight available for the individual unit — FBA fulfillment fee is EXCLUDED from these numbers. Verify in the Amazon Revenue Calculator before purchasing.",
+        "PROVISIONAL — the FBA fulfillment fee is not verified and is EXCLUDED from the net profit / breakeven figures above. All other costs (referral, repackaging, inbound, prep, return reserve) are included.",
+        "Profit: $6.06/unit -> 0.41 (floor $10.00)",
+        "Demand: ~3200/mo -> 0.88 (medium confidence)",
+        "Competition: unknown seller data -> score 0.30",
+        "Competition floor: FAIL (no FBA seller data)",
+        "Listing health: rating 4.8, 14800 reviews -> 1.00",
+        "Composite: 0.5872 -> LOW",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    }
+  ],
+  "discarded": []
+}

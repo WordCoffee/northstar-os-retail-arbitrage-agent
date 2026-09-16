@@ -1,0 +1,323 @@
+{
+  "meta": {
+    "generated_at": "2026-09-16T08:06:42.240631+00:00",
+    "pipeline_version": "0.1.0",
+    "mode": "mock",
+    "elapsed_seconds": 0.0,
+    "categories_scanned": "all",
+    "stores_scanned": [
+      "Costco",
+      "Sam's Club"
+    ],
+    "filters": {
+      "roi_floor": 10.0,
+      "min_monthly_sales": 500,
+      "max_results": 100
+    }
+  },
+  "summary": {
+    "total_opportunities": 10,
+    "high_tier_count": 4,
+    "medium_tier_count": 0,
+    "low_tier_count": 2,
+    "reject_count": 4,
+    "estimated_monthly_profit": 0.0,
+    "average_roi_pct": 1289.6
+  },
+  "opportunities": [
+    {
+      "rank": 1,
+      "composite_score": 100,
+      "tier": "HIGH",
+      "passes_all_filters": true,
+      "scoring_notes": [
+        "$55.66 profit/unit exceeds $10.0 floor"
+      ],
+      "opportunity_tags": [
+        "profitable",
+        "high-breakdown",
+        "triple-digit-roi"
+      ],
+      "wholesale_title": "Kirkland Signature Minoxidil 5% Foam 6-Month Supply (6ct)",
+      "amazon_asin": "B0CP6LXPLK",
+      "amazon_title": "Kirkland Signature Minoxidil 5% Topical Aerosol 6-Month Supply",
+      "brand": "Kirkland",
+      "source_store": "Costco",
+      "category_slug": "personal-care",
+      "pack_count": 6,
+      "wholesale_price": 34.99,
+      "unit_cogs": 5.83,
+      "amazon_price": 79.99,
+      "total_amazon_fees": 18.5,
+      "net_profit_per_unit": 55.66,
+      "roi_per_unit": 954.4,
+      "profit_margin_pct": 69.6,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": null,
+      "fba_sellers": null
+    },
+    {
+      "rank": 2,
+      "composite_score": 100,
+      "tier": "HIGH",
+      "passes_all_filters": true,
+      "scoring_notes": [
+        "$31.45 profit/unit exceeds $10.0 floor"
+      ],
+      "opportunity_tags": [
+        "profitable",
+        "high-breakdown",
+        "triple-digit-roi"
+      ],
+      "wholesale_title": "Kirkland Signature Organic K-Cups Variety Pack (120ct)",
+      "amazon_asin": "B0B1J8MFHV",
+      "amazon_title": "Kirkland Signature K-Cups Medium Roast Coffee (120ct)",
+      "brand": "Kirkland",
+      "source_store": "Costco",
+      "category_slug": "food-beverage",
+      "pack_count": 120,
+      "wholesale_price": 34.99,
+      "unit_cogs": 0.29,
+      "amazon_price": 44.99,
+      "total_amazon_fees": 13.25,
+      "net_profit_per_unit": 31.45,
+      "roi_per_unit": 10785.9,
+      "profit_margin_pct": 69.9,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": null,
+      "fba_sellers": null
+    },
+    {
+      "rank": 3,
+      "composite_score": 92.2,
+      "tier": "HIGH",
+      "passes_all_filters": true,
+      "scoring_notes": [
+        "$15.87 profit/unit exceeds $10.0 floor"
+      ],
+      "opportunity_tags": [
+        "profitable",
+        "high-breakdown",
+        "triple-digit-roi"
+      ],
+      "wholesale_title": "Member's Mark Hand Sanitizer 8-pack (16.9oz each)",
+      "amazon_asin": "B08R68VXFR",
+      "amazon_title": "Member's Mark Hand Sanitizer 8 oz (Pack of 8)",
+      "brand": "Members Mark",
+      "source_store": "Sam's Club",
+      "category_slug": "household",
+      "pack_count": 8,
+      "wholesale_price": 21.47,
+      "unit_cogs": 2.68,
+      "amazon_price": 29.47,
+      "total_amazon_fees": 10.92,
+      "net_profit_per_unit": 15.87,
+      "roi_per_unit": 591.3,
+      "profit_margin_pct": 53.9,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": null,
+      "fba_sellers": null
+    },
+    {
+      "rank": 4,
+      "composite_score": 88.3,
+      "tier": "HIGH",
+      "passes_all_filters": true,
+      "scoring_notes": [
+        "$13.04 profit/unit exceeds $10.0 floor"
+      ],
+      "opportunity_tags": [
+        "profitable",
+        "high-breakdown",
+        "triple-digit-roi"
+      ],
+      "wholesale_title": "Kirkland Signature Crest Pro-Health Toothpaste 8-pack",
+      "amazon_asin": "B00SG6RH2C",
+      "amazon_title": "Kirkland Signature Daily Care Toothpaste Fresh Mint 8-Pack",
+      "brand": "Kirkland",
+      "source_store": "Costco",
+      "category_slug": "personal-care",
+      "pack_count": 8,
+      "wholesale_price": 15.99,
+      "unit_cogs": 2.0,
+      "amazon_price": 22.99,
+      "total_amazon_fees": 7.95,
+      "net_profit_per_unit": 13.04,
+      "roi_per_unit": 652.4,
+      "profit_margin_pct": 56.7,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": null,
+      "fba_sellers": null
+    },
+    {
+      "rank": 5,
+      "composite_score": 28.1,
+      "tier": "LOW",
+      "passes_all_filters": false,
+      "scoring_notes": [
+        "Low profit $0.50/unit"
+      ],
+      "opportunity_tags": [],
+      "wholesale_title": "Equate Daily Multivitamin Gummies 250ct (4-pack)",
+      "amazon_asin": "B07QDPMMGV",
+      "amazon_title": "Equate Adult Daily Multivitamin Gummies 250ct",
+      "brand": "Equate",
+      "source_store": "Sam's Club",
+      "category_slug": "vitamins-supplements",
+      "pack_count": 4,
+      "wholesale_price": 24.98,
+      "unit_cogs": 6.25,
+      "amazon_price": 13.24,
+      "total_amazon_fees": 6.49,
+      "net_profit_per_unit": 0.5,
+      "roi_per_unit": 8.0,
+      "profit_margin_pct": 3.8,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": null,
+      "fba_sellers": null
+    },
+    {
+      "rank": 6,
+      "composite_score": 15.0,
+      "tier": "REJECT",
+      "passes_all_filters": false,
+      "scoring_notes": [
+        "Negative profit \u2014 not viable"
+      ],
+      "opportunity_tags": [
+        "loss-leader"
+      ],
+      "wholesale_title": "Flonase Allergy Relief 240 Spray (2-pack)",
+      "amazon_asin": "B00E9FGOGI",
+      "amazon_title": "Flonase Allergy Relief Nasal Spray 120 Sprays",
+      "brand": "Flonase",
+      "source_store": "Sam's Club",
+      "category_slug": "personal-care",
+      "pack_count": 2,
+      "wholesale_price": 32.98,
+      "unit_cogs": 16.49,
+      "amazon_price": 25.49,
+      "total_amazon_fees": 10.32,
+      "net_profit_per_unit": -1.32,
+      "roi_per_unit": -8.0,
+      "profit_margin_pct": -5.2,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": null,
+      "fba_sellers": null
+    },
+    {
+      "rank": 7,
+      "composite_score": 10.2,
+      "tier": "LOW",
+      "passes_all_filters": false,
+      "scoring_notes": [
+        "Low profit $0.05/unit"
+      ],
+      "opportunity_tags": [],
+      "wholesale_title": "Kirkland Signature Aller-Tec Cetirizine 10mg 365ct",
+      "amazon_asin": "B00U9Z7D4E",
+      "amazon_title": "Kirkland Signature Aller-Tec Cetirizine 10mg Tablets 365ct",
+      "brand": "Kirkland",
+      "source_store": "Costco",
+      "category_slug": "vitamins-supplements",
+      "pack_count": 1,
+      "wholesale_price": 14.99,
+      "unit_cogs": 14.99,
+      "amazon_price": 22.99,
+      "total_amazon_fees": 7.95,
+      "net_profit_per_unit": 0.05,
+      "roi_per_unit": 0.3,
+      "profit_margin_pct": 0.2,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": null,
+      "fba_sellers": null
+    },
+    {
+      "rank": 8,
+      "composite_score": 10.0,
+      "tier": "REJECT",
+      "passes_all_filters": false,
+      "scoring_notes": [
+        "Negative profit \u2014 not viable"
+      ],
+      "opportunity_tags": [
+        "loss-leader"
+      ],
+      "wholesale_title": "Nature Made Multi Complete Vitamins 500ct",
+      "amazon_asin": "B005DK1FOI",
+      "amazon_title": "Nature Made Multi Complete with Iron 130 Tablets",
+      "brand": "Nature Made",
+      "source_store": "Costco",
+      "category_slug": "vitamins-supplements",
+      "pack_count": 1,
+      "wholesale_price": 18.99,
+      "unit_cogs": 18.99,
+      "amazon_price": 15.87,
+      "total_amazon_fees": 6.88,
+      "net_profit_per_unit": -10.0,
+      "roi_per_unit": -52.7,
+      "profit_margin_pct": -63.0,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": null,
+      "fba_sellers": null
+    },
+    {
+      "rank": 9,
+      "composite_score": 10.0,
+      "tier": "REJECT",
+      "passes_all_filters": false,
+      "scoring_notes": [
+        "Negative profit \u2014 not viable"
+      ],
+      "opportunity_tags": [
+        "loss-leader"
+      ],
+      "wholesale_title": "Kirkland Signature Extra Strength Pain Reliever 500ct",
+      "amazon_asin": "B004W1RY72",
+      "amazon_title": "Kirkland Signature Extra Strength Acetaminophen 500mg",
+      "brand": "Kirkland",
+      "source_store": "Costco",
+      "category_slug": "vitamins-supplements",
+      "pack_count": 1,
+      "wholesale_price": 12.99,
+      "unit_cogs": 12.99,
+      "amazon_price": 18.49,
+      "total_amazon_fees": 7.27,
+      "net_profit_per_unit": -1.77,
+      "roi_per_unit": -13.6,
+      "profit_margin_pct": -9.6,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": null,
+      "fba_sellers": null
+    },
+    {
+      "rank": 10,
+      "composite_score": 10.0,
+      "tier": "REJECT",
+      "passes_all_filters": false,
+      "scoring_notes": [
+        "Negative profit \u2014 not viable"
+      ],
+      "opportunity_tags": [
+        "loss-leader"
+      ],
+      "wholesale_title": "Kirkland Signature Vitamin D3 50mcg (600 softgels)",
+      "amazon_asin": "B004GIPJB2",
+      "amazon_title": "Kirkland Signature Vitamin D3 2000 IU 600 Softgels",
+      "brand": "Kirkland",
+      "source_store": "Costco",
+      "category_slug": "vitamins-supplements",
+      "pack_count": 1,
+      "wholesale_price": 9.99,
+      "unit_cogs": 9.99,
+      "amazon_price": 14.49,
+      "total_amazon_fees": 6.67,
+      "net_profit_per_unit": -2.17,
+      "roi_per_unit": -21.7,
+      "profit_margin_pct": -15.0,
+      "economics_confidence": "mock",
+      "monthly_sales_estimate": null,
+      "fba_sellers": null
+    }
+  ]
+}
