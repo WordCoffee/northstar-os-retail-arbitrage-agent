@@ -1,21 +1,31 @@
 """Shared fixtures/factories for Golden Goose Finder tests.
 
 Mock BreakdownEconomics objects are built from the data models defined in
-opportunity_scorer.py (the dataclass shape the sibling module will use) —
-never imported from sibling modules that may not exist yet.
+breakdown_economics.py (the shared dataclass shapes the scorer, orchestrator
+and report modules all consume). Factories introspect the active dataclass
+fields so they keep working whether the full shared model or a slim local
+fallback is on the import path.
 """
 
 from typing import Any, Dict
 
+import dataclasses
+
 import pytest
 
-from ..opportunity_scorer import BreakdownEconomics, IndividualListing, WholesalePack
+from ..breakdown_economics import BreakdownEconomics, IndividualListing, WholesalePack
+
+_WS_SUPPORTED = {f.name for f in dataclasses.fields(WholesalePack)}
+_IND_SUPPORTED = {f.name for f in dataclasses.fields(IndividualListing)}
+_ECON_SUPPORTED = {f.name for f in dataclasses.fields(BreakdownEconomics)}
 
 
 def make_individual(**overrides: Any) -> IndividualListing:
     data: Dict[str, Any] = dict(
         asin="B09GOLDDEMO1",
         title="Kirkland Signature Laundry Detergent Pods (152 ct)",
+        brand="Kirkland Signature",
+        category_slug="health-household",
         amazon_price=29.99,
         bsr=3500,
         review_rating=4.7,
@@ -24,39 +34,33 @@ def make_individual(**overrides: Any) -> IndividualListing:
         monthly_sales_estimate=3000.0,
     )
     data.update(overrides)
-    return IndividualListing(**data)
-
-
-_OPTIONAL_WS_FIELDS = {"source_store", "wholesale_pack_title"}
+    return IndividualListing(**{k: v for k, v in data.items() if k in _IND_SUPPORTED})
 
 
 def make_wholesale(**overrides: Any) -> WholesalePack:
     data: Dict[str, Any] = dict(
-        wholesale_price=24.99,
-        pack_count=152,
+        source_store="Costco",
+        product_title="Kirkland Signature Laundry Detergent Pods 152 ct",
         brand="Kirkland Signature",
         category_slug="health-household",
-        source_store="Costco",
-        wholesale_pack_title="Kirkland Signature Laundry Detergent Pods 152 ct",
+        pack_count=152,
+        wholesale_price=24.99,
     )
     data.update(overrides)
-    core = {k: v for k, v in data.items() if k not in _OPTIONAL_WS_FIELDS}
-    ws = WholesalePack(**core)
-    # Optional reporting fields may not exist on the sibling model; attach
-    # them only when the active class supports them.
-    for opt in _OPTIONAL_WS_FIELDS:
-        if opt in data and hasattr(ws, opt):
-            setattr(ws, opt, data[opt])
-    return ws
+    # Older consumers used wholesale_pack_title; the shared model prefers
+    # product_title. Normalize so either spelling works.
+    if "wholesale_pack_title" in data:
+        data.setdefault("product_title", data["wholesale_pack_title"])
+    return WholesalePack(**{k: v for k, v in data.items() if k in _WS_SUPPORTED})
 
 
 _IND_FIELDS = {
-    "asin", "title", "amazon_price", "bsr", "review_rating",
-    "review_count", "fba_sellers", "monthly_sales_estimate",
+    "asin", "title", "brand", "category_slug", "amazon_price", "bsr",
+    "review_rating", "review_count", "fba_sellers", "monthly_sales_estimate",
 }
 _WS_FIELDS = {
+    "source_store", "product_title", "wholesale_pack_title",
     "wholesale_price", "pack_count", "brand", "category_slug",
-    "source_store", "wholesale_pack_title",
 }
 
 
@@ -81,18 +85,41 @@ def make_economics(**overrides: Any) -> BreakdownEconomics:
             ws_data[key] = value
         else:
             econ_data[key] = value
+
+    # total_costs_per_unit == breakeven, derived as price - net when both are
+    # known (keeps every tiered fixture internally consistent).
+    price = ind_data.get("amazon_price", 29.99)
+    net = econ_data.get("net_profit_per_unit", 12.50)
+    if (
+        isinstance(price, (int, float)) and not isinstance(price, bool)
+        and isinstance(net, (int, float)) and not isinstance(net, bool)
+    ):
+        default_total = round(float(price) - float(net), 2)
+    else:
+        default_total = None
+
     econ: Dict[str, Any] = dict(
         unit_cogs=0.24,
+        repackaging_cost_per_unit=0.75,
+        referral_fee=1.20,
+        fulfillment_fee=4.75,
+        inbound_cost=0.35,
+        prep_cost=0.25,
+        packaging_cost=0.25,
+        return_reserve=0.55,
+        total_amazon_fees=6.50,
+        total_costs_per_unit=default_total,
         net_profit_per_unit=12.50,
         net_profit_per_costco_pack=1900.00,
         roi_per_unit=125.0,
         roi_per_costco_pack=152.0,
         profit_margin_pct=45.0,
-        total_amazon_fees=6.50,
+        breakeven_amazon_price=default_total,
         economics_confidence="estimated",
         economics_notes=["Fee stack estimated from the FBA fee preview."],
     )
     econ.update(econ_data)
+    econ = {k: v for k, v in econ.items() if k in _ECON_SUPPORTED}
     return BreakdownEconomics(
         wholesale=make_wholesale(**ws_data),
         individual=make_individual(**ind_data),
