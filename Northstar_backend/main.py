@@ -21,6 +21,13 @@ import live_gate
 import completeness_score
 from canopy_client import get_canopy_product
 
+# Golden Goose Finder — multi-pack breakdown arbitrage scanner
+try:
+    from agents.golden_goose_finder.main import router as golden_goose_router
+    _HAS_GOLDEN_GOOSE = True
+except ImportError:
+    _HAS_GOLDEN_GOOSE = False
+
 # Phase 6: Production infrastructure
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
@@ -167,6 +174,19 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH"],
     allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
 )
+
+# Golden Goose Finder — multi-pack breakdown arbitrage scanner
+if _HAS_GOLDEN_GOOSE:
+    app.include_router(golden_goose_router)
+
+# Golden Goose Finder UI panel (standalone page; fetches /api/golden-goose/*)
+_GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"
+if _GOOSE_STATIC.exists():
+    app.mount(
+        "/golden-goose",
+        StaticFiles(directory=str(_GOOSE_STATIC)),
+        name="golden-goose-panel",
+    )
 
 
 KIRKLAND_CATALOG = [

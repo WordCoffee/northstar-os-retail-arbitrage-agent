@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Golden Goose Finder — Multi-Pack Breakdown Arbitrage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ================================================================
+       Golden Goose Finder — Standalone Panel
+       Design language: Northstar OS neo-skeuomorphic (dark desk theme)
+       ================================================================ */
+    :root {
+      --bg: #171412;
+      --bg-elevated: #1f1b18;
+      --bg-sunken: #12100e;
+      --bg-hover: #262120;
+      --gold: #D4AF37;
+      --gold-dim: rgba(212, 175, 55, 0.14);
+      --gold-line: rgba(212, 175, 55, 0.45);
+      --gold-bright: #e3c457;
+      --steel: #4682B4;
+      --steel-dim: rgba(70, 130, 180, 0.16);
+      --steel-line: rgba(70, 130, 180, 0.5);
+      --crimson: #8B0000;
+      --crimson-bright: #c0392b;
+      --crimson-dim: rgba(139, 0, 0, 0.22);
+      --green: #7fb069;
+      --green-dim: rgba(127, 176, 105, 0.14);
+      --green-line: rgba(127, 176, 105, 0.4);
+      --ink: #EAE4D8;
+      --ink-dim: #A89F92;
+      --ink-faint: #6e675e;
+      --hairline: #38322c;
+      --hairline-soft: #2a2622;
+      --font-head: 'Playfair Display', Georgia, serif;
+      --font-body: 'Roboto Mono', Consolas, monospace;
+      --radius: 8px;
+      --radius-lg: 12px;
+      --radius-full: 999px;
+      --shadow-card: 0 12px 28px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.04) inset;
+      --shadow-lg: 0 20px 40px rgba(0,0,0,0.6);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --duration-fast: 120ms;
+      --duration-normal: 200ms;
+      --duration-slow: 350ms;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+
+    /* ---- Ribbon ---- */
+    .ribbon {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 20px;
+      height: 56px;
+      background: linear-gradient(180deg, #26221c 0%, #1d1915 100%);
+      border-bottom: 2px solid var(--gold);
+      box-shadow: 0 2px 0 #000, 0 14px 30px rgba(0,0,0,.45);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .ribbon-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .ribbon-brand h1 {
+      font-family: var(--font-head);
+      font-size: 17px;
+      color: var(--ink);
+    }
+    .ribbon-brand h1 span { color: var(--gold); }
+    .ribbon-brand small {
+      display: block;
+      font-size: 9px;
+      color: var(--ink-faint);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .ribbon-link {
+      margin-left: auto;
+      font-size: 10px;
+      color: var(--ink-dim);
+      text-decoration: none;
+      padding: 5px 12px;
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-full);
+      transition: border-color var(--duration-normal), color var(--duration-normal);
+    }
+    .ribbon-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ---- Container ---- */
+    .container { max-width: 1600px; margin: 0 auto; padding: 20px 24px 40px; }
+
+    /* ---- Control Bar ---- */
+    .control-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      margin-bottom: 16px;
+    }
+    .control-bar .ctrl-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .control-bar label {
+      font-size: 9px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      white-space: nowrap;
+    }
+    .control-bar select,
+    .control-bar input[type="number"] {
+      background: var(--bg-sunken);
+      border: 1px solid var(--hairline);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 11px;
+      border-radius: 5px;
+      padding: 5px 8px;
+      outline: none;
+      width: 110px;
+      transition: border-color var(--duration-normal);
+    }
+    .control-bar select:focus,
+    .control-bar input[type="number"]:focus {
+      border-color: var(--gold);
+    }
+    .control-bar input[type="number"] { width: 80px; }
+    .ctrl-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--hairline);
+      margin: 0 4px;
+    }
+
+    /* ---- Buttons ---- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      border: 1px solid var(--hairline);
+      background: linear-gradient(180deg, #2c2722, #211d19);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      transition: border-color var(--duration-normal), box-shadow var(--duration-normal), transform var(--duration-fast);
+      white-space: nowrap;
+    }
+    .btn:hover { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-dim); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn:disabled:hover { border-color: var(--hairline); box-shadow: none; }
+    .btn-green {
+      background: linear-gradient(180deg, #8bc34a, #558b2f);
+      color: #1a2e0a;
+      border-color: #6d9b3a;
+      font-weight: 700;
+    }
+    .btn-green:hover { box-shadow: 0 0 0 2px var(--green-dim), 0 4px 16px rgba(127,176,105,.3); }
+    .btn-red {
+      background: linear-gradient(180deg, #c0392b, #6d0f05);
+      color: #f0d9d3;
+      border-color: #922b21;
+      font-weight: 700;
+    }
+    .btn-red:hover { box-shadow: 0 0 0 2px var(--crimson-dim), 0 4px 16px rgba(192,57,43,.3); }
+    .btn-red[disabled] {
+      background: linear-gradient(180deg, #5a302a, #3d1c18);
+      color: #a0807a;
+      border-color: #4a2a25;
+    }
+    .btn-ghost { background: transparent; border-color: transparent; }
+    .btn-ghost:hover { border-color: var(--hairline); background: var(--bg-hover); }
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,.2);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---- KPI Strip ---- */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .kpi-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+    .kpi-card .lbl {
+      font-size: 8px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .kpi-card .val {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .kpi-card .val.gold { color: var(--gold); }
+    .kpi-card .val.green { color: var(--green); }
+    .kpi-card .val.crimson { color: var(--crimson-bright); }
+    .kpi-card .sub { font-size: 9px; color: var(--ink-dim); margin-top: 2px; }
+
+    /* ---- Table ---- */
+    .table-wrap {
+      background: var(--bg-elevated);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      box-shadow: var(--shadow-card);
+    }
+    table.svc {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 1400px;
+      font-size: 12px;
+    }
+    table.svc thead th {
+      position: sticky;
+      top: 0;
+      background: var(--bg-sunken);
+      color: var(--ink-faint);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 10px 12px;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--hairline);
+      cursor: pointer;
+      user-select: none;
+      transition: color var(--duration-fast);
+    }
+    table.svc thead th:hover { color: var(--gold); }
+    table.svc thead th.sorted { color: var(--gold); }
+    table.svc thead th .sort-arrow { margin-left: 4px; font-size: 8px; }
+    table.svc tbody td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--hairline-soft);
+      white-space: nowrap;
+      vertical-align: middle;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+      transition: background var(--duration-fast);
+    }
+    table.svc tbody tr {
+      background: linear-gradient(180deg, #211d1a, #1c1815);
+      cursor: pointer;
+    }
+    table.svc tbody tr:hover { background: var(--bg-hover); }
+    table.svc tbody tr.selected {
+      background: var(--gold-dim);
+      box-shadow: inset 0 0 0 1px var(--gold-line);
+    }
+    table.svc .num { text-align: right; }
+    table.svc .dim { color: var(--ink-dim); }
+    table.svc .unk { color: var(--ink-faint); font-style: italic; }
+
+    /* ---- Tier coloring for table rows ---- */
+    tr.tier-HIGH td:first-child { box-shadow: inset 3px 0 0 var(--green); }
+    tr.tier-MEDIUM td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
+    tr.tier-LOW td:first-child { box-shadow: inset 3px 0 0 var(--ink-faint); }
+    tr.tier-REJECT td:first-child { box-shadow: inset 3px 0 0 var(--crimson-bright); }
+
+    /* ---- Pills ---- */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .pill.gold { color: var(--gold); background: var(--gold-dim); border: 1px solid var(--gold-line); }
+    .pill.green { color: #9ecf8e; background: var(--green-dim); border: 1px solid var(--green-line); }
+    .pill.crimson { color: #e08a80; background: var(--crimson-dim); border: 1px solid rgba(192,57,43,.5); }
+    .pill.steel { color: #8fc4e8; background: var(--steel-dim); border: 1px solid var(--steel-line); }
+    .pill.dim { color: var(--ink-faint); background: #25201c; border: 1px solid var(--hairline); }
+
+    /* ---- Tags ---- */
+    .tag {
+      display: inline-block;
+      font-size: 8px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      background: rgba(70,130,180,.08);
+      border: 1px solid rgba(70,130,180,.25);
+      border-radius: 3px;
+      padding: 1px 6px;
+      margin-right: 3px;
+    }
+    .tag.hot { color: var(--green); background: var(--green-dim); border-color: var(--green-line); }
+
+    /* ---- Detail Panel (Slide-out) ---- */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(0,0,0,.65);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--duration-normal);
+    }
+    .detail-overlay.active { opacity: 1; pointer-events: auto; }
+    .detail-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 520px;
+      max-width: 90vw;
+      background: var(--bg-elevated);
+      border-left: 1px solid var(--hairline);
+      box-shadow: -12px 0 40px rgba(0,0,0,.6);
+      z-index: 51;
+      transform: translateX(100%);
+      transition: transform var(--duration-slow) var(--ease-out);
+      overflow-y: auto;
+      padding: 0;
+    }
+    .detail-overlay.active .detail-panel { transform: translateX(0); }
+    .detail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--hairline-soft);
+      background: var(--bg-sunken);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .detail-header h2 {
+      font-family: var(--font-head);
+      font-size: 18px;
+      color: var(--ink);
+    }
+    .detail-close {
+      background: none;
+      border: none;
+      color: var(--ink-faint);
+      font-size: 22px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .detail-close:hover { color: var(--ink); background: var(--bg-hover); }
+    .detail-body { padding: 20px; }
+    .detail-section {
+      margin-bottom: 20px;
+    }
+    .detail-section h3 {
+      font-family: var(--font-head);
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--hairline-soft);
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 16px;
+    }
+    .detail-field {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .detail-field .lbl {
+      font-size: 8px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .detail-field .val {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+    .detail-field .val.gold { color: var(--gold); }
+    .detail-field .val.green { color: var(--green); }
+    .detail-field .val.red { color: var(--crimson-bright); }
+    .detail-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .detail-notes { margin-top: 8px; }
+    .detail-note {
+      border-left: 2px solid var(--steel-line);
+      background: var(--steel-dim);
+      border-radius: 0 6px 6px 0;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .notice {
+      border-left: 3px solid var(--steel);
+      background: var(--steel-dim);
+      padding: 10px 14px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 11px;
+      color: var(--ink);
+      margin-top: 16px;
+    }
+    .notice.warn { border-left-color: var(--gold); background: var(--gold-dim); }
+
+    /* ---- Empty State ---- */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      text-align: center;
+    }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: .6; }
+    .empty-title { font-family: var(--font-head); font-size: 18px; color: var(--ink); margin-bottom: 8px; }
+    .empty-text { font-size: 13px; color: var(--ink-faint); max-width: 400px; line-height: 1.6; margin-bottom: 20px; }
+
+    /* ---- Status bar ---- */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background: var(--bg-sunken);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      font-size: 11px;
+      color: var(--ink-dim);
+    }
+    .status-bar .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-bar .dot.idle { background: var(--ink-faint); }
+    .status-bar .dot.running { background: var(--gold); animation: pulse 1.2s ease-in-out infinite; }
+    .status-bar .dot.done { background: var(--green); }
+    .status-bar .dot.error { background: var(--crimson-bright); }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 900px) {
+      .control-bar { flex-direction: column; align-items: stretch; }
+      .ctrl-divider { display: none; }
+      .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+      .detail-panel { width: 100%; max-width: 100vw; }
+    }
+    @media (max-width: 640px) {
+      .container { padding: 12px; }
+      .kpi-strip { grid-template-columns: 1fr; }
+      .ribbon { padding: 0 12px; }
+      .ribbon-brand h1 { font-size: 14px; }
+    }
+
+    /* ---- Tooltip for disabled live button ---- */
+    .tooltip-wrap { position: relative; }
+    .tooltip-wrap .tooltip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-elevated);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+      font-size: 10px;
+      color: var(--ink-dim);
+      white-space: nowrap;
+      box-shadow: var(--shadow-lg);
+      z-index: 10;
+    }
+    .tooltip-wrap:hover .tooltip { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- ============ RIBBON ============ -->
+  <header class="ribbon">
+    <div class="ribbon-brand">
+      <h1>🦢 Golden Goose <span>Finder</span>
+        <small>Multi-Pack Breakdown Arbitrage</small>
+      </h1>
+    </div>
+    <a class="ribbon-link" href="/northstar-os/">← Back to Analyst's Desk</a>
+  </header>
+
+  <div class="container">
+
+    <!-- ============ CONTROL BAR ============ -->
+    <div class="control-bar" id="controls">
+      <div class="ctrl-group">
+        <label for="sel-category">Category</label>
+        <select id="sel-category">
+          <option value="">All Categories</option>
+          <option value="vitamins-supplements">Vitamins &amp; Supplements</option>
+          <option value="personal-care">Personal Care</option>
+          <option value="household">Household</option>
+          <option value="food-beverage">Food &amp; Beverage</option>
+          <option value="electronics">Electronics &amp; Accessories</option>
+        </select>
+      </div>
+      <div class="ctrl-divider"></div>
+      <div class="ctrl-group">
+        <label for="sel-store">Store</label>
+        <select id="sel-store">
+          <option value="">All Stores</option>
+          <option value="Costco">Costco</option>
+          <option value="Sam's Club">Sam's Club</option>
+        </select>
+      </div>
+      <div class="ctrl-divider"></div>
+      <div class="ctrl-group">
+        <label for="inp-profit">Min Profit $</label>
+        <input type="number" id="inp-profit" value="10" min="0" step="1">
+      </div>
+      <div class="ctrl-divider"></div>
+      <div class="ctrl-group">
+        <label for="inp-sales">Min Monthly Sales</label>
+        <input type="number" id="inp-sales" value="500" min="0" step="100">
+      </div>
+      <div class="ctrl-divider"></div>
+      <button class="btn btn-green" id="btn-mock" title="Run scan with mock data — safe, no API calls">
+        ▶ Run Mock Scan
+      </button>
+      <div class="tooltip-wrap">
+        <button class="btn btn-red" id="btn-live" disabled title="Requires §3 operator approval for each API call">
+          ⚡ Run Live Scan
+        </button>
+        <span class="tooltip">Requires §3 operator approval for each Costco / Amazon API call</span>
+      </div>
+      <button class="btn btn-ghost" id="btn-export" style="margin-left:auto" title="Export results as CSV">
+        ↓ Export CSV
+      </button>
+    </div>
+
+    <!-- ============ STATUS BAR ============ -->
+    <div class="status-bar" id="status-bar">
+      <span class="dot idle" id="status-dot"></span>
+      <span id="status-text">Ready — select filters and run a scan</span>
+    </div>
+
+    <!-- ============ KPI STRIP ============ -->
+    <div class="kpi-strip" id="kpis">
+      <div class="kpi-card">
+        <div class="lbl">Total Opportunities</div>
+        <div class="val gold" id="kpi-total">—</div>
+        <div class="sub">from latest scan</div>
+      </div>
+      <div class="kpi-card">
+        <div class="lbl">HIGH Tier</div>
+        <div class="val green" id="kpi-high">—</div>
+        <div class="sub">profitable + viable</div>
+      </div>
+      <div class="kpi-card">
+        <div class="lbl">Est. Monthly Profit</div>
+        <div class="val gold" id="kpi-profit">—</div>
+        <div class="sub">across all tiers</div>
+      </div>
+      <div class="kpi-card">
+        <div class="lbl">Average ROI</div>
+        <div class="val" id="kpi-roi">—</div>
+        <div class="sub">per unit breakdown</div>
+      </div>
+      <div class="kpi-card">
+        <div class="lbl">Scan Mode</div>
+        <div class="val" id="kpi-mode">—</div>
+        <div class="sub" id="kpi-time">no scan yet</div>
+      </div>
+    </div>
+
+    <!-- ============ OPPORTUNITIES TABLE ============ -->
+    <div class="table-wrap" id="table-wrap">
+      <table class="svc" id="opp-table">
+        <thead>
+          <tr>
+            <th data-sort="rank" class="sorted">Rank <span class="sort-arrow">▼</span></th>
+            <th data-sort="amazon_asin">ASIN</th>
+            <th data-sort="brand">Brand</th>
+            <th data-sort="wholesale_title">Product</th>
+            <th data-sort="source_store">Source</th>
+            <th data-sort="pack_count" class="num">Pack</th>
+            <th data-sort="unit_cogs" class="num">Unit COGS</th>
+            <th data-sort="amazon_price" class="num">Amazon $</th>
+            <th data-sort="net_profit_per_unit" class="num">Net Profit</th>
+            <th data-sort="roi_per_unit" class="num">ROI %</th>
+            <th data-sort="monthly_sales_estimate" class="num">Monthly Sold</th>
+            <th data-sort="fba_sellers" class="num">FBA Sellers</th>
+            <th data-sort="composite_score" class="num">Score</th>
+            <th data-sort="tier">Tier</th>
+            <th>Tags</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr>
+            <td colspan="15">
+              <div class="empty-state">
+                <div class="empty-icon">🦢</div>
+                <div class="empty-title">No scan results yet</div>
+                <div class="empty-text">Click "Run Mock Scan" to discover multi-pack breakdown arbitrage opportunities from Costco and Sam's Club.</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============ NOTICE ============ -->
+    <div class="notice warn" style="margin-top:12px">
+      Mock data is for testing only. Monthly sales estimates are provider estimates, not verified data.
+      Live scanning requires §3 operator approval for each external API call.
+    </div>
+
+  </div>
+
+  <!-- ============ DETAIL SLIDE-OUT ============ -->
+  <div class="detail-overlay" id="detail-overlay">
+    <div class="detail-panel" id="detail-panel">
+      <div class="detail-header">
+        <h2 id="detail-title">Opportunity Detail</h2>
+        <button class="detail-close" id="detail-close">&times;</button>
+      </div>
+      <div class="detail-body" id="detail-body"></div>
+    </div>
+  </div>
+
+  <!-- ============ JAVASCRIPT ============ -->
+  <script>
+  (function () {
+    'use strict';
+
+    // --- State ---
+    var state = {
+      opportunities: [],
+      filtered: [],
+      sortKey: 'rank',
+      sortAsc: true,
+      selectedIdx: null,
+      scanning: false,
+    };
+
+    // --- DOM refs ---
+    var $ = function (id) { return document.getElementById(id); };
+    var API_BASE = '/api/golden-goose';
+
+    // --- Helpers ---
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+    function money(v) { return v == null ? '—' : '$' + Number(v).toFixed(2); }
+    function pct(v) { return v == null ? '—' : Number(v).toFixed(1) + '%'; }
+    function num(v) { return v == null ? '—' : String(v); }
+
+    function setStatus(type, text) {
+      var dot = $('status-dot');
+      var txt = $('status-text');
+      dot.className = 'dot ' + type;
+      txt.textContent = text;
+    }
+
+    // --- Load categories into dropdown ---
+    async function loadCategories() {
+      var sel = $('sel-category');
+      var fallbackOptions = [
+        { value: '', label: 'All Categories' },
+        { value: 'nicotine_cessation', label: 'Nicotine Cessation' },
+        { value: 'otc_health', label: 'OTC Health & Remedies' },
+        { value: 'vitamins_supplements', label: 'Vitamins & Supplements' },
+        { value: 'household_cleaning', label: 'Household Cleaning' },
+        { value: 'personal_care', label: 'Personal Care' },
+        { value: 'pet', label: 'Pet Care' },
+        { value: 'snacks_bars', label: 'Snacks & Bars' },
+        { value: 'baby_child', label: 'Baby & Child' },
+      ];
+      // Build options HTML
+      function buildOptions(opts) {
+        return opts.map(function (o) {
+          return '<option value="' + esc(o.value) + '">' + esc(o.label) + '</option>';
+        }).join('');
+      }
+      try {
+        var data = await apiGet('/categories');
+        var cats = data.categories;
+        if (cats && typeof cats === 'object' && Object.keys(cats).length > 0) {
+          var opts = [{ value: '', label: 'All Categories' }];
+          Object.keys(cats).forEach(function (slug) {
+            var cfg = cats[slug] || {};
+            opts.push({ value: slug, label: cfg.display_name || slug });
+          });
+          // Sort by display name, keep "All Categories" first
+          opts = opts.slice(0, 1).concat(
+            opts.slice(1).sort(function (a, b) { return a.label.localeCompare(b.label); })
+          );
+          sel.innerHTML = buildOptions(opts);
+          return;
+        }
+      } catch (e) {
+        // fall through to fallback options
+      }
+      sel.innerHTML = buildOptions(fallbackOptions);
+    }
+
+    // --- Fetch helpers ---
+    function apiUrl(path, params) {
+      var url = API_BASE + path;
+      if (params && Object.keys(params).length) {
+        var qs = new URLSearchParams();
+        Object.keys(params).forEach(function (k) {
+          if (params[k] != null && params[k] !== '') {
+            if (Array.isArray(params[k])) {
+              params[k].forEach(function (v) { qs.append(k, v); });
+            } else {
+              qs.set(k, params[k]);
+            }
+          }
+        });
+        var s = qs.toString();
+        if (s) url += '?' + s;
+      }
+      return url;
+    }
+    async function apiGet(path) {
+      var resp = await fetch(apiUrl(path));
+      if (!resp.ok) throw new Error('API error ' + resp.status);
+      return resp.json();
+    }
+    async function apiPost(path, params) {
+      var resp = await fetch(apiUrl(path, params), { method: 'POST' });
+      if (!resp.ok) throw new Error('API error ' + resp.status);
+      return resp.json();
+    }
+
+    // --- Get filter values ---
+    function getFilters() {
+      return {
+        category: $('sel-category').value || undefined,
+        store: $('sel-store').value || undefined,
+        roi_floor: parseFloat($('inp-profit').value) || 10,
+        min_monthly_sales: parseInt($('inp-sales').value, 10) || 500,
+      };
+    }
+
+    // --- Render KPIs ---
+    function renderKpis(summary, meta) {
+      $('kpi-total').textContent = num(summary.total_opportunities);
+      $('kpi-high').textContent = num(summary.high_tier_count);
+      $('kpi-profit').textContent = summary.estimated_monthly_profit != null
+        ? '$' + Number(summary.estimated_monthly_profit).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        : '—';
+      $('kpi-roi').textContent = summary.average_roi_pct != null
+        ? pct(summary.average_roi_pct)
+        : '—';
+      $('kpi-mode').textContent = meta.mode === 'mock' ? 'Mock (safe)' : 'LIVE';
+      $('kpi-time').textContent = meta.elapsed_seconds != null
+        ? 'scanned in ' + meta.elapsed_seconds + 's'
+        : (meta.generated_at ? 'at ' + meta.generated_at.split('T')[0] : '—');
+    }
+
+    // --- Render table ---
+    function renderTable() {
+      var tbody = $('table-body');
+      var rows = state.filtered;
+
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="15">' +
+          '<div class="empty-state">' +
+          '<div class="empty-icon">🦢</div>' +
+          '<div class="empty-title">No opportunities match your filters</div>' +
+          '<div class="empty-text">Try adjusting your filters or run a new scan.</div>' +
+          '</div></td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = rows.map(function (o, idx) {
+        var tierPill = tierPillHtml(o.tier);
+        var tags = (o.opportunity_tags || []).map(function (t) {
+          var cls = t === 'profitable' || t === 'high-breakdown' || t === 'triple-digit-roi' ? ' hot' : '';
+          return '<span class="tag' + cls + '">' + esc(t) + '</span>';
+        }).join('');
+
+        return '<tr class="tier-' + esc(o.tier) + (state.selectedIdx === idx ? ' selected' : '') +
+          '" data-idx="' + idx + '">' +
+          '<td class="num">' + esc(o.rank) + '</td>' +
+          '<td class="dim">' + esc(o.amazon_asin) + '</td>' +
+          '<td>' + esc(o.brand) + '</td>' +
+          '<td title="' + esc(o.wholesale_title) + '">' + esc((o.wholesale_title || '').substring(0, 38)) + '</td>' +
+          '<td>' + esc(o.source_store) + '</td>' +
+          '<td class="num">' + esc(o.pack_count) + '</td>' +
+          '<td class="num">' + money(o.unit_cogs) + '</td>' +
+          '<td class="num">' + money(o.amazon_price) + '</td>' +
+          '<td class="num" style="font-weight:700;color:' + (o.net_profit_per_unit >= 10 ? 'var(--green)' : o.net_profit_per_unit > 0 ? 'var(--gold)' : 'var(--crimson-bright)') + '">' + money(o.net_profit_per_unit) + '</td>' +
+          '<td class="num">' + pct(o.roi_per_unit) + '</td>' +
+          '<td class="num">' + num(o.monthly_sales_estimate) + '</td>' +
+          '<td class="num">' + num(o.fba_sellers) + '</td>' +
+          '<td class="num" style="font-weight:600;color:var(--gold)">' + num(o.composite_score) + '</td>' +
+          '<td>' + tierPill + '</td>' +
+          '<td>' + tags + '</td>' +
+          '</tr>';
+      }).join('');
+
+      // Bind row clicks
+      var trs = tbody.querySelectorAll('tr[data-idx]');
+      trs.forEach(function (tr) {
+        tr.addEventListener('click', function () {
+          var i = parseInt(tr.getAttribute('data-idx'), 10);
+          openDetail(i);
+        });
+      });
+    }
+
+    function tierPillHtml(tier) {
+      var cls = { HIGH: 'green', MEDIUM: 'gold', LOW: 'dim', REJECT: 'crimson' }[tier] || 'dim';
+      return '<span class="pill ' + cls + '">' + esc(tier) + '</span>';
+    }
+
+    // --- Sort ---
+    function sortData() {
+      var key = state.sortKey;
+      var asc = state.sortAsc;
+      state.filtered.sort(function (a, b) {
+        var va = a[key], vb = b[key];
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+        if (typeof va === 'string') {
+          return asc ? va.localeCompare(vb) : vb.localeCompare(va);
+        }
+        return asc ? va - vb : vb - va;
+      });
+    }
+
+    function applyFiltersAndRender() {
+      var filters = getFilters();
+      state.filtered = state.opportunities.filter(function (o) {
+        if (filters.category && o.category_slug !== filters.category) return false;
+        if (filters.store && o.source_store !== filters.store) return false;
+        if (filters.roi_floor && o.net_profit_per_unit < filters.roi_floor) return false;
+        return true;
+      });
+      sortData();
+      renderTable();
+    }
+
+    // --- Detail panel ---
+    function openDetail(idx) {
+      var o = state.filtered[idx];
+      if (!o) return;
+      state.selectedIdx = idx;
+      renderTable(); // re-render to highlight
+
+      $('detail-title').textContent = (o.brand || '') + ' — ' + (o.wholesale_title || '').substring(0, 40);
+      var body = $('detail-body');
+
+      var tags = (o.opportunity_tags || []).map(function (t) {
+        var cls = t === 'profitable' || t === 'high-breakdown' ? ' hot' : '';
+        return '<span class="tag' + cls + '">' + esc(t) + '</span>';
+      }).join('');
+
+      var notes = (o.scoring_notes || []).map(function (n) {
+        return '<div class="detail-note">' + esc(n) + '</div>';
+      }).join('');
+
+      body.innerHTML =
+        '<div class="detail-section">' +
+          '<h3>Opportunity Score</h3>' +
+          '<div class="detail-grid">' +
+            '<div class="detail-field"><div class="lbl">Composite Score</div><div class="val gold">' + esc(o.composite_score) + ' / 100</div></div>' +
+            '<div class="detail-field"><div class="lbl">Tier</div><div class="val">' + tierPillHtml(o.tier) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Rank</div><div class="val">#' + esc(o.rank) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Passes Filters</div><div class="val">' + (o.passes_all_filters ? '<span class="pill green">YES</span>' : '<span class="pill crimson">NO</span>') + '</div></div>' +
+          '</div>' +
+          '<div class="detail-tags">' + tags + '</div>' +
+        '</div>' +
+
+        '<div class="detail-section">' +
+          '<h3>Financial Breakdown (Per Unit)</h3>' +
+          '<div class="detail-grid">' +
+            '<div class="detail-field"><div class="lbl">Wholesale Price (pack)</div><div class="val">' + money(o.wholesale_price) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Pack Count</div><div class="val">' + esc(o.pack_count) + ' units</div></div>' +
+            '<div class="detail-field"><div class="lbl">Unit COGS</div><div class="val">' + money(o.unit_cogs) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Amazon Selling Price</div><div class="val gold">' + money(o.amazon_price) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Amazon Fees (referral + FBA)</div><div class="val">' + money(o.total_amazon_fees) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Net Profit / Unit</div><div class="val ' + (o.net_profit_per_unit >= 10 ? 'green' : o.net_profit_per_unit > 0 ? 'gold' : 'red') + '">' + money(o.net_profit_per_unit) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">ROI per Unit</div><div class="val">' + pct(o.roi_per_unit) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Profit Margin</div><div class="val">' + pct(o.profit_margin_pct) + '</div></div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="detail-section">' +
+          '<h3>Product Info</h3>' +
+          '<div class="detail-grid">' +
+            '<div class="detail-field"><div class="lbl">Amazon ASIN</div><div class="val"><a href="https://www.amazon.com/dp/' + esc(o.amazon_asin) + '" target="_blank" style="color:var(--steel);text-decoration:none">' + esc(o.amazon_asin) + ' ↗</a></div></div>' +
+            '<div class="detail-field"><div class="lbl">Brand</div><div class="val">' + esc(o.brand) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Source Store</div><div class="val">' + esc(o.source_store) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Category</div><div class="val">' + esc(o.category_slug) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Est. Monthly Sales</div><div class="val">' + num(o.monthly_sales_estimate) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">FBA Sellers</div><div class="val">' + num(o.fba_sellers) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Confidence</div><div class="val">' + esc(o.economics_confidence) + '</div></div>' +
+          '</div>' +
+          '<div style="margin-top:8px"><div class="lbl" style="font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)">Amazon Title</div>' +
+          '<div style="font-size:12px;color:var(--ink);margin-top:4px;line-height:1.5">' + esc(o.amazon_title) + '</div></div>' +
+        '</div>' +
+
+        '<div class="detail-section">' +
+          '<h3>Scoring Notes</h3>' +
+          (notes || '<div class="detail-note">No scoring notes.</div>') +
+        '</div>' +
+
+        '<div class="notice warn">' +
+          'Economics confidence: <strong>' + esc(o.economics_confidence) + '</strong> — ' +
+          'all figures are estimates until live verification.' +
+        '</div>';
+
+      $('detail-overlay').classList.add('active');
+    }
+
+    function closeDetail() {
+      $('detail-overlay').classList.remove('active');
+      state.selectedIdx = null;
+      renderTable();
+    }
+
+    // --- Export CSV ---
+    function exportCSV() {
+      var rows = state.filtered;
+      if (!rows.length) return;
+      var header = ['Rank','ASIN','Brand','Product','Source','Pack','Unit COGS','Amazon Price','Net Profit','ROI%','Monthly Sold','FBA Sellers','Score','Tier','Tags'];
+      var lines = [header.join(',')];
+      rows.forEach(function (o) {
+        lines.push([
+          o.rank,
+          o.amazon_asin,
+          '"' + (o.brand || '').replace(/"/g, '""') + '"',
+          '"' + (o.wholesale_title || '').replace(/"/g, '""') + '"',
+          o.source_store,
+          o.pack_count,
+          o.unit_cogs,
+          o.amazon_price,
+          o.net_profit_per_unit,
+          o.roi_per_unit,
+          o.monthly_sales_estimate || '',
+          o.fba_sellers || '',
+          o.composite_score,
+          o.tier,
+          '"' + (o.opportunity_tags || []).join(';') + '"'
+        ].join(','));
+      });
+      var blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'golden-goose-opportunities.csv';
+      a.click();
+    }
+
+    // --- Scan handler ---
+    async function runScan() {
+      if (state.scanning) return;
+      state.scanning = true;
+      $('btn-mock').disabled = true;
+      $('btn-mock').innerHTML = '<span class="spinner"></span> Scanning…';
+      setStatus('running', 'Running mock scan — discovering multi-pack opportunities…');
+
+      try {
+        var filters = getFilters();
+        var params = {};
+        if (filters.category) params.categories = [filters.category];
+        params.roi_floor = filters.roi_floor;
+        params.min_monthly_sales = filters.min_monthly_sales;
+
+        var data = await apiPost('/scan-mock', params);
+
+        state.opportunities = data.opportunities || [];
+        applyFiltersAndRender();
+        renderKpis(data.summary || {}, data.meta || {});
+
+        setStatus('done', 'Scan complete — ' + state.opportunities.length + ' opportunities found in ' + ((data.meta || {}).elapsed_seconds || '?') + 's');
+      } catch (err) {
+        setStatus('error', 'Scan failed: ' + err.message);
+        state.opportunities = [];
+        state.filtered = [];
+        renderTable();
+      } finally {
+        state.scanning = false;
+        $('btn-mock').disabled = false;
+        $('btn-mock').textContent = '▶ Run Mock Scan';
+      }
+    }
+
+    // --- Load existing data on page load ---
+    async function loadExisting() {
+      try {
+        setStatus('running', 'Loading existing scan data…');
+        var data = await apiGet('/opportunities');
+        if (data.opportunities && data.opportunities.length) {
+          state.opportunities = data.opportunities;
+          applyFiltersAndRender();
+          renderKpis(data.summary || {}, data.report_meta || {});
+          setStatus('done', 'Loaded ' + state.opportunities.length + ' opportunities from previous scan');
+        } else {
+          setStatus('idle', 'No previous scan data — run a mock scan to start');
+        }
+      } catch (e) {
+        setStatus('idle', 'Ready — select filters and run a scan');
+      }
+    }
+
+    // --- Event bindings ---
+    $('btn-mock').addEventListener('click', runScan);
+    $('btn-export').addEventListener('click', exportCSV);
+    $('detail-close').addEventListener('click', closeDetail);
+    $('detail-overlay').addEventListener('click', function (e) {
+      if (e.target === $('detail-overlay')) closeDetail();
+    });
+
+    // Filter changes
+    ['sel-category', 'sel-store', 'inp-profit', 'inp-sales'].forEach(function (id) {
+      $(id).addEventListener('change', function () {
+        if (state.opportunities.length) applyFiltersAndRender();
+      });
+    });
+
+    // Table header sort
+    $('opp-table').querySelector('thead').addEventListener('click', function (e) {
+      var th = e.target.closest('th[data-sort]');
+      if (!th) return;
+      var key = th.getAttribute('data-sort');
+      if (state.sortKey === key) {
+        state.sortAsc = !state.sortAsc;
+      } else {
+        state.sortKey = key;
+        state.sortAsc = key === 'rank' || key === 'composite_score';
+      }
+      // Update sort indicators
+      $('opp-table').querySelectorAll('thead th').forEach(function (h) {
+        h.classList.remove('sorted');
+        var arrow = h.querySelector('.sort-arrow');
+        if (arrow) arrow.textContent = '';
+      });
+      th.classList.add('sorted');
+      var arrow = th.querySelector('.sort-arrow') || document.createElement('span');
+      arrow.className = 'sort-arrow';
+      arrow.textContent = state.sortAsc ? ' ▼' : ' ▲';
+      if (!th.querySelector('.sort-arrow')) th.appendChild(arrow);
+
+      sortData();
+      renderTable();
+    });
+
+    // Keyboard: Escape closes detail
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeDetail();
+    });
+
+    // --- Boot ---
+    (async function init() {
+      await loadCategories();   // populate dropdown from API (fallback list)
+      loadExisting();           // load previous scan, if any
+    })();
+  })();
+  </script>
+</body>
+</html>
