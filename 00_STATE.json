@@ -556,7 +556,7 @@
                                  "before_after_ab":  "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
                              }
                   }
-    ,    "last_updated":  "2026-09-15T22:00:00Z",
+    ,    "last_updated":  "2026-09-16T05:30:00Z",
     "history":  [
                      {
                          "ts":  "2026-09-15T22:00:00Z",
@@ -924,6 +924,13 @@
                         "batch":  "master-brain-20260907",
                         "summary":  "Wired the Master Brain to actually LOAD at session start. Added Northstar_backend/master_brain_profiles.py: priority-ordered pluggable identity resolver chain (two_step_auth \u003e login_session \u003e ip_address = future slots returning no-match; local_default = active bootstrap via NORTHSTAR_PROFILE env or manifest default), canonical profile manifest (master-brain/profiles/manifest.json: t2-holdings-tyrone-johnson = master seed/default), fail-closed loader (unknown ids / path traversal / non-md rejected, never fabricates), sha256+line-count integrity, append-only profile-load audit into shared/master-brain/audit.log.jsonl via existing gateway, bootstrap() one-call session start, CLI (--list/--resolve/--load/--bootstrap). AGENTS.md section 0.1 now directs every future session to load the platform brain and the resolved subscriber\u0027s profile only (future identity = login/IP/2FA). master-brain/README.md documents the implemented wiring. Full offline suite 1456 ran/3 skipped/OK (+44 new tests, zero regressions).",
                         "next_action":  "Per-subscriber onboarding path ready: add profiles/\u003cid\u003e.md + manifest entry, wire future login/IP/2FA resolvers. Pending operator decisions unchanged: B085F1QCB9 follow-up and Costco Step-2 retry."
+                    },
+                    {
+                        "ts":  "2026-09-16T05:30:00Z",
+                        "activity":  "opencode_voice_input",
+                        "batch":  "dev-tools-20260916",
+                        "summary":  "Built voice input for the OpenCode TUI so prompts can be dictated instead of typed. Part 1: scripts/voice-to-clipboard.js (sox records mic until silence, whisper-cli ggml-base.en transcribes locally, clip.exe copies to clipboard; --json mode for machine use; NS_* env overrides; --file test hook) + voice-to-clipboard.bat wrapper + npm run voice/voice:json scripts (commit f286c25). Part 2: OpenCode CLI plugin at ~/.config/opencode/voice-input (registered in cli.json plugins) — keybinds Ctrl+X V and Ctrl+Alt+V record, transcribe, show confirm dialog, then send the text as a prompt to the active session via client.session.prompt; transcript also copied to clipboard. Verified: whisper + sox + clip binaries present; TypeScript parses clean; plugin discovered by OpenCode service and reconciles with zero failures after fixing Keymap.Provider.is-missing by registering keybinds inside a rendered app slot; live 2s mic capture via sox succeeded (64KB WAV, exit 0); non-speech WAVs correctly rejected as No speech detected. Local/offline only — no live or paid calls.",
+                        "next_action":  "Operator live test: restart the OpenCode TUI, press Ctrl+X V (or Ctrl+Alt+V), speak, confirm the prompt dialog. Standalone: npm run voice. Note: chat-voice/universal-voice web components pre-date this work and are unrelated."
                     }
                 ]
 }
