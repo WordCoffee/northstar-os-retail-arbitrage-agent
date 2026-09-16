@@ -556,7 +556,7 @@
                                  "before_after_ab":  "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
                              }
                   }
-    ,    "last_updated":  "2026-09-16T05:30:00Z",
+    ,    "last_updated":  "2026-09-16T07:20:00Z",
     "history":  [
                      {
                          "ts":  "2026-09-15T22:00:00Z",
@@ -931,6 +931,13 @@
                         "batch":  "dev-tools-20260916",
                         "summary":  "Built voice input for the OpenCode TUI so prompts can be dictated instead of typed. Part 1: scripts/voice-to-clipboard.js (sox records mic until silence, whisper-cli ggml-base.en transcribes locally, clip.exe copies to clipboard; --json mode for machine use; NS_* env overrides; --file test hook) + voice-to-clipboard.bat wrapper + npm run voice/voice:json scripts (commit f286c25). Part 2: OpenCode CLI plugin at ~/.config/opencode/voice-input (registered in cli.json plugins) — keybinds Ctrl+X V and Ctrl+Alt+V record, transcribe, show confirm dialog, then send the text as a prompt to the active session via client.session.prompt; transcript also copied to clipboard. Verified: whisper + sox + clip binaries present; TypeScript parses clean; plugin discovered by OpenCode service and reconciles with zero failures after fixing Keymap.Provider.is-missing by registering keybinds inside a rendered app slot; live 2s mic capture via sox succeeded (64KB WAV, exit 0); non-speech WAVs correctly rejected as No speech detected. Local/offline only — no live or paid calls.",
                         "next_action":  "Operator live test: restart the OpenCode TUI, press Ctrl+X V (or Ctrl+Alt+V), speak, confirm the prompt dialog. Standalone: npm run voice. Note: chat-voice/universal-voice web components pre-date this work and are unrelated."
+                    },
+                    {
+                        "ts":  "2026-09-16T07:20:00Z",
+                        "activity":  "opencode_voice_input_v2",
+                        "batch":  "dev-tools-20260916",
+                        "summary":  "Voice input v2 after operator feedback (recording cut off at 4-5s, felt slow). Recording model flipped to NON-STOP: removed sox silence detection; capture records RAW PCM until user stops it, hard 30s cap (NS_VOICE_MAX_SECONDS default 25->30). Stop signals: plugin closes the script's stdin; standalone presses Enter. New TUI stop keybinds Escape / Ctrl+Alt+S; Ctrl+Alt+V is now record/stop toggle. Speed: whisper-cli -t <cpu cores> (was single-threaded). Robust WAV: sox records raw, script wraps in 44-byte WAV header after stop, so killing sox mid-capture is safe. Script now has --record <wav> and --file <wav> modes; default mode still records->transcribes->clipboard. Fixed plugin bug: child.stdout.resume() on ignored stdout (null) removed. Verified: stdin-close stop at 1.5s -> exit 0 + valid RIFF WAV (RIFF:16384); record->transcribe chain rejects non-speech cleanly; tui.ts parses clean; slot-registered keybinds (Keymap.Provider fix) retained.",
+                        "next_action":  "Operator: restart the OpenCode TUI to load the v2 plugin, then test: Ctrl+Alt+V -> talk non-stop -> Escape/Ctrl+Alt+V to stop -> confirm -> send."
                     }
                 ]
 }
