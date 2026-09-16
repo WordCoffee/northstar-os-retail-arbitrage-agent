@@ -56,3 +56,24 @@ OpenCode's TUI keymap provider is not mounted during plugin `setup` — keybinds
 
 - Operator live voice test (mic, keybind, confirm dialog, prompt send).
 - Optional: global-hotkey shortcut to `voice-to-clipboard.bat` for dictation outside OpenCode.
+
+---
+
+## Revision 2 — Non-stop recording + manual stop + 30s cap (2026-09-16)
+
+**Problem reported:** recording stopped after 4-5s (silence detection too aggressive) and transcription felt slow.
+
+**Changes:**
+- **Recording model flipped:** removed sox `silence` detection entirely. Capture now records **non-stop RAW PCM** until the user stops it, with a **30s hard cap** (`NS_VOICE_MAX_SECONDS`, default changed 25 → 30).
+- **Stop signal:** caller closes the script's stdin. Plugin: `child.stdin.end()`. Standalone: press **Enter**.
+- **Stop keybinds in TUI:** `Escape` and `Ctrl+Alt+S` stop the recording; `Ctrl+Alt+V` is now a record/stop **toggle**.
+- **Speed:** whisper-cli now runs with `-t <cpu cores>` (threaded — previously single-threaded).
+- **Robust WAV handling:** sox records raw (`-t raw`), script wraps it in a proper 44-byte WAV header after stop — safe to kill sox mid-capture (no header corruption).
+
+**Verification (real runs):**
+- `--record` simulation: stdin closed after 1.5s → exit 0, valid WAV `RIFF:16384` (44-byte header + payload) — proves plugin-style stop works.
+- `--file --json` on that WAV → `{"ok":false,"error":"No speech detected..."}` — proves record→transcribe chain; non-speech cleanly rejected.
+- Plugin `tui.ts` parses clean under Node 24; keybinds still registered via the `append:"app"` slot (Keymap.Provider fix held).
+- Fixed plugin bug: removed `child.stdout.resume()` on a spawn where stdout is `null` (`stdio[1]="ignore"`).
+
+**Note:** plugin changes require the OpenCode TUI to (re)load the plugin — restart OpenCode or reload plugins to pick up the new keybinds.
