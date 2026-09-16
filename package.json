@@ -10,6 +10,8 @@
     "pipeline": "npm run search && npm run normalize && npm run score",
     "dev": "node src/index.js",
     "voice-server": "node server/voice-transcribe.js",
+    "voice": "node scripts/voice-to-clipboard.js",
+    "voice:json": "node scripts/voice-to-clipboard.js --json",
     "lint": "eslint .",
     "format": "prettier --write .",
     "check": "npm run lint && npm run normalize -- --dry-run",
