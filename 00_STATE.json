@@ -1,11 +1,11 @@
 {
     "test_baseline": {
         "python": "1556 passed, 3 skipped, 0 failures, 0 errors",
-        "golden_goose": "363 passed, 0 failures (live path wired)",
+        "golden_goose": "363 passed, 0 failures (price gap + ad feasibility scoring)",
         "updated_at": "2026-09-16",
-        "phase": "Golden Goose Finder live path wired end-to-end"
+        "phase": "Golden Goose Finder scoring enhanced with price gap + ad feasibility"
     },
-    "current_phase": "Golden Goose Finder — live Costco path wired (weight, slugs, Amazon search, seller identity); awaiting §3 approval for live scan execution",
+    "current_phase": "Golden Goose Finder — full pipeline wired (live path + price gap + ad feasibility + UI detail panels); ready for §3 live scan + web deployment",
     "phases_completed": ["Phase 1: Foundation", "Phase 2: SourceScout", "Phase 3: ListingForge+AdPilot", "Phase 4: SocialPulse+AutothinK", "Phase 5: Auth+Deploy", "Phase 6A: Design System", "Phase 6B: Landing+Auth Pages"],
     "known_issues":  [
                          {
