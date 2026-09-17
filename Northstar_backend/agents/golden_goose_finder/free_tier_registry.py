@@ -55,14 +55,15 @@ KEY_AVAILABLE: Dict[str, bool] = {
     "easyparser": True,
     "rapidapi_pool": True,
     "canopy": True,
-    # New free signups — NOT yet obtained; operator must sign up + provide keys.
-    "scrapingdog": False,
-    "scrapingbee": False,
-    "scrapebadger": False,
+    # Free signups — keys provided 2026-09-16; user must add to .env.
+    "scrapingdog": True,
+    "scrapingbee": True,
+    "scrapebadger": True,
+    "amazonscraperapi": True,
+    "apiclaw": True,
+    "apify_sams": True,
+    # Not yet obtained — waiting on user signup.
     "flybyapis": False,
-    "amazonscraperapi": False,
-    "apiclaw": False,
-    "apify_sams": False,
     "outscraper": False,
 }
 
@@ -133,7 +134,7 @@ FREE_PROVIDERS: List[FreeTierProvider] = [
     _p(
         "apify_sams", "Apify Sam's Club scraper (free credit)", "APIFY_API_TOKEN",
         5, None, {TASK_SAMS_SEARCH: 1.0}, [TASK_SAMS_SEARCH],
-        "~$5 free credit/mo; ~100 actor runs before credit runs low.",
+        "Actor: stealth_mode/samsclub-product-search-scraper ($10/1K results); ~$5 free credit/mo.",
     ),
     _p(
         "outscraper", "Outscraper Sam's Club (free)", "OUTSCRAPER_API_KEY",

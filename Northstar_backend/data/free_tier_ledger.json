@@ -1,0 +1,23 @@
+{
+  "month": "2026-09",
+  "remaining": {
+    "openwebninja_free": 100.0,
+    "apify_sams": 5.0,
+    "outscraper": 500.0,
+    "bright_data_web_unlocker": 5000.0,
+    "firecrawl": 1000.0,
+    "scrape_do": 1000.0,
+    "chocodata": 1000.0,
+    "scavio": 500.0,
+    "scrapingdog": 200.0,
+    "scrapingbee": 1000.0,
+    "scrapebadger": 1000.0,
+    "flybyapis": 100.0,
+    "amazonscraperapi": 1000.0,
+    "apiclaw": 1000.0,
+    "rapidapi_pool": 600.0,
+    "canopy": 500.0,
+    "easyparser": 41.0
+  },
+  "used_this_month": {}
+}

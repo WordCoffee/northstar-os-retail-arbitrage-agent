@@ -119,10 +119,13 @@ class TestKeyAvailability:
             assert KEY_AVAILABLE.get(pid) is True, pid
 
     def test_new_signups_are_false(self):
-        for pid in ("scrapingdog", "scrapingbee", "scrapebadger",
-                     "flybyapis", "amazonscraperapi", "apiclaw",
-                     "apify_sams", "outscraper"):
+        for pid in ("flybyapis", "outscraper"):
             assert KEY_AVAILABLE.get(pid) is False, pid
+
+    def test_recently_registered_providers_are_true(self):
+        for pid in ("scrapingdog", "scrapingbee", "scrapebadger",
+                     "amazonscraperapi", "apiclaw", "apify_sams"):
+            assert KEY_AVAILABLE.get(pid) is True, pid
 
     def test_mark_key_available(self):
         original = KEY_AVAILABLE.get("scrapingdog")
