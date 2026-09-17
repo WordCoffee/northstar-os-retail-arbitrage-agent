@@ -1,9 +1,14 @@
-"""Wholesale Scanner — Costco / Sam's Club multi-pack product discovery.
+"""Wholesale Scanner — Costco / Sam's Club small-light product discovery.
 
-Scans warehouse club catalogs for multi-pack products whose individual
-units can be sold at higher prices on Amazon.  Uses costco_api_client
-for Costco data when available; falls back to deterministic mock data
-for testing without live API calls.
+Scans warehouse club catalogs for SMALL, LIGHT, high-value national-brand
+products (any pack size — singles AND multi-packs) whose individual units
+can be resold on Amazon for $10+ net profit. Uses costco_api_client for
+Costco data when available; falls back to deterministic mock data for
+testing without live API calls.
+
+Strategy filter: prefer <= 2 lbs, hard ceiling 5 lbs (trash bags are the
+largest acceptable item). Heavy bulk (dog food bags, bleach jugs, litter)
+is treated as out-of-scope.
 
 NEVER makes live API calls without explicit operator approval per §3.
 """
@@ -61,9 +66,9 @@ _BRAND_ALLOWLIST: list[str] = [
     "Dove", "Colgate", "Crest", "Old Spice", "CeraVe",
     "Nivea", "Aquaphor", "Olay", "Neutrogena", "Schick",
     "Gillette", "Bioderma",
-    # Pet
-    "Royal Canin", "Blue Buffalo", "Greenies", "Temptations", "Purina",
-    "Hill's", "Pedigree", "Meow Mix", "Iams",
+    # Pet — toys, grooming, collars/harnesses, small accessories (NOT food)
+    "KONG", "Chuckit", "Furminator", "Hartz", "PetSafe", "Outward Hound",
+    "Nylabone", "ZippyPaws", "Greenies", "Temptations", "Pet Head", "Wahl",
 ]
 
 _BRAND_ALLOWLIST_LOWER: dict[str, str] = {b.lower(): b for b in _BRAND_ALLOWLIST}
@@ -331,45 +336,45 @@ def get_mock_wholesale_data(category_slug: Optional[str] = None) -> list[Wholesa
 # fmt: off
 _MOCK_PRODUCTS: list[WholesaleProduct] = [
     # ── Nicotine cessation (5) ──────────────────────────────────────
-    WholesaleProduct("Costco", "Nicorette Nicotine Gum 2mg, 200 Count", "Nicorette", "nicotine-cessation", 200, 89.99, "https://www.costco.com/nicorette-gum-2mg-200ct.html", "1234567"),
-    WholesaleProduct("Costco", "NicoDerm CQ Nicotine Patch Step 2, 144 Count", "NicoDerm", "nicotine-cessation", 144, 119.99, "https://www.costco.com/nicoderm-cq-step2-144ct.html", "1234568"),
-    WholesaleProduct("Costco", "Nicorette Nicotine Lozenge 4mg, 160 Count", "Nicorette", "nicotine-cessation", 160, 99.99, "https://www.costco.com/nicorette-lozenge-4mg-160ct.html", "1234569"),
-    WholesaleProduct("Costco", "Nicorette Nicotine Gum 4mg, 220 Count", "Nicorette", "nicotine-cessation", 220, 109.99, "https://www.costco.com/nicorette-gum-4mg-220ct.html", "1234570"),
-    WholesaleProduct("Costco", "NicoDerm CQ Nicotine Patch Step 1, 168 Count", "NicoDerm", "nicotine-cessation", 168, 129.99, "https://www.costco.com/nicoderm-cq-step1-168ct.html", "1234571"),
+    WholesaleProduct("Costco", "Nicorette Nicotine Gum 2mg, 200 Count", "Nicorette", "nicotine-cessation", 200, 89.99, "https://www.costco.com/nicorette-gum-2mg-200ct.html", "1234567", weight_lbs=1.1),
+    WholesaleProduct("Costco", "NicoDerm CQ Nicotine Patch Step 2, 144 Count", "NicoDerm", "nicotine-cessation", 144, 119.99, "https://www.costco.com/nicoderm-cq-step2-144ct.html", "1234568", weight_lbs=1.0),
+    WholesaleProduct("Costco", "Nicorette Nicotine Lozenge 4mg, 160 Count", "Nicorette", "nicotine-cessation", 160, 99.99, "https://www.costco.com/nicorette-lozenge-4mg-160ct.html", "1234569", weight_lbs=0.9),
+    WholesaleProduct("Costco", "Nicorette Nicotine Gum 4mg, 220 Count", "Nicorette", "nicotine-cessation", 220, 109.99, "https://www.costco.com/nicorette-gum-4mg-220ct.html", "1234570", weight_lbs=1.2),
+    WholesaleProduct("Costco", "NicoDerm CQ Nicotine Patch Step 1, 168 Count", "NicoDerm", "nicotine-cessation", 168, 129.99, "https://www.costco.com/nicoderm-cq-step1-168ct.html", "1234571", weight_lbs=1.1),
 
     # ── OTC health (5) ─────────────────────────────────────────────
-    WholesaleProduct("Costco", "Advil Ibuprofen Pain Reliever 200mg, 500 Tablets", "Advil", "otc-health", 500, 29.99, "https://www.costco.com/advil-ibuprofen-500ct.html", "1234572"),
-    WholesaleProduct("Costco", "Zyrtec Allergy Relief Tablets 10mg, 365 Count", "Zyrtec", "otc-health", 365, 42.99, "https://www.costco.com/zyrtec-allergy-365ct.html", "1234573"),
-    WholesaleProduct("Costco", "Claritin Allergy 24HR Tablets 10mg, 300 Count", "Claritin", "otc-health", 300, 54.99, "https://www.costco.com/claritin-300ct.html", "1234574"),
-    WholesaleProduct("Costco", "Tylenol Extra Strength Caplets 500mg, 600 Count", "Tylenol", "otc-health", 600, 24.99, "https://www.costco.com/tylenol-extra-strength-600ct.html", "1234575"),
-    WholesaleProduct("Costco", "Mucinex Maximum Strength 12-Hour Tablets, 100 Count", "Mucinex", "otc-health", 100, 49.99, "https://www.costco.com/mucinex-max-strength-100ct.html", "1234576"),
+    WholesaleProduct("Costco", "Advil Ibuprofen Pain Reliever 200mg, 500 Tablets", "Advil", "otc-health", 500, 29.99, "https://www.costco.com/advil-ibuprofen-500ct.html", "1234572", weight_lbs=1.8),
+    WholesaleProduct("Costco", "Zyrtec Allergy Relief Tablets 10mg, 365 Count", "Zyrtec", "otc-health", 365, 42.99, "https://www.costco.com/zyrtec-allergy-365ct.html", "1234573", weight_lbs=1.2),
+    WholesaleProduct("Costco", "Claritin Allergy 24HR Tablets 10mg, 300 Count", "Claritin", "otc-health", 300, 54.99, "https://www.costco.com/claritin-300ct.html", "1234574", weight_lbs=1.0),
+    WholesaleProduct("Costco", "Tylenol Extra Strength Caplets 500mg, 600 Count", "Tylenol", "otc-health", 600, 24.99, "https://www.costco.com/tylenol-extra-strength-600ct.html", "1234575", weight_lbs=1.9),
+    WholesaleProduct("Costco", "Mucinex Maximum Strength 12-Hour Tablets, 100 Count", "Mucinex", "otc-health", 100, 49.99, "https://www.costco.com/mucinex-max-strength-100ct.html", "1234576", weight_lbs=1.3),
 
     # ── Vitamins / supplements (5) ──────────────────────────────────
-    WholesaleProduct("Costco", "Nature Made Vitamin D3 2000 IU, 500 Softgels", "Nature Made", "vitamins", 500, 19.99, "https://www.costco.com/nature-made-vitamin-d3-500ct.html", "1234577"),
-    WholesaleProduct("Costco", "Emergen-C Vitamin C Supplement 1000mg, 90 Count", "Emergen-C", "vitamins", 90, 24.99, "https://www.costco.com/emergen-c-90ct.html", "1234578"),
-    WholesaleProduct("Costco", "Centrum Multivitamin Adults, 500 Tablets", "Centrum", "vitamins", 500, 29.99, "https://www.costco.com/centrum-adults-500ct.html", "1234579"),
-    WholesaleProduct("Costco", "Nature's Bounty Vitamin B12 5000mcg, 200 Softgels", "Nature's Bounty", "vitamins", 200, 17.99, "https://www.costco.com/natures-bounty-b12-200ct.html", "1234580"),
-    WholesaleProduct("Costco", "Olly Restful Sleep Gummies 50mg, 140 Count", "Olly", "vitamins", 140, 22.99, "https://www.costco.com/olly-restful-sleep-140ct.html", "1234581"),
+    WholesaleProduct("Costco", "Nature Made Vitamin D3 2000 IU, 500 Softgels", "Nature Made", "vitamins", 500, 19.99, "https://www.costco.com/nature-made-vitamin-d3-500ct.html", "1234577", weight_lbs=1.4),
+    WholesaleProduct("Costco", "Emergen-C Vitamin C Supplement 1000mg, 90 Count", "Emergen-C", "vitamins", 90, 24.99, "https://www.costco.com/emergen-c-90ct.html", "1234578", weight_lbs=0.5),
+    WholesaleProduct("Costco", "Centrum Multivitamin Adults, 500 Tablets", "Centrum", "vitamins", 500, 29.99, "https://www.costco.com/centrum-adults-500ct.html", "1234579", weight_lbs=1.5),
+    WholesaleProduct("Costco", "Nature's Bounty Vitamin B12 5000mcg, 200 Softgels", "Nature's Bounty", "vitamins", 200, 17.99, "https://www.costco.com/natures-bounty-b12-200ct.html", "1234580", weight_lbs=1.0),
+    WholesaleProduct("Costco", "Olly Restful Sleep Gummies 50mg, 140 Count", "Olly", "vitamins", 140, 22.99, "https://www.costco.com/olly-restful-sleep-140ct.html", "1234581", weight_lbs=0.8),
 
-    # ── Household (5) ───────────────────────────────────────────────
-    WholesaleProduct("Costco", "Tide Laundry Detergent Pods 4-in-1, 152 Count", "Tide", "household", 152, 34.99, "https://www.costco.com/tide-pods-152ct.html", "1234582"),
-    WholesaleProduct("Costco", "Cascade Platinum Dishwasher Pods, 104 Count", "Cascade", "household", 104, 29.99, "https://www.costco.com/cascade-platinum-104ct.html", "1234583"),
-    WholesaleProduct("Costco", "Lysol Disinfecting Wipes, 225 Count", "Lysol", "household", 225, 14.99, "https://www.costco.com/lysol-wipes-225ct.html", "1234584"),
-    WholesaleProduct("Costco", "Clorox Disinfecting Bleach, 174 oz (2 Pack)", "Clorox", "household", 2, 12.99, "https://www.costco.com/clorox-bleach-2pk.html", "1234585"),
-    WholesaleProduct("Costco", "Swiffer WetJet Mopping Pad Refills, 64 Count", "Swiffer", "household", 64, 24.99, "https://www.costco.com/swiffer-wetjet-64ct.html", "1234586"),
+    # ── Household — SMALL items only (5) ────────────────────────────
+    WholesaleProduct("Costco", "Tide Laundry Detergent Pods 4-in-1, 152 Count", "Tide", "household", 152, 34.99, "https://www.costco.com/tide-pods-152ct.html", "1234582", weight_lbs=4.8),
+    WholesaleProduct("Costco", "Cascade Platinum Dishwasher Pods, 104 Count", "Cascade", "household", 104, 29.99, "https://www.costco.com/cascade-platinum-104ct.html", "1234583", weight_lbs=4.2),
+    WholesaleProduct("Costco", "Lysol Disinfecting Wipes, 225 Count", "Lysol", "household", 225, 14.99, "https://www.costco.com/lysol-wipes-225ct.html", "1234584", weight_lbs=2.6),
+    WholesaleProduct("Costco", "Swiffer WetJet Mopping Pad Refills, 64 Count", "Swiffer", "household", 64, 24.99, "https://www.costco.com/swiffer-wetjet-64ct.html", "1234585", weight_lbs=1.4),
+    WholesaleProduct("Costco", "Febreze Car Air Freshener Vent Clips, 12 Count", "Febreze", "household", 12, 11.99, "https://www.costco.com/febreze-vent-clips-12ct.html", "1234597", weight_lbs=0.6),
 
     # ── Personal care (5) ───────────────────────────────────────────
-    WholesaleProduct("Costco", "Dove Beauty Bar 4.25 oz, 14 Count", "Dove", "personal-care", 14, 16.99, "https://www.costco.com/dove-beauty-bar-14ct.html", "1234587"),
-    WholesaleProduct("Costco", "Colgate Total Whitening Toothpaste 5.1 oz, 6 Pack", "Colgate", "personal-care", 6, 19.99, "https://www.costco.com/colgate-total-6pk.html", "1234588"),
-    WholesaleProduct("Costco", "Crest 3D White Toothpaste 5.1 oz, 8 Pack", "Crest", "personal-care", 8, 24.99, "https://www.costco.com/crest-3d-white-8pk.html", "1234589"),
-    WholesaleProduct("Costco", "Old Spice Body Wash 18 oz, 6 Pack", "Old Spice", "personal-care", 6, 21.99, "https://www.costco.com/old-spice-body-wash-6pk.html", "1234590"),
-    WholesaleProduct("Costco", "CeraVe Moisturizing Cream 19 oz, 2 Pack", "CeraVe", "personal-care", 2, 29.99, "https://www.costco.com/cerave-cream-2pk.html", "1234591"),
+    WholesaleProduct("Costco", "Dove Beauty Bar 4.25 oz, 14 Count", "Dove", "personal-care", 14, 16.99, "https://www.costco.com/dove-beauty-bar-14ct.html", "1234586", weight_lbs=1.6),
+    WholesaleProduct("Costco", "Colgate Total Whitening Toothpaste 5.1 oz, 6 Pack", "Colgate", "personal-care", 6, 19.99, "https://www.costco.com/colgate-total-6pk.html", "1234587", weight_lbs=1.9),
+    WholesaleProduct("Costco", "Crest 3D White Toothpaste 5.1 oz, 8 Pack", "Crest", "personal-care", 8, 24.99, "https://www.costco.com/crest-3d-white-8pk.html", "1234588", weight_lbs=2.2),
+    WholesaleProduct("Costco", "Old Spice Body Wash 18 oz, 6 Pack", "Old Spice", "personal-care", 6, 21.99, "https://www.costco.com/old-spice-body-wash-6pk.html", "1234589", weight_lbs=3.9),
+    WholesaleProduct("Costco", "CeraVe Moisturizing Cream 19 oz, 2 Pack", "CeraVe", "personal-care", 2, 29.99, "https://www.costco.com/cerave-cream-2pk.html", "1234590", weight_lbs=2.6),
 
-    # ── Pet (5) ─────────────────────────────────────────────────────
-    WholesaleProduct("Costco", "Royal Canin Medium Breed Adult Dog Food 30 lb", "Royal Canin", "pet", 1, 59.99, "https://www.costco.com/royal-canin-medium-30lb.html", "1234592"),
-    WholesaleProduct("Costco", "Blue Buffalo Life Protection Dog Food 30 lb", "Blue Buffalo", "pet", 1, 49.99, "https://www.costco.com/blue-buffalo-30lb.html", "1234593"),
-    WholesaleProduct("Costco", "Greenies Original Dental Dog Treats 36 oz", "Greenies", "pet", 1, 29.99, "https://www.costco.com/greenies-dental-36oz.html", "1234594"),
-    WholesaleProduct("Costco", "Temptations Classic Cat Treats 65 oz, 2 Pack", "Temptations", "pet", 2, 24.99, "https://www.costco.com/temptations-2pk.html", "1234595"),
-    WholesaleProduct("Costco", "Purina Pro Plan Adult Cat Food 25 lb", "Purina", "pet", 1, 44.99, "https://www.costco.com/purina-pro-plan-25lb.html", "1234596"),
+    # ── Pet — toys, grooming, collars, harnesses (NOT food) (5) ─────
+    WholesaleProduct("Costco", "KONG Classic Dog Toy, Medium (2 Pack)", "KONG", "pet", 2, 15.99, "https://www.costco.com/kong-classic-2pk.html", "1234591", weight_lbs=0.9),
+    WholesaleProduct("Costco", "Furminator deShedding Tool for Dogs, Large", "Furminator", "pet", 1, 24.99, "https://www.costco.com/furminator-large.html", "1234592", weight_lbs=0.5),
+    WholesaleProduct("Costco", "Chuckit! Ultra Ball, Large (2 Pack)", "Chuckit", "pet", 2, 10.99, "https://www.costco.com/chuckit-ultra-2pk.html", "1234593", weight_lbs=0.8),
+    WholesaleProduct("Costco", "Hartz Groomer's Best Slicker Brush for Dogs", "Hartz", "pet", 1, 12.99, "https://www.costco.com/hartz-slicker-brush.html", "1234594", weight_lbs=0.4),
+    WholesaleProduct("Costco", "PetSafe Easy Walk Dog Harness, Large", "PetSafe", "pet", 1, 19.99, "https://www.costco.com/petsafe-easy-walk-large.html", "1234595", weight_lbs=0.6),
 ]
 # fmt: on

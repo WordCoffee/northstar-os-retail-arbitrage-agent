@@ -87,6 +87,9 @@ except ImportError:  # pragma: no cover
             url: str | None = None
             image_url: str | None = None
             monthly_sales_estimate: int | None = None
+            seller_name: str | None = None
+            is_brand_seller: bool | None = None
+            is_amazon_seller: bool | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -112,23 +115,26 @@ HELPER_ROLES: list[HelperRole] = [
         id="costco_catalog_scanner",
         name="Costco Catalog Scanner",
         mission=(
-            "Scan costco.com search results pages for multi-pack products in the target "
-            "categories. Capture product title, brand, pack count, price, item number, "
-            "and URL. Focus on national brands (Nicorette, Advil, Nature Made, Tide, etc.) "
-            "and EXCLUDE store brands (Kirkland Signature, Member's Mark, Equate)."
+            "Scan costco.com search results pages for small, light, high-value national-brand "
+            "products in the target categories (any pack size — singles AND multi-packs). "
+            "Capture product title, brand, pack count, price, weight, item number, and URL. "
+            "Focus on national brands (Nicorette, Advil, KONG, Furminator, Nature Made, Tide, etc.) "
+            "and EXCLUDE store brands (Kirkland Signature, Member's Mark, Equate). Skip items "
+            "over ~5 lbs — we target <= 2 lbs, hard ceiling 5 lbs."
         ),
         web_surface="https://www.costco.com search + category listing pages",
-        inputs=["category", "brand allowlist", "max results"],
-        outputs=["product_title", "brand", "pack_count", "wholesale_price", "item_number", "item_url"],
+        inputs=["category", "brand allowlist", "max results", "max weight lbs"],
+        outputs=["product_title", "brand", "pack_count", "wholesale_price", "weight_lbs", "item_number", "item_url"],
         prompt_template=(
             "You are the COSTCO CATALOG SCANNER helper for the Golden Goose Finder.\n"
             "Scan Costco search results for category: {category}.\n"
             "Brand allowlist: {brand_allowlist}\n"
             "Return STRICT JSON: {{\"products\": [{{\"product_title\": str, \"brand\": str, "
-            "\"pack_count\": int|null, \"wholesale_price\": float, \"item_number\": str|null, "
-            "\"item_url\": str|null}}]}}. "
+            "\"pack_count\": int|null, \"wholesale_price\": float, \"weight_lbs\": float|null, "
+            "\"item_number\": str|null, \"item_url\": str|null}}]}}. "
             "Exclude Kirkland Signature / Member's Mark / store brands. "
-            "Max {max_results} products. Ensure pack_count is the NUMBER OF UNITS in the pack."
+            "Max {max_results} products. Prefer SMALL, LIGHT items (<= 2 lbs; never over 5 lbs). "
+            "pack_count: number of sellable units when the pack breaks down; 1 for single items."
         ),
         mock_data_key="costco_products",
     ),
@@ -136,21 +142,23 @@ HELPER_ROLES: list[HelperRole] = [
         id="sams_club_catalog_scanner",
         name="Sam's Club Catalog Scanner",
         mission=(
-            "Scan samsclub.com search results pages for multi-pack products in the target "
-            "categories. Capture product title, brand, pack count, price, item number, URL. "
-            "Exclude Member's Mark store brands; prefer national brands."
+            "Scan samsclub.com search results pages for small, light, high-value national-brand "
+            "products in the target categories (any pack size — singles AND multi-packs). "
+            "Capture product title, brand, pack count, price, weight, item number, URL. "
+            "Exclude Member's Mark store brands; prefer national brands; skip items over ~5 lbs."
         ),
         web_surface="https://www.samsclub.com search + category listing pages",
-        inputs=["category", "brand allowlist", "max results"],
-        outputs=["product_title", "brand", "pack_count", "wholesale_price", "item_number", "item_url"],
+        inputs=["category", "brand allowlist", "max results", "max weight lbs"],
+        outputs=["product_title", "brand", "pack_count", "wholesale_price", "weight_lbs", "item_number", "item_url"],
         prompt_template=(
             "You are the SAM'S CLUB CATALOG SCANNER helper for the Golden Goose Finder.\n"
             "Scan Sam's Club search results for category: {category}.\n"
             "Brand allowlist: {brand_allowlist}\n"
             "Return STRICT JSON: {{\"products\": [{{\"product_title\": str, \"brand\": str, "
-            "\"pack_count\": int|null, \"wholesale_price\": float, \"item_number\": str|null, "
-            "\"item_url\": str|null}}]}}. "
-            "Exclude Member's Mark / store brands. Max {max_results} products."
+            "\"pack_count\": int|null, \"wholesale_price\": float, \"weight_lbs\": float|null, "
+            "\"item_number\": str|null, \"item_url\": str|null}}]}}. "
+            "Exclude Member's Mark / store brands. Max {max_results} products. "
+            "Prefer SMALL, LIGHT items (<= 2 lbs; never over 5 lbs)."
         ),
         mock_data_key="sams_products",
     ),
@@ -183,19 +191,29 @@ HELPER_ROLES: list[HelperRole] = [
         name="Amazon Seller/Competition Analyzer",
         mission=(
             "For each candidate ASIN, determine the competitive depth: active seller count "
-            "split FBA vs FBM, Buy Box owner and price, FBA offer count. This drives the "
-            "competition score (0-1 FBA = golden, >5 = crowded)."
+            "split FBA vs FBM, Buy Box owner and price, FBA offer count — AND the seller "
+            "IDENTITY. Flag 'Sold by Amazon.com' and brand-owner sellers as HARD BLOCKS "
+            "(we never enter a listing the brand or Amazon itself sells). This drives the "
+            "competition score (0 FBA = gold; 1-2 high-priced FBA sellers = undercut; "
+            "3+ = crowded)."
         ),
         web_surface="amazon.com offer listing page per ASIN",
         inputs=["asin", "candidate title"],
-        outputs=["fba_sellers", "fbm_sellers", "buy_box_price", "is_prime", "total_offers"],
+        outputs=[
+            "fba_sellers", "fbm_sellers", "buy_box_price", "is_prime", "total_offers",
+            "seller_name", "is_brand_seller", "is_amazon_seller",
+        ],
         prompt_template=(
             "You are the AMAZON SELLER ANALYZER helper for the Golden Goose Finder.\n"
             "ASIN: {asin} — title: {title}\n"
-            "Scan the offer listing and report competitive depth.\n"
+            "Scan the offer listing and report competitive depth AND seller identity.\n"
             "Return STRICT JSON: {{\"seller_data\": {{\"asin\": str, \"fba_sellers\": int, "
             "\"fbm_sellers\": int, \"buy_box_price\": float|null, \"is_prime\": bool, "
-            "\"total_offers\": int}}}}. Count ACTIVE offers only."
+            "\"total_offers\": int, \"seller_name\": str|null, "
+            "\"is_brand_seller\": bool|null, \"is_amazon_seller\": bool|null}}}}. "
+            "Count ACTIVE offers only. is_brand_seller=True when the brand owner "
+            "(manufacturer) holds an offer; is_amazon_seller=True when 'Sold by Amazon.com'. "
+            "Set flags null when identity cannot be determined — NEVER guess."
         ),
         mock_data_key="seller_data",
     ),
@@ -260,8 +278,8 @@ def build_helper_payloads(
     brands = brand_allowlist or [
         "Nicorette", "NicoDerm", "Advil", "Zyrtec", "Claritin", "Tylenol", "Mucinex",
         "Nature Made", "Emergen-C", "Centrum", "Nature's Bounty", "Tide", "Cascade",
-        "Lysol", "Clorox", "Dove", "Colgate", "Crest", "Royal Canin", "Blue Buffalo",
-        "Greenies", "Temptations", "Olly", "Airborne",
+        "Lysol", "Clorox", "Dove", "Colgate", "Crest", "KONG", "Chuckit", "Furminator",
+        "Hartz", "Greenies", "Temptations", "Olly", "Airborne",
     ]
 
     payloads: list[dict[str, Any]] = []
@@ -452,6 +470,7 @@ def wholesale_products_from_helper_result(
                 item_number=str(item.get("item_number") or "").strip() or None,
                 image_url=str(item.get("image_url") or "").strip() or None,
                 in_stock=bool(item.get("in_stock", True)),
+                weight_lbs=_float_or_none(item.get("weight_lbs")),
             )
         )
     return products
@@ -505,9 +524,19 @@ def amazon_matches_from_helper_results(
                 url=str(item.get("url") or "").strip() or None,
                 image_url=str(item.get("image_url") or "").strip() or None,
                 monthly_sales_estimate=_int_or_none(hist.get("monthly_sales_estimate") or item.get("monthly_sales_estimate")),
+                seller_name=str(seller.get("seller_name") or "").strip() or None,
+                is_brand_seller=_three_way(seller.get("is_brand_seller")),
+                is_amazon_seller=_three_way(seller.get("is_amazon_seller")),
             )
         )
     return matches
+
+
+def _three_way(value: Any) -> bool | None:
+    """Parse a JSON bool as bool; anything else (incl. null) stays None."""
+    if isinstance(value, bool):
+        return value
+    return None
 
 
 def _int_or_none(value: Any) -> int | None:
@@ -569,26 +598,42 @@ class MockHelperDispatcher:
             {
                 "product_title": "Nicorette Nicotine Lozenge 2mg Mint (200 Count)",
                 "brand": "Nicorette",
+                "category_slug": "nicotine_cessation",
                 "pack_count": 200,
                 "wholesale_price": 39.99,
+                "weight_lbs": 1.2,
                 "item_number": "1678912",
                 "item_url": "https://www.costco.com/nicorette-lozenge-2mg.html",
             },
             {
                 "product_title": "Advil Pain Reliever 200mg Liqui-Gels (500 Count)",
                 "brand": "Advil",
+                "category_slug": "otc_health",
                 "pack_count": 500,
                 "wholesale_price": 24.99,
+                "weight_lbs": 1.8,
                 "item_number": "1122334",
                 "item_url": "https://www.costco.com/advil-500ct.html",
             },
             {
                 "product_title": "Nature Made Vitamin D3 2000 IU (250 Softgels)",
                 "brand": "Nature Made",
+                "category_slug": "vitamins_supplements",
                 "pack_count": 250,
                 "wholesale_price": 12.99,
+                "weight_lbs": 0.6,
                 "item_number": "9988776",
                 "item_url": "https://www.costco.com/nature-made-d3.html",
+            },
+            {
+                "product_title": "KONG Classic Dog Toy (Medium, 2-Pack)",
+                "brand": "KONG",
+                "category_slug": "pet",
+                "pack_count": 2,
+                "wholesale_price": 15.99,
+                "weight_lbs": 0.9,
+                "item_number": "4552201",
+                "item_url": "https://www.costco.com/kong-classic-2pk.html",
             },
         ]
 
@@ -597,18 +642,22 @@ class MockHelperDispatcher:
             {
                 "product_title": "Zyrtec Allergy Relief 24hr Tablets (pack of 4 bottles, 70ct each)",
                 "brand": "Zyrtec",
+                "category_slug": "otc_health",
                 "pack_count": 280,
                 "wholesale_price": 44.98,
+                "weight_lbs": 1.5,
                 "item_number": "SAM-887766",
                 "item_url": "https://www.samsclub.com/zyrtec-4pk.html",
             },
             {
-                "product_title": "Tide PODS Laundry Detergent (152 Count)",
-                "brand": "Tide",
-                "pack_count": 152,
-                "wholesale_price": 29.99,
-                "item_number": "SAM-556677",
-                "item_url": "https://www.samsclub.com/tide-pods.html",
+                "product_title": "Furminator deShedding Tool for Dogs (Large)",
+                "brand": "Furminator",
+                "category_slug": "pet",
+                "pack_count": 1,
+                "wholesale_price": 24.98,
+                "weight_lbs": 0.8,
+                "item_number": "SAM-443322",
+                "item_url": "https://www.samsclub.com/furminator-large.html",
             },
         ]
 
@@ -622,6 +671,7 @@ class MockHelperDispatcher:
                 "bsr": 4200,
                 "review_rating": 4.7,
                 "review_count": 8900,
+                "weight_oz": 4.0,
                 "url": "https://www.amazon.com/dp/B00N2Y1THA",
             },
             {
@@ -632,6 +682,7 @@ class MockHelperDispatcher:
                 "bsr": 2100,
                 "review_rating": 4.8,
                 "review_count": 14800,
+                "weight_oz": 6.0,
                 "url": "https://www.amazon.com/dp/B00GOHEWCU",
             },
             {
@@ -642,6 +693,7 @@ class MockHelperDispatcher:
                 "bsr": 1100,
                 "review_rating": 4.8,
                 "review_count": 42100,
+                "weight_oz": 3.0,
                 "url": "https://www.amazon.com/dp/B005DK1FOI",
             },
             {
@@ -652,6 +704,7 @@ class MockHelperDispatcher:
                 "bsr": 980,
                 "review_rating": 4.8,
                 "review_count": 67200,
+                "weight_oz": 5.0,
                 "url": "https://www.amazon.com/dp/B00EN7UEH2",
             },
             {
@@ -662,17 +715,42 @@ class MockHelperDispatcher:
                 "bsr": 1850,
                 "review_rating": 4.7,
                 "review_count": 31900,
+                "weight_oz": 11.0,
                 "url": "https://www.amazon.com/dp/B01ETY8ZIA",
+            },
+            {
+                "asin": "B000P0T01K",
+                "title": "KONG Classic Dog Toy (Medium)",
+                "brand": "KONG",
+                "amazon_price": 12.99,
+                "bsr": 1500,
+                "review_rating": 4.8,
+                "review_count": 28400,
+                "weight_oz": 6.0,
+                "url": "https://www.amazon.com/dp/B000P0T01K",
+            },
+            {
+                "asin": "B001S4LX1Y",
+                "title": "Furminator deShedding Tool for Dogs (Large)",
+                "brand": "Furminator",
+                "amazon_price": 29.99,
+                "bsr": 2600,
+                "review_rating": 4.5,
+                "review_count": 11800,
+                "weight_oz": 8.0,
+                "url": "https://www.amazon.com/dp/B001S4LX1Y",
             },
         ]
 
     def _mock_sellers(self) -> list[dict[str, Any]]:
         return [
-            {"asin": "B00N2Y1THA", "fba_sellers": 1, "fbm_sellers": 3, "buy_box_price": 11.99, "is_prime": True, "total_offers": 8},
-            {"asin": "B00GOHEWCU", "fba_sellers": 0, "fbm_sellers": 2, "buy_box_price": 8.99, "is_prime": True, "total_offers": 5},
-            {"asin": "B005DK1FOI", "fba_sellers": 2, "fbm_sellers": 4, "buy_box_price": 7.99, "is_prime": True, "total_offers": 12},
-            {"asin": "B00EN7UEH2", "fba_sellers": 1, "fbm_sellers": 3, "buy_box_price": 22.99, "is_prime": True, "total_offers": 9},
-            {"asin": "B01ETY8ZIA", "fba_sellers": 3, "fbm_sellers": 4, "buy_box_price": 14.99, "is_prime": True, "total_offers": 14},
+            {"asin": "B00N2Y1THA", "fba_sellers": 1, "fbm_sellers": 3, "buy_box_price": 11.99, "is_prime": True, "total_offers": 8, "seller_name": "Pharmacy Warehouse", "is_brand_seller": False, "is_amazon_seller": False},
+            {"asin": "B00GOHEWCU", "fba_sellers": 0, "fbm_sellers": 2, "buy_box_price": 8.99, "is_prime": True, "total_offers": 5, "seller_name": "HealthDirect", "is_brand_seller": False, "is_amazon_seller": False},
+            {"asin": "B005DK1FOI", "fba_sellers": 2, "fbm_sellers": 4, "buy_box_price": 7.99, "is_prime": True, "total_offers": 12, "seller_name": "Amazon.com", "is_brand_seller": False, "is_amazon_seller": True},
+            {"asin": "B00EN7UEH2", "fba_sellers": 1, "fbm_sellers": 3, "buy_box_price": 22.99, "is_prime": True, "total_offers": 9, "seller_name": "Zyrtec Consumer Care", "is_brand_seller": True, "is_amazon_seller": False},
+            {"asin": "B01ETY8ZIA", "fba_sellers": 3, "fbm_sellers": 4, "buy_box_price": 14.99, "is_prime": True, "total_offers": 14, "seller_name": "Meritline Fulfillment", "is_brand_seller": False, "is_amazon_seller": False},
+            {"asin": "B000P0T01K", "fba_sellers": 0, "fbm_sellers": 1, "buy_box_price": 12.99, "is_prime": True, "total_offers": 3, "seller_name": "Pet Supply Co", "is_brand_seller": False, "is_amazon_seller": False},
+            {"asin": "B001S4LX1Y", "fba_sellers": 1, "fbm_sellers": 2, "buy_box_price": 29.99, "is_prime": True, "total_offers": 6, "seller_name": "Spectrum Home Brands", "is_brand_seller": True, "is_amazon_seller": False},
         ]
 
     def _mock_history(self) -> list[dict[str, Any]]:
@@ -692,7 +770,7 @@ class MockHelperDispatcher:
 async def run_mock_harness(
     categories: list[str] | None = None,
     roi_floor: float = 10.0,
-    min_monthly_sales: int = 500,
+    min_monthly_sales: int = 1000,
     max_results: int = 100,
 ) -> dict[str, Any]:
     """Run the full Golden Goose pipeline using the mock helper dispatcher.
@@ -754,6 +832,10 @@ async def run_mock_harness(
             fba_sellers=match.fba_sellers,
             is_prime=match.is_prime,
             monthly_sales_estimate=match.monthly_sales_estimate,
+            weight_oz=match.weight_oz,
+            seller_name=match.seller_name,
+            is_brand_seller=match.is_brand_seller,
+            is_amazon_seller=match.is_amazon_seller,
         )
         eco = calculate_breakdown_economics(pack, listing, roi_floor=roi_floor)
         if eco is not None:

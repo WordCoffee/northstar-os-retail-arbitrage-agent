@@ -1,7 +1,8 @@
-"""Golden Goose Finder — Multi-pack breakdown arbitrage scanner.
+"""Golden Goose Finder — retail-arbitrage opportunity scanner.
 
-Discovers multi-pack products at Costco / Sam's Club that can be broken
-into individual units and resold on Amazon for $10+ profit per unit.
+Discovers SMALL, LIGHT, high-value national-brand products at Costco /
+Sam's Club (singles AND multi-packs) that can be resold on Amazon for
+$10+ net profit per unit after all fees.
 
 Usage:
   CLI:  python -m agents.golden_goose_finder.main [options]
@@ -9,9 +10,9 @@ Usage:
   Mock: POST /api/golden-goose/scan-mock
 
 Pipeline phases:
-  1. DISCOVERY  — Scan wholesale catalogs for multi-pack products
+  1. DISCOVERY  — Scan wholesale catalogs for small/light products
   2. MATCHING   — Find individual / small-pack Amazon listings
-  3. ECONOMICS  — Calculate full breakdown economics per unit
+  3. ECONOMICS  — Calculate full economics per unit
   4. SCORING    — Score, tier, and rank all opportunities
   5. REPORTING  — Generate reports and export data
 """
@@ -321,7 +322,7 @@ def _builtin_score_opportunity(
     econ: _MockBreakdownEconomics,
     idx: int,
     roi_floor: float = 10.0,
-    min_monthly_sales: int = 500,
+    min_monthly_sales: int = 1000,
 ) -> _MockScoredOpportunity:
     """Score a breakdown opportunity."""
     notes: list[str] = []
@@ -374,7 +375,7 @@ def _builtin_score_opportunity(
 def _builtin_score_batch(
     economics: list[_MockBreakdownEconomics],
     roi_floor: float = 10.0,
-    min_monthly_sales: int = 500,
+    min_monthly_sales: int = 1000,
 ) -> list[_MockScoredOpportunity]:
     """Score all opportunities and sort by composite score descending."""
     scored = []
@@ -389,7 +390,7 @@ def _builtin_score_batch(
 def _mock_scan(
     categories: list[str] | None = None,
     roi_floor: float = 10.0,
-    min_monthly_sales: int = 500,
+    min_monthly_sales: int = 1000,
     max_results: int = 100,
 ) -> list:
     """Run a full mock scan pipeline.
@@ -528,14 +529,14 @@ async def run_pipeline(
     categories: list[str] | None = None,
     stores: list[str] | None = None,
     roi_floor: float = 10.0,
-    min_monthly_sales: int = 500,
+    min_monthly_sales: int = 1000,
     max_results: int = 100,
 ) -> dict[str, Any]:
     """Execute the full Golden Goose pipeline.
 
-    Phase 1: DISCOVERY — Scan wholesale catalogs for multi-pack products
+    Phase 1: DISCOVERY — Scan wholesale catalogs for small/light products
     Phase 2: MATCHING  — Find individual / small-pack Amazon listings
-    Phase 3: ECONOMICS — Calculate full breakdown economics per unit
+    Phase 3: ECONOMICS — Calculate full economics per unit
     Phase 4: SCORING   — Score, tier, and rank all opportunities
     Phase 5: REPORTING — Generate reports and export data
 
@@ -693,7 +694,7 @@ router = APIRouter(prefix="/api/golden-goose", tags=["golden-goose"])
 async def scan_mock(
     categories: list[str] | None = Query(None),
     roi_floor: float = Query(10.0),
-    min_monthly_sales: int = Query(500),
+    min_monthly_sales: int = Query(1000),
     max_results: int = Query(100),
 ):
     """Run a scan using mock data (no live API calls). Safe for testing."""
@@ -717,7 +718,7 @@ async def scan_live(
     categories: list[str] | None = Query(None),
     stores: list[str] | None = Query(None),
     roi_floor: float = Query(10.0),
-    min_monthly_sales: int = Query(500),
+    min_monthly_sales: int = Query(1000),
     max_results: int = Query(100),
 ):
     """Run a live scan (requires §3 operator approval for each API call).
@@ -832,8 +833,8 @@ def _build_parser() -> argparse.ArgumentParser:
 
     parser.add_argument("--categories", nargs="*", default=None, help="Filter by category slugs")
     parser.add_argument("--stores", nargs="*", default=None, help="Filter by store names")
-    parser.add_argument("--roi-floor", type=float, default=10.0, help="Minimum ROI %% (default: 10)")
-    parser.add_argument("--min-sales", type=int, default=500, help="Minimum monthly sales (default: 500)")
+    parser.add_argument("--roi-floor", type=float, default=10.0, help="$ minimum net profit per unit (default: $10)")
+    parser.add_argument("--min-sales", type=int, default=1000, help="Minimum monthly sales (default: 1000)")
     parser.add_argument("--max-results", type=int, default=100, help="Maximum results (default: 100)")
     parser.add_argument("--output-dir", type=str, default=None, help="Report output directory")
     parser.add_argument("--json", action="store_true", help="Output raw JSON instead of table")
@@ -905,7 +906,7 @@ def main():
     print(f"  Mode:       {'Mock (safe)' if not args.live else 'LIVE'}")
     print(f"  Categories: {', '.join(args.categories) if args.categories else 'all'}")
     print(f"  Stores:     {', '.join(args.stores) if args.stores else 'all'}")
-    print(f"  ROI Floor:  {args.roi_floor}%")
+    print(f"  Min Net/Unit: ${args.roi_floor:.2f}")
     print(f"  Min Sales:  {args.min_sales}")
     print(f"  Max:        {args.max_results}")
     print()

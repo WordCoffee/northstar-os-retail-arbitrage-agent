@@ -44,6 +44,52 @@ class AmazonMatch:
     url: str | None = None
     image_url: str | None = None
     monthly_sales_estimate: int | None = None
+    # Seller identity — the "who sells it" gate. is_brand_seller True and
+    # is_amazon_seller True are HARD BLOCKS (profile rule); None means the
+    # seller analyzer could not verify identity (constant seller_identity_blocked
+    # only returns True on observed/strong textual evidence; the scorer decides
+    # whether unknown identity fails closed).
+    seller_name: str | None = None
+    is_brand_seller: bool | None = None
+    is_amazon_seller: bool | None = None
+
+
+# ---------------------------------------------------------------------------
+# Seller-identity hard blocks
+# ---------------------------------------------------------------------------
+
+def seller_identity_blocked(
+    seller_name: str | None,
+    is_brand_seller: bool | None,
+    is_amazon_seller: bool | None,
+    product_brand: str | None = None,
+) -> bool:
+    """True when the listing's seller is a hard block for retail arbitrage.
+
+    Hard blocks (profile rule):
+      - ``is_brand_seller`` observed True (brand owner on the offer), OR
+      - ``is_amazon_seller`` observed True (\"Sold by Amazon.com\"), OR
+      - the seller text itself says \"Amazon.com\", OR
+      - the seller text contains the product brand as a whole word
+        (brand-owner heuristic for when the structured flag is missing).
+
+    None / unknown flags are NOT a block here; the scorer independently
+    decides that an UNVERIFIABLE identity fails the hard filter closed.
+    """
+    if is_brand_seller:
+        return True
+    if is_amazon_seller:
+        return True
+    if not seller_name or not str(seller_name).strip():
+        return False
+    seller = str(seller_name).strip().lower()
+    if "amazon.com" in seller:
+        return True
+    if product_brand and str(product_brand).strip():
+        brand = str(product_brand).strip().lower()
+        if re.search(r"(?<!\w)" + re.escape(brand) + r"(?!\w)", seller):
+            return True
+    return False
 
 
 # ---------------------------------------------------------------------------
@@ -320,49 +366,65 @@ def get_mock_amazon_matches(wholesale_product: WholesaleProduct) -> list[AmazonM
     matches: list[AmazonMatch] = []
 
     # --- Best match: brand match, individual pack, good price ---
+    _seed_best = brand + "best"
     matches.append(AmazonMatch(
-        asin="B0" + _stable_hash(brand + "best")[:8],
+        asin="B0" + _stable_hash(_seed_best)[:8],
         title=f"{brand} {product_type}{suffix}, {small_count} Count",
         brand=brand,
         amazon_price=_price(2.5),
         amazon_category="Health & Household",
-        bsr=_stable_int(brand + "best", 500, 15000),
+        bsr=_stable_int(_seed_best, 500, 15000),
         review_rating=4.5,
         review_count=_stable_int(brand + "rv", 200, 8000),
         fba_sellers=_stable_int(brand + "fba", 0, 3),
         is_prime=True,
         url=f"https://www.amazon.com/dp/B0{''.join(str(ord(c))[-1] for c in brand[:5])}",
         monthly_sales_estimate=_stable_int(brand + "sales", 100, 3000),
+        weight_oz=_mock_weight_oz(_seed_best),
+        seller_name="Meritline Fulfillment",  # clean third-party primary
+        is_brand_seller=False,
+        is_amazon_seller=False,
     ))
 
     # --- Second match: slightly different size/variation ---
+    _seed_v2 = brand + "v2"
     matches.append(AmazonMatch(
-        asin="B0" + _stable_hash(brand + "v2")[:8],
+        asin="B0" + _stable_hash(_seed_v2)[:8],
         title=f"{brand} {product_type}{suffix}, {small_count * 2} Count",
         brand=brand,
         amazon_price=_price(2.0),
         amazon_category="Health & Household",
-        bsr=_stable_int(brand + "v2", 2000, 40000),
+        bsr=_stable_int(_seed_v2, 2000, 40000),
         review_rating=4.3,
         review_count=_stable_int(brand + "rv2", 50, 3000),
         fba_sellers=_stable_int(brand + "fba2", 0, 2),
         is_prime=True,
         monthly_sales_estimate=_stable_int(brand + "sales2", 50, 1500),
+        weight_oz=_mock_weight_oz(_seed_v2),
+        seller_name="EchoSupply FBA",
+        is_brand_seller=False,
+        is_amazon_seller=False,
     ))
 
-    # --- Third match: higher price, more reviews ---
+    # --- Third match: higher price, more reviews (may be seller-blocked) ---
+    _seed_v3 = brand + "v3"
+    _seller_name, _brand_sel, _amz_sel = _mock_seller_identity(_seed_v3, brand)
     matches.append(AmazonMatch(
-        asin="B0" + _stable_hash(brand + "v3")[:8],
+        asin="B0" + _stable_hash(_seed_v3)[:8],
         title=f"{brand} {product_type}{suffix}, {small_count} Count Value",
         brand=brand,
         amazon_price=_price(3.5),
         amazon_category="Health & Household",
-        bsr=_stable_int(brand + "v3", 1000, 25000),
+        bsr=_stable_int(_seed_v3, 1000, 25000),
         review_rating=4.6,
         review_count=_stable_int(brand + "rv3", 500, 12000),
         fba_sellers=_stable_int(brand + "fba3", 0, 2),
         is_prime=True,
         monthly_sales_estimate=_stable_int(brand + "sales3", 200, 5000),
+        weight_oz=_mock_weight_oz(_seed_v3),
+        seller_name=_seller_name,
+        is_brand_seller=_brand_sel,
+        is_amazon_seller=_amz_sel,
     ))
 
     # --- Possible non-brand match (competitor / generic) ---
@@ -378,6 +440,10 @@ def get_mock_amazon_matches(wholesale_product: WholesaleProduct) -> list[AmazonM
         fba_sellers=_stable_int(brand + "genfba", 1, 3),
         is_prime=False,
         monthly_sales_estimate=_stable_int(brand + "gensales", 20, 400),
+        weight_oz=_mock_weight_oz(brand + "gen"),
+        seller_name="Periwinkle Trading",
+        is_brand_seller=False,
+        is_amazon_seller=False,
     ))
 
     # --- Multi-pack that should be filtered OUT ---
@@ -394,6 +460,10 @@ def get_mock_amazon_matches(wholesale_product: WholesaleProduct) -> list[AmazonM
         fba_sellers=_stable_int(brand + "mpfba", 0, 2),
         is_prime=True,
         monthly_sales_estimate=_stable_int(brand + "mpsales", 30, 600),
+        weight_oz=_mock_weight_oz(brand + "mp"),
+        seller_name="Bulk Value Outlet",
+        is_brand_seller=False,
+        is_amazon_seller=False,
     ))
 
     return matches
@@ -419,6 +489,27 @@ def _small_pack_count(pack_count: int) -> int:
 # ---------------------------------------------------------------------------
 # Mock helpers
 # ---------------------------------------------------------------------------
+
+def _mock_weight_oz(seed: str) -> float:
+    """Deterministic small/light weight (8–32 oz → 0.5–2 lbs, preferred band)."""
+    return float(_stable_int(seed + "wt", 8, 32))
+
+
+def _mock_seller_identity(seed: str, brand: str, *, third_party_only: bool = False):
+    """Deterministic mock seller identity per ASIN seed.
+
+    Rolls 0/1/2 → brand-owner / Amazon.com / third-party so the mock
+    pipeline exercises the seller-identity hard block. ``third_party_only``
+    forces a clean third-party seller (used for the primary candidate).
+    """
+    if third_party_only:
+        return "Meritline Fulfillment", False, False
+    roll = _stable_int(seed + "seller", 0, 2)
+    if roll == 0:
+        return f"{brand} Consumer Care", True, False
+    if roll == 1:
+        return "Amazon.com", False, True
+    return "EchoSupply FBA", False, False
 
 def _extract_product_type(title: str) -> str:
     """Pull the core product type from a title for mock generation."""
