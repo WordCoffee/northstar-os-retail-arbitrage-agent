@@ -56,8 +56,8 @@ class TestProviderRegistry:
     def test_providers_for_task_sams_search(self):
         providers = providers_for_task(TASK_SAMS_SEARCH)
         ids = [p.id for p in providers]
-        assert "apify_sams" in ids
-        assert "outscraper" in ids
+        assert "unwrangle_sams" in ids
+        assert "bright_data_web_unlocker" in ids
 
     def test_providers_for_task_amazon_search(self):
         providers = providers_for_task(TASK_AMAZON_SEARCH)
@@ -119,12 +119,14 @@ class TestKeyAvailability:
             assert KEY_AVAILABLE.get(pid) is True, pid
 
     def test_new_signups_are_false(self):
-        for pid in ("flybyapis", "outscraper"):
-            assert KEY_AVAILABLE.get(pid) is False, pid
+        # All formerly-pending providers are now either registered or removed.
+        # Verify no stale false flags remain on active providers.
+        for pid in ("openwebninja_free", "bright_data_web_unlocker", "unwrangle_sams"):
+            assert KEY_AVAILABLE.get(pid) is True, pid
 
     def test_recently_registered_providers_are_true(self):
         for pid in ("scrapingdog", "scrapingbee", "scrapebadger",
-                     "amazonscraperapi", "apiclaw", "apify_sams"):
+                     "amazonscraperapi", "apiclaw", "unwrangle_sams"):
             assert KEY_AVAILABLE.get(pid) is True, pid
 
     def test_mark_key_available(self):

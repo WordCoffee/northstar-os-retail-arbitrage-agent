@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "generated_at": "2026-09-17T01:59:07.973773+00:00",
+    "pipeline_version": "0.1.0",
+    "mode": "mock",
+    "elapsed_seconds": 0.002,
+    "categories_scanned": "all",
+    "stores_scanned": [
+      "Costco",
+      "Sam's Club"
+    ],
+    "filters": {
+      "roi_floor": 50.0,
+      "min_monthly_sales": 1000,
+      "max_results": 2
+    }
+  },
+  "summary": {
+    "total_opportunities": 2,
+    "high_tier_count": 2,
+    "medium_tier_count": 0,
+    "low_tier_count": 0,
+    "reject_count": 0,
+    "estimated_monthly_profit": 393998.6,
+    "average_roi_pct": 1795.4
+  },
+  "opportunities": [
+    {
+      "rank": 0,
+      "composite_score": 0.9609,
+      "tier": "HIGH",
+      "passes_all_filters": true,
+      "scoring_notes": [
+        "Profit: $58.35/unit -> 1.00 (floor $50.00)",
+        "Demand: ~2820/mo -> 0.84 (medium confidence)",
+        "Competition: 0 FBA sellers -> 1.00",
+        "Competition floor: PASS (0 FBA sellers \u2014 uncontested)",
+        "Listing health: rating 4.5, 7786 reviews -> 1.00",
+        "Seller identity: PASS (verified third-party seller)",
+        "Size: PASS (18.0 oz \u2014 preferred <= 2 lbs)",
+        "Composite: 0.9609 -> HIGH"
+      ],
+      "opportunity_tags": [
+        "no_fba_competition",
+        "high_margin",
+        "premium_product",
+        "high_velocity",
+        "trending_up",
+        "bulk_goldmine"
+      ],
+      "wholesale_title": "Colgate Total Whitening Toothpaste 5.1 oz, 6 Pack",
+      "amazon_asin": "B01316ae8f",
+      "amazon_title": "Colgate Total Whitening Toothpaste, 10 Count",
+      "brand": "Colgate",
+      "source_store": "Costco",
+      "category_slug": "personal-care",
+      "pack_count": 6,
+      "wholesale_price": 19.99,
+      "unit_cogs": 3.33,
+      "amazon_price": 83.29,
+      "total_amazon_fees": 20.26,
+      "net_profit_per_unit": 58.35,
+      "roi_per_unit": 1751.45,
+      "profit_margin_pct": 70.06,
+      "economics_confidence": "estimated",
+      "monthly_sales_estimate": 2820,
+      "fba_sellers": 0
+    },
+    {
+      "rank": 0,
+      "composite_score": 0.9461,
+      "tier": "HIGH",
+      "passes_all_filters": true,
+      "scoring_notes": [
+        "Profit: $101.08/unit -> 1.00 (floor $50.00)",
+        "Demand: ~2270/mo -> 0.78 (medium confidence)",
+        "Competition: 0 FBA sellers -> 1.00",
+        "Competition floor: PASS (0 FBA sellers \u2014 uncontested)",
+        "Listing health: rating 4.5, 4547 reviews -> 1.00",
+        "Seller identity: PASS (verified third-party seller)",
+        "Size: PASS (27.0 oz \u2014 preferred <= 2 lbs)",
+        "Composite: 0.9461 -> HIGH"
+      ],
+      "opportunity_tags": [
+        "no_fba_competition",
+        "high_margin",
+        "premium_product",
+        "high_velocity",
+        "trending_up",
+        "bulk_goldmine"
+      ],
+      "wholesale_title": "Chuckit! Ultra Ball, Large (2 Pack)",
+      "amazon_asin": "B0fb042c87",
+      "amazon_title": "Chuckit Chuckit Ultra Ball Large, 10 Count",
+      "brand": "Chuckit",
+      "source_store": "Costco",
+      "category_slug": "pet",
+      "pack_count": 2,
+      "wholesale_price": 10.99,
+      "unit_cogs": 5.5,
+      "amazon_price": 137.38,
+      "total_amazon_fees": 29.46,
+      "net_profit_per_unit": 101.08,
+      "roi_per_unit": 1839.44,
+      "profit_margin_pct": 73.58,
+      "economics_confidence": "estimated",
+      "monthly_sales_estimate": 2270,
+      "fba_sellers": 0
+    }
+  ]
+}
