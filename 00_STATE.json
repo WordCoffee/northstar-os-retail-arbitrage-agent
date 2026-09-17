@@ -1,11 +1,11 @@
 {
     "test_baseline": {
         "python": "1556 passed, 3 skipped, 0 failures, 0 errors",
-        "golden_goose": "362 passed, 0 failures (pivot + free-tier stack)",
+        "golden_goose": "363 passed, 0 failures (live path wired)",
         "updated_at": "2026-09-16",
-        "phase": "Golden Goose Finder pivot + free-tier provider stack complete"
+        "phase": "Golden Goose Finder live path wired end-to-end"
     },
-    "current_phase": "Golden Goose Finder — pivot complete; 6 of 8 new provider keys registered; awaiting .env additions + §3 approval for live scan",
+    "current_phase": "Golden Goose Finder — live Costco path wired (weight, slugs, Amazon search, seller identity); awaiting §3 approval for live scan execution",
     "phases_completed": ["Phase 1: Foundation", "Phase 2: SourceScout", "Phase 3: ListingForge+AdPilot", "Phase 4: SocialPulse+AutothinK", "Phase 5: Auth+Deploy", "Phase 6A: Design System", "Phase 6B: Landing+Auth Pages"],
     "known_issues":  [
                          {
