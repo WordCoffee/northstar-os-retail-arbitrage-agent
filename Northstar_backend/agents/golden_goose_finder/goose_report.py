@@ -128,6 +128,16 @@ def _opportunity_entry(o: ScoredOpportunity) -> Dict[str, Any]:
             "buy_box_price": _round2(ind.amazon_price),
             "bsr": ind.bsr,
         },
+        "seller_identity": {
+            "seller_name": ind.seller_name,
+            "is_brand_seller": ind.is_brand_seller,
+            "is_amazon_seller": ind.is_amazon_seller,
+        },
+        "size_profile": {
+            "weight_oz": _round2(ind.weight_oz),
+            "weight_lbs": _round2(ind.weight_oz / 16.0 if ind.weight_oz is not None else None),
+            "dimensions_in": ind.dimensions_in,
+        },
         "sourcing_data": {
             "source_store": (getattr(ws, "source_store", None) or "Unknown"),
             "wholesale_pack_title": getattr(ws, "wholesale_pack_title", None) or ws.brand,
@@ -173,6 +183,10 @@ def _discarded_entry(o: ScoredOpportunity) -> Dict[str, str]:
         failed.append("competition")
     if not o.passes_listing_health:
         failed.append("listing_health")
+    if not o.passes_seller_identity:
+        failed.append("seller_identity")
+    if not o.passes_size_filter:
+        failed.append("size")
     reason = "Failed filters: %s" % ", ".join(failed) if failed else "Composite %.2f below 0.25" % o.composite_score
     return {
         "asin": o.economics.individual.asin,
@@ -416,6 +430,10 @@ def export_to_scout_panel(scored: List[ScoredOpportunity]) -> List[Dict[str, Any
             "sourceStore": getattr(ws, "source_store", None) or "Unknown",
             "wholesalePack": getattr(ws, "wholesale_pack_title", None) or ws.brand or "Unknown",
             "packCount": ws.pack_count,
+            "seller": ind.seller_name,
+            "weightOz": _round2(ind.weight_oz),
+            "passesSellerIdentity": o.passes_seller_identity,
+            "passesSizeFilter": o.passes_size_filter,
             "tags": list(o.opportunity_tags),
         })
     return rows

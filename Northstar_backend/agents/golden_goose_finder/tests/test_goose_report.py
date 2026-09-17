@@ -88,7 +88,8 @@ def test_json_report_full_entry_shape(high):
 
     assert set(entry.keys()) == {
         "asin", "product_title", "brand", "category", "gating_status",
-        "amazon_metrics", "sourcing_data", "financial_breakdown", "scoring",
+        "amazon_metrics", "seller_identity", "size_profile",
+        "sourcing_data", "financial_breakdown", "scoring",
         "economics_confidence", "notes",
     }
     assert entry["asin"] == "B09GOLDDEMO1"
@@ -131,8 +132,8 @@ def test_json_report_full_entry_shape(high):
     assert scoring["tier"] == TIER_HIGH
     assert scoring["composite_score"] >= 0.7
     assert scoring["tags"] == [
-        "low_competition", "high_margin", "premium_product",
-        "high_velocity", "trending_up", "bulk_goldmine",
+        "low_competition", "undercut_opportunity", "high_margin",
+        "premium_product", "high_velocity", "trending_up", "bulk_goldmine",
     ]
     assert any("breakeven approximated" in n for n in entry["notes"])
 
@@ -267,7 +268,9 @@ def test_export_to_scout_panel_fields(ec, high, medium, low, reject):
     assert set(first.keys()) == {
         "id", "asin", "name", "brand", "cost", "amazonPrice", "fbaFee",
         "net", "roi", "competition", "estMonthly", "tier", "status",
-        "sourceStore", "wholesalePack", "packCount", "tags",
+        "sourceStore", "wholesalePack", "packCount",
+        "seller", "weightOz", "passesSellerIdentity", "passesSizeFilter",
+        "tags",
     }
     assert first["id"] == "B09GOLDDEMO1"
     assert first["asin"] == "B09GOLDDEMO1"
@@ -289,7 +292,9 @@ def test_export_to_scout_panel_fields(ec, high, medium, low, reject):
 
     by_asin = {r["asin"]: r for r in rows}
     assert by_asin["B09MEDIUM001"]["tier"] == "Hold"
-    assert by_asin["B09MEDIUM001"]["competition"] == "Medium"  # 3 FBA sellers
+    assert by_asin["B09MEDIUM001"]["competition"] == "Medium"  # 2 FBA sellers
+    assert by_asin["B09MEDIUM001"]["passesSellerIdentity"] is True
+    assert by_asin["B09MEDIUM001"]["passesSizeFilter"] is True
     assert by_asin["B09LOWX00001"]["tier"] == "Reject"
     assert by_asin["B09LOWX00001"]["competition"] == "High"    # 6 FBA sellers
     assert by_asin["B09REJECT01"]["tier"] == "Reject"

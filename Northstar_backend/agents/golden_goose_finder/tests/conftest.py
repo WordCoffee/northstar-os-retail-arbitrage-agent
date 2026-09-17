@@ -32,6 +32,10 @@ def make_individual(**overrides: Any) -> IndividualListing:
         review_count=1200,
         fba_sellers=1,
         monthly_sales_estimate=3000.0,
+        weight_oz=12.0,  # 0.75 lbs — preferred band (<= 2 lbs)
+        seller_name="Meritline Fulfillment",  # verified third-party seller
+        is_brand_seller=False,
+        is_amazon_seller=False,
     )
     data.update(overrides)
     return IndividualListing(**{k: v for k, v in data.items() if k in _IND_SUPPORTED})
@@ -138,8 +142,8 @@ _MEDIUM = make_economics(
     bsr=12000,
     review_rating=4.2,
     review_count=300,
-    fba_sellers=3,
-    monthly_sales_estimate=700.0,
+    fba_sellers=2,
+    monthly_sales_estimate=1200.0,
     **{"wholesale.brand": "Member's Mark",
        "wholesale.category_slug": "toys-games",
        "wholesale.source_store": "Sam's Club",

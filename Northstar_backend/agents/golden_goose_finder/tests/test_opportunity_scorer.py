@@ -43,6 +43,8 @@ def test_high_tier_opportunity(high):
     assert s.passes_all_filters is True
     assert s.passes_profit_floor and s.passes_demand_floor
     assert s.passes_competition_ceiling and s.passes_listing_health
+    assert s.passes_seller_identity is True   # verified third-party seller
+    assert s.passes_size_filter is True        # 12 oz <= 2 lbs preferred band
     assert s.profit_score > 0.5          # above the $10 floor anchor
     assert s.demand_score > 0.75         # high velocity
     assert s.competition_score == 0.75   # 1 FBA seller
@@ -56,7 +58,12 @@ def test_medium_tier_opportunity(medium):
     assert s.tier == TIER_MEDIUM
     assert 0.45 <= s.composite_score < 0.7
     assert s.passes_profit_floor is True
-    assert s.passes_all_filters is True  # 3 FBA sellers / 700 sales still clear
+    # 2 FBA sellers we can undercut + 1,200 sales still clear every gate.
+    assert s.passes_all_filters is True
+    assert s.passes_competition_ceiling is True  # undercut passes
+    assert s.passes_demand_floor is True         # 1,200 >= 1,000
+    assert s.passes_seller_identity is True
+    assert s.passes_size_filter is True
 
 
 def test_low_tier_opportunity(low):
@@ -64,8 +71,8 @@ def test_low_tier_opportunity(low):
     assert s.tier == TIER_LOW
     assert 0.25 <= s.composite_score < 0.45
     assert s.passes_profit_floor is True
-    assert s.passes_demand_floor is False        # 300/mo < 500
-    assert s.passes_competition_ceiling is False  # 6 FBA sellers, undercut fails
+    assert s.passes_demand_floor is False        # 300/mo < 1,000
+    assert s.passes_competition_ceiling is False  # 6 FBA sellers rejected outright
     assert s.passes_listing_health is True        # rating 4.0 >= 3.5
     assert s.passes_all_filters is False
 
@@ -114,11 +121,16 @@ def test_profit_score_anchors():
 def test_demand_score_anchors():
     assert _demand_score(None) == 0.3
     assert _demand_score(0.0) == 0.0
-    assert _demand_score(500.0) == pytest.approx(0.5, abs=0.001)
+    assert _demand_score(1000.0) == pytest.approx(0.5, abs=0.001)
     assert _demand_score(2000.0) == pytest.approx(0.75, abs=0.001)
     assert _demand_score(5000.0) == 1.0
     assert _demand_score(100000.0) == 1.0
-    assert _demand_score(100.0) < 0.5 < _demand_score(1000.0) < 0.75 < _demand_score(3000.0)
+    assert _demand_score(500.0) == pytest.approx(0.4499, abs=0.001)  # below new baseline
+    assert _demand_score(100.0) < _demand_score(500.0) < 0.5 == _demand_score(1000.0)
+    assert _demand_score(1500.0) > 0.5
+    d2k = _demand_score(2000.0)
+    assert d2k == pytest.approx(0.75, abs=0.001)
+    assert _demand_score(3000.0) > d2k
 
 
 def test_competition_score_anchors():
@@ -185,6 +197,7 @@ def test_tags_applied_for_high_opportunity(high):
     s = score_opportunity(high)
     assert set(s.opportunity_tags) == {
         "low_competition",
+        "undercut_opportunity",  # 1-2 FBA sellers we can undercut and stay profitable
         "high_margin",
         "premium_product",
         "high_velocity",
@@ -207,6 +220,8 @@ def test_no_competition_tag_when_two_sellers(ec):
     tags = _apply_tags(eco)
     assert "no_fba_competition" not in tags
     assert "low_competition" not in tags
+    # 2 high-priced FBA sellers we can undercut -> undercut_opportunity tag.
+    assert "undercut_opportunity" in tags
 
 
 def test_low_opportunity_only_matches_bulk_goldmine(low):
@@ -232,12 +247,12 @@ def test_tags_boundaries(ec):
 
 
 def test_demand_near_baseline_rating_escape(ec):
-    # 450/mo is below 500 but within 80% of it -> rating >= min_rating saves it.
-    passes = score_opportunity(ec(monthly_sales_estimate=450.0, review_rating=4.6))
+    # 900/mo is below 1,000 but within 80% of it -> rating >= min_rating saves it.
+    passes = score_opportunity(ec(monthly_sales_estimate=900.0, review_rating=4.6))
     assert passes.passes_demand_floor is True
     # Same sales but rating 4.0 with min_rating 4.5 -> still fails.
     fails = score_opportunity(
-        ec(monthly_sales_estimate=450.0, review_rating=4.0),
+        ec(monthly_sales_estimate=900.0, review_rating=4.0),
         min_rating=4.5,
     )
     assert fails.passes_demand_floor is False
@@ -245,7 +260,7 @@ def test_demand_near_baseline_rating_escape(ec):
     far = score_opportunity(ec(monthly_sales_estimate=300.0, review_rating=4.9))
     assert far.passes_demand_floor is False
     # At or above the floor -> passes without needing the rating.
-    at_floor = score_opportunity(ec(monthly_sales_estimate=500.0, review_rating=2.0))
+    at_floor = score_opportunity(ec(monthly_sales_estimate=1000.0, review_rating=2.0))
     assert at_floor.passes_demand_floor is True
 
 
@@ -255,15 +270,75 @@ def test_no_demand_data_fails_closed(unknown_data):
 
 
 def test_undercut_competition_escape(ec):
-    # 6 FBA sellers but enough margin that a 2% undercut still clears $10.
-    passes = score_opportunity(ec(**{"individual.fba_sellers": 6}, net_profit_per_unit=13.0, amazon_price=19.99))
+    # 0 FBA sellers -> uncontested, passes without any undercut math.
+    zero = score_opportunity(ec(**{"individual.fba_sellers": 0}, net_profit_per_unit=13.0, amazon_price=19.99))
+    assert zero.passes_competition_ceiling is True
+    # 2 FBA sellers priced high enough that a 2% undercut still clears $10.
+    passes = score_opportunity(ec(**{"individual.fba_sellers": 2}, net_profit_per_unit=13.0, amazon_price=19.99))
     assert passes.passes_competition_ceiling is True
-    # 6 FBA sellers and the undercut eats below the floor -> fails.
-    fails = score_opportunity(ec(**{"individual.fba_sellers": 6}, net_profit_per_unit=10.20, amazon_price=19.99))
+    # 2 FBA sellers but the undercut eats below the floor -> fails.
+    fails = score_opportunity(ec(**{"individual.fba_sellers": 2}, net_profit_per_unit=10.20, amazon_price=19.99))
     assert fails.passes_competition_ceiling is False
     # No price data -> cannot verify undercut -> fails closed.
-    no_price = score_opportunity(ec(**{"individual.fba_sellers": 6}, amazon_price=None))
+    no_price = score_opportunity(ec(**{"individual.fba_sellers": 2}, amazon_price=None))
     assert no_price.passes_competition_ceiling is False
+    # 3+ FBA sellers are rejected outright, no matter how deep the margin.
+    crowded = score_opportunity(ec(**{"individual.fba_sellers": 3}, net_profit_per_unit=20.0, amazon_price=29.99))
+    assert crowded.passes_competition_ceiling is False
+
+
+def test_seller_identity_brand_seller_blocked(ec):
+    s = score_opportunity(ec(**{"individual.seller_name": "Nicorette Consumer Care",
+                                "individual.is_brand_seller": True,
+                                "individual.is_amazon_seller": False}))
+    assert s.passes_seller_identity is False
+    assert s.passes_all_filters is False
+
+
+def test_seller_identity_amazon_seller_blocked(ec):
+    s = score_opportunity(ec(**{"individual.seller_name": "Amazon.com",
+                                "individual.is_brand_seller": False,
+                                "individual.is_amazon_seller": True}))
+    assert s.passes_seller_identity is False
+    assert "blocked" in " ".join(s.scoring_notes).lower()
+
+
+def test_seller_name_brand_text_blocked(ec):
+    # Structured flags missing, but the seller text names the brand owner.
+    s = score_opportunity(ec(**{"individual.seller_name": "Kirkland Signature Consumer Care",
+                                "individual.is_brand_seller": None,
+                                "individual.is_amazon_seller": None}))
+    assert s.passes_seller_identity is False
+
+
+def test_seller_identity_unverifiable_fails_closed(ec):
+    # No seller data at all -> cannot certify -> fails closed.
+    s = score_opportunity(ec(**{"individual.seller_name": None,
+                                "individual.is_brand_seller": None,
+                                "individual.is_amazon_seller": None}))
+    assert s.passes_seller_identity is False
+
+
+def test_size_filter_preferred_band_passes(ec):
+    s = score_opportunity(ec(**{"individual.weight_oz": 24.0}))  # 1.5 lbs
+    assert s.passes_size_filter is True
+
+
+def test_size_filter_between_preferred_and_ceiling_passes(ec):
+    s = score_opportunity(ec(**{"individual.weight_oz": 64.0}))  # 4 lbs
+    assert s.passes_size_filter is True  # under the 5 lb hard ceiling
+    assert "over preferred 2 lbs" in " ".join(s.scoring_notes)
+
+
+def test_size_filter_over_ceiling_fails(ec):
+    s = score_opportunity(ec(**{"individual.weight_oz": 96.0}))  # 6 lbs
+    assert s.passes_size_filter is False
+    assert s.passes_all_filters is False
+
+
+def test_size_filter_unknown_weight_fails_closed(ec):
+    s = score_opportunity(ec(**{"individual.weight_oz": None}))
+    assert s.passes_size_filter is False
 
 
 def test_no_seller_data_fails_closed(unknown_data):
@@ -339,6 +414,7 @@ def test_get_scoring_summary(high, medium, low, reject):
     assert summary["best_opportunity"].asin == "B09GOLDDEMO1"
     expected_tags = {
         "low_competition": 1,
+        "undercut_opportunity": 2,  # HIGH (1 FBA) + MEDIUM (2 FBA) both undercut-clear
         "high_margin": 1,
         "premium_product": 1,
         "high_velocity": 1,

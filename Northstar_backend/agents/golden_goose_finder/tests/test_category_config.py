@@ -96,9 +96,10 @@ def test_category_config_completeness():
 
 def test_size_filter_defaults():
     assert DEFAULT_SIZE_FILTER == {
-        "max_weight_oz": 48.0,
+        "max_weight_oz": 32.0,
+        "abs_max_weight_oz": 80.0,
         "max_dimensions_in": [12, 8, 4],
-        "description": "Items small enough for easy individual repackaging",
+        "description": "Small, light items (<= 2 lbs preferred; 5 lbs hard ceiling) so the item lands in the cheap small-standard FBA band.",
     }
 
 
@@ -137,7 +138,7 @@ def test_brand_allowlist_spot_checks():
         "vitamins_supplements": ["Nature Made", "Centrum", "Olly", "Airborne"],
         "household_cleaning": ["Tide", "Cascade", "Lysol", "Clorox", "Swiffer"],
         "personal_care": ["Dove", "Old Spice", "Colgate", "CeraVe", "Aquaphor"],
-        "pet": ["Royal Canin", "Blue Buffalo", "Purina Pro Plan", "Greenies"],
+        "pet": ["KONG", "Chuckit", "Furminator", "Hartz", "Greenies"],
         "snacks_bars": ["RXBAR", "KIND", "Nature Valley", "Clif Bar", "Pirate's Booty"],
         "baby_child": ["Huggies", "Pampers", "Enfamil", "PediaSure"],
     }
@@ -190,7 +191,8 @@ def test_exclusion_list_catches_kirkland_and_members_mark():
         ("Tide", True),
         ("Dove", True),
         ("Nature Made", True),
-        ("Purina Pro Plan", True),
+        ("KONG", True),
+        ("Furminator", True),
         ("RXBAR", True),
         ("Kirkland Signature", False),
         ("Kirkland", False),
@@ -236,8 +238,8 @@ def test_get_category_config_returns_complete_data():
     assert cfg == CATEGORY_CONFIG["otc_health"]
     assert cfg["display_name"] == "OTC Health & Remedies"
     assert cfg["referral_fee_rate"] in (0.08, 0.15)
-    assert cfg["size_filter_max_weight_oz"] == 48.0
-    assert cfg["min_monthly_sales"] == 500
+    assert cfg["size_filter_max_weight_oz"] == 32.0
+    assert cfg["min_monthly_sales"] == 1000
     assert cfg["min_rating"] == 4.0
     assert cfg["priority"] == 1  # OTC health is a top-priority category
 

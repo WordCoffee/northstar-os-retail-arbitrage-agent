@@ -1,8 +1,8 @@
 """Golden Goose Finder — opportunity scoring and ranking engine.
 
-Scores one multi-pack breakdown result (:class:`BreakdownEconomics`)
-into a 0-1 composite with four weighted components, hard filters, a tier
-label, human-readable notes, and opportunity tags. Pure and
+Scores one retail-arbitrage result (:class:`BreakdownEconomics`) into a 0-1
+composite with four weighted components, hard filters, a tier label,
+human-readable notes, and opportunity tags. Pure and
 deterministic: no network calls, no writes, no invented values.
 
 The shared data models (:class:`WholesalePack`, :class:`IndividualListing`,
@@ -15,10 +15,20 @@ Scoring model (v1.0)::
     composite = 0.35*profit + 0.25*demand + 0.25*competition + 0.15*health
 
     profit      log-interpolated anchors ($0->0.0, $10->0.5, $20->0.75, $30+->1.0)
-    demand      log-interpolated anchors (0->0.0, 500->0.5, 2000->0.75, 5000+->1.0)
+    demand      log-interpolated anchors (0->0.0, 1000->0.5, 2000->0.75, 5000+->1.0)
                 using demand_estimator.estimate_demand(); unknown -> 0.30
     competition stepwise by FBA seller count (0->1.0 ... 6+->0.1); unknown -> 0.30
     health      rating anchors + review-count bonus; no rating -> 0.40
+
+Hard filters (all fail closed on missing data):
+    profit       net_profit_per_unit >= $10
+    demand       1,000+ monthly sales, or rating >= 4.0 near baseline (>= 80%)
+    competition  0 FBA sellers; 1-2 only if undercutting 2% still clears the
+                 profit floor; 3+ rejected
+    seller       brand-owner seller or Amazon.com as a seller = HARD BLOCK;
+                 unverifiable seller identity fails closed
+    size         weight <= 5 lbs (2 lbs preferred); unknown weight fails closed
+    health       rating >= 3.5
 
     tiers       >= 0.70 and all hard filters -> HIGH
                 >= 0.45 and profit floor      -> MEDIUM
@@ -86,6 +96,10 @@ except ImportError:  # pragma: no cover
             review_count: Optional[int] = None
             fba_sellers: Optional[int] = None
             monthly_sales_estimate: Optional[float] = None
+            weight_oz: Optional[float] = None
+            seller_name: Optional[str] = None
+            is_brand_seller: Optional[bool] = None
+            is_amazon_seller: Optional[bool] = None
 
         @dataclass
         class BreakdownEconomics:
@@ -118,9 +132,9 @@ _WEIGHTS_SUM = WEIGHT_PROFIT + WEIGHT_DEMAND + WEIGHT_COMPETITION + WEIGHT_LISTI
 
 # Thresholds
 DEFAULT_ROI_FLOOR = 10.00  # $10 min net profit per unit
-DEFAULT_MIN_MONTHLY_SALES = 500
+DEFAULT_MIN_MONTHLY_SALES = 1000  # proven demand: 1K+ units/mo
 DEFAULT_MIN_RATING = 4.0  # used when sales are near baseline
-BASELINE_MONTHLY_SALES = 500  # threshold for the rating requirement
+BASELINE_MONTHLY_SALES = 1000  # threshold for the rating requirement
 
 # Score tiers
 TIER_HIGH = "HIGH"
@@ -129,14 +143,24 @@ TIER_LOW = "LOW"
 TIER_REJECT = "REJECT"
 
 # Hard-filter ceilings / floors
-COMPETITION_CEILING = 3  # FBA sellers allowed before an undercut check is needed
+# Competition: 0 FBA sellers is gold; 1-2 FBA sellers pass ONLY when their
+# Buy Box price is high enough that undercutting by 2% still clears the
+# profit floor; 3+ FBA sellers are rejected outright (profile rule).
+COMPETITION_CEILING = 2  # FBA sellers allowed before rejection
 LISTING_HEALTH_MIN_RATING = 3.5
 NEAR_BASELINE_FRACTION = 0.80  # sales within 80% of the floor count as "near baseline"
 UNDERCUT_DISCOUNT = 0.02  # price 2% below the buy box for the undercut check
 
+# Size filter — preferred max 2 lbs, hard ceiling 5 lbs (trash bags are the
+# largest acceptable item; most are already too heavy).
+PREFERRED_MAX_WEIGHT_LBS = 2.0   # preferred band (cheap small-standard FBA fee)
+ABS_MAX_WEIGHT_LBS = 5.0         # hard ceiling
+PREFERRED_MAX_WEIGHT_OZ = PREFERRED_MAX_WEIGHT_LBS * 16.0
+ABS_MAX_WEIGHT_OZ = ABS_MAX_WEIGHT_LBS * 16.0
+
 # Score curve anchors: (value, score) pairs, log-interpolated between them.
 PROFIT_ANCHORS = [(0.0, 0.0), (10.0, 0.5), (20.0, 0.75), (30.0, 1.0)]
-DEMAND_ANCHORS = [(0.0, 0.0), (500.0, 0.5), (2000.0, 0.75), (5000.0, 1.0)]
+DEMAND_ANCHORS = [(0.0, 0.0), (1000.0, 0.5), (2000.0, 0.75), (5000.0, 1.0)]
 
 # Slug spellings -> canonical demand-curve category names. Ranges over the
 # common slug variants emitted by sourcing pipelines; anything not listed
@@ -232,7 +256,7 @@ def _profit_score(net_profit_per_unit: Optional[float]) -> float:
 
 
 def _demand_score(monthly_sales: Optional[float]) -> float:
-    """0 -> 0.0, 500 (baseline) -> 0.5, 2000 -> 0.75, 5000+ -> 1.0.
+    """0 -> 0.0, 1000 (baseline) -> 0.5, 2000 -> 0.75, 5000+ -> 1.0.
 
     Unknown (None) scores 0.30 — the caller records the note.
     """
@@ -289,6 +313,71 @@ def _review_bonus(review_count: Optional[int]) -> float:
 def _listing_health_score(rating: Optional[float], review_count: Optional[int]) -> float:
     """Rating anchors combined with the review-count bonus, clamped 0-1."""
     return _clamp01(_rating_component(rating) + _review_bonus(review_count))
+
+
+# ---------------------------------------------------------------------------
+# Seller-identity and size hard filters.
+# ---------------------------------------------------------------------------
+
+
+def _seller_identity_blocked(
+    seller_name: Optional[str],
+    is_brand_seller: Optional[bool],
+    is_amazon_seller: Optional[bool],
+    product_brand: Optional[str],
+) -> bool:
+    """Delegate to amazon_matcher.seller_identity_blocked when available."""
+    try:  # pragma: no cover - sibling resolution
+        from .amazon_matcher import seller_identity_blocked as _sib
+    except ImportError:  # pragma: no cover
+        try:
+            from amazon_matcher import seller_identity_blocked as _sib  # type: ignore[import-not-found]
+        except ImportError:
+            _sib = None  # type: ignore[assignment]
+    if _sib is not None:
+        return _sib(seller_name, is_brand_seller, is_amazon_seller, product_brand)
+    return bool(is_brand_seller or is_amazon_seller)  # pragma: no cover
+
+
+def _verify_seller_identity(ind: Any, ws_brand: Optional[str]) -> tuple:
+    """(passes, note) for the seller-identity hard filter — FAILS CLOSED.
+
+    Unverifiable identity (no seller data at all) is a block: a listing whose
+    sellers we could not identify cannot be certified as safe to enter.
+    """
+    observed = (
+        ind.seller_name is not None
+        or ind.is_brand_seller is not None
+        or ind.is_amazon_seller is not None
+    )
+    if not observed:
+        return False, "FAIL (unverifiable — no seller identity data)"
+    blocked = _seller_identity_blocked(
+        ind.seller_name, ind.is_brand_seller, ind.is_amazon_seller, ws_brand
+    )
+    if blocked:
+        who = ind.seller_name or (
+            "brand owner" if ind.is_brand_seller else "Amazon.com"
+        )
+        return False, "FAIL (seller blocked: %s)" % who
+    return True, "PASS (verified third-party seller)"
+
+
+def _check_size(ind: Any) -> tuple:
+    """(passes, note) for the size hard filter — FAILS CLOSED on unknown weight.
+
+    Small/light is the strategy: <= 2 lbs is preferred, 5 lbs is the hard
+    ceiling (trash bags are the largest acceptable item). Unknown weight
+    cannot be certified small and fails closed.
+    """
+    w = ind.weight_oz
+    if w is None:
+        return False, "FAIL (unknown weight — cannot certify small/light)"
+    if float(w) > ABS_MAX_WEIGHT_OZ:
+        return False, "FAIL (%.1f oz > %.0f oz / 5 lbs ceiling)" % (w, ABS_MAX_WEIGHT_OZ)
+    if float(w) > PREFERRED_MAX_WEIGHT_OZ:
+        return True, "PASS (%.1f oz — over preferred 2 lbs, under 5 lbs ceiling)" % w
+    return True, "PASS (%.1f oz — preferred <= 2 lbs)" % w
 
 
 def _assign_tier(
@@ -368,6 +457,22 @@ def _apply_tags(economics: BreakdownEconomics) -> List[str]:
         tags.append("no_fba_competition")
     elif ind.fba_sellers == 1:
         tags.append("low_competition")
+    # 1-2 FBA sellers whose Buy Box price we can undercut by ~2% and still
+    # clear the $10 profit floor -> winnable competition.
+    if ind.fba_sellers is not None and 1 <= ind.fba_sellers <= 2:
+        undercut = _undercut_allows_competition(
+            economics.net_profit_per_unit, ind.amazon_price, DEFAULT_ROI_FLOOR
+        )
+        if undercut:
+            tags.append("undercut_opportunity")
+    # Seller-identity blockers (these entries end up REJECT, but tagging the
+    # discarded list makes the reason visible in the report).
+    if ind.is_brand_seller:
+        tags.append("brand_owner_seller")
+    if ind.is_amazon_seller or (
+        ind.seller_name and "amazon.com" in str(ind.seller_name).lower()
+    ):
+        tags.append("amazon_seller_present")
     margin = _as_pct(economics.profit_margin_pct)
     if margin is not None and margin > 40:
         tags.append("high_margin")
@@ -408,6 +513,8 @@ class ScoredOpportunity:
     passes_demand_floor: bool
     passes_competition_ceiling: bool
     passes_listing_health: bool
+    passes_seller_identity: bool
+    passes_size_filter: bool
     passes_all_filters: bool
     # Human-readable
     scoring_notes: List[str] = field(default_factory=list)
@@ -423,8 +530,13 @@ def _undercut_allows_competition(
     amazon_price: Optional[float],
     roi_floor: float,
 ) -> Optional[bool]:
-    """Return True/False for the >3-seller undercut escape, or None when the
-    check cannot be evaluated (missing net or price)."""
+    """Return True/False for the 1-2-seller undercut check, or None when the
+    check cannot be evaluated (missing net or price).
+
+    We would price 2% below the Buy Box to win it; the check confirms the
+    undercut price still clears the profit floor (i.e. the incumbent sellers
+    are priced HIGH enough that we can undercut and stay profitable).
+    """
     if net_profit_per_unit is None or amazon_price is None or amazon_price <= 0:
         return None
     cut = amazon_price * UNDERCUT_DISCOUNT
@@ -445,8 +557,13 @@ def score_opportunity(
       - demand:      est monthly sales >= min_monthly_sales, or rating >=
                      min_rating when sales are near baseline (>= 80% of the
                      floor)
-      - competition: fba_sellers <= 3, or undercut pricing can still clear
-                     the profit floor when more sellers are present
+      - competition: 0 FBA sellers (gold); 1-2 FBA sellers pass only when
+                     undercutting 2% below the Buy Box still clears the
+                     profit floor; 3+ rejected
+      - seller:      brand-owner seller or Amazon.com as a seller = HARD
+                     BLOCK; unverifiable seller identity fails closed
+      - size:        weight <= 5 lbs (2 lbs preferred); unknown weight fails
+                     closed
       - listing_health: review_rating >= 3.5
 
     All hard filters fail closed on missing data (with a note).
@@ -505,14 +622,23 @@ def score_opportunity(
         notes.append("Competition floor: FAIL (no FBA seller data)")
     else:
         notes.append("Competition: %d FBA seller%s -> %.2f" % (fba, "" if fba == 1 else "s", competition_score))
-        if fba <= COMPETITION_CEILING:
+        if fba == 0:
             passes_competition = True
-        else:
+            notes.append("Competition floor: PASS (0 FBA sellers — uncontested)")
+        elif fba <= COMPETITION_CEILING:
+            # 1-2 FBA sellers: only winnable if their Buy Box price is high
+            # enough that undercutting by 2% still clears the profit floor.
             undercut = _undercut_allows_competition(net, ind.amazon_price, roi_floor)
             passes_competition = bool(undercut)
             notes.append(
-                "Competition floor: %d FBA sellers > %d; undercut check -> %s"
+                "Competition floor: %d FBA sellers (<= %d); undercut check -> %s"
                 % (fba, COMPETITION_CEILING, "PASS" if undercut else "FAIL")
+            )
+        else:
+            passes_competition = False
+            notes.append(
+                "Competition floor: FAIL (%d FBA sellers > %d ceiling)"
+                % (fba, COMPETITION_CEILING)
             )
 
     # 4. Listing health -------------------------------------------------------
@@ -528,7 +654,22 @@ def score_opportunity(
             % (rating, "?" if ind.review_count is None else ind.review_count, health_score)
         )
 
-    passes_all = passes_profit and passes_demand and passes_competition and passes_health
+    # 4b. Seller identity -----------------------------------------------------
+    passes_seller, seller_note = _verify_seller_identity(ind, ws.brand)
+    notes.append("Seller identity: %s" % seller_note)
+
+    # 4c. Size (small & light) ------------------------------------------------
+    passes_size, size_note = _check_size(ind)
+    notes.append("Size: %s" % size_note)
+
+    passes_all = (
+        passes_profit
+        and passes_demand
+        and passes_competition
+        and passes_health
+        and passes_seller
+        and passes_size
+    )
 
     # 5. Composite + tier -----------------------------------------------------
     composite = round(
@@ -558,6 +699,8 @@ def score_opportunity(
         passes_demand_floor=passes_demand,
         passes_competition_ceiling=passes_competition,
         passes_listing_health=passes_health,
+        passes_seller_identity=passes_seller,
+        passes_size_filter=passes_size,
         passes_all_filters=passes_all,
         scoring_notes=notes,
         opportunity_tags=tags,

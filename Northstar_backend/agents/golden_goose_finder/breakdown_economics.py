@@ -122,6 +122,12 @@ class IndividualListing:
     weight_oz: Optional[float] = None
     dimensions_in: Optional[List[float]] = None
     listing_fba_fee: Optional[float] = None
+    # Seller identity — the "who sells it" gate. is_brand_seller True and
+    # is_amazon_seller True are HARD BLOCKS (profile rule); None means the
+    # seller analyzer could not verify identity (scorer fails closed).
+    seller_name: Optional[str] = None
+    is_brand_seller: Optional[bool] = None
+    is_amazon_seller: Optional[bool] = None
 
 
 @dataclass

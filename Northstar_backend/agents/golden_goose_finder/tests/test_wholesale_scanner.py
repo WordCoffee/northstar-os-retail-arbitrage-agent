@@ -109,8 +109,14 @@ class TestExtractBrand:
     def test_long_brand_name(self):
         assert extract_brand_from_title("Nature's Bounty Vitamin B12 200ct") == "Nature's Bounty"
 
-    def test_purina_brand(self):
-        assert extract_brand_from_title("Purina Pro Plan Adult Dog Food") == "Purina"
+    def test_kong_brand(self):
+        assert extract_brand_from_title("KONG Classic Dog Toy, Medium (2 Pack)") == "KONG"
+
+    def test_furminator_brand(self):
+        assert extract_brand_from_title("Furminator deShedding Tool for Dogs, Large") == "Furminator"
+
+    def test_petsafe_brand(self):
+        assert extract_brand_from_title("PetSafe Easy Walk Dog Harness, Large") == "PetSafe"
 
     def test_dove_brand(self):
         assert extract_brand_from_title("Dove Beauty Bar 14 Count") == "Dove"

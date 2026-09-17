@@ -1,10 +1,18 @@
 """Golden Goose Finder — brand/category registry.
 
 Registry of national brands and the categories the Golden Goose Finder scans
-for multi-pack breakdown arbitrage (buy a bulk club pack, repackage, sell the
-individual units).
+for retail-arbitrage opportunities (buy a small, light, high-value product at
+Costco / Sam's Club, resell the individual units on Amazon).
 
-Design rules:
+Strategy rules (profile-level, NOT master-brain defaults):
+- ANY small, light item with >= $10 NET profit per unit after all Amazon fees
+  is a target — multi-pack breakdown is one path, not the only path.
+- Preferred weight <= 2 lbs; hard ceiling 5 lbs (trash bags are the largest
+  acceptable item, and most of those are already too heavy).
+- 1,000+ monthly sales on Amazon is the demand floor.
+- Competition floor: 0 FBA sellers (gold), or 1-2 FBA sellers whose Buy Box
+  price is high enough that undercutting by 2% still clears the profit floor.
+  Brand-owner sellers and Amazon.com as a seller are HARD BLOCKS.
 - NATIONAL BRANDS ONLY. Store brands / private labels (Kirkland Signature,
   Member's Mark, Great Value, Equate, ...) are excluded by BRAND_EXCLUSION_LIST
   and never appear in BRAND_ALLOWLIST.
@@ -85,17 +93,22 @@ BRAND_ALLOWLIST = {
     "Dr. Teals": "personal_care",
     "Eucerin": "personal_care",
     "Aquaphor": "personal_care",
-    # --- Pet
-    "Royal Canin": "pet",
-    "Blue Buffalo": "pet",
-    "Purina Pro Plan": "pet",
-    "Hill's Science Diet": "pet",
-    "IAMS": "pet",
-    "Pedigree": "pet",
-    "Meow Mix": "pet",
-    "Fancy Feast": "pet",
-    "Temptations": "pet",
+    # --- Pet (toys, grooming, collars/harnesses, small accessories — NOT food)
+    # User rule: pet = toys, shampoos, collars, harnesses, grooming tools,
+    # small accessories. Heavy bags of food / litter are EXCLUDED by the size
+    # filter, which is why food brands are not allowlisted here.
+    "KONG": "pet",
+    "Chuckit": "pet",
+    "Furminator": "pet",
+    "Hartz": "pet",
+    "PetSafe": "pet",
+    "Outward Hound": "pet",
+    "Nylabone": "pet",
+    "ZippyPaws": "pet",
     "Greenies": "pet",
+    "Temptations": "pet",
+    "Pet Head": "pet",
+    "Wahl": "pet",
     # --- Snacks & bars
     "RXBAR": "snacks_bars",
     "KIND": "snacks_bars",
@@ -131,19 +144,41 @@ BRAND_EXCLUSION_LIST = [
 ]
 
 # --------------------------------------------------------------------------
-# Global size filter defaults — items small enough for easy individual
-# repackaging (under 3 lbs, fits a 12 x 8 x 4 in box).
+# Global size filter defaults — small, LIGHT items with low FBA fees.
+#
+# PREFERRED_MAX_WEIGHT_OZ is the sweet spot (2 lbs): these items land in the
+# small-standard FBA fee band and keep fees from eating the margin.
+# ABS_MAX_WEIGHT_OZ is the hard ceiling (5 lbs): trash bags / small bulk
+# boxes are the largest acceptable items; anything heavier is REJECTED.
 # --------------------------------------------------------------------------
+PREFERRED_MAX_WEIGHT_OZ = 32.0  # 2 lbs
+ABS_MAX_WEIGHT_OZ = 80.0        # 5 lbs — hard ceiling
+PREFERRED_MAX_WEIGHT_LBS = PREFERRED_MAX_WEIGHT_OZ / 16.0
+ABS_MAX_WEIGHT_LBS = ABS_MAX_WEIGHT_OZ / 16.0
+
 DEFAULT_SIZE_FILTER = {
-    "max_weight_oz": 48.0,  # 3 lbs
+    "max_weight_oz": PREFERRED_MAX_WEIGHT_OZ,   # 2 lbs preferred
+    "abs_max_weight_oz": ABS_MAX_WEIGHT_OZ,     # 5 lbs hard ceiling
     "max_dimensions_in": [12, 8, 4],
-    "description": "Items small enough for easy individual repackaging",
+    "description": (
+        "Small, light items (<= 2 lbs preferred; 5 lbs hard ceiling) so the "
+        "item lands in the cheap small-standard FBA band."
+    ),
 }
 
 # --------------------------------------------------------------------------
-# ROI floor — scanner-level default. Overridable per user profile; this is
+# Seller-identity hard blocks (profile-level gate).
+# --------------------------------------------------------------------------
+BLOCK_BRAND_AS_SELLER = True   # brand owner on the Buy Box -> do not enter
+BLOCK_AMAZON_AS_SELLER = True   # Amazon.com as a seller -> do not enter
+COMPETITION_MAX_FBA_SELLERS = 2  # 0 = gold; 1-2 OK if we can undercut; 3+ reject
+UNDERCUT_DISCOUNT_RATE = 0.02    # we price 2% below the Buy Box to win it
+
+# --------------------------------------------------------------------------
+# Demand floor — scanner-level default. Overridable per user profile; this is
 # intentionally NOT a master-brain global default.
 # --------------------------------------------------------------------------
+DEFAULT_MIN_MONTHLY_SALES = 1000  # proven demand: 1K+ units/mo
 DEFAULT_ROI_FLOOR_PER_UNIT = 10.00  # Overridable per user profile — NOT a master brain default
 
 # --------------------------------------------------------------------------
@@ -166,9 +201,9 @@ CATEGORY_CONFIG = {
         "typical_pack_sizes": [10, 20, 30, 40, 60, 80, 100, 120, 160, 200, 240],
         "typical_wholesale_range": [25.0, 90.0],
         "typical_individual_range": [8.0, 25.0],
-        "size_filter_max_weight_oz": 48.0,
+        "size_filter_max_weight_oz": 32.0,
         "size_filter_max_dimensions_in": [12, 8, 4],
-        "min_monthly_sales": 500,
+        "min_monthly_sales": 1000,
         "min_rating": 4.0,
         "priority": 4,
     },
@@ -185,9 +220,9 @@ CATEGORY_CONFIG = {
         "typical_pack_sizes": [10, 20, 24, 30, 50, 60, 72, 100, 120, 150, 200, 250, 300, 400, 500, 600, 750, 1000],
         "typical_wholesale_range": [10.0, 60.0],
         "typical_individual_range": [5.0, 20.0],
-        "size_filter_max_weight_oz": 48.0,
+        "size_filter_max_weight_oz": 32.0,
         "size_filter_max_dimensions_in": [12, 8, 4],
-        "min_monthly_sales": 500,
+        "min_monthly_sales": 1000,
         "min_rating": 4.0,
         "priority": 1,
     },
@@ -203,9 +238,9 @@ CATEGORY_CONFIG = {
         "typical_pack_sizes": [30, 50, 60, 90, 100, 120, 150, 180, 200, 250, 300, 365, 400, 500, 750, 1000],
         "typical_wholesale_range": [12.0, 70.0],
         "typical_individual_range": [8.0, 35.0],
-        "size_filter_max_weight_oz": 48.0,
+        "size_filter_max_weight_oz": 32.0,
         "size_filter_max_dimensions_in": [12, 8, 4],
-        "min_monthly_sales": 500,
+        "min_monthly_sales": 1000,
         "min_rating": 4.0,
         "priority": 2,
     },
@@ -222,9 +257,9 @@ CATEGORY_CONFIG = {
         "typical_pack_sizes": [2, 3, 4, 6, 8, 9, 10, 12, 16, 18, 20, 24, 32, 48],
         "typical_wholesale_range": [8.0, 45.0],
         "typical_individual_range": [4.0, 15.0],
-        "size_filter_max_weight_oz": 48.0,
+        "size_filter_max_weight_oz": 32.0,
         "size_filter_max_dimensions_in": [12, 8, 4],
-        "min_monthly_sales": 500,
+        "min_monthly_sales": 1000,
         "min_rating": 4.0,
         "priority": 6,
     },
@@ -242,9 +277,9 @@ CATEGORY_CONFIG = {
         "typical_pack_sizes": [2, 3, 4, 6, 8, 10, 12, 16, 20, 24, 30, 36, 40, 48, 60],
         "typical_wholesale_range": [8.0, 40.0],
         "typical_individual_range": [4.0, 18.0],
-        "size_filter_max_weight_oz": 48.0,
+        "size_filter_max_weight_oz": 32.0,
         "size_filter_max_dimensions_in": [12, 8, 4],
-        "min_monthly_sales": 500,
+        "min_monthly_sales": 1000,
         "min_rating": 4.0,
         "priority": 3,
     },
@@ -253,17 +288,19 @@ CATEGORY_CONFIG = {
         "amazon_browse_nodes": [
             2619533011,  # Pet Supplies (top node, confirmed in fee engine)
             "Pet Supplies",
-            "Pet Food",
-            "Dog Treats",
+            "Dog Toys",
+            "Dog Grooming",
+            "Dog Collars, Harnesses & Leashes",
+            "Cat Toys",
         ],
         "amazon_category_name": "Pet Supplies",  # fee_engine flat 15%
         "referral_fee_rate": 0.15,
         "typical_pack_sizes": [4, 6, 8, 10, 12, 16, 18, 24, 30, 36, 40, 48, 60, 100, 120, 160],
         "typical_wholesale_range": [15.0, 80.0],
         "typical_individual_range": [8.0, 40.0],
-        "size_filter_max_weight_oz": 48.0,
+        "size_filter_max_weight_oz": 32.0,
         "size_filter_max_dimensions_in": [12, 8, 4],
-        "min_monthly_sales": 500,
+        "min_monthly_sales": 1000,
         "min_rating": 4.0,
         "priority": 8,
     },
@@ -280,9 +317,9 @@ CATEGORY_CONFIG = {
         "typical_pack_sizes": [3, 4, 5, 6, 8, 10, 12, 15, 16, 18, 20, 24, 30, 32, 36, 40, 48],
         "typical_wholesale_range": [10.0, 50.0],
         "typical_individual_range": [2.0, 8.0],
-        "size_filter_max_weight_oz": 48.0,
+        "size_filter_max_weight_oz": 32.0,
         "size_filter_max_dimensions_in": [12, 8, 4],
-        "min_monthly_sales": 500,
+        "min_monthly_sales": 1000,
         "min_rating": 4.0,
         "priority": 5,
     },
@@ -299,9 +336,9 @@ CATEGORY_CONFIG = {
         "typical_pack_sizes": [10, 20, 24, 28, 30, 36, 40, 50, 56, 60, 72, 80, 96, 100, 120, 140, 150, 160, 180, 192, 200, 216, 240],
         "typical_wholesale_range": [15.0, 80.0],
         "typical_individual_range": [6.0, 25.0],
-        "size_filter_max_weight_oz": 48.0,
+        "size_filter_max_weight_oz": 32.0,
         "size_filter_max_dimensions_in": [12, 8, 4],
-        "min_monthly_sales": 500,
+        "min_monthly_sales": 1000,
         "min_rating": 4.0,
         "priority": 7,
     },
@@ -482,3 +519,49 @@ def parse_pack_quantity(product_title, category_slug=None):
         return candidates[-1][1]
 
     return None
+
+
+# --------------------------------------------------------------------------
+# Seller-identity blocking (the "who sells it" gate).
+# --------------------------------------------------------------------------
+
+
+def seller_identity_blocked(
+    seller_name: str | None,
+    is_brand_seller: bool | None,
+    is_amazon_seller: bool | None,
+    product_brand: str | None = None,
+) -> bool:
+    """True when the listing's seller is a hard block for retail arbitrage.
+
+    Hard blocks (profile rule):
+      - is_brand_seller is True (the flag was observed), OR
+      - is_amazon_seller is True ("Sold by Amazon.com"), OR
+      - the seller text itself contains the product brand as a word
+        (brand-owner heuristic used when the structured flag is missing).
+
+    None / unknown flags are NOT a block here — whether the scorer treats an
+    unknown identity as fail-closed is the caller's decision (it does: an
+    unverifiable seller identity fails the hard filter).
+
+    ``is_brand_seller``/``is_amazon_seller`` are observed facts when present;
+    the textual checks are fallback heuristics that only fire when the
+    corresponding flag is not already True.
+    """
+    if is_brand_seller:
+        return True
+    if is_amazon_seller:
+        return True
+    if not seller_name or not str(seller_name).strip():
+        return False
+    seller = str(seller_name).strip().lower()
+    # "Sold by Amazon.com" detected from the seller text, flag or not.
+    if "amazon.com" in seller:
+        return True
+    if product_brand and str(product_brand).strip():
+        brand = str(product_brand).strip().lower()
+        if re.search(r"(?<!\w)" + re.escape(brand) + r"(?!\w)", seller):
+            # Word-boundary brand match inside the seller name is the
+            # strongest un-flagged signal that the OWNER is the seller.
+            return True
+    return False

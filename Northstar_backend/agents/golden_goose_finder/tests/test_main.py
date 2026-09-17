@@ -316,7 +316,7 @@ class TestCLIArgParsing:
         assert args.mock is True
         assert args.live is False
         assert args.roi_floor == 10.0
-        assert args.min_sales == 500
+        assert args.min_sales == 1000
         assert args.max_results == 100
         assert args.json is False
         assert args.verbose is False
