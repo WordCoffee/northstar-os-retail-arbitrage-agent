@@ -168,7 +168,13 @@ def parse_wholesale_product(
     brand = raw_data.get("brand") or extract_brand_from_title(title) or "Unknown"
     pack_count = raw_data.get("pack_count") or extract_pack_count(title, category_slug)
 
-    price = raw_data.get("wholesale_price") or raw_data.get("price") or raw_data.get("current_price")
+    price = (
+        raw_data.get("wholesale_price")
+        or raw_data.get("price")
+        or raw_data.get("current_price")
+        or raw_data.get("sale_price")
+        or raw_data.get("regular_price")
+    )
     if price is None:
         return None
     try:

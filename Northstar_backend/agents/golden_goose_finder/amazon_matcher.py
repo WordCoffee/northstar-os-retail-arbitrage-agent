@@ -321,7 +321,7 @@ async def find_individual_listing(
         logger.warning(
             "[AmazonMatcher] Live path returned no matches for '%s'; "
             "falling back to mock",
-            wholesale_product.title,
+            wholesale_product.product_title,
         )
 
     # Mock path — deterministic for testing
@@ -366,7 +366,7 @@ def _live_find_matches(
         return []
 
     # Step 1: Build query and search Amazon
-    query = build_search_query(wholesale_product.brand, wholesale_product.title)
+    query = build_search_query(wholesale_product.brand, wholesale_product.product_title)
     search_caller = make_chocodata_search_caller(query, pages=1)
 
     search_result = run_task(
