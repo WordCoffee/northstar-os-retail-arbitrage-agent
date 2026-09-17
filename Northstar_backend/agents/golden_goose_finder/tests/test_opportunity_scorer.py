@@ -10,9 +10,11 @@ unknown-data / empty edge cases.
 import pytest
 
 from agents.golden_goose_finder.opportunity_scorer import (
+    WEIGHT_AD_FEASIBILITY,
     WEIGHT_COMPETITION,
     WEIGHT_DEMAND,
     WEIGHT_LISTING_HEALTH,
+    WEIGHT_PRICE_GAP,
     WEIGHT_PROFIT,
     TIER_HIGH,
     TIER_LOW,
@@ -39,7 +41,7 @@ from agents.golden_goose_finder.opportunity_scorer import (
 def test_high_tier_opportunity(high):
     s = score_opportunity(high)
     assert s.tier == TIER_HIGH
-    assert s.composite_score >= 0.7
+    assert s.composite_score >= 0.6
     assert s.passes_all_filters is True
     assert s.passes_profit_floor and s.passes_demand_floor
     assert s.passes_competition_ceiling and s.passes_listing_health
@@ -56,7 +58,7 @@ def test_high_tier_opportunity(high):
 def test_medium_tier_opportunity(medium):
     s = score_opportunity(medium)
     assert s.tier == TIER_MEDIUM
-    assert 0.45 <= s.composite_score < 0.7
+    assert 0.4 <= s.composite_score < 0.6
     assert s.passes_profit_floor is True
     # 2 FBA sellers we can undercut + 1,200 sales still clear every gate.
     assert s.passes_all_filters is True
@@ -69,7 +71,7 @@ def test_medium_tier_opportunity(medium):
 def test_low_tier_opportunity(low):
     s = score_opportunity(low)
     assert s.tier == TIER_LOW
-    assert 0.25 <= s.composite_score < 0.45
+    assert 0.2 <= s.composite_score < 0.4
     assert s.passes_profit_floor is True
     assert s.passes_demand_floor is False        # 300/mo < 1,000
     assert s.passes_competition_ceiling is False  # 6 FBA sellers rejected outright
@@ -173,18 +175,21 @@ def test_listing_health_score_review_bonus():
 
 
 def test_tier_boundaries():
-    assert _assign_tier(0.7, True, True) == TIER_HIGH
-    assert _assign_tier(0.7, True, False) == TIER_MEDIUM     # filtered out of HIGH
-    assert _assign_tier(0.7, False, False) == TIER_LOW       # no profit floor -> not HIGH/MEDIUM
+    assert _assign_tier(0.6, True, True) == TIER_HIGH
+    assert _assign_tier(0.6, True, False) == TIER_MEDIUM     # filtered out of HIGH
+    assert _assign_tier(0.6, False, False) == TIER_LOW       # no profit floor -> not HIGH/MEDIUM
     assert _assign_tier(0.45, True, False) == TIER_MEDIUM
-    assert _assign_tier(0.4499, True, False) == TIER_LOW
-    assert _assign_tier(0.25, False, False) == TIER_LOW
-    assert _assign_tier(0.2499, False, False) == TIER_REJECT
+    assert _assign_tier(0.3999, True, False) == TIER_LOW
+    assert _assign_tier(0.2, False, False) == TIER_LOW
+    assert _assign_tier(0.1999, False, False) == TIER_REJECT
     assert _assign_tier(1.0, True, True) == TIER_HIGH
 
 
 def test_weights_sum_to_one():
-    total = WEIGHT_PROFIT + WEIGHT_DEMAND + WEIGHT_COMPETITION + WEIGHT_LISTING_HEALTH
+    total = (
+        WEIGHT_PROFIT + WEIGHT_DEMAND + WEIGHT_COMPETITION
+        + WEIGHT_LISTING_HEALTH + WEIGHT_PRICE_GAP + WEIGHT_AD_FEASIBILITY
+    )
     assert total == pytest.approx(1.0)
 
 

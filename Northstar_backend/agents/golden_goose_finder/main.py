@@ -251,6 +251,14 @@ class _MockScoredOpportunity:
     passes_all_filters: bool = False
     scoring_notes: list[str] = field(default_factory=list)
     opportunity_tags: list[str] = field(default_factory=list)
+    # New scoring fields (defaults for builtin fallback path)
+    profit_score: float = 0.0
+    demand_score: float = 0.0
+    competition_score: float = 0.0
+    listing_health_score: float = 0.0
+    price_gap_score: float = 0.0
+    ad_feasibility_score: float = 0.0
+    ad_feasibility_breakdown: dict = field(default_factory=dict)
 
 
 # Built-in mock data — realistic multi-pack breakdown scenarios
@@ -332,7 +340,8 @@ def _builtin_score_opportunity(
     # Composite score components (0-100 scale)
     profit_score = min(100, max(0, econ.net_profit_per_unit * 4))  # $25 = 100
     roi_score = min(100, max(0, econ.roi_per_unit))  # 100% = 100
-    pack_bonus = min(30, (econ.pack_count - 1) * 5)  # up to 30 for large packs
+    pack_count = getattr(econ, "pack_count", None) or (getattr(getattr(econ, "wholesale", None), "pack_count", None) or 1)
+    pack_bonus = min(30, (pack_count - 1) * 5)  # up to 30 for large packs
     confidence_bonus = 20 if econ.economics_confidence == "estimated" else 10
 
     composite = round((profit_score * 0.35 + roi_score * 0.30 + pack_bonus + confidence_bonus), 1)
@@ -355,7 +364,7 @@ def _builtin_score_opportunity(
         notes.append("Negative profit — not viable")
         tags.append("loss-leader")
 
-    if econ.pack_count and econ.pack_count >= 6:
+    if pack_count and pack_count >= 6:
         tags.append("high-breakdown")
     if econ.roi_per_unit >= 100:
         tags.append("triple-digit-roi")
@@ -731,6 +740,14 @@ def _scored_to_dicts(scored: list) -> list[dict[str, Any]]:
             "passes_all_filters": getattr(s, "passes_all_filters", False),
             "scoring_notes": getattr(s, "scoring_notes", []),
             "opportunity_tags": getattr(s, "opportunity_tags", []),
+            # New scoring fields
+            "profit_score": getattr(s, "profit_score", 0),
+            "demand_score": getattr(s, "demand_score", 0),
+            "competition_score": getattr(s, "competition_score", 0),
+            "listing_health_score": getattr(s, "listing_health_score", 0),
+            "price_gap_score": getattr(s, "price_gap_score", 0),
+            "ad_feasibility_score": getattr(s, "ad_feasibility_score", 0),
+            "ad_feasibility_breakdown": getattr(s, "ad_feasibility_breakdown", {}),
             # Economics fields (flat)
             "wholesale_title": _get(econ, "wholesale_title") or _get(wholesale, "product_title", "title", default=""),
             "amazon_asin": _get(econ, "amazon_asin") or _get(individual, "asin", default=""),
@@ -749,6 +766,12 @@ def _scored_to_dicts(scored: list) -> list[dict[str, Any]]:
             "economics_confidence": _get(econ, "economics_confidence", default="mock") or "mock",
             "monthly_sales_estimate": _get(econ, "monthly_sales_estimate") or _get(individual, "monthly_sales_estimate"),
             "fba_sellers": _get(econ, "fba_sellers") or _get(individual, "fba_sellers"),
+            # Price gap fields
+            "buy_box_price": _get(econ, "buy_box_price"),
+            "undercut_headroom": _get(econ, "undercut_headroom"),
+            "max_undercut_price": _get(econ, "max_undercut_price"),
+            # Per-unit cost (MOQ)
+            "per_unit_cost": _get(wholesale, "per_unit_cost"),
         }
         results.append(d)
     return results

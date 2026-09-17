@@ -154,6 +154,10 @@ class BreakdownEconomics:
     breakeven_amazon_price: Optional[float]
     economics_confidence: str = ECON_UNAVAILABLE
     economics_notes: List[str] = field(default_factory=list)
+    # Price gap analysis — can we undercut the Buy Box?
+    buy_box_price: Optional[float] = None  # current Amazon Buy Box price
+    undercut_headroom: Optional[float] = None  # max $ we can undercut and still clear $10 profit
+    max_undercut_price: Optional[float] = None  # lowest price we could list at and hit $10 profit
 
 
 # ---------------------------------------------------------------------------
@@ -432,6 +436,9 @@ def calculate_breakdown_economics(
             breakeven_amazon_price=None,
             economics_confidence=ECON_UNAVAILABLE,
             economics_notes=notes,
+            buy_box_price=_positive(_attr(individual, "amazon_price")),
+            undercut_headroom=None,
+            max_undercut_price=None,
         )
 
     unit_cogs = wholesale_price / pack_count
@@ -492,6 +499,21 @@ def calculate_breakdown_economics(
     roi_unit = (net_per_unit / unit_cogs * 100.0) if unit_cogs > 0 else None
     roi_pack = (net_per_pack / wholesale_price * 100.0) if wholesale_price > 0 else None
     margin_pct = (net_per_unit / price * 100.0) if price > 0 else None
+
+    # -- price gap analysis ------------------------------------------------
+    # Calculate how much we can undercut the current Buy Box price while
+    # still clearing the $10 profit floor.  buy_box_price is the current
+    # Amazon price (what the incumbent charges).
+    buy_box_price = _positive(_attr(individual, "amazon_price"))
+    undercut_headroom = None
+    max_undercut_price = None
+    if buy_box_price is not None and total_per_unit is not None:
+        # The lowest we can price at and still clear $10 profit:
+        # total_per_unit + $10 = max_undercut_price
+        max_undercut_price = round(total_per_unit + roi_floor, 2)
+        # Headroom = how much below the current price we can go:
+        # buy_box_price - max_undercut_price
+        undercut_headroom = round(buy_box_price - max_undercut_price, 2)
 
     # -- confidence + notes -------------------------------------------------
     if fulfillment is None:
@@ -564,6 +586,9 @@ def calculate_breakdown_economics(
         breakeven_amazon_price=round(total_per_unit, 2),
         economics_confidence=confidence,
         economics_notes=notes,
+        buy_box_price=buy_box_price,
+        undercut_headroom=undercut_headroom,
+        max_undercut_price=max_undercut_price,
     )
 
 

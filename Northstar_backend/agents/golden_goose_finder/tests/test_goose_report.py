@@ -130,7 +130,7 @@ def test_json_report_full_entry_shape(high):
 
     scoring = entry["scoring"]
     assert scoring["tier"] == TIER_HIGH
-    assert scoring["composite_score"] >= 0.7
+    assert scoring["composite_score"] >= 0.6
     assert scoring["tags"] == [
         "low_competition", "undercut_opportunity", "high_margin",
         "premium_product", "high_velocity", "trending_up", "bulk_goldmine",
