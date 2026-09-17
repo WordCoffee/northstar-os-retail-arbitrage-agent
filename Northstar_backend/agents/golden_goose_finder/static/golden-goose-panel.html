@@ -261,7 +261,7 @@
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      min-width: 1400px;
+      min-width: 1600px;
       font-size: 12px;
     }
     table.svc thead th {
@@ -642,7 +642,9 @@
             <th data-sort="net_profit_per_unit" class="num">Net Profit</th>
             <th data-sort="roi_per_unit" class="num">ROI %</th>
             <th data-sort="monthly_sales_estimate" class="num">Monthly Sold</th>
-            <th data-sort="fba_sellers" class="num">FBA Sellers</th>
+            <th data-sort="fba_sellers" class="num">FBA</th>
+            <th data-sort="ad_feasibility_score" class="num">Ad Score</th>
+            <th data-sort="undercut_headroom" class="num">Undercut</th>
             <th data-sort="composite_score" class="num">Score</th>
             <th data-sort="tier">Tier</th>
             <th>Tags</th>
@@ -821,7 +823,7 @@
       var rows = state.filtered;
 
       if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="15">' +
+        tbody.innerHTML = '<tr><td colspan="17">' +
           '<div class="empty-state">' +
           '<div class="empty-icon">🦢</div>' +
           '<div class="empty-title">No opportunities match your filters</div>' +
@@ -837,12 +839,20 @@
           return '<span class="tag' + cls + '">' + esc(t) + '</span>';
         }).join('');
 
+        // Ad feasibility badge color
+        var adScore = o.ad_feasibility_score || 0;
+        var adColor = adScore >= 0.6 ? 'var(--green)' : adScore >= 0.3 ? 'var(--gold)' : 'var(--ink-faint)';
+        // Undercut headroom color
+        var undercut = o.undercut_headroom;
+        var undercutColor = undercut > 5 ? 'var(--green)' : undercut > 0 ? 'var(--gold)' : 'var(--ink-faint)';
+        var undercutText = undercut != null ? '$' + Number(undercut).toFixed(2) : '—';
+
         return '<tr class="tier-' + esc(o.tier) + (state.selectedIdx === idx ? ' selected' : '') +
           '" data-idx="' + idx + '">' +
           '<td class="num">' + esc(o.rank) + '</td>' +
           '<td class="dim">' + esc(o.amazon_asin) + '</td>' +
           '<td>' + esc(o.brand) + '</td>' +
-          '<td title="' + esc(o.wholesale_title) + '">' + esc((o.wholesale_title || '').substring(0, 38)) + '</td>' +
+          '<td title="' + esc(o.wholesale_title) + '">' + esc((o.wholesale_title || '').substring(0, 32)) + '</td>' +
           '<td>' + esc(o.source_store) + '</td>' +
           '<td class="num">' + esc(o.pack_count) + '</td>' +
           '<td class="num">' + money(o.unit_cogs) + '</td>' +
@@ -851,6 +861,8 @@
           '<td class="num">' + pct(o.roi_per_unit) + '</td>' +
           '<td class="num">' + num(o.monthly_sales_estimate) + '</td>' +
           '<td class="num">' + num(o.fba_sellers) + '</td>' +
+          '<td class="num" style="font-weight:600;color:' + adColor + '">' + (adScore > 0 ? (adScore * 100).toFixed(0) : '—') + '</td>' +
+          '<td class="num" style="font-weight:600;color:' + undercutColor + '">' + undercutText + '</td>' +
           '<td class="num" style="font-weight:600;color:var(--gold)">' + num(o.composite_score) + '</td>' +
           '<td>' + tierPill + '</td>' +
           '<td>' + tags + '</td>' +
@@ -923,7 +935,7 @@
         '<div class="detail-section">' +
           '<h3>Opportunity Score</h3>' +
           '<div class="detail-grid">' +
-            '<div class="detail-field"><div class="lbl">Composite Score</div><div class="val gold">' + esc(o.composite_score) + ' / 100</div></div>' +
+            '<div class="detail-field"><div class="lbl">Composite Score</div><div class="val gold">' + esc(o.composite_score) + ' / 1.0</div></div>' +
             '<div class="detail-field"><div class="lbl">Tier</div><div class="val">' + tierPillHtml(o.tier) + '</div></div>' +
             '<div class="detail-field"><div class="lbl">Rank</div><div class="val">#' + esc(o.rank) + '</div></div>' +
             '<div class="detail-field"><div class="lbl">Passes Filters</div><div class="val">' + (o.passes_all_filters ? '<span class="pill green">YES</span>' : '<span class="pill crimson">NO</span>') + '</div></div>' +
@@ -932,11 +944,51 @@
         '</div>' +
 
         '<div class="detail-section">' +
+          '<h3>Price Gap Analysis</h3>' +
+          '<div class="detail-grid">' +
+            '<div class="detail-field"><div class="lbl">Current Buy Box Price</div><div class="val gold">' + money(o.buy_box_price) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Our Landed Cost</div><div class="val">' + money(o.unit_cogs) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Max Undercut Price</div><div class="val">' + money(o.max_undercut_price) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Undercut Headroom</div><div class="val" style="color:' + ((o.undercut_headroom || 0) > 5 ? 'var(--green)' : (o.undercut_headroom || 0) > 0 ? 'var(--gold)' : 'var(--ink-faint)') + '">' + (o.undercut_headroom != null ? '$' + Number(o.undercut_headroom).toFixed(2) : '—') + '</div></div>' +
+          '</div>' +
+          '<div style="margin-top:8px;font-size:11px;color:var(--ink-dim);line-height:1.5">' +
+            (o.undercut_headroom != null && o.undercut_headroom > 0
+              ? '✓ You can undercut by up to <strong>$' + Number(o.undercut_headroom).toFixed(2) + '</strong> and still clear $10 profit.'
+              : o.undercut_headroom != null && o.undercut_headroom <= 0
+              ? '✗ No room to undercut — current price is at or below the profit floor.'
+              : '— Buy box price data not available for undercut analysis.') +
+          '</div>' +
+        '</div>' +
+
+        '<div class="detail-section">' +
+          '<h3>Ad Feasibility (Proxy Signals)</h3>' +
+          '<div class="detail-grid">' +
+            '<div class="detail-field"><div class="lbl">Ad Score</div><div class="val" style="color:' + ((o.ad_feasibility_score || 0) >= 0.6 ? 'var(--green)' : (o.ad_feasibility_score || 0) >= 0.3 ? 'var(--gold)' : 'var(--ink-faint)') + '">' + (o.ad_feasibility_score ? (o.ad_feasibility_score * 100).toFixed(0) + ' / 100' : '—') + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Price Gap Score</div><div class="val">' + (o.price_gap_score ? (o.price_gap_score * 100).toFixed(0) + ' / 100' : '—') + '</div></div>' +
+          '</div>' +
+          (function () {
+            var bd = o.ad_feasibility_breakdown || {};
+            if (Object.keys(bd).length === 0) return '';
+            return '<div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
+              '<div style="font-size:11px;color:var(--ink-dim)">Reviews: <strong style="color:var(--ink)">' + (bd.review_pts || 0) + '/25</strong></div>' +
+              '<div style="font-size:11px;color:var(--ink-dim)">BSR Rank: <strong style="color:var(--ink)">' + (bd.bsr_pts || 0) + '/25</strong></div>' +
+              '<div style="font-size:11px;color:var(--ink-dim)">Sales Velocity: <strong style="color:var(--ink)">' + (bd.velocity_pts || 0) + '/25</strong></div>' +
+              '<div style="font-size:11px;color:var(--ink-dim)">Brand Recognition: <strong style="color:var(--ink)">' + (bd.brand_pts || 0) + '/25</strong></div>' +
+            '</div>';
+          })() +
+          '<div style="margin-top:8px;font-size:11px;color:var(--ink-dim);line-height:1.5">' +
+            'Ad feasibility uses proxy signals: review count (demand), BSR rank (velocity), ' +
+            'monthly sales (proven sales), and brand recognition (search demand for branded ads).' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="detail-section">' +
           '<h3>Financial Breakdown (Per Unit)</h3>' +
           '<div class="detail-grid">' +
             '<div class="detail-field"><div class="lbl">Wholesale Price (pack)</div><div class="val">' + money(o.wholesale_price) + '</div></div>' +
-            '<div class="detail-field"><div class="lbl">Pack Count</div><div class="val">' + esc(o.pack_count) + ' units</div></div>' +
+            '<div class="detail-field"><div class="lbl">Pack Count (MOQ)</div><div class="val">' + esc(o.pack_count) + ' units</div></div>' +
             '<div class="detail-field"><div class="lbl">Unit COGS</div><div class="val">' + money(o.unit_cogs) + '</div></div>' +
+            '<div class="detail-field"><div class="lbl">Per-Unit Cost</div><div class="val">' + money(o.per_unit_cost || o.unit_cogs) + '</div></div>' +
             '<div class="detail-field"><div class="lbl">Amazon Selling Price</div><div class="val gold">' + money(o.amazon_price) + '</div></div>' +
             '<div class="detail-field"><div class="lbl">Amazon Fees (referral + FBA)</div><div class="val">' + money(o.total_amazon_fees) + '</div></div>' +
             '<div class="detail-field"><div class="lbl">Net Profit / Unit</div><div class="val ' + (o.net_profit_per_unit >= 10 ? 'green' : o.net_profit_per_unit > 0 ? 'gold' : 'red') + '">' + money(o.net_profit_per_unit) + '</div></div>' +
@@ -983,7 +1035,7 @@
     function exportCSV() {
       var rows = state.filtered;
       if (!rows.length) return;
-      var header = ['Rank','ASIN','Brand','Product','Source','Pack','Unit COGS','Amazon Price','Net Profit','ROI%','Monthly Sold','FBA Sellers','Score','Tier','Tags'];
+      var header = ['Rank','ASIN','Brand','Product','Source','Pack','Unit COGS','Amazon Price','Net Profit','ROI%','Monthly Sold','FBA','Ad Score','Undercut','Score','Tier','Tags'];
       var lines = [header.join(',')];
       rows.forEach(function (o) {
         lines.push([
@@ -999,6 +1051,8 @@
           o.roi_per_unit,
           o.monthly_sales_estimate || '',
           o.fba_sellers || '',
+          o.ad_feasibility_score ? (o.ad_feasibility_score * 100).toFixed(0) : '',
+          o.undercut_headroom != null ? o.undercut_headroom : '',
           o.composite_score,
           o.tier,
           '"' + (o.opportunity_tags || []).join(';') + '"'
