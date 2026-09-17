@@ -79,7 +79,7 @@ except ImportError:
         is_individual_listing = None  # type: ignore[assignment]
 
 try:
-    from .breakdown_economics import BreakdownEconomics, calculate_breakdown_economics
+    from .breakdown_economics import BreakdownEconomics, WholesalePack, calculate_breakdown_economics
 except ImportError:
     try:
         from breakdown_economics import BreakdownEconomics, calculate_breakdown_economics
@@ -439,7 +439,16 @@ async def _live_scan(
     economics: list = []
     for wp, m in match_pairs:
         try:
-            econ = calculate_breakdown_economics(wp, m)
+            # Convert WholesaleProduct → WholesalePack (different dataclasses)
+            ws_pack = WholesalePack(
+                source_store=wp.source_store,
+                product_title=wp.product_title,
+                brand=wp.brand,
+                category_slug=wp.category_slug,
+                pack_count=wp.pack_count or 1,
+                wholesale_price=wp.wholesale_price,
+            )
+            econ = calculate_breakdown_economics(ws_pack, m)
             if econ is not None:
                 economics.append(econ)
         except Exception:
@@ -639,6 +648,11 @@ async def run_pipeline(
 
     # Build opportunity list for export
     opportunities = _scored_to_dicts(scored)
+    
+    # Assign ranks (sorted by composite_score descending)
+    opportunities.sort(key=lambda o: o.get("composite_score", 0), reverse=True)
+    for i, o in enumerate(opportunities):
+        o["rank"] = i + 1
 
     # Filter by store if specified
     if stores:
@@ -750,6 +764,7 @@ def _scored_to_dicts(scored: list) -> list[dict[str, Any]]:
             "ad_feasibility_breakdown": getattr(s, "ad_feasibility_breakdown", {}),
             # Economics fields (flat)
             "wholesale_title": _get(econ, "wholesale_title") or _get(wholesale, "product_title", "title", default=""),
+            "product_title": _get(econ, "wholesale_title") or _get(wholesale, "product_title", "title", default=""),
             "amazon_asin": _get(econ, "amazon_asin") or _get(individual, "asin", default=""),
             "amazon_title": _get(econ, "amazon_title") or _get(individual, "title", default=""),
             "brand": _get(econ, "brand") or _get(wholesale, "brand", default=""),
