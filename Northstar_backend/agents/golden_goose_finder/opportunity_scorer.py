@@ -30,9 +30,9 @@ Hard filters (all fail closed on missing data):
     size         weight <= 5 lbs (2 lbs preferred); unknown weight fails closed
     health       rating >= 3.5
 
-    tiers       >= 0.70 and all hard filters -> HIGH
-                >= 0.45 and profit floor      -> MEDIUM
-                >= 0.25                       -> LOW
+    tiers       >= 0.60 and all hard filters -> HIGH
+                >= 0.40 and profit floor      -> MEDIUM
+                >= 0.20                       -> LOW
                 else                          -> REJECT
 
 Unknown is never 0: a missing value scores its documented fallback and
@@ -125,10 +125,15 @@ except ImportError:  # pragma: no cover
 # ---------------------------------------------------------------------------
 
 WEIGHT_PROFIT = 0.35
-WEIGHT_DEMAND = 0.25
-WEIGHT_COMPETITION = 0.25
-WEIGHT_LISTING_HEALTH = 0.15
-_WEIGHTS_SUM = WEIGHT_PROFIT + WEIGHT_DEMAND + WEIGHT_COMPETITION + WEIGHT_LISTING_HEALTH
+WEIGHT_DEMAND = 0.20
+WEIGHT_COMPETITION = 0.15
+WEIGHT_LISTING_HEALTH = 0.10
+WEIGHT_PRICE_GAP = 0.10
+WEIGHT_AD_FEASIBILITY = 0.10
+_WEIGHTS_SUM = (
+    WEIGHT_PROFIT + WEIGHT_DEMAND + WEIGHT_COMPETITION
+    + WEIGHT_LISTING_HEALTH + WEIGHT_PRICE_GAP + WEIGHT_AD_FEASIBILITY
+)
 
 # Thresholds
 DEFAULT_ROI_FLOOR = 10.00  # $10 min net profit per unit
@@ -225,7 +230,8 @@ def _log_interp(anchors: List[tuple], value: float) -> float:
     Values at/below the first anchor take its score, values at/beyond the
     last anchor take the last score, and values in between are interpolated
     in log space (+1 offset so log(0) is never evaluated). Clamped to zero
-    for negative inputs.
+    for negative inputs.  Falls back to linear interpolation when the
+    log-space denominator would be non-positive (negative anchor values).
     """
     if value < 0:
         value = 0.0
@@ -235,10 +241,17 @@ def _log_interp(anchors: List[tuple], value: float) -> float:
         if value <= r2:
             if s1 == s2:
                 return float(s1)
-            denom = math.log((r2 + 1.0) / (r1 + 1.0))
-            if denom == 0:
+            # Check if log space is valid before calling math.log
+            shifted_r1 = r1 + 1.0
+            shifted_r2 = r2 + 1.0
+            if shifted_r1 <= 0 or shifted_r2 <= 0 or shifted_r2 / shifted_r1 <= 0:
+                # Linear fallback when log space is invalid
+                t = (value - r1) / (r2 - r1) if r2 != r1 else 0.0
+                return s1 + max(0.0, min(1.0, t)) * (s2 - s1)
+            t = math.log(shifted_r2 / shifted_r1)
+            if t == 0:
                 return float(s1)
-            t = math.log((value + 1.0) / (r1 + 1.0)) / denom
+            t = math.log((value + 1.0) / shifted_r1) / t
             return s1 + t * (s2 - s1)
     return float(anchors[-1][1])
 
@@ -316,6 +329,105 @@ def _listing_health_score(rating: Optional[float], review_count: Optional[int]) 
 
 
 # ---------------------------------------------------------------------------
+# Price gap scoring.
+# ---------------------------------------------------------------------------
+
+PRICE_GAP_ANCHORS = [(-5.0, 0.0), (0.0, 0.2), (5.0, 0.6), (10.0, 0.85), (15.0, 1.0)]
+
+
+def _price_gap_score(undercut_headroom: Optional[float]) -> float:
+    """Score the price gap headroom (how much we can undercut and still profit).
+
+    Negative headroom = can't compete -> 0.0
+    $0 = exactly at the floor -> 0.2 (marginal)
+    $5 = good room -> 0.6
+    $10 = strong position -> 0.85
+    $15+ = dominant -> 1.0
+    Unknown = 0.3 (fallback, fail closed in hard filter)
+    """
+    if undercut_headroom is None:
+        return 0.3
+    return _log_interp(PRICE_GAP_ANCHORS, float(undercut_headroom))
+
+
+# ---------------------------------------------------------------------------
+# Ad feasibility scoring (proxy signals).
+# ---------------------------------------------------------------------------
+
+def _ad_feasibility_score(
+    review_count: Optional[int],
+    bsr: Optional[int],
+    monthly_sales: Optional[float],
+    brand: Optional[str],
+) -> tuple[float, dict]:
+    """Score ad feasibility using proxy signals.
+
+    Returns (score, breakdown_dict) where breakdown_dict has the individual
+    component scores (0-25 each, total 0-100 -> normalized to 0-1).
+
+    Components:
+      - Review count (demand signal): >500=25, >100=15, >20=5, else 0
+      - BSR rank (velocity): <1K=25, <10K=15, <50K=5, else 0
+      - Sales velocity: >5K=25, >2K=15, >1K=5, else 0
+      - Brand recognition: known brand=25, unknown=10, none=0
+    """
+    breakdown = {}
+
+    # Review count — more reviews = proven demand = ads convert better
+    if review_count is not None and review_count >= 500:
+        breakdown["review_pts"] = 25
+    elif review_count is not None and review_count >= 100:
+        breakdown["review_pts"] = 15
+    elif review_count is not None and review_count >= 20:
+        breakdown["review_pts"] = 5
+    else:
+        breakdown["review_pts"] = 0
+
+    # BSR rank — lower = higher velocity = ads amplify momentum
+    if bsr is not None and bsr < 1000:
+        breakdown["bsr_pts"] = 25
+    elif bsr is not None and bsr < 10000:
+        breakdown["bsr_pts"] = 15
+    elif bsr is not None and bsr < 50000:
+        breakdown["bsr_pts"] = 5
+    else:
+        breakdown["bsr_pts"] = 0
+
+    # Sales velocity — proven sales = ads will compound
+    if monthly_sales is not None and monthly_sales >= 5000:
+        breakdown["velocity_pts"] = 25
+    elif monthly_sales is not None and monthly_sales >= 2000:
+        breakdown["velocity_pts"] = 15
+    elif monthly_sales is not None and monthly_sales >= 1000:
+        breakdown["velocity_pts"] = 5
+    else:
+        breakdown["velocity_pts"] = 0
+
+    # Brand recognition — known brands have search demand for branded ads
+    if brand:
+        brand_lower = brand.lower()
+        # Check against the brand allowlist for recognition
+        try:
+            from .wholesale_scanner import _BRAND_ALLOWLIST_LOWER
+        except ImportError:
+            try:
+                from wholesale_scanner import _BRAND_ALLOWLIST_LOWER
+            except ImportError:
+                _BRAND_ALLOWLIST_LOWER = {}
+        if brand_lower in _BRAND_ALLOWLIST_LOWER:
+            breakdown["brand_pts"] = 25
+        else:
+            breakdown["brand_pts"] = 10
+    else:
+        breakdown["brand_pts"] = 0
+
+    total_pts = sum(breakdown.values())
+    score = total_pts / 100.0  # normalize to 0-1
+    breakdown["total_pts"] = total_pts
+    return _clamp01(score), breakdown
+
+
+# ---------------------------------------------------------------------------
 # Seller-identity and size hard filters.
 # ---------------------------------------------------------------------------
 
@@ -386,11 +498,11 @@ def _assign_tier(
     passes_all_filters: bool,
 ) -> str:
     """Tier assignment per the documented rules."""
-    if composite >= 0.7 and passes_all_filters:
+    if composite >= 0.6 and passes_all_filters:
         return TIER_HIGH
-    if composite >= 0.45 and passes_profit_floor:
+    if composite >= 0.4 and passes_profit_floor:
         return TIER_MEDIUM
-    if composite >= 0.25:
+    if composite >= 0.2:
         return TIER_LOW
     return TIER_REJECT
 
@@ -519,6 +631,10 @@ class ScoredOpportunity:
     # Human-readable
     scoring_notes: List[str] = field(default_factory=list)
     opportunity_tags: List[str] = field(default_factory=list)  # e.g. ["low_competition", ...]
+    # New scoring fields (price gap + ad feasibility)
+    price_gap_score: float = 0.0
+    ad_feasibility_score: float = 0.0
+    ad_feasibility_breakdown: Dict[str, Any] = field(default_factory=dict)
 
     @property
     def asin(self) -> str:
@@ -662,6 +778,32 @@ def score_opportunity(
     passes_size, size_note = _check_size(ind)
     notes.append("Size: %s" % size_note)
 
+    # 4d. Price gap headroom --------------------------------------------------
+    eco = economics
+    price_gap = _price_gap_score(eco.undercut_headroom)
+    if eco.undercut_headroom is not None:
+        notes.append(
+            "Price gap: $%.2f headroom -> %.2f (max undercut price $%.2f)"
+            % (eco.undercut_headroom, price_gap, eco.max_undercut_price or 0)
+        )
+    else:
+        notes.append("Price gap: no buy box data -> score 0.30")
+
+    # 4e. Ad feasibility (proxy signals) --------------------------------------
+    ad_score, ad_breakdown = _ad_feasibility_score(
+        ind.review_count, ind.bsr, ind.monthly_sales_estimate, ws.brand
+    )
+    notes.append(
+        "Ad feasibility: %d/100 pts (reviews=%d, BSR=%d, velocity=%d, brand=%d)"
+        % (
+            ad_breakdown.get("total_pts", 0),
+            ad_breakdown.get("review_pts", 0),
+            ad_breakdown.get("bsr_pts", 0),
+            ad_breakdown.get("velocity_pts", 0),
+            ad_breakdown.get("brand_pts", 0),
+        )
+    )
+
     passes_all = (
         passes_profit
         and passes_demand
@@ -672,11 +814,15 @@ def score_opportunity(
     )
 
     # 5. Composite + tier -----------------------------------------------------
+    # Updated weights: profit 35%, demand 20%, competition 15%, health 10%,
+    # price gap 10%, ad feasibility 10%
     composite = round(
         WEIGHT_PROFIT * profit_score
         + WEIGHT_DEMAND * demand_score
         + WEIGHT_COMPETITION * competition_score
-        + WEIGHT_LISTING_HEALTH * health_score,
+        + WEIGHT_LISTING_HEALTH * health_score
+        + WEIGHT_PRICE_GAP * price_gap
+        + WEIGHT_AD_FEASIBILITY * ad_score,
         4,
     )
     tier = _assign_tier(composite, passes_profit, passes_all)
@@ -704,6 +850,9 @@ def score_opportunity(
         passes_all_filters=passes_all,
         scoring_notes=notes,
         opportunity_tags=tags,
+        price_gap_score=price_gap,
+        ad_feasibility_score=ad_score,
+        ad_feasibility_breakdown=ad_breakdown,
     )
 
 

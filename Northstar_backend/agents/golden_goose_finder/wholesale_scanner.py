@@ -41,6 +41,7 @@ class WholesaleProduct:
     dimensions_in: list[float] | None = None
     image_url: str | None = None
     in_stock: bool = True
+    per_unit_cost: float | None = None  # wholesale_price / pack_count (the MOQ cost)
 
 
 # ---------------------------------------------------------------------------
@@ -202,6 +203,11 @@ def parse_wholesale_product(
     if isinstance(in_stock, str):
         in_stock = in_stock.lower() not in ("false", "out_of_stock", "out of stock", "0")
 
+    # Per-unit cost = wholesale_price / pack_count (the effective MOQ cost)
+    per_unit_cost = None
+    if pack_count is not None and pack_count > 0 and price > 0:
+        per_unit_cost = round(price / pack_count, 2)
+
     return WholesaleProduct(
         source_store=source_store,
         product_title=title,
@@ -215,6 +221,7 @@ def parse_wholesale_product(
         dimensions_in=dims,
         image_url=raw_data.get("image_url"),
         in_stock=in_stock,
+        per_unit_cost=per_unit_cost,
     )
 
 
