@@ -1,0 +1,66 @@
+/* ==========================================================================
+   NORTHSTAR OS — DASHBOARD HUB
+   Hub KPI strip redesign with sparklines, activity feed, and service status.
+   ========================================================================== */
+
+/* ---------- Hub KPI Strip (enhanced) ---------- */
+.kpi-strip-enhanced { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--sp-4); margin-bottom: var(--sp-6); }
+.kpi-card-enhanced {
+  background: var(--bg-elevated); border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg); padding: var(--sp-5) var(--sp-6); box-shadow: var(--shadow-card); position: relative; overflow: hiddden;
+  transition: border-color var(--duration-normal), box-shadow var(--duration-normal), transform var(--duration-normal);
+}
+.kpi-card-enhanced:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.kpi-card-enhanced .lbl { font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--sp-2); }
+.kpi-card-enhanced .val { font-size: 22px; font-weight: 700; color: var(--ink); margin-top: var(--sp-2); font-variant-numeric: tabular-nums; }
+.kpi-card-enhanced .val.gold { color: var(--gold); }
+.kpi-card-enhanced .sub { font-size: 9px; color: var(--ink-dim); margin-top: var(--sp-1); }
+.kpi-card-enhanced .trend { position: absolute; right: var(--sp-4); top: var(--sp-4); font-size: 10px; }
+.kpi-card-enhanced .trend.up { color: var(--green); }
+.kpi-card-enhanced .trend.down { color: var(--crimson-bright); }
+
+/* ---------- Activity Feed ---------- */
+.activity-feed { background: var(--bg-elevated); border: 1px solid var(--hairline); border-radius: var(--radius-lg); overflow: hidden; }
+.activity-feed .feed-header { padding: var(--sp-5) var(--sp-6); border-bottom: 1px solid var(--hairline-soft); display: flex; align-items: center; justify-content: space-between; }
+.activity-feed .feed-header h3 { font-family: var(--font-head); font-size: 14px; color: var(--ink); margin: 0; }
+.activity-feed .feed-header .count { color: var(--ink-faint); font-size: 11px; }
+.activity-feed ul { padding: var(--sp-4) var(--sp-6); max-height: 250px; overflow-y: auto; }
+.activity-feed li { padding: var(--sp-3) 0; border-bottom: 1px solid var(--hairline-soft); display: flex; align-items: center; gap: var(--sp-3); font-size: 12px; color: var(--ink-dim); }
+.activity-feed li:last-child { border-bottom: none; }
+.activity-feed li .icon { width: 20px; height: 20px; color: var(--steel); flex-shrink: 0; }
+.activity-feed li .detail { flex: 1; }
+.activity-feed li .service { color: var(--ink); font-weight: 500; font-size: 12px; }
+.activity-feed li .time { color: var(--ink-faint); font-size: 10px; margin-left: auto; }
+
+/* ---------- Service Status Cards ---------- */
+.service-status { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--sp-4); margin-top: var(--sp-4); }
+.service-card {
+  background: var(--bg-elevated); border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg); padding: var(--sp-5); transition: border-color var(--duration-normal), transform var(--duration-normal);
+}
+.service-card:hover { border-color: var(--gold-line); transform: translateY(-2px); }
+.service-card .status-dot {
+  width: 10px; height: 10px; border-radius: 50%; margin-right: var(--sp-3);
+  flex-shrink: 0;
+}
+.service-card .status-dot.good { background: var(--green); box-shadow: 0 0 6px rgba(127,176,105,.6); }
+.service-card .status-dot.warning { background: var(--gold); }
+.service-card .status-dot.blocked { background: var(--crimson-bright); box-shadow: 0 0 6px rgba(192,57,43,.6); }
+.service-card .status-label { color: var(--ink-dim); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.service-card .service-name { font-family: var(--font-head); font-size: 14px; color: var(--ink); margin-top: var(--sp-2); }
+.service-card .last-run { font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .06em; }
+
+/* ---------- Quick Actions Panel ---------- */
+.quick-actions { background: var(--bg-elevated); border: 1px solid var(--hairline); border-radius: var(--radius-lg); padding: var(--sp-5); margin-top: var(--sp-4); }
+.quick-actions .section-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: var(--sp-3); border-bottom: 1px solid var(--hairline-soft); margin-bottom: var(--sp-3); }
+.quick-actions .section-head h3 { font-family: var(--font-head); font-size: 14px; color: var(--ink); margin: 0; }
+.quick-actions .section-head a { color: var(--gold); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; text-decoration: none; }
+.quick-actions ul { padding-left: var(--sp-4); }
+.quick-actions li { margin-bottom: var(--sp-3); font-size: 12px; color: var(--ink-dim); }
+.quick-actions li a { color: var(--gold); text-decoration: underline; }
+
+/* ---------- Empty States in Hub ---------- */
+.empty-state { padding: var(--sp-12) var(--sp-6) var(--sp-4); text-align: center; }
+.empty-state .empty-icon { font-size: 40px; margin-bottom: var(--sp-3); opacity: .5; }
+.empty-state .empty-title { font-family: var(--font-head); font-size: 16px; color: var(--ink); margin: var(--sp-2) 0 0; }
+.empty-state .empty-text { font-size: 12px; color: var(--ink-faint); max-width: 300px; margin: var(--sp-4) auto 0; line-height: 1.5; }

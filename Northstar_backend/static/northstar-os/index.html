@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/hub.css">
+  <link rel="stylesheet" href="css/service-polish.css">
+  <link rel="stylesheet" href="css/onboarding.css">
   <link rel="stylesheet" href="css/shell.css">
   <link rel="stylesheet" href="css/paperclip.css">
   <link rel="stylesheet" href="css/services.css">
@@ -77,8 +81,37 @@
       <section id="view-hub" class="view" data-view="hub" aria-hidden="true">
         <h2 class="view-title">Operations Hub</h2>
         <p class="view-sub">Portfolio overview · <span class="agent-chip">suite shell</span> · <span class="demo-badge">demo</span></p>
-        <div id="hub-kpis" class="kpi-strip"></div>
-        <div class="panel-head"><h3>Services</h3><span class="hint">four agents · one desk</span></div>
+
+        <!-- Enhanced KPI Strip -->
+        <div id="hub-kpis" class="kpi-strip-enhanced"></div>
+
+        <!-- Activity Feed -->
+        <div class="activity-feed" aria-label="Recent activity">
+          <div class="feed-header">
+            <h3>Recent Activity</h3>
+            <span class="count" id="feed-count">0</span>
+          </div>
+          <ul id="feed-list"></ul>
+        </div>
+
+        <!-- Service Status -->
+        <div class="service-status" id="service-status"></div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions" aria-label="Quick actions">
+          <div class="section-head">
+            <h3>Quick Actions</a>
+            <a href="#" id="view-all-services">View All →</a>
+          </div>
+          <ul>
+            <li><a href="#view-sourcescout">Scan products</a></li>
+            <li><a href="#view-listingforge">Generate listing</a></li>
+            <li><a href="#view-adpilot">Review ad performance</a></li>
+            <li><a href="#view-socialpulse">Create post</a></li>
+          </ul>
+        </div>
+
+        <!-- Service Cards (grid) -->
         <div id="hub-services" class="card-grid"></div>
       </section>
 
@@ -330,6 +363,44 @@
 
   </div>
 
+  <!-- ===================== ONBOARDING MODAL ===================== -->
+  <div id="onboarding-modal" class="onboarding-modal" role="dialog" aria-modal="true" aria-label="Welcome tour">
+    <div class="modal">
+      <a href="javascript:void(0)" class="modal-close" aria-label="close">&times;</a>
+      <div class="modal-content">
+        <!-- Step 1 -->
+        <div class="modal-step active" id="onboarding-step-1">
+          <span class="step-number">01</span>
+          <h3 class="step-title">Welcome to Northstar OS</h3>
+          <p class="step-text">Five intelligent agents work together to find profitable products, generate optimized listings, manage ads, create social content, and orchestrate it all with natural language.</p>
+        </div>
+        <!-- Step 2 -->
+        <div class="modal-step" id="onboarding-step-2">
+          <span class="step-number">02</span>
+          <h3 class="step-title">Your Data Stays Local</h3>
+          <p class="step-text">All AI processing runs on your machine via Ollama. No data is sent to cloud APIs. Your competitive advantage is yours alone.</p>
+        </div>
+        <!-- Step 3 -->
+        <div class="modal-step" id="onboarding-step-3">
+          <span class="step-number">03</span>
+          <h3 class="step-title">Start Finding Products</h3>
+          <p class="step-text">Navigate to SourceScout, apply filters, and discover Costco opportunities. Use the filters to narrow by ROI, margin, and competition.</p>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-action" id="onboarding-skip">Skip</button>
+          <button class="modal-action modal-action--primary" id="onboarding-start">Get Started</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== ONBOARDING DOTS ===================== -->
+  <div class="onboarding-dots">
+    <div class="dot active" data-step="1"></div>
+    <div class="dot" data-step="2"></div>
+    <div class="dot" data-step="3"></div>
+  </div>
+
   <!-- ===================== PAPERCLIP ASSISTANT ===================== -->
   <div id="paperclip">
     <div id="pc-note" class="pc-note">
@@ -358,6 +429,57 @@
   <script type="module">
     import { autoInit } from '/components/universal-voice.js';
     autoInit({ serverUrl: 'http://localhost:3001' });
+  </script>
+
+  <!-- Onboarding (first-run welcome modal) -->
+  <script>
+    (function () {
+      'use strict';
+      var NS = window.NS;
+      var overlay = document.getElementById('onboarding-modal');
+      var dots = document.querySelectorAll('.onboarding-dots .dot');
+      var currentStep = 1;
+
+      // Show modal if no onboarding completed
+      var onboardingCompleted = localStorage.getItem('northstar_onboarding');
+      if (onboardingCompleted !== '1' && overlay) {
+        overlay.classList.add('active');
+      }
+
+      // Step navigation
+      function goToStep(step) {
+        currentStep = step;
+        document.querySelectorAll('.modal-step').forEach(function (s) { s.style.display = 'none'; });
+        document.getElementById('onboarding-step-' + step).style.display = 'block';
+        dots.forEach(function (d) { d.classList.remove('active'); });
+        dots[step - 1].classList.add('active');
+      }
+
+      // Dot clicks
+      dots.forEach(function (dot) {
+        dot.addEventListener('click', function () { goToStep(parseInt(this.getAttribute('data-step'))); });
+      });
+
+      // Skip
+      document.getElementById('onboarding-skip').addEventListener('click', function () {
+        localStorage.setItem('northstar_onboarding', '1');
+        overlay.classList.remove('active');
+      });
+
+      // Start (finish onboarding)
+      document.getElementById('onboarding-start').addEventListener('click', function () {
+        localStorage.setItem('northstar_onboarding', '1');
+        overlay.classList.remove('active');
+      });
+
+      // Close on modal backdrop click
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) {
+          localStorage.setItem('northstar_onboarding', '1');
+          overlay.classList.remove('active');
+        }
+      });
+    })();
   </script>
 </body>
 </html>
