@@ -6,7 +6,7 @@
         "phase": "Golden Goose Finder scoring enhanced with price gap + ad feasibility"
     },
     "current_phase": "Golden Goose Finder — live scan working (103 opps, 54 HIGH), standalone panel built for GitHub Pages deployment",
-    "phases_completed": ["Phase 1: Foundation", "Phase 2: SourceScout", "Phase 3: ListingForge+AdPilot", "Phase 4: SocialPulse+AutothinK", "Phase 5: Auth+Deploy", "Phase 6A: Design System", "Phase 6B: Landing+Auth Pages"],
+    "phases_completed": ["Phase 1: Foundation", "Phase 2: SourceScout", "Phase 3: ListingForge+AdPilot", "Phase 4: SocialPulse+AutothinK", "Phase 5: Auth+Deploy", "Phase 6A: Design System", "Phase 6B: Landing + Auth Pages", "Phase 6C: SPA Responsiveness", "Phase 6D: Hub Rebuild", "Phase 6E: Service View Polish", "Phase 6F: Onboarding + First-Run"],
     "known_issues":  [
                          {
                              "id":  "unwrangle_costco_platform_string_bug",
