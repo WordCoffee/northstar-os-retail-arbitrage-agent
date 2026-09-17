@@ -57,8 +57,7 @@ DISPATCH_ORDER: Dict[str, List[str]] = {
         "scrape_do",
     ],
     TASK_SAMS_SEARCH: [
-        "apify_sams",
-        "outscraper",
+        "unwrangle_sams",
         "bright_data_web_unlocker",
     ],
     TASK_AMAZON_SEARCH: [
@@ -76,7 +75,6 @@ DISPATCH_ORDER: Dict[str, List[str]] = {
         "scrapingdog",
         "scrapingbee",
         "amazonscraperapi",
-        "flybyapis",
         "apiclaw",
         "rapidapi_pool",
         "scavio",

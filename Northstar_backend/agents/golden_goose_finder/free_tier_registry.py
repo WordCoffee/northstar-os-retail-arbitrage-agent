@@ -55,16 +55,14 @@ KEY_AVAILABLE: Dict[str, bool] = {
     "easyparser": True,
     "rapidapi_pool": True,
     "canopy": True,
+    "unwrangle_sams": True,  # UNWRANGLE_API_KEY — supports samsclub_search/detail
     # Free signups — keys provided 2026-09-16; user must add to .env.
     "scrapingdog": True,
     "scrapingbee": True,
     "scrapebadger": True,
     "amazonscraperapi": True,
     "apiclaw": True,
-    "apify_sams": True,
-    # Not yet obtained — waiting on user signup.
-    "flybyapis": False,
-    "outscraper": False,
+    # Removed: flybyapis (defunct), outscraper (no free tier), apify_sams (costs money)
 }
 
 
@@ -132,14 +130,9 @@ FREE_PROVIDERS: List[FreeTierProvider] = [
         "100 requests/mo free; Costco search is its strongest surface.",
     ),
     _p(
-        "apify_sams", "Apify Sam's Club scraper (free credit)", "APIFY_API_TOKEN",
-        5, None, {TASK_SAMS_SEARCH: 1.0}, [TASK_SAMS_SEARCH],
-        "Actor: stealth_mode/samsclub-product-search-scraper ($10/1K results); ~$5 free credit/mo.",
-    ),
-    _p(
-        "outscraper", "Outscraper Sam's Club (free)", "OUTSCRAPER_API_KEY",
-        None, 500, {TASK_SAMS_SEARCH: 1.0}, [TASK_SAMS_SEARCH],
-        "500 free Sam's Club product pulls at signup.",
+        "unwrangle_sams", "Unwrangle Sam's Club (existing key)", "UNWRANGLE_API_KEY",
+        None, 5000, {TASK_SAMS_SEARCH: 10.0, TASK_AMAZON_PRODUCT: 10.0}, [TASK_SAMS_SEARCH, TASK_AMAZON_PRODUCT],
+        "10 credits/request; ~500 Sam's Club searches on the existing credit pool.",
     ),
     _p(
         "bright_data_web_unlocker", "Bright Data Web Unlocker (free)", "BRIGHTDATA_API_TOKEN",
@@ -215,11 +208,7 @@ FREE_PROVIDERS: List[FreeTierProvider] = [
         [TASK_AMAZON_PRODUCT, TASK_AMAZON_SEARCH, TASK_AMAZON_OFFERS],
         "1,000 free credits at signup; NOT yet obtained.",
     ),
-    _p(
-        "flybyapis", "FlyByAPIs Amazon (free 100/mo)", "FLYBYAPIS_API_KEY",
-        100, None, {TASK_AMAZON_PRODUCT: 1.0}, [TASK_AMAZON_PRODUCT],
-        "100 free requests/mo; NOT yet obtained.",
-    ),
+    # (FlyByAPIs removed — defunct; Apify Sam's Club removed — costs money)
     _p(
         "amazonscraperapi", "AmazonScraperApi (free 1K)", "AMAZONSCRAPERAPI_API_KEY",
         None, 1000, {TASK_AMAZON_SEARCH: 1.0, TASK_AMAZON_PRODUCT: 1.0},
