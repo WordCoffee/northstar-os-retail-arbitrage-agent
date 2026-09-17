@@ -12,11 +12,14 @@ NEVER makes live API calls without explicit operator approval per §3.
 
 from __future__ import annotations
 
+import logging
 import re
 from dataclasses import dataclass
 from typing import Optional
 
 from .wholesale_scanner import WholesaleProduct
+
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -294,27 +297,32 @@ def rank_candidates(
 async def find_individual_listing(
     wholesale_product: WholesaleProduct,
     max_candidates: int = 5,
+    *,
+    live_armed: bool = False,
 ) -> list[AmazonMatch]:
     """Search Amazon for individual / small-pack versions of a wholesale product.
 
-    Uses provider_waterfall_router if available, otherwise returns mock data.
-    NEVER makes live API calls without explicit operator approval per §3.
+    When ``live_armed=True`` and the §3 gate is satisfied, dispatches through
+    the free-tier waterfall router (Chocodata search → EasyParser sellers).
+    Otherwise returns deterministic mock data for testing.
 
     Strategy:
       1. Search by brand + product type keywords
       2. Filter to individual / small-pack size (exclude other multi-packs)
       3. Filter by brand match
-      4. Rank by relevance
+      4. Enrich with seller identity (EasyParser)
+      5. Rank by relevance
     """
-    # Attempt live path via provider waterfall — only when configured
-    try:
-        import provider_waterfall_router as pwr  # noqa: F401
-        # Live path would go here; for now, provider_waterfall_router
-        # requires a specific ASIN-based route_asin call, not keyword
-        # search.  We fall through to mock for keyword search.
-        pass
-    except ImportError:
-        pass
+    if live_armed:
+        matches = _live_find_matches(wholesale_product, max_candidates)
+        if matches:
+            return matches
+        # Live path returned nothing — fall through to mock for now
+        logger.warning(
+            "[AmazonMatcher] Live path returned no matches for '%s'; "
+            "falling back to mock",
+            wholesale_product.title,
+        )
 
     # Mock path — deterministic for testing
     mock = get_mock_amazon_matches(wholesale_product)
@@ -323,6 +331,121 @@ async def find_individual_listing(
     filtered = [m for m in mock if is_individual_listing(m, wholesale_product.pack_count)]
 
     # Rank
+    ranked = rank_candidates(filtered, wholesale_product)
+
+    return ranked[:max_candidates]
+
+
+def _live_find_matches(
+    wholesale_product: WholesaleProduct,
+    max_candidates: int,
+) -> list[AmazonMatch]:
+    """Live Amazon search via free-tier router.
+
+    Builds a search query from the wholesale product, dispatches through the
+    router's Chocodata adapter, parses results into AmazonMatch objects, and
+    enriches each candidate with seller identity data from EasyParser.
+
+    Returns an empty list on any failure (caller falls back to mock).
+    """
+    try:
+        from .amazon_adapters import (
+            build_search_query,
+            make_chocodata_search_caller,
+            make_easy_parser_seller_caller,
+            parse_chocodata_results,
+            parse_easy_parser_sellers,
+        )
+        from .free_tier_router import (
+            TASK_AMAZON_OFFERS,
+            TASK_AMAZON_SEARCH,
+            run_task,
+        )
+    except ImportError as exc:
+        logger.debug("[AmazonMatcher] Import error for live path: %s", exc)
+        return []
+
+    # Step 1: Build query and search Amazon
+    query = build_search_query(wholesale_product.brand, wholesale_product.title)
+    search_caller = make_chocodata_search_caller(query, pages=1)
+
+    search_result = run_task(
+        TASK_AMAZON_SEARCH,
+        search_caller,
+        live_armed=True,
+    )
+
+    if not search_result.ok or not search_result.result:
+        return []
+
+    # Parse search results into candidate dicts
+    candidates = parse_chocodata_results(
+        search_result.result,
+        brand_filter=wholesale_product.brand,
+    )
+
+    if not candidates:
+        return []
+
+    # Step 2: Convert to AmazonMatch (pre-enrichment)
+    matches: list[AmazonMatch] = []
+    for cand in candidates[:max_candidates * 3]:  # fetch extra for filtering
+        try:
+            match = AmazonMatch(
+                asin=cand["asin"],
+                title=cand["title"],
+                brand=cand["brand"],
+                amazon_price=cand["amazon_price"],
+                bsr=cand.get("bsr"),
+                review_rating=cand.get("review_rating"),
+                review_count=cand.get("review_count"),
+                fba_sellers=cand.get("fba_sellers"),
+                weight_oz=cand.get("weight_oz"),
+                url=cand.get("url"),
+                image_url=cand.get("image_url"),
+                monthly_sales_estimate=cand.get("monthly_sales_estimate"),
+                seller_name=cand.get("seller_name"),
+                is_brand_seller=cand.get("is_brand_seller"),
+                is_amazon_seller=cand.get("is_amazon_seller"),
+            )
+            matches.append(match)
+        except Exception:
+            continue
+
+    if not matches:
+        return []
+
+    # Step 3: Enrich top candidates with seller identity (EasyParser)
+    # Only enrich the first few to conserve credits
+    enrich_count = min(len(matches), max_candidates + 2)
+    for match in matches[:enrich_count]:
+        try:
+            seller_caller = make_easy_parser_seller_caller(match.asin)
+            seller_result = run_task(
+                TASK_AMAZON_OFFERS,
+                seller_caller,
+                live_armed=True,
+            )
+            if seller_result.ok and seller_result.result:
+                seller_data = parse_easy_parser_sellers(seller_result.result)
+                match.fba_sellers = seller_data.get("fba_sellers") or match.fba_sellers
+                match.seller_name = seller_data.get("seller_name") or match.seller_name
+                match.is_amazon_seller = seller_data.get("is_amazon_seller")
+                # Check if seller name matches wholesale brand
+                if seller_data.get("seller_name") and wholesale_product.brand:
+                    brand_lower = wholesale_product.brand.lower()
+                    seller_lower = seller_data["seller_name"].lower()
+                    match.is_brand_seller = brand_lower in seller_lower
+        except Exception as exc:
+            logger.debug(
+                "[AmazonMatcher] Seller enrichment failed for %s: %s",
+                match.asin, exc,
+            )
+
+    # Step 4: Filter to individual listings
+    filtered = [m for m in matches if is_individual_listing(m, wholesale_product.pack_count)]
+
+    # Step 5: Rank
     ranked = rank_candidates(filtered, wholesale_product)
 
     return ranked[:max_candidates]

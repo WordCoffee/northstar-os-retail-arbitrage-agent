@@ -67,13 +67,14 @@ except ImportError:
         scan_sams_club = None  # type: ignore[assignment]
 
 try:
-    from .amazon_matcher import AmazonMatch, get_mock_amazon_matches, is_individual_listing
+    from .amazon_matcher import AmazonMatch, find_individual_listing, get_mock_amazon_matches, is_individual_listing
 except ImportError:
     try:
-        from amazon_matcher import AmazonMatch, get_mock_amazon_matches
+        from amazon_matcher import AmazonMatch, find_individual_listing, get_mock_amazon_matches
         is_individual_listing = None  # type: ignore[assignment]
     except ImportError:
         AmazonMatch = None  # type: ignore[assignment,misc]
+        find_individual_listing = None  # type: ignore[assignment]
         get_mock_amazon_matches = lambda _wp: []  # type: ignore[assignment]
         is_individual_listing = None  # type: ignore[assignment]
 
@@ -387,6 +388,67 @@ def _builtin_score_batch(
     return scored
 
 
+async def _live_scan(
+    categories: list[str] | None = None,
+    roi_floor: float = 10.0,
+    min_monthly_sales: int = 1000,
+    max_results: int = 100,
+) -> list:
+    """Run the full live scan pipeline using real API data.
+
+    Uses scan_costco_categories(live=True) for discovery and
+    find_individual_listing(live_armed=True) for Amazon matching.
+    All other phases (economics, scoring, reporting) are identical to mock.
+
+    §3 gate: this function only executes when
+    GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED=1.  The gate is checked by the
+    caller (run_pipeline); this function trusts that check.
+    """
+    # Phase 1: Discovery — scan Costco via OpenWebNinja
+    wholesale_products = await scan_costco_categories(
+        categories=categories,
+        live=True,
+    )
+
+    if not wholesale_products:
+        return []
+
+    # Phase 2: Matching — find Amazon individual listings via Chocodata + EasyParser
+    match_pairs: list[tuple[Any, Any]] = []
+    for wp in wholesale_products:
+        try:
+            matches = await find_individual_listing(wp, max_candidates=3, live_armed=True)
+            if matches:
+                match_pairs.append((wp, matches[0]))  # best match
+        except Exception:
+            continue
+
+    if not match_pairs:
+        return []
+
+    # Phase 3: Economics — calculate breakdown economics
+    economics: list = []
+    for wp, m in match_pairs:
+        try:
+            econ = calculate_breakdown_economics(wp, m)
+            if econ is not None:
+                economics.append(econ)
+        except Exception:
+            continue
+
+    if not economics:
+        return []
+
+    # Phase 4: Scoring — score all opportunities
+    scored = score_batch(
+        economics,
+        roi_floor=roi_floor,
+        min_monthly_sales=min_monthly_sales,
+    )
+
+    return scored
+
+
 def _mock_scan(
     categories: list[str] | None = None,
     roi_floor: float = 10.0,
@@ -552,9 +614,18 @@ async def run_pipeline(
             max_results=max_results,
         )
     else:
-        raise HTTPException(
-            status_code=403,
-            detail="Live scanning requires operator approval per §3 of the Operating Constitution.",
+        # Live path — requires §3 named operator approval
+        import os as _os
+        if _os.getenv("GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED", "").strip() != "1":
+            raise HTTPException(
+                status_code=403,
+                detail="Live scanning requires operator approval per §3 of the Operating Constitution.",
+            )
+        scored = await _live_scan(
+            categories=categories,
+            roi_floor=roi_floor,
+            min_monthly_sales=min_monthly_sales,
+            max_results=max_results,
         )
 
     # Build opportunity list for export
