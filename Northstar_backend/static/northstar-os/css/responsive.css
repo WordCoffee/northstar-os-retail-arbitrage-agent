@@ -1,0 +1,100 @@
+/* ==========================================================================
+   NORTHSTAR OS — RESPONSIVE SPA
+   Tablet and phone support for The Analyst's Desk.
+   Adjusts drawer, board, and viewports for smaller screens.
+   ========================================================================== */
+
+/* ---------- Tablet (1200px max) ---------- */
+@media (max-width: 1200px) {
+  :root {
+    --board-w: 0px;       /* hide bulletin board */
+    --drawer-w: 60px;     /* icon-only drawer */
+  }
+
+  #board { display: none; }
+
+  /* Icon-only drawer: hide text labels */
+  .nav-item span { display: none; }
+  .drawer-label { display: none; }
+  #drawer-foot { display: none; }
+
+  /* Search full-width in header */
+  #global-search { width: 100%; }
+}
+
+/* ---------- Phone (768px max) ---------- */
+@media (max-width: 768px) {
+  /* Hamburger replaces drawer */
+  #drawer { display: none; }
+
+  /* Full-screen overlay when JS toggles it */
+  .drawer-overlay {
+    position: fixed; inset: 0; z-index: var(--z-drawer);
+    background: rgba(23,20,18,.95); backdrop-filter: blur(8px);
+    transform: translateX(100%);
+    transition: transform var(--duration-normal) var(--ease-out);
+    display: flex; flex-direction: column; padding: var(--sp-8) var(--sp-4);
+  }
+  .drawer-overlay.active { transform: translateX(0); }
+  .nav-item { width: 100%; padding: var(--sp-3) var(--sp-4); }
+  .nav-item span { display: block; color: var(--ink); }
+  .drawer-label { display: block; font-size: 10px; margin-bottom: var(--sp-2); }
+
+  /* Collapse KPI ribbon on very small screens */
+  .ribbon-stats { display: none; }
+
+  /* Full-width search */
+  #global-search { width: 100%; }
+
+  /* Work surface: stack columns */
+  #work { padding: var(--sp-4); }
+  .view-title { font-size: 16px; }
+
+  /* Tables: horizontal scroll with indicator */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-wrap::after {
+    content: ''; position: sticky; right: 0; top: 0; bottom: 0; width: 28px;
+    background: linear-gradient(90deg, transparent, var(--bg-elevated), transparent);
+    pointer-events: none;
+  }
+
+  /* Compact KPI cards */
+  .kpi-card { padding: var(--sp-2) var(--sp-3); }
+  .kpi-card .val { font-size: 16px; }
+  .kpi-card .lbl { font-size: 7px; }
+}
+
+/* ---------- Responsive Tables ---------- */
+@media (max-width: 1024px) {
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-wrap::after {
+    content: ''; position: sticky; right: 0; top: 0; bottom: 0; width: 32px;
+    background: linear-gradient(90deg, transparent, var(--bg-elevated), transparent);
+    pointer-events: none;
+  }
+}
+
+/* ---------- Mobile-First Form Adjustments ---------- */
+@media (max-width: 768px) {
+  .form-row { grid-template-columns: 1fr; gap: var(--sp-3); }
+  .form-input, .form-select { font-size: 12px; }
+  .btn { padding: 8px 14px; font-size: 11px; }
+  .btn-sm { padding: 5px 10px; font-size: 9px; }
+  .btn-lg { padding: 12px 24px; font-size: 13px; }
+}
+
+/* ---------- Ink-Plot Mobile ---------- */
+@media (max-width: 768px) {
+  .ink-plot { padding: 10px; }
+  .ip-bars { gap: 8px; height: 80px; }
+  .ip-bar { min-width: 0; }
+  .ip-bar .bar { min-height: 2px; }
+  .ip-bar .lbl { font-size: 7px; }
+  .ip-bar .v { font-size: 8px; }
+}
+
+/* ---------- Toast Position on Mobile ---------- */
+@media (max-width: 768px) {
+  .toast-container { top: var(sp-3); right: var(--sp-3); left: var(--sp-3); flex-direction: column; }
+  .toast { min-width: unset; width: auto; max-width: 100%; }
+}

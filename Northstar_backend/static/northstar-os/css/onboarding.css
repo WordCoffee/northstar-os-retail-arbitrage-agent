@@ -1,0 +1,66 @@
+/* ==========================================================================
+   NORTHSTAR OS — ONBOARDING & FIRST-RUN
+   Welcome modal, tour, and progressive disclosure.
+   ========================================================================== */
+
+/* ---------- Welcome Modal ---------- */
+.onboarding-modal {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,.85); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: opacity .3s ease;
+}
+.onboarding-modal.active { opacity: 1; visibility: visible; }
+.onboarding-modal .modal {
+  background: var(--bg-elevated); border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg); max-width: 460px; width: 90%;
+  transform: scale(0.95) translateY(20px);
+  transition: transform .3s var(--ease-out);
+  overflow: hidden;
+}
+.onboarding-modal.active .modal { transform: scale(1) translateY(0); }
+.onboarding-modal .modal-close {
+  position: absolute; top: 12px; right: 16px; width: 30px; height: 30px;
+  background: none; border: none; color: var(--ink-faint); font-size: 24px; cursor: pointer;
+}
+.onboarding-modal .modal-close:hover { color: var(--ink); }
+.onboarding-modal .modal-content { padding: var(--sp-6); }
+.onboarding-modal .modal-step { display: none; }
+.onboarding-modal.active .modal-step:first-child { display: block; }
+.onboarding-modal .step-number { color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: var(--sp-3); }
+.onboarding-modal .step-title { font-family: var(--font-head); font-size: 18px; color: var(--ink); margin: var(--sp-2) 0 0; }
+.onboarding-modal .step-text { font-size: 13px; color: var(--ink-faint); line-height: 1.5; margin: var(--sp-4) 0 0; }
+.onboarding-modal .modal-actions { padding: var(--sp-6) var(--sp-6) 0; display: flex; justify-content: flex-end; gap: var(--sp-3); }
+.onboarding-modal .modal-action { font-size: 12px; }
+
+/* ---------- Tour Dots (bottom of viewport) ---------- */
+.onboarding-dots { position: fixed; bottom: var(--sp-5); left: 50%; transform: translateX(-50%); z-index: 99; display: flex; gap: var(--sp-2); }
+.onboarding-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--ink-faint); cursor: pointer; transition: background .15s; }
+.onboarding-dots .dot.active { background: var(--gold); }
+
+/* ---------- Progressive Disclosure ---------- */
+.progressive-trigger {
+  cursor: pointer; color: var(--gold); font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
+  margin-top: var(--sp-2); display: inline-flex; align-items: center; gap: 4px;
+}
+.progressive-trigger:hover { color: var(--gold-bright); }
+
+/* ---------- First-Run Coaching Tooltips ---------- */
+.coach-tooltip {
+  position: absolute; background: var(--bg-elevated); border: 1px solid var(--hairline);
+  border-radius: var(--radius); padding: var(--sp-3) var(--sp-4); font-size: 12px;
+  color: var(--ink); box-shadow: var(--shadow-lg); z-index: 50;
+  white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity .2s;
+}
+.coach-tooltip.visible { opacity: 1; visibility: visible; }
+.coach-tooltip::after {
+  content: ''; position: absolute; top: 50%; right: 100%; margin-top: -5px;
+  border: 6px solid transparent; border-left-color: var(--bg-elevated);
+}
+
+/* ---------- Onboarding CSS ---------- */
+.onboarding-bg { background: var(--desk-leather); overflow: hidden; }
+.onboarding-header { padding: var(--sp-6) var(--sp-4); border-bottom: 1px solid var(--hairline); }
+.onboarding-header h1 { font-family: var(--font-head); font-size: 24px; color: var(--ink); margin: 0; }
+.onboarding-header h1 span { color: var(--gold); }
+.onboarding-header p { font-size: 13px; color: var(--ink-faint); margin: var(--sp-2) 0 0; }

@@ -1,0 +1,96 @@
+/* ==========================================================================
+   NORTHSTAR OS — SERVICE VIEW POLISH
+   Loading skeletons, empty states, and UX improvements for all 5 views.
+   ========================================================================== */
+
+/* ---------- Loading Skeletons ---------- */
+.skeleton-kpi { height: 18px; background: var(--skeleton); border-radius: var(--radius-sm); margin-bottom: 6px; }
+.skeleton-kpi.title { width: 60%; }
+.skeleton-kpi.val { width: 35%; }
+.skeleton-kpi.sub { width: 100%; margin-top: 4px; height: 12px; }
+
+.skeleton-table-row { height: 44px; background: var(--skeleton); border-radius: var(--radius-sm); margin-bottom: 8px; }
+.skeleton-table-row.cell-1 { width: 18%; }
+.skeleton-table-row.cell-2 { width: 14%; }
+.skeleton-table-row.cell-3 { width: 16%; }
+.skeleton-table-row.cell-4 { width: 14%; }
+.skeleton-table-row.cell-5 { width: 12%; }
+.skeleton-table-row.cell-6 { width: 14%; }
+.skeleton-table-row.cell-7 { width: 12%; }
+.skeleton-table-row.cell-8 { width: 10%; }
+.skeleton-table-row.cell-9 { width: 8%; }
+.skeleton-table-row.cell-10 { width: 12%; }
+
+.skeleton-card-header { height: 24px; width: 70%; margin-bottom: 8px; border-radius: var(--radius-sm); }
+.skeleton-card-body { height: 80px; background: var(--skeleton); border-radius: var(--radius-sm); }
+
+/* ---------- Empty States ---------- */
+.empty-state-full {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: var(--sp-12) var(--sp-6) var(--sp-8); text-align: center;
+}
+.empty-state-full .empty-icon { font-size: 64px; margin-bottom: var(--sp-5); opacity: .5; }
+.empty-state-full .empty-title { font-family: var(--font-head); font-size: 22px; color: var(--ink); margin: var(--sp-4) 0 0; }
+.empty-state-full .empty-text { font-size: 14px; color: var(--ink-faint); max-width: 480px; line-height: 1.6; margin: var(--sp-5) 0 0; }
+.empty-state-full .cta-btn { margin-top: var(--sp-6); }
+
+/* View-specific empty states */
+.empty-source .empty-icon { color: var(--steel); }
+.empty-listing .empty-icon { color: var(--gold); }
+.empty-ad .empty-icon { color: var(--steel); }
+.empty-social .empty-icon { color: var(--steel); }
+.empty-autothink .empty-icon { color: var(--gold); }
+
+/* ---------- SourceScout Polish ---------- */
+.source-empty-state {
+  padding: var(--sp-8) var(--sp-6); text-align: center;
+}
+.source-empty-state .empty-icon { font-size: 48px; color: var(--steel); margin-bottom: var(--sp-3); }
+.source-empty-state .empty-title { font-family: var(--font-head); font-size: 18px; color: var(--ink); margin-bottom: var(--sp-2); }
+.source-empty-state .empty-text { font-size: 13px; color: var(--ink-faint); line-height: 1.5; max-width: 360px; margin: 0 auto var(--sp-4); }
+.source-empty-state .btn { margin-top: var(--sp-3); }
+
+/* ---------- ListingForge Polish ---------- */
+.listing-empty-state {
+  padding: var(--sp-8) var(--sp-6); text-align: center;
+}
+.listing-empty-state .empty-icon { font-size: 48px; color: var(--gold); margin-bottom: var(--sp-3); }
+.listing-empty-state .empty-title { font-family: var(--font-head); font-size: 18px; color: var(--ink); margin-bottom: var(--sp-2); }
+.listing-empty-state .empty-text { font-size: 13px; color: var(--ink-faint); line-height: 1.5; max-width: 360px; margin: 0 auto var(--sp-4); }
+.listing-empty-state .btn { margin-top: var(--sp-3); }
+
+/* ---------- AdPilot Polish ---------- */
+.ad-empty-state {
+  padding: var(--sp-8) var(--sp-6); text-align: center;
+}
+.ad-empty-state .empty-icon { font-size: 48px; color: var(--steel); margin-bottom: var(--sp-3); }
+.ad-empty-state .empty-title { font-family: var(--font-head); font-size: 18px; color: var(--ink); margin-bottom: var(--sp-2); }
+.ad-empty-state .empty-text { font-size: 13px; color: var(--ink-faint); line-height: 1.5; max-width: 360px; margin: 0 auto var(--sp-4); }
+.ad-empty-state .btn { margin-top: var(--sp-3); }
+
+/* ---------- SocialPulse Polish ---------- */
+.social-empty-state {
+  padding: var(--sp-8) var(--sp-6); text-align: center;
+}
+.social-empty-state .empty-icon { font-size: 48px; color: var(--steel); margin-bottom: var(--sp-3); }
+.social-empty-state .empty-title { font-family: var(--font-head); font-size: 18px; color: var(--ink); margin-bottom: var(--sp-2); }
+.social-empty-state .empty-text { font-size: 13px; color: var(--ink-faint); line-height: 1.5; max-width: 360px; margin: 0 auto var(--sp-4); }
+.social-empty-state .btn { margin-top: var(--sp-3); }
+
+/* ---------- AdPilot ACoS Band Polish ---------- */
+.acos-band {
+  display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-2) 0;
+  font-size: 12px; color: var(--ink-dim);
+}
+.acos-band .band { flex: 1; height: 8px; border-radius: var(--radius); background: var(--bg-sunken); overflow: hidden; position: relative; }
+.acos-band .band.filled { position: absolute; top: 0; bottom: 0; border-radius: var(--radius) var(--radius) 0 0; }
+.acos-band .band.gold { background: linear-gradient(90deg, var(--gold), #b8860b); }
+.acos-band .band.crimson { background: linear-gradient(90deg, var(--crimson-bright), #a61e2a); }
+.acos-band .band.steel { background: linear-gradient(90deg, var(--steel), #5a9bd3); }
+.acos-band .label { width: 40px; font-size: 10px; color: var(--ink-faint); }
+.acos-band .aco { text-align: right; font-family: var(--font-body); font-size: 10px; color: var(--ink); }
+
+/* ---------- SocialPulse Calendar Polish ---------- */
+.calendar-day-future { opacity: .4; }
+.calendar-day-today { background: var(--gold-dim); border-color: var(--gold-line); color: var(--gold); }
+.calendar-day-selected { background: var(--gold); color: #1d160a; }
