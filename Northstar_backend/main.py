@@ -183,10 +183,16 @@ if _HAS_GOLDEN_GOOSE:
 _GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"
 if _GOOSE_STATIC.exists():
     app.mount(
-        "/golden-goose",
+        "/golden-goose/static",
         StaticFiles(directory=str(_GOOSE_STATIC)),
-        name="golden-goose-panel",
+        name="golden-goose-static",
     )
+
+
+@app.get("/golden-goose/", include_in_schema=False)
+@app.get("/golden-goose", include_in_schema=False)
+def serve_golden_goose():
+    return FileResponse(_GOOSE_STATIC / "golden-goose-panel.html")
 
 
 KIRKLAND_CATALOG = [
