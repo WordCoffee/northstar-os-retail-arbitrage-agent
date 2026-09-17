@@ -219,6 +219,25 @@ def parse_wholesale_product(
 
 
 # ---------------------------------------------------------------------------
+# Costco URL slug → internal category slug mapping
+# ---------------------------------------------------------------------------
+
+_COSTCO_SLUG_MAP: dict[str, str] = {
+    "health-household": "otc_health",
+    "vitamins-supplements": "vitamins_supplements",
+    "household-essentials": "household_cleaning",
+    "personal-care": "personal_care",
+    "pet-supplies": "pet",
+    "nicotine cessation": "nicotine_cessation",
+    "otc health": "otc_health",
+    "vitamins": "vitamins_supplements",
+    "household": "household_cleaning",
+    "personal care": "personal_care",
+    "pet": "pet",
+}
+
+
+# ---------------------------------------------------------------------------
 # Scanner functions
 # ---------------------------------------------------------------------------
 
@@ -248,17 +267,22 @@ async def scan_costco_categories(
             import costco_api_client as cac
             results: list[WholesaleProduct] = []
             cats = categories or [
-                "health-household",
-                "vitamins-supplements",
-                "household-essentials",
-                "personal-care",
-                "pet-supplies",
+                "nicotine_cessation",
+                "otc_health",
+                "vitamins_supplements",
+                "household_cleaning",
+                "personal_care",
+                "pet",
             ]
+            # Map internal slugs to Costco URL slugs for the API query
+            _REVERSE_SLUG_MAP = {v: k for k, v in _COSTCO_SLUG_MAP.items()}
             for cat in cats:
-                query = " ".join(keywords or []) or cat.replace("-", " ")
+                query = " ".join(keywords or []) or _REVERSE_SLUG_MAP.get(cat, cat).replace("-", " ")
                 raw = cac.search_page(query, 1)
                 if raw.get("success") and raw.get("items"):
                     for item in raw["items"][:max_results_per_category]:
+                        # Map OpenWebNinja category slug to our internal slug
+                        internal_cat = _COSTCO_SLUG_MAP.get(cat, cat)
                         parsed = parse_wholesale_product(
                             {
                                 "product_title": item.get("item_name"),
@@ -267,12 +291,12 @@ async def scan_costco_categories(
                                 "item_number": item.get("costco_item_id"),
                                 "item_url": item.get("source_url") or item.get("product_url"),
                                 "pack_count": item.get("pack_count"),
-                                "weight_lbs": None,
+                                "weight_lbs": item.get("net_weight"),
                                 "image_url": None,
                                 "in_stock": item.get("availability", "in_stock") == "in_stock",
                             },
                             source_store="Costco",
-                            category_slug=cat,
+                            category_slug=internal_cat,
                         )
                         if parsed:
                             results.append(parsed)
