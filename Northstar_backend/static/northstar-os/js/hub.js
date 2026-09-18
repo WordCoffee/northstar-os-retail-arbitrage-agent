@@ -72,11 +72,71 @@
     grid.innerHTML = html;
   }
 
+  /* ==========================================================================
+   * Phase 2 · renderHubServices — the four Phase-1 agent cards into #hub-services
+   * (the ANALYST'S HUB wants its four primary services as clickable cards).
+   * Phase 2 contract: exactly 4 cards, each data-service + signature accent,
+   * SourceScout first elegantly. Zero network. Pure demo.
+   * ========================================================================== */
+  function renderHubServices(services) {
+    var grid = document.getElementById('hub-services');
+    if (!grid) return;
+    if (!services || !services.length) {
+      grid.innerHTML = '<p class="service-empty">No services registered yet (demo shell).</p>';
+      return;
+    }
+    var html = services.map(function (svc) {
+      var route = svc.route || svc.id || 'hub';
+      var accent = svc.sig || '--sig-demo';
+      var name = svc.name || route;
+      var chip = svc.agent || svc.chip || 'agent';
+      var icon = svc.icon || '◇';
+      var blurb = svc.desc || '';
+      return '<div class="service-card phase2 service-card--agent" data-service="' + NS.escapeHtml(name) + '" ' +
+        'data-route="' + NS.escapeHtml(route) + '" ' +
+        'style="--sig-accent:' + NS.escapeHtml(accent) + ';--sig-accent-dim:' + NS.escapeHtml(svc.sigDim || accent) + '">' +
+        '<div class="service-icon">' + icon + '</div>' +
+        '<div class="service-name">' + NS.escapeHtml(name) + '</div>' +
+        '<div class="service-chip">' + NS.escapeHtml(chip) + '</div>' +
+        (blurb ? '<div class="service-blurb">' + NS.escapeHtml(blurb) + '</div>' : '') +
+        '<span class="demo-badge">demo</span>' +
+        '</div>';
+    }).join('');
+    grid.innerHTML = html;
+
+    /* bind open → nav */
+    Array.prototype.slice.call(grid.querySelectorAll('.service-card[data-route]')).forEach(function (card) {
+      card.addEventListener('click', function () {
+        /* open-from-hub: honor both data-route (shell cards) and */
+        /* data-open-service (open-from-hub buttons) so any hub    */
+        /* entry point navigates to its agent view.                 */
+        var route = card.getAttribute('data-open-service') || card.getAttribute('data-route');
+        if (route && NS.go) NS.go(route);
+      });
+    });
+  }
+
   function renderHub(demoHub) {
     renderKpis(demoHub);
-    if (NS.onActivityFeed) renderActivityFeed(NS.onActivityFeed());
-    renderServiceStatus(demoHub && demoHub.serviceStatus ? demoHub.serviceStatus : {});
+    if (NS.onMountFeed) renderActivityFeed(NS.onActivityFeed ? NS.onActivityFeed() : null);
+    renderServiceStatus(demoHub && demoHub.statuses);
+    if (demoHub && demoHub.services) renderHubServices(demoHub.services);
   }
+
+  /* ------------------------------------------------------------------
+   * Phase 2 · PUBLIC API — NS.hub
+   * The analyst's hub exposes a per-agent module (same shape as the other
+   * four agents) so the shell can mount it on demand and so the suite's
+   * "hub: open-service buttons bound" contract stays deterministic.
+   * onMount() re-renders the whole hub surface (KPIs, feed, status,
+   * service grid) using the current demo fixture. Zero network.
+   * ------------------------------------------------------------------ */
+  NS.hub = {
+    onMount: function () {
+      var data = NS.DEMO ? NS.DEMO() : null;
+      if (data && data.hub) renderHub(data.hub);
+    }
+  };
 
   // hook into mount lifecycle
   var prevOnMount = NS.onMount;

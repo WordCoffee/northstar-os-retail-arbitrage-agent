@@ -102,6 +102,9 @@ class WholesalePack:
         return self.product_title
 
 
+from datetime import datetime, timezone
+from typing import Optional
+
 @dataclass
 class IndividualListing:
     """The individual/small-pack version sold on Amazon."""
@@ -128,6 +131,8 @@ class IndividualListing:
     seller_name: Optional[str] = None
     is_brand_seller: Optional[bool] = None
     is_amazon_seller: Optional[bool] = None
+    # Timestamp when seller identity was last verified (UTC ISO format)
+    seller_verified_at: Optional[str] = None
 
 
 @dataclass

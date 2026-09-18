@@ -81,4 +81,46 @@
   --z-ribbon: 40;
   --z-modal:  50;
   --z-toast:  60;
+
+  /* ---- signature accents (per-agent identity) ---- */
+  /* Sourcing Agent: "The Hunt" — Gold */
+  --sig-sourcing:        var(--gold);
+  --sig-sourcing-dim:    var(--gold-dim);
+  --sig-sourcing-line:   var(--gold-line);
+  --sig-sourcing-bright: var(--gold-bright);
+
+  /* Listing Agent: "The Forge" — Heated Steel */
+  --sig-listing:         #c96a33;
+  --sig-listing-dim:     rgba(201, 106, 51, 0.16);
+  --sig-listing-line:    rgba(201, 106, 51, 0.5);
+  --sig-listing-bright:  #d97a3f;
+
+  /* Social Media Agent: "The Pulse" — Violet */
+  --sig-social:          #8a6fd8;
+  --sig-social-dim:      rgba(138, 111, 216, 0.16);
+  --sig-social-line:     rgba(138, 111, 216, 0.5);
+  --sig-social-bright:   #a08aed;
+
+  /* Amazon Ads Agent: "The Circuit" — Cyan */
+  --sig-ads:             #3fb9c9;
+  --sig-ads-dim:         rgba(63, 185, 201, 0.16);
+  --sig-ads-line:        rgba(63, 185, 201, 0.5);
+  --sig-ads-bright:      #58c8d8;
+
+  /* AutothinK: "The Observatory" — Indigo */
+  --sig-autothink:       #5b7fbf;
+  --sig-autothink-dim:   rgba(91, 127, 191, 0.16);
+  --sig-autothink-line:  rgba(91, 127, 191, 0.5);
+  --sig-autothink-bright:#7295d4;
+
+  /* Inventory / Repricer / Reviews / Compliance / Launch / Brand: shared steel */
+  --sig-inventory:       var(--steel);
+  --sig-inventory-dim:   var(--steel-dim);
+  --sig-inventory-line:  var(--steel-line);
+
+  /* ---- semantic signature aliases (consumed by views) ---- */
+  --sig-accent:          var(--sig-sourcing);       /* default for sourcing views */
+  --sig-accent-dim:      var(--sig-sourcing-dim);
+  --sig-accent-line:     var(--sig-sourcing-line);
+  --sig-accent-bright:   var(--sig-sourcing-bright);
 }

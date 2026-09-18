@@ -90,7 +90,15 @@ def seller_identity_blocked(
         return True
     if product_brand and str(product_brand).strip():
         brand = str(product_brand).strip().lower()
+        # Brand owner heuristic (existing)
         if re.search(r"(?<!\w)" + re.escape(brand) + r"(?!\w)", seller):
+            return True
+        # VENDOR 1P DETECTION: seller name IS the brand (or very close match)
+        # Vendor Central items show brand as seller, not "Amazon.com"
+        seller_words = set(seller.split())
+        brand_words = set(brand.split())
+        # If brand name IS the seller name (or >80% word overlap), likely vendor
+        if seller == brand or (len(brand_words) > 0 and len(seller_words & brand_words) / len(brand_words) >= 0.8):
             return True
     return False
 
@@ -221,8 +229,141 @@ def _quick_count(title: str) -> Optional[int]:
 
 
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Data quality filters (fixes #13, #14, #15, #16)
+# ---------------------------------------------------------------------------
+
+# Price sanity bounds
+MIN_PRICE_RATIO = 0.5      # Amazon price >= 0.5 * unit_cogs
+MAX_PRICE_RATIO = 500.0    # Amazon price <= 500 * unit_cogs (mock data reaches ~150x)
+
+# Brand normalization for fuzzy matching
+_BRAND_ALIASES = {
+    "nutramax": ["nutramax", "nutramax laboratories", "cosequin"],
+    "nicorette": ["nicorette", "gsk", "glaxosmithkline"],
+    "nicoderm": ["nicoderm", "nicoderm cq", "gsk", "glaxosmithkline"],
+    "claritin": ["claritin", "bayer"],
+    "zyrtec": ["zyrtec", "johnson and johnson", "jnj"],
+    "advil": ["advil", "pfizer", "wyeth"],
+    "tylenol": ["tylenol", "johnson and johnson", "jnj", "mcneil"],
+    "nature made": ["nature made", "pharmavite"],
+    "centrum": ["centrum", "pfizer", "wyeth"],
+    "cera ve": ["cera ve", "cerave", "l'oreal", "loreal"],
+    "kirkland": ["kirkland", "kirkland signature", "costco"],
+    "furminator": ["furminator", "spectrum brands"],
+    "kong": ["kong", "kong company"],
+    "chuckit": ["chuckit", "petmate"],
+    "pet safe": ["pet safe", "petsafe", "radio systems"],
+    "swiffer": ["swiffer", "procter and gamble", "pg"],
+    "cascade": ["cascade", "procter and gamble", "pg"],
+    "tide": ["tide", "procter and gamble", "pg"],
+    "lysol": ["lysol", "reckitt benckiser", "rb"],
+    "febreze": ["febreze", "procter and gamble", "pg"],
+    "old spice": ["old spice", "procter and gamble", "pg"],
+    "dove": ["dove", "unilever"],
+    "colgate": ["colgate", "colgate-palmolive"],
+    "crest": ["crest", "procter and gamble", "pg"],
+    "oral-b": ["oral-b", "oralb", "procter and gamble", "pg"],
+    "gillette": ["gillette", "procter and gamble", "pg"],
+    "pampers": ["pampers", "procter and gamble", "pg"],
+    "huggies": ["huggies", "kimberly-clark", "kc"],
+    "kleenex": ["kleenex", "kimberly-clark", "kc"],
+    "scotch": ["scotch", "3m"],
+    "post-it": ["post-it", "post it", "3m"],
+    "command": ["command", "3m"],
+    "sharpie": ["sharpie", "newell brands"],
+    "paper mate": ["paper mate", "papermate", "newell brands"],
+    "expo": ["expo", "newell brands"],
+    "elmer's": ["elmer's", "elmers", "newell brands"],
+    "krazy glue": ["krazy glue", "krazyglue", "elmer's", "elmers"],
+    "gorilla glue": ["gorilla glue", "gorillaglue", "gorilla"],
+    "duct tape": ["duct tape", "duck tape", "3m", "scotch"],
+    "zip lock": ["zip lock", "ziploc", "s.c. johnson", "sc johnson"],
+    "saran": ["saran", "s.c. johnson", "sc johnson"],
+    "glade": ["glade", "s.c. johnson", "sc johnson"],
+    "off!": ["off!", "off", "s.c. johnson", "sc johnson"],
+    "raid": ["raid", "s.c. johnson", "sc johnson"],
+    "windex": ["windex", "s.c. johnson", "sc johnson"],
+    "fantastik": ["fantastik", "s.c. johnson", "sc johnson"],
+    "pledge": ["pledge", "s.c. johnson", "sc johnson"],
+    "shout": ["shout", "s.c. johnson", "sc johnson"],
+}
+
+
+def _normalize_brand(brand: str) -> str:
+    """Normalize brand for fuzzy matching."""
+    if not brand:
+        return ""
+    b = brand.lower().strip()
+    # Remove common suffixes
+    b = re.sub(r"(inc|llc|ltd|corp|corporation|company|co)\.?", "", b)
+    b = re.sub(r"[^\w\s]", " ", b)
+    b = " ".join(b.split())
+    return b
+
+
+def _brand_match(wholesale_brand: str, amazon_brand: str) -> bool:
+    """Fuzzy brand match using aliases and normalization."""
+    if not wholesale_brand or not amazon_brand:
+        return False
+    wb = _normalize_brand(wholesale_brand)
+    ab = _normalize_brand(amazon_brand)
+    if wb == ab:
+        return True
+    # Check aliases
+    for canonical, aliases in _BRAND_ALIASES.items():
+        if wb in aliases and ab in aliases:
+            return True
+        if wb == canonical and ab in aliases:
+            return True
+        if ab == canonical and wb in aliases:
+            return True
+    # Substring fallback
+    return wb in ab or ab in wb
+
+
+def _validate_match_quality(
+    match: AmazonMatch,
+    wholesale_product: WholesaleProduct,
+) -> tuple[bool, str]:
+    """Validate match quality (price sanity, pack count, brand)."""
+    
+    # Price sanity check (fix #13)
+    if match.amazon_price > 0 and wholesale_product.wholesale_price > 0:
+        pack_count = wholesale_product.pack_count or 1
+        unit_cogs = wholesale_product.wholesale_price / max(pack_count, 1)
+        ratio = match.amazon_price / unit_cogs
+        if ratio < MIN_PRICE_RATIO:
+            return False, f"price_ratio_below_min ({ratio:.2f} < {MIN_PRICE_RATIO})"
+        if ratio > MAX_PRICE_RATIO:
+            return False, f"price_ratio_above_max ({ratio:.2f} > {MAX_PRICE_RATIO})"
+    
+    # Pack count cross-validation (fix #14)
+    amazon_count = _quick_count(match.title)
+    if amazon_count is not None and wholesale_product.pack_count is not None:
+        if amazon_count > wholesale_product.pack_count:
+            return False, f"amazon_count_exceeds_wholesale ({amazon_count} > {wholesale_product.pack_count})"
+    
+    # Brand normalization / fuzzy match (fix #15)
+    if not _brand_match(wholesale_product.brand, match.brand):
+        return False, f"brand_mismatch ('{wholesale_product.brand}' vs '{match.brand}')"
+    
+    return True, "ok"
+
+
+def _deduplicate_asins(candidates: list[AmazonMatch]) -> list[AmazonMatch]:
+    """Deduplicate by ASIN, keeping highest ranked (fix #16)."""
+    seen = {}
+    for c in candidates:
+        if c.asin not in seen:
+            seen[c.asin] = c
+    return list(seen.values())
+
+
+# ---------------------------------------------------------------------------
 # Candidate ranker
 # ---------------------------------------------------------------------------
+
 
 def rank_candidates(
     candidates: list[AmazonMatch],
@@ -232,14 +373,28 @@ def rank_candidates(
 
     Factors (weighted score, higher = better):
       - Brand match (exact)  +10 pts
-      - Price reasonableness  +0–8 pts (max when price ≈ wholesale_price / pack_count)
-      - BSR (lower = better) +0–5 pts
-      - Reviews (more = better) +0–3 pts
+      - Price reasonableness  +0-8 pts (max when price ~= wholesale_price / pack_count)
+      - BSR (lower is better) +0-5 pts
+      - Reviews (more = better) +0-3 pts
       - Is Prime               +1 pt
       - FBA sellers 0-2       +1 pt (competitive)
     """
     if not candidates:
         return []
+
+    # Quality filter before ranking
+    filtered = []
+    for c in candidates:
+        valid, reason = _validate_match_quality(c, wholesale_product)
+        if valid:
+            filtered.append(c)
+        else:
+            logger.debug(
+                "[AmazonMatcher] Filtered out %s: %s", c.asin, reason
+            )
+    
+    # Deduplicate ASINs (fix #16)
+    filtered = _deduplicate_asins(filtered)
 
     pack_count = wholesale_product.pack_count or 1
     expected_individual_price = wholesale_product.wholesale_price / max(pack_count, 1)
@@ -250,17 +405,17 @@ def rank_candidates(
         if m.brand and wholesale_product.brand:
             if m.brand.lower() == wholesale_product.brand.lower():
                 s += 10.0
-        # Price reasonableness — quadratic penalty for deviation
+        # Price reasonableness -- quadratic penalty for deviation
         if m.amazon_price > 0 and expected_individual_price > 0:
             ratio = m.amazon_price / expected_individual_price
-            # Sweet spot: ratio 1.5 – 8.0 (individual sells for 1.5x–8x cost)
+            # Sweet spot: ratio 1.5 - 8.0 (individual sells for 1.5x-8x cost)
             if 1.5 <= ratio <= 8.0:
                 s += 8.0
             elif 1.0 <= ratio < 1.5:
                 s += 5.0  # tight margin
             elif ratio > 8.0:
                 s += max(0.0, 8.0 - (ratio - 8.0))  # diminishing
-            # ratio < 1.0 means Amazon price < Costco unit cost → 0 pts
+            # ratio < 1.0 means Amazon price < Costco unit cost -> 0 pts
         # BSR (lower is better)
         if m.bsr is not None:
             if m.bsr <= 1000:
@@ -282,13 +437,12 @@ def rank_candidates(
         # Prime
         if m.is_prime:
             s += 1.0
-        # FBA sellers (0–2 is competitive)
+        # FBA sellers (0-2 is competitive)
         if m.fba_sellers is not None and 0 <= m.fba_sellers <= 2:
             s += 1.0
         return s
 
-    return sorted(candidates, key=_score, reverse=True)
-
+    return sorted(filtered, key=_score, reverse=True)
 
 # ---------------------------------------------------------------------------
 # Main finder
@@ -415,12 +569,13 @@ def _live_find_matches(
     if not matches:
         return []
 
-    # Step 3: Enrich top candidates with seller identity (EasyParser)
+    # Step 3: Enrich top candidates with seller identity (free-tier waterfall)
     # Only enrich the first few to conserve credits
     enrich_count = min(len(matches), max_candidates + 2)
     for match in matches[:enrich_count]:
         try:
-            seller_caller = make_easy_parser_seller_caller(match.asin)
+            # Generic seller caller that the router will dispatch to the best provider
+            seller_caller = make_generic_seller_caller(match.asin)
             seller_result = run_task(
                 TASK_AMAZON_OFFERS,
                 seller_caller,
@@ -431,6 +586,7 @@ def _live_find_matches(
                 match.fba_sellers = seller_data.get("fba_sellers") or match.fba_sellers
                 match.seller_name = seller_data.get("seller_name") or match.seller_name
                 match.is_amazon_seller = seller_data.get("is_amazon_seller")
+                match.seller_verified_at = datetime.now(timezone.utc).isoformat()
                 # Check if seller name matches wholesale brand
                 if seller_data.get("seller_name") and wholesale_product.brand:
                     brand_lower = wholesale_product.brand.lower()

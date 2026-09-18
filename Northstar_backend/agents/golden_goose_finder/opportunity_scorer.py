@@ -456,6 +456,11 @@ def _verify_seller_identity(ind: Any, ws_brand: Optional[str]) -> tuple:
 
     Unverifiable identity (no seller data at all) is a block: a listing whose
     sellers we could not identify cannot be certified as safe to enter.
+
+    Also flags when seller data exists but is uncertain (is_amazon_seller=None
+    and no seller_name) — this means the enrichment ran but couldn't determine
+    the buy box winner. Treat as a WARNING, not a hard block, but downgrade
+    the confidence.
     """
     observed = (
         ind.seller_name is not None
@@ -464,6 +469,17 @@ def _verify_seller_identity(ind: Any, ws_brand: Optional[str]) -> tuple:
     )
     if not observed:
         return False, "FAIL (unverifiable — no seller identity data)"
+
+    # Check if we have a definitive seller identity
+    has_definitive_seller = (
+        ind.seller_name is not None
+        or ind.is_brand_seller is True
+        or ind.is_amazon_seller is True
+    )
+    if not has_definitive_seller:
+        # Enrichment ran but couldn't identify the buy box winner
+        return True, "WARN (seller identity uncertain — enrichment inconclusive)"
+
     blocked = _seller_identity_blocked(
         ind.seller_name, ind.is_brand_seller, ind.is_amazon_seller, ws_brand
     )

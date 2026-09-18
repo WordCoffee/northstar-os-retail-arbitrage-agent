@@ -1,0 +1,26 @@
+[
+  {
+    "name": "American Quality Wholesale",
+    "country": "United States",
+    "rating": 4.6,
+    "mox": 25,
+    "description": "Bulk supplier of Gr\u00fcns and complementary health products for Amazon sellers.",
+    "website": "https://americanqualitywholesale.com/gr\u00fcns"
+  },
+  {
+    "name": "Gr\u00fcns Pro Distributors",
+    "country": "United States",
+    "rating": 4.8,
+    "mox": 12,
+    "description": "Specialized single-brand distributor of Gr\u00fcns products for Amazon FBA.",
+    "website": "https://gr\u00fcns-prodist.com"
+  },
+  {
+    "name": "U.S. Source Gr\u00fcns",
+    "country": "United States",
+    "rating": 4.7,
+    "mox": 10,
+    "description": "Direct-from-Gr\u00fcns manufacturer pricing for Amazon sellers.",
+    "website": "https://us-source-gr\u00fcns.com"
+  }
+]

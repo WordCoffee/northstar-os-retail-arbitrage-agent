@@ -4,6 +4,14 @@
    Used by: landing page, auth pages, SPA, all views.
    ========================================================================== */
 
+/* ---------- Signature-Accented Button Variants ---------- */
+.btn-sig {
+  background: linear-gradient(180deg, var(--sig-accent-bright), var(--sig-accent));
+  color: var(--bg); border-color: var(--sig-accent-line); font-weight: 700;
+}
+.btn-sig:hover { box-shadow: 0 0 0 2px var(--sig-accent-dim), 0 4px 16px var(--sig-accent-dim); }
+.btn-sig:focus-visible { outline: 2px solid var(--sig-accent); outline-offset: 2px; }
+
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
@@ -173,3 +181,184 @@
 .mt-4 { margin-top: var(--sp-4); } .mt-6 { margin-top: var(--sp-6); } .mt-8 { margin-top: var(--sp-8); }
 .mb-1 { margin-bottom: var(--sp-1); } .mb-2 { margin-bottom: var(--sp-2); } .mb-4 { margin-bottom: var(--sp-4); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+/* ==========================================================================
+   PHASE 2 COMPONENT PRIMITIVES — 13 New Primitives
+   ========================================================================== */
+
+/* ---------- 1. Health Badge (round, status) ---------- */
+.health-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 50%;
+  font-size: 0; /* icon-only via ::before */
+  box-shadow: 0 0 0 1px var(--hairline), 0 0 0 3px var(--bg-elevated);
+}
+.health-badge::before { content: ''; width: 8px; height: 8px; border-radius: 50%; display: block; }
+.health-badge--viable   { background: var(--green); }    .health-badge--viable::before   { background: var(--green-bright); box-shadow: 0 0 8px var(--green); }
+.health-badge--marginal { background: var(--gold); }     .health-badge--marginal::before { background: var(--gold-bright); box-shadow: 0 0 8px var(--gold); }
+.health-badge--reject   { background: var(--crimson-bright); } .health-badge--reject::before   { background: #e74c3c; box-shadow: 0 0 8px var(--crimson-bright); }
+.health-badge--review   { background: var(--steel); }    .health-badge--review::before   { background: var(--steel-line); box-shadow: 0 0 8px var(--steel); }
+
+/* ---------- 2. Tier Pill (extends .pill) ---------- */
+.tier-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 10px; border-radius: var(--radius-full);
+  font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+}
+.tier-pill--A { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-line); }
+.tier-pill--B { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--gold-line); }
+.tier-pill--C { background: var(--steel-dim); color: var(--steel); border: 1px solid var(--steel-line); }
+.tier-pill--D { background: var(--crimson-dim); color: var(--crimson-bright); border: 1px solid rgba(192,57,43,.5); }
+
+/* ---------- 3. Logistics Warning Badge (triangular flag) ---------- */
+.logistics-badge {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px 4px 28px;
+  border-radius: var(--radius-sm);
+  font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: #3a2a00;
+  background: linear-gradient(180deg, #fff8e1, #ffeeba);
+  border: 1px solid #f5c040;
+  box-shadow: 0 1px 3px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.logistics-badge::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 18px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 6px 50%);
+  background: linear-gradient(180deg, #f5c040, #d4a017);
+  border-right: 1px solid #d4a017;
+}
+.logistics-badge--liftgate   { background: linear-gradient(180deg, #fff8e1, #ffeeba); }
+.logistics-badge--freight    { background: linear-gradient(180deg, #fef3e2, #fdebd0); border-color: #e8b86d; }
+.logistics-badge--hazmat     { background: linear-gradient(180deg, #fdf2f2, #fce4e4); border-color: #e07b7b; color: #7f1d1d; }
+.logistics-badge--restricted { background: linear-gradient(180deg, #f0f4ff, #e8eefd); border-color: #9db4e6; color: #1e3a8a; }
+
+/* ---------- 4. Supplier Health Badge (composite) ---------- */
+.supplier-health {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px; border-radius: var(--radius-full);
+  font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+}
+.supplier-health .health-badge { flex-shrink: 0; }
+.supplier-health--viable   { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-line); }
+.supplier-health--marginal { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--gold-line); }
+.supplier-health--reject   { background: var(--crimson-dim); color: var(--crimson-bright); border: 1px solid rgba(192,57,43,.5); }
+.supplier-health--review   { background: var(--steel-dim); color: var(--steel); border: 1px solid var(--steel-line); }
+
+/* ---------- 5. Logistics Tag (inline text label) ---------- */
+.logistics-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 1px 8px; border-radius: var(--radius-sm);
+  font-size: 8px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+}
+.logistics-tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; display: block; flex-shrink: 0; }
+.logistics-tag--liftgate   { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--gold-line); } .logistics-tag--liftgate::before   { background: var(--gold); }
+.logistics-tag--freight    { background: var(--steel-dim); color: var(--steel); border: 1px solid var(--steel-line); } .logistics-tag--freight::before    { background: var(--steel); }
+.logistics-tag--hazmat     { background: var(--crimson-dim); color: var(--crimson-bright); border: 1px solid rgba(192,57,43,.5); } .logistics-tag--hazmat::before     { background: var(--crimson-bright); }
+.logistics-tag--restricted { background: var(--steel-dim); color: var(--steel); border: 1px solid var(--steel-line); opacity: .7; }
+
+/* ---------- 6. Data Grid Row (hover highlight, pinned) ---------- */
+.data-grid {
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+.data-grid-header {
+  display: grid; grid-template-columns: inherit;
+  background: var(--bg-sunken); border-bottom: 1px solid var(--hairline);
+  font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint);
+}
+.data-grid-header > div { padding: 8px 10px; }
+.data-grid-row {
+  display: grid; grid-template-columns: inherit;
+  padding: 10px; border-bottom: 1px solid var(--hairline-soft);
+  align-items: center; font-size: 12px; transition: background .12s;
+}
+.data-grid-row:hover { background: var(--bg-hover); }
+.data-grid-row.pinned { background: linear-gradient(180deg, var(--gold-dim), transparent); border-left: 3px solid var(--gold); }
+.data-grid-row:last-child { border-bottom: none; }
+.data-grid-row > div { padding: 0 10px; display: flex; align-items: center; min-width: 0; }
+.data-grid-row > div:first-child { padding-left: 14px; }
+
+/* ---------- 7. Filter Panel (collapsible) ---------- */
+.filter-panel {
+  background: var(--bg-elevated); border: 1px solid var(--hairline);
+  border-radius: var(--radius); padding: var(--sp-4); margin-bottom: var(--sp-4);
+}
+.filter-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: var(--sp-3); cursor: pointer;
+}
+.filter-panel-header h4 { font-family: var(--font-head); font-size: 14px; color: var(--ink); margin: 0; }
+.filter-panel-header .chevron { transition: transform var(--duration-normal); }
+.filter-panel.collapsed .filter-panel-header .chevron { transform: rotate(-90deg); }
+.filter-panel.collapsed .filter-panel-body { display: none; }
+.filter-panel-body { display: grid; gap: var(--sp-3); }
+.filter-panel-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+@media (max-width: 768px) { .filter-panel-row { grid-template-columns: 1fr; } }
+
+/* ---------- 8. Tab Strip (agent sub-tabs) ---------- */
+.tab-strip {
+  display: flex; gap: 2px; margin-bottom: var(--sp-4);
+  background: var(--bg-sunken); border-radius: var(--radius);
+  padding: 3px; border: 1px solid var(--hairline-soft);
+}
+.tab-btn {
+  flex: 1; padding: 8px 12px; border: none; border-radius: var(--radius-sm);
+  background: transparent; color: var(--ink-dim);
+  font-family: var(--font-body); font-size: 11px; font-weight: 600; cursor: pointer;
+  transition: background .12s, color .12s, box-shadow .12s;
+}
+.tab-btn:hover { background: rgba(0,0,0,.2); color: var(--ink); }
+.tab-btn.active {
+  background: linear-gradient(180deg, var(--sig-accent-dim), transparent);
+  color: var(--sig-accent);
+  box-shadow: inset 0 -2px 0 var(--sig-accent);
+}
+.tab-btn[data-gated] { opacity: .6; cursor: not-allowed; }
+
+/* ---------- 9. CSV Dropzone ---------- */
+.csv-dropzone {
+  border: 2px dashed var(--hairline);
+  border-radius: var(--radius);
+  padding: var(--sp-8) var(--sp-6); text-align: center;
+  background: var(--bg-sunken); transition: border-color .15s, background .15s;
+  cursor: pointer;
+}
+.csv-dropzone:hover,
+.csv-dropzone.drag-over {
+  border-color: var(--sig-accent);
+  background: var(--sig-accent-dim);
+}
+.csv-dropzone .dz-icon { font-size: 32px; margin-bottom: var(--sp-2); opacity: .6; }
+.csv-dropzone .dz-title { font-family: var(--font-head); font-size: 16px; color: var(--ink); margin-bottom: var(--sp-1); }
+.csv-dropzone .dz-hint { font-size: 11px; color: var(--ink-faint); }
+.csv-dropzone .dz-format { font-size: 9px; color: var(--ink-faint); margin-top: var(--sp-2); font-family: var(--font-body); }
+
+/* ---------- 10. KPI Card (signature accent border) ---------- */
+.kpi-card.sig {
+  position: relative;
+  border-top: 3px solid var(--sig-accent);
+}
+.kpi-card.sig::before { display: none; }
+
+/* ---------- 11. Gate Banner (signature accent) ---------- */
+.gate-banner {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-sunken); border: 1px solid var(--hairline);
+  border-radius: var(--radius); font-size: 11px; color: var(--ink-dim);
+}
+.gate-banner.blocked { border-color: var(--sig-accent-line); background: var(--sig-accent-dim); }
+.gate-banner .shield { width: 16px; height: 16px; flex: 0 0 16px; color: var(--sig-accent); }
+.gate-banner .gate-state { font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+.gate-banner.blocked .gate-state { color: var(--sig-accent); }
+
+/* ---------- 12. Signature Accent Card Glow ---------- */
+.card.sig-glow:hover { border-color: var(--sig-accent-line); box-shadow: var(--shadow-lg), 0 0 24px var(--sig-accent-dim); }
+
+/* ---------- 13. Empty State (signature variant) ---------- */
+.empty-state.sig .empty-icon { color: var(--sig-accent); }

@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "generated_at": "2026-09-17T04:01:23.373880+00:00",
+    "pipeline_version": "0.1.0",
+    "mode": "live",
+    "elapsed_seconds": 17.788,
+    "categories_scanned": "all",
+    "stores_scanned": [
+      "Costco",
+      "Sam's Club"
+    ],
+    "filters": {
+      "roi_floor": 10.0,
+      "min_monthly_sales": 1000,
+      "max_results": 100
+    },
+    "report_path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\data\\golden-goose-reports\\goose_scan_20260917_040123.json"
+  },
+  "summary": {
+    "total_opportunities": 0,
+    "high_tier_count": 0,
+    "medium_tier_count": 0,
+    "low_tier_count": 0,
+    "reject_count": 0,
+    "estimated_monthly_profit": 0,
+    "average_roi_pct": 0
+  },
+  "opportunities": []
+}

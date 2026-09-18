@@ -24,6 +24,14 @@ from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
+# --- Bright Data seller extraction ---
+# Reuse the shared seller extraction from amazon_seller_extract
+try:
+    from amazon_seller_extract import extract_seller_data
+except ImportError:
+    extract_seller_data = None  # type: ignore[assignment]
+    logger.debug("[amazon_adapters] amazon_seller_extract not available")
+
 # ---------------------------------------------------------------------------
 # Chocodata search adapter
 # ---------------------------------------------------------------------------
@@ -94,7 +102,7 @@ def make_chocodata_search_caller(query: str, pages: int = 1):
         params = {
             "api_key": api_key,
             "query": query,
-            "domain": "amazon.com",
+            "domain": "com",
             "sort_by": "best_match",
             "start_page": 1,
         }
@@ -376,3 +384,130 @@ def parse_easy_parser_sellers(raw_data: Dict[str, Any]) -> Dict[str, Any]:
         "is_amazon_seller": is_amazon_seller,
         "total_sellers": total_sellers,
     }
+
+
+# ---------------------------------------------------------------------------
+# Bright Data Web Unlocker — Amazon Offers adapter
+# ---------------------------------------------------------------------------
+
+BRIGHT_DATA_OFFERS_TIMEOUT = int(os.getenv("BRIGHT_DATA_OFFERS_TIMEOUT", "60"))
+
+
+def make_bright_data_offers_caller(asin: str):
+    """Return a ``caller(provider, task_type)`` closure for Bright Data offers.
+
+    Fetches the Amazon offers page (gp/offer-listing/{ASIN}) via Bright Data
+    Web Unlocker and parses seller identity using the shared extractor.
+    Returns a dict matching parse_easy_parser_sellers output.
+    """
+
+    def caller(provider, task_type: str) -> Dict[str, Any]:
+        api_key = os.getenv(provider.key_env, "")
+        if not api_key:
+            raise RuntimeError(f"{provider.key_env} not set")
+
+        if extract_seller_data is None:
+            raise RuntimeError("amazon_seller_extract module not available")
+
+        # Try product page first (dp/ASIN) - offers page (gp/offer-listing/ASIN) often 404s
+        urls = [
+            f"https://www.amazon.com/dp/{asin}",
+            f"https://www.amazon.com/gp/offer-listing/{asin}",
+        ]
+
+        # Import here to avoid circular dependency
+        from bright_data_client import _fetch as bd_fetch
+
+        html = None
+        for url in urls:
+            html = bd_fetch(url)
+            if html is not None and "Page Not Found" not in html:
+                break
+        
+        if html is None or "Page Not Found" in html:
+            from bright_data_client import LAST_ERROR, LAST_HTTP_STATUS
+            raise RuntimeError(
+                f"Bright Data fetch failed for all URLs: {LAST_ERROR or LAST_HTTP_STATUS}"
+            )
+
+        # Parse seller data from HTML
+        seller_data = extract_seller_data(html)
+
+        seller_name = seller_data.get("buy_box_seller_name")
+        fulfillment = seller_data.get("buy_box_fulfillment")
+        total_sellers = seller_data.get("total_sellers")
+        other_sellers = seller_data.get("other_sellers_present")
+
+        # Determine FBA count from fulfillment + other sellers
+        # If Buy Box is FBA, count at least 1. If other sellers present, assume more.
+        fba_sellers = None
+        if fulfillment == "FBA":
+            fba_sellers = 1
+            if other_sellers and total_sellers:
+                # Can't know exactly how many are FBA, but at least 1
+                pass
+        elif fulfillment == "Amazon":
+            fba_sellers = 0  # Amazon Retail = no FBA sellers
+
+        # Determine is_amazon_seller from fulfillment + seller name
+        is_amazon_seller = None
+        if seller_name:
+            name_lower = seller_name.lower()
+            is_amazon_seller = (
+                "amazon.com" in name_lower
+                and "marketplace" not in name_lower
+            ) or fulfillment == "Amazon"
+
+        # Note: is_brand_seller is deferred to caller (matches EasyParser behavior)
+        # The caller will check if seller_name matches the wholesale brand
+
+        logger.info(
+            "[Bright Data] ASIN=%s seller=%s fulfillment=%s total_sellers=%s",
+            asin, seller_name, fulfillment, total_sellers,
+        )
+
+        return {
+            "fba_sellers": fba_sellers,
+            "seller_name": seller_name,
+            "is_brand_seller": None,  # deferred to caller
+            "is_amazon_seller": is_amazon_seller,
+            "total_sellers": total_sellers,
+        }
+
+    return caller
+
+
+# ---------------------------------------------------------------------------
+# Generic seller caller for free-tier waterfall
+# ---------------------------------------------------------------------------
+
+
+def make_generic_seller_caller(asin: str):
+    """Return a caller that works with any provider the router selects.
+
+    The router passes the selected provider; we dispatch to the appropriate
+    adapter based on provider.id.
+    """
+
+    def caller(provider, task_type: str) -> Dict[str, Any]:
+        provider_id = provider.id
+
+        if provider_id == "bright_data_web_unlocker":
+            # Use the Bright Data offers adapter
+            bd_caller = make_bright_data_offers_caller(asin)
+            return bd_caller(provider, task_type)
+
+        elif provider_id == "easyparser":
+            # Use the EasyParser offers adapter
+            ep_caller = make_easy_parser_seller_caller(asin)
+            return ep_caller(provider, task_type)
+
+        elif provider_id in ("scrapebadger", "scrapingdog", "apiclaw", "rapidapi_pool", "canopy", "firecrawl", "scrape_do"):
+            # For generic scrape providers, fetch offers page and parse
+            # This is a placeholder - would need provider-specific logic
+            raise RuntimeError(f"Provider {provider_id} not yet implemented for seller enrichment")
+
+        else:
+            raise RuntimeError(f"Unknown provider for TASK_AMAZON_OFFERS: {provider_id}")
+
+    return caller

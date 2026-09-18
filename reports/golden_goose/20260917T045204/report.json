@@ -1,0 +1,657 @@
+{
+  "report_version": "1.0",
+  "generated_at": "2026-09-17T04:52:04.890430+00:00",
+  "run_metadata": {
+    "mode": "mock-harness",
+    "helpers_dispatched": 5,
+    "wholesale_found": 6,
+    "amazon_matches": 7,
+    "economics_evaluated": 6,
+    "disposed": []
+  },
+  "summary": {
+    "total_evaluated": 6,
+    "high": 0,
+    "medium": 1,
+    "low": 5,
+    "rejected": 0,
+    "avg_profit": 1.46,
+    "avg_roi": 2213.57,
+    "best_opportunity": {
+      "asin": "B00EN7UEH2",
+      "product_title": "Zyrtec Allergy Relief 24hr (70 Count)",
+      "brand": "Zyrtec",
+      "category": "otc_health",
+      "gating_status": "APPROVED",
+      "amazon_metrics": {
+        "est_monthly_sales": 4500,
+        "review_rating": 4.8,
+        "review_count": 67200,
+        "current_fba_sellers": 1,
+        "buy_box_price": 22.99,
+        "bsr": 980
+      },
+      "seller_identity": {
+        "seller_name": "Zyrtec Consumer Care",
+        "is_brand_seller": true,
+        "is_amazon_seller": false
+      },
+      "size_profile": {
+        "weight_oz": 5.0,
+        "weight_lbs": 0.31,
+        "dimensions_in": null
+      },
+      "sourcing_data": {
+        "source_store": "Sam's Club",
+        "wholesale_pack_title": "Zyrtec Allergy Relief 24hr Tablets (pack of 4 bottles, 70ct each)",
+        "wholesale_cost": 44.98,
+        "pack_count": 280,
+        "unit_cogs": 0.16
+      },
+      "financial_breakdown": {
+        "resale_price": 22.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 8.66,
+        "total_costs_per_unit": 8.82,
+        "net_profit_per_unit": 12.82,
+        "net_profit_per_costco_pack": 3589.48,
+        "roi_percentage": 7980.16,
+        "roi_per_costco_pack_pct": 7980.16,
+        "profit_margin_pct": 55.76,
+        "breakeven_price": 8.82,
+        "buy_box_price": 22.99,
+        "undercut_headroom": 2.82,
+        "max_undercut_price": 20.17
+      },
+      "scoring": {
+        "composite_score": 0.7526,
+        "profit_score": 0.5882,
+        "demand_score": 0.9713,
+        "competition_score": 0.75,
+        "listing_health_score": 1.0,
+        "price_gap_score": 0.4992,
+        "ad_feasibility_score": 0.9,
+        "tier": "MEDIUM",
+        "tags": [
+          "low_competition",
+          "undercut_opportunity",
+          "brand_owner_seller",
+          "high_margin",
+          "high_velocity",
+          "trending_up",
+          "bulk_goldmine"
+        ],
+        "ad_feasibility_breakdown": {
+          "review_pts": 25,
+          "bsr_pts": 25,
+          "velocity_pts": 15,
+          "brand_pts": 25,
+          "total_pts": 90
+        }
+      },
+      "economics_confidence": "estimated",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "All costs included: referral fee, FBA fulfillment, repackaging $0.75/unit, inbound $0.35/unit, prep $0.25/unit, return reserve 2% of the sale price.",
+        "Profit: $12.82/unit -> 0.59 (floor $10.00)",
+        "Demand: ~4500/mo -> 0.97 (medium confidence)",
+        "Competition: 1 FBA seller -> 0.75",
+        "Competition floor: 1 FBA sellers (<= 2); undercut check -> PASS",
+        "Listing health: rating 4.8, 67200 reviews -> 1.00",
+        "Seller identity: FAIL (seller blocked: Zyrtec Consumer Care)",
+        "Size: PASS (5.0 oz — preferred <= 2 lbs)",
+        "Price gap: $2.82 headroom -> 0.50 (max undercut price $20.17)",
+        "Ad feasibility: 90/100 pts (reviews=25, BSR=25, velocity=15, brand=25)",
+        "Composite: 0.7526 -> MEDIUM",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    },
+    "top_tags": {
+      "low_competition": 3,
+      "undercut_opportunity": 1,
+      "brand_owner_seller": 2,
+      "high_margin": 1,
+      "high_velocity": 3,
+      "trending_up": 6,
+      "bulk_goldmine": 4,
+      "amazon_seller_present": 1,
+      "premium_product": 1
+    }
+  },
+  "opportunities": [
+    {
+      "asin": "B00EN7UEH2",
+      "product_title": "Zyrtec Allergy Relief 24hr (70 Count)",
+      "brand": "Zyrtec",
+      "category": "otc_health",
+      "gating_status": "APPROVED",
+      "amazon_metrics": {
+        "est_monthly_sales": 4500,
+        "review_rating": 4.8,
+        "review_count": 67200,
+        "current_fba_sellers": 1,
+        "buy_box_price": 22.99,
+        "bsr": 980
+      },
+      "seller_identity": {
+        "seller_name": "Zyrtec Consumer Care",
+        "is_brand_seller": true,
+        "is_amazon_seller": false
+      },
+      "size_profile": {
+        "weight_oz": 5.0,
+        "weight_lbs": 0.31,
+        "dimensions_in": null
+      },
+      "sourcing_data": {
+        "source_store": "Sam's Club",
+        "wholesale_pack_title": "Zyrtec Allergy Relief 24hr Tablets (pack of 4 bottles, 70ct each)",
+        "wholesale_cost": 44.98,
+        "pack_count": 280,
+        "unit_cogs": 0.16
+      },
+      "financial_breakdown": {
+        "resale_price": 22.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 8.66,
+        "total_costs_per_unit": 8.82,
+        "net_profit_per_unit": 12.82,
+        "net_profit_per_costco_pack": 3589.48,
+        "roi_percentage": 7980.16,
+        "roi_per_costco_pack_pct": 7980.16,
+        "profit_margin_pct": 55.76,
+        "breakeven_price": 8.82,
+        "buy_box_price": 22.99,
+        "undercut_headroom": 2.82,
+        "max_undercut_price": 20.17
+      },
+      "scoring": {
+        "composite_score": 0.7526,
+        "profit_score": 0.5882,
+        "demand_score": 0.9713,
+        "competition_score": 0.75,
+        "listing_health_score": 1.0,
+        "price_gap_score": 0.4992,
+        "ad_feasibility_score": 0.9,
+        "tier": "MEDIUM",
+        "tags": [
+          "low_competition",
+          "undercut_opportunity",
+          "brand_owner_seller",
+          "high_margin",
+          "high_velocity",
+          "trending_up",
+          "bulk_goldmine"
+        ],
+        "ad_feasibility_breakdown": {
+          "review_pts": 25,
+          "bsr_pts": 25,
+          "velocity_pts": 15,
+          "brand_pts": 25,
+          "total_pts": 90
+        }
+      },
+      "economics_confidence": "estimated",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "All costs included: referral fee, FBA fulfillment, repackaging $0.75/unit, inbound $0.35/unit, prep $0.25/unit, return reserve 2% of the sale price.",
+        "Profit: $12.82/unit -> 0.59 (floor $10.00)",
+        "Demand: ~4500/mo -> 0.97 (medium confidence)",
+        "Competition: 1 FBA seller -> 0.75",
+        "Competition floor: 1 FBA sellers (<= 2); undercut check -> PASS",
+        "Listing health: rating 4.8, 67200 reviews -> 1.00",
+        "Seller identity: FAIL (seller blocked: Zyrtec Consumer Care)",
+        "Size: PASS (5.0 oz — preferred <= 2 lbs)",
+        "Price gap: $2.82 headroom -> 0.50 (max undercut price $20.17)",
+        "Ad feasibility: 90/100 pts (reviews=25, BSR=25, velocity=15, brand=25)",
+        "Composite: 0.7526 -> MEDIUM",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    },
+    {
+      "asin": "B00N2Y1THA",
+      "product_title": "Nicorette Nicotine Lozenge 2mg Mint (20 Count)",
+      "brand": "Nicorette",
+      "category": "nicotine_cessation",
+      "gating_status": "APPROVED",
+      "amazon_metrics": {
+        "est_monthly_sales": 1800,
+        "review_rating": 4.7,
+        "review_count": 8900,
+        "current_fba_sellers": 1,
+        "buy_box_price": 11.99,
+        "bsr": 4200
+      },
+      "seller_identity": {
+        "seller_name": "Pharmacy Warehouse",
+        "is_brand_seller": false,
+        "is_amazon_seller": false
+      },
+      "size_profile": {
+        "weight_oz": 4.0,
+        "weight_lbs": 0.25,
+        "dimensions_in": null
+      },
+      "sourcing_data": {
+        "source_store": "Costco",
+        "wholesale_pack_title": "Nicorette Nicotine Lozenge 2mg Mint (200 Count)",
+        "wholesale_cost": 39.99,
+        "pack_count": 200,
+        "unit_cogs": 0.2
+      },
+      "financial_breakdown": {
+        "resale_price": 11.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 6.79,
+        "total_costs_per_unit": 6.99,
+        "net_profit_per_unit": 3.65,
+        "net_profit_per_costco_pack": 730.05,
+        "roi_percentage": 1825.58,
+        "roi_per_costco_pack_pct": 1825.58,
+        "profit_margin_pct": 30.44,
+        "breakeven_price": 6.99,
+        "buy_box_price": 11.99,
+        "undercut_headroom": -6.35,
+        "max_undercut_price": 18.34
+      },
+      "scoring": {
+        "composite_score": 0.5571,
+        "profit_score": 0.3205,
+        "demand_score": 0.712,
+        "competition_score": 0.75,
+        "listing_health_score": 1.0,
+        "price_gap_score": 0.2,
+        "ad_feasibility_score": 0.7,
+        "tier": "LOW",
+        "tags": [
+          "low_competition",
+          "trending_up",
+          "bulk_goldmine"
+        ],
+        "ad_feasibility_breakdown": {
+          "review_pts": 25,
+          "bsr_pts": 15,
+          "velocity_pts": 5,
+          "brand_pts": 25,
+          "total_pts": 70
+        }
+      },
+      "economics_confidence": "estimated",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "All costs included: referral fee, FBA fulfillment, repackaging $0.75/unit, inbound $0.35/unit, prep $0.25/unit, return reserve 2% of the sale price.",
+        "Profit: $3.65/unit -> 0.32 (floor $10.00)",
+        "Demand: ~1800/mo -> 0.71 (medium confidence)",
+        "Competition: 1 FBA seller -> 0.75",
+        "Competition floor: 1 FBA sellers (<= 2); undercut check -> FAIL",
+        "Listing health: rating 4.7, 8900 reviews -> 1.00",
+        "Seller identity: PASS (verified third-party seller)",
+        "Size: PASS (4.0 oz — preferred <= 2 lbs)",
+        "Price gap: $-6.35 headroom -> 0.20 (max undercut price $18.34)",
+        "Ad feasibility: 70/100 pts (reviews=25, BSR=15, velocity=5, brand=25)",
+        "Composite: 0.5571 -> LOW",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    },
+    {
+      "asin": "B005DK1FOI",
+      "product_title": "Nature Made Vitamin D3 2000 IU (60 Softgels)",
+      "brand": "Nature Made",
+      "category": "vitamins_supplements",
+      "gating_status": "APPROVED",
+      "amazon_metrics": {
+        "est_monthly_sales": 5800,
+        "review_rating": 4.8,
+        "review_count": 42100,
+        "current_fba_sellers": 2,
+        "buy_box_price": 7.99,
+        "bsr": 1100
+      },
+      "seller_identity": {
+        "seller_name": "Amazon.com",
+        "is_brand_seller": false,
+        "is_amazon_seller": true
+      },
+      "size_profile": {
+        "weight_oz": 3.0,
+        "weight_lbs": 0.19,
+        "dimensions_in": null
+      },
+      "sourcing_data": {
+        "source_store": "Costco",
+        "wholesale_pack_title": "Nature Made Vitamin D3 2000 IU (250 Softgels)",
+        "wholesale_cost": 12.99,
+        "pack_count": 250,
+        "unit_cogs": 0.05
+      },
+      "financial_breakdown": {
+        "resale_price": 7.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 6.11,
+        "total_costs_per_unit": 6.16,
+        "net_profit_per_unit": 0.48,
+        "net_profit_per_costco_pack": 119.56,
+        "roi_percentage": 920.4,
+        "roi_per_costco_pack_pct": 920.4,
+        "profit_margin_pct": 5.99,
+        "breakeven_price": 6.16,
+        "buy_box_price": 7.99,
+        "undercut_headroom": -9.52,
+        "max_undercut_price": 17.51
+      },
+      "scoring": {
+        "composite_score": 0.5136,
+        "profit_score": 0.0817,
+        "demand_score": 1.0,
+        "competition_score": 0.5,
+        "listing_health_score": 1.0,
+        "price_gap_score": 0.2,
+        "ad_feasibility_score": 0.9,
+        "tier": "LOW",
+        "tags": [
+          "amazon_seller_present",
+          "high_velocity",
+          "trending_up",
+          "bulk_goldmine"
+        ],
+        "ad_feasibility_breakdown": {
+          "review_pts": 25,
+          "bsr_pts": 15,
+          "velocity_pts": 25,
+          "brand_pts": 25,
+          "total_pts": 90
+        }
+      },
+      "economics_confidence": "estimated",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "All costs included: referral fee, FBA fulfillment, repackaging $0.75/unit, inbound $0.35/unit, prep $0.25/unit, return reserve 2% of the sale price.",
+        "Profit: $0.48/unit -> 0.08 (floor $10.00)",
+        "Demand: ~5800/mo -> 1.00 (medium confidence)",
+        "Competition: 2 FBA sellers -> 0.50",
+        "Competition floor: 2 FBA sellers (<= 2); undercut check -> FAIL",
+        "Listing health: rating 4.8, 42100 reviews -> 1.00",
+        "Seller identity: FAIL (seller blocked: Amazon.com)",
+        "Size: PASS (3.0 oz — preferred <= 2 lbs)",
+        "Price gap: $-9.52 headroom -> 0.20 (max undercut price $17.51)",
+        "Ad feasibility: 90/100 pts (reviews=25, BSR=15, velocity=25, brand=25)",
+        "Composite: 0.5136 -> LOW",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    },
+    {
+      "asin": "B00GOHEWCU",
+      "product_title": "Advil Liqui-Gels 200mg (100 Count)",
+      "brand": "Advil",
+      "category": "otc_health",
+      "gating_status": "UNKNOWN",
+      "amazon_metrics": {
+        "est_monthly_sales": 3200,
+        "review_rating": 4.8,
+        "review_count": 14800,
+        "current_fba_sellers": null,
+        "buy_box_price": 8.99,
+        "bsr": 2100
+      },
+      "seller_identity": {
+        "seller_name": "HealthDirect",
+        "is_brand_seller": false,
+        "is_amazon_seller": false
+      },
+      "size_profile": {
+        "weight_oz": 6.0,
+        "weight_lbs": 0.38,
+        "dimensions_in": null
+      },
+      "sourcing_data": {
+        "source_store": "Costco",
+        "wholesale_pack_title": "Advil Pain Reliever 200mg Liqui-Gels (500 Count)",
+        "wholesale_cost": 24.99,
+        "pack_count": 500,
+        "unit_cogs": 0.05
+      },
+      "financial_breakdown": {
+        "resale_price": 8.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 6.28,
+        "total_costs_per_unit": 6.33,
+        "net_profit_per_unit": 1.31,
+        "net_profit_per_costco_pack": 655.11,
+        "roi_percentage": 2621.49,
+        "roi_per_costco_pack_pct": 2621.49,
+        "profit_margin_pct": 14.57,
+        "breakeven_price": 6.33,
+        "buy_box_price": 8.99,
+        "undercut_headroom": -8.69,
+        "max_undercut_price": 17.68
+      },
+      "scoring": {
+        "composite_score": 0.4817,
+        "profit_score": 0.1746,
+        "demand_score": 0.8782,
+        "competition_score": 0.3,
+        "listing_health_score": 1.0,
+        "price_gap_score": 0.2,
+        "ad_feasibility_score": 0.8,
+        "tier": "LOW",
+        "tags": [
+          "high_velocity",
+          "trending_up",
+          "bulk_goldmine"
+        ],
+        "ad_feasibility_breakdown": {
+          "review_pts": 25,
+          "bsr_pts": 15,
+          "velocity_pts": 15,
+          "brand_pts": 25,
+          "total_pts": 80
+        }
+      },
+      "economics_confidence": "estimated",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "All costs included: referral fee, FBA fulfillment, repackaging $0.75/unit, inbound $0.35/unit, prep $0.25/unit, return reserve 2% of the sale price.",
+        "Profit: $1.31/unit -> 0.17 (floor $10.00)",
+        "Demand: ~3200/mo -> 0.88 (medium confidence)",
+        "Competition: unknown seller data -> score 0.30",
+        "Competition floor: FAIL (no FBA seller data)",
+        "Listing health: rating 4.8, 14800 reviews -> 1.00",
+        "Seller identity: PASS (verified third-party seller)",
+        "Size: PASS (6.0 oz — preferred <= 2 lbs)",
+        "Price gap: $-8.69 headroom -> 0.20 (max undercut price $17.68)",
+        "Ad feasibility: 80/100 pts (reviews=25, BSR=15, velocity=15, brand=25)",
+        "Composite: 0.4817 -> LOW",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    },
+    {
+      "asin": "B001S4LX1Y",
+      "product_title": "Furminator deShedding Tool for Dogs (Large)",
+      "brand": "Furminator",
+      "category": "pet",
+      "gating_status": "APPROVED",
+      "amazon_metrics": {
+        "est_monthly_sales": null,
+        "review_rating": 4.5,
+        "review_count": 11800,
+        "current_fba_sellers": 1,
+        "buy_box_price": 29.99,
+        "bsr": 2600
+      },
+      "seller_identity": {
+        "seller_name": "Spectrum Home Brands",
+        "is_brand_seller": true,
+        "is_amazon_seller": false
+      },
+      "size_profile": {
+        "weight_oz": 8.0,
+        "weight_lbs": 0.5,
+        "dimensions_in": null
+      },
+      "sourcing_data": {
+        "source_store": "Sam's Club",
+        "wholesale_pack_title": "Furminator deShedding Tool for Dogs (Large)",
+        "wholesale_cost": 24.98,
+        "pack_count": 1,
+        "unit_cogs": 24.98
+      },
+      "financial_breakdown": {
+        "resale_price": 29.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 9.85,
+        "total_costs_per_unit": 34.83,
+        "net_profit_per_unit": -6.19,
+        "net_profit_per_costco_pack": -6.19,
+        "roi_percentage": -24.78,
+        "roi_per_costco_pack_pct": -24.78,
+        "profit_margin_pct": -20.64,
+        "breakeven_price": 34.83,
+        "buy_box_price": 29.99,
+        "undercut_headroom": -16.19,
+        "max_undercut_price": 46.18
+      },
+      "scoring": {
+        "composite_score": 0.3575,
+        "profit_score": 0.0,
+        "demand_score": 0.3,
+        "competition_score": 0.75,
+        "listing_health_score": 1.0,
+        "price_gap_score": 0.2,
+        "ad_feasibility_score": 0.65,
+        "tier": "LOW",
+        "tags": [
+          "low_competition",
+          "brand_owner_seller",
+          "premium_product",
+          "trending_up"
+        ],
+        "ad_feasibility_breakdown": {
+          "review_pts": 25,
+          "bsr_pts": 15,
+          "velocity_pts": 0,
+          "brand_pts": 25,
+          "total_pts": 65
+        }
+      },
+      "economics_confidence": "estimated",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "All costs included: referral fee, FBA fulfillment, repackaging $0.75/unit, inbound $0.35/unit, prep $0.25/unit, return reserve 2% of the sale price.",
+        "pack_count is 1 — this is a straight resale, not a breakdown; the repackaging labor/packaging costs may be overstated.",
+        "ROI -24.78% is below the 10.00% roi floor — reconsider before committing capital.",
+        "Profit: $-6.19/unit -> 0.00 (floor $10.00)",
+        "Demand: no BSR/sales data -> score 0.30",
+        "Demand floor: FAIL (no monthly sales estimate)",
+        "Competition: 1 FBA seller -> 0.75",
+        "Competition floor: 1 FBA sellers (<= 2); undercut check -> FAIL",
+        "Listing health: rating 4.5, 11800 reviews -> 1.00",
+        "Seller identity: FAIL (seller blocked: Spectrum Home Brands)",
+        "Size: PASS (8.0 oz — preferred <= 2 lbs)",
+        "Price gap: $-16.19 headroom -> 0.20 (max undercut price $46.18)",
+        "Ad feasibility: 65/100 pts (reviews=25, BSR=15, velocity=0, brand=25)",
+        "Composite: 0.3575 -> LOW",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    },
+    {
+      "asin": "B000P0T01K",
+      "product_title": "KONG Classic Dog Toy (Medium)",
+      "brand": "KONG",
+      "category": "pet",
+      "gating_status": "UNKNOWN",
+      "amazon_metrics": {
+        "est_monthly_sales": null,
+        "review_rating": 4.8,
+        "review_count": 28400,
+        "current_fba_sellers": null,
+        "buy_box_price": 12.99,
+        "bsr": 1500
+      },
+      "seller_identity": {
+        "seller_name": "Pet Supply Co",
+        "is_brand_seller": false,
+        "is_amazon_seller": false
+      },
+      "size_profile": {
+        "weight_oz": 6.0,
+        "weight_lbs": 0.38,
+        "dimensions_in": null
+      },
+      "sourcing_data": {
+        "source_store": "Costco",
+        "wholesale_pack_title": "KONG Classic Dog Toy (Medium, 2-Pack)",
+        "wholesale_cost": 15.99,
+        "pack_count": 2,
+        "unit_cogs": 8.0
+      },
+      "financial_breakdown": {
+        "resale_price": 12.99,
+        "referral_fee": null,
+        "fulfillment_fee": null,
+        "repackaging_cost": null,
+        "total_fees": 6.96,
+        "total_costs_per_unit": 14.96,
+        "net_profit_per_unit": -3.31,
+        "net_profit_per_costco_pack": -6.63,
+        "roi_percentage": -41.46,
+        "roi_per_costco_pack_pct": -41.46,
+        "profit_margin_pct": -25.52,
+        "breakeven_price": 14.96,
+        "buy_box_price": 12.99,
+        "undercut_headroom": -13.31,
+        "max_undercut_price": 26.3
+      },
+      "scoring": {
+        "composite_score": 0.29,
+        "profit_score": 0.0,
+        "demand_score": 0.3,
+        "competition_score": 0.3,
+        "listing_health_score": 1.0,
+        "price_gap_score": 0.2,
+        "ad_feasibility_score": 0.65,
+        "tier": "LOW",
+        "tags": [
+          "trending_up"
+        ],
+        "ad_feasibility_breakdown": {
+          "review_pts": 25,
+          "bsr_pts": 15,
+          "velocity_pts": 0,
+          "brand_pts": 25,
+          "total_pts": 65
+        }
+      },
+      "economics_confidence": "estimated",
+      "notes": [
+        "Referral fee resolved to default category 'Everything Else' (15%) — no exact category/browse node on record; verify in Seller Central.",
+        "All costs included: referral fee, FBA fulfillment, repackaging $0.75/unit, inbound $0.35/unit, prep $0.25/unit, return reserve 2% of the sale price.",
+        "ROI -41.46% is below the 10.00% roi floor — reconsider before committing capital.",
+        "Profit: $-3.31/unit -> 0.00 (floor $10.00)",
+        "Demand: no BSR/sales data -> score 0.30",
+        "Demand floor: FAIL (no monthly sales estimate)",
+        "Competition: unknown seller data -> score 0.30",
+        "Competition floor: FAIL (no FBA seller data)",
+        "Listing health: rating 4.8, 28400 reviews -> 1.00",
+        "Seller identity: PASS (verified third-party seller)",
+        "Size: PASS (6.0 oz — preferred <= 2 lbs)",
+        "Price gap: $-13.31 headroom -> 0.20 (max undercut price $26.30)",
+        "Ad feasibility: 65/100 pts (reviews=25, BSR=15, velocity=0, brand=25)",
+        "Composite: 0.2900 -> LOW",
+        "breakeven approximated at the current fee level (fee split not provided)"
+      ]
+    }
+  ],
+  "discarded": []
+}

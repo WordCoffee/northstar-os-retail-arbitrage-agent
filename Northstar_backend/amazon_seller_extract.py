@@ -234,7 +234,7 @@ def extract_buy_box_fulfillment(html: str, seller_name: Optional[str]) -> str:
     - "ships from Amazon Fulfillment" / "Fulfilled by Amazon" -> FBA
     - "Ships from and sold by Amazon.com" (in Buy Box area) -> Amazon Retail
     - "Ships from [Seller] and sold by [Seller]" -> FBM
-    - Fallback: if seller_name is "Amazon.com" -> Amazon
+    - Fallback: if seller_name is "Amazon.com" or "Amazon" -> Amazon
 
     v2 fix: scope regexes to the merchant-info block when present so
     carousel text for OTHER products cannot flip an FBA page to FBM.
@@ -249,12 +249,12 @@ def extract_buy_box_fulfillment(html: str, seller_name: Optional[str]) -> str:
     # Amazon Retail: explicit "Ships from and sold by Amazon.com"
     # This can appear in related product carousels, so check seller name too
     if _FULFILLMENT_AMAZON_RE.search(scope):
-        # Only return Amazon if the seller name is also Amazon.com
-        if isinstance(seller_name, str) and seller_name.strip().lower() == "amazon.com":
+        # Only return Amazon if the seller name is also Amazon.com or Amazon
+        if isinstance(seller_name, str) and seller_name.strip().lower() in ("amazon.com", "amazon"):
             return "Amazon"
 
     # Also check seller name directly
-    if isinstance(seller_name, str) and seller_name.strip().lower() == "amazon.com":
+    if isinstance(seller_name, str) and seller_name.strip().lower() in ("amazon.com", "amazon"):
         return "Amazon"
 
     # FBM: "Ships from X and sold by X" pattern (only when NO FBA marker)

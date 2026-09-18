@@ -39,38 +39,103 @@
   <div id="app">
 
     <!-- ===================== THE DRAWER ===================== -->
+    <!-- Phase 2: collapsible groups per the blueprint route map, each with a
+         signature accent dot (--sig-accent is scoped per group so an active
+         nav item glows in its agent's identity color). -->
     <aside id="drawer" aria-label="Service drawer">
-      <div class="drawer-label">Notebooks</div>
-      <button class="nav-item" id="nav-hub" data-route="hub" aria-current="false">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-        Hub
-      </button>
-      <button class="nav-item" id="nav-sourcescout" data-route="sourcescout" aria-current="false">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M16.2 7.8 14 14l-6.2 2.2L10 10z"/></svg>
-        SourceScout
-      </button>
-      <button class="nav-item" id="nav-listingforge" data-route="listingforge" aria-current="false">
-        <svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg>
-        ListingForge
-      </button>
-      <button class="nav-item" id="nav-adpilot" data-route="adpilot" aria-current="false">
-        <svg viewBox="0 0 24 24"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>
-        AdPilot
-      </button>
-      <button class="nav-item" id="nav-socialpulse" data-route="socialpulse" aria-current="false">
-        <svg viewBox="0 0 24 24"><path d="M3 11l18-7-8 16-2-8z"/></svg>
-        SocialPulse
-      </button>
       <div class="drawer-label">Workspace</div>
-      <button class="nav-item" id="nav-autothink" data-route="autothink" aria-current="false">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg>
-        AutothinK
-      </button>
-      <div class="drawer-label">Account</div>
-      <button class="nav-item" id="nav-account" data-route="account" aria-current="false">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        Account
-      </button>
+
+      <!-- HUB · Overview -->
+      <div class="drawer-group" data-sig="hub" style="--sig-accent:var(--sig-inventory);--sig-accent-dim:var(--sig-inventory-dim)">
+        <button class="drawer-group-header" data-collapse="dg-hub" aria-expanded="true" title="Toggle group">
+          <span class="sig-dot"></span> Hub · Overview <span class="chevron">▾</span>
+        </button>
+        <div class="drawer-group-items">
+          <button class="nav-item" id="nav-hub" data-route="hub" aria-current="false">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Operations Hub
+          </button>
+        </div>
+      </div>
+
+      <!-- SOURCING AGENT · The Hunt · Gold -->
+      <div class="drawer-group" data-sig="sourcing" style="--sig-accent:var(--sig-sourcing);--sig-accent-dim:var(--sig-sourcing-dim)">
+        <button class="drawer-group-header" data-collapse="dg-sourcing" aria-expanded="true" title="Toggle group">
+          <span class="sig-dot"></span> The Hunt · Sourcing <span class="chevron">▾</span>
+        </button>
+        <div class="drawer-group-items">
+          <button class="nav-item" id="nav-sourcescout" data-route="sourcescout" aria-current="false">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M16.2 7.8 14 14l-6.2 2.2L10 10z"/></svg>
+            SourceScout
+          </button>
+        </div>
+      </div>
+
+      <!-- LISTING AGENT · The Forge · Heated steel -->
+      <div class="drawer-group" data-sig="listing" style="--sig-accent:var(--sig-listing);--sig-accent-dim:var(--sig-listing-dim)">
+        <button class="drawer-group-header" data-collapse="dg-listing" aria-expanded="true" title="Toggle group">
+          <span class="sig-dot"></span> The Forge · Listing <span class="chevron">▾</span>
+        </button>
+        <div class="drawer-group-items">
+          <button class="nav-item" id="nav-listingforge" data-route="listingforge" aria-current="false">
+            <svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg>
+            ListingForge
+          </button>
+        </div>
+      </div>
+
+      <!-- SOCIAL MEDIA AGENT · The Pulse · Violet -->
+      <div class="drawer-group" data-sig="social" style="--sig-accent:var(--sig-social);--sig-accent-dim:var(--sig-social-dim)">
+        <button class="drawer-group-header" data-collapse="dg-social" aria-expanded="true" title="Toggle group">
+          <span class="sig-dot"></span> The Pulse · Social <span class="chevron">▾</span>
+        </button>
+        <div class="drawer-group-items">
+          <button class="nav-item" id="nav-socialpulse" data-route="socialpulse" aria-current="false">
+            <svg viewBox="0 0 24 24"><path d="M3 11l18-7-8 16-2-8z"/></svg>
+            SocialPulse
+          </button>
+        </div>
+      </div>
+
+      <!-- ADS AGENT · The Circuit · Cyan -->
+      <div class="drawer-group" data-sig="ads" style="--sig-accent:var(--sig-ads);--sig-accent-dim:var(--sig-ads-dim)">
+        <button class="drawer-group-header" data-collapse="dg-ads" aria-expanded="true" title="Toggle group">
+          <span class="sig-dot"></span> The Circuit · Ads <span class="chevron">▾</span>
+        </button>
+        <div class="drawer-group-items">
+          <button class="nav-item" id="nav-adpilot" data-route="adpilot" aria-current="false">
+            <svg viewBox="0 0 24 24"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>
+            AdPilot
+          </button>
+        </div>
+      </div>
+
+      <!-- AUTOTHINK · The Observatory · Indigo -->
+      <div class="drawer-group" data-sig="autothink" style="--sig-accent:var(--sig-autothink);--sig-accent-dim:var(--sig-autothink-dim)">
+        <button class="drawer-group-header" data-collapse="dg-autothink" aria-expanded="true" title="Toggle group">
+          <span class="sig-dot"></span> Observatory · AutothinK <span class="chevron">▾</span>
+        </button>
+        <div class="drawer-group-items">
+          <button class="nav-item" id="nav-autothink" data-route="autothink" aria-current="false">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg>
+            AutothinK
+          </button>
+        </div>
+      </div>
+
+      <!-- ACCOUNT · Shared steel -->
+      <div class="drawer-group" data-sig="account" style="--sig-accent:var(--sig-inventory);--sig-accent-dim:var(--sig-inventory-dim)">
+        <button class="drawer-group-header" data-collapse="dg-account" aria-expanded="true" title="Toggle group">
+          <span class="sig-dot"></span> Account &amp; Plans <span class="chevron">▾</span>
+        </button>
+        <div class="drawer-group-items">
+          <button class="nav-item" id="nav-account" data-route="account" aria-current="false">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            Account
+          </button>
+        </div>
+      </div>
+
       <div id="drawer-foot"><span class="dot"></span>Demo mode — no live data, no live calls. Gates marked <span style="color:var(--gold)">Authorization required</span> stay closed until explicitly approved.</div>
     </aside>
 
@@ -115,10 +180,23 @@
         <div id="hub-services" class="card-grid"></div>
       </section>
 
-      <!-- ---------------- SOURCESCOUT ---------------- -->
-      <section id="view-sourcescout" class="view" data-view="sourcescout" aria-hidden="true">
-        <h2 class="view-title">SourceScout</h2>
-        <p class="view-sub">Retail Arbitrage Agent · <span class="agent-chip">discovery</span> · <span class="demo-badge">demo</span></p>
+      <!-- ---------------- SOURCING AGENT · The Hunt (Gold) ----------------
+           Three sub-views in one routing surface: Product Finder (default),
+           Golden Goose, Find a Supplier. Each pane uses the Phase 2
+           component primitives (data-grid, health badges, tier pills,
+           logistics badges, filter panel, CSV dropzone). -->
+      <section id="view-sourcescout" class="view" data-view="sourcescout" aria-hidden="true"
+               style="--sig-accent:var(--sig-sourcing);--sig-accent-dim:var(--sig-sourcing-dim);--sig-accent-line:var(--sig-sourcing-line);--sig-accent-bright:var(--sig-sourcing-bright)">
+        <h2 class="view-title">The Hunt</h2>
+        <p class="view-sub">Sourcing Agent · <span class="agent-chip">product finder · golden goose · suppliers</span> · <span class="demo-badge">demo</span></p>
+        <div class="tab-strip" id="sourcing-tabs" role="tablist" aria-label="Sourcing sub-views">
+          <button class="tab-btn active" data-src-tab="pf" aria-selected="true" role="tab">Product Finder</button>
+          <button class="tab-btn" data-src-tab="gg" aria-selected="false" role="tab">Golden Goose</button>
+          <button class="tab-btn" data-src-tab="su" aria-selected="false" role="tab">Find a Supplier</button>
+        </div>
+
+        <!-- --- Product Finder pane (default) --- -->
+        <div id="pane-pf" data-src-pane="pf">
         <div id="ss-live-banner" class="gate-banner" data-gate="sourcescout_live_pull" data-live-gate="off"></div>
         <p id="ss-live-meta" class="dim" style="margin:8px 0 14px"></p>
         <div id="ss-live-status"></div>
@@ -175,12 +253,100 @@
           </table>
         </div>
         <div class="notice" style="margin-top:12px">Est. Monthly is a provider estimate, not verified sales. Rows with missing fees show "—" until fee verification (demo fixture).</div>
+        </div>
+
+        <!-- --- Golden Goose pane --- -->
+        <div id="pane-gg" data-src-pane="gg" style="display:none">
+          <div class="kpi-strip">
+            <div class="kpi-card sig"><div class="lbl">Candidates screened</div><div class="val gold">12,452</div><div class="sub">rolling demo fixture</div></div>
+            <div class="kpi-card sig"><div class="lbl">Goose-tier finds</div><div class="val">5</div><div class="sub">cleared every gate</div></div>
+            <div class="kpi-card sig"><div class="lbl">Pipeline ROI</div><div class="val gold">248%</div><div class="sub">weighted, demo</div></div>
+            <div class="kpi-card sig"><div class="lbl">Est. 90d profit</div><div class="val">$8,192</div><div class="sub">fixture estimate only</div></div>
+          </div>
+          <div class="filter-panel">
+            <div class="filter-panel-header">
+              <h4>Goose Criteria</h4><span class="chevron">▾</span>
+            </div>
+            <div class="filter-panel-body">
+              <div class="filter-panel-row">
+                <div class="form-group"><label class="form-label">Min net profit</label><select class="form-select"><option>$11 (gate)</option><option>$20</option><option>$40</option></select></div>
+                <div class="form-group"><label class="form-label">Seller count</label><select class="form-select"><option>1–3 (goose)</option><option>4–8</option><option>any</option></select></div>
+              </div>
+            </div>
+          </div>
+          <div class="data-grid" id="gg-grid" style="grid-template-columns:1.8fr .6fr .7fr .8fr .9fr 1.2fr .5fr">
+            <div class="data-grid-header"><div>Product</div><div>Tier</div><div>Health</div><div>Est. Monthly</div><div>Net Profit</div><div>Logistics</div><div>Qualified</div></div>
+            <div class="data-grid-row pinned">
+              <div><strong>Kirkland Organic EVOO 2L ×2</strong></div><div><span class="tier-pill tier-pill--A">A</span></div><div><span class="health-badge health-badge--viable" title="viable"></span></div><div>2,400</div><div class="text-gold">$35.00</div><div><span class="logistics-tag logistics-tag--liftgate">liftgate</span></div><div><span class="badge badge-green">Yes</span></div>
+            </div>
+            <div class="data-grid-row">
+              <div>Facial Towelettes 180ct</div><div><span class="tier-pill tier-pill--B">B</span></div><div><span class="health-badge health-badge--viable" title="viable"></span></div><div>1,900</div><div class="text-gold">$14.50</div><div><span class="logistics-tag logistics-tag--freight">freight</span></div><div><span class="badge badge-green">Yes</span></div>
+            </div>
+            <div class="data-grid-row">
+              <div>Flushable Wipes 632ct</div><div><span class="tier-pill tier-pill--B">B</span></div><div><span class="health-badge health-badge--marginal" title="marginal"></span></div><div>1,100</div><div class="text-gold">$12.81</div><div><span class="logistics-tag logistics-tag--freight">freight</span></div><div><span class="badge badge-green">Yes</span></div>
+            </div>
+            <div class="data-grid-row">
+              <div>Flex-Tech Trash Bags</div><div><span class="tier-pill tier-pill--C">C</span></div><div><span class="health-badge health-badge--reject" title="reject"></span></div><div>860</div><div class="text-red">-$3.79</div><div><span class="logistics-tag logistics-tag--restricted">restricted</span></div><div><span class="badge badge-muted">No</span></div>
+            </div>
+          </div>
+          <p class="notice" style="margin-top:12px">Golden Goose = Tier A candidates that clear every gate (invoice, buy-box, compliance, logistics). Rows shown are demo fixtures — a live scan requires the Costco live-pull gate to be individually approved.</p>
+        </div>
+
+        <!-- --- Find a Supplier pane --- -->
+        <div id="pane-su" data-src-pane="su" style="display:none">
+          <div id="gate-supplier_enrich" class="gate-banner" data-gate="sourcescout_enrich" data-live-gate="off"></div>
+          <div class="filter-panel" style="margin-top:12px">
+            <div class="filter-panel-header">
+              <h4>Supplier Filters</h4><span class="chevron">▾</span>
+            </div>
+            <div class="filter-panel-body">
+              <div class="filter-panel-row">
+                <div class="form-group"><label class="form-label">Category</label><select class="form-select"><option>Consumables</option><option>OTC / supplement</option><option>Household</option></select></div>
+                <div class="form-group"><label class="form-label">Min order</label><select class="form-select"><option>$500</option><option>$1,000</option><option>$5,000</option></select></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-grid" id="su-cards">
+            <div class="card sig-glow">
+              <div class="card-body">
+                <div class="supplier-health supplier-health--viable"><span class="health-badge health-badge--viable"></span> Viable — verified</div>
+                <h3 style="margin:10px 0 4px;font-family:var(--font-head);font-size:15px">Acme Wholesale Distributors</h3>
+                <p class="dim" style="font-size:11px">Consumables · net-30 · invoices accepted by Amazon</p>
+                <div class="plan-services" style="margin-top:8px"><span class="svc-chip">brand-invoice ✓</span><span class="svc-chip">FBA prep</span></div>
+              </div>
+            </div>
+            <div class="card sig-glow">
+              <div class="card-body">
+                <div class="supplier-health supplier-health--marginal"><span class="health-badge health-badge--marginal"></span> Marginal — review invoice docs</div>
+                <h3 style="margin:10px 0 4px;font-family:var(--font-head);font-size:15px">Metro Goods Co.</h3>
+                <p class="dim" style="font-size:11px">Household · net-60 · incomplete invoice trail flagged</p>
+                <div class="plan-services" style="margin-top:8px"><span class="svc-chip">invoice-doc 🟡</span></div>
+              </div>
+            </div>
+            <div class="card sig-glow">
+              <div class="card-body">
+                <div class="supplier-health supplier-health--reject"><span class="health-badge health-badge--reject"></span> Reject — gating risk</div>
+                <h3 style="margin:10px 0 4px;font-family:var(--font-head);font-size:15px">Bulk Import Inc.</h3>
+                <p class="dim" style="font-size:11px">Unvetted listing-level invoices; high account risk</p>
+                <div class="plan-services" style="margin-top:8px"><span class="gate-chip">brand-gated ⛔</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="csv-dropzone" id="su-dropzone" tabindex="0" role="button" aria-label="Upload supplier price list (demo)">
+            <div class="dz-icon">📄</div>
+            <div class="dz-title">Drop a supplier price list</div>
+            <div class="dz-hint">CSV · dragged locally, parsed in-browser (demo)</div>
+            <div class="dz-format">sku, title, cost, case_qty, moq</div>
+          </div>
+          <p class="notice" style="margin-top:12px">Supplier enrichment (Easyparser / RapidAPI / DataForSEO) is gated above and stays OFF until individually approved. All supplier rows are demo fixtures.</p>
+        </div>
       </section>
 
-      <!-- ---------------- LISTINGFORGE ---------------- -->
-      <section id="view-listingforge" class="view" data-view="listingforge" aria-hidden="true">
-        <h2 class="view-title">ListingForge</h2>
-        <p class="view-sub">Listing Optimizer Agent · <span class="agent-chip">studio</span> · <span class="demo-badge">demo</span></p>
+      <!-- ---------------- LISTING AGENT · The Forge (Heated Steel) ---------------- -->
+      <section id="view-listingforge" class="view" data-view="listingforge" aria-hidden="true"
+               style="--sig-accent:var(--sig-listing);--sig-accent-dim:var(--sig-listing-dim);--sig-accent-line:var(--sig-listing-line);--sig-accent-bright:var(--sig-listing-bright)">
+        <h2 class="view-title">The Forge</h2>
+        <p class="view-sub">Listing Agent · <span class="agent-chip">studio · scoring · compliance · media · keywords · feedback</span> · <span class="demo-badge">demo</span></p>
         <div id="lf-kpis" class="kpi-strip"></div>
         <div class="facets">
           <div class="facet"><span class="lbl">ASIN</span><select id="lf-asin-select" aria-label="Select listing"></select></div>
@@ -197,10 +363,11 @@
         <div id="lf-detail"></div>
       </section>
 
-      <!-- ---------------- ADPILOT ---------------- -->
-      <section id="view-adpilot" class="view" data-view="adpilot" aria-hidden="true">
-        <h2 class="view-title">AdPilot</h2>
-        <p class="view-sub">Amazon Ads Agent · <span class="agent-chip">PPC</span> · <span class="demo-badge">demo</span></p>
+      <!-- ---------------- ADS AGENT · The Circuit (Cyan) ---------------- -->
+      <section id="view-adpilot" class="view" data-view="adpilot" aria-hidden="true"
+               style="--sig-accent:var(--sig-ads);--sig-accent-dim:var(--sig-ads-dim);--sig-accent-line:var(--sig-ads-line);--sig-accent-bright:var(--sig-ads-bright)">
+        <h2 class="view-title">The Circuit</h2>
+        <p class="view-sub">Amazon Ads Agent · <span class="agent-chip">tiers · search terms · bids · guardrails · bulk</span> · <span class="demo-badge">demo</span></p>
         <div id="ap-kpis" class="kpi-strip"></div>
         <div class="panel">
           <div class="panel-head"><h3>Campaign Tiers</h3><span class="hint">4-tier spend ladder</span></div>
@@ -259,10 +426,11 @@
         </div>
       </section>
 
-      <!-- ---------------- SOCIALPULSE ---------------- -->
-      <section id="view-socialpulse" class="view" data-view="socialpulse" aria-hidden="true">
-        <h2 class="view-title">SocialPulse</h2>
-        <p class="view-sub">Social Media Agent · <span class="agent-chip">content</span> · <span class="demo-badge">demo</span></p>
+      <!-- ---------------- SOCIAL MEDIA AGENT · The Pulse (Violet) ---------------- -->
+      <section id="view-socialpulse" class="view" data-view="socialpulse" aria-hidden="true"
+               style="--sig-accent:var(--sig-social);--sig-accent-dim:var(--sig-social-dim);--sig-accent-line:var(--sig-social-line);--sig-accent-bright:var(--sig-social-bright)">
+        <h2 class="view-title">The Pulse</h2>
+        <p class="view-sub">Social Media Agent · <span class="agent-chip">voices · studio · calendar · creative · outreach · attribution</span> · <span class="demo-badge">demo</span></p>
         <div id="soc-kpis" class="kpi-strip"></div>
         <div class="panel-head"><h3>Brand Voices</h3><span class="hint">modules</span></div>
         <div id="soc-voices" class="card-grid"></div>
@@ -291,10 +459,11 @@
         <div id="soc-attribution"></div>
       </section>
 
-      <!-- ---------------- AUTOTHINK ---------------- -->
-      <section id="view-autothink" class="view" data-view="autothink" aria-hidden="true">
-        <h2 class="view-title">Northstar AutothinK</h2>
-        <p class="view-sub">Premium build-anything layer · <span class="agent-chip">workspace</span></p>
+      <!-- ---------------- AUTOTHINK · The Observatory (Indigo) ---------------- -->
+      <section id="view-autothink" class="view" data-view="autothink" aria-hidden="true"
+               style="--sig-accent:var(--sig-autothink);--sig-accent-dim:var(--sig-autothink-dim);--sig-accent-line:var(--sig-autothink-line);--sig-accent-bright:var(--sig-autothink-bright)">
+        <h2 class="view-title">The Observatory</h2>
+        <p class="view-sub">AutothinK System · <span class="agent-chip">workspace · memory · skills · delegate</span></p>
         <div class="panel">
           <div class="panel-head"><h3>Workspace</h3><span class="demo-badge">your brain</span></div>
           <p style="margin-bottom:12px">AutothinK is the premium build-anything tier of Northstar OS. The full chat workspace runs on its own backend (port 8100, local brain). Launch via <code>autothink/launch.bat</code>.</p>
@@ -325,8 +494,9 @@
                 style="width:100%;height:560px;border:1px solid var(--hairline);border-radius:var(--radius);margin-top:8px;background:var(--bg-sunken)"></iframe>
       </section>
 
-      <!-- ---------------- ACCOUNT ---------------- -->
-      <section id="view-account" class="view" data-view="account" aria-hidden="true">
+      <!-- ---------------- ACCOUNT · Shared Steel ---------------- -->
+      <section id="view-account" class="view" data-view="account" aria-hidden="true"
+               style="--sig-accent:var(--sig-inventory);--sig-accent-dim:var(--sig-inventory-dim);--sig-accent-line:var(--sig-inventory-line)">
         <h2 class="view-title">Account &amp; Plans</h2>
         <p class="view-sub">Subscribers · entitlements · beta build · <span class="demo-badge">demo</span></p>
 

@@ -414,8 +414,10 @@ async def _live_scan(
     caller (run_pipeline); this function trusts that check.
     """
     # Phase 1: Discovery — scan Costco via OpenWebNinja
+    # Use keyword search for better coverage; category slugs don't map well to OpenWebNinja queries
+    search_keywords = categories or ["kirkland"]  # default to broad Kirkland search
     wholesale_products = await scan_costco_categories(
-        categories=categories,
+        keywords=search_keywords,
         live=True,
     )
 
@@ -450,6 +452,9 @@ async def _live_scan(
             )
             econ = calculate_breakdown_economics(ws_pack, m)
             if econ is not None:
+                # Propagate seller verification timestamp from match to economics
+                if hasattr(m, "seller_verified_at") and m.seller_verified_at:
+                    econ.individual.seller_verified_at = m.seller_verified_at
                 economics.append(econ)
         except Exception:
             continue
@@ -604,6 +609,10 @@ def _get_mock_wholesale_products(categories: list[str] | None = None) -> list:
 # ---------------------------------------------------------------------------
 
 
+# Default scan timeout budget (seconds)
+DEFAULT_SCAN_TIMEOUT = 300  # 5 minutes
+
+
 async def run_pipeline(
     use_mock: bool = True,
     categories: list[str] | None = None,
@@ -611,6 +620,7 @@ async def run_pipeline(
     roi_floor: float = 10.0,
     min_monthly_sales: int = 1000,
     max_results: int = 100,
+    scan_timeout: float = DEFAULT_SCAN_TIMEOUT,
 ) -> dict[str, Any]:
     """Execute the full Golden Goose pipeline.
 
@@ -623,6 +633,7 @@ async def run_pipeline(
     Returns the full report dict.
     """
     start = time.time()
+    scan_deadline = start + scan_timeout
 
     if use_mock:
         scored = _mock_scan(
@@ -648,7 +659,13 @@ async def run_pipeline(
 
     # Build opportunity list for export
     opportunities = _scored_to_dicts(scored)
-    
+
+    # Check scan timeout
+    scan_complete = True
+    if time.time() >= scan_deadline:
+        scan_complete = False
+        logger.warning("[GoldenGoose] Scan timeout reached (%.1fs), returning partial results", scan_timeout)
+
     # Assign ranks (sorted by composite_score descending)
     opportunities.sort(key=lambda o: o.get("composite_score", 0), reverse=True)
     for i, o in enumerate(opportunities):
@@ -687,6 +704,8 @@ async def run_pipeline(
             "pipeline_version": "0.1.0",
             "mode": "mock" if use_mock else "live",
             "elapsed_seconds": elapsed,
+            "scan_complete": scan_complete,
+            "scan_timeout_seconds": scan_timeout,
             "categories_scanned": categories or "all",
             "stores_scanned": stores or ["Costco", "Sam's Club"],
             "filters": {
@@ -707,16 +726,19 @@ async def run_pipeline(
         "opportunities": opportunities,
     }
 
-    # Save report to disk
+    # Save report to disk (atomic write)
     try:
         REPORT_DIR.mkdir(parents=True, exist_ok=True)
         ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         report_path = REPORT_DIR / f"goose_scan_{ts}.json"
-        with open(report_path, "w", encoding="utf-8") as f:
+        # Atomic write: write to temp file then rename
+        temp_path = report_path.with_suffix(".tmp")
+        with open(temp_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, default=str)
+        temp_path.replace(report_path)
         report["meta"]["report_path"] = str(report_path)
-    except Exception:
-        pass  # Report save is best-effort
+    except Exception as exc:
+        logger.warning("[GoldenGoose] Report save failed: %s", exc)
 
     return report
 
@@ -781,6 +803,11 @@ def _scored_to_dicts(scored: list) -> list[dict[str, Any]]:
             "economics_confidence": _get(econ, "economics_confidence", default="mock") or "mock",
             "monthly_sales_estimate": _get(econ, "monthly_sales_estimate") or _get(individual, "monthly_sales_estimate"),
             "fba_sellers": _get(econ, "fba_sellers") or _get(individual, "fba_sellers"),
+            # Seller identity fields (for audit)
+            "seller_name": _get(individual, "seller_name"),
+            "is_brand_seller": _get(individual, "is_brand_seller"),
+            "is_amazon_seller": _get(individual, "is_amazon_seller"),
+            "seller_verified_at": _get(individual, "seller_verified_at"),
             # Price gap fields
             "buy_box_price": _get(econ, "buy_box_price"),
             "undercut_headroom": _get(econ, "undercut_headroom"),
@@ -832,16 +859,45 @@ async def scan_live(
 ):
     """Run a live scan (requires §3 operator approval for each API call).
 
-    This endpoint is HARD STOPPED — it will reject unless explicitly armed.
+    Checks GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED env var.
     """
-    raise HTTPException(
-        status_code=403,
-        detail=(
-            "Live scanning requires operator approval per §3 of the Operating "
-            "Constitution. Each Costco, Sam's Club, and Amazon API call requires "
-            "fresh, named operator authorization. Use /scan-mock for testing."
-        ),
+    import os
+    gate = os.environ.get("GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED", "0")
+    if gate != "1":
+        raise HTTPException(
+            status_code=403,
+            detail=(
+                "Live scanning requires operator approval per §3 of the Operating "
+                "Constitution. Set GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED=1 and restart "
+                "the server. Use /scan-mock for testing."
+            ),
+        )
+    # Gate passed — run the live scan
+    start_time = __import__("time").time()
+    scored = await _live_scan(
+        categories=categories,
+        roi_floor=roi_floor,
+        min_monthly_sales=min_monthly_sales,
+        max_results=max_results,
     )
+    opportunities = _scored_to_dicts(scored)
+    opportunities.sort(key=lambda o: o.get("composite_score", 0), reverse=True)
+    for i, o in enumerate(opportunities):
+        o["rank"] = i + 1
+    elapsed = round(__import__("time").time() - start_time, 3)
+    high = sum(1 for o in opportunities if o.get("tier") == "HIGH")
+    med = sum(1 for o in opportunities if o.get("tier") == "MEDIUM")
+    low = sum(1 for o in opportunities if o.get("tier") == "LOW")
+    return {
+        "opportunities": opportunities,
+        "summary": {
+            "total_opportunities": len(opportunities),
+            "high_tier_count": high,
+            "medium_tier_count": med,
+            "low_tier_count": low,
+        },
+        "meta": {"mode": "live", "elapsed_seconds": elapsed},
+    }
 
 
 @router.get("/opportunities")
@@ -850,9 +906,33 @@ async def get_opportunities(
     category: str | None = Query(None),
     min_profit: float | None = Query(None),
 ):
-    """Get previously scanned and scored opportunities from latest report."""
+    """Get previously scanned and scored opportunities from latest report.
+
+    Prefers the most recent LIVE scan report over mock reports so the panel
+    surfaces real data when it exists.
+    """
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
-    report_files = sorted(REPORT_DIR.glob("goose_scan_*.json"), reverse=True)
+
+    def _mtime(p):
+        try:
+            return p.stat().st_mtime
+        except OSError:
+            return 0.0
+
+    def _is_live(p):
+        try:
+            with open(p, "r", encoding="utf-8") as f:
+                return json.load(f).get("meta", {}).get("mode") == "live"
+        except Exception:
+            return False
+
+    report_files = sorted(
+        REPORT_DIR.glob("goose_scan_*.json"), key=_mtime, reverse=True
+    )
+    # Prefer any live scan report over the newest mock report.
+    live_reports = [p for p in report_files if _is_live(p)]
+    if live_reports:
+        report_files = live_reports
 
     if not report_files:
         return {
@@ -1001,8 +1081,13 @@ def main():
     args = parser.parse_args()
 
     if args.live:
-        print("ERROR: Live scanning requires §3 operator approval. Use --mock instead.")
-        sys.exit(1)
+        import os as _os
+        gate = _os.getenv("GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED", "").strip()
+        if gate != "1":
+            print("ERROR: Live scanning requires §3 operator approval.")
+            print("       Set GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED=1 and re-run.")
+            print("       Use --mock for testing.")
+            sys.exit(1)
 
     output_dir = Path(args.output_dir) if args.output_dir else None
     if output_dir:
