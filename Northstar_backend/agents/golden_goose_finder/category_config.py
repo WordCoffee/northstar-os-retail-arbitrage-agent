@@ -536,9 +536,11 @@ def seller_identity_blocked(
 
     Hard blocks (profile rule):
       - is_brand_seller is True (the flag was observed), OR
-      - is_amazon_seller is True ("Sold by Amazon.com"), OR
+      - is_amazon_seller is True ("Sold by Amazon.com" 3P), OR
       - the seller text itself contains the product brand as a word
-        (brand-owner heuristic used when the structured flag is missing).
+        (brand-owner heuristic used when the structured flag is missing), OR
+      - VENDOR 1P DETECTION: seller_name matches product_brand exactly/closely
+        (vendor 1P items show brand as seller, not "Amazon.com").
 
     None / unknown flags are NOT a block here — whether the scorer treats an
     unknown identity as fail-closed is the caller's decision (it does: an
@@ -563,5 +565,11 @@ def seller_identity_blocked(
         if re.search(r"(?<!\w)" + re.escape(brand) + r"(?!\w)", seller):
             # Word-boundary brand match inside the seller name is the
             # strongest un-flagged signal that the OWNER is the seller.
+            return True
+        # VENDOR 1P DETECTION: seller name IS the brand (or very close match)
+        # Vendor Central items show brand as seller, not "Amazon.com"
+        seller_words = set(seller.split())
+        brand_words = set(brand.split())
+        if seller == brand or (len(brand_words) > 0 and len(seller_words & brand_words) / len(brand_words) >= 0.8):
             return True
     return False

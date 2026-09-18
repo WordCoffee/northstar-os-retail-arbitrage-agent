@@ -525,7 +525,7 @@
       setStatus('running', 'Running live Costco scan — this takes 2-4 minutes…');
       try {
         var f = getFilters();
-        var data = await apiPost('/scan-live', f);
+        var data = await apiPost('/scan', f);
         state.opportunities = data.opportunities||[];
         applyFiltersAndRender();
         renderKpis(data.summary||{}, data.meta||{});
@@ -559,6 +559,46 @@
 
     // --- Init ---
     loadCategories();
+    // Auto-load mock data on page open
+    (function autoLoad() {
+      setStatus('running', 'Auto-loading latest scan data…');
+      fetch(API + '/opportunities')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var opps = data.opportunities || data;
+          if (Array.isArray(opps) && opps.length > 0) {
+            state.opportunities = opps;
+            applyFiltersAndRender();
+            renderKpis({
+              total_opportunities: opps.length,
+              high_tier_count: opps.filter(function(o){return o.tier==='HIGH'}).length,
+              medium_tier_count: opps.filter(function(o){return o.tier==='MEDIUM'}).length,
+              estimated_monthly_profit: null,
+              average_roi_pct: null
+            }, {mode: opps[0] && opps[0].economics_confidence ? 'live' : 'mock'});
+            setStatus('done', 'Loaded ' + opps.length + ' opportunities from latest scan');
+          } else {
+            // No saved reports — load mock
+            return apiPost('/scan-mock', {}).then(function(d) {
+              state.opportunities = d.opportunities || [];
+              applyFiltersAndRender();
+              renderKpis(d.summary || {}, d.meta || {});
+              setStatus('done', 'Loaded ' + state.opportunities.length + ' mock opportunities');
+            });
+          }
+        })
+        .catch(function() {
+          // Fallback: load mock
+          apiPost('/scan-mock', {}).then(function(d) {
+            state.opportunities = d.opportunities || [];
+            applyFiltersAndRender();
+            renderKpis(d.summary || {}, d.meta || {});
+            setStatus('done', 'Loaded ' + state.opportunities.length + ' mock opportunities');
+          }).catch(function(e2) {
+            setStatus('error', 'No data available: ' + e2.message);
+          });
+        });
+    })();
   </script>
 </body>
 </html>

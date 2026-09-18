@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "generated_at": "2026-09-17T09:43:41.987304+00:00",
+    "pipeline_version": "0.1.0",
+    "mode": "mock",
+    "elapsed_seconds": 0.0,
+    "scan_complete": true,
+    "scan_timeout_seconds": 300,
+    "categories_scanned": [
+      "nonexistent-category-xyz"
+    ],
+    "stores_scanned": [
+      "Costco",
+      "Sam's Club"
+    ],
+    "filters": {
+      "roi_floor": 10.0,
+      "min_monthly_sales": 1000,
+      "max_results": 100
+    }
+  },
+  "summary": {
+    "total_opportunities": 0,
+    "high_tier_count": 0,
+    "medium_tier_count": 0,
+    "low_tier_count": 0,
+    "reject_count": 0,
+    "estimated_monthly_profit": 0,
+    "average_roi_pct": 0
+  },
+  "opportunities": []
+}

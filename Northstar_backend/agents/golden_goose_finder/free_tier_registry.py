@@ -135,7 +135,7 @@ FREE_PROVIDERS: List[FreeTierProvider] = [
         "10 credits/request; ~500 Sam's Club searches on the existing credit pool.",
     ),
     _p(
-        "bright_data_web_unlocker", "Bright Data Web Unlocker (free)", "BRIGHTDATA_API_TOKEN",
+        "bright_data_web_unlocker", "Bright Data Web Unlocker (free)", "BRIGHTDATA_UNLOCKER_API_KEY",
         5000, None, {
             TASK_COSTCO_SEARCH: 1.0,
             TASK_SAMS_SEARCH: 1.0,

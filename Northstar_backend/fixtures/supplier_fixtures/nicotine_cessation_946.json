@@ -1,0 +1,26 @@
+[
+  {
+    "name": "American Quality Wholesale",
+    "country": "United States",
+    "rating": 4.6,
+    "mox": 25,
+    "description": "Bulk supplier of Kirkland Signature and complementary health products for Amazon sellers.",
+    "website": "https://americanqualitywholesale.com/kirkland signature"
+  },
+  {
+    "name": "Kirkland Signature Pro Distributors",
+    "country": "United States",
+    "rating": 4.8,
+    "mox": 12,
+    "description": "Specialized single-brand distributor of Kirkland Signature products for Amazon FBA.",
+    "website": "https://kirkland signature-prodist.com"
+  },
+  {
+    "name": "U.S. Source Kirkland Signature",
+    "country": "United States",
+    "rating": 4.7,
+    "mox": 10,
+    "description": "Direct-from-Kirkland Signature manufacturer pricing for Amazon sellers.",
+    "website": "https://us-source-kirkland signature.com"
+  }
+]

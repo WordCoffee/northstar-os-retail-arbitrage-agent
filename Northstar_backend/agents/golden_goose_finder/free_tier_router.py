@@ -97,6 +97,41 @@ DISPATCH_ORDER: Dict[str, List[str]] = {
 }
 
 
+# Error code classification for structured error handling
+ERROR_CODES = {
+    "AUTH_ERROR": "provider authentication failed",
+    "RATE_LIMITED": "provider rate limit exceeded",
+    "TIMEOUT": "request timeout",
+    "TRANSPORT_ERROR": "network/connection failure",
+    "PARSE_ERROR": "response parsing failed",
+    "VALIDATION_ERROR": "request/response validation failed",
+    "PROVIDER_UNAVAILABLE": "provider not configured or keyless",
+    "CREDITS_EXHAUSTED": "provider credit quota exhausted",
+    "GATE_BLOCKED": "§3 live gate not armed",
+    "UNKNOWN_ERROR": "unclassified error",
+}
+
+
+def classify_error(exc: Exception, http_status: Optional[int] = None) -> str:
+    """Classify an exception into a structured error code."""
+    msg = str(exc).lower()
+    if http_status == 401 or http_status == 403 or "auth" in msg or "unauthorized" in msg or "forbidden" in msg:
+        return "AUTH_ERROR"
+    if http_status == 429 or "rate limit" in msg or "rate_limited" in msg:
+        return "RATE_LIMITED"
+    if "timeout" in msg or "timed out" in msg:
+        return "TIMEOUT"
+    if "connection" in msg or "connect" in msg or "dns" in msg or "resolve" in msg:
+        return "TRANSPORT_ERROR"
+    if "parse" in msg or "json" in msg or "decode" in msg:
+        return "PARSE_ERROR"
+    if "validation" in msg or "invalid" in msg or "schema" in msg:
+        return "VALIDATION_ERROR"
+    if "exhausted" in msg or "no credits" in msg or "quota" in msg:
+        return "CREDITS_EXHAUSTED"
+    return "UNKNOWN_ERROR"
+
+
 @dataclass
 class RouteAttempt:
     """One provider attempt within a route."""
@@ -105,6 +140,8 @@ class RouteAttempt:
     status: str  # selected | no_key | exhausted | failed | ok | blocked
     cost: Optional[float] = None
     error: Optional[str] = None
+    error_code: Optional[str] = None
+    http_status: Optional[int] = None
     at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
@@ -233,8 +270,19 @@ def run_task(
         try:
             outcome = caller(provider, task_type)
         except Exception as exc:  # noqa: BLE001 - provider failure → fallback
-            attempts.append(RouteAttempt(provider_id=provider_id, status="failed",
-                                         cost=cost, error=str(exc)))
+            # Try to extract HTTP status from exception
+            http_status = getattr(exc, "http_status", None) or getattr(exc, "response", None)
+            if http_status is not None and hasattr(http_status, "status_code"):
+                http_status = http_status.status_code
+            error_code = classify_error(exc, http_status)
+            attempts.append(RouteAttempt(
+                provider_id=provider_id,
+                status="failed",
+                cost=cost,
+                error=str(exc),
+                error_code=error_code,
+                http_status=http_status,
+            ))
             continue
         # Caller succeeded — debit credits and record success.
         ledger.debit(provider_id, cost)
@@ -269,6 +317,8 @@ def _record_audit(audit: Optional[AuditTrail], result: RouteResult) -> None:
                     "status": a.status,
                     "cost": a.cost,
                     "error": a.error,
+                    "error_code": a.error_code,
+                    "http_status": a.http_status,
                 }
                 for a in result.attempts
             ],

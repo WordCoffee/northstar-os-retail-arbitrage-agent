@@ -1,0 +1,17 @@
+Golden Goose Finder Report
+========================================
+Generated: 2026-09-17T08:33:35.013456+00:00
+Report version: 1.0
+
+Summary: 6 evaluated | HIGH 0 | MEDIUM 1 | LOW 5 | REJECTED 0
+Avg profit/unit: $1.46 | Avg ROI: 2213.6%
+Best: B00EN7UEH2 (Zyrtec Allergy Relief 24hr (70 Count)) | tier MEDIUM | $12.82/unit | composite 0.7526
+Top tags: amazon_seller_present x1, brand_owner_seller x2, bulk_goldmine x4, high_margin x1, high_velocity x3, low_competition x3, premium_product x1, trending_up x6, undercut_opportunity x1
+
+--- Ranked opportunities (6) ---
+1. B00EN7UEH2 | MEDIUM | Zyrtec Allergy Relief 24hr (70 Count) | $12.82 net/unit | ROI 7980.2% | ~4500/mo | 1 FBA
+2. B00N2Y1THA | LOW | Nicorette Nicotine Lozenge 2mg Mint (20 Count) | $3.65 net/unit | ROI 1825.6% | ~1800/mo | 1 FBA
+3. B005DK1FOI | LOW | Nature Made Vitamin D3 2000 IU (60 Softgels) | $0.48 net/unit | ROI 920.4% | ~5800/mo | 2 FBA
+4. B00GOHEWCU | LOW | Advil Liqui-Gels 200mg (100 Count) | $1.31 net/unit | ROI 2621.5% | ~3200/mo | None FBA
+5. B001S4LX1Y | LOW | Furminator deShedding Tool for Dogs (Large) | $-6.19 net/unit | ROI -24.8% | ~None/mo | 1 FBA
+6. B000P0T01K | LOW | KONG Classic Dog Toy (Medium) | $-3.31 net/unit | ROI -41.5% | ~None/mo | None FBA
