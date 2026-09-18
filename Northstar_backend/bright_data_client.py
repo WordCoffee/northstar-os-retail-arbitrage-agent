@@ -541,13 +541,15 @@ def _fetch(url: str) -> Optional[str]:
     return html
 
 
-def search_products(keyword: str, pages: int = 1) -> List[Dict]:
+def search_products(keyword: str, pages: int = 1, match_all: bool = False) -> List[Dict]:
     """Fetch Amazon search results for one keyword via the Web Unlocker.
 
     Returns normalized candidates (asin, name, amazon_price, product_url,
-    brand, sales signals, rating) filtered by the shared Kirkland relevance
-    rule. A page with zero cards stops paging; any failure records
-    LAST_ERROR and stops the loop. Never raises (except missing-key).
+    brand, sales signals, rating). ``match_all=False`` (default) filters by
+    the shared Kirkland relevance rule; ``match_all=True`` returns every
+    parsed card (universal sourcing across all categories/brands). A page
+    with zero cards stops paging; any failure records LAST_ERROR and stops
+    the loop. Never raises (except missing-key).
     """
     if not keyword or not str(keyword).strip():
         return []
@@ -569,7 +571,7 @@ def search_products(keyword: str, pages: int = 1) -> List[Dict]:
             if candidate is None:
                 continue
             card_count += 1
-            if not is_genuine_kirkland_candidate(candidate):
+            if not match_all and not is_genuine_kirkland_candidate(candidate):
                 continue
             results.append(candidate)
         print(

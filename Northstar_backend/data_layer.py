@@ -21,6 +21,8 @@ Usage:
 import os
 import json
 import sqlite3
+import threading
+import uuid
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
@@ -44,6 +46,7 @@ class DataLayer:
     def __init__(self):
         self._pg_url = _get_postgres_url()
         self._conn = None
+        self._lock = threading.RLock()
         self._mode = "postgres" if self._pg_url else "sqlite"
         if self._mode == "sqlite":
             self._init_sqlite()
@@ -55,7 +58,10 @@ class DataLayer:
     def _init_sqlite(self):
         """Create SQLite database and tables if they don't exist."""
         _SQLITE_PATH.parent.mkdir(parents=True, exist_ok=True)
-        self._conn = sqlite3.connect(str(_SQLITE_PATH))
+        # check_same_thread=False: the FastAPI app runs sync handlers in a
+        # threadpool, so one process-wide connection must be usable across
+        # threads. All access is serialized by self._lock.
+        self._conn = sqlite3.connect(str(_SQLITE_PATH), check_same_thread=False)
         self._conn.row_factory = sqlite3.Row
         self._conn.execute("PRAGMA journal_mode=WAL")
         self._conn.execute("PRAGMA foreign_keys=ON")
@@ -238,6 +244,71 @@ class DataLayer:
                 created_at TEXT DEFAULT (datetime('now'))
             );
 
+            -- Supplier intelligence (Phase 1: universal catalog + supplier discovery)
+            CREATE TABLE IF NOT EXISTS suppliers (
+                id TEXT PRIMARY KEY,
+                name TEXT NOT NULL UNIQUE,
+                public_catalog_url TEXT,
+                api_endpoint TEXT,
+                api_auth_type TEXT,  -- 'none', 'api_key', 'oauth', 'basic'
+                api_credentials_ref TEXT,  -- Ref to encrypted credential store
+                account_friction_level TEXT CHECK (account_friction_level IN ('low', 'medium', 'high')),
+                requires_liftgate BOOLEAN DEFAULT 1,
+                liftgate_notes TEXT,
+                invoice_verified_status TEXT CHECK (invoice_verified_status IN ('unverified', 'pending', 'verified', 'failed')),
+                last_scraped_at TEXT,
+                scrape_success_rate REAL DEFAULT 0,
+                categories_supplied TEXT,  -- JSON array of category slugs
+                logistics_notes TEXT,
+                decision_flag TEXT CHECK (decision_flag IN ('viable', 'marginal', 'reject', 'needs_manual_review')),
+                friction_notes TEXT,
+                contact_email TEXT,
+                contact_phone TEXT,
+                created_at TEXT DEFAULT (datetime('now')),
+                updated_at TEXT DEFAULT (datetime('now'))
+            );
+
+            CREATE TABLE IF NOT EXISTS supplier_products (
+                id TEXT PRIMARY KEY,
+                supplier_id TEXT NOT NULL REFERENCES suppliers(id),
+                supplier_sku TEXT,
+                product_name TEXT,
+                brand TEXT,
+                category_slug TEXT,
+                pack_size TEXT,
+                unit_count INTEGER,
+                wholesale_price REAL,
+                wholesale_currency TEXT DEFAULT 'USD',
+                moq INTEGER,
+                availability TEXT,  -- 'in_stock', 'limited', 'pre_order', 'discontinued'
+                weight_lbs REAL,
+                scraped_at TEXT,
+                scrape_confidence REAL,
+                source_file TEXT,
+                FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
+            );
+
+            CREATE TABLE IF NOT EXISTS supplier_cost_analysis (
+                id TEXT PRIMARY KEY,
+                supplier_product_id TEXT NOT NULL REFERENCES supplier_products(id),
+                amazon_asin TEXT,
+                amazon_price REAL,
+                estimated_net_profit REAL,
+                estimated_roi_pct REAL,
+                landed_cost REAL,
+                fba_fee_estimate REAL,
+                referral_fee_estimate REAL,
+                inbound_cost_estimate REAL,
+                prep_cost_estimate REAL,
+                unit_cogs REAL,
+                min_roi_threshold REAL,
+                meets_threshold BOOLEAN,
+                analysis_date TEXT DEFAULT (datetime('now')),
+                decision_flag TEXT CHECK (decision_flag IN ('viable', 'marginal', 'reject', 'needs_manual_review')),
+                notes TEXT,
+                FOREIGN KEY (supplier_product_id) REFERENCES supplier_products(id)
+            );
+
             -- Indexes for common queries
             CREATE INDEX IF NOT EXISTS idx_products_asin ON products(asin);
             CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
@@ -251,25 +322,32 @@ class DataLayer:
             CREATE INDEX IF NOT EXISTS idx_sqp_asin ON search_query_performance(asin);
             CREATE INDEX IF NOT EXISTS idx_memory_account ON memory_entries(account_id);
             CREATE INDEX IF NOT EXISTS idx_audit_account ON audit_log(account_id);
+            CREATE INDEX IF NOT EXISTS idx_supplier_products_supplier ON supplier_products(supplier_id);
+            CREATE INDEX IF NOT EXISTS idx_supplier_products_sku ON supplier_products(supplier_sku);
+            CREATE INDEX IF NOT EXISTS idx_cost_analysis_product ON supplier_cost_analysis(supplier_product_id);
         """)
         self._conn.commit()
 
     def execute(self, sql: str, params: tuple = ()) -> sqlite3.Cursor:
         """Execute SQL (SQLite mode only for now)."""
-        return self._conn.execute(sql, params)
+        with self._lock:
+            return self._conn.execute(sql, params)
 
     def executemany(self, sql: str, params_list: list) -> sqlite3.Cursor:
         """Execute many SQL statements."""
-        return self._conn.executemany(sql, params_list)
+        with self._lock:
+            return self._conn.executemany(sql, params_list)
 
     def commit(self):
         """Commit the current transaction."""
-        self._conn.commit()
+        with self._lock:
+            self._conn.commit()
 
     def close(self):
         """Close the database connection."""
-        if self._conn:
-            self._conn.close()
+        with self._lock:
+            if self._conn:
+                self._conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -760,6 +838,273 @@ class AuditDB:
 
 
 # ---------------------------------------------------------------------------
+# Supplier Intelligence Data Access (Phase 1)
+# ---------------------------------------------------------------------------
+
+class SuppliersDB:
+    """Data access for the suppliers / supplier_products / supplier_cost_analysis
+    tables — the supplier intelligence module backing the "Find a Supplier"
+    dashboard, catalog ingestion, and pre-account cost-benefit analysis.
+
+    All methods accept/return plain dicts keyed by the table column names.
+    IDs are operator/ingestion-supplied (stable across re-ingests) or
+    generated as ASCII slugs.
+    """
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    # -- suppliers -----------------------------------------------------------
+
+    _SUPPLIER_COLUMNS = [
+        "id", "name", "public_catalog_url", "api_endpoint", "api_auth_type",
+        "api_credentials_ref", "account_friction_level", "requires_liftgate",
+        "liftgate_notes", "invoice_verified_status", "last_scraped_at",
+        "scrape_success_rate", "categories_supplied", "logistics_notes",
+        "decision_flag", "friction_notes", "contact_email", "contact_phone",
+    ]
+
+    def upsert(self, supplier: Dict[str, Any]) -> str:
+        """Insert or replace a supplier by id. Returns the supplier id."""
+        sup = dict(supplier)
+        sup.setdefault("id", _slugify(sup.get("name") or "supplier"))
+        sup.setdefault("account_friction_level", "medium")
+        sup.setdefault("requires_liftgate", 1)
+        sup.setdefault("invoice_verified_status", "unverified")
+        sup.setdefault("decision_flag", "needs_manual_review")
+        if isinstance(sup.get("requires_liftgate"), bool):
+            sup["requires_liftgate"] = 1 if sup["requires_liftgate"] else 0
+        if isinstance(sup.get("categories_supplied"), (list, tuple)):
+            sup["categories_supplied"] = json.dumps(list(sup["categories_supplied"]))
+        now = datetime.now(timezone.utc).isoformat()
+        sup["updated_at"] = now
+        cols = [c for c in self._SUPPLIER_COLUMNS if c in sup]
+        insert_cols = cols + ["created_at"]
+        placeholders = ", ".join("?" for _ in insert_cols)
+        update_clause = ", ".join(f"{c} = excluded.{c}" for c in cols if c != "id")
+        params = [sup[c] for c in insert_cols] if "created_at" not in insert_cols else \
+            [sup[c] for c in insert_cols[:-1]] + [now]
+        # created_at handled via COALESCE on upsert: use INSERT ... ON CONFLICT
+        self.db.execute(
+            f"""INSERT INTO suppliers ({", ".join(insert_cols)})
+                VALUES ({placeholders})
+                ON CONFLICT(id) DO UPDATE SET
+                    {update_clause},
+                    updated_at = excluded.updated_at""",
+            tuple(params),
+        )
+        self.db.commit()
+        return sup["id"]
+
+    def get_by_id(self, sid: str) -> Optional[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM suppliers WHERE id = ?", (sid,)
+        )
+        row = cur.fetchone()
+        return dict(row) if row else None
+
+    def list_all(
+        self,
+        decision_flag: Optional[str] = None,
+        requires_liftgate: Optional[bool] = None,
+        category_slug: Optional[str] = None,
+        limit: int = 200,
+    ) -> List[Dict[str, Any]]:
+        """List suppliers with optional filters.
+
+        ``category_slug`` matches a slug contained in the JSON
+        ``categories_supplied`` column (LIKE match on the serialized array).
+        """
+        sql = "SELECT * FROM suppliers WHERE 1=1"
+        params: List[Any] = []
+        if decision_flag:
+            sql += " AND decision_flag = ?"
+            params.append(decision_flag)
+        if requires_liftgate is not None:
+            sql += " AND requires_liftgate = ?"
+            params.append(1 if requires_liftgate else 0)
+        if category_slug:
+            sql += " AND categories_supplied LIKE ?"
+            params.append(f"%{category_slug}%")
+        sql += " ORDER BY updated_at DESC LIMIT ?"
+        params.append(limit)
+        cur = self.db.execute(sql, tuple(params))
+        return [dict(r) for r in cur.fetchall()]
+
+    def update_flag(self, sid: str, decision_flag: str) -> bool:
+        """Set a supplier's decision flag (viable/marginal/reject/review)."""
+        cur = self.db.execute(
+            "UPDATE suppliers SET decision_flag = ?, updated_at = ? WHERE id = ?",
+            (decision_flag, datetime.now(timezone.utc).isoformat(), sid),
+        )
+        self.db.commit()
+        return cur.rowcount > 0
+
+    def delete(self, sid: str) -> bool:
+        """Delete a supplier and all dependent rows (products + analyses)."""
+        # Order matters: analyses reference products, products reference the
+        # supplier (the FKs have no ON DELETE CASCADE).
+        self.db.execute(
+            """DELETE FROM supplier_cost_analysis
+               WHERE supplier_product_id IN
+                 (SELECT id FROM supplier_products WHERE supplier_id = ?)""",
+            (sid,),
+        )
+        self.db.execute("DELETE FROM supplier_products WHERE supplier_id = ?", (sid,))
+        cur = self.db.execute("DELETE FROM suppliers WHERE id = ?", (sid,))
+        self.db.commit()
+        return cur.rowcount > 0
+
+    # -- supplier_products ---------------------------------------------------
+
+    _SUPPLIER_PRODUCT_COLUMNS = [
+        "id", "supplier_id", "supplier_sku", "product_name", "brand",
+        "category_slug", "pack_size", "unit_count", "wholesale_price",
+        "wholesale_currency", "moq", "availability", "weight_lbs",
+        "scraped_at", "scrape_confidence", "source_file",
+    ]
+
+    def add_product(self, supplier_id: str, product: Dict[str, Any]) -> str:
+        """Insert or update one supplier product. Returns the product id.
+
+        Idempotent: the id is stable per (supplier_id, supplier_sku) when a
+        SKU is present, else per (supplier_id, product_name). Re-importing
+        the same catalog updates rows instead of failing on the primary key.
+        """
+        p = dict(product)
+        sku = p.get("supplier_sku")
+        p.setdefault(
+            "id",
+            _slugify(f"{supplier_id}-{sku or p.get('product_name') or p.get('id') or len(p)}"),
+        )
+        p["supplier_id"] = supplier_id
+        p.setdefault("wholesale_currency", "USD")
+        p.setdefault("availability", "in_stock")
+        p.setdefault("scraped_at", datetime.now(timezone.utc).isoformat())
+        cols = [c for c in self._SUPPLIER_PRODUCT_COLUMNS if c in p]
+        placeholders = ", ".join("?" for _ in cols)
+        update_clause = ", ".join(f"{c} = excluded.{c}" for c in cols if c != "id")
+        self.db.execute(
+            f"""INSERT INTO supplier_products ({", ".join(cols)})
+                VALUES ({placeholders})
+                ON CONFLICT(id) DO UPDATE SET {update_clause}""",
+            tuple(p[c] for c in cols),
+        )
+        self.db.commit()
+        return p["id"]
+
+    def add_products(self, supplier_id: str, products: List[Dict[str, Any]]) -> int:
+        """Bulk-insert products for a supplier. Returns the count inserted."""
+        for p in products:
+            self.add_product(supplier_id, p)
+        return len(products)
+
+    def get_products(
+        self,
+        supplier_id: str,
+        limit: int = 500,
+        min_wholesale_price: Optional[float] = None,
+    ) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM supplier_products WHERE supplier_id = ?"
+        params: List[Any] = [supplier_id]
+        if min_wholesale_price is not None:
+            sql += " AND wholesale_price >= ?"
+            params.append(min_wholesale_price)
+        sql += " ORDER BY scraped_at DESC LIMIT ?"
+        params.append(limit)
+        cur = self.db.execute(sql, tuple(params))
+        return [dict(r) for r in cur.fetchall()]
+
+    def get_product_by_id(self, pid: str) -> Optional[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM supplier_products WHERE id = ?", (pid,)
+        )
+        row = cur.fetchone()
+        return dict(row) if row else None
+
+    def count_products(self, supplier_id: str) -> int:
+        cur = self.db.execute(
+            "SELECT COUNT(*) as cnt FROM supplier_products WHERE supplier_id = ?",
+            (supplier_id,),
+        )
+        return cur.fetchone()["cnt"]
+
+    def replace_products(self, supplier_id: str, products: List[Dict[str, Any]]) -> int:
+        """Replace all products for a supplier (used after a fresh scrape)."""
+        self.db.execute(
+            """DELETE FROM supplier_cost_analysis
+               WHERE supplier_product_id IN
+                 (SELECT id FROM supplier_products WHERE supplier_id = ?)""",
+            (supplier_id,),
+        )
+        self.db.execute(
+            "DELETE FROM supplier_products WHERE supplier_id = ?", (supplier_id,)
+        )
+        self.db.commit()
+        return self.add_products(supplier_id, products)
+
+    # -- supplier_cost_analysis ----------------------------------------------
+
+    _ANALYSIS_COLUMNS = [
+        "id", "supplier_product_id", "amazon_asin", "amazon_price",
+        "estimated_net_profit", "estimated_roi_pct", "landed_cost",
+        "fba_fee_estimate", "referral_fee_estimate", "inbound_cost_estimate",
+        "prep_cost_estimate", "unit_cogs", "min_roi_threshold",
+        "meets_threshold", "decision_flag", "notes",
+    ]
+
+    def add_cost_analysis(self, product_id: str, analysis: Dict[str, Any]) -> str:
+        """Append one cost-benefit analysis row. Returns the analysis id.
+
+        Analyses are a time-series (every re-run is kept for history), so each
+        call gets a unique id unless the caller supplies one explicitly.
+        """
+        a = dict(analysis)
+        a.setdefault("id", f"ca-{product_id}-{uuid.uuid4().hex[:12]}")
+        a["supplier_product_id"] = product_id
+        if isinstance(a.get("notes"), list):
+            a["notes"] = json.dumps(a["notes"])
+        a.setdefault("analysis_date", datetime.now(timezone.utc).isoformat())
+        a.setdefault("decision_flag", "needs_manual_review")
+        cols = [c for c in self._ANALYSIS_COLUMNS if c in a] + ["analysis_date"]
+        placeholders = ", ".join("?" for _ in cols)
+        self.db.execute(
+            f"""INSERT INTO supplier_cost_analysis ({", ".join(cols)})
+                VALUES ({placeholders})""",
+            tuple(a[c] for c in cols),
+        )
+        self.db.commit()
+        return a["id"]
+
+    def get_analyses(
+        self,
+        product_id: Optional[str] = None,
+        decision_flag: Optional[str] = None,
+        limit: int = 200,
+    ) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM supplier_cost_analysis WHERE 1=1"
+        params: List[Any] = []
+        if product_id:
+            sql += " AND supplier_product_id = ?"
+            params.append(product_id)
+        if decision_flag:
+            sql += " AND decision_flag = ?"
+            params.append(decision_flag)
+        sql += " ORDER BY analysis_date DESC LIMIT ?"
+        params.append(limit)
+        cur = self.db.execute(sql, tuple(params))
+        return [dict(r) for r in cur.fetchall()]
+
+
+def _slugify(value: Any) -> str:
+    """Deterministic ASCII slug id for supplier entity ids."""
+    import re as _re
+    s = str(value or "")
+    s = _re.sub(r"[^a-zA-Z0-9_.-]+", "-", s).strip("-").lower()
+    return s[:96] or "item"
+
+
+# ---------------------------------------------------------------------------
 # Convenience: all DAOs accessible from one place
 # ---------------------------------------------------------------------------
 
@@ -775,6 +1120,7 @@ class NorthstarDB:
         self.transactions = TransactionsDB(self._layer)
         self.memory = MemoryDB(self._layer)
         self.audit = AuditDB(self._layer)
+        self.suppliers = SuppliersDB(self._layer)
 
     @property
     def mode(self) -> str:
