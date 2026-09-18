@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "discovery": {
+    "enabled": true,
+    "sources": ["google_custom_search", "thomasnet", "alibaba", "wholesale_central"],
+    "max_results_per_category": 50,
+    "min_confidence_threshold": 0.6
+  },
+  "ingestion": {
+    "rate_limit_rps": 1,
+    "timeout_seconds": 30,
+    "max_pages_per_catalog": 100,
+    "selectors": {
+      "product_card": ".product-item, .product-card, [itemtype*='Product']",
+      "name": "h3, .product-title, [itemprop='name']",
+      "price": ".price, [itemprop='price'], .wholesale-price",
+      "sku": "[itemprop='sku'], .sku, .product-code",
+      "pack_size": "[itemprop='packSize'], .pack-size, .quantity"
+    }
+  },
+  "analysis": {
+    "min_roi_pct": 20.0,
+    "min_profit_margin_pct": 15.0,
+    "min_net_profit_per_unit": 5.0,
+    "fba_fee_weight_lbs": true
+  },
+  "logistics": {
+    "default_requires_liftgate": true,
+    "liftgate_keywords": ["liftgate", "tailgate", "LTL", "box truck", "pallet", "dock required"],
+    "warning_message": "Delivery constraint: Residential detached garage—mechanical liftgate required."
+  },
+  "thresholds": {
+    "min_roi_per_unit": 10.0,
+    "min_monthly_sales": 1000,
+    "preferred_max_weight_oz": 32.0,
+    "abs_max_weight_oz": 80.0,
+    "max_fba_sellers": 2
+  }
+}

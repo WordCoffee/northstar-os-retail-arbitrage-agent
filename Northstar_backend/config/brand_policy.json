@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "blacklist": [
+    "Kirkland Signature"
+  ],
+  "whitelist": [],
+  "last_recheck": "2026-09-17T00:00:00Z",
+  "recheck_schedule": "0 0 1 * *",
+  "recheck_strategy": "sp_api",
+  "notes": {
+    "blacklist_meaning": "Brands on this list are blocked from the universal sourcing filter regardless of category. The list is Cron-re-checked monthly against live gating status via the Amazon Selling Partner API (tasks/brand_blacklist_updater.py); brands that become un-gated are surfaced for operator decision, never auto-removed.",
+    "whitelist_meaning": "Brands explicitly allowed even when the seller-identity gate would otherwise flag them. Reserved for operator decisions.",
+    "static_exclusions": "The separate static store/private-label exclusion list (Kirkland Signature, Member's Mark, Great Value, Equate, store brand, private label) lives in filters/universal_filter.py and category_config.py and always applies."
+  }
+}

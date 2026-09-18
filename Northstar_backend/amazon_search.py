@@ -235,13 +235,15 @@ def _parse_sales_volume(raw) -> Optional[float]:
 def _search_brightdata(
     keywords: Optional[List[str]],
     pages: Optional[int],
+    match_all: bool = False,
 ) -> List[Dict]:
     """Fetch Amazon search pages via the Bright Data Web Unlocker.
 
     Delegates the HTTP + card parsing to bright_data_client (one POST
-    /request per page, zone northstaros, raw HTML). Cards are filtered by
-    the shared Kirkland relevance rule inside the client. Any request
-    failure is mirrored from bright_data_client.LAST_ERROR.
+    /request per page, zone northstaros, raw HTML). ``match_all=False``
+    (default) keeps the shared Kirkland relevance rule inside the client;
+    ``match_all=True`` returns every parsed card (universal sourcing). Any
+    request failure is mirrored from bright_data_client.LAST_ERROR.
     """
     global LAST_SEARCH_ERROR
 
@@ -253,7 +255,9 @@ def _search_brightdata(
     results: List[Dict] = []
     try:
         for keyword in keywords:
-            page_results = bright_data_client.search_products(keyword, pages)
+            page_results = bright_data_client.search_products(
+                keyword, pages, match_all=match_all
+            )
             results.extend(page_results)
             LAST_SEARCH_ERROR = bright_data_client.LAST_ERROR
             if LAST_SEARCH_ERROR:
@@ -312,12 +316,31 @@ def search_kirkland_products(
 ) -> List[Dict]:
     """Search Amazon via the configured provider, normalized to candidates.
 
-    Hard containment boundary: when SCANNER_LIVE_ALLOWED is not an
-    explicit opt-in, this returns [] immediately — zero provider calls,
-    zero error flags, zero output — so no GET/static/UI/import path can
-    ever reach a live search provider. Live searches only run through
-    the explicit refresh paths (POST /api/kirkland/refresh or the npm
-    pipeline) with the gate enabled.
+    Kirkland-profile wrapper: identical behavior to the historical function,
+    now delegating to :func:`search_products` with ``match_all=False`` (the
+    shared Kirkland relevance rule stays in force).
+    """
+    return search_products(keywords=keywords, pages=pages, match_all=False)
+
+
+def search_products(
+    keywords: Optional[List[str]] = None,
+    pages: Optional[int] = None,
+    match_all: bool = False,
+) -> List[Dict]:
+    """Category-agnostic Amazon keyword search (Phase 1 generalization).
+
+    ``match_all=False`` keeps the Kirkland relevance filter (default,
+    backward compatible). ``match_all=True`` returns EVERY normalized
+    candidate for the given keywords regardless of brand — the universal
+    sourcing path used by Product Finder / Supplier Finder.
+
+    Hard containment boundary: when SCANNER_LIVE_ALLOWED is not an explicit
+    opt-in, this returns [] immediately — zero provider calls, zero error
+    flags, zero output — so no GET/static/UI/import path can ever reach a
+    live search provider. Live searches only run through the explicit
+    refresh paths (POST /api/kirkland/refresh or the npm pipeline) with the
+    gate enabled.
 
     A successful HTTP response (even with zero products) clears the error
     flag; any failure records a human-readable LAST_SEARCH_ERROR. When the
@@ -331,11 +354,11 @@ def search_kirkland_products(
     LAST_SEARCH_ERROR = None
 
     if SCANNER_SEARCH_SOURCE == "BRIGHTDATA":
-        products = _search_brightdata(keywords, pages)
+        products = _search_brightdata(keywords, pages, match_all=match_all)
         if not products and LAST_SEARCH_ERROR and SCANNER_SEARCH_FALLBACK:
             fallback = SCANNER_SEARCH_FALLBACK
             if fallback == "CHOCODATA":
-                products = _search_chocodata(keywords, pages)
+                products = _search_chocodata(keywords, pages, match_all=match_all)
             elif fallback == "SCAVIO":
                 products = scavio_client.search_kirkland_products(keywords, pages)
                 LAST_SEARCH_ERROR = scavio_client.LAST_SEARCH_ERROR
@@ -347,7 +370,7 @@ def search_kirkland_products(
         return products
 
     if SCANNER_SEARCH_SOURCE == "CHOCODATA":
-        return _search_chocodata(keywords, pages)
+        return _search_chocodata(keywords, pages, match_all=match_all)
 
     products = scavio_client.search_kirkland_products(keywords, pages)
     LAST_SEARCH_ERROR = scavio_client.LAST_SEARCH_ERROR
@@ -363,6 +386,7 @@ def _marketplace_domain() -> str:
 def _search_chocodata(
     keywords: Optional[List[str]],
     pages: Optional[int],
+    match_all: bool = False,
 ) -> List[Dict]:
     global LAST_SEARCH_ERROR
 
@@ -417,7 +441,7 @@ def _search_chocodata(
                             asin = item.get("asin")
                             name = item.get("title") or item.get("name")
                             brand = item.get("brand")
-                            if not _is_kirkland_signature(name, brand):
+                            if not match_all and not _is_kirkland_signature(name, brand):
                                 continue
                             price = item.get("price")
                             price_val = None

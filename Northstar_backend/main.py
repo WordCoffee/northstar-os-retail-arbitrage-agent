@@ -1275,4 +1275,331 @@ def list_plans():
     return {"plans": auth.PLAN_ENTITLEMENTS}
 
 
+# ---------------------------------------------------------------------------
+# Supplier Intelligence + Universal Sourcing routes (Phase 1)
+#
+# All routes are offline-safe: discovery/ingestion default to the built-in
+# seed catalog / caller-supplied bytes. No live/paid outbound call is made
+# unless the operator has armed the matching named gate AND injected a
+# transport (see scrapers/*). Reading these routes never spends credits.
+# ---------------------------------------------------------------------------
+
+
+def _suppliers_db():
+    from data_layer import get_db, SuppliersDB
+    return SuppliersDB(get_db())
+
+
+def _logistics_warning(requires_liftgate) -> Optional[str]:
+    """Human-readable logistics warning for a supplier row."""
+    if not requires_liftgate:
+        return None
+    try:
+        from pathlib import Path as _Path
+        import json as _json
+        cfg = _Path(__file__).resolve().parent / "config" / "supplier_intelligence.json"
+        with open(cfg, "r", encoding="utf-8") as f:
+            data = _json.load(f)
+        return data.get("logistics", {}).get(
+            "warning_message",
+            "Delivery constraint: mechanical liftgate may be required.",
+        )
+    except (OSError, ValueError):
+        return "Delivery constraint: mechanical liftgate may be required."
+
+
+@app.get("/api/suppliers")
+def list_suppliers_route(
+    decision_flag: Optional[str] = None,
+    requires_liftgate: Optional[bool] = None,
+    category: Optional[str] = None,
+    limit: int = 200,
+):
+    """List known suppliers for the Find-a-Supplier dashboard."""
+    db = _suppliers_db()
+    rows = db.list_all(
+        decision_flag=decision_flag,
+        requires_liftgate=requires_liftgate,
+        category_slug=category,
+        limit=limit,
+    )
+    for r in rows:
+        r["logistics_warning"] = _logistics_warning(r.get("requires_liftgate"))
+        if r.get("categories_supplied"):
+            try:
+                r["categories_supplied"] = json.loads(r["categories_supplied"])
+            except (ValueError, TypeError):
+                pass
+    return {"suppliers": rows, "count": len(rows)}
+
+
+@app.get("/api/suppliers/analytics")
+def suppliers_analytics_route():
+    """Summary counts for the supplier dashboard tiles."""
+    db = _suppliers_db()
+    suppliers = db.list_all(limit=1000)
+    analyses = db.get_analyses(limit=2000)
+    counts = {"viable": 0, "marginal": 0, "reject": 0, "needs_manual_review": 0}
+    for a in analyses:
+        flag = a.get("decision_flag")
+        if flag in counts:
+            counts[flag] += 1
+    return {
+        "suppliers_total": len(suppliers),
+        "suppliers_liftgate": sum(1 for s in suppliers if s.get("requires_liftgate")),
+        "analyses_total": len(analyses),
+        "decision_counts": counts,
+    }
+
+
+@app.get("/api/suppliers/analyses")
+def supplier_analyses_route(
+    product_id: Optional[str] = None,
+    decision_flag: Optional[str] = None,
+    limit: int = 200,
+):
+    """List stored cost-benefit analysis rows."""
+    db = _suppliers_db()
+    rows = db.get_analyses(product_id=product_id, decision_flag=decision_flag, limit=limit)
+    return {"analyses": rows, "count": len(rows)}
+
+
+@app.post("/api/suppliers/discover")
+def discover_suppliers_route(body: dict):
+    """Discover wholesale suppliers for a category (offline seed by default).
+
+    ``live=true`` requires SUPPLIER_DISCOVERY_LIVE_OPERATOR_APPROVED=1 and an
+    injected transport; without both, offline results are returned and the
+    response records that no live call was made.
+    """
+    from scrapers.supplier_discovery import SupplierDiscoveryScraper
+    category = body.get("category") or body.get("category_slug") or ""
+    keywords = body.get("keywords") or []
+    requested_live = bool(body.get("live"))
+    scraper = SupplierDiscoveryScraper()
+    mode = "live" if requested_live else "offline"
+    profiles = scraper.discover(category, keywords, mode=mode)
+    persist = bool(body.get("persist"))
+    saved_ids: List[str] = []
+    if persist:
+        db = _suppliers_db()
+        for p in profiles:
+            try:
+                saved_ids.append(db.upsert(p.as_dict()))
+            except Exception as exc:  # duplicate name, etc. — do not 500
+                logger.warning(f"supplier persist skipped: {exc}")
+    effective_mode = mode if (mode == "offline" or profiles) else "offline"
+    return {
+        "mode": effective_mode,
+        "live_requested": requested_live,
+        "live_armed": scraper.live_armed(),
+        "error": scraper.last_error,
+        "suppliers": [p.as_dict() for p in profiles],
+        "persisted_ids": saved_ids,
+    }
+
+
+@app.post("/api/suppliers/analyze")
+def analyze_supplier_route(body: dict):
+    """Pre-account cost-benefit analysis of one supplier product."""
+    from analysis.supplier_cost_benefit import SupplierCostBenefitAnalyzer
+    product = body.get("supplier_product") or {}
+    match = body.get("amazon_match") or {}
+    if not product:
+        raise HTTPException(status_code=400, detail="supplier_product is required")
+    analyzer = SupplierCostBenefitAnalyzer(
+        min_roi_pct=body.get("min_roi_pct"),
+        min_profit_margin_pct=body.get("min_profit_margin_pct"),
+        min_net_profit_per_unit=body.get("min_net_profit_per_unit"),
+    )
+    result = analyzer.analyze(product, match or None)
+    return result.as_dict()
+
+
+@app.post("/api/suppliers")
+def upsert_supplier_route(body: dict):
+    """Create or update a supplier record."""
+    if not body.get("name"):
+        raise HTTPException(status_code=400, detail="name is required")
+    db = _suppliers_db()
+    sid = db.upsert(body)
+    return {"id": sid, "supplier": db.get_by_id(sid)}
+
+
+@app.post("/api/suppliers/import-csv")
+def import_supplier_csv_route(body: dict):
+    """Ingest a supplier CSV price list, persist products, run cost-benefit."""
+    supplier_id = body.get("supplier_id")
+    csv_text = body.get("csv_text") or body.get("csv")
+    if not supplier_id or csv_text is None:
+        raise HTTPException(status_code=400, detail="supplier_id and csv_text are required")
+    from data_layer import get_db, SuppliersDB
+    from scrapers.supplier_catalog_ingestion import parse_csv_bytes
+    from tasks.supplier_pipeline import SupplierPipeline
+
+    db = SuppliersDB(get_db())
+    if db.get_by_id(supplier_id) is None:
+        raise HTTPException(status_code=404, detail=f"Supplier '{supplier_id}' not found")
+
+    ingest = parse_csv_bytes(
+        csv_text.encode("utf-8") if isinstance(csv_text, str) else csv_text,
+        supplier_id,
+        body.get("source_file"),
+    )
+    pipeline = SupplierPipeline(db=db)
+    result = pipeline.ingest_products(supplier_id, ingest.products)
+    return {
+        "supplier_id": supplier_id,
+        "rows_parsed": ingest.rows_parsed,
+        "rows_imported": ingest.rows_imported,
+        "rows_skipped": ingest.rows_skipped,
+        "skip_reasons": ingest.skip_reasons,
+        "pipeline": result.as_dict(),
+    }
+
+
+@app.get("/api/suppliers/{sid}")
+def get_supplier_route(sid: str):
+    """Supplier detail with products and their latest analyses."""
+    db = _suppliers_db()
+    supplier = db.get_by_id(sid)
+    if supplier is None:
+        raise HTTPException(status_code=404, detail=f"Supplier '{sid}' not found")
+    if supplier.get("categories_supplied"):
+        try:
+            supplier["categories_supplied"] = json.loads(supplier["categories_supplied"])
+        except (ValueError, TypeError):
+            pass
+    supplier["logistics_warning"] = _logistics_warning(supplier.get("requires_liftgate"))
+    products = db.get_products(sid, limit=500)
+    for p in products:
+        analyses = db.get_analyses(product_id=p["id"], limit=1)
+        p["latest_analysis"] = analyses[0] if analyses else None
+        if p["latest_analysis"] and p["latest_analysis"].get("notes"):
+            try:
+                p["latest_analysis"]["notes"] = json.loads(p["latest_analysis"]["notes"])
+            except (ValueError, TypeError):
+                pass
+    return {"supplier": supplier, "products": products, "product_count": len(products)}
+
+
+@app.delete("/api/suppliers/{sid}")
+def delete_supplier_route(sid: str):
+    """Delete a supplier and its products."""
+    db = _suppliers_db()
+    deleted = db.delete(sid)
+    if not deleted:
+        raise HTTPException(status_code=404, detail=f"Supplier '{sid}' not found")
+    return {"deleted": True, "id": sid}
+
+
+@app.get("/api/suppliers/{sid}/products")
+def get_supplier_products_route(sid: str, limit: int = 500):
+    """List a supplier's ingested products."""
+    db = _suppliers_db()
+    if db.get_by_id(sid) is None:
+        raise HTTPException(status_code=404, detail=f"Supplier '{sid}' not found")
+    products = db.get_products(sid, limit=limit)
+    return {"supplier_id": sid, "products": products, "count": len(products)}
+
+
+@app.post("/api/suppliers/{sid}/products")
+def add_supplier_products_route(sid: str, body: dict):
+    """Add products to a supplier and optionally run cost-benefit analysis."""
+    db = _suppliers_db()
+    if db.get_by_id(sid) is None:
+        raise HTTPException(status_code=404, detail=f"Supplier '{sid}' not found")
+    products = body.get("products") or []
+    if not isinstance(products, list) or not products:
+        raise HTTPException(status_code=400, detail="products must be a non-empty list")
+    if body.get("replace"):
+        db.replace_products(sid, products)
+    else:
+        db.add_products(sid, products)
+
+    analyses = []
+    if body.get("analyze"):
+        from analysis.supplier_cost_benefit import SupplierCostBenefitAnalyzer
+        analyzer = SupplierCostBenefitAnalyzer()
+        prices = body.get("amazon_prices") or {}
+        for p in products:
+            match = None
+            price = prices.get(p.get("supplier_sku")) or p.get("amazon_price")
+            if price:
+                match = {"amazon_price": price}
+            result = analyzer.analyze(p, match)
+            analyses.append(result.as_dict())
+    return {
+        "supplier_id": sid,
+        "added": len(products),
+        "analyses": analyses,
+    }
+
+
+@app.post("/api/filters/universal/evaluate")
+def universal_filter_evaluate_route(body: dict):
+    """Apply the universal (Golden Goose) filter to a product dict."""
+    from filters.universal_filter import UniversalProductFilter
+    product = body.get("product") or {}
+    if not product:
+        raise HTTPException(status_code=400, detail="product is required")
+    filt = UniversalProductFilter(
+        min_roi_per_unit=body.get("min_roi_per_unit", 10.0),
+        min_monthly_sales=body.get("min_monthly_sales", 1000),
+        max_fba_sellers=body.get("max_fba_sellers", 2),
+        brand_blacklist=body.get("brand_blacklist"),
+    )
+    result = filt.apply(product)
+    return {
+        "passed": result.passed,
+        "reasons": result.reasons,
+        "passed_gates": result.passed_gates,
+        "thresholds": {
+            "min_roi_per_unit": filt.min_roi_per_unit,
+            "min_monthly_sales": filt.min_monthly_sales,
+            "preferred_max_weight_oz": filt.preferred_max_weight_oz,
+            "abs_max_weight_oz": filt.abs_max_weight_oz,
+            "max_fba_sellers": filt.max_fba_sellers,
+        },
+    }
+
+
+@app.get("/api/products/finder")
+def product_finder_route(
+    limit: int = 100,
+    min_roi_per_unit: float = 10.0,
+    min_monthly_sales: int = 1000,
+    max_fba_sellers: int = 2,
+):
+    """Universal Product Finder — cache-only candidates scored by the
+    universal filter. Zero provider calls: reads the local candidate cache
+    (populated by an explicit gated refresh) and applies the Golden Goose
+    thresholds category-agnostically."""
+    from filters.universal_filter import UniversalProductFilter
+    candidates = amazon_search.load_cached_candidates()
+    filt = UniversalProductFilter(
+        min_roi_per_unit=min_roi_per_unit,
+        min_monthly_sales=min_monthly_sales,
+        max_fba_sellers=max_fba_sellers,
+    )
+    evaluated = filt.filter_all(candidates, keep_rejected=True)
+    passed = [e for e in evaluated if e.get("universal_filter_passed")]
+    evaluated.sort(key=lambda e: (not e.get("universal_filter_passed"),))
+    return {
+        "passed": passed[:limit],
+        "evaluated": evaluated[:limit],
+        "candidate_count": len(evaluated),
+        "passed_count": len(passed),
+        "filter_source": "cache-only",
+        "thresholds": {
+            "min_roi_per_unit": filt.min_roi_per_unit,
+            "min_monthly_sales": filt.min_monthly_sales,
+            "preferred_max_weight_oz": filt.preferred_max_weight_oz,
+            "abs_max_weight_oz": filt.abs_max_weight_oz,
+            "max_fba_sellers": filt.max_fba_sellers,
+        },
+    }
+
+
+
 

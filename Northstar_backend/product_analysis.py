@@ -160,18 +160,30 @@ def _apply_market_intelligence(results: List[Dict], snapshots: Dict, candidate_p
         )
 
 
-def _candidates_for_mode() -> List[Dict]:
+def _candidates_for_mode(keywords=None, match_all: bool = False) -> List[Dict]:
     """Candidate source selected by the enrichment flag.
 
     Disabled (cache-only): the local search cache only — zero outbound or
     provider calls. Enabled: live search; the cache is written only after
     a fully successful result, and a failed/partial live search falls
     back to the prior cache instead of overwriting it.
+
+    Phase 1 generalization:
+      * ``match_all=False`` (default) keeps the historical Kirkland search
+        (``search_kirkland_products``) — byte-identical behavior, and the
+        module-level patch point stays intact for existing tests.
+      * ``match_all=True`` runs a category-agnostic universal search via
+        ``amazon_search.search_products`` for any keywords.
     """
     if offer_enrichment._enrichment_mode() == "OFF":
         return _dedupe_candidates(amazon_search.load_cached_candidates())
 
-    candidates = _dedupe_candidates(search_kirkland_products())
+    if match_all:
+        candidates = _dedupe_candidates(
+            amazon_search.search_products(keywords=keywords, match_all=True)
+        )
+    else:
+        candidates = _dedupe_candidates(search_kirkland_products())
     if amazon_search.LAST_SEARCH_ERROR:
         cached = _dedupe_candidates(amazon_search.load_cached_candidates())
         if cached:
@@ -182,7 +194,30 @@ def _candidates_for_mode() -> List[Dict]:
 
 
 def analyze_kirkland_products() -> Dict:
-    candidates = _candidates_for_mode()
+    """Kirkland-profile scan (backward compatible).
+
+    Delegates to :func:`_analyze_candidates` with the Kirkland-relevance
+    candidate source. Identical behavior and patch surface to the original
+    implementation.
+    """
+    return _analyze_candidates(_candidates_for_mode())
+
+
+def analyze_products(keywords=None, match_all: bool = False) -> Dict:
+    """Category-agnostic universal scan (Phase 1 generalization).
+
+    Runs the SAME analysis pipeline as :func:`analyze_kirkland_products` but
+    sources candidates from a keyword/category search instead of the
+    Kirkland-only relevance rule when ``match_all=True``. Costco cost
+    resolution, Amazon offer enrichment, fee-engine economics, market
+    intelligence, and profit tiers are all unchanged.
+    """
+    return _analyze_candidates(
+        _candidates_for_mode(keywords=keywords, match_all=match_all)
+    )
+
+
+def _analyze_candidates(candidates: List[Dict]) -> Dict:
     results: List[Dict] = []
     _snapshots = (
         market_snapshot_store.load_snapshots()
