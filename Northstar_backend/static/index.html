@@ -10317,7 +10317,29 @@ html[data-theme-v2] {
                     return '<tr><td>' + NS.escapeHtml(a.id) + '</td><td>' + NS.escapeHtml(a.email) + '</td><td>' + NS.escapeHtml(a.plan) + '</td><td>' + NS.escapeHtml(a.created_at) + '</td></tr>';
                 }).join('');
                 return '<p class="gg-seam-legend">Least-privilege view: basic account fields only (id, email, plan, created_at). No security-sensitive data.</p>' +
-                    '<div class="table-wrap"><table aria-label="Accounts"><thead><tr><th scope="col">id</th><th scope="col">email</th><th scope="col">plan</th><th scope="col">created</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+                    '<div class="table-wrap"><table aria-label="Accounts"><thead><tr><th scope="col">id</th><th scope="col">email</th><th scope="col">plan</th><th scope="col">created</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+                    NS.ws.renderSupport(NS.ws.supportRows);
+            },
+            // S8: support queue panel (local tickets). Pure renderer; rows fed
+            // by the admin-only GET /api/v1/support (offline fallback = [ ]).
+            supportRows: [],
+            renderSupport: function (rows) {
+                var list = (rows && rows.length) ? rows : [];
+                var body = list.length ? list.map(function (t) {
+                    return '<tr><td>' + NS.escapeHtml(t.id || '—') + '</td><td>' + NS.escapeHtml((t.subject || '').slice(0, 40)) + '</td>' +
+                        '<td>' + NS.escapeHtml(t.status || 'open') + '</td><td>' + NS.escapeHtml(t.assigned_to || '—') + '</td>' +
+                        '<td><button type="button" class="btn ghost" data-sup-close="' + NS.escapeHtml(t.id || '') + '" title="Mark resolved (admin)">Resolve</button></td></tr>';
+                }).join('') : '<tr><td colspan="5" class="state-block">No tickets yet — support requests appear here for the operator.</td></tr>';
+                return '<div class="ns-disclaimer" style="font-size:11px">Support queue (local only — no ticketing integration).</div>' +
+                    '<div class="table-wrap"><table aria-label="Support queue"><thead><tr><th scope="col">id</th><th scope="col">subject</th><th scope="col">status</th><th scope="col">assigned</th><th scope="col">action</th></tr></thead><tbody>' + body + '</tbody></table></div>';
+            },
+            supportLoad: function () {
+                if (!(NS.isThemeV2 && NS.isThemeV2())) return false;
+                fetch('/api/v1/support').then(function (r) { return r.json(); }).then(function (d) {
+                    NS.ws.supportRows = (d && Array.isArray(d.tickets)) ? d.tickets : [];
+                    NS.ws.renderWorkspace('admin');
+                }).catch(function () { NS.ws.supportRows = []; });
+                return true;
             },
 
             /* shared export (no-leak) + CSV (C1/C3) */

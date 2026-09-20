@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
-from fastapi import FastAPI, HTTPException, Depends, Request, Body
+from fastapi import FastAPI, HTTPException, Depends, Request, Body, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -1378,6 +1378,49 @@ async def credits_me(request: Request):
         }
     except Exception:
         raise HTTPException(status_code=500, detail="Credit ledger unavailable")
+
+
+# ---------------------------------------------------------------------------
+# Phase F/S8 — internal support queue (local only)
+# ---------------------------------------------------------------------------
+
+@app.post("/api/v1/support/tickets")
+async def support_create_ticket(body: dict = Body(...), user: dict = Depends(get_current_user)):
+    import support as support_mod
+    try:
+        ticket = support_mod.create_ticket(
+            user.get("id", "anonymous"),
+            str(body.get("subject", "")),
+            str(body.get("body", "")),
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return {"ticket": ticket}
+
+
+@app.get("/api/v1/support")
+async def support_list_tickets(status_: Optional[str] = Query(None, alias="status"),
+                               admin: dict = Depends(require_admin)):
+    import support as support_mod
+    return {"tickets": support_mod.list_tickets(status_)}
+
+
+@app.patch("/api/v1/support/{ticket_id}")
+async def support_update_ticket(ticket_id: str, body: dict = Body(...),
+                                admin: dict = Depends(require_admin)):
+    import support as support_mod
+    try:
+        if "status" in body:
+            ticket = support_mod.set_status(ticket_id, str(body["status"]))
+        elif "assign" in body:
+            ticket = support_mod.assign(ticket_id, str(body["assign"]))
+        else:
+            raise HTTPException(status_code=400, detail="Nothing to update")
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown ticket")
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return {"ticket": ticket}
 
 
 # ---------------------------------------------------------------------------
