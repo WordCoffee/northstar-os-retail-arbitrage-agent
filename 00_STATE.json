@@ -1,12 +1,13 @@
 {
     "test_baseline": {
-        "python": "1556 passed, 3 skipped, 0 failures, 0 errors",
-        "golden_goose": "363 passed, 0 failures (live scan verified: 103 opps, 54 HIGH)",
-        "updated_at": "2026-09-16",
-        "phase": "Golden Goose Finder scoring enhanced with price gap + ad feasibility"
+        "python": "2221 passed, 2 known failures (pre-existing protected-hash drift), 3 skipped, 48 subtests",
+        "golden_goose": "463 passed, 0 failures (module suite)",
+        "ui_shell_functions": "UI 1122 / Shell 251 / Functions 31 passed",
+        "updated_at": "2026-09-20",
+        "phase": "Phase F complete — engineering debt + Golden Goose hardening (S1-S13)"
     },
-    "current_phase": "Golden Goose Finder — live scan working (103 opps, 54 HIGH), standalone panel built for GitHub Pages deployment",
-    "phases_completed": ["Phase 1: Foundation", "Phase 2: SourceScout", "Phase 3: ListingForge+AdPilot", "Phase 4: SocialPulse+AutothinK", "Phase 5: Auth+Deploy", "Phase 6A: Design System", "Phase 6B: Landing + Auth Pages", "Phase 6C: SPA Responsiveness", "Phase 6D: Hub Rebuild", "Phase 6E: Service View Polish", "Phase 6F: Onboarding + First-Run"],
+    "current_phase": "Phase F complete: BFF envelope, auth/session schema, error-rate alerting, scan_manifest UI, prod posture check, invites+onboarding (stubbed email), support queue, PG migrations (prepared, NOT applied), honest placeholder UX, FIXES_50 code-only subset, .env test isolation, rollback drill. Harness GREEN: backend 2221 + 2 known, GG 463, UI 1122, shell 251, functions 31. HEAD 8784f16.",
+    "phases_completed": ["Phase 1: Foundation", "Phase 2: SourceScout", "Phase 3: ListingForge+AdPilot", "Phase 4: SocialPulse+AutothinK", "Phase 5: Auth+Deploy", "Phase 6A: Design System", "Phase 6B: Landing + Auth Pages", "Phase 6C: SPA Responsiveness", "Phase 6D: Hub Rebuild", "Phase 6E: Service View Polish", "Phase 6F: Onboarding + First-Run", "Phase F: Engineering Debt + Golden Goose Hardening"],
     "known_issues":  [
                          {
                              "id":  "unwrangle_costco_platform_string_bug",
