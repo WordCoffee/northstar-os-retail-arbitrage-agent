@@ -65,12 +65,16 @@ let pendingOptions = null;
  */
 function attachVoiceToInputsInRoot(root, options) {
   const {
-    serverUrl = 'http://localhost:3001',
+    serverUrl = null,
     excludeSelectors = [],
     includeSelectors = [],
     onTranscribed = null,
     onError = null
   } = options;
+
+  // D4-F5: never default to a localhost voice server. When no server URL is
+  // configured, do not attach voice (feature stays disabled, honest no-op).
+  if (!serverUrl) return;
 
   const allExclude = [...EXCLUDE_SELECTORS, ...excludeSelectors];
   const allInclude = [...TEXT_INPUT_SELECTORS, ...includeSelectors];

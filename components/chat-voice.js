@@ -12,13 +12,13 @@
  *
  * Usage:
  *   import { attachVoiceToChat } from '/components/chat-voice.js';
- *   attachVoiceToChat('.chat-input-container', { serverUrl: 'http://localhost:3001' });
+ *   attachVoiceToChat('.chat-input-container', { serverUrl: 'https://voice.example.com' });
  */
 
 class ChatVoiceWidget {
   constructor(options = {}) {
     this.options = {
-      serverUrl: options.serverUrl || 'http://localhost:3001',
+      serverUrl: options.serverUrl || null,
       model: options.model || 'local',
       duration: options.duration || 300, // 5 minutes max
       onTranscribed: options.onTranscribed || null,
