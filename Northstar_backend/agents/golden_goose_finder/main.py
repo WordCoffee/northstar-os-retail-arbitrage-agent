@@ -35,12 +35,14 @@ from fastapi import APIRouter, HTTPException, Query, Request
 logger = logging.getLogger(__name__)
 
 try:
-    from .gg_workflow import ScanBudget
+    from .gg_workflow import ScanBudget, compose_tier_alert, tier_regressions
 except ImportError:
     try:
-        from gg_workflow import ScanBudget
+        from gg_workflow import ScanBudget, compose_tier_alert, tier_regressions
     except ImportError:
         ScanBudget = None  # type: ignore[assignment]
+        compose_tier_alert = None  # type: ignore[assignment]
+        tier_regressions = None  # type: ignore[assignment]
 
 try:
     from .gg_observability import quota_precheck
@@ -915,6 +917,21 @@ async def run_pipeline(
         REPORT_DIR.mkdir(parents=True, exist_ok=True)
         ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         report_path = REPORT_DIR / f"goose_scan_{ts}.json"
+
+        # FIXES_50 #25: tier-regression alert vs the previous report (no
+        # send — payload only; the operator wires a channel later).
+        report["meta"]["tier_regression_alerts"] = None
+        if tier_regressions is not None and compose_tier_alert is not None:
+            try:
+                older = sorted(REPORT_DIR.glob("goose_scan_*.json"))
+                if older:
+                    with older[-1].open(encoding="utf-8") as fh_prev:
+                        prev_opps = (json.load(fh_prev)).get("opportunities", [])
+                    regs = tier_regressions(prev_opps, report["opportunities"])
+                    report["meta"]["tier_regression_alerts"] = compose_tier_alert(regs)
+            except Exception as exc:  # noqa: BLE001 - compare is best-effort
+                logger.debug("[GoldenGoose] Tier-regression compare skipped: %s", exc)
+
         # Atomic write: write to temp file then rename
         temp_path = report_path.with_suffix(".tmp")
         with open(temp_path, "w", encoding="utf-8") as f:

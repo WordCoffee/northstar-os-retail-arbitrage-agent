@@ -17,6 +17,7 @@ from agents.golden_goose_finder.gg_workflow import (  # noqa: E402
     AnnotationStore,
     SchedulerStub,
     TTLCache,
+    compose_tier_alert,
     confirm_continue,
     diff_reports,
     generate_cli_docs,
@@ -24,6 +25,7 @@ from agents.golden_goose_finder.gg_workflow import (  # noqa: E402
     read_stream,
     resolve_profile,
     rollback_plan,
+    tier_regressions,
     webhook_notify,
     write_rows_streaming,
 )
@@ -88,6 +90,37 @@ def test_diff_reports() -> None:
     assert d["added"] == ["B3"]
     assert d["dropped"] == ["B1"]
     assert d["tier_changed"] == ["B2"]
+
+
+# --- FIXES_50 #25 tier-regression alerts (Phase G) ---
+
+def test_tier_regressions_detects_drops() -> None:
+    prev = [{"asin": "B1", "tier": "HIGH"}, {"asin": "B2", "tier": "MEDIUM"}]
+    curr = [{"asin": "B1", "tier": "LOW"}, {"asin": "B2", "tier": "REJECT"}]
+    regs = tier_regressions(prev, curr)
+    assert [(r["asin"], r["previous_tier"], r["current_tier"]) for r in regs] == [
+        ("B1", "HIGH", "LOW"), ("B2", "MEDIUM", "REJECT"),
+    ]
+
+
+def test_tier_regressions_ignore_improvements_and_flat() -> None:
+    prev = [{"asin": "B1", "tier": "LOW"}, {"asin": "B2", "tier": "HIGH"}, {"asin": "B3", "tier": "MEDIUM"}]
+    curr = [{"asin": "B1", "tier": "HIGH"}, {"asin": "B2", "tier": "HIGH"}, {"asin": "B3", "tier": "MEDIUM"}]
+    assert tier_regressions(prev, curr) == []
+
+
+def test_tier_regressions_absent_not_counted() -> None:
+    prev = [{"asin": "B1", "tier": "HIGH"}, {"asin": "B2", "tier": "LOW"}]
+    curr = [{"asin": "B1", "tier": "LOW"}]           # B2 dropped out entirely
+    assert [r["asin"] for r in tier_regressions(prev, curr)] == ["B1"]
+
+
+def test_compose_tier_alert_no_send() -> None:
+    regs = [{"asin": "B0X", "previous_tier": "HIGH", "current_tier": "LOW", "dropped": True}]
+    a = compose_tier_alert(regs)
+    assert a["code"] == "tier_regression" and a["severity"] == "warning"
+    assert a["channel"] is None
+    assert compose_tier_alert([])["code"] == "ok"
 
 
 def test_resolve_profile() -> None:

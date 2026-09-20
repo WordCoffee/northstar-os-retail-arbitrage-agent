@@ -154,6 +154,32 @@ class TestRunPipeline:
         assert q["status"] in ("ok", "warning", "skipped")
         assert "status" in q
 
+    # --- Phase G — FIXES_50 #25 tier-regression alert (no send) -------------
+
+    def test_tier_regression_alerts_field_present(self):
+        report = asyncio.run(run_pipeline(use_mock=True))
+        alert = report["meta"]["tier_regression_alerts"]
+        assert alert is None or alert["code"] in ("ok", "tier_regression")
+        assert "channel" in alert or alert is None
+
+    def test_tier_regression_alert_wired_against_previous(self, tmp_path, monkeypatch):
+        import agents.golden_goose_finder.main as ggmain
+        monkeypatch.setattr(ggmain, "REPORT_DIR", tmp_path)
+        (tmp_path / "goose_scan_prev.json").write_text(
+            json.dumps({"opportunities": [{"asin": "B0X", "tier": "HIGH"}]}),
+            encoding="utf-8",
+        )
+
+        def fake_regressions(prev, curr):
+            return [{"asin": "B0X", "previous_tier": "HIGH", "current_tier": "LOW", "dropped": True}]
+        monkeypatch.setattr(ggmain, "tier_regressions", fake_regressions)
+
+        report = asyncio.run(run_pipeline(use_mock=True, max_results=2))
+        alert = report["meta"]["tier_regression_alerts"]
+        assert alert is not None
+        assert alert["code"] == "tier_regression" and alert["count"] == 1
+        assert alert["channel"] is None and alert["regressions"][0]["asin"] == "B0X"
+
 
 # ---------------------------------------------------------------------------
 # Economics tests

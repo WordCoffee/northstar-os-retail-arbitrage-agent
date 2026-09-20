@@ -109,6 +109,46 @@ def asin_key(e: Dict[str, Any]) -> str:
     return str(e.get("amazon_asin") or e.get("asin") or "")
 
 
+# --- #25 tier-regression detection ---------------------------------------------
+
+TIER_ORDER = {"HIGH": 4, "MEDIUM": 3, "LOW": 2, "REJECT": 1, "UNKNOWN": 0}
+
+
+def tier_regressions(prev: Sequence[Dict[str, Any]], curr: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """FIXES_50 #25 — detect ASINs whose tier DROPPED between scans.
+
+    Only strictly-downward moves count (HIGH->MEDIUM/LOW/REJECT, MEDIUM->LOW/
+    REJECT, LOW->REJECT). Drops out of the report entirely are NOT regressions
+    (they are covered by diff_reports' dropped list). Pure; no send.
+    """
+    p = {asin_key(e): str((e.get("tier") or "UNKNOWN")).upper() for e in prev}
+    c = {asin_key(e): str((e.get("tier") or "UNKNOWN")).upper() for e in curr}
+    out = []
+    for a in sorted(c):
+        if a and a in p and TIER_ORDER.get(c[a], 0) < TIER_ORDER.get(p[a], 0):
+            out.append({
+                "asin": a,
+                "previous_tier": p[a],
+                "current_tier": c[a],
+                "dropped": True,
+            })
+    return out
+
+
+def compose_tier_alert(regressions: Sequence[Dict[str, Any]], max_items: int = 10) -> Dict[str, Any]:
+    """No-send alert payload for tier regressions (operator wires delivery)."""
+    return {
+        "code": "tier_regression" if regressions else "ok",
+        "severity": "warning" if regressions else "info",
+        "count": len(regressions),
+        "regressions": [
+            {k: r[k] for k in ("asin", "previous_tier", "current_tier")}
+            for r in regressions[:max_items]
+        ],
+        "channel": None,
+    }
+
+
 def diff_reports(prev: Sequence[Dict[str, Any]], curr: Sequence[Dict[str, Any]]) -> Dict[str, List[str]]:
     p = {asin_key(e): e for e in prev}
     c = {asin_key(e): e for e in curr}
