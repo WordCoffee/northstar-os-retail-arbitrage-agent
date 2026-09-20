@@ -1440,6 +1440,32 @@ def _safe_stdout():
         pass
 
 
+def _docs_reference() -> str:
+    """FIXES_50 #50 — auto-generated CLI reference (offline)."""
+    from .gg_workflow import generate_cli_docs
+    return generate_cli_docs("golden-goose-finder", CLI_DOCS_ARGS)
+
+
+# Flags covered by the generated reference (kept with --docs in lockstep;
+# test_cli_docs_drift.py fails the suite if this file drifts).
+CLI_DOCS_ARGS = [
+    ("-h, --help", "Show this help and exit"),
+    ("--mock / --live", "Mock data (default) / live scan (requires §3 operator approval)"),
+    ("--categories", "Filter by category slugs"),
+    ("--stores", "Filter by store names"),
+    ("--roi-floor", "$ minimum net profit per unit (default: $10)"),
+    ("--min-sales", "Minimum monthly sales (default: 1000)"),
+    ("--max-results", "Maximum results (default: 100)"),
+    ("--output-dir", "Report output directory"),
+    ("--json", "Output raw JSON instead of table"),
+    ("--verbose", "Show all candidates including REJECT tier"),
+    ("--dry-run", "Estimate credits/time/volume; NO provider calls, NO report write"),
+    ("--scout-csv", "Write the Scout-panel CSV export to a path"),
+    ("--rollback-to", "Delete LOCAL report+manifest files after a run id"),
+    ("--docs", "Print this auto-generated reference"),
+]
+
+
 def main():
     """CLI entry point."""
     parser = _build_parser()
@@ -1453,26 +1479,8 @@ def main():
 
     if args.docs:
         # FIXES_50 #50: auto-generated reference — offline, no providers.
-        from .gg_workflow import generate_cli_docs
         _safe_stdout()
-        print(generate_cli_docs(
-            "golden-goose-finder",
-            [("-h, --help", "Show this help and exit"),
-             ("--mock / --live", "Mock data (default) / live scan (requires §3 operator approval)"),
-             ("--categories", "Filter by category slugs"),
-             ("--stores", "Filter by store names"),
-             ("--roi-floor", "$ minimum net profit per unit (default: $10)"),
-             ("--min-sales", "Minimum monthly sales (default: 1000)"),
-             ("--max-results", "Maximum results (default: 100)"),
-             ("--output-dir", "Report output directory"),
-             ("--json", "Output raw JSON instead of table"),
-             ("--verbose", "Show all candidates including REJECT tier"),
-             ("--dry-run", "Estimate credits/time/volume; NO provider calls, NO report write"),
-             ("--scout-csv", "Write the Scout-panel CSV export to a path"),
-             ("--rollback-to", "Delete LOCAL report+manifest files after a run id"),
-             ("--docs", "Print this auto-generated reference"),
-             ],
-        ), end="")
+        print(_docs_reference(), end="")
         return 0
 
     if args.rollback_to:
