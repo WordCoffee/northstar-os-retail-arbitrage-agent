@@ -74,7 +74,7 @@ $hasFunctions = ($null -ne $base.baseline.functions)
 
 # ---------- 1. backend sanitized full suite ----------
 Write-Host "== [1/4] Backend sanitized full suite (pytest) =="
-$r = Run-Suite $BackendDir "python -m pytest -q --ignore=agents\golden_goose_finder\test_single_match.py"
+$r = Run-Suite $BackendDir "python -m pytest -q"
 $sm = [regex]::Match($r.text, "(\d+)\s+failed,\s+(\d+)\s+passed,\s+(\d+)\s+skipped,\s+(\d+)\s+subtests\s+passed")
 if ($sm -eq $null) {
     $bParsed = $false

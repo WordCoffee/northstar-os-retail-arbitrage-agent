@@ -7,7 +7,9 @@ approval. No item here authorizes any live call.
 ## B4 — Golden Goose §3 live-gate env flip (in-process)
 
 - **Status:** RESOLVED for `run_live_scan.py` under **B1** (2026-09-19). The
-  test-hygiene portion below remains OPEN for Phase B.
+  test-hygiene portion below was **fixed under Phase F/S3 (2026-09-20)** —
+  `test_single_match.py` was rewritten with no import-time side effects and is
+  re-included in the standard suite (no longer `--ignore`d).
 - **File:** `Northstar_backend/agents/golden_goose_finder/run_live_scan.py`
 - **Finding:** this script set the §3 envelope env var
   `GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED=1` **in-process**, opening the golden-goose
@@ -23,16 +25,15 @@ approval. No item here authorizes any live call.
   Tests: `tests/test_live_scan_gate.py` (gate matrix, refusals make zero
   pipeline calls, authorized fixture path with a fake pipeline, never-self-armed
   source guard).
-- **Related, still OPEN (Phase B — test hygiene, same root cause):**
-  - `agents/golden_goose_finder/test_single_match.py` sets the same env var at
-    **module import time** (line 8) and executes top-level live-discovery code
-    on import. When the full pytest tree is collected, this leaks the gate
-    open for every later test in the same process. Sanctioned suite composition
-    excludes it (Golden Goose module runs = `tests/` subdir only). The file also
-    contains `async def test_match` with no async pytest plugin installed.
-  - Phase B scope: move the env manipulation into a fixture/monkeypatch, gate
-    the import-time execution behind `if __name__ == "__main__"`, and either add
-    an async plugin or make the test sync/marked. (Not actioned in B1/B2.)
+- **Related (Phase F/S3 — RESOLVED):**
+  - `agents/golden_goose_finder/test_single_match.py` previously set the §3
+    envelope env var at module import and ran top-level live-discovery code.
+    **Rewritten (Phase F/S3):** no import-time env flips / dotenv / execution;
+    an offline mock-pipeline test replaces the old live-async test (no async
+    plugin needed); the original live probe lives behind
+    `if __name__ == "__main__"` with an explicit two-gate check. The file is
+    **re-included** in the standard suite (the runner `--ignore` was removed).
+    Hygiene is asserted by `test_import_has_no_side_effects`.
 
 ---
 *Created: 2026-09-19 (Phase A Gate-1 session). Read/write-limited: flagging only.*
