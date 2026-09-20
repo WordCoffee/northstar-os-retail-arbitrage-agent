@@ -161,7 +161,17 @@ are forbidden.
 | `conflict` | 409 | State conflict (e.g. transitioning a terminal job). |
 | `rate_limited` | 429 | Caller rate exceeded. |
 | `provider_unavailable` | 502 | Upstream data source unavailable (generic — **no provider name**). |
-| `not_implemented` | 501 | Endpoint intentionally not implemented; the server returns this honestly instead of a fake success (used e.g. by `functions/api/transcribe.js`). |
+| `not_implemented` | 501 | Endpoint intentionally not implemented; the server returns this honestly instead of a fake success (used by `functions/api/transcribe.js`). |
+
+> **E3 decision (2026-09-20):** `/api/transcribe` is **intentionally deferred**
+> — the 501 `not_implemented` stub is the **frozen behavior through Phase E**
+> (and until a later phase explicitly scopes STT). Rationale: speech-to-text
+> needs either a self-hosted whisper-class backend or a paid STT API; both are
+> out of alpha scope and any paid provider call is a §3 Hard-Stop action
+> requiring named approval (and would incur per-call cost). The BFF contract's
+> honest-stub rule applies: never fake a transcription result. Target phase:
+> post-alpha (Phase F / hosted-release) with an explicit provider + cost
+> approval.
 | `internal_error` | 500 | Unhandled server fault (generic — **no stack trace**). |
 
 **Rules:** `message` is human-readable and leaks nothing; `details` is

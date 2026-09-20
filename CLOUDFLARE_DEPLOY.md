@@ -23,7 +23,7 @@ functions/
     files.js                 # GET /api/files          -> bff/v1 envelope
     latest-deals.js          # GET /api/latest-deals   -> bff/v1 envelope
     data/[filename].js       # GET /api/data/:name     -> bff/v1 envelope
-    transcribe.js            # GET/POST -> 501 not_implemented (honest stub)
+    transcribe.js            # GET/POST -> 501 not_implemented (intentional through Phase E — see E3 note below)
 src/lib/dealsApi.js          # Shared KV read logic for latest-deals
 wrangler.toml                # Pages project config (pages_build_output_dir=public)
 _routes.json                 # /* static, /api/* -> Pages Functions
@@ -190,7 +190,7 @@ src/lib/dealsApi.js   # Shared logic for reading KV data
 | `internal_error` from `/api/latest-deals` | KV binding `DEALS_KV` missing or not bound to the Pages project |
 | CORS errors | Pages Functions auto-handle CORS for same-origin; add headers if calling from elsewhere |
 | Access denies you | Check Zero Trust policy includes your email/domain; verify login method works |
-| `/api/transcribe` returns 501 | Expected — transcription is not implemented in this deployment (honest stub) |
+| `/api/transcribe` returns 501 | **Intentional through Phase E (E3 deferral)** — transcription is not implemented in this deployment; the stub is honest (no fake result). See the E3 decision note below. |
 | Stale data | Pipeline must run and commit new `data/scored/` files; GitHub Action above automates this |
 
 ---
@@ -207,3 +207,9 @@ Total: **$0/month** for typical usage.
 > Updated 2026-09-19 (B5): documents the real Pages + Functions path, the
 > bff/v1 envelope, and the honest `not_implemented` transcribe stub. No
 > Workers compute layer or second deploy target is claimed.
+
+> **E3 decision (2026-09-20):** `/api/transcribe` **remains the 501
+> `not_implemented` stub intentionally through Phase E** (and until a later
+> phase explicitly scopes STT). No live provider is wired; any paid STT call is
+> a §3 Hard-Stop action (named approval + per-call cost). Target phase:
+> post-alpha (Phase F / hosted release) with provider + cost approval.
