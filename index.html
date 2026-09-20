@@ -434,11 +434,10 @@
   </div>
 </footer>
 
-<!-- Universal Voice Integration -->
-<script type="module">
-  import { autoInit } from '/components/universal-voice.js';
-  autoInit({ serverUrl: 'http://localhost:3001' });
-</script>
+<!-- Universal Voice Integration — DISABLED (D4-F5).
+     The previous snippet hardcoded http://localhost:3001 and imported a
+     non-exported name. Voice stays off until a production voice server URL
+     is configured (see components/universal-voice.js). -->
 
 </body>
 </html>
