@@ -10291,20 +10291,24 @@ html[data-theme-v2] {
                 return true;
             },
 
-            /* Commerce Ops + Creative Studio (C6) — honest empty states */
+            /* Commerce Ops + Creative Studio (C6) — honest "coming soon" stubs (S10) */
             renderCommerceOps: function () {
-                var pending = [
-                    'Inventory & restock forecasting — not built (roadmap).',
-                    'Vendor/P&L rollup — not built (roadmap).',
-                ];
-                return '<ul class="state-block">' + pending.map(function (p) { return '<li>' + NS.escapeHtml(p) + '</li>'; }).join('') + '</ul>';
+                return '<div class="state-block" role="note"><strong>Commerce Ops — coming soon.</strong><br/>' +
+                    'This workspace is a placeholder; nothing is fabricated. Planned surfaces:<br/>' +
+                    '<ul>' +
+                    '<li>Inventory &amp; restock forecasting (needs live stock data — provider decision required)</li>' +
+                    '<li>Vendor / P&amp;L rollup (needs billing + ledger wiring — Phase 5)</li>' +
+                    '<li>Order &amp; RFQ tracking (needs Amazon API integration — deferred)</li>' +
+                    '</ul></div>';
             },
             renderCreativeStudio: function () {
                 var items = NS.wsFixtures.creative.map(function (c) {
                     return '<div class="cre-item"><p><strong>' + NS.escapeHtml(c.label) + '</strong> · ' + NS.escapeHtml(c.status) + '</p>' +
-                        '<p>' + NS.escapeHtml(c.prompt) + '</p><button type="button" class="btn" disabled title="Generation is not wired in alpha">Generate (disabled)</button></div>';
+                        '<p>' + NS.escapeHtml(c.prompt) + '</p><button type="button" class="btn" disabled title="Media generation is not wired — requires a provider + spend decision">Generate (disabled)</button></div>';
                 }).join('');
-                return items || '<div class="state-block">No prompts yet.</div>';
+                return '<div class="state-block" role="note"><strong>Creative Studio — prompt library only.</strong><br/>' +
+                    'Image/video generation is not wired (provider + spend decision pending). The prompt list below is editable copy, not generated media.</div>' +
+                    (items || '<div class="state-block">No prompts yet.</div>');
             },
 
             /* Admin (C6, role-gated via B2) */
