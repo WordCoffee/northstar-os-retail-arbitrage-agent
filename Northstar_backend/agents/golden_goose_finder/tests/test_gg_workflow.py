@@ -19,6 +19,7 @@ from agents.golden_goose_finder.gg_workflow import (  # noqa: E402
     TTLCache,
     compose_tier_alert,
     confirm_continue,
+    cron_next_minute,
     diff_reports,
     generate_cli_docs,
     needs_lazy_enrichment,
@@ -26,6 +27,7 @@ from agents.golden_goose_finder.gg_workflow import (  # noqa: E402
     resolve_profile,
     rollback_plan,
     tier_regressions,
+    validate_cron,
     webhook_notify,
     write_rows_streaming,
 )
@@ -147,6 +149,51 @@ def test_scheduler_stub() -> None:
     s.schedule("weekly-scan", "0 6 * * 1")
     s.schedule("daily-enrich", "0 */2 * * *")
     assert len(s.jobs_list()) == 2 and s.jobs_list()[0]["cron"] == "0 6 * * 1"
+
+
+# --- FIXES_50 #45 cron validator + next-fire dry-run (Phase G) ---
+
+def test_validate_cron() -> None:
+    assert validate_cron("0 6 * * 1") is True
+    assert validate_cron("*/15 * * * *") is True
+    assert validate_cron("30 6 * * 1-5") is True
+    assert validate_cron("0 6 * * 7") is True          # 7 = Sunday alias
+    assert validate_cron("0 6 * *") is False           # 4 fields
+    assert validate_cron("61 * * * *") is False        # bad minute
+    assert validate_cron("a * * * *") is False
+    assert validate_cron("") is False
+
+
+def test_cron_next_minute_step() -> None:
+    from datetime import datetime, timezone
+    base = int(datetime(2026, 9, 20, 10, 7, tzinfo=timezone.utc).timestamp())
+    nxt = cron_next_minute("*/15 * * * *", base)
+    expected = int(datetime(2026, 9, 20, 10, 15, tzinfo=timezone.utc).timestamp())
+    assert nxt == expected
+
+
+def test_cron_next_minute_weekly() -> None:
+    from datetime import datetime, timezone
+    sunday = int(datetime(2026, 9, 20, 18, 0, tzinfo=timezone.utc).timestamp())
+    nxt = cron_next_minute("0 6 * * 1", sunday)        # Monday 06:00 UTC
+    expected = int(datetime(2026, 9, 21, 6, 0, tzinfo=timezone.utc).timestamp())
+    assert nxt == expected
+
+
+def test_cron_next_minute_none_for_invalid() -> None:
+    assert cron_next_minute("nope", 1000.0) is None
+
+
+def test_scheduler_dry_run_validates_without_executing() -> None:
+    from datetime import datetime, timezone
+    s = SchedulerStub()
+    s.schedule("weekly-scan", "0 6 * * 1")
+    s.schedule("broken", "99 99 99 99 99")
+    base = int(datetime(2026, 9, 20, 18, 0, tzinfo=timezone.utc).timestamp())
+    out = s.dry_run(now=base)
+    by_name = {r["name"]: r for r in out}
+    assert by_name["weekly-scan"]["valid"] is True and by_name["weekly-scan"]["next_fire_epoch"] is not None
+    assert by_name["broken"]["valid"] is False and "next_fire_epoch" not in by_name["broken"]
 
 
 def test_webhook_stubbed_never_sends(caplog) -> None:

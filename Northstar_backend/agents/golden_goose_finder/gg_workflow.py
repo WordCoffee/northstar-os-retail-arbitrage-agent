@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import time
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence
 
@@ -211,6 +212,120 @@ class SchedulerStub:
 
     def jobs_list(self) -> List[Dict[str, str]]:
         return [{"name": j.name, "cron": j.schedule_cron} for j in self.jobs]
+
+    def dry_run(self, now: Optional[float] = None) -> List[Dict[str, Any]]:
+        """FIXES_50 #45 — validate + compute next-fire ONLY; never executes.
+
+        Proves the jobs *would* fire on schedule without running anything.
+        """
+        out = []
+        base = time.time() if now is None else now
+        for j in self.jobs:
+            if not validate_cron(j.schedule_cron):
+                out.append({"name": j.name, "cron": j.schedule_cron, "valid": False})
+                continue
+            nxt = cron_next_minute(j.schedule_cron, base)
+            out.append({
+                "name": j.name, "cron": j.schedule_cron, "valid": True,
+                "next_fire_epoch": nxt,
+            })
+        return out
+
+
+# --- #45 local cron validator + next-fire (dry-run only) -------------------------
+
+_CRON_RANGES = ((0, 59), (0, 23), (1, 31), (1, 12), (0, 6))
+
+
+def _parse_cron_field(token: str, lo: int, hi: int, allow_sunday_7: bool = False) -> Optional[set]:
+    """Parse one cron field token into a set of allowed values (or None)."""
+    allowed: set = set()
+    for part in str(token).split(","):
+        part = part.strip()
+        if not part:
+            return None
+        step = 1
+        base = part
+        if "/" in part:
+            base, _, step_s = part.rpartition("/")
+            try:
+                step = int(step_s)
+            except ValueError:
+                return None
+            if step <= 0:
+                return None
+        if base == "*":
+            allowed.update(range(lo, hi + 1, step))
+        elif "-" in base:
+            a_s, _, b_s = base.partition("-")
+            try:
+                a, b = int(a_s), int(b_s)
+            except ValueError:
+                return None
+            if a < lo or b > hi or a > b:
+                return None
+            allowed.update(range(a, b + 1, step))
+        else:
+            try:
+                v = int(base)
+            except ValueError:
+                return None
+            if v == 7 and allow_sunday_7:
+                v = 0
+            if v < lo or v > hi:
+                return None
+            if step != 1:
+                return None
+            allowed.add(v)
+    return allowed
+
+
+def _cron_fields(expr: str) -> Optional[List[set]]:
+    fields = str(expr or "").split()
+    if len(fields) != 5:
+        return None
+    out = []
+    for i, (token, (lo, hi)) in enumerate(zip(fields, _CRON_RANGES)):
+        parsed = _parse_cron_field(token, lo, hi, allow_sunday_7=(i == 4))
+        if parsed is None:
+            return None
+        out.append(parsed)
+    return out
+
+
+def validate_cron(expr: str) -> bool:
+    """FIVE standard fields (minute hour day month weekday), numeric tokens:
+    '*', '*/n', 'a-b', 'a', 'a,b'. DOW 0/7 = Sunday. Returns False otherwise."""
+    return _cron_fields(expr) is not None
+
+
+def cron_next_minute(expr: str, now: float) -> Optional[int]:
+    """Epoch (UTC, minute-aligned) of the next minute matching ``expr`` after
+    ``now``, or None if none fires within a 48h horizon. Pure, clock-injected."""
+    fields = _cron_fields(expr)
+    if fields is None:
+        return None
+    minute, hour, dom, month, dow = fields
+    dom_wild = set(dom) == set(range(1, 32))
+    dow_wild = set(dow) == set(range(0, 7))
+    start = int(now) + 60
+    horizon = start + 48 * 3600
+    for epoch in range(start, horizon, 60):
+        dt = datetime.fromtimestamp(epoch, tz=timezone.utc)
+        if dt.minute not in minute or dt.hour not in hour or dt.month not in month:
+            continue
+        py_dow = (dt.weekday() + 1) % 7   # cron convention: 0=Sunday
+        if dom_wild and dow_wild:
+            day_ok = True
+        elif dow_wild:
+            day_ok = dt.day in dom
+        elif dom_wild:
+            day_ok = py_dow in dow
+        else:
+            day_ok = (dt.day in dom) or (py_dow in dow)
+        if day_ok:
+            return epoch
+    return None
 
 
 # --- #46 webhook (local test stub — never sends) --------------------------------------
