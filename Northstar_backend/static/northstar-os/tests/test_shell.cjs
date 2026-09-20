@@ -710,6 +710,27 @@ assert(html.includes('data-src="../../autothink/ui/index.html"'), 'perf: workspa
 assert(!html.includes('<iframe id="at-workspace" src='), 'perf: no static src on the workspace iframe (boot stays light)');
 assert(els['at-workspace'].getAttribute('src') === '../../autothink/ui/index.html', 'perf: workspace iframe mounted once by first visit');
 
+/* ==========================================================================
+ * A3 — demo-data re-sync: the UI subscriber mirror must equal the canonical
+ * catalog (shared/subscription-plans.json). Data-shape fix assertions are
+ * additive; the hub stays zero-network by design.
+ * ========================================================================== */
+const demoPlansA3 = (typeof NS.DEMO === 'function' && NS.DEMO() && NS.DEMO().subscriber && NS.DEMO().subscriber.plans)
+    ? NS.DEMO().subscriber.plans
+    : [];
+const dPanelA3 = demoPlansA3.find((p) => p && p.id === 'autothink');
+assert(!!dPanelA3, 'a3: demo catalog has an autothink plan');
+const CANON_A3 = ['sourcescout_live_pull', 'sourcescout_enrich', 'listingforge_copy', 'listingforge_media', 'adpilot_ads_read', 'adpilot_bulk_exec', 'socialpulse_attrib', 'socialpulse_publish', 'autothink_workspace'];
+assert(!!dPanelA3 && JSON.stringify(dPanelA3.entitled_gates) === JSON.stringify(CANON_A3),
+    'a3: demo autothink gate array matches shared/subscription-plans.json exactly (incl. autothink_workspace, order)');
+assert(demoPlansA3.length === 4, 'a3: demo catalog still four plans (foundation/scout/mover/autothink)');
+assert(JSON.stringify(demoPlansA3, null, 2).toLowerCase().indexOf('unlimited') === -1,
+    'a3: demo catalog carries no "unlimited" language');
+assert(JSON.stringify(demoPlansA3).includes('Everything + AutothinK AI workspace'),
+    'a3: demo autothink blurb matches the canonical description');
+assert((NS.DEMO().subscriber.gateStateNote || '').includes('shared/subscription-plans.json'),
+    'a3: demo mirror cites the canonical catalog path');
+
 console.log('\nShell contract complete.');
 console.log(failures === 0 ? 'ALL GREEN' : failures + ' FAILURES');
 process.exit(failures === 0 ? 0 : 1);

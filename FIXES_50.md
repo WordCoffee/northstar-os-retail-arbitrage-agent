@@ -33,8 +33,8 @@
 23. **Scan manifest** — `scan_manifest.json` per run: inputs, provider versions, env flags, git SHA
 24. **Metrics emission** — Push scan duration, opp count, tier distribution, credit spend to local metrics file
 25. **Alert on tier regression** — If HIGH count drops > 50% vs last scan, notify operator
-26. **Provider latency percentiles** — Track p50/p95/p99 per provider; auto-deprioritize slow providers
-26. **Error budget tracking** — Monthly error budget per provider; pause if exceeded
+26. **Provider latency percentiles** — Track p50/p95/p99 per provider; auto-deprioritize slow providers <!-- DUPLICATE #26 (see second 26 below) — flag only, renumber in a future pass -->
+26. **Error budget tracking** — Monthly error budget per provider; pause if exceeded <!-- DUPLICATE #26 — this file numbers two entries as #26 (latency percentiles above + error budget here); subsequent items 27-50 continue from this second #26. Renumbering deferred to a future doc pass; do not renumber in Phase A. -->
 27. **Structured logging** — JSON logs with `scan_id`, `asin`, `provider`, `stage` for correlation
 28. **Debug mode flag** — `GOLDEN_GOOSE_DEBUG=1` dumps raw HTML, API responses to `data/debug/`
 29. **Replay capability** — Save raw provider responses; `python -m replay_scan --from-file X` for debugging

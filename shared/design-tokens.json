@@ -1,0 +1,70 @@
+{
+  "schema": "design-tokens-v1",
+  "version": 1,
+  "name": "Northstar OS Design Tokens",
+  "description": "Canonical design-token source for Northstar OS surfaces (A3). Single source for color, type scale, spacing, radius, elevation, and motion. Consumed by shared/design-tokens.css (:root alias layer gated behind html[data-theme-v2]). Version-1 values are transcribed VERBATIM from the current active SPA theme (static/index.html, DESIGN SYSTEM v2 blocks), so enabling data-theme-v2 is pixel-identical to today's default; token tuning happens from here, not from SPA markup.",
+  "modes": ["dark", "light"],
+  "default_mode": "dark",
+  "tokens": {
+    "color": {
+      "bg-app":        { "dark": "#0a0f1f",                     "light": "#f2f3f9" },
+      "bg-panel":      { "dark": "#101830",                     "light": "#ffffff" },
+      "bg-raised":     { "dark": "#182142",                     "light": "#eef0f7" },
+      "bg-hover":      { "dark": "#223059",                     "light": "#e7eaf4" },
+      "border":        { "dark": "#223156",                     "light": "#e2e6f0" },
+      "border-strong": { "dark": "#33446f",                     "light": "#c7cfe2" },
+      "text-hi":       { "dark": "#eef1fb",                     "light": "#0f172a" },
+      "text":          { "dark": "#c2cbe2",                     "light": "#3b4a66" },
+      "text-muted":    { "dark": "#7e8bb2",                     "light": "#66748f" },
+      "text-faint":    { "dark": "#5a6994",                     "light": "#93a0b8" },
+      "accent":        { "dark": "#8b7bff",                     "light": "#5b53e8" },
+      "accent-hi":     { "dark": "#a99bff",                     "light": "#463dcf" },
+      "accent-hover":  { "dark": "#409cff",                     "light": "#0077ed" },
+      "accent-soft":   { "dark": "rgba(139, 123, 255, 0.14)",   "light": "rgba(91, 83, 232, 0.1)" },
+      "pos":           { "dark": "#3ddc97",                     "light": "#0f9d6e" },
+      "pos-soft":      { "dark": "rgba(61, 220, 151, 0.13)",    "light": "rgba(15, 157, 110, 0.11)" },
+      "warn":          { "dark": "#e3b341",                     "light": "#b07d13" },
+      "warn-soft":     { "dark": "rgba(227, 179, 65, 0.13)",    "light": "rgba(176, 125, 19, 0.11)" },
+      "neg":           { "dark": "#f27c6a",                     "light": "#d6453c" },
+      "neg-soft":      { "dark": "rgba(242, 124, 106, 0.13)",   "light": "rgba(214, 69, 60, 0.11)" },
+      "info":          { "dark": "#6aa3e8",                     "light": "#3e78c0" },
+      "info-soft":     { "dark": "rgba(106, 163, 232, 0.13)",   "light": "rgba(62, 120, 192, 0.11)" },
+      "neutral-soft":  { "dark": "rgba(126, 139, 178, 0.14)",   "light": "rgba(102, 116, 143, 0.12)" }
+    },
+    "type": {
+      "font-ui":  { "dark": "\"Inter\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", Helvetica, Arial, sans-serif", "light": "\"Inter\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", Helvetica, Arial, sans-serif" },
+      "font-mono":{ "dark": "ui-monospace, \"SF Mono\", \"Cascadia Code\", \"Segoe UI Mono\", Consolas, monospace", "light": "ui-monospace, \"SF Mono\", \"Cascadia Code\", \"Segoe UI Mono\", Consolas, monospace" },
+      "xs":  { "dark": "10.5px", "light": "10.5px" },
+      "sm":  { "dark": "11.5px", "light": "11.5px" },
+      "base":{ "dark": "13px",   "light": "13px" },
+      "md":  { "dark": "14px",   "light": "14px" },
+      "lg":  { "dark": "16px",   "light": "16px" },
+      "xl":  { "dark": "18px",   "light": "18px" }
+    },
+    "spacing": {
+      "1":  { "dark": "4px",  "light": "4px" },
+      "2":  { "dark": "8px",  "light": "8px" },
+      "3":  { "dark": "12px", "light": "12px" },
+      "4":  { "dark": "16px", "light": "16px" },
+      "5":  { "dark": "20px", "light": "20px" },
+      "6":  { "dark": "24px", "light": "24px" },
+      "8":  { "dark": "32px", "light": "32px" },
+      "10": { "dark": "40px", "light": "40px" }
+    },
+    "radius": {
+      "sm":  { "dark": "8px",  "light": "8px" },
+      "base":{ "dark": "12px", "light": "12px" },
+      "lg":  { "dark": "16px", "light": "16px" }
+    },
+    "elevation": {
+      "sm":  { "dark": "0 1px 2px rgba(0, 0, 0, 0.25)",                   "light": "0 1px 2px rgba(16, 32, 46, 0.06)" },
+      "base":{ "dark": "0 1px 2px rgba(0, 0, 0, 0.4)",                    "light": "0 1px 3px rgba(23, 30, 76, 0.08), 0 1px 2px rgba(23, 30, 76, 0.03)" },
+      "md":  { "dark": "0 2px 8px rgba(0, 0, 0, 0.3)",                     "light": "0 2px 8px rgba(16, 32, 46, 0.08)" },
+      "lg":  { "dark": "0 4px 16px rgba(0, 0, 0, 0.4)",                    "light": "0 4px 16px rgba(16, 32, 46, 0.10)" }
+    },
+    "motion": {
+      "dur":  { "dark": "0.2s",                    "light": "0.2s" },
+      "ease": { "dark": "cubic-bezier(.4,0,.2,1)", "light": "cubic-bezier(.4,0,.2,1)" }
+    }
+  }
+}

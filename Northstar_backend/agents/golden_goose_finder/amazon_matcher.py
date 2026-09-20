@@ -104,6 +104,57 @@ def seller_identity_blocked(
 
 
 # ---------------------------------------------------------------------------
+# ASIN validation (fix #12) — mock-pattern / malformed ASIN rejection
+# ---------------------------------------------------------------------------
+#
+# Real Amazon ASINs are exactly 10 alphanumeric characters. The placeholder
+# shape ``B0`` followed by 8 hex digits (^B0[a-f0-9]{8}$) is the synthetic
+# form produced by this module's own offline mock generator (_stable_hash),
+# so it is the tell-tale of ASINs that must NOT be trusted from — or sent
+# to — external providers.
+#
+# Gate placement: this gate applies at EXTERNAL boundaries only —
+#  - provider results entering matching (_live_find_matches,
+#    amazon_adapters.parse_chocodata_results), and
+#  - ASINs bound for outbound provider calls (the adapter caller factories
+#    in amazon_adapters.py).
+# The offline mock path (get_mock_amazon_matches) intentionally produces the
+# mock shape and is exempt: its ASINs never leave the process and never reach
+# a provider. This matches FIXES_50 #12 ("reject before sending to Bright
+# Data/Chocodata").
+
+ASIN_RE = re.compile(r"^[A-Z0-9]{10}$", re.I)
+MOCK_ASIN_RE = re.compile(r"^B0[a-f0-9]{8}$", re.I)
+
+
+def is_valid_asin(asin: object) -> bool:
+    """True only for a well-formed, non-mock ASIN (fix #12).
+
+    Accepts exactly 10 alphanumeric characters and rejects the mock-pattern
+    shape ``^B0[a-f0-9]{8}$`` (case-insensitive).
+    """
+    if not isinstance(asin, str):
+        return False
+    raw = asin.strip()
+    if not ASIN_RE.match(raw):
+        return False
+    if MOCK_ASIN_RE.match(raw):
+        return False
+    return True
+
+
+def reject_invalid_asin(asin: object, context: str = "") -> None:
+    """Raise ValueError unless ``asin`` passes :func:`is_valid_asin` (fix #12).
+
+    ``context`` is a short label (e.g. the provider name) so rejection
+    messages pin down which boundary caught the ASIN.
+    """
+    if not is_valid_asin(asin):
+        label = f" ({context})" if context else ""
+        raise ValueError(f"Invalid or mock-pattern ASIN rejected{label}: {asin!r}")
+
+
+# ---------------------------------------------------------------------------
 # Multi-pack indicator tokens to strip from search queries
 # ---------------------------------------------------------------------------
 
@@ -545,6 +596,15 @@ def _live_find_matches(
     matches: list[AmazonMatch] = []
     for cand in candidates[:max_candidates * 3]:  # fetch extra for filtering
         try:
+            # fix #12: never let an invalid/mock-pattern ASIN enter matching.
+            # parse_chocodata_results already drops them, but re-check at the
+            # matcher boundary so any provider path is covered.
+            if not is_valid_asin(cand.get("asin")):
+                logger.debug(
+                    "[AmazonMatcher] Dropped provider ASIN (invalid or mock-pattern): %r",
+                    cand.get("asin"),
+                )
+                continue
             match = AmazonMatch(
                 asin=cand["asin"],
                 title=cand["title"],

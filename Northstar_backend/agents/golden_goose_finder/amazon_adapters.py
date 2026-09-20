@@ -24,6 +24,11 @@ from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
+# fix #12 — share the mock-pattern / malformed ASIN gate with the matcher.
+# amazon_matcher does not import this module at module level, so there is no
+# import cycle.
+from .amazon_matcher import is_valid_asin, reject_invalid_asin
+
 # --- Bright Data seller extraction ---
 # Reuse the shared seller extraction from amazon_seller_extract
 try:
@@ -167,7 +172,11 @@ def parse_chocodata_results(
             continue
 
         asin = item.get("asin")
-        if not asin:
+        # fix #12 — reject mock-pattern / malformed ASINs at the provider
+        # parse boundary so they never enter matching or any later provider
+        # call (e.g. seller enrichment).
+        if not is_valid_asin(asin):
+            logger.debug("[Chocodata] Dropped invalid/mock-pattern ASIN: %r", asin)
             continue
 
         title = item.get("title") or item.get("name") or ""
@@ -268,6 +277,9 @@ def make_easy_parser_seller_caller(asin: str):
     The closure fetches the seller roster for an ASIN and returns a dict with
     seller identity information.  Raises on failure so the router falls through.
     """
+    # fix #12 — reject mock-pattern / malformed ASINs before any request can
+    # be built (never bill a provider for a bogus ASIN).
+    reject_invalid_asin(asin, context="EasyParser sellers")
 
     def caller(provider, task_type: str) -> Dict[str, Any]:
         api_key = os.getenv(provider.key_env, "")
@@ -400,6 +412,9 @@ def make_bright_data_offers_caller(asin: str):
     Web Unlocker and parses seller identity using the shared extractor.
     Returns a dict matching parse_easy_parser_sellers output.
     """
+    # fix #12 — reject mock-pattern / malformed ASINs before any request can
+    # be built (never spend a credit on a bogus ASIN).
+    reject_invalid_asin(asin, context="Bright Data offers")
 
     def caller(provider, task_type: str) -> Dict[str, Any]:
         api_key = os.getenv(provider.key_env, "")
@@ -488,6 +503,9 @@ def make_generic_seller_caller(asin: str):
     The router passes the selected provider; we dispatch to the appropriate
     adapter based on provider.id.
     """
+    # fix #12 — reject mock-pattern / malformed ASINs at the router boundary
+    # before any provider is selected or billed.
+    reject_invalid_asin(asin, context="generic seller router")
 
     def caller(provider, task_type: str) -> Dict[str, Any]:
         provider_id = provider.id

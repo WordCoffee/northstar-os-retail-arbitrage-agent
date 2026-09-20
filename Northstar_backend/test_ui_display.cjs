@@ -119,6 +119,7 @@ const context = vm.createContext({
     document: documentStub,
     localStorage: localStorageStub,
     window: { innerWidth: 1280 },
+    location: { search: '' },
     fetch: () => new Promise(() => {}),
     setTimeout,
     clearTimeout,
@@ -2997,6 +2998,74 @@ assert(fetchCalls.length === 0, 'phase18: zero fetch calls during all Focus inte
 
         g = gateOf({});
         assert(g && g.key === 'needs_review', 'empty {} => needs_review (default fallback, not invoice_pending)');
+
+        /* ==========================================================================
+         * A3 — design tokens: canonical source embedded + aliased, v2-gated.
+         * Default <html> keeps the OLD theme (no data-theme-v2 attr) until the
+         * full contract passes on v2. Additive assertions only.
+         * ========================================================================== */
+        /* the default <html> tag must carry NO data-theme-v2 (old theme stays default) */
+        const htmlTagA3 = html.slice(html.indexOf('<html'), html.indexOf('>', html.indexOf('<html')) + 1);
+        assert(htmlTagA3.includes('data-theme="light"') && !htmlTagA3.includes('data-theme-v2'),
+            'a3: default <html> has NO data-theme-v2 (old theme stays default)');
+        assert(html.includes('html[data-theme-v2]'), 'a3: token layer gated behind html[data-theme-v2]');
+        assert(html.includes('--ns-color-bg-app: #0a0f1f'), 'a3: canonical dark token present (color/bg-app)');
+        assert(html.includes('--ns-color-bg-app: #f2f3f9'), 'a3: canonical light token present (color/bg-app)');
+        assert(html.includes('--bg-app: var(--ns-color-bg-app)'), 'a3: existing var --bg-app aliased to token');
+        assert(html.includes('--card-r: var(--ns-radius-lg)'), 'a3: radius alias covers --card-r');
+        assert(html.includes('--dur: var(--ns-motion-dur)'), 'a3: motion dur aliased (--dur -> --ns-motion-dur)');
+        assert(html.includes('--ease: var(--ns-motion-ease)'), 'a3: motion ease aliased (--ease -> --ns-motion-ease)');
+        /* sync guard: the embedded token CSS must match shared/design-tokens.css verbatim (CRLF-normalized) */
+        const tokBegin = 'A3 DESIGN-TOKENS: BEGIN';
+        const tokEnd = 'A3 DESIGN-TOKENS: END';
+        const tokIdxB = html.indexOf(tokBegin);
+        const tokIdxE = html.lastIndexOf(tokEnd);
+        const embeddedOk = tokIdxB !== -1 && tokIdxE !== -1 && tokIdxE > tokIdxB;
+        const contentStart = embeddedOk ? html.indexOf('\n', tokIdxB) + 1 : -1;
+        const contentEnd = embeddedOk ? html.lastIndexOf('\n', tokIdxE) : -1;
+        const embeddedCss = (contentStart !== -1 && contentEnd > contentStart)
+            ? html.slice(contentStart, contentEnd).replace(/\r/g, '').trim()
+            : '';
+        const tokCssFile = fs.readFileSync(path.join(__dirname, '..', 'shared', 'design-tokens.css'), 'utf8').replace(/\r/g, '').trim();
+        assert(embeddedCss === tokCssFile, 'a3: embedded token CSS matches shared/design-tokens.css verbatim (sync guard)');
+
+        /* ==========================================================================
+         * A4 — SPA v2 redesign: presentation layer behind html[data-theme-v2].
+         * Additive assertions: v2 CSS block present + token-driven, dev toggle
+         * wiring present, and the toggle provably DOES NOT activate by default.
+         * ========================================================================== */
+        assert(html.includes('A4 SPA V2 REDESIGN: BEGIN') && html.includes('A4 SPA V2 REDESIGN: END'),
+            'a4: v2 redesign CSS block present between A4 markers');
+        assert(html.includes('html[data-theme-v2] #mainContent { max-width:') || html.includes('html[data-theme-v2] .app-shell'),
+            'a4: v2 layout rules scoped behind data-theme-v2');
+        assert(html.includes('html[data-theme-v2] .intel-metric') && html.includes('var(--ns-space-'),
+            'a4: v2 spacing rhythm uses --ns-space tokens');
+        assert(html.includes('html[data-theme-v2] #scoutTable') && html.includes('font-variant-numeric: tabular-nums'),
+            'a4: v2 typography applied to table with tabular numerals');
+        assert(html.includes('html[data-theme-v2] .btn.primary') && html.includes('var(--ns-color-accent)'),
+            'a4: v2 button surface uses accent tokens');
+        assert(html.includes(':focus-visible') && html.includes('var(--ns-color-accent-hi)'),
+            'a4: v2 focus-visible outline (accessibility)');
+        assert(html.includes('prefers-reduced-motion') && html.includes('html[data-theme-v2] .stream-row'),
+            'a4: v2 respects prefers-reduced-motion');
+        assert(html.indexOf('THEME_V2_KEY') !== -1 && html.includes('NS.applyThemeV2') && html.includes('initThemeV2'),
+            'a4: dev toggle JS present (localStorage flag + apply + boot)');
+        assert(/[?&]v2=1/.test(html) && html.includes("'t2.kirklandScout.themeV2.v1'"),
+            'a4: ?v2=1 query param + localStorage key wired');
+        assert(/id="devV2Btn"[^>]*aria-label="Toggle v2 theme \(dev-only\)"/.test(html),
+            'a4: dev V2 chip carries an aria-label (accessibility)');
+        /* functional: default boot must NOT activate v2 (old theme stays default) */
+        const v2HtmlRec = { attrs: new Map(), setAttribute(k, v) { this.attrs.set(k, String(v)); }, removeAttribute(k) { this.attrs.delete(k); }, getAttribute(k) { return this.attrs.has(k) ? this.attrs.get(k) : null; } };
+        documentStub.documentElement = v2HtmlRec;
+        vm.runInContext(`localStorage.removeItem('t2.kirklandScout.themeV2.v1'); initThemeV2();`, context);
+        assert(!v2HtmlRec.attrs.has('data-theme-v2') && vm.runInContext(`localStorage.getItem('t2.kirklandScout.themeV2.v1')`, context) === '0',
+            'a4: default boot leaves data-theme-v2 OFF and persists 0');
+        /* functional: flag/param path activates the attribute */
+        vm.runInContext(`localStorage.setItem('t2.kirklandScout.themeV2.v1', '1'); initThemeV2();`, context);
+        assert(v2HtmlRec.attrs.get('data-theme-v2') === '' && vm.runInContext(`localStorage.getItem('t2.kirklandScout.themeV2.v1')`, context) === '1',
+            'a4: localStorage flag activates data-theme-v2');
+        vm.runInContext(`NS.applyThemeV2(false);`, context);
+        assert(!v2HtmlRec.attrs.has('data-theme-v2'), 'a4: applyThemeV2(false) removes the attribute');
 
         if (failures === 0) {
     console.log('ALL UI DISPLAY TESTS PASSED');
