@@ -3202,6 +3202,16 @@ assert(fetchCalls.length === 0, 'phase18: zero fetch calls during all Focus inte
             && html.indexOf('/legal/refund') !== -1, 'c9: SPA footer carries Terms/Privacy/Refund links');
         assert(html.indexOf('data-slot="onboarding-spa"') !== -1, 'c9: onboarding disclaimer slot present');
 
+        /* S5 — scan manifest surfaced in the GG workspace (read-only) */
+        const ggManifestPayload = { report_meta: { mode: 'mock', scan_manifest: {
+            git_sha: '0a5126b', inputs: { categories: 'all', use_mock: true, dry_run: false },
+            env_flags: { GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED: false } } }, items: [] };
+        const manifestHtml = vm.runInContext('NS.ggSeam.renderManifest(' + JSON.stringify(ggManifestPayload) + ')', context);
+        assert(manifestHtml.indexOf('Scan manifest') !== -1 && manifestHtml.indexOf('0a5126b') !== -1
+            && manifestHtml.indexOf('env flags') !== -1, 's5: gg workspace surfaces the scan manifest read-only');
+        assert(vm.runInContext('NS.ggSeam.renderManifest({items:[]})', context) === '',
+            's5: no manifest -> empty surface (honest)');
+
         if (failures === 0) {
     console.log('ALL UI DISPLAY TESTS PASSED');
 } else {

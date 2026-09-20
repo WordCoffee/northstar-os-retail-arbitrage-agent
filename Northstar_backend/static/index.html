@@ -5990,6 +5990,7 @@ html[data-theme-v2] {
                         Tier = HIGH / MEDIUM / LOW / REJECT from the finder's scorer. Figures are
                         per-unit estimates on fixture/report data, never live provider data here.
                     </div>
+                    <div class="gg-seam-manifest" id="ggManifestBox" hidden></div>
                     <div class="table-wrap" id="ggSeamWrap" hidden>
                         <table id="ggSeamTable" aria-label="Golden Goose opportunities">
                             <caption class="sr-only">Golden Goose finder opportunities by composite score</caption>
@@ -9834,7 +9835,35 @@ html[data-theme-v2] {
                 NS.ggSeam.setStatus(rows.length + ' opportunities · HIGH ' +
                     (summary.high_tier_count != null ? summary.high_tier_count : '—') +
                     ' · mode ' + (((payload && payload.report_meta) || {}).mode || 'unknown'));
+                NS.ggSeam.renderManifest(payload);
                 return rows;
+            },
+            // S5: read-only surfacing of the scan manifest written by the
+            // backend (FIXES_50 #23) — inputs, git sha, env-flag presence.
+            // No write path. Returns the rendered HTML for tests.
+            renderManifest: function (payload) {
+                var box = el('ggManifestBox');
+                var manifest = null;
+                if (payload && payload.report_meta && payload.report_meta.scan_manifest) {
+                    manifest = payload.report_meta.scan_manifest;
+                } else if (payload && payload.scan_manifest) {
+                    manifest = payload.scan_manifest;
+                }
+                if (!manifest) {
+                    if (box) { box.hidden = true; box.innerHTML = ''; }
+                    return '';
+                }
+                var inputs = manifest.inputs || {};
+                var flags = manifest.env_flags || {};
+                var flagList = Object.keys(flags).map(function (k) { return k + '=' + (flags[k] ? 'on' : 'off'); }).join(', ');
+                var html = '<div class="gg-manifest" role="note"><strong>Scan manifest</strong> · git ' +
+                    NS.escapeHtml(manifest.git_sha || 'unknown') +
+                    ' · mode ' + NS.escapeHtml(inputs.use_mock ? 'mock' : 'live') +
+                    (inputs.dry_run ? ' · dry-run' : '') +
+                    ' · categories ' + NS.escapeHtml(String(inputs.categories || 'all')) +
+                    '<br/><span class="gg-manifest-sub">env flags: ' + NS.escapeHtml(flagList) + '</span></div>';
+                if (box) { box.innerHTML = html; box.hidden = false; }
+                return html;
             },
             // v2-gated entry point. Returns false (no network) when v2 is off.
             open: function () {
