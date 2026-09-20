@@ -35,12 +35,17 @@ import conftest as _conftest  # noqa: E402
 
 
 def _credential_vars_now() -> list:
-    return [n for n in os.environ if _CREDENTIAL_RE.search(n) and n not in _SAFE_VARS]
+    return [
+        n for n in os.environ
+        if _CREDENTIAL_RE.search(n) and n not in _SAFE_VARS
+        and not _conftest._is_placeholder_value(os.environ[n])
+    ]
 
 
 def test_no_credential_env_vars_present() -> None:
     assert _credential_vars_now() == [], (
-        "credential-shaped env vars leaked into the test process: %r" % _credential_vars_now()
+        "real credential values leaked into the test process: %r"
+        % {n: "<redacted>" for n in _credential_vars_now()}
     )
 
 
@@ -51,6 +56,24 @@ def test_scrub_function_removes_and_preserves_safe() -> None:
     assert "SUPERSECRET_API_KEY" not in os.environ
     assert os.environ.get("NORTHSTAR_DISABLE_RATE_LIMIT") == "1"   # safe var kept
     _conftest._restore_env(snapshot)
+
+
+def test_offline_mock_placeholder_keys_survive() -> None:
+    """Test-authored mock keys (DUMMY / test-key-*) are NOT real secrets.
+
+    The offline rehearsal suites set credential-NAMED vars to placeholders so
+    their mocked provider paths run; S12 must not break them.
+    """
+    os.environ["KEENABLE_API_KEY"] = "DUMMY"
+    os.environ["BRIGHTDATA_UNLOCKER_API_KEY"] = "test-key-brightdata"
+    os.environ["FIRECRAWL_API_KEY"] = "test-key-firecrawl"
+    snapshot = _conftest._scrub_credential_env()
+    try:
+        assert os.environ.get("KEENABLE_API_KEY") == "DUMMY"
+        assert os.environ.get("BRIGHTDATA_UNLOCKER_API_KEY") == "test-key-brightdata"
+        assert os.environ.get("FIRECRAWL_API_KEY") == "test-key-firecrawl"
+    finally:
+        _conftest._restore_env(snapshot)
 
 
 def test_env_files_not_tracked_by_git() -> None:

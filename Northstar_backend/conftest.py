@@ -32,20 +32,36 @@ _CREDENTIAL_RE = re.compile(
     r"KEY|TOKEN|SECRET|PASSWORD|PASSWD|CREDENTIAL|API\.?KEY|AUTH", re.IGNORECASE
 )
 
+# Test suites intentionally set credential-NAMED vars to placeholder values so
+# their OFFLINE rehearsals run (provider_seller_probe uses "DUMMY"; the
+# full-pull rehearsal uses "test-key-*"). Only non-placeholder values are
+# treated as real secrets and scrubbed.
+def _is_placeholder_value(value: str) -> bool:
+    if not value:
+        return True
+    if value == "DUMMY":
+        return True
+    if value.startswith("test-key-") or value.startswith("test-"):
+        return True
+    return False
+
+
+def _is_credential(name: str, value: str) -> bool:
+    return name not in _SAFE_VARS and bool(_CREDENTIAL_RE.search(name)) and not _is_placeholder_value(value)
+
+
 _snapshot: dict = {}
 
 
 def _scrub_credential_env() -> dict:
-    """Remove credential-shaped vars from os.environ.
+    """Remove real credential values from os.environ.
 
     Returns a snapshot {name: value} so tests can restore them afterward
     (restoration is only for consistency — nothing below reads values).
     """
     removed = {}
     for name in list(os.environ.keys()):
-        if name in _SAFE_VARS:
-            continue
-        if _CREDENTIAL_RE.search(name):
+        if _is_credential(name, os.environ[name]):
             removed[name] = os.environ.pop(name)
     return removed
 
@@ -58,6 +74,11 @@ def _restore_env(snapshot: dict) -> None:
 
 def pytest_configure(config):  # noqa: ANN001
     """Scrub once at startup — before any test module collection result runs."""
+    _snapshot.update(_scrub_credential_env())
+
+
+def pytest_collection_finish(session):  # noqa: ANN001
+    """Scrub after collection: test-module imports may have run load_dotenv()."""
     _snapshot.update(_scrub_credential_env())
 
 
