@@ -180,6 +180,20 @@ class TestRunPipeline:
         assert alert["code"] == "tier_regression" and alert["count"] == 1
         assert alert["channel"] is None and alert["regressions"][0]["asin"] == "B0X"
 
+    # --- Phase G — FIXES_50 #46 webhook trigger point (stub, no send) -------
+
+    def test_webhook_stub_fires_on_high_tier(self):
+        report = asyncio.run(run_pipeline(use_mock=True))
+        if report["summary"]["high_tier_count"] > 0:
+            assert report["meta"]["webhook_status"] == "stubbed"
+        else:
+            assert report["meta"]["webhook_status"] == "not_triggered"
+
+    def test_webhook_not_fired_with_zero_opportunities(self):
+        report = asyncio.run(run_pipeline(use_mock=True, categories=["nonexistent-category-xyz"]))
+        assert report["summary"]["high_tier_count"] == 0
+        assert report["meta"]["webhook_status"] == "not_triggered"
+
 
 # ---------------------------------------------------------------------------
 # Economics tests

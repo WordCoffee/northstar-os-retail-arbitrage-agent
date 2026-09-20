@@ -880,6 +880,25 @@ async def run_pipeline(
     ]
     avg_roi = round(sum(viable_rois) / len(viable_rois), 1) if viable_rois else 0
 
+    # FIXES_50 #46: webhook trigger point on HIGH-tier opportunities. The
+    # notify call is a STUB — it logs and never sends (delivery is operator
+    # wiring); the URL is never a real value from the environment.
+    webhook_state = "stubbed" if (high_count > 0 and webhook_notify is not None) else "not_triggered"
+    if webhook_state == "stubbed":
+        import os as _hook_os
+        configured = bool(str(_hook_os.getenv("GOLDEN_GOOSE_WEBHOOK_URL", "") or "").strip())
+        webhook_notify(
+            "https://placeholder.invalid" if not configured else "<configured-in-env>",
+            {
+                "event": "high_tier_found",
+                "high_count": high_count,
+                "scan_mode": "mock" if use_mock else "live",
+                "webhook_configured": configured,      # presence flag only — no values
+                "top_asins": [o.get("amazon_asin", "") for o in opportunities
+                              if o.get("tier") == "HIGH"][:5],
+            },
+        )
+
     report = {
         "meta": {
             "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -902,6 +921,7 @@ async def run_pipeline(
                 min_monthly_sales=min_monthly_sales, max_results=max_results,
                 use_mock=use_mock, dry_run=False, scan_complete=scan_complete,
             ),
+            "webhook_status": webhook_state,
         },
         "summary": {
             "total_opportunities": len(opportunities),
@@ -1424,6 +1444,12 @@ def main():
     """CLI entry point."""
     parser = _build_parser()
     args = parser.parse_args()
+    global REPORT_DIR
+
+    # --output-dir applies to every action below (scan, rollback, docs).
+    output_dir = Path(args.output_dir) if args.output_dir else None
+    if output_dir:
+        REPORT_DIR = output_dir
 
     if args.docs:
         # FIXES_50 #50: auto-generated reference — offline, no providers.
@@ -1470,11 +1496,6 @@ def main():
             print("       Set GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED=1 and re-run.")
             print("       Use --mock for testing.")
             sys.exit(1)
-
-    output_dir = Path(args.output_dir) if args.output_dir else None
-    if output_dir:
-        global REPORT_DIR
-        REPORT_DIR = output_dir
 
     _safe_stdout()
     print("\n🦢 Golden Goose Finder v0.1.0")
@@ -1538,4 +1559,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
