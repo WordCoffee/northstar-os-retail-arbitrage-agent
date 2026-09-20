@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created": "2026-09-19T19:20:00Z",
-  "note": "Canary baseline for the Northstar OS All-Tests runner (scripts/run_all_tests.ps1). Recorded after Phase C (C1-C9 workspaces; GG envelope/dry-run/manifest/atomic-save/entitlement; credit meter; legal embed; rate-limiter harness opt-out). Any drift off these counts (or any failure outside known_exceptions) fails the aggregate as RED. The two known failures are PRE-EXISTING protected-hash drift (fixtures/protected_hashes.json vs data/scanner-search-cache.json) tracked here and NOT being fixed (per operator direction).",
+  "note": "Canary baseline for the Northstar OS All-Tests runner (scripts/run_all_tests.ps1). Recorded after Phase E1 (monitoring: /api/health route + functions suite coverage) / Phase C (C1-C9 workspaces; GG envelope/dry-run/manifest/atomic-save/entitlement; credit meter; legal embed; rate-limiter harness opt-out). Any drift off these counts (or any failure outside known_exceptions) fails the aggregate as RED. The two known failures are PRE-EXISTING protected-hash drift (fixtures/protected_hashes.json vs data/scanner-search-cache.json) tracked here and NOT being fixed (per operator direction).",
   "known_exceptions": {
     "ignored": [
       "agents/golden_goose_finder/test_single_match.py"
@@ -11,7 +11,7 @@
       "test_proof_batch_run.py::KnownTitleConflictTests::test_protected_artifacts_byte_identical",
       "test_proof_batch_run.py::Attempt2PreflightTests::test_no_protected_artifact_changed"
     ],
-    "known_failures_reason": "pre-existing protected-hash drift: fixtures/protected_hashes.json baseline for data/scanner-search-cache.json is stale (366c… expected vs 7c0b… on the committed, git-clean file). Tracked, not fixed."
+    "known_failures_reason": "pre-existing protected-hash drift: fixtures/protected_hashes.json baseline for data/scanner-search-cache.json is stale (366c\u2026 expected vs 7c0b\u2026 on the committed, git-clean file). Tracked, not fixed."
   },
   "baseline": {
     "backend": {
@@ -33,7 +33,7 @@
       "failed": 0
     },
     "functions": {
-      "passed": 25,
+      "passed": 31,
       "failed": 0
     }
   }

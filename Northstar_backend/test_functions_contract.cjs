@@ -115,6 +115,19 @@ function assertStatus(body, url, status) {
   assertStatus(body, '/api/latest-deals', 'ok');
   assert(Array.isArray(body.data.rows) && body.data.rows.length === 0, '/api/latest-deals empty rows honest');
 
+  /* ---------- health.js (E1 uptime) ---------- */
+  const health = await load('health.js');
+  ctx = { env: { DEALS_KV: {} } };
+  body = await (await health.onRequestGet(ctx)).json();
+  assertEnvelope(body, '/api/health', 200);
+  assertStatus(body, '/api/health', 'ok');
+  assert(body.data.status === 'ok' && body.data.kv_bound === true,
+    '/api/health reports ok + KV binding present');
+  assertNoLeak(body, '/api/health');
+  ctx = { env: {} };
+  body = await (await health.onRequestGet(ctx)).json();
+  assert(body.data.kv_bound === false, '/api/health reports kv_bound:false when unbound (honest)');
+
   /* ---------- aggregate ---------- */
   console.log(failures === 0 ? '\nFUNCTIONS CONTRACT OK' : '\n' + failures + ' FAILURE(S)');
   process.exitCode = failures === 0 ? 0 : 1;
