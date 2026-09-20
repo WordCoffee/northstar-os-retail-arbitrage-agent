@@ -87,6 +87,15 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         }
 
     async def dispatch(self, request: Request, call_next):
+        # Local/test builds may disable the edge rate limiter (the shared
+        # pytest process counts every TestClient call against one client id,
+        # which tripped anonymous 30/min during larger suites). Product limits
+        # above remain the deployed default; set NORTHSTAR_DISABLE_RATE_LIMIT=1
+        # only in harness/tooling invocations.
+        import os
+        if os.getenv("NORTHSTAR_DISABLE_RATE_LIMIT", "").strip() == "1":
+            return await call_next(request)
+
         # Skip rate limiting for health checks and static files
         path = request.url.path
         if path in ("/health", "/health/detailed") or path.startswith("/static"):

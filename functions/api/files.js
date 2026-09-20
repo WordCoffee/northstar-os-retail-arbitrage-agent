@@ -1,14 +1,22 @@
+import { ok, empty, internalError } from "./_envelope.js";
+
 export async function onRequestGet(context) {
   const { env } = context;
   try {
     const raw = await env.DEALS_KV.get("scored:index");
-    return new Response(raw || "[]", {
-      headers: { "Content-Type": "application/json" }
-    });
+    if (raw === null || raw === undefined) {
+      const data = { files: [] };
+      return empty(data, "sourcescout");
+    }
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (e) {
+      // KV returned malformed index — treat as empty, never leak the value.
+      return empty({ files: [] }, "sourcescout");
+    }
+    return ok({ files: parsed }, "sourcescout");
   } catch (e) {
-    return new Response(JSON.stringify({ error: e.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
+    return internalError("sourcescout");
   }
 }

@@ -29,7 +29,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 
 # ---------------------------------------------------------------------------
 # Sibling module imports (graceful degradation when modules are stubs).
@@ -612,6 +612,84 @@ def _get_mock_wholesale_products(categories: list[str] | None = None) -> list:
 # Default scan timeout budget (seconds)
 DEFAULT_SCAN_TIMEOUT = 300  # 5 minutes
 
+# FIXES_50 #49: dry-run estimate constants (credit-ledger/v1 §3, no spend).
+CC_SEARCH_PER_CATEGORY = 10   # goose.scan.live estimate (one search per category)
+CC_ENRICH_PER_OPP = 1         # sourcescout.enrich estimate (per opportunity)
+EST_SECONDS_PER_SEARCH = 2.0
+EST_SECONDS_PER_OPP = 0.05
+EST_OPP_CAP = 1000            # hard ceiling for the projected count
+
+
+def _manifest_env_flags() -> dict[str, bool]:
+    """Presence-only flags for the scan manifest — never values (B7 no-leak)."""
+    import os as _os
+    names = (
+        "GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED",
+        "GOLDEN_GOOSE_LIVE_AUTH_PHRASE",
+        "SCANNER_LIVE_ALLOWED",
+        "COSTCO_CATALOG_DETAIL_ENABLED",
+        "BRIGHTDATA_COSTCO_DETAIL_ENABLED",
+        "FIRECRAWL_COSTCO_DETAIL_ENABLED",
+    )
+    return {n: bool(str(_os.getenv(n, "") or "").strip()) for n in names}
+
+
+def _git_sha() -> str | None:
+    """Best-effort HEAD sha for the scan manifest (never a live operation)."""
+    import subprocess
+    try:
+        out = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if out.returncode == 0 and out.stdout.strip():
+            return out.stdout.strip()[:12]
+    except Exception:
+        return None
+    return None
+
+
+def build_scan_manifest(*, categories, stores, roi_floor, min_monthly_sales,
+                        max_results, use_mock, dry_run) -> dict[str, Any]:
+    """FIXES_50 #23: scan manifest (inputs / provider versions / env flags /
+    git SHA). No secrets, no provider values — presence-only flags."""
+    return {
+        "manifest_kind": "goose.scan",
+        "inputs": {
+            "categories": categories or "all",
+            "stores": stores or None,
+            "roi_floor": roi_floor,
+            "min_monthly_sales": min_monthly_sales,
+            "max_results": max_results,
+            "use_mock": use_mock,
+            "dry_run": dry_run,
+        },
+        "provider_versions": {"pipeline_version": "0.1.0"},
+        "env_flags": _manifest_env_flags(),
+        "git_sha": _git_sha(),
+        "session_tool": "northstar-os-alpha",
+    }
+
+
+def _dry_run_estimate(categories: list[str] | None, max_results: int) -> dict[str, Any]:
+    """FIXES_50 #49: credit/time/volume projection with ZERO provider calls.
+
+    Uses the SAFE offline mock discovery routine only for a projected count;
+    no economics/scoring are run and nothing is written to disk."""
+    n_categories = 1 if not categories else max(1, len(categories))
+    projected_opps = min(EST_OPP_CAP, max_results)
+    credits = (n_categories * CC_SEARCH_PER_CATEGORY) + (projected_opps * CC_ENRICH_PER_OPP)
+    seconds = round((n_categories * EST_SECONDS_PER_SEARCH) + (projected_opps * EST_SECONDS_PER_OPP), 1)
+    return {
+        "dry_run": True,
+        "would_run_live": False,
+        "estimated_credits": credits,
+        "estimated_time_seconds": seconds,
+        "estimated_opportunities": projected_opps,
+        "categories_scanned": categories or "all",
+        "note": "Estimate only — no provider call was made and no report was written.",
+    }
+
 
 async def run_pipeline(
     use_mock: bool = True,
@@ -621,6 +699,7 @@ async def run_pipeline(
     min_monthly_sales: int = 1000,
     max_results: int = 100,
     scan_timeout: float = DEFAULT_SCAN_TIMEOUT,
+    dry_run: bool = False,
 ) -> dict[str, Any]:
     """Execute the full Golden Goose pipeline.
 
@@ -630,9 +709,47 @@ async def run_pipeline(
     Phase 4: SCORING   — Score, tier, and rank all opportunities
     Phase 5: REPORTING — Generate reports and export data
 
+    ``dry_run=True`` (FIXES_50 #49) makes ZERO provider calls and writes NO
+    report: it returns a credit/time/volume projection instead.
+
     Returns the full report dict.
     """
     start = time.time()
+
+    # FIXES_50 #49: dry-run never touches a provider, never writes a report,
+    # and never requires the live gate (there is no call to authorize).
+    if dry_run:
+        estimate = _dry_run_estimate(categories, max_results)
+        report = {
+            "meta": {
+                "generated_at": datetime.now(timezone.utc).isoformat(),
+                "pipeline_version": "0.1.0",
+                "mode": "dry-run",
+                "elapsed_seconds": round(time.time() - start, 3),
+                "scan_complete": True,
+                "scan_timeout_seconds": scan_timeout,
+                "categories_scanned": categories or "all",
+                "stores_scanned": stores or ["Costco", "Sam's Club"],
+                "filters": {
+                    "roi_floor": roi_floor,
+                    "min_monthly_sales": min_monthly_sales,
+                    "max_results": max_results,
+                },
+                "dry_run": estimate,
+                "scan_manifest": build_scan_manifest(
+                    categories=categories, stores=stores, roi_floor=roi_floor,
+                    min_monthly_sales=min_monthly_sales, max_results=max_results,
+                    use_mock=use_mock, dry_run=True,
+                ),
+            },
+            "summary": {"total_opportunities": 0, "high_tier_count": 0,
+                        "medium_tier_count": 0, "low_tier_count": 0,
+                        "reject_count": 0, "estimated_monthly_profit": 0.0,
+                        "average_roi_pct": 0.0},
+            "opportunities": [],
+        }
+        return report
+
     scan_deadline = start + scan_timeout
 
     if use_mock:
@@ -713,6 +830,11 @@ async def run_pipeline(
                 "min_monthly_sales": min_monthly_sales,
                 "max_results": max_results,
             },
+            "scan_manifest": build_scan_manifest(
+                categories=categories, stores=stores, roi_floor=roi_floor,
+                min_monthly_sales=min_monthly_sales, max_results=max_results,
+                use_mock=use_mock, dry_run=False,
+            ),
         },
         "summary": {
             "total_opportunities": len(opportunities),
@@ -726,7 +848,7 @@ async def run_pipeline(
         "opportunities": opportunities,
     }
 
-    # Save report to disk (atomic write)
+    # Save report to disk (atomic write) + scan manifest (FIXES_50 #23)
     try:
         REPORT_DIR.mkdir(parents=True, exist_ok=True)
         ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
@@ -737,6 +859,13 @@ async def run_pipeline(
             json.dump(report, f, indent=2, default=str)
         temp_path.replace(report_path)
         report["meta"]["report_path"] = str(report_path)
+
+        manifest_path = REPORT_DIR / f"scan_manifest_{ts}.json"
+        mtmp = manifest_path.with_suffix(".tmp")
+        with open(mtmp, "w", encoding="utf-8") as f:
+            json.dump(report["meta"]["scan_manifest"], f, indent=2, default=str)
+        mtmp.replace(manifest_path)
+        report["meta"]["scan_manifest_path"] = str(manifest_path)
     except Exception as exc:
         logger.warning("[GoldenGoose] Report save failed: %s", exc)
 
@@ -826,6 +955,97 @@ def _scored_to_dicts(scored: list) -> list[dict[str, Any]]:
 router = APIRouter(prefix="/api/golden-goose", tags=["golden-goose"])
 
 
+# ---------------------------------------------------------------------------
+# bff/v1 envelope + entitlement helpers for this router (B1/B7 contracts).
+# ---------------------------------------------------------------------------
+import secrets as _secrets
+from .gg_entitlements import gg_entitlements_for_plan  # noqa: E402
+from .job_model import DONE, GooseJob, new_job_id  # noqa: E402
+
+
+def _bff(envelope_status: str, data=None, error=None, http_status: int = 200):
+    """Uniform bff/v1 JSON response (no provider names, IDs, or paths leak)."""
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        {
+            "contract": "bff/v1",
+            "request_id": "req_" + _secrets.token_hex(16),
+            "status": envelope_status,
+            "data": data,
+            "error": error,
+            "meta": {"service": "golden_goose", "version": "v1"},
+        },
+        status_code=http_status,
+    )
+
+
+def _bff_ok(data):
+    return _bff("ok", data=data)
+
+
+def _bff_empty(data=None):
+    return _bff("empty", data=data or {})
+
+
+def _bff_err(code: str, message: str, http_status: int):
+    return _bff(
+        "error",
+        error={"code": code, "message": message,
+               "retryable": code in ("provider_unavailable", "rate_limited"),
+               "details": None},
+        http_status=http_status,
+    )
+
+
+def _strip_internal(meta: dict) -> dict:
+    """Remove internal filesystem paths before serving a report's meta."""
+    out = dict(meta or {})
+    out.pop("report_path", None)
+    out.pop("scan_manifest_path", None)
+    return out
+
+
+def _caller_plan(request) -> str:
+    """Resolve the caller's plan from a bearer token; demo = foundation."""
+    hdr = request.headers.get("authorization", "") if request else ""
+    if hdr.lower().startswith("bearer "):
+        try:
+            import auth as _auth
+            payload = _auth.decode_token(hdr[7:].strip())
+            plan = payload.get("plan", "foundation")
+            gg_entitlements_for_plan(plan)   # unknown plan ids raise -> fall to demo
+            return plan
+        except Exception:
+            return "foundation"
+    return "foundation"
+
+
+def _category_denied_response(request, category: str):
+    """Return a 403 envelope response when the plan does not entitle a GG
+    category, else None (allowed)."""
+    plan = _caller_plan(request)
+    try:
+        ent = gg_entitlements_for_plan(plan)
+    except Exception:
+        ent = {"categories": [], "exports": []}
+    if category not in ent["categories"]:
+        return _bff_err(
+            "entitlement_required",
+            "This plan does not entitle Golden Goose category %r." % category,
+            403,
+        )
+    return None
+
+
+def _done_job_view() -> dict:
+    """An opaque, finished job view for a served report (B7 job model)."""
+    from .job_model import DONE, RUNNING, GooseJob, new_job_id
+    job = GooseJob(job_id=new_job_id())
+    job.transition(RUNNING)
+    job.transition(DONE)
+    return job.public_view()
+
+
 @router.post("/scan-mock")
 async def scan_mock(
     categories: list[str] | None = Query(None),
@@ -833,7 +1053,10 @@ async def scan_mock(
     min_monthly_sales: int = Query(1000),
     max_results: int = Query(100),
 ):
-    """Run a scan using mock data (no live API calls). Safe for testing."""
+    """Run a scan using mock data (no live API calls). Safe for testing.
+
+    Returns the bff/v1 envelope; internal report/scan_manifest paths are
+    stripped (no-leak, B1 §6)."""
     report = await run_pipeline(
         use_mock=True,
         categories=categories,
@@ -841,12 +1064,11 @@ async def scan_mock(
         min_monthly_sales=min_monthly_sales,
         max_results=max_results,
     )
-    return {
-        "status": "ok",
+    return _bff_ok({
         "summary": report["summary"],
         "opportunities": report["opportunities"],
-        "meta": report["meta"],
-    }
+        "meta": _strip_internal(report["meta"]),
+    })
 
 
 @router.post("/scan")
@@ -902,15 +1124,22 @@ async def scan_live(
 
 @router.get("/opportunities")
 async def get_opportunities(
+    request: Request,
     tier: str | None = Query(None),
     category: str | None = Query(None),
     min_profit: float | None = Query(None),
 ):
     """Get previously scanned and scored opportunities from latest report.
 
-    Prefers the most recent LIVE scan report over mock reports so the panel
-    surfaces real data when it exists.
+    bff/v1 envelope; category filters are gated by the caller's plan
+    (B7 entitlement mapping); internal report paths are stripped; the
+    response carries an opaque, finished job view (B7 job model).
     """
+    if category:
+        denied = _category_denied_response(request, category)
+        if denied is not None:
+            return denied
+
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
     def _mtime(p):
@@ -935,12 +1164,11 @@ async def get_opportunities(
         report_files = live_reports
 
     if not report_files:
-        return {
-            "status": "no_data",
+        return _bff_empty({
+            "reason": "no_reports_yet",
             "message": "No scan reports found. Run a scan first via POST /api/golden-goose/scan-mock.",
-            "opportunities": [],
-            "summary": {},
-        }
+            "next": "/api/golden-goose/scan-mock",
+        })
 
     with open(report_files[0], "r", encoding="utf-8") as f:
         report = json.load(f)
@@ -955,34 +1183,61 @@ async def get_opportunities(
     if min_profit is not None:
         opps = [o for o in opps if (o.get("net_profit_per_unit") or 0) >= min_profit]
 
-    return {
-        "status": "ok",
-        "report_meta": report.get("meta", {}),
+    return _bff_ok({
+        "items": opps,
         "summary": report.get("summary", {}),
-        "opportunities": opps,
-    }
+        "report_meta": _strip_internal(report.get("meta", {})),
+        "job": _done_job_view(),
+    })
 
 
 @router.get("/categories")
 async def list_categories():
-    """List all target categories with their configuration."""
+    """List all target categories with their configuration (bff/v1 envelope)."""
     try:
         if get_all_categories is not None:
             cats = get_all_categories()
-            return {"status": "ok", "categories": cats}
+            return _bff_ok({"categories": cats})
     except Exception:
         pass
 
-    return {
-        "status": "ok",
-        "categories": _BUILTIN_CATEGORIES,
-    }
+    return _bff_ok({"categories": _BUILTIN_CATEGORIES})
+
+
+@router.get("/dry-run")
+async def dry_run_scan(
+    categories: list[str] | None = Query(None),
+    roi_floor: float = Query(10.0),
+    min_monthly_sales: int = Query(1000),
+    max_results: int = Query(100),
+):
+    """FIXES_50 #49: dry-run projection. Zero provider calls, no report write."""
+    report = await run_pipeline(
+        use_mock=True, categories=categories,
+        roi_floor=roi_floor, min_monthly_sales=min_monthly_sales,
+        max_results=max_results, dry_run=True,
+    )
+    return _bff_ok({
+        "meta": _strip_internal(report["meta"]),
+        "estimate": report["meta"]["dry_run"],
+    })
+
+
+@router.get("/entitlements")
+async def gg_entitlements_route(request: Request):
+    """The caller's plan -> GG categories/exports (B7 mapping, envelope-wrapped)."""
+    plan = _caller_plan(request)
+    try:
+        ent = gg_entitlements_for_plan(plan)
+    except Exception:
+        ent = {"plan": plan, "categories": [], "exports": []}
+    return _bff_ok(ent)
 
 
 @router.get("/health")
 async def health_check():
-    """Health check for the Golden Goose Finder service."""
-    return {
+    """Health check for the Golden Goose Finder service (bff/v1 envelope)."""
+    return _bff_ok({
         "status": "ok",
         "service": "golden-goose-finder",
         "version": "0.1.0",
@@ -995,7 +1250,7 @@ async def health_check():
             "goose_report": generate_json_report is not None and not _is_noop(generate_json_report),
         },
         "mock_data_source": "builtin" if WholesaleProduct is None else "sibling_module",
-    }
+    })
 
 
 def _is_noop(fn) -> bool:
@@ -1028,6 +1283,8 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output-dir", type=str, default=None, help="Report output directory")
     parser.add_argument("--json", action="store_true", help="Output raw JSON instead of table")
     parser.add_argument("--verbose", action="store_true", help="Show all candidates including REJECT tier")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="FIXES_50 #49: estimate credits/time/volume; NO provider calls, NO report write")
 
     return parser
 
@@ -1115,6 +1372,7 @@ def main():
             roi_floor=args.roi_floor,
             min_monthly_sales=args.min_sales,
             max_results=args.max_results,
+            dry_run=args.dry_run,
         )
     )
 
@@ -1122,6 +1380,15 @@ def main():
         print(json.dumps(report, indent=2, default=str))
     else:
         summary = report["summary"]
+        if args.dry_run:
+            est = report["meta"].get("dry_run", {})
+            print("  DRY-RUN      (no provider call, no report written)")
+            print(f"  Est Credits: {est.get('estimated_credits', 0)}")
+            print(f"  Est Time:    {est.get('estimated_time_seconds', 0)}s")
+            print(f"  Est Opps:    {est.get('estimated_opportunities', 0)}")
+            print(f"  Categories:  {est.get('categories_scanned', 'all')}")
+            print(f"  Note:        {est.get('note', '')}")
+            sys.exit(0)
         print(f"  Results:    {summary['total_opportunities']} opportunities")
         print(f"  HIGH:       {summary['high_tier_count']}")
         print(f"  MEDIUM:     {summary['medium_tier_count']}")

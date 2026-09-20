@@ -1012,6 +1012,14 @@ writes reports — it is a test mode, not a dry-run).
 
 No build work happens here in Phase A (Gate 1 is flagging + confirming scope).
 
+**B2 progress (2026-09-19):** the Golden Goose finder's real output is now wired
+into the SPA v2 shell (`static/index.html`) behind `html[data-theme-v2]`, via the
+finder's actual contract `GET /api/golden-goose/opportunities`
+(report-backed/offline). The workspace consumes the `_scored_to_dicts` shape
+(rank, tier, net/ROI, composite score, price-gap + ad-feasibility scores,
+seller identity). `/scan` remains 403-gated. Items #49 (dry-run), #23 (scan
+manifest), and #10 (atomic `save_report`) above remain NEW B/C work.
+
 ---
 
 ## 17. MODEL STRATEGY ADDENDUM {#17-model-strategy-addendum}

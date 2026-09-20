@@ -33,7 +33,7 @@ class _FakeStreamResponse:
 
 class AdapterTests(unittest.TestCase):
     def setUp(self):
-        self.adapter = UnifiedLLMAdapter(local_model="qwen2.5-coder:14b", timeout_s=5)
+        self.adapter = UnifiedLLMAdapter(local_model="qwen3:14b", timeout_s=5)
 
     @mock.patch("backend.llm_adapter.requests.post")
     def test_local_generate_success(self, mock_post):
@@ -50,7 +50,7 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(result["prompt_tokens"], 12)
         self.assertEqual(result["completion_tokens"], 8)
         mocked_call = mock_post.call_args
-        self.assertEqual(mocked_call.kwargs["json"]["model"], "qwen2.5-coder:14b")
+        self.assertEqual(mocked_call.kwargs["json"]["model"], "qwen3:14b")
         self.assertTrue(mocked_call.kwargs["json"]["stream"])
         self.assertEqual(mocked_call.kwargs["json"]["options"]["num_predict"], la.NUM_PREDICT)
         self.assertEqual(mocked_call.kwargs["json"]["options"]["num_ctx"], la.NUM_CTX)
@@ -84,10 +84,10 @@ class AdapterTests(unittest.TestCase):
     def test_list_local_models_parses_tags(self, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
-            "models": [{"name": "qwen2.5-coder:14b"}, {"name": "deepseek-r1:14b"}, {"name": ""}]
+            "models": [{"name": "qwen3:14b"}, {"name": "qwen3:4b"}, {"name": ""}]
         }
         models = self.adapter.list_local_models()
-        self.assertEqual(models, ["qwen2.5-coder:14b", "deepseek-r1:14b"])
+        self.assertEqual(models, ["qwen3:14b", "qwen3:4b"])
 
     def test_cloud_without_key_is_gated(self):
         with mock.patch.dict(os.environ, {}, clear=False):

@@ -38,7 +38,7 @@ class _FakeAdapter:
         return False
 
     def list_local_models(self):
-        return ["qwen2.5-coder:14b"]
+        return ["qwen3:14b"]
 
 
 class AutoThinkApiTests(unittest.TestCase):
@@ -74,7 +74,7 @@ class AutoThinkApiTests(unittest.TestCase):
         r = self.client.get("/api/autothink/models")
         self.assertEqual(r.status_code, 200)
         data = r.json()
-        self.assertIn("qwen2.5-coder:14b", data["models"])
+        self.assertIn("qwen3:14b", data["models"])
         self.assertTrue(data["local_available"])
         self.assertFalse(data["cloud_available"])
 

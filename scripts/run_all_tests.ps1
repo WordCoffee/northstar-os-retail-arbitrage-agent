@@ -26,6 +26,10 @@ $BaselinePath = Join-Path $Root "tests\BASELINE.json"
 $BackendDir  = Join-Path $Root "Northstar_backend"
 $ShellDir    = Join-Path $Root "Northstar_backend\static\northstar-os"
 $TmpDir      = if ($env:TEMP) { $env:TEMP } else { $Root }
+# Harness-only: disable the edge rate limiter so the shared test process
+# (one client id) is not throttled by the anonymous 30/min production limit.
+# Product limits are unchanged — this only affects the runner's own runs.
+$env:NORTHSTAR_DISABLE_RATE_LIMIT = "1"
 
 function Read-Text($path) {
     try { return Get-Content -Raw -Encoding UTF8 $path } catch {}
@@ -66,6 +70,7 @@ $base = $null
 try { $base = $baseText | ConvertFrom-Json } catch {}
 if ($base -eq $null) { Write-Host "FATAL: tests/BASELINE.json is not valid JSON" -ForegroundColor Red; exit 1 }
 $known = @($base.known_exceptions.known_failures)
+$hasFunctions = ($null -ne $base.baseline.functions)
 
 # ---------- 1. backend sanitized full suite ----------
 Write-Host "== [1/4] Backend sanitized full suite (pytest) =="
@@ -142,6 +147,25 @@ $shOk = ($shPassed -eq $shExp) -and ($shFailed -eq 0) -and $shDone
 $shLabel = if ($shOk) { "OK" } else { "MISMATCH" }
 Write-Host ("  {0} passed, {1} failed | {2}" -f $shPassed, $shFailed, $shLabel)
 if (-not $shOk) { $mismatch = $mismatch + 1; Write-Host ("    diff: shell passed {0} != baseline {1} (or failures/missing marker)" -f $shPassed, $shExp) -ForegroundColor Yellow }
+
+# ---------- 5. Cloudflare Functions contract suite ----------
+Write-Host "== [5/5] Cloudflare Functions contract suite (node test_functions_contract.cjs) =="
+$r = Run-Suite $BackendDir "node test_functions_contract.cjs"
+$fnPassed = ([regex]::Matches($r.text, "(?m)^PASS:")).Count
+$fnFailed = ([regex]::Matches($r.text, "(?m)^FAIL:")).Count
+$fnDone   = [regex]::IsMatch($r.text, "FUNCTIONS CONTRACT OK")
+if ($hasFunctions) {
+    $fnExp = [int]$base.baseline.functions.passed
+    $fnOk = ($fnPassed -eq $fnExp) -and ($fnFailed -eq 0) -and $fnDone
+    $fnLabel = if ($fnOk) { "OK" } else { "MISMATCH" }
+    Write-Host ("  {0} passed, {1} failed | {2}" -f $fnPassed, $fnFailed, $fnLabel)
+    if (-not $fnOk) { $mismatch = $mismatch + 1; Write-Host ("    diff: functions passed {0} != baseline {1} (or failures/missing marker)" -f $fnPassed, $fnExp) -ForegroundColor Yellow }
+} else {
+    $fnOk = ($fnFailed -eq 0) -and $fnDone
+    $fnLabel = if ($fnOk) { "OK" } else { "MISMATCH" }
+    Write-Host ("  {0} passed, {1} failed | baseline not recorded yet (will record after next baseline update) | {2}" -f $fnPassed, $fnFailed, $fnLabel)
+    if (-not $fnOk) { $mismatch = $mismatch + 1 }
+}
 
 # ---------- aggregate ----------
 Write-Host ""

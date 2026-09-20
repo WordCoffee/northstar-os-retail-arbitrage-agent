@@ -3067,6 +3067,141 @@ assert(fetchCalls.length === 0, 'phase18: zero fetch calls during all Focus inte
         vm.runInContext(`NS.applyThemeV2(false);`, context);
         assert(!v2HtmlRec.attrs.has('data-theme-v2'), 'a4: applyThemeV2(false) removes the attribute');
 
+        /* ==========================================================================
+         * B2 — Golden Goose finder seam (v2 workspace, real data contract).
+         * Additive: markup + v2 gating + pure contract mapping/render, and a
+         * functional check that the seam makes ZERO fetches while v2 is off.
+         * ========================================================================== */
+        assert(html.includes('B2 GOLDEN GOOSE SEAM: BEGIN') && html.includes('B2 GOLDEN GOOSE SEAM: END'),
+            'b2: seam CSS block present between B2 markers');
+        assert(html.includes('id="view-goldengoose"') && html.includes('id="ggSeamTable"'),
+            'b2: Golden Goose workspace section + table present');
+        assert(/id="nav-goldengoose"[^>]*class="[^"]*gg-v2-only[^"]*"[^>]*hidden/.test(html)
+            || /class="[^"]*gg-v2-only[^"]*"[^>]*id="nav-goldengoose"[^>]*hidden/.test(html)
+            || html.includes('gg-v2-only" id="nav-goldengoose"') && html.includes('id="nav-goldengoose"'),
+            'b2: v2-only nav entry present');
+        assert(html.includes('html:not([data-theme-v2]) .gg-v2-only { display: none !important; }'),
+            'b2: v2-only nav/dock hidden unless data-theme-v2');
+        assert(html.includes("GG_SEAM_URL = '/api/golden-goose/opportunities'"),
+            'b2: seam binds the finder real endpoint contract');
+        const ggFixture = { rank: 1, amazon_asin: 'B0FIXTURE01', brand: 'Kirkland',
+            wholesale_title: 'Kirkland Signature Minoxidil Foam', net_profit_per_unit: 12.5,
+            roi_per_unit: 114.4, composite_score: 88.5, tier: 'HIGH', source_store: 'Costco',
+            pack_count: 6, monthly_sales_estimate: 3200, fba_sellers: 2, opportunity_tags: ['profitable'] };
+        const mapped = vm.runInContext('NS.ggSeam.mapOpportunity(' + JSON.stringify(ggFixture) + ')', context);
+        assert(mapped.asin === 'B0FIXTURE01' && mapped.tier === 'HIGH' && mapped.net === 12.5 && mapped.score === 88.5,
+            'b2: mapOpportunity maps the real finder contract to a UI row');
+        const mappedHtml = vm.runInContext('NS.ggSeam.renderRows([' + JSON.stringify(mapped) + '])', context);
+        assert(mappedHtml.indexOf('B0FIXTURE01') !== -1 && mappedHtml.indexOf('gg-tier-high') !== -1,
+            'b2: renderRows emits ASIN + tier class');
+        const mappedMissing = vm.runInContext('NS.ggSeam.mapOpportunity({amazon_asin:"B0X", tier:"REJECT", net_profit_per_unit:null})', context);
+        assert(mappedMissing.net === null, 'b2: null finder profit stays null (never fabricated 0)');
+        assert(vm.runInContext('NS.ggSeam.renderRows([' + JSON.stringify(mappedMissing) + '])', context).indexOf('$0.00') === -1,
+            'b2: no fabricated $0.00 for a null opportunity');
+        /* functional v2 gate: seam must make ZERO fetch calls while v2 is OFF */
+        vm.runInContext("__ggCalls = 0; __ggUrl = null; fetch = function (u) { __ggCalls++; __ggUrl = u; return new Promise(function () {}); };", context);
+        const openedOff = vm.runInContext('NS.ggSeam.loaded = false; NS.ggSeam.open();', context);
+        assert(openedOff === false && vm.runInContext('__ggCalls', context) === 0,
+            'b2: seam makes zero fetches and returns false while v2 is OFF (default untouched)');
+        v2HtmlRec.setAttribute('data-theme-v2', '');
+        vm.runInContext('NS.ggSeam.open();', context);
+        assert(vm.runInContext('__ggCalls', context) === 1
+            && String(vm.runInContext('__ggUrl', context)).indexOf('/api/golden-goose/opportunities') !== -1,
+            'b2: seam fetches the finder endpoint exactly once when v2 is ON');
+        v2HtmlRec.removeAttribute('data-theme-v2');
+
+        /* ==========================================================================
+         * B6 — disclaimer embed: the SPA footer slot must exist and carry the
+         * required copy (additive; matches docs/contracts/DISCLAIMER_EMBED_v1.md).
+         * ========================================================================== */
+        assert(/<footer[^>]*class="ns-disclaimer"[^>]*id="nsFooterDisclaimer"[^>]*data-slot="spa-footer"/.test(html),
+            'b6: SPA footer disclaimer slot present (#nsFooterDisclaimer, data-slot=spa-footer)');
+        assert(html.includes('not a recommendation to buy, and not an approval to resell')
+            && html.includes('Plans never flip live gates')
+            && html.indexOf('unlimited') === -1,
+            'b6: SPA footer disclaimer carries the required copy; no "unlimited" language');
+
+        /* ==========================================================================
+         * Phase C — service workspaces against the frozen contracts.
+         * Additive: registry/view wiring, envelope + no-leak fixtures, honest
+         * states, approval flow + credit meter, role-gated admin, onboarding,
+         * and the /legal embed links.
+         * ========================================================================== */
+        /* structure: all workspace views + nav exist behind v2 */
+        ['commandcenter', 'sourcescout', 'listingforge', 'adpilot', 'socialpulse',
+         'autothink', 'commerceops', 'creativestudio', 'admin'].forEach(function (id) {
+            assert(html.includes('id="view-' + id + '"'), 'c: view ' + id + ' section present');
+            assert(vm.runInContext('WS_VIEW_META.' + id + ' !== undefined', context),
+                'c: WS_VIEW_META registered for ' + id);
+        });
+        assert(html.includes('nav-sourcescout') && html.includes('nr-sourcescout')
+            && html.includes('nav-autothink') && html.includes('nr-autothink'),
+            'c: workspace nav + dock entries present');
+        assert(html.includes('onboardingOverlay') && html.includes('id="onboardingStart"'),
+            'c6: onboarding overlay + start button present');
+        assert(vm.runInContext('typeof NS.ws !== "undefined" && NS.ws.renderWorkspace !== undefined', context),
+            'c: NS.ws workspace engine present');
+
+        /* envelope + no-leak (B1) are enforced client-side for fixtures/exports */
+        assert(vm.runInContext('NS.bff.ok({items:[1,2]}).contract', context) === 'bff/v1',
+            'c: NS.bff.ok emits the bff/v1 envelope');
+        assert(vm.runInContext('NS.bff.assertNoLeak({provider:"brightdata"})', context) === false
+            && vm.runInContext('NS.bff.assertNoLeak({asin:"B0X", tier:"HIGH"})', context) === true,
+            'c: no-leak allowlist rejects provider tokens and accepts product data');
+        assert(vm.runInContext('NS.bff.assertNoLeak({report_path:"C:/x"})', context) === false,
+            'c: report_path is on the client no-leak allowlist');
+
+        /* SourceScout (C1): filters + table + honest empty */
+        vm.runInContext('NS.ws.ssState = { search: "", tier: "all", rows: NS.wsFixtures.sourcescout.slice(), loaded: true };', context);
+        const ssHtml = vm.runInContext('NS.ws.renderSourceScout()', context);
+        assert(ssHtml.indexOf('Kirkland Signature Fish Oil') !== -1, 'c1: SourceScout renders fixture rows');
+        vm.runInContext('NS.ws.ssState.tier = "Pass";', context);
+        assert(vm.runInContext('NS.ws.renderSourceScout()', context).indexOf('Member\'s Mark Trash Bags') === -1
+            || vm.runInContext('NS.ws.renderSourceScout()', context).indexOf('Hold') === -1,
+            'c1: tier filter excludes Hold rows');
+        vm.runInContext('NS.ws.ssState.tier = "all"; NS.ws.ssState.rows = [];', context);
+        assert(vm.runInContext('NS.ws.renderSourceScout()', context).indexOf('No matches') !== -1,
+            'c1: empty state is honest (no fabricated rows)');
+        vm.runInContext('NS.ws.ssState.rows = NS.wsFixtures.sourcescout.slice();', context);
+
+        /* ListingForge (C2): generate + save + disabled publish */
+        vm.runInContext('NS.ws.lfState.drafts = []; NS.ws.lfGenerate();', context);
+        assert(vm.runInContext('NS.ws.renderListingForge()', context).indexOf('Publish (disabled)') !== -1
+            && vm.runInContext('NS.ws.renderListingForge()', context).indexOf('Mock draft') !== -1,
+            'c2: ListingForge renders drafts with disabled publish + mock label');
+
+        /* AdPilot (C3): sanitize removes forbidden fields, manifest is no-leak */
+        vm.runInContext('NS.ws.apState.sanitized = null; NS.ws.apState.manifest = null; NS.ws.apSanitize();', context);
+        assert(vm.runInContext('NS.ws.apState.sanitized.every(function(r){ return r.provider === undefined; })', context),
+            'c3: AdPilot sanitize strips provider fields');
+        assert(vm.runInContext('NS.ws.apBuildManifest()', context) === true
+            && vm.runInContext('NS.bff.assertNoLeak(NS.ws.apState.manifest)', context) === true,
+            'c3: AdPilot manifest is no-leak');
+
+        /* AutothinK (C8): approval states + credit meter read-only */
+        vm.runInContext('NS.ws.atDraft();', context);
+        assert(vm.runInContext('NS.ws.runState', context) === 'awaiting_approval'
+            || vm.runInContext('NS.ws.runState', context) === 'draft',
+            'c8: draft state advanced toward approval');
+        assert(vm.runInContext('NS.ws.atComplete(false)', context) === 'failed', 'c8: reject -> failed state');
+        assert(vm.runInContext('NS.ws.atComplete(true)', context) === 'done', 'c8: approve -> done state');
+        vm.runInContext('NS.ws.atMeterSet({ data: { balance: 500, allotment: 500 } });', context);
+        assert(vm.runInContext('NS.ws.atCreditBalance', context) === 500, 'c8: credit meter reads balance (read-only)');
+        assert(vm.runInContext('NS.ws.atMeterSet(null)', context) === null, 'c8: meter unavailable is honest (null)');
+
+        /* Admin (C6): role-gated least-privilege */
+        vm.runInContext('NS.wsSession = { role: "member", plan: "foundation" };', context);
+        assert(vm.runInContext('NS.ws.renderAdmin()', context).indexOf('Authorization required') !== -1,
+            'c6: admin view is role-gated (member denied)');
+        vm.runInContext('NS.wsSession = { role: "admin", plan: "autothink" };', context);
+        assert(vm.runInContext('NS.ws.renderAdmin()', context).indexOf('password') === -1,
+            'c6: admin view shows basic account fields only');
+
+        /* C9: legal embed — /legal links present in SPA footer + onboarding */
+        assert(html.indexOf('/legal/terms') !== -1 && html.indexOf('/legal/privacy') !== -1
+            && html.indexOf('/legal/refund') !== -1, 'c9: SPA footer carries Terms/Privacy/Refund links');
+        assert(html.indexOf('data-slot="onboarding-spa"') !== -1, 'c9: onboarding disclaimer slot present');
+
         if (failures === 0) {
     console.log('ALL UI DISPLAY TESTS PASSED');
 } else {

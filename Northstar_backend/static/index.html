@@ -4699,6 +4699,42 @@ html[data-theme-v2] {
         /* ---- dev toggle: shows only under ?dev=1 (see JS initThemeV2) ---- */
         html[data-theme-v2] #devV2Btn, html[data-theme-v2] .topbar-right .icon-btn { border-radius: var(--ns-radius-base); }
         /* ==== A4 SPA V2 REDESIGN: END ==== */
+
+        /* ==== B2 GOLDEN GOOSE SEAM: BEGIN (v2 workspace; hidden unless data-theme-v2) ==== */
+        html:not([data-theme-v2]) .gg-v2-only { display: none !important; }
+        html[data-theme-v2] .gg-v2-only { display: inline-flex; }
+        html:not([data-theme-v2]) .gg-seam { display: none !important; }
+        html[data-theme-v2] #view-goldengoose { display: block; }
+        html[data-theme-v2] .gg-seam-toolbar { display: flex; align-items: center; gap: var(--ns-space-3); margin: var(--ns-space-3) 0; }
+        html[data-theme-v2] .gg-seam-status { color: var(--ns-color-text-muted); font-size: var(--ns-type-sm); }
+        html[data-theme-v2] .gg-seam-legend { color: var(--ns-color-text-muted); font-size: var(--ns-type-xs); margin-bottom: var(--ns-space-3); }
+        html[data-theme-v2] #ggSeamTable { font-size: var(--ns-type-sm); font-variant-numeric: tabular-nums; }
+        html[data-theme-v2] #ggSeamTable .gg-tier { font-weight: 650; }
+        html[data-theme-v2] #ggSeamTable .gg-tier-high { color: var(--ns-color-pos); }
+        html[data-theme-v2] #ggSeamTable .gg-tier-medium { color: var(--ns-color-warn); }
+        html[data-theme-v2] #ggSeamTable .gg-tier-low { color: var(--ns-color-text-muted); }
+        html[data-theme-v2] #ggSeamTable .gg-tier-reject { color: var(--ns-color-neg); }
+        /* ==== B2 GOLDEN GOOSE SEAM: END ==== */
+
+        /* ==== C6: onboarding overlay (v2 only; hidden unless data-theme-v2) ==== */
+        html:not([data-theme-v2]) #onboardingOverlay { display: none !important; }
+        html[data-theme-v2] .ns-overlay {
+            position: fixed; inset: 0; z-index: 5000;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(6, 10, 28, 0.62);
+        }
+        html[data-theme-v2] .ns-overlay-panel {
+            max-width: 520px; width: 92%;
+            background: var(--ns-color-bg-panel, #101830);
+            color: var(--ns-color-text, #c2cbe2);
+            border: 1px solid var(--ns-color-border-strong, #33446f);
+            border-radius: var(--ns-radius-lg, 16px);
+            box-shadow: var(--ns-elevation-lg, 0 4px 16px rgba(0, 0, 0, 0.4));
+            padding: 22px 24px;
+        }
+        html[data-theme-v2] .ns-overlay-panel h3 { margin: 0 0 10px; color: var(--ns-color-accent, #8b7bff); }
+        html[data-theme-v2] .ns-overlay-panel p { margin: 8px 0; font-size: var(--ns-type-sm, 11.5px); line-height: 1.6; }
+        /* ==== C6: onboarding overlay: END ==== */
 </head>
 <body>
     <div class="sc-mesh" id="scMesh" aria-hidden="true"></div>
@@ -4759,6 +4795,30 @@ html[data-theme-v2] {
                     <svg aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
                     <span>Portfolio</span>
                 </button>
+                <button class="sc-nav-pill gg-v2-only" id="nav-goldengoose" data-view="goldengoose" type="button" hidden aria-label="Golden Goose Finder (v2 workspace)">
+                    <svg aria-hidden="true"><path d="M4 14c3 0 5-2 6-5 1 3 3 5 6 5"/><circle cx="9" cy="7" r="1.4"/><path d="M4 19c2.5-1 5-1.5 8-1.5s5.5.5 8 1.5"/></svg>
+                    <span>Golden Goose</span>
+                </button>
+                <button class="sc-nav-pill gg-v2-only" id="nav-sourcescout" data-view="sourcescout" type="button" hidden aria-label="SourceScout workspace (v2)">
+                    <svg aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="m15 9-2.5 3.5L9 15l2.5-3.5L15 9z"/></svg>
+                    <span>SourceScout</span>
+                </button>
+                <button class="sc-nav-pill gg-v2-only" id="nav-listingforge" data-view="listingforge" type="button" hidden aria-label="ListingForge workspace (v2)">
+                    <svg aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M15 9h-4a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4H9"/><path d="M12 6v2m0 8v2"/></svg>
+                    <span>ListingForge</span>
+                </button>
+                <button class="sc-nav-pill gg-v2-only" id="nav-adpilot" data-view="adpilot" type="button" hidden aria-label="AdPilot workspace (v2)">
+                    <svg aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18"/></svg>
+                    <span>AdPilot</span>
+                </button>
+                <button class="sc-nav-pill gg-v2-only" id="nav-socialpulse" data-view="socialpulse" type="button" hidden aria-label="SocialPulse workspace (v2)">
+                    <svg aria-hidden="true"><path d="M4 12a4 4 0 0 1 4-4h0l6 6v8h-6a4 4 0 0 1-4-4z"/><circle cx="17" cy="7" r="3"/></svg>
+                    <span>SocialPulse</span>
+                </button>
+                <button class="sc-nav-pill gg-v2-only" id="nav-autothink" data-view="autothink" type="button" hidden aria-label="AutoThink workspace (v2)">
+                    <svg aria-hidden="true"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M17 5.6l-1.4 1.4M5.6 18.4 7 17"/><circle cx="12" cy="12" r="3.5"/></svg>
+                    <span>AutothinK</span>
+                </button>
             </nav>
         </header>
 
@@ -4793,6 +4853,30 @@ html[data-theme-v2] {
                 <button class="nr-btn" id="nr-portfolio" data-view="portfolio" type="button" aria-label="Portfolio">
                     <svg aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
                     <span class="nr-btn-label">Portfolio</span>
+                </button>
+                <button class="nr-btn gg-v2-only" id="nr-goldengoose" data-view="goldengoose" type="button" aria-label="Golden Goose Finder (v2 workspace)" hidden>
+                    <svg aria-hidden="true"><path d="M4 14c3 0 5-2 6-5 1 3 3 5 6 5"/><circle cx="9" cy="7" r="1.4"/><path d="M4 19c2.5-1 5-1.5 8-1.5s5.5.5 8 1.5"/></svg>
+                    <span class="nr-btn-label">Golden Goose</span>
+                </button>
+                <button class="nr-btn gg-v2-only" id="nr-sourcescout" data-view="sourcescout" type="button" aria-label="SourceScout workspace" hidden>
+                    <svg aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="m15 9-2.5 3.5L9 15l2.5-3.5L15 9z"/></svg>
+                    <span class="nr-btn-label">SourceScout</span>
+                </button>
+                <button class="nr-btn gg-v2-only" id="nr-listingforge" data-view="listingforge" type="button" aria-label="ListingForge workspace" hidden>
+                    <svg aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M15 9h-4a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4H9"/><path d="M12 6v2m0 8v2"/></svg>
+                    <span class="nr-btn-label">ListingForge</span>
+                </button>
+                <button class="nr-btn gg-v2-only" id="nr-adpilot" data-view="adpilot" type="button" aria-label="AdPilot workspace" hidden>
+                    <svg aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18"/></svg>
+                    <span class="nr-btn-label">AdPilot</span>
+                </button>
+                <button class="nr-btn gg-v2-only" id="nr-socialpulse" data-view="socialpulse" type="button" aria-label="SocialPulse workspace" hidden>
+                    <svg aria-hidden="true"><path d="M4 12a4 4 0 0 1 4-4h0l6 6v8h-6a4 4 0 0 1-4-4z"/><circle cx="17" cy="7" r="3"/></svg>
+                    <span class="nr-btn-label">SocialPulse</span>
+                </button>
+                <button class="nr-btn gg-v2-only" id="nr-autothink" data-view="autothink" type="button" aria-label="AutothinK workspace" hidden>
+                    <svg aria-hidden="true"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M17 5.6l-1.4 1.4M5.6 18.4 7 17"/><circle cx="12" cy="12" r="3.5"/></svg>
+                    <span class="nr-btn-label">AutothinK</span>
                 </button>
             </div>
         </nav>
@@ -5883,6 +5967,131 @@ html[data-theme-v2] {
                             </table>
                         </div>
                     </div>
+                </section>
+
+                <!-- ==================== GOLDEN GOOSE FINDER (v2 workspace) ====================
+                     Real seam integration (B2): consumes the finder's actual data
+                     contract GET /api/golden-goose/opportunities. Visible ONLY under
+                     html[data-theme-v2] (class gg-seam, hidden attribute) so the
+                     default theme is untouched. Offline/report-backed endpoint —
+                     never a provider call. -->
+                <section class="view gg-seam" id="view-goldengoose" aria-label="Golden Goose Finder (v2 workspace)" hidden>
+                    <div class="calc-callout">
+                        Golden Goose Finder workspace (v2). Reads the finder's real opportunity
+                        output from <code>GET /api/golden-goose/opportunities</code>
+                        (report-backed, offline). <strong>Not</strong> a purchase authorization, and
+                        live scanning stays 403-gated.
+                    </div>
+                    <div class="gg-seam-toolbar">
+                        <button class="btn" id="ggSeamReload" type="button">Reload opportunities</button>
+                        <span class="gg-seam-status" id="ggSeamStatus">Not loaded.</span>
+                    </div>
+                    <div class="gg-seam-legend" id="ggSeamLegend">
+                        Tier = HIGH / MEDIUM / LOW / REJECT from the finder's scorer. Figures are
+                        per-unit estimates on fixture/report data, never live provider data here.
+                    </div>
+                    <div class="table-wrap" id="ggSeamWrap" hidden>
+                        <table id="ggSeamTable" aria-label="Golden Goose opportunities">
+                            <caption class="sr-only">Golden Goose finder opportunities by composite score</caption>
+                            <thead><tr>
+                                <th scope="col">#</th><th scope="col">ASIN</th><th scope="col">Brand</th>
+                                <th scope="col">Product</th><th scope="col" class="num">Net/unit</th>
+                                <th scope="col" class="num">ROI</th><th scope="col" class="num">Score</th>
+                                <th scope="col">Tier</th>
+                            </tr></thead>
+                            <tbody id="ggSeamBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ==================== C6: COMMAND CENTER (v2) ==================== -->
+                <section class="view ns-ws gg-seam" id="view-commandcenter" aria-label="Command Center (v2 workspaces)" hidden>
+                    <div class="calc-callout">Command Center (v2). All destinations reachable below; unbuilt surfaces show honest empty states.</div>
+                    <div id="commandcenterCanvas" class="ws-canvas"></div>
+                </section>
+
+                <!-- ==================== C1: SOURCESCOUT (v2 workspace) ==================== -->
+                <section class="view ns-ws gg-seam" id="view-sourcescout" aria-label="SourceScout workspace (v2)" hidden>
+                    <div class="calc-callout">SourceScout workspace (v2) — envelope-conformant fixture pipeline + filters + CSV export. Mock data only.</div>
+                    <div class="gg-seam-toolbar">
+                        <input id="ssSearch" type="search" class="f-control" placeholder="Filter by product or ASIN…" aria-label="Filter SourceScout rows">
+                        <select id="ssTier" class="f-control" aria-label="Tier filter"><option value="all">All tiers</option><option value="Pass">Pass</option><option value="Hold">Hold</option></select>
+                        <button class="btn" id="ssRefresh" type="button">Refresh (fixture)</button>
+                        <button class="btn" id="ssExport" type="button">Export CSV + manifest</button>
+                        <span class="gg-seam-status" id="ssStatus">Not loaded.</span>
+                    </div>
+                    <div id="sourcescoutCanvas" class="ws-canvas"></div>
+                    <p class="result-note">Estimates from fixture data — not a recommendation to buy. No live scan.</p>
+                </section>
+
+                <!-- ==================== C2: LISTINGFORGE (v2 workspace) ==================== -->
+                <section class="view ns-ws gg-seam" id="view-listingforge" aria-label="ListingForge workspace (v2)" hidden>
+                    <div class="calc-callout">ListingForge workspace (v2) — mock generate/edit/save drafts. Publishing is not wired in alpha.</div>
+                    <div class="gg-seam-toolbar">
+                        <input id="lfBrand" type="text" class="f-control" placeholder="Brand (e.g. Word Coffee)" aria-label="Listing brand">
+                        <button class="btn" id="lfGenerate" type="button">Generate draft (mock)</button>
+                        <button class="btn" id="lfClearSaved" type="button">Reset saved</button>
+                        <span class="gg-seam-status" id="lfStatus">No drafts yet.</span>
+                    </div>
+                    <div id="listingforgeCanvas" class="ws-canvas"></div>
+                </section>
+
+                <!-- ==================== C3: ADPILOT (v2 workspace) ==================== -->
+                <section class="view ns-ws gg-seam" id="view-adpilot" aria-label="AdPilot workspace (v2)" hidden>
+                    <div class="calc-callout">AdPilot V1 Review &amp; Export pipeline (v2) — sanitize → manifest → CSV, mock rows only. Amazon Ads API connected mode is NOT wired; dry-run/mock labeled.</div>
+                    <div class="gg-seam-toolbar">
+                        <button class="btn" id="apSanitize" type="button">1 · Sanitize rows</button>
+                        <button class="btn" id="apManifest" type="button" disabled>2 · Build manifest</button>
+                        <button class="btn" id="apExport" type="button" disabled>3 · Export CSV</button>
+                        <span class="gg-seam-status" id="apStatus">Awaiting review rows.</span>
+                    </div>
+                    <div id="adpilotCanvas" class="ws-canvas"></div>
+                </section>
+
+                <!-- ==================== C4: SOCIALPULSE (v2 workspace) ==================== -->
+                <section class="view ns-ws gg-seam" id="view-socialpulse" aria-label="SocialPulse workspace (v2)" hidden>
+                    <div class="calc-callout">SocialPulse workspace (v2) — draft-pipeline alpha. Mock captions; publishing is not wired.</div>
+                    <div class="gg-seam-toolbar">
+                        <select id="spChannel" class="f-control" aria-label="Channel"><option value="instagram">Instagram</option><option value="tiktok">TikTok</option><option value="facebook">Facebook</option></select>
+                        <button class="btn" id="spDraft" type="button">Create draft (mock)</button>
+                        <span class="gg-seam-status" id="spStatus">No drafts yet.</span>
+                    </div>
+                    <div id="socialpulseCanvas" class="ws-canvas"></div>
+                </section>
+
+                <!-- ==================== C8: AUTOTHINK (v2 workspace) ==================== -->
+                <section class="view ns-ws gg-seam" id="view-autothink" aria-label="AutothinK workspace (v2)" hidden>
+                    <div class="calc-callout">AutothinK workspace (v2) — agent-run UI with visible approval states and a read-only credit meter (B3 ledger). Mock runs only.</div>
+                    <div class="gg-seam-toolbar">
+                        <span class="gg-seam-status" id="atMeter">Credits: —</span>
+                        <span class="gg-seam-status" id="atState">State: idle</span>
+                    </div>
+                    <div class="gg-seam-toolbar">
+                        <input id="atPrompt" type="text" class="f-control" placeholder="Ask AutothinK to do something…" aria-label="AutothinK prompt">
+                        <button class="btn" id="atDraft" type="button">Draft run</button>
+                        <button class="btn" id="atApprove" type="button" disabled>Approve</button>
+                        <button class="btn ghost" id="atReject" type="button" disabled>Reject</button>
+                        <span class="gg-seam-status" id="atRunState"></span>
+                    </div>
+                    <div id="autothinkCanvas" class="ws-canvas"></div>
+                </section>
+
+                <!-- ==================== C6: COMMERCE OPS (v2) ==================== -->
+                <section class="view ns-ws gg-seam" id="view-commerceops" aria-label="Commerce Ops (v2)" hidden>
+                    <div class="calc-callout">Commerce Ops workspace (v2) — operations dashboard. Pending surfaces listed honestly; nothing fabricated.</div>
+                    <div id="commerceopsCanvas" class="ws-canvas"></div>
+                </section>
+
+                <!-- ==================== C6: CREATIVE STUDIO (v2) ==================== -->
+                <section class="view ns-ws gg-seam" id="view-creativestudio" aria-label="Creative Studio (v2)" hidden>
+                    <div class="calc-callout">Creative Studio (v2) — media prompt list. Image generation itself is not wired (honest empty state).</div>
+                    <div id="creativestudioCanvas" class="ws-canvas"></div>
+                </section>
+
+                <!-- ==================== C6: ADMIN (v2, role-gated) ==================== -->
+                <section class="view ns-ws gg-seam" id="view-admin" aria-label="Admin (v2, role-gated)" hidden>
+                    <div class="calc-callout">Admin workspace (v2) — least-privilege account view, gated by the B2 admin role.</div>
+                    <div id="adminCanvas" class="ws-canvas"></div>
                 </section>
 
             </main>
@@ -9395,6 +9604,22 @@ html[data-theme-v2] {
         NS.initProfitCalc = initProfitCalc;
 
         /* ---------- navigation ---------- */
+        /* C1-C8 workspace ids + view metadata (declared before VIEW_META so
+         * openView can wire workspace views at parse time). */
+        var WS_IDS = ['commandcenter', 'sourcescout', 'listingforge', 'adpilot',
+            'socialpulse', 'autothink', 'commerceops', 'creativestudio', 'admin'];
+        var WS_VIEW_META = {
+            commandcenter: { title: 'Command Center', context: 'v2 workspaces — every destination reachable; unbuilt surfaces show honest empty states' },
+            sourcescout: { title: 'SourceScout', context: 'Envelope-conformant fixture pipeline + filters + CSV export (mock data only)' },
+            listingforge: { title: 'ListingForge', context: 'Mock generate/edit/save drafts — publishing not wired in alpha' },
+            adpilot: { title: 'AdPilot V1', context: 'Review & Export pipeline: sanitize → manifest → CSV (mock; no Ads API)' },
+            socialpulse: { title: 'SocialPulse', context: 'Draft-pipeline alpha — publishing not wired' },
+            autothink: { title: 'AutothinK', context: 'Agent-run UI with approval states + read-only credit meter (B3 ledger)' },
+            commerceops: { title: 'Commerce Ops', context: 'Operations dashboard — pending surfaces listed honestly' },
+            creativestudio: { title: 'Creative Studio', context: 'Media prompt list — generation not wired' },
+            admin: { title: 'Admin', context: 'Least-privilege account view — gated by the B2 admin role' },
+        };
+
         var VIEW_META = {
             scout: { title: 'Product Scout', context: 'Kirkland sourcing candidates ranked from market data and Costco COGS' },
             calculator: { title: 'Margin Calculator', context: 'Manual unit-economics model — values do not alter Scout source-cost data' },
@@ -9402,12 +9627,27 @@ html[data-theme-v2] {
             risk: { title: 'Risk Engine', context: 'Internal scenario tool — scores depend on your assumptions' },
             cycle: { title: 'Cycle Planner', context: 'Batch and replenishment planning from calculator assumptions' },
             portfolio: { title: 'Portfolio', context: 'Demo / scenario portfolio until connected to live scanner data' },
+            goldengoose: { title: 'Golden Goose Finder', context: 'Finder workspace (v2) — real finder output from /api/golden-goose/opportunities (report-backed, offline)' },
+            commandcenter: WS_VIEW_META.commandcenter,
+            sourcescout: WS_VIEW_META.sourcescout,
+            listingforge: WS_VIEW_META.listingforge,
+            adpilot: WS_VIEW_META.adpilot,
+            socialpulse: WS_VIEW_META.socialpulse,
+            autothink: WS_VIEW_META.autothink,
+            commerceops: WS_VIEW_META.commerceops,
+            creativestudio: WS_VIEW_META.creativestudio,
+            admin: WS_VIEW_META.admin,
         };
 
         function openView(view) {
-            var allowed = ['scout', 'calculator', 'profit', 'risk', 'cycle', 'portfolio'];
+            // B2: the Golden Goose workspace is v2-only — fall back to scout if
+            // the v2 theme is off, so the default experience is unchanged.
+            if (view === 'goldengoose' && !(NS.isThemeV2 && NS.isThemeV2())) view = 'scout';
+            var allowed = ['scout', 'calculator', 'profit', 'risk', 'cycle', 'portfolio', 'goldengoose']
+                .concat(WS_IDS);
             if (allowed.indexOf(view) === -1) view = 'scout';
-            var views = ['scout', 'calculator', 'profit', 'risk', 'cycle', 'portfolio'];
+            var views = ['scout', 'calculator', 'profit', 'risk', 'cycle', 'portfolio', 'goldengoose']
+                .concat(WS_IDS);
             views.forEach(function (v) {
                 var section = el('view-' + v);
                 if (section) { section.hidden = (v !== view); }
@@ -9437,6 +9677,8 @@ html[data-theme-v2] {
             if (view === 'risk') renderRisk();
             if (view === 'cycle') renderCycle();
             if (view === 'portfolio') renderPortfolio();
+            if (view === 'goldengoose') NS.ggSeam.open();
+            if (WS_VIEW_META[view] && NS.ws && NS.ws.viewOpen) NS.ws.viewOpen(view);
             closeSidebar();
         }
         NS.openView = openView;
@@ -9506,9 +9748,652 @@ html[data-theme-v2] {
                 var chip = el('devV2Btn');
                 if (chip) { chip.hidden = false; if (chip.style) chip.style.display = ''; }
             }
+            initGgSeamUi();
+            initWorkspacesUi();
+            maybeShowOnboarding();
         }
 
-        /* ---------- filter panel wiring ---------- */
+        /* ---------- B2: Golden Goose finder seam (v2 workspace, real contract) ----------
+         * Consumes the finder's actual data contract:
+         *   GET /api/golden-goose/opportunities ->
+         *     { status, report_meta, summary, opportunities: [ <_scored_to_dicts shape> ] }
+         * The endpoint is report-backed/offline (never a provider call). This
+         * module is v2-only: the workspace/nav stay hidden until data-theme-v2.
+         * `mapOpportunity` is pure so it can be tested against fixtures with no
+         * network. `load()` is the only fetch, and only runs under v2.
+         */
+        var GG_SEAM_URL = '/api/golden-goose/opportunities';
+        NS.ggSeam = {
+            loaded: false,
+            loading: false,
+            items: [],
+            lastError: null,
+            // Pure: map one finder opportunity (real contract) to a UI row.
+            mapOpportunity: function (o) {
+                o = o || {};
+                function numOrNull(v) { return (typeof v === 'number' && isFinite(v)) ? v : null; }
+                return {
+                    rank: numOrNull(o.rank),
+                    asin: o.amazon_asin || '',
+                    brand: o.brand || 'Unknown',
+                    title: o.wholesale_title || o.product_title || o.amazon_title || '',
+                    net: numOrNull(o.net_profit_per_unit),
+                    roi: numOrNull(o.roi_per_unit),
+                    score: numOrNull(o.composite_score),
+                    tier: String(o.tier || 'REJECT').toUpperCase(),
+                    sourceStore: o.source_store || '',
+                    packCount: numOrNull(o.pack_count),
+                    monthlySales: numOrNull(o.monthly_sales_estimate),
+                    fbaSellers: numOrNull(o.fba_sellers),
+                    priceGapScore: numOrNull(o.price_gap_score),
+                    adFeasibilityScore: numOrNull(o.ad_feasibility_score),
+                    tags: Array.isArray(o.opportunity_tags) ? o.opportunity_tags.slice() : [],
+                };
+            },
+            mapAll: function (payload) {
+                var opps = (payload && Array.isArray(payload.opportunities)) ? payload.opportunities : [];
+                return opps.map(NS.ggSeam.mapOpportunity);
+            },
+            // Pure: render mapped rows to table HTML (honest "—" for missing).
+            renderRows: function (rows) {
+                if (!rows || !rows.length) {
+                    return '<tr><td colspan="8" class="state-block">No opportunities in the latest finder report.</td></tr>';
+                }
+                function money(v) { return v === null ? '—' : '$' + v.toFixed(2); }
+                function pct(v) { return v === null ? '—' : v.toFixed(1) + '%'; }
+                function tierCls(t) {
+                    return t === 'HIGH' ? 'gg-tier gg-tier-high'
+                        : t === 'MEDIUM' ? 'gg-tier gg-tier-medium'
+                        : t === 'REJECT' ? 'gg-tier gg-tier-reject' : 'gg-tier gg-tier-low';
+                }
+                return rows.map(function (r) {
+                    return '<tr data-gg-asin="' + NS.escapeHtml(r.asin) + '">' +
+                        '<td class="num">' + NS.escapeHtml(r.rank === null ? '—' : String(r.rank)) + '</td>' +
+                        '<td>' + NS.escapeHtml(r.asin || '—') + '</td>' +
+                        '<td>' + NS.escapeHtml(r.brand) + '</td>' +
+                        '<td title="' + NS.escapeHtml(r.title) + '">' + NS.escapeHtml(r.title.slice(0, 48)) + '</td>' +
+                        '<td class="num">' + money(r.net) + '</td>' +
+                        '<td class="num">' + pct(r.roi) + '</td>' +
+                        '<td class="num">' + (r.score === null ? '—' : r.score.toFixed(1)) + '</td>' +
+                        '<td><span class="' + tierCls(r.tier) + '">' + NS.escapeHtml(r.tier) + '</span></td>' +
+                        '</tr>';
+                }).join('');
+            },
+            setStatus: function (text) {
+                var s = el('ggSeamStatus');
+                if (s) s.textContent = text;
+            },
+            render: function (payload) {
+                var rows = NS.ggSeam.mapAll(payload);
+                NS.ggSeam.items = rows;
+                var body = el('ggSeamBody');
+                if (body) body.innerHTML = NS.ggSeam.renderRows(rows);
+                var wrap = el('ggSeamWrap');
+                if (wrap) wrap.hidden = false;
+                var summary = (payload && payload.summary) || {};
+                NS.ggSeam.setStatus(rows.length + ' opportunities · HIGH ' +
+                    (summary.high_tier_count != null ? summary.high_tier_count : '—') +
+                    ' · mode ' + (((payload && payload.report_meta) || {}).mode || 'unknown'));
+                return rows;
+            },
+            // v2-gated entry point. Returns false (no network) when v2 is off.
+            open: function () {
+                if (!(NS.isThemeV2 && NS.isThemeV2())) return false;
+                if (NS.ggSeam.loaded || NS.ggSeam.loading) return true;
+                NS.ggSeam.load();
+                return true;
+            },
+            load: function () {
+                if (!(NS.isThemeV2 && NS.isThemeV2())) return false;
+                NS.ggSeam.loading = true;
+                NS.ggSeam.setStatus('Loading finder opportunities…');
+                fetch(GG_SEAM_URL)
+                    .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+                    .then(function (data) {
+                        NS.ggSeam.loaded = true;
+                        NS.ggSeam.lastError = null;
+                        NS.ggSeam.render(data);
+                    })
+                    .catch(function (e) {
+                        NS.ggSeam.lastError = (e && e.message) || 'network error';
+                        NS.ggSeam.setStatus('Finder feed unavailable — ' + NS.ggSeam.lastError + ' (no fake rows shown).');
+                        var body = el('ggSeamBody');
+                        if (body) body.innerHTML = '<tr><td colspan="8" class="state-block">Unavailable — no fabricated opportunities.</td></tr>';
+                    })
+                    .finally(function () { NS.ggSeam.loading = false; });
+                return true;
+            },
+        };
+
+        // B2: reveal the v2-only nav/dock entries when (and only when) v2 is on.
+        function initGgSeamUi() {
+            var on = !!(NS.isThemeV2 && NS.isThemeV2());
+            ['nav-goldengoose', 'nr-goldengoose'].forEach(function (id) {
+                var n = el(id);
+                if (!n) return;
+                n.hidden = !on;
+                if (n.setAttribute) n.setAttribute('aria-hidden', on ? 'false' : 'true');
+            });
+            var reload = el('ggSeamReload');
+            if (reload && reload.addEventListener && !reload._ggBound) {
+                reload._ggBound = true;
+                reload.addEventListener('click', function () {
+                    NS.ggSeam.loaded = false;
+                    NS.ggSeam.open();
+                });
+            }
+        }
+
+        /* ---------- C1-C8: service workspaces layer (v2, fixture/offline) ----------
+         * Builds every service workspace against the frozen contracts: bff/v1
+         * envelope handling, no-leak export manifests, honest loading/empty/
+         * error states, role-gated admin, approval-state UI + read-only credit
+         * meter for AutothinK. All data is fixture/mock — no live providers. */
+        NS.bff = {
+            envelope: function (status, data, error, service) {
+                return { contract: 'bff/v1', request_id: 'req_' + NS.wsRand32(), status: status,
+                    data: status === 'error' ? null : (data === undefined ? null : data),
+                    error: status === 'error' ? error : null,
+                    meta: { service: service || 'spa', version: 'v1' } };
+            },
+            ok: function (data, service) { return NS.bff.envelope('ok', data, null, service); },
+            empty: function (data, service) { return NS.bff.envelope('empty', data || {}, null, service); },
+            readData: function (payload) {
+                // Tolerate both the envelope ({status,data}) and legacy
+                // ({opportunities:[...]}) shapes; returns the payload's data.
+                if (payload && payload.data !== undefined) return payload.data;
+                return payload || {};
+            },
+            noLeakTokens: ['bright data', 'brightdata', 'chocodata', 'easyparser',
+                'openwebninja', 'unwrangle', 'scavio', 'canopy', 'dataforseo',
+                'firecrawl', 'scrape.do', 'rapidapi', 'ollama', 'openrouter',
+                'deepseek', 'relace', 'deepinfra', 'open-inference', 'report_path'],
+            assertNoLeak: function (obj) {
+                var text = JSON.stringify(obj);
+                var low = String(text).toLowerCase();
+                for (var i = 0; i < NS.bff.noLeakTokens.length; i++) {
+                    if (low.indexOf(NS.bff.noLeakTokens[i]) !== -1) return false;
+                }
+                if (/[A-Za-z]:\\|\/Users\/|\/home\/|\/tmp\//.test(text)) return false;
+                return true;
+            },
+            session: function () {
+                // Stub/mock session (B2 alpha): demo member unless overridden.
+                var s = NS.wsSession || { role: 'member', plan: 'foundation' };
+                return s;
+            },
+        };
+        NS.wsRand32 = function () {
+            var out = '';
+            for (var i = 0; i < 32; i++) out += Math.floor(Math.random() * 16).toString(16);
+            return out;
+        };
+
+        /* ---- fixture datasets (contract-shaped, mock only) ---- */
+        NS.wsFixtures = NS.wsFixtures || {};
+        NS.wsFixtures.sourcescout = [
+            { asin: 'B0WS000001', name: 'Kirkland Signature Fish Oil', brand: 'Kirkland', tier: 'Pass', net: 6.4, roi: 42.1, estMonthly: 1200 },
+            { asin: 'B0WS000002', name: 'Kirkland Signature CoQ10', brand: 'Kirkland', tier: 'Pass', net: 8.1, roi: 51.0, estMonthly: 900 },
+            { asin: 'B0WS000003', name: 'Member\'s Mark Trash Bags', brand: 'Member\'s Mark', tier: 'Hold', net: 3.2, roi: 18.5, estMonthly: 640 },
+            { asin: 'B0WS000004', name: 'Kirkland Signature Vitamin C', brand: 'Kirkland', tier: 'Pass', net: 5.7, roi: 33.9, estMonthly: 1500 },
+        ];
+        NS.wsFixtures.listingTemplates = {
+            title: '|BRAND| — ',
+        };
+        NS.wsFixtures.adpilot = [
+            { asin: 'B0AD000001', keyword: 'caffeine pills', spend: 12.4, orders: 2, acos: 0.31, status: 'review', provider: 'brightdata' },
+            { asin: 'B0AD000002', keyword: 'nicotine gum', spend: 9.1, orders: 3, acos: 0.22, status: 'review', provider: 'brightdata' },
+        ];
+        NS.wsFixtures.social = {
+            instagram: 'Fresh from the studio — |BRAND| just landed at Costco. #wholesale #amazonfba',
+            tiktok: 'POV: you found the |BRAND| restock before everyone else #fba #costco #reseller',
+            facebook: '|BRAND| restock alert — pantry staples back on the shelf this week.',
+        };
+        NS.wsFixtures.creative = [
+            { label: 'Hero pack shot', prompt: 'Studio product photo of the |BRAND| pack on a neutral background.', status: 'draft' },
+            { label: 'Lifestyle scene', prompt: 'Lifestyle photo showing |BRAND| in a real kitchen, natural light.', status: 'draft' },
+        ];
+        NS.wsFixtures.adminAccounts = [
+            { id: 'acct_1', email: 'owner@example.com', plan: 'autothink', created_at: '2026-09-12' },
+            { id: 'acct_2', email: 'member@example.com', plan: 'scout', created_at: '2026-09-14' },
+        ];
+
+        /* ---- workspace engine ---- */
+        NS.ws = {
+            state: {},
+            runState: 'idle',
+            atCreditBalance: null,
+
+            viewOpen: function (id) {
+                var canvas = el(id + 'Canvas');
+                var status = el(id === 'autothink' ? 'atRunState' : id === 'sourcescout' ? 'ssStatus' : '');
+                if (!canvas) return true;
+                NS.ws.renderWorkspace(id);
+                return true;
+            },
+
+            renderWorkspace: function (id) {
+                var canvas = el(id + 'Canvas');
+                if (!canvas) return;
+                var html = '';
+                switch (id) {
+                    case 'commandcenter': html = NS.ws.renderCommandCenter(); break;
+                    case 'sourcescout': html = NS.ws.renderSourceScout(); break;
+                    case 'listingforge': html = NS.ws.renderListingForge(); break;
+                    case 'adpilot': html = NS.ws.renderAdPilot(); break;
+                    case 'socialpulse': html = NS.ws.renderSocialPulse(); break;
+                    case 'autothink': html = NS.ws.renderAutoThink(); break;
+                    case 'commerceops': html = NS.ws.renderCommerceOps(); break;
+                    case 'creativestudio': html = NS.ws.renderCreativeStudio(); break;
+                    case 'admin': html = NS.ws.renderAdmin(); break;
+                    default: html = '';
+                }
+                canvas.innerHTML = html;
+                NS.ws.updateStatusLeds(id);
+            },
+
+            updateStatusLeds: function (id) {
+                var map = { sourcescout: 'ssStatus', adpilot: 'apStatus', listingforge: 'lfStatus',
+                    socialpulse: 'spStatus', autothink: 'atRunState' };
+                var sid = map[id];
+                if (!sid) return;
+                var status = el(sid);
+                if (status && NS.ws.state[id]) status.textContent = NS.ws.state[id].statusText || '';
+            },
+
+            /* Command Center (C6) */
+            renderCommandCenter: function () {
+                var cards = [
+                    ['sourcescout', 'SourceScout', 'Fixture pipeline + filters + CSV export'],
+                    ['listingforge', 'ListingForge', 'Mock generate/edit/save drafts'],
+                    ['adpilot', 'AdPilot V1', 'Review & Export: sanitize → manifest → CSV'],
+                    ['socialpulse', 'SocialPulse', 'Draft-pipeline alpha'],
+                    ['goldengoose', 'Golden Goose', 'Finder workspace (real report contract, offline)'],
+                    ['autothink', 'AutothinK', 'Agent run UI + credit meter (B3)'],
+                    ['commerceops', 'Commerce Ops', 'Ops dashboard (honest pending)'],
+                    ['creativestudio', 'Creative Studio', 'Media prompt list'],
+                    ['admin', 'Admin', 'Least-privilege account view (role-gated)'],
+                ];
+                return cards.map(function (c) {
+                    return '<div class="cc-card" data-nav="' + c[0] + '" tabindex="0" role="button">' +
+                        '<strong>' + NS.escapeHtml(c[1]) + '</strong><p>' + NS.escapeHtml(c[2]) + '</p></div>';
+                }).join('');
+            },
+
+            /* SourceScout (C1) */
+            ssState: { search: '', tier: 'all', rows: NS.wsFixtures.sourcescout.slice(), loaded: false },
+            renderSourceScout: function () {
+                NS.ws.state.sourcescout = NS.ws.state.sourcescout || {};
+                var q = NS.ws.ssState.search.toLowerCase();
+                var t = NS.ws.ssState.tier;
+                var rows = NS.ws.ssState.rows.filter(function (r) {
+                    var nameHit = (r.name.toLowerCase().indexOf(q) !== -1) || (r.asin.toLowerCase().indexOf(q) !== -1);
+                    return nameHit && (t === 'all' || r.tier === t);
+                });
+                if (!rows.length) {
+                    NS.ws.state.sourcescout.statusText = NS.ws.ssState.loaded ? 'Empty — no rows match the current filters.' : 'Not loaded.';
+                    return '<div class="state-block">' + NS.escapeHtml(NS.ws.ssState.loaded ? 'No matches.' : 'Nothing loaded yet — press Refresh (fixture).') + '</div>';
+                }
+                NS.ws.state.sourcescout.statusText = 'Loaded ' + rows.length + ' findings (fixture).';
+                var head = '<tr><th scope="col">ASIN</th><th scope="col">Product</th><th scope="col">Brand</th><th scope="col">Tier</th><th scope="col" class="num">Net/unit</th><th scope="col" class="num">ROI</th><th scope="col" class="num">Est/mo</th></tr>';
+                var body = rows.map(function (r) {
+                    return '<tr><td>' + NS.escapeHtml(r.asin) + '</td><td>' + NS.escapeHtml(r.name) + '</td><td>' +
+                        NS.escapeHtml(r.brand) + '</td><td>' + NS.escapeHtml(r.tier) + '</td><td class="num">' +
+                        (r.net === null ? '—' : '$' + r.net.toFixed(2)) + '</td><td class="num">' +
+                        (r.roi === null ? '—' : r.roi.toFixed(1) + '%') + '</td><td class="num">' +
+                        (r.estMonthly === null ? '—' : String(r.estMonthly)) + '</td></tr>';
+                }).join('');
+                return '<div class="table-wrap"><table aria-label="SourceScout findings"><caption class="sr-only">SourceScout fixture findings</caption><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';
+            },
+            ssFilter: function () {
+                NS.ws.renderWorkspace('sourcescout');
+            },
+            ssRefresh: function () {
+                var status = el('ssStatus');
+                if (status) status.textContent = 'Refreshing fixture…';
+                var self = this;
+                setTimeout(function () {
+                    NS.ws.ssState.loaded = true;
+                    NS.ws.renderWorkspace('sourcescout');
+                }, 40);
+            },
+            ssExport: function () {
+                var rows = NS.ws.ssState.rows.filter(function (r) { return true; });
+                var ok = NS.ws.exportCsv('sourcescout-export', rows, ['asin', 'name', 'brand', 'tier', 'net', 'roi', 'estMonthly']);
+                var status = el('ssStatus');
+                if (status) status.textContent = ok ? 'Exported CSV + no-leak manifest (' + rows.length + ' rows).' : 'Export failed — no-leak check FAILED.';
+            },
+
+            /* ListingForge (C2) */
+            lfState: { drafts: [] },
+            loadLf: function () {
+                try {
+                    var raw = localStorage.getItem('t2.listingforge.drafts.v1');
+                    if (raw) NS.ws.lfState.drafts = JSON.parse(raw);
+                } catch (e) { /* noop */ }
+                if (!Array.isArray(NS.ws.lfState.drafts)) NS.ws.lfState.drafts = [];
+            },
+            saveLf: function () {
+                try { localStorage.setItem('t2.listingforge.drafts.v1', JSON.stringify(NS.ws.lfState.drafts)); } catch (e) { /* noop */ }
+            },
+            renderListingForge: function () {
+                NS.ws.loadLf();
+                NS.ws.state.listingforge = { statusText: NS.ws.lfState.drafts.length ? NS.ws.lfState.drafts.length + ' draft(s) (local).' : 'No drafts yet.' };
+                var d = NS.ws.lfState.drafts;
+                if (!d.length) return '<div class="state-block">No drafts yet — enter a brand and press Generate draft (mock).</div>';
+                return d.map(function (x, i) {
+                    return '<div class="lf-draft" data-lf-index="' + i + '">' +
+                        '<div class="ns-disclaimer" style="font-size:11px">Mock draft — not a real listing.</div>' +
+                        '<p><strong>' + NS.escapeHtml(x.brand) + ' — ' + NS.escapeHtml(x.title) + '</strong></p>' +
+                        '<textarea class="f-control" data-lf-body="' + i + '" rows="3">' + NS.escapeHtml(x.body) + '</textarea>' +
+                        '<div><button type="button" class="btn ghost" data-lf-save="' + i + '">' + (x.saved ? 'Saved (local)' : 'Save draft') + '</button> ' +
+                        '<button type="button" class="btn" disabled title="Publish is not wired in alpha">Publish (disabled)</button></div>' +
+                        '</div>';
+                }).join('');
+            },
+            lfGenerate: function () {
+                var status = el('lfStatus');
+                if (status) status.textContent = 'Generating mock draft…';
+                var brandVal = (el('lfBrand') && el('lfBrand').value) || 'Word Coffee';
+                NS.ws.lfState.drafts.unshift({
+                    brand: brandVal,
+                    title: 'Affirmation Cards for Moms — 53 cards',
+                    body: 'Give the gift of daily affirmation: 53 keepsake cards for Moms. (mock copy)',
+                    saved: false,
+                });
+                NS.ws.saveLf();
+                NS.ws.renderWorkspace('listingforge');
+                if (status && NS.ws.state.listingforge) status.textContent = NS.ws.state.listingforge.statusText;
+            },
+            lfSave: function (index) {
+                var d = NS.ws.lfState.drafts[index];
+                var ta = el('lfBodyInput');
+                var bodyEl = document.querySelector && document.querySelector('[data-lf-body="' + index + '"]');
+                if (d) { d.saved = true; NS.ws.saveLf(); }
+                if (status) NS.ws.state.listingforge = { statusText: 'Saved (local).' };
+                NS.ws.renderWorkspace('listingforge');
+            },
+            lfClear: function () { NS.ws.lfState.drafts = []; NS.ws.saveLf(); NS.ws.renderWorkspace('listingforge'); },
+
+            /* AdPilot V1 (C3) */
+            apState: { rows: NS.wsFixtures.adpilot.map(function (r) { return Object.assign({}, r); }),
+                sanitized: null, manifest: null, exported: false },
+            renderAdPilot: function () {
+                if (!NS.ws.apState.sanitized) {
+                    NS.ws.state.adpilot = { statusText: 'Awaiting review rows (' + NS.ws.apState.rows.length + ' mock rows).' };
+                    return '<div class="state-block">Mock rows ready. Press 1 · Sanitize rows to start the pipeline.</div>';
+                }
+                var rows = NS.ws.apState.sanitized;
+                var head = '<tr><th scope="col">ASIN</th><th scope="col">Keyword</th><th scope="col" class="num">Spend</th><th scope="col" class="num">Orders</th><th scope="col" class="num">ACoS</th></tr>';
+                var body = rows.map(function (r) {
+                    return '<tr><td>' + NS.escapeHtml(r.asin || '—') + '</td><td>' + NS.escapeHtml(r.keyword || '—') + '</td>' +
+                        '<td class="num">' + (r.spend == null ? '—' : '$' + r.spend.toFixed(2)) + '</td><td class="num">' + (r.orders == null ? '—' : String(r.orders)) + '</td>' +
+                        '<td class="num">' + (r.acos == null ? '—' : (r.acos * 100).toFixed(1) + '%') + '</td></tr>';
+                }).join('');
+                return '<div class="table-wrap"><table aria-label="AdPilot sanitized rows"><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';
+            },
+            apSanitize: function () {
+                var kept = ['asin', 'keyword', 'spend', 'orders', 'acos', 'status'];
+                var removed = 0;
+                var rows = NS.ws.apState.rows.map(function (r) {
+                    var out = {};
+                    kept.forEach(function (k) { if (k in r) out[k] = r[k]; });
+                    if (!NS.bff.assertNoLeak(r)) removed++;   // drop forbidden fields
+                    return out;
+                });
+                NS.ws.apState.sanitized = rows;
+                var status = el('apStatus');
+                var en = function (id, on) { var b = el(id); if (b) b.disabled = !on; };
+                en('apManifest', true);
+                if (status) status.textContent = 'Sanitized ' + rows.length + ' rows (removed ' + removed + ' forbidden-field rows).';
+                NS.ws.renderWorkspace('adpilot');
+            },
+            apBuildManifest: function () {
+                var manifest = {
+                    manifest_version: 'goose-export/v1',
+                    export_id: 'exp_' + NS.wsRand32(),
+                    service: 'golden_goose',
+                    export_type: 'opportunities_csv',
+                    row_count: NS.ws.apState.sanitized.length,
+                    columns: ['asin', 'keyword', 'spend', 'orders', 'acos'],
+                    currency: 'USD',
+                    disclaimer: 'Estimates only. Not a recommendation to buy or an approval to resell.',
+                };
+                if (!NS.bff.assertNoLeak(manifest)) return false;
+                NS.ws.apState.manifest = manifest;
+                var status = el('apStatus');
+                var en = function (id, on) { var b = el(id); if (b) b.disabled = !on; };
+                en('apExport', true);
+                if (status) status.textContent = 'Manifest built (no vendor leakage).';
+                return true;
+            },
+            apExport: function () {
+                var ok = NS.ws.exportCsv('adpilot-review-' + Date.now(), NS.ws.apState.sanitized, ['asin', 'keyword', 'spend', 'orders', 'acos']);
+                var status = el('apStatus');
+                if (status) status.textContent = ok ? 'Exported CSV + no-leak manifest.' : 'Export blocked — no-leak check FAILED.';
+                NS.ws.apState.exported = true;
+            },
+
+            /* SocialPulse (C4) */
+            spState: { drafts: [] },
+            renderSocialPulse: function () {
+                NS.ws.state.socialpulse = { statusText: NS.ws.spState.drafts.length ? NS.ws.spState.drafts.length + ' draft(s).' : 'No drafts yet.' };
+                if (!NS.ws.spState.drafts.length) return '<div class="state-block">No drafts yet — pick a channel and press Create draft (mock).</div>';
+                return NS.ws.spState.drafts.map(function (d) {
+                    return '<div class="sp-draft"><p><strong>' + NS.escapeHtml(d.channel) + '</strong> · draft</p>' +
+                        '<p>' + NS.escapeHtml(d.body) + '</p>' +
+                        '<button type="button" class="btn" disabled title="Publishing is not wired in alpha">Publish (disabled)</button></div>';
+                }).join('');
+            },
+            spDraft: function () {
+                var ch = (el('spChannel') && el('spChannel').value) || 'instagram';
+                var tmpl = NS.wsFixtures.social[ch] || NS.wsFixtures.social.instagram;
+                var body = tmpl.replace('|BRAND|', 'Kirkland');
+                NS.ws.spState.drafts.unshift({ channel: ch, body: body });
+                NS.ws.renderWorkspace('socialpulse');
+            },
+
+            /* AutothinK (C8) */
+            renderAutoThink: function () {
+                NS.ws.state.autothink = { statusText: 'State: ' + NS.ws.runState };
+                if (NS.ws.runState === 'idle') return '<div class="state-block">Type a prompt and press Draft run to begin the approval flow (mock).</div>';
+                var notes = {
+                    idle: 'Idle.',
+                    draft: 'Draft created — production is not running.',
+                    awaiting_approval: 'Awaiting your approval before running (mock).',
+                    running: 'Running… (mock)',
+                    done: 'Run finished (mock). Output shown below.',
+                    failed: 'Run failed (mock). Not re-run automatically.',
+                };
+                return '<div class="at-run"><p>' + NS.escapeHtml(notes[NS.ws.runState] || NS.ws.runState) + '</p>' +
+                    (NS.ws.runState === 'done' ? '<pre class="at-output">Mock run output — estimates only, no network.</pre>' : '') +
+                    (NS.ws.runState === 'failed' ? '<p class="ns-disclaimer">Run failed honestly; nothing fabricated.</p>' : '') + '</div>';
+            },
+            atDraft: function () {
+                NS.ws.runState = 'draft';
+                NS.ws.atAdvanceScale();
+                NS.ws.renderWorkspace('autothink');
+                var a = el('atApprove'), r = el('atReject');
+                if (a) a.disabled = false;
+                if (r) r.disabled = false;
+                NS.ws.updateAutothinkLeds();
+            },
+            atAdvanceScale: function () {
+                if (NS.ws.runState === 'draft') NS.ws.runState = 'awaiting_approval';
+            },
+            atApprove: function () {
+                var a = el('atApprove'), r = el('atReject');
+                if (a) a.disabled = true;
+                if (r) r.disabled = true;
+                NS.ws.runState = 'running';
+                NS.ws.renderWorkspace('autothink');
+                NS.ws.updateAutothinkLeds();
+                var self = this;
+                setTimeout(function () { NS.ws.atComplete(true); }, 60);
+            },
+            atReject: function () {
+                var a = el('atApprove'), r = el('atReject');
+                if (a) a.disabled = true;
+                if (r) r.disabled = true;
+                NS.ws.atComplete(false);
+            },
+            atComplete: function (ok) {
+                NS.ws.runState = ok ? 'done' : 'failed';
+                NS.ws.renderWorkspace('autothink');
+                NS.ws.updateAutothinkLeds();
+                return NS.ws.runState;
+            },
+            updateAutothinkLeds: function () {
+                var cs = el('atRunState');
+                if (cs) cs.textContent = 'State: ' + NS.ws.runState;
+            },
+            atMeterSet: function (payload) {
+                var data = NS.bff.readData(payload);
+                NS.ws.atCreditBalance = (data && typeof data.balance === 'number') ? data.balance : null;
+                var m = el('atMeter');
+                if (m) m.textContent = NS.ws.atCreditBalance === null ? 'Credits: unavailable' : 'Credits: ' + NS.ws.atCreditBalance + ' / ' + ((data && data.allotment) || '—') + ' (read-only)';
+                return NS.ws.atCreditBalance;
+            },
+            atMeterLoad: function () {
+                if (!(NS.isThemeV2 && NS.isThemeV2())) return false;
+                fetch('/api/v1/credits/me').then(function (res) { return res.json(); }).then(function (data) {
+                    NS.ws.atMeterSet(data);
+                }).catch(function () { NS.ws.atMeterSet(null); });
+                return true;
+            },
+
+            /* Commerce Ops + Creative Studio (C6) — honest empty states */
+            renderCommerceOps: function () {
+                var pending = [
+                    'Inventory & restock forecasting — not built (roadmap).',
+                    'Vendor/P&L rollup — not built (roadmap).',
+                ];
+                return '<ul class="state-block">' + pending.map(function (p) { return '<li>' + NS.escapeHtml(p) + '</li>'; }).join('') + '</ul>';
+            },
+            renderCreativeStudio: function () {
+                var items = NS.wsFixtures.creative.map(function (c) {
+                    return '<div class="cre-item"><p><strong>' + NS.escapeHtml(c.label) + '</strong> · ' + NS.escapeHtml(c.status) + '</p>' +
+                        '<p>' + NS.escapeHtml(c.prompt) + '</p><button type="button" class="btn" disabled title="Generation is not wired in alpha">Generate (disabled)</button></div>';
+                }).join('');
+                return items || '<div class="state-block">No prompts yet.</div>';
+            },
+
+            /* Admin (C6, role-gated via B2) */
+            renderAdmin: function () {
+                var session = NS.bff.session();
+                if (session.role !== 'admin') {
+                    return '<div class="state-block">Authorization required — the admin role is required to view account administration. You are: ' + NS.escapeHtml(session.role || 'unknown') + '.</div>';
+                }
+                var rows = NS.wsFixtures.adminAccounts.map(function (a) {
+                    return '<tr><td>' + NS.escapeHtml(a.id) + '</td><td>' + NS.escapeHtml(a.email) + '</td><td>' + NS.escapeHtml(a.plan) + '</td><td>' + NS.escapeHtml(a.created_at) + '</td></tr>';
+                }).join('');
+                return '<p class="gg-seam-legend">Least-privilege view: basic account fields only (id, email, plan, created_at). No security-sensitive data.</p>' +
+                    '<div class="table-wrap"><table aria-label="Accounts"><thead><tr><th scope="col">id</th><th scope="col">email</th><th scope="col">plan</th><th scope="col">created</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+            },
+
+            /* shared export (no-leak) + CSV (C1/C3) */
+            exportCsv: function (label, rows, columns) {
+                var manifest = {
+                    manifest_version: 'goose-export/v1',
+                    export_id: 'exp_' + NS.wsRand32(),
+                    service: 'golden_goose',
+                    export_type: 'opportunities_csv',
+                    row_count: rows.length,
+                    columns: columns,
+                    currency: 'USD',
+                    disclaimer: 'Estimates only. Not a recommendation to buy or an approval to resell.',
+                };
+                if (!NS.bff.assertNoLeak(manifest)) return false;
+                var csv = columns.join(',') + '\n' + rows.map(function (r) {
+                    return columns.map(function (c) { return String(r[c] === undefined ? '—' : r[c]); }).join(',');
+                }).join('\n');
+                try {
+                    if (typeof document !== 'undefined' && document.createElement) {
+                        var a = document.createElement('a');
+                        a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+                        a.download = label + '.csv';
+                        if (document.body && document.body.appendChild) {
+                            document.body.appendChild(a);
+                            if (a.click) a.click();
+                        }
+                    }
+                } catch (e) { /* download best-effort; tests assert manifest no-leak */ }
+                return true;
+            },
+
+            wireWorkspaces: function () {
+                if (NS.ws._wired) return;
+                NS.ws._wired = true;
+                if (typeof document === 'undefined' || !document.addEventListener) return;
+                document.addEventListener('click', function (e) {
+                    var t = e && e.target;
+                    var btn = t && t.closest ? t.closest('[id]') : null;
+                    if (!btn) return;
+                    var id = btn.id;
+                    if (id === 'ssRefresh') NS.ws.ssRefresh();
+                    else if (id === 'ssSearch' || id === 'ssTier') { }
+                    else if (id === 'ssExport') NS.ws.ssExport();
+                    else if (id === 'lfGenerate') NS.ws.lfGenerate();
+                    else if (id === 'lfClearSaved') NS.ws.lfClear();
+                    else if (id === 'apSanitize') NS.ws.apSanitize();
+                    else if (id === 'apManifest') NS.ws.apBuildManifest();
+                    else if (id === 'apExport') NS.ws.apExport();
+                    else if (id === 'spDraft') NS.ws.spDraft();
+                    else if (id === 'atDraft') NS.ws.atDraft();
+                    else if (id === 'atApprove') NS.ws.atApprove();
+                    else if (id === 'atReject') NS.ws.atReject();
+                });
+                var search = el('ssSearch');
+                if (search && search.addEventListener) search.addEventListener('input', function () {
+                    NS.ws.ssState.search = search.value || '';
+                    NS.ws.ssFilter();
+                });
+                var tier = el('ssTier');
+                if (tier && tier.addEventListener) tier.addEventListener('change', function () {
+                    NS.ws.ssState.tier = tier.value || 'all';
+                    NS.ws.ssFilter();
+                });
+                var nav = el('commandcenterCanvas');
+                if (nav && nav.addEventListener) nav.addEventListener('click', function (e) {
+                    var card = e.target && e.target.closest ? e.target.closest('[data-nav]') : null;
+                    if (card && NS.openView) NS.openView(card.getAttribute('data-nav'));
+                });
+                var ob = el('onboardingStart');
+                if (ob && ob.addEventListener) ob.addEventListener('click', dismissOnboarding);
+            },
+        };
+
+        NS.wsSession = null;   // B2 stub session; set role:'admin' in tests to exercise gating
+        NS.ws.runState = 'idle';
+
+        function maybeShowOnboarding() {
+            if (!(NS.isThemeV2 && NS.isThemeV2())) return;
+            var done = null;
+            try { done = localStorage.getItem('t2.shell.onboarding.v1'); } catch (e) { /* noop */ }
+            if (done === '1') return;
+            var ov = el('onboardingOverlay');
+            if (ov) ov.hidden = false;
+        }
+
+        function dismissOnboarding() {
+            try { localStorage.setItem('t2.shell.onboarding.v1', '1'); } catch (e) { /* noop */ }
+            var ov = el('onboardingOverlay');
+            if (ov) ov.hidden = true;
+        }
+
+        function initWorkspacesUi() {
+            NS.ws.wireWorkspaces();
+            var on = !!(NS.isThemeV2 && NS.isThemeV2());
+            var ids = ['nav-goldengoose', 'nr-goldengoose', 'nav-sourcescout', 'nr-sourcescout',
+                'nav-listingforge', 'nr-listingforge', 'nav-adpilot', 'nr-adpilot',
+                'nav-socialpulse', 'nr-socialpulse', 'nav-autothink', 'nr-autothink'];
+            ids.forEach(function (id) {
+                var n = el(id);
+                if (!n) return;
+                n.hidden = !on;
+                if (n.setAttribute) n.setAttribute('aria-hidden', on ? 'false' : 'true');
+            });
+        }
         function syncFilterInputs() {
             var f = currentFilters;
             var v = el('fSearch'); if (v) v.value = f.search;
@@ -11609,6 +12494,17 @@ html[data-theme-v2] {
         <div class="filter-actions">
             <button class="btn ghost" id="colVisReset" type="button">Reset</button>
         </div>
+    </div>
+
+    <footer class="ns-disclaimer" id="nsFooterDisclaimer" data-slot="spa-footer" style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;padding:18px 16px 24px;border-top:1px solid var(--border);color:var(--text-muted);font-size:11px;line-height:1.5">Dashboards show estimates from available data — not guarantees, not a recommendation to buy, and not an approval to resell. Plans never flip live gates; live actions require a fresh named operator approval. <a href="/legal/terms">Terms</a> · <a href="/legal/privacy">Privacy</a> · <a href="/legal/refund">Refund-Cancellation</a></footer>
+
+    <div class="ns-overlay" id="onboardingOverlay" hidden role="dialog" aria-modal="true" aria-label="Welcome to Northstar OS v2">
+      <div class="ns-overlay-panel">
+        <h3>Welcome to Northstar OS (v2)</h3>
+        <p>Command Center, Commerce Ops, AutoThink Studio, Creative Studio, and Admin are reachable from the Command Center. Every surface shows honest loading/empty/error states; unbuilt tools are clearly marked, never faked.</p>
+        <p class="ns-disclaimer" data-slot="onboarding-spa">Dashboards show estimates from available data — not guarantees, not a recommendation to buy, and not an approval to resell. Plans never flip live gates. <a href="/legal/terms">Terms</a> · <a href="/legal/privacy">Privacy</a> · <a href="/legal/refund">Refund-Cancellation</a></p>
+        <button class="btn" id="onboardingStart" type="button">Get Started</button>
+      </div>
     </div>
 
 </body>

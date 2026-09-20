@@ -1,0 +1,49 @@
+{
+  "$schema": "gg-entitlements-v1",
+  "description": "Golden Goose Finder category/export entitlements, keyed by PLAN ID from shared/subscription-plans.json. This file REFERENCE-ONLY duplicates catalog data: it never restates plan names, prices, or gate arrays. A plan entitles a GG category/export; it never flips a live gate. See docs/contracts/GOLDEN_GOOSE_SEAM_v1.md (B7).",
+  "catalog_ref": "shared/subscription-plans.json",
+  "contract_ref": "docs/contracts/GOLDEN_GOOSE_SEAM_v1.md",
+  "category_source": "Northstar_backend/agents/golden_goose_finder/category_config.py::CATEGORY_CONFIG",
+  "canonical_categories": [
+    "nicotine_cessation",
+    "otc_health",
+    "vitamins_supplements",
+    "household_cleaning",
+    "personal_care",
+    "pet",
+    "snacks_bars",
+    "baby_child"
+  ],
+  "export_types": [
+    "opportunities_json",
+    "opportunities_csv",
+    "export_manifest_json"
+  ],
+  "plans": {
+    "foundation": {
+      "categories": [],
+      "exports": []
+    },
+    "scout": {
+      "categories": ["vitamins_supplements", "otc_health"],
+      "exports": ["opportunities_json"]
+    },
+    "mover": {
+      "categories": ["vitamins_supplements", "otc_health", "household_cleaning", "personal_care", "snacks_bars"],
+      "exports": ["opportunities_json", "opportunities_csv"]
+    },
+    "autothink": {
+      "categories": [
+        "nicotine_cessation",
+        "otc_health",
+        "vitamins_supplements",
+        "household_cleaning",
+        "personal_care",
+        "pet",
+        "snacks_bars",
+        "baby_child"
+      ],
+      "exports": ["opportunities_json", "opportunities_csv", "export_manifest_json"]
+    }
+  }
+}
