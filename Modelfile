@@ -1,4 +1,7 @@
-FROM qwen2.5-coder:14b
+# B3: base retargeted from retired qwen2.5-coder:14b (deleted 2026-09-14 fleet
+# trim) to the current kept local engine base qwen3:14b. No functional change
+# to parameters/SYSTEM.
+FROM qwen3:14b
 PARAMETER temperature 0.2
 PARAMETER top_p 0.9
 PARAMETER num_predict 8192

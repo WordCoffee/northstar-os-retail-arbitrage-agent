@@ -1,6 +1,43 @@
 # Northstar OS — Cloudflare Pages Deployment
 
-This guide covers deploying the dashboard UI to **Cloudflare Pages** and protecting it with **Cloudflare Access** (Zero Trust).
+This guide covers the **actual** deploy path of this repository: a static
+dashboard UI on **Cloudflare Pages** with **Pages Functions** for `/api/*`,
+protected by **Cloudflare Access** (Zero Trust).
+
+> **Honest scope (B5 alignment):** this project deploys as **Pages + Pages
+> Functions only**. There is **no Workers compute layer**, no backend-on-
+> Workers staging, and no second deploy target. The FastAPI backend
+> (`Northstar_backend/main.py`) and AutothinK (`autothink/`) run locally and
+> are **not** part of this Pages deployment. Any claim that this Pages site
+> serves the full backend would be false — it does not.
+
+---
+
+## Current architecture
+
+```
+public/                      # static dashboard (Cloudflare Pages build dir)
+functions/
+  api/
+    _envelope.js             # bff/v1 envelope helper (NOT a route; _ = util)
+    files.js                 # GET /api/files          -> bff/v1 envelope
+    latest-deals.js          # GET /api/latest-deals   -> bff/v1 envelope
+    data/[filename].js       # GET /api/data/:name     -> bff/v1 envelope
+    transcribe.js            # GET/POST -> 501 not_implemented (honest stub)
+src/lib/dealsApi.js          # Shared KV read logic for latest-deals
+wrangler.toml                # Pages project config (pages_build_output_dir=public)
+_routes.json                 # /* static, /api/* -> Pages Functions
+```
+
+**API contract:** every Functions response conforms to
+[`docs/contracts/BFF_CONTRACT_v1.md`](docs/contracts/BFF_CONTRACT_v1.md):
+uniform envelope (`contract`, `request_id`, `status`, `data`, `error`, `meta`),
+honest error taxonomy (including `not_implemented` = 501 for `transcribe.js`),
+and a no-leak rule (generic messages only — never raw provider/exception text).
+
+**KV:** `DEALS_KV` (bound in `wrangler.toml`) backs `/api/files` and
+`/api/latest-deals` with the `scored:*` and `csv:*` keys written by the local
+pipeline.
 
 ---
 
@@ -23,7 +60,7 @@ git remote add origin https://github.com/YOUR_USERNAME/northstar-os-dashboard.gi
 git push -u origin main
 ```
 
-> The `.gitignore` excludes `.env`, `node_modules`, and local data files.
+> `.gitignore` excludes `.env`, `node_modules`, and local data files.
 
 ---
 
@@ -33,12 +70,14 @@ git push -u origin main
 2. Connect to Git → Select your private repo
 3. Configure build settings:
    - **Framework preset**: None (static)
-   - **Build command**: `npm run build` (or leave empty if no build step)
+   - **Build command**: empty (no build step required for `public/`)
    - **Build output directory**: `public`
    - **Root directory**: `/` (or where `public/` lives)
 4. Click **Save and Deploy**
 
-> Cloudflare Pages will auto-detect the `functions/` directory and deploy API routes as Pages Functions.
+> Cloudflare Pages auto-detects the `functions/` directory and serves `/api/*`
+> routes through Pages Functions. The functions expect a KV namespace bound as
+> `DEALS_KV` (set it in **Settings → Bindings → KV namespace**).
 
 ---
 
@@ -46,19 +85,20 @@ git push -u origin main
 
 1. In your Pages project → **Custom domains** → **Set up a custom domain**
 2. Enter your domain (e.g., `northstar.yourdomain.com`)
-3. Cloudflare will add the DNS records automatically (if domain is on Cloudflare)
+3. Cloudflare adds DNS records automatically (if domain is on Cloudflare)
 
 ---
 
 ## 4. Enable Cloudflare Access (Password Protection)
 
-**Cloudflare Access** (part of Zero Trust) adds authentication in front of your Pages deployment — no code changes needed.
+**Cloudflare Access** (part of Zero Trust) adds authentication in front of your
+Pages deployment — no code changes needed.
 
 ### Option A: GitHub/Google/OIDC Login (Recommended)
 
 1. Go to **Zero Trust → Access → Applications → Add an application**
 2. Select **Self-hosted** → **Next**
-3. **Application domain**: `northstar.yourdomain.com` (your Pages domain)
+3. **Application domain**: `northstar.yourdomain.com`
 4. **Policy name**: "Northstar OS Access"
 5. **Action**: Allow
 6. **Include**: Emails ending in `@yourdomain.com` (or specific emails)
@@ -84,8 +124,11 @@ If you need programmatic access to `/api/*`:
 ## 5. Verify Deployment
 
 - Visit `https://northstar.yourdomain.com` → should redirect to login
-- After login → dashboard loads with latest deals
-- API: `https://northstar.yourdomain.com/api/latest-deals` → returns JSON
+- After login → dashboard loads
+- API: `https://northstar.yourdomain.com/api/latest-deals` → a **bff/v1 JSON
+  envelope** with `status:"ok"` (or `status:"empty"` when no KV rows yet)
+- `/api/transcribe` → `status:"error"`, `error.code:"not_implemented"` (501) —
+  this is the honest stub state; not a hidden feature
 
 ---
 
@@ -126,13 +169,15 @@ jobs:
 
 ```
 public/
-  index.html          # Dashboard UI
+  index.html          # Dashboard UI (static)
 functions/
   api/
-    latest-deals.js   # GET /api/latest-deals → JSON
-    files.js          # GET /api/files → list of scored JSON files
-    data/[filename].js# GET /api/data/:filename → raw scored JSON
-src/lib/dealsApi.js   # Shared logic for reading data files
+    _envelope.js      # bff/v1 envelope helper (not a route)
+    latest-deals.js   # GET /api/latest-deals      -> bff/v1 envelope
+    files.js          # GET /api/files             -> bff/v1 envelope
+    data/[filename].js# GET /api/data/:name        -> bff/v1 envelope
+    transcribe.js     # GET/POST -> 501 not_implemented (honest stub)
+src/lib/dealsApi.js   # Shared logic for reading KV data
 ```
 
 ---
@@ -142,8 +187,10 @@ src/lib/dealsApi.js   # Shared logic for reading data files
 | Issue | Fix |
 |-------|-----|
 | 404 on `/api/latest-deals` | Ensure `functions/api/latest-deals.js` exists and Pages Functions are enabled |
+| `internal_error` from `/api/latest-deals` | KV binding `DEALS_KV` missing or not bound to the Pages project |
 | CORS errors | Pages Functions auto-handle CORS for same-origin; add headers if calling from elsewhere |
 | Access denies you | Check Zero Trust policy includes your email/domain; verify login method works |
+| `/api/transcribe` returns 501 | Expected — transcription is not implemented in this deployment (honest stub) |
 | Stale data | Pipeline must run and commit new `data/scored/` files; GitHub Action above automates this |
 
 ---
@@ -151,8 +198,12 @@ src/lib/dealsApi.js   # Shared logic for reading data files
 ## Costs
 
 All free tier:
-- **Cloudflare Pages**: Unlimited sites, 500 builds/mo, unlimited bandwidth
-- **Cloudflare Access**: Free for ≤50 users
-- **Cloudflare DNS/Registrar**: Wholesale pricing (no markup)
+- **Cloudflare Pages**: unlimited sites, 500 builds/mo, unlimited bandwidth
+- **Cloudflare Access**: free for ≤50 users
+- **Cloudflare DNS/Registrar**: wholesale pricing (no markup)
 
 Total: **$0/month** for typical usage.
+
+> Updated 2026-09-19 (B5): documents the real Pages + Functions path, the
+> bff/v1 envelope, and the honest `not_implemented` transcribe stub. No
+> Workers compute layer or second deploy target is claimed.

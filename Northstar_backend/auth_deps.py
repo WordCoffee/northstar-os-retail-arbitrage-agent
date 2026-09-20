@@ -33,6 +33,8 @@ async def get_current_user(token: Optional[str] = Depends(oauth2_scheme)) -> dic
 
     For the demo/launch phase, requests without a token get a
     read-only 'foundation' user so the UI works without auth setup.
+    B2: the returned dict carries `role` + `tenant_id` (demo fallback =
+    member/anonymous, least privilege). Unknown roles fail closed to member.
     """
     if not token:
         # Demo mode — allow unauthenticated read-only access
@@ -40,6 +42,8 @@ async def get_current_user(token: Optional[str] = Depends(oauth2_scheme)) -> dic
             "id": "anonymous",
             "email": "demo@northstar.local",
             "plan": "foundation",
+            "role": auth.ROLE_MEMBER,
+            "tenant_id": "anonymous",
             "is_demo": True,
         }
 
@@ -71,6 +75,42 @@ async def get_current_user(token: Optional[str] = Depends(oauth2_scheme)) -> dic
             detail="User not found",
         )
 
+    # B2: role/tenant come from the token (never the request body); unknown
+    # roles fail closed to the lowest tenant role.
+    role = payload.get("role")
+    user["role"] = role if auth.is_valid_role(role) else auth.ROLE_MEMBER
+    user["tenant_id"] = payload.get("tenant_id") or user.get("id")
+    return user
+
+
+def require_role(minimum_role: str):
+    """Dependency factory: require a minimum TENANT role (fail closed).
+
+    Unknown minimum_role => deny. `admin` is a separate axis and does NOT
+    satisfy tenant-role checks (least privilege).
+    """
+    async def _check(user: dict = Depends(get_current_user)) -> dict:
+        if not auth.has_role(user, minimum_role):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Insufficient role for this action.",
+            )
+        return user
+
+    return _check
+
+
+async def require_admin(user: dict = Depends(get_current_user)) -> dict:
+    """Dependency: require the platform `admin` role (fail closed).
+
+    Admin is least-privilege: callers must use `auth.admin_account_view` and
+    must never return security-sensitive fields.
+    """
+    if not auth.is_admin(user):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Administrator role required.",
+        )
     return user
 
 

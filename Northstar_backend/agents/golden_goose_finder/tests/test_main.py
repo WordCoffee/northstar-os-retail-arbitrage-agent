@@ -240,21 +240,25 @@ class TestAPIEndpoints:
         return TestClient(app)
 
     def test_health_endpoint(self, client):
-        """Health check returns 200 with correct structure."""
+        """Health check returns 200 with correct (envelope) structure."""
         resp = client.get("/api/golden-goose/health")
         assert resp.status_code == 200
         data = resp.json()
+        assert data["contract"] == "bff/v1"
         assert data["status"] == "ok"
-        assert data["service"] == "golden-goose-finder"
-        assert "version" in data
-        assert "modules_loaded" in data
+        inner = data["data"]
+        assert inner["service"] == "golden-goose-finder"
+        assert "version" in inner
+        assert "modules_loaded" in inner
 
     def test_scan_mock_endpoint(self, client):
-        """Mock scan endpoint returns 200 with opportunities."""
+        """Mock scan endpoint returns a bff/v1 envelope with opportunities."""
         resp = client.post("/api/golden-goose/scan-mock")
         assert resp.status_code == 200
-        data = resp.json()
-        assert data["status"] == "ok"
+        body = resp.json()
+        assert body["contract"] == "bff/v1"
+        assert body["status"] == "ok"
+        data = body["data"]
         assert isinstance(data["opportunities"], list)
         assert isinstance(data["summary"], dict)
         assert "total_opportunities" in data["summary"]
@@ -263,7 +267,7 @@ class TestAPIEndpoints:
         """Mock scan respects query parameters."""
         resp = client.post("/api/golden-goose/scan-mock?roi_floor=50&max_results=2")
         assert resp.status_code == 200
-        data = resp.json()
+        data = resp.json()["data"]
         assert len(data["opportunities"]) <= 2
 
     def test_scan_live_endpoint_is_hard_stopped(self, client):
@@ -274,29 +278,31 @@ class TestAPIEndpoints:
         assert "operator approval" in detail.lower() or "§3" in detail
 
     def test_categories_endpoint(self, client):
-        """Categories endpoint returns data."""
+        """Categories endpoint returns (envelope) data."""
         resp = client.get("/api/golden-goose/categories")
         assert resp.status_code == 200
         data = resp.json()
+        assert data["contract"] == "bff/v1"
         assert data["status"] == "ok"
-        assert "categories" in data
-        assert isinstance(data["categories"], dict)
+        categories = data["data"]["categories"]
+        assert isinstance(categories, dict)
 
     def test_opportunities_endpoint_no_data(self, client):
         """Opportunities endpoint handles missing reports gracefully."""
         resp = client.get("/api/golden-goose/opportunities")
         assert resp.status_code == 200
         data = resp.json()
-        assert data["status"] in ("ok", "no_data")
+        assert data["contract"] == "bff/v1"
+        assert data["status"] in ("ok", "empty")
 
     def test_opportunities_with_tier_filter(self, client):
-        """Opportunities endpoint supports tier filter."""
-        # First run a mock scan to create a report
+        """Opportunities endpoint supports tier filter (envelope)."""
         client.post("/api/golden-goose/scan-mock")
         resp = client.get("/api/golden-goose/opportunities?tier=HIGH")
         assert resp.status_code == 200
         data = resp.json()
-        for opp in data.get("opportunities", []):
+        assert data["status"] == "ok"
+        for opp in data["data"].get("items", []):
             assert opp["tier"] == "HIGH"
 
 

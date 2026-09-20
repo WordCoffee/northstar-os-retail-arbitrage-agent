@@ -250,21 +250,32 @@ def save_report(report: Dict[str, Any], output_dir: Optional[str] = None) -> str
 
     Writes report.json plus a human-readable summary.txt alongside it.
     Returns the report.json path.
+
+    Atomicity (FIXES_50 #10 / blueprint §16): each file is written to a
+    temp sibling then renamed, so a crash never leaves a partial JSON on
+    disk — matching the atomic report write already used by run_pipeline.
     """
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
     base = Path(output_dir) if output_dir else _REPORTS_ROOT / timestamp
     base.mkdir(parents=True, exist_ok=True)
 
     json_path = base / "report.json"
-    json_path.write_text(
+    _atomic_write_text(
+        json_path,
         json.dumps(report, indent=2, ensure_ascii=False, default=str),
-        encoding="utf-8",
     )
 
     summary_path = base / "summary.txt"
-    summary_path.write_text(_build_summary_text(report), encoding="utf-8")
+    _atomic_write_text(summary_path, _build_summary_text(report))
 
     return str(json_path)
+
+
+def _atomic_write_text(dest: Path, text: str) -> None:
+    """Write ``text`` to ``dest`` atomically (temp file + rename)."""
+    tmp = dest.with_suffix(dest.suffix + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    tmp.replace(dest)
 
 
 def _build_summary_text(report: Dict[str, Any]) -> str:

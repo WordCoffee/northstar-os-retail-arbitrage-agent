@@ -1,3 +1,5 @@
-FROM devstral-small-2:24b
+# B3: base retargeted from retired devstral-small-2:24b (deleted 2026-09-14
+# fleet trim) to the current kept local engine base qwen3:14b.
+FROM qwen3:14b
 PARAMETER num_ctx 4096
 PARAMETER temperature 0.15

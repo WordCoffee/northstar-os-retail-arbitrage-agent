@@ -21,14 +21,14 @@ OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_CHAT_ENDPOINT = f"{OLLAMA_BASE_URL}/api/chat"
 OLLAMA_TAGS_ENDPOINT = f"{OLLAMA_BASE_URL}/api/tags"
 
-DEFAULT_LOCAL_MODEL = "qwen2.5-coder:14b"
+DEFAULT_LOCAL_MODEL = "qwen3:14b"  # B3: was retired qwen2.5-coder:14b (deleted 2026-09-14 fleet trim)
 DEFAULT_CLOUD_MODEL = "gpt-4o"
 
 # Generation guardrails for long automation prompts. These override the
 # Modelfile defaults at request time so the AutothinK surface is never
 # capped by a small num_predict or a 16k context window once the model is
 # rebuilt with matching values. num_ctx must not exceed the rebuilt
-# model's context (qwen2.5-coder:14b supports 32768).
+# model's context (qwen3:14b supports 32768).
 NUM_PREDICT = int(os.environ.get("AUTOTHINK_NUM_PREDICT", "8192"))
 NUM_CTX = int(os.environ.get("AUTOTHINK_NUM_CTX", "32768"))
 

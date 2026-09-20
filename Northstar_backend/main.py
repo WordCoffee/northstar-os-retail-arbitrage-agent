@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -32,7 +32,7 @@ except ImportError:
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
 from rate_limiter import RateLimitMiddleware
-from auth_deps import get_current_user, require_plan
+from auth_deps import get_current_user, require_plan, require_role, require_admin
 
 # Initialize structured logging
 setup_logging()
@@ -1273,6 +1273,89 @@ def list_plans():
     """List all subscription plans with entitlements."""
     import auth
     return {"plans": auth.PLAN_ENTITLEMENTS}
+
+
+@app.get("/api/v1/admin/accounts/{user_id}")
+async def admin_get_account(user_id: str, admin: dict = Depends(require_admin)):
+    """Least-privilege admin read (B4 boundary enforcement).
+
+    Requires the platform `admin` role and returns ONLY the whitelisted basic
+    account view (id, email, plan, created_at) — never password hashes, tokens,
+    session ids, or tenant product data. Unknown ids return 404 (fail closed).
+    """
+    import auth
+    target = auth.get_user(user_id)
+    if not target:
+        raise HTTPException(status_code=404, detail="Account not found")
+    return {"account": auth.admin_account_view(target)}
+
+
+@app.get("/api/v1/credits/me")
+async def credits_me(request: Request):
+    """Credit meter read (B3 contract/C8) — read-only, offline, no cost logic.
+
+    Plan is resolved from the bearer token (B2 stub auth); demo = foundation.
+    Balance is seeded per the catalog plan allotment for the current period;
+    nothing is billed. The client only DISPLAYS this value — it never computes
+    cost logic (credit-ledger/v1 §3, C8).
+    """
+    try:
+        from credit_ledger import allotment_for_plan
+        import auth as _auth
+        plan = "foundation"
+        header = request.headers.get("authorization", "")
+        if header.lower().startswith("bearer "):
+            try:
+                payload = _auth.decode_token(header[7:].strip())
+                candidate = payload.get("plan", "foundation")
+                allotment_for_plan(candidate)  # validate against catalog
+                plan = candidate
+            except Exception:
+                plan = "foundation"
+        allotment = allotment_for_plan(plan)
+        # Offline alpha: no consumption tracked yet; balance == allotment.
+        return {
+            "contract": "bff/v1",
+            "status": "ok",
+            "data": {
+                "balance": allotment,
+                "allotment": allotment,
+                "consumed": 0,
+                "class": "compute",
+                "plan": plan,
+                "period": "month",
+            },
+            "error": None,
+            "meta": {"service": "credits", "version": "v1"},
+        }
+    except Exception:
+        raise HTTPException(status_code=500, detail="Credit ledger unavailable")
+
+
+# ---------------------------------------------------------------------------
+# C9: legal document routes (serve the A6 docs/legal drafts; plain markdown).
+# ---------------------------------------------------------------------------
+
+_LEGAL_DOCS = {
+    "terms": "TERMS_OF_SERVICE.md",
+    "privacy": "PRIVACY_POLICY.md",
+    "refund": "REFUND_CANCELLATION.md",
+}
+
+
+@app.get("/legal/{name}")
+def serve_legal_doc(name: str):
+    """Serve a docs/legal draft as markdown (C9 embed; non-authoritative copy)."""
+    filename = _LEGAL_DOCS.get(name)
+    if not filename:
+        raise HTTPException(status_code=404, detail="Legal document not found")
+    from fastapi.responses import PlainTextResponse
+    from pathlib import Path as _P
+    path = _P(__file__).resolve().parent.parent / "docs" / "legal" / filename
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Legal document not found")
+    return PlainTextResponse(path.read_text(encoding="utf-8"),
+                             media_type="text/markdown")
 
 
 @app.get("/api/v1/plans/{plan_id}")

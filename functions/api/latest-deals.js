@@ -1,15 +1,12 @@
 import { loadLatestDeals } from "../../src/lib/dealsApi.js";
+import { ok, internalError } from "./_envelope.js";
 
 export async function onRequestGet(context) {
   try {
     const data = await loadLatestDeals(context.env);
-    return new Response(JSON.stringify(data), {
-      headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=60" },
-    });
+    return ok(data, "sourcescout");
   } catch (e) {
-    return new Response(JSON.stringify({ error: e.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    // Never leak the raw provider/storage error — no-leak boundary (BFF §6).
+    return internalError("sourcescout");
   }
 }

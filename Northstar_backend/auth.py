@@ -79,6 +79,72 @@ def _load_plan_catalog() -> Dict[str, Dict[str, Any]]:
 PLAN_ENTITLEMENTS = _load_plan_catalog()
 
 # ---------------------------------------------------------------------------
+# B2: roles, tenancy, and least-privilege admin (contract: auth-rbac/v1)
+# ---------------------------------------------------------------------------
+# Role = what a principal may DO within their tenant. Plan = what the tenant is
+# ENTITLED to. Effective capability = role permission ∩ plan entitlement.
+# Unknown roles fail closed (rank -1 => every role check fails).
+
+ROLE_MEMBER = "member"
+ROLE_OPERATOR = "operator"
+ROLE_OWNER = "owner"
+ROLE_ADMIN = "admin"
+
+# Tenant role hierarchy (admin is a SEPARATE axis, deliberately not ranked here,
+# so an admin does NOT satisfy owner/operator tenant checks — least privilege).
+ROLE_ORDER: Dict[str, int] = {ROLE_MEMBER: 0, ROLE_OPERATOR: 1, ROLE_OWNER: 2}
+VALID_ROLES = frozenset(ROLE_ORDER) | {ROLE_ADMIN}
+
+# Plan entitlement order (from the catalog); never duplicated as names/prices.
+PLAN_ORDER: Dict[str, int] = {"foundation": 0, "scout": 1, "mover": 2, "autothink": 3}
+
+# Basic account fields an admin may see — nothing security-sensitive.
+_ADMIN_ACCOUNT_FIELDS = ("id", "email", "plan", "created_at")
+
+
+def is_valid_role(role: Any) -> bool:
+    return role in VALID_ROLES
+
+
+def role_rank(role: Any) -> int:
+    """Tenant-role rank; unknown roles and the admin axis return -1 (fail closed)."""
+    return ROLE_ORDER.get(role, -1)
+
+
+def plan_rank(plan: Any) -> int:
+    return PLAN_ORDER.get(plan, -1)
+
+
+def is_admin(user: Optional[Dict[str, Any]]) -> bool:
+    return bool(user) and user.get("role") == ROLE_ADMIN
+
+
+def has_role(user: Optional[Dict[str, Any]], minimum_role: str) -> bool:
+    """True only when the user's tenant role meets the minimum. Fail closed:
+    an unknown minimum_role or an unknown user role returns False; admin does
+    not pass tenant-role checks."""
+    if minimum_role not in ROLE_ORDER:
+        return False
+    return role_rank((user or {}).get("role")) >= ROLE_ORDER[minimum_role]
+
+
+def tenant_id_of(user: Optional[Dict[str, Any]]) -> Optional[str]:
+    """Single-tenant-per-account: tenant_id falls back to the account id.
+    Fails closed (None) when neither is present."""
+    if not user:
+        return None
+    return user.get("tenant_id") or user.get("id") or None
+
+
+def admin_account_view(user: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """Least-privilege admin view: ONLY basic account fields. Password hashes,
+    tokens, session ids, gate/live state, and tenant product data are
+    structurally excluded (contract: security-boundaries/v1 §3)."""
+    if not user:
+        return {}
+    return {k: user.get(k) for k in _ADMIN_ACCOUNT_FIELDS}
+
+# ---------------------------------------------------------------------------
 # Password hashing
 # ---------------------------------------------------------------------------
 
@@ -101,14 +167,26 @@ def create_access_token(
     email: str,
     plan: str = "foundation",
     expires_delta: Optional[timedelta] = None,
+    *,
+    role: str = ROLE_OWNER,
+    tenant_id: Optional[str] = None,
 ) -> str:
-    """Create a JWT access token."""
+    """Create a JWT access token.
+
+    B2 additive claims: ``role`` (fail-closed to ``member`` on an unknown value)
+    and ``tenant_id`` (single-tenant-per-account: defaults to the account id).
+    A ``jti`` opaque session id is included. Defaults preserve prior behavior.
+    """
     expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    safe_role = role if role in VALID_ROLES else ROLE_MEMBER
     payload = {
         "sub": user_id,
         "email": email,
         "plan": plan,
+        "role": safe_role,
+        "tenant_id": tenant_id or user_id,
         "type": "access",
+        "jti": "sess_" + secrets.token_hex(16),
         "iat": datetime.now(timezone.utc),
         "exp": expire,
     }
