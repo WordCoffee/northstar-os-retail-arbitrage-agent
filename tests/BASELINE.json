@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "created": "2026-09-19T19:20:00Z",
-  "note": "Recorded after Phase F S3 (bff envelope + auth/session schema + test_single_match re-included).",
+  "created": "2026-09-20T15:30:00Z",
+  "note": "Phase F complete (S1-S13): bff envelope, auth/session schema, error-rate alerting, scan_manifest UI, prod posture, invites, support queue, PG migrations (prepared), honest stubs, FIXES_50 subset, .env isolation, rollback drill. test_single_match re-included.",
   "known_exceptions": {
     "ignored": [],
     "ignored_reason": "NONE \u2014 test_single_match.py hygiene fixed under Phase F/S3; re-included in the standard suite.",
@@ -13,13 +13,13 @@
   },
   "baseline": {
     "backend": {
-      "passed": 2159,
+      "passed": 2221,
       "failed": 2,
       "skipped": 3,
       "subtests": 48
     },
     "golden_goose": {
-      "passed": 431,
+      "passed": 463,
       "failed": 0
     },
     "ui": {
