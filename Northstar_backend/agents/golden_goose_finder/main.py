@@ -1285,6 +1285,8 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--verbose", action="store_true", help="Show all candidates including REJECT tier")
     parser.add_argument("--dry-run", action="store_true",
                         help="FIXES_50 #49: estimate credits/time/volume; NO provider calls, NO report write")
+    parser.add_argument("--docs", action="store_true",
+                        help="FIXES_50 #50: print the auto-generated CLI reference (offline)")
 
     return parser
 
@@ -1336,6 +1338,28 @@ def main():
     """CLI entry point."""
     parser = _build_parser()
     args = parser.parse_args()
+
+    if args.docs:
+        # FIXES_50 #50: auto-generated reference — offline, no providers.
+        from .gg_workflow import generate_cli_docs
+        _safe_stdout()
+        print(generate_cli_docs(
+            "golden-goose-finder",
+            [("-h, --help", "Show this help and exit"),
+             ("--mock / --live", "Mock data (default) / live scan (requires §3 operator approval)"),
+             ("--categories", "Filter by category slugs"),
+             ("--stores", "Filter by store names"),
+             ("--roi-floor", "$ minimum net profit per unit (default: $10)"),
+             ("--min-sales", "Minimum monthly sales (default: 1000)"),
+             ("--max-results", "Maximum results (default: 100)"),
+             ("--output-dir", "Report output directory"),
+             ("--json", "Output raw JSON instead of table"),
+             ("--verbose", "Show all candidates including REJECT tier"),
+             ("--dry-run", "Estimate credits/time/volume; NO provider calls, NO report write"),
+             ("--docs", "Print this auto-generated reference"),
+             ],
+        ), end="")
+        return 0
 
     if args.live:
         import os as _os
