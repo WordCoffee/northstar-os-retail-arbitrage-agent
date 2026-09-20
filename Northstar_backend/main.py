@@ -83,6 +83,14 @@ async def lifespan(app):
     logger.info("Northstar OS v1.0.0 starting up")
     logger.info(f"Base directory: {BASE_DIR}")
 
+    # Phase F/S6: assert the production rate-limiter posture at startup.
+    from rate_limiter import assert_prod_posture
+    try:
+        assert_prod_posture()
+    except RuntimeError as exc:
+        logger.critical(str(exc))
+        raise
+
     try:
         from data_layer import get_database
         db = get_database()

@@ -19,6 +19,33 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 
+def prod_posture_ok() -> bool:
+    """True when the production rate-limiter posture is intact.
+
+    The harness-only opt-out (NORTHSTAR_DISABLE_RATE_LIMIT=1) must never be
+    set when ENVIRONMENT=production. Phase F/S6.
+    """
+    import os
+    if os.getenv("ENVIRONMENT", "").strip().lower() == "production":
+        if os.getenv("NORTHSTAR_DISABLE_RATE_LIMIT", "").strip() == "1":
+            return False
+    return True
+
+
+def assert_prod_posture() -> None:
+    """Raise RuntimeError if the production posture is violated.
+
+    Call at app startup (main.lifespan). Never disabled the limiter in
+    production; the harness opt-out is for local/test runs only.
+    """
+    if not prod_posture_ok():
+        raise RuntimeError(
+            "PROD POSTURE VIOLATION: NORTHSTAR_DISABLE_RATE_LIMIT=1 while "
+            "ENVIRONMENT=production. The edge rate limiter must be enforced in "
+            "production. See PROD_POSTURE.md."
+        )
+
+
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """In-memory token bucket rate limiter."""
 
