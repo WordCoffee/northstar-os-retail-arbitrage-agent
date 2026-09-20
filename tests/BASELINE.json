@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created": "2026-09-20T15:30:00Z",
-  "note": "Phase F complete (S1-S13): bff envelope, auth/session schema, error-rate alerting, scan_manifest UI, prod posture, invites, support queue, PG migrations (prepared), honest stubs, FIXES_50 subset, .env isolation, rollback drill. test_single_match re-included.",
+  "note": "Phase G complete (A1/A2/A3): FIXES_50 leftovers #7 #9 #17 #18 #19 #22 #25 #26b #29; partials closed #38 #43 #45 #48 #21 #46; --docs drift CI; entitlements proposal. Phase F record below.",
   "known_exceptions": {
     "ignored": [],
     "ignored_reason": "NONE \u2014 test_single_match.py hygiene fixed under Phase F/S3; re-included in the standard suite.",
@@ -13,13 +13,13 @@
   },
   "baseline": {
     "backend": {
-      "passed": 2221,
+      "passed": 2279,
       "failed": 2,
       "skipped": 3,
       "subtests": 48
     },
     "golden_goose": {
-      "passed": 463,
+      "passed": 511,
       "failed": 0
     },
     "ui": {
