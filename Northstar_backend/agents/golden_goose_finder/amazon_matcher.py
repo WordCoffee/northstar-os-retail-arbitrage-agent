@@ -287,6 +287,7 @@ def _quick_count(title: str) -> Optional[int]:
 # Price sanity bounds
 MIN_PRICE_RATIO = 0.5      # Amazon price >= 0.5 * unit_cogs
 MAX_PRICE_RATIO = 500.0    # Amazon price <= 500 * unit_cogs (mock data reaches ~150x)
+MATCH_ROI_FLOOR_PCT = 10.0  # fix #20: drop matches whose gross ROI can't reach 10%
 
 # Brand normalization for fuzzy matching
 _BRAND_ALIASES = {
@@ -377,7 +378,7 @@ def _validate_match_quality(
     match: AmazonMatch,
     wholesale_product: WholesaleProduct,
 ) -> tuple[bool, str]:
-    """Validate match quality (price sanity, pack count, brand)."""
+    """Validate match quality (price sanity, pack count, brand, ROI floor)."""
     
     # Price sanity check (fix #13)
     if match.amazon_price > 0 and wholesale_product.wholesale_price > 0:
@@ -388,7 +389,15 @@ def _validate_match_quality(
             return False, f"price_ratio_below_min ({ratio:.2f} < {MIN_PRICE_RATIO})"
         if ratio > MAX_PRICE_RATIO:
             return False, f"price_ratio_above_max ({ratio:.2f} > {MAX_PRICE_RATIO})"
-    
+
+        # fix #20: ROI floor at MATCH stage — drop candidates that cannot reach
+        # the floor even before scoring (unit_cogs * (1 + floor/100) > price).
+        if unit_cogs * (1 + MATCH_ROI_FLOOR_PCT / 100.0) > match.amazon_price:
+            return False, (
+                "roi_below_floor_at_match (price $%.2f < cogs $%.2f x (1 + %.0f%%))"
+                % (match.amazon_price, unit_cogs, MATCH_ROI_FLOOR_PCT)
+            )
+
     # Pack count cross-validation (fix #14)
     amazon_count = _quick_count(match.title)
     if amazon_count is not None and wholesale_product.pack_count is not None:
