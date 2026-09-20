@@ -36,7 +36,11 @@ _SQLITE_PATH = _BASE_DIR / "data" / "northstar.db"
 
 
 def _get_postgres_url() -> Optional[str]:
-    """Return PostgreSQL connection URL if configured, else None."""
+    # TODO(Phase F/S2): production data layer. A Postgres/Supabase connection
+    # is operator-supplied via DATABASE_URL or SUPABASE_DB_URL in the runtime
+    # environment. Tests + locals stay on the SQLite fallback (_SQLITE_PATH).
+    # Apply schema changes through /migrations (Phase F Section 9), never by
+    # editing SQLite DDL in production.
     return os.environ.get("DATABASE_URL") or os.environ.get("SUPABASE_DB_URL")
 
 

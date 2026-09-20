@@ -222,7 +222,16 @@ def _db():
 
 
 def _ensure_user_table():
-    """Create users table if it doesn't exist."""
+    """Create users + sessions tables (SQLite local dev base) if missing.
+
+    Phase F/S2: adds the `role` column (B2 RBAC) and an opaque-session table.
+    Idempotent: re-running against an existing DB only adds missing columns.
+
+    TODO(Phase F/S2): a production Postgres connection (DATABASE_URL /
+    SUPABASE_DB_URL, see data_layer) is operator-supplied; apply the same DDL
+    via the migrations in /migrations (Section 9). Tests must keep running on
+    the local SQLite fallback.
+    """
     db = _db()
     db.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -236,7 +245,27 @@ def _ensure_user_table():
             is_active INTEGER DEFAULT 1
         )
     """)
+    # Add the role column if it does not exist (idempotent migrations).
+    _add_column_if_missing(db, "users", "role", "TEXT")
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS sessions (
+            token_id TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            created_at TEXT DEFAULT (datetime('now')),
+            expires_at TEXT,
+            revoked INTEGER DEFAULT 0
+        )
+    """)
     db.commit()
+
+
+def _add_column_if_missing(db, table: str, column: str, ddl: str):
+    try:
+        cols = {r[1] for r in db.execute("PRAGMA table_info(%s)" % table).fetchall()}
+    except Exception:
+        return
+    if column not in cols:
+        db.execute("ALTER TABLE %s ADD COLUMN %s %s" % (table, column, ddl))
 
 
 def register_user(email: str, password: str, plan: str = "foundation") -> Dict[str, Any]:
@@ -263,8 +292,8 @@ def register_user(email: str, password: str, plan: str = "foundation") -> Dict[s
     now = datetime.now(timezone.utc).isoformat()
 
     db.execute(
-        "INSERT INTO users (id, email, password_hash, plan, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)",
-        (user_id, email.lower().strip(), password_hash, plan, now, now),
+        "INSERT INTO users (id, email, password_hash, plan, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (user_id, email.lower().strip(), password_hash, plan, ROLE_OWNER, now, now),
     )
     db.commit()
 
@@ -297,6 +326,7 @@ def login_user(email: str, password: str) -> Dict[str, Any]:
 
     access_token = create_access_token(user["id"], user["email"], user["plan"])
     refresh_token = create_refresh_token(user["id"])
+    _record_session(access_token, user["id"])
 
     return {
         "access_token": access_token,
@@ -307,8 +337,26 @@ def login_user(email: str, password: str) -> Dict[str, Any]:
             "id": user["id"],
             "email": user["email"],
             "plan": user["plan"],
+            "role": user.get("role") or ROLE_MEMBER,
         },
     }
+
+
+def _record_session(access_token: str, user_id: str) -> None:
+    """Record an opaque session row for the freshly issued access token."""
+    try:
+        payload = decode_token(access_token)
+        token_id = payload.get("jti") or "sess_" + secrets.token_hex(16)
+        expires_at = datetime.fromtimestamp(payload["exp"], tz=timezone.utc).isoformat() if payload.get("exp") else None
+        db = _db()
+        db.execute(
+            "INSERT INTO sessions (token_id, user_id, expires_at) VALUES (?, ?, ?)",
+            (token_id, user_id, expires_at),
+        )
+        db.commit()
+    except Exception:
+        # Session persistence is best-effort; auth still succeeds.
+        return
 
 
 def refresh_access_token(refresh_token: str) -> Dict[str, Any]:
@@ -340,10 +388,10 @@ def refresh_access_token(refresh_token: str) -> Dict[str, Any]:
 
 
 def get_user(user_id: str) -> Optional[Dict[str, Any]]:
-    """Get user by ID."""
+    """Get user by ID (surface role too, for B2 RBAC)."""
     _ensure_user_table()
     db = _db()
-    cur = db.execute("SELECT id, email, plan, created_at, last_login_at FROM users WHERE id = ?", (user_id,))
+    cur = db.execute("SELECT id, email, plan, role, created_at, last_login_at FROM users WHERE id = ?", (user_id,))
     row = cur.fetchone()
     return dict(row) if row else None
 
