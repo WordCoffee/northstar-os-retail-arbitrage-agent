@@ -10,7 +10,7 @@
  * Or with options:
  *   <script type="module">
  *     import { initUniversalVoice } from '/components/universal-voice.js';
- *     initUniversalVoice({ serverUrl: 'http://localhost:3001' });
+ *     initUniversalVoice({ serverUrl: 'https://voice.your-domain.com' });
  *   </script>
  */
 
