@@ -380,6 +380,46 @@ def rollback_plan(scan_keys: Sequence[str], target_key: str) -> Dict[str, Any]:
     }
 
 
+def rollback_local_reports(report_dir, target_run_id: str) -> Dict[str, Any]:
+    """FIXES_50 #48 — perform a LOCAL report rollback (no git / infra).
+
+    Deletes ONLY local report + manifest files (goose_scan_*.json /
+    scan_manifest_*.json) for runs after the target. ``target_run_id`` is a
+    report stem (e.g. "goose_scan_20260920_140022") or a unique prefix of one.
+    """
+    d = Path(report_dir)
+    reports = sorted(d.glob("goose_scan_*.json"))
+    keys = [p.stem for p in reports]  # includes the "goose_scan_" prefix
+    matched = [k for k in keys if k == target_run_id]
+    if not matched:
+        prefix_hits = [k for k in keys if k.startswith(target_run_id)]
+        if len(prefix_hits) == 1:
+            matched = prefix_hits
+    if not matched:
+        return {
+            "ok": False, "target": target_run_id,
+            "reason": "no matching local report file",
+            "would_remove": [], "removed": [], "report_dir": str(d),
+        }
+    target_key = matched[0]
+    plan = rollback_plan(keys, target_key)
+    removed = []
+    if plan["ok"]:
+        for key in plan["would_remove"]:
+            manifest_key = key.replace("goose_scan_", "scan_manifest_", 1)
+            for name in (key + ".json", manifest_key + ".json"):
+                p = d / name
+                if p.exists():
+                    p.unlink()
+                    removed.append(str(p))
+    return {
+        **plan,
+        "report_dir": str(d),
+        "removed": removed,
+        "total_reports": len(keys),
+    }
+
+
 # --- #50 docs auto-gen ------------------------------------------------------------------
 
 def generate_cli_docs(prog: str, args_help: Sequence[tuple]) -> str:

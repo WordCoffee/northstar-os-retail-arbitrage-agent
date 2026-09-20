@@ -35,14 +35,17 @@ from fastapi import APIRouter, HTTPException, Query, Request
 logger = logging.getLogger(__name__)
 
 try:
-    from .gg_workflow import ScanBudget, compose_tier_alert, tier_regressions
+    from .gg_workflow import (ScanBudget, compose_tier_alert, tier_regressions,
+                              webhook_notify)
 except ImportError:
     try:
-        from gg_workflow import ScanBudget, compose_tier_alert, tier_regressions
+        from gg_workflow import (ScanBudget, compose_tier_alert, tier_regressions,
+                                 webhook_notify)
     except ImportError:
         ScanBudget = None  # type: ignore[assignment]
         compose_tier_alert = None  # type: ignore[assignment]
         tier_regressions = None  # type: ignore[assignment]
+        webhook_notify = None  # type: ignore[assignment]
 
 try:
     from .gg_observability import quota_precheck
@@ -1368,6 +1371,8 @@ def _build_parser() -> argparse.ArgumentParser:
                         help="FIXES_50 #50: print the auto-generated CLI reference (offline)")
     parser.add_argument("--scout-csv", type=str, default=None, metavar="PATH",
                         help="FIXES_50 #43: write the Scout-panel CSV export to PATH after the scan")
+    parser.add_argument("--rollback-to", type=str, default=None, metavar="RUN_ID",
+                        help="FIXES_50 #48: delete LOCAL report+manifest files for runs after RUN_ID (no git/infra touch)")
 
     return parser
 
@@ -1437,9 +1442,24 @@ def main():
              ("--json", "Output raw JSON instead of table"),
              ("--verbose", "Show all candidates including REJECT tier"),
              ("--dry-run", "Estimate credits/time/volume; NO provider calls, NO report write"),
+             ("--scout-csv", "Write the Scout-panel CSV export to a path"),
+             ("--rollback-to", "Delete LOCAL report+manifest files after a run id"),
              ("--docs", "Print this auto-generated reference"),
              ],
         ), end="")
+        return 0
+
+    if args.rollback_to:
+        # FIXES_50 #48 — local report rollback; never touches git or infra.
+        from .gg_workflow import rollback_local_reports
+        plan = rollback_local_reports(REPORT_DIR, args.rollback_to)
+        if not plan["ok"]:
+            print("ERROR: %s (%s)" % (plan.get("reason", "rollback failed"), args.rollback_to))
+            return 1
+        print("Rollback to %s: removed %d file(s) (kept target + older):"
+              % (plan["target"], len(plan["removed"])))
+        for p in plan["removed"]:
+            print("  - %s" % p)
         return 0
 
     if args.live:

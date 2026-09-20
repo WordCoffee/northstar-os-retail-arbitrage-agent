@@ -25,6 +25,7 @@ from agents.golden_goose_finder.gg_workflow import (  # noqa: E402
     needs_lazy_enrichment,
     read_stream,
     resolve_profile,
+    rollback_local_reports,
     rollback_plan,
     tier_regressions,
     validate_cron,
@@ -218,6 +219,39 @@ def test_rollback_plan() -> None:
     assert rollback_plan(["run1"], "run1")["would_remove"] == []
     bad = rollback_plan(["run1", "run2"], "runX")
     assert bad["ok"] is False and bad["would_remove"] == []
+
+
+# --- FIXES_50 #48 local report rollback (Phase G) ---
+
+def _make_reports(d: Path, *run_ids: str) -> None:
+    for rid in run_ids:
+        (d / ("goose_scan_%s.json" % rid)).write_text('{}', encoding="utf-8")
+        (d / ("scan_manifest_%s.json" % rid)).write_text('{}', encoding="utf-8")
+
+
+def test_rollback_local_reports_removes_only_newer(tmp_path) -> None:
+    _make_reports(tmp_path, "a", "b", "c")
+    plan = rollback_local_reports(tmp_path, "goose_scan_b")
+    assert plan["ok"] is True and plan["would_remove"] == ["goose_scan_c"]
+    assert (tmp_path / "goose_scan_c.json").exists() is False
+    assert (tmp_path / "scan_manifest_c.json").exists() is False
+    assert (tmp_path / "goose_scan_a.json").exists() is True
+    assert (tmp_path / "goose_scan_b.json").exists() is True
+    assert len(plan["removed"]) == 2
+
+
+def test_rollback_local_reports_unknown_target_safe(tmp_path) -> None:
+    _make_reports(tmp_path, "a", "b")
+    plan = rollback_local_reports(tmp_path, "goose_scan_z")
+    assert plan["ok"] is False and plan["removed"] == []
+    assert (tmp_path / "goose_scan_a.json").exists() is True
+    assert (tmp_path / "goose_scan_b.json").exists() is True
+
+
+def test_rollback_local_reports_prefix_match(tmp_path) -> None:
+    _make_reports(tmp_path, "a", "b", "c")
+    plan = rollback_local_reports(tmp_path, "goose_scan_b")
+    assert plan["ok"] is True and plan["target"] == "goose_scan_b"
 
 
 def test_cli_docs_generation() -> None:
