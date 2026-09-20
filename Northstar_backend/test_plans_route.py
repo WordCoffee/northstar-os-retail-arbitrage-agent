@@ -28,13 +28,16 @@ def client():
 def test_plans_list_matches_catalog(client):
     resp = client.get("/api/v1/plans")
     assert resp.status_code == 200
-    data = resp.json()
+    body = resp.json()
+    # bff/v1 envelope (Phase F / D12); legacy shape preserved under data
+    assert body["contract"] == "bff/v1" and body["status"] == "ok" and body["error"] is None
+    data = body["data"]
     assert data["plans"] == auth.PLAN_ENTITLEMENTS
     assert set(data["plans"]) == {"foundation", "scout", "mover", "autothink"}
 
 
 def test_plans_list_prices_and_gates_preserved(client):
-    data = client.get("/api/v1/plans").json()["plans"]
+    data = client.get("/api/v1/plans").json()["data"]["plans"]
     assert data["foundation"]["price"] == 0
     assert data["scout"]["price"] == 29
     assert data["mover"]["price"] == 79
@@ -55,14 +58,14 @@ def test_plans_list_prices_and_gates_preserved(client):
 def test_plan_by_id(client):
     resp = client.get("/api/v1/plans/scout")
     assert resp.status_code == 200
-    assert resp.json()["plan"] == auth.PLAN_ENTITLEMENTS["scout"]
+    assert resp.json()["data"]["plan"] == auth.PLAN_ENTITLEMENTS["scout"]
 
 
 def test_plan_by_id_autothink(client):
     resp = client.get("/api/v1/plans/autothink")
     assert resp.status_code == 200
-    assert resp.json()["plan"]["name"] == "AutothinK"
-    assert resp.json()["plan"]["price"] == 149
+    assert resp.json()["data"]["plan"]["name"] == "AutothinK"
+    assert resp.json()["data"]["plan"]["price"] == 149
 
 
 def test_plan_by_id_unknown_404(client):

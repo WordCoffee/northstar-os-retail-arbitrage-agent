@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created": "2026-09-19T19:20:00Z",
-  "note": "Canary baseline for the Northstar OS All-Tests runner (scripts/run_all_tests.ps1). Recorded after Phase E1 (monitoring: /api/health route + functions suite coverage) / Phase C (C1-C9 workspaces; GG envelope/dry-run/manifest/atomic-save/entitlement; credit meter; legal embed; rate-limiter harness opt-out). Any drift off these counts (or any failure outside known_exceptions) fails the aggregate as RED. The two known failures are PRE-EXISTING protected-hash drift (fixtures/protected_hashes.json vs data/scanner-search-cache.json) tracked here and NOT being fixed (per operator direction).",
+  "note": "Recorded after Phase F S1 (bff/v1 envelope middleware on legacy prefixes). Canary baseline for the Northstar OS All-Tests runner (scripts/run_all_tests.ps1). Recorded after Phase E1 (monitoring: /api/health route + functions suite coverage) / Phase C (C1-C9 workspaces; GG envelope/dry-run/manifest/atomic-save/entitlement; credit meter; legal embed; rate-limiter harness opt-out). Any drift off these counts (or any failure outside known_exceptions) fails the aggregate as RED. The two known failures are PRE-EXISTING protected-hash drift (fixtures/protected_hashes.json vs data/scanner-search-cache.json) tracked here and NOT being fixed (per operator direction).",
   "known_exceptions": {
     "ignored": [
       "agents/golden_goose_finder/test_single_match.py"
@@ -15,7 +15,7 @@
   },
   "baseline": {
     "backend": {
-      "passed": 2143,
+      "passed": 2152,
       "failed": 2,
       "skipped": 3,
       "subtests": 48

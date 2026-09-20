@@ -32,6 +32,7 @@ except ImportError:
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
 from rate_limiter import RateLimitMiddleware
+from bff_envelope import BffEnvelopeMiddleware
 from auth_deps import get_current_user, require_plan, require_role, require_admin
 
 # Initialize structured logging
@@ -165,6 +166,9 @@ app.add_middleware(RequestTracingMiddleware)
 
 # 3. Rate limiting
 app.add_middleware(RateLimitMiddleware, window_seconds=60)
+
+# 3b. bff/v1 envelope on legacy endpoint prefixes (Phase F / D12)
+app.add_middleware(BffEnvelopeMiddleware)
 
 # 4. CORS
 app.add_middleware(
