@@ -17,3 +17,8 @@ venv*/
 __pycache__/
 *.pyc
 Northstar_backend_audit_export/
+# Pipeline output artifacts — never commit generated exports (D4-F2).
+# Historical blobs (commit 009ac85) embedded third-party URL query tokens;
+# output dirs are now ignored going forward. History rewrite = operator decision.
+data/scored/
+data/normalized/
