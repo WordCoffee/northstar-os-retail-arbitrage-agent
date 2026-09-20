@@ -1,0 +1,152 @@
+/* Northstar OS Design Tokens — canonical CSS (A3).
+ *
+ * Source of truth: shared/design-tokens.json. This file is embedded VERBATIM
+ * in static/index.html between the A3 DESIGN-TOKENS markers; the UI harness
+ * (test_ui_display.cjs) asserts the embedded block matches this file, so the
+ * two can never drift.
+ *
+ * Gating: everything below activates ONLY on <html data-theme-v2>. The old
+ * theme remains the default (no attribute) until the UI contract suite passes
+ * on v2. Version-1 values are transcribed from the current SPA theme, so
+ * enabling v2 today is pixel-identical; tune tokens here, never in SPA markup.
+ *
+ * The alias layer keeps every existing CSS variable name resolving to a token
+ * under v2 — no existing variable is renamed or removed. Layout-only vars
+ * (--rail-*, --drawer-width, --topbar-h, --gallery-gap, --grad*) are not
+ * design tokens and intentionally stay outside this layer.
+ */
+
+/* ---- token layer: dark (default mode) ---- */
+html[data-theme-v2] {
+    --ns-color-bg-app: #0a0f1f;
+    --ns-color-bg-panel: #101830;
+    --ns-color-bg-raised: #182142;
+    --ns-color-bg-hover: #223059;
+    --ns-color-border: #223156;
+    --ns-color-border-strong: #33446f;
+    --ns-color-text-hi: #eef1fb;
+    --ns-color-text: #c2cbe2;
+    --ns-color-text-muted: #7e8bb2;
+    --ns-color-text-faint: #5a6994;
+    --ns-color-accent: #8b7bff;
+    --ns-color-accent-hi: #a99bff;
+    --ns-color-accent-hover: #409cff;
+    --ns-color-accent-soft: rgba(139, 123, 255, 0.14);
+    --ns-color-pos: #3ddc97;
+    --ns-color-pos-soft: rgba(61, 220, 151, 0.13);
+    --ns-color-warn: #e3b341;
+    --ns-color-warn-soft: rgba(227, 179, 65, 0.13);
+    --ns-color-neg: #f27c6a;
+    --ns-color-neg-soft: rgba(242, 124, 106, 0.13);
+    --ns-color-info: #6aa3e8;
+    --ns-color-info-soft: rgba(106, 163, 232, 0.13);
+    --ns-color-neutral-soft: rgba(126, 139, 178, 0.14);
+    --ns-font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+    --ns-font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Segoe UI Mono", Consolas, monospace;
+    --ns-type-xs: 10.5px;
+    --ns-type-sm: 11.5px;
+    --ns-type-base: 13px;
+    --ns-type-md: 14px;
+    --ns-type-lg: 16px;
+    --ns-type-xl: 18px;
+    --ns-space-1: 4px;
+    --ns-space-2: 8px;
+    --ns-space-3: 12px;
+    --ns-space-4: 16px;
+    --ns-space-5: 20px;
+    --ns-space-6: 24px;
+    --ns-space-8: 32px;
+    --ns-space-10: 40px;
+    --ns-radius-sm: 8px;
+    --ns-radius-base: 12px;
+    --ns-radius-lg: 16px;
+    --ns-elevation-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+    --ns-elevation-base: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --ns-elevation-md: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --ns-elevation-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --ns-motion-dur: 0.2s;
+    --ns-motion-ease: cubic-bezier(.4,0,.2,1);
+}
+
+/* ---- token layer: light mode ---- */
+html[data-theme-v2][data-theme="light"] {
+    --ns-color-bg-app: #f2f3f9;
+    --ns-color-bg-panel: #ffffff;
+    --ns-color-bg-raised: #eef0f7;
+    --ns-color-bg-hover: #e7eaf4;
+    --ns-color-border: #e2e6f0;
+    --ns-color-border-strong: #c7cfe2;
+    --ns-color-text-hi: #0f172a;
+    --ns-color-text: #3b4a66;
+    --ns-color-text-muted: #66748f;
+    --ns-color-text-faint: #93a0b8;
+    --ns-color-accent: #5b53e8;
+    --ns-color-accent-hi: #463dcf;
+    --ns-color-accent-hover: #0077ed;
+    --ns-color-accent-soft: rgba(91, 83, 232, 0.1);
+    --ns-color-pos: #0f9d6e;
+    --ns-color-pos-soft: rgba(15, 157, 110, 0.11);
+    --ns-color-warn: #b07d13;
+    --ns-color-warn-soft: rgba(176, 125, 19, 0.11);
+    --ns-color-neg: #d6453c;
+    --ns-color-neg-soft: rgba(214, 69, 60, 0.11);
+    --ns-color-info: #3e78c0;
+    --ns-color-info-soft: rgba(62, 120, 192, 0.11);
+    --ns-color-neutral-soft: rgba(102, 116, 143, 0.12);
+    --ns-elevation-sm: 0 1px 2px rgba(16, 32, 46, 0.06);
+    --ns-elevation-base: 0 1px 3px rgba(23, 30, 76, 0.08), 0 1px 2px rgba(23, 30, 76, 0.03);
+    --ns-elevation-md: 0 2px 8px rgba(16, 32, 46, 0.08);
+    --ns-elevation-lg: 0 4px 16px rgba(16, 32, 46, 0.10);
+}
+
+/* ---- alias layer: existing var names -> tokens (active under v2 only) ---- */
+html[data-theme-v2] {
+    --bg-app: var(--ns-color-bg-app);
+    --bg-panel: var(--ns-color-bg-panel);
+    --bg-raised: var(--ns-color-bg-raised);
+    --bg-hover: var(--ns-color-bg-hover);
+    --border: var(--ns-color-border);
+    --border-strong: var(--ns-color-border-strong);
+    --text-hi: var(--ns-color-text-hi);
+    --text: var(--ns-color-text);
+    --text-muted: var(--ns-color-text-muted);
+    --text-faint: var(--ns-color-text-faint);
+    --accent: var(--ns-color-accent);
+    --accent-hi: var(--ns-color-accent-hi);
+    --accent-hover: var(--ns-color-accent-hover);
+    --accent-soft: var(--ns-color-accent-soft);
+    --pos: var(--ns-color-pos);
+    --pos-soft: var(--ns-color-pos-soft);
+    --warn: var(--ns-color-warn);
+    --warn-soft: var(--ns-color-warn-soft);
+    --neg: var(--ns-color-neg);
+    --neg-soft: var(--ns-color-neg-soft);
+    --info: var(--ns-color-info);
+    --info-soft: var(--ns-color-info-soft);
+    --neutral-soft: var(--ns-color-neutral-soft);
+    --font: var(--ns-font-ui);
+    --mono: var(--ns-font-mono);
+    --text-xs: var(--ns-type-xs);
+    --text-sm: var(--ns-type-sm);
+    --text-base: var(--ns-type-base);
+    --text-md: var(--ns-type-md);
+    --text-lg: var(--ns-type-lg);
+    --text-xl: var(--ns-type-xl);
+    --sp-1: var(--ns-space-1);
+    --sp-2: var(--ns-space-2);
+    --sp-3: var(--ns-space-3);
+    --sp-4: var(--ns-space-4);
+    --sp-5: var(--ns-space-5);
+    --sp-6: var(--ns-space-6);
+    --sp-8: var(--ns-space-8);
+    --sp-10: var(--ns-space-10);
+    --radius: var(--ns-radius-base);
+    --radius-sm: var(--ns-radius-sm);
+    --card-r: var(--ns-radius-lg);
+    --shadow: var(--ns-elevation-base);
+    --shadow-sm: var(--ns-elevation-sm);
+    --shadow-md: var(--ns-elevation-md);
+    --shadow-lg: var(--ns-elevation-lg);
+    --dur: var(--ns-motion-dur);
+    --ease: var(--ns-motion-ease);
+}

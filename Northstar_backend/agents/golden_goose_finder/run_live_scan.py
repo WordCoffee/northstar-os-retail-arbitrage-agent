@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # Set the §3 gate
+# SECURITY REVIEW — Phase B (B4): this script can flip the §3 live-gate env
+# var in-process; needs to require an explicit operator-passed flag instead.
 os.environ["GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED"] = "1"
 
 # Ensure the backend is on the path

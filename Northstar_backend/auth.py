@@ -33,55 +33,50 @@ JWT_ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 REFRESH_TOKEN_EXPIRE_DAYS = 30
 
-# Plan entitlements
-PLAN_ENTITLEMENTS = {
-    "foundation": {
-        "name": "Foundation",
-        "price": 0,
-        "gates": [],
-        "description": "Demo/read-only access",
-    },
-    "scout": {
-        "name": "Scout",
-        "price": 29,
-        "gates": [
-            "sourcescout_live_pull",
-            "sourcescout_enrich",
-            "listingforge_copy",
-            "adpilot_ads_read",
-        ],
-        "description": "Product sourcing intelligence",
-    },
-    "mover": {
-        "name": "Mover",
-        "price": 79,
-        "gates": [
-            "sourcescout_live_pull",
-            "sourcescout_enrich",
-            "listingforge_copy",
-            "listingforge_media",
-            "adpilot_ads_read",
-            "socialpulse_attrib",
-        ],
-        "description": "Full SourceScout + ListingForge + Ads",
-    },
-    "autothink": {
-        "name": "AutothinK",
-        "price": 149,
-        "gates": [
-            "sourcescout_live_pull",
-            "sourcescout_enrich",
-            "listingforge_copy",
-            "listingforge_media",
-            "adpilot_ads_read",
-            "adpilot_bulk_exec",
-            "socialpulse_attrib",
-            "socialpulse_publish",
-            "autothink_workspace",
-        ],
-        "description": "Everything + AutothinK AI workspace",
-    },
-}
+# Plan entitlements — thin loader over the canonical catalog.
+# Single source of truth: shared/subscription-plans.json (A2 migration).
+# The PLAN_ENTITLEMENTS variable name and shape are preserved so every
+# downstream consumer (main.py routes, auth.register_user, user_has_entitlement,
+# get_plan_info) keeps working unchanged: {plan_id: {name, price, gates, description}}.
+
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_PLAN_CATALOG_PATH = os.path.join(_REPO_ROOT, "shared", "subscription-plans.json")
+
+
+def _load_plan_catalog() -> Dict[str, Dict[str, Any]]:
+    """Read shared/subscription-plans.json and project it into the legacy shape.
+
+    Fail-closed: a missing/malformed catalog or a plan missing its id raises
+    at import so a bad catalog can never silently degrade entitlements.
+    """
+    try:
+        with open(_PLAN_CATALOG_PATH, "r", encoding="utf-8-sig") as _fh:
+            catalog = json.load(_fh)
+    except (OSError, ValueError) as _exc:
+        raise ValueError(
+            "Cannot load plan catalog %s: %s" % (_PLAN_CATALOG_PATH, _exc)
+        ) from _exc
+
+    if catalog.get("gates_always_off") is not True:
+        raise ValueError("Plan catalog invariant breach: gates_always_off must be true")
+
+    plans: Dict[str, Dict[str, Any]] = {}
+    for p in catalog.get("plans", []):
+        pid = p.get("id")
+        if not pid:
+            raise ValueError("Plan catalog holds a plan without an id")
+        plans[pid] = {
+            "name": p["name"],
+            "price": p.get("price_usd_month", 0),
+            "gates": list(p.get("entitled_gates", [])),
+            "description": p.get("description", ""),
+        }
+    if not plans:
+        raise ValueError("Plan catalog holds no plans")
+    return plans
+
+
+PLAN_ENTITLEMENTS = _load_plan_catalog()
 
 # ---------------------------------------------------------------------------
 # Password hashing

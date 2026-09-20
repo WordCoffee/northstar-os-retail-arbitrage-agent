@@ -14,8 +14,9 @@ HARD INVARIANT: a plan ENTITLES a gate — it never OPENS one. The 8 live gates
 named operator approval per action. The catalog carries `gates_always_off:
 true` and every loader asserts it.
 
-The canonical plan catalog lives in `master-brain/subscription-plans.json` and
-the canonical subscriber index lives in `master-brain/profiles/manifest.json`.
+The canonical plan catalog lives in `shared/subscription-plans.json` (A2
+single source of truth, shared with auth.py::PLAN_ENTITLEMENTS) and the
+canonical subscriber index lives in `master-brain/profiles/manifest.json`.
 Unknown plan ids and unknown profile ids fail closed (never fabricated).
 """
 
@@ -26,12 +27,15 @@ from typing import Dict, List, Optional
 
 # Project-root canonical paths
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PLANS_PATH = os.path.join(REPO_ROOT, "master-brain", "subscription-plans.json")
+PLANS_PATH = os.path.join(REPO_ROOT, "shared", "subscription-plans.json")
 MANIFEST_PATH = os.path.join(REPO_ROOT, "master-brain", "profiles", "manifest.json")
 
 # Canonical live-gate registry, mirroring the Analyst's Desk shell (NS.gates).
 # Single source of truth for what a plan may entitle. Every gate stays OFF in
 # beta regardless of plan; execution needs separate named approval.
+# A2: `autothink_workspace` added to complete the registry — the canonical
+# autothink gate array (shared/subscription-plans.json) entitles it, matching
+# auth.py. No tier/pricing/gate-array content changed.
 LIVE_GATES: Dict[str, str] = {
     "sourcescout_live_pull": "Costco live-pull (Bright Data / Firecrawl)",
     "sourcescout_enrich": "Enrichment (Easyparser / RapidAPI / DataForSEO)",
@@ -41,6 +45,7 @@ LIVE_GATES: Dict[str, str] = {
     "adpilot_ads_read": "Amazon Ads API read",
     "socialpulse_publish": "Meta / TikTok / Instagram publish",
     "socialpulse_attrib": "Amazon Attribution generation",
+    "autothink_workspace": "AutothinK AI workspace",
 }
 
 
@@ -61,6 +66,12 @@ def load_plans(path: Optional[str] = None) -> Dict:
     plans = catalog.get("plans")
     if not isinstance(plans, list) or not plans:
         raise ValueError("Plan catalog holds no plans")
+    # Normalize the consumer view: the single source keeps the canonical
+    # auth.py-legacy `description` field; legacy consumers of the subscriber
+    # registry read `blurb`. Map description -> blurb so CLI/UI output keeps
+    # working without duplicating the text in the catalog file.
+    for p in plans:
+        p.setdefault("blurb", p.get("description", ""))
     return catalog
 
 

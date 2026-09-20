@@ -1,0 +1,67 @@
+{
+  "$schema": "subscription-plans-v2",
+  "catalog_version": 2,
+  "description": "Northstar OS subscription plan catalog — SINGLE SOURCE OF TRUTH (A2 unification). v2 relocates the exact catalog previously hard-coded in Northstar_backend/auth.py::PLAN_ENTITLEMENTS (tier names, prices, gate arrays, descriptions unchanged) and supersedes the older master-brain/subscription-plans.json (v1), which had drifted: autothink was missing autothink_workspace and gate order differed. Both backend loaders (auth.py::PLAN_ENTITLEMENTS and master_brain_subscribers.load_plans()) read this one file; a smoke test fails if they ever disagree. Entitlements declare which live gates a plan WOULD cover for a subscriber. A plan never flips a gate: gates_always_off=true, and executing any live action additionally requires a fresh, named operator approval per action. No uncapped/unmetered promises: named credit classes only (see Early Paid Launch Boundary, PRODUCTION_BLUEPRINT §18).",
+  "gates_always_off": true,
+  "currency": "USD",
+  "plans": [
+    {
+      "id": "foundation",
+      "name": "Foundation",
+      "tier": 1,
+      "price_usd_month": 0,
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse"],
+      "description": "Demo/read-only access",
+      "entitled_gates": []
+    },
+    {
+      "id": "scout",
+      "name": "Scout",
+      "tier": 1,
+      "price_usd_month": 29,
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse"],
+      "description": "Product sourcing intelligence",
+      "entitled_gates": [
+        "sourcescout_live_pull",
+        "sourcescout_enrich",
+        "listingforge_copy",
+        "adpilot_ads_read"
+      ]
+    },
+    {
+      "id": "mover",
+      "name": "Mover",
+      "tier": 1,
+      "price_usd_month": 79,
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse"],
+      "description": "Full SourceScout + ListingForge + Ads",
+      "entitled_gates": [
+        "sourcescout_live_pull",
+        "sourcescout_enrich",
+        "listingforge_copy",
+        "listingforge_media",
+        "adpilot_ads_read",
+        "socialpulse_attrib"
+      ]
+    },
+    {
+      "id": "autothink",
+      "name": "AutothinK",
+      "tier": 2,
+      "price_usd_month": 149,
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse", "autothink"],
+      "description": "Everything + AutothinK AI workspace",
+      "entitled_gates": [
+        "sourcescout_live_pull",
+        "sourcescout_enrich",
+        "listingforge_copy",
+        "listingforge_media",
+        "adpilot_ads_read",
+        "adpilot_bulk_exec",
+        "socialpulse_attrib",
+        "socialpulse_publish",
+        "autothink_workspace"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "created": "2026-09-19T19:20:00Z",
+  "note": "Canary baseline for the Northstar OS All-Tests runner (scripts/run_all_tests.ps1). Recorded after A4. Any drift off these counts (or any failure outside known_exceptions) fails the aggregate as RED. The two known failures are PRE-EXISTING protected-hash drift (fixtures/protected_hashes.json vs data/scanner-search-cache.json) tracked here and NOT being fixed (per operator direction).",
+  "known_exceptions": {
+    "ignored": [
+      "agents/golden_goose_finder/test_single_match.py"
+    ],
+    "ignored_reason": "import-time GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED env flip + top-level live code + async test with no pytest-asyncio plugin; tracked in docs/PHASE_B_SECURITY_ITEMS.md (B4). Excluded from the backend suite by --ignore.",
+    "known_failures": [
+      "test_proof_batch_run.py::KnownTitleConflictTests::test_protected_artifacts_byte_identical",
+      "test_proof_batch_run.py::Attempt2PreflightTests::test_no_protected_artifact_changed"
+    ],
+    "known_failures_reason": "pre-existing protected-hash drift: fixtures/protected_hashes.json baseline for data/scanner-search-cache.json is stale (366c… expected vs 7c0b… on the committed, git-clean file). Tracked, not fixed."
+  },
+  "baseline": {
+    "backend": {
+      "passed": 2055,
+      "failed": 2,
+      "skipped": 3,
+      "subtests": 48
+    },
+    "golden_goose": {
+      "passed": 389,
+      "failed": 0
+    },
+    "ui": {
+      "passed": 1068,
+      "failed": 0
+    },
+    "shell": {
+      "passed": 251,
+      "failed": 0
+    }
+  }
+}

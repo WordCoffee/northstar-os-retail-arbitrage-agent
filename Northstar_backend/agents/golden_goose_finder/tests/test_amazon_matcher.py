@@ -9,7 +9,9 @@ from agents.golden_goose_finder.amazon_matcher import (
     find_individual_listing,
     get_mock_amazon_matches,
     is_individual_listing,
+    is_valid_asin,
     rank_candidates,
+    reject_invalid_asin,
 )
 from agents.golden_goose_finder.wholesale_scanner import WholesaleProduct
 
@@ -170,6 +172,47 @@ class TestRankCandidates:
         overpriced = _make_amazon(asin="B0OVER0001", brand="Nicorette", amazon_price=50.00, bsr=5000, is_prime=True)
         ranked = rank_candidates([overpriced, sweet_spot], wp)
         assert ranked[0].asin == "B0SWEET001"
+
+
+# =========================================================================
+# ASIN validation (fix #12)
+# =========================================================================
+
+class TestAsinValidation:
+
+    def test_accepts_real_shaped_asin(self):
+        assert is_valid_asin("B0TEST0001") is True
+
+    def test_accepts_legacy_shaped_asin(self):
+        # Real ASINs are not limited to B0-prefix.
+        assert is_valid_asin("B08R68VXFR") is True
+
+    def test_rejects_mock_pattern(self):
+        # ^B0[a-f0-9]{8}$ — the synthetic shape (lowercase hex, case-insensitive).
+        assert is_valid_asin("b0a1b2c3d4") is False
+        assert is_valid_asin("B012345678") is False
+
+    def test_rejects_too_short(self):
+        assert is_valid_asin("B0ABCD123") is False
+
+    def test_rejects_too_long(self):
+        assert is_valid_asin("B0ABCDEF012") is False
+
+    def test_rejects_non_alnum(self):
+        assert is_valid_asin("B0ABCD-EF1") is False
+
+    def test_rejects_empty_and_non_string(self):
+        assert is_valid_asin("") is False
+        assert is_valid_asin(None) is False
+        assert is_valid_asin(12345) is False
+
+    def test_reject_invalid_raises(self):
+        with pytest.raises(ValueError, match="mock-pattern"):
+            reject_invalid_asin("b0a1b2c3d4", context="test-boundary")
+
+    def test_reject_invalid_accepts_real_shaped(self):
+        # Must NOT raise.
+        reject_invalid_asin("B0TEST0001", context="test-boundary")
 
 
 # =========================================================================

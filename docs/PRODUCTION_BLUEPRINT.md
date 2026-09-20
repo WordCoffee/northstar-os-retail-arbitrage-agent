@@ -26,6 +26,10 @@
 13. [API Endpoint Map](#13-api-endpoints)
 14. [Prompt Templates](#14-prompt-templates)
 15. [n8n Workflow Templates](#15-n8n-workflows)
+16. [Golden Goose Seam Spec (B7)](#16-golden-goose-seam-spec)
+17. [Model Strategy Addendum](#17-model-strategy-addendum)
+18. [Early Paid Launch Boundary](#18-early-paid-launch-boundary)
+19. [Proprietary UX / Security / Admin Boundary](#19-proprietary-ux-security-admin-boundary)
 
 ---
 
@@ -634,9 +638,22 @@ CREATE TABLE audit_log (
 |---|---|---|
 | JWT authentication | FastAPI dependency + refresh tokens | P0 |
 | User registration/login | `/api/v1/auth/*` endpoints | P0 |
-| Plan enforcement | Middleware checks `subscription_plans.json` entitlements | P0 |
+| Plan enforcement | Middleware checks `shared/subscription-plans.json` entitlements (single source of truth, A2) | P0 |
 | API key management | Per-subscriber keys for programmatic access | P1 |
 | OAuth2 (future) | Google, Amazon Seller Central SSO | P2 |
+
+> **Tier-catalog reconciliation (A1, 2026-09-19; completed by A2):** the plan
+> catalog in §8.2 below exactly matches the live implementation. **A2 (done,
+> 2026-09-19)** materialized the catalog as `shared/subscription-plans.json`
+> (`catalog_version: 2`) — the single source of truth. `auth.py::PLAN_ENTITLEMENTS`
+> is now a thin loader over that file (same variable name/shape; contents
+> unchanged — names/prices/gate arrays relocated verbatim), and
+> `master_brain_subscribers.load_plans()` reads the same file (its separate
+> v1 source `master-brain/subscription-plans.json` was removed after it was
+> found to have drifted — autothink missed `autothink_workspace`; canonical now
+> matches `auth.py` exactly). A smoke test
+> (`Northstar_backend/test_subscription_catalog_smoke.py`) fails if the two
+> loaders ever disagree again. `GET /api/v1/plans/{id}` added (additive).
 
 ### 8.2 Billing & Subscriptions (Stripe)
 
@@ -646,6 +663,10 @@ CREATE TABLE audit_log (
 | Scout | $29/mo | sourcescout_live_pull, sourcescout_enrich, listingforge_copy, adpilot_ads_read | Single-product sellers |
 | Mover | $79/mo | All Scout + listingforge_media, socialpulse_attrib | Growing brands |
 | AutothinK | $149/mo | Everything + adpilot_bulk_exec, socialpulse_publish, autothink_workspace | Full-service operators |
+
+> **A1 note:** this table is the canonical tier catalog and is mirrored 1:1 in
+> `auth.py::PLAN_ENTITLEMENTS`. Entitlement gates are read-time checks only —
+> a plan entitles a gate; it never opens a live gate (§3 stands).
 
 ### 8.3 Deployment Architecture
 
@@ -972,9 +993,179 @@ Trigger: Daily analysis (AdPilot keyword harvester)
 
 ---
 
+## 16. GOLDEN GOOSE SEAM SPEC {#16-golden-goose-seam-spec} (B7)
+
+> Reconciles the Golden Goose backlog with current code reality. This section
+> exists so the operator can see, in one place, which backlog items are NEW
+> work for Phase B/C versus already covered by the existing `--mock` default.
+
+**Confirmed decision (Gate 1, 2026-09-19):** the following three backlog items
+are **NEW WORK for Phase B/C** and are **NOT** considered partially done by the
+existing `--mock` default (which produces deterministic mock data and still
+writes reports — it is a test mode, not a dry-run).
+
+| Backlog item | Code reality today | Verdict | Phase |
+|---|---|---|---|
+| **#49 Dry-run mode** | Golden Goose CLI has no `--dry-run` flag (no credit/time estimate that skips provider calls and report writes). `--mock` is the safe default but still runs the pipeline and writes `goose_scan_*.json`. `pipeline_dry_run.py` covers the separate layer-15 validation pipeline — not Golden Goose. | **NEW WORK** | B/C |
+| **#23 Scan manifest** | Report `meta` carries `pipeline_version` + filters only. No manifest file (inputs, provider versions, env flags, git SHA). | **NEW WORK** | B/C |
+| **#10 Atomic `save_report`** | `run_pipeline` writes `goose_scan_*.json` atomically (temp + rename). `goose_report.py::save_report` (`report.json` + `summary.txt`) writes in place — **not** atomic. | **NEW WORK** (atomicity exists in the pipeline path only) | B/C |
+
+No build work happens here in Phase A (Gate 1 is flagging + confirming scope).
+
+---
+
+## 17. MODEL STRATEGY ADDENDUM {#17-model-strategy-addendum}
+
+> **Locked in the Alpha Build Blueprint (validated 2026-09-19, decisions D1–D6).**
+> The alpha build engine is an **OpenRouter-based DeepSeek dual-model strategy**
+> — NOT the local Ollama fleet. The local fleet remains only as the offline
+> rollback baseline (see §17.3). Nothing in this section authorizes spend:
+> spending runs on the tranches/funding of D6, and every phase runs inside a
+> §3-approved envelope.
+
+### 17.1 Locked model decisions (D1–D6, Alpha Build Blueprint §1)
+
+| # | Decision | Value |
+|---|---|---|
+| D1 | Model build | **Dual-model**: DeepSeek V4 Flash as the volume worker + DeepSeek V4.1 Flash for architecture/security seams. |
+| D2 | Volume worker | `deepseek/deepseek-v4-flash-0731` as primary worker, pinned to a tool-capable cheapest provider (e.g., `relace/fp4` at time of writing). Treat as a **1M-context worker**; no alpha phase needs more. Typical OpenRouter resale band ≈ $0.04–0.06/M input, $0.08–0.12/M output. Verify exact provider + price with `/models` before each gate. |
+| D3 | Seam model | `deepseek/deepseek-v4.1-flash` as seam/architecture model, pinned to a tool-capable discounted provider (e.g., `deepinfra/fp8` at time of writing; ≈ $0.14/M input, $0.42/M output; fp8, required tool-calling, high uptime). Verify with `/models` before each gate. |
+| D4 | Endpoint pinning | Dev build uses `provider.only` + `allow_fallbacks:false` in OpenCode config per model, so the exact provider is known. Live product may later use Balanced routing. |
+| D5 | Batching | A(Flash) → B(V4.1) → C(Flash) → D(V4.1). **Three model switches, each an approval gate.** No mid-phase mixing: each model runs one continuous stretch; a single artifact is produced by one model. |
+| D6 | Funding | Dev-only OpenRouter key (`northstar-dev`, never embedded in repo/client bundles). Tranches per gate: T1 $10 (funded) → T2/T3/T4 +$50 → T5 +$50 = **cumulative ~$210** (revised 2026-09-19). Per-tranche alerts at ~70% / ~90%; **hard stop at ~90% of funded balance**. Agent pauses and reports if a phase will exceed its tranche + carryover before finishing. |
+
+### 17.2 Operation rules (Alpha Blueprint §2b, §4)
+
+1. **Session start on `:free` 0731** — Gate-0-style read/token-heavy work runs
+   `deepseek/deepseek-v4-flash-0731:free` (open-inference/fp8, $0, 1M ctx, full
+   tool-calling). No provider pin on `:free` (fixed host). Rate limits (verified):
+   20 req/min, 1,000 req/day for accounts bought ≥$10 all-time. On 429 → wait
+   ~1 min and retry; hitting the daily cap means switching to the paid pinned
+   entry — **not** a phase switch (D5 unaffected).
+2. **Free tier is opportunistic, never load-bearing.** No SLA (single host
+   `open-inference/fp8`). Parity-test runs, ledger/money-touching logic, and any
+   step that must finish without mid-run retry use the **paid pinned 0731**.
+3. **Model-change protocol (stop → prompt → validate → continue).** The agent
+   cannot switch models itself — the picker is operator-side. On a required
+   switch the agent stops at a step boundary, writes a state note, prompts
+   "switch to `<exact model ID>` now", then **validates** via operator
+   confirmation + a 1-line self-identification probe. A contradiction stops the
+   build; nothing continues unverified. Switches happen at step boundaries,
+   never mid-file-edit.
+4. **Switch map (approved gates).** 1) A0→A1: free 0731 → paid 0731 (first
+   write/commit-capable stretch). 2) STOP 1 (end of Phase A): → V4.1. 3) STOP 2
+   (end of Phase B): → paid 0731. 4) STOP 3 (end of Phase C): → V4.1. V4.1 then
+   carries through Phase D (no-leak audit D1 → handoff D6). The first private
+   push (staging release, D3) is an approval prompt, not a model switch.
+5. **Hard stops apply in-engine:** no live/paid outbound calls except named
+   low-risk approved probes; no `.env`/secrets reads; local commits only until
+   D3; no credential spend beyond named counts (Blueprint §7).
+
+### 17.3 Local fleet — offline / rollback baseline only
+
+| Slot | Model | Why it stays |
+|---|---|---|
+| Master Brain (primary, local) | `northstar-qwen3:rev1` (from `qwen3:14b`, 9.3 GB) | Offline/private fallback; capsule SYSTEM + params baked; rebuild from Modelfile |
+| Base / rebuild source | `qwen3:14b` | Rollback + rebuild base (blobs shared with rev1) |
+| Quick / small | `qwen3:4b` | `small_model`, voice-command input parsing, fast tasks |
+| Vision | `qwen2.5vl:7b` | Images, brand assets, OCR, Memory Bank ingestion |
+
+- Params (Modelfile.northstar-qwen3): temp 0.35 / top_p 0.9 / min_p 0.05 /
+  repeat_penalty 1.1 / num_ctx 32768 / num_predict 6000.
+- The 2026-09-14 trim deleted 14 local tags (incl. `gpt-oss` ×3 — failed the
+  banned-call probe — and local `deepseek-r1`/`deepseek-v4-flash:cloud`).
+  Do not re-add a removed local tag without a fresh bench pass (adherence 4/4,
+  golden set 8/8 on the candidate). Local `deepseek-v4-flash:cloud` does NOT
+  substitute for the locked OpenRouter strategy.
+- **Neither local models nor OpenRouter change the test contract:** CI is
+  model-agnostic by design (deterministic gateway classifier, zero LLM in CI),
+  so engine swaps never change test outcomes (baseline: 986 UI assertions,
+  ~1500+ Python tests).
+
+### 17.4 Bench baseline (kept for engine hygiene)
+
+- Adherence probes 2026-09-14 (local rev1): 4/4 PASS; golden set 2026-09-15:
+  8/8 PASS. The DeepSeek V4 Flash / V4.1 engine candidates repeat the same
+  probes (banned-call refusal mandatory) before any model is load-bearing.
+
+---
+
+## 18. EARLY PAID LAUNCH BOUNDARY {#18-early-paid-launch-boundary}
+
+Defines the line between "building" and "earning". Phase A/B build and tune;
+**nothing goes live/paid without a fresh, named operator approval per §3.**
+
+1. **Live gates stay closed.** Every live/paid path requires a named env gate
+   plus operator approval. Examples: `GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED`
+   (403 until set), `DATAFORSEO_TRANSPORT_ENABLED` (default false),
+   `COSTCO_CATALOG_DETAIL_ENABLED` (default 0). No standing approval may open
+   a gate; `standing-approvals.json` exists but never auto-approves live calls.
+2. **Billing is not implemented.** Stripe (blueprint §8.2) is a Phase 5
+   target. No payment-processing code executes in Phase A; `/api/v1/plans`
+   returns the catalog only.
+3. **Tenant isolation is a launch precondition.** Do not take the first paid
+   dollar before tenant isolation (§8.1 → A2 migration) and the credit ledger
+   ship. Paid tiers entitle gates; they never bypass §3.
+4. **Credits.** Beta uses free-tier providers only. Every live probe is a
+   named 1-credit diagnostic with the circuit breaker armed (stop on any hard
+   failure, persist, report — never auto-retry).
+5. **Operator sign-off gate.** The earliest paid launch requires: tenant
+   isolation green, credit ledger green, subscription catalog migrated to
+   `subscription_plans.json`, security surface sweep (see §19), and a named
+   go/no-go decision recorded in `00_STATE.json`.
+
+---
+
+## 19. PROPRIETARY UX / SECURITY / ADMIN BOUNDARY {#19-proprietary-ux-security-admin-boundary}
+
+### 19.1 Proprietary UX boundary
+
+The "moat" presentation layers — Spatial Command Center, Command Omnibar,
+masonry Data X-Ray, Risk/Reward Radar, Thermal/Topography and Orbital
+overlays, Golden Goose panel — are **proprietary presentation built on the
+public data contract** (the allowlisted scanner response and the
+`/api/golden-goose/*` routes). Rules:
+
+- The data contract stays stable and additive; presentation evolves freely.
+- Design tokens are the seam: a single token source (`shared/design-tokens`
+  migration) applied additively behind `html[data-theme-v2]`, never renaming
+  existing vars in place.
+- UI contract suites (`test_ui_display.cjs` 986 asserts, shell 71 asserts)
+  freeze element IDs/data attributes — presentation changes must stay
+  additive.
+
+### 19.2 Security boundary
+
+- Credentials exist in `.env` files by **name only** in any doc/code (see
+  master plan provenance rule). `.env` is never read/printed by this brain;
+  secret values never appear in reports.
+- Test credential isolation is mandatory: known issue
+  `credential_exposure_in_test_failure_diff` stays OPEN until tests run with
+  an empty credential env and no real value can appear in a unittest diff.
+- Rotation items are standing Phase B: rotate `BRIGHTDATA_API_KEY` and scrub
+  the plaintext credential in `FirstNorthstarautomationchat.md`.
+- In-process gate flips are forbidden after Phase B (see
+  `docs/PHASE_B_SECURITY_ITEMS.md` — B4).
+
+### 19.3 Admin boundary
+
+- Admin surfaces (subscriber plan management, live-gate toggles, audit log
+  review, memory unlearn) are **operator-only**, never tenant-reachable.
+- Admin API is gated by a distinct role claim — never by the anonymous
+  foundation fallback (`auth_deps.get_current_user` demo path grants
+  read-only foundation, nothing more).
+- Audit trail (`shared/master-brain/audit.log.jsonl`, gateway entries) is
+  append-only and gains `tenant_id` in the A2 migration.
+
+---
+
 *This blueprint is the living reference. Update it as features ship, requirements
 change, or new competitive intelligence emerges. Version-stamp updates.*
 
-*Last updated: 2026-09-15*
+*Last updated: 2026-09-19 (Gate 1 / Phase A: + Golden Goose Seam Spec B7,
+Model Strategy Addendum — corrected to the locked D1–D6 DeepSeek V4 Flash /
+V4.1 OpenRouter strategy, 2026-09-19, local fleet demoted to rollback baseline —
+Early Paid Launch Boundary, Proprietary UX/Security/Admin Boundary; tier-catalog
+reconciliation)*
 *Author: Northstar Master Brain*
-*Status: Version 1.0 — ready for implementation*
+*Status: Version 1.1 — ready for implementation (Phase A active)*

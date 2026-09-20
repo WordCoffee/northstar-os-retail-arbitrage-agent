@@ -1275,6 +1275,21 @@ def list_plans():
     return {"plans": auth.PLAN_ENTITLEMENTS}
 
 
+@app.get("/api/v1/plans/{plan_id}")
+def get_plan_by_id(plan_id: str):
+    """Get a single subscription plan by id (additive A2 endpoint).
+
+    Reads the same canonical catalog as GET /api/v1/plans
+    (auth.PLAN_ENTITLEMENTS, projected from shared/subscription-plans.json).
+    Unknown plan ids return 404 — never fabricated.
+    """
+    import auth
+    plan = auth.PLAN_ENTITLEMENTS.get(plan_id)
+    if plan is None:
+        raise HTTPException(status_code=404, detail=f"Unknown plan: {plan_id}")
+    return {"plan": plan}
+
+
 # ---------------------------------------------------------------------------
 # Supplier Intelligence + Universal Sourcing routes (Phase 1)
 #
