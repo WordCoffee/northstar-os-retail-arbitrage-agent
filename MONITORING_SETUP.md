@@ -27,6 +27,31 @@ Enable/view in the Cloudflare dashboard (free):
 
 ## 3. Uptime / error alerting (recommended, free, operator-enabled)
 
+### 3a. Error-rate alert logic (Phase F/S4)
+
+In-repo code delivers nothing — it *computes* breaches and leaves delivery to
+the operator (no real email/Slack/webhook is sent by the code):
+
+- `Northstar_backend/error_alerts.py` — `ErrorRateTracker` (rolling 5-min
+  window; alerts when >5% of responses are 5xx AND the sample is ≥10
+  requests), `compose_alert()` (payload builder; `channel: null`).
+- `GET /api/monitoring/error-alerts` — bff/v1 envelope with `summary` +
+  `alert` (code `ok` or `error_rate_breached`, severity `critical`).
+- The tracker is fed automatically by a middleware that records `status_code`
+  for every `/api/*` response.
+
+**Operator wiring (later — no real send now):** poll the endpoint (or the
+uptime probe pattern) and forward `compose_alert()` output to:
+- **Email** — any SMTP/transactional provider; send when `alert.code ==
+  "error_rate_breached"`, dedupe with a ~15-min re-alert hold.
+- **Slack** — a workflow webhook URL (incoming) → POST the alert JSON; set the
+  webhook URL as an operator-side env value (never commit it).
+- **Webhook** — e.g. Better Stack / PagerDuty `/v2/enrich` — POST the alert
+  JSON to the channel URL.
+
+None of these are wired in-repo (no credentials, no network) — this section is
+the integration contract for the operator.
+
 Cloudflare's own Health Checks are a **paid** add-on — do **not** enable without
 approval. Use a **free** external probe instead:
 

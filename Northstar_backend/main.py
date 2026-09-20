@@ -170,6 +170,20 @@ app.add_middleware(RateLimitMiddleware, window_seconds=60)
 # 3b. bff/v1 envelope on legacy endpoint prefixes (Phase F / D12)
 app.add_middleware(BffEnvelopeMiddleware)
 
+
+# 3c. Error-rate telemetry (Phase F/S4): feed the in-memory tracker with
+# status codes for /api/* responses. Pure/offline — delivery wiring is
+# operator-side later (see MONITORING_SETUP.md).
+from error_alerts import tracker as _error_rate_tracker
+
+
+@app.middleware("http")
+async def _record_error_rate(request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/api/"):
+        _error_rate_tracker.record(response.status_code)
+    return response
+
 # 4. CORS
 app.add_middleware(
     CORSMiddleware,
@@ -663,6 +677,28 @@ def _scanner_sort_key(product: dict) -> tuple:
         str(product.get("name") or "").lower(),
         str(product.get("asin") or "").lower(),
     )
+
+
+@app.get("/api/monitoring/error-alerts")
+async def monitoring_error_alerts():
+    """Error-rate alert status (Phase F/S4).
+
+    Returns the in-memory ErrorRateTracker summary + a composed alert payload
+    (never delivered — the operator wires a channel later; see
+    MONITORING_SETUP.md). bff/v1 envelope.
+    """
+    from error_alerts import compose_alert, tracker
+    import secrets as _s
+    summary = tracker.summary()
+    alert = compose_alert(summary)
+    return {
+        "contract": "bff/v1",
+        "request_id": "req_" + _s.token_hex(16),
+        "status": "ok" if not summary["breached"] else "ok",
+        "data": {"summary": summary, "alert": alert},
+        "error": None,
+        "meta": {"service": "monitoring", "version": "v1"},
+    }
 
 
 @app.get("/health")
