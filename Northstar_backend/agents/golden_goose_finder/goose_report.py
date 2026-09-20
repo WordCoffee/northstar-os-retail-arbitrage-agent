@@ -13,6 +13,7 @@ only from observed seller presence, never asserted as fact.
 
 from __future__ import annotations
 
+import csv
 import json
 import sys
 from datetime import datetime, timezone
@@ -454,3 +455,61 @@ def export_to_scout_panel(scored: List[ScoredOpportunity]) -> List[Dict[str, Any
             "tags": list(o.opportunity_tags),
         })
     return rows
+
+
+# ---------------------------------------------------------------------------
+# Scout CSV one-click export (FIXES_50 #43, Phase G).
+# ---------------------------------------------------------------------------
+
+SCOUT_CSV_HEADERS = [
+    "asin", "name", "brand", "cost", "amazonPrice", "fbaFee", "net", "roi",
+    "estMonthly", "tier", "competition", "seller", "sourceStore", "packCount",
+    "weightOz",
+]
+
+
+def scout_rows_from_report(report: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Convert a pipeline report dict into Scout-panel-shaped CSV rows.
+
+    Mirrors export_to_scout_panel's columns for the fields a report row
+    carries; absent fields become empty strings (honesty over invention).
+    """
+    rows: List[Dict[str, Any]] = []
+    for o in report.get("opportunities", []):
+        fba = o.get("fba_sellers")
+        competition = (
+            "Competitive" if (fba is not None and 0 <= int(fba) <= 2)
+            else ("High" if fba is not None else "")
+        )
+        rows.append({
+            "asin": o.get("amazon_asin") or o.get("asin") or "",
+            "name": o.get("amazon_title") or o.get("product_title") or "",
+            "brand": o.get("brand") or "",
+            "cost": o.get("unit_cogs", 0),
+            "amazonPrice": o.get("amazon_price", 0),
+            "fbaFee": o.get("total_amazon_fees", 0),
+            "net": o.get("net_profit_per_unit", 0),
+            "roi": o.get("roi_per_unit", 0),
+            "estMonthly": o.get("monthly_sales_estimate", 0),
+            "tier": o.get("tier", ""),
+            "competition": competition,
+            "seller": o.get("seller_name") or "",
+            "sourceStore": o.get("source_store") or "",
+            "packCount": o.get("pack_count", 1),
+            "weightOz": o.get("weight_oz") if o.get("weight_oz") is not None else "",
+        })
+    return rows
+
+
+def write_scout_csv(rows: List[Dict[str, Any]], path: str | Path) -> int:
+    """Write Scout CSV rows atomically (temp + rename). Returns row count."""
+    p = Path(path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    tmp = p.with_suffix(".csv.tmp")
+    with open(tmp, "w", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(fh, fieldnames=SCOUT_CSV_HEADERS, extrasaction="ignore")
+        writer.writeheader()
+        for r in rows:
+            writer.writerow(r)
+    tmp.replace(p)
+    return len(rows)

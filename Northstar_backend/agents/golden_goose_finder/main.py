@@ -1366,6 +1366,8 @@ def _build_parser() -> argparse.ArgumentParser:
                         help="FIXES_50 #49: estimate credits/time/volume; NO provider calls, NO report write")
     parser.add_argument("--docs", action="store_true",
                         help="FIXES_50 #50: print the auto-generated CLI reference (offline)")
+    parser.add_argument("--scout-csv", type=str, default=None, metavar="PATH",
+                        help="FIXES_50 #43: write the Scout-panel CSV export to PATH after the scan")
 
     return parser
 
@@ -1505,6 +1507,14 @@ def main():
         if report["meta"].get("report_path"):
             print(f"  Report saved: {report['meta']['report_path']}")
         print()
+
+    if args.scout_csv and not args.dry_run:
+        try:
+            from .goose_report import scout_rows_from_report, write_scout_csv
+        except ImportError:
+            from goose_report import scout_rows_from_report, write_scout_csv
+        n = write_scout_csv(scout_rows_from_report(report), Path(args.scout_csv))
+        print(f"  Scout CSV: {args.scout_csv} ({n} rows)")
 
 
 if __name__ == "__main__":
