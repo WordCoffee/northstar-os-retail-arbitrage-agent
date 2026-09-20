@@ -45,6 +45,26 @@ def test_ttl_cache() -> None:
         assert cache2.get("k") is None
 
 
+# --- FIXES_50 #7 scan-timeout budget (Phase G) ---
+
+def test_scan_budget_clock_injected_expiry():
+    from agents.golden_goose_finder.gg_workflow import ScanBudget
+    b = ScanBudget(timeout_seconds=300, started_at=1000.0)
+    assert b.deadline == pytest.approx(1300.0)
+    assert b.expired(now=1299.0) is False
+    assert b.expired(now=1300.0) is True
+    assert b.remaining(now=1250.0) == pytest.approx(50.0)
+    assert b.remaining(now=1400.0) == pytest.approx(0.0)   # clamp at 0
+
+
+def test_scan_budget_checkpoint():
+    from agents.golden_goose_finder.gg_workflow import ScanBudget
+    b = ScanBudget(timeout_seconds=60, started_at=1000.0)
+    c = b.checkpoint(now=1010.0)
+    assert c["complete"] is True and c["remaining_seconds"] == pytest.approx(50.0)
+    assert b.checkpoint(now=1100.0)["complete"] is False
+
+
 def test_lazy_enrichment_selector() -> None:
     assert needs_lazy_enrichment({"net_profit_per_unit": 12.5}) is True
     assert needs_lazy_enrichment({"net_profit_per_unit": -3}) is False

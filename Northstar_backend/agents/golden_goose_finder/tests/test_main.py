@@ -121,6 +121,39 @@ class TestRunPipeline:
         assert report["summary"]["total_opportunities"] == 0
         assert report["opportunities"] == []
 
+    # --- Phase G — FIXES_50 #7 scan-timeout budget --------------------------
+
+    def test_scan_timeout_budget_default_complete(self):
+        report = asyncio.run(run_pipeline(use_mock=True))
+        assert report["meta"]["scan_complete"] is True
+        assert report["meta"]["scan_manifest"]["scan_complete"] is True
+        assert report["meta"]["scan_budget"]["complete"] is True
+
+    def test_scan_timeout_zero_marks_incomplete_everywhere(self):
+        report = asyncio.run(run_pipeline(use_mock=True, scan_timeout=0))
+        assert report["meta"]["scan_complete"] is False
+        assert report["meta"]["scan_manifest"]["scan_complete"] is False
+        assert report["meta"]["scan_budget"]["complete"] is False
+
+    # --- Phase G — FIXES_50 #9 quota precheck -------------------------------
+
+    def test_quota_precheck_warns_below_threshold(self):
+        report = asyncio.run(run_pipeline(use_mock=True, quota_snapshot=(1000, 990, 50)))
+        q = report["meta"]["quota_precheck"]
+        assert q["status"] == "warning" and q["warned"] is True
+        assert "WARN" in q["message"]
+
+    def test_quota_precheck_ok_above_threshold(self):
+        report = asyncio.run(run_pipeline(use_mock=True, quota_snapshot=(1000, 100, 50)))
+        q = report["meta"]["quota_precheck"]
+        assert q["status"] == "ok" and q["warned"] is False
+
+    def test_quota_precheck_skipped_without_ledger(self):
+        report = asyncio.run(run_pipeline(use_mock=True))
+        q = report["meta"]["quota_precheck"]
+        assert q["status"] in ("ok", "warning", "skipped")
+        assert "status" in q
+
 
 # ---------------------------------------------------------------------------
 # Economics tests

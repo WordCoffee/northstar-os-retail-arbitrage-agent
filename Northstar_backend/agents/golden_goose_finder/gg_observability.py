@@ -200,3 +200,33 @@ def project_scans(monthly_limit: int, spent: int, avg_credits_per_scan: int) -> 
         "avg_credits_per_scan": avg_credits_per_scan,
         "projected_scans_remaining": projected,
     }
+
+
+# --- #9 quota pre-scan hook ------------------------------------------------------
+
+QUOTA_WARN_FRACTION = 0.20  # warn when < 20% of the monthly quota remains
+
+
+def quota_precheck(monthly_limit: int, spent: int, avg_credits_per_scan: int) -> Dict[str, Any]:
+    """FIXES_50 #9 — pre-scan quota check (pure; the caller decides stopping).
+
+    Returns a warning payload when projected remaining quota falls below
+    QUOTA_WARN_FRACTION of the monthly limit. No ledger interaction here —
+    the caller passes the numbers it trusts.
+    """
+    proj = project_scans(monthly_limit, spent, avg_credits_per_scan)
+    pct = (proj["remaining"] / monthly_limit) if monthly_limit else 0.0
+    warned = pct < QUOTA_WARN_FRACTION
+    return {
+        "projection": proj,
+        "remaining_pct": round(pct, 4),
+        "warn_threshold_pct": QUOTA_WARN_FRACTION,
+        "warned": warned,
+        "message": (
+            ("WARN: projected quota remaining (%.0f%%) is below the %.0f%% "
+             "pre-scan threshold (%d credits left).")
+            % (pct * 100, QUOTA_WARN_FRACTION * 100, proj["remaining"])
+            if warned
+            else "Quota precheck OK."
+        ),
+    }

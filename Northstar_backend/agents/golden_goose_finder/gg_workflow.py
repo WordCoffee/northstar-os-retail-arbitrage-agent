@@ -37,6 +37,41 @@ class TTLCache:
         self._store[key] = (value, time.time())
 
 
+# --- #7 scan-timeout budget ------------------------------------------------------
+
+class ScanBudget:
+    """FIXES_50 #7 — hard scan-timeout budget.
+
+    A scan starts a budget; when the deadline passes the scan must stop and
+    report ``scan_complete: false`` (partial results are honest results).
+    Pure and clock-injectable for tests.
+    """
+
+    def __init__(self, timeout_seconds: float, started_at: Optional[float] = None) -> None:
+        self.timeout_seconds = timeout_seconds
+        self.started_at = time.time() if started_at is None else started_at
+
+    @property
+    def deadline(self) -> float:
+        return self.started_at + self.timeout_seconds
+
+    def expired(self, now: Optional[float] = None) -> bool:
+        return (time.time() if now is None else now) >= self.deadline
+
+    def remaining(self, now: Optional[float] = None) -> float:
+        return max(0.0, self.deadline - (time.time() if now is None else now))
+
+    def checkpoint(self, now: Optional[float] = None) -> Dict[str, Any]:
+        now = time.time() if now is None else now
+        expired = now >= self.deadline
+        return {
+            "timeout_seconds": self.timeout_seconds,
+            "deadline": self.deadline,
+            "remaining_seconds": round(max(0.0, self.deadline - now), 3),
+            "complete": not expired,
+        }
+
+
 # --- #35 lazy enrichment selector ----------------------------------------------
 
 def needs_lazy_enrichment(opp: Dict[str, Any]) -> bool:

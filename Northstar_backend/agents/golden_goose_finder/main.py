@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import sys
 import time
 import traceback
@@ -30,6 +31,24 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query, Request
+
+logger = logging.getLogger(__name__)
+
+try:
+    from .gg_workflow import ScanBudget
+except ImportError:
+    try:
+        from gg_workflow import ScanBudget
+    except ImportError:
+        ScanBudget = None  # type: ignore[assignment]
+
+try:
+    from .gg_observability import quota_precheck
+except ImportError:
+    try:
+        from gg_observability import quota_precheck
+    except ImportError:
+        quota_precheck = None  # type: ignore[assignment]
 
 # ---------------------------------------------------------------------------
 # Sibling module imports (graceful degradation when modules are stubs).
@@ -650,11 +669,13 @@ def _git_sha() -> str | None:
 
 
 def build_scan_manifest(*, categories, stores, roi_floor, min_monthly_sales,
-                        max_results, use_mock, dry_run) -> dict[str, Any]:
+                        max_results, use_mock, dry_run,
+                        scan_complete: bool | None = None) -> dict[str, Any]:
     """FIXES_50 #23: scan manifest (inputs / provider versions / env flags /
     git SHA). No secrets, no provider values — presence-only flags."""
     return {
         "manifest_kind": "goose.scan",
+        "scan_complete": True if scan_complete is None else scan_complete,
         "inputs": {
             "categories": categories or "all",
             "stores": stores or None,
@@ -691,6 +712,39 @@ def _dry_run_estimate(categories: list[str] | None, max_results: int) -> dict[st
     }
 
 
+def _quota_precheck_block(snapshot: tuple | None) -> dict[str, Any]:
+    """FIXES_50 #9 — pre-scan quota precheck (best-effort, never crashes).
+
+    With an explicit ``snapshot`` (monthly_limit, spent, avg_credits_per_scan)
+    the check is deterministic (tests pass one). Otherwise it attempts a
+    best-effort credit_ledger read and skips truthfully when unavailable.
+    """
+    if quota_precheck is None:
+        return {"status": "skipped", "reason": "quota_precheck unavailable"}
+    if snapshot is not None:
+        try:
+            limit, spent, avg = int(snapshot[0]), int(snapshot[1]), int(snapshot[2])
+        except (TypeError, ValueError, IndexError):
+            return {"status": "skipped", "reason": "invalid quota snapshot"}
+        result = quota_precheck(limit, spent, avg)
+        result["status"] = "warning" if result["warned"] else "ok"
+        if result["warned"]:
+            logger.warning("[GoldenGoose] %s", result["message"])
+        return result
+    try:
+        from ... import credit_ledger as _cl
+        balance = _cl.CreditLedger().balance("default", _cl.COMPUTE)
+        limit = int(_cl.PLAN_CREDIT_ALLOTMENT.get("autothink", 2000))
+        spent = max(0, limit - int(balance))
+    except Exception:
+        return {"status": "skipped", "reason": "no ledger balance available"}
+    result = quota_precheck(limit, spent, 25)   # rough live scan cost estimate
+    result["status"] = "ok" if result["warned"] is False else "warning"
+    if result["warned"]:
+        logger.warning("[GoldenGoose] %s", result["message"])
+    return result
+
+
 async def run_pipeline(
     use_mock: bool = True,
     categories: list[str] | None = None,
@@ -700,6 +754,7 @@ async def run_pipeline(
     max_results: int = 100,
     scan_timeout: float = DEFAULT_SCAN_TIMEOUT,
     dry_run: bool = False,
+    quota_snapshot: tuple | None = None,
 ) -> dict[str, Any]:
     """Execute the full Golden Goose pipeline.
 
@@ -728,6 +783,10 @@ async def run_pipeline(
                 "elapsed_seconds": round(time.time() - start, 3),
                 "scan_complete": True,
                 "scan_timeout_seconds": scan_timeout,
+                "scan_budget": {
+                    "timeout_seconds": scan_timeout,
+                    "complete": True,
+                },
                 "categories_scanned": categories or "all",
                 "stores_scanned": stores or ["Costco", "Sam's Club"],
                 "filters": {
@@ -739,7 +798,7 @@ async def run_pipeline(
                 "scan_manifest": build_scan_manifest(
                     categories=categories, stores=stores, roi_floor=roi_floor,
                     min_monthly_sales=min_monthly_sales, max_results=max_results,
-                    use_mock=use_mock, dry_run=True,
+                    use_mock=use_mock, dry_run=True, scan_complete=True,
                 ),
             },
             "summary": {"total_opportunities": 0, "high_tier_count": 0,
@@ -750,7 +809,8 @@ async def run_pipeline(
         }
         return report
 
-    scan_deadline = start + scan_timeout
+    scan_budget = ScanBudget(scan_timeout, started_at=start) if ScanBudget else None
+    quota_precheck_result = _quota_precheck_block(quota_snapshot)
 
     if use_mock:
         scored = _mock_scan(
@@ -777,9 +837,9 @@ async def run_pipeline(
     # Build opportunity list for export
     opportunities = _scored_to_dicts(scored)
 
-    # Check scan timeout
+    # FIXES_50 #7: hard scan-timeout budget — partial results are honest.
     scan_complete = True
-    if time.time() >= scan_deadline:
+    if scan_budget is None or scan_budget.expired():
         scan_complete = False
         logger.warning("[GoldenGoose] Scan timeout reached (%.1fs), returning partial results", scan_timeout)
 
@@ -823,6 +883,8 @@ async def run_pipeline(
             "elapsed_seconds": elapsed,
             "scan_complete": scan_complete,
             "scan_timeout_seconds": scan_timeout,
+            "scan_budget": scan_budget.checkpoint() if scan_budget else None,
+            "quota_precheck": quota_precheck_result,
             "categories_scanned": categories or "all",
             "stores_scanned": stores or ["Costco", "Sam's Club"],
             "filters": {
@@ -833,7 +895,7 @@ async def run_pipeline(
             "scan_manifest": build_scan_manifest(
                 categories=categories, stores=stores, roi_floor=roi_floor,
                 min_monthly_sales=min_monthly_sales, max_results=max_results,
-                use_mock=use_mock, dry_run=False,
+                use_mock=use_mock, dry_run=False, scan_complete=scan_complete,
             ),
         },
         "summary": {
