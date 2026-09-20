@@ -16,6 +16,7 @@ if str(_BACKEND) not in sys.path:
     sys.path.insert(0, str(_BACKEND))
 
 from agents.golden_goose_finder.gg_observability import (  # noqa: E402
+    AuditWriter,
     CostTracker,
     DebugStore,
     LatencyTracker,
@@ -100,3 +101,28 @@ def test_quota_projection():
     assert r["projected_scans_remaining"] == 15
     assert project_scans(1000, 1000, 50)["projected_scans_remaining"] == 0
     assert project_scans(100, 0, 0)["projected_scans_remaining"] == 0
+
+
+# --- FIXES_50 #22: per-ASIN audit trail ---
+
+def test_audit_writer_roundtrip(tmp_path):
+    aw = AuditWriter(tmp_path)
+    aw.write(asin="B0AUDIT001", provider="chocodata", action="search",
+             status="error", error_code="TIMEOUT", latency_ms=120_000,
+             credits=1, scan_id="scan1")
+    aw.write(asin="B0AUDIT001", provider="easyparser", action="sellers",
+             status="ok", latency_ms=240)
+    entries = aw.entries_for("B0AUDIT001")
+    assert len(entries) == 2
+    assert entries[0]["code"] == "TIMEOUT" and entries[0]["provider"] == "chocodata"
+    assert entries[1]["code"] == "ok"
+    assert aw.path_for("B0AUDIT001").exists()
+
+
+def test_audit_writer_isolated_per_asin(tmp_path):
+    aw = AuditWriter(tmp_path)
+    aw.write(asin="B0AA", provider="p", action="a", status="error", error_code="AUTH")
+    aw.write(asin="B0BB", provider="p", action="a", status="ok")
+    assert len(aw.entries_for("B0AA")) == 1
+    assert len(aw.entries_for("B0BB")) == 1
+    assert len(aw.entries_for("B0CC")) == 0

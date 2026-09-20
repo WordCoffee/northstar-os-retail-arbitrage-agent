@@ -77,6 +77,59 @@ class StructuredLogger:
         return json.dumps(record)
 
 
+class AuditWriter:
+    """FIXES_50 #22 — discrete per-ASIN audit trail (JSONL, append-only).
+
+    Every provider/adapter call for an ASIN gets one line with the canonical
+    error taxonomy (gg_errors.ErrorCode) when it failed, plus latency/credits
+    where available. Files are local and scoped; nothing here sends anywhere.
+    """
+
+    def __init__(self, root: Path) -> None:
+        self.root = root
+
+    def path_for(self, asin: str) -> Path:
+        tag = (asin or "global").replace("/", "_")[:12]
+        return self.root / ("%s.audit.jsonl" % tag)
+
+    def write(self, *, asin: str, provider: str, action: str, status: str,
+              latency_ms: Optional[float] = None, credits: Optional[int] = None,
+              error_code: Optional[str] = None, scan_id: Optional[str] = None,
+              extra: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        entry: Dict[str, Any] = {
+            "ts": time.time(),
+            "asin": asin or "",
+            "provider": provider,
+            "action": action,
+            "status": status,          # ok | error
+            "code": error_code or ("ok" if status == "ok" else "UNKNOWN"),
+        }
+        if latency_ms is not None:
+            entry["latency_ms"] = latency_ms
+        if credits is not None:
+            entry["credits"] = credits
+        if scan_id:
+            entry["scan_id"] = scan_id
+        if extra:
+            entry.update(extra)
+        self.root.mkdir(parents=True, exist_ok=True)
+        with self.path_for(asin).open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(entry) + "\n")
+        return entry
+
+    def entries_for(self, asin: str) -> List[Dict[str, Any]]:
+        p = self.path_for(asin)
+        if not p.exists():
+            return []
+        out = []
+        with p.open("r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if line:
+                    out.append(json.loads(line))
+        return out
+
+
 # --- #28 debug mode + #29 replay + #36 compress/purge -------------------------
 
 class DebugStore:

@@ -69,6 +69,69 @@ class ErrorRateTracker:
         }
 
 
+# ---------------------------------------------------------------------------
+# FIXES_50 #26b — per-provider error budget (Phase G)
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class ProviderErrorBudget:
+    """Track error-budget burn PER PROVIDER against a monthly cap.
+
+    Each failure charges the budget (weighted by the canonical error code from
+    gg_errors.ErrorCode). Exhausted providers must be paused by the caller;
+    this class only computes and reports — enforcement is the caller's.
+    """
+
+    monthly_budget: int = 100          # error "cost" units per provider / month
+    warn_fraction: float = 0.8
+    _burn: Dict[str, int] = field(default_factory=dict)
+
+    # Relative severity weights per error code (gg_errors taxonomy).
+    _WEIGHTS = {
+        "PROVIDER_ERROR": 2,
+        "AUTH": 2,
+        "RATE_LIMIT": 1,
+        "PARSE": 1,
+        "VALIDATION_ERROR": 1,
+        "TIMEOUT": 1,
+        "UNKNOWN": 1,
+    }
+
+    def charge(self, provider: str, code: str = "PROVIDER_ERROR",
+               weight: Optional[int] = None) -> int:
+        w = weight if weight is not None else self._WEIGHTS.get(code.upper(), 1)
+        self._burn[provider] = self._burn.get(provider, 0) + w
+        return self._burn[provider]
+
+    def burn(self, provider: str) -> int:
+        return self._burn.get(provider, 0)
+
+    def remaining(self, provider: str) -> int:
+        return max(0, self.monthly_budget - self.burn(provider))
+
+    def warned(self, provider: str) -> bool:
+        return self.burn(provider) >= self.monthly_budget * self.warn_fraction
+
+    def exhausted(self, provider: str) -> bool:
+        return self.burn(provider) >= self.monthly_budget
+
+    def summary(self) -> Dict[str, Any]:
+        return {
+            "monthly_budget": self.monthly_budget,
+            "warn_fraction": self.warn_fraction,
+            "providers": {
+                p: {
+                    "burn": self._burn[p],
+                    "remaining": self.remaining(p),
+                    "warned": self.warned(p),
+                    "exhausted": self.exhausted(p),
+                }
+                for p in sorted(self._burn)
+            },
+        }
+
+
 # Singleton fed by the request path (optional wiring).
 tracker = ErrorRateTracker()
 

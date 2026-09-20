@@ -15,7 +15,11 @@ _BACKEND = Path(__file__).resolve().parent
 if str(_BACKEND) not in sys.path:
     sys.path.insert(0, str(_BACKEND))
 
-from error_alerts import ErrorRateTracker, compose_alert  # noqa: E402
+from error_alerts import (  # noqa: E402
+    ErrorRateTracker,
+    ProviderErrorBudget,
+    compose_alert,
+)
 
 
 def _feed(tracker, statuses, base=1_000_000.0):
@@ -83,3 +87,38 @@ def test_endpoint_returns_envelope():
     b = resp.json()
     assert b["contract"] == "bff/v1" and b["status"] == "ok"
     assert "summary" in b["data"] and "alert" in b["data"]
+
+
+# ---------------------------------------------------------------------------
+# FIXES_50 #26b — per-provider error budget (Phase G)
+# ---------------------------------------------------------------------------
+
+
+def test_error_budget_burn_and_warn():
+    b = ProviderErrorBudget(monthly_budget=100, warn_fraction=0.8)
+    for _ in range(80):
+        b.charge("brightdata", code="TIMEOUT")
+    assert b.burn("brightdata") == 80 and b.warned("brightdata") is True
+    assert b.exhausted("brightdata") is False
+
+
+def test_error_budget_exhaustion():
+    b = ProviderErrorBudget(monthly_budget=20)
+    for _ in range(10):
+        b.charge("chocodata", code="PROVIDER_ERROR", weight=2)
+    assert b.exhausted("chocodata") is True and b.remaining("chocodata") == 0
+
+
+def test_error_budget_severity_weights():
+    b = ProviderErrorBudget(monthly_budget=100)
+    b.charge("firecrawl", code="AUTH")          # weight 2
+    b.charge("firecrawl", code="RATE_LIMIT")    # weight 1
+    assert b.burn("firecrawl") == 3
+
+
+def test_error_budget_summary_excludes_untouched_providers():
+    b = ProviderErrorBudget(monthly_budget=100)
+    b.charge("costco", code="PROVIDER_ERROR")
+    s = b.summary()
+    assert list(s["providers"].keys()) == ["costco"]
+    assert s["providers"]["costco"]["burn"] == 2
