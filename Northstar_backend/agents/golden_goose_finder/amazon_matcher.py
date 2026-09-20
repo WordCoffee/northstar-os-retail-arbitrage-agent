@@ -289,6 +289,13 @@ MIN_PRICE_RATIO = 0.5      # Amazon price >= 0.5 * unit_cogs
 MAX_PRICE_RATIO = 500.0    # Amazon price <= 500 * unit_cogs (mock data reaches ~150x)
 MATCH_ROI_FLOOR_PCT = 10.0  # fix #20: drop matches whose gross ROI can't reach 10%
 
+# FIXES_50 data-quality hard-reject thresholds (#17 / #18 / #19).
+BSR_STALE_THRESHOLD = 1_000_000            # #17: BSR > 1M = stale/phantom listing
+REVIEW_COUNT_ABSURD = 100_000              # #18: implausibly high review count
+REVIEW_BSR_CONSISTENCY = 100_000           # #18: reviews > 100K while BSR > 100K = inconsistent signals
+FBA_WEIGHT_LB_LIMIT = 5.0                  # #19: standard-size weight ceiling (lb)
+FBA_MAX_DIMENSIONS_IN = (18.0, 14.0, 8.0)  # #19: standard-size dimension ceilings (L x W x H)
+
 # Brand normalization for fuzzy matching
 _BRAND_ALIASES = {
     "nutramax": ["nutramax", "nutramax laboratories", "cosequin"],
@@ -403,7 +410,32 @@ def _validate_match_quality(
     if amazon_count is not None and wholesale_product.pack_count is not None:
         if amazon_count > wholesale_product.pack_count:
             return False, f"amazon_count_exceeds_wholesale ({amazon_count} > {wholesale_product.pack_count})"
-    
+
+    # FIXES_50 #17: BSR > 1M is a stale/phantom listing — hard reject.
+    if match.bsr is not None and match.bsr > BSR_STALE_THRESHOLD:
+        return False, f"bsr_stale_or_phantom ({match.bsr} > {BSR_STALE_THRESHOLD})"
+
+    # FIXES_50 #18: implausible review/sales signals — hard reject when a very
+    # high review count coexists with a weak BSR (inconsistent signals).
+    if match.review_count is not None and match.review_count > REVIEW_COUNT_ABSURD:
+        if match.bsr is not None and match.bsr > REVIEW_BSR_CONSISTENCY:
+            return False, (
+                f"review_count_implausible (reviews {match.review_count} > {REVIEW_COUNT_ABSURD} "
+                f"while BSR {match.bsr} > {REVIEW_BSR_CONSISTENCY})"
+            )
+
+    # FIXES_50 #19: FBA oversize — hard reject (weight > 5 lb, or any dimension
+    # exceeding the standard-size ceilings). Missing measures pass through
+    # (null is honesty, not evidence).
+    if match.weight_oz is not None and (match.weight_oz / 16.0) > FBA_WEIGHT_LB_LIMIT:
+        return False, (
+            "oversize_weight (%.1f oz > %.1f lb)" % (match.weight_oz, FBA_WEIGHT_LB_LIMIT)
+        )
+    if match.dimensions_in:
+        dims = [d for d in match.dimensions_in if d is not None]
+        if dims and not all(d <= lim for d, lim in zip(dims, FBA_MAX_DIMENSIONS_IN)):
+            return False, f"oversize_dimensions ({dims} exceeds {list(FBA_MAX_DIMENSIONS_IN)})"
+
     # Brand normalization / fuzzy match (fix #15)
     if not _brand_match(wholesale_product.brand, match.brand):
         return False, f"brand_mismatch ('{wholesale_product.brand}' vs '{match.brand}')"

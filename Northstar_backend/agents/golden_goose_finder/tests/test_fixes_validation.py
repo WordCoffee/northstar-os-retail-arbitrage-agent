@@ -53,3 +53,69 @@ def test_price_sanity_bounds_still_guard():
     ok, reason = _validate_match_quality(absurd, wp)
     assert ok is False and "price_ratio" in reason
     assert MATCH_ROI_FLOOR_PCT == 10.0
+
+
+# --- FIXES_50 #17: BSR freshness hard reject ---
+
+def test_bsr_stale_hard_reject():
+    wp = _make_wholesale(wholesale_price=10.0, pack_count=1)
+    stale = _make_amazon(asin="B0STALE001", brand="Nicorette", amazon_price=40.0, bsr=1_500_000)
+    ok, reason = _validate_match_quality(stale, wp)
+    assert ok is False and "bsr_stale_or_phantom" in reason
+
+
+def test_bsr_in_band_accepted():
+    wp = _make_wholesale(wholesale_price=10.0, pack_count=1)
+    good = _make_amazon(asin="B0GOODBSR1", brand="Nicorette", amazon_price=40.0, bsr=5_000)
+    ok, reason = _validate_match_quality(good, wp)
+    assert ok is True and reason == "ok"
+
+
+# --- FIXES_50 #18: review-count plausibility ---
+
+def test_review_count_implausible_rejected():
+    wp = _make_wholesale(wholesale_price=10.0, pack_count=1)
+    bad = _make_amazon(asin="B0RVC00001", brand="Nicorette", amazon_price=40.0,
+                       review_count=150_000, bsr=500_000)
+    ok, reason = _validate_match_quality(bad, wp)
+    assert ok is False and "review_count_implausible" in reason
+
+
+def test_review_count_high_but_consistent_ok():
+    wp = _make_wholesale(wholesale_price=10.0, pack_count=1)
+    good = _make_amazon(asin="B0RVC00002", brand="Nicorette", amazon_price=40.0,
+                        review_count=150_000, bsr=5_000)
+    ok, reason = _validate_match_quality(good, wp)
+    assert ok is True and reason == "ok"
+
+
+# --- FIXES_50 #19: weight/size oversize validation ---
+
+def test_oversize_weight_rejected():
+    wp = _make_wholesale(wholesale_price=10.0, pack_count=1)
+    heavy = _make_amazon(asin="B0WGT00001", brand="Nicorette", amazon_price=40.0, weight_oz=800.0)
+    ok, reason = _validate_match_quality(heavy, wp)
+    assert ok is False and "oversize_weight" in reason
+
+
+def test_standard_weight_accepted():
+    wp = _make_wholesale(wholesale_price=10.0, pack_count=1)
+    light = _make_amazon(asin="B0WGT00002", brand="Nicorette", amazon_price=40.0, weight_oz=32.0)
+    ok, reason = _validate_match_quality(light, wp)
+    assert ok is True and reason == "ok"
+
+
+def test_oversize_dimensions_rejected():
+    wp = _make_wholesale(wholesale_price=10.0, pack_count=1)
+    big = _make_amazon(asin="B0DIM00001", brand="Nicorette", amazon_price=40.0,
+                       dimensions_in=[20.0, 10.0, 7.0])
+    ok, reason = _validate_match_quality(big, wp)
+    assert ok is False and "oversize_dimensions" in reason
+
+
+def test_null_measures_pass_through():
+    wp = _make_wholesale(wholesale_price=10.0, pack_count=1)
+    unknown = _make_amazon(asin="B0NUL00001", brand="Nicorette", amazon_price=40.0,
+                           weight_oz=None, dimensions_in=None, bsr=None, review_count=None)
+    ok, reason = _validate_match_quality(unknown, wp)
+    assert ok is True and reason == "ok"
