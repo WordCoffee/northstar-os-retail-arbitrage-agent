@@ -42,7 +42,7 @@ function respond(status, error, data, service) {
     error: status === "error" ? error : null,
     meta: { service: service || "unknown", version: "v1" },
   }), {
-    status: HTTP_FOR[status] || 500,
+    status: HTTP_FOR[status === "error" ? error.code : status] || 500,
     headers: JSON_HEADERS,
   });
 }
