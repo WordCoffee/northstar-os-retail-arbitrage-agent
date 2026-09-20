@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
-from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi import FastAPI, HTTPException, Depends, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -1378,6 +1378,47 @@ async def credits_me(request: Request):
         }
     except Exception:
         raise HTTPException(status_code=500, detail="Credit ledger unavailable")
+
+
+# ---------------------------------------------------------------------------
+# Phase F/S7 — invite + onboarding flow (code only; email send is stubbed)
+# ---------------------------------------------------------------------------
+
+@app.post("/api/v1/invites")
+async def create_invite(body: dict = Body(...), admin: dict = Depends(require_admin)):
+    """Operator-only: create a founding-cohort invite code."""
+    import invites as invites_mod
+    try:
+        inv = invites_mod.create_invite(
+            str(body.get("cohort", "")), email=body.get("email") or None
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return {"invite": inv}
+
+
+@app.get("/api/v1/invites/{code}")
+async def invite_lookup(code: str):
+    """Public: validate an invite code (no secrets in the response)."""
+    import invites as invites_mod
+    inv = invites_mod.get_invite(code)
+    if inv is None:
+        raise HTTPException(status_code=404, detail="Unknown invite code")
+    return {"invite": inv}
+
+
+@app.post("/api/v1/invites/redeem")
+async def redeem_invite(body: dict = Body(...), user: dict = Depends(get_current_user)):
+    """Authenticated: redeem an invite. Cohort/plan come from the row."""
+    import invites as invites_mod
+    code = str(body.get("code", ""))
+    try:
+        result = invites_mod.redeem_invite(code, user.get("id", "anonymous"))
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown invite code")
+    except PermissionError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    return {"result": result}
 
 
 # ---------------------------------------------------------------------------

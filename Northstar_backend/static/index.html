@@ -10389,6 +10389,8 @@ html[data-theme-v2] {
                 });
                 var ob = el('onboardingStart');
                 if (ob && ob.addEventListener) ob.addEventListener('click', dismissOnboarding);
+                var ir = el('inviteRedeem');
+                if (ir && ir.addEventListener) ir.addEventListener('click', NS.ws.inviteRedeem);
             },
         };
 
@@ -10409,6 +10411,30 @@ html[data-theme-v2] {
             var ov = el('onboardingOverlay');
             if (ov) ov.hidden = true;
         }
+
+        // S7: redeem an invite code (POST, no email). Honest status text.
+        NS.ws.inviteRedeem = function () {
+            var input = el('inviteCode');
+            var status = el('inviteStatus');
+            var code = (input && input.value) || '';
+            if (!code.trim()) { if (status) status.textContent = 'Enter an invite code first.'; return; }
+            if (status) status.textContent = 'Redeeming…';
+            if (!(NS.isThemeV2 && NS.isThemeV2())) { if (status) status.textContent = 'V2 workspace required to redeem.'; return; }
+            fetch('/api/v1/invites/redeem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: code.trim() }),
+            }).then(function (r) { return r.json(); }).then(function (data) {
+                if (data && data.result) {
+                    if (status) status.textContent = 'Redemption ' + data.result.status + ' (' + (data.result.cohort || '—') + ' cohort).';
+                } else if (data && data.detail) {
+                    if (status) status.textContent = 'Redeem failed: ' + String(data.detail);
+                }
+            }).catch(function () {
+                if (status) status.textContent = 'Redeem failed (offline). No email was sent — invites are stubbed.';
+            });
+            return true;
+        };
 
         function initWorkspacesUi() {
             NS.ws.wireWorkspaces();
@@ -12532,6 +12558,11 @@ html[data-theme-v2] {
         <h3>Welcome to Northstar OS (v2)</h3>
         <p>Command Center, Commerce Ops, AutoThink Studio, Creative Studio, and Admin are reachable from the Command Center. Every surface shows honest loading/empty/error states; unbuilt tools are clearly marked, never faked.</p>
         <p class="ns-disclaimer" data-slot="onboarding-spa">Dashboards show estimates from available data — not guarantees, not a recommendation to buy, and not an approval to resell. Plans never flip live gates. <a href="/legal/terms">Terms</a> · <a href="/legal/privacy">Privacy</a> · <a href="/legal/refund">Refund-Cancellation</a></p>
+        <div class="gg-seam-toolbar" style="margin-top:8px">
+          <input id="inviteCode" type="text" class="f-control" placeholder="Have an invite code? Paste it here…" aria-label="Invite code" autocomplete="off">
+          <button class="btn" id="inviteRedeem" type="button">Redeem invite</button>
+          <span class="gg-seam-status" id="inviteStatus"></span>
+        </div>
         <button class="btn" id="onboardingStart" type="button">Get Started</button>
       </div>
     </div>
