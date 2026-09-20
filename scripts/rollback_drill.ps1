@@ -16,7 +16,10 @@ param(
     [string]$Target = "v0.1.0-alpha"
 )
 
-$ErrorActionPreference = "Stop"
+# Failures are detected via $LASTEXITCODE checks, not EAP=Stop: that mode
+# turns benign git stderr (e.g. "Preparing worktree ...") into terminating
+# errors, which would abort the drill for the wrong reason.
+$ErrorActionPreference = "Continue"
 
 # Repo root = parent of the scripts/ dir this file lives in.
 $RepoRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot ".."))
