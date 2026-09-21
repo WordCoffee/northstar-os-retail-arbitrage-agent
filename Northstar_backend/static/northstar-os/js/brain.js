@@ -39,6 +39,12 @@
 
   function renderState() {
     var el = $id('brain-state');
+    var dot = $id('brain-dot');
+    var armed = !!(catalog && catalog.cloud && catalog.cloud.live_armed);
+    if (dot) {
+      dot.className = 'brain-dot ' + (state.provider === 'cloud'
+        ? (armed ? 'cloud-armed' : 'cloud-off') : 'local');
+    }
     if (!el) return;
     var model = '—';
     if (catalog) {

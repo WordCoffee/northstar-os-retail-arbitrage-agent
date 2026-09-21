@@ -28,6 +28,98 @@
       padding: 3px 6px;
     }
     .rb-brain .val { font-variant-numeric: tabular-nums; }
+    .brain-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--steel, #4682B4); display: inline-block;
+      box-shadow: 0 0 6px currentColor;
+    }
+    .brain-dot.local { background: var(--steel, #4682B4); color: var(--steel, #4682B4); }
+    .brain-dot.cloud-armed { background: var(--gold, #D4AF37); color: var(--gold, #D4AF37); }
+    .brain-dot.cloud-off { background: var(--crimson-bright, #c0392b); color: var(--crimson-bright, #c0392b); }
+
+    /* Command Deck — H9 */
+    .deck {
+      background: var(--bg-elevated, #1f1b18);
+      border: 1px solid var(--hairline, #38322c);
+      border-radius: var(--radius, 8px);
+      padding: var(--sp-4, 16px);
+      margin: 18px 0;
+    }
+    .deck-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+    .deck-head h3 { margin: 0; font-family: var(--font-head, serif); letter-spacing: .02em; }
+    .deck-hint { color: var(--ink-faint, #6e675e); font-size: 12px; }
+    .deck-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+    .deck-card {
+      display: flex; flex-direction: column; gap: 4px;
+      padding: 12px 14px; border-radius: var(--radius-sm, 4px);
+      background: var(--bg-sunken, #12100e);
+      border: 1px solid var(--hairline-soft, #2a2622);
+      border-left-width: 3px;
+    }
+    .deck-steel { border-left-color: var(--steel, #4682B4); }
+    .deck-gold { border-left-color: var(--gold, #D4AF37); }
+    .deck-green { border-left-color: var(--green, #7fb069); }
+    .deck-crimson { border-left-color: var(--crimson-bright, #c0392b); }
+    .deck-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-faint, #6e675e); }
+    .deck-value { font-size: 15px; color: var(--ink, #EAE4D8); }
+    .deck-sub { font-size: 11.5px; color: var(--ink-dim, #A89F92); }
+    .deck-steps { margin: 6px 0 0; padding-left: 16px; font-size: 11.5px; color: var(--ink-dim, #A89F92); }
+    .deck-steps li { margin: 2px 0; }
+    .deck-map { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .deck-map-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-faint, #6e675e); margin-right: 4px; }
+    .deck-chip {
+      font-size: 11.5px; padding: 3px 9px; border-radius: 999px;
+      border: 1px solid var(--hairline, #38322c); color: var(--ink-dim, #A89F92);
+      background: var(--bg-sunken, #12100e);
+    }
+
+    /* Command palette — H9 */
+    .palette { position: fixed; inset: 0; background: rgba(8,6,5,.62); display: flex; align-items: flex-start; justify-content: center; z-index: 60; padding-top: 12vh; }
+    .palette[hidden] { display: none; }
+    .palette-box {
+      width: min(560px, 92vw); background: var(--bg-elevated, #1f1b18);
+      border: 1px solid var(--hairline, #38322c); border-radius: var(--radius-lg, 12px);
+      box-shadow: 0 24px 60px rgba(0,0,0,.55); overflow: hidden;
+    }
+    .palette-input {
+      width: 100%; box-sizing: border-box; border: 0; border-bottom: 1px solid var(--hairline, #38322c);
+      background: var(--bg-sunken, #12100e); color: var(--ink, #EAE4D8);
+      font: inherit; font-size: 15px; padding: 14px 16px; outline: none;
+    }
+    .palette-list { max-height: 44vh; overflow-y: auto; }
+    .palette-item {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+      width: 100%; text-align: left; background: transparent; border: 0; cursor: pointer;
+      color: var(--ink, #EAE4D8); font: inherit; padding: 11px 16px;
+    }
+    .palette-item:hover, .palette-item.active { background: var(--gold-dim, rgba(212,175,55,.14)); }
+    .palette-name { font-size: 14px; }
+    .palette-hint { font-size: 11.5px; color: var(--ink-faint, #6e675e); }
+    .palette-empty { padding: 16px; color: var(--ink-faint, #6e675e); }
+    .palette-foot { padding: 8px 16px; font-size: 11px; color: var(--ink-faint, #6e675e); border-top: 1px solid var(--hairline-soft, #2a2622); }
+
+    /* Coming-soon service cards — H9 */
+    .soon {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: var(--bg-elevated, #1f1b18);
+      border: 1px solid var(--hairline, #38322c);
+      border-radius: var(--radius, 8px);
+      padding: 18px 20px; margin-top: 14px;
+      border-left: 3px solid var(--steel, #4682B4);
+    }
+    .soon-badge {
+      flex: 0 0 auto; font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em;
+      padding: 5px 10px; border-radius: 999px;
+      border: 1px solid var(--gold-line, rgba(212,175,55,.45));
+      color: var(--gold, #D4AF37); background: var(--gold-dim, rgba(212,175,55,.14));
+      white-space: nowrap;
+    }
+    .soon-body { display: flex; flex-direction: column; gap: 10px; }
+    .soon-pitch { margin: 0; color: var(--ink, #EAE4D8); font-size: 13.5px; line-height: 1.55; max-width: 62ch; }
+    .soon-meta { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 18px; }
+    .soon-meta li { display: flex; flex-direction: column; gap: 2px; }
+    .soon-meta span { font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-faint, #6e675e); }
+    .soon-meta strong { font-size: 12.5px; color: var(--ink-dim, #A89F92); font-weight: 500; }
   </style>
 </head>
 <body>
@@ -57,6 +149,7 @@
           <option value="T2" selected>T2 Core</option>
           <option value="T3">T3 Seam</option>
         </select>
+        <span class="brain-dot local" id="brain-dot" title="Engine state"></span>
         <span class="val" id="brain-state" title="Dual-engine switch (H2/H3)">—</span>
       </div>
     </div>
@@ -202,6 +295,16 @@
         <!-- Enhanced KPI Strip -->
         <div id="hub-kpis" class="kpi-strip-enhanced"></div>
 
+        <!-- Command Deck (H9): engines · gates · caps · launch checks -->
+        <section class="deck" id="command-deck" aria-label="Alpha command deck">
+          <div class="deck-head">
+            <h3>Alpha Command Deck</h3>
+            <span class="deck-hint">engines · gates · caps · launch checks</span>
+          </div>
+          <div class="deck-grid" id="deck-grid"></div>
+          <div class="deck-map" id="deck-map"></div>
+        </section>
+
         <!-- Activity Feed -->
         <div class="activity-feed" aria-label="Recent activity">
           <div class="feed-header">
@@ -217,7 +320,7 @@
         <!-- Quick Actions -->
         <div class="quick-actions" aria-label="Quick actions">
           <div class="section-head">
-            <h3>Quick Actions</a>
+            <h3>Quick Actions</h3>
             <a href="#" id="view-all-services">View All →</a>
           </div>
           <ul>
@@ -549,12 +652,16 @@
       <!-- ---------------- THE LEDGER · Profitability (H3 placeholder) ---------------- -->
       <section id="view-theledger" class="view" data-view="theledger" aria-hidden="true">
         <h2 class="view-title">The Ledger</h2>
-        <p class="view-sub">Profitability dashboard · <span class="demo-badge">coming soon</span></p>
-        <div class="panel">
-          <div class="state-block" role="note" data-slot="theledger-placeholder">
-            <strong>The Ledger — coming soon.</strong><br/>
-            Portfolio net-profit view: revenue − COGS − fees − ad spend, per SKU and per brand.
-            Nothing is fabricated here; the surface ships when the P&amp;L data layer lands.
+        <p class="view-sub">Profitability dashboard · per SKU, per brand</p>
+        <div class="soon" data-slot="theledger-placeholder">
+          <div class="soon-badge demo-badge">Coming soon</div>
+          <div class="soon-body">
+            <p class="soon-pitch">Revenue − COGS − fees − ad spend, rolled up per SKU and per brand. The one number that says whether the portfolio is actually winning.</p>
+            <ul class="soon-meta">
+              <li><span>Unlocks at</span><strong>Keystone</strong></li>
+              <li><span>Build state</span><strong>Not built — honest placeholder</strong></li>
+              <li><span>Needs</span><strong>P&amp;L data layer</strong></li>
+            </ul>
           </div>
         </div>
       </section>
@@ -562,12 +669,16 @@
       <!-- ---------------- THE WATCH · Listing Guardian (H3 placeholder) ---------------- -->
       <section id="view-thewatch" class="view" data-view="thewatch" aria-hidden="true">
         <h2 class="view-title">The Watch</h2>
-        <p class="view-sub">Listing guardian · hijackers · suppressions · Buy Box · <span class="demo-badge">coming soon</span></p>
-        <div class="panel">
-          <div class="state-block" role="note" data-slot="thewatch-placeholder">
-            <strong>The Watch — coming soon.</strong><br/>
-            Monitors your own ASINs for hijackers, unauthorized listing changes, suppressions,
-            and Buy Box loss. Reserved for Mainstay and above. No alerts are fabricated.
+        <p class="view-sub">Listing guardian · hijackers · suppressions · Buy Box</p>
+        <div class="soon" data-slot="thewatch-placeholder">
+          <div class="soon-badge demo-badge">Coming soon</div>
+          <div class="soon-body">
+            <p class="soon-pitch">Keeps watch on your own ASINs — hijackers, unauthorized listing changes, suppressions, and Buy Box loss — so a problem finds you before it costs you.</p>
+            <ul class="soon-meta">
+              <li><span>Unlocks at</span><strong>Mainstay</strong></li>
+              <li><span>Build state</span><strong>Not built — honest placeholder</strong></li>
+              <li><span>Needs</span><strong>SP-API read access</strong></li>
+            </ul>
           </div>
         </div>
       </section>
@@ -575,12 +686,16 @@
       <!-- ---------------- RANKLEDGER · Keyword Rank Tracking (H3 placeholder) ---------------- -->
       <section id="view-rankledger" class="view" data-view="rankledger" aria-hidden="true">
         <h2 class="view-title">RankLedger</h2>
-        <p class="view-sub">Daily keyword rank snapshots · <span class="demo-badge">coming soon</span></p>
-        <div class="panel">
-          <div class="state-block" role="note" data-slot="rankledger-placeholder">
-            <strong>RankLedger — coming soon.</strong><br/>
-            Daily rank snapshots for selected ASIN × keyword pairs, with trend lines on the
-            Analyst's Desk. Included with Mainstay and above. No ranks are invented.
+        <p class="view-sub">Daily keyword rank snapshots · ASIN × keyword</p>
+        <div class="soon" data-slot="rankledger-placeholder">
+          <div class="soon-badge demo-badge">Coming soon</div>
+          <div class="soon-body">
+            <p class="soon-pitch">A daily rank ledger for the ASIN × keyword pairs you care about, plotted as ink on the Analyst's Desk. Trend, not a snapshot.</p>
+            <ul class="soon-meta">
+              <li><span>Unlocks at</span><strong>Mainstay</strong></li>
+              <li><span>Build state</span><strong>Not built — honest placeholder</strong></li>
+              <li><span>Needs</span><strong>Rank source (free tier first)</strong></li>
+            </ul>
           </div>
         </div>
       </section>
@@ -588,12 +703,16 @@
       <!-- ---------------- THE RIVAL BOARD · Competitor & Buy Box Monitor (H3 placeholder) ---------------- -->
       <section id="view-rivalboard" class="view" data-view="rivalboard" aria-hidden="true">
         <h2 class="view-title">The Rival Board</h2>
-        <p class="view-sub">Competitor &amp; Buy Box monitoring · <span class="demo-badge">coming soon</span></p>
-        <div class="panel">
-          <div class="state-block" role="note" data-slot="rivalboard-placeholder">
-            <strong>The Rival Board — coming soon.</strong><br/>
-            Tracks competitor ASIN price and Buy Box changes so you see a price war before it
-            hits your margin. Included with Keystone and above. No competitor data is fabricated.
+        <p class="view-sub">Competitor &amp; Buy Box monitoring</p>
+        <div class="soon" data-slot="rivalboard-placeholder">
+          <div class="soon-badge demo-badge">Coming soon</div>
+          <div class="soon-body">
+            <p class="soon-pitch">Tracks competitor ASIN price and Buy Box changes so you see a price war forming before it reaches your margin.</p>
+            <ul class="soon-meta">
+              <li><span>Unlocks at</span><strong>Keystone</strong></li>
+              <li><span>Build state</span><strong>Not built — honest placeholder</strong></li>
+              <li><span>Needs</span><strong>Competitor ASIN watchlist</strong></li>
+            </ul>
           </div>
         </div>
       </section>
@@ -637,6 +756,16 @@
 
   </div>
 
+  <!-- ===================== COMMAND PALETTE (Ctrl/Cmd+K) ===================== -->
+  <div id="palette" class="palette" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+    <div class="palette-box">
+      <input id="palette-input" class="palette-input" type="text"
+             placeholder="Jump to a service…   (Ctrl/Cmd+K)" aria-label="Command palette search">
+      <div id="palette-list" class="palette-list"></div>
+      <div class="palette-foot">Esc closes · Enter opens the first match</div>
+    </div>
+  </div>
+
   <!-- ===================== ONBOARDING MODAL ===================== -->
   <div id="onboarding-modal" class="onboarding-modal" role="dialog" aria-modal="true" aria-label="Welcome tour">
     <div class="modal">
@@ -651,8 +780,8 @@
         <!-- Step 2 -->
         <div class="modal-step" id="onboarding-step-2">
           <span class="step-number">02</span>
-          <h3 class="step-title">Your Data Stays Local</h3>
-          <p class="step-text">All AI processing runs on your machine via Ollama. No data is sent to cloud APIs. Your competitive advantage is yours alone.</p>
+          <h3 class="step-title">Two Engines — You Choose</h3>
+          <p class="step-text">Local is the default: AI runs on your machine via Ollama — private and free. The cloud engine (DeepSeek lane) is opt-in per request and stays disarmed until you arm it. The Brain switch in the ribbon controls both.</p>
         </div>
         <!-- Step 3 -->
         <div class="modal-step" id="onboarding-step-3">
@@ -699,6 +828,7 @@
   <script src="js/socialpulse.js"></script>
   <script src="js/autothink.js"></script>
   <script src="js/account.js"></script>
+  <script src="js/deck.js"></script>
   <script>NS.init();</script>
 
   <!-- Universal Voice Integration -->

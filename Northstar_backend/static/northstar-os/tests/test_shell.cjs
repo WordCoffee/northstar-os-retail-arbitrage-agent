@@ -18,9 +18,9 @@ const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const scriptParts = [
     'engine.js', 'demo-data.js', 'brain.js', 'hub.js', 'sourcescout.js',
     'listingforge.js', 'adpilot.js', 'socialpulse.js', 'autothink.js',
-    'account.js',
+    'account.js', 'deck.js',
 ].map((f) => fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'));
-const boot = 'window.NS.init(); if (window.NS.brain && window.NS.brain.init) window.NS.brain.init();';
+const boot = 'window.NS.init(); if (window.NS.brain && window.NS.brain.init) window.NS.brain.init(); if (window.NS.deck && window.NS.deck.init) window.NS.deck.init();';
 const script = scriptParts.join('\n;\n') + '\n' + boot;
 
 let failures = 0;
@@ -767,6 +767,44 @@ assert(html.includes('id="nav-thewatch"') && html.includes('id="nav-rankledger"'
     && html.includes('id="nav-rivalboard"') && html.includes('id="nav-theledger"'),
     'new services: four nav items registered');
 
-console.log('\nShell contract complete.');
-console.log(failures === 0 ? 'ALL GREEN' : failures + ' FAILURES');
+/* ==========================================================================
+ * H9 — Alpha Command Deck + command palette + engine lamp
+ * ========================================================================== */
+assert(!!NS.deck, 'deck: module exposed on NS');
+const deckGrid = els['deck-grid'] ? els['deck-grid'].innerHTML : '';
+assert(deckGrid.indexOf('data-deck="local"') !== -1 && deckGrid.indexOf('data-deck="cloud"') !== -1,
+    'deck: engine cards rendered (local + cloud)');
+assert(deckGrid.indexOf('data-deck="gates"') !== -1 && deckGrid.indexOf('data-deck="plan"') !== -1,
+    'deck: gate posture + current plan cards rendered');
+assert(deckGrid.indexOf('data-deck="launch"') !== -1 && deckGrid.indexOf('deck-steps') !== -1,
+    'deck: launch checks card with steps');
+assert(deckGrid.indexOf('ARMED') === -1, 'deck: cloud engine honestly shows disarmed (no key/flag in demo)');
+assert((els['deck-map'] ? els['deck-map'].innerHTML : '').indexOf('Prospector') !== -1,
+    'deck: suite map surfaces the display names (Prospector)');
+
+/* engine lamp reflects provider + arm state */
+assert(html.indexOf('id="brain-dot"') !== -1, 'lamp: brain status dot present in the ribbon');
+NS.brain.set('local', 'T2');
+NS.brain.renderState();
+assert(getEl('brain-dot').className.indexOf('local') !== -1, 'lamp: local engine shows the steel dot');
+NS.brain.set('cloud', 'T2');
+NS.brain.renderState();
+assert(getEl('brain-dot').className.indexOf('cloud-off') !== -1, 'lamp: disarmed cloud shows the crimson dot');
+NS.brain.set('local', 'T2');
+
+/* command palette */
+assert(html.indexOf('id="palette"') !== -1 && html.indexOf('id="palette-input"') !== -1,
+    'palette: markup present');
+assert(NS.deck.isPaletteOpen() === false, 'palette: closed by default');
+NS.deck.openPalette();
+assert(NS.deck.isPaletteOpen() === true, 'palette: opens on demand');
+assert(NS.deck.paletteMatches('rival').length === 1, 'palette: filters to a single match');
+assert(NS.deck.paletteMatches('ledger').length >= 1, 'palette: partial match finds the ledger surfaces');
+assert(NS.deck.paletteMatches('the').length >= 2, 'palette: multi-match on partial');
+assert(NS.deck.paletteMatches('zzzz').length === 0, 'palette: honest empty result');
+assert(NS.deck.services().length === 12, 'palette: indexes all 12 destinations');
+NS.deck.closePalette();
+assert(NS.deck.isPaletteOpen() === false, 'palette: closes cleanly');
+
+console.log('\nShell contract complete.');console.log(failures === 0 ? 'ALL GREEN' : failures + ' FAILURES');
 process.exit(failures === 0 ? 0 : 1);
