@@ -1,13 +1,13 @@
 {
     "test_baseline": {
-        "python": "2279 passed, 2 known failures (pre-existing protected-hash drift), 3 skipped, 48 subtests",
+        "python": "2328 passed, 2 known failures (pre-existing protected-hash drift), 3 skipped, 48 subtests",
         "golden_goose": "511 passed, 0 failures (module suite)",
-        "ui_shell_functions": "UI 1122 / Shell 251 / Functions 31 passed",
-        "updated_at": "2026-09-20",
-        "phase": "Phase G complete — FIXES_50 leftovers + partial closures + docs drift CI (A1/A2/A3)"
+        "ui_shell_functions": "UI 1122 / Shell 268 / Functions 31 passed",
+        "updated_at": "2026-09-21",
+        "phase": "Phase H complete — private alpha launch (dual-engine Brain, alpha gate, catalog v3)"
     },
-    "current_phase": "Phase G complete: FIXES_50 #7 #9 #17 #18 #19 #22 #25 #26b #29 + closures #38 #43 #45 #48 #21 #46 + --docs drift CI + entitlements proposal (non-canonical). Harness GREEN: backend 2279 + 2 known, GG 511, UI 1122, shell 251, functions 31. HEAD 48aed71. Section B (model lane, live gates, funding, launch flip, decisions) logged DEFERRED per work order.",
-    "phases_completed": ["Phase 1: Foundation", "Phase 2: SourceScout", "Phase 3: ListingForge+AdPilot", "Phase 4: SocialPulse+AutothinK", "Phase 5: Auth+Deploy", "Phase 6A: Design System", "Phase 6B: Landing + Auth Pages", "Phase 6C: SPA Responsiveness", "Phase 6D: Hub Rebuild", "Phase 6E: Service View Polish", "Phase 6F: Onboarding + First-Run", "Phase F: Engineering Debt + Golden Goose Hardening", "Phase G: Next Batch (FIXES_50 leftovers + partials + hygiene)"],
+    "current_phase": "Phase H complete: operator-only alpha gate, dual-engine model router (local Ollama / OpenRouter DeepSeek lane) + Brain UI switch, 4 new service placeholders, usage meter + cost model, catalog v3 (Whetstone/Mainstay/Keystone/AutothinK 39/79/129/179), Word Coffee fixture + test plan, private-alpha deploy runbook. Harness GREEN: backend 2328 + 2 known, GG 511, UI 1122, shell 268, functions 31. HEAD cbbefcb. Cloud lane coded + disarmed; nothing live executed.",
+    "phases_completed": ["Phase 1: Foundation", "Phase 2: SourceScout", "Phase 3: ListingForge+AdPilot", "Phase 4: SocialPulse+AutothinK", "Phase 5: Auth+Deploy", "Phase 6A: Design System", "Phase 6B: Landing + Auth Pages", "Phase 6C: SPA Responsiveness", "Phase 6D: Hub Rebuild", "Phase 6E: Service View Polish", "Phase 6F: Onboarding + First-Run", "Phase F: Engineering Debt + Golden Goose Hardening", "Phase G: Next Batch (FIXES_50 leftovers + partials + hygiene)", "Phase H: Private Alpha Launch (dual-engine, operator-only)"],
     "known_issues":  [
                          {
                              "id":  "unwrangle_costco_platform_string_bug",
