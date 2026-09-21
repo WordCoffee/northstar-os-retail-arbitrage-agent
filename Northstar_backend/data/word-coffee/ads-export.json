@@ -1,0 +1,46 @@
+{
+  "brand": "Word Coffee",
+  "window": "~90 days",
+  "source": "Amazon Ads + Business Report exports (operator-provided 2026-09-21)",
+  "account": {
+    "spend": 2370.40,
+    "sales": 1428.30,
+    "acos_pct": 166.0,
+    "purchases": 86,
+    "units": 90,
+    "avg_cpc": 1.31,
+    "ctr_pct": 0.334,
+    "business_sessions": 3893,
+    "business_units_ordered": 210,
+    "business_ordered_sales": 3223.80,
+    "implied_asp": 15.87
+  },
+  "campaigns": [
+    { "name": "Scale - Broad (V2)", "spend": 582.28, "sales": 415.74, "acos_pct": 140.1, "tos_share_pct": 1.9 },
+    { "name": "Scale - Broad", "spend": 541.00, "sales": 284.82, "acos_pct": 189.9, "tos_share_pct": 4.0 },
+    { "name": "Almost Winners - Phrase", "spend": 329.60, "sales": 268.83, "acos_pct": 122.6 },
+    { "name": "Bench - Auto", "spend": 298.40, "sales": 187.08, "acos_pct": 159.5, "tos_share_pct": 6.9 },
+    { "name": "Winners - Exact", "spend": 246.46, "sales": 111.93, "acos_pct": 220.2, "tos_share_pct": 9.0 },
+    { "name": "Bench - Auto V2", "spend": 230.66, "sales": 95.94, "acos_pct": 240.4 }
+  ],
+  "products": [
+    { "name": "Affirmation Cards for Women", "sku": "VL-GTST-2KQT", "spend": 2099.87, "sales": 1237.92, "units": 78, "acos_pct": 169.6 },
+    { "name": "Mom Affirmation Cards", "sku": "OA-4URE-O0AN", "spend": 270.53, "sales": 190.38, "units": 12, "acos_pct": 142.1 }
+  ],
+  "search_terms": [
+    { "term": "affirmation cards for women", "clicks": 169, "cost": 243.47, "sales": 207.87, "purchases": 11 },
+    { "term": "birthday gifts for women", "clicks": 123, "cost": 182.51, "sales": 127.92, "purchases": 8 },
+    { "term": "daily affirmation cards for women", "clicks": 34, "cost": 52.29, "sales": 47.97, "purchases": 3 },
+    { "term": "gifts for women", "clicks": 38, "cost": 55.14, "sales": 47.97, "purchases": 3 },
+    { "term": "self care gifts for women", "clicks": 17, "cost": 21.37, "sales": 31.98, "purchases": 1 }
+  ],
+  "targets": [
+    { "target": "gifts for women", "match": "BROAD", "spend": 293.80, "sales": 63.96, "acos_pct": 459.3 },
+    { "target": "gifts for women", "match": "PHRASE", "spend": 224.03, "sales": 172.89, "acos_pct": 129.6 },
+    { "target": "birthday gifts for women", "match": "BROAD", "spend": 141.29, "sales": 95.94, "acos_pct": 147.3 },
+    { "target": "affirmation cards for women", "match": "EXACT", "spend": 140.90, "sales": 79.95, "acos_pct": 176.2 },
+    { "target": "birthday gift for women", "match": "BROAD", "spend": 131.89, "sales": 191.88, "acos_pct": 68.7 },
+    { "target": "substitutes (PT)", "match": "Auto", "spend": 131.78, "sales": 31.98, "acos_pct": 412.1 }
+  ],
+  "notes": "Every active campaign is above 100% ACoS. 'birthday gift for women' BROAD (68.7%) is the only healthy target. COGS/unit is not yet supplied; breakeven ACoS is computed once it is."
+}
