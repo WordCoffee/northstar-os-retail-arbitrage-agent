@@ -1,26 +1,32 @@
 {
-  "$schema": "subscription-plans-v2",
-  "catalog_version": 2,
-  "description": "Northstar OS subscription plan catalog — SINGLE SOURCE OF TRUTH (A2 unification). v2 relocates the exact catalog previously hard-coded in Northstar_backend/auth.py::PLAN_ENTITLEMENTS (tier names, prices, gate arrays, descriptions unchanged) and supersedes the older master-brain/subscription-plans.json (v1), which had drifted: autothink was missing autothink_workspace and gate order differed. Both backend loaders (auth.py::PLAN_ENTITLEMENTS and master_brain_subscribers.load_plans()) read this one file; a smoke test fails if they ever disagree. Entitlements declare which live gates a plan WOULD cover for a subscriber. A plan never flips a gate: gates_always_off=true, and executing any live action additionally requires a fresh, named operator approval per action. No uncapped/unmetered promises: named credit classes only (see Early Paid Launch Boundary, PRODUCTION_BLUEPRINT §18).",
+  "$schema": "subscription-plans-v3",
+  "catalog_version": 3,
+  "description": "Northstar OS subscription plan catalog — SINGLE SOURCE OF TRUTH. v3 (Phase H/H6) updates DISPLAY NAMES, PRICES, and service coverage to the frozen alpha ladder (Whetstone/Mainstay/Keystone/AutothinK at 39/79/129/179). Plan ids remain stable (foundation/scout/mover/autothink) per the naming scope rule — display labels are cosmetic; ids, gate ids, and routes do not change until a scheduled revision. Entitled gate arrays are UNCHANGED from v2. A plan never flips a gate: gates_always_off=true; every live action additionally requires a fresh, named operator approval per action. Per-tier action caps live in shared/usage-caps.json (enforcement) and credits are the display meter.",
   "gates_always_off": true,
   "currency": "USD",
+  "usage_caps_ref": "shared/usage-caps.json",
+  "naming_note": "Display names only. Internal ids (plan/gate/route/API) are stable until a scheduled revision.",
+  "service_catalog": {
+    "sourcescout": "Prospector",
+    "goldengoose": "Golden Goose",
+    "listingforge": "OfferChisel",
+    "adpilot": "The Auctioneer",
+    "socialpulse": "The Town Crier",
+    "thewatch": "The Watch",
+    "rankledger": "RankLedger",
+    "rivalboard": "The Rival Board",
+    "theledger": "The Ledger",
+    "autothink": "AutothinK",
+    "commandcenter": "Command Center"
+  },
   "plans": [
     {
       "id": "foundation",
-      "name": "Foundation",
+      "name": "Whetstone",
       "tier": 1,
-      "price_usd_month": 0,
-      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse"],
-      "description": "Demo/read-only access",
-      "entitled_gates": []
-    },
-    {
-      "id": "scout",
-      "name": "Scout",
-      "tier": 1,
-      "price_usd_month": 29,
-      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse"],
-      "description": "Product sourcing intelligence",
+      "price_usd_month": 39,
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse", "goldengoose"],
+      "description": "Entry suite — sharpen the hunt (sourcing, listings, ads)",
       "entitled_gates": [
         "sourcescout_live_pull",
         "sourcescout_enrich",
@@ -29,12 +35,28 @@
       ]
     },
     {
-      "id": "mover",
-      "name": "Mover",
-      "tier": 1,
+      "id": "scout",
+      "name": "Mainstay",
+      "tier": 2,
       "price_usd_month": 79,
-      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse"],
-      "description": "Full SourceScout + ListingForge + Ads",
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse", "goldengoose", "thewatch", "rankledger"],
+      "description": "Active brand — monitoring (The Watch + RankLedger) and more data",
+      "entitled_gates": [
+        "sourcescout_live_pull",
+        "sourcescout_enrich",
+        "listingforge_copy",
+        "listingforge_media",
+        "adpilot_ads_read",
+        "socialpulse_attrib"
+      ]
+    },
+    {
+      "id": "mover",
+      "name": "Keystone",
+      "tier": 3,
+      "price_usd_month": 129,
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse", "goldengoose", "thewatch", "rankledger", "rivalboard", "theledger"],
+      "description": "Power brand — pro creatives, competitor monitoring, profitability",
       "entitled_gates": [
         "sourcescout_live_pull",
         "sourcescout_enrich",
@@ -47,9 +69,9 @@
     {
       "id": "autothink",
       "name": "AutothinK",
-      "tier": 2,
-      "price_usd_month": 149,
-      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse", "autothink"],
+      "tier": 4,
+      "price_usd_month": 179,
+      "services": ["sourcescout", "listingforge", "adpilot", "socialpulse", "goldengoose", "thewatch", "rankledger", "rivalboard", "theledger", "autothink"],
       "description": "Everything + AutothinK AI workspace",
       "entitled_gates": [
         "sourcescout_live_pull",

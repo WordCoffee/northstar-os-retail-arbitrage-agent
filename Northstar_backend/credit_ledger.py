@@ -24,12 +24,13 @@ from typing import Dict, List, Optional
 _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CATALOG_PATH = os.path.join(_REPO_ROOT, "shared", "subscription-plans.json")
 
-# Proposed alpha allotments — operator sign-off required (see contract §2).
+# Phase H/H6 — allotments aligned to shared/usage-caps.json credit weights.
+# Values are still operator-confirmable, but no longer the old placeholders.
 PLAN_CREDIT_ALLOTMENT: Dict[str, int] = {
-    "foundation": 0,
-    "scout": 100,
-    "mover": 500,
-    "autothink": 2000,
+    "foundation": 5000,    # Whetstone
+    "scout": 11000,        # Mainstay
+    "mover": 19000,        # Keystone
+    "autothink": 26000,    # AutothinK
 }
 
 DEFAULT_RESERVATION_TTL_SECONDS = 900  # 15 minutes

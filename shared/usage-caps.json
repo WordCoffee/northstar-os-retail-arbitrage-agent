@@ -1,0 +1,119 @@
+{
+  "schema": "usage-caps-v1",
+  "note": "Phase H/H6 — canonical per-tier action caps (single source of truth). Enforcement is by ACTION CAPS; credits are the display meter. Names are display-layer; plan ids are stable. Caps are sized so worst-case cost stays under 40% of price (cost_model.py enforces the invariant).",
+  "currency": "USD",
+  "refund_policy": {
+    "window_days": 7,
+    "credit_rate_usd": 0.0078,
+    "rule": "Partial refund = paid - (credits_consumed x credit_rate_usd). Full refund only when every consumed action came from the zero-cost set (deterministic reads, free-tier API results, mock content). Credits are never refunded as cash."
+  },
+  "tiers": {
+    "whetstone": {
+      "name": "Whetstone",
+      "tier": 1,
+      "price_usd_month": 39,
+      "description": "Entry suite - sharpen the hunt",
+      "caps": {
+        "chat_t1": 750,
+        "gg_scan": 12,
+        "gg_items_per_scan": 12,
+        "listing": 50,
+        "post": 50,
+        "rank_snapshot": 0,
+        "alert": 0,
+        "autothink_t2": 0,
+        "autothink_t3": 0
+      },
+      "images": { "V1": 100, "V2": 0, "V3": 0 }
+    },
+    "mainstay": {
+      "name": "Mainstay",
+      "tier": 2,
+      "price_usd_month": 79,
+      "description": "Active brand - monitoring + more data",
+      "caps": {
+        "chat_t1": 2000,
+        "gg_scan": 60,
+        "gg_items_per_scan": 14,
+        "listing": 150,
+        "post": 150,
+        "rank_snapshot": 3000,
+        "alert": 200,
+        "autothink_t2": 0,
+        "autothink_t3": 0
+      },
+      "images": { "V1": 300, "V2": 0, "V3": 0 }
+    },
+    "keystone": {
+      "name": "Keystone",
+      "tier": 3,
+      "price_usd_month": 129,
+      "description": "Power brand - pro creatives + competitor monitoring",
+      "caps": {
+        "chat_t1": 8000,
+        "gg_scan": 80,
+        "gg_items_per_scan": 15,
+        "listing": 240,
+        "post": 200,
+        "rank_snapshot": 4000,
+        "alert": 500,
+        "autothink_t2": 0,
+        "autothink_t3": 0
+      },
+      "images": { "V1": 0, "V2": 250, "V3": 100 }
+    },
+    "autothink": {
+      "name": "AutothinK",
+      "tier": 4,
+      "price_usd_month": 179,
+      "description": "Everything + the AutothinK AI workspace (T2 + T3)",
+      "caps": {
+        "chat_t1": 8000,
+        "gg_scan": 80,
+        "gg_items_per_scan": 15,
+        "listing": 240,
+        "post": 200,
+        "rank_snapshot": 4000,
+        "alert": 500,
+        "autothink_t2": 300,
+        "autothink_t3": 60
+      },
+      "images": { "V1": 0, "V2": 300, "V3": 150 }
+    }
+  },
+  "credit_weight": {
+    "chat_t1": 1,
+    "post": 4,
+    "listing": 8,
+    "gg_scan": 25,
+    "gg_item": 5,
+    "rank_snapshot": 2,
+    "alert": 2,
+    "autothink_t2": 60,
+    "autothink_t3": 300,
+    "image_v1": 12,
+    "image_v2": 40,
+    "image_v3": 125
+  },
+  "unit_costs_usd": {
+    "chat_t1": 0.0002,
+    "listing": 0.001,
+    "post": 0.002,
+    "autothink_t2": 0.02,
+    "autothink_t3": 0.15,
+    "gg_scan": 0.005,
+    "gg_item": 0.02,
+    "image_v1": 0.006,
+    "image_v2": 0.02,
+    "image_v3": 0.06,
+    "rank_snapshot": 0.001,
+    "alert": 0.001,
+    "fixed_infra": 8.0
+  },
+  "ppc_fee_bands": [
+    { "up_to_usd": 10000, "fee_pct": 0.0, "note": "included in tier" },
+    { "up_to_usd": 50000, "fee_pct": 2.5, "note": "on the band above $10k" },
+    { "up_to_usd": 250000, "fee_pct": 3.0, "note": "on the band above $50k" },
+    { "up_to_usd": null, "fee_pct": 3.5, "note": "on the band above $250k" }
+  ]
+}

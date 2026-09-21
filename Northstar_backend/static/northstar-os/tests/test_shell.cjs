@@ -673,7 +673,7 @@ const acctPlans = els['acct-plans'].innerHTML;
 assert((acctPlans.match(/class="plan-card/g) || []).length === 4, 'account: four plan cards render');
 assert(acctPlans.includes('data-plan="foundation"') && acctPlans.includes('data-plan="autothink"') &&
        acctPlans.includes('data-plan="scout"') && acctPlans.includes('data-plan="mover"'), 'account: all four plan ids rendered');
-assert(acctPlans.includes('$0') && acctPlans.includes('$29') && acctPlans.includes('$79') && acctPlans.includes('$149'), 'account: plan prices render (demo)');
+assert(acctPlans.includes('$39') && acctPlans.includes('$79') && acctPlans.includes('$129') && acctPlans.includes('$179'), 'account: plan prices render (demo)');
 assert(acctPlans.includes('>AutothinK<'), 'account: premium plan spelled AutothinK');
 assert(acctPlans.includes('your plan'), 'account: active plan card is tagged');
 

@@ -38,10 +38,10 @@ def test_plans_list_matches_catalog(client):
 
 def test_plans_list_prices_and_gates_preserved(client):
     data = client.get("/api/v1/plans").json()["data"]["plans"]
-    assert data["foundation"]["price"] == 0
-    assert data["scout"]["price"] == 29
-    assert data["mover"]["price"] == 79
-    assert data["autothink"]["price"] == 149
+    assert data["foundation"]["price"] == 39
+    assert data["scout"]["price"] == 79
+    assert data["mover"]["price"] == 129
+    assert data["autothink"]["price"] == 179
     assert data["autothink"]["gates"] == [
         "sourcescout_live_pull",
         "sourcescout_enrich",
@@ -65,7 +65,7 @@ def test_plan_by_id_autothink(client):
     resp = client.get("/api/v1/plans/autothink")
     assert resp.status_code == 200
     assert resp.json()["data"]["plan"]["name"] == "AutothinK"
-    assert resp.json()["data"]["plan"]["price"] == 149
+    assert resp.json()["data"]["plan"]["price"] == 179
 
 
 def test_plan_by_id_unknown_404(client):
