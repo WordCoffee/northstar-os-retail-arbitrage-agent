@@ -720,6 +720,31 @@ def health():
     return {"status": "ok", "service": "northstar-backend", "version": "1.0.0"}
 
 
+@app.get("/api/v1/models")
+async def list_models():
+    """Phase H/H2 — unified dual-engine Brain catalog (local + cloud + tiers).
+
+    Presence-only flags; never returns credential values.
+    """
+    import model_router
+    installed: list = []
+    try:
+        import httpx
+        resp = httpx.get("http://localhost:11434/api/tags", timeout=2)
+        if resp.status_code == 200:
+            installed = [m.get("name", "") for m in resp.json().get("models", []) if m.get("name")]
+    except Exception:
+        installed = []
+    return {
+        "contract": "bff/v1",
+        "request_id": "req_" + __import__("secrets").token_hex(16),
+        "status": "ok",
+        "data": model_router.catalog(installed),
+        "error": None,
+        "meta": {"service": "brain", "version": "v1"},
+    }
+
+
 @app.get("/health/detailed")
 def health_detailed():
     """Detailed readiness probe — checks data files, provider key presence,

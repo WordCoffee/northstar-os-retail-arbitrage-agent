@@ -91,18 +91,54 @@ class AdapterTests(unittest.TestCase):
 
     def test_cloud_without_key_is_gated(self):
         with mock.patch.dict(os.environ, {}, clear=False):
-            if "OPENAI_API_KEY" in os.environ:
-                os.environ.pop("OPENAI_API_KEY")
+            for k in ("OPENAI_API_KEY", "OPENROUTER_API_KEY"):
+                if k in os.environ:
+                    os.environ.pop(k)
             self.assertFalse(self.adapter.cloud_available())
             result = self.adapter.generate("hi", provider="cloud")
             self.assertFalse(result["ok"])
             self.assertEqual(result["reason"], "no_api_key")
-            self.assertIn("[OPENAI FALLBACK]", result["content"])
+            self.assertIn("[CLOUD FALLBACK]", result["content"])
 
     def test_cloud_availability_reflects_presence_only(self):
         with mock.patch.dict(os.environ, {"OPENAI_API_KEY": "set"}, clear=False):
+            os.environ.pop("OPENROUTER_API_KEY", None)
             self.assertTrue(self.adapter.cloud_available())
         # never leaks the value
+
+    def test_cloud_requires_live_flag_even_with_key(self):
+        with mock.patch.dict(os.environ, {"OPENROUTER_API_KEY": "set"}, clear=False):
+            os.environ.pop("CLOUD_MODEL_LIVE", None)
+            self.assertTrue(self.adapter.cloud_available())
+            self.assertFalse(self.adapter.cloud_live_armed())
+            result = self.adapter.generate("hi", provider="cloud")
+            self.assertFalse(result["ok"])
+            self.assertEqual(result["reason"], "not_approved")
+
+    @mock.patch("backend.llm_adapter.requests.post")
+    def test_openrouter_armed_call_parses_response(self, mock_post):
+        with mock.patch.dict(os.environ, {"OPENROUTER_API_KEY": "set", "CLOUD_MODEL_LIVE": "1"}, clear=False):
+            mock_post.return_value.status_code = 200
+            mock_post.return_value.json.return_value = {
+                "model": "deepseek/deepseek-v4-flash-0731",
+                "choices": [{"message": {"content": "Cloud says hi"}}],
+                "usage": {"prompt_tokens": 9, "completion_tokens": 4},
+            }
+            result = self.adapter.generate("hi", provider="cloud",
+                                           model="deepseek/deepseek-v4-flash-0731")
+            self.assertTrue(result["ok"])
+            self.assertEqual(result["content"], "Cloud says hi")
+            self.assertEqual(result["prompt_tokens"], 9)
+            self.assertEqual(mock_post.call_args.kwargs["json"]["model"],
+                             "deepseek/deepseek-v4-flash-0731")
+
+    @mock.patch("backend.llm_adapter.requests.post")
+    def test_openrouter_armed_http_error_is_fallback(self, mock_post):
+        with mock.patch.dict(os.environ, {"OPENROUTER_API_KEY": "set", "CLOUD_MODEL_LIVE": "1"}, clear=False):
+            mock_post.return_value.status_code = 429
+            result = self.adapter.generate("hi", provider="cloud")
+            self.assertFalse(result["ok"])
+            self.assertIn("[CLOUD FALLBACK]", result["content"])
 
 
 if __name__ == "__main__":

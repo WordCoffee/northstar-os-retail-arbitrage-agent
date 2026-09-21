@@ -21,6 +21,15 @@ for _p in (_ROOT, os.path.dirname(_ROOT)):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
+# The dual-engine Brain router lives in the Northstar backend.
+_BACKEND_DIR = os.path.join(os.path.dirname(_ROOT), "Northstar_backend")
+if _BACKEND_DIR not in sys.path:
+    sys.path.insert(0, _BACKEND_DIR)
+try:
+    import model_router as _model_router
+except ImportError:  # pragma: no cover - defensive
+    _model_router = None
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, Field
@@ -55,6 +64,8 @@ class RunRequest(BaseModel):
     query: str = Field(..., min_length=1, max_length=4000)
     provider: str = Field("local", pattern="^(local|cloud)$")
     model: Optional[str] = None
+    tier: Optional[str] = Field(None, pattern="^(T1|T2|T3|V1|V2|V3)$")
+    prev_tier: Optional[str] = Field(None, pattern="^(T1|T2|T3|V1|V2|V3)$")
 
 
 @app.get("/")
@@ -71,12 +82,18 @@ def health():
 def models():
     installed = adapter.list_local_models()
     local_ok = adapter.local_available()
+    catalog = _model_router.catalog(installed) if _model_router else None
+    cloud_provider = getattr(adapter, "cloud_provider", lambda: None)()
+    cloud_armed = bool(getattr(adapter, "cloud_live_armed", lambda: False)())
     return {
         "local_available": local_ok,
         "cloud_available": adapter.cloud_available(),
+        "cloud_provider": cloud_provider,
+        "cloud_live_armed": cloud_armed,
         "default_local_model": DEFAULT_LOCAL_MODEL,
         "default_cloud_model": DEFAULT_CLOUD_MODEL,
         "models": installed,
+        "catalog": catalog,
     }
 
 
@@ -89,11 +106,26 @@ def run(req: RunRequest):
     route = route_task(query)
     context = build_context(query, route, data_sources=_DATA_SOURCES)
 
-    result = adapter.generate(query, provider=req.provider, model=req.model)
+    # Dual-engine Brain: resolve (provider, tier) -> concrete model + weight.
+    tier = req.tier or "T2"
+    resolution = None
+    effective_model = req.model
+    credit_weight = None
+    if _model_router is not None:
+        resolution = _model_router.resolve(req.provider, tier, req.model)
+        effective_model = resolution.model
+        credit_weight = resolution.credit_weight
+
+    consent = None
+    if _model_router is not None and req.prev_tier:
+        consent = _model_router.consent_prompt(req.prev_tier, tier)
+
+    result = adapter.generate(query, provider=req.provider, model=effective_model)
 
     entry = {
         "track": route["task_class"],
         "provider": req.provider or "local",
+        "tier": tier,
         "model": result.get("model"),
         "ok": result.get("ok", False),
         "task_class": route["task_class"],
@@ -110,6 +142,12 @@ def run(req: RunRequest):
         "query": query,
         "provider": result.get("provider", req.provider),
         "model": result.get("model"),
+        "tier": tier,
+        "credit_weight": credit_weight,
+        "resolved": ({"provider": resolution.provider, "tier": resolution.tier,
+                      "available": resolution.available, "reason": resolution.reason,
+                      "pin": resolution.pin} if resolution else None),
+        "consent": consent,
         "ok": result.get("ok", False),
         "task_class": route["task_class"],
         "label": route["label"],

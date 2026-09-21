@@ -21,8 +21,11 @@ OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_CHAT_ENDPOINT = f"{OLLAMA_BASE_URL}/api/chat"
 OLLAMA_TAGS_ENDPOINT = f"{OLLAMA_BASE_URL}/api/tags"
 
-DEFAULT_LOCAL_MODEL = "qwen3:14b"  # B3: was retired qwen2.5-coder:14b (deleted 2026-09-14 fleet trim)
-DEFAULT_CLOUD_MODEL = "gpt-4o"
+DEFAULT_LOCAL_MODEL = "northstar-qwen3:rev1"  # H2: Master Brain primary (vanilla qwen3:14b selectable)
+DEFAULT_CLOUD_MODEL = "deepseek/deepseek-v4-flash-0731"  # H2: locked DeepSeek lane (§17)
+LEGACY_CLOUD_MODEL = "gpt-4o"
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+CLOUD_FALLBACK_MARK = "[CLOUD FALLBACK]"
 
 # Generation guardrails for long automation prompts. These override the
 # Modelfile defaults at request time so the AutothinK surface is never
@@ -63,8 +66,26 @@ class UnifiedLLMAdapter:
 
     @staticmethod
     def cloud_available() -> bool:
-        """True only if an OPENAI_API_KEY is present. Presence-only check."""
-        return bool(os.environ.get("OPENAI_API_KEY"))
+        """True if a cloud key is present (OpenRouter preferred). Presence-only."""
+        return UnifiedLLMAdapter.cloud_provider() is not None
+
+    @staticmethod
+    def cloud_provider() -> Optional[str]:
+        """Which cloud provider is configured, by KEY PRESENCE only.
+
+        Returns "openrouter" (DeepSeek lane), "openai" (legacy), or None.
+        Credential values are never read, printed, or logged.
+        """
+        if os.environ.get("OPENROUTER_API_KEY"):
+            return "openrouter"
+        if os.environ.get("OPENAI_API_KEY"):
+            return "openai"
+        return None
+
+    @staticmethod
+    def cloud_live_armed() -> bool:
+        """Cloud EXECUTION requires the live flag; presence alone never fires."""
+        return str(os.environ.get("CLOUD_MODEL_LIVE", "")).strip() == "1"
 
     def local_available(self) -> bool:
         """Probe Ollama /api/tags. Zero auth, zero cost."""
@@ -169,27 +190,83 @@ class UnifiedLLMAdapter:
             return self._local_fallback(query, model, reason=str(exc))
 
     def _generate_cloud(self, query: str, model: str) -> Dict:
-        if not self.cloud_available():
+        provider = self.cloud_provider()
+        if provider is None:
             return {
                 "ok": False,
                 "provider": "cloud",
                 "model": model,
                 "content": (
-                    "[OPENAI FALLBACK] Cloud provider is not configured — no OPENAI_API_KEY "
-                    "is present in the environment. Switch to the Local provider to use the "
-                    "offline Ollama model."
+                    CLOUD_FALLBACK_MARK + " Cloud provider is not configured — no "
+                    "OPENROUTER_API_KEY (or legacy OPENAI_API_KEY) is present. "
+                    "Switch to Local to use the offline Ollama model."
                 ),
                 "reason": "no_api_key",
             }
-        # Full cloud code path is implemented here but is live-gated by
-        # cloud_available(). Calls are deliberately NOT executed without an
-        # explicitly approved live run.
+        if not self.cloud_live_armed():
+            return {
+                "ok": False,
+                "provider": "cloud",
+                "model": model,
+                "content": (
+                    CLOUD_FALLBACK_MARK + " Cloud path is coded but gated. Set "
+                    "CLOUD_MODEL_LIVE=1 (with a fresh §3 operator approval) to execute."
+                ),
+                "reason": "not_approved",
+            }
+        if provider != "openrouter":
+            return {
+                "ok": False,
+                "provider": "cloud",
+                "model": model,
+                "content": (
+                    CLOUD_FALLBACK_MARK + " Legacy provider configured; set "
+                    "OPENROUTER_API_KEY for the DeepSeek lane."
+                ),
+                "reason": "provider_not_supported",
+            }
+
+        # Real OpenRouter call — only reachable when armed above.
+        headers = {
+            "Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"],
+            "Content-Type": "application/json",
+        }
+        body = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": self.system_prompt},
+                {"role": "user", "content": query},
+            ],
+            "max_tokens": NUM_PREDICT,
+        }
+        try:
+            resp = requests.post(OPENROUTER_URL, headers=headers, json=body, timeout=self.timeout_s)
+        except requests.RequestException as exc:
+            return self._cloud_fallback(model, str(exc))
+        if resp.status_code != 200:
+            return self._cloud_fallback(model, "openrouter http %s" % resp.status_code)
+        try:
+            payload = resp.json()
+            content = payload["choices"][0]["message"]["content"]
+        except (ValueError, KeyError, IndexError, TypeError):
+            return self._cloud_fallback(model, "malformed openrouter response")
+        usage = payload.get("usage") or {}
+        return {
+            "ok": True,
+            "provider": "cloud",
+            "model": payload.get("model", model),
+            "content": content,
+            "prompt_tokens": usage.get("prompt_tokens"),
+            "completion_tokens": usage.get("completion_tokens"),
+        }
+
+    def _cloud_fallback(self, model: str, reason: str) -> Dict:
         return {
             "ok": False,
             "provider": "cloud",
             "model": model,
-            "content": "[OPENAI FALLBACK] Cloud path is coded but gated; awaiting operator approval to execute.",
-            "reason": "not_approved",
+            "content": CLOUD_FALLBACK_MARK + " Cloud call failed (%s)." % reason,
+            "reason": reason,
         }
 
     def _local_fallback(self, query: str, model: str, reason: str) -> Dict:
