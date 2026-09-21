@@ -39,7 +39,7 @@ def test_plans_by_id_wrapped(client):
     resp = client.get("/api/v1/plans/scout")
     body = resp.json()
     assert body["contract"] == "bff/v1"
-    assert body["data"]["plan"]["price"] == 29
+    assert body["data"]["plan"]["price"] == 79
 
 
 def test_suppliers_list_wrapped(client):

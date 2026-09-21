@@ -34,12 +34,12 @@ def test_credits_meter_demo_foundation(client):
     body = resp.json()
     assert body["contract"] == "bff/v1" and body["status"] == "ok"
     data = body["data"]
-    assert data["balance"] == 0 and data["allotment"] == 0
+    assert data["balance"] == 5000 and data["allotment"] == 5000
     assert data["class"] == "compute" and data["period"] == "month"
 
 
 def test_credits_meter_plan_allotment(client):
-    for plan, expected in (("scout", 100), ("mover", 500), ("autothink", 2000)):
+    for plan, expected in (("scout", 11000), ("mover", 19000), ("autothink", 26000)):
         data = client.get("/api/v1/credits/me", headers=_bearer(plan)).json()["data"]
         assert data["balance"] == expected and data["plan"] == plan
 

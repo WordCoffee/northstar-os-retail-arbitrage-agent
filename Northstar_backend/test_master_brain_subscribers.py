@@ -45,17 +45,22 @@ def test_list_plans_catalog_order():
     assert subs.list_plans() == ["foundation", "scout", "mover", "autothink"]
 
 
-def test_get_plan_foundation_is_free_with_no_gates():
+def test_get_plan_foundation_is_entry_tier_with_gates():
     plan = subs.get_plan("foundation")
-    assert plan["price_usd_month"] == 0
+    assert plan["price_usd_month"] == 39
     assert plan["tier"] == 1
-    assert plan["entitled_gates"] == []
+    assert plan["entitled_gates"] == [
+        "sourcescout_live_pull",
+        "sourcescout_enrich",
+        "listingforge_copy",
+        "adpilot_ads_read",
+    ]
 
 
-def test_get_plan_autothink_is_tier2_premium():
+def test_get_plan_autothink_is_top_tier_premium():
     plan = subs.get_plan("autothink")
-    assert plan["tier"] == 2
-    assert plan["price_usd_month"] == 149
+    assert plan["tier"] == 4
+    assert plan["price_usd_month"] == 179
     assert "autothink" in plan["services"]
 
 
@@ -129,7 +134,7 @@ def test_cli_plans():
 def test_cli_plan_detail():
     code, lines = subs.run_cli(["--plan", "scout"])
     assert code == 0
-    assert "Scout" in lines[0] and "$29" in lines[0]
+    assert "Mainstay" in lines[0] and "$79" in lines[0]
 
 
 def test_cli_plan_unknown_fails_closed():

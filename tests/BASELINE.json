@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created": "2026-09-20T15:30:00Z",
-  "note": "Phase G complete (A1/A2/A3): FIXES_50 leftovers #7 #9 #17 #18 #19 #22 #25 #26b #29; partials closed #38 #43 #45 #48 #21 #46; --docs drift CI; entitlements proposal. Phase F record below.",
+  "note": "Phase H complete (H1-H8): private-alpha gate, dual-engine Brain (model router + OpenRouter DeepSeek lane + unified /api/v1/models), Brain UI selector, 4 new service placeholders, usage meter + cost model, catalog v3 (Whetstone/Mainstay/Keystone/AutothinK 39/79/129/179), Word Coffee fixture + test plan, private-alpha deploy runbook.",
   "known_exceptions": {
     "ignored": [],
     "ignored_reason": "NONE \u2014 test_single_match.py hygiene fixed under Phase F/S3; re-included in the standard suite.",
@@ -13,7 +13,7 @@
   },
   "baseline": {
     "backend": {
-      "passed": 2279,
+      "passed": 2328,
       "failed": 2,
       "skipped": 3,
       "subtests": 48
@@ -27,7 +27,7 @@
       "failed": 0
     },
     "shell": {
-      "passed": 251,
+      "passed": 268,
       "failed": 0
     },
     "functions": {

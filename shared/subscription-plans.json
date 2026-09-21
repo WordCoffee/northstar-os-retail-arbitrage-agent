@@ -63,6 +63,7 @@
         "listingforge_copy",
         "listingforge_media",
         "adpilot_ads_read",
+        "adpilot_bulk_exec",
         "socialpulse_attrib"
       ]
     },

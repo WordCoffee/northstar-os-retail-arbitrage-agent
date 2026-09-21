@@ -100,7 +100,7 @@ def test_ledger_is_append_only_and_balance_equals_sum():
 
 
 def test_allotment_for_plan_validated_against_catalog():
-    assert allotment_for_plan("foundation") == 0
-    assert allotment_for_plan("autothink") == 2000
+    assert allotment_for_plan("foundation") == 5000
+    assert allotment_for_plan("autothink") == 26000
     with pytest.raises(UnknownPlanError):
         allotment_for_plan("enterprise_plus")
