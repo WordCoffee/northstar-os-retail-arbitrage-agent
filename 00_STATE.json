@@ -2,7 +2,7 @@
     "test_baseline": {
         "python": "2328 passed, 2 known failures (pre-existing protected-hash drift), 3 skipped, 48 subtests",
         "golden_goose": "511 passed, 0 failures (module suite)",
-        "ui_shell_functions": "UI 1122 / Shell 268 / Functions 31 passed",
+        "ui_shell_functions": "UI 1122 / Shell 286 / Functions 31 passed",
         "updated_at": "2026-09-21",
         "phase": "Phase H complete — private alpha launch (dual-engine Brain, alpha gate, catalog v3)"
     },
