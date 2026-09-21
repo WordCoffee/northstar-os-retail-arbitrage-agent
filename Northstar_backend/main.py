@@ -201,6 +201,11 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
 )
 
+# 5. Private-alpha gate (Phase H / H1) — outermost so it blocks earliest.
+# Locked to NORTHSTAR_ALPHA_ALLOWLIST when NORTHSTAR_PRIVATE_ALPHA=1.
+from alpha_gate import AlphaGateMiddleware  # noqa: E402
+app.add_middleware(AlphaGateMiddleware)
+
 # Golden Goose Finder — multi-pack breakdown arbitrage scanner
 if _HAS_GOLDEN_GOOSE:
     app.include_router(golden_goose_router)
