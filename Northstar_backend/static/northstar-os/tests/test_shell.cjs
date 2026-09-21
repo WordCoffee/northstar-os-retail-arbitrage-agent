@@ -16,11 +16,11 @@ const vm = require('vm');
 const ROOT = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const scriptParts = [
-    'engine.js', 'demo-data.js', 'hub.js', 'sourcescout.js',
+    'engine.js', 'demo-data.js', 'brain.js', 'hub.js', 'sourcescout.js',
     'listingforge.js', 'adpilot.js', 'socialpulse.js', 'autothink.js',
     'account.js',
 ].map((f) => fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'));
-const boot = 'window.NS.init();';
+const boot = 'window.NS.init(); if (window.NS.brain && window.NS.brain.init) window.NS.brain.init();';
 const script = scriptParts.join('\n;\n') + '\n' + boot;
 
 let failures = 0;
@@ -175,11 +175,13 @@ const raw = fs.readFileSync(path.join(ROOT, 'js', 'demo-data.js'), 'utf8');
 assert(raw.includes('demo'), 'honesty: demo-data module is explicitly labeled demo');
 assert(!raw.includes('fetch(') && !raw.includes('XMLHttpRequest'), 'zero-network: demo-data has no network calls');
 const allJs = scriptParts.join('\n');
-assert(!allJs.includes('fetch(') && !allJs.includes('XMLHttpRequest'), 'zero-network: no shell script uses fetch or XHR');
+const nonBrainJs = scriptParts.filter((s) => !s.includes('NS.brain')).join('\n');
+assert(!nonBrainJs.includes('fetch(') && !nonBrainJs.includes('XMLHttpRequest'), 'zero-network: shell scripts (except Brain) use no fetch/XHR');
+assert(allJs.includes("fetch('/api/v1/models')"), 'brain: the sole network call is the local model catalog read');
 assert(!html.includes('fetch('), 'zero-network: shell index.html has no fetch calls');
 assert(html.includes('data-live-gate="off"'), 'honesty: shell markup carries data-live-gate="off" on gated controls');
 assert((html.match(/Authorization required/g) || []).length === 1, 'gates: "Authorization required" appears exactly once (drawer footnote), not in static banners');
-assert((html.match(/demo-badge/g) || []).length === 7, 'honesty: seven demo badges in shell markup');
+assert((html.match(/demo-badge/g) || []).length === 11, 'honesty: eleven demo badges in shell markup (7 + 4 new services)');
 
 /* all authorization gates start OFF */
 Object.keys(NS.gates).forEach((name) => {
@@ -361,7 +363,7 @@ NS.go('autothink');
 assert(els['view-autothink'].classList.contains('active'), 'autothink: route mounts workspace view');
 assert(html.includes('AutothinK'), 'autothink: brand spelled AutothinK in shell markup');
 assert(html.includes('id="at-workspace"'), 'autothink: workspace iframe present in shell');
-assert((html.match(/<button class="nav-item"/g) || []).length === 7, 'shell: drawer holds 7 nav items (hub + 4 services + autothink + account)');
+assert((html.match(/<button class="nav-item"/g) || []).length === 11, 'shell: drawer holds 11 nav items (hub + ledger + 4 services + 3 monitoring + autothink + account)');
 assert(html.includes("Northstar OS — The Analyst's Desk"), 'shell: document title matches Analyst\u2019s Desk');
 assert(html.includes('css/tokens.css') && html.includes('css/shell.css'), 'shell: css wired');
 
@@ -730,6 +732,40 @@ assert(JSON.stringify(demoPlansA3).includes('Everything + AutothinK AI workspace
     'a3: demo autothink blurb matches the canonical description');
 assert((NS.DEMO().subscriber.gateStateNote || '').includes('shared/subscription-plans.json'),
     'a3: demo mirror cites the canonical catalog path');
+
+/* ==========================================================================
+ * H3 — dual-engine Brain switch + four new service placeholders
+ * ========================================================================== */
+assert(html.includes('id="brain-provider"') && html.includes('id="brain-tier"'),
+    'brain: provider + tier selects present in the ribbon');
+assert(!!NS.brain, 'brain: module exposed on NS');
+assert(NS.brain.state().provider === 'local' && NS.brain.state().tier === 'T2',
+    'brain: defaults to local · T2');
+const brainReq = NS.brain.buildRequest();
+assert(brainReq.provider === 'local' && brainReq.tier === 'T2', 'brain: buildRequest returns the selected engine');
+
+/* switching provider/tier is reflected + persisted */
+NS.brain.set('cloud', 'T3');
+assert(NS.brain.state().provider === 'cloud' && NS.brain.state().tier === 'T3', 'brain: set() updates provider + tier');
+assert(NS.brain.buildRequest().tier === 'T3', 'brain: buildRequest follows set()');
+NS.brain.set('local', 'T2'); /* reset */
+
+/* honest offline state when no catalog has been fetched */
+NS.brain.renderState();
+assert(els['brain-state'].textContent.indexOf('offline') !== -1, 'brain: honest offline state before catalog fetch');
+
+/* the four new service placeholders exist with honest slots */
+[['view-theledger', 'theledger-placeholder', 'The Ledger'],
+ ['view-thewatch', 'thewatch-placeholder', 'The Watch'],
+ ['view-rankledger', 'rankledger-placeholder', 'RankLedger'],
+ ['view-rivalboard', 'rivalboard-placeholder', 'The Rival Board'],
+].forEach((t) => {
+    assert(html.includes('id="' + t[0] + '"'), 'new service: view ' + t[0] + ' present');
+    assert(html.includes('data-slot="' + t[1] + '"'), 'new service: honest placeholder slot ' + t[1]);
+});
+assert(html.includes('id="nav-thewatch"') && html.includes('id="nav-rankledger"')
+    && html.includes('id="nav-rivalboard"') && html.includes('id="nav-theledger"'),
+    'new services: four nav items registered');
 
 console.log('\nShell contract complete.');
 console.log(failures === 0 ? 'ALL GREEN' : failures + ' FAILURES');
