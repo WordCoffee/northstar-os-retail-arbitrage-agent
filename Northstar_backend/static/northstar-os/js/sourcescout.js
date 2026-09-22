@@ -210,6 +210,7 @@
     a.setAttribute('href', URL.createObjectURL(blob));
     a.setAttribute('download', 'sourcescout-worksheet.csv');
     a.click();
+    if (NS.toast) NS.toast('Worksheet exported (' + rows.length + ' rows, demo CSV)', 'success');
   }
 
   function onMount() {

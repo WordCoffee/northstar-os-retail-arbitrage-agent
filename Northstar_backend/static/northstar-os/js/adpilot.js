@@ -227,9 +227,11 @@
     if (parseBtn && !parseBtn._apParseBound) {
       parseBtn._apParseBound = true;
       parseBtn.addEventListener('click', function () {
+        if (NS.spin) NS.spin(parseBtn, 700, 'Parsing…');
         var rows = parseBulkCsv(csvSrc ? csvSrc.value : FIXTURE_CSV);
         bulkRows = rows;
         renderBulkRows(rows);
+        if (NS.toast) NS.toast('Bulk sheet parsed — ' + rows.length + ' rows annotated (demo)', 'success');
       });
     }
 

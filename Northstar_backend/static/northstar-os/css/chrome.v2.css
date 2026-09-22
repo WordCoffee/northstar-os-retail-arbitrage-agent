@@ -699,6 +699,15 @@ table.svc th[data-sort]:hover { color: var(--ink); }
 /* the shell's inline <style> block references legacy gold/bg vars; the tokens
    above remap them, so nothing more is needed here. */
 
+/* spinner + busy state (I4) */
+.spinner {
+  width: 14px; height: 14px; border: 2px solid var(--hairline);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: nsSpin .7s linear infinite; display: inline-block; vertical-align: -2px;
+}
+@keyframes nsSpin { to { transform: rotate(360deg); } }
+.btn[aria-busy="true"], button[aria-busy="true"] { opacity: .8; cursor: progress; }
+
 /* ------------------------------------------------------- 26. RESPONSIVE */
 @media (max-width: 1200px) { #board { display: none; } :root { --board-w: 0px; } }
 @media (max-width: 980px) {

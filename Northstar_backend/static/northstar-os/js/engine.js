@@ -299,6 +299,45 @@
     }
   };
 
+  // ---------------- TOASTS / INTERACTION STATES (I4) ----------------
+  NS.toast = function (message, kind, ms) {
+    var host = $id('toast-container');
+    if (!host || !document.createElement) return;
+    kind = kind || 'info';
+    var t = document.createElement('div');
+    t.className = 'toast toast-' + kind;
+    t.setAttribute('role', 'status');
+    t.textContent = message;
+    host.appendChild(t);
+    var wait = ms || 3600;
+    setTimeout(function () {
+      if (t.parentNode) t.parentNode.removeChild(t);
+    }, wait);
+  };
+  NS.spin = function (btn, ms, label) {
+    if (!btn) return;
+    var orig = btn.textContent;
+    var wasDisabled = btn.disabled;
+    btn.disabled = true;
+    btn.setAttribute('aria-busy', 'true');
+    btn.textContent = (label || 'Working…');
+    setTimeout(function () {
+      btn.disabled = wasDisabled;
+      btn.removeAttribute('aria-busy');
+      btn.textContent = orig;
+    }, ms || 800);
+  };
+  NS.bindToastButtons = function () {
+    $qa('[data-toast]').forEach(function (btn) {
+      if (btn._toastBound) return;
+      btn._toastBound = true;
+      btn.addEventListener('click', function () {
+        var msg = btn.getAttribute('data-toast') || 'Done.';
+        NS.toast(msg, btn.getAttribute('data-toast-kind') || 'info');
+      });
+    });
+  };
+
   // ---------------- HELPERS ----------------
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -324,6 +363,7 @@
     NS.bindDrawer();
     NS.bindPaperclip();
     NS.bindSearch();
+    NS.bindToastButtons();
     $qa('.gate-banner[data-gate]').forEach(function (el) {
       NS.renderGateBanner(el, el.getAttribute('data-gate'));
     });

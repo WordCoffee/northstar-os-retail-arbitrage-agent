@@ -390,7 +390,7 @@
               <span class="facet-check"><input type="checkbox" id="facet-consumable" aria-label="Consumables first"> Consumables first</span>
             </span>
           </div>
-          <button id="ss-export" class="btn gold">Export Worksheet (CSV·demo)</button>
+          <button id="ss-export" class="btn gold" data-toast="Worksheet exported (demo CSV)" data-toast-kind="success">Export Worksheet (CSV·demo)</button>
           <button id="ss-open-workbench" class="btn ghost">Open full workbench</button>
           <a href="/golden-goose/" class="btn" style="text-decoration:none">🦆 Golden Goose Finder</a>
           <span id="ss-result-count" class="dim" style="margin-left:auto"></span>
@@ -570,7 +570,7 @@
           <div class="panel-head"><h3>CSV Dock</h3><span class="hint">fixture bulk sheet · parse &amp; annotate decisions</span></div>
           <textarea id="ap-csv-src" class="editor" rows="4" aria-label="Bulk ops CSV source (fixture)"></textarea>
           <div class="editor-meta">
-            <button id="ap-parse-csv" class="btn small steel">Parse sheet (demo)</button>
+            <button id="ap-parse-csv" class="btn small steel" data-toast="Bulk sheet parsed (demo)" data-toast-kind="success">Parse sheet (demo)</button>
             <span id="ap-bulk-count" class="char-count"></span>
           </div>
           <div class="notice">Nothing here is executed: bid changes and negatives are only ever <em>drafted</em>. Upload to Amazon requires explicit operator approval.</div>
@@ -600,8 +600,8 @@
           <div class="panel-head"><h3>Content Studio</h3><span class="hint">fixture templates · re-generatable · demo</span></div>
           <div class="studio-console">
             <select id="soc-cs-channel" aria-label="Channel"><option value="meta">Meta</option><option value="instagram">Instagram</option><option value="tiktok">TikTok</option></select>
-            <button id="soc-cs-generate" class="btn small steel">Generate caption (demo)</button>
-            <button id="soc-cs-schedule" class="btn small gold">Schedule this caption</button>
+            <button id="soc-cs-generate" class="btn small steel" data-toast="Caption generated (demo)" data-toast-kind="success">Generate caption (demo)</button>
+            <button id="soc-cs-schedule" class="btn small gold" data-toast="Scheduled as demo draft" data-toast-kind="success">Schedule this caption</button>
           </div>
           <div id="soc-cs-output"></div>
         </div>
@@ -787,6 +787,9 @@
     </aside>
 
   </div>
+
+  <!-- ===================== TOASTS ===================== -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
   <!-- ===================== COMMAND PALETTE (Ctrl/Cmd+K) ===================== -->
   <div id="palette" class="palette" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
