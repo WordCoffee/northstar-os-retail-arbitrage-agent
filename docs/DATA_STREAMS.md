@@ -21,7 +21,11 @@ All in `Northstar_backend/agents/golden_goose_finder/free_tier_registry.py`. Tas
 | **Scavio** | ~500 | search, product | fallback |
 | **RapidAPI pool** | ~600/mo | amazon_product | 6 hosts |
 | **EasyParser** | 41 | amazon_offers | seller identity snapshots |
-| **Scrapingdog/Bee/Badger/AmazonScraperApi/APIclaw** | 200–1,000 | search/product/offers | keys NOT yet obtained — signup needed |
+| **Scrapingdog** | 200 | search/product/offers | key obtained 2026-09-22 |
+| **ScrapeBee** | 1,000 | search/product | key obtained 2026-09-22 |
+| **ScrapeBadger** | 1,000 | product/search/offers | key obtained 2026-09-22 |
+| **AmazonScraperApi** | 1,000 | search/product | key obtained 2026-09-22 |
+| **APIclaw** | 1,000 | search/product/offers | key obtained 2026-09-22 |
 
 Router behavior: waterfall (a provider failure falls through to the next), credit
 ledger per provider, §3 gate (`GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED=1`), never invents
@@ -81,8 +85,9 @@ sell-through to find high-ROI Golden Goose candidates (tier A: clears every gate
       writes to `data_layer` (ProductsDB) — then Golden Goose scans the stocked catalog.
 - [ ] Add a "pull fresh" path in Prospector that routes a live search when the stocked
       DB misses, and stores the result.
-- [ ] Backfill the remaining free keys (Scrapingdog/Bee/Badger/AmazonScraperApi/APIclaw)
-      to deepen the waterfall.
+- [x] Backfill the remaining free keys (Scrapingdog/Bee/Badger/AmazonScraperApi/APIclaw)
+      — DONE 2026-09-22, written to `.env`; also `APIFY_API_TOKEN` stored for a future
+      adapter (Apify Sam's Club was removed as a paid source — not wired into the router).
 - [ ] Remove demo fixtures from services with live data available; keep honest empty
       states until stocked.
 - [ ] Replace Kirkland-era fixtures with the stocked, non-Kirkland data.
