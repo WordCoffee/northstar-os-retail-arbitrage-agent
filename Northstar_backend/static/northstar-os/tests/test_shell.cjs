@@ -329,7 +329,7 @@ assert(lfDetail2.includes('medical_claim'), 'listingforge: second-fixture compli
  * ============================================================ */
 NS.go('adpilot');
 const kwBody = els['ap-kw-body'].innerHTML;
-assert((kwBody.match(/class="row-card"/g) || []).length === 5, 'adpilot: 5 keyword rows');
+assert((kwBody.match(/class="row-card"/g) || []).length >= 20, 'adpilot: dense keyword table (>=20 rows)');
 assert(kwBody.includes('affirmation cards for women'), 'adpilot: harvest row present');
 assert(kwBody.includes('PROMOTED') && kwBody.includes('DEMOTED'), 'adpilot: movement pills rendered');
 assert(kwBody.includes('needs approval'), 'adpilot: needs-approval zone surfaced');
@@ -470,8 +470,8 @@ assert(NS.ap.bandFor(null, 3).band === 'no ACoS', 'adpilot: missing ACoS reporte
 /* harvester table carries band-rule bid delta cells; band previews render */
 NS.go('adpilot');
 const apDeep = els['ap-kw-body'].innerHTML;
-assert((apDeep.match(/data-bid-delta=/g) || []).length === 3, 'adpilot: bid-delta cells rendered for keywords with ACoS + data');
-assert((els['ap-band-previews'].innerHTML.match(/data-band-preview=/g) || []).length === 3, 'adpilot: per-keyword band previews rendered');
+assert((apDeep.match(/data-bid-delta=/g) || []).length === 23, 'adpilot: bid-delta cells rendered for keywords with ACoS + data');
+assert((els['ap-band-previews'].innerHTML.match(/data-band-preview=/g) || []).length === 23, 'adpilot: per-keyword band previews rendered');
 assert(els['ap-band-previews'].innerHTML.includes('+30%'), 'adpilot: band preview shows +15/+30% for sub-15 ACoS keyword');
 assert(els['ap-bulk-count'].textContent.includes('3 rows parsed'), 'adpilot: bulk dock reports parsed row count');
 
