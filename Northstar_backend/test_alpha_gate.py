@@ -108,3 +108,25 @@ def test_middleware_allows_when_alpha_off(monkeypatch):
     from main import app
     c = TestClient(app)
     assert c.get("/api/v1/plans").status_code in (200, 404)
+
+
+def test_root_redirects_to_workspace_in_private_alpha(monkeypatch):
+    monkeypatch.setenv("NORTHSTAR_PRIVATE_ALPHA", "1")
+    monkeypatch.setenv("NORTHSTAR_ALPHA_ALLOWLIST", "op@x.com")
+    monkeypatch.setenv("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
+    from fastapi.testclient import TestClient
+    from main import app
+    c = TestClient(app)
+    r = c.get("/", follow_redirects=False)
+    assert r.status_code == 307
+    assert r.headers["location"] == "/northstar-os/"
+
+
+def test_root_serves_landing_when_alpha_off(monkeypatch):
+    monkeypatch.delenv("NORTHSTAR_PRIVATE_ALPHA", raising=False)
+    monkeypatch.setenv("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
+    from fastapi.testclient import TestClient
+    from main import app
+    c = TestClient(app)
+    r = c.get("/", follow_redirects=False)
+    assert r.status_code == 200

@@ -5,6 +5,42 @@ with both AI engines. Payment is deferred (manual invoicing later).
 
 ---
 
+## 0. The free, private, full-UX path (start here)
+
+**You do not need to deploy anything to test the complete service UX.** The
+Cloudflare **quick tunnel** already serves the entire suite from your machine:
+
+```
+you  ->  https://<random>.trycloudflare.com   (Cloudflare Access: your email)
+              ->  local backend :8000
+                    /northstar-os/   the full suite (every service, real UI)
+                    /autothink/      the AutothinK workspace (same-origin)
+                    /api/*           real APIs + the Brain model switch
+                    Ollama :11434    LOCAL engine (free, private)
+                    OpenRouter       CLOUD engine (opt-in, gated)
+```
+
+- **Free:** Cloudflare Tunnel + Access free tier; Ollama free; no hosting bill.
+- **Private:** Cloudflare Access allow-lists only your email; the in-app alpha
+  gate (`NORTHSTAR_PRIVATE_ALPHA=1`) is a second lock. In private-alpha mode
+  the tunnel **root redirects into the workspace**, so the URL behaves like the
+  real product.
+- **Full UX:** nothing is mocked away — it *is* the product shell, talking to
+  the real backend.
+
+### Two caveats (both expected)
+1. **The URL changes on every `cloudflared` restart** (quick tunnels are
+   ephemeral) - re-point the Access application to the new hostname.
+2. `cloudflared` must be reachable; the launcher auto-detects common install
+   paths, or pass `-CloudflaredPath <path to cloudflared.exe>`.
+
+### Later (when you buy a domain for subscriptions)
+Promote to a **named tunnel** on your domain: `app.<yourdomain>` with a stable
+hostname (no re-pointing), DNS + Access on your own zone, and the same
+everything-else. No code changes - only the tunnel type and the Access app.
+
+---
+
 ## 1. Topology (what actually serves what)
 
 ```

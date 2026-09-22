@@ -23,6 +23,7 @@
 
 param(
     [string]$Email = "northstarosllc@gmail.com",
+    [string]$CloudflaredPath = "",
     [switch]$Cloud,
     [switch]$NoTunnel,
     [switch]$NoAutothink,
@@ -40,6 +41,22 @@ $StateFile   = Join-Path $env:TEMP "northstar-alpha-pids.json"
 $TunnelLog   = Join-Path $env:TEMP "northstar-tunnel.log"
 
 function Have-Cmd($name) { return [bool](Get-Command $name -ErrorAction SilentlyContinue) }
+
+function Resolve-Cloudflared() {
+    if ($CloudflaredPath -and (Test-Path $CloudflaredPath)) { return $CloudflaredPath }
+    if (Have-Cmd "cloudflared") { return "cloudflared" }
+    $candidates = @(
+        (Join-Path $env:ProgramFiles "cloudflared\cloudflared.exe"),
+        (Join-Path ${env:ProgramFiles(x86)} "cloudflared\cloudflared.exe"),
+        (Join-Path $env:LOCALAPPDATA "cloudflared\cloudflared.exe"),
+        (Join-Path $env:USERPROFILE "cloudflared.exe"),
+        "C:\ProgramData\chocolatey\bin\cloudflared.exe"
+    )
+    foreach ($c in $candidates) { if ($c -and (Test-Path $c)) { return $c } }
+    $wg = Get-ChildItem (Join-Path $env:LOCALAPPDATA "Microsoft\WinGet\Packages") -Filter "cloudflared.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($wg) { return $wg.FullName }
+    return $null
+}
 
 function Port-Busy($port) {
     try { return [bool](Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue) }
@@ -78,14 +95,16 @@ Write-Host ("Email:  {0}" -f $Email)
 $cloudTxt = if ($Cloud) { 'ARMED (real spend on run)' } else { 'disarmed (local only)' }
 Write-Host ("Cloud:  {0}" -f $cloudTxt)
 
+$cf = Resolve-Cloudflared
 $missing = @()
 if (-not (Have-Cmd "python"))      { $missing += "python" }
 if (-not (Have-Cmd "ollama"))      { $missing += "ollama" }
-if (-not $NoTunnel -and -not (Have-Cmd "cloudflared")) { $missing += "cloudflared" }
+if (-not $NoTunnel -and -not $cf)  { $missing += "cloudflared" }
 
 if ($missing.Count -gt 0) {
     Write-Host ("MISSING tools: {0}" -f ($missing -join ", ")) -ForegroundColor Red
     Write-Host "Install them, or pass -NoTunnel to skip cloudflared."
+    Write-Host "For cloudflared you can also pass -CloudflaredPath <path to cloudflared.exe>."
     exit 1
 }
 
@@ -100,6 +119,7 @@ if ($Check) {
     Write-Host ("  autothink: {0}  (port 8100 {1})" -f $AutoDir, $p8100)
     Write-Host ("  ollama   : {0}" -f $ol)
     Write-Host ("  tunnel   : {0}" -f $tn)
+    Write-Host ("  cloudflared: {0}" -f $(if ($cf) { $cf } else { 'not found' }))
     Write-Host "Run without -Check to launch."
     exit 0
 }
@@ -162,7 +182,7 @@ $tunnelUrl = $null
 if (-not $NoTunnel) {
     Write-Host "Tunnel: starting cloudflared..."
     Remove-Item $TunnelLog -Force -ErrorAction SilentlyContinue
-    $t = Start-Process -FilePath "cloudflared" -PassThru -WindowStyle Minimized -ArgumentList @(
+    $t = Start-Process -FilePath $cf -PassThru -WindowStyle Minimized -ArgumentList @(
         "tunnel", "--url", "http://127.0.0.1:8000", "--logfile", $TunnelLog
     )
     $launched += @{ name = "cloudflared"; id = $t.Id }

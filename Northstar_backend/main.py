@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI, HTTPException, Depends, Request, Body, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Any, Dict, List, Optional
@@ -142,7 +142,14 @@ if AUTOTHINK_DIR.exists():
 
 @app.get("/", include_in_schema=False)
 def serve_scout():
-    """Root serves the landing page."""
+    """Root serves the landing page — except in private alpha, where the root
+    is the workspace itself (so the tunnel URL behaves like the real product)."""
+    try:
+        from alpha_gate import private_alpha_enabled
+        if private_alpha_enabled():
+            return RedirectResponse(url="/northstar-os/", status_code=307)
+    except Exception:
+        pass
     return FileResponse(STATIC_DIR / "landing" / "index.html")
 
 
