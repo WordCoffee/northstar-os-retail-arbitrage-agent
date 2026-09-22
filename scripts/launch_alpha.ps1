@@ -26,6 +26,7 @@ param(
     [string]$CloudflaredPath = "",
     [switch]$Cloud,
     [switch]$Gate,
+    [switch]$Restart,
     [switch]$NoTunnel,
     [switch]$NoAutothink,
     [switch]$Check,
@@ -72,6 +73,28 @@ function Ollama-Up() {
 }
 
 function Banner($text) { Write-Host $text -ForegroundColor Cyan }
+
+function Stop-Listeners($ports) {
+    foreach ($port in $ports) {
+        try {
+            $conns = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
+            foreach ($c in @($conns)) {
+                try {
+                    Stop-Process -Id $c.OwningProcess -Force -ErrorAction SilentlyContinue
+                    Write-Host ("restart: stopped pid {0} on :{1}" -f $c.OwningProcess, $port) -ForegroundColor Yellow
+                } catch { }
+            }
+        } catch { }
+    }
+    Start-Sleep -Milliseconds 800
+}
+
+function Shell-Assets-Ok() {
+    try {
+        $a = Invoke-WebRequest -Uri "http://127.0.0.1:8000/northstar-os/css/tokens.css" -TimeoutSec 3 -UseBasicParsing
+        return ($a.StatusCode -eq 200)
+    } catch { return $false }
+}
 
 # ---------------------------------------------------------------- -Stop
 if ($Stop) {
@@ -127,6 +150,12 @@ if ($Check) {
     exit 0
 }
 
+# ------------------------------------------------------------- -Restart
+if ($Restart) {
+    Write-Host "Restart: stopping any listener on :8000 / :8100 ..."
+    Stop-Listeners @(8000, 8100)
+}
+
 # ------------------------------------------------------------- environment
 # Child processes inherit these.
 if ($Gate) { $env:NORTHSTAR_PRIVATE_ALPHA = "1" } else { Remove-Item Env:\NORTHSTAR_PRIVATE_ALPHA -ErrorAction SilentlyContinue }
@@ -150,6 +179,8 @@ if (Ollama-Up) {
 # ------------------------------------------------------------- 2. Backend
 if (Port-Busy 8000) {
     Write-Host "Backend: port 8000 already in use - leaving it as-is." -ForegroundColor Yellow
+    Write-Host "  WARNING: a running backend may be STALE (old code). If the UI looks" -ForegroundColor Yellow
+    Write-Host "  unstyled / buttons do nothing, relaunch with -Restart." -ForegroundColor Yellow
 } else {
     Write-Host "Backend: starting on :8000..."
     $b = Start-Process -FilePath "powershell" -PassThru -WindowStyle Minimized -ArgumentList @(
@@ -207,6 +238,13 @@ Write-Host ""
 Banner "== READY =="
 $healthTxt = if ($ready) { '(health OK)' } else { '(health not responding yet)' }
 Write-Host ("Local suite : http://127.0.0.1:8000/northstar-os/   {0}" -f $healthTxt) -ForegroundColor Green
+$assetsOk = $ready -and (Shell-Assets-Ok)
+if (-not $assetsOk) {
+    Write-Host "  WARNING: the shell's CSS/JS are NOT served -> the UI will look unstyled." -ForegroundColor Red
+    Write-Host "           You are likely running a STALE backend. Relaunch with -Restart." -ForegroundColor Red
+} else {
+    Write-Host "  assets OK: stylesheets + scripts served (styled, interactive UI)" -ForegroundColor Green
+}
 Write-Host  "AutothinK   : http://127.0.0.1:8000/autothink/ui/index.html  (same-origin iframe)"
 Write-Host  "Local engine: Ollama on 127.0.0.1:11434"
 $cloudEngine = if ($Cloud) { 'ARMED - CLOUD_MODEL_LIVE=1' } else { 'disarmed (set -Cloud or CLOUD_MODEL_LIVE=1 to arm)' }
@@ -229,6 +267,7 @@ if ($tunnelUrl) {
 Write-Host ""
 Write-Host "Local URL   : http://127.0.0.1:8000/northstar-os/   (no tunnel needed for same-machine testing)"
 Write-Host "Gate on/off : launch with -Gate to enable the in-app allowlist"
+Write-Host "After code changes : powershell -File scripts\launch_alpha.ps1 -Restart"
 Write-Host "Stop everything : powershell -File scripts\launch_alpha.ps1 -Stop"
 Write-Host "Runbook         : docs/PRIVATE_ALPHA_DEPLOY.md"
 exit 0

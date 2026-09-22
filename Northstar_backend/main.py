@@ -161,10 +161,16 @@ def serve_landing():
     return FileResponse(STATIC_DIR / "landing" / "index.html")
 
 
-@app.get("/northstar-os/", include_in_schema=False)
-@app.get("/northstar-os", include_in_schema=False)
-def serve_northstar_os():
-    return FileResponse(NORTHSTAR_OS_DIR / "index.html")
+# FIX (critical): the shell loads its css/js as RELATIVE paths
+# (css/tokens.css, js/engine.js) resolved against /northstar-os/. A single
+# index route left every asset at 404 -> the suite rendered as unstyled HTML
+# with dead JavaScript. Mount the whole directory (html=True serves index.html
+# for the directory request and 307s /northstar-os -> /northstar-os/).
+app.mount(
+    "/northstar-os",
+    StaticFiles(directory=str(NORTHSTAR_OS_DIR), html=True),
+    name="northstar-os",
+)
 
 
 @app.get("/workbench", include_in_schema=False)
