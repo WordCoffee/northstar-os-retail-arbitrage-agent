@@ -38,11 +38,12 @@
     var tbody = getEl('led-sku-body');
     if (!tbody) return;
     if (!skus || !skus.length) {
-      tbody.innerHTML = '<tr><td colspan="9" class="service-empty">No P&L rows in this fixture.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="10" class="service-empty">No P&L rows in this fixture.</td></tr>';
       return;
     }
     tbody.innerHTML = skus.map(function (s) {
       return '<tr class="row-card" data-sku="' + NS.escapeHtml(s.sku) + '">' +
+        '<td class="img-cell">' + NS.img(s.image, s.name, 'img-tile') + '</td>' +
         '<td class="dim">' + NS.escapeHtml(s.sku) + '</td>' +
         '<td>' + NS.escapeHtml(s.name) + '</td>' +
         '<td class="num">' + NS.fmt(s.units) + '</td>' +

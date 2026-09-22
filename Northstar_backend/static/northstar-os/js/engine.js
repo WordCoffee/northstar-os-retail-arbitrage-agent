@@ -83,7 +83,7 @@
   };
 
   // ---------------- ROUTER ----------------
-  var ROUTES = ['hub', 'sourcescout', 'listingforge', 'adpilot', 'socialpulse', 'autothink', 'account', 'theledger', 'thewatch', 'rankledger', 'rivalboard'];
+  var ROUTES = ['hub', 'sourcescout', 'goldengoose', 'listingforge', 'adpilot', 'socialpulse', 'autothink', 'account', 'theledger', 'thewatch', 'rankledger', 'rivalboard'];
   NS.currentRoute = function () {
     var h = (location.hash || '').replace(/^#\/?/, '');
     return ROUTES.indexOf(h) !== -1 ? h : 'hub';
@@ -336,6 +336,38 @@
         NS.toast(msg, btn.getAttribute('data-toast-kind') || 'info');
       });
     });
+  };
+
+  // ---------------- PRODUCT IMAGES (I3: real photos + branded fallback) ----------------
+  // The suite is online-capable: thumbnails load from real image URLs (lazy)
+  // and fall back to a deterministic branded SVG tile when the URL is missing
+  // or fails (offline / broken CDN link).
+  NS.fallbackDataURI = function (alt) {
+    var s = String(alt == null ? 'Product' : alt);
+    var h = 0, i;
+    for (i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    var hue = 205 + (h % 55);                       /* steel-blue band */
+    var init = (s.trim().charAt(0) || 'N').toUpperCase();
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120">' +
+      '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+      '<stop offset="0" stop-color="hsl(' + hue + ',35%,88%)"/>' +
+      '<stop offset="1" stop-color="hsl(' + hue + ',45%,74%)"/></linearGradient></defs>' +
+      '<rect width="120" height="120" rx="10" fill="url(#g)"/>' +
+      '<path d="M60 22l7 17 18 1-14 12 5 18-16-10-16 10 5-18-14-12 18-1z" fill="hsl(' + hue + ',55%,42%)" opacity=".9"/>' +
+      '<text x="60" y="94" font-family="Inter,Segoe UI,sans-serif" font-size="34" font-weight="700" text-anchor="middle" fill="hsl(' + hue + ',45%,30%)">' + init + '</text></svg>';
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  };
+  NS.fallbackImg = function (img) {
+    if (!img) return;
+    img.onerror = null;
+    img.src = NS.fallbackDataURI(img.getAttribute('alt') || 'Product');
+  };
+  NS.img = function (src, alt, cls) {
+    var a = alt == null ? 'Product' : String(alt);
+    var escAlt = a.replace(/"/g, '&quot;');
+    var s = src || NS.fallbackDataURI(a);
+    return '<img class="' + (cls || 'img-tile') + '" src="' + NS.escapeHtml(s) + '" alt="' + escAlt +
+      '" loading="eager" referrerpolicy="no-referrer" onerror="window.NS && NS.fallbackImg(this)">';
   };
 
   // ---------------- HELPERS ----------------

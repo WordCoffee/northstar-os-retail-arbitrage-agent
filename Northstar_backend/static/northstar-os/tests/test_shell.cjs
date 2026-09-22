@@ -18,7 +18,7 @@ const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const scriptParts = [
     'engine.js', 'demo-data.js', 'brain.js', 'hub.js', 'sourcescout.js',
     'listingforge.js', 'adpilot.js', 'socialpulse.js', 'autothink.js',
-    'account.js', 'ledger.js', 'deck.js',
+    'account.js', 'ledger.js', 'goldengoose.js', 'deck.js',
 ].map((f) => fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'));
 const boot = 'window.NS.init(); if (window.NS.brain && window.NS.brain.init) window.NS.brain.init(); if (window.NS.deck && window.NS.deck.init) window.NS.deck.init();';
 const script = scriptParts.join('\n;\n') + '\n' + boot;
@@ -181,7 +181,7 @@ assert(allJs.includes("fetch('/api/v1/models')"), 'brain: the sole network call 
 assert(!html.includes('fetch('), 'zero-network: shell index.html has no fetch calls');
 assert(html.includes('data-live-gate="off"'), 'honesty: shell markup carries data-live-gate="off" on gated controls');
 assert((html.match(/Authorization required/g) || []).length === 1, 'gates: "Authorization required" appears exactly once (drawer footnote), not in static banners');
-assert((html.match(/demo-badge/g) || []).length === 11, 'honesty: eleven demo badges in shell markup (7 + 4 new services)');
+assert((html.match(/demo-badge/g) || []).length === 12, 'honesty: twelve demo badges in shell markup (incl. Golden Goose)');
 
 /* all authorization gates start OFF */
 Object.keys(NS.gates).forEach((name) => {
@@ -363,7 +363,7 @@ NS.go('autothink');
 assert(els['view-autothink'].classList.contains('active'), 'autothink: route mounts workspace view');
 assert(html.includes('AutothinK'), 'autothink: brand spelled AutothinK in shell markup');
 assert(html.includes('id="at-workspace"'), 'autothink: workspace iframe present in shell');
-assert((html.match(/<button class="nav-item"/g) || []).length === 11, 'shell: drawer holds 11 nav items (hub + ledger + 4 services + 3 monitoring + autothink + account)');
+assert((html.match(/<button class="nav-item"/g) || []).length === 12, 'shell: drawer holds 12 nav items (incl. Golden Goose)');
 assert(html.includes("Northstar OS — Retail Arbitrage Suite"), 'shell: document title matches the suite');
 assert(html.includes('css/tokens.css') && html.includes('css/shell.css'), 'shell: css wired');
 
@@ -757,6 +757,8 @@ assert(els['brain-state'].textContent.indexOf('offline') !== -1, 'brain: honest 
 
 /* the built Ledger + three honest coming-soon placeholders */
 assert(html.includes('id="view-theledger"'), 'new service: view view-theledger present');
+assert(html.includes('id="view-goldengoose"'), 'goldengoose: standalone view present');
+assert(html.includes('id="nav-goldengoose"') && html.includes('data-route="goldengoose"'), 'goldengoose: nav item registered');
 assert(html.includes('id="led-sku-body"') && html.includes('id="led-monthly"') && html.includes('id="led-kpis"'), 'ledger: P&L screen built (KPIs + chart + SKU table)');
 assert(!html.includes('data-slot="theledger-placeholder"'), 'ledger: honest placeholder retired (now a real screen)');
 [['view-thewatch', 'thewatch-placeholder', 'The Watch'],
@@ -778,6 +780,18 @@ assert((els['led-kpis'].innerHTML.match(/data-kpi=/g) || []).length === 6, 'ledg
 assert(els['led-kpis'].innerHTML.includes('Net Profit'), 'ledger: net profit KPI present');
 assert((els['led-sku-body'].innerHTML.match(/data-sku=/g) || []).length === 9, 'ledger: nine per-SKU P&L rows rendered');
 assert(els['led-monthly'].innerHTML.includes('ip-bar'), 'ledger: monthly net-profit chart rendered');
+
+/* Golden Goose deep: standalone breakdown scan renders from the fixture */
+assert(NS.gg && typeof NS.gg.onMount === 'function', 'goldengoose: module exposed on NS');
+NS.go('goldengoose');
+assert(locationStub.hash === '#/goldengoose', 'goldengoose: route resolves');
+assert((els['gg-kpis'].innerHTML.match(/data-kpi=/g) || []).length === 4, 'goldengoose: four scan KPIs rendered');
+assert((els['gg-grid'].innerHTML.match(/data-gg=/g) || []).length >= 6, 'goldengoose: tiered results grid rendered (>=6)');
+assert(els['gg-grid'].innerHTML.includes('data-tier="A"') && els['gg-grid'].innerHTML.includes('data-tier="D"'), 'goldengoose: tier span A..D present');
+assert(els['gg-grid'].innerHTML.includes('<img'), 'goldengoose: product thumbnails rendered');
+assert(els['gg-manifest'].innerHTML.includes('resolved'), 'goldengoose: scan manifest rendered');
+assert(getEl('gg-dryrun')._listeners.click.length === 1, 'goldengoose: dry-run button bound');
+assert(getEl('gate-goldengoose_live').getAttribute('data-gate') === 'sourcescout_live_pull', 'goldengoose: live-pull gate banner wired');
 
 /* ==========================================================================
  * H9 — Alpha Command Deck + command palette + engine lamp

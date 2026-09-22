@@ -708,6 +708,15 @@ table.svc th[data-sort]:hover { color: var(--ink); }
 @keyframes nsSpin { to { transform: rotate(360deg); } }
 .btn[aria-busy="true"], button[aria-busy="true"] { opacity: .8; cursor: progress; }
 
+/* product thumbnails (I3: real photos + branded SVG fallback) */
+.img-tile {
+  width: 40px; height: 40px; border-radius: 6px; object-fit: cover;
+  border: 1px solid var(--hairline); background: var(--bg-inset); display: block;
+}
+.img-cell { width: 50px; padding: 4px 8px !important; }
+.gg-tile { width: 42px; height: 42px; }
+.data-grid-row .img-tile, .data-grid-row > div .img-tile { margin: 4px 0; }
+
 /* ------------------------------------------------------- 26. RESPONSIVE */
 @media (max-width: 1200px) { #board { display: none; } :root { --board-w: 0px; } }
 @media (max-width: 980px) {

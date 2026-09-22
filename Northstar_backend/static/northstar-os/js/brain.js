@@ -58,6 +58,10 @@
     el.textContent = state.provider + ' · ' + state.tier + ' · ' + model;
   }
 
+  function tierLabel(t) {
+    return t + (t === 'T1' ? ' Fast' : t === 'T2' ? ' Core' : ' Seam');
+  }
+
   function populate(c) {
     var ps = $id('brain-provider');
     var ts = $id('brain-tier');
@@ -69,8 +73,16 @@
     }
     if (ts && c.tiers) {
       var textTiers = c.tiers.filter(function (t) { return t.charAt(0) === 'T'; });
+      // When Cloud is selected, expose the actual OpenRouter model ids as the
+      // tier labels so the operator can pick a specific hosted AI.
+      var showModel = state.provider === 'cloud' && c.cloud && c.cloud.defaults;
       ts.innerHTML = textTiers.map(function (t) {
-        return '<option value="' + t + '">' + t + (t === 'T1' ? ' Fast' : t === 'T2' ? ' Core' : ' Seam') + '</option>';
+        var label = tierLabel(t);
+        if (showModel) {
+          var mid = c.cloud.defaults[t];
+          if (mid) label = String(mid).replace(/^deepseek\//, '');
+        }
+        return '<option value="' + t + '">' + label + '</option>';
       }).join('');
       ts.value = state.tier;
     }
@@ -84,7 +96,10 @@
       ps.value = state.provider;
       if (!ps._brainBound) {
         ps._brainBound = true;
-        ps.addEventListener('change', function () { NS.brain.set(ps.value, null); });
+        ps.addEventListener('change', function () {
+          NS.brain.set(ps.value, null);
+          if (catalog) populate(catalog); // refresh tier labels for Local vs Cloud
+        });
       }
     }
     if (ts) {

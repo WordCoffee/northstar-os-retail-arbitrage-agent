@@ -156,13 +156,14 @@
     var tbody = getEl('ss-table-body');
     if (!tbody) return;
     if (!rows.length) {
-      tbody.innerHTML = '<tr><td colspan="8" class="service-empty">No rows match the current facets.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="11" class="service-empty">No rows match the current facets.</td></tr>';
       return;
     }
     tbody.innerHTML = rows.map(function (r) {
       var tier = tierPill(r.tier);
       return '<tr class="row-card" data-asin="' + NS.escapeHtml(r.asin) + '" data-name="' + NS.escapeHtml(r.name) + '" data-roi="' + (r.roi == null ? '' : r.roi) + '" data-margin="' + (marginPct(r) == null ? '' : marginPct(r)) + '">' +
         '<td><button class="pin-btn" data-pin-row aria-label="pin">&#9825;</button></td>' +
+        '<td class="img-cell">' + NS.img(r.image, r.name, 'img-tile') + '</td>' +
         '<td class="dim">' + NS.escapeHtml(r.asin) + '</td>' +
         '<td>' + NS.escapeHtml(r.name) + '</td>' +
         '<td class="num">' + money(r.cost) + '</td>' +

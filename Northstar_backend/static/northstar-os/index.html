@@ -197,6 +197,10 @@
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M16.2 7.8 14 14l-6.2 2.2L10 10z"/></svg>
             Prospector
           </button>
+          <button class="nav-item" id="nav-goldengoose" data-route="goldengoose" aria-current="false">
+            <svg viewBox="0 0 24 24"><path d="M12 3l2.4 5.8 6.3.3-4.9 3.9 1.6 6.1L12 15.5 6.6 19.1l1.6-6.1-4.9-3.9 6.3-.3z"/></svg>
+            Golden Goose
+          </button>
         </div>
       </div>
 
@@ -399,6 +403,7 @@
           <table id="ss-table" class="svc">
             <thead><tr>
               <th scope="col"><span class="sort-ind"></span>&nbsp;</th>
+              <th scope="col" aria-label="Image">&nbsp;</th>
               <th scope="col">ASIN</th>
               <th scope="col" data-sort="name"><span class="sort-ind" data-ind="name"></span>Product</th>
               <th scope="col" class="num" data-sort="cost"><span class="sort-ind" data-ind="cost"></span>Costco COGS</th>
@@ -499,6 +504,46 @@
             <div class="dz-format">sku, title, cost, case_qty, moq</div>
           </div>
           <p class="notice" style="margin-top:12px">Supplier enrichment (Easyparser / RapidAPI / DataForSEO) is gated above and stays OFF until individually approved. All supplier rows are demo fixtures.</p>
+        </div>
+      </section>
+
+      <!-- ---------------- GOLDEN GOOSE · Standalone breakdown scan ---------------- -->
+      <section id="view-goldengoose" class="view" data-view="goldengoose" aria-hidden="true"
+               style="--sig-accent:var(--sig-sourcing);--sig-accent-dim:var(--sig-sourcing-dim);--sig-accent-line:var(--sig-sourcing-line)">
+        <h2 class="view-title">Golden Goose</h2>
+        <p class="view-sub">Breakdown scan · tiered finds · <span class="agent-chip">scan config · results · manifest · dry-run</span> · <span class="demo-badge">demo</span></p>
+
+        <div id="gate-goldengoose_live" class="gate-banner" data-gate="sourcescout_live_pull"></div>
+
+        <div class="filter-panel" style="margin-top:12px">
+          <div class="filter-panel-header">
+            <h4>Scan Configuration</h4><span class="chevron">▾</span>
+          </div>
+          <div class="filter-panel-body">
+            <div class="filter-panel-row">
+              <div class="form-group"><label class="form-label" for="gg-profit">Min net profit</label><select id="gg-profit" class="form-select"><option>$11 (gate)</option><option>$20</option><option>$40</option></select></div>
+              <div class="form-group"><label class="form-label" for="gg-sellers">Seller count</label><select id="gg-sellers" class="form-select"><option>1–3 (goose)</option><option>4–8</option><option>any</option></select></div>
+              <div class="form-group"><label class="form-label" for="gg-category">Category</label><select id="gg-category" class="form-select"><option>All</option><option>Grocery</option><option>Household</option><option>Personal care</option><option>Private label</option></select></div>
+            </div>
+            <div class="editor-meta" style="margin-top:4px">
+              <button id="gg-dryrun" class="btn gold">Dry-run scan (demo)</button>
+              <span class="hint" id="gg-last-run">no scan run this session</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="gg-kpis" class="kpi-strip"></div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>Tiered Results</h3><span class="hint">A clears every gate · D fails a gate (demo fixture)</span></div>
+          <div class="table-wrap">
+            <div id="gg-grid" class="data-grid" style="grid-template-columns:56px 1.9fr .6fr .8fr .8fr .9fr 1.2fr .8fr"></div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:16px">
+          <div class="panel-head"><h3>Scan Manifest</h3><span class="hint">evidence · typed, honest (fixture)</span></div>
+          <div id="gg-manifest"></div>
         </div>
       </section>
 
@@ -667,6 +712,7 @@
         <div class="table-wrap">
           <table id="led-sku" class="svc">
             <thead><tr>
+              <th scope="col" aria-label="Image">&nbsp;</th>
               <th scope="col">SKU</th>
               <th scope="col">Product</th>
               <th scope="col" class="num">Units</th>
@@ -858,6 +904,7 @@
   <script src="js/brain.js"></script>
   <script src="js/hub.js"></script>
   <script src="js/sourcescout.js"></script>
+  <script src="js/goldengoose.js"></script>
   <script src="js/listingforge.js"></script>
   <script src="js/adpilot.js"></script>
   <script src="js/socialpulse.js"></script>
