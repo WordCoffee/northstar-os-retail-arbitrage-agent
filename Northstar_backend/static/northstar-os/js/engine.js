@@ -396,6 +396,7 @@
     NS.bindPaperclip();
     NS.bindSearch();
     NS.bindToastButtons();
+    if (NS.bindVoice) NS.bindVoice(document);
     $qa('.gate-banner[data-gate]').forEach(function (el) {
       NS.renderGateBanner(el, el.getAttribute('data-gate'));
     });

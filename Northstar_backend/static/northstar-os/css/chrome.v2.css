@@ -717,6 +717,24 @@ table.svc th[data-sort]:hover { color: var(--ink); }
 .gg-tile { width: 42px; height: 42px; }
 .data-grid-row .img-tile, .data-grid-row > div .img-tile { margin: 4px 0; }
 
+/* voice-input microphones (I3: dictate on every text field) */
+.voice-wrap { display: flex; align-items: center; gap: 6px; width: 100%; min-width: 0; }
+.voice-wrap > textarea, .voice-wrap > input[type="text"] { flex: 1 1 auto; min-width: 0; }
+.voice-input {
+  width: 32px; height: 32px; flex: 0 0 32px; padding: 0;
+  border: 1px solid var(--hairline); background: var(--bg-inset); color: var(--ink-faint);
+  border-radius: var(--radius-sm); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.voice-input:hover { border-color: var(--accent-line); color: var(--accent); background: var(--accent-dim); }
+.voice-input svg { width: 15px; height: 15px; }
+.voice-input.rec {
+  border-color: var(--loss-bright); color: var(--loss-bright);
+  background: var(--loss-dim); animation: nsPulse 1.2s ease-in-out infinite;
+}
+@keyframes nsPulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+
 /* ------------------------------------------------------- 26. RESPONSIVE */
 @media (max-width: 1200px) { #board { display: none; } :root { --board-w: 0px; } }
 @media (max-width: 980px) {

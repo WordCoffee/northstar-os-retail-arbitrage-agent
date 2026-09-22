@@ -18,7 +18,7 @@ const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const scriptParts = [
     'engine.js', 'demo-data.js', 'brain.js', 'hub.js', 'sourcescout.js',
     'listingforge.js', 'adpilot.js', 'socialpulse.js', 'autothink.js',
-    'account.js', 'ledger.js', 'goldengoose.js', 'deck.js',
+    'account.js', 'ledger.js', 'goldengoose.js', 'voice.js', 'deck.js',
 ].map((f) => fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'));
 const boot = 'window.NS.init(); if (window.NS.brain && window.NS.brain.init) window.NS.brain.init(); if (window.NS.deck && window.NS.deck.init) window.NS.deck.init();';
 const script = scriptParts.join('\n;\n') + '\n' + boot;
@@ -792,6 +792,11 @@ assert(els['gg-grid'].innerHTML.includes('<img'), 'goldengoose: product thumbnai
 assert(els['gg-manifest'].innerHTML.includes('resolved'), 'goldengoose: scan manifest rendered');
 assert(getEl('gg-dryrun')._listeners.click.length === 1, 'goldengoose: dry-run button bound');
 assert(getEl('gate-goldengoose_live').getAttribute('data-gate') === 'sourcescout_live_pull', 'goldengoose: live-pull gate banner wired');
+
+/* Voice input: microphone system exposed + wired into every text field */
+assert(typeof NS.bindVoice === 'function' && NS.voice && typeof NS.voice.support === 'function', 'voice: module exposed (NS.bindVoice / NS.voice)');
+assert(html.includes('js/voice.js'), 'voice: script wired in shell');
+assert(script.includes('voice-input'), 'voice: mic button class present in voice module');
 
 /* ==========================================================================
  * H9 — Alpha Command Deck + command palette + engine lamp
