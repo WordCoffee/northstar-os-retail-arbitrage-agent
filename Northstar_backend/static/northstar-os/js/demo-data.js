@@ -16,10 +16,10 @@
         { label: 'Demo Mode', value: 'ON', kind: 'dim', sub: 'no live data, no live calls' },
       ],
       services: [
-        { id: 'sourcescout', name: 'SourceScout', agent: 'Retail Arbitrage Agent', desc: 'Product sourcing, margin calc, velocity analysis, Kirkland-to-Amazon arbitrage detection.', class: 'Retail Arbitrage' },
-        { id: 'listingforge', name: 'ListingForge', agent: 'Listing Optimizer Agent', desc: 'Title/bullet/description rewrites, A+ content, SEO, compliance screening, Rufus readiness.', class: 'Listing Optimization' },
-        { id: 'adpilot', name: 'AdPilot', agent: 'Amazon Ads Agent', desc: 'PPC bid optimization, ACoS management, keyword harvesting, placement analysis, negatives.', class: 'Amazon Ads' },
-        { id: 'socialpulse', name: 'SocialPulse', agent: 'Social Media Agent', desc: 'Post generation, scheduling copy, brand-voice content, creator outreach.', class: 'Social Media' },
+        { id: 'sourcescout', name: 'Prospector', agent: 'Retail Arbitrage Agent', desc: 'Product sourcing, margin calc, velocity analysis, Kirkland-to-Amazon arbitrage detection.', class: 'Retail Arbitrage' },
+        { id: 'listingforge', name: 'OfferChisel', agent: 'Listing Optimizer Agent', desc: 'Title/bullet/description rewrites, A+ content, SEO, compliance screening, Rufus readiness.', class: 'Listing Optimization' },
+        { id: 'adpilot', name: 'The Auctioneer', agent: 'Amazon Ads Agent', desc: 'PPC bid optimization, ACoS management, keyword harvesting, placement analysis, negatives.', class: 'Amazon Ads' },
+        { id: 'socialpulse', name: 'The Town Crier', agent: 'Social Media Agent', desc: 'Post generation, scheduling copy, brand-voice content, creator outreach.', class: 'Social Media' },
       ],
     },
 

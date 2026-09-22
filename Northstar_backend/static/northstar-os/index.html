@@ -637,10 +637,10 @@
             <span class="dim" style="margin-left:8px">no probe performed — shows configured state</span>
           </div>
           <div class="at-quick" aria-label="Ask a service">
-            <button class="subnav-btn" id="at-quick-sourcescout" data-quick="sourcescout">Ask SourceScout</button>
-            <button class="subnav-btn" id="at-quick-listingforge" data-quick="listingforge">Ask ListingForge</button>
-            <button class="subnav-btn" id="at-quick-adpilot" data-quick="adpilot">Ask AdPilot</button>
-            <button class="subnav-btn" id="at-quick-socialpulse" data-quick="socialpulse">Ask SocialPulse</button>
+            <button class="subnav-btn" id="at-quick-sourcescout" data-quick="sourcescout">Ask Prospector</button>
+            <button class="subnav-btn" id="at-quick-listingforge" data-quick="listingforge">Ask OfferChisel</button>
+            <button class="subnav-btn" id="at-quick-adpilot" data-quick="adpilot">Ask The Auctioneer</button>
+            <button class="subnav-btn" id="at-quick-socialpulse" data-quick="socialpulse">Ask The Town Crier</button>
           </div>
           <div class="at-composer-row">
             <input id="at-composer" class="at-composer" type="text" readonly aria-label="Composer prefill"
@@ -683,55 +683,70 @@
         <div class="notice" style="margin-top:12px">Demo fixture only — a live P&amp;L requires Amazon settlement + ads-spend read, both gated. Nothing here is live data.</div>
       </section>
 
-      <!-- ---------------- THE WATCH · Listing Guardian (H3 placeholder) ---------------- -->
+      <!-- ---------------- THE WATCH · Listing Guardian (skeleton monitoring table) ---------------- -->
       <section id="view-thewatch" class="view" data-view="thewatch" aria-hidden="true">
         <h2 class="view-title">The Watch</h2>
-        <p class="view-sub">Listing guardian · hijackers · suppressions · Buy Box</p>
-        <div class="soon" data-slot="thewatch-placeholder">
-          <div class="soon-badge demo-badge">Coming soon</div>
-          <div class="soon-body">
-            <p class="soon-pitch">Keeps watch on your own ASINs — hijackers, unauthorized listing changes, suppressions, and Buy Box loss — so a problem finds you before it costs you.</p>
-            <ul class="soon-meta">
-              <li><span>Unlocks at</span><strong>Mainstay</strong></li>
-              <li><span>Build state</span><strong>Not built — honest placeholder</strong></li>
-              <li><span>Needs</span><strong>SP-API read access</strong></li>
-            </ul>
-          </div>
+        <p class="view-sub">Listing guardian · hijackers · suppressions · Buy Box · <span class="demo-badge">schema preview</span></p>
+        <div class="table-wrap" data-slot="thewatch-placeholder">
+          <table class="svc">
+            <thead><tr>
+              <th scope="col">ASIN</th><th scope="col">Listing</th><th scope="col">Alert</th>
+              <th scope="col" class="num">Price</th><th scope="col" class="num">Buy Box</th>
+              <th scope="col" class="num">Suppressed</th><th scope="col">Last Seen</th>
+            </tr></thead>
+            <tbody>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:78px"></span></td><td><span class="skeleton skeleton-text" style="width:150px"></span></td><td><span class="skeleton skeleton-text" style="width:90px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td></tr>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:78px"></span></td><td><span class="skeleton skeleton-text" style="width:150px"></span></td><td><span class="skeleton skeleton-text" style="width:90px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td></tr>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:78px"></span></td><td><span class="skeleton skeleton-text" style="width:150px"></span></td><td><span class="skeleton skeleton-text" style="width:90px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td></tr>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:78px"></span></td><td><span class="skeleton skeleton-text" style="width:150px"></span></td><td><span class="skeleton skeleton-text" style="width:90px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td></tr>
+            </tbody>
+          </table>
         </div>
+        <div class="notice" style="margin-top:12px">The Watch is <strong>not built yet</strong> — this is an honest schema preview of the monitoring table. It needs SP-API read access (gated) to populate. Unlocks at Mainstay.</div>
       </section>
 
-      <!-- ---------------- RANKLEDGER · Keyword Rank Tracking (H3 placeholder) ---------------- -->
+      <!-- ---------------- RANKLEDGER · Keyword Rank Tracking (skeleton monitoring table) ---------------- -->
       <section id="view-rankledger" class="view" data-view="rankledger" aria-hidden="true">
         <h2 class="view-title">RankLedger</h2>
-        <p class="view-sub">Daily keyword rank snapshots · ASIN × keyword</p>
-        <div class="soon" data-slot="rankledger-placeholder">
-          <div class="soon-badge demo-badge">Coming soon</div>
-          <div class="soon-body">
-            <p class="soon-pitch">A daily rank ledger for the ASIN × keyword pairs you care about, plotted as ink on the Analyst's Desk. Trend, not a snapshot.</p>
-            <ul class="soon-meta">
-              <li><span>Unlocks at</span><strong>Mainstay</strong></li>
-              <li><span>Build state</span><strong>Not built — honest placeholder</strong></li>
-              <li><span>Needs</span><strong>Rank source (free tier first)</strong></li>
-            </ul>
-          </div>
+        <p class="view-sub">Daily keyword rank snapshots · ASIN × keyword · <span class="demo-badge">schema preview</span></p>
+        <div class="table-wrap" data-slot="rankledger-placeholder">
+          <table class="svc">
+            <thead><tr>
+              <th scope="col">ASIN</th><th scope="col">Keyword</th>
+              <th scope="col" class="num">Page 1</th><th scope="col" class="num">Page 2</th>
+              <th scope="col" class="num">Page 3</th><th scope="col" class="num">Δ 7d</th><th scope="col">Snapshot</th>
+            </tr></thead>
+            <tbody>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:78px"></span></td><td><span class="skeleton skeleton-text" style="width:160px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:120px"></span></td></tr>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:78px"></span></td><td><span class="skeleton skeleton-text" style="width:160px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:120px"></span></td></tr>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:78px"></span></td><td><span class="skeleton skeleton-text" style="width:160px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:120px"></span></td></tr>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:78px"></span></td><td><span class="skeleton skeleton-text" style="width:160px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:48px"></span></td><td><span class="skeleton skeleton-text" style="width:120px"></span></td></tr>
+            </tbody>
+          </table>
         </div>
+        <div class="notice" style="margin-top:12px">RankLedger is <strong>not built yet</strong> — honest schema preview. Needs a rank source (free tier first, gated). Unlocks at Mainstay.</div>
       </section>
 
-      <!-- ---------------- THE RIVAL BOARD · Competitor & Buy Box Monitor (H3 placeholder) ---------------- -->
+      <!-- ---------------- THE RIVAL BOARD · Competitor & Buy Box Monitor (skeleton monitoring table) ---------------- -->
       <section id="view-rivalboard" class="view" data-view="rivalboard" aria-hidden="true">
         <h2 class="view-title">The Rival Board</h2>
-        <p class="view-sub">Competitor &amp; Buy Box monitoring</p>
-        <div class="soon" data-slot="rivalboard-placeholder">
-          <div class="soon-badge demo-badge">Coming soon</div>
-          <div class="soon-body">
-            <p class="soon-pitch">Tracks competitor ASIN price and Buy Box changes so you see a price war forming before it reaches your margin.</p>
-            <ul class="soon-meta">
-              <li><span>Unlocks at</span><strong>Keystone</strong></li>
-              <li><span>Build state</span><strong>Not built — honest placeholder</strong></li>
-              <li><span>Needs</span><strong>Competitor ASIN watchlist</strong></li>
-            </ul>
-          </div>
+        <p class="view-sub">Competitor &amp; Buy Box monitoring · <span class="demo-badge">schema preview</span></p>
+        <div class="table-wrap" data-slot="rivalboard-placeholder">
+          <table class="svc">
+            <thead><tr>
+              <th scope="col">Competitor ASIN</th><th scope="col">Brand</th>
+              <th scope="col" class="num">Price</th><th scope="col" class="num">Buy Box</th>
+              <th scope="col" class="num">Est. Monthly</th><th scope="col" class="num">Price Δ 7d</th><th scope="col">Last Seen</th>
+            </tr></thead>
+            <tbody>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:90px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:60px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td></tr>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:90px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:60px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td></tr>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:90px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:60px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td></tr>
+              <tr class="row-card"><td><span class="skeleton skeleton-text" style="width:90px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:60px"></span></td><td><span class="skeleton skeleton-text" style="width:52px"></span></td><td><span class="skeleton skeleton-text" style="width:110px"></span></td></tr>
+            </tbody>
+          </table>
         </div>
+        <div class="notice" style="margin-top:12px">The Rival Board is <strong>not built yet</strong> — honest schema preview. Needs a competitor ASIN watchlist (gated). Unlocks at Keystone.</div>
       </section>
 
       <!-- ---------------- ACCOUNT · Shared Steel ---------------- -->

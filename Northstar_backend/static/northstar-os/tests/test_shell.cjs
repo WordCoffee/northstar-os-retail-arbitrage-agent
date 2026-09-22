@@ -204,7 +204,7 @@ assert(getEl('gate-socialpulse_publish').innerHTML.includes('Authorization requi
 NS.go('hub');
 assert(els['hub-kpis'].innerHTML.includes('Total Profit'), 'hub: KPI strip renders');
 assert((els['hub-kpis'].innerHTML.match(/data-kpi=/g) || []).length === 4, 'hub: exactly 4 KPIs');
-assert(els['hub-services'].innerHTML.includes('SourceScout'), 'hub: SourceScout service card');
+assert(els['hub-services'].innerHTML.includes('Prospector'), 'hub: Prospector service card');
 assert((els['hub-services'].innerHTML.match(/data-service=/g) || []).length === 4, 'hub: exactly 4 service cards');
 
 /* open-service buttons bind and navigate */
@@ -566,10 +566,10 @@ assert(getEl('at-lamp-dot').classList.contains('detected') && !getEl('at-lamp-do
 
 /* quick-ask buttons prefill the composer for the Master Brain router */
 getEl('at-quick-sourcescout')._listeners.click.forEach((fn) => fn());
-assert(getEl('at-composer').value === 'Ask SourceScout: find sourcing candidates (demo prefill)', 'autothink: Ask SourceScout prefills verb + domain');
+assert(getEl('at-composer').value === 'Ask Prospector: find sourcing candidates (demo prefill)', 'autothink: Ask Prospector prefills verb + domain');
 getEl('at-quick-adpilot')._listeners.click.forEach((fn) => fn());
-assert(NS.autothink.prefill('adpilot') === 'Ask AdPilot: optimize campaign bids by band (demo prefill)', 'autothink: Ask AdPilot prefill returns deterministic copy');
-assert(getEl('at-composer').value.indexOf('Ask AdPilot:') === 0, 'autothink: composer shows the AdPilot ask');
+assert(NS.autothink.prefill('adpilot') === 'Ask The Auctioneer: optimize campaign bids by band (demo prefill)', 'autothink: Ask The Auctioneer prefill returns deterministic copy');
+assert(getEl('at-composer').value.indexOf('Ask The Auctioneer:') === 0, 'autothink: composer shows the Auctioneer ask');
 assert(NS.autothink.prefill('nope') === null, 'autothink: unknown service fails closed');
 
 /* copy affordance is demo-only (no live clipboard side effects asserted) */

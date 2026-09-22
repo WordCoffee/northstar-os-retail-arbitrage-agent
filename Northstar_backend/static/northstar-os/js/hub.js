@@ -41,10 +41,10 @@
     if (count) count.textContent = activity.length;
     var html = activity.map(function (ev) {
       var icon = '⚙️'; // default
-      if (ev.service === 'SourceScout') icon = '🔍';
-      else if (ev.service === 'ListingForge') icon = '✍️';
-      else if (ev.service === 'AdPilot') icon = '📈';
-      else if (ev.service === 'SocialPulse') icon = '📱';
+      if (ev.service === 'Prospector') icon = '🔍';
+      else if (ev.service === 'OfferChisel') icon = '✍️';
+      else if (ev.service === 'The Auctioneer') icon = '📈';
+      else if (ev.service === 'The Town Crier') icon = '📱';
       return '<li>' +
         '<span class="icon">' + icon + '</span>' +
         '<div class="detail">' +

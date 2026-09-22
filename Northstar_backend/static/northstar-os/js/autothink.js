@@ -12,10 +12,10 @@
   var NS = window.NS;
 
   var SERVICE_NAMES = {
-    sourcescout: 'SourceScout',
-    listingforge: 'ListingForge',
-    adpilot: 'AdPilot',
-    socialpulse: 'SocialPulse',
+    sourcescout: 'Prospector',
+    listingforge: 'OfferChisel',
+    adpilot: 'The Auctioneer',
+    socialpulse: 'The Town Crier',
   };
   var EXAMPLE_ASK = {
     sourcescout: 'find sourcing candidates',
