@@ -642,10 +642,11 @@
         <div class="panel-head" style="margin-top:18px"><h3>Content Studio &amp; Calendar</h3><span class="hint">drafts · slots</span></div>
         <div id="soc-posts" class="card-grid"></div>
         <div class="panel" style="margin-top:14px">
-          <div class="panel-head"><h3>Content Studio</h3><span class="hint">fixture templates · re-generatable · demo</span></div>
+          <div class="panel-head"><h3>Content Studio</h3><span class="hint">brief → generate → schedule (demo)</span></div>
           <div class="studio-console">
+            <textarea id="soc-cs-prompt" class="studio-prompt" rows="2" placeholder="Describe the post — e.g. a calm morning-ritual shot for moms…"></textarea>
             <select id="soc-cs-channel" aria-label="Channel"><option value="meta">Meta</option><option value="instagram">Instagram</option><option value="tiktok">TikTok</option></select>
-            <button id="soc-cs-generate" class="btn small steel" data-toast="Caption generated (demo)" data-toast-kind="success">Generate caption (demo)</button>
+            <button id="soc-cs-generate" class="btn small steel" data-toast="Caption generated (demo)" data-toast-kind="success">Generate caption</button>
             <button id="soc-cs-schedule" class="btn small gold" data-toast="Scheduled as demo draft" data-toast-kind="success">Schedule this caption</button>
           </div>
           <div id="soc-cs-output"></div>

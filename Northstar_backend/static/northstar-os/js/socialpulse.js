@@ -127,7 +127,10 @@
     if (sel && sel.value) channel = sel.value;
     var g = generateCaption('word_coffee', channel, csStep);
     if (!g) return;
+    var promptEl = document.getElementById('soc-cs-prompt');
+    var brief = (promptEl && promptEl.value && promptEl.value.trim()) ? promptEl.value.trim() : '';
     host.innerHTML =
+      (brief ? '<div class="studio-brief">Brief: ' + NS.escapeHtml(brief) + '</div>' : '') +
       '<div class="caption-card">' + NS.escapeHtml(g.caption) + '</div>' +
       '<div style="margin-top:8px">' + hashtagChips(g.hashtags, true) + '</div>' +
       '<div class="hint" style="margin-top:8px">Generated from the Word Coffee voice tagline set (demo template) — editable in a later pass; publishing stays gated.</div>';

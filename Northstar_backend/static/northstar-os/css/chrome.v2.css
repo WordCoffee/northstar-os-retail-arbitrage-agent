@@ -717,6 +717,22 @@ table.svc th[data-sort]:hover { color: var(--ink); }
 .gg-tile { width: 42px; height: 42px; }
 .data-grid-row .img-tile, .data-grid-row > div .img-tile { margin: 4px 0; }
 
+/* design-studio surfaces (I3: chat-bar generation + mic) */
+.studio-console {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: var(--bg-inset); border: 1px solid var(--hairline);
+  border-radius: var(--radius); padding: 10px; margin-bottom: 12px;
+}
+.studio-console select { flex: 0 0 auto; }
+.studio-console .btn { flex: 0 0 auto; }
+.studio-prompt { flex: 1 1 240px; min-width: 0; }
+.studio-prompt.voice-wrap { flex: 1 1 240px; }
+.studio-brief {
+  font-size: var(--fs-sm); color: var(--accent); background: var(--accent-dim);
+  border: 1px solid var(--accent-line); border-radius: var(--radius-sm);
+  padding: 6px 10px; margin-bottom: 8px;
+}
+
 /* voice-input microphones (I3: dictate on every text field) */
 .voice-wrap { display: flex; align-items: center; gap: 6px; width: 100%; min-width: 0; }
 .voice-wrap > textarea, .voice-wrap > input[type="text"] { flex: 1 1 auto; min-width: 0; }
