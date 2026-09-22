@@ -25,6 +25,7 @@ param(
     [string]$Email = "northstarosllc@gmail.com",
     [string]$CloudflaredPath = "",
     [switch]$Cloud,
+    [switch]$Gate,
     [switch]$NoTunnel,
     [switch]$NoAutothink,
     [switch]$Check,
@@ -94,6 +95,8 @@ Write-Host ("Repo:   {0}" -f $RepoRoot)
 Write-Host ("Email:  {0}" -f $Email)
 $cloudTxt = if ($Cloud) { 'ARMED (real spend on run)' } else { 'disarmed (local only)' }
 Write-Host ("Cloud:  {0}" -f $cloudTxt)
+$lockTxt = if ($Gate) { 'in-app allowlist gate ON' } else { 'no Access / no gate (URL-only) - solo test week' }
+Write-Host ("Lock:   {0}" -f $lockTxt)
 
 $cf = Resolve-Cloudflared
 $missing = @()
@@ -126,9 +129,10 @@ if ($Check) {
 
 # ------------------------------------------------------------- environment
 # Child processes inherit these.
-$env:NORTHSTAR_PRIVATE_ALPHA   = "1"
+if ($Gate) { $env:NORTHSTAR_PRIVATE_ALPHA = "1" } else { Remove-Item Env:\NORTHSTAR_PRIVATE_ALPHA -ErrorAction SilentlyContinue }
 $env:NORTHSTAR_ALPHA_ALLOWLIST = $Email
 $env:NORTHSTAR_DISABLE_RATE_LIMIT = "0"
+$env:NORTHSTAR_ROOT_TO_APP = "1"   # tunnel/local root lands in the workspace
 if ($Cloud) { $env:CLOUD_MODEL_LIVE = "1" } else { Remove-Item Env:\CLOUD_MODEL_LIVE -ErrorAction SilentlyContinue }
 
 $launched = @()
@@ -210,12 +214,21 @@ Write-Host ("Cloud engine: {0}" -f $cloudEngine)
 if ($tunnelUrl) {
     Write-Host ""
     Write-Host ("Public URL  : {0}" -f $tunnelUrl) -ForegroundColor Yellow
-    Write-Host "Next: in Cloudflare Zero Trust -> Access -> add/point the app at the URL above,"
-    Write-Host ("      policy = allow {0}." -f $Email)
+    if ($Gate) {
+        Write-Host "Locked by   : in-app allowlist gate. Register/log in with $Email to use the APIs."
+    } else {
+        Write-Host "Locked by   : nothing but the unguessable URL (option A, solo test week)." -ForegroundColor Yellow
+        Write-Host "              Do NOT share this URL. For real access control:" -ForegroundColor Yellow
+        Write-Host "                - buy a domain -> named tunnel + Cloudflare Access, OR" -ForegroundColor Yellow
+        Write-Host "                - run with -Gate (in-app allowlist, requires login), OR" -ForegroundColor Yellow
+        Write-Host "                - use Tailscale (private, free, no domain)." -ForegroundColor Yellow
+    }
 } elseif (-not $NoTunnel) {
     Write-Host "Tunnel URL not captured yet - check the cloudflared window / $TunnelLog." -ForegroundColor Yellow
 }
 Write-Host ""
+Write-Host "Local URL   : http://127.0.0.1:8000/northstar-os/   (no tunnel needed for same-machine testing)"
+Write-Host "Gate on/off : launch with -Gate to enable the in-app allowlist"
 Write-Host "Stop everything : powershell -File scripts\launch_alpha.ps1 -Stop"
 Write-Host "Runbook         : docs/PRIVATE_ALPHA_DEPLOY.md"
 exit 0

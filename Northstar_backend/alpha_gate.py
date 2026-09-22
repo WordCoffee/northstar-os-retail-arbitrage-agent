@@ -29,6 +29,11 @@ PUBLIC_PATH_PREFIXES = (
     "/health",
     "/api/health",
     "/api/v1/plans",
+    # Auth must be reachable so an allowlisted operator can obtain a token
+    # (registration itself is allowlist-restricted while private alpha is on).
+    "/api/v1/auth/register",
+    "/api/v1/auth/login",
+    "/api/v1/auth/refresh",
     "/legal",
     "/docs",
     "/redoc",

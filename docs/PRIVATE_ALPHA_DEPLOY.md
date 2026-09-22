@@ -41,6 +41,35 @@ everything-else. No code changes - only the tunnel type and the Access app.
 
 ---
 
+## 0b. Cloudflare Access needs a domain (the easy blocker)
+
+A self-hosted Access application attaches to a **zone you own**. A quick-tunnel
+`*.trycloudflare.com` hostname lives in Cloudflare's zone, so it **cannot** be
+added as an Access app. Until you buy a domain, the honest choices are:
+
+| Option | Access control | Free | Setup |
+|---|---|---|---|
+| **A. URL-only (this week)** | none - unguessable URL only | yes | none (launcher default) |
+| **B. In-app gate** | real allowlist (login required) | yes | launch with `-Gate` |
+| **C. Tailscale** | real, private, per-device | yes | install Tailscale |
+| **D. Domain + named tunnel** | real Cloudflare Access | domain cost | when you buy |
+
+**Option A is acceptable for a solo, same-week test** - the URL is random and
+known only to you. It is **not** access control: anyone with the URL gets in.
+Do not share it, and do not leave it running long-term.
+
+**Option B (recommended once you want real control without a domain):** launch
+with `-Gate`. Registration is then restricted to your allowlist email and every
+API call needs a token; authenticate with that email. The tunnel root still
+lands in the workspace (`NORTHSTAR_ROOT_TO_APP=1`).
+
+**Option C:** Tailscale gives a private, stable HTTPS address reachable only by
+your devices - no domain, no public exposure.
+
+When you buy the domain, move to **D** (named tunnel + Access) and drop A/B.
+
+---
+
 ## 1. Topology (what actually serves what)
 
 ```

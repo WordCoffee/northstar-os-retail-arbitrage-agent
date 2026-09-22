@@ -145,8 +145,10 @@ def serve_scout():
     """Root serves the landing page — except in private alpha, where the root
     is the workspace itself (so the tunnel URL behaves like the real product)."""
     try:
+        import os as _os
         from alpha_gate import private_alpha_enabled
-        if private_alpha_enabled():
+        root_to_app = str(_os.getenv("NORTHSTAR_ROOT_TO_APP", "") or "").strip() == "1"
+        if root_to_app or private_alpha_enabled():
             return RedirectResponse(url="/northstar-os/", status_code=307)
     except Exception:
         pass
@@ -1301,10 +1303,21 @@ def get_sourcescout_summary():
 
 @app.post("/api/v1/auth/register")
 def register_user(body: dict):
-    """Register a new user account."""
+    """Register a new user account.
+
+    In private alpha, registration is restricted to the allowlist so the
+    in-app gate is real access control (not just obscurity).
+    """
     import auth
+    from alpha_gate import is_allowlisted, private_alpha_enabled, alpha_allowlist
+    email = body.get("email", "")
+    if private_alpha_enabled() and not is_allowlisted(email):
+        raise HTTPException(
+            status_code=403,
+            detail="Registration is restricted to authorized accounts during private alpha.",
+        )
     result = auth.register_user(
-        email=body.get("email", ""),
+        email=email,
         password=body.get("password", ""),
         plan=body.get("plan", "foundation"),
     )

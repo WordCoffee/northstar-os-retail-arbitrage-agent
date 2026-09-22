@@ -124,9 +124,41 @@ def test_root_redirects_to_workspace_in_private_alpha(monkeypatch):
 
 def test_root_serves_landing_when_alpha_off(monkeypatch):
     monkeypatch.delenv("NORTHSTAR_PRIVATE_ALPHA", raising=False)
+    monkeypatch.delenv("NORTHSTAR_ROOT_TO_APP", raising=False)
     monkeypatch.setenv("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
     from fastapi.testclient import TestClient
     from main import app
     c = TestClient(app)
     r = c.get("/", follow_redirects=False)
     assert r.status_code == 200
+
+
+def test_root_redirects_when_root_to_app_even_without_gate(monkeypatch):
+    monkeypatch.delenv("NORTHSTAR_PRIVATE_ALPHA", raising=False)
+    monkeypatch.setenv("NORTHSTAR_ROOT_TO_APP", "1")
+    monkeypatch.setenv("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
+    from fastapi.testclient import TestClient
+    from main import app
+    c = TestClient(app)
+    r = c.get("/", follow_redirects=False)
+    assert r.status_code == 307 and r.headers["location"] == "/northstar-os/"
+
+
+def test_auth_paths_are_public_under_gate(monkeypatch):
+    monkeypatch.setenv("NORTHSTAR_PRIVATE_ALPHA", "1")
+    monkeypatch.setenv("NORTHSTAR_ALPHA_ALLOWLIST", "op@x.com")
+    for p in ("/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/refresh"):
+        assert alpha_gate.decide("POST", p, None) == (False, "public_path"), p
+
+
+def test_register_blocked_for_non_allowlisted_under_gate(monkeypatch):
+    monkeypatch.setenv("NORTHSTAR_PRIVATE_ALPHA", "1")
+    monkeypatch.setenv("NORTHSTAR_ALPHA_ALLOWLIST", "op@x.com")
+    monkeypatch.setenv("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
+    from fastapi.testclient import TestClient
+    from main import app
+    c = TestClient(app)
+    r = c.post("/api/v1/auth/register",
+               json={"email": "stranger@y.com", "password": "password123"})
+    assert r.status_code == 403
+    assert "restricted" in r.json()["detail"].lower()
