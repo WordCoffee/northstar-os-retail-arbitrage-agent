@@ -364,7 +364,7 @@ assert(els['view-autothink'].classList.contains('active'), 'autothink: route mou
 assert(html.includes('AutothinK'), 'autothink: brand spelled AutothinK in shell markup');
 assert(html.includes('id="at-workspace"'), 'autothink: workspace iframe present in shell');
 assert((html.match(/<button class="nav-item"/g) || []).length === 11, 'shell: drawer holds 11 nav items (hub + ledger + 4 services + 3 monitoring + autothink + account)');
-assert(html.includes("Northstar OS — The Analyst's Desk"), 'shell: document title matches Analyst\u2019s Desk');
+assert(html.includes("Northstar OS — Retail Arbitrage Suite"), 'shell: document title matches the suite');
 assert(html.includes('css/tokens.css') && html.includes('css/shell.css'), 'shell: css wired');
 
 /* ============================================================

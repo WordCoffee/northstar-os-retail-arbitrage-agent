@@ -30,6 +30,14 @@ $TmpDir      = if ($env:TEMP) { $env:TEMP } else { $Root }
 # (one client id) is not throttled by the anonymous 30/min production limit.
 # Product limits are unchanged — this only affects the runner's own runs.
 $env:NORTHSTAR_DISABLE_RATE_LIMIT = "1"
+# Fresh per-run pytest temp root. A stale or ACL-locked pytest-of-* dir in the
+# user temp (WinError 5 on os.scandir) would otherwise error every tmp_path
+# fixture and false-fail the whole suite. Isolation only - counts must still
+# match BASELINE.json exactly.
+$FreshTmp = Join-Path $TmpDir ("northstar-pt-" + $PID + "-" + (Get-Date -Format "yyyyMMddHHmmss"))
+New-Item -ItemType Directory -Force -Path $FreshTmp | Out-Null
+$env:TEMP = $FreshTmp
+$env:TMP  = $FreshTmp
 
 function Read-Text($path) {
     try { return Get-Content -Raw -Encoding UTF8 $path } catch {}
@@ -74,7 +82,7 @@ $hasFunctions = ($null -ne $base.baseline.functions)
 
 # ---------- 1. backend sanitized full suite ----------
 Write-Host "== [1/4] Backend sanitized full suite (pytest) =="
-$r = Run-Suite $BackendDir "python -m pytest -q"
+$r = Run-Suite $BackendDir "python -m pytest -q -p no:cacheprovider"
 $sm = [regex]::Match($r.text, "(\d+)\s+failed,\s+(\d+)\s+passed,\s+(\d+)\s+skipped,\s+(\d+)\s+subtests\s+passed")
 if ($sm -eq $null) {
     $bParsed = $false
@@ -109,7 +117,7 @@ if ($sm -eq $null) {
 
 # ---------- 2. golden goose module suite ----------
 Write-Host "== [2/4] Golden Goose module suite (pytest) =="
-$r = Run-Suite $BackendDir "python -m pytest -q agents\golden_goose_finder\tests"
+$r = Run-Suite $BackendDir "python -m pytest -q -p no:cacheprovider agents\golden_goose_finder\tests"
 $gm = [regex]::Match($r.text, "(\d+)\s+passed")
 if ($gm -eq $null) {
     Write-Host "  ERROR: could not parse GG summary (exit $($r.code))" -ForegroundColor Red

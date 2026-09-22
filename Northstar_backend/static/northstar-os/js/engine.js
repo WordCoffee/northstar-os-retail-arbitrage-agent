@@ -116,6 +116,42 @@
     $qa('.nav-item[data-route]').forEach(function (item) {
       item.addEventListener('click', function () { NS.go(item.getAttribute('data-route')); });
     });
+    // collapsible groups
+    $qa('.drawer-group-header[data-collapse]').forEach(function (head) {
+      head.addEventListener('click', function () {
+        var group = head.parentNode;
+        if (!group || group.className.indexOf('drawer-group') === -1) return;
+        var collapsed = group.classList.toggle('collapsed');
+        head.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+      });
+    });
+  };
+
+  // ---------------- THEME (light primary + dark toggle) ----------------
+  NS.theme = function () {
+    var de = document.documentElement;
+    return de.getAttribute ? (de.getAttribute('data-theme') || 'light') : 'light';
+  };
+  NS.setTheme = function (t) {
+    t = (t === 'dark') ? 'dark' : 'light';
+    var de = document.documentElement;
+    if (de.setAttribute) de.setAttribute('data-theme', t);
+    try { localStorage.setItem('northstar_theme', t); } catch (e) {}
+    var btn = $id('theme-toggle');
+    if (btn) btn.setAttribute('data-theme', t);
+    return t;
+  };
+  NS.toggleTheme = function () {
+    return NS.setTheme(NS.theme() === 'dark' ? 'light' : 'dark');
+  };
+  NS.initTheme = function () {
+    var saved = null;
+    try { saved = localStorage.getItem('northstar_theme'); } catch (e) {}
+    NS.setTheme(saved || 'light');
+    var btn = $id('theme-toggle');
+    if (btn) btn.addEventListener('click', NS.toggleTheme);
+    var chip = $id('account-chip');
+    if (chip) chip.addEventListener('click', function () { NS.go('account'); });
   };
 
   // ---------------- BULLETIN BOARD ----------------
@@ -284,6 +320,7 @@
 
   // ---------------- BOOT ----------------
   NS.init = function () {
+    NS.initTheme();
     NS.bindDrawer();
     NS.bindPaperclip();
     NS.bindSearch();

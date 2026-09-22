@@ -1,0 +1,223 @@
+/* ==========================================================================
+   NORTHSTAR OS — DESIGN TOKENS v2  (Phase I · I1)
+   Data-tool design system: LIGHT PRIMARY + DARK TOGGLE.
+   Neutral surfaces, ONE accent (Northstar steel-blue), semantic
+   green=profit / red=loss / amber=warn. Inter for UI, tabular mono for
+   numbers. Compact table density, real elevation, focus rings.
+
+   Loaded AFTER css/tokens.css so these values win the cascade. Every legacy
+   token name is redefined here so the existing component stylesheets adopt
+   the v2 palette without markup changes.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ------------------------------------------------------------------ LIGHT */
+:root {
+  color-scheme: light;
+
+  /* ---- surfaces ---- */
+  --bg:            #f3f5f9;   /* app canvas */
+  --bg-elevated:   #ffffff;   /* cards, panels, rail */
+  --bg-sunken:     #eceff5;   /* table header, wells */
+  --bg-hover:      #e6ebf4;   /* hover fill */
+  --bg-inset:      #f7f9fc;   /* inset fields */
+  --desk-leather:  #f3f5f9;   /* legacy name -> flat canvas */
+  --aluminum:      linear-gradient(180deg, #ffffff, #f1f4f9);
+  --aluminum-hi:   linear-gradient(180deg, #ffffff, #e9eef6);
+
+  /* ---- the ONE accent: Northstar steel-blue ---- */
+  --accent:         #2563eb;
+  --accent-bright:  #3b82f6;
+  --accent-deep:    #1d4ed8;
+  --accent-dim:     rgba(37, 99, 235, 0.10);
+  --accent-line:    rgba(37, 99, 235, 0.42);
+  --accent-ink:     #ffffff;
+
+  /* ---- semantic: profit / loss / warn ---- */
+  --profit:         #15803d;
+  --profit-bright:  #16a34a;
+  --profit-dim:     rgba(22, 163, 74, 0.12);
+  --profit-line:    rgba(22, 163, 74, 0.40);
+
+  --loss:           #b91c1c;
+  --loss-bright:    #dc2626;
+  --loss-dim:       rgba(220, 38, 38, 0.10);
+  --loss-line:      rgba(220, 38, 38, 0.38);
+
+  --warn:           #b45309;
+  --warn-bright:    #d97706;
+  --warn-dim:       rgba(217, 119, 6, 0.12);
+  --warn-line:      rgba(217, 119, 6, 0.42);
+
+  /* ---- text ---- */
+  --ink:            #0e1a2b;   /* primary */
+  --ink-dim:        #475569;   /* secondary */
+  --ink-faint:      #7c8aa0;   /* tertiary / muted */
+  --hairline:       #d6dde8;   /* border */
+  --hairline-soft:  #e7ecf4;   /* subtle border */
+
+  /* ---- semantic aliases ---- */
+  --text-primary:   var(--ink);
+  --text-secondary: var(--ink-dim);
+  --text-muted:     var(--ink-faint);
+  --surface:        var(--bg-elevated);
+  --surface-hover:  var(--bg-hover);
+  --border:         var(--hairline);
+  --border-subtle:  var(--hairline-soft);
+
+  /* ---- legacy colour names remapped to the v2 system ---- */
+  --gold:           var(--accent);
+  --gold-dim:       var(--accent-dim);
+  --gold-line:      var(--accent-line);
+  --gold-bright:    var(--accent-bright);
+  --steel:          var(--accent);
+  --steel-dim:      var(--accent-dim);
+  --steel-line:     var(--accent-line);
+  --green:          var(--profit-bright);
+  --green-dim:      var(--profit-dim);
+  --green-line:     var(--profit-line);
+  --green-bright:   #22c55e;
+  --crimson:        var(--loss);
+  --crimson-bright: var(--loss-bright);
+  --crimson-dim:    var(--loss-dim);
+
+  /* ---- typography ---- */
+  --font-ui:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-head:  var(--font-ui);   /* serif retired */
+  --font-body:  var(--font-ui);
+  --font-mono:  'JetBrains Mono', ui-monospace, 'Cascadia Mono', 'Consolas', 'SFMono-Regular', Menlo, monospace;
+
+  --fs-2xs: 10.5px; --fs-xs: 11.5px; --fs-sm: 12.5px; --fs-md: 13.5px;
+  --fs-lg: 15px;    --fs-xl: 18px;   --fs-2xl: 22px;  --fs-3xl: 28px;
+  --lh-tight: 1.25; --lh-normal: 1.5;
+
+  /* ---- spacing scale (4px base) ---- */
+  --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 20px;  --sp-6: 24px;  --sp-7: 28px;  --sp-8: 32px;
+  --sp-9: 36px;  --sp-10: 40px; --sp-11: 44px; --sp-12: 48px;
+
+  /* ---- radii ---- */
+  --radius:        8px;
+  --radius-sm:     5px;
+  --radius-lg:     12px;
+  --radius-xl:     16px;
+  --radius-full:   999px;
+
+  /* ---- layout metrics ---- */
+  --rail-w:              236px;
+  --rail-w-collapsed:    62px;
+  --topbar-h:            56px;
+  --ribbon-h:            var(--topbar-h);   /* legacy */
+  --drawer-w:            var(--rail-w);     /* legacy */
+  --drawer-w-collapsed:  var(--rail-w-collapsed);
+  --board-w:             280px;
+  --space:               16px;
+
+  /* ---- table density ---- */
+  --row-h:          36px;
+  --row-h-compact:  30px;
+  --cell-pad-x:     12px;
+
+  /* ---- elevation ---- */
+  --shadow-sm:   0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
+  --shadow-card: 0 1px 2px rgba(16,24,40,.05), 0 1px 3px rgba(16,24,40,.07);
+  --shadow-pin:  0 4px 14px rgba(16,24,40,.12);
+  --shadow-lg:   0 10px 30px rgba(16,24,40,.14);
+  --shadow-pop:  0 22px 48px rgba(16,24,40,.22);
+
+  /* ---- focus ring ---- */
+  --focus-ring:  0 0 0 2px var(--bg-elevated), 0 0 0 4px var(--accent-line);
+
+  /* ---- transitions ---- */
+  --ease-out:        cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast:   120ms;
+  --duration-normal: 180ms;
+  --duration-slow:   320ms;
+
+  /* ---- z-index scale ---- */
+  --z-drawer: 30;
+  --z-ribbon: 40;
+  --z-modal:  50;
+  --z-toast:  60;
+
+  /* ---- single-accent signature aliases (all groups share the accent) ---- */
+  --sig-sourcing:        var(--accent);
+  --sig-sourcing-dim:    var(--accent-dim);
+  --sig-sourcing-line:   var(--accent-line);
+  --sig-sourcing-bright: var(--accent-bright);
+  --sig-listing:         var(--accent);
+  --sig-listing-dim:     var(--accent-dim);
+  --sig-listing-line:    var(--accent-line);
+  --sig-listing-bright:  var(--accent-bright);
+  --sig-social:          var(--accent);
+  --sig-social-dim:      var(--accent-dim);
+  --sig-social-line:     var(--accent-line);
+  --sig-social-bright:   var(--accent-bright);
+  --sig-ads:             var(--accent);
+  --sig-ads-dim:         var(--accent-dim);
+  --sig-ads-line:        var(--accent-line);
+  --sig-ads-bright:      var(--accent-bright);
+  --sig-autothink:       var(--accent);
+  --sig-autothink-dim:   var(--accent-dim);
+  --sig-autothink-line:  var(--accent-line);
+  --sig-autothink-bright:var(--accent-bright);
+  --sig-inventory:       var(--accent);
+  --sig-inventory-dim:   var(--accent-dim);
+  --sig-inventory-line:  var(--accent-line);
+
+  --sig-accent:        var(--accent);
+  --sig-accent-dim:    var(--accent-dim);
+  --sig-accent-line:   var(--accent-line);
+  --sig-accent-bright: var(--accent-bright);
+}
+
+/* ------------------------------------------------------------------- DARK */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg:            #0d1420;
+  --bg-elevated:   #151d2b;
+  --bg-sunken:     #0a0f19;
+  --bg-hover:      #1d2738;
+  --bg-inset:      #101724;
+  --desk-leather:  #0d1420;
+  --aluminum:      linear-gradient(180deg, #1a2332, #141c29);
+  --aluminum-hi:   linear-gradient(180deg, #1f2937, #161f2d);
+
+  --accent:         #3b82f6;
+  --accent-bright:  #60a5fa;
+  --accent-deep:    #2563eb;
+  --accent-dim:     rgba(59, 130, 246, 0.16);
+  --accent-line:    rgba(59, 130, 246, 0.50);
+  --accent-ink:     #ffffff;
+
+  --profit:         #22c55e;
+  --profit-bright:  #34d399;
+  --profit-dim:     rgba(34, 197, 94, 0.16);
+  --profit-line:    rgba(34, 197, 94, 0.44);
+
+  --loss:           #f87171;
+  --loss-bright:    #f87171;
+  --loss-dim:       rgba(248, 113, 113, 0.14);
+  --loss-line:      rgba(248, 113, 113, 0.44);
+
+  --warn:           #fbbf24;
+  --warn-bright:    #fbbf24;
+  --warn-dim:       rgba(251, 191, 36, 0.16);
+  --warn-line:      rgba(251, 191, 36, 0.46);
+
+  --ink:            #e6edf6;
+  --ink-dim:        #9fb0c6;
+  --ink-faint:      #6b7c93;
+  --hairline:       #26344a;
+  --hairline-soft:  #1c2738;
+
+  --shadow-sm:   0 1px 2px rgba(0,0,0,.4);
+  --shadow-card: 0 1px 3px rgba(0,0,0,.45);
+  --shadow-pin:  0 4px 14px rgba(0,0,0,.5);
+  --shadow-lg:   0 12px 32px rgba(0,0,0,.55);
+  --shadow-pop:  0 22px 48px rgba(0,0,0,.62);
+
+  --focus-ring:  0 0 0 2px var(--bg-elevated), 0 0 0 4px var(--accent-line);
+}
