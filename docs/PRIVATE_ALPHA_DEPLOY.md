@@ -27,6 +27,32 @@ Local FastAPI backend  (127.0.0.1:8000)
 
 ## 2. Bring-up (each session)
 
+### One command (recommended)
+
+Double-click **`START-NORTHSTAR-ALPHA.bat`** (repo root), or run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\launch_alpha.ps1
+```
+
+It sets the private-alpha env, starts Ollama (if down), the backend (:8000),
+AutothinK (:8100) and the Cloudflare tunnel, then prints the public URL.
+
+| Mode | Command |
+|---|---|
+| Check first (no launch) | `... -File scripts\launch_alpha.ps1 -Check` |
+| Local only (no tunnel)  | `... -File scripts\launch_alpha.ps1 -NoTunnel` |
+| Arm the cloud engine    | `... -File scripts\launch_alpha.ps1 -Cloud` (real spend on run) |
+| Stop what it started    | `... -File scripts\launch_alpha.ps1 -Stop` |
+
+> `cloudflared` must be on `PATH` for the tunnel step. If it is installed
+> elsewhere, run the launcher with `-NoTunnel` and start the tunnel yourself
+> (below); the launcher prints the state of everything else.
+> `-Stop` only stops processes the launcher started (it never touches a
+> backend that was already running).
+
+### Manual (if you prefer)
+
 ```powershell
 # 1. Local engines
 ollama serve                                   # local engine (leave running)
