@@ -74,19 +74,51 @@ function Ollama-Up() {
 
 function Banner($text) { Write-Host $text -ForegroundColor Cyan }
 
+function Stop-ProcessTree($procId) {
+    # Kill the process and its children (uvicorn --reload parent shells +
+    # worker pythons). taskkill /T walks the whole tree.
+    try {
+        taskkill /PID $procId /T /F 2>$null | Out-Null
+    } catch { }
+}
+
 function Stop-Listeners($ports) {
+    $failed = @()
     foreach ($port in $ports) {
-        try {
-            $conns = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
-            foreach ($c in @($conns)) {
+        $conns = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
+        $pids = @()
+        foreach ($c in @($conns)) {
+            if ($c.OwningProcess -and ($pids -notcontains $c.OwningProcess)) { $pids += $c.OwningProcess }
+        }
+        if ($pids.Count -eq 0) {
+            Write-Host ("restart: :{0} already free" -f $port) -ForegroundColor DarkGray
+            continue
+        }
+        foreach ($procId in $pids) {
+            Stop-ProcessTree $procId
+            Write-Host ("restart: stopped pid {0} on :{1}" -f $procId, $port) -ForegroundColor Yellow
+        }
+        # netstat/Get-NetTCPConnection can report a dead parent as the owner;
+        # also kill any python/powershell whose command line pins this port.
+        $candidates = Get-CimInstance Win32_Process -Filter "Name='python.exe' OR Name='powershell.exe'" -ErrorAction SilentlyContinue
+        foreach ($proc in @($candidates)) {
+            if ($proc.CommandLine -and ($proc.CommandLine -match ("--port\s+" + $port))) {
                 try {
-                    Stop-Process -Id $c.OwningProcess -Force -ErrorAction SilentlyContinue
-                    Write-Host ("restart: stopped pid {0} on :{1}" -f $c.OwningProcess, $port) -ForegroundColor Yellow
-                } catch { }
+                    Stop-ProcessTree $proc.ProcessId
+                    Write-Host ("restart: killed tree owner {0} on :{1}" -f $proc.ProcessId, $port) -ForegroundColor Yellow
+                } catch { $failed += ("pid " + $proc.ProcessId + " on :" + $port) }
             }
-        } catch { }
+        }
     }
-    Start-Sleep -Milliseconds 800
+    Start-Sleep -Milliseconds 1500
+    foreach ($port in $ports) {
+        if (Port-Busy $port) { $failed += ("port " + $port + " still busy") }
+        else { Write-Host ("restart: :{0} verified free" -f $port) -ForegroundColor Green }
+    }
+    if ($failed.Count -gt 0) {
+        Write-Host ("restart FAILED to free: {0}" -f ($failed -join "; ")) -ForegroundColor Red
+        throw "Stop-Listeners could not free the requested ports. Resolve manually (elevated taskkill) and retry."
+    }
 }
 
 function Shell-Assets-Ok() {
