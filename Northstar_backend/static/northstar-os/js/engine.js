@@ -83,7 +83,7 @@
   };
 
   // ---------------- ROUTER ----------------
-  var ROUTES = ['hub', 'sourcescout', 'listingforge', 'adpilot', 'socialpulse', 'autothink', 'account'];
+  var ROUTES = ['hub', 'sourcescout', 'listingforge', 'adpilot', 'socialpulse', 'autothink', 'account', 'theledger', 'thewatch', 'rankledger', 'rivalboard'];
   NS.currentRoute = function () {
     var h = (location.hash || '').replace(/^#\/?/, '');
     return ROUTES.indexOf(h) !== -1 ? h : 'hub';

@@ -654,21 +654,33 @@
                 style="width:100%;height:560px;border:1px solid var(--hairline);border-radius:var(--radius);margin-top:8px;background:var(--bg-sunken)"></iframe>
       </section>
 
-      <!-- ---------------- THE LEDGER · Profitability (H3 placeholder) ---------------- -->
+      <!-- ---------------- THE LEDGER · Profitability (built: P&L KPIs + charts) ---------------- -->
       <section id="view-theledger" class="view" data-view="theledger" aria-hidden="true">
         <h2 class="view-title">The Ledger</h2>
-        <p class="view-sub">Profitability dashboard · per SKU, per brand</p>
-        <div class="soon" data-slot="theledger-placeholder">
-          <div class="soon-badge demo-badge">Coming soon</div>
-          <div class="soon-body">
-            <p class="soon-pitch">Revenue − COGS − fees − ad spend, rolled up per SKU and per brand. The one number that says whether the portfolio is actually winning.</p>
-            <ul class="soon-meta">
-              <li><span>Unlocks at</span><strong>Keystone</strong></li>
-              <li><span>Build state</span><strong>Not built — honest placeholder</strong></li>
-              <li><span>Needs</span><strong>P&amp;L data layer</strong></li>
-            </ul>
-          </div>
+        <p class="view-sub">Profitability · per SKU, per brand · <span class="demo-badge">demo</span></p>
+        <div id="led-kpis" class="kpi-strip"></div>
+        <div class="panel">
+          <div class="panel-head"><h3>Monthly P&amp;L</h3><span class="hint">net profit · rolling 3 months (demo)</span></div>
+          <div id="led-monthly" class="ink-plot"></div>
         </div>
+        <div class="panel-head" style="margin-top:18px"><h3>Per-SKU P&amp;L</h3><span class="hint">revenue − COGS − fees − ads (demo fixture)</span></div>
+        <div class="table-wrap">
+          <table id="led-sku" class="svc">
+            <thead><tr>
+              <th scope="col">SKU</th>
+              <th scope="col">Product</th>
+              <th scope="col" class="num">Units</th>
+              <th scope="col" class="num">Revenue</th>
+              <th scope="col" class="num">COGS</th>
+              <th scope="col" class="num">Fees</th>
+              <th scope="col" class="num">Ad Spend</th>
+              <th scope="col" class="num">Net</th>
+              <th scope="col" class="num">Margin</th>
+            </tr></thead>
+            <tbody id="led-sku-body"></tbody>
+          </table>
+        </div>
+        <div class="notice" style="margin-top:12px">Demo fixture only — a live P&amp;L requires Amazon settlement + ads-spend read, both gated. Nothing here is live data.</div>
       </section>
 
       <!-- ---------------- THE WATCH · Listing Guardian (H3 placeholder) ---------------- -->
@@ -833,6 +845,7 @@
   <script src="js/socialpulse.js"></script>
   <script src="js/autothink.js"></script>
   <script src="js/account.js"></script>
+  <script src="js/ledger.js"></script>
   <script src="js/deck.js"></script>
   <script>NS.init();</script>
 

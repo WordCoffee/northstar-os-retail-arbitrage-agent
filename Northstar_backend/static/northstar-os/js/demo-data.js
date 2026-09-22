@@ -221,6 +221,33 @@
       ],
     },
 
+    ledger: {
+      kpis: [
+        { label: 'Revenue · 90d', value: '$71,611', kind: 'good', sub: 'portfolio gross (demo)' },
+        { label: 'COGS · 90d', value: '$32,972', kind: 'dim', sub: 'landed cost (demo)' },
+        { label: 'Amazon Fees · 90d', value: '$15,290', kind: 'dim', sub: 'referral + FBA (demo)' },
+        { label: 'Ad Spend · 90d', value: '$5,072', kind: 'dim', sub: 'PPC (demo)' },
+        { label: 'Net Profit · 90d', value: '$18,277', kind: 'gold', sub: 'after fees + ads (demo)' },
+        { label: 'Blended Margin', value: '25.5%', kind: 'good', sub: 'net / revenue (demo)' },
+      ],
+      monthly: [
+        { label: 'Jul', value: 5240 },
+        { label: 'Aug', value: 6110 },
+        { label: 'Sep', value: 6927 },
+      ],
+      skus: [
+        { sku: 'WC-MOMS-V1', name: 'Word Coffee — Affirmation Cards for Moms', units: 412, revenue: 8236, cogs: 2513, fees: 1440, ads: 610, net: 3673, margin: 44.6 },
+        { sku: 'WC-WOMEN-V2', name: 'Word Coffee — Affirmation Cards for Women', units: 268, revenue: 5362, cogs: 1635, fees: 938, ads: 402, net: 2387, margin: 44.5 },
+        { sku: 'B0CP6LXPLK', name: 'Kirkland Signature Minoxidil 5%', units: 330, revenue: 13860, cogs: 5937, fees: 2781, ads: 1240, net: 3902, margin: 28.2 },
+        { sku: 'B08B5GZXHN', name: 'Organic Extra Virgin Olive Oil 2L', units: 96, revenue: 2594, cogs: 863, fees: 586, ads: 210, net: 935, margin: 36.0 },
+        { sku: 'B07XJ8C8F5', name: 'Kirkland Signature Bath Tissue 30 rolls', units: 210, revenue: 8398, cogs: 4723, fees: 1911, ads: 480, net: 1284, margin: 15.3 },
+        { sku: 'B00C2UQ2XK', name: 'Kirkland Signature Colombian Coffee 3lb', units: 260, revenue: 12997, cogs: 6497, fees: 2652, ads: 720, net: 3128, margin: 24.1 },
+        { sku: 'B0BV2L9T4R', name: 'Kirkland Signature Trail Mix 2lb', units: 120, revenue: 3420, cogs: 1679, fees: 936, ads: 260, net: 545, margin: 15.9 },
+        { sku: 'B09J8V5T2P', name: 'Kirkland Signature Protein Bars 40ct', units: 230, revenue: 10347, cogs: 5288, fees: 2276, ads: 610, net: 2173, margin: 21.0 },
+        { sku: 'B07Q5K7J2M', name: 'Kirkland Signature Sparkling Water 35pk', units: 320, revenue: 6397, cogs: 3837, fees: 1770, ads: 540, net: 250, margin: 3.9 },
+      ],
+    },
+
     subscriber: {
       gateStateNote: 'Demo fixture mirroring shared/subscription-plans.json and the profiles manifest. Plans mark which live gates they WOULD cover; gates are never flipped by a plan.',
       identity: {

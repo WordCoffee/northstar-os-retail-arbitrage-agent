@@ -18,7 +18,7 @@ const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const scriptParts = [
     'engine.js', 'demo-data.js', 'brain.js', 'hub.js', 'sourcescout.js',
     'listingforge.js', 'adpilot.js', 'socialpulse.js', 'autothink.js',
-    'account.js', 'deck.js',
+    'account.js', 'ledger.js', 'deck.js',
 ].map((f) => fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'));
 const boot = 'window.NS.init(); if (window.NS.brain && window.NS.brain.init) window.NS.brain.init(); if (window.NS.deck && window.NS.deck.init) window.NS.deck.init();';
 const script = scriptParts.join('\n;\n') + '\n' + boot;
@@ -754,9 +754,11 @@ NS.brain.set('local', 'T2'); /* reset */
 NS.brain.renderState();
 assert(els['brain-state'].textContent.indexOf('offline') !== -1, 'brain: honest offline state before catalog fetch');
 
-/* the four new service placeholders exist with honest slots */
-[['view-theledger', 'theledger-placeholder', 'The Ledger'],
- ['view-thewatch', 'thewatch-placeholder', 'The Watch'],
+/* the built Ledger + three honest coming-soon placeholders */
+assert(html.includes('id="view-theledger"'), 'new service: view view-theledger present');
+assert(html.includes('id="led-sku-body"') && html.includes('id="led-monthly"') && html.includes('id="led-kpis"'), 'ledger: P&L screen built (KPIs + chart + SKU table)');
+assert(!html.includes('data-slot="theledger-placeholder"'), 'ledger: honest placeholder retired (now a real screen)');
+[['view-thewatch', 'thewatch-placeholder', 'The Watch'],
  ['view-rankledger', 'rankledger-placeholder', 'RankLedger'],
  ['view-rivalboard', 'rivalboard-placeholder', 'The Rival Board'],
 ].forEach((t) => {
@@ -766,6 +768,15 @@ assert(els['brain-state'].textContent.indexOf('offline') !== -1, 'brain: honest 
 assert(html.includes('id="nav-thewatch"') && html.includes('id="nav-rankledger"')
     && html.includes('id="nav-rivalboard"') && html.includes('id="nav-theledger"'),
     'new services: four nav items registered');
+NS.go('theledger');
+assert(locationStub.hash === '#/theledger', 'router: go(theledger) resolves (was falling back to hub)');
+
+/* Ledger deep: the P&L screen renders from the demo fixture */
+assert(NS.ledger && typeof NS.ledger.onMount === 'function', 'ledger: module exposed on NS');
+assert((els['led-kpis'].innerHTML.match(/data-kpi=/g) || []).length === 6, 'ledger: six P&L KPIs rendered');
+assert(els['led-kpis'].innerHTML.includes('Net Profit'), 'ledger: net profit KPI present');
+assert((els['led-sku-body'].innerHTML.match(/data-sku=/g) || []).length === 9, 'ledger: nine per-SKU P&L rows rendered');
+assert(els['led-monthly'].innerHTML.includes('ip-bar'), 'ledger: monthly net-profit chart rendered');
 
 /* ==========================================================================
  * H9 — Alpha Command Deck + command palette + engine lamp
