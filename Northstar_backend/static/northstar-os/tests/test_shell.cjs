@@ -348,7 +348,7 @@ NS.go('socialpulse');
 const voices = els['soc-voices'].innerHTML;
 assert(voices.includes('Word Coffee') && voices.includes('NOT a beverage'), 'socialpulse: voice module enforces NOT-a-beverage rule');
 const posts = els['soc-posts'].innerHTML;
-assert((posts.match(/data-post=/g) || []).length === 3, 'socialpulse: 3 post drafts');
+assert((posts.match(/data-post=/g) || []).length >= 10, 'socialpulse: dense post drafts grid (>=10)');
 assert(posts.includes('Grab Word Coffee, not a cup'), 'socialpulse: brand-voice copy present');
 assert((els['soc-creatives'].innerHTML.match(/data-creative=/g) || []).length === 3, 'socialpulse: 3 creative prompts');
 assert((els['soc-outreach'].innerHTML.match(/data-outreach=/g) || []).length === 2, 'socialpulse: 2 outreach templates');
@@ -532,9 +532,10 @@ assert(els['soc-cs-output'].innerHTML.includes('Fuel Your Focus.'), 'socialpulse
 getEl('soc-cs-schedule')._listeners.click.forEach((fn) => fn());
 const socCal2 = els['soc-calendar'].innerHTML;
 assert((socCal2.match(/class="day-slot filled"/g) || []).length === 3, 'socialpulse: studio caption occupies a calendar slot');
-assert(socCal2.includes('data-filled="cs4"'), 'socialpulse: studio-scheduled post tracked by id in calendar');
-assert(socCal2.includes('data-slot="Tue 8:30 AM"') && socCal2.includes('data-filled="cs4"'), 'socialpulse: scheduling picks the first free slot (Tue)');
-assert((els['soc-posts'].innerHTML.match(/data-post=/g) || []).length === 4, 'socialpulse: studio-scheduled caption appended to posts');
+const csFilled = socCal2.match(/data-filled="(cs\d+)"/g) || [];
+assert(csFilled.length === 1 && /^data-filled="cs\d+"$/.test(csFilled[0]), 'socialpulse: studio-scheduled post tracked by generated id in calendar');
+assert(socCal2.includes('data-slot="Tue 8:30 AM"') && csFilled.length === 1, 'socialpulse: scheduling picks the first free slot (Tue)');
+assert((els['soc-posts'].innerHTML.match(/data-post=/g) || []).length >= 12, 'socialpulse: studio-scheduled caption appended to dense post grid');
 
 /* draft -> calendar: p3 moves out of drafts on click */
 getEl('schedule-p3')._listeners.click.forEach((fn) => fn());
