@@ -14,11 +14,51 @@
   var NS = window.NS;
 
   var state = { rows: [], filtered: [] };
+  var sortState = { key: null, dir: 'desc' };
 
   function allRows(demo) {
     return (demo && demo.sourcescout && demo.sourcescout.rows) || [];
   }
   function getEl(id) { return document.getElementById(id); }
+  function $$(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  /* ---------- sortable columns ---------- */
+  function sortValue(r, key) {
+    if (key === 'name' || key === 'competition' || key === 'tier') return String(r[key] || '').toLowerCase();
+    var v = r[key];
+    return v == null ? null : Number(v);
+  }
+  function applySort(rows) {
+    if (!sortState.key) return rows;
+    var k = sortState.key, dir = sortState.dir === 'asc' ? 1 : -1;
+    return rows.slice().sort(function (a, b) {
+      var av = sortValue(a, k), bv = sortValue(b, k);
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;   /* nulls always last */
+      if (bv == null) return -1;
+      if (av < bv) return -1 * dir;
+      if (av > bv) return 1 * dir;
+      return 0;
+    });
+  }
+  function updateSortIndicators() {
+    $$('#ss-table thead th[data-sort] .sort-ind').forEach(function (s) {
+      var k = s.getAttribute('data-ind');
+      s.textContent = (sortState.key === k) ? (sortState.dir === 'asc' ? ' \u25B2' : ' \u25BC') : '';
+    });
+  }
+  function bindSort() {
+    $$('#ss-table thead th[data-sort]').forEach(function (th) {
+      if (th._ssSort) return;
+      th._ssSort = true;
+      th.addEventListener('click', function () {
+        var key = th.getAttribute('data-sort');
+        if (sortState.key === key) sortState.dir = sortState.dir === 'desc' ? 'asc' : 'desc';
+        else { sortState.key = key; sortState.dir = 'desc'; }
+        applyFilters();
+      });
+    });
+  }
 
   /* net margin % = (Amazon Price - COGS) / Amazon Price, 1 decimal */
   function marginPct(r) {
@@ -147,11 +187,13 @@
 
   function applyFilters() {
     state.filtered = state.rows.filter(NS.ss.matchesFilters);
+    state.filtered = applySort(state.filtered);
     // "Prefer consumables" is a sort preference — consumables first, all rows kept
     if (getEl('facet-consumable') && getEl('facet-consumable').checked) {
       state.filtered.sort(function (a, b) { return (b.consumable ? 1 : 0) - (a.consumable ? 1 : 0); });
     }
     renderTable(state.filtered);
+    updateSortIndicators();
     var count = getEl('ss-result-count');
     if (count) count.textContent = state.filtered.length + ' of ' + state.rows.length + ' rows';
   }
@@ -179,6 +221,7 @@
     renderLiveStatus(data);
     state.rows = allRows(data);
     applyFilters();
+    bindSort();
     NS.bindKnobs(getEl('view-sourcescout'));
 
     // facet listeners (guarded so remounts never stack duplicates)
@@ -200,5 +243,5 @@
     if (route === 'sourcescout') onMount();
     if (prevOnMount) prevOnMount(route);
   };
-  window.NS.ss = { applyFilters: applyFilters, exportWorksheet: exportWorksheet, matchesFilters: NS.ss.matchesFilters, marginPct: marginPct, state: state };
+  window.NS.ss = { applyFilters: applyFilters, exportWorksheet: exportWorksheet, matchesFilters: NS.ss.matchesFilters, marginPct: marginPct, state: state, sortState: sortState };
 })();

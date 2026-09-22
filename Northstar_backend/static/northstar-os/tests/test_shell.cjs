@@ -265,11 +265,11 @@ getEl('facet-units').value = '0';
 
 NS.go('sourcescout');
 const ssBody = els['ss-table-body'].innerHTML;
-assert((ssBody.match(/class="row-card"/g) || []).length === 5, 'sourcescout: 5 demo rows rendered');
+assert((ssBody.match(/class="row-card"/g) || []).length >= 20, 'sourcescout: dense demo table renders (>=20 rows)');
 assert(ssBody.includes('B0F87RXTVC'), 'sourcescout: Word Coffee row present');
 assert(ssBody.includes('B0CP6LXPLK'), 'sourcescout: Kirkland Minoxidil row present');
 assert(ssBody.includes('unk'), 'sourcescout: missing values render as "—" / unknown');
-assert(els['ss-result-count'].textContent.includes('5 of 5'), 'sourcescout: result counter shows 5 of 5');
+assert(els['ss-result-count'].textContent.includes('26 of 26'), 'sourcescout: result counter shows 26 of 26');
 assert(els['ss-kpis'].innerHTML.includes('Qualified Deals'), 'sourcescout: KPI strip renders');
 assert(els['ss-live-banner'].innerHTML.includes('Authorization required'), 'sourcescout: live-pull gate banner OFF');
 assert(els['ss-live-meta'].textContent.includes('Bright Data'), 'sourcescout: live-pull provider meta shown');
@@ -280,18 +280,18 @@ assert((getEl('ss-open-workbench')._listeners.click || []).length === 1, 'source
 /* facet filtering */
 els['facet-roi'].value = '75';
 (els['facet-roi']._listeners.change || []).forEach((fn) => fn());
-assert(els['ss-result-count'].textContent.includes('1 of 5'), 'sourcescout: ROI>=75 filter yields 1 row');
+assert(els['ss-result-count'].textContent.includes('2 of 26'), 'sourcescout: ROI>=75 filter yields 2 rows');
 els['facet-roi'].value = '0';
 (els['facet-roi']._listeners.change || []).forEach((fn) => fn());
-assert(els['ss-result-count'].textContent.includes('5 of 5'), 'sourcescout: clearing ROI facet restores 5 rows');
+assert(els['ss-result-count'].textContent.includes('26 of 26'), 'sourcescout: clearing ROI facet restores 26 rows');
 
 /* global search filters within the view */
 NS.globalQuery = 'kirkland';
 NS.ss.applyFilters();
-assert(els['ss-result-count'].textContent.includes('3 of 5'), 'sourcescout: global search filters to "kirkland" rows');
+assert(els['ss-result-count'].textContent.includes('24 of 26'), 'sourcescout: global search filters to "kirkland" rows');
 NS.globalQuery = '';
 NS.ss.applyFilters();
-assert(els['ss-result-count'].textContent.includes('5 of 5'), 'sourcescout: clearing search restores 5 rows');
+assert(els['ss-result-count'].textContent.includes('26 of 26'), 'sourcescout: clearing search restores 26 rows');
 
 /* worksheet export builds CSV through stubbed Blob/URL */
 NS.ss.exportWorksheet();
@@ -601,28 +601,28 @@ assert(!ssLive.includes('success'), 'sourcescout: partial manifest never marks s
 assert(els['ss-live-meta'].textContent.includes('Bright Data'), 'sourcescout: provider meta preserved');
 
 /* sourcing facets */
-assert(els['ss-result-count'].textContent.includes('5 of 5'), 'sourcescout: all rows present with facets neutral');
+assert(els['ss-result-count'].textContent.includes('26 of 26'), 'sourcescout: all rows present with facets neutral');
 getEl('facet-margin').value = '20';
 (getEl('facet-margin')._listeners.change || []).forEach((fn) => fn());
-assert(els['ss-result-count'].textContent.includes('4 of 5'), 'sourcescout: margin>=20% excludes unscored detergent');
+assert(els['ss-result-count'].textContent.includes('24 of 26'), 'sourcescout: margin>=20% excludes unscored rows (null cost)');
 getEl('facet-margin').value = '0';
 (getEl('facet-margin')._listeners.change || []).forEach((fn) => fn());
 
 getEl('facet-buybox').checked = true;
 (getEl('facet-buybox')._listeners.change || []).forEach((fn) => fn());
-assert(els['ss-result-count'].textContent.includes('4 of 5'), 'sourcescout: buy-box-stable-only excludes towelettes');
+assert(els['ss-result-count'].textContent.includes('23 of 26'), 'sourcescout: buy-box-stable-only excludes unstable buy-box rows');
 getEl('facet-buybox').checked = false;
 (getEl('facet-buybox')._listeners.change || []).forEach((fn) => fn());
 
 getEl('facet-invoice').checked = true;
 (getEl('facet-invoice')._listeners.change || []).forEach((fn) => fn());
-assert(els['ss-result-count'].textContent.includes('4 of 5'), 'sourcescout: clean-invoice-only excludes unverified towelettes');
+assert(els['ss-result-count'].textContent.includes('24 of 26'), 'sourcescout: clean-invoice-only excludes unverified invoices');
 getEl('facet-invoice').checked = false;
 (getEl('facet-invoice')._listeners.change || []).forEach((fn) => fn());
 
 getEl('facet-risk').checked = true;
 (getEl('facet-risk')._listeners.change || []).forEach((fn) => fn());
-assert(els['ss-result-count'].textContent.includes('3 of 5'), 'sourcescout: risk-clean-only excludes Minoxidil + towelettes');
+assert(els['ss-result-count'].textContent.includes('22 of 26'), 'sourcescout: risk-clean-only excludes flagged rows');
 getEl('facet-risk').checked = false;
 (getEl('facet-risk')._listeners.change || []).forEach((fn) => fn());
 
@@ -631,7 +631,7 @@ getEl('facet-margin').value = '20';
 getEl('facet-buybox').checked = true;
 (getEl('facet-margin')._listeners.change || []).forEach((fn) => fn());
 (getEl('facet-buybox')._listeners.change || []).forEach((fn) => fn());
-assert(els['ss-result-count'].textContent.includes('3 of 5'), 'sourcescout: margin+buy-box compose (drops detergent + towelettes)');
+assert(els['ss-result-count'].textContent.includes('21 of 26'), 'sourcescout: margin+buy-box compose (drops null-cost + unstable rows)');
 getEl('facet-margin').value = '0';
 getEl('facet-buybox').checked = false;
 (getEl('facet-margin')._listeners.change || []).forEach((fn) => fn());
@@ -641,11 +641,11 @@ getEl('facet-buybox').checked = false;
 getEl('facet-consumable').checked = true;
 (getEl('facet-consumable')._listeners.change || []).forEach((fn) => fn());
 const ssCons = els['ss-table-body'].innerHTML;
-assert((ssCons.match(/class="row-card"/g) || []).length === 5, 'sourcescout: consumables-first keeps all 5 rows');
+assert((ssCons.match(/class="row-card"/g) || []).length === 26, 'sourcescout: consumables-first keeps all 26 rows');
 assert(ssCons.indexOf('Facial Towelettes') > ssCons.indexOf('Word Coffee'), 'sourcescout: non-consumable sorts below consumables');
 getEl('facet-consumable').checked = false;
 (getEl('facet-consumable')._listeners.change || []).forEach((fn) => fn());
-assert(els['ss-result-count'].textContent.includes('5 of 5'), 'sourcescout: clearing all facets restores 5 rows');
+assert(els['ss-result-count'].textContent.includes('26 of 26'), 'sourcescout: clearing all facets restores 26 rows');
 
 /* pure predicates exported; missing data never fakes a zero */
 assert(NS.ss.marginPct({ amazonPrice: 42, cost: 17.99 }) === 57.2, 'sourcescout: marginPct math exact (42/17.99 -> 57.2)');
