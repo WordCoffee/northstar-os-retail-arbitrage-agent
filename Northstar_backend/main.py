@@ -943,6 +943,20 @@ def health_detailed():
         except Exception:
             pass
 
+    # Data readiness (Phase A/A4) — per-service live-data readiness.
+    try:
+        import readiness
+        _ready_report = readiness.check_all(live=False)
+        readiness_summary = {
+            "ready": _ready_report["ready"],
+            "services": {
+                r["service"]: {"ready": r["ready"], "reason": r["reason"]}
+                for r in _ready_report["services"]
+            },
+        }
+    except Exception as exc:
+        readiness_summary = {"ready": False, "error": str(exc)}
+
     return {
         "status": "ok",
         "service": "northstar-backend",
@@ -951,6 +965,7 @@ def health_detailed():
         "providers": provider_status,
         "scanner_mode": scanner_status,
         "test_status": test_status,
+        "readiness": readiness_summary,
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 

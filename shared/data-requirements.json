@@ -1,0 +1,81 @@
+{
+  "$schema": "data-requirements-v1",
+  "description": "Per-service data requirements for the readiness runner (Phase A/A4). Each service declares the fields it needs, the route that supplies them, a minimum freshness window, and a fallback. readiness.py checks key presence, stock counts, field coverage, and freshness against this manifest and emits per-service PASS/FAIL.",
+  "freshness_hours_default": 24,
+  "services": {
+    "sourcescout": {
+      "display": "Prospector",
+      "route": "amazon_search",
+      "required_fields": ["asin", "title", "amazon_price"],
+      "min_freshness_hours": 24,
+      "fallback": "live pull (chocodata/bright data)"
+    },
+    "goldengoose": {
+      "display": "Golden Goose",
+      "route": "wholesale_catalog + amazon_search",
+      "required_fields": ["asin", "title", "amazon_price", "net_profit", "monthly_sales_estimate", "seller_count", "weight_lbs"],
+      "min_freshness_hours": 24,
+      "fallback": "Tundra catalog + per-SKU enrich"
+    },
+    "listingforge": {
+      "display": "OfferChisel",
+      "route": "amazon_product",
+      "required_fields": ["asin", "title", "brand", "category"],
+      "min_freshness_hours": 168,
+      "fallback": "live product pull"
+    },
+    "adpilot": {
+      "display": "The Auctioneer",
+      "route": "amazon_search",
+      "required_fields": ["asin", "title"],
+      "min_freshness_hours": 168,
+      "fallback": "managed CSV import"
+    },
+    "socialpulse": {
+      "display": "The Town Crier",
+      "route": "memory_bank (brand_voice)",
+      "required_fields": [],
+      "min_freshness_hours": 0,
+      "fallback": "brand voice from Memory Bank"
+    },
+    "thewatch": {
+      "display": "The Watch",
+      "route": "amazon_product",
+      "required_fields": ["asin", "bsr_rank"],
+      "min_freshness_hours": 24,
+      "fallback": "SP-API rank read"
+    },
+    "rankledger": {
+      "display": "RankLedger",
+      "route": "amazon_product",
+      "required_fields": ["asin", "bsr_rank"],
+      "min_freshness_hours": 24,
+      "fallback": "SP-API rank read"
+    },
+    "rivalboard": {
+      "display": "The Rival Board",
+      "route": "amazon_search",
+      "required_fields": ["asin", "title", "seller_count"],
+      "min_freshness_hours": 168,
+      "fallback": "competitor watchlist refresh"
+    },
+    "theledger": {
+      "display": "The Ledger",
+      "route": "transactions",
+      "required_fields": ["asin", "net_profit"],
+      "min_freshness_hours": 168,
+      "fallback": "order import"
+    },
+    "autothink": {
+      "display": "AutothinK",
+      "route": "workspace (no product data)",
+      "required_fields": [],
+      "min_freshness_hours": 0,
+      "fallback": "n/a"
+    }
+  },
+  "providers": {
+    "amazon_search": ["bright_data_web_unlocker", "chocodata", "scrapingdog", "scrapingbee", "scrapebadger", "amazonscraperapi", "apiclaw"],
+    "generic_scrape": ["bright_data_web_unlocker", "firecrawl", "scrape_do"]
+  }
+}

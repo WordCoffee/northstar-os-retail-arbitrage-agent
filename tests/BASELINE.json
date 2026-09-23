@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created": "2026-09-20T15:30:00Z",
-  "note": "Phase H complete (H1-H8): private-alpha gate, dual-engine Brain (model router + OpenRouter DeepSeek lane + unified /api/v1/models), Brain UI selector, 4 new service placeholders, usage meter + cost model, catalog v3 (Whetstone/Mainstay/Keystone/AutothinK 39/79/129/179), Word Coffee fixture + test plan, private-alpha deploy runbook.",
+  "note": "Phase A (A0-A4): learning loop + cache hierarchy MVP (master_brain_learning, playbooks, L0-L3 routing, memory/learning routes), economics recalibration (usage-caps v2 + 60-80% margin band), config-driven model suite (model-suite.json + service-model-map.json), live data warehouse (products live columns + live_pulls, stock runner, live_catalog, wholesale_catalog), data readiness runner. Backend passed 2348 -> 2413 (+65 tests).",
   "known_exceptions": {
     "ignored": [],
     "ignored_reason": "NONE \u2014 test_single_match.py hygiene fixed under Phase F/S3; re-included in the standard suite.",
@@ -13,7 +13,7 @@
   },
   "baseline": {
     "backend": {
-      "passed": 2348,
+      "passed": 2413,
       "failed": 2,
       "skipped": 3,
       "subtests": 48
