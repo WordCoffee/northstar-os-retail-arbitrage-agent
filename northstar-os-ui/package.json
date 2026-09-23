@@ -1,0 +1,21 @@
+{
+  "name": "northstar-os-ui",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Northstar OS SPA — SIGNAL design system",
+  "scripts": {
+    "dev": "vite --port 8101 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --port 8101 --strictPort"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.8"
+  }
+}

@@ -1,0 +1,7 @@
+# Build artifacts
+dist/
+node_modules/
+*.log
+
+# Playwright capture
+.playwright-mcp/
