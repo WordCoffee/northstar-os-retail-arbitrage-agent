@@ -24,7 +24,7 @@ import sqlite3
 import threading
 import uuid
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional
 
 # ---------------------------------------------------------------------------
@@ -329,7 +329,45 @@ class DataLayer:
             CREATE INDEX IF NOT EXISTS idx_supplier_products_supplier ON supplier_products(supplier_id);
             CREATE INDEX IF NOT EXISTS idx_supplier_products_sku ON supplier_products(supplier_sku);
             CREATE INDEX IF NOT EXISTS idx_cost_analysis_product ON supplier_cost_analysis(supplier_product_id);
+
+            CREATE TABLE IF NOT EXISTS live_pulls (
+                id TEXT PRIMARY KEY,
+                query TEXT,
+                task_type TEXT,
+                provider_id TEXT,
+                credits_used REAL DEFAULT 0,
+                rows_returned INTEGER DEFAULT 0,
+                account_id TEXT DEFAULT 'default',
+                started_at TEXT,
+                finished_at TEXT,
+                ok INTEGER DEFAULT 1,
+                error TEXT
+            );
+            CREATE INDEX IF NOT EXISTS idx_live_pulls_query ON live_pulls(query);
+            CREATE INDEX IF NOT EXISTS idx_live_pulls_provider ON live_pulls(provider_id);
         """)
+        self._conn.commit()
+        self._migrate_live_columns()
+
+    def _migrate_live_columns(self):
+        """Idempotently add live-data columns to an existing products table."""
+        try:
+            cur = self._conn.execute("PRAGMA table_info(products)")
+            existing = {row[1] for row in cur.fetchall()}
+        except sqlite3.Error:
+            return
+        additions = {
+            "data_kind": "TEXT DEFAULT 'demo'",
+            "provider_id": "TEXT",
+            "fetched_at": "TEXT",
+            "fresh_until": "TEXT",
+        }
+        for col, decl in additions.items():
+            if col not in existing:
+                try:
+                    self._conn.execute(f"ALTER TABLE products ADD COLUMN {col} {decl}")
+                except sqlite3.Error:
+                    pass
         self._conn.commit()
 
     def execute(self, sql: str, params: tuple = ()) -> sqlite3.Cursor:
@@ -471,6 +509,84 @@ class ProductsDB:
         cur = self.db.execute("DELETE FROM products WHERE asin = ?", (asin,))
         self.db.commit()
         return cur.rowcount > 0
+
+    # --- live-data warehouse (Phase A / A3) ---
+
+    def upsert_live(self, product: Dict[str, Any], provider_id: str,
+                    ttl_seconds: int = 86400) -> str:
+        """Upsert a product as LIVE data with provenance + freshness window."""
+        now = datetime.now(timezone.utc)
+        row = dict(product)
+        row["data_kind"] = "live"
+        row["provider_id"] = provider_id
+        row["fetched_at"] = now.isoformat()
+        row["fresh_until"] = (now + timedelta(seconds=ttl_seconds)).isoformat()
+        return self.upsert(row)
+
+    def list_stocked(self, category: Optional[str] = None, limit: int = 500,
+                     fresh_only: bool = True) -> List[Dict[str, Any]]:
+        """List live-stocked products (fresh by default — the stock-first read)."""
+        sql = "SELECT * FROM products WHERE data_kind = 'live'"
+        params: list = []
+        if category:
+            sql += " AND category = ?"
+            params.append(category)
+        if fresh_only:
+            sql += " AND (fresh_until IS NULL OR fresh_until > ?)"
+            params.append(datetime.now(timezone.utc).isoformat())
+        sql += " ORDER BY updated_at DESC LIMIT ?"
+        params.append(limit)
+        cur = self.db.execute(sql, tuple(params))
+        return [dict(row) for row in cur.fetchall()]
+
+    def count_live(self, fresh_only: bool = False) -> int:
+        sql = "SELECT COUNT(*) as cnt FROM products WHERE data_kind = 'live'"
+        params: tuple = ()
+        if fresh_only:
+            sql += " AND (fresh_until IS NULL OR fresh_until > ?)"
+            params = (datetime.now(timezone.utc).isoformat(),)
+        return self.db.execute(sql, params).fetchone()["cnt"]
+
+    def mark_demo(self, asin: str) -> None:
+        """Downgrade a row to demo provenance (fixture hygiene)."""
+        self.db.execute("UPDATE products SET data_kind = 'demo' WHERE asin = ?", (asin,))
+        self.db.commit()
+
+
+class LivePullsDB:
+    """Append-only audit of live provider pulls (Phase A / A3)."""
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def record(self, query: str, task_type: str, provider_id: str,
+               credits_used: float = 0, rows_returned: int = 0,
+               account_id: str = "default", ok: bool = True,
+               error: Optional[str] = None,
+               started_at: Optional[str] = None,
+               finished_at: Optional[str] = None) -> str:
+        import uuid
+        now = datetime.now(timezone.utc).isoformat()
+        pid = str(uuid.uuid4())
+        self.db.execute(
+            """INSERT INTO live_pulls
+               (id, query, task_type, provider_id, credits_used, rows_returned,
+                account_id, started_at, finished_at, ok, error)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (pid, query, task_type, provider_id, credits_used, rows_returned,
+             account_id, started_at or now, finished_at or now, 1 if ok else 0, error),
+        )
+        self.db.commit()
+        return pid
+
+    def recent(self, limit: int = 50) -> List[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM live_pulls ORDER BY finished_at DESC LIMIT ?", (limit,)
+        )
+        return [dict(row) for row in cur.fetchall()]
+
+    def count(self) -> int:
+        return self.db.execute("SELECT COUNT(*) as cnt FROM live_pulls").fetchone()["cnt"]
 
 
 # ---------------------------------------------------------------------------
@@ -1125,6 +1241,7 @@ class NorthstarDB:
         self.memory = MemoryDB(self._layer)
         self.audit = AuditDB(self._layer)
         self.suppliers = SuppliersDB(self._layer)
+        self.live_pulls = LivePullsDB(self._layer)
 
     @property
     def mode(self) -> str:

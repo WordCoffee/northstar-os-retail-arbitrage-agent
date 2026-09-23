@@ -1995,18 +1995,49 @@ def product_finder_route(
     min_monthly_sales: int = 1000,
     max_fba_sellers: int = 2,
 ):
-    """Universal Product Finder — cache-only candidates scored by the
-    universal filter. Zero provider calls: reads the local candidate cache
-    (populated by an explicit gated refresh) and applies the Golden Goose
-    thresholds category-agnostically."""
+    """Universal Product Finder — candidates scored by the universal filter.
+
+    Stock-first: reads live-stocked rows from ProductsDB (Phase A/A3 warehouse),
+    then merges the local candidate cache. Zero provider calls by default; a
+    live refresh is an explicit, gated action."""
     from filters.universal_filter import UniversalProductFilter
-    candidates = amazon_search.load_cached_candidates()
+    import live_catalog
+
+    def _stored_to_candidate(row: dict) -> dict:
+        return {
+            "asin": row.get("asin"),
+            "name": row.get("title") or "",
+            "brand": row.get("brand"),
+            "category": row.get("category"),
+            "amazon_price": row.get("amazon_price"),
+            "net_profit": row.get("net_profit"),
+            "roi_pct": row.get("roi_pct"),
+            "monthly_sales_estimate": row.get("monthly_sales_estimate"),
+            "weight_lbs": row.get("weight_lbs"),
+            "fba_sellers": row.get("seller_count"),
+            "data_kind": row.get("data_kind"),
+            "provider_id": row.get("provider_id"),
+            "fresh_until": row.get("fresh_until"),
+        }
+
+    stocked = [_stored_to_candidate(r) for r in live_catalog.get_stocked(limit=1000)]
+    cache = amazon_search.load_cached_candidates()
+
+    merged: list = []
+    seen = set()
+    for c in stocked + cache:
+        key = c.get("asin") or c.get("name")
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(c)
+
     filt = UniversalProductFilter(
         min_roi_per_unit=min_roi_per_unit,
         min_monthly_sales=min_monthly_sales,
         max_fba_sellers=max_fba_sellers,
     )
-    evaluated = filt.filter_all(candidates, keep_rejected=True)
+    evaluated = filt.filter_all(merged, keep_rejected=True)
     passed = [e for e in evaluated if e.get("universal_filter_passed")]
     evaluated.sort(key=lambda e: (not e.get("universal_filter_passed"),))
     return {
@@ -2014,7 +2045,8 @@ def product_finder_route(
         "evaluated": evaluated[:limit],
         "candidate_count": len(evaluated),
         "passed_count": len(passed),
-        "filter_source": "cache-only",
+        "stocked_count": len(stocked),
+        "filter_source": "stock+cache" if stocked else "cache-only",
         "thresholds": {
             "min_roi_per_unit": filt.min_roi_per_unit,
             "min_monthly_sales": filt.min_monthly_sales,
