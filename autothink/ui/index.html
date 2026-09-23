@@ -316,7 +316,12 @@
       <input id="query" placeholder="Enter your command..." autocomplete="off" />
       <select id="provider">
         <option value="local">Local (Ollama)</option>
-        <option value="cloud">Cloud (gpt-4o)</option>
+        <option value="cloud">Cloud (DeepSeek)</option>
+      </select>
+      <select id="tier" title="Tier">
+        <option value="T1">T1 Fast</option>
+        <option value="T2" selected>T2 Core</option>
+        <option value="T3">T3 Seam</option>
       </select>
       <select id="model" title="Model">
         <option value="">default</option>
@@ -512,7 +517,8 @@
 
   var output = document.getElementById("output");
   var query = document.getElementById("query");
-  var provider = document.getElementById("provider");
+    var provider = document.getElementById("provider");
+    var tier = document.getElementById("tier");
   var model = document.getElementById("model");
   var runBtn = document.getElementById("runBtn");
 
@@ -611,7 +617,7 @@
       var resp = await fetch("/api/autothink/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: q, provider: provider.value, model: model.value || null })
+        body: JSON.stringify({ query: q, provider: provider.value, tier: (tier && tier.value) || null, model: model.value || null })
       });
       var data = await resp.json();
       if (!resp.ok) {

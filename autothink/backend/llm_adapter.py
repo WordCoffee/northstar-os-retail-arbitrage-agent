@@ -1,13 +1,15 @@
-"""UnifiedLLMAdapter — routes AutothinK queries to a local Ollama model or a
-cloud provider (gpt-4o), per the Northstar OS master plan (§5.3).
+"""UnifiedLLMAdapter — routes AutothinK queries to a local Ollama model or the
+cloud OpenRouter DeepSeek lane, per the Northstar OS master plan (§5.3, §17).
 
-Local Ollama (localhost:11434) is the default provider and the first-class
-citizen: free, private, no credentials. The cloud path is fully coded but
-gated: it activates ONLY if an OPENAI_API_KEY is present in the environment.
+The local lane is the default and first-class citizen: free, private, no
+credentials. Its base URL is configurable (OLLAMA_BASE_URL / OLLAMA_HOST) so it
+is not anchored to one machine — a future GPU server (vLLM/OpenAI-compatible)
+slots in by changing one env var. The cloud path is fully coded but gated: it
+activates ONLY when OPENROUTER_API_KEY is present AND CLOUD_MODEL_LIVE=1.
 Credential VALUES are never read, printed, logged, or returned — only the
 boolean presence flag is checked.
 
-Fallback strings `[LOCAL FALLBACK]` / `[OPENAI FALLBACK]` are returned when
+Fallback strings `[LOCAL FALLBACK]` / `[CLOUD FALLBACK]` are returned when
 the corresponding provider is unavailable, so the UI always has a deterministic
 answer instead of an unhandled exception.
 """

@@ -74,6 +74,16 @@ class ScanResponse(BaseModel):
 # --- Lifespan (startup / shutdown) ---
 
 BASE_DIR = Path(__file__).resolve().parent
+
+
+def _ollama_base_url() -> str:
+    """Local LLM base URL — configurable so the local lane is not anchored to
+    Ollama's default port. Ollama today; any OpenAI-compatible server later."""
+    return (
+        os.environ.get("OLLAMA_BASE_URL")
+        or os.environ.get("OLLAMA_HOST")
+        or "http://localhost:11434"
+    ).rstrip("/")
 STATIC_DIR = BASE_DIR / "static"
 
 
@@ -100,7 +110,7 @@ async def lifespan(app):
 
     try:
         import httpx
-        resp = httpx.get("http://localhost:11434/api/tags", timeout=3)
+        resp = httpx.get(f"{_ollama_base_url()}/api/tags", timeout=3)
         if resp.status_code == 200:
             models = resp.json().get("models", [])
             logger.info(f"Ollama: {len(models)} models available")
@@ -745,7 +755,7 @@ async def list_models():
     installed: list = []
     try:
         import httpx
-        resp = httpx.get("http://localhost:11434/api/tags", timeout=2)
+        resp = httpx.get(f"{_ollama_base_url()}/api/tags", timeout=2)
         if resp.status_code == 200:
             installed = [m.get("name", "") for m in resp.json().get("models", []) if m.get("name")]
     except Exception:

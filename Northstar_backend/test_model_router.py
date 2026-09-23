@@ -122,3 +122,64 @@ def test_models_endpoint_envelope(monkeypatch):
     # environment (importing main may load .env), so never assert a value.
     assert isinstance(b["data"]["cloud"]["key_present"], bool)
     assert isinstance(b["data"]["cloud"]["live_armed"], bool)
+
+
+# --- service + vision resolution (Phase A / A2) ---
+
+def test_resolve_for_service_cloud_default():
+    d = mr.resolve_for_service("goldengoose")
+    assert d["known"] is True and d["tier"] == "T2"
+    assert d["resolution"].model == "deepseek/deepseek-v4-flash-0731"
+    assert mr.resolve_for_service("listingforge")["media"] == ["V2", "V3"]
+
+
+def test_resolve_for_service_t1_services():
+    for svc in ("sourcescout", "thewatch", "rankledger", "rivalboard", "theledger"):
+        assert mr.resolve_for_service(svc)["tier"] == "T1"
+
+
+def test_resolve_for_service_operator_local():
+    d = mr.resolve_for_service("autothink", provider="local")
+    assert d["resolution"].model == "northstar-qwen3:rev1"
+    assert d["escalation_tier"] == "T3"
+
+
+def test_resolve_for_service_unknown_fails_closed():
+    d = mr.resolve_for_service("does_not_exist")
+    assert d["known"] is False and d["reason"] == "unknown_service"
+
+
+def test_resolve_vision_understand_cloud():
+    r = mr.resolve_vision("V1", "cloud", "understand")
+    assert r.model == "qwen/qwen3.7-flash"
+    assert r.backend == "openrouter"
+    assert r.available is False and r.reason == "not_armed"
+
+
+def test_resolve_vision_understand_local():
+    r = mr.resolve_vision("V2", "local", "understand")
+    assert r.model == "qwen2.5vl:7b" and r.available is True
+
+
+def test_resolve_vision_generate_local_comfyui():
+    r = mr.resolve_vision("V1", "local", "generate")
+    assert r.backend == "comfyui" and r.model == "comfyui:flux2-klein-4b" and r.available is True
+
+
+def test_resolve_vision_generate_cloud_gated():
+    final = mr.resolve_vision("V2", "cloud", "generate", quality="final")
+    assert final.model == "flux.2-pro" and final.backend == "fal"
+    assert final.available is False  # no FAL_KEY / MEDIA_GEN_LIVE
+
+
+def test_media_armed_requires_gate(monkeypatch):
+    assert mr.media_live_armed() is False
+    monkeypatch.setenv("MEDIA_GEN_LIVE", "1")
+    assert mr.media_live_armed() is True
+
+
+def test_catalog_includes_suite_and_services():
+    c = mr.catalog([])
+    assert "vision" in c and "services" in c
+    assert "goldengoose" in c["services"]
+    assert "media_armed" in c
