@@ -898,6 +898,65 @@ async def learning_unlearn(req: LearningUnlearnRequest):
     raise HTTPException(status_code=400, detail="intent_signature or topic required")
 
 
+# --- Live catalog routes (Phase B) ------------------------------------------
+
+class CatalogStockRequest(BaseModel):
+    queries: list
+    live: bool = False
+    ttl_seconds: Optional[int] = None
+
+
+class WholesaleStockRequest(BaseModel):
+    query: str
+    supplier: Optional[dict] = None
+    live: bool = False
+
+
+@app.get("/api/v1/catalog/stocked")
+async def catalog_stocked(limit: int = 100):
+    """List fresh live-stocked products from the warehouse (offline read)."""
+    import live_catalog
+    rows = live_catalog.get_stocked(limit=limit)
+    return _bff({"rows": rows, "count": len(rows)}, service="catalog")
+
+
+@app.post("/api/v1/catalog/stock")
+async def catalog_stock(req: CatalogStockRequest):
+    """Stock live search results into the warehouse (§3 gated; offline if live=false)."""
+    import live_catalog
+    results = []
+    for q in req.queries:
+        kwargs = {"live": req.live}
+        if req.ttl_seconds:
+            kwargs["ttl_seconds"] = req.ttl_seconds
+        results.append({"query": q, **live_catalog.stock(q, **kwargs)})
+    return _bff({"results": results,
+                 "total_stocked": sum(r.get("stocked", 0) for r in results)}, service="catalog")
+
+
+@app.get("/api/v1/catalog/pull")
+async def catalog_pull(query: str, limit: int = 50, live: bool = False):
+    """Prospector pull path — stock-first; on a miss and ``live``, pull fresh (§3 gated)."""
+    import live_catalog
+    return _bff(live_catalog.get_or_pull(query, limit=limit, live=live), service="catalog")
+
+
+@app.post("/api/v1/catalog/wholesale/stock")
+async def catalog_wholesale_stock(req: WholesaleStockRequest):
+    """Stock a wholesaler catalog (Tundra) into supplier_products (§3 gated)."""
+    import wholesale_catalog
+    return _bff(wholesale_catalog.stock_wholesale(req.query, supplier=req.supplier, live=req.live),
+                service="catalog")
+
+
+@app.get("/api/v1/catalog/wholesale/products")
+async def catalog_wholesale_products(supplier_id: Optional[str] = None, limit: int = 200):
+    """List stocked wholesaler SKUs for Golden Goose scoring (offline read)."""
+    import wholesale_catalog
+    rows = wholesale_catalog.list_stocked_supplier_products(supplier_id, limit=limit)
+    return _bff({"rows": rows, "count": len(rows)}, service="catalog")
+
+
 @app.get("/health/detailed")
 def health_detailed():
     """Detailed readiness probe — checks data files, provider key presence,

@@ -13,7 +13,7 @@
   },
   "baseline": {
     "backend": {
-      "passed": 2413,
+      "passed": 2418,
       "failed": 2,
       "skipped": 3,
       "subtests": 48

@@ -90,10 +90,14 @@ def stock_wholesale(query: str, supplier: Optional[Dict[str, Any]] = None,
                 "error": "no wholesaler caller configured (Tundra scraper pending)"}
 
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from agents.golden_goose_finder.free_tier_router import run_task, TASK_GENERIC_SCRAPE
+    from agents.golden_goose_finder.free_tier_router import (
+        run_task, TASK_GENERIC_SCRAPE, is_live_approved,
+    )
     from agents.golden_goose_finder import free_tier_registry  # noqa: F401
 
-    res = run_task(TASK_GENERIC_SCRAPE, caller, live_armed=live)
+    # §3: a live pull fires only when the operator envelope is armed.
+    armed = bool(live) and is_live_approved()
+    res = run_task(TASK_GENERIC_SCRAPE, caller, live_armed=armed)
     result = getattr(res, "result", None)
     rows = result if isinstance(result, list) else ([result] if result else [])
     normalized = [r for r in (normalize_wholesale_row(x) for x in rows) if r]

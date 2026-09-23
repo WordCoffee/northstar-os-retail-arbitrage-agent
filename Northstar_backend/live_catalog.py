@@ -62,7 +62,9 @@ def stock(query: str, caller: Optional[Callable] = None, pages: int = 1,
     is armed. ``caller`` may be injected for tests.
     """
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from agents.golden_goose_finder.free_tier_router import run_task, TASK_AMAZON_SEARCH
+    from agents.golden_goose_finder.free_tier_router import (
+        run_task, TASK_AMAZON_SEARCH, is_live_approved,
+    )
     from agents.golden_goose_finder import amazon_adapters
 
     if task_type is None:
@@ -70,7 +72,9 @@ def stock(query: str, caller: Optional[Callable] = None, pages: int = 1,
     if caller is None:
         caller = amazon_adapters.make_chocodata_search_caller(query, pages=pages)
 
-    res = run_task(task_type, caller, live_armed=live)
+    # §3: a live pull fires only when the operator envelope is armed.
+    armed = bool(live) and is_live_approved()
+    res = run_task(task_type, caller, live_armed=armed)
     result = getattr(res, "result", None)
     rows = result if isinstance(result, list) else ([result] if result else [])
 
