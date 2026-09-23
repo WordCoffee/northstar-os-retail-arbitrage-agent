@@ -1,7 +1,7 @@
 /* ==========================================================================
    NORTHSTAR OS — SOURCESCOUT SERVICE VIEW
    Retail Arbitrage Agent app (shell layer). The full tested workbench lives
-   at ../index.html (Northstar_backend/static/index.html) and is reachable
+   at /workbench (Northstar_backend/static/index.html) and is reachable
    via "Open full workbench". This shell view renders a labeled demo table,
    rich sourcing facets (ROI / units / net margin / buy-box / invoice /
    risk-clean / consumables-first), worksheet export in the honest shape
@@ -237,7 +237,7 @@
     var exp = getEl('ss-export');
     if (exp && !exp._ssBound) { exp._ssBound = true; exp.addEventListener('click', exportWorksheet); }
     var open = getEl('ss-open-workbench');
-    if (open && !open._ssBound) { open._ssBound = true; open.addEventListener('click', function () { window.location.href = '../index.html'; }); }
+    if (open && !open._ssBound) { open._ssBound = true; open.addEventListener('click', function () { window.location.href = '/workbench'; }); }
   }
 
   var prevOnMount = NS.onMount;

@@ -912,6 +912,32 @@ class WholesaleStockRequest(BaseModel):
     live: bool = False
 
 
+@app.get("/api/v1/status")
+async def live_status():
+    """Live-data status for the shell: warehouse counts + readiness + mode."""
+    import live_catalog
+    try:
+        db = live_catalog._db()
+        live_rows = db.products.count_live(fresh_only=False)
+        fresh_rows = db.products.count_live(fresh_only=True)
+        pulls = db.live_pulls.count()
+    except Exception:
+        live_rows = fresh_rows = pulls = 0
+    try:
+        import readiness
+        rep = readiness.check_all(live=False)
+        ready = rep["ready"]
+        services = {r["service"]: r["ready"] for r in rep["services"]}
+    except Exception:
+        ready = False
+        services = {}
+    return _bff({
+        "mode": "live" if live_rows > 0 else "demo",
+        "warehouse": {"live_rows": live_rows, "fresh_rows": fresh_rows, "pulls": pulls},
+        "readiness": {"ready": ready, "services": services},
+    }, service="status")
+
+
 @app.get("/api/v1/catalog/stocked")
 async def catalog_stocked(limit: int = 100):
     """List fresh live-stocked products from the warehouse (offline read)."""

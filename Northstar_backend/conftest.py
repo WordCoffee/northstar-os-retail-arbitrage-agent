@@ -15,10 +15,13 @@ GOLDEN_GOOSE_DEBUG) are preserved. Never read or print credential values.
 
 from __future__ import annotations
 
+import glob
 import os
 import re
 
 import pytest
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Keep these harness variables; everything credential-shaped is scrubbed.
 _SAFE_VARS = {
@@ -94,3 +97,44 @@ def _no_credential_env_leak():  # noqa: ANN201
     yield
     for name, value in snapshot.items():
         os.environ[name] = value
+
+
+# --- generated-artifact isolation (F remediation) ---------------------------
+# The scanner cache is a GENERATED artifact. Some offline tests legitimately
+# regenerate it (and some CLI mains mutate SCANNER_SEARCH_CACHE_PATH globally),
+# which left the committed file dirty and made the byte-identity guard in
+# test_proof_batch_run.py order-dependent. Snapshot the committed bytes at
+# session start and restore after every test so the guard is deterministic.
+# Source-file guards (finance.py, fee_engine.py, …) remain strict — only the
+# generated scanner-cache set is restored.
+_GENERATED_ARTIFACT_GLOBS = [
+    os.path.join(_HERE, "data", "scanner-search-cache*.json"),
+]
+_generated_snapshot: dict = {}
+
+
+def pytest_sessionstart(session):  # noqa: ANN001
+    for pattern in _GENERATED_ARTIFACT_GLOBS:
+        for path in glob.glob(pattern):
+            try:
+                with open(path, "rb") as fh:
+                    _generated_snapshot[path] = fh.read()
+            except OSError:
+                continue
+
+
+@pytest.fixture(autouse=True)
+def _restore_generated_artifacts():  # noqa: ANN201
+    """Restore the generated scanner cache to its committed bytes after each test."""
+    yield
+    for path, data in _generated_snapshot.items():
+        try:
+            current = None
+            if os.path.exists(path):
+                with open(path, "rb") as fh:
+                    current = fh.read()
+            if current != data:
+                with open(path, "wb") as fh:
+                    fh.write(data)
+        except OSError:
+            continue
