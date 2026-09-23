@@ -83,14 +83,14 @@ $hasFunctions = ($null -ne $base.baseline.functions)
 # ---------- 1. backend sanitized full suite ----------
 Write-Host "== [1/4] Backend sanitized full suite (pytest) =="
 $r = Run-Suite $BackendDir "python -m pytest -q -p no:cacheprovider"
-$sm = [regex]::Match($r.text, "(\d+)\s+failed,\s+(\d+)\s+passed,\s+(\d+)\s+skipped,\s+(\d+)\s+subtests\s+passed")
-if ($sm -eq $null) {
+$sm = [regex]::Match($r.text, "(?:(\d+)\s+failed,\s+)?(\d+)\s+passed,\s+(\d+)\s+skipped,\s+(\d+)\s+subtests\s+passed")
+if (-not $sm.Success) {
     $bParsed = $false
     Write-Host "  ERROR: could not parse backend summary (pytest exit code $($r.code))" -ForegroundColor Red
     $unrun = $unrun + 1
 } else {
     $bParsed = $true
-    $bFailed  = [int]$sm.Groups[1].Value
+    $bFailed  = if ($sm.Groups[1].Success) { [int]$sm.Groups[1].Value } else { 0 }
     $bPassed  = [int]$sm.Groups[2].Value
     $bSkipped = [int]$sm.Groups[3].Value
     $bSub     = [int]$sm.Groups[4].Value

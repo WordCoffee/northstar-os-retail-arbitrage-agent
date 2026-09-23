@@ -1,20 +1,18 @@
 {
   "schema_version": 1,
   "created": "2026-09-20T15:30:00Z",
-  "note": "Phase A (A0-A4): learning loop + cache hierarchy MVP (master_brain_learning, playbooks, L0-L3 routing, memory/learning routes), economics recalibration (usage-caps v2 + 60-80% margin band), config-driven model suite (model-suite.json + service-model-map.json), live data warehouse (products live columns + live_pulls, stock runner, live_catalog, wholesale_catalog), data readiness runner. Backend passed 2348 -> 2413 (+65 tests).",
+  "note": "Phase A (A0-A4) + B: learning loop + cache hierarchy MVP, economics recalibration (usage-caps v2 + 60-80% margin band), config-driven model suite, live data warehouse (products live columns + live_pulls, stock runner, live_catalog, wholesale_catalog), data readiness runner, live catalog routes. Protected-hash drift remediated -> ZERO known failures. Backend passed 2348 -> 2420.",
   "known_exceptions": {
     "ignored": [],
     "ignored_reason": "NONE \u2014 test_single_match.py hygiene fixed under Phase F/S3; re-included in the standard suite.",
-    "known_failures": [
-      "test_proof_batch_run.py::KnownTitleConflictTests::test_protected_artifacts_byte_identical",
-      "test_proof_batch_run.py::Attempt2PreflightTests::test_no_protected_artifact_changed"
-    ],
-    "known_failures_reason": "pre-existing protected-hash drift: fixtures/protected_hashes.json baseline for data/scanner-search-cache.json is stale (366c\u2026 expected vs 7c0b\u2026 on the committed, git-clean file). Tracked, not fixed."
+    "known_failures": [],
+    "known_failures_reason": "NONE \u2014 protected-hash drift remediated (fixtures/protected_hashes.json re-baselined to the committed data/scanner-search-cache.json and product_analysis.py). Harness fully green.",
+    "harness_note": "scripts/run_all_tests.ps1 backend summary regex now tolerates the zero-failure pytest line (\"0 failed\" is omitted when there are no failures)."
   },
   "baseline": {
     "backend": {
-      "passed": 2418,
-      "failed": 2,
+      "passed": 2420,
+      "failed": 0,
       "skipped": 3,
       "subtests": 48
     },
