@@ -88,7 +88,7 @@
     if (!tabs || tabs._lfBound) return;
     tabs._lfBound = true;
     var btns = [];
-    if (tabs.querySelectorAll) btns = Array.prototype.slice.call(tabs.querySelectorAll('.lf-tab[data-lf-tab]'));
+    if (tabs.querySelectorAll) btns = Array.prototype.slice.call(tabs.querySelectorAll('[data-lf-tab]'));
     btns.forEach(function (b) {
       b.addEventListener('click', function () { setTab(b.getAttribute('data-lf-tab')); });
     });
@@ -100,7 +100,7 @@
     if (detail.querySelectorAll) panels = Array.prototype.slice.call(detail.querySelectorAll('.lf-panel[data-panel]'));
     var tabsEl = document.getElementById('lf-tabs');
     if (tabsEl && tabsEl.querySelectorAll) {
-      Array.prototype.slice.call(tabsEl.querySelectorAll('.lf-tab')).forEach(function (b) {
+      Array.prototype.slice.call(tabsEl.querySelectorAll('[data-lf-tab]')).forEach(function (b) {
         var on = tab === 'overview' || b.getAttribute('data-lf-tab') === tab;
         b.classList.toggle('active', on);
       });

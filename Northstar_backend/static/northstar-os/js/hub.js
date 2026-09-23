@@ -118,10 +118,16 @@
 
   function renderHub(demoHub) {
     renderKpis(demoHub);
-    if (NS.onMountFeed) renderActivityFeed(NS.onActivityFeed ? NS.onActivityFeed() : null);
+    renderActivityFeed(NS.onActivityFeed ? NS.onActivityFeed() : null);
     renderServiceStatus(demoHub && demoHub.statuses);
     if (demoHub && demoHub.services) renderHubServices(demoHub.services);
   }
+
+  // Default activity feed source: the demo hub's activity list (until live).
+  NS.onActivityFeed = function () {
+    var d = NS.DEMO ? NS.DEMO() : null;
+    return d && d.hub ? d.hub.activity : null;
+  };
 
   /* ------------------------------------------------------------------
    * Phase 2 · PUBLIC API — NS.hub

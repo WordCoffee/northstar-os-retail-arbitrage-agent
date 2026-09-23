@@ -81,6 +81,16 @@
         if (NS.toast) NS.toast('Dry-run scan complete (demo) — ' + 12 + ' candidates screened, no live pull.', 'success');
       });
     }
+    // scan config selects (apply on next scan)
+    ['gg-profit', 'gg-sellers', 'gg-category'].forEach(function (id) {
+      var el = getEl(id);
+      if (el && !el._ggSelBound) {
+        el._ggSelBound = true;
+        el.addEventListener('change', function () {
+          if (NS.toast) NS.toast('Scan threshold updated: ' + id.replace('gg-', '') + ' = ' + el.value + ' (applies on next scan).', 'note');
+        });
+      }
+    });
     // the Prospector "Golden Goose" tab now opens this standalone screen
     var tab = document.querySelector('[data-src-tab="gg"]');
     if (tab && !tab._ggNavBound) {

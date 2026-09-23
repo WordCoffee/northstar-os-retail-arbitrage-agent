@@ -214,6 +214,29 @@
     if (NS.toast) NS.toast('Worksheet exported (' + rows.length + ' rows, demo CSV)', 'success');
   }
 
+  function bindSourcingTabs() {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('#sourcing-tabs [data-src-tab]'));
+    var panes = Array.prototype.slice.call(document.querySelectorAll('#view-sourcescout [data-src-pane]'));
+    function show(key) {
+      tabs.forEach(function (x) {
+        var on = x.getAttribute('data-src-tab') === key;
+        x.classList.toggle('active', on);
+        x.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      panes.forEach(function (p) {
+        p.style.display = p.getAttribute('data-src-pane') === key ? '' : 'none';
+      });
+    }
+    tabs.forEach(function (t) {
+      if (t._srcTabBound) return;
+      t._srcTabBound = true;
+      var key = t.getAttribute('data-src-tab');
+      if (key === 'gg') return; // standalone Golden Goose screen (bound in goldengoose.js)
+      t.addEventListener('click', function () { show(key); });
+    });
+    show('pf'); // default pane
+  }
+
   function onMount() {
     var data = NS.DEMO ? NS.DEMO() : null;
     if (!data || !data.sourcescout) return;
@@ -236,6 +259,17 @@
     });
     var exp = getEl('ss-export');
     if (exp && !exp._ssBound) { exp._ssBound = true; exp.addEventListener('click', exportWorksheet); }
+    bindSourcingTabs();
+    var dz = getEl('su-dropzone');
+    if (dz && !dz._ssBound) {
+      dz._ssBound = true;
+      dz.addEventListener('click', function () {
+        if (NS.toast) NS.toast('Supplier import is demo-only — enrichment is gated (stays OFF until approved).', 'note');
+      });
+      dz.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dz.click(); }
+      });
+    }
     var open = getEl('ss-open-workbench');
     if (open && !open._ssBound) { open._ssBound = true; open.addEventListener('click', function () { window.location.href = '/workbench'; }); }
   }

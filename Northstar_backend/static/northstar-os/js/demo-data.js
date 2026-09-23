@@ -21,6 +21,19 @@
         { id: 'adpilot', name: 'The Auctioneer', agent: 'Amazon Ads Agent', desc: 'PPC bid optimization, ACoS management, keyword harvesting, placement analysis, negatives.', class: 'Amazon Ads' },
         { id: 'socialpulse', name: 'The Town Crier', agent: 'Social Media Agent', desc: 'Post generation, scheduling copy, brand-voice content, creator outreach.', class: 'Social Media' },
       ],
+      activity: [
+        { service: 'Prospector', time: '2h ago' },
+        { service: 'Golden Goose', time: '5h ago' },
+        { service: 'OfferChisel', time: '1d ago' },
+        { service: 'The Town Crier', time: '2d ago' },
+      ],
+      statuses: {
+        'Prospector': 'good',
+        'Golden Goose': 'good',
+        'OfferChisel': 'good',
+        'The Auctioneer': 'good',
+        'The Town Crier': 'warning'
+      },
     },
 
     sourcescout: {

@@ -20,10 +20,13 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
     HEADERS = {
         "X-Content-Type-Options": "nosniff",
-        "X-Frame-Options": "DENY",
+        # SAMEORIGIN (not DENY) so the AutothinK workspace can be embedded in the
+        # suite shell iframe (same-origin). Still blocks third-party framing.
+        "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
         "Referrer-Policy": "strict-origin-when-cross-origin",
-        "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+        # microphone allowed for self so the in-app voice dictation works.
+        "Permissions-Policy": "camera=(), microphone=(self), geolocation=()",
         "Cache-Control": "no-store, no-cache, must-revalidate, private",
     }
 

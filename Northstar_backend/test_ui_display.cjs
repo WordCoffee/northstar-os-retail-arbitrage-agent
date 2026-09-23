@@ -1682,7 +1682,7 @@ click('scConfirmOk');
 click('scConfirmOk');
 assert(refreshCalls.length === 2 && refreshCalls[0] === '/api/kirkland/refresh', 'refresh: POST /api/kirkland/refresh issued right after the second confirmation');
 assert(getEl('scConfirm').hidden === true, 'refresh: dialog dismissed the moment the run begins');
-assert(refreshCalls[1] === 'http://127.0.0.1:8000/api/kirkland/scanner', 'refresh: catalog reloads via the cache-only scanner endpoint');
+assert(refreshCalls[1] === '/api/kirkland/scanner', 'refresh: catalog reloads via the cache-only scanner endpoint');
 assert(els.tableBody.innerHTML.includes('Refreshed Product'), 'refresh: fresh data renders after a successful live pull');
 assert(els.scRefreshNotice.textContent.includes('Live refresh completed') && els.scRefreshNotice.textContent.includes('5 candidates'), 'refresh: completion notice carries the real candidate count');
 assert(els.scRefreshNotice.className.indexOf('ok') !== -1, 'refresh: completion notice styled as ok');
@@ -1703,7 +1703,7 @@ setState([P()], 'error', 'ready');
 click('retryBtn');
 assert(getEl('scConfirm').hidden === true, 'refresh: retry never opens the confirm dialog');
 assert(refreshCalls.indexOf('/api/kirkland/refresh') === -1, 'refresh: retry performs no live POST');
-assert(refreshCalls.indexOf('http://127.0.0.1:8000/api/kirkland/scanner') !== -1, 'refresh: retry is a plain cache-only scanner reload');
+assert(refreshCalls.indexOf('/api/kirkland/scanner') !== -1, 'refresh: retry is a plain cache-only scanner reload');
 
 /* server fails closed (gate off): honest refusal notice, nothing swapped */
 refreshCalls.length = 0;

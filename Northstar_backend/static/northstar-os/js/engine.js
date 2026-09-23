@@ -243,6 +243,10 @@
       if (NS.onSearch) NS.onSearch(NS.globalQuery);
     });
   };
+  // Default global-search reaction: re-filter the active service that supports it.
+  NS.onSearch = function () {
+    if (NS.currentRoute() === 'sourcescout' && NS.ss && NS.ss.applyFilters) NS.ss.applyFilters();
+  };
 
   // ---------------- ROTARY KNOB ----------------
   NS.bindKnobs = function (root) {

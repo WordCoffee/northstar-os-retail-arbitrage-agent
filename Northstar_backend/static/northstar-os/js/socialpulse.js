@@ -78,6 +78,17 @@
         '</div>';
     }).join('');
     posts().forEach(function (p) { bindSchedule(p.id); });
+    // hashtag chips: click to copy (delegated, bound once)
+    if (host && !host._socHashBound) {
+      host._socHashBound = true;
+      host.addEventListener('click', function (e) {
+        var chip = e.target && e.target.closest ? e.target.closest('[data-hashtag]') : null;
+        if (!chip) return;
+        var tag = chip.getAttribute('data-hashtag');
+        try { if (navigator.clipboard) navigator.clipboard.writeText(tag); } catch (err) { /* ignore */ }
+        if (NS.toast) NS.toast('Copied ' + tag + ' to clipboard.', 'success');
+      });
+    }
   }
 
   function bindSchedule(postId) {

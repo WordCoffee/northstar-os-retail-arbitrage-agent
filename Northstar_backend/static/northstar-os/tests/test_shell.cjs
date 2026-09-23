@@ -421,7 +421,7 @@ const lfTabsList = ['overview', 'studio', 'scoring', 'compliance', 'media', 'bri
   b.setAttribute('data-lf-tab', t);
   return b;
 });
-getEl('lf-tabs').querySelectorAll = (sel) => (sel === '.lf-tab[data-lf-tab]' || sel === '.lf-tab' ? lfTabsList : []);
+getEl('lf-tabs').querySelectorAll = (sel) => (sel === '[data-lf-tab]' || sel === '.lf-tab[data-lf-tab]' || sel === '.lf-tab' ? lfTabsList : []);
 NS.lf.setTab('studio');
 assert(panelScoring.classList.contains('hidden'), 'listingforge: setTab(studio) hides scoring panel');
 assert(!panelStudio.classList.contains('hidden'), 'listingforge: setTab(studio) shows studio panel');

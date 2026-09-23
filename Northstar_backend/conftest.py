@@ -123,10 +123,7 @@ def pytest_sessionstart(session):  # noqa: ANN001
                 continue
 
 
-@pytest.fixture(autouse=True)
-def _restore_generated_artifacts():  # noqa: ANN201
-    """Restore the generated scanner cache to its committed bytes after each test."""
-    yield
+def _restore_generated() -> None:
     for path, data in _generated_snapshot.items():
         try:
             current = None
@@ -138,3 +135,15 @@ def _restore_generated_artifacts():  # noqa: ANN201
                     fh.write(data)
         except OSError:
             continue
+
+
+def pytest_collection_finish(session):  # noqa: ANN001
+    """Restore after collection — test-module imports may mutate the cache."""
+    _restore_generated()
+
+
+@pytest.fixture(autouse=True)
+def _restore_generated_artifacts():  # noqa: ANN201
+    """Restore the generated scanner cache to its committed bytes after each test."""
+    yield
+    _restore_generated()

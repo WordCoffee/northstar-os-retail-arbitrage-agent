@@ -307,7 +307,7 @@
       }
 
       // ===================== FETCH REAL DATA FROM NORTHSTAR BACKEND =====================
-      const BACKEND_BASE = 'http://127.0.0.1:8000';
+      const BACKEND_BASE = '';
 
       // --- API 1: Scanner products (source scout) ---
       async function loadScannerData() {
@@ -383,7 +383,7 @@
         // AutothinK opens external link
         if (id === 'autothink') {
           setTimeout(() => {
-            window.open('http://127.0.0.1:8000/autothink/ui/index.html', '_blank');
+            window.open('/autothink/ui/index.html', '_blank');
           }, 500);
         }
       }

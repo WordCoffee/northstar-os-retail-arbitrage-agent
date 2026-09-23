@@ -149,6 +149,11 @@ AUTOTHINK_DIR = BASE_DIR.parent / "autothink"
 if AUTOTHINK_DIR.exists():
     app.mount("/autothink", StaticFiles(directory=str(AUTOTHINK_DIR)), name="autothink")
 
+# Reference docs (markdown) served read-only at /reference — FastAPI owns /docs.
+_DOCS_DIR = BASE_DIR.parent / "docs"
+if _DOCS_DIR.exists():
+    app.mount("/reference", StaticFiles(directory=str(_DOCS_DIR)), name="reference")
+
 
 @app.get("/", include_in_schema=False)
 def serve_scout():
@@ -981,6 +986,60 @@ async def catalog_wholesale_products(supplier_id: Optional[str] = None, limit: i
     import wholesale_catalog
     rows = wholesale_catalog.list_stocked_supplier_products(supplier_id, limit=limit)
     return _bff({"rows": rows, "count": len(rows)}, service="catalog")
+
+
+# --- AutothinK workspace API (Batch 0: single-server integration) -----------
+# The AutothinK backend used to run as a separate process on :8100, which broke
+# the embedded workspace (its relative /api/autothink/* fetches hit this app and
+# 404'd). We now serve those routes here by delegating to the AutothinK module.
+
+class AutothinkRunRequest(BaseModel):
+    query: str
+    provider: str = "local"
+    model: Optional[str] = None
+    tier: Optional[str] = None
+    prev_tier: Optional[str] = None
+
+
+def _autothink_server():
+    """Lazily import the AutothinK backend module (adds its dir to sys.path)."""
+    import importlib
+    import sys as _sys
+    at_dir = str(BASE_DIR.parent / "autothink")
+    if at_dir not in _sys.path:
+        _sys.path.insert(0, at_dir)
+    return importlib.import_module("backend.server")
+
+
+@app.get("/api/autothink/models")
+def autothink_models():
+    """Installed local models + provider availability for the workspace UI."""
+    try:
+        srv = _autothink_server()
+        return srv.models()
+    except Exception as exc:
+        return {"local_available": False, "cloud_available": False, "models": [],
+                "error": str(exc)}
+
+
+@app.post("/api/autothink/run")
+def autothink_run(req: AutothinkRunRequest):
+    """Route + generate an AutothinK response (local Ollama or cloud OpenRouter)."""
+    if not (req.query or "").strip():
+        raise HTTPException(status_code=422, detail="query is empty")
+    srv = _autothink_server()
+    try:
+        payload = srv.RunRequest(**req.model_dump())
+    except Exception as exc:  # pydantic validation (e.g. bad provider/tier)
+        raise HTTPException(status_code=422, detail=str(exc))
+    return srv.run(payload)
+
+
+@app.get("/api/autothink/history")
+def autothink_history(limit: int = 20):
+    """Session command history for the workspace."""
+    srv = _autothink_server()
+    return srv.history(limit)
 
 
 @app.get("/health/detailed")
