@@ -205,6 +205,38 @@ ENDPOINTS = {
         "auth": True,
     },
 
+    # Learning loop + cache hierarchy
+    "POST /api/v1/learning/capture": {
+        "summary": "Capture a learning signal (user_edit|outcome|model_choice|staleness)",
+        "tags": ["Learning"],
+        "plan": "scout",
+        "auth": True,
+    },
+    "POST /api/v1/learning/route": {
+        "summary": "Route a request through L0-L3 (live/paid never auto-replayed)",
+        "tags": ["Learning"],
+        "plan": "scout",
+        "auth": True,
+    },
+    "GET /api/v1/learning/playbooks": {
+        "summary": "List distilled playbooks",
+        "tags": ["Learning"],
+        "plan": "scout",
+        "auth": True,
+    },
+    "POST /api/v1/learning/distill": {
+        "summary": "Distill experience.jsonl into playbooks.json",
+        "tags": ["Learning"],
+        "plan": "autothink",
+        "auth": True,
+    },
+    "POST /api/v1/learning/unlearn": {
+        "summary": "Unlearn a playbook by intent signature or topic",
+        "tags": ["Learning"],
+        "plan": "autothink",
+        "auth": True,
+    },
+
     # Health
     "GET /health": {
         "summary": "Basic health check",

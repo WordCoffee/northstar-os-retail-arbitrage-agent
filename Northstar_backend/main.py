@@ -760,6 +760,134 @@ async def list_models():
     }
 
 
+# --- Memory Bank + Learning loop routes (Phase A / A0) ----------------------
+
+class MemoryIngestRequest(BaseModel):
+    content: str
+    entry_type: str = "fact"
+    account_id: str = "default"
+    source: str = "chat"
+    confidence: float = 0.8
+    tags: Optional[list] = None
+    provenance: Optional[dict] = None
+
+
+class MemorySearchRequest(BaseModel):
+    intent: str
+    account_id: str = "default"
+    entry_type: Optional[str] = None
+    limit: int = 10
+
+
+class LearningCaptureRequest(BaseModel):
+    kind: str
+    task: str
+    account_id: str = "default"
+    task_class: Optional[str] = None
+    payload: Optional[dict] = None
+
+
+class LearningRouteRequest(BaseModel):
+    task: str
+    account_id: str = "default"
+    live: bool = False
+    profile_id: Optional[str] = None
+
+
+class LearningUnlearnRequest(BaseModel):
+    intent_signature: Optional[str] = None
+    topic: Optional[str] = None
+    account_id: str = "default"
+
+
+def _bff(data: Any, service: str = "memory") -> Dict[str, Any]:
+    return {
+        "contract": "bff/v1",
+        "request_id": "req_" + __import__("secrets").token_hex(16),
+        "status": "ok",
+        "data": data,
+        "error": None,
+        "meta": {"service": service, "version": "v1"},
+    }
+
+
+@app.post("/api/v1/memory/ingest")
+async def memory_ingest(req: MemoryIngestRequest):
+    """Ingest knowledge into the per-account Memory Bank (offline, local)."""
+    import memory_bank
+    eid = memory_bank.ingest(
+        content=req.content, entry_type=req.entry_type, account_id=req.account_id,
+        source=req.source, confidence=req.confidence, tags=req.tags, provenance=req.provenance,
+    )
+    return _bff({"id": eid}, service="memory")
+
+
+@app.post("/api/v1/memory/search")
+async def memory_search(req: MemorySearchRequest):
+    """Search the Memory Bank by intent; returns matches + injectable context."""
+    import memory_bank
+    results = memory_bank.search(req.intent, account_id=req.account_id,
+                                 entry_type=req.entry_type, limit=req.limit)
+    context = memory_bank.retrieve_context(req.intent, account_id=req.account_id)
+    return _bff({"results": results, "count": len(results), "context": context}, service="memory")
+
+
+@app.post("/api/v1/learning/capture")
+async def learning_capture(req: LearningCaptureRequest):
+    """Capture one learning signal (user_edit|outcome|model_choice|staleness)."""
+    import master_brain_learning as mbl
+    try:
+        record = mbl.record_experience(req.kind, req.task, account_id=req.account_id,
+                                       task_class=req.task_class, payload=req.payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return _bff({"record": record}, service="learning")
+
+
+@app.post("/api/v1/learning/route")
+async def learning_route(req: LearningRouteRequest):
+    """Route a request through L0->L1->L2->L3 (live/paid never auto-replayed)."""
+    import master_brain_learning as mbl
+    d = mbl.route_request(req.task, account_id=req.account_id, live=req.live, profile_id=req.profile_id)
+    return _bff({
+        "tier": d.tier, "action": d.action, "requires_approval": d.requires_approval,
+        "reason": d.reason, "model_hint": d.model_hint,
+        "fingerprint": d.fingerprint, "intent_signature": d.intent_signature,
+        "state_hash": d.state_hash, "playbook": d.playbook,
+    }, service="learning")
+
+
+@app.get("/api/v1/learning/playbooks")
+async def learning_playbooks(account_id: str = "default"):
+    """List distilled playbooks (optionally scoped to an account)."""
+    import master_brain_learning as mbl
+    books = mbl.load_playbooks()
+    if account_id:
+        books = {k: v for k, v in books.items() if v.get("account_id") == account_id}
+    return _bff({"playbooks": books, "count": len(books)}, service="learning")
+
+
+@app.post("/api/v1/learning/distill")
+async def learning_distill(account_id: str = "default"):
+    """Distill experience.jsonl into playbooks.json."""
+    import master_brain_learning as mbl
+    books = mbl.distill(account_id=account_id)
+    return _bff({"playbooks": len(books)}, service="learning")
+
+
+@app.post("/api/v1/learning/unlearn")
+async def learning_unlearn(req: LearningUnlearnRequest):
+    """Unlearn a playbook by intent signature, or every playbook matching a topic."""
+    import master_brain_learning as mbl
+    if req.intent_signature:
+        ok = mbl.unlearn_intent(req.intent_signature)
+        return _bff({"removed": req.intent_signature if ok else None}, service="learning")
+    if req.topic:
+        removed = mbl.unlearn_topic(req.topic, account_id=req.account_id)
+        return _bff({"removed": removed}, service="learning")
+    raise HTTPException(status_code=400, detail="intent_signature or topic required")
+
+
 @app.get("/health/detailed")
 def health_detailed():
     """Detailed readiness probe — checks data files, provider key presence,

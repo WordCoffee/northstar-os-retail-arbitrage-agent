@@ -1,0 +1,54 @@
+{
+  "$schema": "learning-loop-v1",
+  "description": "Schemas for the Master Brain learning loop + cache hierarchy (Phase A/A0). Captured by Northstar_backend/master_brain_learning.py. All local, offline, append-only.",
+  "experience_jsonl": {
+    "description": "One JSON object per line in learning/experience.jsonl. Append-only; never overwritten.",
+    "record": {
+      "timestamp": "ISO-8601 UTC",
+      "kind": "user_edit | outcome | model_choice | staleness",
+      "task": "raw task string",
+      "task_class": "one of the 7 gateway TRACKS",
+      "intent_signature": "sha256(canonical(task_class, normalized_task, account_id))",
+      "account_id": "subscriber partition key",
+      "payload": {
+        "user_edit": {"field": "str", "from": "any", "to": "any"},
+        "outcome": {"outcome": "accepted | partial | rejected", "detail": "object"},
+        "model_choice": {"tier": "str", "model": "str", "latency_ms": "number|null", "cost_usd": "number|null", "ok": "bool"},
+        "staleness": {"reason": "str", "state_hash": "sha256"}
+      }
+    }
+  },
+  "playbooks_json": {
+    "description": "learning/playbooks.json — distilled playbooks keyed by intent_signature.",
+    "entry": {
+      "intent_signature": "sha256",
+      "task_class": "str",
+      "task": "str",
+      "account_id": "str",
+      "strategy": {"model_choice": "object|null", "edits": ["{field,to}"]},
+      "confidence": "0.0-1.0 (outcome-weighted, prior-blended, decayed over time)",
+      "observations": "int",
+      "state_hash": "sha256 of the invalidation subset at distillation time",
+      "hits": "int (replay count, preserved across distills)",
+      "created_at": "ISO-8601",
+      "updated_at": "ISO-8601",
+      "expires_at": "ISO-8601 (TTL)",
+      "ttl_seconds": "int"
+    }
+  },
+  "l0_cache_json": {
+    "description": "learning/l0_cache.json — deterministic replay keyed by fingerprint = sha256(intent_signature:state_hash).",
+    "entry": {"output": "any", "created_at": "ISO-8601", "expires_at": "ISO-8601", "ttl_seconds": "int"}
+  },
+  "invalidation_root": {
+    "description": "state_hash = sha256(canonical subset of 00_STATE.json + optional profile sha256).",
+    "subset": ["git_baseline.commit_hash", "engine.primary_id", "known_issues[].status", "test_baseline.updated_at", "profile.sha256"]
+  },
+  "cache_tiers": {
+    "L0": "deterministic replay (exact fingerprint + state hash) — $0",
+    "L1": "playbook replay (confidence >= theta) — ~$0",
+    "L2": "fast-path LLM (prompt-cached, playbook as few-shot)",
+    "L3": "frontier / escalation — novel or high-stakes"
+  },
+  "safety": "Live/paid tasks are never auto-replayed; route_request(live=True) returns L3 with requires_approval=true (constitution §3)."
+}
