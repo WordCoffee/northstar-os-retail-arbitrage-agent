@@ -1,12 +1,12 @@
-"""Cost model + margin invariants (Phase H / H5).
+"""Cost model + margin invariants (Phase H / H5; recalibrated Phase A / A1).
 
 Loads the canonical caps/unit costs from ``shared/usage-caps.json`` and
 computes the worst-case cost of a tier (every cap hit) and its margin. The
-invariant — worst case ≤ 40% of price (≥60% margin) — is asserted by tests so
-the pricing can never silently drift into a loss.
-
-Pure and offline. The unit costs are planning assumptions; they are
-recalibrated from real provider invoices before launch (the calibration gate).
+invariant — worst case <= 40% of price (>=60% margin) and >= 20% (<=80%
+margin) — is asserted by tests so the pricing can never silently drift into a
+loss or an over-margin tier. Unit costs are calibrated to REAL provider prices
+(Sept 2026 media/AI stack) and re-verified against provider invoices before
+launch (the calibration gate).
 """
 
 from __future__ import annotations
@@ -19,8 +19,10 @@ from typing import Dict, List, Optional
 _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _CAPS_PATH = os.path.join(_REPO_ROOT, "shared", "usage-caps.json")
 
-MARGIN_FLOOR = 0.60          # worst case must keep ≥60% margin
-MAX_COST_FRACTION = 0.40     # worst-case cost ≤ 40% of price
+MARGIN_FLOOR = 0.60          # worst case must keep >=60% margin
+MAX_COST_FRACTION = 0.40     # worst-case cost <= 40% of price
+MARGIN_CEILING = 0.80        # target band upper bound (cost >= 20% of price)
+MIN_COST_FRACTION = 0.20     # worst-case cost >= 20% of price
 
 
 def load_caps(path: Optional[str] = None) -> Dict:
@@ -70,6 +72,9 @@ def worst_case(plan: str, data: Optional[Dict] = None) -> TierCost:
     add("image_v2", images.get("V2", 0) * u["image_v2"])
     add("image_v3", images.get("V3", 0) * u["image_v3"])
 
+    video = tier.get("video", {})
+    add("video_wan_15s", video.get("Wan15s", 0) * u.get("video_wan_15s", 0.0))
+
     add("fixed_infra", u["fixed_infra"])
 
     cost = round(sum(breakdown.values()), 4)
@@ -89,6 +94,12 @@ def all_tiers(data: Optional[Dict] = None) -> List[TierCost]:
 def margin_ok(plan: str, data: Optional[Dict] = None,
               floor: float = MARGIN_FLOOR) -> bool:
     return worst_case(plan, data).margin >= floor
+
+
+def within_band(plan: str, data: Optional[Dict] = None,
+                floor: float = MARGIN_FLOOR, ceiling: float = MARGIN_CEILING) -> bool:
+    """True when worst-case margin sits inside the 60-80% target band."""
+    return floor <= worst_case(plan, data).margin <= ceiling
 
 
 def ppc_fee(managed_spend: float, data: Optional[Dict] = None) -> Dict[str, float]:

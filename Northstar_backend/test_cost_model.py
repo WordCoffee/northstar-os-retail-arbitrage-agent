@@ -64,10 +64,10 @@ def test_bulk_consume_refuses_without_partial_charge():
 
 def test_meter_from_caps_loads_all_tiers():
     m = um.meter_from_caps()
-    assert m.limit_for("whetstone", "gg_scan") == 12
-    assert m.limit_for("mainstay", "rank_snapshot") == 3000
-    assert m.limit_for("keystone", "alert") == 500
-    assert m.limit_for("autothink", "autothink_t3") == 60
+    assert m.limit_for("whetstone", "gg_scan") == 3
+    assert m.limit_for("mainstay", "rank_snapshot") == 2128
+    assert m.limit_for("keystone", "alert") == 748
+    assert m.limit_for("autothink", "autothink_t3") == 1645
 
 
 # --- cost model ---
@@ -80,10 +80,27 @@ def test_all_tiers_keep_margin_floor():
         assert tier.worst_case_cost <= cm.MAX_COST_FRACTION * tier.price
 
 
+def test_all_tiers_within_target_band():
+    """Phase A/A1 — worst-case margin sits inside the 60-80% band."""
+    for tier in cm.all_tiers():
+        assert cm.MARGIN_FLOOR <= tier.margin <= cm.MARGIN_CEILING, (
+            "%s margin %.3f outside band" % (tier.plan, tier.margin)
+        )
+        assert cm.within_band(tier.plan) is True
+
+
+def test_video_cap_priced_into_worst_case():
+    d = cm.load_caps()
+    c = cm.worst_case("autothink")
+    wan = d["tiers"]["autothink"]["video"]["Wan15s"]
+    assert wan > 0
+    assert c.breakdown["video_wan_15s"] == round(wan * d["unit_costs_usd"]["video_wan_15s"], 6)
+
+
 def test_autothink_is_priciest_and_covers_t3():
     d = cm.load_caps()
     assert d["tiers"]["autothink"]["price_usd_month"] == 179
-    assert d["tiers"]["autothink"]["caps"]["autothink_t3"] == 60
+    assert d["tiers"]["autothink"]["caps"]["autothink_t3"] == 1645
     assert cm.worst_case("autothink").worst_case_cost > cm.worst_case("whetstone").worst_case_cost
 
 
