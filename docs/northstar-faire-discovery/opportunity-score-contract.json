@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpportunityScoreContract",
+  "description": "Transparent 0-100 score. Hard disqualifiers applied BEFORE scoring. No unsupported 'easy' badge.",
+  "type": "object",
+  "required": ["opportunity_state", "score", "components", "hard_disqualifiers"],
+  "properties": {
+    "opportunity_state": {
+      "enum": ["DISCOVERED", "MATCH_REVIEW", "DIRECT_SUPPLIER_RESEARCH", "AUTHORIZATION_REQUIRED", "ELIGIBILITY_CHECK_REQUIRED", "ECONOMICS_INCOMPLETE", "QUALIFIED_FOR_MANUAL_REVIEW", "WATCHLIST", "REJECTED", "SOURCE_READY", "PURCHASE_READY"]
+    },
+    "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "components": {
+      "type": "object",
+      "properties": {
+        "verified_profit_and_roi": { "type": "integer", "maximum": 20 },
+        "size_weight_fba_burden": { "type": "integer", "maximum": 15 },
+        "marketplace_eligibility_authorization": { "type": "integer", "maximum": 15 },
+        "direct_supplier_invoice_readiness": { "type": "integer", "maximum": 15 },
+        "demand_evidence": { "type": "integer", "maximum": 10 },
+        "competition_quality": { "type": "integer", "maximum": 10 },
+        "price_stability": { "type": "integer", "maximum": 5 },
+        "replenishment_quality": { "type": "integer", "maximum": 5 },
+        "operational_simplicity": { "type": "integer", "maximum": 5 }
+      },
+      "additionalProperties": false
+    },
+    "hard_disqualifiers": {
+      "type": "array",
+      "items": {
+        "enum": ["faire_is_only_sourcing_route", "brand_prohibits_amazon", "direct_supplier_prohibits_amazon", "amazon_eligibility_restricted_or_not_eligible", "exact_match_failed", "pack_mismatch_unresolved", "invoice_path_absent", "product_authenticity_uncertain", "required_cost_or_fee_missing", "contribution_profit_non_positive", "exceeds_weight_or_dimensions", "hazmat_expiration_meltable_over_tolerance", "amazon_retail_or_brand_dominance", "ip_enforcement_or_detail_page_mismatch", "case_break_terms_violation"]
+      }
+    },
+    "source_ready_allowed": { "type": "boolean" },
+    "purchase_ready_allowed": { "type": "boolean" },
+    "missing_evidence": { "type": "array", "items": { "type": "string" } },
+    "recommended_next_action": { "type": ["string", "null"] }
+  }
+}

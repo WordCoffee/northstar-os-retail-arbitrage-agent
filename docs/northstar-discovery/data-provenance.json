@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "phase": 0,
+    "generated_at": "2026-09-23",
+    "note": "Field provenance. Source types: IMPORTED/CACHE/LIVE/COMPUTED/MOCKED/MISSING. Misrepresentation flags highlight fields where the UI can mislead.",
+    "tests_executed": false
+  },
+  "fields": [
+    {"field": "product_title", "ui_label": "Product", "type": "str", "source": "varies by store (products.title / sourcescout_manifest.title / scanner name)", "freshness": "updated_at / generated_at", "provenance": "IMPORTED/CACHE", "formula": null, "misrepresents": "different titles per store", "safe_for_financial": false},
+    {"field": "asin", "ui_label": "ASIN", "type": "str", "source": "products.asin / cache asin", "freshness": "same as row", "provenance": "IMPORTED", "formula": null, "misrepresents": false, "safe_for_financial": false, "note": "identity key but not canonical across stores"},
+    {"field": "image", "ui_label": null, "type": "url", "source": "fixture URLs in demo-data.js only", "freshness": "static", "provenance": "MOCKED", "formula": null, "misrepresents": null, "safe_for_financial": false},
+    {"field": "amazon_price", "ui_label": "Price", "type": "REAL", "source": "cache/offer provider", "freshness": "cached_at / fetched_at", "provenance": "CACHE/LIVE(gated)", "formula": null, "misrepresents": "cache age not surfaced in SPA", "safe_for_financial": false},
+    {"field": "supplier_price", "ui_label": "Costco COGS", "type": "REAL", "source": "costco_client CSV / costco_api_client / costco_cost_reference", "freshness": "generated_at", "provenance": "IMPORTED/COMPUTED", "formula": null, "misrepresents": "0.0 shown as known", "safe_for_financial": false},
+    {"field": "estimated_sales", "ui_label": "Sales/mo", "type": "INTEGER", "source": "demand_estimator from BSR", "freshness": "cached", "provenance": "COMPUTED/ESTIMATED", "formula": "log-log BSR->sales calibration", "misrepresents": "labeled estimate", "safe_for_financial": false},
+    {"field": "bsr_rank", "ui_label": "BSR", "type": "INTEGER", "source": "provider (unwrangle/chocodata; dataforseo does NOT return BSR)", "freshness": "fetched_at", "provenance": "LIVE(gated)/CACHE", "formula": null, "misrepresents": false, "safe_for_financial": false},
+    {"field": "seller_count", "ui_label": "Seller", "type": "INTEGER", "source": "offer roster providers", "freshness": "cached_at", "provenance": "CACHE", "formula": null, "misrepresents": false, "safe_for_financial": false},
+    {"field": "buy_box", "ui_label": "Buy Box", "type": "str", "source": "seller cache / offer providers", "freshness": "cached_at", "provenance": "CACHE", "formula": null, "misrepresents": false, "safe_for_financial": false},
+    {"field": "fba_fees", "ui_label": "FBA", "type": "REAL", "source": "fee_engine size-tier table", "freshness": "static rules", "provenance": "COMPUTED", "formula": "size-tier table (see 04)", "misrepresents": false, "safe_for_financial": true},
+    {"field": "referral_fees", "ui_label": null, "type": "REAL", "source": "fee_engine category rules", "freshness": "static rules", "provenance": "COMPUTED", "formula": "category rule + min fee", "misrepresents": false, "safe_for_financial": true},
+    {"field": "roi", "ui_label": "ROI", "type": "REAL", "source": "fee_engine", "freshness": "static+input", "provenance": "COMPUTED", "formula": "net/cogs*100", "misrepresents": false, "safe_for_financial": true},
+    {"field": "margin", "ui_label": "Margin", "type": "REAL", "source": "scanner_data / product_analysis (2 defs)", "freshness": "computed", "provenance": "COMPUTED", "formula": "net/price*100 OR net/costco_cost*100", "misrepresents": true, "safe_for_financial": false, "note": "two definitions in code"},
+    {"field": "opportunity_score", "ui_label": "Score", "type": "INTEGER", "source": "opportunity_scorer (GG) / product_analysis", "freshness": "computed", "provenance": "COMPUTED", "formula": "0.35 profit+0.20 demand+0.15 comp+0.10 health+0.10 gap+0.10 ad", "misrepresents": "subjective weights", "safe_for_financial": false},
+    {"field": "eligibility", "ui_label": null, "type": "bool", "source": "hard filters (GG)", "freshness": "computed", "provenance": "COMPUTED", "formula": "profit/demand/competition/size/rating gates", "misrepresents": false, "safe_for_financial": false},
+    {"field": "invoice_status", "ui_label": "invoice_verified_status", "type": "str", "source": "suppliers table", "freshness": "updated_at", "provenance": "IMPORTED/STATIC", "formula": null, "misrepresents": false, "safe_for_financial": true, "note": "defaults unverified; retail receipt != invoice"},
+    {"field": "keyword_rank", "ui_label": null, "type": "str", "source": "schema-only (keyword_performance)", "freshness": null, "provenance": "MISSING", "formula": null, "misrepresents": null, "safe_for_financial": false},
+    {"field": "ad_metrics", "ui_label": null, "type": "REAL", "source": "word_coffee fixture / frontend calculator", "freshness": "fixture", "provenance": "IMPORTED(fixture)/COMPUTED(frontend)", "formula": "see ACoS formula duplication", "misrepresents": "no live data", "safe_for_financial": false},
+    {"field": "credits", "ui_label": "Balance", "type": "INTEGER", "source": "credit_ledger (derived sum)", "freshness": "main.py:1717", "provenance": "COMPUTED (display)", "formula": "balance=allotment, consumed=0", "misrepresents": "shows balance as real while nothing consumes", "safe_for_financial": false},
+    {"field": "model_usage", "ui_label": null, "type": "str", "source": "usage_meter (exists, unwired)", "freshness": null, "provenance": "MISSING", "formula": null, "misrepresents": null, "safe_for_financial": false},
+    {"field": "provider_status", "ui_label": "cloud key present", "type": "str/bool", "source": "/api/v1/models", "freshness": "live", "provenance": "RUNTIME", "formula": null, "misrepresents": false, "safe_for_financial": false},
+    {"field": "integration_status", "ui_label": "Authorization required", "type": "str", "source": "gate flags/env", "freshness": "live", "provenance": "RUNTIME (env)", "formula": null, "misrepresents": false, "safe_for_financial": false}
+  ]
+}

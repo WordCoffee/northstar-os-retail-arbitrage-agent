@@ -1,0 +1,26 @@
+{
+  "owner": "Tyrone",
+  "step": "007_private_beta_operations (staging)",
+  "applied_at": "2026-09-25T16:33:43.066569+00:00",
+  "backup": {
+    "path": "Northstar_backend\\data\\staging\\staging-pre-007-20260925T163342Z.sql",
+    "bytes": 485039,
+    "verified": true
+  },
+  "migration": "007_private_beta_operations.sql",
+  "duration_ms": 84,
+  "post_apply": {
+    "tables": 57,
+    "columns": 554,
+    "new_tables": [
+      "org_lifecycle",
+      "org_lifecycle_events",
+      "org_admin_notes",
+      "entitlement_overrides",
+      "support_tickets",
+      "onboarding",
+      "usage_counters"
+    ]
+  },
+  "rollback": "NOT EXECUTED (Tyrone sole rollback authority)"
+}

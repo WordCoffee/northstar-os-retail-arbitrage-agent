@@ -1,0 +1,26 @@
+{
+  "manifest_kind": "goose.scan",
+  "scan_complete": true,
+  "inputs": {
+    "categories": "all",
+    "stores": null,
+    "roi_floor": 10.0,
+    "min_monthly_sales": 1000,
+    "max_results": 100,
+    "use_mock": true,
+    "dry_run": false
+  },
+  "provider_versions": {
+    "pipeline_version": "0.1.0"
+  },
+  "env_flags": {
+    "GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED": false,
+    "GOLDEN_GOOSE_LIVE_AUTH_PHRASE": false,
+    "SCANNER_LIVE_ALLOWED": true,
+    "COSTCO_CATALOG_DETAIL_ENABLED": true,
+    "BRIGHTDATA_COSTCO_DETAIL_ENABLED": true,
+    "FIRECRAWL_COSTCO_DETAIL_ENABLED": false
+  },
+  "git_sha": "381d739fbe7e",
+  "session_tool": "northstar-os-alpha"
+}

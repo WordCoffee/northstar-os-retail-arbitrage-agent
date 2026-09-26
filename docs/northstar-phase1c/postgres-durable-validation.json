@@ -1,0 +1,108 @@
+{
+  "phase": "1C-LC Workstream B (B02/B03)",
+  "generated_at": "2026-09-26T03:40:08.609443+00:00",
+  "database_target": {
+    "host": "127.0.0.1",
+    "port": 55432,
+    "database": "northstar_phase1c02_ephemeral",
+    "user": "northstar_phase1c02_test"
+  },
+  "server_version": "PostgreSQL 15.19 (Debian 15.19-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+  "checksums": {
+    "001_foundation.sql": "2c415c8498f8b9d5a13f415706de4cd97fa77850575493e6a04148f9bcd14a3c",
+    "002_jobs_durable.sql": "2dbd7d4f45ee6013241a09ba40138ffc7bc5f5cf81541692728e93924020b952",
+    "002_rollback_jobs_durable.sql": "1079d9598a0fd60b7e4f059e3954a62a251ddc600a53681a0d9eff50df212f3d"
+  },
+  "steps": {
+    "1_clean_apply": {
+      "status": "PASS",
+      "tables": 57,
+      "columns": 554
+    },
+    "2_schema_inspection": {
+      "status": "PASS",
+      "table_count": 57,
+      "missing_tables": [],
+      "missing_columns": []
+    },
+    "3_constraint_inspection": {
+      "status": "PASS",
+      "foreign_keys_present": [
+        "fk_ad_performance_observations_search_term_id",
+        "fk_import_batches_organization_id",
+        "fk_import_batches_source_file_id",
+        "fk_job_requests_organization_id",
+        "fk_job_runs_job_request_id",
+        "fk_job_schedules_organization_id",
+        "fk_keyword_links_keyword_id",
+        "fk_keywords_organization_id",
+        "fk_rank_observations_keyword_id",
+        "fk_rejected_rows_import_batch_id",
+        "fk_schedule_occurrences_schedule_id",
+        "fk_search_terms_organization_id",
+        "fk_source_files_organization_id",
+        "fk_targets_keyword_id"
+      ],
+      "missing_foreign_keys": [],
+      "org_scoped_idempotency_unique": true
+    },
+    "4_index_inspection": {
+      "status": "PASS",
+      "index_count": 97,
+      "missing_indexes": []
+    },
+    "5_repository_tests": {
+      "status": "PASS",
+      "checks": [
+        "org/user/membership roundtrip",
+        "job_request with durable columns",
+        "job_run with lease fields",
+        "job_state_history append",
+        "job_schedule + schedule_occurrence",
+        "org-scoped idempotency (dup rejected, cross-org allowed)"
+      ]
+    },
+    "6_rollback": {
+      "status": "PASS",
+      "tables_after_rollback": 25,
+      "durable_objects_removed": true
+    },
+    "7_reapply": {
+      "status": "PASS",
+      "tables_after_reapply": 57
+    },
+    "8_fingerprint_comparison": {
+      "status": "PASS",
+      "reapply_matches_original": true,
+      "clean_room_deterministic": true,
+      "fingerprints": {
+        "full": "e1c0f495fcebffcb",
+        "rolled": "345cae2321893923",
+        "reapplied": "e1c0f495fcebffcb",
+        "clean": "e1c0f495fcebffcb"
+      }
+    },
+    "9_foundation_regression": {
+      "status": "PASS",
+      "post_seed_counts": {
+        "marketplace_count": 1,
+        "pricing_policy_count": 1,
+        "provider_count": 2
+      }
+    }
+  },
+  "summary": {
+    "status": "PASS",
+    "postgres_version": "PostgreSQL 15.19 (Debian 15.19-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+    "steps_passed": 9,
+    "steps_total": 9,
+    "database_target": {
+      "host": "127.0.0.1",
+      "port": 55432,
+      "database": "northstar_phase1c02_ephemeral",
+      "user": "northstar_phase1c02_test"
+    },
+    "network_status": "loopback-only disposable container (docker postgres:15)",
+    "staging_or_production_contacted": false
+  }
+}

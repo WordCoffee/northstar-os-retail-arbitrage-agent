@@ -1,0 +1,145 @@
+// Session context provider — organization, role, permissions, environment, preview.
+import { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import foundationApi, { getDevSession, setDevSession, getToken, setToken } from './api.js'
+import { getFlags } from './flags.js'
+
+const SessionContext = createContext(null)
+
+export function useSession() {
+  const ctx = useContext(SessionContext)
+  if (!ctx) throw new Error('useSession must be used within <SessionProvider>')
+  return ctx
+}
+
+export function hasPerm(session, permission) {
+  if (!session || !session.permissions) return false
+  if (!permission) return true
+  return session.permissions.includes(permission)
+}
+
+const ANON = {
+  loaded: false,
+  authenticated: false,
+  error: null,
+  userId: '',
+  organizations: [],
+  activeOrganizationId: null,
+  role: null,
+  environment: 'production',
+  viewContext: 'normal',
+  permissions: [],
+  isPreview: false,
+  preview: null,
+  flags: getFlags(),
+}
+
+export function SessionProvider({ children }) {
+  const [session, setSession] = useState(ANON)
+  const [dev, setDev] = useState(getDevSession())
+  const [tokenPresent, setTokenPresent] = useState(!!getToken())
+
+  const refresh = useCallback(async () => {
+    // ui_mode is a PUBLIC signal (available pre-auth) so signed-out clients
+    // also land in the correct beta entry state (never the legacy shell).
+    let uiMode = 'full'
+    try {
+      const m = await foundationApi.uiMode()
+      uiMode = m.ui_mode || 'full'
+    } catch { /* keep default */ }
+    // No token and no dev identity → signed-out (no network call needed).
+    if (!getToken() && !getDevSession().userId) {
+      setSession((s) => ({ ...s, loaded: true, authenticated: false, error: null, uiMode }))
+      return
+    }
+    try {
+      const [me, env, active] = await Promise.all([
+        foundationApi.me(),
+        foundationApi.environment(),
+        foundationApi.previewActive().catch(() => ({ active: false, preview: null })),
+      ])
+      setSession((s) => ({
+        ...s,
+        loaded: true,
+        authenticated: true,
+        error: null,
+        userId: me.user_id,
+        organizations: me.organizations || [],
+        activeOrganizationId: me.active_organization_id,
+        role: me.role,
+        environment: env.environment,
+        viewContext: env.view_context,
+        uiMode: env.ui_mode || uiMode,
+        permissions: me.permissions || [],
+        isPreview: !!env.is_preview,
+        preview: active.active ? active.preview : null,
+      }))
+    } catch (e) {
+      // 401 → signed out / expired / revoked session.
+      if (e.status === 401) {
+        setToken('')
+        setSession((s) => ({ ...ANON, loaded: true, authenticated: false }))
+        return
+      }
+      // 403 with org_lifecycle_blocked → account suspended/paused/cancelled:
+      // show a clear account-status screen instead of a generic error.
+      if (e.status === 403 && (e.detail?.code || e.code) === 'org_lifecycle_blocked') {
+        const blockState = e.detail?.state || ''
+        setSession((s) => ({
+          ...s, loaded: true, authenticated: true, suspended: true,
+          suspensionState: blockState,
+          suspensionMessage: e.detail?.message || 'access is currently disabled for this account',
+          error: null,
+        }))
+        return
+      }
+      setSession((s) => ({ ...s, loaded: true, error: e }))
+    }
+  }, [])
+
+  useEffect(() => { refresh() }, [refresh, dev, tokenPresent])
+
+  const updateDev = useCallback((patch) => {
+    const next = setDevSession(patch)
+    setDev(next)
+    refresh()
+  }, [refresh])
+
+  const signIn = useCallback(async (token) => {
+    setToken(token)
+    setTokenPresent(true)
+    await refresh()
+    return session
+  }, [refresh])
+
+  const signOut = useCallback(() => {
+    setToken('')
+    setDevSession({ userId: '', orgId: '', role: '', env: 'production', previewId: '' })
+    setDev(getDevSession())
+    setTokenPresent(false)
+    setSession((s) => ({ ...ANON, loaded: true, authenticated: false }))
+  }, [])
+
+  const startPreview = useCallback(async ({ targetOrganizationId, targetRole, reason }) => {
+    const res = await foundationApi.previewStart({
+      target_organization_id: targetOrganizationId,
+      target_role: targetRole || null,
+      reason,
+    })
+    updateDev({ previewId: res.preview_id })
+    return res
+  }, [updateDev])
+
+  const endPreview = useCallback(async () => {
+    const pid = getDevSession().previewId
+    if (pid) await foundationApi.previewEnd(pid)
+    updateDev({ previewId: '' })
+  }, [updateDev])
+
+  const value = { ...session, refresh, dev, updateDev, signIn, signOut,
+                  startPreview, endPreview,
+                  hasPerm: (p) => hasPerm(session, p) }
+
+  return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
+}
+
+export default SessionProvider

@@ -1,0 +1,32 @@
+{
+  "phase": "1C-02R + 1C-LC",
+  "generated_at": "2026-09-23",
+  "amended_at": "2026-09-24 (staging provisioning + migration + smoke executed under owner authorization)",
+  "status": "STAGING_APPLIED_AND_SMOKED",
+  "do_not_execute": false,
+  "owner_authorization": "2026-09-24 staging provisioning authorization (Tyrone)",
+  "target": "local Docker-based staging PostgreSQL (loopback 127.0.0.1:55433, db northstar_staging, user northstar_staging_owner)",
+  "required_postgres_major": 15,
+  "postgres_version_verified": "PostgreSQL 15.19 (Debian 15.19-1.pgdg13+2)",
+  "migration_package": "docs/northstar-phase1c/staging-migration-package.json",
+  "migrations_applied": [
+    "001_foundation.sql",
+    "002_jobs_durable.sql",
+    "003_keyword_intel.sql"
+  ],
+  "post_apply_schema": {"tables": 41, "columns": 424},
+  "backup": "verified pre-migration pg_dump (Northstar_backend/data/staging/staging-pre-migration-*.sql); backup step never skipped",
+  "preflight": "staging-identity + production-denylist + checksum validated (offline) before apply",
+  "rollback": "compensating rollback scripts prepared (002/003) but NOT executed — Tyrone is the sole rollback authority",
+  "smoke": {
+    "report": "docs/northstar-phase1c/staging-smoke-report.json",
+    "result": "26/26 PASS",
+    "plan": "staging-handoff-checklist.md F03"
+  },
+  "health_checks": {
+    "table_count": 41,
+    "fingerprint_reported": "see staging-provision-report.json"
+  },
+  "secret_delivery": "staging DB password stored in encrypted AES-256-GCM vault outside the repo (foundation/secrets.py); no secret values committed or logged",
+  "cost": "$0 (local Docker container on the existing engine; no managed infrastructure provisioned)"
+}

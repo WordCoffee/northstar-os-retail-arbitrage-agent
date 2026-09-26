@@ -1,0 +1,22 @@
+{
+  "owner": "Tyrone",
+  "step": "005_beta_launch_controls (staging)",
+  "applied_at": "2026-09-25T14:49:45.657654+00:00",
+  "backup": {
+    "path": "Northstar_backend\\data\\staging\\staging-pre-005-20260925T144945Z.sql",
+    "bytes": 203552,
+    "verified": true
+  },
+  "migration": "005_beta_launch_controls.sql",
+  "duration_ms": 46,
+  "post_apply": {
+    "tables": 44,
+    "columns": 455,
+    "new_tables": [
+      "legal_documents",
+      "acceptance_events",
+      "account_acceptance"
+    ]
+  },
+  "rollback": "NOT EXECUTED (Tyrone sole rollback authority)"
+}

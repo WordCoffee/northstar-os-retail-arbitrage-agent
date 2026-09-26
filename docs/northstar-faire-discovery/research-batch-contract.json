@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ResearchBatchContract",
+  "description": "Bounded, operator-approved research batches. Batches never self-enlarge. No purchase/listing/supplier-contact modes exist.",
+  "type": "object",
+  "required": ["org_id", "batch_id", "batch_number", "mode", "operator_approved", "created_at"],
+  "properties": {
+    "org_id": { "type": "string" },
+    "batch_id": { "type": "string" },
+    "batch_number": { "type": "integer", "minimum": 1, "maximum": 4 },
+    "mode": { "enum": ["MODE_1_OFFLINE", "MODE_2_PUBLIC_DISCOVERY", "MODE_3_AUTHORIZED_IMPORT", "MODE_4_APPROVED_LIVE_VERIFICATION"] },
+    "operator_approved": { "type": "boolean", "const": false },
+    "operator_approval_ref": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "correlation_id": { "type": ["string", "null"] },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "max_brands": { "type": ["integer", "null"] },
+        "max_products": { "type": ["integer", "null"] },
+        "max_amazon_matches": { "type": ["integer", "null"] },
+        "max_qualified_opportunities": { "type": ["integer", "null"] },
+        "max_provider_requests": { "type": ["integer", "null"] }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "brands_reviewed": { "type": "integer" },
+        "products_reviewed": { "type": "integer" },
+        "amazon_candidates_matched": { "type": "integer" },
+        "exact_matches": { "type": "integer" },
+        "ambiguous_matches": { "type": "integer" },
+        "direct_suppliers_identified": { "type": "integer" },
+        "brands_permitting_amazon": { "type": "integer" },
+        "products_with_complete_economics": { "type": "integer" },
+        "qualified_opportunities": { "type": "integer" },
+        "rejected_by_reason": { "type": "object", "additionalProperties": { "type": "integer" } }
+      }
+    },
+    "external_calls_made": { "type": "integer", "minimum": 0 },
+    "purchases_made": { "type": "integer", "const": 0 },
+    "listings_created": { "type": "integer", "const": 0 },
+    "supplier_contacts_made": { "type": "integer", "const": 0 },
+    "marketplace_writes": { "type": "integer", "const": 0 }
+  }
+}

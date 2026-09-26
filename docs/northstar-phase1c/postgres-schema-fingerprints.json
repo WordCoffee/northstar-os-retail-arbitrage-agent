@@ -1,0 +1,15 @@
+{
+  "phase": "1C-02R",
+  "generated_at": "2026-09-23",
+  "method": "PostgreSQL-side md5(string_agg(...)) over information_schema / pg_constraint / pg_indexes (deterministic; no shell newline artifacts)",
+  "note": "An earlier PowerShell line-join fingerprint (99750de2...) was method-inconsistent (LF vs CRLF); the canonical db-side fingerprints below supersede it.",
+  "fingerprints": {
+    "columns": {"clean_room_apply": "64d08db3ff66fb9af246a674aa99e6f5", "reapply_after_rollback": "64d08db3ff66fb9af246a674aa99e6f5", "match": true},
+    "constraints_pk_unique": {"clean_room_apply": "a1596ce1a63ef6261ff1cbaec3b8e13b", "reapply_after_rollback": "a1596ce1a63ef6261ff1cbaec3b8e13b", "match": true, "count": 30},
+    "indexes": {"clean_room_apply": "8b3d4ecd2a67ab8a61873883198bfc8b", "reapply_after_rollback": "8b3d4ecd2a67ab8a61873883198bfc8b", "match": true},
+    "primary_apply_vs_reapply_same_db": {"method": "PowerShell line-join (superseded)", "value": "99750de274a234568f790dfc84ba6d15971e7f4f119a2c0c5276d579f18a4d7c", "match": true}
+  },
+  "exclusion_rules": ["no timestamps or row data included; column metadata only", "column_default included (all empty in P0)", "ordering normalized by table_name, ordinal_position"],
+  "tables": 25,
+  "columns": 234
+}

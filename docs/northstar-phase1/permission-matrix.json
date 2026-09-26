@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "phase": "1A",
+    "generated_at": "2026-09-23",
+    "dimensions": ["environment: sandbox|production", "role: customer|operator|admin", "view_context: normal|audited_customer_preview"],
+    "no_impersonation": true
+  },
+  "roles": {
+    "customer": ["use services within plan", "view own org data", "create drafts", "request approvals"],
+    "operator": ["customer capabilities", "run jobs/refresh within gates", "manage org settings", "view org audit", "audited customer preview"],
+    "admin": ["operator capabilities", "platform/org admin", "plans/teams/provider registry for org", "audit queries", "security settings"]
+  },
+  "mode_matrix": [
+    {"action": "read canonical DB", "sandbox": "OK", "production": "OK", "preview": "OK (customer-scoped)"},
+    {"action": "local LLM generation", "sandbox": "OK", "production": "OK", "preview": "OK"},
+    {"action": "provider live read", "sandbox": "mock only", "production": "gate+budget", "preview": "blocked unless operator-approved + audited"},
+    {"action": "draft create", "sandbox": "OK", "production": "OK", "preview": "OK"},
+    {"action": "external write", "sandbox": "blocked", "production": "requires approval", "preview": "blocked"},
+    {"action": "purchase", "sandbox": "blocked (manual)", "production": "manual + approval", "preview": "blocked"}
+  ],
+  "approval_gates": {
+    "external_writes": ["Amazon listing publish", "Amazon Ads changes", "social publishing"],
+    "manual_purchases": true,
+    "elevated_cost": "provider live scans above budget",
+    "record": "approval_request / approval_grant; scoped, budgeted, revocable, audited"
+  },
+  "preview_requirements": [
+    "preserve operator real identity",
+    "record target org+user context",
+    "persistent non-dismissable banner",
+    "block unauthorized production writes",
+    "log entry/exit/actions",
+    "reauthorization for sensitive actions",
+    "never expose secrets"
+  ]
+}

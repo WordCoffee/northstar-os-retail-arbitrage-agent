@@ -1,0 +1,28 @@
+{
+  "phase": "1C-01F",
+  "generated_at": "2026-09-23",
+  "status": "passed",
+  "environment_modes": ["development", "test", "staging", "production"],
+  "required_in_staging_production": ["NORTHSTAR_JWT_SECRET", "NORTHSTAR_JWT_ISSUER", "NORTHSTAR_JWT_AUDIENCE", "non-empty algorithm allowlist"],
+  "startup_fails_closed": true,
+  "algorithm_allowlist": {"env": "NORTHSTAR_JWT_ALGORITHMS", "default": ["HS256"], "none_allowed": false},
+  "jwt_validation": ["signature", "exp", "nbf", "iat_shape", "iss", "aud", "sub", "type", "algorithm", "kid", "leeway", "lifetime_bound"],
+  "rejections": ["malformed_token", "empty_algorithm", "alg_none_rejected", "unexpected_algorithm", "malformed_kid", "unknown_kid", "no_signing_key_configured", "no_algorithm_allowed", "issuer_required", "audience_required", "invalid_issuer", "invalid_audience", "missing_required_claim", "token_expired", "token_not_yet_valid", "malformed_iat", "token_lifetime_exceeded", "unapproved_token_type", "invalid_token"],
+  "bounds": {"leeway_seconds_default": 30, "leeway_max": 300, "max_kid_length_default": 120},
+  "proxy_resolution": {"trusted_env": "NORTHSTAR_TRUSTED_PROXIES", "untrusted_forward_headers": "rejected as untrusted-proxy", "selection": "nearest untrusted hop right-to-left", "dns_lookups": false},
+  "organization_resolution": {"source": "memberships table", "role_from_claims": false, "header_authority": false, "membership_status_enforced": true, "cross_org_denied": true},
+  "initial_owner_bootstrap": {"module": "foundation/bootstrap.py", "route": false, "startup_trigger": false, "idempotent": true, "audited": true, "secrets_on_cli": false, "recovery_flag": "--recover"},
+  "jwks": {"implemented": false, "reason": "static-key model chosen for 1C-01F", "controls_not_applicable": ["https_requirement", "jwks_host_allowlist", "kid_fetch_bounds", "rotation", "stale_cache", "refresh_rate_limit"]},
+  "legacy_bridge": {"implemented": false, "plan": "legacy-identity-bridge-plan.md", "blocking_decisions": ["B1", "B2", "B3", "B4", "B5"]},
+  "session_reconciliation": {"boundary": "foundation and legacy session stores are separate", "foundation_routes_use_foundation_revocation": true, "legacy_cookie_auth_on_foundation": false, "cleanup": "deferred to 1C-04"},
+  "tests": {"command": "python -m pytest Northstar_backend/foundation/tests -q -p no:cacheprovider", "passed": 172, "failed": 0, "delta_since_1C01": 48},
+  "runtime_evidence": [
+    {"check": "staging without issuer/audience", "result": "AuthPostureError: missing_issuer; missing_audience"},
+    {"check": "production with issuer+audience+secret (loopback)", "result": "startup ok"},
+    {"check": "production without secret", "result": "AuthPostureError: missing_signing_key"},
+    {"check": "production + remote-dev override", "result": "AuthPostureError: remote_dev_override_in_prod"}
+  ],
+  "gate": "PASSED",
+  "provider_calls": "none",
+  "deployment": false
+}

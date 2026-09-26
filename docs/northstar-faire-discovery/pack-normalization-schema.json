@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PackNormalizationAssessment",
+  "type": "object",
+  "required": ["org_id", "source_record_id", "captured_at", "pack_configuration"],
+  "properties": {
+    "org_id": { "type": "string" },
+    "source_record_id": { "type": "string" },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "pack_configuration": {
+      "enum": ["WHOLESALE_SHIPPING_CASE", "MANUFACTURER_SINGLE_UNITS_INSIDE_CASE", "MANUFACTURER_MULTIPACK", "SELLER_CREATED_MULTIPACK", "BUNDLE_OF_DIFFERENT_PRODUCTS", "DISPLAY_PACK", "INNER_PACK", "PACK_CONFIGURATION_UNKNOWN"]
+    },
+    "supplier_case_quantity": { "type": ["integer", "null"] },
+    "inner_quantity": { "type": ["integer", "null"] },
+    "retail_ready_unit_count": { "type": ["integer", "null"] },
+    "amazon_unit_count": { "type": ["integer", "null"] },
+    "amazon_item_package_quantity": { "type": ["integer", "null"] },
+    "wholesale_cost_per_case": { "type": ["string", "null"], "pattern": "^[0-9]+\\.[0-9]{2}$" },
+    "landed_cost_per_case": { "type": ["string", "null"], "pattern": "^[0-9]+\\.[0-9]{2}$" },
+    "landed_cost_per_retail_ready_unit": { "type": ["string", "null"], "pattern": "^[0-9]+\\.[0-9]{2}$" },
+    "amazon_sale_price_per_sellable_unit": { "type": ["string", "null"], "pattern": "^[0-9]+\\.[0-9]{2}$" },
+    "sellable_units_per_case": { "type": ["integer", "null"] },
+    "residual_unusable_units": { "type": ["integer", "null"] },
+    "repackaging_requirements": { "type": ["string", "null"] },
+    "labeling_requirements": { "type": ["string", "null"] },
+    "new_upc_required": { "type": ["boolean", "null"] },
+    "brand_permission_required": { "type": ["boolean", "null"] },
+    "case_break_status": { "enum": ["ALLOWED", "DENIED", "REVIEW_REQUIRED", "UNKNOWN"] },
+    "case_break_failed_conditions": { "type": "array", "items": { "type": "string" } },
+    "pack_match_status": { "enum": ["EXACT", "MISMATCH", "UNRESOLVED", "UNKNOWN"] },
+    "manual_review_reason": { "type": ["string", "null"] }
+  }
+}

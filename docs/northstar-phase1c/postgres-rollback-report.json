@@ -1,0 +1,32 @@
+{
+  "phase": "1C-02R",
+  "generated_at": "2026-09-23",
+  "status": "EXERCISED_EPHEMERAL",
+  "evidence_state": "RUNTIME_CONFIRMED_EPHEMERAL",
+  "rollback_kind": "compensating (drop foundation tables only)",
+  "rollback_sql_sha256": "0fcbba99d8b2e949c0314723dac395232740319b4c13c9864f68f9a26526181a",
+  "drops_only_foundation_tables": true,
+  "legacy_tables_touched": false,
+  "drop_count": 25,
+  "cascade_used": false,
+  "transaction_boundary": "single transaction (BEGIN/COMMIT)",
+  "exercise": {
+    "rollback_exit": 0,
+    "tables_after_rollback": 0,
+    "objects_outside_inventory_removed": 0,
+    "reapply_after_rollback_exit": 0,
+    "fingerprint_match_after_reapply": true
+  },
+  "safety_review": {
+    "every_drop_is_foundation_owned": true,
+    "legacy_name_collision": "none",
+    "shared_with_other_subsystem": "none",
+    "drop_order": "reverse SCHEMA order (no FKs, order safe)",
+    "cascade_impact": "n/a (no CASCADE)"
+  },
+  "history": [
+    {"at": "2026-09-23 (blocked attempt)", "status": "generated_not_exercised", "reason_not_exercised": "no PostgreSQL available"},
+    {"at": "2026-09-23 (1C-02R)", "status": "EXERCISED_EPHEMERAL"}
+  ],
+  "staging_rollback": "NOT EXECUTED (requires owner authorization)"
+}

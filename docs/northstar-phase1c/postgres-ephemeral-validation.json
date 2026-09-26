@@ -1,0 +1,50 @@
+{
+  "phase": "1C-02R",
+  "generated_at": "2026-09-23",
+  "evidence_state": "RUNTIME_CONFIRMED_EPHEMERAL",
+  "git_head": "ecef24a",
+  "overall_result": "EPHEMERAL_VALIDATED_STAGING_PENDING",
+  "postgres": {
+    "image_repo": "docker.io/library/postgres",
+    "image_tag": "15",
+    "image_digest": "sha256:dfbbb0ad8cab91d41e99123664e37a9b25d0413426d4fb3154e4d668e5d35246",
+    "server_version": "PostgreSQL 15.19 (Debian 15.19-1.pgdg13+2)",
+    "server_version_num": "150019",
+    "client_version": "psql 15 (in-image)",
+    "driver": "psycopg 3.2.13 (venv-phase1c02)",
+    "target_version_rationale": "docker-compose.yml:81 pins supabase/postgres:15.1.1.78 -> documented major 15; official library/postgres major 15 used (supabase image is third-party and not authorized)",
+    "bind": "127.0.0.1:55432",
+    "host_classification": "loopback",
+    "database_name_classification": "disposable (northstar_phase1c02_ephemeral)"
+  },
+  "checksums": {
+    "apply_sql_sha256": "20562cac6223dee6d242aafeb4b00b89ce09d2a1ad826dd57ed878f7c76b5500",
+    "rollback_sql_sha256": "0fcbba99d8b2e949c0314723dac395232740319b4c13c9864f68f9a26526181a",
+    "db_source_sha256": "9b28c253748f5ab5c0ec3caac6b974a1b0733f0b284143d1002e908bf1d83d59"
+  },
+  "stages": {
+    "A_empty_baseline": {"result": "PASS", "user_tables": 0, "extensions": ["plpgsql"], "timezone": "Etc/UTC", "collation": "en_US.utf8", "isolation": "read committed"},
+    "B_first_apply": {"result": "PASS", "exit": 0, "duration_ms": 320, "tables_created": 25},
+    "C_schema_validation": {"result": "PASS", "tables": 25, "column_rows": 234, "constraints_pk_unique": 30, "type_counts": {"text": 164, "timestamp with time zone": 31, "boolean": 13, "jsonb": 10, "double precision": 8, "bigint": 8}},
+    "D_postgres_semantics": {"result": "PASS", "jsonb": "pass", "boolean": "pass", "timestamptz": "pass", "numeric": "pass", "constraints": "pass", "transactions_savepoint": "pass", "advisory_lock": "pass"},
+    "E_repository_tests": {"result": "PASS", "suite": "test_postgres_integration.py", "passed": 13, "failed": 0, "dialect_asserted": "postgresql", "sqlite_fallback": false},
+    "F_reapply_without_rollback": {"result": "PASS", "exit": 0, "behavior": "safe no-op (CREATE TABLE IF NOT EXISTS)", "notices": 25, "tables": 25},
+    "G_rollback": {"result": "PASS", "exit": 0, "drops": 25, "tables_after": 0},
+    "H_reapply_after_rollback": {"result": "PASS", "exit": 0, "tables": 25, "fingerprint_match": true},
+    "I_clean_room": {"result": "PASS", "apply_exit": 0, "tables": 25, "fingerprint_match": true, "smoke_passed": 13}
+  },
+  "network_activity": [
+    {"op": "docker daemon start", "destination": "local Docker Desktop", "outcome": "ok"},
+    {"op": "docker pull", "image": "docker.io/library/postgres:15", "digest": "sha256:dfbbb0ad8cab91d41e99123664e37a9b25d0413426d4fb3154e4d668e5d35246", "outcome": "ok"},
+    {"op": "pip install (venv)", "package": "psycopg[binary]", "version": "3.2.13", "source": "PyPI", "outcome": "ok"}
+  ],
+  "databases_contacted": {"remote": false, "staging": false, "production": false, "local_ephemeral": true},
+  "production_data_used": false,
+  "provider_calls": "none",
+  "deployment": false,
+  "commit": false,
+  "push": false,
+  "cleanup": {"container_removed": true, "volume_removed": true, "network_removed": true, "port_released": true, "ephemeral_password_deleted": true, "image_kept_cached": true},
+  "gate": {"1C-02A_offline_preflight": "PASSED", "1C-02B_ephemeral_postgres": "PASSED", "1C-02C_staging_identity": "NOT_STARTED", "1C-02D_staging_migration": "NOT_STARTED", "1C-02E_staging_rollback": "NOT_STARTED"},
+  "phases_not_started": ["1C-03", "1C-04", "1C-05", "1C-06"]
+}

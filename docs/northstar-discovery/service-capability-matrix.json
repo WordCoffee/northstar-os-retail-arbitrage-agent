@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "phase": 0,
+    "generated_at": "2026-09-23",
+    "tests_executed": false,
+    "status_legend": {
+      "VERIFIED_WORKING": "runtime-validated in this audit OR supported by a clearly identified recent runtime artifact",
+      "PARTIALLY_WORKING": "some pieces work, others do not",
+      "UI_ONLY": "renders but no real function",
+      "MOCKED": "mock/seed path only",
+      "HARD_CODED": "constants in source",
+      "CACHED_ONLY": "cache-first; no live acquisition",
+      "IMPORTED_DATA": "imported/static data",
+      "LIVE_READ": "live read",
+      "LIVE_WRITE": "live write",
+      "CONFIGURED_UNVERIFIED": "wired but not runtime-validated",
+      "BROKEN": "broken",
+      "MISSING": "not present",
+      "UNKNOWN": "cannot determine"
+    }
+  },
+  "services": [
+    {"id": "hub", "name": "Operations Hub", "status": "UI_ONLY (shell) + partial SPA", "production_readiness": 1, "evidence": "Analyst's Desk js/hub.js fixtures; SPA Hub.jsx proxy (R)", "evidence_state": "STATICALLY_CONFIRMED"},
+    {"id": "ledger", "name": "Ledger", "status": "PARTIALLY_WORKING", "production_readiness": 1, "evidence": "credit_ledger.py engine (S); credits endpoint returns balance==allotment (R); consumption unwired (S)", "evidence_state": "RUNTIME_CONFIRMED"},
+    {"id": "prospector", "name": "Prospector", "status": "CACHED_ONLY (default); live gated", "production_readiness": 2, "evidence": "scanner endpoint cached 45 products (R); refresh gated by SCANNER_LIVE_ALLOWED (S)", "evidence_state": "RUNTIME_CONFIRMED"},
+    {"id": "goldengoose", "name": "Golden Goose", "status": "MOCKED/STATICALLY_CONFIRMED; live gated", "production_readiness": 2, "evidence": "mock scan main.py:499 (S); live gated main.py:1188-1198 (S); gate2 not enforced (S)", "evidence_state": "STATICALLY_CONFIRMED"},
+    {"id": "offerchisel", "name": "OfferChisel", "status": "STATICALLY_CONFIRMED generator; no dedicated route", "production_readiness": 2, "evidence": "listing_forge.py (S); generic autothink run validated (R); no service route (S)", "evidence_state": "STATICALLY_CONFIRMED"},
+    {"id": "towncrier", "name": "The Town Crier", "status": "STATICALLY_CONFIRMED draft-only", "production_readiness": 1, "evidence": "social_pulse.py draft status :180 (S); no publish (S)", "evidence_state": "STATICALLY_CONFIRMED"},
+    {"id": "auctioneer", "name": "The Auctioneer", "status": "STATICALLY_CONFIRMED rule library; UI_ONLY harvesting", "production_readiness": 1, "evidence": "ad_pilot.py pure functions (S); Ads API unwired (S)", "evidence_state": "STATICALLY_CONFIRMED"},
+    {"id": "autothink", "name": "AutothinK", "status": "RUNTIME_CONFIRMED local; cloud CONFIGURED_UNVERIFIED", "production_readiness": 3, "evidence": "/api/autothink/run local generated (R); cloud.live_armed=false (R)", "evidence_state": "RUNTIME_CONFIRMED"},
+    {"id": "thewatch", "name": "The Watch", "status": "UI_ONLY skeleton / CACHED_ONLY", "production_readiness": 0, "evidence": "no capture loop (S); bsr_history store needs external record_snapshot (S)", "evidence_state": "STATICALLY_CONFIRMED"},
+    {"id": "rankledger", "name": "RankLedger", "status": "UI_ONLY skeleton", "production_readiness": 0, "evidence": "skeleton views (S)", "evidence_state": "STATICALLY_CONFIRMED"},
+    {"id": "rivalboard", "name": "The Rival Board", "status": "UI_ONLY skeleton / CACHED_ONLY", "production_readiness": 0, "evidence": "skeleton views; competition from local snapshots (S)", "evidence_state": "STATICALLY_CONFIRMED"},
+    {"id": "account", "name": "Account", "status": "PARTIALLY_WORKING", "production_readiness": 2, "evidence": "auth/RBAC/plans (S); billing MISSING; authorization badges presentation (S)", "evidence_state": "STATICALLY_CONFIRMED"},
+    {"id": "master_brain", "name": "Master Brain", "status": "STATICALLY_CONFIRMED (offline)", "production_readiness": 2, "evidence": "gateway/learning/profiles (S); no embeddings; learning empty (S)", "evidence_state": "STATICALLY_CONFIRMED"},
+    {"id": "suppliers", "name": "Suppliers", "status": "STATICALLY_CONFIRMED CRUD/analysis; live discovery gated", "production_readiness": 2, "evidence": "routes main.py:1894-2119 (S); SuppliersDB data_layer.py:964 (S); tests exist but NOT executed", "evidence_state": "STATICALLY_CONFIRMED"}
+  ]
+}

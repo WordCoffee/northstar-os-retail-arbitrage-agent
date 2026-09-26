@@ -2216,5 +2216,29 @@ def product_finder_route(
     }
 
 
+# =============================================================================
+# Foundation (Phase 1B) — ADDITIVE, versioned namespace /api/v1/foundation/*
+# Shared P0 foundation: organizations/identity, canonical product identity,
+# provenance, provider registry, jobs, usage (shadow mode), audit, approvals.
+# No external provider execution; no production migration; no GET-triggered
+# provider activity. Mounted defensively so a foundation error can never break
+# the existing API surface.
+# =============================================================================
+try:
+    from foundation.api.state import FoundationState as _FoundationState
+    from foundation.api.router import router as _foundation_router
+    from foundation.authn import assert_startup_posture as _assert_auth_posture
+
+    _assert_auth_posture()
+    app.state.foundation = _FoundationState.build()
+    app.include_router(_foundation_router)
+except Exception as _foundation_exc:  # pragma: no cover - defensive mount
+    import logging as _logging
+
+    _logging.getLogger("northstar.foundation").warning(
+        "foundation router not mounted: %s", _foundation_exc
+    )
+
+
 
 

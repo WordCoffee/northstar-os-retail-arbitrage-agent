@@ -58,6 +58,31 @@ export const SERVICES = [
     items: [
       { id: 'account', label: 'Account', route: '/account', icon: 'account' }
     ]
+  },
+  {
+    group: 'Internal',
+    icon: 'gauge',
+    items: [
+      { id: 'foundation', label: 'Operations Hub', route: '/foundation', icon: 'gauge', perm: 'request_refresh' },
+      { id: 'jobs', label: 'Jobs & Schedules', route: '/jobs', icon: 'jobs', perm: 'request_refresh' },
+      { id: 'keywords', label: 'Keywords & SEO', route: '/keywords', icon: 'rank', perm: 'request_refresh' }
+    ]
+  },
+  {
+    group: 'Private Beta',
+    icon: 'lock',
+    items: [
+      { id: 'beta', label: 'Onboarding & Plan', route: '/beta', icon: 'check', perm: 'view' },
+      { id: 'beta-support', label: 'Support', route: '/beta#support', icon: 'help', perm: 'view' },
+      { id: 'beta-signup', label: 'Invite entry', route: '/beta-signup', icon: 'plus', perm: 'view' }
+    ]
+  },
+  {
+    group: 'Beta Operations',
+    icon: 'shield',
+    items: [
+      { id: 'beta-ops', label: 'Tester Dashboard', route: '/beta-ops', icon: 'gauge', perm: 'platform_admin' }
+    ]
   }
 ]
 

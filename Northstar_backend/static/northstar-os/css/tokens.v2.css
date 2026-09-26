@@ -1,61 +1,54 @@
 /* ==========================================================================
-   NORTHSTAR OS — DESIGN TOKENS v2  (Phase I · I1)
-   Data-tool design system: LIGHT PRIMARY + DARK TOGGLE.
-   Neutral surfaces, ONE accent (Northstar steel-blue), semantic
-   green=profit / red=loss / amber=warn. Inter for UI, tabular mono for
-   numbers. Compact table density, real elevation, focus rings.
-
-   Loaded AFTER css/tokens.css so these values win the cascade. Every legacy
-   token name is redefined here so the existing component stylesheets adopt
-   the v2 palette without markup changes.
-   ========================================================================== */
+    NORTHSTAR OS — DESIGN TOKENS v3: SIGNAL (Living Data Expressive)
+    Deep obsidian canvas, glassmorphic backdrop blur, electric cyan accent,
+    hot coral alert, neon mint profit, JetBrains Mono tabular numerics.
+    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-/* ------------------------------------------------------------------ LIGHT */
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
-  /* ---- surfaces ---- */
-  --bg:            #f3f5f9;   /* app canvas */
-  --bg-elevated:   #ffffff;   /* cards, panels, rail */
-  --bg-sunken:     #eceff5;   /* table header, wells */
-  --bg-hover:      #e6ebf4;   /* hover fill */
-  --bg-inset:      #f7f9fc;   /* inset fields */
-  --desk-leather:  #f3f5f9;   /* legacy name -> flat canvas */
-  --aluminum:      linear-gradient(180deg, #ffffff, #f1f4f9);
-  --aluminum-hi:   linear-gradient(180deg, #ffffff, #e9eef6);
+  /* ---- surfaces & glass ---- */
+  --bg:            #070b14;   /* deep space obsidian canvas */
+  --bg-elevated:   rgba(15, 23, 42, 0.82);   /* glass cards, panels */
+  --bg-sunken:     rgba(10, 15, 30, 0.90);   /* table header, wells */
+  --bg-hover:      rgba(30, 41, 59, 0.70);   /* hover fill */
+  --bg-inset:      rgba(3, 7, 18, 0.60);     /* inset fields */
+  --desk-leather:  #070b14;
+  --aluminum:      rgba(15, 23, 42, 0.85);
+  --aluminum-hi:   rgba(30, 41, 59, 0.90);
 
-  /* ---- the ONE accent: Northstar steel-blue ---- */
-  --accent:         #2563eb;
-  --accent-bright:  #3b82f6;
-  --accent-deep:    #1d4ed8;
-  --accent-dim:     rgba(37, 99, 235, 0.10);
-  --accent-line:    rgba(37, 99, 235, 0.42);
-  --accent-ink:     #ffffff;
+  /* ---- SIGNAL accent: Electric Cyan (#00f0ff) ---- */
+  --accent:         #00f0ff;
+  --accent-bright:  #33f3ff;
+  --accent-deep:    #00b8c4;
+  --accent-dim:     rgba(0, 240, 255, 0.15);
+  --accent-line:    rgba(0, 240, 255, 0.45);
+  --accent-ink:     #070b14;
 
-  /* ---- semantic: profit / loss / warn ---- */
-  --profit:         #15803d;
-  --profit-bright:  #16a34a;
-  --profit-dim:     rgba(22, 163, 74, 0.12);
-  --profit-line:    rgba(22, 163, 74, 0.40);
+  /* ---- semantic: neon mint profit / hot coral loss / warn ---- */
+  --profit:         #00ffcc;
+  --profit-bright:  #33ffdd;
+  --profit-dim:     rgba(0, 255, 204, 0.15);
+  --profit-line:    rgba(0, 255, 204, 0.45);
 
-  --loss:           #b91c1c;
-  --loss-bright:    #dc2626;
-  --loss-dim:       rgba(220, 38, 38, 0.10);
-  --loss-line:      rgba(220, 38, 38, 0.38);
+  --loss:           #ff3366;
+  --loss-bright:    #ff5c8a;
+  --loss-dim:       rgba(255, 51, 102, 0.15);
+  --loss-line:      rgba(255, 51, 102, 0.45);
 
-  --warn:           #b45309;
-  --warn-bright:    #d97706;
-  --warn-dim:       rgba(217, 119, 6, 0.12);
-  --warn-line:      rgba(217, 119, 6, 0.42);
+  --warn:           #ffbb00;
+  --warn-bright:    #ffd033;
+  --warn-dim:       rgba(255, 187, 0, 0.15);
+  --warn-line:      rgba(255, 187, 0, 0.45);
 
   /* ---- text ---- */
-  --ink:            #0e1a2b;   /* primary */
-  --ink-dim:        #475569;   /* secondary */
-  --ink-faint:      #7c8aa0;   /* tertiary / muted */
-  --hairline:       #d6dde8;   /* border */
-  --hairline-soft:  #e7ecf4;   /* subtle border */
+  --ink:            #f8fafc;   /* pure white primary */
+  --ink-dim:        #94a3b8;   /* slate secondary */
+  --ink-faint:      #64748b;   /* muted slate */
+  --hairline:       rgba(255, 255, 255, 0.08);   /* glass border */
+  --hairline-soft:  rgba(255, 255, 255, 0.04);   /* subtle border */
 
   /* ---- semantic aliases ---- */
   --text-primary:   var(--ink);
@@ -66,7 +59,7 @@
   --border:         var(--hairline);
   --border-subtle:  var(--hairline-soft);
 
-  /* ---- legacy colour names remapped to the v2 system ---- */
+  /* ---- legacy colour names remapped to SIGNAL system ---- */
   --gold:           var(--accent);
   --gold-dim:       var(--accent-dim);
   --gold-line:      var(--accent-line);
@@ -77,16 +70,16 @@
   --green:          var(--profit-bright);
   --green-dim:      var(--profit-dim);
   --green-line:     var(--profit-line);
-  --green-bright:   #22c55e;
+  --green-bright:   #00ffcc;
   --crimson:        var(--loss);
   --crimson-bright: var(--loss-bright);
   --crimson-dim:    var(--loss-dim);
 
   /* ---- typography ---- */
-  --font-ui:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-head:  var(--font-ui);   /* serif retired */
+  --font-ui:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-head:  var(--font-ui);
   --font-body:  var(--font-ui);
-  --font-mono:  'JetBrains Mono', ui-monospace, 'Cascadia Mono', 'Consolas', 'SFMono-Regular', Menlo, monospace;
+  --font-mono:  'JetBrains Mono', ui-monospace, monospace;
 
   --fs-2xs: 10.5px; --fs-xs: 11.5px; --fs-sm: 12.5px; --fs-md: 13.5px;
   --fs-lg: 15px;    --fs-xl: 18px;   --fs-2xl: 22px;  --fs-3xl: 28px;
@@ -98,36 +91,36 @@
   --sp-9: 36px;  --sp-10: 40px; --sp-11: 44px; --sp-12: 48px;
 
   /* ---- radii ---- */
-  --radius:        8px;
-  --radius-sm:     5px;
-  --radius-lg:     12px;
-  --radius-xl:     16px;
+  --radius:        12px;
+  --radius-sm:     6px;
+  --radius-lg:     16px;
+  --radius-xl:     24px;
   --radius-full:   999px;
 
   /* ---- layout metrics ---- */
-  --rail-w:              236px;
-  --rail-w-collapsed:    62px;
+  --rail-w:              240px;
+  --rail-w-collapsed:    64px;
   --topbar-h:            56px;
-  --ribbon-h:            var(--topbar-h);   /* legacy */
-  --drawer-w:            var(--rail-w);     /* legacy */
+  --ribbon-h:            var(--topbar-h);
+  --drawer-w:            var(--rail-w);
   --drawer-w-collapsed:  var(--rail-w-collapsed);
   --board-w:             280px;
   --space:               16px;
 
   /* ---- table density ---- */
-  --row-h:          36px;
-  --row-h-compact:  30px;
-  --cell-pad-x:     12px;
+  --row-h:          40px;
+  --row-h-compact:  32px;
+  --cell-pad-x:     16px;
 
-  /* ---- elevation ---- */
-  --shadow-sm:   0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
-  --shadow-card: 0 1px 2px rgba(16,24,40,.05), 0 1px 3px rgba(16,24,40,.07);
-  --shadow-pin:  0 4px 14px rgba(16,24,40,.12);
-  --shadow-lg:   0 10px 30px rgba(16,24,40,.14);
-  --shadow-pop:  0 22px 48px rgba(16,24,40,.22);
+  /* ---- elevation & glass glow ---- */
+  --shadow-sm:   0 1px 3px rgba(0,0,0,0.4);
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+  --shadow-pin:  0 8px 30px rgba(0,0,0,0.6);
+  --shadow-lg:   0 12px 40px rgba(0,0,0,0.7);
+  --shadow-pop:  0 24px 60px rgba(0,0,0,0.85);
 
   /* ---- focus ring ---- */
-  --focus-ring:  0 0 0 2px var(--bg-elevated), 0 0 0 4px var(--accent-line);
+  --focus-ring:  0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
 
   /* ---- transitions ---- */
   --ease-out:        cubic-bezier(0.22, 1, 0.36, 1);
@@ -141,7 +134,6 @@
   --z-modal:  50;
   --z-toast:  60;
 
-  /* ---- single-accent signature aliases (all groups share the accent) ---- */
   --sig-sourcing:        var(--accent);
   --sig-sourcing-dim:    var(--accent-dim);
   --sig-sourcing-line:   var(--accent-line);
@@ -172,52 +164,9 @@
   --sig-accent-bright: var(--accent-bright);
 }
 
-/* ------------------------------------------------------------------- DARK */
+[data-theme="light"] {
+  color-scheme: dark;
+}
 [data-theme="dark"] {
   color-scheme: dark;
-
-  --bg:            #0d1420;
-  --bg-elevated:   #151d2b;
-  --bg-sunken:     #0a0f19;
-  --bg-hover:      #1d2738;
-  --bg-inset:      #101724;
-  --desk-leather:  #0d1420;
-  --aluminum:      linear-gradient(180deg, #1a2332, #141c29);
-  --aluminum-hi:   linear-gradient(180deg, #1f2937, #161f2d);
-
-  --accent:         #3b82f6;
-  --accent-bright:  #60a5fa;
-  --accent-deep:    #2563eb;
-  --accent-dim:     rgba(59, 130, 246, 0.16);
-  --accent-line:    rgba(59, 130, 246, 0.50);
-  --accent-ink:     #ffffff;
-
-  --profit:         #22c55e;
-  --profit-bright:  #34d399;
-  --profit-dim:     rgba(34, 197, 94, 0.16);
-  --profit-line:    rgba(34, 197, 94, 0.44);
-
-  --loss:           #f87171;
-  --loss-bright:    #f87171;
-  --loss-dim:       rgba(248, 113, 113, 0.14);
-  --loss-line:      rgba(248, 113, 113, 0.44);
-
-  --warn:           #fbbf24;
-  --warn-bright:    #fbbf24;
-  --warn-dim:       rgba(251, 191, 36, 0.16);
-  --warn-line:      rgba(251, 191, 36, 0.46);
-
-  --ink:            #e6edf6;
-  --ink-dim:        #9fb0c6;
-  --ink-faint:      #6b7c93;
-  --hairline:       #26344a;
-  --hairline-soft:  #1c2738;
-
-  --shadow-sm:   0 1px 2px rgba(0,0,0,.4);
-  --shadow-card: 0 1px 3px rgba(0,0,0,.45);
-  --shadow-pin:  0 4px 14px rgba(0,0,0,.5);
-  --shadow-lg:   0 12px 32px rgba(0,0,0,.55);
-  --shadow-pop:  0 22px 48px rgba(0,0,0,.62);
-
-  --focus-ring:  0 0 0 2px var(--bg-elevated), 0 0 0 4px var(--accent-line);
 }

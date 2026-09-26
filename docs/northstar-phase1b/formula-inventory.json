@@ -1,0 +1,50 @@
+{
+  "phase": "1B-amendment",
+  "generated_at": "2026-09-23",
+  "purpose": "R13/R14 resolution prerequisite — inventory of every fee/ROI/profit/margin/ACoS formula site before building the canonical economics module",
+  "formulas_changed_in_phase_1b": false,
+  "sites": [
+    {"id": "F1", "kind": "referral_fee", "path": "Northstar_backend/fee_engine.py", "line": 180, "symbol": "calculate_referral_fee"},
+    {"id": "F2", "kind": "fba_fee", "path": "Northstar_backend/fee_engine.py", "line": 263, "symbol": "calculate_fba_fulfillment_fee"},
+    {"id": "F3", "kind": "referral_fee", "path": "Northstar_backend/fee_calculator.py", "line": 130, "symbol": "calculate_referral_fee"},
+    {"id": "F4", "kind": "fee_composite", "path": "Northstar_backend/pricing.py", "line": 4, "symbol": "compute_profit", "note": "hardcoded referral 0.15, fuel 0.035, inbound 0.35"},
+    {"id": "F5", "kind": "fee_composite", "path": "northstar-os-ui/src/pages/Auctioneer.jsx", "line": 12, "symbol": "inline", "note": "frontend hardcoded 0.15 + tier FBA"},
+    {"id": "F6", "kind": "fee_composite", "path": "northstar-os-ui/src/pages/GoldenGoose.jsx", "line": 12, "symbol": "inline", "note": "frontend hardcoded 0.15 + tier FBA"},
+    {"id": "P1", "kind": "net_profit+roi", "path": "Northstar_backend/fee_engine.py", "line": 406, "symbol": "calculate_unit_economics"},
+    {"id": "P2", "kind": "net_profit+margin", "path": "Northstar_backend/fee_calculator.py", "line": 233, "symbol": "inline", "note": "net_margin = net/price*100"},
+    {"id": "P3", "kind": "margin", "path": "Northstar_backend/product_analysis.py", "line": 376, "symbol": "inline", "note": "profit_margin_pct = net/costco_cost*100 (cost-basis margin)"},
+    {"id": "P4", "kind": "margin", "path": "Northstar_backend/scanner_data.py", "line": 265, "symbol": "net_margin_pct", "note": "net/price*100 (price margin)"},
+    {"id": "P5", "kind": "roi", "path": "Northstar_backend/finance.py", "line": 129, "symbol": "projected_roi_pct"},
+    {"id": "P6", "kind": "net_profit", "path": "Northstar_backend/unit_economics.py", "line": 24, "symbol": "compute_economics"},
+    {"id": "P7", "kind": "economics", "path": "Northstar_backend/enricher.py", "line": 143, "symbol": "compute_economics"},
+    {"id": "P8", "kind": "margin+roi", "path": "Northstar_backend/agents/golden_goose_finder/breakdown_economics.py", "line": 506, "symbol": "calculate_breakdown_economics"},
+    {"id": "P9", "kind": "margin", "path": "northstar-os-ui/src/pages/Prospector.jsx", "line": 13, "symbol": "inline"},
+    {"id": "P10", "kind": "net+roi+margin", "path": "northstar-os-ui/src/pages/GoldenGoose.jsx", "line": 6, "symbol": "scoreDeals"},
+    {"id": "A1", "kind": "acos", "path": "Northstar_backend/ad_pilot.py", "line": 327, "symbol": "compute_target_acos"},
+    {"id": "A2", "kind": "acos", "path": "Northstar_backend/word_coffee.py", "line": 47, "symbol": "breakeven_acos"},
+    {"id": "A3", "kind": "acos", "path": "northstar-os-ui/src/pages/Auctioneer.jsx", "line": 15, "symbol": "inline"},
+    {"id": "A4", "kind": "score", "path": "Northstar_backend/agents/golden_goose_finder/opportunity_scorer.py", "line": 835, "symbol": "composite"}
+  ],
+  "confirmed_conflicts": [
+    {"id": "C1", "description": "Two margin definitions (net/price vs net/costco_cost)", "sites": ["P3", "P4", "P8", "P9"]},
+    {"id": "C2", "description": "Three ACoS implementations with different bases/targets", "sites": ["A1", "A2", "A3"]},
+    {"id": "C3", "description": "Frontend hardcodes 0.15 referral and tier FBA fees, diverging from backend rule engine", "sites": ["F5", "F6", "F1", "F2"]},
+    {"id": "C4", "description": "Multiple compute_economics/profit functions with different inputs/null behavior", "sites": ["P1", "P2", "P5", "P6", "P7"]}
+  ],
+  "canonical_module_requirements": {
+    "single_referral_fee": true,
+    "single_fba_fee": true,
+    "single_net_profit": true,
+    "single_roi": true,
+    "single_margin_definition": "net/price (price margin); cost-basis margin reported separately if needed",
+    "single_breakeven_acos": true,
+    "single_target_acos": true,
+    "preserve_formula_version": true,
+    "preserve_input_provenance": true,
+    "null_first": true,
+    "prevent_division_by_zero": true,
+    "distinguish_percentage_vs_ratio": true,
+    "regression_tests_per_inventoried_site": true,
+    "must_reduce_source_count": true
+  }
+}

@@ -33,7 +33,11 @@ const paths = {
   paperclip: <path d="M19 4l4 14 14 4a5 5 0 0 1 5 5l-5-5a3 3 0 0 1-3-3l3 3M4 18l-3-3" {...stroke} />,
   alert: <path d="M12 4a7 7 0 0 1 7 7l-7-7a4 4 0 0 1-4-4l4 4" {...stroke} />,
   check: <path d="M5 4h14M6 5l1 3M5 19l1-3" {...stroke} />,
-  caret: <path d="M6 4h12v3h-12v3" {...stroke} />
+  caret: <path d="M6 4h12v3h-12v3" {...stroke} />,
+  sync: <path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7" {...stroke} />,
+  clock: <path d="M12 3a9 9 0 1 0 9 9M12 7v5l3 2M21 4v6h-6" {...stroke} />,
+  lock: <path d="M6 11h12v9H6zM9 11V7a3 3 0 0 1 6 0v4" {...stroke} />,
+  bell: <path d="M6 10a6 6 0 1 1 12 0v4l2 2H4l2-2zM10 20a2 2 0 0 0 4 0" {...stroke} />
 }
 
 export default function Icon({ name, size = 16, className }) {

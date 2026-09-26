@@ -127,9 +127,9 @@ assert(html.includes('id="at-lamp-dot"') && html.includes('id="at-lamp-value"') 
 assert(html.includes('id="at-lamp-meta">no probe performed'), 'brand: lamp meta defaults to "no probe performed" in markup');
 assert(html.includes('master-brain/northstar-os-master-plan.md') && html.includes('master-brain/service-plans/05_autothink_surface.md'),
   'brand: master-brain docs pointer present');
-assert(html.includes('--ns-gold: #D4AF37') && html.includes('--ns-steel: #4682B4') && html.includes('--ns-crimson: #8B0000'),
-  'brand: Northstar gold/steel/crimson tokens defined');
-assert(html.includes('--bg: var(--ns-space)') && html.includes('#050505'), 'brand: space-bg token on #050505 applied');
+assert(html.includes('--ns-gold: #00f0ff') && html.includes('--ns-steel: #00f0ff') && html.includes('--ns-crimson: #ff3366'),
+  'brand: Northstar SIGNAL cyan/coral tokens defined');
+assert(html.includes('--bg: var(--ns-space)') && html.includes('#070b14'), 'brand: space-bg token on #070b14 applied');
 assert(!html.includes('#ff00cc') && !html.includes('#ff9900') && !html.includes('#ffd700'),
   'brand: legacy neon/neon-gold hex removed (full brand sweep)');
 

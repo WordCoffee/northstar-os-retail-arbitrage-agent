@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "phase": 0,
+    "generated_at": "2026-09-23",
+    "severity_key": ["critical", "high", "medium", "low"],
+    "probability_key": ["high", "medium", "low"],
+    "tests_executed": false
+  },
+  "risks": [
+    {"id": "R1", "title": "No canonical product identity; 4 ASIN stores diverge", "severity": "critical", "probability": "high", "area": "data integrity", "evidence": "docs/northstar-discovery/08-master-brain-data-flow.md", "mitigation": "canonical (marketplace,asin) record + reconciliation dry-run", "owner_decision": true},
+    {"id": "R2", "title": "Keyword/SEO + campaign intelligence dormant (schema only)", "severity": "high", "probability": "high", "area": "product capability", "evidence": "08", "mitigation": "wire importers/consumers in Phase 1", "owner_decision": true},
+    {"id": "R3", "title": "No scheduler/capture loop; Watch/Rank/Rival track nothing", "severity": "high", "probability": "high", "area": "reliability", "evidence": "04, 02", "mitigation": "scheduler + snapshot job", "owner_decision": true},
+    {"id": "R4", "title": "Credits display-only; ledger never debited", "severity": "high", "probability": "high", "area": "financial", "evidence": "main.py:1717", "mitigation": "wire meter->ledger; define conversion", "owner_decision": true},
+    {"id": "R5", "title": "Golden Goose live route not two-gated", "severity": "high", "probability": "medium", "area": "control", "evidence": "live_scan_gate.py not enforced by /scan", "mitigation": "enforce both gates on /scan", "owner_decision": false},
+    {"id": "R6", "title": "React SPA untested and not served by FastAPI", "severity": "high", "probability": "high", "area": "quality", "evidence": "10", "mitigation": "test framework; mount dist or decide surface", "owner_decision": true},
+    {"id": "R7", "title": "adapters/ + importers/ orphaned (SP-API, Ads API unwired)", "severity": "high", "probability": "medium", "area": "maintainability", "evidence": "06", "mitigation": "adopt or remove in Phase 1", "owner_decision": true},
+    {"id": "R8", "title": "Unwrangle blocked (403); single-provider dependency risk", "severity": "medium", "probability": "medium", "area": "reliability", "evidence": "06 (HISTORICALLY_FAILED / CURRENTLY_UNVERIFIED)", "mitigation": "fallback chain; re-check under approved envelope", "owner_decision": false},
+    {"id": "R9", "title": "live badges + 0.00 costs on cache-first pages misrepresent certainty", "severity": "high", "probability": "high", "area": "data integrity / UX", "evidence": "05", "mitigation": "provenance labels surfaced; null-not-zero", "owner_decision": false},
+    {"id": "R10", "title": "Anonymous demo fallback means open API by default", "severity": "medium", "probability": "medium", "area": "security", "evidence": "auth_deps.py:39-48", "mitigation": "auth required in production", "owner_decision": true},
+    {"id": "R11", "title": "JWT secret ephemeral fallback (restart invalidates sessions)", "severity": "medium", "probability": "low", "area": "security", "evidence": "auth.py:31", "mitigation": "persist NORTHSTAR_JWT_SECRET in prod", "owner_decision": false},
+    {"id": "R12", "title": "Rate limiter in-memory (not multi-worker safe)", "severity": "medium", "probability": "medium", "area": "reliability", "evidence": "rate_limiter.py", "mitigation": "redis-backed in prod", "owner_decision": false},
+    {"id": "R13", "title": "Three ACoS formula implementations", "severity": "medium", "probability": "high", "area": "financial", "evidence": "05", "mitigation": "single shared formula module", "owner_decision": true},
+    {"id": "R14", "title": "Two margin definitions both labeled margin", "severity": "medium", "probability": "high", "area": "data integrity", "evidence": "05", "mitigation": "canonicalize definition", "owner_decision": true},
+    {"id": "R15", "title": "No mode architecture (sandbox/prod/operator/customer-view/impersonation)", "severity": "high", "probability": "high", "area": "security / compliance", "evidence": "12", "mitigation": "Phase-1 foundation", "owner_decision": true},
+    {"id": "R16", "title": "Hardcoded test credentials in tools/test_chrome.py + browser_agent", "severity": "medium", "probability": "medium", "area": "security", "evidence": "12", "mitigation": "remove literals; use env", "owner_decision": false},
+    {"id": "R17", "title": "DataForSEO import-time credential capture (OPEN issue)", "severity": "medium", "probability": "medium", "area": "security", "evidence": "00_STATE.json:161-166", "mitigation": "lazy config reads", "owner_decision": false},
+    {"id": "R18", "title": "test_scavio.py latent live-call foot-gun", "severity": "medium", "probability": "low", "area": "provider cost", "evidence": "10", "mitigation": "gate/remove live __main__", "owner_decision": false},
+    {"id": "R19", "title": "GG + scanner read different product universes", "severity": "high", "probability": "high", "area": "data integrity", "evidence": "08", "mitigation": "shared product record feeds both", "owner_decision": true},
+    {"id": "R20", "title": "Four frontend surfaces; no single product surface", "severity": "high", "probability": "high", "area": "UX / maintainability", "evidence": "03, 11", "mitigation": "surface decision (owner)", "owner_decision": true},
+    {"id": "R21", "title": "No unified audit UI; CRUD not fully audited", "severity": "medium", "probability": "medium", "area": "compliance", "evidence": "12", "mitigation": "audit middleware + UI", "owner_decision": true},
+    {"id": "R22", "title": "Migrations not applied; schema described 4 ways", "severity": "medium", "probability": "medium", "area": "maintainability", "evidence": "07", "mitigation": "consolidate schema; apply to staging only", "owner_decision": true}
+  ],
+  "summary": {
+    "critical": 1,
+    "high": 9,
+    "medium": 12,
+    "low": 0,
+    "owner_decisions_required": 13
+  }
+}

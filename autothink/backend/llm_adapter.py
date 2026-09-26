@@ -240,6 +240,9 @@ class UnifiedLLMAdapter:
                 {"role": "user", "content": query},
             ],
             "max_tokens": NUM_PREDICT,
+            # Explicit cost-first routing: cheapest available provider, fallbacks
+            # allowed. Approved 2026-09-24; no hard max_price ceiling yet.
+            "provider": {"sort": "price", "allow_fallbacks": True},
         }
         try:
             resp = requests.post(OPENROUTER_URL, headers=headers, json=body, timeout=self.timeout_s)

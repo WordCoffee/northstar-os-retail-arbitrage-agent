@@ -2,7 +2,7 @@ import Icon from './Icon.jsx'
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function Header({ theme, onToggleTheme, toast }) {
+export default function Header({ theme, onToggleTheme, toast, rightSlot }) {
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const inputRef = useRef(null)
@@ -75,6 +75,7 @@ export default function Header({ theme, onToggleTheme, toast }) {
           <Icon name={theme === 'light' ? 'sun' : 'moon'} size={17} />
         </button>
         <button className="btn" onClick={() => navigate('/account')}>Account</button>
+        {rightSlot}
       </div>
     </header>
   )

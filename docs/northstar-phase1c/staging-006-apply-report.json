@@ -1,0 +1,25 @@
+{
+  "owner": "Tyrone",
+  "step": "006_private_beta_readiness (staging)",
+  "applied_at": "2026-09-25T15:36:50.611662+00:00",
+  "backup": {
+    "path": "Northstar_backend\\data\\staging\\staging-pre-006-20260925T153649Z.sql",
+    "bytes": 304476,
+    "verified": true
+  },
+  "migration": "006_private_beta_readiness.sql",
+  "duration_ms": 69,
+  "post_apply": {
+    "tables": 50,
+    "columns": 503,
+    "new_tables": [
+      "billing_customers",
+      "checkout_sessions",
+      "subscriptions",
+      "billing_events",
+      "invites",
+      "org_entitlements"
+    ]
+  },
+  "rollback": "NOT EXECUTED (Tyrone sole rollback authority)"
+}

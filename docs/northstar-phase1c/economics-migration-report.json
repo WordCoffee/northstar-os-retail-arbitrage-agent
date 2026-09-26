@@ -1,0 +1,33 @@
+{
+  "phase": "1C-03R",
+  "generated_at": "2026-09-24 (sprint 5)",
+  "status": "PARTIAL",
+  "batch_status": {
+    "A_core_mapping": "DONE (fee_engine delegates; adapter present)",
+    "B_scanner_flow": "DONE (scanner canonicalized; version+readiness+canonical ROI)",
+    "C1_ad_pilot": "DONE (canonical break-even + explicit target-AcoS policy)",
+    "C2_word_coffee": "DONE (canonical break-even; legacy field preserved)",
+    "C3_golden_goose_breakdown": "PENDING",
+    "C4_golden_goose_scorer": "PENDING"
+  },
+  "advertising_policy": {
+    "module": "foundation/economics/advertising.py",
+    "policy_version": "advertising-policy-1.0.0",
+    "separation": ["break_even_acos (objective, canonical)", "target_acos (policy: break_even|retained_contribution|loss_leading)", "maximum_cpc (math, requires CVR)"],
+    "no_hidden_defaults": ["no 15% referral assumption", "no 70%-of-break-even constant", "loss-leading requires explicit flag"],
+    "evidence": {"tests": "foundation/tests/test_advertising_canonical.py (10 passed)", "combined": "265 passed, 13 skipped", "gg": "43 passed", "word_coffee": "10 passed"}
+  },
+  "canonical_path_authority": "foundation/economics",
+  "classifications": {
+    "ACTIVE_CANONICAL_PATH": ["foundation/economics/**", "fee_engine.calculate_unit_economics", "ad_pilot.compute_target_acos (canonical fields)", "word_coffee.breakeven_acos (canonical field)"],
+    "DISPLAY_ONLY": ["northstar-os-ui Auctioneer/Prospector/GoldenGoose economics"],
+    "HISTORICAL_BENCHMARK": ["foundation/economics/benchmarks.py"],
+    "ACTIVE_LEGACY_PATH_REMAINING": [
+      {"module": "agents/golden_goose_finder/breakdown_economics.py", "note": "render canonical output; no recompute"},
+      {"module": "agents/golden_goose_finder/opportunity_scorer.py", "note": "readiness-gated; no zero-for-unknown"}
+    ]
+  },
+  "provider_calls": "none",
+  "marketplace_actions": "none",
+  "advertising_writes": "none"
+}

@@ -1,0 +1,315 @@
+{
+  "owner": "Tyrone",
+  "plan": "staging-handoff-checklist.md F03",
+  "started_at": "2026-09-25T19:03:00.563603+00:00",
+  "completed_at": "2026-09-25T19:03:00.563606+00:00",
+  "environment": "staging",
+  "database_target": {
+    "host": "127.0.0.1",
+    "port": 55433,
+    "database": "northstar_staging",
+    "user": "northstar_staging_owner"
+  },
+  "network_status": "loopback-only local Docker staging box (postgres:15)",
+  "items": {
+    "01_auth_posture_jwt": {
+      "pass": true,
+      "detail": ""
+    },
+    "02_environment": {
+      "pass": true,
+      "detail": ""
+    },
+    "03_missing_jwt_401": {
+      "pass": true,
+      "detail": ""
+    },
+    "04_valid_jwt_ok": {
+      "pass": true,
+      "detail": ""
+    },
+    "05_org_resolved": {
+      "pass": true,
+      "detail": ""
+    },
+    "06_cross_org_denied": {
+      "pass": true,
+      "detail": ""
+    },
+    "07_session_revocation": {
+      "pass": true,
+      "detail": ""
+    },
+    "08_preview_banner": {
+      "pass": true,
+      "detail": ""
+    },
+    "09_preview_audited": {
+      "pass": true,
+      "detail": ""
+    },
+    "10_economics_canonical": {
+      "pass": true,
+      "detail": ""
+    },
+    "11_missing_cost_incomplete": {
+      "pass": true,
+      "detail": ""
+    },
+    "12_fake_job_succeeds": {
+      "pass": true,
+      "detail": ""
+    },
+    "13_transient_retries": {
+      "pass": true,
+      "detail": ""
+    },
+    "14_scheduler_dedup": {
+      "pass": true,
+      "detail": "{\"occurrences\": 1, \"r2_enqueued\": 0}"
+    },
+    "15_keyword_import": {
+      "pass": true,
+      "detail": ""
+    },
+    "16_import_idempotent": {
+      "pass": true,
+      "detail": ""
+    },
+    "17_rejected_rows_preserved": {
+      "pass": true,
+      "detail": ""
+    },
+    "18_keyword_search": {
+      "pass": true,
+      "detail": ""
+    },
+    "19_search_term_performance": {
+      "pass": true,
+      "detail": ""
+    },
+    "20_frontend_served": {
+      "pass": true,
+      "detail": ""
+    },
+    "21_deep_link": {
+      "pass": true,
+      "detail": ""
+    },
+    "22_security_headers": {
+      "pass": true,
+      "detail": ""
+    },
+    "23_get_creates_no_jobs": {
+      "pass": true,
+      "detail": ""
+    },
+    "24_no_provider_on_load": {
+      "pass": true,
+      "detail": ""
+    },
+    "25_audit_events": {
+      "pass": true,
+      "detail": ""
+    },
+    "26_usage_settled": {
+      "pass": true,
+      "detail": ""
+    },
+    "27_financial_chain_request_to_audit": {
+      "pass": true,
+      "detail": "{\"job\": \"ece8ac3a-1061-486c-a849-7574c872926d\", \"settle\": \"settle:189021bf-e92f-456e-933d-577fb90e6ae2:1\", \"audit_events\": 18}"
+    },
+    "28_authz_two_org_two_role": {
+      "pass": true,
+      "detail": "{\"owner_submit\": true, \"viewer_own_org_read\": true, \"viewer_ledger_blocked\": true, \"viewer_providers_blocked\": true, \"viewer_submit_blocked\": true, \"viewer_cross_org_job_404\": true, \"cross_org_body_no_hint\": true}"
+    },
+    "29_beta_acceptance_access_denial": {
+      "pass": true,
+      "detail": "{\"documents_published\": true, \"new_account_denied_before_acceptance\": true, \"public_documents_reachable\": true, \"acceptance_recorded\": true, \"access_restored_after_acceptance\": true, \"acceptance_events_append_only\": true}"
+    },
+    "30_master_slice_e2e": {
+      "pass": true,
+      "detail": "{\"invite_issued\": true, \"signup_ok\": true, \"acceptance_ok\": true, \"hosted_checkout_no_cards\": true, \"webhook_settled\": true, \"tier_granted\": true, \"within_tier_0\": true, \"within_tier_1\": true, \"within_tier_2\": true, \"within_tier_3\": true, \"within_tier_4\": true, \"over_tier_blocked\": true, \"downgrade_on_cancel\": true, \"audit_correlated\": true}"
+    },
+    "31_subscriber_operations_e2e": {
+      "pass": true,
+      "detail": "{\"org_approved\": true, \"signup_ok\": true, \"acceptance_ok\": true, \"onboarding_ok\": true, \"plan_visible\": true, \"over_limit_blocked\": true, \"usage_shown\": true, \"support_ok\": true, \"next_request_blocked\": true, \"dashboard_final\": true, \"export_final\": true, \"audit_correlated\": true}"
+    }
+  },
+  "passed": 31,
+  "total": 31,
+  "overall": "PASS",
+  "financial_chain": {
+    "request": {
+      "correlation_id": "staging-req-chain-1",
+      "idempotency_key": "staging-fin-chain",
+      "job_id": "ece8ac3a-1061-486c-a849-7574c872926d"
+    },
+    "execution": {
+      "state": "succeeded"
+    },
+    "ledger": {
+      "finalized_count": 1,
+      "entry": "settle:189021bf-e92f-456e-933d-577fb90e6ae2:1",
+      "credits_debited": 0.0
+    },
+    "audit_chain": [
+      {
+        "action": "job.state.queued",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T13:42:57.563452+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T13:42:57.567905+00:00"
+      },
+      {
+        "action": "job.state.leased",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T13:42:57.627375+00:00"
+      },
+      {
+        "action": "job.state.running",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T13:42:57.643119+00:00"
+      },
+      {
+        "action": "job.state.succeeded",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T13:42:57.663199+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T13:43:28.320889+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T13:43:44.386185+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T14:11:44.116648+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T14:51:12.324705+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T14:53:53.132013+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T15:37:32.064392+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T15:38:04.498282+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T15:39:15.673971+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T15:39:50.610987+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T16:34:21.239653+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T16:34:45.093123+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T16:35:02.550924+00:00"
+      },
+      {
+        "action": "job.submit",
+        "job_id": "ece8ac3a-1061-486c-a849-7574c872926d",
+        "actor": "818d3840-1a16-40b6-9757-9e5a67af68f8",
+        "timestamp": "2026-09-25T19:03:00.568782+00:00"
+      }
+    ]
+  },
+  "authorization_matrix": {
+    "owner_submit": true,
+    "viewer_own_org_read": true,
+    "viewer_ledger_blocked": true,
+    "viewer_providers_blocked": true,
+    "viewer_submit_blocked": true,
+    "viewer_cross_org_job_404": true,
+    "cross_org_body_no_hint": true
+  },
+  "beta_acceptance": {
+    "documents_published": true,
+    "new_account_denied_before_acceptance": true,
+    "public_documents_reachable": true,
+    "acceptance_recorded": true,
+    "access_restored_after_acceptance": true,
+    "acceptance_events_append_only": true
+  },
+  "master_slice_e2e": {
+    "invite_issued": true,
+    "signup_ok": true,
+    "acceptance_ok": true,
+    "hosted_checkout_no_cards": true,
+    "webhook_settled": true,
+    "tier_granted": true,
+    "within_tier_0": true,
+    "within_tier_1": true,
+    "within_tier_2": true,
+    "within_tier_3": true,
+    "within_tier_4": true,
+    "over_tier_blocked": true,
+    "downgrade_on_cancel": true,
+    "audit_correlated": true
+  },
+  "subscriber_operations_e2e": {
+    "org_approved": true,
+    "signup_ok": true,
+    "acceptance_ok": true,
+    "onboarding_ok": true,
+    "plan_visible": true,
+    "over_limit_blocked": true,
+    "usage_shown": true,
+    "support_ok": true,
+    "next_request_blocked": true,
+    "dashboard_final": true,
+    "export_final": true,
+    "audit_correlated": true
+  }
+}

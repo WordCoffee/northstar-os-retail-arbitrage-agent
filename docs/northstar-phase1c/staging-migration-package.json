@@ -1,0 +1,143 @@
+{
+  "phase": "1C-LC",
+  "purpose": "Staging migration package (1C-06 beta launch controls)",
+  "generated_at": "2026-09-25T15:40:03.466568+00:00",
+  "postgres_requirements": {
+    "min_version": "15",
+    "verified_on": "PostgreSQL 15.19"
+  },
+  "extensions": [],
+  "ordered_migrations": [
+    {
+      "file": "001_foundation.sql",
+      "direction": "up",
+      "checksum": "520b64f1d06c1b55d86ceed42a0a1e1231d02fa8ab97f74510dbe29e649ef960",
+      "additive": true,
+      "reapply_safe": true
+    },
+    {
+      "file": "002_jobs_durable.sql",
+      "direction": "up",
+      "checksum": "2dbd7d4f45ee6013241a09ba40138ffc7bc5f5cf81541692728e93924020b952",
+      "additive": true,
+      "reapply_safe": true,
+      "depends_on": [
+        "001_foundation.sql"
+      ]
+    },
+    {
+      "file": "003_keyword_intel.sql",
+      "direction": "up",
+      "checksum": "408e6e8120260750700618b9e70190f9cb8ef4778bd87cc58f748f8933c0775b",
+      "additive": true,
+      "reapply_safe": true,
+      "depends_on": [
+        "001_foundation.sql",
+        "002_jobs_durable.sql"
+      ]
+    },
+    {
+      "file": "004_financial_integrity.sql",
+      "direction": "up",
+      "checksum": "f0d03a8e017a917831b61f89ae5622586b8cbec803eca2ee3ae51455b5f07c8c",
+      "additive": true,
+      "reapply_safe": true,
+      "depends_on": [
+        "001_foundation.sql",
+        "002_jobs_durable.sql"
+      ]
+    },
+    {
+      "file": "005_beta_launch_controls.sql",
+      "direction": "up",
+      "checksum": "80209b9e6ad4ccf46495972496e4e8a69c9d0f76f505d34f96507867a124c9a4",
+      "additive": true,
+      "reapply_safe": true,
+      "depends_on": [
+        "001_foundation.sql",
+        "002_jobs_durable.sql"
+      ],
+      "note": "versioned beta documents + append-only acceptance + current acceptance pointer"
+    },
+    {
+      "file": "006_private_beta_readiness.sql",
+      "direction": "up",
+      "checksum": "06ae49ac3aa53bd24a8d4ba8962d878b1dab39ba5901a457a4fa5f1ef06176c8",
+      "additive": true,
+      "reapply_safe": true,
+      "depends_on": [
+        "001_foundation.sql",
+        "002_jobs_durable.sql"
+      ],
+      "note": "test-mode billing, subscriber tiers & entitlements, invite-gated access"
+    },
+    {
+      "file": "007_private_beta_operations.sql",
+      "direction": "up",
+      "checksum": "9b1d16402b7cdb9860e8b731420a7631dd7ac4100be5e92d114683af6f6a531e",
+      "additive": true,
+      "reapply_safe": true,
+      "depends_on": [
+        "001_foundation.sql",
+        "002_jobs_durable.sql"
+      ],
+      "note": "lifecycle, admin notes/overrides, support, onboarding, usage counters"
+    }
+  ],
+  "rollback_ordered": [
+    {
+      "file": "007_rollback_private_beta_operations.sql",
+      "direction": "down",
+      "checksum": "256e26d490795cddfdefe414defd7dc4225e0ab0d0a83e8d42279cb275dc6d7a",
+      "compensating": true
+    },
+    {
+      "file": "006_rollback_private_beta_readiness.sql",
+      "direction": "down",
+      "checksum": "aebdb58e12d55e86724f600d9cad58e3b18e6eefedc0629ce00285480684dba2",
+      "compensating": true
+    },
+    {
+      "file": "005_rollback_beta_launch_controls.sql",
+      "direction": "down",
+      "checksum": "0ee1652bfbb5a65fc618a358f85b04bee47480d94e4518a77d22c1b87feb79cd",
+      "compensating": true
+    },
+    {
+      "file": "004_rollback_financial_integrity.sql",
+      "direction": "down",
+      "checksum": "fbe3b0517b8b323ede26868f05bbd50f065e14eea24224c11b132efde42f5dc7",
+      "compensating": true
+    },
+    {
+      "file": "003_rollback_keyword_intel.sql",
+      "direction": "down",
+      "checksum": "7238dcb8b627616687cf7110d321c081a6acecfe5bdd87992b687408a1bb77e6",
+      "compensating": true
+    },
+    {
+      "file": "002_rollback_jobs_durable.sql",
+      "direction": "down",
+      "checksum": "1079d9598a0fd60b7e4f059e3954a62a251ddc600a53681a0d9eff50df212f3d",
+      "compensating": true
+    }
+  ],
+  "lock_risks": [
+    "CREATE/DROP INDEX take ACCESS EXCLUSIVE; run in a maintenance window.",
+    "DO-block ALTER TABLE ADD/DROP CONSTRAINT takes ACCESS EXCLUSIVE."
+  ],
+  "abort_conditions": [
+    "Staging identity validation fails; checksum mismatch; unverified backup; denylisted identifier."
+  ],
+  "production_denylist": [
+    "prod",
+    "production",
+    "live",
+    "primary"
+  ],
+  "rollback_verification": "005/004/003/002 compensating rollbacks validated on the disposable PostgreSQL (harness 9/9).",
+  "data_preservation_warnings": [
+    "Rollback DROPS foundation tables and destroys data written by the new system; take a verified backup first.",
+    "Legacy tables are never touched by any migration."
+  ]
+}

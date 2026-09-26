@@ -1,0 +1,18 @@
+{
+  "checked_org": "2841b83a-5767-4919-817b-18985fbd437f",
+  "items": {
+    "invite_issued_and_accepted": true,
+    "legal_docs_accepted": true,
+    "org_state_valid": true,
+    "plan_assigned": true,
+    "usage_counters_initialized": true,
+    "support_path_verified": true,
+    "entitlement_visibility_verified": true,
+    "suspension_path_known": true,
+    "audit_present": true,
+    "no_blocked_prereq": true
+  },
+  "all_pass": true,
+  "unknown_items": [],
+  "verified_at": "2026-09-25"
+}

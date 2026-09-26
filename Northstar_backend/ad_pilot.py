@@ -342,6 +342,27 @@ def compute_target_acos(
     target_acos = max_acos_pct * (1 - desired_profit_margin / 100)
     breakeven_acos = max_acos_pct
 
+    # 1C-03R: canonical break-even (objective) + explicit target-AcoS policy.
+    try:
+        from foundation.economics.advertising import break_even_acos as _be, target_acos_policy as _tp
+        from foundation.economics.versions import FORMULA_VERSION as _FV
+    except ImportError:
+        try:
+            from .foundation.economics.advertising import break_even_acos as _be, target_acos_policy as _tp
+            from .foundation.economics.versions import FORMULA_VERSION as _FV
+        except ImportError:
+            _be = _tp = None
+            _FV = None
+
+    canonical_be = None
+    policy = {"target_acos": None, "policy_name": "break_even",
+              "policy_version": None, "warnings": []}
+    if _be is not None:
+        _cbe = _be(pre_ad_contribution=gross_profit, ad_attributed_revenue=amazon_price)
+        canonical_be = float(_cbe["break_even_acos"]) if _cbe["break_even_acos"] is not None else None
+        policy = _tp(break_even_acos=canonical_be, policy="retained_contribution",
+                     retained_contribution_pct=(desired_profit_margin / 100.0))
+
     return {
         "amazon_price": amazon_price,
         "product_cost": product_cost,
@@ -352,4 +373,11 @@ def compute_target_acos(
         "breakeven_acos": round(breakeven_acos, 1),
         "target_acos": round(max(target_acos, 0), 1),
         "desired_margin": desired_profit_margin,
+        # canonical + policy separation (additive; legacy keys above preserved)
+        "break_even_acos": canonical_be,
+        "target_acos_policy": policy["target_acos"],
+        "policy_name": policy["policy_name"],
+        "advertising_policy_version": policy["policy_version"],
+        "economics_formula_version": _FV,
+        "policy_warnings": policy["warnings"],
     }

@@ -1,0 +1,70 @@
+{
+  "phase": "1C-01",
+  "generated_at": "2026-09-23",
+  "status": "complete",
+  "scope": "real JWT authentication and organization resolution only",
+  "not_started": ["1C-02 postgres apply", "1C-03 economics", "1C-04 workers", "1C-05 keyword", "1C-06 frontend serving"],
+  "files_added": ["Northstar_backend/foundation/authn.py"],
+  "files_modified": [
+    "Northstar_backend/foundation/api/deps.py",
+    "Northstar_backend/foundation/db.py",
+    "Northstar_backend/foundation/repositories.py",
+    "Northstar_backend/foundation/context.py",
+    "Northstar_backend/foundation/api/router.py",
+    "Northstar_backend/foundation/app.py",
+    "Northstar_backend/main.py",
+    "Northstar_backend/foundation/tests/test_auth_guard.py",
+    "Northstar_backend/foundation/tests/test_api_contracts.py",
+    "Northstar_backend/foundation/tests/conftest.py"
+  ],
+  "files_added_tests": [
+    "Northstar_backend/foundation/tests/test_auth_jwt.py",
+    "Northstar_backend/foundation/tests/test_auth_org_scope.py",
+    "Northstar_backend/foundation/tests/test_auth_posture.py"
+  ],
+  "schema_tables": 25,
+  "new_table": "sessions (jti, user_id, organization_id, issued_at, expires_at, revoked_at, revoked_reason)",
+  "api": {
+    "added": ["POST /api/v1/foundation/session/revoke"],
+    "changed": ["/environment (auth_method + posture)", "/auth-posture (now requires auth)"],
+    "auth_model": "JWT-first; dev shim only in ENVIRONMENT=development and loopback client"
+  },
+  "guardrail_acceptance": {
+    "G1_override_rejected_in_staging_production": true,
+    "G2_startup_fail_on_remote_bind_with_dev_shim": true,
+    "G3_proxy_cannot_masquerade_as_loopback": true,
+    "G4_forwarded_headers_trusted_only_from_configured_proxies": true,
+    "G5_jwt_validated_before_identity_headers": true,
+    "G6_dev_headers_ignored_outside_local_development": true,
+    "G7_fail_closed": true
+  },
+  "runtime_evidence": [
+    {"id": 1, "check": "localhost /me no auth", "result": 401},
+    {"id": 2, "check": "localhost /me valid JWT", "result": 200},
+    {"id": 3, "check": "localhost /me bad JWT", "result": 401},
+    {"id": 4, "check": "LAN /me dev headers no JWT", "result": 401},
+    {"id": 5, "check": "LAN /me valid JWT", "result": 200},
+    {"id": 6, "check": "LAN /me spoofed XFF + dev headers", "result": 401},
+    {"id": 7, "check": "localhost cross-org X-Org-Id", "result": 403},
+    {"id": 8, "check": "/auth-posture (JWT)", "result": "auth_posture=jwt, real_authentication_active=true"},
+    {"id": "S1", "check": "startup production without secret", "result": "AuthPostureError"},
+    {"id": "S2", "check": "startup production + remote-dev override", "result": "AuthPostureError"}
+  ],
+  "tests": {"command": "python -m pytest Northstar_backend/foundation/tests -q -p no:cacheprovider", "passed": 124, "failed": 0, "new_auth_tests": 32},
+  "gaps": [
+    "membership provisioning bridge from legacy auth.py users to foundation memberships",
+    "issuer/audience validated only when configured",
+    "foundation sessions separate from legacy sessions table"
+  ],
+  "confirmations": {
+    "postgres_migration_applied": false,
+    "economics_changed": false,
+    "workers_started": false,
+    "frontend_exposed": false,
+    "external_provider_call": false,
+    "deployment": false,
+    "commit": false,
+    "push": false,
+    "policy_files_changed": false
+  }
+}

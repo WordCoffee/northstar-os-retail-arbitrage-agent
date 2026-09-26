@@ -1,0 +1,108 @@
+{
+  "phase": "1C",
+  "generated_at": "2026-09-23",
+  "amended_at": "2026-09-24 (local legacy-UI cutoff: PASS)",
+  "overall_status": "PARTIAL",
+  "boundary": "session/context budget (not a safety blocker)",
+  "gates": {
+    "1C-01F": {
+      "status": "PASSED"
+    },
+    "1C-02A_offline_preflight": {
+      "status": "PASSED"
+    },
+    "1C-02B_ephemeral_postgres": {
+      "status": "PASSED"
+    },
+    "1C-02C_D_E_staging": {
+      "status": "PASSED_LOCAL_STAGING",
+      "evidence": "staging-provision-report.json + staging-smoke-report.json + postgres-staging-readiness.json (26/26 smoke PASS on 127.0.0.1:55433/northstar_staging)"
+    },
+    "1C-03_canonical_economics": {
+      "status": "PASSED"
+    },
+    "1C-03R_reconciliation": {
+      "status": "PARTIAL",
+      "done": [
+        "collection repaired",
+        "combined collection green",
+        "frontend authority removed",
+        "economics API added"
+      ],
+      "pending": [
+        "backend legacy consumer rewire (fee_engine, fee_calculator, pricing, finance, unit_economics, enricher, product_analysis, scanner_data, ad_pilot, word_coffee, GG breakdown/scorer)"
+      ]
+    },
+    "1C-04_worker_scheduler": {
+      "status": "PASSED",
+      "evidence": "foundation/tests/test_1c04_gate.py + durable job/worker/scheduler suites (SQLite 419 passed/28 skipped; disposable PG 28 passed; migration harness 9/9)"
+    },
+    "1C-05_keyword_seo": {
+      "status": "PASSED",
+      "evidence": "foundation/tests/test_1c05_gate.py + keyword suites (SQLite 494 passed/28 skipped; PG 28 passed; migration harness 9/9 incl. 003)"
+    },
+    "1C-06_frontend_serving": {
+      "status": "PASSED",
+      "evidence": "foundation/tests/test_1c06_gate.py + test_frontend_gate.py (SQLite suite 517 passed/28 skipped)"
+    },
+    "1C-04_financial_integrity": {
+      "status": "PASSED",
+      "evidence": "reports/northstar_phase1c_financial_integrity_20260924.md; test_financial_integrity{,_postgres}.py; staging-smoke-report.json item 27 (financial_chain); staging-004-apply-report.json"
+    },
+    "1C-04_durable_execution": {
+      "status": "PASSED",
+      "decision": "ACCEPTED",
+      "evidence_preserved": [
+        "reports/northstar_phase1c_financial_integrity_20260924.md",
+        "staging-smoke-report.json",
+        "staging-004-apply-report.json",
+        "staging-apply-ledger.json",
+        "postgres-durable-validation.json"
+      ]
+    },
+    "1C-05_authorization_data_boundaries": {
+      "status": "PASSED",
+      "decision": "ACCEPTED",
+      "evidence": "test_authorization_matrix.py (9) + test_authorization_postgres.py (4) + staging smoke item 28"
+    },
+    "1C-06_beta_launch_controls": {
+      "status": "PASSED",
+      "decision": "ACCEPTED"
+    },
+    "1C-06_master_slice_private_beta_readiness": {
+      "status": "PASSED",
+      "decision": "ACCEPTED"
+    },
+    "private_beta_operations_subscriber_rules": {
+      "status": "PASSED",
+      "decision": "ACCEPTED"
+    },
+    "phase1c_ui_wiring_private_beta_experience": {
+      "status": "PASSED",
+      "decision": "ACCEPTED"
+    },
+    "local_legacy_ui_cutoff": {
+      "status": "PASSED",
+      "decision": "PASS",
+      "evidence": "browser-verified: /ui lands in #/beta-ops (admin) and #/beta (tester); signed-out -> #/beta-signup; legacy routes -> Legacy-disabled tombstone; beta-only sidebar; tests added in test_frontend_gate.py"
+    }
+  },
+  "tests": {
+    "combined_collection": "foundation durable execution green (SQLite 419 passed / 28 skipped; PG 28 passed)",
+    "combined_run": "SQLite 633 passed / 58 skipped; disposable PG 58 passed; harness 9/9 (001-007); staging smoke 31/31",
+    "frontend_build": "success"
+  },
+  "databases_contacted": {
+    "local_ephemeral": "stopped",
+    "staging": true,
+    "staging_identity": "loopback 127.0.0.1:55433 northstar_staging (owner-authorized 2026-09-24)",
+    "production": false
+  },
+  "provider_calls": "none",
+  "marketplace_writes": "none",
+  "deployment": false,
+  "commit": false,
+  "push": false,
+  "owner_action_required": "LOCAL_PRIVATE_BETA_UI_READY. Browser flows usable at 127.0.0.1:8001/ui. No production/live/real keys.",
+  "classification": "LOCAL_PRODUCTION_CANDIDATE + STAGING_APPLIED_AND_SMOKED"
+}

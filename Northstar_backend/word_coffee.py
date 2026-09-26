@@ -56,6 +56,21 @@ def breakeven_acos(cogs_per_unit: float, asp: Optional[float] = None,
     referral = price * referral_pct / 100.0
     contribution = price - cogs_per_unit - fba_fee - referral
     margin = contribution / price if price else 0.0
+    # 1C-03R: canonical break-even (objective) is authoritative.
+    try:
+        from foundation.economics.advertising import break_even_acos as _be
+        from foundation.economics.versions import FORMULA_VERSION as _FV
+    except ImportError:
+        try:
+            from .foundation.economics.advertising import break_even_acos as _be
+            from .foundation.economics.versions import FORMULA_VERSION as _FV
+        except ImportError:
+            _be = None
+            _FV = None
+    canonical_be = None
+    if _be is not None and price:
+        _cbe = _be(pre_ad_contribution=contribution, ad_attributed_revenue=price)
+        canonical_be = float(_cbe["break_even_acos"]) if _cbe["break_even_acos"] is not None else None
     return {
         "asp": round(price, 2),
         "cogs_per_unit": cogs_per_unit,
@@ -63,6 +78,9 @@ def breakeven_acos(cogs_per_unit: float, asp: Optional[float] = None,
         "fba_fee": fba_fee,
         "contribution_per_unit": round(contribution, 2),
         "breakeven_acos_pct": round(margin * 100.0, 1),
+        # canonical (additive; legacy field preserved)
+        "break_even_acos": canonical_be,
+        "economics_formula_version": _FV,
     }
 
 

@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "phase": "1A",
+    "generated_at": "2026-09-23",
+    "specification": true,
+    "implementation": false
+  },
+  "entities": {
+    "identity": ["organization", "user", "membership", "session", "invite"],
+    "catalog": ["marketplace", "catalog_product", "product_identifier", "brand", "variation_family", "variation_child", "pack_config", "unit_normalization"],
+    "market": ["amazon_offer_snapshot", "seller_offer_snapshot", "demand_snapshot", "rank_snapshot", "eligibility_snapshot"],
+    "economics": ["fee_snapshot", "product_economics_snapshot"],
+    "opportunity": ["opportunity_assessment"],
+    "supplier": ["supplier", "supplier_account", "supplier_product", "supplier_offer_snapshot", "invoice_status"],
+    "intelligence": ["keyword", "keyword_observation", "keyword_association", "listing", "listing_version", "advertising_entity", "social_asset", "social_content", "watch_config", "competitor", "competitor_observation"],
+    "ops": ["provenance_record", "refresh_job", "audit_event", "usage_event", "approval_request", "approval_grant", "brain_run", "brain_tool_invocation", "brain_artifact", "tour_completion", "notification", "provider_registry", "provider_budget", "pricing_policy", "invoice"]
+  },
+  "provenance_attributes": ["source", "source_identifier", "captured_at", "effective_at", "confidence", "verification_state", "raw_source_ref", "transformation_version", "staleness_state"],
+  "identity_rules": {
+    "global_key": "product_id (immutable UUID)",
+    "amazon_unique": "(marketplace_id, asin)",
+    "multipack_bundle": "never collapsed into parent product row",
+    "identifiers": ["ASIN", "UPC", "EAN", "GTIN", "MPN"],
+    "normalization": "ASIN uppercase-trim; UPC/EAN/GTIN digit-normalized; raw preserved"
+  },
+  "snapshot_pattern": "append-only *_snapshot rows keyed to parent + captured_at; latest via DISTINCT ON; never mutate old snapshots",
+  "freshness": {"offers_days": 7, "sales_days": 30, "identity_days": 90}
+}

@@ -1,0 +1,47 @@
+{
+  "phase": "1B",
+  "generated_at": "2026-09-23",
+  "tool": "Northstar_backend/tools/foundation_migrate_dryrun.py",
+  "mode": "read-only",
+  "writes_performed": 0,
+  "sources": [
+    {"source": "products_table", "path": "Northstar_backend/data/northstar.db", "access": "sqlite mode=ro", "records": 1024, "valid_asin": 1024, "invalid_asin": 0, "missing_asin": 0, "missing_provenance": 851},
+    {"source": "scanner-search-cache.brightdata-20260817-065933-20260817-021812.json", "records": 234, "valid_asin": 234, "missing_provenance": 234},
+    {"source": "scanner-search-cache.enriched-candidate.json", "records": 10, "valid_asin": 10, "missing_provenance": 10},
+    {"source": "scanner-search-cache.json", "records": 89, "valid_asin": 89, "missing_provenance": 89},
+    {"source": "sourcescout_manifest", "path": "Northstar_backend/data/catalog/sourcescout_manifest.json", "records": 470, "valid_asin": 470, "missing_provenance": 470},
+    {"source": "golden_goose_report", "path": "Northstar_backend/data/golden-goose-reports/ (latest)", "records": 30, "valid_asin": 30, "missing_provenance": 30}
+  ],
+  "totals": {
+    "total_source_records": 1857,
+    "distinct_amazon_identities": 1628,
+    "new_product_candidates": 1628,
+    "duplicate_count": 229,
+    "conflict_count": 151,
+    "invalid_asin_count": 0,
+    "marketplace_unknown_count": 0,
+    "pack_ambiguity_count": 421,
+    "variation_ambiguity_count": 0,
+    "records_missing_provenance": 1684
+  },
+  "proposed_mapping": {
+    "catalog_product": 1628,
+    "product_identifier(asin)": 1857,
+    "amazon_offer_snapshot": 1857,
+    "supplier_documentation": 0
+  },
+  "acceptance_thresholds_proposed": {
+    "asin_validity_pct": 100,
+    "unmapped_critical_fields": 0,
+    "conflicts_reviewed": true,
+    "provenance_completeness_pct_min": 95
+  },
+  "readiness": {
+    "canonical_model_defined": true,
+    "dry_run_tool_available": true,
+    "migration_file_prepared": true,
+    "import_jobs_implemented": false,
+    "staging_apply_performed": false,
+    "blocking_gaps": ["import jobs M1-M6 (Phase 1C)", "provenance attachment on import", "staging Postgres"]
+  }
+}

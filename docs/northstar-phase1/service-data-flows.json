@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "phase": "1A",
+    "generated_at": "2026-09-23",
+    "specification": true
+  },
+  "services": [
+    {"service": "hub", "reads_from": ["portfolio read-model", "opportunity_assessment", "listing", "advertising", "alert", "social_content", "brain_run", "approval_request", "provider_registry", "usage projection", "refresh_job", "audit_event"], "writes_to": ["approval_request (via actions)"], "emits": ["hub.widget.customized", "hub.alert.acknowledged", "hub.action.launched"]},
+    {"service": "ledger", "reads_from": ["usage_event", "pricing_policy", "invoice"], "writes_to": [], "emits": [], "consumes": ["usage.event.recorded", "credits.adjusted", "invoice.generated"]},
+    {"service": "prospector", "reads_from": ["catalog_product", "product_identifier", "pack_config", "supplier_product", "supplier_offer_snapshot", "amazon_offer_snapshot", "fee_snapshot", "demand_snapshot", "eligibility_snapshot"], "writes_to": ["catalog_product (ingest)", "supplier_offer_snapshot", "amazon_offer_snapshot", "refresh_job"], "emits": ["product.created", "product.updated", "identity.merged", "supplier.ingested", "supplier.offer.updated", "snapshot.recorded", "refresh_job.*"], "feeds": ["goldengoose", "thewatch", "offerchisel", "auctioneer", "hub"]},
+    {"service": "goldengoose", "reads_from": ["opportunity_assessment", "catalog_product", "economics", "market snapshot", "supplier", "invoice_status"], "writes_to": ["opportunity_assessment", "watch_config", "approval_request"], "emits": ["opportunity.assessed", "opportunity.approved", "opportunity.dismissed", "opportunity.assigned"], "consumes": ["product.created", "economics.computed", "market.snapshot", "supplier.offer.updated"], "feeds": ["thewatch", "auctioneer", "offerchisel", "hub"]},
+    {"service": "offerchisel", "reads_from": ["catalog_product", "keyword graph", "brand_voice", "listing", "economics"], "writes_to": ["listing", "listing_version", "approval_request"], "emits": ["listing.drafted", "listing.version.created", "listing.approved", "listing.published", "listing.audited"], "consumes": ["keyword.observed", "product.updated", "economics.computed"], "feeds": ["auctioneer", "towncrier", "rankledger", "hub"]},
+    {"service": "towncrier", "reads_from": ["brand_voice", "keyword graph", "social_asset", "social_content"], "writes_to": ["social_content", "social_asset", "approval_request"], "emits": ["social.drafted", "social.approved", "social.scheduled", "social.published", "social.asset.uploaded"], "consumes": ["brand.voice", "keyword.observed"], "feeds": ["hub"]},
+    {"service": "auctioneer", "reads_from": ["campaigns", "keyword graph", "economics", "ad_performance_snapshot"], "writes_to": ["advertising_entity", "ad_performance_snapshot", "approval_request"], "emits": ["campaign.changed", "ad.performance.recorded", "recommendation.generated"], "consumes": ["keyword.observed", "economics.computed"], "feeds": ["hub", "offerchisel", "rankledger"]},
+    {"service": "autothink", "reads_from": ["all domain stores via context", "brain_run", "brain_artifact"], "writes_to": ["brain_run", "brain_tool_invocation", "brain_artifact", "brain_approval", "usage_event"], "emits": ["brain.run_started", "brain.step_completed", "brain.approval_required", "brain.run_completed", "brain.run_failed", "brain.artifact.created"], "consumes": ["all domain events"], "feeds": ["hub", "ledger", "notifications", "approvals"]},
+    {"service": "thewatch", "reads_from": ["watch_config", "snapshots", "alert"], "writes_to": ["watch_config", "alert"], "emits": ["alert.raised", "watch.triggered", "snapshot.recorded"], "consumes": ["product.created", "snapshot.recorded"], "feeds": ["prospector", "goldengoose", "hub"]},
+    {"service": "rankledger", "reads_from": ["keyword graph", "keyword_observation", "rank_snapshot"], "writes_to": ["keyword_observation", "keyword_association"], "emits": ["keyword.observed", "rank.alert.raised"], "consumes": ["snapshot.recorded", "listing.changed", "campaign.changed"], "feeds": ["hub", "offerchisel", "auctioneer", "rival"]},
+    {"service": "rival", "reads_from": ["competitor", "competitor_observation", "keyword graph", "market snapshot"], "writes_to": ["competitor", "competitor_observation"], "emits": ["rival.observed", "rival.alert.raised"], "consumes": ["market.snapshot", "keyword.observed"], "feeds": ["hub", "rankledger", "auctioneer"]},
+    {"service": "account", "reads_from": ["identity", "provider_registry", "usage projection", "connections", "brand_voice"], "writes_to": ["connections", "brand_voice", "membership"], "emits": ["user.updated", "org.changed", "connection.changed", "provider.status_changed", "tour.completed", "preview.started", "preview.ended"], "consumes": ["auth/session events"], "feeds": ["all services"]}
+  ],
+  "shared_intelligence": {
+    "product_graph": "catalog_product + identifiers + snapshots (single)",
+    "supplier_graph": "supplier + supplier_product + offers + invoice_status",
+    "keyword_graph": "keyword + observations + associations (single, shared by OfferChisel/Auctioneer/TownCrier/RankLedger/Rival)",
+    "brand_voice": "single store (Account)",
+    "economics": "single canonical modules (fee, margin, ROI, ACoS)",
+    "recommendations": "derived via event consumers",
+    "audit": "audit_event unified",
+    "memory": "per-org memory bank",
+    "embeddings": "planned (P3)"
+  }
+}

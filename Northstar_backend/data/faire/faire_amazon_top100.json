@@ -1,0 +1,4610 @@
+{
+  "generated_at": "2026-09-24T10:34:24Z",
+  "n": 100,
+  "requests": 131,
+  "stageA": [
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "catnip toy",
+        "token": "p_7qgxc3z4hk",
+        "name": "Sushi Roll Cat Toy (3 Pack)",
+        "brand": "b_6tmqj9f90u",
+        "wholesale_usd": 16.57,
+        "faire_retail_usd": 99.42,
+        "faire_margin_usd": 82.85,
+        "reviews": "200",
+        "moq": "0"
+      },
+      "query": "Sushi Roll Cat Toy 3 Pack",
+      "amazon_count": 0
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "airtag holder",
+        "token": "p_dh74xh5dpx",
+        "name": "12 Pack Key Ring For Air Tags",
+        "brand": "b_91xnis3wu7",
+        "wholesale_usd": 12.0,
+        "faire_retail_usd": 84.0,
+        "faire_margin_usd": 72.0,
+        "reviews": "308",
+        "moq": "0"
+      },
+      "query": "12 Pack Key Ring For Air Tags",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.231,
+        "asin": "B0C5XGPHWX",
+        "title": "Stouchi 4 Packs Air- tag Holder Key Ring Stainless Steel Invisible Slim",
+        "price": 11.99,
+        "reviews_count": 20,
+        "rating": 4.4
+      },
+      "per_unit_profit": -0.01
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "airtag holder",
+        "token": "p_gcmt4h337y",
+        "name": "12 Pack-Gel Loop For Air Tags",
+        "brand": "b_91xnis3wu7",
+        "wholesale_usd": 12.0,
+        "faire_retail_usd": 84.0,
+        "faire_margin_usd": 72.0,
+        "reviews": "308",
+        "moq": "0"
+      },
+      "query": "12 Pack-Gel Loop For Air Tags",
+      "amazon_count": 0
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "console organizer",
+        "token": "p_rnfm26zyq5",
+        "name": "Chrome/Clear - 2-Tier Sliding Drawer Organizer",
+        "brand": "b_efec8ahdtv",
+        "wholesale_usd": 29.99,
+        "faire_retail_usd": 149.97,
+        "faire_margin_usd": 119.98,
+        "reviews": "26",
+        "moq": "0"
+      },
+      "query": "Chrome/Clear - 2-Tier Sliding Drawer Organizer",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.424,
+        "asin": "B0GYDDLSXQ",
+        "title": "American Dream 2-Tier Sliding Drawer Organizer, Chrome & Clear",
+        "price": 29.49,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": -0.5
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "tooth whitening pen",
+        "token": "p_23kzdcze9n",
+        "name": "Teeth Whitening Pens - 16hp (5pcs)",
+        "brand": "b_akxtvppq23",
+        "wholesale_usd": 15.0,
+        "faire_retail_usd": 150.0,
+        "faire_margin_usd": 135.0,
+        "reviews": "15",
+        "moq": "0"
+      },
+      "query": "Teeth Whitening Pens - 16hp 5pcs",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.337,
+        "asin": "B0H42CNHD7",
+        "title": "Teeth Whitening Pen Kit: 35% Carbamide Peroxide Gel - 5 Pack",
+        "price": 18.98,
+        "reviews_count": 36,
+        "rating": 5.0
+      },
+      "per_unit_profit": 3.98
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "instant read meat thermometer",
+        "token": "p_p38maee7hz",
+        "name": "Meat Thermometer – Bluetooth Wireless, Usb-C, Grill Tech",
+        "brand": "b_et3n2yow1w",
+        "wholesale_usd": 39.99,
+        "faire_retail_usd": 99.99,
+        "faire_margin_usd": 60.0,
+        "reviews": "289",
+        "moq": "0"
+      },
+      "query": "Meat Thermometer Bluetooth Wireless Usb-C Grill Tech",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.473,
+        "asin": "B0GGQN5V2B",
+        "title": "Bluetooth Meat Thermometer Wireless for Grill BBQ Oven, Upgraded Probe",
+        "price": 29.99,
+        "reviews_count": 43,
+        "rating": 4.2
+      },
+      "per_unit_profit": -10.0
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "citrus juicer",
+        "token": "p_98en0mlx",
+        "name": "Mexican Citrus Juicer",
+        "brand": "b_6xvu4qtx",
+        "wholesale_usd": 49.5,
+        "faire_retail_usd": 99.0,
+        "faire_margin_usd": 49.5,
+        "reviews": "1001",
+        "moq": "0"
+      },
+      "query": "Mexican Citrus Juicer",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.4,
+        "asin": "B07815P2VY",
+        "title": "Verve Culture Artisan Manual Citrus Juicer",
+        "price": 99.0,
+        "reviews_count": 253,
+        "rating": 3.6
+      },
+      "per_unit_profit": 49.5,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": 3,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Alrossa",
+        "fba_fee": null,
+        "brand": "Verve CULTURE",
+        "category": "Home & Kitchen",
+        "sales_rank": 137495
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": true,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "countertop compost bin",
+        "token": "p_4czk2bvfzp",
+        "name": "Fox Run Ceramic Kitchen Compost Bin, 7\" X 10.7\"",
+        "brand": "b_aaqcz0m321",
+        "wholesale_usd": 39.75,
+        "faire_retail_usd": 79.49,
+        "faire_margin_usd": 39.74,
+        "reviews": "474",
+        "moq": "0"
+      },
+      "query": "Fox Run Ceramic Kitchen Compost Bin 7 X 10 7",
+      "amazon_count": 44,
+      "match": {
+        "sim": 0.458,
+        "asin": "B0B8GB4VQ2",
+        "title": "Black Ceramic Kitchen Compost Bin for Countertops",
+        "price": 48.99,
+        "reviews_count": 25,
+        "rating": 3.9
+      },
+      "per_unit_profit": 9.24,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 8.1130016,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": null,
+        "fba_fee": 9.9,
+        "brand": "Fox Run",
+        "category": "Home & Kitchen",
+        "sales_rank": 2348976
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "citrus juicer",
+        "token": "p_2makw7txrt",
+        "name": "Cuisinart Black/Silver 8 oz Stainless Steel Citrus Juicer",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 45.19,
+        "faire_retail_usd": 90.38,
+        "faire_margin_usd": 45.19,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Cuisinart Black/Silver 8 oz Stainless Steel Citrus Juicer",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.343,
+        "asin": "B000A76VCY",
+        "title": "800CPXL Citrus Press Pro Juicer Machine, Brushed Stainless Steel",
+        "price": 279.95,
+        "reviews_count": 2464,
+        "rating": 4.5
+      },
+      "per_unit_profit": 234.76,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.5625,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Weck Jars",
+        "fba_fee": 5.25,
+        "brand": "4.5",
+        "category": "Home & Kitchen",
+        "sales_rank": 29051
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "citrus juicer",
+        "token": "p_633wp6mj2y",
+        "name": "Cuisinart Black/Silver Stainless Steel 8 oz Citrus Juicer",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 45.19,
+        "faire_retail_usd": 90.38,
+        "faire_margin_usd": 45.19,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Cuisinart Black/Silver Stainless Steel 8 oz Citrus Juicer",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.35,
+        "asin": "B000A76VCY",
+        "title": "800CPXL Citrus Press Pro Juicer Machine, Brushed Stainless Steel",
+        "price": 279.95,
+        "reviews_count": 2464,
+        "rating": 4.5
+      },
+      "per_unit_profit": 234.76,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.5625,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Weck Jars",
+        "fba_fee": 5.25,
+        "brand": "4.5",
+        "category": "Home & Kitchen",
+        "sales_rank": 29051
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "collagen powder",
+        "token": "p_sck9q3hw4z",
+        "name": "Vital Proteins Collagen Peptides 0.35 oz - 20 Pack",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 43.37,
+        "faire_retail_usd": 86.74,
+        "faire_margin_usd": 43.37,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Vital Proteins Collagen Peptides 0 35 oz - 20 Pack",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.381,
+        "asin": "B07PRSRNFV",
+        "title": "Collagen Peptides Single, 0.35 OZ",
+        "price": 1.68,
+        "reviews_count": 626,
+        "rating": 4.5
+      },
+      "per_unit_profit": -41.69
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "corn cob holders",
+        "token": "p_bar6nve5c3",
+        "name": "Basket and Sign For Popping Cobs - Display Only",
+        "brand": "b_3mrdir3u",
+        "wholesale_usd": 50.0,
+        "faire_retail_usd": 100.0,
+        "faire_margin_usd": 50.0,
+        "reviews": "144",
+        "moq": "0"
+      },
+      "query": "Basket and Sign For Popping Cobs - Display Only",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.3,
+        "asin": "B004DDKEHO",
+        "title": "Basket Sign Holder, 25 Pieces",
+        "price": 16.15,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": -33.85
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "silicone baking mat",
+        "token": "p_9x9fgfemyy",
+        "name": "DSS-1919/DSS-2323, 19\" & 23\" Ss Doughnut Screens",
+        "brand": "b_7b25cuen6n",
+        "wholesale_usd": 43.95,
+        "faire_retail_usd": 87.9,
+        "faire_margin_usd": 43.95,
+        "reviews": "224",
+        "moq": "0"
+      },
+      "query": "DSS-1919/DSS-2323 19 & 23 Ss Doughnut Screens",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.201,
+        "asin": "B0GVL3RHKJ",
+        "title": "OCS Parts 10-Pack 19\" x 19\" Heavy Duty Stainless Steel Donut Fryer Screens",
+        "price": 390.0,
+        "reviews_count": 1,
+        "rating": 5.0
+      },
+      "per_unit_profit": 346.05,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "OCSParts",
+        "fba_fee": null,
+        "brand": "OCS Parts",
+        "category": "Industrial & Scientific",
+        "sales_rank": 616964
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "toiletry bottles TSA",
+        "token": "p_hebdyxzy74",
+        "name": "Joan & David the Sport Nylon Double Handle Hanging Toiletry Case",
+        "brand": "b_e7patoizvp",
+        "wholesale_usd": 14.0,
+        "faire_retail_usd": 78.0,
+        "faire_margin_usd": 64.0,
+        "reviews": "45",
+        "moq": "0"
+      },
+      "query": "Joan & David the Sport Nylon Double Handle Hanging Toiletry Case",
+      "amazon_count": 18,
+      "match": {
+        "sim": 0.3,
+        "asin": "B06XHCWX79",
+        "title": "Travelon Compact Hanging Toiletry Kit",
+        "price": 20.0,
+        "reviews_count": 1247,
+        "rating": 4.4
+      },
+      "per_unit_profit": 6.0,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.220462,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": null,
+        "fba_fee": 4.75,
+        "brand": "Travelon",
+        "category": "Beauty & Personal Care",
+        "sales_rank": 23926
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "car sunshade",
+        "token": "p_8fj2u8b3zu",
+        "name": "Auto Expressions 38\"x31\" Gray Foldable Sun Shade, 4-Pack",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 41.26,
+        "faire_retail_usd": 82.52,
+        "faire_margin_usd": 41.26,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Auto Expressions 38 x31 Gray Foldable Sun Shade 4-Pack",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.392,
+        "asin": "B001B0VC14",
+        "title": "Auto Expressions 114810A Reflective Shade Jum",
+        "price": 18.25,
+        "reviews_count": 4,
+        "rating": 1.2
+      },
+      "per_unit_profit": -23.01
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "tooth whitening pen",
+        "token": "p_3fgkmrk84n",
+        "name": "Super Gel Professional Whitening Kit",
+        "brand": "b_cemln6lbp5",
+        "wholesale_usd": 35.0,
+        "faire_retail_usd": 99.0,
+        "faire_margin_usd": 64.0,
+        "reviews": "38",
+        "moq": "0"
+      },
+      "query": "Super Gel Professional Whitening Kit",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.257,
+        "asin": "B07CHCXR79",
+        "title": "Opalescence 45% Syringes Teeth Whitening Gel with PF - 5359-2",
+        "price": 38.0,
+        "reviews_count": 1676,
+        "rating": 4.4
+      },
+      "per_unit_profit": 3.0
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "cuticle oil pen",
+        "token": "p_c7f9y4mn52",
+        "name": "Bulk - Cuticle & Nail Oil - You Package & Label",
+        "brand": "b_adcnhzqf",
+        "wholesale_usd": 45.0,
+        "faire_retail_usd": 90.0,
+        "faire_margin_usd": 45.0,
+        "reviews": "140",
+        "moq": "0"
+      },
+      "query": "Bulk - Cuticle & Nail Oil - You Package & Label",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.299,
+        "asin": "B0CN65Q5LD",
+        "title": "NXJ INFILILA 100PCS Cuticle Oil for Nails,Mini Cuticle Oil Bulk for Travel",
+        "price": 9.99,
+        "reviews_count": 257,
+        "rating": 4.8
+      },
+      "per_unit_profit": -35.01
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "tooth whitening pen",
+        "token": "p_tbd6j4ww6u",
+        "name": "Professional Teeth Whitening Kit with Pen 2ml",
+        "brand": "b_7d8uupszmv",
+        "wholesale_usd": 10.77,
+        "faire_retail_usd": 107.72,
+        "faire_margin_usd": 96.95,
+        "reviews": "6",
+        "moq": "0"
+      },
+      "query": "Professional Teeth Whitening Kit with Pen 2ml",
+      "amazon_count": 53,
+      "match": {
+        "sim": 0.486,
+        "asin": "B0D4XD96HH",
+        "title": "SNOW Sensitive Teeth Whitening Pen with Hydroxyapatite, 3 Pack, 2ml",
+        "price": 22.94,
+        "reviews_count": 9,
+        "rating": 4.1
+      },
+      "per_unit_profit": 12.17,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.13,
+        "total_sellers": 17,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "GoinGoneSold",
+        "fba_fee": 4.75,
+        "brand": "SNOW",
+        "category": "Health & Household",
+        "sales_rank": 167939
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "drawer organizer",
+        "token": "p_fvcn49zza7",
+        "name": "Deflecto Clear 3-Drawer Storage Organizer, 7\"x10\"x6.8\"",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 37.77,
+        "faire_retail_usd": 75.54,
+        "faire_margin_usd": 37.77,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Deflecto Clear 3-Drawer Storage Organizer 7 x10 x6 8",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.326,
+        "asin": "B0FZTP2YRS",
+        "title": "Clear Storage Organizer with Drawers, 3-Layer Desktop Organizer",
+        "price": 12.99,
+        "reviews_count": 19,
+        "rating": 4.7
+      },
+      "per_unit_profit": -24.78
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "gua sha tool",
+        "token": "p_b3rf2nul1q",
+        "name": "Bulk Round Disk Stone - Pack of 12",
+        "brand": "b_bjfdoher",
+        "wholesale_usd": 29.0,
+        "faire_retail_usd": 59.95,
+        "faire_margin_usd": 30.95,
+        "reviews": "536",
+        "moq": "0"
+      },
+      "query": "Bulk Round Disk Stone - Pack of 12",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.234,
+        "asin": "B07KFLV89J",
+        "title": "Round 9\" Pizza Stone, White",
+        "price": 16.99,
+        "reviews_count": 232,
+        "rating": 4.4
+      },
+      "per_unit_profit": -12.01
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "visor organizer",
+        "token": "p_p9b4h6uzve",
+        "name": "Hanging Cap Organizer For Up To 15 Caps",
+        "brand": "b_efec8ahdtv",
+        "wholesale_usd": 15.99,
+        "faire_retail_usd": 79.99,
+        "faire_margin_usd": 64.0,
+        "reviews": "26",
+        "moq": "0"
+      },
+      "query": "Hanging Cap Organizer For Up To 15 Caps",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.44,
+        "asin": "B0CJ7BLKM8",
+        "title": "10-Pocket Hanging Hat Organizer for Closet, Hold Up to 100 Caps. Many uses.",
+        "price": 21.99,
+        "reviews_count": 261,
+        "rating": 4.6
+      },
+      "per_unit_profit": 6.0,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 1.4,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Perfect Curve Inc",
+        "fba_fee": 6.1,
+        "brand": "Perfect Curve",
+        "category": "Home & Kitchen",
+        "sales_rank": 451421
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "collagen powder",
+        "token": "p_ytkzvs29am",
+        "name": "Vital Proteins Collagen Peptides Unflavored 10 oz",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 34.9,
+        "faire_retail_usd": 69.8,
+        "faire_margin_usd": 34.9,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Vital Proteins Collagen Peptides Unflavored 10 oz",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.463,
+        "asin": "B0BWFGX7F5",
+        "title": "Collagen Peptides Powder Unflavored 19.3 OZ Creamer Vanilla",
+        "price": 41.93,
+        "reviews_count": 58,
+        "rating": 4.2
+      },
+      "per_unit_profit": 7.03,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.66,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Vital Proteins",
+        "fba_fee": 5.25,
+        "brand": "Vital Proteins",
+        "category": "Health & Household",
+        "sales_rank": 445992
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "screen cleaner",
+        "token": "p_v4s5ehhkjp",
+        "name": "Ittar Window Squeegee Cleaning Kit Window Washing Equipment",
+        "brand": "b_7b25cuen6n",
+        "wholesale_usd": 35.95,
+        "faire_retail_usd": 71.9,
+        "faire_margin_usd": 35.95,
+        "reviews": "224",
+        "moq": "0"
+      },
+      "query": "Ittar Window Squeegee Cleaning Kit Window Washing Equipment",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.471,
+        "asin": "B08R7C5RJZ",
+        "title": "ITTAR Window Squeegee Cleaning Kit with 60\" Extension Pole & Rotatable Head",
+        "price": 20.5,
+        "reviews_count": 3286,
+        "rating": 4.3
+      },
+      "per_unit_profit": -15.45
+    },
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "cat nail caps",
+        "token": "p_rz5de68589",
+        "name": "Conairpro Multicolored Dog Nail Grinder 1 Pk",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 34.71,
+        "faire_retail_usd": 69.42,
+        "faire_margin_usd": 34.71,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Conairpro Multicolored Dog Nail Grinder 1 Pk",
+      "amazon_count": 53,
+      "match": {
+        "sim": 0.341,
+        "asin": "B0C1MHYMS3",
+        "title": "Dog Nail Trimmers with Light for All Breeds | Dog Nail Grinder Quiet",
+        "price": 8.99,
+        "reviews_count": 454,
+        "rating": 4.2
+      },
+      "per_unit_profit": -25.72
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "screen cleaner",
+        "token": "p_amv4hq58gc",
+        "name": "Hypergear Screenwhiz Screen Cleaning Wipes and Cloth Kit",
+        "brand": "b_8xnmaee28k",
+        "wholesale_usd": 46.67,
+        "faire_retail_usd": 93.34,
+        "faire_margin_usd": 46.67,
+        "reviews": "73",
+        "moq": "0"
+      },
+      "query": "Hypergear Screenwhiz Screen Cleaning Wipes and Cloth Kit",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.338,
+        "asin": "B00IA8JIMA",
+        "title": "Screen Cleaning Combo Kit for Computers, Phones, Televisions and More",
+        "price": 14.37,
+        "reviews_count": 168,
+        "rating": 4.7
+      },
+      "per_unit_profit": -32.3
+    },
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "catnip toy",
+        "token": "p_h9eq8jshue",
+        "name": "Multipet Ice Cream Cone Cat Toys 25ct Pdq",
+        "brand": "b_88deyfcwhj",
+        "wholesale_usd": 40.69,
+        "faire_retail_usd": 81.99,
+        "faire_margin_usd": 41.3,
+        "reviews": "112",
+        "moq": "0"
+      },
+      "query": "Multipet Ice Cream Cone Cat Toys 25ct Pdq",
+      "amazon_count": 15,
+      "match": {
+        "sim": 0.322,
+        "asin": "B08YY5S38G",
+        "title": "Ice Cream Cone 25pc. Assorted Colors (Black, White, Pink, and Blue) 25ct Cat Toy",
+        "price": 64.99,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": 24.3,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.5625,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "PamperpetsAMZ",
+        "fba_fee": 5.25,
+        "brand": "Multipet",
+        "category": "Pet Supplies",
+        "sales_rank": 605459
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "instant read meat thermometer",
+        "token": "p_trj4v9bvp2",
+        "name": "Taylor - Instant Read Digital Wireless Probe Thermometer",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 32.5,
+        "faire_retail_usd": 65.0,
+        "faire_margin_usd": 32.5,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Taylor - Instant Read Digital Wireless Probe Thermometer",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.504,
+        "asin": "B00N58FNT2",
+        "title": "Pro Instant Read Digital Thermometer (TAP9847N)",
+        "price": 21.17,
+        "reviews_count": 12,
+        "rating": 5.0
+      },
+      "per_unit_profit": -11.33
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "console organizer",
+        "token": "p_fq2j7kqmjp",
+        "name": "Deflecto Tilt Bin Interlocking 9-Bin Storage Organizer",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 32.28,
+        "faire_retail_usd": 64.56,
+        "faire_margin_usd": 32.28,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Deflecto Tilt Bin Interlocking 9-Bin Storage Organizer",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.616,
+        "asin": "B01JB726AE",
+        "title": "Tilt Bin Interlocking 4-Bin Organizer",
+        "price": 44.18,
+        "reviews_count": 3,
+        "rating": 5.0
+      },
+      "per_unit_profit": 11.9,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": 5,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Value Point Supply",
+        "fba_fee": null,
+        "brand": "Deflecto",
+        "category": "Electronics",
+        "sales_rank": 490608
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "visor organizer",
+        "token": "p_wqc7zjuz8f",
+        "name": "Stanley 30-Compartment Bin System, Black/Clear",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 31.57,
+        "faire_retail_usd": 63.14,
+        "faire_margin_usd": 31.57,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Stanley 30-Compartment Bin System Black/Clear",
+      "amazon_count": 22,
+      "match": {
+        "sim": 0.311,
+        "asin": "B07D6Y4F6W",
+        "title": "STST40739 39 Mixed Drawer Bin System",
+        "price": 40.22,
+        "reviews_count": 19,
+        "rating": 4.1
+      },
+      "per_unit_profit": 8.65,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 2.20462,
+        "total_sellers": 8,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Toolup",
+        "fba_fee": 7.1,
+        "brand": "4.1",
+        "category": "Home & Kitchen",
+        "sales_rank": 2729687
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "compression bags",
+        "token": "p_yu7dqb4bjb",
+        "name": "Everest Sports Medium Hiking Bag Pack 8045D",
+        "brand": "b_qtfstsa6e6",
+        "wholesale_usd": 27.85,
+        "faire_retail_usd": 55.7,
+        "faire_margin_usd": 27.85,
+        "reviews": "416",
+        "moq": "0"
+      },
+      "query": "Everest Sports Medium Hiking Bag Pack 8045D",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.231,
+        "asin": "B01EIZQLLY",
+        "title": "Mini Hiking Pack Multipurpose Backpack, Dark Gray/Black",
+        "price": 16.52,
+        "reviews_count": 463,
+        "rating": 4.4
+      },
+      "per_unit_profit": -11.33
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "dermaplaning tool",
+        "token": "p_6v8swf2qs2",
+        "name": "Intimate Peach Peel Kit",
+        "brand": "b_8lqxdn14oh",
+        "wholesale_usd": 46.0,
+        "faire_retail_usd": 92.0,
+        "faire_margin_usd": 46.0,
+        "reviews": "53",
+        "moq": "0"
+      },
+      "query": "Intimate Peach Peel Kit",
+      "amazon_count": 3,
+      "match": {
+        "sim": 0.11,
+        "asin": "B0BC4RJQGL",
+        "title": "Peaches Skin Care Ageless Night Serum - Retinol Face Serum, 1 oz",
+        "price": 48.0,
+        "reviews_count": 23,
+        "rating": 4.7
+      },
+      "per_unit_profit": 2.0
+    },
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "poop bag dispenser",
+        "token": "p_53eknptdkm",
+        "name": "Earth Rated Countertop Display w/21 Rolls & 6 Dispensers",
+        "brand": "b_b79bcbw4tx",
+        "wholesale_usd": 30.53,
+        "faire_retail_usd": 56.73,
+        "faire_margin_usd": 26.2,
+        "reviews": "674",
+        "moq": "0"
+      },
+      "query": "Earth Rated Countertop Display w/21 Rolls & 6 Dispensers",
+      "amazon_count": 0
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "sink caddy",
+        "token": "p_ech43zhepr",
+        "name": "Core Kitchen Sink Strainer Organizer, 14\"x13\"x5\"",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 30.82,
+        "faire_retail_usd": 61.64,
+        "faire_margin_usd": 30.82,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Core Kitchen Sink Strainer Organizer 14 x13 x5",
+      "amazon_count": 56,
+      "match": {
+        "sim": 0.491,
+        "asin": "B0GCSFYNV3",
+        "title": "Core Kitchen AC54166 Sink Strainer Organizer 14\" L X 13\" W X 5\" H Black",
+        "price": 28.95,
+        "reviews_count": 1,
+        "rating": 5.0
+      },
+      "per_unit_profit": -1.87
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "cable ties",
+        "token": "p_7cnsx4dxx8",
+        "name": "12\"L X 4.5mm Zip Ties - MD014627",
+        "brand": "b_67fq8k84yq",
+        "wholesale_usd": 12.0,
+        "faire_retail_usd": 48.0,
+        "faire_margin_usd": 36.0,
+        "reviews": "134",
+        "moq": "0"
+      },
+      "query": "12 L X 4 5mm Zip Ties - MD014627",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.203,
+        "asin": "B0FXX1SB49",
+        "title": "Zip Ties 12 Inch, Black Cable Ties 100 Pack, 60lbs Tensile Strength",
+        "price": 6.99,
+        "reviews_count": 56,
+        "rating": 4.7
+      },
+      "per_unit_profit": -5.01
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "lash serum",
+        "token": "p_ppd8tbbt66",
+        "name": "Revitalizing Lash Serum",
+        "brand": "b_daafhlsrzv",
+        "wholesale_usd": 40.0,
+        "faire_retail_usd": 80.0,
+        "faire_margin_usd": 40.0,
+        "reviews": "78",
+        "moq": "0"
+      },
+      "query": "Revitalizing Lash Serum",
+      "amazon_count": 53,
+      "match": {
+        "sim": 0.271,
+        "asin": "B0BV7KR7WY",
+        "title": "OLAPLEX LASHBOND™ Building Serum | Peptide Lash Serum, 4.5 mL",
+        "price": 68.0,
+        "reviews_count": 807,
+        "rating": 4.2
+      },
+      "per_unit_profit": 28.0,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.004409248840367555,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": null,
+        "fba_fee": 4.75,
+        "brand": null,
+        "category": "Beauty & Personal Care",
+        "sales_rank": 30593
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "lash serum",
+        "token": "p_jf8qtte3ce",
+        "name": "Plus Lash Serum",
+        "brand": "b_daafhlsrzv",
+        "wholesale_usd": 40.0,
+        "faire_retail_usd": 80.0,
+        "faire_margin_usd": 40.0,
+        "reviews": "78",
+        "moq": "0"
+      },
+      "query": "Plus Lash Serum",
+      "amazon_count": 53,
+      "match": {
+        "sim": 0.274,
+        "asin": "B09C82MWZX",
+        "title": "Obagi Nu-Cil Eyelash Enhancing Serum",
+        "price": 125.0,
+        "reviews_count": 1111,
+        "rating": 4.2
+      },
+      "per_unit_profit": 85.0,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.06613859999999999,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Obagi Cosmeceuticals",
+        "fba_fee": 4.75,
+        "brand": null,
+        "category": "Beauty & Personal Care",
+        "sales_rank": 8340
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "brow gel",
+        "token": "p_4chkztgsbd",
+        "name": "Nabi Long Lasting Gel Brow  24 Units , Ebg 24",
+        "brand": "b_gk6kg6d4dw",
+        "wholesale_usd": 30.0,
+        "faire_retail_usd": 60.0,
+        "faire_margin_usd": 30.0,
+        "reviews": "244",
+        "moq": "0"
+      },
+      "query": "Nabi Long Lasting Gel Brow 24 Units Ebg 24",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.306,
+        "asin": "B00ZTFQR44",
+        "title": "Stay Put Brow Color - Long Lasting Eyebrow Color - Dark Brown",
+        "price": 9.45,
+        "reviews_count": 17330,
+        "rating": 4.4
+      },
+      "per_unit_profit": -20.55
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "console organizer",
+        "token": "p_9ddg6h65yb",
+        "name": "Stanley 9-Compartment Bin System, Black/Clear",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 29.49,
+        "faire_retail_usd": 58.98,
+        "faire_margin_usd": 29.49,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Stanley 9-Compartment Bin System Black/Clear",
+      "amazon_count": 25,
+      "match": {
+        "sim": 0.316,
+        "asin": "B07D6XCFH4",
+        "title": "STST40709 9 Large Drawer Bin System",
+        "price": 27.99,
+        "reviews_count": 18,
+        "rating": 4.2
+      },
+      "per_unit_profit": -1.5
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "toiletry bottles TSA",
+        "token": "p_uc6zu9khta",
+        "name": "Locking Triple Wall-Mount Bottle Holder with Shampoo, Conditioner & Body Wash Bottles",
+        "brand": "b_7w4x0tlw1u",
+        "wholesale_usd": 35.98,
+        "faire_retail_usd": 71.95,
+        "faire_margin_usd": 35.97,
+        "reviews": "115",
+        "moq": "0"
+      },
+      "query": "Locking Triple Wall-Mount Bottle Holder with Shampoo Conditioner & Body Wash Bottles",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.421,
+        "asin": "B0CPP2BFQF",
+        "title": "Luxury Stainless Triple Shower Bottle Holder with Bottles",
+        "price": 125.0,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": 89.02,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Harpole Design",
+        "fba_fee": null,
+        "brand": "Generic",
+        "category": "Home & Kitchen",
+        "sales_rank": 1055961
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "monitor stand",
+        "token": "p_rbcrc9dx5w",
+        "name": "Dac Stax Ergonomic Monitor Stand with 2 Usb Ports",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 29.39,
+        "faire_retail_usd": 58.78,
+        "faire_margin_usd": 29.39,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Dac Stax Ergonomic Monitor Stand with 2 Usb Ports",
+      "amazon_count": 8,
+      "match": {
+        "sim": 0.439,
+        "asin": "B0GDZGKRS7",
+        "title": "Dual Monitor Stand with USB Ports Wood Monitor Stand Riser with Drawer",
+        "price": 49.99,
+        "reviews_count": 27,
+        "rating": 4.4
+      },
+      "per_unit_profit": 20.6,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Cheerwing USA",
+        "fba_fee": null,
+        "brand": "Elephance",
+        "category": "Electronics",
+        "sales_rank": 594
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "catnip toy",
+        "token": "p_spjpftkq4y",
+        "name": "Mini Crinkle Ball Cat Toy Display | 50 Count | Best Seller",
+        "brand": "b_5zatgx9y6e",
+        "wholesale_usd": 27.5,
+        "faire_retail_usd": 99.5,
+        "faire_margin_usd": 72.0,
+        "reviews": "7",
+        "moq": "0"
+      },
+      "query": "Mini Crinkle Ball Cat Toy Display 50 Count Best Seller",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.336,
+        "asin": "B01C2NLVIW",
+        "title": "Mini Crinkle Balls for Cats – 1.5 Inch, 50 Pack",
+        "price": 59.99,
+        "reviews_count": 1947,
+        "rating": 4.5
+      },
+      "per_unit_profit": 32.49,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.1,
+        "total_sellers": 2,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "PaxDistribution",
+        "fba_fee": 4.75,
+        "brand": "Cancor Innovations",
+        "category": "Pet Supplies",
+        "sales_rank": 19729
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": true,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "packing cubes",
+        "token": "p_ngmdneecxg",
+        "name": "Joan & David 6 Piece Travel Packing Cube Set",
+        "brand": "b_e7patoizvp",
+        "wholesale_usd": 14.0,
+        "faire_retail_usd": 59.0,
+        "faire_margin_usd": 45.0,
+        "reviews": "45",
+        "moq": "0"
+      },
+      "query": "Joan & David 6 Piece Travel Packing Cube Set",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.322,
+        "asin": "B0GQSKQQ7Z",
+        "title": "6 Set Compression Packing Cubes, Travel Organizers (Polka Dot)",
+        "price": 16.49,
+        "reviews_count": 180,
+        "rating": 4.5
+      },
+      "per_unit_profit": 2.49
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "webcam cover",
+        "token": "p_646pxt9zdq",
+        "name": "Emerson Usb Gaming & Streaming Microphone with Rgb Lighting",
+        "brand": "b_8xnmaee28k",
+        "wholesale_usd": 39.46,
+        "faire_retail_usd": 78.92,
+        "faire_margin_usd": 39.46,
+        "reviews": "73",
+        "moq": "0"
+      },
+      "query": "Emerson Usb Gaming & Streaming Microphone with Rgb Lighting",
+      "amazon_count": 46,
+      "match": {
+        "sim": 0.843,
+        "asin": "B0CGKVS1K9",
+        "title": "EAM-9050 USB Gaming & Streaming Microphone with RGB Lighting",
+        "price": 39.99,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": 0.53
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "travel perfume atomizer",
+        "token": "p_7uvg9ar4cy",
+        "name": "Crystal Perfume Spray Travel Bottle Atomizer",
+        "brand": "b_rxebd2d7qj",
+        "wholesale_usd": 12.0,
+        "faire_retail_usd": 60.0,
+        "faire_margin_usd": 48.0,
+        "reviews": "33",
+        "moq": "0"
+      },
+      "query": "Crystal Perfume Spray Travel Bottle Atomizer",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.521,
+        "asin": "B00KFB39C0",
+        "title": "Checked Carved Crystal Refillable Perfume Bottle with Spray Atomizer",
+        "price": 13.99,
+        "reviews_count": 330,
+        "rating": 4.4
+      },
+      "per_unit_profit": 1.99
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "herb scissors",
+        "token": "p_erikk6ji0q",
+        "name": "Thai Kitchen & Garden Shears",
+        "brand": "b_6xvu4qtx",
+        "wholesale_usd": 24.0,
+        "faire_retail_usd": 48.0,
+        "faire_margin_usd": 24.0,
+        "reviews": "1001",
+        "moq": "0"
+      },
+      "query": "Thai Kitchen & Garden Shears",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.472,
+        "asin": "B001DINYHE",
+        "title": "Shun Kitchen Shears",
+        "price": 89.95,
+        "reviews_count": 594,
+        "rating": 4.6
+      },
+      "per_unit_profit": 65.95,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 2.20462,
+        "total_sellers": 8,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Amazon",
+        "buy_box_seller_name": "Amazon",
+        "fba_fee": 7.1,
+        "brand": "4.6",
+        "category": "Home & Kitchen",
+        "sales_rank": 105459
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": false,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "desk organizer",
+        "token": "p_qu5zm5fn7e",
+        "name": "4pc Clear Acrylic Makeup Organizer Set",
+        "brand": "b_72ivqmkinu",
+        "wholesale_usd": 10.0,
+        "faire_retail_usd": 39.99,
+        "faire_margin_usd": 29.99,
+        "reviews": "191",
+        "moq": "0"
+      },
+      "query": "4pc Clear Acrylic Makeup Organizer Set",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.61,
+        "asin": "B0DJMTXLGG",
+        "title": "Acrylic Organizer 4-Piece Makeup Organizer Set",
+        "price": 20.99,
+        "reviews_count": 64,
+        "rating": 4.9
+      },
+      "per_unit_profit": 10.99,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "CONVERTing",
+        "fba_fee": null,
+        "brand": "LONTOHCE",
+        "category": "Beauty & Personal Care",
+        "sales_rank": 79590
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "passport holder",
+        "token": "p_sb72aujkrr",
+        "name": "Full-Grain Leather Snap Passport Wallet",
+        "brand": "b_ddg3xfs9",
+        "wholesale_usd": 37.5,
+        "faire_retail_usd": 75.0,
+        "faire_margin_usd": 37.5,
+        "reviews": "74",
+        "moq": "0"
+      },
+      "query": "Full-Grain Leather Snap Passport Wallet",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.544,
+        "asin": "B0G42JG2KW",
+        "title": "Full-Grain Leather Passport Holder, AirTag Slot RFID Wallet",
+        "price": 19.99,
+        "reviews_count": 22,
+        "rating": 4.8
+      },
+      "per_unit_profit": -17.51
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "packing cubes",
+        "token": "p_zz49yajbu9",
+        "name": "\"Patrick\" Packing Cubes (Personalizable)",
+        "brand": "b_ij2qgczobo",
+        "wholesale_usd": 33.0,
+        "faire_retail_usd": 73.0,
+        "faire_margin_usd": 40.0,
+        "reviews": "57",
+        "moq": "0"
+      },
+      "query": "Patrick Packing Cubes Personalizable",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.292,
+        "asin": "B0DHXRZ76H",
+        "title": "Packing Cubes for Suitcase Large Organizer Bags,L,Green",
+        "price": 15.29,
+        "reviews_count": 223,
+        "rating": 3.3
+      },
+      "per_unit_profit": -17.71
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "tire valve caps",
+        "token": "p_ae5efkwewd",
+        "name": "Digital Tire Inflator with Auto Shut-Off, Led Display, Usb",
+        "brand": "b_9jyvvww0vc",
+        "wholesale_usd": 28.75,
+        "faire_retail_usd": 59.99,
+        "faire_margin_usd": 31.24,
+        "reviews": "143",
+        "moq": "0"
+      },
+      "query": "Digital Tire Inflator with Auto Shut-Off Led Display Usb",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.289,
+        "asin": "B0C2H652ZJ",
+        "title": "AstroAI S1 Tire Inflator Portable Air Compressor 12V DC with Digital Gauge",
+        "price": 26.99,
+        "reviews_count": 11362,
+        "rating": 4.4
+      },
+      "per_unit_profit": -1.76
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "packing cubes",
+        "token": "p_6ncbdr76ae",
+        "name": "3M Scotch Box Lock Packing Tape 1.88\"x22.2yd, Clear, 6-Pack",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 26.8,
+        "faire_retail_usd": 53.6,
+        "faire_margin_usd": 26.8,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "3M Scotch Box Lock Packing Tape 1 88 x22 2yd Clear 6-Pack",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.317,
+        "asin": "B08YZ8W1XG",
+        "title": "Box Lock Packing Tape, 1.88 in x 54.6 yd, 1 Roll",
+        "price": 7.98,
+        "reviews_count": 765,
+        "rating": 4.7
+      },
+      "per_unit_profit": -18.82
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "ergonomic mouse pad",
+        "token": "p_tk3zmsy234",
+        "name": "Kensington Duo Gel Mouse Wrist Rest Wave - 1 Pack",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 26.62,
+        "faire_retail_usd": 53.24,
+        "faire_margin_usd": 26.62,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Kensington Duo Gel Mouse Wrist Rest Wave - 1 Pack",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.491,
+        "asin": "B018GFBCGG",
+        "title": "Duo Gel Mouse Pad with Wrist Rest - Red (K62402AM)",
+        "price": 20.99,
+        "reviews_count": 5260,
+        "rating": 4.6
+      },
+      "per_unit_profit": -5.63
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "countertop compost bin",
+        "token": "p_vvjbk8x4cw",
+        "name": "Jaylen Compost Bin - Black",
+        "brand": "b_46t0premuw",
+        "wholesale_usd": 38.45,
+        "faire_retail_usd": 64.99,
+        "faire_margin_usd": 26.54,
+        "reviews": "260",
+        "moq": "0"
+      },
+      "query": "Jaylen Compost Bin - Black",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.41,
+        "asin": "B0CX347WD5",
+        "title": "Epica Kitchen Compost Bin for Kitchen Countertops, 1.3 Galllon - Black",
+        "price": 29.98,
+        "reviews_count": 20964,
+        "rating": 4.6
+      },
+      "per_unit_profit": -8.47
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "countertop compost bin",
+        "token": "p_97m3tgsf75",
+        "name": "Jaylen Compost Bin - Tan",
+        "brand": "b_46t0premuw",
+        "wholesale_usd": 38.45,
+        "faire_retail_usd": 64.99,
+        "faire_margin_usd": 26.54,
+        "reviews": "260",
+        "moq": "0"
+      },
+      "query": "Jaylen Compost Bin - Tan",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.311,
+        "asin": "B0H8636JTM",
+        "title": "BUKLIYN Compost Bin Outdoor - 285 Gallon Metal Wire Mesh Compost Bins",
+        "price": 149.99,
+        "reviews_count": 5,
+        "rating": 4.5
+      },
+      "per_unit_profit": 111.54,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 36.4,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "BUKLIYN",
+        "fba_fee": 15.0,
+        "brand": "BUKLIYN",
+        "category": "Patio, Lawn & Garden",
+        "sales_rank": 130256
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "countertop compost bin",
+        "token": "p_ah5hj88c5s",
+        "name": "Jaylen Compost Bin - Gray",
+        "brand": "b_46t0premuw",
+        "wholesale_usd": 38.45,
+        "faire_retail_usd": 64.99,
+        "faire_margin_usd": 26.54,
+        "reviews": "260",
+        "moq": "0"
+      },
+      "query": "Jaylen Compost Bin - Gray",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.345,
+        "asin": "B0DPXMTVKJ",
+        "title": "Plexon Countertop Compost Bin Kitchen with Lid, Gray 1.5 Gall",
+        "price": 29.95,
+        "reviews_count": 284,
+        "rating": 4.5
+      },
+      "per_unit_profit": -8.5
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "corn cob holders",
+        "token": "p_am8s92gwb9",
+        "name": "Hic Kitchen Corn Skewers, Display of 144",
+        "brand": "b_88jamcs923",
+        "wholesale_usd": 30.0,
+        "faire_retail_usd": 59.99,
+        "faire_margin_usd": 29.99,
+        "reviews": "159",
+        "moq": "0"
+      },
+      "query": "Hic Kitchen Corn Skewers Display of 144",
+      "amazon_count": 20,
+      "match": {
+        "sim": 0.31,
+        "asin": "B0046CS29E",
+        "title": "J100-5-5030 Corn Skewers 50Pk",
+        "price": 9.31,
+        "reviews_count": 24,
+        "rating": 4.2
+      },
+      "per_unit_profit": -20.69
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "herb scissors",
+        "token": "p_rtk92gmzam",
+        "name": "Mini Bonsai Snips (Set of 5)",
+        "brand": "b_fgua8m6ud9",
+        "wholesale_usd": 42.0,
+        "faire_retail_usd": 70.0,
+        "faire_margin_usd": 28.0,
+        "reviews": "204",
+        "moq": "0"
+      },
+      "query": "Mini Bonsai Snips Set of 5",
+      "amazon_count": 0
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "lash serum",
+        "token": "p_9sjlauiotl",
+        "name": "Moon Boost Lash & Brow Enhancing Serum",
+        "brand": "b_8925a342et",
+        "wholesale_usd": 39.5,
+        "faire_retail_usd": 79.0,
+        "faire_margin_usd": 39.5,
+        "reviews": "50",
+        "moq": "0"
+      },
+      "query": "Moon Boost Lash & Brow Enhancing Serum",
+      "amazon_count": 59,
+      "match": {
+        "sim": 0.404,
+        "asin": "B0BJBPCW9N",
+        "title": "r.e.m. beauty by Ariana Grande Lash & Brow Boosting Serum",
+        "price": 20.0,
+        "reviews_count": 27,
+        "rating": 4.4
+      },
+      "per_unit_profit": -19.5
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "monitor stand",
+        "token": "p_kez64bevs5",
+        "name": "Advantus Monitor Stand",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 26.08,
+        "faire_retail_usd": 52.16,
+        "faire_margin_usd": 26.08,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Advantus Monitor Stand",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.337,
+        "asin": "B01MYX3WSA",
+        "title": "SmartFit Adjustable Monitor Stand Riser K52785WW, Black",
+        "price": 34.29,
+        "reviews_count": 264,
+        "rating": 4.5
+      },
+      "per_unit_profit": 8.21,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 3.0,
+        "total_sellers": 14,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Computing Essentials",
+        "fba_fee": 7.1,
+        "brand": "4.5",
+        "category": "Electronics",
+        "sales_rank": 718
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "health",
+        "query": "pill organizer",
+        "token": "p_cak2d1nw0q",
+        "name": "Zara Silver Plated Weekly Pill Box Organizer",
+        "brand": "b_dec65a68",
+        "wholesale_usd": 27.5,
+        "faire_retail_usd": 55.0,
+        "faire_margin_usd": 27.5,
+        "reviews": "207",
+        "moq": "0"
+      },
+      "query": "Zara Silver Plated Weekly Pill Box Organizer",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.358,
+        "asin": "B09X1DKH8N",
+        "title": "Vesici 2 Pack Metal Weekly Pill Organizer Keychain Travel, Black, Silver",
+        "price": 15.49,
+        "reviews_count": 133,
+        "rating": 4.2
+      },
+      "per_unit_profit": -12.01
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "tooth whitening pen",
+        "token": "p_w63r544dn9",
+        "name": "Teeth Whitening Kit",
+        "brand": "b_daafhlsrzv",
+        "wholesale_usd": 35.0,
+        "faire_retail_usd": 70.0,
+        "faire_margin_usd": 35.0,
+        "reviews": "78",
+        "moq": "0"
+      },
+      "query": "Teeth Whitening Kit",
+      "amazon_count": 53,
+      "match": {
+        "sim": 0.349,
+        "asin": "B0BK2SC18T",
+        "title": "GuruNanda Teeth Whitening Strips - 4X Whiter Teeth, 7-Day Whitening Kit",
+        "price": 9.97,
+        "reviews_count": 21967,
+        "rating": 4.4
+      },
+      "per_unit_profit": -25.03
+    },
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "cat nail caps",
+        "token": "p_scuyvputuu",
+        "name": "Professional Pet Products Nail-Safe Styptic Powder, 6 oz.",
+        "brand": "b_b79bcbw4tx",
+        "wholesale_usd": 25.99,
+        "faire_retail_usd": 47.98,
+        "faire_margin_usd": 21.99,
+        "reviews": "674",
+        "moq": "0"
+      },
+      "query": "Professional Pet Products Nail-Safe Styptic Powder 6 oz",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.291,
+        "asin": "B005N2FDLG",
+        "title": "Top Performance MediStyp Pet Styptic Powder with Benzocaine, 1-1/2-Ounce,white",
+        "price": 12.99,
+        "reviews_count": 661,
+        "rating": 4.6
+      },
+      "per_unit_profit": -13.0
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "dermaplaning tool",
+        "token": "p_h5c7u32gz3",
+        "name": "Dermaplaning Facial Razor 72PC, 2103",
+        "brand": "b_gk6kg6d4dw",
+        "wholesale_usd": 26.25,
+        "faire_retail_usd": 52.5,
+        "faire_margin_usd": 26.25,
+        "reviews": "244",
+        "moq": "0"
+      },
+      "query": "Dermaplaning Facial Razor 72PC 2103",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.282,
+        "asin": "B0GQ3933PL",
+        "title": "Plum Beauty Double-Sided Dermaplaning Razors (4-Pack) - Women Facial Razors",
+        "price": 5.32,
+        "reviews_count": 239,
+        "rating": 4.5
+      },
+      "per_unit_profit": -20.93
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "tire valve caps",
+        "token": "p_uaavpe9vqv",
+        "name": "Slime 12 V 60 Psi Tire Inflator/Gauge",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 25.65,
+        "faire_retail_usd": 51.3,
+        "faire_margin_usd": 25.65,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Slime 12 V 60 Psi Tire Inflator/Gauge",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.222,
+        "asin": "B0FMK9DSSV",
+        "title": "12000mAh Heavy Duty Tire Inflator Portable Air Compressor",
+        "price": 79.97,
+        "reviews_count": 421,
+        "rating": 4.6
+      },
+      "per_unit_profit": 54.32,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 3.2,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Aborder Products",
+        "fba_fee": 8.2,
+        "brand": "OlarHike",
+        "category": "Automotive",
+        "sales_rank": 603
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "sink caddy",
+        "token": "p_qypkajte9g",
+        "name": "Dish Rack with Utensil Caddy and Glassware Holder,White",
+        "brand": "b_7h26k4z5h9",
+        "wholesale_usd": 43.76,
+        "faire_retail_usd": 87.52,
+        "faire_margin_usd": 43.76,
+        "reviews": "30",
+        "moq": "0"
+      },
+      "query": "Dish Rack with Utensil Caddy and Glassware Holder White",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.426,
+        "asin": "B0CZ3XX7Y1",
+        "title": "SAYZH Dish Drying Rack for Kitchen Counter with Utensil Holder, White",
+        "price": 26.98,
+        "reviews_count": 2674,
+        "rating": 4.6
+      },
+      "per_unit_profit": -16.78
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "sink caddy",
+        "token": "p_abbc5jvst2",
+        "name": "Dish Rack with Utensil Caddy and Glassware Holder, Black",
+        "brand": "b_7h26k4z5h9",
+        "wholesale_usd": 43.76,
+        "faire_retail_usd": 87.52,
+        "faire_margin_usd": 43.76,
+        "reviews": "29",
+        "moq": "0"
+      },
+      "query": "Dish Rack with Utensil Caddy and Glassware Holder Black",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.413,
+        "asin": "B01MR30Z8E",
+        "title": "Mega Chef Dish Rack with 14 Plate Positioners and A Detachable Utensil Holder, Black",
+        "price": 21.94,
+        "reviews_count": 474,
+        "rating": 4.0
+      },
+      "per_unit_profit": -21.82
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "milk frother",
+        "token": "p_tfm47xv4tm",
+        "name": "Aerolatte Chrome Stainless Steel Milk Frother By Harold",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 24.98,
+        "faire_retail_usd": 49.96,
+        "faire_margin_usd": 24.98,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Aerolatte Chrome Stainless Steel Milk Frother By Harold",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.345,
+        "asin": "B0CNBFHPW3",
+        "title": "Kaffe Handheld Milk Frother - Stainless Steel - Battery Operated (NO STAND)",
+        "price": 14.95,
+        "reviews_count": 45,
+        "rating": 3.2
+      },
+      "per_unit_profit": -10.03
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "travel perfume atomizer",
+        "token": "p_qcm3qhs86d",
+        "name": "TRAVALO Couture Dorado – Swarovski Crystal Perfume Atomizer",
+        "brand": "b_2a48b3d2",
+        "wholesale_usd": 50.0,
+        "faire_retail_usd": 100.0,
+        "faire_margin_usd": 50.0,
+        "reviews": "16",
+        "moq": "0"
+      },
+      "query": "TRAVALO Couture Dorado Swarovski Crystal Perfume Atomizer",
+      "amazon_count": 40,
+      "match": {
+        "sim": 0.323,
+        "asin": "B01NCK32SR",
+        "title": "100ml Crystal Art Refillable Perfume Atomizer Bottle,Long Spray",
+        "price": 9.99,
+        "reviews_count": 1086,
+        "rating": 4.0
+      },
+      "per_unit_profit": -40.01
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "garlic press",
+        "token": "p_bfpzvnnq3d",
+        "name": "Oxo Good Grips Garlic Press - Black Rubber/Stainless Steel",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 24.93,
+        "faire_retail_usd": 49.86,
+        "faire_margin_usd": 24.93,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Oxo Good Grips Garlic Press - Black Rubber/Stainless Steel",
+      "amazon_count": 49,
+      "match": {
+        "sim": 0.514,
+        "asin": "B09QBDRCRK",
+        "title": "Good Grips Stainless Steel Garlic Press",
+        "price": 14.97,
+        "reviews_count": 2484,
+        "rating": 4.5
+      },
+      "per_unit_profit": -9.96
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "phone grip stand",
+        "token": "p_7patw2fgpy",
+        "name": "Lovehandle Pro Pink Cell Phone Grip For All Mobile Devices",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 24.95,
+        "faire_retail_usd": 49.9,
+        "faire_margin_usd": 24.95,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Lovehandle Pro Pink Cell Phone Grip For All Mobile Devices",
+      "amazon_count": 19,
+      "match": {
+        "sim": 0.38,
+        "asin": "B0GM6P784S",
+        "title": "PRO for MagSafe Phone Grip + Kickstand - Pink Leopard",
+        "price": 38.99,
+        "reviews_count": 1,
+        "rating": 5.0
+      },
+      "per_unit_profit": 14.04,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": 2,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "LoveHandle",
+        "fba_fee": null,
+        "brand": "LOVEHANDLE",
+        "category": "Cell Phones & Accessories",
+        "sales_rank": 122489
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": true,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "avocado slicer",
+        "token": "p_76g85m29kr",
+        "name": "Core Kitchen Green/Black Avocado Tool - 6 Pack",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 24.77,
+        "faire_retail_usd": 49.54,
+        "faire_margin_usd": 24.77,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Core Kitchen Green/Black Avocado Tool - 6 Pack",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.429,
+        "asin": "B0G15SCP4P",
+        "title": "Green/Black Polypropylene Avocado Tool",
+        "price": 32.32,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": 7.55,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": 3,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "UnbeatableSale Local",
+        "fba_fee": null,
+        "brand": "Core Kitchen",
+        "category": "Home & Kitchen",
+        "sales_rank": null
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": true,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "drawer organizer",
+        "token": "p_9uf85rv4rc",
+        "name": "Cbc Home- Large Premium Bamboo Silverware Organizer- 14''-26'' Expandable",
+        "brand": "b_9ykzwajg7c",
+        "wholesale_usd": 10.98,
+        "faire_retail_usd": 69.99,
+        "faire_margin_usd": 59.01,
+        "reviews": "8",
+        "moq": "0"
+      },
+      "query": "Cbc Home- Large Premium Bamboo Silverware Organizer- 14 -26 Expandable",
+      "amazon_count": 53,
+      "match": {
+        "sim": 0.337,
+        "asin": "B0DCBT1RKM",
+        "title": "Fibogollo Expandable Bamboo Silverware Organizer, Kitchen Drawer Organizer",
+        "price": 19.99,
+        "reviews_count": 119,
+        "rating": 4.6
+      },
+      "per_unit_profit": 9.01,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "SXL Direct",
+        "fba_fee": null,
+        "brand": "Fibogollo",
+        "category": "Home & Kitchen",
+        "sales_rank": 33287
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "corn cob holders",
+        "token": "p_94sx9gca9m",
+        "name": "Lee's - Lee's Stainless Steel/Wood Corn Cutter",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 24.43,
+        "faire_retail_usd": 48.86,
+        "faire_margin_usd": 24.43,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Lee s - Lee s Stainless Steel/Wood Corn Cutter",
+      "amazon_count": 15,
+      "match": {
+        "sim": 0.444,
+        "asin": "B000BI8E40",
+        "title": "101-p Lee Adjustable Wooden Corn Cutter",
+        "price": 23.67,
+        "reviews_count": 423,
+        "rating": 4.4
+      },
+      "per_unit_profit": -0.76
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "monitor stand",
+        "token": "p_9ebr4zfexe",
+        "name": "Lorell Monitor/Laptop Stand",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 23.85,
+        "faire_retail_usd": 47.7,
+        "faire_margin_usd": 23.85,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Lorell Monitor/Laptop Stand",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.375,
+        "asin": "B0B35LHL9D",
+        "title": "Mesh Laptop Stand",
+        "price": 34.2,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": 10.35,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 2.9,
+        "total_sellers": 21,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "OfficeWorld Store",
+        "fba_fee": 7.1,
+        "brand": "Lorell",
+        "category": "Electronics",
+        "sales_rank": 630167
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "luggage scale",
+        "token": "p_yt74eegueg",
+        "name": "Taylor - Taylor White Luggage Scale",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 23.86,
+        "faire_retail_usd": 47.72,
+        "faire_margin_usd": 23.86,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Taylor - Taylor White Luggage Scale",
+      "amazon_count": 53,
+      "match": {
+        "sim": 0.447,
+        "asin": "B006H1XV2A",
+        "title": "Travel Luggage Scale",
+        "price": 13.0,
+        "reviews_count": 125,
+        "rating": 3.8
+      },
+      "per_unit_profit": -10.86
+    },
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "dog paw cleaner",
+        "token": "p_j3rhjganj5",
+        "name": "Dexas Mudbuster Gray Dog Paw Cleaner 1 Pk",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 23.77,
+        "faire_retail_usd": 47.54,
+        "faire_margin_usd": 23.77,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Dexas Mudbuster Gray Dog Paw Cleaner 1 Pk",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.365,
+        "asin": "B084GY7264",
+        "title": "MudBuster Portable Dog Paw Cleaner, Premium Quality Large Gray Pet Accessory",
+        "price": 17.0,
+        "reviews_count": 28700,
+        "rating": 4.4
+      },
+      "per_unit_profit": -6.77
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "packing cubes",
+        "token": "p_srf6ws4wv2",
+        "name": "Packing Cubes 4 Piece Set - Gift & Travel - Fall 2026",
+        "brand": "b_3kje29ko",
+        "wholesale_usd": 16.0,
+        "faire_retail_usd": 40.0,
+        "faire_margin_usd": 24.0,
+        "reviews": "248",
+        "moq": "0"
+      },
+      "query": "Packing Cubes 4 Piece Set - Gift & Travel - Fall 2026",
+      "amazon_count": 52,
+      "match": {
+        "sim": 0.413,
+        "asin": "B0DTKTPZNZ",
+        "title": "Compression Packing Cubes for Travel - 4 Set National Park Pattern",
+        "price": 12.99,
+        "reviews_count": 552,
+        "rating": 4.5
+      },
+      "per_unit_profit": -3.01
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "cable organizer",
+        "token": "p_bxjvb23z5h",
+        "name": "Velcro® Black Cable Sleeves, 2-Pack, Cut-To-Length, 36\"",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 23.35,
+        "faire_retail_usd": 46.7,
+        "faire_margin_usd": 23.35,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Velcro Black Cable Sleeves 2-Pack Cut-To-Length 36",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.322,
+        "asin": "B09QGZ8VZ9",
+        "title": "VELCRO Brand Cut-to-Length Straps Roll, 30ft x 1/2in, Black",
+        "price": 8.79,
+        "reviews_count": 2588,
+        "rating": 4.8
+      },
+      "per_unit_profit": -14.56
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "car trash can",
+        "token": "p_ahfps89man",
+        "name": "22x17 Inches Disposable White Paper Car Mats Floor Protector",
+        "brand": "b_7b25cuen6n",
+        "wholesale_usd": 23.95,
+        "faire_retail_usd": 47.9,
+        "faire_margin_usd": 23.95,
+        "reviews": "224",
+        "moq": "0"
+      },
+      "query": "22x17 Inches Disposable White Paper Car Mats Floor Protector",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.473,
+        "asin": "B0BN5XHQJC",
+        "title": "Woanger 800 Pcs Disposable Paper Floor Mats for Car Dealerships, White",
+        "price": 103.99,
+        "reviews_count": 48,
+        "rating": 4.4
+      },
+      "per_unit_profit": 80.04,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 28.2,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Yragrant",
+        "fba_fee": 15.0,
+        "brand": "Woanger",
+        "category": "Automotive",
+        "sales_rank": 149333
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "instant read meat thermometer",
+        "token": "p_2q5y8whjqi",
+        "name": "Instant Read Digital Meat Thermometer with Probe",
+        "brand": "b_et3n2yow1w",
+        "wholesale_usd": 17.55,
+        "faire_retail_usd": 39.99,
+        "faire_margin_usd": 22.44,
+        "reviews": "289",
+        "moq": "0"
+      },
+      "query": "Instant Read Digital Meat Thermometer with Probe",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.703,
+        "asin": "B0DKHVXLHW",
+        "title": "Instant Read Meat Thermometer Digital for Cooking with Dual Probe",
+        "price": 12.98,
+        "reviews_count": 1569,
+        "rating": 4.5
+      },
+      "per_unit_profit": -4.57
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "desk organizer",
+        "token": "p_cufp25jd4k",
+        "name": "4 Tier Paper Tray Organizer with Drawer For Office Use",
+        "brand": "b_9nsazb7vtc",
+        "wholesale_usd": 45.99,
+        "faire_retail_usd": 68.98,
+        "faire_margin_usd": 22.99,
+        "reviews": "248",
+        "moq": "0"
+      },
+      "query": "4 Tier Paper Tray Organizer with Drawer For Office Use",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.496,
+        "asin": "B0GYRB9N47",
+        "title": "Clear Acrylic Desk Organizer with Drawer – Paper Tray Office Storage",
+        "price": 31.5,
+        "reviews_count": 35,
+        "rating": 4.7
+      },
+      "per_unit_profit": -14.49
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "key finder",
+        "token": "p_6gja8h5yhj",
+        "name": "Kinky Pleasure - AC177 - Fresh N Rebel Smart Finder Keychain",
+        "brand": "b_y9yrtsajja",
+        "wholesale_usd": 22.77,
+        "faire_retail_usd": 68.31,
+        "faire_margin_usd": 45.54,
+        "reviews": "16",
+        "moq": "0"
+      },
+      "query": "Kinky Pleasure - AC177 - Fresh N Rebel Smart Finder Keychain",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.176,
+        "asin": "B0GY1D3NY4",
+        "title": "Smart Tracker Tags, Key Finder PU Leather Bluetooth Tracker",
+        "price": 26.99,
+        "reviews_count": 16,
+        "rating": 4.6
+      },
+      "per_unit_profit": 4.22
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "cable organizer",
+        "token": "p_z3w9j77jve",
+        "name": "Extra Large Cable Management Box – Handmade Mango Wood Cord Organizer & Power Strip Cover",
+        "brand": "b_8xlrz1lxr0",
+        "wholesale_usd": 29.98,
+        "faire_retail_usd": 59.99,
+        "faire_margin_usd": 30.01,
+        "reviews": "84",
+        "moq": "0"
+      },
+      "query": "Extra Large Cable Management Box Handmade Mango Wood Cord Organizer & Power",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.574,
+        "asin": "B0FR51JGM2",
+        "title": "Extra Large Cable Management Box, Power Strip & Cord Hider, Desk Organizer",
+        "price": 55.97,
+        "reviews_count": 974,
+        "rating": 4.8
+      },
+      "per_unit_profit": 25.99,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "LuxeDesigns Co",
+        "fba_fee": null,
+        "brand": "Luxe Designs",
+        "category": "Electronics",
+        "sales_rank": 5077
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "facial roller",
+        "token": "p_5t4h76s2qu",
+        "name": "Gold Derma Roller Beauty Tool",
+        "brand": "b_atexqpqtmq",
+        "wholesale_usd": 5.0,
+        "faire_retail_usd": 40.0,
+        "faire_margin_usd": 35.0,
+        "reviews": "44",
+        "moq": "0"
+      },
+      "query": "Gold Derma Roller Beauty Tool",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.56,
+        "asin": "B0GVQLZ2JP",
+        "title": "ROSELYNBOUTIQUE Derma Roller Personal Care Beauty Tool",
+        "price": 5.99,
+        "reviews_count": 20801,
+        "rating": 4.4
+      },
+      "per_unit_profit": 0.99
+    },
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "pet hair roller",
+        "token": "p_nw9629eyw9",
+        "name": "Artero Apollo- Long Blade Mat Breaker-Comb",
+        "brand": "b_b79bcbw4tx",
+        "wholesale_usd": 22.99,
+        "faire_retail_usd": 41.98,
+        "faire_margin_usd": 18.99,
+        "reviews": "674",
+        "moq": "0"
+      },
+      "query": "Artero Apollo- Long Blade Mat Breaker-Comb",
+      "amazon_count": 19,
+      "match": {
+        "sim": 0.389,
+        "asin": "B09VTLRRJW",
+        "title": "Apollo Long Blade Mat Breaker for Dogs, 9 Serrated Blades",
+        "price": 32.88,
+        "reviews_count": 9,
+        "rating": 3.6
+      },
+      "per_unit_profit": 9.89,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": 3,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "ARTERO",
+        "fba_fee": null,
+        "brand": "ARTERO",
+        "category": "Tools & Home Improvement",
+        "sales_rank": 281690
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": true,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "silicone stretch lids",
+        "token": "p_x5auxs3xe3",
+        "name": "Disposable Clear Plastic  Dome Lids For Standard Sized Pet C",
+        "brand": "b_7b25cuen6n",
+        "wholesale_usd": 26.05,
+        "faire_retail_usd": 49.21,
+        "faire_margin_usd": 23.16,
+        "reviews": "224",
+        "moq": "0"
+      },
+      "query": "Disposable Clear Plastic Dome Lids For Standard Sized Pet C",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.396,
+        "asin": "B0GC77QBC3",
+        "title": "210 Pcs Plastic Dome Lids with Straw Slot, Disposable PET Cup Lid",
+        "price": 25.99,
+        "reviews_count": 2,
+        "rating": 2.8
+      },
+      "per_unit_profit": -0.06
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "webcam cover",
+        "token": "p_xp86wzgf3c",
+        "name": "Lifeware Ultra Slim Dash Cam with 2.4 Inch Wide Screen",
+        "brand": "b_5ejmb05o44",
+        "wholesale_usd": 13.13,
+        "faire_retail_usd": 69.99,
+        "faire_margin_usd": 56.86,
+        "reviews": "6",
+        "moq": "0"
+      },
+      "query": "Lifeware Ultra Slim Dash Cam with 2 4 Inch Wide Screen",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.261,
+        "asin": "B0DF7BW4GV",
+        "title": "Dash Cam Front and Rear for Cars, 2.5K+1080P Dual Camera with 2\" Screen",
+        "price": 41.39,
+        "reviews_count": 3522,
+        "rating": 4.2
+      },
+      "per_unit_profit": 28.26,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.125,
+        "total_sellers": 4,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "E-YEEGER STORE",
+        "fba_fee": 4.75,
+        "brand": "E-YEEGER",
+        "category": "Electronics",
+        "sales_rank": 2253
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "car phone mount",
+        "token": "p_g9gnfwhp8s",
+        "name": "Universal Wireless Charging Dash Car Mount - Retail Pack",
+        "brand": "b_dqlfq61fp6",
+        "wholesale_usd": 5.0,
+        "faire_retail_usd": 29.99,
+        "faire_margin_usd": 24.99,
+        "reviews": "160",
+        "moq": "0"
+      },
+      "query": "Universal Wireless Charging Dash Car Mount - Retail Pack",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.419,
+        "asin": "B0BG5GWRJ1",
+        "title": "Wireless Car Charger 15W Fast Charging Dash Windshield Vent Car Mount",
+        "price": 23.98,
+        "reviews_count": 1701,
+        "rating": 4.3
+      },
+      "per_unit_profit": 18.98,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.75,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Star maps",
+        "fba_fee": 5.25,
+        "brand": "MOKPR",
+        "category": "Cell Phones & Accessories",
+        "sales_rank": 4350
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "dog paw cleaner",
+        "token": "p_8tsm2j5qce",
+        "name": "Dexas Mudbuster Gray Dog Paw Cleaner 1 Pk",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 22.03,
+        "faire_retail_usd": 44.06,
+        "faire_margin_usd": 22.03,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Dexas Mudbuster Gray Dog Paw Cleaner 1 Pk",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.365,
+        "asin": "B084GY7264",
+        "title": "MudBuster Portable Dog Paw Cleaner, Premium Quality Large Gray Pet Accessory",
+        "price": 17.0,
+        "reviews_count": 28700,
+        "rating": 4.4
+      },
+      "per_unit_profit": -5.03
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "instant read meat thermometer",
+        "token": "p_hczae8tvgq",
+        "name": "Outset Digital Wireless Dual Probe Bbq Thermometer, 4.25\"",
+        "brand": "b_aaqcz0m321",
+        "wholesale_usd": 18.75,
+        "faire_retail_usd": 37.49,
+        "faire_margin_usd": 18.74,
+        "reviews": "474",
+        "moq": "0"
+      },
+      "query": "Outset Digital Wireless Dual Probe Bbq Thermometer 4 25",
+      "amazon_count": 52,
+      "match": {
+        "sim": 0.53,
+        "asin": "B09R8K6J4Y",
+        "title": "Grill Thermometer, Digital Wireless BBQ Thermometer, Dual Probe",
+        "price": 21.99,
+        "reviews_count": 7,
+        "rating": 3.3
+      },
+      "per_unit_profit": 3.24
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "packing cubes",
+        "token": "p_55f8y7xe9g",
+        "name": "*New* Pack Like A Boss™ Mocha Stripe - Packing Cubes",
+        "brand": "b_df9cebde",
+        "wholesale_usd": 18.5,
+        "faire_retail_usd": 36.99,
+        "faire_margin_usd": 18.49,
+        "reviews": "3016",
+        "moq": "0"
+      },
+      "query": "New Pack Like A Boss Mocha Stripe - Packing Cubes",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.273,
+        "asin": "B0FLDM19TS",
+        "title": "Compression Packing Cubes for Travel, 6-Pack, Mocha",
+        "price": 59.99,
+        "reviews_count": 2409,
+        "rating": 4.5
+      },
+      "per_unit_profit": 41.49,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 2.0,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Intent Brands USA",
+        "fba_fee": 6.1,
+        "brand": "Aerotrunk",
+        "category": "Clothing, Shoes & Jewelry",
+        "sales_rank": 1576
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "packing cubes",
+        "token": "p_wck42u3bcv",
+        "name": "Taupe Checkerboard Pack Like A Boss™ Packing Cubes",
+        "brand": "b_df9cebde",
+        "wholesale_usd": 18.5,
+        "faire_retail_usd": 36.99,
+        "faire_margin_usd": 18.49,
+        "reviews": "3016",
+        "moq": "0"
+      },
+      "query": "Taupe Checkerboard Pack Like A Boss Packing Cubes",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.274,
+        "asin": "B0H6S85R3Z",
+        "title": "7 Pcs Compression Packing Cubes for Travel, Pink Checkerboard",
+        "price": 39.99,
+        "reviews_count": 23,
+        "rating": 4.8
+      },
+      "per_unit_profit": 21.49,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "HOMESPON",
+        "fba_fee": null,
+        "brand": "HOMESPON",
+        "category": "Clothing, Shoes & Jewelry",
+        "sales_rank": 156160
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "countertop compost bin",
+        "token": "p_5gacted6sa",
+        "name": "Mya Compost Bin - Black",
+        "brand": "b_46t0premuw",
+        "wholesale_usd": 32.3,
+        "faire_retail_usd": 53.99,
+        "faire_margin_usd": 21.69,
+        "reviews": "260",
+        "moq": "0"
+      },
+      "query": "Mya Compost Bin - Black",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.399,
+        "asin": "B0CX347WD5",
+        "title": "Epica Kitchen Compost Bin for Kitchen Countertops, 1.3 Galllon - Black",
+        "price": 29.98,
+        "reviews_count": 20964,
+        "rating": 4.6
+      },
+      "per_unit_profit": -2.32
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "countertop compost bin",
+        "token": "p_d7buhejpwa",
+        "name": "Mya Compost Bin - Tan",
+        "brand": "b_46t0premuw",
+        "wholesale_usd": 32.3,
+        "faire_retail_usd": 53.99,
+        "faire_margin_usd": 21.69,
+        "reviews": "260",
+        "moq": "0"
+      },
+      "query": "Mya Compost Bin - Tan",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.289,
+        "asin": "B0CX2TJQV4",
+        "title": "Epica Kitchen Compost Bin for Kitchen Countertops, 1.3 Galllon - Copper",
+        "price": 29.98,
+        "reviews_count": 20964,
+        "rating": 4.6
+      },
+      "per_unit_profit": -2.32
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "ergonomic mouse pad",
+        "token": "p_hb2xnph64n",
+        "name": "Compucessory Black Gel Mouse Pad, 9\"x10\"x1\", 1 Pack",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 21.65,
+        "faire_retail_usd": 43.3,
+        "faire_margin_usd": 21.65,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Compucessory Black Gel Mouse Pad 9 x10 x1 1 Pack",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.399,
+        "asin": "B0147GJQ6Q",
+        "title": "Compucessory 55151 Gel Mouse Pad, Wrist Rest, 9-Inch x10-Inch x1-Inch, Black",
+        "price": 14.01,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": -7.64
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "ergonomic mouse pad",
+        "token": "p_vz8n5rfeej",
+        "name": "Compucessory Blue Gel Mouse Pad, 9\"x10\"x1\", 1 Pack",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 21.65,
+        "faire_retail_usd": 43.3,
+        "faire_margin_usd": 21.65,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Compucessory Blue Gel Mouse Pad 9 x10 x1 1 Pack",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.384,
+        "asin": "B0147GJO18",
+        "title": "Compucessory 45162 Gel Mouse Pad, Wrist Rest, 9-Inch x10-Inch x1-Inch, Blue",
+        "price": 11.8,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": -9.85
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "screen cleaner",
+        "token": "p_dke99j2uh2",
+        "name": "Screen Magic 32oz Window Screen Cleaner Liquid",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 21.45,
+        "faire_retail_usd": 42.9,
+        "faire_margin_usd": 21.45,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Screen Magic 32oz Window Screen Cleaner Liquid",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.436,
+        "asin": "B08L43HJTT",
+        "title": "Nano Magic Nano Magic Screen Cleaner Recharge KIT",
+        "price": 24.5,
+        "reviews_count": 19,
+        "rating": 4.2
+      },
+      "per_unit_profit": 3.05
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "screen cleaner",
+        "token": "p_3xp6kmc4ww",
+        "name": "Screen Magic 32 oz Window Screen Cleaner Liquid",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 21.45,
+        "faire_retail_usd": 42.9,
+        "faire_margin_usd": 21.45,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Screen Magic 32 oz Window Screen Cleaner Liquid",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.409,
+        "asin": "B0CTJ731VB",
+        "title": "WHOOSH! Electronics Screen Cleaner Liquid Refill, 32.1 fl oz",
+        "price": 24.99,
+        "reviews_count": 448,
+        "rating": 4.8
+      },
+      "per_unit_profit": 3.54
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "usb c adapter",
+        "token": "p_r2536xy33g",
+        "name": "Belkin Usb-C To Usb-A 3.0 Adapter - 5 Gbps - Black",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 21.25,
+        "faire_retail_usd": 42.5,
+        "faire_margin_usd": 21.25,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Belkin Usb-C To Usb-A 3 0 Adapter - 5 Gbps - Black",
+      "amazon_count": 22,
+      "match": {
+        "sim": 0.326,
+        "asin": "B00WJSPWRM",
+        "title": "USB 3.1 GEN 1 Type-C Male to USB 3.1 GEN 1 Type-A Female Adapter Cable - Black",
+        "price": 11.99,
+        "reviews_count": 1391,
+        "rating": 4.6
+      },
+      "per_unit_profit": -9.26
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "packing cubes",
+        "token": "p_p8a3592fyy",
+        "name": "Baby Blue Bungalow Stacking Set | Mint",
+        "brand": "b_1elkhlkb3n",
+        "wholesale_usd": 23.0,
+        "faire_retail_usd": 53.0,
+        "faire_margin_usd": 30.0,
+        "reviews": "62",
+        "moq": "0"
+      },
+      "query": "Baby Blue Bungalow Stacking Set Mint",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.247,
+        "asin": "B000GIL2DU",
+        "title": "Melissa & Doug Alphabet Nesting & Stacking Blocks 10-Piece Set",
+        "price": 11.19,
+        "reviews_count": 6014,
+        "rating": 4.2
+      },
+      "per_unit_profit": -11.81
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "packing cubes",
+        "token": "p_bcgrpmez2d",
+        "name": "Navy Preppy Stripe ~Wipeable~ Stacking Set | Mint",
+        "brand": "b_1elkhlkb3n",
+        "wholesale_usd": 23.0,
+        "faire_retail_usd": 53.0,
+        "faire_margin_usd": 30.0,
+        "reviews": "62",
+        "moq": "0"
+      },
+      "query": "Navy Preppy Stripe Wipeable Stacking Set Mint",
+      "amazon_count": 0
+    }
+  ],
+  "stageB": [
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "silicone baking mat",
+        "token": "p_9x9fgfemyy",
+        "name": "DSS-1919/DSS-2323, 19\" & 23\" Ss Doughnut Screens",
+        "brand": "b_7b25cuen6n",
+        "wholesale_usd": 43.95,
+        "faire_retail_usd": 87.9,
+        "faire_margin_usd": 43.95,
+        "reviews": "224",
+        "moq": "0"
+      },
+      "query": "DSS-1919/DSS-2323 19 & 23 Ss Doughnut Screens",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.201,
+        "asin": "B0GVL3RHKJ",
+        "title": "OCS Parts 10-Pack 19\" x 19\" Heavy Duty Stainless Steel Donut Fryer Screens",
+        "price": 390.0,
+        "reviews_count": 1,
+        "rating": 5.0
+      },
+      "per_unit_profit": 346.05,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "OCSParts",
+        "fba_fee": null,
+        "brand": "OCS Parts",
+        "category": "Industrial & Scientific",
+        "sales_rank": 616964
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "citrus juicer",
+        "token": "p_2makw7txrt",
+        "name": "Cuisinart Black/Silver 8 oz Stainless Steel Citrus Juicer",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 45.19,
+        "faire_retail_usd": 90.38,
+        "faire_margin_usd": 45.19,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Cuisinart Black/Silver 8 oz Stainless Steel Citrus Juicer",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.343,
+        "asin": "B000A76VCY",
+        "title": "800CPXL Citrus Press Pro Juicer Machine, Brushed Stainless Steel",
+        "price": 279.95,
+        "reviews_count": 2464,
+        "rating": 4.5
+      },
+      "per_unit_profit": 234.76,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.5625,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Weck Jars",
+        "fba_fee": 5.25,
+        "brand": "4.5",
+        "category": "Home & Kitchen",
+        "sales_rank": 29051
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "citrus juicer",
+        "token": "p_633wp6mj2y",
+        "name": "Cuisinart Black/Silver Stainless Steel 8 oz Citrus Juicer",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 45.19,
+        "faire_retail_usd": 90.38,
+        "faire_margin_usd": 45.19,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Cuisinart Black/Silver Stainless Steel 8 oz Citrus Juicer",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.35,
+        "asin": "B000A76VCY",
+        "title": "800CPXL Citrus Press Pro Juicer Machine, Brushed Stainless Steel",
+        "price": 279.95,
+        "reviews_count": 2464,
+        "rating": 4.5
+      },
+      "per_unit_profit": 234.76,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.5625,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Weck Jars",
+        "fba_fee": 5.25,
+        "brand": "4.5",
+        "category": "Home & Kitchen",
+        "sales_rank": 29051
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "countertop compost bin",
+        "token": "p_97m3tgsf75",
+        "name": "Jaylen Compost Bin - Tan",
+        "brand": "b_46t0premuw",
+        "wholesale_usd": 38.45,
+        "faire_retail_usd": 64.99,
+        "faire_margin_usd": 26.54,
+        "reviews": "260",
+        "moq": "0"
+      },
+      "query": "Jaylen Compost Bin - Tan",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.311,
+        "asin": "B0H8636JTM",
+        "title": "BUKLIYN Compost Bin Outdoor - 285 Gallon Metal Wire Mesh Compost Bins",
+        "price": 149.99,
+        "reviews_count": 5,
+        "rating": 4.5
+      },
+      "per_unit_profit": 111.54,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 36.4,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "BUKLIYN",
+        "fba_fee": 15.0,
+        "brand": "BUKLIYN",
+        "category": "Patio, Lawn & Garden",
+        "sales_rank": 130256
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "toiletry bottles TSA",
+        "token": "p_uc6zu9khta",
+        "name": "Locking Triple Wall-Mount Bottle Holder with Shampoo, Conditioner & Body Wash Bottles",
+        "brand": "b_7w4x0tlw1u",
+        "wholesale_usd": 35.98,
+        "faire_retail_usd": 71.95,
+        "faire_margin_usd": 35.97,
+        "reviews": "115",
+        "moq": "0"
+      },
+      "query": "Locking Triple Wall-Mount Bottle Holder with Shampoo Conditioner & Body Wash Bottles",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.421,
+        "asin": "B0CPP2BFQF",
+        "title": "Luxury Stainless Triple Shower Bottle Holder with Bottles",
+        "price": 125.0,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": 89.02,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Harpole Design",
+        "fba_fee": null,
+        "brand": "Generic",
+        "category": "Home & Kitchen",
+        "sales_rank": 1055961
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "lash serum",
+        "token": "p_jf8qtte3ce",
+        "name": "Plus Lash Serum",
+        "brand": "b_daafhlsrzv",
+        "wholesale_usd": 40.0,
+        "faire_retail_usd": 80.0,
+        "faire_margin_usd": 40.0,
+        "reviews": "78",
+        "moq": "0"
+      },
+      "query": "Plus Lash Serum",
+      "amazon_count": 53,
+      "match": {
+        "sim": 0.274,
+        "asin": "B09C82MWZX",
+        "title": "Obagi Nu-Cil Eyelash Enhancing Serum",
+        "price": 125.0,
+        "reviews_count": 1111,
+        "rating": 4.2
+      },
+      "per_unit_profit": 85.0,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.06613859999999999,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Obagi Cosmeceuticals",
+        "fba_fee": 4.75,
+        "brand": null,
+        "category": "Beauty & Personal Care",
+        "sales_rank": 8340
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "car trash can",
+        "token": "p_ahfps89man",
+        "name": "22x17 Inches Disposable White Paper Car Mats Floor Protector",
+        "brand": "b_7b25cuen6n",
+        "wholesale_usd": 23.95,
+        "faire_retail_usd": 47.9,
+        "faire_margin_usd": 23.95,
+        "reviews": "224",
+        "moq": "0"
+      },
+      "query": "22x17 Inches Disposable White Paper Car Mats Floor Protector",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.473,
+        "asin": "B0BN5XHQJC",
+        "title": "Woanger 800 Pcs Disposable Paper Floor Mats for Car Dealerships, White",
+        "price": 103.99,
+        "reviews_count": 48,
+        "rating": 4.4
+      },
+      "per_unit_profit": 80.04,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 28.2,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Yragrant",
+        "fba_fee": 15.0,
+        "brand": "Woanger",
+        "category": "Automotive",
+        "sales_rank": 149333
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "herb scissors",
+        "token": "p_erikk6ji0q",
+        "name": "Thai Kitchen & Garden Shears",
+        "brand": "b_6xvu4qtx",
+        "wholesale_usd": 24.0,
+        "faire_retail_usd": 48.0,
+        "faire_margin_usd": 24.0,
+        "reviews": "1001",
+        "moq": "0"
+      },
+      "query": "Thai Kitchen & Garden Shears",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.472,
+        "asin": "B001DINYHE",
+        "title": "Shun Kitchen Shears",
+        "price": 89.95,
+        "reviews_count": 594,
+        "rating": 4.6
+      },
+      "per_unit_profit": 65.95,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 2.20462,
+        "total_sellers": 8,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Amazon",
+        "buy_box_seller_name": "Amazon",
+        "fba_fee": 7.1,
+        "brand": "4.6",
+        "category": "Home & Kitchen",
+        "sales_rank": 105459
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": false,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "tire valve caps",
+        "token": "p_uaavpe9vqv",
+        "name": "Slime 12 V 60 Psi Tire Inflator/Gauge",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 25.65,
+        "faire_retail_usd": 51.3,
+        "faire_margin_usd": 25.65,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Slime 12 V 60 Psi Tire Inflator/Gauge",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.222,
+        "asin": "B0FMK9DSSV",
+        "title": "12000mAh Heavy Duty Tire Inflator Portable Air Compressor",
+        "price": 79.97,
+        "reviews_count": 421,
+        "rating": 4.6
+      },
+      "per_unit_profit": 54.32,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 3.2,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Aborder Products",
+        "fba_fee": 8.2,
+        "brand": "OlarHike",
+        "category": "Automotive",
+        "sales_rank": 603
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "citrus juicer",
+        "token": "p_98en0mlx",
+        "name": "Mexican Citrus Juicer",
+        "brand": "b_6xvu4qtx",
+        "wholesale_usd": 49.5,
+        "faire_retail_usd": 99.0,
+        "faire_margin_usd": 49.5,
+        "reviews": "1001",
+        "moq": "0"
+      },
+      "query": "Mexican Citrus Juicer",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.4,
+        "asin": "B07815P2VY",
+        "title": "Verve Culture Artisan Manual Citrus Juicer",
+        "price": 99.0,
+        "reviews_count": 253,
+        "rating": 3.6
+      },
+      "per_unit_profit": 49.5,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": 3,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Alrossa",
+        "fba_fee": null,
+        "brand": "Verve CULTURE",
+        "category": "Home & Kitchen",
+        "sales_rank": 137495
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": true,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "packing cubes",
+        "token": "p_55f8y7xe9g",
+        "name": "*New* Pack Like A Boss™ Mocha Stripe - Packing Cubes",
+        "brand": "b_df9cebde",
+        "wholesale_usd": 18.5,
+        "faire_retail_usd": 36.99,
+        "faire_margin_usd": 18.49,
+        "reviews": "3016",
+        "moq": "0"
+      },
+      "query": "New Pack Like A Boss Mocha Stripe - Packing Cubes",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.273,
+        "asin": "B0FLDM19TS",
+        "title": "Compression Packing Cubes for Travel, 6-Pack, Mocha",
+        "price": 59.99,
+        "reviews_count": 2409,
+        "rating": 4.5
+      },
+      "per_unit_profit": 41.49,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 2.0,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Intent Brands USA",
+        "fba_fee": 6.1,
+        "brand": "Aerotrunk",
+        "category": "Clothing, Shoes & Jewelry",
+        "sales_rank": 1576
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "catnip toy",
+        "token": "p_spjpftkq4y",
+        "name": "Mini Crinkle Ball Cat Toy Display | 50 Count | Best Seller",
+        "brand": "b_5zatgx9y6e",
+        "wholesale_usd": 27.5,
+        "faire_retail_usd": 99.5,
+        "faire_margin_usd": 72.0,
+        "reviews": "7",
+        "moq": "0"
+      },
+      "query": "Mini Crinkle Ball Cat Toy Display 50 Count Best Seller",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.336,
+        "asin": "B01C2NLVIW",
+        "title": "Mini Crinkle Balls for Cats – 1.5 Inch, 50 Pack",
+        "price": 59.99,
+        "reviews_count": 1947,
+        "rating": 4.5
+      },
+      "per_unit_profit": 32.49,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.1,
+        "total_sellers": 2,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "PaxDistribution",
+        "fba_fee": 4.75,
+        "brand": "Cancor Innovations",
+        "category": "Pet Supplies",
+        "sales_rank": 19729
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": true,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "webcam cover",
+        "token": "p_xp86wzgf3c",
+        "name": "Lifeware Ultra Slim Dash Cam with 2.4 Inch Wide Screen",
+        "brand": "b_5ejmb05o44",
+        "wholesale_usd": 13.13,
+        "faire_retail_usd": 69.99,
+        "faire_margin_usd": 56.86,
+        "reviews": "6",
+        "moq": "0"
+      },
+      "query": "Lifeware Ultra Slim Dash Cam with 2 4 Inch Wide Screen",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.261,
+        "asin": "B0DF7BW4GV",
+        "title": "Dash Cam Front and Rear for Cars, 2.5K+1080P Dual Camera with 2\" Screen",
+        "price": 41.39,
+        "reviews_count": 3522,
+        "rating": 4.2
+      },
+      "per_unit_profit": 28.26,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.125,
+        "total_sellers": 4,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "E-YEEGER STORE",
+        "fba_fee": 4.75,
+        "brand": "E-YEEGER",
+        "category": "Electronics",
+        "sales_rank": 2253
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "lash serum",
+        "token": "p_ppd8tbbt66",
+        "name": "Revitalizing Lash Serum",
+        "brand": "b_daafhlsrzv",
+        "wholesale_usd": 40.0,
+        "faire_retail_usd": 80.0,
+        "faire_margin_usd": 40.0,
+        "reviews": "78",
+        "moq": "0"
+      },
+      "query": "Revitalizing Lash Serum",
+      "amazon_count": 53,
+      "match": {
+        "sim": 0.271,
+        "asin": "B0BV7KR7WY",
+        "title": "OLAPLEX LASHBOND™ Building Serum | Peptide Lash Serum, 4.5 mL",
+        "price": 68.0,
+        "reviews_count": 807,
+        "rating": 4.2
+      },
+      "per_unit_profit": 28.0,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.004409248840367555,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": null,
+        "fba_fee": 4.75,
+        "brand": null,
+        "category": "Beauty & Personal Care",
+        "sales_rank": 30593
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "cable organizer",
+        "token": "p_z3w9j77jve",
+        "name": "Extra Large Cable Management Box – Handmade Mango Wood Cord Organizer & Power Strip Cover",
+        "brand": "b_8xlrz1lxr0",
+        "wholesale_usd": 29.98,
+        "faire_retail_usd": 59.99,
+        "faire_margin_usd": 30.01,
+        "reviews": "84",
+        "moq": "0"
+      },
+      "query": "Extra Large Cable Management Box Handmade Mango Wood Cord Organizer & Power",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.574,
+        "asin": "B0FR51JGM2",
+        "title": "Extra Large Cable Management Box, Power Strip & Cord Hider, Desk Organizer",
+        "price": 55.97,
+        "reviews_count": 974,
+        "rating": 4.8
+      },
+      "per_unit_profit": 25.99,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "LuxeDesigns Co",
+        "fba_fee": null,
+        "brand": "Luxe Designs",
+        "category": "Electronics",
+        "sales_rank": 5077
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "catnip toy",
+        "token": "p_h9eq8jshue",
+        "name": "Multipet Ice Cream Cone Cat Toys 25ct Pdq",
+        "brand": "b_88deyfcwhj",
+        "wholesale_usd": 40.69,
+        "faire_retail_usd": 81.99,
+        "faire_margin_usd": 41.3,
+        "reviews": "112",
+        "moq": "0"
+      },
+      "query": "Multipet Ice Cream Cone Cat Toys 25ct Pdq",
+      "amazon_count": 15,
+      "match": {
+        "sim": 0.322,
+        "asin": "B08YY5S38G",
+        "title": "Ice Cream Cone 25pc. Assorted Colors (Black, White, Pink, and Blue) 25ct Cat Toy",
+        "price": 64.99,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": 24.3,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.5625,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "PamperpetsAMZ",
+        "fba_fee": 5.25,
+        "brand": "Multipet",
+        "category": "Pet Supplies",
+        "sales_rank": 605459
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "packing cubes",
+        "token": "p_wck42u3bcv",
+        "name": "Taupe Checkerboard Pack Like A Boss™ Packing Cubes",
+        "brand": "b_df9cebde",
+        "wholesale_usd": 18.5,
+        "faire_retail_usd": 36.99,
+        "faire_margin_usd": 18.49,
+        "reviews": "3016",
+        "moq": "0"
+      },
+      "query": "Taupe Checkerboard Pack Like A Boss Packing Cubes",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.274,
+        "asin": "B0H6S85R3Z",
+        "title": "7 Pcs Compression Packing Cubes for Travel, Pink Checkerboard",
+        "price": 39.99,
+        "reviews_count": 23,
+        "rating": 4.8
+      },
+      "per_unit_profit": 21.49,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "HOMESPON",
+        "fba_fee": null,
+        "brand": "HOMESPON",
+        "category": "Clothing, Shoes & Jewelry",
+        "sales_rank": 156160
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "monitor stand",
+        "token": "p_rbcrc9dx5w",
+        "name": "Dac Stax Ergonomic Monitor Stand with 2 Usb Ports",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 29.39,
+        "faire_retail_usd": 58.78,
+        "faire_margin_usd": 29.39,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Dac Stax Ergonomic Monitor Stand with 2 Usb Ports",
+      "amazon_count": 8,
+      "match": {
+        "sim": 0.439,
+        "asin": "B0GDZGKRS7",
+        "title": "Dual Monitor Stand with USB Ports Wood Monitor Stand Riser with Drawer",
+        "price": 49.99,
+        "reviews_count": 27,
+        "rating": 4.4
+      },
+      "per_unit_profit": 20.6,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Cheerwing USA",
+        "fba_fee": null,
+        "brand": "Elephance",
+        "category": "Electronics",
+        "sales_rank": 594
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "car phone mount",
+        "token": "p_g9gnfwhp8s",
+        "name": "Universal Wireless Charging Dash Car Mount - Retail Pack",
+        "brand": "b_dqlfq61fp6",
+        "wholesale_usd": 5.0,
+        "faire_retail_usd": 29.99,
+        "faire_margin_usd": 24.99,
+        "reviews": "160",
+        "moq": "0"
+      },
+      "query": "Universal Wireless Charging Dash Car Mount - Retail Pack",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.419,
+        "asin": "B0BG5GWRJ1",
+        "title": "Wireless Car Charger 15W Fast Charging Dash Windshield Vent Car Mount",
+        "price": 23.98,
+        "reviews_count": 1701,
+        "rating": 4.3
+      },
+      "per_unit_profit": 18.98,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.75,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Star maps",
+        "fba_fee": 5.25,
+        "brand": "MOKPR",
+        "category": "Cell Phones & Accessories",
+        "sales_rank": 4350
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "electronics",
+        "query": "phone grip stand",
+        "token": "p_7patw2fgpy",
+        "name": "Lovehandle Pro Pink Cell Phone Grip For All Mobile Devices",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 24.95,
+        "faire_retail_usd": 49.9,
+        "faire_margin_usd": 24.95,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Lovehandle Pro Pink Cell Phone Grip For All Mobile Devices",
+      "amazon_count": 19,
+      "match": {
+        "sim": 0.38,
+        "asin": "B0GM6P784S",
+        "title": "PRO for MagSafe Phone Grip + Kickstand - Pink Leopard",
+        "price": 38.99,
+        "reviews_count": 1,
+        "rating": 5.0
+      },
+      "per_unit_profit": 14.04,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": 2,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "LoveHandle",
+        "fba_fee": null,
+        "brand": "LOVEHANDLE",
+        "category": "Cell Phones & Accessories",
+        "sales_rank": 122489
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": true,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "tooth whitening pen",
+        "token": "p_tbd6j4ww6u",
+        "name": "Professional Teeth Whitening Kit with Pen 2ml",
+        "brand": "b_7d8uupszmv",
+        "wholesale_usd": 10.77,
+        "faire_retail_usd": 107.72,
+        "faire_margin_usd": 96.95,
+        "reviews": "6",
+        "moq": "0"
+      },
+      "query": "Professional Teeth Whitening Kit with Pen 2ml",
+      "amazon_count": 53,
+      "match": {
+        "sim": 0.486,
+        "asin": "B0D4XD96HH",
+        "title": "SNOW Sensitive Teeth Whitening Pen with Hydroxyapatite, 3 Pack, 2ml",
+        "price": 22.94,
+        "reviews_count": 9,
+        "rating": 4.1
+      },
+      "per_unit_profit": 12.17,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.13,
+        "total_sellers": 17,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "GoinGoneSold",
+        "fba_fee": 4.75,
+        "brand": "SNOW",
+        "category": "Health & Household",
+        "sales_rank": 167939
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "console organizer",
+        "token": "p_fq2j7kqmjp",
+        "name": "Deflecto Tilt Bin Interlocking 9-Bin Storage Organizer",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 32.28,
+        "faire_retail_usd": 64.56,
+        "faire_margin_usd": 32.28,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Deflecto Tilt Bin Interlocking 9-Bin Storage Organizer",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.616,
+        "asin": "B01JB726AE",
+        "title": "Tilt Bin Interlocking 4-Bin Organizer",
+        "price": 44.18,
+        "reviews_count": 3,
+        "rating": 5.0
+      },
+      "per_unit_profit": 11.9,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": 5,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Value Point Supply",
+        "fba_fee": null,
+        "brand": "Deflecto",
+        "category": "Electronics",
+        "sales_rank": 490608
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "desk organizer",
+        "token": "p_qu5zm5fn7e",
+        "name": "4pc Clear Acrylic Makeup Organizer Set",
+        "brand": "b_72ivqmkinu",
+        "wholesale_usd": 10.0,
+        "faire_retail_usd": 39.99,
+        "faire_margin_usd": 29.99,
+        "reviews": "191",
+        "moq": "0"
+      },
+      "query": "4pc Clear Acrylic Makeup Organizer Set",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.61,
+        "asin": "B0DJMTXLGG",
+        "title": "Acrylic Organizer 4-Piece Makeup Organizer Set",
+        "price": 20.99,
+        "reviews_count": 64,
+        "rating": 4.9
+      },
+      "per_unit_profit": 10.99,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "CONVERTing",
+        "fba_fee": null,
+        "brand": "LONTOHCE",
+        "category": "Beauty & Personal Care",
+        "sales_rank": 79590
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "monitor stand",
+        "token": "p_9ebr4zfexe",
+        "name": "Lorell Monitor/Laptop Stand",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 23.85,
+        "faire_retail_usd": 47.7,
+        "faire_margin_usd": 23.85,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Lorell Monitor/Laptop Stand",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.375,
+        "asin": "B0B35LHL9D",
+        "title": "Mesh Laptop Stand",
+        "price": 34.2,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": 10.35,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 2.9,
+        "total_sellers": 21,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "OfficeWorld Store",
+        "fba_fee": 7.1,
+        "brand": "Lorell",
+        "category": "Electronics",
+        "sales_rank": 630167
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "pet",
+        "query": "pet hair roller",
+        "token": "p_nw9629eyw9",
+        "name": "Artero Apollo- Long Blade Mat Breaker-Comb",
+        "brand": "b_b79bcbw4tx",
+        "wholesale_usd": 22.99,
+        "faire_retail_usd": 41.98,
+        "faire_margin_usd": 18.99,
+        "reviews": "674",
+        "moq": "0"
+      },
+      "query": "Artero Apollo- Long Blade Mat Breaker-Comb",
+      "amazon_count": 19,
+      "match": {
+        "sim": 0.389,
+        "asin": "B09VTLRRJW",
+        "title": "Apollo Long Blade Mat Breaker for Dogs, 9 Serrated Blades",
+        "price": 32.88,
+        "reviews_count": 9,
+        "rating": 3.6
+      },
+      "per_unit_profit": 9.89,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": 3,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "ARTERO",
+        "fba_fee": null,
+        "brand": "ARTERO",
+        "category": "Tools & Home Improvement",
+        "sales_rank": 281690
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": true,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "countertop compost bin",
+        "token": "p_4czk2bvfzp",
+        "name": "Fox Run Ceramic Kitchen Compost Bin, 7\" X 10.7\"",
+        "brand": "b_aaqcz0m321",
+        "wholesale_usd": 39.75,
+        "faire_retail_usd": 79.49,
+        "faire_margin_usd": 39.74,
+        "reviews": "474",
+        "moq": "0"
+      },
+      "query": "Fox Run Ceramic Kitchen Compost Bin 7 X 10 7",
+      "amazon_count": 44,
+      "match": {
+        "sim": 0.458,
+        "asin": "B0B8GB4VQ2",
+        "title": "Black Ceramic Kitchen Compost Bin for Countertops",
+        "price": 48.99,
+        "reviews_count": 25,
+        "rating": 3.9
+      },
+      "per_unit_profit": 9.24,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 8.1130016,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": null,
+        "fba_fee": 9.9,
+        "brand": "Fox Run",
+        "category": "Home & Kitchen",
+        "sales_rank": 2348976
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "home_kitchen",
+        "query": "drawer organizer",
+        "token": "p_9uf85rv4rc",
+        "name": "Cbc Home- Large Premium Bamboo Silverware Organizer- 14''-26'' Expandable",
+        "brand": "b_9ykzwajg7c",
+        "wholesale_usd": 10.98,
+        "faire_retail_usd": 69.99,
+        "faire_margin_usd": 59.01,
+        "reviews": "8",
+        "moq": "0"
+      },
+      "query": "Cbc Home- Large Premium Bamboo Silverware Organizer- 14 -26 Expandable",
+      "amazon_count": 53,
+      "match": {
+        "sim": 0.337,
+        "asin": "B0DCBT1RKM",
+        "title": "Fibogollo Expandable Bamboo Silverware Organizer, Kitchen Drawer Organizer",
+        "price": 19.99,
+        "reviews_count": 119,
+        "rating": 4.6
+      },
+      "per_unit_profit": 9.01,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "SXL Direct",
+        "fba_fee": null,
+        "brand": "Fibogollo",
+        "category": "Home & Kitchen",
+        "sales_rank": 33287
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "visor organizer",
+        "token": "p_wqc7zjuz8f",
+        "name": "Stanley 30-Compartment Bin System, Black/Clear",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 31.57,
+        "faire_retail_usd": 63.14,
+        "faire_margin_usd": 31.57,
+        "reviews": "257",
+        "moq": "0"
+      },
+      "query": "Stanley 30-Compartment Bin System Black/Clear",
+      "amazon_count": 22,
+      "match": {
+        "sim": 0.311,
+        "asin": "B07D6Y4F6W",
+        "title": "STST40739 39 Mixed Drawer Bin System",
+        "price": 40.22,
+        "reviews_count": 19,
+        "rating": 4.1
+      },
+      "per_unit_profit": 8.65,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 2.20462,
+        "total_sellers": 8,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Toolup",
+        "fba_fee": 7.1,
+        "brand": "4.1",
+        "category": "Home & Kitchen",
+        "sales_rank": 2729687
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "office",
+        "query": "monitor stand",
+        "token": "p_kez64bevs5",
+        "name": "Advantus Monitor Stand",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 26.08,
+        "faire_retail_usd": 52.16,
+        "faire_margin_usd": 26.08,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Advantus Monitor Stand",
+      "amazon_count": 16,
+      "match": {
+        "sim": 0.337,
+        "asin": "B01MYX3WSA",
+        "title": "SmartFit Adjustable Monitor Stand Riser K52785WW, Black",
+        "price": 34.29,
+        "reviews_count": 264,
+        "rating": 4.5
+      },
+      "per_unit_profit": 8.21,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 3.0,
+        "total_sellers": 14,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Computing Essentials",
+        "fba_fee": 7.1,
+        "brand": "4.5",
+        "category": "Electronics",
+        "sales_rank": 718
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "kitchen_gadgets",
+        "query": "avocado slicer",
+        "token": "p_76g85m29kr",
+        "name": "Core Kitchen Green/Black Avocado Tool - 6 Pack",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 24.77,
+        "faire_retail_usd": 49.54,
+        "faire_margin_usd": 24.77,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Core Kitchen Green/Black Avocado Tool - 6 Pack",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.429,
+        "asin": "B0G15SCP4P",
+        "title": "Green/Black Polypropylene Avocado Tool",
+        "price": 32.32,
+        "reviews_count": null,
+        "rating": null
+      },
+      "per_unit_profit": 7.55,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": null,
+        "total_sellers": 3,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "UnbeatableSale Local",
+        "fba_fee": null,
+        "brand": "Core Kitchen",
+        "category": "Home & Kitchen",
+        "sales_rank": null
+      },
+      "screened": {
+        "weight_ok": false,
+        "not_amazon_seller": true,
+        "low_competition": true,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "beauty",
+        "query": "collagen powder",
+        "token": "p_ytkzvs29am",
+        "name": "Vital Proteins Collagen Peptides Unflavored 10 oz",
+        "brand": "b_7xgwjjb7p6",
+        "wholesale_usd": 34.9,
+        "faire_retail_usd": 69.8,
+        "faire_margin_usd": 34.9,
+        "reviews": "258",
+        "moq": "0"
+      },
+      "query": "Vital Proteins Collagen Peptides Unflavored 10 oz",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.463,
+        "asin": "B0BWFGX7F5",
+        "title": "Collagen Peptides Powder Unflavored 19.3 OZ Creamer Vanilla",
+        "price": 41.93,
+        "reviews_count": 58,
+        "rating": 4.2
+      },
+      "per_unit_profit": 7.03,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.66,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "Unknown",
+        "buy_box_seller_name": "Vital Proteins",
+        "fba_fee": 5.25,
+        "brand": "Vital Proteins",
+        "category": "Health & Household",
+        "sales_rank": 445992
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "travel",
+        "query": "toiletry bottles TSA",
+        "token": "p_hebdyxzy74",
+        "name": "Joan & David the Sport Nylon Double Handle Hanging Toiletry Case",
+        "brand": "b_e7patoizvp",
+        "wholesale_usd": 14.0,
+        "faire_retail_usd": 78.0,
+        "faire_margin_usd": 64.0,
+        "reviews": "45",
+        "moq": "0"
+      },
+      "query": "Joan & David the Sport Nylon Double Handle Hanging Toiletry Case",
+      "amazon_count": 18,
+      "match": {
+        "sim": 0.3,
+        "asin": "B06XHCWX79",
+        "title": "Travelon Compact Hanging Toiletry Kit",
+        "price": 20.0,
+        "reviews_count": 1247,
+        "rating": 4.4
+      },
+      "per_unit_profit": 6.0,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 0.220462,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": null,
+        "fba_fee": 4.75,
+        "brand": "Travelon",
+        "category": "Beauty & Personal Care",
+        "sales_rank": 23926
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    },
+    {
+      "faire": {
+        "cat": "auto",
+        "query": "visor organizer",
+        "token": "p_p9b4h6uzve",
+        "name": "Hanging Cap Organizer For Up To 15 Caps",
+        "brand": "b_efec8ahdtv",
+        "wholesale_usd": 15.99,
+        "faire_retail_usd": 79.99,
+        "faire_margin_usd": 64.0,
+        "reviews": "26",
+        "moq": "0"
+      },
+      "query": "Hanging Cap Organizer For Up To 15 Caps",
+      "amazon_count": 48,
+      "match": {
+        "sim": 0.44,
+        "asin": "B0CJ7BLKM8",
+        "title": "10-Pocket Hanging Hat Organizer for Closet, Hold Up to 100 Caps. Many uses.",
+        "price": 21.99,
+        "reviews_count": 261,
+        "rating": 4.6
+      },
+      "per_unit_profit": 6.0,
+      "detail": {
+        "source": "bright_data",
+        "weight_lbs": 1.4,
+        "total_sellers": null,
+        "fba_sellers": null,
+        "fbm_sellers": null,
+        "amazon_sellers": null,
+        "buy_box_fulfillment": "FBA",
+        "buy_box_seller_name": "Perfect Curve Inc",
+        "fba_fee": 6.1,
+        "brand": "Perfect Curve",
+        "category": "Home & Kitchen",
+        "sales_rank": 451421
+      },
+      "screened": {
+        "weight_ok": true,
+        "not_amazon_seller": true,
+        "low_competition": false,
+        "fbm_preferred": false
+      }
+    }
+  ],
+  "last_error": null
+}

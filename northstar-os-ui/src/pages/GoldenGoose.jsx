@@ -3,28 +3,28 @@ import Icon from '../components/Icon.jsx'
 import { PageHead, Card, Metric } from '../ui.jsx'
 import { api } from '../services/api.js'
 
+const fmtMoney = (v) => (v === null || v === undefined ? '—' : `$${Number(v).toFixed(2)}`)
+const fmtPct = (v) => (v === null || v === undefined ? '—' : `${v}%`)
+
 function scoreDeals(items) {
+  // 1C-03R: backend-authoritative. No local fee/net/ROI/margin/score math.
+  // Unknown values stay null (never 0).
   return items
     .map((it) => {
-      // Scanner product (has real economics) OR match record
-      const price = it.amazon_price || it.price || 0
-      const cost = it.costco_cost || it.quantity_match?.costco_sku?.costco_cost_reference || 0
-      const net = it.net_profit ?? (price ? price - price * 0.15 - (price > 59 ? 5.55 : price > 19 ? 4.6 : 3.4) - (cost + cost * 0.08) : 0)
-      const roi = it.roi_pct ?? (cost + cost * 0.08 > 0 ? (net / (cost + cost * 0.08)) * 100 : 0)
-      const score = it.opportunity_score ?? Math.round(clamp(net * 3, 0, 60) + clamp(roi, 0, 80) * 0.35 + 10)
+      const num = (v) => (v === null || v === undefined || v === '' || Number.isNaN(Number(v)) ? null : Number(v))
       return {
         asin: it.asin,
         title: it.name || it.title,
-        net: +net.toFixed(2),
-        marginPct: price ? +(net / price * 100).toFixed(1) : 0,
-        roiPct: +roi.toFixed(1),
-        rating: it.rating?.value || null,
-        score,
-        monthlySales: it.monthly_sales_estimate || null
+        net: num(it.net_profit),
+        marginPct: num(it.margin_on_revenue ?? it.margin_pct),
+        roiPct: num(it.roi_pct),
+        rating: it.rating?.value ?? null,
+        score: num(it.opportunity_score),
+        monthlySales: it.monthly_sales_estimate ?? null
       }
     })
-    .filter(Boolean)
-    .sort((a, b) => b.score - a.score)
+    .filter((d) => d.asin)
+    .sort((a, b) => (b.score ?? -1) - (a.score ?? -1))
     .slice(0, 50)
 }
 
@@ -65,7 +65,7 @@ export default function GoldenGoose({ toast }) {
     })()
   }, [])
 
-  const filtered = deals.filter((d) => d.score >= minScore)
+  const filtered = deals.filter((d) => (d.score ?? -1) >= minScore)
 
   return (
     <div className="page">
@@ -99,11 +99,11 @@ export default function GoldenGoose({ toast }) {
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 600, fontSize: 13 }}>{d.title.length > 70 ? d.title.slice(0, 70) + '…' : d.title}</div>
                     <div className="text-low" style={{ fontSize: 11 }}>
-                      <span className="mono">{d.asin}</span> · est. net <span className="text-lime mono">${d.net.toFixed(2)}</span> · ROI <span className="text-lime mono">{d.roiPct}%</span>{d.rating ? ` · ★ ${d.rating}` : ''}
+                      <span className="mono">{d.asin}</span> · est. net <span className="text-lime mono">{fmtMoney(d.net)}</span> · ROI <span className="text-lime mono">{fmtPct(d.roiPct)}</span>{d.rating ? ` · ★ ${d.rating}` : ''}
                     </div>
                   </div>
-                  <span className="badge badge-live">{d.marginPct}%</span>
-                  <span className={`status-pill ${d.score >= 70 ? 'on' : d.score >= 50 ? 'warn' : 'off'}`}>{d.score}/100</span>
+                  <span className="badge badge-live">{fmtPct(d.marginPct)}</span>
+                  <span className={`status-pill ${d.score == null ? 'off' : d.score >= 70 ? 'on' : d.score >= 50 ? 'warn' : 'off'}`}>{d.score == null ? '—' : `${d.score}/100`}</span>
                   <button
                     className="btn btn-ghost"
                     style={{ padding: '4px 10px' }}
@@ -124,7 +124,7 @@ export default function GoldenGoose({ toast }) {
         <Card title="Snapshot" icon="gauge">
           <div className="metric">
             <Metric k="Deals Scored" v={deals.length} d="live catalog" tone="glow" />
-            <Metric k="Score ≥ 70" v={deals.filter((d) => d.score >= 70).length} d="top-tier" tone="lime" />
+            <Metric k="Score ≥ 70" v={deals.filter((d) => (d.score ?? -1) >= 70).length} d="top-tier" tone="lime" />
             <Metric k="Qualified" v={filtered.length} d={`at ≥ ${minScore}`} tone="lime" />
           </div>
         </Card>

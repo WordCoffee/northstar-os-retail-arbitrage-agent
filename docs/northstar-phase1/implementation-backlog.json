@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "phase": "1A",
+    "generated_at": "2026-09-23",
+    "priorities": {"P0": "required before meaningful service UI", "P1": "first controlled customer workflows", "P2": "expanded capability", "P3": "later optimization"},
+    "sizes": ["S", "M", "L", "XL"],
+    "no_calendar_estimates": true
+  },
+  "items": [
+    {"id": "P0-01", "priority": "P0", "module": "identity", "value": "login/register/org", "dependencies": [], "size": "L", "provider": false, "owner": false},
+    {"id": "P0-02", "priority": "P0", "module": "modes", "value": "sandbox/prod/preview separation", "dependencies": ["P0-01"], "size": "L", "provider": false, "owner": true},
+    {"id": "P0-03", "priority": "P0", "module": "catalog", "value": "canonical product identity + migration M1-M5", "dependencies": ["P0-01"], "size": "XL", "provider": false, "owner": true},
+    {"id": "P0-04", "priority": "P0", "module": "provider", "value": "provider registry/gates/budgets", "dependencies": ["P0-01"], "size": "L", "provider": false, "owner": false},
+    {"id": "P0-05", "priority": "P0", "module": "usage", "value": "real metered credits ledger", "dependencies": ["P0-01", "P0-04"], "size": "L", "provider": false, "owner": true},
+    {"id": "P0-06", "priority": "P0", "module": "audit", "value": "unified audit", "dependencies": ["P0-01"], "size": "M", "provider": false, "owner": false},
+    {"id": "P0-07", "priority": "P0", "module": "design_system", "value": "professional design system", "dependencies": [], "size": "L", "provider": false, "owner": false},
+    {"id": "P0-08", "priority": "P0", "module": "frontend_shell", "value": "canonical app served by FastAPI", "dependencies": ["P0-01", "P0-07"], "size": "L", "provider": false, "owner": false},
+    {"id": "P0-09", "priority": "P0", "module": "jobs", "value": "async job runner", "dependencies": ["P0-04"], "size": "M", "provider": false, "owner": false},
+    {"id": "P0-10", "priority": "P0", "module": "help", "value": "tours/help infrastructure", "dependencies": ["P0-01", "P0-08"], "size": "M", "provider": false, "owner": false},
+    {"id": "P1-01", "priority": "P1", "module": "catalog+market", "value": "Prospector read path on canonical DB", "dependencies": ["P0-03", "P0-09"], "size": "XL", "provider": true, "owner": false},
+    {"id": "P1-02", "priority": "P1", "module": "economics", "value": "single canonical formula set", "dependencies": ["P0-03"], "size": "M", "provider": false, "owner": false},
+    {"id": "P1-03", "priority": "P1", "module": "opportunity", "value": "Golden Goose ranked", "dependencies": ["P1-01", "P1-02"], "size": "L", "provider": false, "owner": false},
+    {"id": "P1-04", "priority": "P1", "module": "keyword", "value": "shared SEO keyword graph", "dependencies": ["P0-03"], "size": "L", "provider": true, "owner": true},
+    {"id": "P1-05", "priority": "P1", "module": "ai_orchestration", "value": "agentic AutothinK", "dependencies": ["P0-05", "P0-09", "P0-03"], "size": "XL", "provider": true, "owner": true},
+    {"id": "P1-06", "priority": "P1", "module": "listing", "value": "OfferChisel draft flow", "dependencies": ["P1-02", "P1-04", "P1-05"], "size": "L", "provider": false, "owner": false},
+    {"id": "P1-07", "priority": "P1", "module": "account", "value": "Account + connections + brand voice", "dependencies": ["P0-01", "P0-07"], "size": "L", "provider": false, "owner": false},
+    {"id": "P1-08", "priority": "P1", "module": "hub", "value": "command center widgets", "dependencies": ["P1-01", "P1-02", "P1-03", "P1-04", "P1-05", "P1-06", "P1-07"], "size": "L", "provider": false, "owner": false},
+    {"id": "P1-09", "priority": "P1", "module": "ledger", "value": "real usage display", "dependencies": ["P0-05"], "size": "M", "provider": false, "owner": false},
+    {"id": "P2-01", "priority": "P2", "module": "monitoring", "value": "The Watch live", "dependencies": ["P1-01", "P0-09"], "size": "L", "provider": true, "owner": false},
+    {"id": "P2-02", "priority": "P2", "module": "rankledger", "value": "RankLedger", "dependencies": ["P1-04", "P2-01"], "size": "L", "provider": true, "owner": true},
+    {"id": "P2-03", "priority": "P2", "module": "rival", "value": "Rival Board", "dependencies": ["P1-04", "P2-01"], "size": "L", "provider": true, "owner": false},
+    {"id": "P2-04", "priority": "P2", "module": "advertising", "value": "Auctioneer analysis", "dependencies": ["P1-02", "P1-04"], "size": "L", "provider": true, "owner": true},
+    {"id": "P2-05", "priority": "P2", "module": "social", "value": "Town Crier full", "dependencies": ["P1-06", "P1-04"], "size": "L", "provider": true, "owner": true},
+    {"id": "P2-06", "priority": "P2", "module": "supplier", "value": "supplier flows + invoice status", "dependencies": ["P0-03", "P1-01"], "size": "L", "provider": true, "owner": true},
+    {"id": "P3-01", "priority": "P3", "module": "brain", "value": "scheduled recurring runs", "dependencies": ["P1-05"], "size": "M", "provider": false, "owner": false},
+    {"id": "P3-02", "priority": "P3", "module": "media", "value": "image/video gen", "dependencies": ["P2-05"], "size": "L", "provider": true, "owner": true},
+    {"id": "P3-03", "priority": "P3", "module": "notifications", "value": "richer delivery", "dependencies": ["P2-01", "P2-05"], "size": "M", "provider": false, "owner": false},
+    {"id": "P3-04", "priority": "P3", "module": "embeddings", "value": "memory retrieval", "dependencies": ["P1-05"], "size": "L", "provider": false, "owner": false},
+    {"id": "P3-05", "priority": "P3", "module": "api", "value": "developer API/webhooks", "dependencies": ["P1-08"], "size": "L", "provider": false, "owner": true},
+    {"id": "P3-06", "priority": "P3", "module": "perf", "value": "scale reads", "dependencies": ["P2-01"], "size": "XL", "provider": false, "owner": false}
+  ]
+}

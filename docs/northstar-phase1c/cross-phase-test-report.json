@@ -1,0 +1,22 @@
+{
+  "phase": "1C-autonomous-sprint",
+  "generated_at": "2026-09-24",
+  "completion": "PARTIAL",
+  "suites": [
+    {"suite": "foundation/sqlite", "command": "python -m pytest Northstar_backend/foundation/tests -q -p no:cacheprovider", "passed": 202, "failed": 0, "skipped": 13, "skipped_reason": "postgres integration tests (FOUNDATION_DB_URL unset)"},
+    {"suite": "economics", "command": "pytest foundation/tests/test_economics.py", "passed": 30, "failed": 0, "skipped": 0},
+    {"suite": "faire", "command": "pytest Northstar_backend/faire_research/tests", "passed": 45, "failed": 0, "skipped": 0}
+  ],
+  "not_run": [
+    {"suite": "postgres integration", "reason": "no disposable PostgreSQL provisioned this session; passed previously (13/13)"},
+    {"suite": "worker/scheduler", "reason": "1C-04 not started"},
+    {"suite": "keyword/import", "reason": "1C-05 not started"},
+    {"suite": "frontend e2e/component/a11y", "reason": "1C-06 not started"},
+    {"suite": "provider suites", "reason": "prohibited (no provider traffic)"},
+    {"suite": "tools/test_chrome.py", "reason": "credential-bearing + external network (prohibited)"}
+  ],
+  "warnings": {"hmac_key_length": "test-fixture short keys only; no functional impact"},
+  "external_providers_contacted": "none",
+  "staging_contacted": false,
+  "production_contacted": false
+}

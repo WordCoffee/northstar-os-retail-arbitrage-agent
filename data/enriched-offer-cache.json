@@ -1,9 +1,9 @@
 {
   "B00QGMOJ4Y": {
     "offer": {
-      "amazon_price": 22.99,
-      "buy_box_price": 22.99,
-      "lowest_price": 22.99,
+      "amazon_price": 21.0,
+      "buy_box_price": 21.0,
+      "lowest_price": 21.0,
       "highest_price": null,
       "total_sellers": null,
       "fba_sellers": null,
@@ -23,54 +23,57 @@
         "Still Water"
       ],
       "category_source_hint": "breadcrumb",
-      "buy_box_seller": "AzTECH",
+      "buy_box_seller": "PrimeBuy Market",
       "buy_box_fulfillment": "FBM",
       "other_sellers_present": true,
       "title": "Kirkland Signature Purified Drinking Water, 16.9 Ounce, 40 Count",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-17T23:26:56.754449+00:00"
+      "enriched_at": "2026-09-23T09:23:44.908669+00:00"
     },
-    "cached_at": "2026-09-17T23:26:56.755756+00:00"
+    "cached_at": "2026-09-23T09:23:44.910473+00:00"
   },
   "B0H1Z32VYW": {
     "offer": {
-      "amazon_price": null,
-      "buy_box_price": null,
-      "lowest_price": null,
+      "amazon_price": 33.99,
+      "buy_box_price": 33.99,
+      "lowest_price": 33.99,
       "highest_price": null,
-      "total_sellers": null,
+      "total_sellers": 3,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
       "highest_price_seller_type": "unknown",
       "monthly_sales_estimate": null,
       "monthly_sales_estimated": false,
-      "fba_fee": null,
+      "fba_fee": 9.9,
       "amazon_category": null,
       "browse_node_id": null,
       "breadcrumb": null,
       "category_source_hint": null,
-      "title": null,
+      "buy_box_seller": "Bobbos 2003",
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
+      "title": "KIRKLAND Signature Women's Travel Pant",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-13T05:09:42.872360+00:00"
+      "enriched_at": "2026-09-23T02:03:16.603444+00:00"
     },
-    "cached_at": "2026-09-13T05:09:42.874689+00:00"
+    "cached_at": "2026-09-23T02:03:16.604647+00:00"
   },
   "B0H1Z2GJYY": {
     "offer": {
-      "amazon_price": 31.99,
-      "buy_box_price": 31.99,
-      "lowest_price": 31.99,
+      "amazon_price": 24.25,
+      "buy_box_price": 24.25,
+      "lowest_price": 24.25,
       "highest_price": null,
-      "total_sellers": null,
+      "total_sellers": 11,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
       "highest_price_seller_type": "unknown",
-      "monthly_sales_estimate": null,
-      "monthly_sales_estimated": false,
+      "monthly_sales_estimate": 50.0,
+      "monthly_sales_estimated": true,
       "fba_fee": 5.25,
       "amazon_category": "Clothing, Shoes & Jewelry",
       "browse_node_id": 7141123011,
@@ -82,12 +85,15 @@
         "Pants"
       ],
       "category_source_hint": "breadcrumb",
+      "buy_box_seller": "Select Pro Sales",
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
       "title": "KIRKLAND Signature Women's Travel Pant",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-08-18T00:48:54.086700+00:00"
+      "enriched_at": "2026-09-23T02:18:44.905477+00:00"
     },
-    "cached_at": "2026-08-18T00:48:54.089856+00:00"
+    "cached_at": "2026-09-23T02:18:44.907011+00:00"
   },
   "B0H1Z19FMH": {
     "offer": {
@@ -1878,7 +1884,7 @@
       "buy_box_price": 129.99,
       "lowest_price": 129.99,
       "highest_price": null,
-      "total_sellers": null,
+      "total_sellers": 11,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
@@ -1895,12 +1901,15 @@
         "Hair Regrowth Treatments"
       ],
       "category_source_hint": "breadcrumb",
+      "buy_box_seller": "KOSLOK",
+      "buy_box_fulfillment": "FBM",
+      "other_sellers_present": true,
       "title": "Kirkland Signature - 5% Minoxidil for Men Hair Growth Treatment Unscented Topical Foam Aerosol - 12 Month Supply ,Kirkland-w3w3",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-13T04:27:31.207135+00:00"
+      "enriched_at": "2026-09-23T06:11:40.052445+00:00"
     },
-    "cached_at": "2026-09-13T04:27:31.207642+00:00"
+    "cached_at": "2026-09-23T06:11:40.055077+00:00"
   },
   "B0154AVVSK": {
     "offer": {
@@ -2083,9 +2092,9 @@
   },
   "B01CZ637O2": {
     "offer": {
-      "amazon_price": 85.59,
-      "buy_box_price": 85.59,
-      "lowest_price": 85.59,
+      "amazon_price": 41.73,
+      "buy_box_price": 41.73,
+      "lowest_price": 41.73,
       "highest_price": null,
       "total_sellers": null,
       "fba_sellers": null,
@@ -2104,20 +2113,23 @@
         "Chondroitin"
       ],
       "category_source_hint": "breadcrumb",
+      "buy_box_seller": null,
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
       "title": "Kirkland Signature Glucosamine with MSM, 375 Tablets",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-13T04:28:13.076938+00:00"
+      "enriched_at": "2026-09-23T02:40:29.764207+00:00"
     },
-    "cached_at": "2026-09-13T04:28:13.077455+00:00"
+    "cached_at": "2026-09-23T02:40:29.765724+00:00"
   },
   "B01EWBH2VM": {
     "offer": {
-      "amazon_price": 47.85,
-      "buy_box_price": 47.85,
-      "lowest_price": 47.85,
+      "amazon_price": 47.75,
+      "buy_box_price": 47.75,
+      "lowest_price": 47.75,
       "highest_price": null,
-      "total_sellers": null,
+      "total_sellers": 17,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
@@ -2134,12 +2146,15 @@
         "CoQ10"
       ],
       "category_source_hint": "breadcrumb",
+      "buy_box_seller": "Elife",
+      "buy_box_fulfillment": "FBA",
+      "other_sellers_present": true,
       "title": "Kirkland Signature CoQ10 300 mg, 200 Softgels",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-13T04:28:17.860184+00:00"
+      "enriched_at": "2026-09-23T02:02:44.055412+00:00"
     },
-    "cached_at": "2026-09-13T04:28:17.860710+00:00"
+    "cached_at": "2026-09-23T02:02:44.056662+00:00"
   },
   "B01FFV68KO": {
     "offer": {
@@ -2240,7 +2255,7 @@
       "buy_box_price": 53.99,
       "lowest_price": 53.99,
       "highest_price": null,
-      "total_sellers": null,
+      "total_sellers": 31,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
@@ -2257,12 +2272,15 @@
         "Hair Regrowth Treatments"
       ],
       "category_source_hint": "breadcrumb",
+      "buy_box_seller": "NSSB Intl. Ltd.,",
+      "buy_box_fulfillment": "FBA",
+      "other_sellers_present": true,
       "title": "Kirkland Minoxidil 5% Extra Strength Men Hair Regrowth (12 Month Supply)",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-13T04:28:33.314498+00:00"
+      "enriched_at": "2026-09-23T09:24:12.426475+00:00"
     },
-    "cached_at": "2026-09-13T04:28:33.315057+00:00"
+    "cached_at": "2026-09-23T09:24:12.428097+00:00"
   },
   "B01LBWZDCA": {
     "offer": {
@@ -2319,9 +2337,9 @@
       "title": "Kirkland Signature Natural Body Wash 27 Fl Oz (Pack of 1)",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-17T23:27:15.518068+00:00"
+      "enriched_at": "2026-09-24T02:49:53.714113+00:00"
     },
-    "cached_at": "2026-09-17T23:27:15.520529+00:00"
+    "cached_at": "2026-09-24T02:49:53.716898+00:00"
   },
   "B01NABAG3F": {
     "offer": {
@@ -3457,16 +3475,16 @@
   },
   "B07N798Y1J": {
     "offer": {
-      "amazon_price": 18.99,
-      "buy_box_price": 18.99,
-      "lowest_price": 18.99,
+      "amazon_price": 7.14,
+      "buy_box_price": 7.14,
+      "lowest_price": 7.14,
       "highest_price": null,
-      "total_sellers": 29,
+      "total_sellers": null,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
       "highest_price_seller_type": "unknown",
-      "monthly_sales_estimate": 866.0,
+      "monthly_sales_estimate": 433.0,
       "monthly_sales_estimated": true,
       "fba_fee": 6.1,
       "amazon_category": "Health & Household",
@@ -3478,15 +3496,15 @@
         "Calcium"
       ],
       "category_source_hint": "breadcrumb",
-      "buy_box_seller": "Superior Products",
-      "buy_box_fulfillment": "FBA",
+      "buy_box_seller": null,
+      "buy_box_fulfillment": "Unknown",
       "other_sellers_present": true,
       "title": "Kirkland Signature Calcium Citrate Magnesium and Zinc, 500 Tablets",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-17T23:26:22.108832+00:00"
+      "enriched_at": "2026-09-24T02:50:10.702707+00:00"
     },
-    "cached_at": "2026-09-17T23:26:22.111041+00:00"
+    "cached_at": "2026-09-24T02:50:10.704477+00:00"
   },
   "B07N7CTW4Q": {
     "offer": {
@@ -3700,16 +3718,16 @@
   },
   "B082HD5KL6": {
     "offer": {
-      "amazon_price": 18.9,
-      "buy_box_price": 18.9,
-      "lowest_price": 18.9,
+      "amazon_price": 18.99,
+      "buy_box_price": 18.99,
+      "lowest_price": 18.99,
       "highest_price": null,
       "total_sellers": null,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
       "highest_price_seller_type": "unknown",
-      "monthly_sales_estimate": 100.0,
+      "monthly_sales_estimate": 200.0,
       "monthly_sales_estimated": true,
       "fba_fee": 4.75,
       "amazon_category": "Grocery & Gourmet Food",
@@ -3720,12 +3738,15 @@
         "Sauces, Gravies & Marinades"
       ],
       "category_source_hint": "breadcrumb",
+      "buy_box_seller": "Daesang America",
+      "buy_box_fulfillment": "FBA",
+      "other_sellers_present": true,
       "title": "Organic Seaweed Roasted 10 17g Kirkland Signature",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-13T04:32:19.456743+00:00"
+      "enriched_at": "2026-09-23T02:02:23.813524+00:00"
     },
-    "cached_at": "2026-09-13T04:32:19.457473+00:00"
+    "cached_at": "2026-09-23T02:02:23.814691+00:00"
   },
   "B083XP5K1G": {
     "offer": {
@@ -3974,9 +3995,9 @@
   },
   "B08B1J4275": {
     "offer": {
-      "amazon_price": 3956.0,
-      "buy_box_price": 3956.0,
-      "lowest_price": 3956.0,
+      "amazon_price": 41.99,
+      "buy_box_price": 41.99,
+      "lowest_price": 41.99,
       "highest_price": null,
       "total_sellers": null,
       "fba_sellers": null,
@@ -3996,15 +4017,15 @@
         "Carbonated Water"
       ],
       "category_source_hint": "breadcrumb",
-      "buy_box_seller": null,
-      "buy_box_fulfillment": "Unknown",
-      "other_sellers_present": false,
+      "buy_box_seller": "AllyDayi",
+      "buy_box_fulfillment": "FBM",
+      "other_sellers_present": true,
       "title": "KIRKLAND SIGNATURE Vita Rain Zero Variety Water Beverage 24/20 Fl Oz Bottles Net Wt 480 Fl Oz",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-17T23:27:57.810289+00:00"
+      "enriched_at": "2026-09-23T02:02:16.249910+00:00"
     },
-    "cached_at": "2026-09-17T23:27:57.811666+00:00"
+    "cached_at": "2026-09-23T02:02:16.251156+00:00"
   },
   "B08B5GZXHN": {
     "offer": {
@@ -4562,12 +4583,12 @@
       "buy_box_price": 25.99,
       "lowest_price": 25.99,
       "highest_price": null,
-      "total_sellers": 14,
+      "total_sellers": 16,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
       "highest_price_seller_type": "unknown",
-      "monthly_sales_estimate": 216.5,
+      "monthly_sales_estimate": 433.0,
       "monthly_sales_estimated": true,
       "fba_fee": null,
       "amazon_category": "Beauty & Personal Care",
@@ -4585,9 +4606,9 @@
       "title": "Kirkland Signature Minoxidil Topical Solution USP 5%, Extra Strength Hair Regrowth Treatment for Men, 6 Months Supply",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-17T23:26:17.852411+00:00"
+      "enriched_at": "2026-09-23T09:23:36.452834+00:00"
     },
-    "cached_at": "2026-09-17T23:26:17.853772+00:00"
+    "cached_at": "2026-09-23T09:23:36.455662+00:00"
   },
   "B09KMH36RF": {
     "offer": {
@@ -4838,17 +4859,17 @@
   },
   "B0C54GXFQ8": {
     "offer": {
-      "amazon_price": 44.85,
-      "buy_box_price": 44.85,
-      "lowest_price": 44.85,
+      "amazon_price": 43.99,
+      "buy_box_price": 43.99,
+      "lowest_price": 43.99,
       "highest_price": null,
       "total_sellers": 43,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
       "highest_price_seller_type": "unknown",
-      "monthly_sales_estimate": null,
-      "monthly_sales_estimated": false,
+      "monthly_sales_estimate": 433.0,
+      "monthly_sales_estimated": true,
       "fba_fee": 7.1,
       "amazon_category": "Sports & Outdoors",
       "browse_node_id": 3375251,
@@ -4860,15 +4881,15 @@
         "Standard Balls"
       ],
       "category_source_hint": "breadcrumb",
-      "buy_box_seller": "Elife",
-      "buy_box_fulfillment": "Unknown",
+      "buy_box_seller": "Mlaags",
+      "buy_box_fulfillment": "FBA",
       "other_sellers_present": true,
       "title": "Kirkland Signature V3.0#1654518 Performance Plus 3-Piece Urethane Covered Golf Ball (2 Dozen, 24 Balls)",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-17T23:25:55.130736+00:00"
+      "enriched_at": "2026-09-24T02:49:46.358280+00:00"
     },
-    "cached_at": "2026-09-17T23:25:55.133300+00:00"
+    "cached_at": "2026-09-24T02:49:46.363561+00:00"
   },
   "B0C6B3RSB8": {
     "offer": {
@@ -6106,46 +6127,16 @@
   },
   "B0F45WF91C": {
     "offer": {
-      "amazon_price": 12.19,
-      "buy_box_price": 12.19,
-      "lowest_price": 12.19,
+      "amazon_price": 11.85,
+      "buy_box_price": 11.85,
+      "lowest_price": 11.85,
       "highest_price": null,
       "total_sellers": null,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
       "highest_price_seller_type": "unknown",
-      "monthly_sales_estimate": null,
-      "monthly_sales_estimated": false,
-      "fba_fee": 6.1,
-      "amazon_category": "Beauty & Personal Care",
-      "browse_node_id": 3760911,
-      "breadcrumb": [
-        "Beauty & Personal Care",
-        "Hair Care",
-        "Hair Loss Products",
-        "Hair Regrowth Treatments"
-      ],
-      "category_source_hint": "breadcrumb",
-      "title": "Kirkland Signature Minoxidil Topical Solution USP 5%, Extra Strength Hair Regrowth Treatment for Men, 6 Months Supply, Total 12 Fl Oz",
-      "offer_data_provider": "brightdata",
-      "enrichment_status": "partial",
-      "enriched_at": "2026-09-13T04:37:38.214787+00:00"
-    },
-    "cached_at": "2026-09-13T04:37:38.215702+00:00"
-  },
-  "B0F7GTX962": {
-    "offer": {
-      "amazon_price": 13.95,
-      "buy_box_price": 13.95,
-      "lowest_price": 13.95,
-      "highest_price": null,
-      "total_sellers": 7,
-      "fba_sellers": null,
-      "fba_sellers_estimated": false,
-      "lowest_price_seller_type": "unknown",
-      "highest_price_seller_type": "unknown",
-      "monthly_sales_estimate": 866.0,
+      "monthly_sales_estimate": 400.0,
       "monthly_sales_estimated": true,
       "fba_fee": 6.1,
       "amazon_category": "Beauty & Personal Care",
@@ -6157,15 +6148,48 @@
         "Hair Regrowth Treatments"
       ],
       "category_source_hint": "breadcrumb",
-      "buy_box_seller": "Fitline Supply",
-      "buy_box_fulfillment": "FBA",
+      "buy_box_seller": null,
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
+      "title": "Kirkland Signature Minoxidil Topical Solution USP 5%, Extra Strength Hair Regrowth Treatment for Men, 6 Months Supply, Total 12 Fl Oz",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T06:11:47.112807+00:00"
+    },
+    "cached_at": "2026-09-23T06:11:47.121185+00:00"
+  },
+  "B0F7GTX962": {
+    "offer": {
+      "amazon_price": 14.99,
+      "buy_box_price": 14.99,
+      "lowest_price": 14.99,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": 1299.0,
+      "monthly_sales_estimated": true,
+      "fba_fee": 6.1,
+      "amazon_category": "Beauty & Personal Care",
+      "browse_node_id": 3760911,
+      "breadcrumb": [
+        "Beauty & Personal Care",
+        "Hair Care",
+        "Hair Loss Products",
+        "Hair Regrowth Treatments"
+      ],
+      "category_source_hint": "breadcrumb",
+      "buy_box_seller": null,
+      "buy_box_fulfillment": "Unknown",
       "other_sellers_present": true,
       "title": "Kirkland Signature Minoxidil Topical Solution USP 5%, Extra Strength Hair Regrowth Treatment for Men, 6 Months Supply",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-17T23:27:02.899746+00:00"
+      "enriched_at": "2026-09-24T02:50:15.610621+00:00"
     },
-    "cached_at": "2026-09-17T23:27:02.901209+00:00"
+    "cached_at": "2026-09-24T02:50:15.612553+00:00"
   },
   "B0F88TL5CC": {
     "offer": {
@@ -6297,7 +6321,7 @@
       "buy_box_price": 32.99,
       "lowest_price": 32.99,
       "highest_price": null,
-      "total_sellers": null,
+      "total_sellers": 2,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
@@ -6315,12 +6339,15 @@
         "Casual"
       ],
       "category_source_hint": "breadcrumb",
+      "buy_box_seller": "ONDIBS",
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
       "title": "KIRKLAND Signature Men\u2019s Stretch Tech Pant",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-13T04:38:01.058748+00:00"
+      "enriched_at": "2026-09-23T02:40:08.547776+00:00"
     },
-    "cached_at": "2026-09-13T04:38:01.059835+00:00"
+    "cached_at": "2026-09-23T02:40:08.549259+00:00"
   },
   "B0FC4TG61M": {
     "offer": {
@@ -6496,16 +6523,16 @@
   },
   "B0FPFMT1MS": {
     "offer": {
-      "amazon_price": 12.65,
-      "buy_box_price": 12.65,
-      "lowest_price": 12.65,
+      "amazon_price": 29.95,
+      "buy_box_price": 29.95,
+      "lowest_price": 29.95,
       "highest_price": null,
       "total_sellers": null,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
       "highest_price_seller_type": "unknown",
-      "monthly_sales_estimate": 4330.0,
+      "monthly_sales_estimate": 866.0,
       "monthly_sales_estimated": true,
       "fba_fee": 5.25,
       "amazon_category": "Beauty & Personal Care",
@@ -6523,9 +6550,9 @@
       "title": "Kirkland Minoxidil for Men Liquid, Extra Strength Hair Regrowth Treatment 5%, 6 Months Supply - Upgraded Dropper Applicator and Bonus Free Guide Included",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-17T23:26:40.892736+00:00"
+      "enriched_at": "2026-09-24T02:49:59.033367+00:00"
     },
-    "cached_at": "2026-09-17T23:26:40.895149+00:00"
+    "cached_at": "2026-09-24T02:49:59.035069+00:00"
   },
   "B0FR2NK7QB": {
     "offer": {
@@ -7662,7 +7689,7 @@
       "buy_box_price": 65.36,
       "lowest_price": 65.36,
       "highest_price": null,
-      "total_sellers": 34,
+      "total_sellers": 33,
       "fba_sellers": null,
       "fba_sellers_estimated": false,
       "lowest_price_seller_type": "unknown",
@@ -7679,14 +7706,377 @@
         "CoQ10"
       ],
       "category_source_hint": "breadcrumb",
-      "buy_box_seller": "3 Elements Co",
+      "buy_box_seller": "Arezzo G",
       "buy_box_fulfillment": "FBA",
       "other_sellers_present": true,
       "title": "Kirkland Signature CoQ10 300 mg., 100 Softgels (3 Pack)",
       "offer_data_provider": "brightdata",
       "enrichment_status": "partial",
-      "enriched_at": "2026-09-17T23:27:24.408178+00:00"
+      "enriched_at": "2026-09-23T10:14:17.382095+00:00"
     },
-    "cached_at": "2026-09-17T23:27:24.410702+00:00"
+    "cached_at": "2026-09-23T10:14:17.413490+00:00"
+  },
+  "B006VRNEFO": {
+    "offer": {
+      "amazon_price": 12.18,
+      "buy_box_price": 12.18,
+      "lowest_price": 12.18,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": 50.0,
+      "monthly_sales_estimated": true,
+      "fba_fee": 5.25,
+      "amazon_category": "Health & Household",
+      "browse_node_id": 3760901,
+      "breadcrumb": [
+        "Health & Household",
+        "Vitamins, Minerals & Supplements",
+        "Vitamins",
+        "Multivitamins"
+      ],
+      "category_source_hint": "breadcrumb",
+      "buy_box_seller": null,
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
+      "title": "Kirkland Signature Daily Multi, 500 Tablets",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T02:03:08.469601+00:00"
+    },
+    "cached_at": "2026-09-23T02:03:08.470932+00:00"
+  },
+  "B0H1Z2D2Y1": {
+    "offer": {
+      "amazon_price": 27.99,
+      "buy_box_price": 27.99,
+      "lowest_price": 27.99,
+      "highest_price": null,
+      "total_sellers": 4,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": null,
+      "amazon_category": null,
+      "browse_node_id": null,
+      "breadcrumb": null,
+      "category_source_hint": null,
+      "buy_box_seller": "More in Stores (SN Recorded)",
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
+      "title": "KIRKLAND Signature Women's Travel Pant",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T02:06:19.790336+00:00"
+    },
+    "cached_at": "2026-09-23T02:06:19.791749+00:00"
+  },
+  "B0H1Z31YZB": {
+    "offer": {
+      "amazon_price": 42.99,
+      "buy_box_price": 42.99,
+      "lowest_price": 42.99,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": 5.25,
+      "amazon_category": "Clothing, Shoes & Jewelry",
+      "browse_node_id": 7141123011,
+      "breadcrumb": [
+        "Clothing, Shoes & Jewelry",
+        "Sport Specific Clothing",
+        "Hiking & Outdoor Recreation",
+        "Women",
+        "Pants"
+      ],
+      "category_source_hint": "breadcrumb",
+      "buy_box_seller": "SaMe Market",
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
+      "title": "KIRKLAND Signature Women's Travel Pant",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T02:06:28.362221+00:00"
+    },
+    "cached_at": "2026-09-23T02:06:28.363604+00:00"
+  },
+  "B0CQVVXS36": {
+    "offer": {
+      "amazon_price": 9.13,
+      "buy_box_price": 9.13,
+      "lowest_price": 9.13,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": 7.1,
+      "amazon_category": "Grocery & Gourmet Food",
+      "browse_node_id": 16310101,
+      "breadcrumb": [
+        "Grocery & Gourmet Food",
+        "Pantry Staples",
+        "Cooking & Baking",
+        "Nuts & Seeds",
+        "Almonds"
+      ],
+      "category_source_hint": "breadcrumb",
+      "buy_box_seller": null,
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
+      "title": "Kirkland Signature Roasted Almonds, Sea Salt, 2.5 Pounds",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T02:07:20.286864+00:00"
+    },
+    "cached_at": "2026-09-23T02:07:20.288030+00:00"
+  },
+  "B09TM8L9L5": {
+    "offer": {
+      "amazon_price": 17.97,
+      "buy_box_price": 17.97,
+      "lowest_price": 17.97,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": 8.2,
+      "amazon_category": "Beauty & Personal Care",
+      "browse_node_id": 3760911,
+      "breadcrumb": [
+        "Beauty & Personal Care",
+        "Skin Care",
+        "Body",
+        "Cleansers",
+        "Body Washes"
+      ],
+      "category_source_hint": "breadcrumb",
+      "buy_box_seller": null,
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
+      "title": "Kirkland Signature Liquid Body Wash, Natural Citrus, 27 fl oz, 2-count",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T02:07:42.494819+00:00"
+    },
+    "cached_at": "2026-09-23T02:07:42.496401+00:00"
+  },
+  "B0BMK2SYLL": {
+    "offer": {
+      "amazon_price": 29.25,
+      "buy_box_price": 29.25,
+      "lowest_price": 29.25,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": 216.5,
+      "monthly_sales_estimated": true,
+      "fba_fee": 4.75,
+      "amazon_category": "Health & Household",
+      "browse_node_id": 3760901,
+      "breadcrumb": [
+        "Health & Household",
+        "Vitamins, Minerals & Supplements",
+        "Chondroitin & Glucosamine",
+        "Combinations"
+      ],
+      "category_source_hint": "breadcrumb",
+      "buy_box_seller": null,
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
+      "title": "Kirkland Signature Glucosamine & Chondroitin, 280 Tablets",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T02:18:52.105526+00:00"
+    },
+    "cached_at": "2026-09-23T02:18:52.106997+00:00"
+  },
+  "B073CDDL1X": {
+    "offer": {
+      "amazon_price": 27.8,
+      "buy_box_price": 27.8,
+      "lowest_price": 27.8,
+      "highest_price": null,
+      "total_sellers": 27,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": 50.0,
+      "monthly_sales_estimated": true,
+      "fba_fee": 12.5,
+      "amazon_category": "Health & Household",
+      "browse_node_id": 3760901,
+      "breadcrumb": [
+        "Health & Household",
+        "Household Supplies",
+        "Paper & Plastic",
+        "Trash, Compost & Lawn Bags",
+        "Trash Bags"
+      ],
+      "category_source_hint": "breadcrumb",
+      "buy_box_seller": "Royal Store",
+      "buy_box_fulfillment": "FBA",
+      "other_sellers_present": true,
+      "title": "Kirkland Signature Drawstring Kitchen Trash Bags - 13 Gallon, 200 Count",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T02:18:56.819083+00:00"
+    },
+    "cached_at": "2026-09-23T02:18:56.820341+00:00"
+  },
+  "B00EXPV502": {
+    "offer": {
+      "amazon_price": 8.99,
+      "buy_box_price": 8.99,
+      "lowest_price": 8.99,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": 100.0,
+      "monthly_sales_estimated": true,
+      "fba_fee": 4.75,
+      "amazon_category": "Health & Household",
+      "browse_node_id": 3760901,
+      "breadcrumb": [
+        "Health & Household",
+        "Vitamins, Minerals & Supplements",
+        "Vitamins",
+        "Vitamin D"
+      ],
+      "category_source_hint": "breadcrumb",
+      "buy_box_seller": null,
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
+      "title": "Kirkland Signature Extra Strength D3 50 mcg, 600 Softgels",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T02:19:05.931231+00:00"
+    },
+    "cached_at": "2026-09-23T02:19:05.932794+00:00"
+  },
+  "B0H1YM3YTK": {
+    "offer": {
+      "amazon_price": 24.95,
+      "buy_box_price": 24.95,
+      "lowest_price": 24.95,
+      "highest_price": null,
+      "total_sellers": 10,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": 5.25,
+      "amazon_category": "Clothing, Shoes & Jewelry",
+      "browse_node_id": 7141123011,
+      "breadcrumb": [
+        "Clothing, Shoes & Jewelry",
+        "Sport Specific Clothing",
+        "Hiking & Outdoor Recreation",
+        "Women",
+        "Pants"
+      ],
+      "category_source_hint": "breadcrumb",
+      "buy_box_seller": "The Shopper's Shop",
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
+      "title": "KIRKLAND Signature Women's Travel Pant",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T02:39:40.181320+00:00"
+    },
+    "cached_at": "2026-09-23T02:39:40.183030+00:00"
+  },
+  "B01NCRITAE": {
+    "offer": {
+      "amazon_price": 27.49,
+      "buy_box_price": 27.49,
+      "lowest_price": 27.49,
+      "highest_price": null,
+      "total_sellers": 21,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": null,
+      "monthly_sales_estimated": false,
+      "fba_fee": 5.25,
+      "amazon_category": "Health & Household",
+      "browse_node_id": 3760901,
+      "breadcrumb": [
+        "Health & Household",
+        "Vitamins, Minerals & Supplements",
+        "Vitamins",
+        "Vitamin D"
+      ],
+      "category_source_hint": "breadcrumb",
+      "buy_box_seller": "Fashion Apparel Zone",
+      "buy_box_fulfillment": "FBA",
+      "other_sellers_present": true,
+      "title": "Kirkland Signature Extra Strength D3 50 mcg., 600 Softgels (2 Pack)",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T06:11:35.725062+00:00"
+    },
+    "cached_at": "2026-09-23T06:11:35.726603+00:00"
+  },
+  "B01M7QUOBB": {
+    "offer": {
+      "amazon_price": 25.44,
+      "buy_box_price": 25.44,
+      "lowest_price": 25.44,
+      "highest_price": null,
+      "total_sellers": null,
+      "fba_sellers": null,
+      "fba_sellers_estimated": false,
+      "lowest_price_seller_type": "unknown",
+      "highest_price_seller_type": "unknown",
+      "monthly_sales_estimate": 300.0,
+      "monthly_sales_estimated": true,
+      "fba_fee": 15.0,
+      "amazon_category": "Pet Supplies",
+      "browse_node_id": 2619533011,
+      "breadcrumb": [
+        "Pet Supplies",
+        "Dogs",
+        "Treats",
+        "Cookies, Biscuits & Snacks"
+      ],
+      "category_source_hint": "breadcrumb",
+      "buy_box_seller": null,
+      "buy_box_fulfillment": "Unknown",
+      "other_sellers_present": true,
+      "title": "Kirkland Signature Dental Chews, 72-Count",
+      "offer_data_provider": "brightdata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-09-23T06:11:53.388791+00:00"
+    },
+    "cached_at": "2026-09-23T06:11:53.390372+00:00"
   }
 }

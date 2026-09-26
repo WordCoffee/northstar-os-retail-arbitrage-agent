@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "phase": 0,
+    "generated_at": "2026-09-23",
+    "evidence_states": ["STATICALLY_CONFIRMED", "RUNTIME_CONFIRMED", "HISTORICALLY_RECORDED", "INFERRED", "UNVERIFIED", "UNKNOWN"],
+    "tests_executed": false
+  },
+  "surfaces": [
+    {
+      "surface": "analysts_desk",
+      "id": "analysts_desk",
+      "name": "Analyst's Desk SPA",
+      "path": "Northstar_backend/static/northstar-os/",
+      "build_status": "static, no build step",
+      "serve_path": "FastAPI /northstar-os (html=True)",
+      "router": "hand-rolled hash router engine.js:86",
+      "backend_connectivity": "zero network by design; only /api/v1/status + /api/v1/models",
+      "reachable_from_launcher": true,
+      "classification": "legacy primary offline-fixture shell",
+      "data_source": "demo-data.js fixtures",
+      "routes": [
+        {"route": "hub", "screen": "Operations Hub", "status": "functional shell", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "sourcescout", "screen": "Prospector (3 tabs)", "status": "functional shell", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "goldengoose", "screen": "Golden Goose", "status": "functional shell", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "listingforge", "screen": "OfferChisel (7 sub-nav tabs)", "status": "functional shell", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "adpilot", "screen": "The Auctioneer", "status": "functional shell", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "socialpulse", "screen": "The Town Crier", "status": "functional shell", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "autothink", "screen": "AutothinK workspace (iframe)", "status": "functional, embeds real engine", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "theledger", "screen": "The Ledger", "status": "functional shell", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "thewatch", "screen": "The Watch", "status": "skeleton", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "rankledger", "screen": "RankLedger", "status": "skeleton", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "rivalboard", "screen": "The Rival Board", "status": "skeleton", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "account", "screen": "Account & Plans", "status": "functional shell", "evidence_state": "STATICALLY_CONFIRMED"}
+      ]
+    },
+    {
+      "surface": "northstar-os-ui",
+      "id": "northstar-os-ui",
+      "name": "SIGNAL React/Vite SPA",
+      "path": "northstar-os-ui/",
+      "build_status": "Vite build (dist/)",
+      "serve_path": "dev/preview :8101 (not served by FastAPI)",
+      "router": "react-router HashRouter App.jsx:47-62",
+      "backend_connectivity": "Vite proxy /api,/health,/autothink,/legal -> :8000",
+      "reachable_from_launcher": false,
+      "classification": "experimental parallel surface",
+      "data_source": "live backend via proxy",
+      "routes": [
+        {"route": "/, /hub", "screen": "Hub", "status": "partial (proxy RUNTIME_CONFIRMED)", "evidence_state": "RUNTIME_CONFIRMED"},
+        {"route": "/ledger", "screen": "Ledger", "status": "partial", "evidence_state": "RUNTIME_CONFIRMED"},
+        {"route": "/prospector", "screen": "Prospector", "status": "partial (cache-first data)", "evidence_state": "RUNTIME_CONFIRMED"},
+        {"route": "/goldengoose", "screen": "Golden Goose", "status": "partial", "evidence_state": "RUNTIME_CONFIRMED"},
+        {"route": "/offerchisel", "screen": "OfferChisel", "status": "partial (uses autothink run)", "evidence_state": "RUNTIME_CONFIRMED"},
+        {"route": "/towncrier", "screen": "The Town Crier", "status": "partial", "evidence_state": "RUNTIME_CONFIRMED"},
+        {"route": "/auctioneer", "screen": "The Auctioneer", "status": "local calc only", "evidence_state": "STATICALLY_CONFIRMED"},
+        {"route": "/autothink", "screen": "AutothinK", "status": "functional", "evidence_state": "RUNTIME_CONFIRMED"},
+        {"route": "/thewatch", "screen": "The Watch", "status": "partial", "evidence_state": "RUNTIME_CONFIRMED"},
+        {"route": "/rankledger", "screen": "RankLedger", "status": "partial", "evidence_state": "RUNTIME_CONFIRMED"},
+        {"route": "/rivalboard", "screen": "The Rival Board", "status": "partial", "evidence_state": "RUNTIME_CONFIRMED"},
+        {"route": "/account", "screen": "Account", "status": "partial", "evidence_state": "RUNTIME_CONFIRMED"},
+        {"route": "*", "screen": "NotFound", "status": "functional", "evidence_state": "STATICALLY_CONFIRMED"}
+      ]
+    },
+    {
+      "surface": "workbench",
+      "id": "workbench",
+      "name": "Workbench (single-file)",
+      "path": "Northstar_backend/static/index.html (735,352 B)",
+      "build_status": "static single file",
+      "serve_path": "FastAPI /workbench (main.py:191-194)",
+      "router": "data-view pills in-file",
+      "backend_connectivity": "/api/kirkland/scanner, /api/kirkland/refresh, /api/golden-goose/opportunities, /api/products/{asin}/offers",
+      "reachable_from_launcher": false,
+      "classification": "legacy power tool",
+      "data_source": "live backend + fixtures",
+      "routes": [
+        {"route": "scout/calculator/profit/risk/cycle/portfolio + hidden v2 workspaces", "screen": "workbench views", "status": "partial", "evidence_state": "STATICALLY_CONFIRMED"}
+      ]
+    },
+    {
+      "surface": "autothink_ui",
+      "id": "autothink_ui",
+      "name": "AutothinK UI",
+      "path": "autothink/ui/index.html",
+      "build_status": "static single file",
+      "serve_path": "FastAPI /autothink mount + standalone :8100",
+      "router": "single page",
+      "backend_connectivity": "/api/autothink/models, /run, /history",
+      "reachable_from_launcher": true,
+      "classification": "primary AutothinK surface",
+      "data_source": "live engine",
+      "routes": [
+        {"route": "/", "screen": "AutothinK workspace", "status": "functional", "evidence_state": "RUNTIME_CONFIRMED"}
+      ]
+    }
+  ],
+  "backend_routes": {
+    "main.py": 69,
+    "golden_goose_router": 7,
+    "autothink_server": 5,
+    "total": 81,
+    "counting_method": "decorator grep (see 17-evidence-index.md §E)"
+  }
+}

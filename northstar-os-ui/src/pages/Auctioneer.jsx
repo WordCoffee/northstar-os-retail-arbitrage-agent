@@ -1,68 +1,110 @@
 import { useState } from 'react'
 import Icon from '../components/Icon.jsx'
 import { PageHead, Card, Metric } from '../ui.jsx'
+import foundationApi from '../foundation/api.js'
 
-// Real Amazon ad economics — break-even ACoS from fee structure
+// NOTE (1C-03R): this page performs NO authoritative business math.
+// All economics come from the canonical backend engine via /economics/compute.
+const FIELDS = [
+  ['selling_price', 'Selling price ($)'],
+  ['acquisition_cost', 'Landed cost ($)'],
+  ['referral_fee_amount', 'Referral fee ($)'],
+  ['fba_fulfillment_fee', 'FBA fulfillment fee ($)'],
+  ['advertising_cost', 'Advertising cost ($)'],
+  ['impressions', 'Impressions'],
+  ['clicks', 'Clicks'],
+  ['orders', 'Orders'],
+]
+
 export default function Auctioneer({ toast }) {
-  const [price, setPrice] = useState(24.99)
-  const [cogs, setCogs] = useState(12.5)
-  const [ctr, setCtr] = useState(0.6)
-  const [conv, setConv] = useState(9)
+  const [form, setForm] = useState({
+    selling_price: '24.99', acquisition_cost: '12.50',
+    referral_fee_amount: '3.75', fba_fulfillment_fee: '4.60',
+    advertising_cost: '0', impressions: '10000', clicks: '60', orders: '5',
+  })
+  const [out, setOut] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [err, setErr] = useState(null)
 
-  const referral = price * 0.15
-  const fulfillment = price > 59 ? 5.55 : price > 19 ? 4.6 : 3.4
-  const gross = price - referral - fulfillment - cogs
-  const breakEvenAcos = price > 0 ? Math.max(0, (gross / price) * 100) : 0
-  const targetAcos = breakEvenAcos * 0.7 // 70% of break-even for profit
-  const cpc = ctr > 0 ? (price * conv / 100 * (targetAcos / 100)) / (ctr / 100) : 0
-  const estSales = 10000 * (ctr / 100) * (conv / 100) // 10k impressions
-  const estSpend = estSales * (targetAcos / 100)
-  const estProfit = estSales * (gross / price) - estSpend
+  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }))
+
+  const compute = async () => {
+    setLoading(true); setErr(null)
+    try {
+      const input = {}
+      for (const [k] of FIELDS) {
+        const v = form[k]
+        if (v === '' || v === undefined) continue
+        input[k] = ['impressions', 'clicks', 'orders'].includes(k) ? parseInt(v, 10) : v
+      }
+      input.currency = 'USD'
+      input.marketplace = 'amazon.com'
+      input.provenance = 'user_supplied'
+      input.total_revenue = form.selling_price // demo scope; labelled below
+      const res = await foundationApi.economicsCompute(input)
+      setOut(res)
+      toast(`Canonical economics computed (${res.formula_version})`, 'ok')
+    } catch (e) {
+      setErr(e.message)
+      toast('Backend required for economics', 'err')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="page">
       <PageHead
         title="The Auctioneer"
-        sub="Amazon Ads Agent — live campaign economics calculator"
-        badges={[{ label: 'live · computed', tone: 'live' }]}
+        sub="Amazon Ads Agent — canonical economics (backend-authoritative)"
+        badges={[{ label: out ? 'live · canonical' : 'canonical engine', tone: 'live' }]}
       />
 
       <div className="stack" style={{ marginTop: 14 }}>
         <Card title="Campaign Economics" icon="auctioneer">
           <div className="grid-2">
             <div className="stack" style={{ gap: 10 }}>
-              {[
-                ['Selling price ($)', price, setPrice, 1],
-                ['Landed COGS ($)', cogs, setCogs, 0.5],
-                ['CTR (%)', ctr, setCtr, 0.1],
-                ['Conversion (%)', conv, setConv, 0.5]
-              ].map(([label, val, setter, step]) => (
-                <label key={label} className="stack" style={{ gap: 4 }}>
+              {FIELDS.map(([k, label]) => (
+                <label key={k} className="stack" style={{ gap: 4 }}>
                   <span className="text-low" style={{ fontSize: 11.5 }}>{label}</span>
-                  <input type="number" className="field" value={val} step={step} onChange={(e) => setter(+e.target.value)} />
+                  <input className="field" value={form[k]} onChange={(e) => set(k, e.target.value)} />
                 </label>
               ))}
+              <button className="btn btn-primary" onClick={compute} disabled={loading}>
+                <Icon name="gauge" size={15} /> {loading ? 'Computing…' : 'Compute (canonical)'}
+              </button>
+              {err && <div className="text-coral" style={{ fontSize: 12 }}>{err}</div>}
             </div>
             <div className="stack">
-              <div className="metric" style={{ gridTemplateColumns: '1fr' }}>
-                <Metric k="Gross Margin / Unit" v={`$${gross.toFixed(2)}`} d={`after ${referral.toFixed(2)} referral + ${fulfillment.toFixed(2)} fulfillment`} tone="glow" />
-                <Metric k="Break-Even ACoS" v={`${breakEvenAcos.toFixed(1)}%`} d="max ad spend % at zero profit" tone="lime" />
-                <Metric k="Target ACoS" v={`${targetAcos.toFixed(1)}%`} d="70% of break-even (profit)" tone="lime" />
-                <Metric k="Est. CPC" v={`$${cpc.toFixed(2)}`} d="implied from CTR + conv" />
-              </div>
+              {out ? (
+                <div className="metric" style={{ gridTemplateColumns: '1fr' }}>
+                  <Metric k="Contribution profit / unit" v={`$${out.contribution_profit_after_ads ?? '—'}`} d={`readiness: ${out.readiness}`} tone="glow" />
+                  <Metric k="Break-even ACoS" v={out.break_even_acos ?? '—'} d="pre-ad contribution / ad revenue" tone="lime" />
+                  <Metric k="Target ACoS" v={out.target_acos ?? '—'} d="policy (not hardcoded)" tone="lime" />
+                  <Metric k="Max CPC" v={out.maximum_cpc != null ? `$${out.maximum_cpc}` : '—'} d="derived from economics + CVR" />
+                  <Metric k="ROI (denominator: landed)" v={out.roi_on_invested_cost ?? '—'} d={out.roi_denominator_label} />
+                  <Metric k="Formula version" v={out.formula_version} d="canonical engine" />
+                </div>
+              ) : (
+                <div className="text-low" style={{ fontSize: 12 }}>
+                  Enter inputs and compute. Values are produced by the canonical backend engine —
+                  this page holds no formulas. Unknown inputs stay unknown (never zero).
+                </div>
+              )}
+              {out && out.missing_inputs?.length > 0 && (
+                <div className="text-low" style={{ fontSize: 11 }}>
+                  Missing inputs: {out.missing_inputs.join(', ')}
+                </div>
+              )}
             </div>
           </div>
         </Card>
 
-        <Card title="Projection (10,000 impressions)" icon="gauge">
-          <div className="metric">
-            <Metric k="Est. Sales" v={estSales.toFixed(0)} d="units" />
-            <Metric k="Est. Ad Spend" v={`$${estSpend.toFixed(2)}`} d="at target ACoS" />
-            <Metric k="Est. Profit" v={`$${estProfit.toFixed(2)}`} d={estProfit >= 0 ? 'net of ads' : 'negative — lower target ACoS'} tone={estProfit >= 0 ? 'lime' : 'coral'} />
-          </div>
-          <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-            <button className="btn btn-primary" onClick={() => toast('Campaign plan built — publishing is gated', 'ok')}>Build campaign plan</button>
-            <button className="btn" onClick={() => toast('Saving to ad plan workspace', 'ok')}>Save</button>
+        <Card title="Notes" icon="alert">
+          <div className="text-low" style={{ fontSize: 12 }}>
+            Backend-authoritative (1C-03). This UI formats decimal strings returned by the
+            engine; it does not define referral/FBA/margin/ACoS formulas. Demo scope only —
+            no live ad data is used.
           </div>
         </Card>
       </div>

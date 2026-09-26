@@ -1,0 +1,87 @@
+{
+  "owner": "Tyrone",
+  "authorization": "2026-09-24 staging provisioning",
+  "started_at": "2026-09-25T12:45:22.917849+00:00",
+  "steps": {
+    "existing_containers": [
+      "northstar-phase1c04-ephemeral|postgres:15|Exited (0) 10 hours ago"
+    ],
+    "staging_env_var_names": [],
+    "no_staging_exists": true,
+    "secrets": {
+      "vault": "C:\\Users\\T2Hol\\AppData\\Local\\northstar\\secrets.vault",
+      "names": [
+        "staging_db_password"
+      ],
+      "master_key_location": "OS-permissioned local file outside repo; env NORTHSTAR_SECRETS_MASTER_KEY"
+    },
+    "container": "northstar-staging",
+    "port": 55433,
+    "ready": true,
+    "preflight": {
+      "migration_id": "foundation-001",
+      "checksum": "90d314caba6882ca",
+      "identity": {
+        "environment": "staging",
+        "host": "1*******1",
+        "database": "n***************g",
+        "migration_id": "foundation-001"
+      },
+      "denylist": true
+    },
+    "backup": {
+      "path": "Northstar_backend\\data\\staging\\staging-pre-migration-20260925T124526Z.sql",
+      "bytes": 695,
+      "verified_non_empty": true
+    },
+    "applied": [
+      {
+        "file": "001_foundation.sql",
+        "duration_ms": 313
+      },
+      {
+        "file": "002_jobs_durable.sql",
+        "duration_ms": 15
+      },
+      {
+        "file": "003_keyword_intel.sql",
+        "duration_ms": 18
+      }
+    ],
+    "post_apply_fingerprint": {
+      "tables": 41,
+      "columns": 424,
+      "tables_hash": "84725eb87d9b832b"
+    },
+    "post_apply_health": {
+      "table_count": 41,
+      "expected_tables": 43
+    }
+  },
+  "summary": {
+    "status": "COMPLETE",
+    "provisioning_approach": "local Docker-based staging box (postgres:15) on loopback \u2014 consistent with repository convention; $0 cost; upgradeable to a managed instance via connection-string change without rebuild",
+    "size_estimate": "single PG container; ample for single-operator + ~50 users",
+    "backup": {
+      "path": "Northstar_backend\\data\\staging\\staging-pre-migration-20260925T124526Z.sql",
+      "bytes": 695,
+      "verified_non_empty": true
+    },
+    "migrations": [
+      {
+        "file": "001_foundation.sql",
+        "duration_ms": 313
+      },
+      {
+        "file": "002_jobs_durable.sql",
+        "duration_ms": 15
+      },
+      {
+        "file": "003_keyword_intel.sql",
+        "duration_ms": 18
+      }
+    ],
+    "rollback": "prepared but NOT executed; Tyrone sole rollback authority",
+    "completed_at": "2026-09-25T12:45:27.992523+00:00"
+  }
+}

@@ -19822,5 +19822,79 @@
       ]
     },
     "cached_at": "2026-09-14T20:20:22.928259+00:00"
+  },
+  "B0F87RXTVC": {
+    "payload": {
+      "asin": "B0F87RXTVC",
+      "offer_data_status": "available",
+      "offer_data_source": "easyparser",
+      "offer_data_fetched_at": "2026-09-23T02:38:51.778Z",
+      "offer_data_note": null,
+      "offer_data_cached": false,
+      "total_sellers": 2,
+      "fba_sellers": 2,
+      "fbm_sellers": 0,
+      "amazon_sellers": 0,
+      "buy_box": {
+        "available": true,
+        "seller_name": "Word Coffee",
+        "seller_id": "A3FIJMKW2J6WIF",
+        "fulfillment": "FBA",
+        "price": 15.99,
+        "shipping": null,
+        "landed_price": null,
+        "condition": "New",
+        "prime": true,
+        "note": null
+      },
+      "offers": [
+        {
+          "seller_name": "Word Coffee",
+          "seller_id": "A3FIJMKW2J6WIF",
+          "fulfillment": "FBA",
+          "is_buy_box_winner": true,
+          "price": null,
+          "shipping": null,
+          "landed_price": null,
+          "condition": "New",
+          "prime": true,
+          "rating": "5.0",
+          "feedback_count": 1,
+          "availability": null,
+          "shipping_free": true,
+          "shipping_text": "FREE delivery Sunday, September 27 on orders shipped by Amazon over $35"
+        },
+        {
+          "seller_name": "Word Coffee",
+          "seller_id": "A3FIJMKW2J6WIF",
+          "fulfillment": "FBA",
+          "is_buy_box_winner": false,
+          "price": null,
+          "shipping": null,
+          "landed_price": null,
+          "condition": "Used - Like New",
+          "prime": true,
+          "rating": "5.0",
+          "feedback_count": 1,
+          "availability": null,
+          "shipping_free": true,
+          "shipping_text": "FREE delivery Sunday, September 27 on orders shipped by Amazon over $35"
+        }
+      ],
+      "offers_returned": 2,
+      "offers_complete": true,
+      "offer_count": 2,
+      "buy_box_price": 15.99,
+      "request_zip_code": "19805",
+      "observed_at": "2026-09-23T02:38:51.778Z",
+      "title": "Word Coffee Mom Affirmation Cards \u2013 Daily Affirmation Cards for New Moms & Pregnant Moms \u2013 Baby Shower & Postpartum Self Care Gift Mama Bear Deck",
+      "credits_used": 70,
+      "credits_remaining": 30,
+      "data_gaps": [
+        "Returned offers may be a subset of the total offer_count; pagination and completeness are not verified.",
+        "Results are ZIP-code and time specific."
+      ]
+    },
+    "cached_at": "2026-09-23T02:38:51.577208+00:00"
   }
 }

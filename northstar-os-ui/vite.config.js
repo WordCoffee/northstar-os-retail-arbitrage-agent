@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  base: '/ui/',  // canonical frontend is served under /ui/ by FastAPI
   plugins: [react()],
   server: {
     port: 8101,

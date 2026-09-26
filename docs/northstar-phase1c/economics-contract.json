@@ -1,0 +1,17 @@
+{
+  "phase": "1C-03",
+  "generated_at": "2026-09-24",
+  "status": "PASS",
+  "evidence_state": "RUNTIME_CONFIRMED",
+  "formula_version": "economics-1.0.0",
+  "module": "Northstar_backend/foundation/economics/",
+  "money_type": "Decimal",
+  "rounding": {"internal_precision": 34, "currency_quantum": "0.01", "rate_quantum": "0.0001", "percent_quantum": "0.01", "mode_default": "ROUND_HALF_UP"},
+  "inputs": ["marketplace","currency","cost_currency","selling_price","acquisition_cost","inbound_freight","prep_cost","label_cost","duties","storage_allocation","referral_fee_rate","referral_fee_amount","fba_fulfillment_fee","closing_fee","variable_closing_fee","other_marketplace_fees","refund_return_reserve","refund_return_reserve_rate","damage_reserve","advertising_cost","ad_attributed_revenue","total_revenue","impressions","clicks","orders","required_post_ad_profit","target_acos","cash_basis","reinvestment_policy_amount","quantity","pack_count","pack_verified","sourcing_verified","documentation_verified","eligibility_confirmed","provenance","confidence","stale","rounding"],
+  "outputs": ["gross_revenue","marketplace_fees","marketplace_payout_before_ads","landed_inventory_cost","pre_ad_contribution","advertising_cost","contribution_profit_after_ads","roi_on_invested_cost","roi_denominator_label","margin_on_revenue","markup_on_cost","break_even_acos","target_acos","tacos","cvr","ctr","cpc","roas","maximum_cpc","cash_available_for_reinvestment","missing_inputs","readiness","purchase_ready","formula_version","explanation"],
+  "readiness_states": ["COMPLETE_VERIFIED","COMPLETE_ESTIMATED","SELLING_PRICE_MISSING","ACQUISITION_COST_MISSING","REFERRAL_FEE_UNKNOWN","FULFILLMENT_FEE_UNKNOWN","PACK_CONFIGURATION_UNRESOLVED","CURRENCY_MISMATCH","PROVENANCE_STALE","SOURCE_UNVERIFIED","NOT_PURCHASE_READY"],
+  "invariants": ["unknown inputs never become zero", "money not computed with binary floats", "roi denominator disclosed (landed_inventory_cost)", "markup is not labelled margin", "target_acos is policy, not a hardcoded constant", "purchase_ready requires economics + sourcing + documentation + eligibility"],
+  "serialization": "money/rates serialized as decimal strings; None stays None",
+  "no_provider_calls": true,
+  "no_db_side_effects": true
+}

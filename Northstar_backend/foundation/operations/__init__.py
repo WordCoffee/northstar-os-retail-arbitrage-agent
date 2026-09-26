@@ -1,0 +1,1 @@
+"""Private beta operations layer (1C-06 / subscriber rules)."""

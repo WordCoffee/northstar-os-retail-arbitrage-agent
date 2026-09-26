@@ -1,0 +1,34 @@
+{
+  "phase": "1C-02",
+  "generated_at": "2026-09-23",
+  "evidence_state": "RUNTIME_CONFIRMED_EPHEMERAL",
+  "migration_id": "foundation-001",
+  "file": "Northstar_backend/migrations_foundation/001_foundation.sql",
+  "checksum_sha256": "20562cac6223dee6d242aafeb4b00b89ce09d2a1ad826dd57ed878f7c76b5500",
+  "table_count": 25,
+  "applied": {"ephemeral": true, "staging": false, "production": false},
+  "drift_check": {"exists": true, "in_sync": true},
+  "current_result": {
+    "ephemeral_apply": "PASS (PostgreSQL 15.19, exit 0, 320ms, 25 tables)",
+    "reapply_no_rollback": "PASS (safe no-op)",
+    "rollback": "PASS (25 drops, 0 tables)",
+    "reapply_after_rollback": "PASS (fingerprint match)",
+    "clean_room": "PASS (fingerprint match, smoke 13/13)"
+  },
+  "history": [
+    {
+      "at": "2026-09-23 (earlier, blocked attempt)",
+      "status": "BLOCKED",
+      "reason": "no PostgreSQL available",
+      "applied": {"ephemeral": false, "staging": false, "production": false}
+    },
+    {
+      "at": "2026-09-23 (1C-02R)",
+      "status": "EPHEMERAL_VALIDATED_STAGING_PENDING",
+      "applied": {"ephemeral": true, "staging": false, "production": false}
+    }
+  ],
+  "staging": "NOT APPLIED — requires explicit owner authorization (see postgres-staging-readiness.json)",
+  "phases_not_started": ["1C-03", "1C-04", "1C-05", "1C-06"],
+  "provider_calls": "none"
+}

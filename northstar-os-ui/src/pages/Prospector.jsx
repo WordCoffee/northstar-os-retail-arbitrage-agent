@@ -3,17 +3,22 @@ import Icon from '../components/Icon.jsx'
 import { PageHead, Card, Metric } from '../ui.jsx'
 import { api } from '../services/api.js'
 
+const NUM = (v) => (v === null || v === undefined || v === '' || Number.isNaN(Number(v)) ? null : Number(v))
+export const fmtMoney = (v) => (v === null || v === undefined ? '—' : `$${Number(v).toFixed(2)}`)
+export const fmtPct = (v) => (v === null || v === undefined ? '—' : `${v}%`)
+
 function fromScanner(product) {
+  // 1C-03R: backend-authoritative. NO local fee/margin/ROI math; unknowns stay null.
   return {
     asin: product.asin,
     title: product.name || product.asin,
-    price: product.amazon_price || 0,
-    cost: product.costco_cost || product.costco_cogs || 0,
-    net: product.net_profit || 0,
-    marginPct: product.amazon_price ? Math.round(((product.net_profit || 0) / product.amazon_price) * 1000) / 10 : 0,
-    roiPct: product.roi_pct || 0,
-    score: product.opportunity_score || 0,
-    monthlySales: product.monthly_sales_estimate || null,
+    price: NUM(product.amazon_price),
+    cost: NUM(product.costco_cost ?? product.costco_cogs),
+    net: NUM(product.net_profit),
+    marginPct: NUM(product.margin_on_revenue ?? product.margin_pct),
+    roiPct: NUM(product.roi_pct),
+    score: NUM(product.opportunity_score),
+    monthlySales: product.monthly_sales_estimate ?? null,
     seller: product.buy_box_seller || null,
     fulfillment: product.buy_box_fulfillment || null,
     fbaFee: product.fba_fee || null,
@@ -23,26 +28,15 @@ function fromScanner(product) {
 }
 
 function fromMatch(it) {
-  const price = it.price || it.buybox_price || 0
-  const cost = it.quantity_match?.costco_sku?.costco_cost_reference || 0
+  // Fallback source carries identity only; NO invented economics.
+  const price = it.price ?? it.buybox_price ?? null
   if (!price) return null
-  const referral = price * 0.15
-  const fulfillment = price > 59 ? 5.55 : price > 19 ? 4.6 : 3.4
-  const landed = cost + cost * 0.08
-  const net = price - referral - fulfillment - landed
   return {
     asin: it.asin,
     title: it.title,
-    price,
-    cost: +cost.toFixed(2),
-    net: +net.toFixed(2),
-    marginPct: price > 0 ? Math.round((net / price) * 1000) / 10 : 0,
-    roiPct: landed > 0 ? Math.round((net / landed) * 1000) / 10 : 0,
-    score: 0,
-    monthlySales: null,
-    seller: null,
-    fulfillment: null,
-    fbaFee: null,
+    price: NUM(price),
+    cost: null, net: null, marginPct: null, roiPct: null, score: null,
+    monthlySales: null, seller: null, fulfillment: null, fbaFee: null,
     match: it.quantity_match?.status || 'PASS',
     fresh: null
   }
@@ -152,10 +146,10 @@ export default function Prospector({ toast }) {
                       <div style={{ fontWeight: 560, fontSize: 12.8 }}>{r.title.length > 75 ? r.title.slice(0, 75) + '…' : r.title}</div>
                       <div className="mono text-low" style={{ fontSize: 10.5 }}>{r.asin}</div>
                     </td>
-                    <td className="mono">${r.price.toFixed(2)}</td>
-                    <td className="mono">${r.cost.toFixed(2)}</td>
-                    <td className="mono text-lime">${r.net.toFixed(2)}</td>
-                    <td className={`mono ${r.roiPct >= 30 ? 'text-lime' : r.roiPct >= 15 ? 'text-glow' : 'text-coral'}`}>{r.roiPct}%</td>
+                    <td className="mono">{fmtMoney(r.price)}</td>
+                    <td className="mono">{fmtMoney(r.cost)}</td>
+                    <td className="mono text-lime">{fmtMoney(r.net)}</td>
+                    <td className={`mono ${r.roiPct == null ? 'text-low' : r.roiPct >= 30 ? 'text-lime' : r.roiPct >= 15 ? 'text-glow' : 'text-coral'}`}>{fmtPct(r.roiPct)}</td>
                     <td className="mono">{r.score ? `${r.score}/100` : '—'}</td>
                     <td className="mono">{r.monthlySales ? r.monthlySales.toFixed(0) : '—'}</td>
                     <td>

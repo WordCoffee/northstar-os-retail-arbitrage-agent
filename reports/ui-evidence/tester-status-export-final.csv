@@ -1,0 +1,2 @@
+organization_id,organization_name,lifecycle_state,plan_tier,subscription_status,invite_status,acceptance_complete,onboarding_complete,monthly_jobs_used,max_jobs_per_month,seats_used,seat_limit,open_tickets,blocker_tickets,last_activity,flags
+f4030d55-adb2-4c88-911e-7df35ec1567c,Local Production,suspended,trial,active,used,True,True,0,5,3,3,1,0,2026-09-25T18:51:49.208686+00:00,['blocked:suspended']

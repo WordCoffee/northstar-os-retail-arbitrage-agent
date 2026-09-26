@@ -147,7 +147,7 @@
   NS.initTheme = function () {
     var saved = null;
     try { saved = localStorage.getItem('northstar_theme'); } catch (e) {}
-    NS.setTheme(saved || 'light');
+    NS.setTheme(saved || 'dark');
     var btn = $id('theme-toggle');
     if (btn) btn.addEventListener('click', NS.toggleTheme);
     var chip = $id('account-chip');

@@ -1,0 +1,19 @@
+{
+  "owner": "Tyrone",
+  "step": "004_financial_integrity (staging)",
+  "applied_at": "2026-09-25T13:42:18.465353+00:00",
+  "backup": {
+    "path": "Northstar_backend\\data\\staging\\staging-pre-004-20260925T134217Z.sql",
+    "bytes": 94789,
+    "verified": true
+  },
+  "migration": "004_financial_integrity.sql",
+  "duration_ms": 31,
+  "post_apply": {
+    "tables": 41,
+    "columns": 425,
+    "uq_job_requests_org_type_idem": true,
+    "audit_correlation_id": true
+  },
+  "rollback": "NOT EXECUTED (Tyrone sole rollback authority)"
+}

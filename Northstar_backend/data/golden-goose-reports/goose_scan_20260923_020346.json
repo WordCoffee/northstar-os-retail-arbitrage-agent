@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "generated_at": "2026-09-23T02:03:46.958523+00:00",
+    "pipeline_version": "0.1.0",
+    "mode": "mock",
+    "elapsed_seconds": 0.0,
+    "scan_complete": true,
+    "scan_timeout_seconds": 300,
+    "scan_budget": {
+      "timeout_seconds": 300,
+      "deadline": 1790129326.9584827,
+      "remaining_seconds": 300.0,
+      "complete": true
+    },
+    "quota_precheck": {
+      "status": "skipped",
+      "reason": "no ledger balance available"
+    },
+    "categories_scanned": [
+      "vitamins-supplements"
+    ],
+    "stores_scanned": [
+      "Costco",
+      "Sam's Club"
+    ],
+    "filters": {
+      "roi_floor": 10.0,
+      "min_monthly_sales": 1000,
+      "max_results": 100
+    },
+    "scan_manifest": {
+      "manifest_kind": "goose.scan",
+      "scan_complete": true,
+      "inputs": {
+        "categories": [
+          "vitamins-supplements"
+        ],
+        "stores": null,
+        "roi_floor": 10.0,
+        "min_monthly_sales": 1000,
+        "max_results": 100,
+        "use_mock": true,
+        "dry_run": false
+      },
+      "provider_versions": {
+        "pipeline_version": "0.1.0"
+      },
+      "env_flags": {
+        "GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED": false,
+        "GOLDEN_GOOSE_LIVE_AUTH_PHRASE": false,
+        "SCANNER_LIVE_ALLOWED": true,
+        "COSTCO_CATALOG_DETAIL_ENABLED": true,
+        "BRIGHTDATA_COSTCO_DETAIL_ENABLED": true,
+        "FIRECRAWL_COSTCO_DETAIL_ENABLED": false
+      },
+      "git_sha": "5cab61922530",
+      "session_tool": "northstar-os-alpha"
+    },
+    "webhook_status": "not_triggered",
+    "tier_regression_alerts": {
+      "code": "ok",
+      "severity": "info",
+      "count": 0,
+      "regressions": [],
+      "channel": null
+    }
+  },
+  "summary": {
+    "total_opportunities": 0,
+    "high_tier_count": 0,
+    "medium_tier_count": 0,
+    "low_tier_count": 0,
+    "reject_count": 0,
+    "estimated_monthly_profit": 0,
+    "average_roi_pct": 0
+  },
+  "opportunities": []
+}

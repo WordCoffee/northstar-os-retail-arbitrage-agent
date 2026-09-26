@@ -1,0 +1,210 @@
+{
+  "source_of_truth": "Northstar_backend/foundation/db.py:SCHEMA",
+  "table_count": 25,
+  "tables": [
+    "organizations",
+    "users",
+    "memberships",
+    "marketplaces",
+    "catalog_products",
+    "product_identifiers",
+    "pack_configs",
+    "variation_relationships",
+    "product_aliases",
+    "unresolved_candidates",
+    "identity_conflicts",
+    "observations",
+    "providers",
+    "job_requests",
+    "job_runs",
+    "usage_events",
+    "pricing_policies",
+    "audit_events",
+    "approval_requests",
+    "approval_decisions",
+    "preview_sessions",
+    "sessions",
+    "suppliers",
+    "supplier_documentation",
+    "ui_preferences"
+  ],
+  "type_mapping": {
+    "id": {
+      "sqlite": "TEXT",
+      "postgres": "TEXT"
+    },
+    "text": {
+      "sqlite": "TEXT",
+      "postgres": "TEXT"
+    },
+    "int": {
+      "sqlite": "INTEGER",
+      "postgres": "BIGINT"
+    },
+    "real": {
+      "sqlite": "REAL",
+      "postgres": "DOUBLE PRECISION"
+    },
+    "bool": {
+      "sqlite": "INTEGER",
+      "postgres": "BOOLEAN"
+    },
+    "json": {
+      "sqlite": "TEXT",
+      "postgres": "JSONB"
+    },
+    "ts": {
+      "sqlite": "TEXT",
+      "postgres": "TIMESTAMPTZ"
+    }
+  },
+  "primary_keys": {
+    "organizations": [
+      "id"
+    ],
+    "users": [
+      "id"
+    ],
+    "memberships": [
+      "id"
+    ],
+    "marketplaces": [
+      "id"
+    ],
+    "catalog_products": [
+      "id"
+    ],
+    "product_identifiers": [
+      "id"
+    ],
+    "pack_configs": [
+      "id"
+    ],
+    "variation_relationships": [
+      "id"
+    ],
+    "product_aliases": [
+      "id"
+    ],
+    "unresolved_candidates": [
+      "id"
+    ],
+    "identity_conflicts": [
+      "id"
+    ],
+    "observations": [
+      "id"
+    ],
+    "providers": [
+      "id"
+    ],
+    "job_requests": [
+      "id"
+    ],
+    "job_runs": [
+      "id"
+    ],
+    "usage_events": [
+      "id"
+    ],
+    "pricing_policies": [
+      "version"
+    ],
+    "audit_events": [
+      "id"
+    ],
+    "approval_requests": [
+      "id"
+    ],
+    "approval_decisions": [
+      "id"
+    ],
+    "preview_sessions": [
+      "id"
+    ],
+    "sessions": [
+      "jti"
+    ],
+    "suppliers": [
+      "id"
+    ],
+    "supplier_documentation": [
+      "id"
+    ],
+    "ui_preferences": [
+      "user_id",
+      "organization_id",
+      "key"
+    ]
+  },
+  "unique_columns": {
+    "organizations": [],
+    "users": [],
+    "memberships": [],
+    "marketplaces": [
+      "code"
+    ],
+    "catalog_products": [],
+    "product_identifiers": [],
+    "pack_configs": [],
+    "variation_relationships": [],
+    "product_aliases": [],
+    "unresolved_candidates": [],
+    "identity_conflicts": [],
+    "observations": [],
+    "providers": [
+      "provider_key"
+    ],
+    "job_requests": [
+      "idempotency_key"
+    ],
+    "job_runs": [],
+    "usage_events": [
+      "idempotency_key"
+    ],
+    "pricing_policies": [],
+    "audit_events": [],
+    "approval_requests": [
+      "idempotency_key"
+    ],
+    "approval_decisions": [],
+    "preview_sessions": [],
+    "sessions": [],
+    "suppliers": [],
+    "supplier_documentation": [],
+    "ui_preferences": []
+  },
+  "identifier_length_check": {
+    "max_column_name_len": 22,
+    "pg_limit": 63,
+    "ok": true
+  },
+  "reserved_word_check": {
+    "hits": [
+      "ui_preferences.key"
+    ],
+    "ok": false,
+    "note": "PG DDL quotes all identifiers, so reserved words are safe even if present"
+  },
+  "equivalence": "generated from one SCHEMA; sqlite_validated + postgres_missing_items==[] (see test_db_schema.py)",
+  "behavior_reviews": [
+    "json->JSONB (explicit dumps/loads)",
+    "bool->BOOLEAN (explicit 0/1 on sqlite)",
+    "ts->TIMESTAMPTZ (ISO text on sqlite; freshness computed in Python)",
+    "no NUMERIC columns in p0 (money added in 1C-03)",
+    "no foreign keys in p0 schema (additive)",
+    "no extensions required",
+    "UNIQUE on idempotency_key/code"
+  ],
+  "ephemeral_validation": {
+    "applied": true,
+    "server": "PostgreSQL 15.19",
+    "tables_created": 25,
+    "column_rows": 234,
+    "pk_unique_constraints": 30,
+    "jsonb_columns_confirmed": true,
+    "boolean_columns_confirmed": true,
+    "timestamptz_columns_confirmed": true,
+    "evidence_state": "RUNTIME_CONFIRMED_EPHEMERAL"
+  }
+}

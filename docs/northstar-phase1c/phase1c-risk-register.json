@@ -1,0 +1,14 @@
+{
+  "phase": "1C",
+  "generated_at": "2026-09-23",
+  "amended_at": "2026-09-23 (1C-02R)",
+  "risks": [
+    {"id": "1C-R2", "title": "PostgreSQL apply/rollback unvalidated", "status": "EPHEMERAL_VALIDATED_STAGING_PENDING", "severity": "medium", "probability": "medium", "area": "database", "evidence": "postgres-ephemeral-validation.json", "blocking_program": false, "what_is_proven": "apply, reapply-no-op, rollback, reapply, clean-room on PostgreSQL 15.19 (ephemeral)", "what_is_not_proven": "staging and production compatibility", "mitigation": "execute the staging plan (postgres-staging-readiness.json) under explicit owner authorization", "history": ["BLOCKED_NO_POSTGRES (earlier attempt)", "EPHEMERAL_VALIDATED_STAGING_PENDING (1C-02R)"], "owner_decision": true},
+    {"id": "1C-R1", "title": "Legacy users not bridged to foundation memberships", "severity": "medium", "probability": "high", "area": "security/integration", "evidence": "legacy-identity-bridge-plan.md", "blocking_program": false, "mitigation": "owner decisions B1-B5; bootstrap-only access until then", "owner_decision": true},
+    {"id": "1C-R3", "title": "JWKS not implemented (static-key model)", "severity": "low", "probability": "low", "area": "security", "evidence": "auth-final-hardening-report.json", "blocking_program": false, "mitigation": "static key acceptable for 1C-01F; adopt JWKS if an IdP is chosen", "owner_decision": false},
+    {"id": "1C-R4", "title": "Foundation session cleanup not scheduled", "severity": "low", "probability": "medium", "area": "hygiene", "evidence": "session-reconciliation-plan.md", "blocking_program": false, "mitigation": "1C-04 scheduled cleanup job", "owner_decision": false},
+    {"id": "1C-R5", "title": "Frontend not serving foundation (1C-06 not started)", "severity": "medium", "probability": "high", "area": "product", "evidence": "phase1c-status.json", "blocking_program": false, "mitigation": "1C-06", "owner_decision": false},
+    {"id": "1C-R6", "title": "No NUMERIC money type yet (money added in 1C-03)", "severity": "medium", "probability": "high", "area": "financial", "evidence": "postgres-behavior-differences.md", "blocking_program": false, "mitigation": "1C-03 canonical economics with Decimal/NUMERIC", "owner_decision": false}
+  ],
+  "summary": {"blocking": 0, "staging_pending": 1, "high": 0, "medium": 4, "low": 2, "owner_decisions_required": 2}
+}

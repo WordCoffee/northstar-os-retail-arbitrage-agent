@@ -1,0 +1,42 @@
+{
+  "phase": "1B",
+  "generated_at": "2026-09-23",
+  "command": "python -m pytest Northstar_backend/foundation/tests -q -p no:cacheprovider",
+  "summary": {"passed": 74, "failed": 0, "skipped": 0, "withheld": 0, "errors": 0},
+  "safety": {
+    "offline": true,
+    "provider_isolated": true,
+    "credential_independent": true,
+    "database_isolated": true,
+    "temp_db_per_test": true,
+    "external_calls": false
+  },
+  "modules": [
+    {"module": "test_identity.py", "tests": 9, "result": "pass"},
+    {"module": "test_permissions.py", "tests": 10, "result": "pass"},
+    {"module": "test_provenance.py", "tests": 5, "result": "pass"},
+    {"module": "test_usage_shadow.py", "tests": 6, "result": "pass"},
+    {"module": "test_jobs.py", "tests": 8, "result": "pass"},
+    {"module": "test_approvals.py", "tests": 7, "result": "pass"},
+    {"module": "test_audit.py", "tests": 3, "result": "pass"},
+    {"module": "test_repositories.py", "tests": 8, "result": "pass"},
+    {"module": "test_api_contracts.py", "tests": 18, "result": "pass"}
+  ],
+  "other_runs": [
+    {"command": "cd northstar-os-ui && npm run build", "result": "success", "modules": 67},
+    {"command": "python -m py_compile Northstar_backend/main.py ...", "result": "success"},
+    {"command": "python -m Northstar_backend.tools.foundation_migrate_dryrun --repo-root . --json", "result": "success (read-only)"},
+    {"command": "uvicorn foundation.app:app (spare port) + curl", "result": "success; server stopped"}
+  ],
+  "withheld": [
+    {"suite": "Northstar_backend/test_*.py (full)", "reason": "broad suite; not required for changed modules; owner approval pending"},
+    {"suite": "*.cjs contract suites", "reason": "unaffected by foundation additions"},
+    {"suite": "provider live suites", "reason": "provider access out of scope"},
+    {"suite": "tools/test_chrome.py", "reason": "hardcoded credentials + external network"}
+  ],
+  "fixes_during_phase": [
+    {"area": "repositories", "change": "BaseRepo.add returns the persisted (serialized) row for consistent reads"},
+    {"area": "usage", "change": "effective_policy parses JSON service_multipliers column"},
+    {"area": "usage", "change": "reversal accounting model: append-only negative ADJUSTED entry; balance = granted - consumed - adjustments"}
+  ]
+}

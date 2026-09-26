@@ -1,0 +1,32 @@
+{
+  "phase": "1C-03",
+  "generated_at": "2026-09-24",
+  "canonical_engine": "Northstar_backend/foundation/economics/engine.py:compute",
+  "formula_version": "economics-1.0.0",
+  "metrics": [
+    {"name": "GROSS_REVENUE", "authority": "engine", "definition": "selling_price * quantity"},
+    {"name": "MARKETPLACE_FEES", "authority": "engine", "definition": "referral + fba + closing + variable_closing + other; None if referral or fba unknown"},
+    {"name": "MARKETPLACE_PAYOUT_BEFORE_ADS", "authority": "engine", "definition": "gross - fees"},
+    {"name": "LANDED_INVENTORY_COST", "authority": "engine", "definition": "(acquisition + inbound + prep + label + duties + storage) * quantity"},
+    {"name": "PRE_AD_CONTRIBUTION", "authority": "engine", "definition": "gross - fees - landed - reserves"},
+    {"name": "CONTRIBUTION_PROFIT_AFTER_ADS", "authority": "engine", "definition": "pre_ad - advertising_cost"},
+    {"name": "ROI_ON_INVESTED_COST", "authority": "engine", "definition": "contribution / landed; denominator label disclosed"},
+    {"name": "MARGIN_ON_REVENUE", "authority": "engine", "definition": "contribution / gross"},
+    {"name": "MARKUP_ON_COST", "authority": "engine", "definition": "contribution / landed"},
+    {"name": "BREAK_EVEN_ACOS", "authority": "engine", "definition": "pre_ad / ad_attributed_revenue when known and positive"},
+    {"name": "TARGET_ACOS", "authority": "engine", "definition": "explicit policy or derived from required_post_ad_profit floor (never a hardcoded constant)"},
+    {"name": "TACOS", "authority": "engine", "definition": "advertising_cost / total_revenue (None without total revenue scope)"},
+    {"name": "CTR", "authority": "engine", "definition": "clicks / impressions"},
+    {"name": "CVR", "authority": "engine", "definition": "orders / clicks"},
+    {"name": "CPC", "authority": "engine", "definition": "advertising_cost / clicks"},
+    {"name": "ROAS", "authority": "engine", "definition": "ad_attributed_revenue / advertising_cost"},
+    {"name": "MAXIMUM_CPC", "authority": "engine", "definition": "(pre_ad - required_post_ad_profit) * cvr"},
+    {"name": "CASH_AVAILABLE_FOR_REINVESTMENT", "authority": "engine", "definition": "depends on disclosed cash_basis (payout/settlement/contribution-after-replacement/user-defined)"}
+  ],
+  "legacy_conflicts_resolved": [
+    {"id": "C1", "issue": "two margin definitions (net/price vs net/cost)", "resolution": "single MARGIN_ON_REVENUE = contribution/gross; MARKUP_ON_COST separately named"},
+    {"id": "C2", "issue": "three ACoS implementations", "resolution": "single BREAK_EVEN_ACOS + policy TARGET_ACOS in engine"},
+    {"id": "C3", "issue": "frontend hardcoded 0.15 referral + tier FBA", "resolution": "frontend must consume engine output; no authoritative frontend math"},
+    {"id": "C4", "issue": "multiple compute_economics/profit functions", "resolution": "single compute(); legacy sites delegate via compatibility.py"}
+  ]
+}
