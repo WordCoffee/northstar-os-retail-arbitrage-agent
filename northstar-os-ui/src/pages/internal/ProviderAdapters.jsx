@@ -40,7 +40,7 @@ export default function ProviderAdapters() {
             </div>
             <DataTable columns={[
               { key: 'adapter', label: 'Adapter' },
-              { key: 'status', label: 'Status', render: (v) => <span className={`pill ${v === 'Active' ? 'pill-forest' : v === 'Rate Limited' ? 'pill-warn' : 'pill-muted'}`}>{v}</span> },
+              { key: 'status', label: 'Status', render: (v) => <span className={`pill ${v === 'Active' ? 'pill-muted' : v === 'Rate Limited' ? 'pill-warn' : 'pill-muted'}`} title="Sample/observed adapter state — not a live probe">{v}</span> },
               { key: 'latency', label: 'Latency' },
               { key: 'data', label: 'Data State' },
               { key: 'calls', label: 'Calls (24h)' },
@@ -50,6 +50,9 @@ export default function ProviderAdapters() {
               { adapter: 'Buy Box Monitor', status: 'Rate Limited', latency: '—', data: 'Stale', calls: '3,200' },
               { adapter: 'Review Aggregator', status: 'Idle', latency: '—', data: 'Unavailable', calls: '0' },
             ]} />
+            <div className="text-low" style={{ fontSize: 11, marginTop: 10 }} title="Truth-state rule: green means live-verified only">
+              Adapter states here are sample/observed. Green is reserved for genuinely probe-backed, live-verified outcomes; adverse states keep their distinct colour.
+            </div>
           </div>
         </div>
       )}
@@ -100,11 +103,11 @@ export default function ProviderAdapters() {
             <div className="stack" style={{ gap: 8 }}>
               <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
                 <div style={{ fontSize: 13 }}>Market Price Feed — refresh cadence 2h</div>
-                <span className="pill pill-forest">Configured</span>
+                <span className="pill pill-muted">Configured</span>
               </div>
               <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
                 <div style={{ fontSize: 13 }}>Rank Tracker — refresh cadence 1h</div>
-                <span className="pill pill-forest">Configured</span>
+                <span className="pill pill-muted">Configured</span>
               </div>
               <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
                 <div style={{ fontSize: 13 }}>Buy Box Monitor — rate limit tripped</div>

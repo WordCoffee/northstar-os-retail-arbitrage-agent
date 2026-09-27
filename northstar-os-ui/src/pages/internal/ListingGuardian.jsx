@@ -177,7 +177,7 @@ export default function ListingGuardian() {
 
       {view === 'diffs' && (
         <div className="subview">
-          <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: 20, alignItems: 'start' }}>
+          <div className="split-aside-l">
             <div className="card">
               <div className="card-head">
                 <h3 className="card-title" style={{ fontSize: 15 }}>Detected Changes</h3>
@@ -244,7 +244,7 @@ export default function ListingGuardian() {
 
       {view === 'history' && (
         <div className="subview">
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 320px', gap: 20, alignItems: 'start' }}>
+          <div className="split-aside-r">
             <div className="card">
               <div className="card-head">
                 <h3 className="card-title">Change Timeline</h3>

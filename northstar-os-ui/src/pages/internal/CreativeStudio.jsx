@@ -108,7 +108,7 @@ export default function CreativeStudio() {
 
       {view === 'briefs' && (
         <div className="subview">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 20 }}>
+          <div className="grid-cards-3" style={{ marginBottom: 20 }}>
             {BRIEFS.map(b => (
               <div key={b.id} className="card" style={{ padding: 14 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
@@ -155,7 +155,7 @@ export default function CreativeStudio() {
             <span className="pill pill-muted" style={{ marginRight: 'auto' }}>{active.name} · {VARIANTS.length} variants · sample</span>
             <button className="btn btn-sm" onClick={() => t('Variant added to the set (sample).', 'info')}>Add Variant</button>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
+          <div className="grid-cards-3">
             {VARIANTS.map(v => (
               <div key={v.id} className="card" style={{ padding: 12 }}>
                 <ThumbPlaceholder height={110} label={`${v.aspect} · ${v.format}`} />
@@ -182,7 +182,7 @@ export default function CreativeStudio() {
             ))}
             <button className="btn btn-sm" style={{ marginLeft: 'auto' }} onClick={() => t('Upload accepts images, video, and A+ blocks (sample).', 'info')}>Upload Asset</button>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
+          <div className="grid-cards-3">
             {ASSETS.filter(a => assetFilter === 'All' || a.type === assetFilter).map(a => (
               <div key={a.name} className="card" style={{ padding: 12 }}>
                 <ThumbPlaceholder label={a.type} />
@@ -206,7 +206,7 @@ export default function CreativeStudio() {
           <DataNotice tone="internal" title="Export bundles are prepared, not published">
             Bundles package existing creative for handoff to SocialPulse or ListingForge. Nothing is published or listed from here.
           </DataNotice>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 20, alignItems: 'start' }}>
+          <div className="split-aside">
             <div className="card">
               <div className="card-head">
                 <h3 className="card-title">Bundle Builder — {active.name}</h3>
@@ -265,7 +265,7 @@ export default function CreativeStudio() {
               <h3 className="card-title">Creative Collections</h3>
               <span className="pill pill-muted">brand library · sample</span>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
+            <div className="grid-cards-4">
               {COLLECTIONS.map(c => (
                 <div key={c.name} className="card" style={{ padding: 14 }}>
                   <ThumbPlaceholder height={72} label="collection" note={`${c.count} items`} />

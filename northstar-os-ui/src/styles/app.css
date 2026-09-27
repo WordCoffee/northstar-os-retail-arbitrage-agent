@@ -404,3 +404,17 @@ tbody tr:last-child td { border-bottom: none; }
 .subview { animation: fadeIn var(--t-normal); }
 .workbench .card { margin-bottom: 14px; padding: 16px 18px; }
 .workbench .card-head { margin-bottom: 12px; }
+
+/* ── RESPONSIVE ROOM GRIDS (phone-width hardening) ──
+   Desktop keeps the fixed compositions; at phone widths card grids become
+   horizontally scrollable with an affordance and two-pane layouts stack. */
+.grid-cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.grid-cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.split-aside { display: grid; grid-template-columns: 1fr 360px; gap: 20px; align-items: start; }
+.split-aside-l { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
+.split-aside-r { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+@media (max-width: 900px) {
+  .grid-cards-3 { grid-template-columns: repeat(3, minmax(220px, 1fr)); overflow-x: auto; padding-bottom: 6px; }
+  .grid-cards-4 { grid-template-columns: repeat(4, minmax(200px, 1fr)); overflow-x: auto; padding-bottom: 6px; }
+  .split-aside, .split-aside-l, .split-aside-r { grid-template-columns: 1fr; }
+}
