@@ -18,10 +18,16 @@ const ALERTS = [
 ]
 
 const SERVICES = [
-  { svc: 'FastAPI backend', state: 'Unreachable', tone: 'pill-error', basis: 'Health probe' },
-  { svc: 'Provider Adapters', state: 'Rate limited', tone: 'pill-warn', basis: 'Adapter state' },
-  { svc: 'UI build', state: 'Healthy', tone: 'pill-forest', basis: 'Build check' },
-  { svc: 'Screenshot pipeline', state: 'Healthy', tone: 'pill-forest', basis: 'Pipeline check' },
+  { svc: 'FastAPI backend', state: 'Unreachable', tone: 'pill-error', basis: 'Health probe (sample)', live: false },
+  { svc: 'Provider Adapters', state: 'Rate limited', tone: 'pill-warn', basis: 'Adapter state (sample)', live: false },
+  { svc: 'UI build', state: 'Healthy', tone: 'pill-muted', basis: 'Build check (sample)', live: false },
+  { svc: 'Screenshot pipeline', state: 'Healthy', tone: 'pill-muted', basis: 'Pipeline check (sample)', live: false },
+]
+
+const DESTINATIONS = [
+  { label: 'Shared Data Layer', route: '/shared-data', context: 'sources & freshness', match: 'Shared Data Layer' },
+  { label: 'Provider Adapters', route: '/provider-adapters', context: 'runs & spend', match: 'Provider Adapters' },
+  { label: 'Commerce Ops', route: '/commerce-ops', context: 'inventory & approvals', match: 'Commerce Ops' },
 ]
 
 const STALENESS = [
@@ -75,10 +81,24 @@ export default function Monitoring() {
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Where to investigate</h3>
+              <span className="pill pill-muted">routes to source-of-truth</span>
             </div>
-            <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
-              <button className="btn btn-sm btn-ghost" onClick={() => navigate('/shared-data')}>Shared Data Layer — sources &amp; freshness</button>
-              <button className="btn btn-sm btn-ghost" onClick={() => navigate('/provider-adapters')}>Provider Adapters — runs &amp; spend</button>
+            <div className="stack" style={{ gap: 8 }}>
+              {DESTINATIONS.map(d => {
+                const count = ALERTS.filter(a => a.source === d.match).length
+                return (
+                  <div key={d.label} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 500 }}>{d.label}</div>
+                      <div className="text-low" style={{ fontSize: 11 }}>{d.context}</div>
+                    </div>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                      <span className={`pill ${count ? 'pill-clay' : 'pill-muted'}`} title="Active alerts pointing at this room">{count} alert{count === 1 ? '' : 's'}</span>
+                      <button className="btn btn-sm btn-ghost" onClick={() => navigate(d.route)}>Open</button>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -117,10 +137,13 @@ export default function Monitoring() {
                   <div style={{ fontSize: 13 }}>{s.svc}</div>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <span className="pill pill-muted" style={{ fontSize: 10 }} title="How this state is determined">{s.basis}</span>
-                    <span className={`pill ${s.tone}`}>{s.state}</span>
+                    <span className={`pill ${s.tone}`} title={s.live ? 'Live probe-backed check' : 'Sample-derived — not live-verified'}>{s.state}</span>
                   </div>
                 </div>
               ))}
+            </div>
+            <div className="text-low" style={{ fontSize: 11, marginTop: 10 }} title="Truth-state rule: green means live-verified only">
+              Green is reserved for live probe-backed checks. Sample-derived checks are muted; adverse states keep their distinct colour.
             </div>
           </div>
         </div>

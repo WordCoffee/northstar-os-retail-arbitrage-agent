@@ -1,4 +1,4 @@
-import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
+import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -45,7 +45,24 @@ const COLLECTIONS = [
 
 const EXPORT_OUTPUTS = ['Ad creatives', 'Social variants', 'Listing imagery']
 
+const TOTAL_COLLECTION_ITEMS = COLLECTIONS.reduce((n, c) => n + c.count, 0)
+
 const VAR_STATE_PILL = { Approved: 'pill-muted', 'In Review': 'pill-warn', Draft: 'pill-muted', 'Changes Requested': 'pill-ochre' }
+
+function ThumbPlaceholder({ height = 90, label, note = 'no preview · sample' }) {
+  return (
+    <div style={{
+      height, borderRadius: 6, marginBottom: 10,
+      border: '1px dashed var(--divider-mid)',
+      background: 'repeating-linear-gradient(45deg, rgba(138,138,122,0.07) 0 6px, transparent 6px 12px)',
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3,
+      color: 'var(--ink-soft)',
+    }} title="Placeholder — sample record, not a failed image load">
+      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: 0.06, textTransform: 'uppercase' }}>{label}</span>
+      <span style={{ fontSize: 10 }}>{note}</span>
+    </div>
+  )
+}
 
 export default function CreativeStudio() {
   const { toast } = useToast()
@@ -141,9 +158,7 @@ export default function CreativeStudio() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
             {VARIANTS.map(v => (
               <div key={v.id} className="card" style={{ padding: 12 }}>
-                <div style={{ height: 110, borderRadius: 6, background: 'linear-gradient(135deg, rgba(196,148,26,0.10), rgba(138,138,122,0.10))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: 'var(--ink-soft)', marginBottom: 10 }}>
-                  {v.aspect} · {v.format}
-                </div>
+                <ThumbPlaceholder height={110} label={`${v.aspect} · ${v.format}`} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <strong style={{ fontSize: 12 }}>{v.id}</strong>
                   <span className={`pill ${VAR_STATE_PILL[v.state] || 'pill-muted'}`} style={{ fontSize: 10 }} title="Internal review state">{v.state}</span>
@@ -170,9 +185,7 @@ export default function CreativeStudio() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
             {ASSETS.filter(a => assetFilter === 'All' || a.type === assetFilter).map(a => (
               <div key={a.name} className="card" style={{ padding: 12 }}>
-                <div style={{ height: 90, borderRadius: 6, background: 'linear-gradient(135deg, rgba(138,138,122,0.10), rgba(45,106,45,0.08))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: 'var(--ink-soft)', marginBottom: 10 }}>
-                  {a.type} asset
-                </div>
+                <ThumbPlaceholder label={a.type} />
                 <div style={{ fontSize: 12, fontWeight: 500, marginBottom: 6 }}>{a.name}</div>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   <span className="pill pill-muted" style={{ fontSize: 10 }}>{a.collection}</span>
@@ -241,6 +254,12 @@ export default function CreativeStudio() {
 
       {view === 'library' && (
         <div className="subview">
+          <MetricTiles columns={4} metrics={[
+            { label: 'Collections', value: String(COLLECTIONS.length), sub: 'Brand library · sample' },
+            { label: 'Assets in library', value: String(TOTAL_COLLECTION_ITEMS), sub: 'Across all collections · sample' },
+            { label: 'Largest collection', value: 'Product photography', sub: '38 items · sample' },
+            { label: 'Most recent addition', value: 'UNREVIEWED item', sub: 'Needs review — not an authorization' },
+          ]} />
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Creative Collections</h3>
@@ -249,7 +268,7 @@ export default function CreativeStudio() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
               {COLLECTIONS.map(c => (
                 <div key={c.name} className="card" style={{ padding: 14 }}>
-                  <div style={{ height: 72, borderRadius: 6, background: 'linear-gradient(135deg, rgba(45,106,45,0.10), rgba(196,148,26,0.10))', marginBottom: 10 }} />
+                  <ThumbPlaceholder height={72} label="collection" note={`${c.count} items`} />
                   <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{c.name}</div>
                   <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>{c.note}</div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -258,6 +277,9 @@ export default function CreativeStudio() {
                   </div>
                 </div>
               ))}
+            </div>
+            <div className="text-low" style={{ fontSize: 11, marginTop: 14 }} title="Library is a sample inventory — not publishing or purchase authorization">
+              Collection counts are sample inventory. Opening a collection never publishes or authorizes anything.
             </div>
           </div>
         </div>

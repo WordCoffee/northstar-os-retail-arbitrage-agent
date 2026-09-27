@@ -29,17 +29,33 @@ const WARNINGS = [
 ]
 
 const DIFFS = [
-  { id: 'DF-01', asin: 'B08L5VJQ7T', field: 'Title', before: 'Premium Water Filter — 5 Stage', after: 'Premium Water Filter — Best 5 Stage (Organic)', severity: 'High', date: '2026-09-26' },
-  { id: 'DF-02', asin: 'B08N5WRWNW', field: 'Price', before: '$29.99', after: '$24.99', severity: 'Low', date: '2026-09-24' },
-  { id: 'DF-03', asin: 'B07XJ8C9F3', field: 'Bullet 2', before: 'Universal fit with 3M adhesive', after: 'Compatible with most phones', severity: 'Medium', date: '2026-09-23' },
+  { id: 'DF-01', asin: 'B08L5VJQ7T', field: 'Title', before: 'Premium Water Filter — 5 Stage', after: 'Premium Water Filter — Best 5 Stage (Organic)', severity: 'High', date: '2026-09-26', state: 'CACHED' },
+  { id: 'DF-02', asin: 'B08N5WRWNW', field: 'Price', before: '$29.99', after: '$24.99', severity: 'Low', date: '2026-09-24', state: 'OBSERVED' },
+  { id: 'DF-03', asin: 'B07XJ8C9F3', field: 'Bullet 2', before: 'Universal fit with 3M adhesive', after: 'Compatible with most phones', severity: 'Medium', date: '2026-09-23', state: 'OBSERVED' },
 ]
 
 const HISTORY = [
-  { id: 'AL-003', event: 'Price change resolved — within tolerance', date: '2026-09-24', state: 'OBSERVED' },
-  { id: 'AL-002', event: 'Rank drop flagged — monitoring window open', date: '2026-09-25', state: 'OBSERVED' },
-  { id: 'AL-001', event: 'Content change detected — diff captured', date: '2026-09-26', state: 'CACHED' },
-  { id: 'AL-004', event: 'New competitor surfaced historically', date: '2026-09-23', state: 'HISTORICAL' },
+  { id: 'AL-001', event: 'Content change detected — diff captured', type: 'Content Change', asin: 'B08L5VJQ7T', severity: 'High', date: '2026-09-26', state: 'CACHED' },
+  { id: 'AL-002', event: 'Rank drop flagged — monitoring window open', type: 'Rank Drop', asin: 'B09M8KJ4X2', severity: 'Medium', date: '2026-09-25', state: 'OBSERVED' },
+  { id: 'AL-003', event: 'Price change resolved — within tolerance', type: 'Price Change', asin: 'B08N5WRWNW', severity: 'Low', date: '2026-09-24', state: 'OBSERVED' },
+  { id: 'AL-004', event: 'New competitor surfaced historically', type: 'New Competitor', asin: 'B07XJ8C9F3', severity: 'High', date: '2026-09-23', state: 'HISTORICAL' },
 ]
+
+const HISTORY_BY_TYPE = Object.values(HISTORY.reduce((m, h) => {
+  (m[h.type] = m[h.type] || { type: h.type, count: 0, severities: [] })
+  m[h.type].count += 1
+  m[h.type].severities.push(h.severity)
+  return m
+}, {}))
+
+const HISTORY_BY_STATE = Object.values(HISTORY.reduce((m, h) => {
+  (m[h.state] = m[h.state] || { state: h.state, count: 0 })
+  m[h.state].count += 1
+  return m
+}, {}))
+
+const SEV_ORDER = { High: 3, Medium: 2, Low: 1 }
+const highestSeverity = (list) => list.reduce((a, b) => (SEV_ORDER[b] > SEV_ORDER[a] ? b : a), 'Low')
 
 const ESCALATIONS = [
   { id: 'ES-01', asin: 'B08L5VJQ7T', reason: 'Prohibited claim in title', target: 'ListingForge', state: 'Awaiting Review', age: '4h' },
@@ -54,6 +70,19 @@ const RULES = [
 ]
 
 const statePill = (s) => <span className="pill pill-muted" title={s === 'CACHED' ? 'Derived from cached sample data — may be stale' : s === 'HISTORICAL' ? 'Historical record — not current state' : 'Directly observed event (sample data)'}>{s}</span>
+
+const SEV_DOT = {
+  High: { background: 'var(--status-error-soft)', color: 'var(--status-error)' },
+  Medium: { background: 'var(--status-warn-soft)', color: 'var(--status-warn)' },
+  Low: { background: 'var(--status-unknown-soft)', color: 'var(--status-unknown)' },
+}
+
+const fieldGlyph = (field) => {
+  if (/title/i.test(field)) return 'T'
+  if (/price/i.test(field)) return '$'
+  if (/bullet/i.test(field)) return 'B'
+  return '•'
+}
 
 export default function ListingGuardian() {
   const { toast } = useToast()
@@ -155,11 +184,31 @@ export default function ListingGuardian() {
                 <span className="pill pill-muted">{DIFFS.length}</span>
               </div>
               <div className="stack" style={{ gap: 8 }}>
-                {DIFFS.map(d => (
-                  <button key={d.id} className={`filter-pill ${selectedDiff.id === d.id ? 'active' : ''}`} style={{ textAlign: 'left', justifyContent: 'flex-start', whiteSpace: 'normal' }} onClick={() => setSelectedDiff(d)}>
-                    {d.asin} · {d.field}
-                  </button>
-                ))}
+                {DIFFS.map(d => {
+                  const active = selectedDiff.id === d.id
+                  return (
+                    <button key={d.id} onClick={() => setSelectedDiff(d)} style={{
+                      display: 'block', width: '100%', textAlign: 'left', cursor: 'pointer',
+                      padding: '10px 12px', borderRadius: 6, fontFamily: 'var(--font-ui)',
+                      border: `1px solid ${active ? 'rgba(29,90,29,0.35)' : 'var(--divider)'}`,
+                      background: active ? 'var(--forest-glow)' : 'var(--surface)',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                        <span style={{ width: 22, height: 22, flexShrink: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--divider-mid)', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--pine)' }}>{fieldGlyph(d.field)}</span>
+                        <span style={{ fontSize: 12, fontWeight: 600 }}>{d.field} changed</span>
+                        <span className={`pill ${SEV_PILL[d.severity]}`} style={{ marginLeft: 'auto', fontSize: 10 }}>{d.severity}</span>
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-mid)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {d.before} <span className="text-low">→</span> {d.after}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                        <span className="text-low" style={{ fontSize: 10, fontFamily: 'var(--font-mono)' }}>{d.date}</span>
+                        <span className="text-low" style={{ fontSize: 10, fontFamily: 'var(--font-mono)' }}>{d.asin}</span>
+                        {statePill(d.state)}
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
             </div>
 
@@ -178,6 +227,12 @@ export default function ListingGuardian() {
                   <div style={{ fontSize: 13 }}>{selectedDiff.after}</div>
                 </div>
               </div>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <span>Provenance: {statePill(selectedDiff.state)}</span>
+                <span style={{ fontFamily: 'var(--font-mono)' }}>diff {selectedDiff.id}</span>
+                <span style={{ fontFamily: 'var(--font-mono)' }}>ASIN {selectedDiff.asin}</span>
+                <span style={{ fontFamily: 'var(--font-mono)' }}>{selectedDiff.date}</span>
+              </div>
               <div className="inline-flex" style={{ gap: 8 }}>
                 <button className="btn btn-sm" onClick={() => escalate(selectedDiff.asin, 'ListingForge')}>Escalate to ListingForge</button>
                 <button className="btn btn-sm btn-ghost" onClick={() => toast('Marked as reviewed — no listing change is made from here.', 'info')}>Mark Reviewed</button>
@@ -189,25 +244,55 @@ export default function ListingGuardian() {
 
       {view === 'history' && (
         <div className="subview">
-          <div className="card">
-            <div className="card-head">
-              <h3 className="card-title">Change Timeline</h3>
-              <span className="pill pill-muted">{HISTORY.length} events · sample</span>
-            </div>
-            <div className="timeline" style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {HISTORY.map((h, i) => (
-                <div key={i} className="timeline-item" style={{ display: 'flex', gap: 12, padding: '8px 0' }}>
-                  <div style={{ width: 24, height: 24, borderRadius: '50%', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, background: 'rgba(138,138,122,0.12)', color: '#8a8a7a' }}>·</div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 13 }}>{h.event}</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 11, color: 'var(--ink-soft)', fontFamily: 'var(--font-mono)' }}>{h.date}</span>
-                      <span className="pill pill-muted" style={{ fontSize: 10 }}>{h.id}</span>
-                      {statePill(h.state)}
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 320px', gap: 20, alignItems: 'start' }}>
+            <div className="card">
+              <div className="card-head">
+                <h3 className="card-title">Change Timeline</h3>
+                <span className="pill pill-muted">{HISTORY.length} events · sample</span>
+              </div>
+              <div className="timeline">
+                {HISTORY.map((h, i) => (
+                  <div key={i} className="timeline-item">
+                    <div className="timeline-dot" style={SEV_DOT[h.severity]} title={`Severity: ${h.severity}`}>·</div>
+                    <div className="timeline-content">
+                      <div className="timeline-text">{h.event}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4, flexWrap: 'wrap' }}>
+                        <span className="timeline-date">{h.date}</span>
+                        <span className="pill pill-muted" style={{ fontSize: 10 }}>{h.id}</span>
+                        <span className="text-low" style={{ fontSize: 10, fontFamily: 'var(--font-mono)' }}>{h.asin}</span>
+                        <span className="pill pill-ochre" style={{ fontSize: 10 }} title="Event type">{h.type}</span>
+                        {statePill(h.state)}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            <div className="card">
+              <div className="card-head">
+                <h3 className="card-title" style={{ fontSize: 15 }}>Watch Summary</h3>
+                <span className="pill pill-muted">last 7 days · sample</span>
+              </div>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 8 }}>Events by type</div>
+              <div className="stack" style={{ gap: 6, marginBottom: 16 }}>
+                {HISTORY_BY_TYPE.map(g => (
+                  <div key={g.type} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderBottom: '1px solid var(--divider)' }}>
+                    <span style={{ fontSize: 12 }}>{g.type}</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span className={`pill ${SEV_PILL[highestSeverity(g.severities)]}`} style={{ fontSize: 10 }}>{highestSeverity(g.severities)}</span>
+                      <span className="pill pill-muted" style={{ fontSize: 10 }}>{g.count}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 8 }}>Events by provenance</div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
+                {HISTORY_BY_STATE.map(s => <span key={s.state} className="pill pill-muted" style={{ fontSize: 10 }}>{s.state} · {s.count}</span>)}
+              </div>
+              <div className="text-low" style={{ fontSize: 11 }} title="Watchtower summary only — source detail lives in Alerts and Diffs">
+                Indications from the sample watch feed — not verified fact.
+              </div>
             </div>
           </div>
         </div>

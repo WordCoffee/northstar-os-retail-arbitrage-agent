@@ -26,6 +26,13 @@ const VOICES = ['Founder voice', 'Product demo', 'Problem/solution', 'Before/aft
 
 const STAGE_PILL = { Draft: 'pill-muted', Approved: 'pill-forest', Scheduled: 'pill-ochre', Published: 'pill-muted' }
 
+const STAGE_ACTION = {
+  Drafts: { label: 'Send to Approvals', note: 'Sent to Approvals — nothing publishes automatically.' },
+  Approved: { label: 'Schedule', note: 'Queued for scheduling — requires an approved slot.' },
+  Scheduled: { label: 'Mark Published', note: 'Marked Published (sample) — no post publishes autonomously.' },
+  Published: { label: 'View', note: 'Opened published post (sample).' },
+}
+
 const POSTS = [
   { day: 20, platform: 'Instagram', title: 'Installation guide', stage: 'Published' },
   { day: 22, platform: 'X Thread', title: 'Behind the scenes — filtering', stage: 'Draft' },
@@ -37,18 +44,18 @@ const POSTS = [
 
 const QUEUE = {
   Drafts: [
-    { title: 'Behind the scenes — filtering', platform: 'X Thread', voice: 'Founder voice' },
-    { title: 'Q4 promo teaser', platform: 'TikTok', voice: 'Seasonal promo' },
+    { title: 'Behind the scenes — filtering', platform: 'X Thread', voice: 'Founder voice', detail: 'Not yet submitted for approval' },
+    { title: 'Q4 promo teaser', platform: 'TikTok', voice: 'Seasonal promo', detail: 'Awaiting brand check' },
   ],
   Approved: [
-    { title: 'Installation guide', platform: 'Instagram', voice: 'Product demo' },
+    { title: 'Installation guide', platform: 'Instagram', voice: 'Product demo', detail: 'Approved — ready to schedule' },
   ],
   Scheduled: [
-    { title: 'Product highlight — Water Filter', platform: 'Instagram Reels', voice: 'Lifestyle edit' },
+    { title: 'Product highlight — Water Filter', platform: 'Instagram Reels', voice: 'Lifestyle edit', detail: 'Slot: Sep 28 · 08:00 (sample)' },
   ],
   Published: [
-    { title: 'Customer testimonial', platform: 'Facebook', voice: 'UGC testimonial' },
-    { title: 'Installation guide', platform: 'Instagram', voice: 'Product demo' },
+    { title: 'Customer testimonial', platform: 'Facebook', voice: 'UGC testimonial', detail: 'Published Sep 24 (sample)' },
+    { title: 'Installation guide', platform: 'Instagram', voice: 'Product demo', detail: 'Published Sep 20 (sample)' },
   ],
 }
 
@@ -75,12 +82,13 @@ const COPILOT_SUGGESTIONS = [
 ]
 
 const POSTS_BY_DAY = POSTS.reduce((m, p) => { (m[p.day] = m[p.day] || []).push(p); return m }, {})
+const MONTH_START_OFFSET = 1
 const MONTH_CELLS = (() => {
   const cells = []
-  for (let i = 0; i < 35; i++) {
-    const day = i - 1
-    cells.push(day >= 1 && day <= 30 ? day : null)
-  }
+  for (let i = 0; i < MONTH_START_OFFSET; i++) cells.push({ out: true, label: 31 - i })
+  for (let d = 1; d <= 30; d++) cells.push({ out: false, day: d })
+  let n = 1
+  while (cells.length < 35) cells.push({ out: true, label: n++ })
   return cells
 })()
 
@@ -146,14 +154,26 @@ export default function SocialPulse() {
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
                   <div key={d} className="text-low" style={{ textAlign: 'center', paddingBottom: 4 }}>{d}</div>
                 ))}
-                {MONTH_CELLS.map((day, i) => (
-                  <div key={i} style={{ minHeight: 74, border: '1px solid var(--divider)', borderRadius: 6, padding: 6, background: day ? 'var(--surface-2, rgba(138,138,122,0.04))' : 'transparent' }}>
-                    {day && <div className="text-low" style={{ fontSize: 10, marginBottom: 4 }}>{day}</div>}
-                    {day && (POSTS_BY_DAY[day] || []).map((p, j) => (
-                      <div key={j} style={{ fontSize: 10, padding: '2px 5px', borderRadius: 4, marginBottom: 3, background: 'rgba(29,90,29,0.08)', color: 'var(--pine-deep)' }} title={`${p.platform} · ${p.stage}`}>
-                        {p.title.length > 18 ? p.title.slice(0, 18) + '…' : p.title}
-                      </div>
-                    ))}
+                {MONTH_CELLS.map((cell, i) => (
+                  <div key={i} style={{
+                    minHeight: 74,
+                    border: `1px ${cell.out ? 'dashed' : 'solid'} var(--divider)`,
+                    borderRadius: 6,
+                    padding: 6,
+                    background: cell.out
+                      ? 'repeating-linear-gradient(45deg, rgba(138,138,122,0.06) 0 6px, transparent 6px 12px)'
+                      : 'var(--surface-2, rgba(138,138,122,0.04))',
+                  }} title={cell.out ? 'Outside September 2026 — not interactive' : undefined}>
+                    {cell.out
+                      ? <div className="text-low" style={{ fontSize: 10, opacity: 0.55 }}>{cell.label}</div>
+                      : <>
+                          <div className="text-low" style={{ fontSize: 10, marginBottom: 4 }}>{cell.day}</div>
+                          {(POSTS_BY_DAY[cell.day] || []).map((p, j) => (
+                            <div key={j} style={{ fontSize: 10, padding: '2px 5px', borderRadius: 4, marginBottom: 3, background: 'rgba(29,90,29,0.08)', color: 'var(--pine-deep)' }} title={`${p.platform} · ${p.stage}`}>
+                              {p.title.length > 18 ? p.title.slice(0, 18) + '…' : p.title}
+                            </div>
+                          ))}
+                        </>}
                   </div>
                 ))}
               </div>
@@ -211,12 +231,22 @@ export default function SocialPulse() {
                     {cards.map((c, i) => (
                       <div key={i} style={{ border: '1px solid var(--divider)', borderRadius: 6, padding: 10 }}>
                         <div style={{ fontSize: 12, fontWeight: 500, marginBottom: 4 }}>{c.title}</div>
-                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 6 }}>
                           <span className="pill pill-muted" style={{ fontSize: 10 }}>{c.platform}</span>
                           <span className="pill pill-muted" style={{ fontSize: 10 }}>{c.voice}</span>
                         </div>
+                        <div className="text-low" style={{ fontSize: 10, marginBottom: 8 }}>{c.detail}</div>
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                          <button className="btn btn-sm" onClick={() => t(STAGE_ACTION[stage].note, 'info')}>{STAGE_ACTION[stage].label}</button>
+                          {stage === 'Published' && (
+                            <button className="btn btn-sm btn-ghost" onClick={() => go('composer')}>Repurpose</button>
+                          )}
+                        </div>
                       </div>
                     ))}
+                  </div>
+                  <div className="text-low" style={{ fontSize: 11, marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--divider)' }}>
+                    {cards.length} {cards.length === 1 ? 'post' : 'posts'} in stage
                   </div>
                 </div>
               ))}

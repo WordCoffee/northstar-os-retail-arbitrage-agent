@@ -1,7 +1,7 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 const TABS = [
@@ -40,6 +40,13 @@ const ALERTS = [
   { id: 'KA-02', term: 'water purifier', asin: 'B08L5VJQ7T', type: 'Position Drop', severity: 'Medium', date: '2026-09-24' },
 ]
 
+const UNCOVERED = [
+  { term: 'under sink water filter', asin: 'B08L5VJQ7T', product: 'Premium Water Filter', set: 'Water Filter Core', gaps: 3, severity: 'High' },
+  { term: 'car vent phone holder', asin: 'B07XJ8C9F3', product: 'Car Phone Mount', set: 'Car Accessories', gaps: 5, severity: 'High' },
+  { term: 'dimmable desk lamp', asin: 'B09M8KJ4X2', product: 'LED Desk Lamp', set: 'Kitchen Utility', gaps: 2, severity: 'Medium' },
+  { term: 'portable bluetooth speaker', asin: 'B08N5WRWNW', product: 'Bluetooth Speaker', set: 'Audio', gaps: 2, severity: 'Medium' },
+]
+
 const SEV_PILL = { High: 'pill-ochre', Medium: 'pill-warn', Low: 'pill-muted' }
 
 function Sparkline({ series }) {
@@ -58,10 +65,16 @@ function Sparkline({ series }) {
 export default function KeywordTracker() {
   const { toast } = useToast()
   const location = useLocation()
+  const navigate = useNavigate()
   const [set, setSet] = useState('Water Filter Core')
 
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : 'sets'
+
+  const verifyInTrends = (term) => {
+    navigate('/keyword-tracker?view=trends')
+    toast(`Opened “${term}” in Trends — verify against the cached snapshot before acting.`, 'info')
+  }
 
   return (
     <PageLayout
@@ -72,8 +85,8 @@ export default function KeywordTracker() {
         <button className="btn btn-sm btn-ghost" onClick={() => toast('Reports export uses cached snapshot data.', 'info')}>Reports</button>
       </>}
     >
-      <DataNotice tone="cached" title="Rankings are a cached snapshot">
-        Position data is a cached snapshot from 2h ago. Search volume is estimated and must not be treated as verified traffic. Position changes are indications, not guarantees.
+      <DataNotice tone="cached" title="Rankings and movement alerts are a cached snapshot">
+        Position data is a cached snapshot from 2h ago, and the flagged movement alerts derive from that same snapshot. Search volume is estimated and must not be treated as verified traffic. Position changes are indications — verify in Trends before acting.
       </DataNotice>
 
       <div className="card" style={{ marginBottom: 16, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
@@ -184,7 +197,7 @@ export default function KeywordTracker() {
 
       {view === 'coverage' && (
         <div className="subview">
-          <div className="card">
+          <div className="card" style={{ marginBottom: 20 }}>
             <div className="card-head">
               <h3 className="card-title">Coverage Gaps</h3>
               <span className="pill pill-muted">sample</span>
@@ -197,15 +210,30 @@ export default function KeywordTracker() {
               { key: 'gap', label: 'Gaps', render: (v) => <span className={`pill ${v > 3 ? 'pill-ochre' : 'pill-muted'}`} title="Missing coverage — a gap to address, not a failure">{v}</span> },
             ]} rows={COVERAGE} />
           </div>
+
+          <div className="card">
+            <div className="card-head">
+              <h3 className="card-title">Top Uncovered Terms</h3>
+              <span className="pill pill-ochre">{UNCOVERED.length} gaps · sample</span>
+            </div>
+            <DataTable columns={[
+              { key: 'term', label: 'Gap Term' },
+              { key: 'asin', label: 'ASIN' },
+              { key: 'product', label: 'Product' },
+              { key: 'set', label: 'Set' },
+              { key: 'severity', label: 'Signal', render: (v, row) => <span className={`pill ${SEV_PILL[v]}`} title="Gap severity — indication, not verified">{v} · {row.gaps}</span> },
+              { key: 'action', label: '', render: (v, row) => <button className="btn btn-sm btn-ghost" onClick={() => verifyInTrends(row.term)}>Open in Trends</button> },
+            ]} rows={UNCOVERED} />
+            <div className="text-low" style={{ fontSize: 11, marginTop: 10 }} title="Gap terms come from the cached coverage snapshot — confirm in Trends">
+              Gaps are opportunities from the cached snapshot — not failures. Confirm movement in Trends before prioritizing.
+            </div>
+          </div>
         </div>
       )}
 
       {view === 'alerts' && (
         <div className="subview">
-          <DataNotice tone="cached" title="Movement alerts use cached data">
-            Alerts flagged here are movement indications from a cached snapshot — verify before acting.
-          </DataNotice>
-          <div className="card">
+          <div className="card" style={{ marginBottom: 20 }}>
             <div className="card-head">
               <h3 className="card-title">Flagged Movement Alerts</h3>
               <span className="pill pill-ochre">{ALERTS.length} active</span>
@@ -217,7 +245,30 @@ export default function KeywordTracker() {
               { key: 'type', label: 'Type' },
               { key: 'severity', label: 'Severity', render: (v) => <span className={`pill ${SEV_PILL[v]}`}>{v}</span> },
               { key: 'date', label: 'Date' },
+              { key: 'action', label: '', render: (v, row) => <button className="btn btn-sm btn-ghost" onClick={() => verifyInTrends(row.term)}>Verify in Trends</button> },
             ]} rows={ALERTS} />
+          </div>
+
+          <div className="card">
+            <div className="card-head">
+              <h3 className="card-title">Movement by Keyword</h3>
+              <span className="pill pill-muted">cached snapshot</span>
+            </div>
+            <div className="stack" style={{ gap: 8 }}>
+              {ALERTS.map(a => (
+                <div key={a.id} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 500 }}>{a.term}</div>
+                    <div className="text-low" style={{ fontSize: 11, fontFamily: 'var(--font-mono)' }}>{a.asin} · {a.date}</div>
+                  </div>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                    <span className="pill pill-ochre" style={{ fontSize: 10 }} title="Direction of movement — indication, not verified">↓ Drop</span>
+                    <span className={`pill ${SEV_PILL[a.severity]}`} style={{ fontSize: 10 }}>{a.severity}</span>
+                    <button className="btn btn-sm btn-ghost" onClick={() => verifyInTrends(a.term)}>Verify in Trends</button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
