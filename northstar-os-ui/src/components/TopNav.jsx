@@ -30,8 +30,8 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
             <span>{role === 'platform_admin' ? 'Admin' : role === 'customer' ? 'Customer' : 'Operator'}</span>
           </div>
         )}
-        <div className="top-nav-avatar" title={session.userId || 'Guest'}>
-          {session.userId ? session.userId[0].toUpperCase() : '?'}
+        <div className="top-nav-avatar" title={session.authenticated ? session.userId : 'Guest'}>
+          {session.authenticated && session.userId ? session.userId[0].toUpperCase() : '?'}
         </div>
       </div>
     </header>

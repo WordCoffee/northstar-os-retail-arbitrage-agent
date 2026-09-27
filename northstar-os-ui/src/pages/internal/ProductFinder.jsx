@@ -35,7 +35,7 @@ function TruthPill({ v }) {
 
 function StatusPill({ v }) {
   const t = String(v)
-  const cls = t === 'Internal review ready' ? 'pill-muted' : t === 'Watch' ? 'pill-muted' : 'pill-ochre'
+  const cls = ['Restricted', 'Blocked', 'Failed'].includes(t) ? 'pill-ochre' : 'pill-muted'
   return <span className={`pill ${cls}`}>{t}</span>
 }
 
@@ -111,17 +111,17 @@ export default function ProductFinder() {
                   <span className="pill pill-muted">Researching</span>
                   <span className="pill pill-muted" title="Cached observation — not live Amazon data">observed 2h ago</span>
                 </div>
-                <div className="identity-strip">
-                  <div><div className="identity-strip-label">UPC / GTIN</div><TruthPill v="UNKNOWN" /></div>
-                  <div><div className="identity-strip-label">MPN / Model</div><TruthPill v="UNAVAILABLE" /></div>
-                  <div><div className="identity-strip-label">Pack Count</div><TruthPill v="UNKNOWN" /></div>
-                  <div><div className="identity-strip-label">ASIN State</div><TruthPill v="UNVERIFIED" /></div>
-                </div>
               </div>
               <div className="inline-flex" style={{ gap: 8, alignSelf: 'center' }}>
                 <button className="btn btn-sm" onClick={() => navigate(`/product-finder/${primary.asin}`)}>Open in Product Set</button>
                 <button className="btn btn-sm btn-ghost" title="Hand off this product to the Commerce Ops workflow queue" onClick={() => navigate('/commerce-ops')}>Send to Commerce Ops</button>
               </div>
+            </div>
+            <div className="identity-strip">
+              <div><div className="identity-strip-label">UPC / GTIN</div><TruthPill v="UNKNOWN" /></div>
+              <div><div className="identity-strip-label">MPN / Model</div><TruthPill v="UNAVAILABLE" /></div>
+              <div><div className="identity-strip-label">Pack Count</div><TruthPill v="UNKNOWN" /></div>
+              <div><div className="identity-strip-label">ASIN State</div><TruthPill v="UNVERIFIED" /></div>
             </div>
           </div>
 
@@ -196,8 +196,8 @@ export default function ProductFinder() {
                   <span className="pill pill-clay">Commerce Ops Handoff Available</span>
                 </div>
                 <div className="stack" style={{ gap: 8, marginTop: 12 }}>
-                  <button className="btn btn-sm" onClick={() => navigate('/golden-goose')}>Open Golden Goose</button>
-                  <button className="btn btn-sm btn-ghost" title="Hand off this product to the Commerce Ops workflow queue" onClick={() => navigate('/commerce-ops')}>Send to Commerce Ops</button>
+                  <button className="btn btn-sm" style={{ alignSelf: 'flex-start', minWidth: 180 }} onClick={() => navigate('/golden-goose')}>Open Golden Goose</button>
+                  <button className="btn btn-sm btn-ghost" style={{ alignSelf: 'flex-start', minWidth: 180 }} title="Hand off this product to the Commerce Ops workflow queue" onClick={() => navigate('/commerce-ops')}>Send to Commerce Ops</button>
                 </div>
               </div>
             </div>
