@@ -1,222 +1,187 @@
-import { useState, useEffect } from 'react'
-import { HashRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
-import Header from './components/Header.jsx'
-import Sidebar from './components/Sidebar.jsx'
-import Dock from './components/Dock.jsx'
-import Icon from './components/Icon.jsx'
-import { PageHead } from './ui.jsx'
-
-import Hub from './pages/Hub.jsx'
-import Ledger from './pages/Ledger.jsx'
-import Prospector from './pages/Prospector.jsx'
-import GoldenGoose from './pages/GoldenGoose.jsx'
-import OfferChisel from './pages/OfferChisel.jsx'
-import TownCrier from './pages/TownCrier.jsx'
-import Auctioneer from './pages/Auctioneer.jsx'
-import Autothink from './pages/Autothink.jsx'
-import TheWatch from './pages/TheWatch.jsx'
-import RankLedger from './pages/RankLedger.jsx'
-import RivalBoard from './pages/RivalBoard.jsx'
-import Account from './pages/Account.jsx'
-
+import { useState } from 'react'
+import { useNavigate, useLocation, HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import CommandPalette from './components/CommandPalette.jsx'
+import { NAV_GROUPS, canUseRole } from './data/nav-config.js'
+import SuiteRail from './components/SuiteRail.jsx'
+import TopNav from './components/TopNav.jsx'
+import MobileBottomNav from './components/MobileBottomNav.jsx'
 import { SessionProvider, useSession } from './foundation/session.jsx'
-import EnvBadge from './foundation/components/EnvBadge.jsx'
-import PreviewBanner from './foundation/components/PreviewBanner.jsx'
-import OrgSelector from './foundation/components/OrgSelector.jsx'
-import Notifications from './foundation/components/Notifications.jsx'
-import PinnedDrawer from './foundation/components/PinnedDrawer.jsx'
-import CommandPalette from './foundation/components/CommandPalette.jsx'
-import RouteGuard from './foundation/components/RouteGuard.jsx'
-import FoundationStatus from './foundation/pages/FoundationStatus.jsx'
-import Jobs from './foundation/pages/Jobs.jsx'
-import Keywords from './foundation/pages/Keywords.jsx'
-import BetaTester from './foundation/pages/BetaTester.jsx'
-import BetaOps from './foundation/pages/BetaOps.jsx'
-import BetaSignup from './foundation/pages/BetaSignup.jsx'
-import { useTour, TourOverlay } from './foundation/HelpTour.jsx'
-import { routeToId } from './data/services.js'
+import { TOAST_PROVIDER, useToast } from './components/ToastContext.jsx'
+
+import CommandCenter from './pages/internal/CommandCenter.jsx'
+import ProductFinder from './pages/internal/ProductFinder.jsx'
+import GoldenGooseDesk from './pages/internal/GoldenGoose.jsx'
+import ListingGuardian from './pages/internal/ListingGuardian.jsx'
+import KeywordTracker from './pages/internal/KeywordTracker.jsx'
+import CompetitorMonitor from './pages/internal/CompetitorMonitor.jsx'
+import ListingForge from './pages/internal/ListingForge.jsx'
+import AdPilot from './pages/internal/AdPilot.jsx'
+import SocialPulse from './pages/internal/SocialPulse.jsx'
+import CreativeStudio from './pages/internal/CreativeStudio.jsx'
+import ProfitabilityDashboard from './pages/internal/ProfitabilityDashboard.jsx'
+import CommerceOps from './pages/internal/CommerceOps.jsx'
+import Monitoring from './pages/internal/Monitoring.jsx'
+import AutothinK from './pages/internal/AutothinK.jsx'
+import MemoryBank from './pages/internal/MemoryBank.jsx'
+import SharedDataLayer from './pages/internal/SharedDataLayer.jsx'
+import ProviderAdapters from './pages/internal/ProviderAdapters.jsx'
+import MasterBrain from './pages/internal/MasterBrain.jsx'
+import CustomerWorkspace from './pages/customer/Workspace.jsx'
+import BetaOpsOverview from './pages/admin/Overview.jsx'
+import OrgsList, { OrgDetail } from './pages/admin/OrgsList.jsx'
+import InviteCreate, { InviteDetail } from './pages/admin/InviteCreate.jsx'
+import Cohorts, { SupportOps, ReportsExports, AuditNotes, LifecycleModal, EligibilityChecklist } from './pages/admin/Cohorts.jsx'
+import InternalAdmin from './pages/internal/Admin.jsx'
+import CustomerSetup from './pages/customer/Setup.jsx'
+import CustomerDocuments from './pages/customer/Documents.jsx'
+import CustomerPlan from './pages/customer/PlanUsage.jsx'
+import CustomerSupport from './pages/customer/Support.jsx'
+import CustomerAccount from './pages/customer/AccountStatus.jsx'
+import SignIn from './pages/public/SignIn.jsx'
+import Recovery from './pages/public/Recovery.jsx'
+import BetaLanding from './pages/public/BetaLanding.jsx'
+import NotFound from './pages/NotFound.jsx'
+
+function currentRole(session) {
+  return session.authenticated
+    ? (session.role || (session.permissions?.includes('platform_admin') ? 'platform_admin' : 'operator'))
+    : 'invitee'
+}
+
+function GuardedRoutes({ role }) {
+  const location = useLocation()
+  const path = location.pathname
+  const adminOnly = path === '/beta-ops' || path.startsWith('/beta-ops/') || path === '/admin'
+  if (adminOnly && role !== 'platform_admin') {
+    return <Navigate to="/home" replace />
+  }
+  return (
+    <Routes>
+      <Route path="/home" element={<CommandCenter />} />
+      <Route path="/product-finder" element={<ProductFinder />} />
+      <Route path="/product-finder/:id" element={<ProductFinder />} />
+      <Route path="/golden-goose" element={<GoldenGooseDesk />} />
+      <Route path="/golden-goose/:id" element={<GoldenGooseDesk />} />
+      <Route path="/listings" element={<ListingGuardian />} />
+      <Route path="/keyword-tracker" element={<KeywordTracker />} />
+      <Route path="/competitor-monitor" element={<CompetitorMonitor />} />
+      <Route path="/listingforge" element={<ListingForge />} />
+      <Route path="/adpilot" element={<AdPilot />} />
+      <Route path="/socialpulse" element={<SocialPulse />} />
+      <Route path="/creative-studio" element={<CreativeStudio />} />
+      <Route path="/profitability" element={<ProfitabilityDashboard />} />
+      <Route path="/commerce-ops" element={<CommerceOps />} />
+      <Route path="/commerce-ops/:id" element={<CommerceOps />} />
+      <Route path="/monitoring" element={<Monitoring />} />
+      <Route path="/autothink" element={<AutothinK />} />
+      <Route path="/memory-bank" element={<MemoryBank />} />
+      <Route path="/shared-data" element={<SharedDataLayer />} />
+      <Route path="/provider-adapters" element={<ProviderAdapters />} />
+      <Route path="/master-brain" element={<MasterBrain />} />
+      <Route path="/customer-workspace" element={<CustomerWorkspace />} />
+      <Route path="/beta-ops" element={<BetaOpsOverview />} />
+      <Route path="/beta-ops/orgs" element={<OrgsList />} />
+      <Route path="/beta-ops/orgs/:id" element={<OrgDetail />} />
+      <Route path="/beta-ops/invites" element={<InviteCreate />} />
+      <Route path="/beta-ops/invites/:id" element={<InviteDetail />} />
+      <Route path="/beta-ops/cohorts" element={<Cohorts />} />
+      <Route path="/beta-ops/support" element={<SupportOps />} />
+      <Route path="/beta-ops/reports" element={<ReportsExports />} />
+      <Route path="/beta-ops/audit" element={<AuditNotes />} />
+      <Route path="/beta-ops/lifecycle" element={<LifecycleModal />} />
+      <Route path="/beta-ops/eligibility" element={<EligibilityChecklist />} />
+      <Route path="/admin" element={<InternalAdmin />} />
+      <Route path="/setup" element={<CustomerSetup />} />
+      <Route path="/documents" element={<CustomerDocuments />} />
+      <Route path="/plan" element={<CustomerPlan />} />
+      <Route path="/support" element={<CustomerSupport />} />
+      <Route path="/account" element={<CustomerAccount />} />
+      <Route path="/sign-in" element={<SignIn />} />
+      <Route path="/recovery" element={<Recovery />} />
+      <Route path="/beta" element={<BetaLanding />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  )
+}
+
+const MOBILE_ACTIVE = [
+  { path: '/home', tab: 'home' },
+  { path: '/product-finder', tab: 'sourcescout' },
+  { path: '/golden-goose', tab: 'goose' },
+  { path: '/profitability', tab: 'profitability' },
+]
 
 function Shell() {
+  const session = useSession()
+  const { toast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
-  const session = useSession()
-
-  const [theme, setTheme] = useState(() => localStorage.getItem('northstar-theme') || 'dark')
-  const [toasts, setToasts] = useState([])
   const [paletteOpen, setPaletteOpen] = useState(false)
-  const [tourOpen, setTourOpen] = useState(false)
-  const tour = useTour(routeToId(location.pathname) || 'hub')
+  const [toolsOpen, setToolsOpen] = useState(false)
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-    localStorage.setItem('northstar-theme', theme)
-  }, [theme])
+  const role = currentRole(session)
+  const path = location.pathname
+  const mobileTab = MOBILE_ACTIVE.find(m => path === m.path || path.startsWith(m.path + '/'))
+  const mobileActive = toolsOpen ? 'tools' : (mobileTab ? mobileTab.tab : '')
 
-  // First-entry tour: show once per service unless dismissed.
-  useEffect(() => {
-    if (!tour.available || tourOpen) return
-    tour.isDone().then((done) => { if (!done) setTourOpen(true) })
-  }, [location.pathname])
-
-  const finishTour = () => {
-    setTourOpen(false)
-    tour.markDone()
-  }
-
-  const toast = (msg, tone = 'ok') => {
-    const id = Date.now() + Math.random()
-    setToasts((prev) => [...prev.slice(-3), { id, msg, tone }])
-    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 3200)
-  }
-
-  return session.suspended ? (
+  return (
     <div className="app">
-      <div className="page" style={{ maxWidth: 560, margin: '60px auto' }}>
-        <PageHead title="Account suspended"
-          sub="Your organization cannot use product features right now" />
-        <div className="stack">
-          <div className="alert warn">
-            <div className="k">Status</div>
-            <div style={{ flex: 1 }}>{session.suspensionState || 'suspended'}</div>
-          </div>
-          <p className="text-low">
-            {session.suspensionMessage || 'Feature use is currently blocked for this account.'}
-          </p>
-          <p className="text-low">
-            To resolve this, contact the beta operator through the support channel
-            you were given at onboarding.
-          </p>
-          <a className="btn" href="/api/v1/foundation/legal/filesets/support_contact" target="_blank"
-             rel="noreferrer">Support &amp; contact</a>
-        </div>
-      </div>
-    </div>
-  ) : (
-    <div className="app">
-      <Header theme={theme} onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              toast={toast}
-              rightSlot={
-                <div className="fs-topbar-extra">
-                  <EnvBadge />
-                  <OrgSelector />
-                  <Notifications />
-                  <button className="btn btn-ghost" onClick={() => setTourOpen(true)} title="Replay tour">Help</button>
-                  <button className="btn btn-ghost" onClick={() => setPaletteOpen(true)} title="Command palette (Ctrl+K)">⌘K</button>
-                </div>
-              } />
-
-      <PreviewBanner />
-
-      <div className="body">
-        <Sidebar betaOnly={session.uiMode === 'private_beta'} />
-        <main className="main" key={location.pathname}>
-          {session.uiMode === 'private_beta' ? (
-            <Routes>
-              <Route path="/" element={<BetaDefault />} />
-              <Route path="/beta" element={
-                <RouteGuard permission="view"><BetaTester toast={toast} /></RouteGuard>
-              } />
-              <Route path="/beta-signup" element={<BetaSignup toast={toast} />} />
-              <Route path="/beta-ops" element={
-                <RouteGuard permission="platform_admin"><BetaOps toast={toast} /></RouteGuard>
-              } />
-              {/* any legacy route in the local private-beta stack -> tombstone */}
-              <Route path="*" element={<LegacyDisabled />} />
-            </Routes>
-          ) : (
-            <Routes>
-              <Route path="/" element={<Hub toast={toast} navigate={navigate} />} />
-              <Route path="/hub" element={<Hub toast={toast} navigate={navigate} />} />
-              <Route path="/ledger" element={<Ledger toast={toast} />} />
-              <Route path="/prospector" element={<Prospector toast={toast} />} />
-              <Route path="/goldengoose" element={<GoldenGoose toast={toast} />} />
-              <Route path="/offerchisel" element={<OfferChisel toast={toast} />} />
-              <Route path="/towncrier" element={<TownCrier toast={toast} />} />
-              <Route path="/auctioneer" element={<Auctioneer toast={toast} />} />
-              <Route path="/autothink" element={<Autothink toast={toast} />} />
-              <Route path="/thewatch" element={<TheWatch toast={toast} />} />
-              <Route path="/rankledger" element={<RankLedger toast={toast} />} />
-              <Route path="/rivalboard" element={<RivalBoard toast={toast} />} />
-              <Route path="/account" element={<Account toast={toast} />} />
-              <Route path="/foundation" element={
-                <RouteGuard permission="request_refresh"><FoundationStatus toast={toast} /></RouteGuard>
-              } />
-              <Route path="/jobs" element={
-                <RouteGuard permission="request_refresh"><Jobs toast={toast} /></RouteGuard>
-              } />
-              <Route path="/keywords" element={
-                <RouteGuard permission="request_refresh"><Keywords toast={toast} /></RouteGuard>
-              } />
-              <Route path="/beta" element={
-                <RouteGuard permission="view"><BetaTester toast={toast} /></RouteGuard>
-              } />
-              <Route path="/beta-signup" element={<BetaSignup toast={toast} />} />
-              <Route path="/beta-ops" element={
-                <RouteGuard permission="platform_admin"><BetaOps toast={toast} /></RouteGuard>
-              } />
-              <Route path="*" element={<NotFound navigate={navigate} />} />
-            </Routes>
-          )}
+      <TopNav
+        role={role}
+        paletteOpen={paletteOpen}
+        setPaletteOpen={setPaletteOpen}
+      />
+      <div className="body-layout">
+        <SuiteRail onNavigate={() => setToolsOpen(false)} />
+        <main className="main-content">
+          <GuardedRoutes role={role} />
         </main>
       </div>
-
-      {session.uiMode !== 'private_beta' && <><PinnedDrawer toast={toast} /><Dock /></>}
-
-      <TourOverlay steps={tour.steps} onClose={finishTour} />
-
-      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)}
-                      onToggle={() => setPaletteOpen((v) => !v)} />
-
-      <div className="toast-wrap">
-        {toasts.map((t) => (
-          <div key={t.id} className={`toast ${t.tone}`}>{t.msg}</div>
-        ))}
-      </div>
+      <MobileBottomNav active={mobileActive} onToolsClick={() => setToolsOpen(true)} />
+      {toolsOpen && (
+        <div className="tools-sheet-overlay" onClick={() => setToolsOpen(false)}>
+          <div className="tools-sheet" onClick={e => e.stopPropagation()}>
+            <div className="tools-sheet-header">
+              <span className="tools-sheet-title">Tools</span>
+              <button onClick={() => setToolsOpen(false)} className="tools-sheet-close">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <div className="tools-sheet-content">
+              {NAV_GROUPS.filter(g => g.sections.some(s => canUseRole(s, role))).map(g => (
+                <div key={g.id} className="tools-sheet-group">
+                  <div className="tools-sheet-group-label">{g.label}</div>
+                  {g.sections.filter(s => canUseRole(s, role)).map(s => (
+                    <button
+                      key={s.id}
+                      className="tools-sheet-item"
+                      onClick={() => { navigate(s.route); setToolsOpen(false) }}
+                    >
+                      {s.label}
+                      {s.status && <span className={`pill pill-muted`}>{s.status}</span>}
+                    </button>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+      {paletteOpen && (
+        <CommandPalette onClose={() => setPaletteOpen(false)} />
+      )}
+      <ToastContainer />
     </div>
   )
 }
 
-function NotFound({ navigate }) {
+function ToastContainer() {
+  const { toasts } = useToast()
   return (
-    <div className="page">
-      <div className="card">
-        <h1 className="text-glow" style={{ fontSize: 20 }}>Route not found</h1>
-        <p className="text-mid">The service you requested doesn’t exist in this shell.</p>
-        <button className="btn btn-primary" onClick={() => navigate('/hub')}>Back to Operations Hub</button>
-      </div>
-    </div>
-  )
-}
-
-// Role-aware default landing for the private-beta UI mode.
-function BetaDefault() {
-  const session = useSession()
-  const navigate = useNavigate()
-  useEffect(() => {
-    if (!session.authenticated) { navigate('/beta-signup', { replace: true }); return }
-    if (session.hasPerm && session.hasPerm('platform_admin')) { navigate('/beta-ops', { replace: true }); return }
-    navigate('/beta', { replace: true })
-  }, [session.authenticated, session.role])
-  return <div className="page"><div className="text-low">Loading beta…</div></div>
-}
-
-// Explicit tombstone for legacy UI routes in the local private-beta mode.
-function LegacyDisabled() {
-  return (
-    <div className="page">
-      <PageHead title="Legacy UI disabled"
-        sub="The legacy Operations Hub shell is disabled in the local private-beta environment" />
-      <div className="card">
-        <p className="text-low">
-          This area is not part of the private beta. The legacy analyst shell
-          (Operations Hub, Ledger, Sourcing, Prospecting, Golden Goose, Listings,
-          and similar) is intentionally unavailable here.
-        </p>
-        <p className="text-low">
-          Use the <strong>Private Beta</strong> (tester) or <strong>Beta Operations</strong>
-          (platform admin) areas instead.
-        </p>
-      </div>
+    <div className="toast-container">
+      {toasts.map(t => (
+        <div key={t.id} className={`toast-item toast-${t.tone}`}>{t.msg}</div>
+      ))}
     </div>
   )
 }
@@ -225,7 +190,9 @@ export default function App() {
   return (
     <HashRouter>
       <SessionProvider>
-        <Shell />
+        <TOAST_PROVIDER>
+          <Shell />
+        </TOAST_PROVIDER>
       </SessionProvider>
     </HashRouter>
   )

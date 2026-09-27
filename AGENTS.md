@@ -35,5 +35,15 @@ Missing an API key / config / decision? Stub + log to blocker list + keep buildi
 ## Memory bank (Knowledge Plane)
 Per-account knowledge store — facts, preferences, experiences, AI-derived learnings — ingested from text/images/voice, retrieved by intent at generation time; revisions + unlearn supported. All local, all free, no live calls (§8).
 
+## UI Build (northstar-os-ui)
+- **Dev server:** `cd northstar-os-ui && npm run dev` (port 8101)
+- **Production build:** `cd northstar-os-ui && npm run build` → outputs to `dist/`
+- **Vite base path:** `/ui/` (served under /ui/ by FastAPI)
+- **Design system:** Paper/bone surfaces, pine forest ink, Libre Baskerville serif + DM Sans UI
+- **Architecture:** React 18 + React Router 6 + Vite 5; room-based navigation with top nav + side nav
+- **Route structure:** Public (/beta, /sign-in, /recovery, /legal) → Customer (/, /setup, /documents, /plan, /support, /account) → Admin (/beta-ops/*) → Internal (/home, /product-finder, /golden-goose, /sourcing, /portfolio, /listings, /monitoring, /admin)
+- **Key components:** TopNav, SideNav, CommandPalette, RouteGuard, PageLayout, DataTable, EvidencePacket, MetricTiles, MobileBottomNav
+- **Build verification:** `npm run build` must succeed with 0 errors
+
 ## Authority order
 1. Full constitution (`docs/OPERATING_CONSTITUTION.md`), 2. resolved user profile (refinements only), 3. benchmark/CI baseline, 4. batch files, 5. this capsule's guardrails as interpreted against the constitution. Nothing below loosens credential hygiene, real-money approval, or git safety.
