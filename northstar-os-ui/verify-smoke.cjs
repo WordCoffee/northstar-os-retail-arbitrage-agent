@@ -41,6 +41,10 @@ async function run() {
 
   // ---- deep links ----
   const deepLinks = [
+    ['#/home?view=exceptions', 'for routing', 'deep /home?view=exceptions'],
+    ['#/home?view=activity', 'Assigned-Owner Visibility', 'deep /home?view=activity'],
+    ['#/home?view=exposure', 'not authorizations', 'deep /home?view=exposure'],
+    ['#/home?view=handoffs', 'Handoff Queue', 'deep /home?view=handoffs'],
     ['#/profitability?view=scenarios', 'Scenario Calculator', 'deep /profitability?view=scenarios'],
     ['#/profitability?view=fee', 'Set-Level Fee Basis', 'deep /profitability?view=fee'],
     ['#/commerce-ops?view=approvals', 'Approval Checkpoints', 'deep /commerce-ops?view=approvals'],
