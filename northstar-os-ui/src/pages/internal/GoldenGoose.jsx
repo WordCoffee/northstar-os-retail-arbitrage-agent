@@ -9,9 +9,12 @@ const TABS = [
 ]
 
 const OPPS = [
-  { id: 'GG-001', name: 'Water Filter Pro', why: 'High margin + low competition', source: 'Algorithmic signal analysis', confidence: 'Moderate', supporting: ['Verified supplier pricing', 'Low competitive density', 'Consistent demand trend'], contradicting: ['Seasonal Q4 demand dip', 'Shipping costs not verified'], sourcing: 'Direct manufacturer — needs invoice verification', portfolio: 'Set B (12 ASINs, 8% exposure)', relatedScout: 'B08L5VJQ7T' },
-  { id: 'GG-002', name: 'LED Garden Light', why: 'Seasonal demand spike + untapped supply', source: 'Market trend monitoring', confidence: 'Low', supporting: ['Growing search volume', 'Few dedicated listings'], contradicting: ['High seasonal variance', 'Return rate data unavailable'], sourcing: 'Unknown — no sourcing path established', portfolio: 'Not in portfolio', relatedScout: 'B09M8KJ4X2' },
+  { id: 'GG-001', name: 'Water Filter Pro', why: 'High margin + low competition', source: 'Algorithmic signal analysis', confidence: 'Moderate', freshness: 'surfaced 2d ago · cached snapshot', supporting: ['Verified supplier pricing', 'Low competitive density', 'Consistent demand trend'], contradicting: ['Seasonal Q4 demand dip', 'Shipping costs not verified'], sourcing: 'Direct manufacturer — needs invoice verification', portfolio: 'Set B (12 ASINs, 8% exposure)', relatedScout: 'B08L5VJQ7T' },
+  { id: 'GG-002', name: 'LED Garden Light', why: 'Seasonal demand spike + untapped supply', source: 'Market trend monitoring', confidence: 'Low', freshness: 'surfaced 1d ago · cached snapshot', supporting: ['Growing search volume', 'Few dedicated listings'], contradicting: ['High seasonal variance', 'Return rate data unavailable'], sourcing: 'Unknown — no sourcing path established', portfolio: 'Not in portfolio', relatedScout: 'B09M8KJ4X2' },
 ]
+
+const CONF_PILL = { High: 'pill-forest', Moderate: 'pill-ochre', Low: 'pill-warn' }
+const CONF_TITLE = 'Data-quality signal — not a purchase recommendation'
 
 const DECISIONS = [
   { id: 'GG-001', decision: 'Under review — verification pending', confidence: 'Moderate', date: '2026-09-24', status: 'Review', tone: 'pill-warn' },
@@ -24,7 +27,7 @@ function oppCard(opp, navigate) {
     <div key={opp.id} className="card" style={{ marginBottom: 20 }}>
       <div className="card-head">
         <h3 className="card-title" style={{ fontSize: 18 }}>{opp.name}</h3>
-        <span className={`pill ${opp.confidence === 'High' ? 'pill-ok' : opp.confidence === 'Moderate' ? 'pill-ochre' : 'pill-warn'}`}>{opp.confidence} confidence</span>
+        <span className={`pill ${CONF_PILL[opp.confidence] || 'pill-muted'}`} title={CONF_TITLE}>{opp.confidence} research confidence</span>
       </div>
 
       <div className="grid-2" style={{ gap: 16, marginBottom: 16 }}>
@@ -113,8 +116,9 @@ export default function GoldenGooseDesk() {
             <DataTable columns={[
               { key: 'id', label: 'ID' },
               { key: 'name', label: 'Opportunity' },
-              { key: 'confidence', label: 'Confidence' },
+              { key: 'confidence', label: 'Research Confidence', render: (v) => <span className={`pill ${CONF_PILL[v] || 'pill-muted'}`} title={CONF_TITLE}>{v}</span> },
               { key: 'why', label: 'Why Surfaced' },
+              { key: 'freshness', label: 'Freshness', render: (v) => <span className="pill pill-muted" title="Provenance stamp — cached snapshot, not live market data">{v}</span> },
               { key: 'open', label: '', render: (v, row) => <button className="btn btn-sm" onClick={() => navigate(`/golden-goose/${row.id}`)}>Open</button> },
             ]} rows={OPPS} />
           </div>
@@ -136,7 +140,7 @@ export default function GoldenGooseDesk() {
             <DataTable columns={[
               { key: 'id', label: 'ID' },
               { key: 'decision', label: 'Decision' },
-              { key: 'confidence', label: 'Confidence' },
+              { key: 'confidence', label: 'Research Confidence', render: (v) => v === '—' ? <span>—</span> : <span className={`pill ${CONF_PILL[v] || 'pill-muted'}`} title={CONF_TITLE}>{v}</span> },
               { key: 'date', label: 'Date' },
               { key: 'status', label: 'Status', render: (v, row) => <span className={`pill ${row.tone}`}>{v}</span> },
             ]} rows={DECISIONS} />

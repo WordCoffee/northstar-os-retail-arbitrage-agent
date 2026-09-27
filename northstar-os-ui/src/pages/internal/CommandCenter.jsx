@@ -32,21 +32,25 @@ export default function CommandCenter() {
           <div className="text-low" style={{ fontSize: 11 }}>Urgent Decisions</div>
           <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--pine-deep)' }}>2</div>
           <div className="text-low" style={{ fontSize: 11 }}>Require review</div>
+          <div className="text-low" style={{ fontSize: 10, marginTop: 2 }} title="Count derived from the sample task list, not live data">Basis: sample task list</div>
         </div>
         <div className="card" style={{ padding: 14 }}>
           <div className="text-low" style={{ fontSize: 11 }}>Research Queue</div>
           <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--pine-deep)' }}>5</div>
           <div className="text-low" style={{ fontSize: 11 }}>Active tasks</div>
+          <div className="text-low" style={{ fontSize: 10, marginTop: 2 }} title="Count derived from the sample queue, not live data">Basis: sample queue</div>
         </div>
         <div className="card" style={{ padding: 14 }}>
           <div className="text-low" style={{ fontSize: 11 }}>Exceptions</div>
           <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--clay)' }}>2</div>
           <div className="text-low" style={{ fontSize: 11 }}>Require attention</div>
+          <div className="text-low" style={{ fontSize: 10, marginTop: 2 }} title="Count derived from the sample exception feed, not live monitoring">Basis: sample exception feed</div>
         </div>
         <div className="card" style={{ padding: 14 }}>
           <div className="text-low" style={{ fontSize: 11 }}>Portfolio Exposure</div>
           <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--pine-deep)' }}>3</div>
           <div className="text-low" style={{ fontSize: 11 }}>Active sets</div>
+          <div className="text-low" style={{ fontSize: 10, marginTop: 2 }} title="Count derived from the sample portfolio, not live records">Basis: sample portfolio</div>
         </div>
       </div>
 
@@ -97,8 +101,14 @@ export default function CommandCenter() {
           <DataTable columns={[
             { key: 'set', label: 'Set' },
             { key: 'asins', label: 'ASINs' },
-            { key: 'margin', label: 'Margin' },
-            { key: 'status', label: 'Status' },
+            { key: 'margin', label: 'Margin', render: (v) => v === 'UNKNOWN'
+              ? <span className="pill pill-unknown">UNKNOWN</span>
+              : <span className="pill pill-muted" title="Estimated value — not a verified calculation">{v}</span> },
+            { key: 'status', label: 'Status', render: (v) => v === 'Research'
+              ? <span className="pill pill-warn">{v}</span>
+              : v === 'Approved'
+                ? <span className="pill pill-muted" title="Internal review state — not an authorization to purchase">{v}</span>
+                : <span className="pill pill-forest">{v}</span> },
           ]} rows={portfolio} />
         </div>
 
@@ -108,10 +118,10 @@ export default function CommandCenter() {
           </div>
           <div className="timeline" style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
             {[
-              { date: '2026-09-26', text: 'Set #47: 2 new ASINs added to research queue', status: 'ok' },
-              { date: '2026-09-25', text: 'Organization #0838 lifecycle blocked — review required', status: 'error' },
-              { date: '2026-09-25', text: 'Invite INV-2026-09-25-0192 expired', status: 'warn' },
-              { date: '2026-09-24', text: 'Golden Goose opportunity GG-001 surfaced', status: 'info' },
+              { date: '2026-09-26', text: 'Set #47: 2 new ASINs added to research queue', status: 'ok', basis: 'cached' },
+              { date: '2026-09-25', text: 'Organization #0838 lifecycle blocked — review required', status: 'error', basis: 'observed' },
+              { date: '2026-09-25', text: 'Invite INV-2026-09-25-0192 expired', status: 'warn', basis: 'observed' },
+              { date: '2026-09-24', text: 'Golden Goose opportunity GG-001 surfaced', status: 'info', basis: 'cached' },
             ].map((item, i) => (
               <div key={i} className="timeline-item" style={{ display: 'flex', gap: 12, padding: '8px 0', position: 'relative' }}>
                 <div style={{ width: 24, height: 24, borderRadius: '50%', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, background: item.status === 'error' ? 'rgba(160,64,32,0.12)' : item.status === 'warn' ? 'rgba(184,134,11,0.12)' : item.status === 'info' ? 'rgba(29,90,29,0.12)' : 'rgba(45,106,45,0.12)', color: item.status === 'error' ? '#a04020' : item.status === 'warn' ? '#b8860b' : item.status === 'info' ? '#1d5a1d' : '#2d6a2d' }}>
@@ -119,7 +129,10 @@ export default function CommandCenter() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 13, color: 'var(--ink)' }}>{item.text}</div>
-                  <div style={{ fontSize: 11, color: 'var(--ink-soft)', fontFamily: 'var(--font-mono)' }}>{item.date}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 11, color: 'var(--ink-soft)', fontFamily: 'var(--font-mono)' }}>{item.date}</span>
+                    <span className="pill pill-muted" style={{ fontSize: 10 }} title={item.basis === 'cached' ? 'Derived from cached sample data' : 'Directly observed lifecycle event (sample data)'}>{item.basis}</span>
+                  </div>
                 </div>
               </div>
             ))}
