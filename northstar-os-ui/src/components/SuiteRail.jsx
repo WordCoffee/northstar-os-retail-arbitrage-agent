@@ -14,9 +14,10 @@ export default function SuiteRail({ onNavigate }) {
 
   const toggle = (id) => setCollapsed(prev => ({ ...prev, [id]: !prev[id] }))
 
-  const filtered = NAV_GROUPS.filter(g =>
-    g.sections.some(s => canUseRole(s, role))
-  )
+  const filtered = NAV_GROUPS
+    .filter(g => g.sections.some(s => canUseRole(s, role)))
+    .map(g => ({ ...g, sections: g.sections.filter(s => canUseRole(s, role)) }))
+    .filter(g => g.sections.length > 0)
 
   return (
     <aside className="suite-rail" aria-label="Suite navigation">
