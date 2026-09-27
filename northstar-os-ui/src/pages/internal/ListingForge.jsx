@@ -6,6 +6,8 @@ const TABS = [
   { id: 'listings', label: 'Listings', count: 24 },
   { id: 'editor', label: 'Editor' },
   { id: 'templates', label: 'Templates' },
+  { id: 'assets', label: 'Assets' },
+  { id: 'revisions', label: 'Revision Log' },
 ]
 
 const LISTINGS = [
@@ -54,10 +56,34 @@ export default function ListingForge() {
               { key: 'asin', label: 'ASIN' },
               { key: 'title', label: 'Listing' },
               { key: 'status', label: 'Status' },
-              { key: 'health', label: 'Health', render: (v) => <span className={`pill ${v >= 80 ? 'pill-ok' : v >= 70 ? 'pill-ochre' : 'pill-warn'}`}>{v}/100</span> },
-              { key: 'updated', label: 'Updated' },
+              { key: 'health', label: 'Health', render: (v, row) => <span className={`pill ${row.status === 'Draft' ? 'pill-warn' : 'pill-muted'}`} title="Sample health score — not a verified calculation">{v}/100</span> },
+              { key: 'updated', label: 'Updated', render: (v) => <span className="pill pill-muted" title="Provenance stamp — sample revision state, not live listing data">{v} · sample</span> },
               { key: 'open', label: '', render: (v, row) => <button className="btn btn-sm" onClick={() => navigate(`/listingforge?view=editor`)}>Edit</button> },
             ]} rows={LISTINGS} />
+          </div>
+
+          <div className="card" style={{ marginTop: 20 }}>
+            <div className="card-head">
+              <h3 className="card-title">Studio Snapshot</h3>
+              <span className="pill pill-muted">Basis: sample data</span>
+            </div>
+            <div className="grid-3" style={{ gap: 16 }}>
+              <div>
+                <div className="text-low" style={{ fontSize: 11 }}>Revisions in progress</div>
+                <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--ochre)' }}>2</div>
+                <div className="text-low" style={{ fontSize: 11, marginTop: 2 }} title="Sample workflow state">Water Filter v3.2 · Speaker v1.4</div>
+              </div>
+              <div>
+                <div className="text-low" style={{ fontSize: 11 }}>Drafts awaiting health check</div>
+                <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--clay)' }}>1</div>
+                <div className="text-low" style={{ fontSize: 11, marginTop: 2 }} title="Sample workflow state">Car Phone Mount — REQUIRED</div>
+              </div>
+              <div>
+                <div className="text-low" style={{ fontSize: 11 }}>Publish-ready (reviewed)</div>
+                <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--pine)' }}>2 of 4</div>
+                <div className="text-low" style={{ fontSize: 11, marginTop: 2 }} title="Internal review state — not an authorization to publish">Internal review ready</div>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -155,6 +181,63 @@ export default function ListingForge() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {view === 'assets' && (
+        <div className="subview">
+          <DataNotice tone="sample" title="Asset library is sample content">
+            Attachments become real only when connected to a live listing workspace.
+          </DataNotice>
+          <div className="card">
+            <div className="card-head">
+              <h3 className="card-title">Asset Tray — Premium Water Filter</h3>
+              <span className="pill pill-muted">6 assets</span>
+            </div>
+            <DataTable columns={[
+              { key: 'name', label: 'Asset' },
+              { key: 'type', label: 'Type' },
+              { key: 'state', label: 'State', render: (v, row) => <span className={`pill ${row.tone}`}>{v}</span> },
+              { key: 'used', label: 'Used In' },
+            ]} rows={[
+              { name: 'hero-main.jpg', type: 'Image', state: 'Attached', used: 'Title / Bullets', tone: 'pill-muted' },
+              { name: 'lifestyle-kitchen-01.jpg', type: 'Image', state: 'Attached', used: 'Description', tone: 'pill-muted' },
+              { name: 'filter-exploded.png', type: 'Diagram', state: 'Draft', used: '—', tone: 'pill-warn' },
+              { name: 'install-clip-15s.mp4', type: 'Video', state: 'UNREVIEWED', used: '—', tone: 'pill-unverified' },
+              { name: 'comparison-chart.png', type: 'Diagram', state: 'Missing alt text', used: 'Description', tone: 'pill-warn' },
+              { name: 'brand-logo-pack.zip', type: 'Brand', state: 'Attached', used: 'A+ Content', tone: 'pill-muted' },
+            ]} />
+            <div className="inline-flex" style={{ gap: 8, marginTop: 12 }}>
+              <button className="btn btn-sm btn-ghost" onClick={() => navigate('/creative-studio')}>Open Creative Studio</button>
+              <button className="btn btn-sm btn-ghost">Upload Assets</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {view === 'revisions' && (
+        <div className="subview">
+          <DataNotice tone="sample" title="Revision history is sample data">
+            Version states below are demonstration workflow. Revert restores draft state only — it does not republish to a live listing.
+          </DataNotice>
+          <div className="card">
+            <div className="card-head">
+              <h3 className="card-title">Revision Log — Premium Water Filter</h3>
+              <span className="pill pill-warn">v3.2 in progress</span>
+            </div>
+            <DataTable columns={[
+              { key: 'version', label: 'Version' },
+              { key: 'summary', label: 'Summary' },
+              { key: 'saved', label: 'Saved' },
+              { key: 'state', label: 'State', render: (v) => <span className={`pill ${v === 'In progress' ? 'pill-warn' : v === 'Reverted' ? 'pill-ochre' : 'pill-muted'}`}>{v}</span> },
+              { key: 'action', label: '', render: (v, row) => row.state === 'In progress' ? null : <button className="btn btn-sm btn-ghost">Restore as Draft</button> },
+            ]} rows={[
+              { version: 'v3.2', summary: 'Title pack-count added; bullets reworded; description refreshed', saved: '2h ago', state: 'In progress' },
+              { version: 'v3.1', summary: 'Keyword coverage pass — 68% matched', saved: '1d ago', state: 'Published (sample)' },
+              { version: 'v3.0', summary: 'Launch copy — full rewrite', saved: '6d ago', state: 'Published (sample)' },
+              { version: 'v2.9', summary: 'Compliance flag: unsupported claim removed', saved: '12d ago', state: 'Reverted' },
+            ]} />
           </div>
         </div>
       )}
