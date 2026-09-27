@@ -41,7 +41,10 @@ async function run() {
 
   // ---- deep links ----
   const deepLinks = [
-    ['#/profitability?view=scenario', 'Scenario Calculator', 'deep /profitability?view=scenario'],
+    ['#/profitability?view=scenarios', 'Scenario Calculator', 'deep /profitability?view=scenarios'],
+    ['#/profitability?view=fee', 'Set-Level Fee Basis', 'deep /profitability?view=fee'],
+    ['#/commerce-ops?view=approvals', 'Approval Checkpoints', 'deep /commerce-ops?view=approvals'],
+    ['#/commerce-ops?view=blockers', 'Blocking Conditions', 'deep /commerce-ops?view=blockers'],
     ['#/autothink?view=composer', 'Research Run Composer', 'deep /autothink?view=composer'],
     ['#/customer-workspace?view=services', 'Entitled Services', 'deep /customer-workspace?view=services'],
     ['#/keyword-tracker?view=terms', 'Tracked Terms by ASIN', 'deep /keyword-tracker?view=terms'],
