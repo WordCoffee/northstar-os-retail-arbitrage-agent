@@ -255,6 +255,9 @@ body {
 .btn-sm { padding: 5px 10px; font-size: 12px; }
 .btn-ghost { background: transparent; border: 1px solid var(--divider-mid); box-shadow: none; color: var(--ink-mid); }
 .btn-ghost:hover { color: var(--forest); background: var(--forest-glow); border-color: var(--divider-strong); }
+.btn:disabled, .btn[disabled] { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+.btn:disabled:hover, .btn[disabled]:hover { background: var(--surface); border-color: var(--divider-mid); box-shadow: var(--shadow-sm); }
+.btn-primary:disabled, .btn-primary[disabled] { background: var(--forest); }
 .btn-block { width: 100%; }
 
 .card {
