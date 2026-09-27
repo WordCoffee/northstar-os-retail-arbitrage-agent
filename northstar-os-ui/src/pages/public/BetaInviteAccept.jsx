@@ -36,7 +36,7 @@ export default function BetaInviteAccept() {
             <div className="empty-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" strokeWidth="1.5"><polyline points="20 6 9 17 4 12"/></svg></div>
             <div className="empty-title">Access Confirmed</div>
             <p className="text-mid" style={{ marginBottom: 20 }}>Welcome to NorthstarOS. Your workspace is ready.</p>
-            <button className="btn btn-primary" onClick={() => window.location.href = '/home'}>Enter Workspace</button>
+            <button className="btn btn-primary" onClick={() => window.location.hash = '#/home'}>Enter Workspace</button>
           </div>
         )}
       </div>

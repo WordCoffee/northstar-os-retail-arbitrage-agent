@@ -40,6 +40,7 @@ import CustomerAccount from './pages/customer/AccountStatus.jsx'
 import SignIn from './pages/public/SignIn.jsx'
 import Recovery from './pages/public/Recovery.jsx'
 import BetaLanding from './pages/public/BetaLanding.jsx'
+import BetaInviteAccept from './pages/public/BetaInviteAccept.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 function currentRole(session) {
@@ -99,6 +100,7 @@ function GuardedRoutes({ role }) {
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/recovery" element={<Recovery />} />
       <Route path="/beta" element={<BetaLanding />} />
+      <Route path="/beta/accept" element={<BetaInviteAccept />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )
