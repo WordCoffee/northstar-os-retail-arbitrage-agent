@@ -19,7 +19,7 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
           <Icon name="search" size={15} />
           <input
             type="search"
-            placeholder="Northstar Index — search rooms, products…"
+            placeholder="Search the Northstar Index…"
             onKeyDown={(e) => { if (e.key === 'Enter') setPaletteOpen(true) }}
             aria-label="Search"
           />

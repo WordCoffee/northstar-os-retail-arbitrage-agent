@@ -34,7 +34,12 @@ export default function SuiteRail({ onNavigate }) {
         </div>
       </div>
 
-      {filtered.map(g => {
+      {filtered.length === 0 ? (
+        <div className="suite-rail-signin">
+          <div className="suite-rail-signin-title">Sign in to open your workspace</div>
+          <button className="btn btn-sm" onClick={() => navigate('/sign-in')}>Sign In</button>
+        </div>
+      ) : filtered.map(g => {
         const open = !collapsed[g.id]
         const activeSection = g.sections.find(s => s.route === location.pathname)
         return (
