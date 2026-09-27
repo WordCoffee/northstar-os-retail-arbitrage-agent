@@ -59,11 +59,17 @@ async function run() {
     ['#/commerce-ops?view=blockers', 'Blocking Conditions', 'deep /commerce-ops?view=blockers'],
     ['#/autothink?view=composer', 'Research Run Composer', 'deep /autothink?view=composer'],
     ['#/customer-workspace?view=services', 'Entitled Services', 'deep /customer-workspace?view=services'],
-    ['#/keyword-tracker?view=terms', 'Tracked Terms by ASIN', 'deep /keyword-tracker?view=terms'],
+    ['#/keyword-tracker?view=trends', 'Rank Trend Summary', 'deep /keyword-tracker?view=trends'],
+    ['#/keyword-tracker?view=coverage', 'Coverage Gaps', 'deep /keyword-tracker?view=coverage'],
+    ['#/keyword-tracker?view=alerts', 'Flagged Movement Alerts', 'deep /keyword-tracker?view=alerts'],
+    ['#/listings?view=diffs', 'Detected Changes', 'deep /listings?view=diffs'],
+    ['#/listings?view=history', 'Change Timeline', 'deep /listings?view=history'],
+    ['#/listings?view=escalations', 'Escalation Queue', 'deep /listings?view=escalations'],
+    ['#/monitoring?view=health', 'Service Checks', 'deep /monitoring?view=health'],
+    ['#/monitoring?view=sync', 'Staleness Summary', 'deep /monitoring?view=sync'],
     ['#/commerce-ops/CO-01', 'Sourcing Validation', 'deep /commerce-ops/CO-01'],
     ['#/product-finder/B08L5VJQ7T', 'Product Set — B08L5VJQ7T', 'deep /product-finder/B08L5VJQ7T'],
     ['#/golden-goose/GG-001', 'Water Filter Pro', 'deep /golden-goose/GG-001'],
-    ['#/listings?view=rules', 'Guardian Rules', 'deep /listings?view=rules'],
   ]
   for (const [href, marker, ctx] of deepLinks) {
     await page.goto(BASE + href)
@@ -78,7 +84,7 @@ async function run() {
     await expectHash(page, expectedHash, ctx)
   }
 
-  await navAction('#/listings', 'button:has-text("New Rule")', '#/listings?view=rules', 'ListingGuardian New Rule')
+  await navAction('#/listings', 'button:has-text("New Rule")', '#/listings?view=escalations', 'ListingGuardian New Rule')
   await navAction('#/listingforge', 'button:has-text("Create Listing")', '#/listingforge?view=editor', 'ListingForge Create Listing')
   await navAction('#/adpilot', 'button:has-text("Create Campaign")', '#/adpilot?view=planner', 'AdPilot Create Campaign')
   await navAction('#/autothink', 'button:has-text("New Research Run")', '#/autothink?view=composer', 'AutothinK New Research Run')

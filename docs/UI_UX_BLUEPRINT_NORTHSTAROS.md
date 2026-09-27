@@ -3,7 +3,7 @@
 > Operator-supplied authoritative spec (2026-09-27). SourceScout is the frozen benchmark room.
 > Rooms are judged against: same suite, specifically designed for the job of the service.
 
-NorthstarOS should be built as a premium suite of dedicated service rooms, not as a generic dashboard with many tabs. It should match the breadth, operational usefulness, and workflow coverage expected from Helium 10-class seller software while maintaining a more composed, more premium, more editorial, and more evidence-conscious experience that is visually distinct from Helium 10 and SellerSprite.
+NorthstarOS should be built as a premium suite of dedicated service rooms, not as a generic dashboard with many tabs. It should match the breadth, operational usefulness, and workflow coverage expected from Helium 10-class seller software while maintaining a more composed, more premium, more editorial, and more evidence-conscious experience that is visually distinct from Helium 10 and from SellerAmp (SAS, https://sas.selleramp.com/). SellerAmp is the sole competitor reference; SellerSprite is no longer a reference product.
 
 This blueprint defines the suite-wide operating model, the page-by-page service architecture, the functional requirements for each major room, the interaction patterns that should repeat across the suite, and the room-specific UI/UX identities that make NorthstarOS feel unified without making every service look the same.
 
