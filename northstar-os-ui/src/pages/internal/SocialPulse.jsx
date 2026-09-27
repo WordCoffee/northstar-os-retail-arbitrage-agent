@@ -220,7 +220,7 @@ export default function SocialPulse() {
             ))}
           </div>
           {queueMode === 'Board' ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(170px, 1fr))', gap: 14, overflowX: 'auto', paddingBottom: 4 }}>
               {Object.entries(QUEUE).map(([stage, cards]) => (
                 <div key={stage} className="card" style={{ padding: 12 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
