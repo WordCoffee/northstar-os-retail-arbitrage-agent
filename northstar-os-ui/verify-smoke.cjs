@@ -42,6 +42,9 @@ async function run() {
   // ---- deep links ----
   const deepLinks = [
     ['#/home?view=exceptions', 'for routing', 'deep /home?view=exceptions'],
+    ['#/golden-goose?view=review', 'What Remains Unknown', 'deep /golden-goose?view=review'],
+    ['#/golden-goose?view=decisions', 'internal review history', 'deep /golden-goose?view=decisions'],
+    ['#/golden-goose?view=history', 'Historical log', 'deep /golden-goose?view=history'],
     ['#/home?view=activity', 'Assigned-Owner Visibility', 'deep /home?view=activity'],
     ['#/home?view=exposure', 'not authorizations', 'deep /home?view=exposure'],
     ['#/home?view=handoffs', 'Handoff Queue', 'deep /home?view=handoffs'],
