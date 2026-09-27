@@ -1,5 +1,5 @@
 /*
- * Mocked frontend tests for static/index.html (Northstar OS Scout).
+ * Mocked frontend tests for legacy/scout/index.html (Northstar OS Scout).
  *
  * Loads the embedded <script> into a sandboxed VM with a DOM stub and a
  * never-resolving fetch stub (no network). Exercises the Scout data
@@ -12,12 +12,12 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-const htmlPath = path.join(__dirname, 'static', 'index.html');
+const htmlPath = path.join(__dirname, '..', 'legacy', 'scout', 'index.html');
 const html = fs.readFileSync(htmlPath, 'utf8');
 
 const scriptMatch = html.match(/<script>([\s\S]*?)<\/script>/);
 if (!scriptMatch) {
-    console.error('FAIL: could not find <script> block in static/index.html');
+    console.error('FAIL: could not find <script> block in legacy/scout/index.html');
     process.exit(1);
 }
 const script = scriptMatch[1];
@@ -1583,7 +1583,7 @@ assert(bbNulls.includes('Unavailable'), 's7: null seller values render Unavailab
 assert(!bbNulls.includes('>0<') && !bbNulls.includes('$0.00'), 's7: null values do not render as zero');
 
 /* 9. Seller table is scoped to seller-detail (CSS does not affect Scout/Portfolio/Cycle) */
-var scopedRules = fs.readFileSync(path.join(__dirname, 'static', 'index.html'), 'utf8');
+var scopedRules = fs.readFileSync(path.join(__dirname, '..', 'legacy', 'scout', 'index.html'), 'utf8');
 assert(scopedRules.includes('.seller-detail .seller-table'), 's7: seller table CSS is scoped to .seller-detail');
 assert(scopedRules.includes('.seller-detail .buy-box-card'), 's7: buy-box-card CSS is scoped to .seller-detail');
 assert(scopedRules.includes('.seller-detail .seller-table-wrap'), 's7: seller-table-wrap CSS is scoped');

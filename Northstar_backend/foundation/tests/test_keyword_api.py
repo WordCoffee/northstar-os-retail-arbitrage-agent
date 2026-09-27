@@ -9,10 +9,9 @@ from Northstar_backend.foundation.keywords.contracts import KeywordReadContracts
 from Northstar_backend.foundation.keywords.importer import KeywordImporter
 from Northstar_backend.foundation.models import Organization, User, Membership
 from Northstar_backend.foundation.enums import Role
-from Northstar_backend.foundation.tests.conftest import owner_headers, make_access_token, bearer
+from Northstar_backend.foundation.tests.conftest import owner_headers, make_access_token, bearer, FIXTURES_DIR
 
-FIXTURE = os.path.join("Northstar_backend", "foundation", "tests", "fixtures",
-                       "search_term_report_sample.csv")
+FIXTURE = os.path.join(FIXTURES_DIR, "search_term_report_sample.csv")
 
 
 def _seed_other_org(state):

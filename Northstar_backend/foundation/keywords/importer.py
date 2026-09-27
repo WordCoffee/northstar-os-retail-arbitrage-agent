@@ -15,6 +15,7 @@ import csv
 import os
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
+from pathlib import Path
 from typing import Optional
 from uuid import uuid4
 
@@ -381,8 +382,8 @@ class KeywordImporter:
 
     @staticmethod
     def _resolve_path(file_name: str) -> str:
-        base = os.environ.get("NORTHSTAR_KEYWORD_SOURCE_DIR") or os.path.join(
-            "Northstar_backend", "foundation", "tests", "fixtures")
+        base = (os.environ.get("NORTHSTAR_KEYWORD_SOURCE_DIR")
+                or str(Path(__file__).resolve().parents[1] / "tests" / "fixtures"))
         return os.path.join(base, file_name)
 
     def _batch_view(self, batch: dict, org_id: str,

@@ -11,9 +11,9 @@ import re
 
 import pytest
 
-from Northstar_backend.foundation.tests.conftest import owner_headers, make_access_token, bearer
+from Northstar_backend.foundation.tests.conftest import owner_headers, make_access_token, bearer, UI_DIST
 
-DIST = os.path.join("northstar-os-ui", "dist")
+DIST = os.fspath(UI_DIST)
 
 
 @pytest.fixture()

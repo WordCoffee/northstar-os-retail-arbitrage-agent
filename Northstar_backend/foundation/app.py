@@ -5,25 +5,25 @@ module lets the foundation be exercised in isolation without touching main.py.
 
 Canonical frontend (1C-06/D01): the React/Vite production build in
 ``northstar-os-ui/dist`` is served loopback-only at ``/ui/`` with an SPA
-fallback. The legacy/demo Analyst's Desk shell under ``/northstar-os`` is
-documented as legacy and NOT the canonical frontend.
+fallback (shared with the main app via ``ui_serving.mount_ui``). The
+legacy/demo Analyst's Desk shell under ``/northstar-os`` is documented as
+legacy and NOT the canonical frontend.
 """
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from pathlib import Path
 from typing import Optional
 
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 
 from .api.state import FoundationState
 from .api.router import router as foundation_router
 from .authn import assert_startup_posture
 
-_BASE = Path(__file__).resolve().parent.parent.parent
-UI_DIST = _BASE / "northstar-os-ui" / "dist"
+try:
+    from ui_serving import mount_ui  # Northstar_backend dir on sys.path
+except ImportError:  # pragma: no cover - project root on sys.path (foundation suite)
+    from Northstar_backend.ui_serving import mount_ui
 
 
 def create_app(db_path: Optional[str] = None) -> FastAPI:
@@ -46,20 +46,7 @@ def create_app(db_path: Optional[str] = None) -> FastAPI:
 
     # Canonical React/Vite UI (loopback-only production build). Hash routing
     # keeps deep links client-side; the index fallback covers direct loads.
-    if UI_DIST.exists():
-        app.mount("/ui/assets", StaticFiles(directory=str(UI_DIST / "assets")),
-                  name="ui-assets")
-
-        @app.get("/ui/{full_path:path}", include_in_schema=False)
-        def serve_ui(full_path: str):
-            candidate = UI_DIST / full_path
-            if full_path and candidate.is_file():
-                return FileResponse(str(candidate))
-            return FileResponse(str(UI_DIST / "index.html"))
-
-        @app.get("/ui", include_in_schema=False)
-        def serve_ui_root():
-            return FileResponse(str(UI_DIST / "index.html"))
+    mount_ui(app)
 
     @app.middleware("http")
     async def authz_denial_audit(request, call_next):

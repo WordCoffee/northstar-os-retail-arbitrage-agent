@@ -7,9 +7,9 @@ from Northstar_backend.foundation.api.state import FoundationState
 from Northstar_backend.foundation.keywords.sources import (
     SourceRegistry, classify_report_type, sniff_csv, _sha256, NOT_PRESENT,
 )
+from Northstar_backend.foundation.tests.conftest import FIXTURES_DIR
 
-FIXTURE = os.path.join("Northstar_backend", "foundation", "tests", "fixtures",
-                       "search_term_report_sample.csv")
+FIXTURE = os.path.join(FIXTURES_DIR, "search_term_report_sample.csv")
 
 
 def _state_and_org():

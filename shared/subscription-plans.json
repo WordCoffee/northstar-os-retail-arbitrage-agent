@@ -7,17 +7,18 @@
   "usage_caps_ref": "shared/usage-caps.json",
   "naming_note": "Display names only. Internal ids (plan/gate/route/API) are stable until a scheduled revision.",
   "service_catalog": {
-    "sourcescout": "Prospector",
-    "goldengoose": "Golden Goose",
-    "listingforge": "OfferChisel",
-    "adpilot": "The Auctioneer",
-    "socialpulse": "The Town Crier",
-    "thewatch": "The Watch",
-    "rankledger": "RankLedger",
-    "rivalboard": "The Rival Board",
-    "theledger": "The Ledger",
+    "sourcescout": "SourceScout",
+    "goldengoose": "Golden Goose Finder",
+    "listingforge": "ListingForge",
+    "adpilot": "AdPilot",
+    "socialpulse": "SocialPulse",
+    "thewatch": "Listing Guardian",
+    "rankledger": "Keyword Tracker",
+    "rivalboard": "Competitor Monitor",
+    "theledger": "Commerce Ops",
     "autothink": "AutothinK",
-    "commandcenter": "Command Center"
+    "commandcenter": "Command Center",
+    "creativestudio": "Creative Studio"
   },
   "plans": [
     {

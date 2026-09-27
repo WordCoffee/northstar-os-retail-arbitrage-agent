@@ -104,18 +104,15 @@ class LiveContainmentTests(unittest.TestCase):
     # --- browser page load: GET / and GET /?ui_debug=1 ---
 
     def test_root_serves_ui_with_zero_provider_calls(self):
-        resp = main.serve_scout()
-        self.assertTrue(os.path.basename(resp.path) == "index.html")
-        with open(resp.path, "r", encoding="utf-8") as f:
-            html = f.read()
-        # Root now serves the landing page (unified design)
-        self.assertIn("Northstar", html)
-        self.assertIn("Northstar OS", html)
+        resp = main.serve_root()
+        self.assertEqual(resp.status_code, 307)
+        self.assertEqual(resp.headers["location"], "/ui")
         self.assert_zero_provider_calls()
 
     def test_root_ui_debug_serves_ui_with_zero_provider_calls(self):
-        resp = main.serve_scout()
-        self.assertTrue(os.path.basename(resp.path) == "index.html")
+        resp = main.serve_root()
+        self.assertEqual(resp.status_code, 307)
+        self.assertEqual(resp.headers["location"], "/ui")
         self.assert_zero_provider_calls()
 
     # --- the exact endpoint the UI fetches on page load ---
@@ -134,14 +131,21 @@ class LiveContainmentTests(unittest.TestCase):
         self.assertEqual(result["status"], "ok")
         self.assert_zero_provider_calls()
 
-    def test_static_mount_serves_disk_only_zero_provider_calls(self):
-        static_mounts = [
-            r for r in main.app.routes if getattr(r, "path", None) == "/static"
+    def test_ui_assets_mount_serves_disk_only_zero_provider_calls(self):
+        ui_mounts = [
+            r for r in main.app.routes if getattr(r, "path", None) == "/ui/assets"
         ]
-        self.assertEqual(len(static_mounts), 1)
-        mount = static_mounts[0]
-        self.assertEqual(mount.app.directory, str(main.STATIC_DIR))
-        path, stat = mount.app.lookup_path("index.html")
+        self.assertEqual(len(ui_mounts), 1)
+        mount = ui_mounts[0]
+        dist_dir = os.path.normpath(os.path.join(
+            os.path.dirname(os.path.abspath(main.__file__)),
+            "..", "northstar-os-ui", "dist"))
+        self.assertEqual(mount.app.directory, str(os.path.join(dist_dir, "assets")))
+        assets_dir = os.path.join(dist_dir, "assets")
+        self.assertTrue(os.path.isdir(assets_dir))
+        js = next((a for a in os.listdir(assets_dir) if a.endswith(".js")), None)
+        self.assertIsNotNone(js)
+        path, stat = mount.app.lookup_path(js)
         self.assertTrue(stat is not None)
         self.assertTrue(os.path.isfile(path))
         self.assert_zero_provider_calls()

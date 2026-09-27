@@ -17,10 +17,10 @@ from Northstar_backend.foundation.app import create_app
 from Northstar_backend.foundation.enums import Role
 from Northstar_backend.foundation.models import Organization, Membership, User
 from Northstar_backend.foundation.tests.conftest import (
-    owner_headers, make_access_token, bearer,
+    owner_headers, make_access_token, bearer, UI_DIST, UI_SRC,
 )
 
-DIST = os.path.join("northstar-os-ui", "dist")
+DIST = os.fspath(UI_DIST)
 INDEX = os.path.join(DIST, "index.html")
 
 
@@ -252,7 +252,7 @@ def test_ui_redirect_safety():
 def test_ui_source_uses_semantic_forms_and_labels():
     """Static baseline: forms use labels (htmlFor), dialogs use role/aria-modal,
     interactive controls carry aria labels."""
-    src_root = os.path.join("northstar-os-ui", "src")
+    src_root = UI_SRC
     checks = {
         "form_labels": ('htmlFor="' in open(os.path.join(src_root, "foundation", "pages", "Jobs.jsx"), encoding="utf-8").read()),
         "tour_dialog": ('role="dialog"' in open(os.path.join(src_root, "foundation", "HelpTour.jsx"), encoding="utf-8").read()),
@@ -267,7 +267,7 @@ def test_ui_source_uses_semantic_forms_and_labels():
 def test_ui_theme_supports_reduced_motion():
     """Reduced-motion support: prefers-reduced-motion media query present."""
     css_files = []
-    for base in ("northstar-os-ui/src/styles",):
+    for base in (os.path.join(UI_SRC, "styles"),):
         for root, _dirs, files in os.walk(base):
             for f in files:
                 if f.endswith(".css"):

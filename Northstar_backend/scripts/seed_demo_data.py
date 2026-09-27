@@ -1,7 +1,7 @@
 """Northstar OS — Demo Data Seeder
 
 Seeds the database with demo/fixture data for development and testing.
-Reads the embedded demo fixtures from ``static/northstar-os/js/demo-data.js``
+Reads the embedded demo fixtures from ``legacy/northstar-os/js/demo-data.js``
 and populates products, keywords, campaigns, listings, and memory entries.
 
 All seeded data is tagged as demo (``data_kind='demo'``) so the UI can

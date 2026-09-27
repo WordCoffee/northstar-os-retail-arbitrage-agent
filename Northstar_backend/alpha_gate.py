@@ -38,16 +38,14 @@ PUBLIC_PATH_PREFIXES = (
     "/docs",
     "/redoc",
     "/openapi.json",
-    "/static",
+    "/ui",
     "/autothink",
-    "/northstar-os",
-    "/landing",
     "/favicon",
 )
 
 # Static shells served at the root are always reachable (they are UI only;
 # their data calls are what the gate protects).
-PUBLIC_EXACT_PATHS = ("/", "/workbench", "/northstar-os", "/northstar-os/")
+PUBLIC_EXACT_PATHS = ("/",)
 
 _warned_empty_allowlist = False
 

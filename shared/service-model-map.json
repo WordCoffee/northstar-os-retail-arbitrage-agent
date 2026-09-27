@@ -3,16 +3,17 @@
   "description": "Per-service model-tier assignment. Cloud is the customer-facing lane; local is the operator lane. model_router.resolve_for_service() reads this. Tier ids map to shared/model-suite.json (text tiers T1-T3; media tiers via each service's 'media' list).",
   "default_provider": { "customer": "cloud", "operator": "local" },
   "services": {
-    "sourcescout": { "display": "Prospector", "kind": "text", "tier": "T1" },
-    "goldengoose": { "display": "Golden Goose", "kind": "text", "tier": "T2" },
-    "listingforge": { "display": "OfferChisel", "kind": "text", "tier": "T2", "media": ["V2", "V3"] },
-    "adpilot": { "display": "The Auctioneer", "kind": "text", "tier": "T2" },
-    "socialpulse": { "display": "The Town Crier", "kind": "text", "tier": "T2", "media": ["V1", "V3"] },
-    "thewatch": { "display": "The Watch", "kind": "text", "tier": "T1" },
-    "rankledger": { "display": "RankLedger", "kind": "text", "tier": "T1" },
-    "rivalboard": { "display": "The Rival Board", "kind": "text", "tier": "T1" },
-    "theledger": { "display": "The Ledger", "kind": "text", "tier": "T1" },
+    "sourcescout": { "display": "SourceScout", "kind": "text", "tier": "T1" },
+    "goldengoose": { "display": "Golden Goose Finder", "kind": "text", "tier": "T2" },
+    "listingforge": { "display": "ListingForge", "kind": "text", "tier": "T2", "media": ["V2", "V3"] },
+    "adpilot": { "display": "AdPilot", "kind": "text", "tier": "T2" },
+    "socialpulse": { "display": "SocialPulse", "kind": "text", "tier": "T2", "media": ["V1", "V3"] },
+    "thewatch": { "display": "Listing Guardian", "kind": "text", "tier": "T1" },
+    "rankledger": { "display": "Keyword Tracker", "kind": "text", "tier": "T1" },
+    "rivalboard": { "display": "Competitor Monitor", "kind": "text", "tier": "T1" },
+    "theledger": { "display": "Commerce Ops", "kind": "text", "tier": "T1" },
     "autothink": { "display": "AutothinK", "kind": "text", "tier": "T2", "escalation_tier": "T3" },
+    "creativestudio": { "display": "Creative Studio", "kind": "media", "tier": "T2", "media": ["V2", "V3"] },
     "audit": { "display": "Audits / seam escalation", "kind": "text", "tier": "T3" }
   }
 }

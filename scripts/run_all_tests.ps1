@@ -4,7 +4,7 @@
 #   1. Backend sanitized full suite   (pytest, --ignore=agents/golden_goose_finder/test_single_match.py)
 #   2. Golden Goose module suite      (pytest agents/golden_goose_finder/tests)
 #   3. SPA UI contract suite          (node test_ui_display.cjs)
-#   4. Shell contract suite           (node static/northstar-os/tests/test_shell.cjs)
+#   4. Shell contract suite           (node legacy/northstar-os/tests/test_shell.cjs)
 #
 # Known exceptions are BAKED IN (not hidden):
 #   - test_single_match.py is excluded (import-time §3 env flip + no async plugin; tracked in
@@ -24,7 +24,7 @@ $ErrorActionPreference = "Stop"
 $Root        = (Get-Item (Join-Path $PSScriptRoot "..")).FullName
 $BaselinePath = Join-Path $Root "tests\BASELINE.json"
 $BackendDir  = Join-Path $Root "Northstar_backend"
-$ShellDir    = Join-Path $Root "Northstar_backend\static\northstar-os"
+$ShellDir    = Join-Path $Root "legacy\northstar-os"
 $TmpDir      = if ($env:TEMP) { $env:TEMP } else { $Root }
 # Harness-only: disable the edge rate limiter so the shared test process
 # (one client id) is not throttled by the anonymous 30/min production limit.
@@ -83,7 +83,7 @@ $hasFunctions = ($null -ne $base.baseline.functions)
 # ---------- 1. backend sanitized full suite ----------
 Write-Host "== [1/4] Backend sanitized full suite (pytest) =="
 $r = Run-Suite $BackendDir "python -m pytest -q -p no:cacheprovider"
-$sm = [regex]::Match($r.text, "(?:(\d+)\s+failed,\s+)?(\d+)\s+passed,\s+(\d+)\s+skipped,\s+(\d+)\s+subtests\s+passed")
+$sm = [regex]::Match($r.text, "(?:(\d+)\s+failed,\s+)?(\d+)\s+passed,\s+(\d+)\s+skipped,\s+(?:\d+\s+warnings?,\s+)?(\d+)\s+subtests\s+passed")
 if (-not $sm.Success) {
     $bParsed = $false
     Write-Host "  ERROR: could not parse backend summary (pytest exit code $($r.code))" -ForegroundColor Red

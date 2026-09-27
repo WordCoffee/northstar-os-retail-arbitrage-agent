@@ -15,9 +15,9 @@ from Northstar_backend.foundation.api.state import FoundationState
 from Northstar_backend.foundation.keywords.importer import KeywordImporter, ImportError_
 from Northstar_backend.foundation.models import Organization, User, Membership
 from Northstar_backend.foundation.enums import Role
+from Northstar_backend.foundation.tests.conftest import FIXTURES_DIR
 
-FIXTURE = os.path.join("Northstar_backend", "foundation", "tests", "fixtures",
-                       "search_term_report_sample.csv")
+FIXTURE = os.path.join(FIXTURES_DIR, "search_term_report_sample.csv")
 
 
 @pytest.fixture()

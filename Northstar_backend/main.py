@@ -20,6 +20,7 @@ import offer_enrichment
 import live_gate
 import completeness_score
 from canopy_client import get_canopy_product
+from ui_serving import mount_ui
 
 # Golden Goose Finder — multi-pack breakdown arbitrage scanner
 try:
@@ -84,7 +85,6 @@ def _ollama_base_url() -> str:
         or os.environ.get("OLLAMA_HOST")
         or "http://localhost:11434"
     ).rstrip("/")
-STATIC_DIR = BASE_DIR / "static"
 
 
 @asynccontextmanager
@@ -137,11 +137,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
-
-# Northstar OS services suite shell (Analyst's Desk SPA)
-NORTHSTAR_OS_DIR = STATIC_DIR / "northstar-os"
-
 # AutothinK workspace (served at /autothink/ui/index.html — resolves the
 # shell's ../../autothink/ui/index.html iframe and new-tab link from
 # /static/northstar-os/index.html)
@@ -154,44 +149,15 @@ _DOCS_DIR = BASE_DIR.parent / "docs"
 if _DOCS_DIR.exists():
     app.mount("/reference", StaticFiles(directory=str(_DOCS_DIR)), name="reference")
 
+# Canonical React/Vite frontend (northstar-os-ui/dist) at /ui. No-op when the
+# build is absent, so offline/dev harnesses still start cleanly.
+mount_ui(app)
+
 
 @app.get("/", include_in_schema=False)
-def serve_scout():
-    """Root serves the landing page — except in private alpha, where the root
-    is the workspace itself (so the tunnel URL behaves like the real product)."""
-    try:
-        import os as _os
-        from alpha_gate import private_alpha_enabled
-        root_to_app = str(_os.getenv("NORTHSTAR_ROOT_TO_APP", "") or "").strip() == "1"
-        if root_to_app or private_alpha_enabled():
-            return RedirectResponse(url="/northstar-os/", status_code=307)
-    except Exception:
-        pass
-    return FileResponse(STATIC_DIR / "landing" / "index.html")
-
-
-@app.get("/landing", include_in_schema=False)
-def serve_landing():
-    """Landing page."""
-    return FileResponse(STATIC_DIR / "landing" / "index.html")
-
-
-# FIX (critical): the shell loads its css/js as RELATIVE paths
-# (css/tokens.css, js/engine.js) resolved against /northstar-os/. A single
-# index route left every asset at 404 -> the suite rendered as unstyled HTML
-# with dead JavaScript. Mount the whole directory (html=True serves index.html
-# for the directory request and 307s /northstar-os -> /northstar-os/).
-app.mount(
-    "/northstar-os",
-    StaticFiles(directory=str(NORTHSTAR_OS_DIR), html=True),
-    name="northstar-os",
-)
-
-
-@app.get("/workbench", include_in_schema=False)
-def serve_workbench():
-    """Full research workbench."""
-    return FileResponse(STATIC_DIR / "index.html")
+def serve_root():
+    """Root always redirects to the canonical /ui frontend."""
+    return RedirectResponse(url="/ui", status_code=307)
 
 
 # --- Middleware stack (order matters: outermost runs first) ---

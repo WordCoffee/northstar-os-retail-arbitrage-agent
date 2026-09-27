@@ -13,10 +13,9 @@ from decimal import Decimal
 
 from Northstar_backend.foundation.keywords.contracts import KeywordReadContracts
 from Northstar_backend.foundation.jobs_worker import JobWorker
-from Northstar_backend.foundation.tests.conftest import owner_headers
+from Northstar_backend.foundation.tests.conftest import owner_headers, FIXTURES_DIR
 
-FIXTURE = os.path.join("Northstar_backend", "foundation", "tests", "fixtures",
-                       "search_term_report_sample.csv")
+FIXTURE = os.path.join(FIXTURES_DIR, "search_term_report_sample.csv")
 
 
 def test_gate_full_import_lifecycle(client, seeded_state):

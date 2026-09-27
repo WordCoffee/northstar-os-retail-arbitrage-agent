@@ -16,7 +16,8 @@ import pytest
 from Northstar_backend.foundation.enums import Role
 from Northstar_backend.foundation.models import Organization, Membership, User
 from Northstar_backend.foundation.tests.conftest import (
-    owner_headers, make_access_token, bearer,
+    owner_headers, make_access_token, bearer, PROJECT_ROOT, UI_ROOT, UI_DIST,
+    FIXTURES_DIR,
 )
 
 
@@ -33,7 +34,7 @@ def test_secret_scan_no_env_values_in_tree():
     """Changed files must not contain .env values. Scan for obvious secret
     assignment patterns in the foundation code we added this phase."""
     hits = []
-    for root, _dirs, files in os.walk("Northstar_backend/foundation"):
+    for root, _dirs, files in os.walk(os.path.join(PROJECT_ROOT, "Northstar_backend", "foundation")):
         if "__pycache__" in root:
             continue
         for f in files:
@@ -48,9 +49,9 @@ def test_secret_scan_no_env_values_in_tree():
 
 def test_bundle_scan_no_secrets():
     bundle = ""
-    for a in os.listdir(os.path.join("northstar-os-ui", "dist", "assets")):
+    for a in os.listdir(os.path.join(UI_DIST, "assets")):
         if a.endswith(".js"):
-            bundle += open(os.path.join("northstar-os-ui", "dist", "assets", a),
+            bundle += open(os.path.join(UI_DIST, "assets", a),
                            encoding="utf-8", errors="ignore").read()
     for pat in (r"(?i)NORTHSTAR_JWT_SECRET", r"BEGIN (RSA|PRIVATE) KEY",
                 r"(?i)sk-[A-Za-z0-9]{20,}", r"(?i)api[_-]?key\s*[:=]\s*[\"'][A-Za-z0-9]{16,}"):
@@ -149,7 +150,7 @@ def test_get_side_effect_audit(web, seeded_state):
 
 def test_dependency_audit_present():
     """Dependency metadata exists and is valid."""
-    data = json.load(open("northstar-os-ui/package-lock.json", encoding="utf-8"))
+    data = json.load(open(os.path.join(UI_ROOT, "package-lock.json"), encoding="utf-8"))
     assert data["lockfileVersion"]
 
 
@@ -183,8 +184,7 @@ def test_perf_smoke(seeded_state):
     # keyword search latency
     imp = KeywordImporter(seeded_state.repos)
     imp.import_file(seeded_state.ids["org"],
-                    os.path.join("Northstar_backend", "foundation", "tests",
-                                 "fixtures", "search_term_report_sample.csv"))
+                    os.path.join(FIXTURES_DIR, "search_term_report_sample.csv"))
     t1 = _t.perf_counter()
     kws = svc.repos.keywords.list(where={"organization_id": seeded_state.ids["org"]})
     search_dt = _t.perf_counter() - t1

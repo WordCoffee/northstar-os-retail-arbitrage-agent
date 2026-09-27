@@ -123,9 +123,9 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if os.getenv("NORTHSTAR_DISABLE_RATE_LIMIT", "").strip() == "1":
             return await call_next(request)
 
-        # Skip rate limiting for health checks and static files
+        # Skip rate limiting for health checks and static/frontend files
         path = request.url.path
-        if path in ("/health", "/health/detailed") or path.startswith("/static"):
+        if path in ("/health", "/health/detailed") or path.startswith(("/static", "/ui")):
             return await call_next(request)
 
         client_id = self._get_client_id(request)

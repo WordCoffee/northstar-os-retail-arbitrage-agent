@@ -1,19 +1,19 @@
 {
   "schema_version": 1,
-  "created": "2026-09-20T15:30:00Z",
-  "note": "Phase A (A0-A4) + B: learning loop + cache hierarchy MVP, economics recalibration (usage-caps v2 + 60-80% margin band), config-driven model suite, live data warehouse (products live columns + live_pulls, stock runner, live_catalog, wholesale_catalog), data readiness runner, live catalog routes. Protected-hash drift remediated -> ZERO known failures. Backend passed 2348 -> 2420.",
+  "created": "2026-09-26T22:30:00Z",
+  "note": "S0 UI v3 rollout: retired legacy shell, rewired serving to northstar-os-ui (mount_ui). Foundation keyword tests fixed to be cwd-independent (harness runs pytest from Northstar_backend); KeywordImporter._resolve_path default base now derived from module location; protected_hashes re-baselined (data/scanner-search-cache.json + fee_engine.py had legitimately drifted since the e9aa691 snapshot, matching committed artifacts); csv-parse restored for the Cloudflare functions contract suite. All five suites green -> ZERO known failures.",
   "known_exceptions": {
     "ignored": [],
-    "ignored_reason": "NONE \u2014 test_single_match.py hygiene fixed under Phase F/S3; re-included in the standard suite.",
+    "ignored_reason": "NONE",
     "known_failures": [],
-    "known_failures_reason": "NONE \u2014 protected-hash drift remediated (fixtures/protected_hashes.json re-baselined to the committed data/scanner-search-cache.json and product_analysis.py). Harness fully green.",
-    "harness_note": "scripts/run_all_tests.ps1 backend summary regex now tolerates the zero-failure pytest line (\"0 failed\" is omitted when there are no failures)."
+    "known_failures_reason": "NONE - S0 pre-existing breakage remediated (cwd-relative foundation paths, conftest import collision, stale protected hashes, missing csv-parse). Harness fully green.",
+    "harness_note": "scripts/run_all_tests.ps1 backend summary regex now tolerates both the zero-failure line and an optional 'N warnings,' token between skipped and subtests."
   },
   "baseline": {
     "backend": {
-      "passed": 2425,
+      "passed": 3091,
       "failed": 0,
-      "skipped": 3,
+      "skipped": 64,
       "subtests": 48
     },
     "golden_goose": {

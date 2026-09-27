@@ -18,9 +18,9 @@ import pytest
 
 from Northstar_backend.foundation.enums import Role
 from Northstar_backend.foundation.models import Organization, Membership, User
-from Northstar_backend.foundation.tests.conftest import make_access_token, bearer
+from Northstar_backend.foundation.tests.conftest import make_access_token, bearer, FIXTURES_DIR, UI_DIST, UI_SRC
 
-DIST = os.path.join("northstar-os-ui", "dist")
+DIST = os.fspath(UI_DIST)
 
 
 @pytest.fixture()
@@ -330,8 +330,7 @@ def test_24_schedule_enqueues_once(stack):
 
 
 def test_25_keyword_import_succeeds(stack):
-    fixture = os.path.join("Northstar_backend", "foundation", "tests", "fixtures",
-                           "search_term_report_sample.csv")
+    fixture = os.path.join(FIXTURES_DIR, "search_term_report_sample.csv")
     r = stack["state"].keywords.import_file(stack["org"], fixture,
                                             submitted_by=stack["user"])
     assert r["status"] == "completed"
@@ -339,16 +338,14 @@ def test_25_keyword_import_succeeds(stack):
 
 
 def test_26_duplicate_import_idempotent(stack):
-    fixture = os.path.join("Northstar_backend", "foundation", "tests", "fixtures",
-                           "search_term_report_sample.csv")
+    fixture = os.path.join(FIXTURES_DIR, "search_term_report_sample.csv")
     a = stack["state"].keywords.import_file(stack["org"], fixture)
     b = stack["state"].keywords.import_file(stack["org"], fixture)
     assert b["idempotent_replay"] is True and a["id"] == b["id"]
 
 
 def test_27_invalid_rows_preserved(stack):
-    fixture = os.path.join("Northstar_backend", "foundation", "tests", "fixtures",
-                           "search_term_report_sample.csv")
+    fixture = os.path.join(FIXTURES_DIR, "search_term_report_sample.csv")
     r = stack["state"].keywords.import_file(stack["org"], fixture)
     rejected = stack["state"].keywords.rejected_rows(stack["org"], r["id"])
     assert len(rejected) == 1
@@ -406,7 +403,7 @@ def test_33_session_revocation_updates_ui(stack):
 
 
 def test_34_backend_unavailable_state_works():
-    src = open(os.path.join("northstar-os-ui", "src", "foundation", "pages",
+    src = open(os.path.join(UI_SRC, "foundation", "pages",
                             "Jobs.jsx"), encoding="utf-8").read()
     assert "Backend unavailable" in src  # explicit error state
 

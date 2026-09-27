@@ -9,6 +9,7 @@ Verifies that:
 
 from __future__ import annotations
 
+import importlib.util
 import os
 import re
 import subprocess
@@ -31,7 +32,20 @@ _SAFE_VARS = {
     "GOLDEN_GOOSE_LIVE_OPERATOR_APPROVED",
 }
 
-import conftest as _conftest  # noqa: E402
+def _load_backend_conftest():
+    """Load Northstar_backend/conftest.py under a unique name so its helpers
+    are available even when a nested conftest is already imported as
+    'conftest' (module-name collision when run from the repo root)."""
+    spec = importlib.util.spec_from_file_location("_ns_backend_conftest",
+                                                  _BACKEND / "conftest.py")
+    if spec is None or spec.loader is None:
+        raise ImportError(f"cannot load {_BACKEND / 'conftest.py'}")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_conftest = _load_backend_conftest()
 
 
 def _credential_vars_now() -> list:

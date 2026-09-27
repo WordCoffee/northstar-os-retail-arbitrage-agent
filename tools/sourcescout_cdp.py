@@ -9,13 +9,13 @@ async def main():
     if not browser:
         print('CDP attach failed - will fall back to fresh launch')
         ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-        await take_screenshot('http://127.0.0.1:8000/static/northstar-os/index.html#/sourcescout', use_chrome=True)
+        await take_screenshot('http://127.0.0.1:8000/ui#/sourcescout', use_chrome=True)
         return
     
     print(f'Attached! Contexts: {len(browser.contexts)}, Pages: {len(pages)}')
     
     page = pages[0] if pages else await ctx.new_page()
-    await page.goto('http://127.0.0.1:8000/static/northstar-os/index.html#/sourcescout', wait_until='networkidle', timeout=30000)
+    await page.goto('http://127.0.0.1:8000/ui#/sourcescout', wait_until='networkidle', timeout=30000)
     print('Navigated to Sourcescout')
     
     await page.wait_for_timeout(5000)

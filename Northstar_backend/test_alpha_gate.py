@@ -38,7 +38,7 @@ def test_public_paths_never_blocked(monkeypatch):
     monkeypatch.setenv("NORTHSTAR_PRIVATE_ALPHA", "1")
     monkeypatch.setenv("NORTHSTAR_ALPHA_ALLOWLIST", "op@x.com")
     for p in ("/health", "/api/health", "/api/v1/plans", "/legal/terms",
-              "/static/x.css", "/autothink/ui/index.html", "/northstar-os/", "/"):
+              "/ui", "/ui/jobs", "/ui/assets/index.js", "/autothink/ui/index.html", "/"):
         assert alpha_gate.decide("GET", p, None) == (False, "public_path"), p
 
 
@@ -110,7 +110,7 @@ def test_middleware_allows_when_alpha_off(monkeypatch):
     assert c.get("/api/v1/plans").status_code in (200, 404)
 
 
-def test_root_redirects_to_workspace_in_private_alpha(monkeypatch):
+def test_root_redirects_to_ui_in_private_alpha(monkeypatch):
     monkeypatch.setenv("NORTHSTAR_PRIVATE_ALPHA", "1")
     monkeypatch.setenv("NORTHSTAR_ALPHA_ALLOWLIST", "op@x.com")
     monkeypatch.setenv("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
@@ -119,10 +119,10 @@ def test_root_redirects_to_workspace_in_private_alpha(monkeypatch):
     c = TestClient(app)
     r = c.get("/", follow_redirects=False)
     assert r.status_code == 307
-    assert r.headers["location"] == "/northstar-os/"
+    assert r.headers["location"] == "/ui"
 
 
-def test_root_serves_landing_when_alpha_off(monkeypatch):
+def test_root_serves_ui_when_alpha_off(monkeypatch):
     monkeypatch.delenv("NORTHSTAR_PRIVATE_ALPHA", raising=False)
     monkeypatch.delenv("NORTHSTAR_ROOT_TO_APP", raising=False)
     monkeypatch.setenv("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
@@ -130,18 +130,18 @@ def test_root_serves_landing_when_alpha_off(monkeypatch):
     from main import app
     c = TestClient(app)
     r = c.get("/", follow_redirects=False)
-    assert r.status_code == 200
+    assert r.status_code == 307
+    assert r.headers["location"] == "/ui"
 
 
-def test_root_redirects_when_root_to_app_even_without_gate(monkeypatch):
+def test_root_redirects_to_ui_even_without_gate(monkeypatch):
     monkeypatch.delenv("NORTHSTAR_PRIVATE_ALPHA", raising=False)
-    monkeypatch.setenv("NORTHSTAR_ROOT_TO_APP", "1")
     monkeypatch.setenv("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
     from fastapi.testclient import TestClient
     from main import app
     c = TestClient(app)
     r = c.get("/", follow_redirects=False)
-    assert r.status_code == 307 and r.headers["location"] == "/northstar-os/"
+    assert r.status_code == 307 and r.headers["location"] == "/ui"
 
 
 def test_auth_paths_are_public_under_gate(monkeypatch):

@@ -14,9 +14,17 @@ from __future__ import annotations
 import os
 import tempfile
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 import jwt as pyjwt
 import pytest
+
+# --- repository-relative paths (cwd-independent; harness runs pytest from Northstar_backend/)
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+UI_ROOT = PROJECT_ROOT / "northstar-os-ui"
+UI_DIST = UI_ROOT / "dist"
+UI_SRC = UI_ROOT / "src"
+FIXTURES_DIR = PROJECT_ROOT / "Northstar_backend" / "foundation" / "tests" / "fixtures"
 
 # --- test environment (set at import, before fixtures) -----------------------
 os.environ["ENVIRONMENT"] = "development"

@@ -217,22 +217,25 @@ class ContainmentReassertTests(unittest.TestCase):
         self.assertIsNotNone(body)
 
     def test_root_debug_zero_provider_calls(self):
-        resp = main.serve_scout()
-        self.assertTrue(os.path.basename(resp.path) == "index.html")
-        with open(resp.path, "r", encoding="utf-8") as f:
-            html = f.read()
-        # Root now serves the landing page (unified design system)
-        self.assertIn("Northstar", html)
-        self.assertIn("Northstar OS", html)
+        resp = main.serve_root()
+        self.assertEqual(resp.status_code, 307)
+        self.assertEqual(resp.headers["location"], "/ui")
 
-    def test_static_asset_lookup_offline(self):
-        static_mounts = [
-            r for r in main.app.routes if getattr(r, "path", None) == "/static"
+    def test_ui_assets_lookup_offline(self):
+        ui_mounts = [
+            r for r in main.app.routes if getattr(r, "path", None) == "/ui/assets"
         ]
-        self.assertEqual(len(static_mounts), 1)
-        mount = static_mounts[0]
-        path, stat = mount.app.lookup_path("index.html")
-        self.assertTrue(path.endswith("index.html"))
+        self.assertEqual(len(ui_mounts), 1)
+        mount = ui_mounts[0]
+        dist_dir = os.path.normpath(os.path.join(
+            os.path.dirname(os.path.abspath(main.__file__)),
+            "..", "northstar-os-ui", "dist"))
+        assets_dir = os.path.join(dist_dir, "assets")
+        self.assertTrue(os.path.isdir(assets_dir))
+        js = next((a for a in os.listdir(assets_dir) if a.endswith(".js")), None)
+        self.assertIsNotNone(js)
+        path, stat = mount.app.lookup_path(js)
+        self.assertTrue(path.endswith(".js"))
         self.assertIsNotNone(stat)
 
 

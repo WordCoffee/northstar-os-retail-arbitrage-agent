@@ -1,4 +1,4 @@
-with open('static/index.html', 'r') as f:
+with open('../legacy/scout/index.html', 'r') as f:
     content = f.read()
 import re
 match = re.search(r'id="scoutTable"', content)

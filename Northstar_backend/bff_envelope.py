@@ -37,7 +37,7 @@ WRAP_PREFIXES = (
 )
 
 SKIP_PREFIXES = ("/legal", "/health", "/api/golden-goose", "/api/v1/credits",
-                 "/api/v1/auth", "/api/v1/admin", "/static", "/api/transcribe", "/api/files", "/api/latest-deals", "/api/data/")
+                 "/api/v1/auth", "/api/v1/admin", "/api/transcribe", "/api/files", "/api/latest-deals", "/api/data/")
 #if needed: exclude already-conformant by content check anyway
 
 
