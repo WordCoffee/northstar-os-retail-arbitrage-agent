@@ -10,7 +10,6 @@ Never logs or returns credentials, hashes, or full tokens.
 from __future__ import annotations
 
 import secrets
-import time
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 from urllib.parse import urlsplit
@@ -25,9 +24,6 @@ SESSION_PATH = "/api/v1/foundation"   # narrowly scoped to the Foundation API
 CSRF_PATH = "/"                        # readable by the SPA document
 DEFAULT_TTL_SECONDS = 3600
 _UNSAFE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
-
-# Per-process login throttle (documented limitation: not shared across workers).
-_LOGIN_ATTEMPTS: dict[str, list[float]] = {}
 
 
 def mint_access_token(*, user_id: str, org_id: Optional[str], role: Optional[str],
@@ -91,18 +87,3 @@ def csrf_ok(request) -> bool:
         if urlsplit(origin).netloc != request.headers.get("host", ""):
             return False
     return True
-
-
-def check_login_rate(key: str, *, limit: int = 5, window_seconds: int = 60) -> bool:
-    now = time.monotonic()
-    arr = [t for t in _LOGIN_ATTEMPTS.get(key, []) if now - t < window_seconds]
-    if len(arr) >= limit:
-        _LOGIN_ATTEMPTS[key] = arr
-        return False
-    arr.append(now)
-    _LOGIN_ATTEMPTS[key] = arr
-    return True
-
-
-def reset_login_rate(key: str) -> None:
-    _LOGIN_ATTEMPTS.pop(key, None)

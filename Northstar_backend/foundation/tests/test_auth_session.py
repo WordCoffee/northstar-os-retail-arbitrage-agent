@@ -13,14 +13,6 @@ EMAIL = "owner@test.test"
 PW = "OwnerPassw0rd!23"
 
 
-@pytest.fixture(autouse=True)
-def _clear_rate_limiter():
-    from Northstar_backend.foundation import auth_session
-    auth_session._LOGIN_ATTEMPTS.clear()
-    yield
-    auth_session._LOGIN_ATTEMPTS.clear()
-
-
 def _app_with_owner(monkeypatch):
     monkeypatch.setenv("ENVIRONMENT", "development")
     monkeypatch.setenv("NORTHSTAR_JWT_SECRET", "test-owner-secret")
@@ -119,7 +111,7 @@ def test_login_rate_limited(monkeypatch):
     assert 429 in codes
 
 
-def test_hosted_fail_closed_ignores_dev_shim_and_marks_secure(monkeypatch):
+def test_hosted_fail_closed_ignores_dev_shim_and_requires_shared_store(monkeypatch):
     monkeypatch.setenv("ENVIRONMENT", "production")
     monkeypatch.setenv("NORTHSTAR_JWT_SECRET", "prod-owner-secret-value")
     monkeypatch.setenv("NORTHSTAR_JWT_ISSUER", "https://northstar.example")
@@ -138,7 +130,23 @@ def test_hosted_fail_closed_ignores_dev_shim_and_marks_secure(monkeypatch):
     # Header-based impersonation must NOT authenticate a hosted request.
     assert client.get("/api/v1/foundation/me",
                       headers={"X-User-Id": r["user_id"]}).status_code == 401
-    # Cookie is Secure in production.
+    # Hosted login fails closed without a shared throttle store (SQLite here).
     lr = client.post("/api/v1/foundation/auth/login", json={"email": EMAIL, "password": PW})
-    assert lr.status_code == 200
-    assert "secure" in _lower_headers(lr).get("set-cookie", "").lower()
+    assert lr.status_code == 503
+    assert lr.json()["detail"]["code"] == "auth_store_unavailable"
+
+
+def test_secure_cookie_attributes_in_production_like(monkeypatch):
+    """HTTPS cookie attributes are asserted at the transport layer, separately
+    from any local HTTP walkthrough."""
+    from Northstar_backend.foundation.auth_session import (
+        session_cookie_kwargs, csrf_cookie_kwargs,
+    )
+    monkeypatch.setenv("ENVIRONMENT", "production")
+    s = session_cookie_kwargs("t")
+    c = csrf_cookie_kwargs("t")
+    assert s["secure"] is True and s["httponly"] is True and s["samesite"] == "strict"
+    assert s["path"] == "/api/v1/foundation"
+    assert c["secure"] is True and c["httponly"] is False and c["path"] == "/"
+    monkeypatch.setenv("ENVIRONMENT", "development")
+    assert session_cookie_kwargs("t")["secure"] is False

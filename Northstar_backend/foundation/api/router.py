@@ -270,20 +270,24 @@ def login(body: LoginBody, request: Request, response: Response,
     CSRF cookie. Never returns an access token to JavaScript (P2-T5b)."""
     from ..auth_session import (
         mint_access_token, session_cookie_kwargs, new_csrf_token,
-        csrf_cookie_kwargs, check_login_rate, reset_login_rate,
-        DEFAULT_TTL_SECONDS,
+        csrf_cookie_kwargs, DEFAULT_TTL_SECONDS,
     )
-    from ..authn import jwt_secret
+    from ..authn import jwt_secret, environment as auth_environment
     from ..credentials import get_by_email, verify_password
+    from .. import login_throttle
 
     if not jwt_secret():
         # Fail closed everywhere (not just prod-like) rather than 500 on mint.
         raise _err("auth_unconfigured", "authentication is not configured", 503)
+    try:
+        login_throttle.require_shared(state.db, auth_environment())
+    except login_throttle.ThrottleUnavailable as exc:
+        raise _err("auth_store_unavailable", str(exc), 503)
 
     email = (body.email or "").strip().lower()
     client = request.client.host if getattr(request, "client", None) else "unknown"
     rate_key = f"{email}|{client}"
-    if not check_login_rate(rate_key):
+    if not login_throttle.allow(state.db, rate_key):
         raise _err("rate_limited", "too many login attempts; try again later", 429)
 
     row = get_by_email(state.db, email)
@@ -292,7 +296,7 @@ def login(body: LoginBody, request: Request, response: Response,
                            after_meta={"email": email}, result="denied")
         raise _err("invalid_credentials", "Invalid email or password", 401)
 
-    reset_login_rate(rate_key)
+    login_throttle.reset(state.db, rate_key)
     user_id = row["user_id"]
     active = [m for m in state.repos.memberships.for_user(user_id)
               if (m.get("status") or "active") == "active"]
