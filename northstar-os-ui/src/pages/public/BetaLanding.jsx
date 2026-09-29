@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { MetricTiles } from '../../components/Shared.jsx'
 
 export default function BetaLanding() {
+  const navigate = useNavigate()
   return (
     <div className="fade-in">
       <div className="page-header" style={{ textAlign: 'center', paddingTop: 60 }}>
@@ -35,8 +37,8 @@ export default function BetaLanding() {
         <div className="stack" style={{ gap: 10 }}>
           <p className="text-mid" style={{ fontSize: 13 }}>If you have received an invitation, accept it through the link provided to you.</p>
           <div className="inline-flex" style={{ gap: 10 }}>
-            <button className="btn btn-primary btn-block" onClick={() => window.location.hash = '#/beta/accept'}>Accept Invitation</button>
-            <button className="btn btn-block" onClick={() => window.location.href = '/sign-in'}>Sign In</button>
+            <button className="btn btn-primary btn-block" onClick={() => navigate('/beta/accept')}>Accept Invitation</button>
+            <button className="btn btn-block" onClick={() => navigate('/sign-in')}>Sign In</button>
           </div>
           <p className="text-low" style={{ fontSize: 12, textAlign: 'center' }}>Need access? Contact your organization operator.</p>
         </div>
