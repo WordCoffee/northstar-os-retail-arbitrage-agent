@@ -9,7 +9,7 @@ import os
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, Field
 
 from ..context import RequestContext
@@ -233,6 +233,11 @@ class ImportCancelBody(BaseModel):
     reason: str = "operator cancelled"
 
 
+class LoginBody(BaseModel):
+    email: str
+    password: str
+
+
 # ---- context / identity ------------------------------------------------------
 
 @router.get("/me", response_model=UserContextResponse)
@@ -256,6 +261,72 @@ def me(state: FoundationState = Depends(get_state),
         view_context=ctx.view_context,
         permissions=sorted(permissions_for_role(role)) if role else [],
     )
+
+
+@router.post("/auth/login")
+def login(body: LoginBody, request: Request, response: Response,
+          state: FoundationState = Depends(get_state)):
+    """Email+password login. Sets the HttpOnly session cookie + a double-submit
+    CSRF cookie. Never returns an access token to JavaScript (P2-T5b)."""
+    from ..auth_session import (
+        mint_access_token, session_cookie_kwargs, new_csrf_token,
+        csrf_cookie_kwargs, check_login_rate, reset_login_rate,
+        DEFAULT_TTL_SECONDS,
+    )
+    from ..authn import jwt_secret, environment as auth_environment
+    from ..credentials import get_by_email, verify_password
+
+    if auth_environment() in ("staging", "production") and not jwt_secret():
+        raise _err("auth_unconfigured", "authentication is not configured", 503)
+
+    email = (body.email or "").strip().lower()
+    client = request.client.host if getattr(request, "client", None) else "unknown"
+    rate_key = f"{email}|{client}"
+    if not check_login_rate(rate_key):
+        raise _err("rate_limited", "too many login attempts; try again later", 429)
+
+    row = get_by_email(state.db, email)
+    if not row or not verify_password(body.password, row["password_hash"]):
+        state.audit.record(action="auth.login.failed", actor_user_id=None,
+                           after_meta={"email": email}, result="denied")
+        raise _err("invalid_credentials", "Invalid email or password", 401)
+
+    reset_login_rate(rate_key)
+    user_id = row["user_id"]
+    active = [m for m in state.repos.memberships.for_user(user_id)
+              if (m.get("status") or "active") == "active"]
+    org_id = active[0]["organization_id"] if active else None
+    role = active[0]["role"] if active else None
+
+    token, jti, exp = mint_access_token(user_id=user_id, org_id=org_id, role=role)
+    state.repos.sessions.register(jti, user_id, org_id, exp.isoformat())
+    response.set_cookie(**session_cookie_kwargs(token, max_age=DEFAULT_TTL_SECONDS))
+    response.set_cookie(**csrf_cookie_kwargs(new_csrf_token(), max_age=DEFAULT_TTL_SECONDS))
+    state.audit.record(action="auth.login.success", actor_user_id=user_id,
+                       organization_id=org_id, after_meta={"email": email})
+    return {"ok": True, "user_id": user_id}
+
+
+@router.post("/auth/logout")
+def logout(request: Request, response: Response,
+           state: FoundationState = Depends(get_state),
+           ctx: RequestContext = Depends(get_context)):
+    """Revoke the current session and clear the session + CSRF cookies."""
+    from ..auth_session import SESSION_COOKIE, CSRF_COOKIE, SESSION_PATH, CSRF_PATH
+    from ..authn import decode_and_validate, AuthError
+    token = request.cookies.get(SESSION_COOKIE)
+    if token:
+        try:
+            jti = decode_and_validate(token).get("jti")
+        except AuthError:
+            jti = None
+        if jti:
+            state.repos.sessions.revoke(jti, reason="logout")
+    response.delete_cookie(SESSION_COOKIE, path=SESSION_PATH)
+    response.delete_cookie(CSRF_COOKIE, path=CSRF_PATH)
+    state.audit.record(action="auth.logout", actor_user_id=ctx.user_id,
+                       organization_id=ctx.effective_organization_id, after_meta={})
+    return {"ok": True}
 
 
 @router.get("/roles")

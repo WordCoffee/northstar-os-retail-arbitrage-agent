@@ -127,13 +127,24 @@ def get_context(
     jti: Optional[str] = None
     org_claim: Optional[str] = None
 
+    auth_token: Optional[str] = None
+    from_cookie = False
     if authorization:
         # --- JWT path (validation executes before any identity header) ---
         if not authorization.lower().startswith("bearer "):
             raise _auth_401("invalid_authorization_header")
-        token = authorization.split(" ", 1)[1].strip()
+        auth_token = authorization.split(" ", 1)[1].strip()
+    else:
+        # --- Cookie session path (canonical hosted transport, P2-T5b) ---
+        from ..auth_session import SESSION_COOKIE
+        ck = request.cookies.get(SESSION_COOKIE)
+        if ck:
+            auth_token = ck
+            from_cookie = True
+
+    if auth_token:
         try:
-            claims = decode_and_validate(token)
+            claims = decode_and_validate(auth_token)
         except AuthError as exc:
             raise _auth_401(exc.code, exc.message)
         user_id = str(claims.get("sub") or "")
@@ -149,6 +160,12 @@ def get_context(
             if not state.repos.sessions.by_jti(jti):
                 state.repos.sessions.register(
                     jti, user_id, org_claim, _exp_iso(claims.get("exp")))
+        # CSRF: cookie-authenticated state-changing requests must double-submit.
+        if from_cookie:
+            from ..auth_session import csrf_ok
+            if not csrf_ok(request):
+                raise HTTPException(status_code=403, detail={
+                    "code": "csrf_failed", "message": "CSRF validation failed"})
     else:
         # --- Dev shim path: local development only ---
         if dev_shim_enabled() and is_local and x_user_id:
