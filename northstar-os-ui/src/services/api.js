@@ -1,3 +1,8 @@
+// DEPRECATED (F11): legacy v2 backend API client. NOT imported by any v3 room
+// (pages/internal, pages/customer, pages/admin, pages/public, foundation, or the
+// v3 components). Retained only for the retired, unmounted top-level legacy pages
+// (Hub/Ledger/TownCrier/etc.), which are scheduled for removal. Do not add new
+// imports from v3 code; use `foundation/api.js` instead.
 // Northstar OS — live backend API client
 // All calls proxy through Vite to the FastAPI service on :8000.
 
