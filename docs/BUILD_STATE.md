@@ -14,7 +14,8 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
 | P1-T1 Baseline | DONE | | all four UI harnesses pass (40/8/26/11); backend invite+auth 23 passed + foundation auth subset 108p/7s; costco 217p/0f (plan expected 191 — see Baseline); test_frontend_gate.py 2 failed/23 passed (known) |
 | P1-T2 Fix test_frontend_gate.py | DONE | | replaced retired Sidebar.jsx + "Legacy UI disabled" assertions with v3 invariants; gate 25 passed/0 failed |
 | P1-T3 Frontend defects F1-F11 | DONE | | F1-F8,F11 fixed (F9/F10 deferred to P8). App.jsx hosts F2/F3/F4 and was committed once. Harnesses green: smoke 40/0, guards 11/0, acceptance 26/0, invite 11/0; frontend gate 25/0 |
-| P2-T1 Hosting intake | PENDING | | |
+| P2-T1 Hosting intake | DONE | | owner silent; default applied: local Docker Compose only, no public URL, no domain/VPS yet |
+| P2-T2 Containerize | PENDING | | |
 
 ## Backup record
 
@@ -39,6 +40,9 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
    for non-purchase actions only; any real purchase still needs a fresh explicit
    named owner approval per Constitution §3 (score/self-approval alone never
    yields `PURCHASE_READY`). Owner silent.
+3. (P2-T1) Applied default hosting posture: **local Docker Compose only, no
+   public URL, no domain or VPS** until the owner supplies (1) domain, (2) VPS
+   provider, (3) other users' emails. Owner silent.
 
 ## Open Questions
 
@@ -49,6 +53,8 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
   pipeline-internal.
 - OQ-4 (P0-T3): owner ruling on test-mode self-approval vs Constitution §3
   purchase-approval rule. Safe default applied (see Assumptions #2).
+- OQ-5 (P2-T1): domain name, VPS provider, and additional user emails (Tyler).
+  Default applied: local Compose only, no public URL (Assumptions #3).
 
 ## Owner Answers
 
