@@ -1,6 +1,6 @@
 const { chromium } = require('playwright')
 
-const BASE = 'http://127.0.0.1:8104/ui/'
+const BASE = process.env.HARNESS_BASE_URL || 'http://127.0.0.1/ui/'
 let pass = 0, fail = 0
 const issues = []
 function ok(ctx) { pass++; console.log('PASS  ' + ctx) }
