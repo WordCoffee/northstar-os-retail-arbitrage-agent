@@ -85,6 +85,7 @@ Resolved in the resume kickoff (addendum, 2026-09-28) — do not re-ask:
 | Foundation auth/invite | `pytest Northstar_backend/foundation/tests -q -k "auth or invite or authorization"` | 108 passed / 7 skipped (Postgres) / 578 deselected | — |
 | Frontend gate | `pytest Northstar_backend/foundation/tests/test_frontend_gate.py -q` | 2 failed / 23 passed (KNOWN: Sidebar.jsx missing; "Legacy UI disabled" marker absent) | 2 known failures |
 | Costco plain | `pytest costco_non_kirkland/tests -q` | 217 passed / 0 failed | 191 (see note) |
+| Costco non-frozen (VERIFIED baseline) | `pytest costco_non_kirkland/tests -q --ignore=<4 test_brightdata_*.py>` | 172 passed / 0 failed | new baseline |
 
 Reconciliation (spec vs disk, per §5):
 - Root `npm run build` fails in this environment: the root script uses
@@ -92,14 +93,17 @@ Reconciliation (spec vs disk, per §5):
   a package spec (`npm error 404 northstar-os-ui`). Running `npm run build`
   with workdir `northstar-os-ui` succeeds. Candidate frontend defect (F-class)
   for P1-T3.
-- Costco plain suite is 217, not 191. The 191 figure is documented in
-  `reports/northstar_ui_owner_acceptance_packet_20260927.md` and
-  `reports/post_acceptance_p2_hardening_20260927.md` for the same command on
-  2026-09-27. The working tree now carries untracked Bright Data test files
-  (`test_brightdata_campaign.py`, `test_brightdata_manifest.py`,
-  `test_brightdata_schema_test.py`) plus modified frozen test files added by
-  prior sessions (already captured at P0-T1). Zero failures either way; the
-  delta is additional tests, not regressions.
+- Costco 191->217 delta verification (addendum §5, required). Per-file counts in
+  the current tree: test_brightdata_preflight 9, test_brightdata_campaign 13,
+  test_brightdata_manifest 13, test_brightdata_schema_test 10 (all four are the
+  frozen Bright Data test files) = 45; test_enrichment_identity 20 (modified
+  frozen-adjacent). The three untracked frozen files (campaign/manifest/
+  schema_test = 36) are part of the increase over HEAD; the plain 217 therefore
+  **includes frozen Bright Data tests**. The 191->217 delta (+26) is NOT a clean
+  non-frozen delta. Verified non-frozen count: **172 passed / 0 failed**
+  (excluding the four `test_brightdata_*` files). If test_enrichment_identity.py is
+  also treated as frozen, the count is 152. Treat 172 as the Costco non-frozen
+  baseline; 217 stays the plain-collection number only.
 
 ## Credentials Status (names only, never values)
 
