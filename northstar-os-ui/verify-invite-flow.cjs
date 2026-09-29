@@ -15,6 +15,7 @@ async function stub(page) {
   await page.addInitScript(() => {
     localStorage.removeItem('ns-access-token')
     const FOUND = '/api/v1/foundation'
+    window.__NORTHSTAR_LOCAL_DEV__ = true
     window.__stubCalls = []
     window.fetch = (input) => {
       const url = typeof input === 'string' ? input : input.url
@@ -24,7 +25,11 @@ async function stub(page) {
       const json = (body, status = 200) => Promise.resolve(new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } }))
       if (route === '/ui-mode') return json({ ui_mode: 'full' })
       if (route === '/me') {
-        // No dev session -> the app never calls /me; with a session -> operator.
+        // Signed-out (no explicit local-dev session) -> 401, mirroring the real
+        // cookie-less backend. With a dev session -> the demo operator.
+        let hasDev = false
+        try { hasDev = !!JSON.parse(localStorage.getItem('ns-dev-session') || '{}').userId } catch {}
+        if (!hasDev) return json({ detail: { code: 'authentication_required', message: 'authentication required' } }, 401)
         return json({ user_id: 'demo-t2', email: '', display_name: '', organizations: [{ id: 'org-t2', name: 'T2 Holdings LLC', role: 'operator' }], active_organization_id: 'org-t2', role: 'operator', environment: 'production', view_context: 'normal', permissions: [] })
       }
       if (route === '/environment') return json({ environment: 'production', view_context: 'normal', ui_mode: 'full', is_preview: false })

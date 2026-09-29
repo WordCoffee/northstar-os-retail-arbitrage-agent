@@ -1,12 +1,16 @@
 // Foundation API client — /api/v1/foundation/*
-// Real authentication: a JWT access token is stored in localStorage (never in
-// URLs or logs) and sent as `Authorization: Bearer <token>`. In local
-// development the dev-session identity headers may be used instead.
-// Phase 1C — see docs/northstar-phase1c/01-auth-final-hardening.md.
+// Hosted authentication uses an HttpOnly session cookie (set by /auth/login),
+// sent automatically same-origin. NO access token is stored in localStorage for
+// hosted use. The local-development identity shim (X-User-Id headers) is used
+// ONLY when LOCAL_DEV is explicitly enabled (see foundation/dev.js).
+
+import { LOCAL_DEV } from './dev.js'
 
 const BASE = '/api/v1/foundation'
 const TOKEN_KEY = 'ns-access-token'
 
+// DEPRECATED: retained only for backwards-compatible imports; hosted auth no
+// longer reads or writes a localStorage access token.
 export function getToken() {
   try { return localStorage.getItem(TOKEN_KEY) || '' } catch { return '' }
 }
@@ -34,11 +38,16 @@ export function setDevSession(patch) {
   return next
 }
 
-function headers(extra = {}) {
+function readCookie(name) {
+  try {
+    const m = document.cookie.match(new RegExp('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)'))
+    return m ? decodeURIComponent(m[2]) : ''
+  } catch { return '' }
+}
+
+function headers(method, extra = {}) {
   const h = { 'Content-Type': 'application/json', ...extra }
-  const token = getToken()
-  if (token) h['Authorization'] = `Bearer ${token}`
-  else {
+  if (LOCAL_DEV) {
     const s = getDevSession()
     if (s.userId) h['X-User-Id'] = s.userId
     if (s.orgId) h['X-Org-Id'] = s.orgId
@@ -46,11 +55,20 @@ function headers(extra = {}) {
     if (s.env) h['X-Env'] = s.env
     if (s.previewId) h['X-Preview-Id'] = s.previewId
   }
+  // CSRF double-submit for cookie-auth state-changing requests.
+  const unsafe = ['POST', 'PUT', 'PATCH', 'DELETE'].includes((method || 'GET').toUpperCase())
+  const csrf = readCookie('ns_csrf')
+  if (unsafe && csrf) h['X-CSRF-Token'] = csrf
   return h
 }
 
 async function req(path, opts = {}) {
-  const res = await fetch(`${BASE}${path}`, { headers: headers(opts.headers), ...opts })
+  const method = opts.method || 'GET'
+  const res = await fetch(`${BASE}${path}`, {
+    credentials: 'include',
+    headers: headers(method, opts.headers),
+    ...opts,
+  })
   if (!res.ok) {
     let detail = { code: `http_${res.status}`, message: res.statusText }
     try {
@@ -106,6 +124,10 @@ export const foundationApi = {
 
   // public UI-mode signal (works before auth; local stack = private_beta)
   uiMode: () => req('/ui-mode'),
+
+  // auth session (P2-T5b): cookie transport, no token returned to JS
+  login: (email, password) => req('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
+  logout: () => req('/auth/logout', { method: 'POST' }),
 
   // durable jobs & scheduler (1C-04)
   durableJobs: (params = {}) => {

@@ -46,11 +46,8 @@ export function SessionProvider({ children }) {
       const m = await foundationApi.uiMode()
       uiMode = m.ui_mode || 'full'
     } catch { /* keep default */ }
-    // No token and no dev identity → signed-out (no network call needed).
-    if (!getToken() && !getDevSession().userId) {
-      setSession((s) => ({ ...s, loaded: true, authenticated: false, error: null, uiMode }))
-      return
-    }
+    // Always resolve identity from the backend (/me). Hosted identity comes from
+    // the HttpOnly session cookie; local-dev identity via the explicit dev shim.
     try {
       const [me, env, active] = await Promise.all([
         foundationApi.me(),
@@ -60,12 +57,12 @@ export function SessionProvider({ children }) {
       setSession((s) => ({
         ...s,
         loaded: true,
-        authenticated: true,
+        authenticated: !!me.user_id,
         error: null,
-        userId: me.user_id,
+        userId: me.user_id || '',
         organizations: me.organizations || [],
         activeOrganizationId: me.active_organization_id,
-        role: me.role,
+        role: me.role || null,
         environment: env.environment,
         viewContext: env.view_context,
         uiMode: env.ui_mode || uiMode,
@@ -111,7 +108,9 @@ export function SessionProvider({ children }) {
     return session
   }, [refresh])
 
-  const signOut = useCallback(() => {
+  const signOut = useCallback(async () => {
+    // Revoke the hosted cookie session (best-effort), then clear local state.
+    try { await foundationApi.logout() } catch { /* already signed out */ }
     setToken('')
     setDevSession({ userId: '', orgId: '', role: '', env: 'production', previewId: '' })
     setDev(getDevSession())

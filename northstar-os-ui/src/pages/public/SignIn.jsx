@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useSession } from '../../foundation/session.jsx'
+import foundationApi from '../../foundation/api.js'
+import { LOCAL_DEV } from '../../foundation/dev.js'
 
 // Local private-beta demo identity.
 // The SPA authenticates locally through the loopback development identity shim
@@ -17,23 +19,42 @@ export default function SignIn() {
   const location = useLocation()
   const session = useSession()
   const invitedOrg = new URLSearchParams(location.search).get('org') || ''
-  const [form, setForm] = useState({ identifier: LOCAL_DEMO_IDENTIFIER, password: LOCAL_DEMO_PASSWORD })
+  const [form, setForm] = useState(LOCAL_DEV
+    ? { identifier: LOCAL_DEMO_IDENTIFIER, password: LOCAL_DEMO_PASSWORD }
+    : { identifier: '', password: '' })
   const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
 
   // Already signed in (incl. after a page refresh) -> straight to the workspace.
   if (session.authenticated) return <Navigate to="/home" replace />
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
     setError('')
-    const identifier = (form.identifier || '').trim().toLowerCase()
-    if (identifier !== LOCAL_DEMO_IDENTIFIER.toLowerCase() || form.password !== LOCAL_DEMO_PASSWORD) {
-      setError('Those credentials did not match the local private-beta account.')
+    const identifier = (form.identifier || '').trim()
+
+    if (LOCAL_DEV) {
+      // Explicit local-development identity shim (never a hosted fallback).
+      if (identifier.toLowerCase() !== LOCAL_DEMO_IDENTIFIER.toLowerCase() || form.password !== LOCAL_DEMO_PASSWORD) {
+        setError('Those credentials did not match the local private-beta account.')
+        return
+      }
+      session.updateDev(LOCAL_DEMO_SESSION)
+      navigate('/home')
       return
     }
-    // Establish the local session (persisted in localStorage -> survives refresh).
-    session.updateDev(LOCAL_DEMO_SESSION)
-    navigate('/home')
+
+    // Hosted: real credential login (sets the HttpOnly session cookie).
+    setBusy(true)
+    try {
+      await foundationApi.login(identifier.toLowerCase(), form.password)
+      await session.refresh()
+      navigate('/home')
+    } catch {
+      setError('Invalid email or password.')
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (

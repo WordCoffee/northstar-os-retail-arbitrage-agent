@@ -16,6 +16,7 @@ async function stubSession(page, role = 'operator', userId = 'u-smoke-1') {
       userId, orgId: 'org-smoke', role, env: 'production', previewId: '',
     }))
     localStorage.removeItem('ns-access-token')
+    window.__NORTHSTAR_LOCAL_DEV__ = true
     window.__stubCalls = []
     const FOUND = '/api/v1/foundation'
     window.fetch = (input) => {
