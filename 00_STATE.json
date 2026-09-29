@@ -539,11 +539,11 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P2-T5b backend auth and session (see docs/BUILD_STATE.md)",
+  "next_batch": "P2-T6 preparation (LOCAL VERIFICATION only: compose smoke, migrations, auth integration, /ui deep-link)",
   "git_baseline": {
-    "commit_hash": "60f6dad",
+    "commit_hash": "b7a5efe",
     "committed_at": "2026-09-02T07:30:00Z",
-    "message": "P2-T5a: owner credential store + migration 008 + bootstrap CLI",
+    "message": "P2-T5c: real cookie sign-in UI, /me session, explicit local-dev shim",
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-29T06:36:40Z",
+  "last_updated": "2026-09-29T06:50:10Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -963,6 +963,13 @@
       "batch": "P2-T5a",
       "summary": "Owner credential storage + bootstrap. Added foundation/credentials.py (bcrypt hashing, dedicated owner_credentials table created by forward migration 008 on PG and by ensure_table on SQLite, leaving SCHEMA/drift untouched); interactive foundation_seed_owner.py (getpass only, idempotent, refuses ambiguous second admin / non-loopback without --allow-remote / production-denylist targets; never prints password or hash); FoundationState.build now treats an explicit db_path as authoritative over DB_URL. Tests: 8 passed/1 skipped on SQLite; 9 passed against a self-spun disposable PG (torn down). Commit 60f6dad.",
       "next_action": "Proceed to P2-T5b (Foundation login endpoint, HttpOnly cookie session, CSRF, logout, rate limit, hosted fail-closed)."
+    },
+    {
+      "ts": "2026-09-29T06:50:10Z",
+      "activity": "master_build_plan_P2-T5b_T5c",
+      "batch": "P2-T5b/c",
+      "summary": "Hosted auth: foundation/auth_session.py (HS256 mint matching validator, HttpOnly session cookie Path=/api/v1/foundation, double-submit CSRF cookie, per-process login throttle); deps reads session cookie + CSRF; router /auth/login + /auth/logout (no token in body); UI switched to cookie transport (api.js credentials:include + CSRF header + login/logout, no hosted localStorage token), session.jsx resolves identity from /me, SignIn real login with explicit local-dev shim only (foundation/dev.js). Harnesses set __NORTHSTAR_LOCAL_DEV__; invite stub 401 when signed out. Tests: smoke 42/0, guards 11/0, acceptance 27/0, invite 11/0, frontend gate 25/0, auth subset 119p/8s, SQLite suite 658p/59s/0f, disposable-PG 62 passed. Commits edc8d72 (T5b), b7a5efe (T5c). P2-T5 hosted-HTTPS acceptance remains OPEN (needs URL+operator creds).",
+      "next_action": "P2-T6 prep LOCAL VERIFICATION only; do not deploy publicly or report DONE without hosting facts."
     }
   ]
 }
