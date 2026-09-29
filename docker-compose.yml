@@ -7,6 +7,7 @@
 # environment. Dev defaults below are clearly non-production.
 
 x-foundation-env: &foundation-env
+  DB_URL: postgresql://${POSTGRES_USER:-northstar}:${POSTGRES_PASSWORD:-northstar_dev_only}@postgres:5432/${POSTGRES_DB:-northstar}
   FOUNDATION_DB_URL: postgresql://${POSTGRES_USER:-northstar}:${POSTGRES_PASSWORD:-northstar_dev_only}@postgres:5432/${POSTGRES_DB:-northstar}
   ENVIRONMENT: ${ENVIRONMENT:-development}
   # Dev posture: allow remote bind while the dev shim is active (P2-T5 replaces

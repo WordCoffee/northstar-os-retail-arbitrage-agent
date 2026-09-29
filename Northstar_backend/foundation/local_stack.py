@@ -119,5 +119,6 @@ class LocalProductionCandidate:
 
 
 def resolve_db_url() -> Optional[str]:
-    """Disposable loopback PG URL from env, or None."""
-    return os.environ.get("FOUNDATION_DB_URL")
+    """Disposable loopback PG URL from env, or None. DB_URL is the canonical
+    name (P2-T4); FOUNDATION_DB_URL remains supported."""
+    return os.environ.get("DB_URL") or os.environ.get("FOUNDATION_DB_URL")

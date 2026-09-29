@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Optional
 
 from ..db import FoundationDB
@@ -51,12 +52,18 @@ class FoundationState:
     @classmethod
     def build(cls, db_path: Optional[str] = None, *, seed: bool = True) -> "FoundationState":
         # Default to a disposable temp SQLite DB. NEVER the production-like DB.
-        # If FOUNDATION_DB_URL is set, use the PostgreSQL backend instead.
+        # If DB_URL (or the legacy FOUNDATION_DB_URL) is set, use PostgreSQL.
         import os as _os
-        _url = _os.environ.get("FOUNDATION_DB_URL")
+        _url = _os.environ.get("DB_URL") or _os.environ.get("FOUNDATION_DB_URL")
         if _url:
             from ..db_postgres import PostgresFoundationDB
             db = PostgresFoundationDB(_url)
+            # P2-T4: fail closed in hosted environments if migrations are behind.
+            from ..migrations_check import assert_migrations_current
+            _migrations_dir = str(Path(__file__).resolve().parents[2] / "migrations_foundation")
+            assert_migrations_current(
+                db, environment=_os.environ.get("ENVIRONMENT"),
+                migrations_dir=_migrations_dir)
         else:
             db = FoundationDB(db_path)
         repos = Repositories(db)
