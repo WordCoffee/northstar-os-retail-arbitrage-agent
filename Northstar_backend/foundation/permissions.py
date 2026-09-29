@@ -78,6 +78,17 @@ def evaluate(ctx: RequestContext, permission: str) -> tuple[bool, str]:
     role = ctx.effective_role
     if role is None:
         return False, "no_role"
+    # Owner Test Mode (P3-T2): the owner holds every permission string, including
+    # purchase. Truth-label / fail-closed / spend-cap rules are enforced elsewhere
+    # and are NOT bypassed (P3-T3).
+    from .authn import environment as _env
+    from . import owner_test_mode as _otm
+    if _otm.is_owner_test_mode(role=role, environment=_env()):
+        if permission == PERM_WRITE_EXTERNAL and ctx.is_sandbox:
+            return False, "sandbox_blocks_external_write"
+        if permission in (PERM_WRITE_EXTERNAL, PERM_PURCHASE) and not ctx.allow_write():
+            return False, "preview_read_only"
+        return True, "owner_test_mode"
     if not has_permission(role, permission):
         return False, f"role_{role}_lacks_{permission}"
     # Environment guard: production writes never allowed from sandbox context.

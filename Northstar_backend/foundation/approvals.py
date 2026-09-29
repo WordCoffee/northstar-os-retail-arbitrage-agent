@@ -91,6 +91,21 @@ class ApprovalService:
                 result="denied", failure_class="insufficient_approver_role")
             raise PermissionError("role not authorized to decide this approval")
 
+        # Owner Test Mode (P3-T2/P3-T3): self-approval ONLY when the explicit
+        # NORTHSTAR_OWNER_SELF_APPROVAL flag is on. While off, a second actor is
+        # required even in test mode.
+        if decided_by_user_id == req.get("requested_by_user_id"):
+            from .authn import environment as _env
+            from . import owner_test_mode as _otm
+            if _otm.is_owner_test_mode(role=decided_by_role, environment=_env()) \
+                    and not _otm.self_approval_enabled():
+                self.audit.record(
+                    action="approval.decide", actor_user_id=decided_by_user_id,
+                    actor_role=decided_by_role, organization_id=req["organization_id"],
+                    resource_type="approval_request", resource_id=approval_request_id,
+                    result="denied", failure_class="self_approval_disabled")
+                raise PermissionError("self-approval is disabled; a second actor is required")
+
         decision_row = ApprovalDecision(
             approval_request_id=approval_request_id,
             decided_by_user_id=decided_by_user_id, decided_by_role=decided_by_role,
