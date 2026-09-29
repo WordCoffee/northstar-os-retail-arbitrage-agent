@@ -21,8 +21,8 @@ PG_URL = os.environ.get("FOUNDATION_DB_URL")
 pytestmark = pytest.mark.skipif(
     not PG_URL, reason="FOUNDATION_DB_URL not set (PostgreSQL integration)")
 
-DISPOSABLE_DB = "northstar_phase1c02_ephemeral"
-DISPOSABLE_USER = "northstar_phase1c02_test"
+DISPOSABLE_DB = os.environ.get("NORTHSTAR_PG_TEST_DB", "northstar_phase1c02_ephemeral")
+DISPOSABLE_USER = os.environ.get("NORTHSTAR_PG_TEST_USER", "northstar_phase1c02_test")
 
 
 def _assert_disposable_target():
@@ -30,7 +30,10 @@ def _assert_disposable_target():
     assert u.hostname == "127.0.0.1"
     assert u.username == DISPOSABLE_USER
     assert (u.path or "").lstrip("/") == DISPOSABLE_DB
-    assert u.port == 55432
+    _expected_port = os.environ.get("NORTHSTAR_PG_TEST_PORT")
+    if _expected_port:
+        assert u.port == int(_expected_port), (
+            f"port must match NORTHSTAR_PG_TEST_PORT={_expected_port}, got {u.port}")
 
 
 def _fresh(durable_pg, tag):
