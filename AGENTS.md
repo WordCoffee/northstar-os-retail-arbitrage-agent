@@ -41,7 +41,7 @@ Per-account knowledge store — facts, preferences, experiences, AI-derived lear
 - **Vite base path:** `/ui/` (served under /ui/ by FastAPI)
 - **Design system:** Paper/bone surfaces, pine forest ink, Libre Baskerville serif + DM Sans UI
 - **Architecture:** React 18 + React Router 6 + Vite 5; room-based navigation with top nav + side nav
-- **Route structure:** Public (/beta, /sign-in, /recovery, /legal) → Customer (/, /setup, /documents, /plan, /support, /account) → Admin (/beta-ops/*) → Internal (/home, /product-finder, /golden-goose, /sourcing, /portfolio, /listings, /monitoring, /admin)
+- **Route structure:** Public (/beta, /sign-in, /recovery, /legal) → Customer (/, /setup, /documents, /plan, /support, /account) → Admin (/beta-ops/*) → Internal (/home, /product-finder, /golden-goose, /listings, /monitoring, /admin)
 - **Key components:** TopNav, SideNav, CommandPalette, RouteGuard, PageLayout, DataTable, EvidencePacket, MetricTiles, MobileBottomNav
 - **Build verification:** `npm run build` must succeed with 0 errors
 
