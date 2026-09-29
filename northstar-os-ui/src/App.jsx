@@ -150,6 +150,16 @@ function Shell() {
 
   return (
     <div className="app">
+      {session.ownerTestMode && (
+        <div
+          className="owner-test-mode-banner"
+          data-testid="owner-test-mode-banner"
+          role="status"
+          style={{ background: '#5a3d12', color: '#fff', textAlign: 'center', padding: '4px 12px', fontSize: 13, letterSpacing: 0.3 }}
+        >
+          {session.ownerTestModeBanner || 'OWNER TEST MODE — bypasses are audited.'}
+        </div>
+      )}
       <TopNav
         role={role}
         paletteOpen={paletteOpen}

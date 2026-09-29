@@ -24,6 +24,7 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
 | P2-T5c UI sign-in and route guards | DONE | | `foundation/dev.js` explicit local-dev switch; api.js cookie transport (`credentials:include`, CSRF header, login/logout, no hosted token); session.jsx always resolves identity from /me (empty user_id = signed out) + logout revokes cookie; SignIn.jsx real login (local demo only when LOCAL_DEV); harnesses set `window.__NORTHSTAR_LOCAL_DEV__=true`; invite stub returns 401 when signed out. Harnesses: smoke 42/0, guards 11/0, acceptance 27/0, invite 11/0; frontend gate 25/0; auth subset 119 passed/8 skipped; SQLite suite 658 passed/59 skipped/0 failed; disposable PG 62 passed; PG torn down. |
 | P2-T5 acceptance (hosted HTTPS sign-in) | PARTIAL | | implementation complete; hosted-HTTPS owner sign-in UNVERIFIED (needs a real URL + operator-created owner credential). Not claimed. |
 | P2-T6 prep (LOCAL VERIFICATION) | PARTIAL | | local only; not deployed. Shared DB login throttle (migration 009) + hosted fail-closed without shared store. Live browser walkthrough `northstar-os-ui/verify-live-signin.cjs` against local Compose: 14 passed / 0 failed — sign-in -> /ui/home; no token in localStorage; NO local-dev flag in served build; protected load + refresh stay authenticated; /me=internal_platform_admin; logout no-CSRF 403 / with-CSRF 200; /me after logout 401; signed-out /ui/monitoring -> /ui/sign-in; 8 expected non-2xx resource notices, 0 unexpected console errors, 0 uncaught JS exceptions, 0 failed requests. HTTP only — NOT a hosted-TLS test. Test owner seeded + cleaned up. |
+| P3-T1 Owner Test Mode flag + scope + banner | DONE | | `foundation/owner_test_mode.py` (flag off = zero change; owner-role only; never in `production_tenant`; self-approval default off); `/environment` exposes `owner_test_mode`/banner/`owner_self_approval`; UI persistent banner (`data-testid=owner-test-mode-banner`) gated on session flag. Tests 5/0; harnesses smoke 42/0, guards 11/0, acceptance 27/0, invite 11/0. |
 
 ## Backup record
 
@@ -77,6 +78,7 @@ Resolved in the resume kickoff (addendum, 2026-09-28) — do not re-ask:
 - Self-approval: `NORTHSTAR_OWNER_SELF_APPROVAL=0` (disabled) until owner replies option A to the P0-T3 ASK OWNER block (printed once this session).
 - P0-T2 two-repo: default B (two repos + ingest contract) per prior assumption.
 - P2-T1 hosting: local Compose only until domain/VPS/email supplied.
+- (2026-09-29) **P2-T6 = B: defer hosting, stay local.** Do NOT deploy publicly or purchase infrastructure. Keep P2-T6 and the P2-T5 hosted-HTTPS sign-in acceptance item PARTIAL. Do not re-ask for domain/VPS until the owner says they have them.
 
 ## Baseline (P1-T1, 2026-09-28, branch build/master-plan)
 

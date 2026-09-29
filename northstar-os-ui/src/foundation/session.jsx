@@ -31,6 +31,8 @@ const ANON = {
   isPreview: false,
   preview: null,
   flags: getFlags(),
+  ownerTestMode: false,
+  ownerTestModeBanner: null,
 }
 
 export function SessionProvider({ children }) {
@@ -69,6 +71,8 @@ export function SessionProvider({ children }) {
         permissions: me.permissions || [],
         isPreview: !!env.is_preview,
         preview: active.active ? active.preview : null,
+        ownerTestMode: !!env.owner_test_mode,
+        ownerTestModeBanner: env.owner_test_mode_banner || null,
       }))
     } catch (e) {
       // 401 → signed out / expired / revoked session.

@@ -345,6 +345,9 @@ def roles(ctx: RequestContext = Depends(get_context)):
 @router.get("/environment")
 def environment(ctx: RequestContext = Depends(get_context)):
     posture = current_auth_posture()
+    from ..authn import environment as _proc_env
+    from ..owner_test_mode import is_owner_test_mode, self_approval_enabled, banner
+    _otm = is_owner_test_mode(role=ctx.effective_role, environment=_proc_env())
     return {
         "environment": ctx.environment,
         "view_context": ctx.view_context,
@@ -355,6 +358,10 @@ def environment(ctx: RequestContext = Depends(get_context)):
         "auth_posture": posture["auth_posture"],
         "real_authentication_active": posture["real_authentication_active"],
         "remote_blocked_by_default": True,
+        # Owner Test Mode (P3-T1): flag-gated, owner-only, audited.
+        "owner_test_mode": _otm,
+        "owner_test_mode_banner": banner() if _otm else None,
+        "owner_self_approval": self_approval_enabled(),
         # LOCAL-ONLY UI mode: "private_beta" hides the legacy Operations Hub
         # shell in the canonical UI. Set by the local stack; defaults to "full"
         # everywhere else (staging/production unchanged).
