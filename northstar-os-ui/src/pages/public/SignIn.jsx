@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useSession } from '../../foundation/session.jsx'
 
 // Local private-beta demo identity.
@@ -68,7 +68,7 @@ export default function SignIn() {
               Local private-beta sign-in. In hosted environments, use your organization’s credentials.
             </div>
             <div style={{ textAlign: 'center', fontSize: 13 }}>
-              <a href="#/recovery">Forgot password?</a> &nbsp;·&nbsp; <a href="#/beta">Need help?</a>
+              <Link to="/recovery">Forgot password?</Link> &nbsp;·&nbsp; <Link to="/beta">Need help?</Link> &nbsp;·&nbsp; <Link to="/legal">Legal</Link>
             </div>
           </form>
         </div>
