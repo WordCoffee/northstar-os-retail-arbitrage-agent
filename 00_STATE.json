@@ -539,11 +539,11 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P2-T6 (PARTIAL): deploy requires hosting provider/domain + operator-run owner bootstrap",
+  "next_batch": "P3-T2 remaining (entitlements all-on, quotas counted-not-enforced, concept rooms) then P3-T3/P3-T4",
   "git_baseline": {
-    "commit_hash": "df4f966",
+    "commit_hash": "3f3d056",
     "committed_at": "2026-09-02T07:30:00Z",
-    "message": "P2-T6: shared login throttle + live sign-in walkthrough",
+    "message": "P3-T1 + P3-T2(partial): Owner Test Mode",
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-29T07:10:40Z",
+  "last_updated": "2026-09-29T08:17:48Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -984,6 +984,13 @@
       "batch": "P2-T6",
       "summary": "Local security/acceptance for P2-T5/T6. (1) Replaced per-process login throttle with shared DB-backed limiter (foundation/login_throttle.py + migration 009); hosted (prod/staging) fails closed 503 auth_store_unavailable without PostgreSQL (SQLite). (2) Live browser walkthrough northstar-os-ui/verify-live-signin.cjs vs local Compose (disposable creds, cleaned up): 14 passed/0 failed \u2014 sign-in->/ui/home, no localStorage token, no local-dev flag in build, protected load+refresh authed, /me internal_platform_admin, logout no-CSRF 403/with-CSRF 200, /me after logout 401, signed-out /ui/monitoring->/ui/sign-in; 0 unexpected console errors, 0 uncaught JS exceptions, 0 failed requests. (3) Hosted-mode: header impersonation 401 in production; Secure/HttpOnly/SameSite asserted at transport layer separately (not via HTTP walkthrough). P2-T5 hosted-HTTPS acceptance UNVERIFIED. Commits 75be815 (throttle), df4f966 (walkthrough).",
       "next_action": "Ask for domain + VPS provider + operator-run owner bootstrap when local work exhausted; never request a password."
+    },
+    {
+      "ts": "2026-09-29T08:17:48Z",
+      "activity": "master_build_plan_P3",
+      "batch": "P3",
+      "summary": "Owner answered P2-T6=B (defer hosting; stay local; keep P2-T6 + P2-T5 hosted acceptance PARTIAL; do not deploy or purchase infra). Recorded in docs/BUILD_STATE.md Owner Answers. Proceeded to Phase 3 locally. P3-T1 DONE: foundation/owner_test_mode.py flag (off=zero change), owner-role scope, never production_tenant, self-approval default off; /environment exposes owner_test_mode/banner/owner_self_approval; UI persistent banner. P3-T2 PARTIAL: RBAC owner holds every permission (permissions.evaluate reason owner_test_mode; non-admin unaffected), org-lifecycle already exempts platform admin, every active request audited (owner_test_mode.active), self-approval gated behind NORTHSTAR_OWNER_SELF_APPROVAL (off => second actor required). Tests: P3-T1 5/0, P3-T2 6/0, subset 194 passed/7 skipped; harnesses smoke42/guards11/acceptance27/invite11. Commits 0d9354b (P3-T1), 3f3d056 (P3-T2 partial). Remaining P3-T2: entitlements all-on, quotas counted-not-enforced, concept rooms; then P3-T3 (non-bypassed rules) and P3-T4 (demo dataset).",
+      "next_action": "Continue P3-T2 remaining then P3-T3/P3-T4 locally; self-approval stays disabled until an explicit Constitution amendment."
     }
   ]
 }
