@@ -10,7 +10,7 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
 |---|---|---|---|
 | P0-T1 State capture | DONE | 1711edd | branch `build/master-plan` created; db backed up; BACKUP_SHA256=A4684F36DCF760870A3B4707D174C72C9A9FB370CAF08010620EB3562C99D0AD |
 | P0-T2 Two-repo reconciliation | DONE | | default B applied; pipeline config reference renamed (config-only, no file move); contract in `docs/DATA_CONTRACT.md` |
-| P0-T3 Constitution diff | PENDING | | |
+| P0-T3 Constitution diff | DONE | | `docs/PLAN_CONSTITUTION_CHECK.md`; 21 items COMPATIBLE, 1 NEEDS-AMENDMENT (test-mode self-approval; safe default applied) |
 | P1-T1 Baseline | PENDING | | |
 | P1-T2 Fix test_frontend_gate.py | PENDING | | |
 | P1-T3 Frontend defects F1-F11 | PENDING | | |
@@ -34,6 +34,10 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
 1. (P0-T2) Applied default **B** for the two-repo decision: Foundation repo is the
    hosted product; `fba-product-screener` stays a separate repo exchanging data
    via a documented ingest contract (`docs/DATA_CONTRACT.md`). Owner silent.
+2. (P0-T3) Applied safe default for owner-test-mode **self-approval**: permitted
+   for non-purchase actions only; any real purchase still needs a fresh explicit
+   named owner approval per Constitution §3 (score/self-approval alone never
+   yields `PURCHASE_READY`). Owner silent.
 
 ## Open Questions
 
@@ -42,6 +46,8 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
   `data/pipeline_northstar.db` (file move deferred; config reference only).
 - OQ-3 (P0-T2): whether pipeline `data/products.db` is ingested or stays
   pipeline-internal.
+- OQ-4 (P0-T3): owner ruling on test-mode self-approval vs Constitution §3
+  purchase-approval rule. Safe default applied (see Assumptions #2).
 
 ## Owner Answers
 
