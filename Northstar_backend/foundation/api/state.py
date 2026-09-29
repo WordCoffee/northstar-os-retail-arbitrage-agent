@@ -51,11 +51,13 @@ class FoundationState:
 
     @classmethod
     def build(cls, db_path: Optional[str] = None, *, seed: bool = True) -> "FoundationState":
-        # Default to a disposable temp SQLite DB. NEVER the production-like DB.
-        # If DB_URL (or the legacy FOUNDATION_DB_URL) is set, use PostgreSQL.
+        # An explicit db_path always means SQLite (authoritative over env).
+        # Otherwise DB_URL/FOUNDATION_DB_URL selects PostgreSQL; else SQLite temp.
         import os as _os
         _url = _os.environ.get("DB_URL") or _os.environ.get("FOUNDATION_DB_URL")
-        if _url:
+        if db_path is not None:
+            db = FoundationDB(db_path)
+        elif _url:
             from ..db_postgres import PostgresFoundationDB
             db = PostgresFoundationDB(_url)
             # P2-T4: fail closed in hosted environments if migrations are behind.
