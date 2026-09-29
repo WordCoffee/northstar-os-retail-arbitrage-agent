@@ -273,10 +273,11 @@ def login(body: LoginBody, request: Request, response: Response,
         csrf_cookie_kwargs, check_login_rate, reset_login_rate,
         DEFAULT_TTL_SECONDS,
     )
-    from ..authn import jwt_secret, environment as auth_environment
+    from ..authn import jwt_secret
     from ..credentials import get_by_email, verify_password
 
-    if auth_environment() in ("staging", "production") and not jwt_secret():
+    if not jwt_secret():
+        # Fail closed everywhere (not just prod-like) rather than 500 on mint.
         raise _err("auth_unconfigured", "authentication is not configured", 503)
 
     email = (body.email or "").strip().lower()

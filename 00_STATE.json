@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-29T06:50:10Z",
+  "last_updated": "2026-09-29T06:54:50Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -970,6 +970,13 @@
       "batch": "P2-T5b/c",
       "summary": "Hosted auth: foundation/auth_session.py (HS256 mint matching validator, HttpOnly session cookie Path=/api/v1/foundation, double-submit CSRF cookie, per-process login throttle); deps reads session cookie + CSRF; router /auth/login + /auth/logout (no token in body); UI switched to cookie transport (api.js credentials:include + CSRF header + login/logout, no hosted localStorage token), session.jsx resolves identity from /me, SignIn real login with explicit local-dev shim only (foundation/dev.js). Harnesses set __NORTHSTAR_LOCAL_DEV__; invite stub 401 when signed out. Tests: smoke 42/0, guards 11/0, acceptance 27/0, invite 11/0, frontend gate 25/0, auth subset 119p/8s, SQLite suite 658p/59s/0f, disposable-PG 62 passed. Commits edc8d72 (T5b), b7a5efe (T5c). P2-T5 hosted-HTTPS acceptance remains OPEN (needs URL+operator creds).",
       "next_action": "P2-T6 prep LOCAL VERIFICATION only; do not deploy publicly or report DONE without hosting facts."
+    },
+    {
+      "ts": "2026-09-29T06:54:50Z",
+      "activity": "master_build_plan_P2-T6_local_verify",
+      "batch": "P2-T6 prep",
+      "summary": "LOCAL VERIFICATION only (no public deploy). Compose stack rebuilt: postgres healthy, migrate 8/8 (schema_migrations=8), api/worker/scheduler/caddy Up; health ok (postgres); login 200 sets HttpOnly ns_session (Path=/api/v1/foundation, SameSite=strict) + ns_csrf double-submit; no token in body; /me 200 with cookie (internal_platform_admin), 401 without; logout 403 without CSRF / 200 with; /ui/golden-goose deep link 200. Login hardened to fail closed (503 auth_unconfigured) when no signing key (was 500). Test owner seeded then cleaned up. Hosted HTTPS sign-in acceptance remains OPEN pending hosting facts.",
+      "next_action": "P2-T6 requires hosting provider/domain + operator credentials (ASK OWNER); meanwhile unblocked work continues per plan."
     }
   ]
 }
