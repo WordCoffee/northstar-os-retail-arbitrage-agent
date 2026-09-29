@@ -539,11 +539,11 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P2-T6 preparation (LOCAL VERIFICATION only: compose smoke, migrations, auth integration, /ui deep-link)",
+  "next_batch": "P2-T6 (PARTIAL): deploy requires hosting provider/domain + operator-run owner bootstrap",
   "git_baseline": {
-    "commit_hash": "b7a5efe",
+    "commit_hash": "df4f966",
     "committed_at": "2026-09-02T07:30:00Z",
-    "message": "P2-T5c: real cookie sign-in UI, /me session, explicit local-dev shim",
+    "message": "P2-T6: shared login throttle + live sign-in walkthrough",
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-29T06:54:50Z",
+  "last_updated": "2026-09-29T07:10:40Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -977,6 +977,13 @@
       "batch": "P2-T6 prep",
       "summary": "LOCAL VERIFICATION only (no public deploy). Compose stack rebuilt: postgres healthy, migrate 8/8 (schema_migrations=8), api/worker/scheduler/caddy Up; health ok (postgres); login 200 sets HttpOnly ns_session (Path=/api/v1/foundation, SameSite=strict) + ns_csrf double-submit; no token in body; /me 200 with cookie (internal_platform_admin), 401 without; logout 403 without CSRF / 200 with; /ui/golden-goose deep link 200. Login hardened to fail closed (503 auth_unconfigured) when no signing key (was 500). Test owner seeded then cleaned up. Hosted HTTPS sign-in acceptance remains OPEN pending hosting facts.",
       "next_action": "P2-T6 requires hosting provider/domain + operator credentials (ASK OWNER); meanwhile unblocked work continues per plan."
+    },
+    {
+      "ts": "2026-09-29T07:10:40Z",
+      "activity": "master_build_plan_P2-T6_local_security",
+      "batch": "P2-T6",
+      "summary": "Local security/acceptance for P2-T5/T6. (1) Replaced per-process login throttle with shared DB-backed limiter (foundation/login_throttle.py + migration 009); hosted (prod/staging) fails closed 503 auth_store_unavailable without PostgreSQL (SQLite). (2) Live browser walkthrough northstar-os-ui/verify-live-signin.cjs vs local Compose (disposable creds, cleaned up): 14 passed/0 failed \u2014 sign-in->/ui/home, no localStorage token, no local-dev flag in build, protected load+refresh authed, /me internal_platform_admin, logout no-CSRF 403/with-CSRF 200, /me after logout 401, signed-out /ui/monitoring->/ui/sign-in; 0 unexpected console errors, 0 uncaught JS exceptions, 0 failed requests. (3) Hosted-mode: header impersonation 401 in production; Secure/HttpOnly/SameSite asserted at transport layer separately (not via HTTP walkthrough). P2-T5 hosted-HTTPS acceptance UNVERIFIED. Commits 75be815 (throttle), df4f966 (walkthrough).",
+      "next_action": "Ask for domain + VPS provider + operator-run owner bootstrap when local work exhausted; never request a password."
     }
   ]
 }
