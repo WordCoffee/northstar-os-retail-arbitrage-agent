@@ -7,6 +7,39 @@ let fail = 0
 function ok(ctx) { pass++; console.log('PASS  ' + ctx) }
 function no(ctx, detail) { fail++; console.log('FAIL  ' + ctx + (detail ? ' :: ' + detail : '')) }
 
+// F4: internal rooms now require an authenticated session. Stub the local
+// development identity shim (operator) so the rooms under test render.
+async function stubSession(page, role = 'operator', userId = 'u-smoke-1') {
+  await page.addInitScript(({ role, userId }) => {
+    localStorage.setItem('ns-dev-session', JSON.stringify({
+      userId, orgId: 'org-smoke', role, env: 'production', previewId: '',
+    }))
+    localStorage.removeItem('ns-access-token')
+    window.__stubCalls = []
+    const FOUND = '/api/v1/foundation'
+    window.fetch = (input) => {
+      const url = typeof input === 'string' ? input : input.url
+      if (!url.includes(FOUND)) return Promise.reject(new Error('unexpected fetch ' + url))
+      const route = url.split(FOUND)[1].split('?')[0]
+      window.__stubCalls.push(route)
+      const json = (body, status = 200) =>
+        Promise.resolve(new Response(JSON.stringify(body), {
+          status, headers: { 'Content-Type': 'application/json' },
+        }))
+      if (route === '/ui-mode') return json({ ui_mode: 'full' })
+      if (route === '/me') return json({
+        user_id: userId, organizations: [], active_organization_id: null, role,
+        permissions: role === 'platform_admin' ? ['platform_admin'] : [],
+      })
+      if (route === '/environment') return json({
+        environment: 'production', view_context: 'normal', ui_mode: 'full', is_preview: false,
+      })
+      if (route === '/preview/active') return json({ active: false, preview: null })
+      return json({ detail: { code: 'not_stubbed' } }, 404)
+    }
+  }, { role, userId })
+}
+
 async function expectMarker(page, marker, ctx) {
   try {
     await page.waitForFunction(m => document.body.innerText.includes(m), marker, { timeout: 7000 })
@@ -38,6 +71,7 @@ async function expectToast(page, text, ctx) {
 async function run() {
   const browser = await chromium.launch()
   const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
+  await stubSession(page, 'operator', 'u-smoke-1')
 
   // ---- deep links ----
   const deepLinks = [

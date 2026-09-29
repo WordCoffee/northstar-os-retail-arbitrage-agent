@@ -60,17 +60,33 @@ async function run() {
   const page = await ctx.newPage()
 
   // --- Case A: signed-out (invitee) direct URL access ---------------------
+  // F4: internal paths require authentication -> signed-out sends them to sign-in.
   await page.goto(BASE + '#/beta-ops')
-  const a1 = await waitHash(page, '#/home')
+  const a1 = await waitHash(page, '#/sign-in')
   a1 && !(await bodyHas(page, 'Beta Operations'))
-    ? ok('signed-out direct #/beta-ops -> redirects #/home, admin content absent')
+    ? ok('signed-out direct #/beta-ops -> redirects #/sign-in, admin content absent')
     : no('signed-out direct #/beta-ops', 'hash=' + await page.evaluate(() => location.hash))
 
   await page.goto(BASE + '#/admin')
-  const a2 = await waitHash(page, '#/home')
+  const a2 = await waitHash(page, '#/sign-in')
   a2 && !(await bodyHas(page, 'Internal Administration'))
-    ? ok('signed-out direct #/admin -> redirects #/home, admin content absent')
+    ? ok('signed-out direct #/admin -> redirects #/sign-in, admin content absent')
     : no('signed-out direct #/admin', 'hash=' + await page.evaluate(() => location.hash))
+
+  await page.goto(BASE + '#/golden-goose')
+  const a3 = await waitHash(page, '#/sign-in')
+  a3 ? ok('signed-out direct internal #/golden-goose -> redirects #/sign-in')
+     : no('signed-out direct #/golden-goose', 'hash=' + await page.evaluate(() => location.hash))
+
+  await page.goto(BASE + '#/monitoring')
+  const a4 = await waitHash(page, '#/sign-in')
+  a4 ? ok('signed-out direct internal #/monitoring -> redirects #/sign-in')
+     : no('signed-out direct #/monitoring', 'hash=' + await page.evaluate(() => location.hash))
+
+  await page.goto(BASE + '#/beta')
+  const a5 = await waitHash(page, '#/beta')
+  a5 ? ok('signed-out public #/beta stays reachable (not redirected)')
+     : no('signed-out public #/beta', 'hash=' + await page.evaluate(() => location.hash))
 
   // --- Case B: authenticated customer -------------------------------------
   // full page load required so the fetch stub + dev session apply on a fresh document

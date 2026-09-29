@@ -73,8 +73,15 @@ async function run() {
   console.log('\n--- role->deep-link final hash ---')
   for (const r of Object.keys(matrix)) console.log(r, JSON.stringify(matrix[r]))
 
-  // Expected: beta-ops + admin only for platform_admin; customer/invitee redirected off them.
-  for (const role of ['signedout', 'customer', 'operator']) {
+  // F4: signed-out internal access -> /sign-in (auth gate).
+  ;(matrix['signedout']['#/beta-ops'] === '#/sign-in')
+    ? ok('signedout: /beta-ops redirected to /sign-in')
+    : no('signedout: /beta-ops guard', 'got ' + matrix['signedout']['#/beta-ops'])
+  (matrix['signedout']['#/admin'] === '#/sign-in')
+    ? ok('signedout: /admin redirected to /sign-in')
+    : no('signedout: /admin guard', 'got ' + matrix['signedout']['#/admin'])
+  // Authenticated non-admins: admin paths redirect to /home.
+  for (const role of ['customer', 'operator']) {
     (matrix[role]['#/beta-ops'] === '#/home')
       ? ok(`${role}: /beta-ops redirected to /home`)
       : no(`${role}: /beta-ops guard`, 'got ' + matrix[role]['#/beta-ops'])
