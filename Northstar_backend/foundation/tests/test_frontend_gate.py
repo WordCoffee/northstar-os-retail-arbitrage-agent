@@ -258,7 +258,8 @@ def test_ui_source_uses_semantic_forms_and_labels():
         "tour_dialog": ('role="dialog"' in open(os.path.join(src_root, "foundation", "HelpTour.jsx"), encoding="utf-8").read()),
         "pinned_aria": ('aria-controls="fs-pinned-drawer"' in open(os.path.join(src_root, "foundation", "components", "PinnedDrawer.jsx"), encoding="utf-8").read()),
         "preview_aria": ('aria-' in open(os.path.join(src_root, "foundation", "components", "PreviewBanner.jsx"), encoding="utf-8").read()),
-        "sidebar_nav_label": ('aria-label="Service drawer"' in open(os.path.join(src_root, "components", "Sidebar.jsx"), encoding="utf-8").read()),
+        "suite_rail_label": ('aria-label="Suite navigation"' in open(os.path.join(src_root, "components", "SuiteRail.jsx"), encoding="utf-8").read()),
+        "top_nav_search_label": ('aria-label="Search"' in open(os.path.join(src_root, "components", "TopNav.jsx"), encoding="utf-8").read()),
     }
     failed = [k for k, v in checks.items() if not v]
     assert not failed, f"a11y baseline missing: {failed}"
@@ -291,20 +292,35 @@ def test_environment_reports_ui_mode(web, seeded_state, monkeypatch):
     assert r2.json()["ui_mode"] == "private_beta"
 
 
-def test_legacy_ui_cutoff_present_in_bundle():
-    """The canonical bundle must NOT default to the legacy Hub in private-beta
-    mode: it must contain the beta-default landing, the legacy tombstone, and
-    the beta-only sidebar filter. This prevents regressing to the old shell."""
-    bundle = ""
-    for a in os.listdir(os.path.join(DIST, "assets")):
-        if a.endswith(".js"):
-            bundle += open(os.path.join(DIST, "assets", a), encoding="utf-8",
-                           errors="ignore").read()
-    for marker in ("Legacy UI disabled", "private_beta", "beta-signup",
-                   "Beta Operations", "Private Beta"):
-        assert marker in bundle, f"legacy-UI-cutoff marker missing in bundle: {marker}"
-    # The old default shell page (Hub) must no longer be the unconditional
-    # default: the beta default landing route string is present, and the Hub
-    # only renders under the non-private-beta branch.
-    assert "beta" in bundle  # beta default landing present
-    assert bundle.count("Legacy UI disabled") >= 1  # tombstone for legacy routes
+def test_v3_shell_invariants():
+    """The v3 shell (SuiteRail + TopNav + CommandPalette) is the canonical shell.
+    Asserts the real v3 invariants (no retired Sidebar.jsx, no legacy-UI tombstone
+    marker): the shell components exist, the App route table has 44 routes, and no
+    v3 room imports the legacy client `services/api.js`."""
+    for name in ("SuiteRail.jsx", "TopNav.jsx", "CommandPalette.jsx"):
+        path = os.path.join(UI_SRC, "components", name)
+        assert os.path.exists(path), f"v3 shell component missing: {name}"
+
+    app = open(os.path.join(UI_SRC, "App.jsx"), encoding="utf-8").read()
+    route_count = len(re.findall(r"<Route\s+path=", app))
+    assert route_count == 44, f"expected 44 routes in App.jsx, found {route_count}"
+
+    # The legacy client (services/api.js) must not be imported by any v3 module.
+    v3_dirs = ["pages/internal", "pages/customer", "pages/admin", "pages/public",
+               "foundation", "components"]
+    offenders = []
+    for rel in v3_dirs:
+        base = os.path.join(UI_SRC, rel)
+        for root, _dirs, files in os.walk(base):
+            for f in files:
+                if f.endswith((".jsx", ".js")):
+                    body = open(os.path.join(root, f), encoding="utf-8",
+                                errors="ignore").read()
+                    if "services/api" in body:
+                        offenders.append(os.path.join(root, f))
+    assert not offenders, f"legacy services/api.js imported by v3 module(s): {offenders}"
+
+    # The legacy top-level pages that DO use services/api.js must remain unmounted
+    # from the v3 route table (they are retired, not wired into the shell).
+    assert "pages/Hub" not in app
+    assert "pages/Ledger" not in app
