@@ -539,11 +539,11 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P3-T2 remaining (entitlements all-on, quotas counted-not-enforced, concept rooms) then P3-T3/P3-T4",
+  "next_batch": "P4-T1 pack-count diagnostic (needs companion pipeline data; next unblocked)",
   "git_baseline": {
-    "commit_hash": "3f3d056",
+    "commit_hash": "d61bef2",
     "committed_at": "2026-09-02T07:30:00Z",
-    "message": "P3-T1 + P3-T2(partial): Owner Test Mode",
+    "message": "Phase 3 Owner Test Mode complete (P3-T1..T4)",
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-29T08:17:48Z",
+  "last_updated": "2026-09-29T23:57:34Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -991,6 +991,13 @@
       "batch": "P3",
       "summary": "Owner answered P2-T6=B (defer hosting; stay local; keep P2-T6 + P2-T5 hosted acceptance PARTIAL; do not deploy or purchase infra). Recorded in docs/BUILD_STATE.md Owner Answers. Proceeded to Phase 3 locally. P3-T1 DONE: foundation/owner_test_mode.py flag (off=zero change), owner-role scope, never production_tenant, self-approval default off; /environment exposes owner_test_mode/banner/owner_self_approval; UI persistent banner. P3-T2 PARTIAL: RBAC owner holds every permission (permissions.evaluate reason owner_test_mode; non-admin unaffected), org-lifecycle already exempts platform admin, every active request audited (owner_test_mode.active), self-approval gated behind NORTHSTAR_OWNER_SELF_APPROVAL (off => second actor required). Tests: P3-T1 5/0, P3-T2 6/0, subset 194 passed/7 skipped; harnesses smoke42/guards11/acceptance27/invite11. Commits 0d9354b (P3-T1), 3f3d056 (P3-T2 partial). Remaining P3-T2: entitlements all-on, quotas counted-not-enforced, concept rooms; then P3-T3 (non-bypassed rules) and P3-T4 (demo dataset).",
       "next_action": "Continue P3-T2 remaining then P3-T3/P3-T4 locally; self-approval stays disabled until an explicit Constitution amendment."
+    },
+    {
+      "ts": "2026-09-29T23:57:34Z",
+      "activity": "master_build_plan_Phase3",
+      "batch": "P3",
+      "summary": "Completed Phase 3 locally. P3-T1 flag/scope/banner DONE (0d9354b). P3-T2 bypasses DONE (0f8d0bd): entitlements all-on for owner (non-owner/base unchanged; flag-off restores), quotas counted-but-not-enforced (flag-off restores), RBAC owner holds all perms, env safety allowlist {development,test} via raw ENVIRONMENT (production/production_tenant/staging/unknown/missing fail closed), per-actual-bypass audit only (owner_test_mode=true/actor/org/action/reason/occurred_at; no page-load flood), concept rooms UI-only (no server gate). P3-T3 DONE (7bc4838): 9 tests prove test mode does NOT bypass truth labels (UNKNOWN stays UNKNOWN), unregistered jobs, disabled providers, arming/score!=PURCHASE_READY, separate approval, auth + tenant isolation; frozen-file boundary asserted as static rule (not runtime); provider arming + hard spend caps are P7-T1, not yet implemented (not claimed). P3-T4 DONE (d61bef2): owner-only Demo Dataset toggle with SAMPLE rows in separate demo_observations table, hidden by default, excluded from real observations, toggle never mutates real data, SAMPLE never PURCHASE_READY. Full SQLite foundation suite 700 passed/59 skipped/0 failed. Self-approval still disabled (no amendment).",
+      "next_action": "P4-T1 pack-count diagnostic (companion fba-product-screener pipeline data required); hosting deferred per owner answer B."
     }
   ]
 }
