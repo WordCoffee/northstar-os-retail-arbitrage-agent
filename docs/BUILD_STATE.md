@@ -8,7 +8,7 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
 
 | Card | Status | Commit | Notes |
 |---|---|---|---|
-| P0-T1 State capture | IN_PROGRESS | | branch `build/master-plan` created; db backed up; BACKUP_SHA256=A4684F36DCF760870A3B4707D174C72C9A9FB370CAF08010620EB3562C99D0AD |
+| P0-T1 State capture | DONE | 1711edd | branch `build/master-plan` created; db backed up; BACKUP_SHA256=A4684F36DCF760870A3B4707D174C72C9A9FB370CAF08010620EB3562C99D0AD |
 | P0-T2 Two-repo reconciliation | PENDING | | |
 | P0-T3 Constitution diff | PENDING | | |
 | P1-T1 Baseline | PENDING | | |
