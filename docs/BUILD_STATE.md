@@ -56,6 +56,12 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
   purchase-approval rule. Safe default applied (see Assumptions #2).
 - OQ-5 (P2-T1): domain name, VPS provider, and additional user emails (Tyler).
   Default applied: local Compose only, no public URL (Assumptions #3).
+- OQ-6 (P2-T3, next card): BrowserRouter base path. Plan says base `/`; the SPA
+  is built and served under `/ui/` (Vite base `/ui/`, FastAPI `ui_serving`, Caddy
+  `handle_path /ui/*`). Options: (a) BrowserRouter `basename="/ui"` keeping
+  serving as-is; (b) move Vite base + serving to root `/`. Also need to know what
+  serves the harness port 8104 (external process, not in repo) and whether it
+  does SPA fallback for path routing. Next card resumes here.
 
 ## Owner Answers
 
