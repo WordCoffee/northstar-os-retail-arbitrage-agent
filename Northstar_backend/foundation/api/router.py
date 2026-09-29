@@ -334,6 +334,39 @@ def logout(request: Request, response: Response,
     return {"ok": True}
 
 
+def _require_platform_admin(ctx: RequestContext) -> None:
+    from ..permissions import evaluate, PERM_PLATFORM_ADMIN
+    allowed, reason = evaluate(ctx, PERM_PLATFORM_ADMIN)
+    if not allowed:
+        raise _err("permission_denied", "platform administrator required", 403)
+
+
+@router.get("/demo/status")
+def demo_status(state: FoundationState = Depends(get_state),
+                ctx: RequestContext = Depends(get_context)):
+    _require_platform_admin(ctx)
+    from ..demo_dataset import status
+    return status(state.db, ctx.effective_organization_id)
+
+
+@router.post("/demo/enable")
+def demo_enable(state: FoundationState = Depends(get_state),
+                ctx: RequestContext = Depends(get_context)):
+    _require_platform_admin(ctx)
+    from ..demo_dataset import set_enabled
+    return set_enabled(state.db, ctx.effective_organization_id, True,
+                       actor_user_id=ctx.user_id, audit=state.audit)
+
+
+@router.post("/demo/disable")
+def demo_disable(state: FoundationState = Depends(get_state),
+                 ctx: RequestContext = Depends(get_context)):
+    _require_platform_admin(ctx)
+    from ..demo_dataset import set_enabled
+    return set_enabled(state.db, ctx.effective_organization_id, False,
+                       actor_user_id=ctx.user_id, audit=state.audit)
+
+
 @router.get("/roles")
 def roles(ctx: RequestContext = Depends(get_context)):
     out = {}

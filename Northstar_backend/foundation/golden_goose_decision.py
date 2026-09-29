@@ -97,7 +97,8 @@ def decide(*, gate_inputs: Optional[dict] = None,
            uncertainty_penalty: float = 0.0,
            uncertainty_reasons: Optional[list] = None,
            approval: Optional[dict] = None,
-           warnings: Optional[list] = None) -> dict:
+           warnings: Optional[list] = None,
+           sample: bool = False) -> dict:
     """Produce the structured, versioned decision-control output.
 
     A numeric score never sets PURCHASE_READY; mandatory gates + approval do."""
@@ -131,6 +132,12 @@ def decide(*, gate_inputs: Optional[dict] = None,
 
     # all mandatory gates PASS + economics complete -> need approval
     if not _approval_valid(approval):
+        return _out(gates, APPROVAL_REQUIRED, True, economics_formula_version,
+                    component_scores, component_availability, component_weights,
+                    uncertainty_penalty, uncertainty_reasons, approval, warns, False)
+
+    if sample:
+        # A labeled SAMPLE row can NEVER be promoted to PURCHASE_READY (P3-T4).
         return _out(gates, APPROVAL_REQUIRED, True, economics_formula_version,
                     component_scores, component_availability, component_weights,
                     uncertainty_penalty, uncertainty_reasons, approval, warns, False)
