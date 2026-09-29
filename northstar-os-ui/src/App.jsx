@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useLocation, HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useNavigate, useLocation, BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import CommandPalette from './components/CommandPalette.jsx'
 import { NAV_GROUPS, canUseRole } from './data/nav-config.js'
 import SuiteRail from './components/SuiteRail.jsx'
@@ -214,12 +214,12 @@ function ToastContainer() {
 
 export default function App() {
   return (
-    <HashRouter>
+    <BrowserRouter basename="/ui">
       <SessionProvider>
         <TOAST_PROVIDER>
           <Shell />
         </TOAST_PROVIDER>
       </SessionProvider>
-    </HashRouter>
+    </BrowserRouter>
   )
 }

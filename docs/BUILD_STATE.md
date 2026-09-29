@@ -17,7 +17,8 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
 | P1-T3 Frontend defects F1-F11 | DONE | | F1-F8,F11 fixed (F9/F10 deferred to P8). App.jsx hosts F2/F3/F4 and was committed once. Harnesses green: smoke 40/0, guards 11/0, acceptance 26/0, invite 11/0; frontend gate 25/0 |
 | P2-T1 Hosting intake | DONE | | owner silent; default applied: local Docker Compose only, no public URL, no domain/VPS yet |
 | P2-T2 Containerize | DONE | | Dockerfile.api/.ui, Caddyfile, docker-compose.yml (api/worker/scheduler/postgres/caddy/migrate); GET /api/v1/foundation/health added; stack verified: health ok (db_backend=postgres), UI 200 at http://127.0.0.1/ui/. Existing compose preserved as docker-compose.local.yml. Pre-existing malformed root `.env` (line 98) blocks plain `up`; used `--env-file .env.example` |
-| P2-T3 BrowserRouter migration | PENDING | | |
+| P2-T3 BrowserRouter migration | DONE | | App.jsx HashRouter->BrowserRouter basename="/ui"; BetaInviteAccept links/router nav; four harnesses rewritten to path routing; direct load /ui/golden-goose 200 + renders; smoke 42/0, guards 11/0, acceptance 27/0, invite 11/0; frontend gate 25/0 |
+| P2-T4 Postgres in hosted mode | PENDING | | |
 
 ## Backup record
 

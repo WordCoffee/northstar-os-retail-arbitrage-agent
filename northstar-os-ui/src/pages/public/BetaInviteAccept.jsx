@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function BetaInviteAccept() {
+  const navigate = useNavigate()
   const [step, setStep] = useState(1)
   return (
     <div className="fade-in" style={{ maxWidth: 520, margin: '40px auto' }}>
@@ -26,7 +28,7 @@ export default function BetaInviteAccept() {
             </div>
             <div className="check-row" style={{ marginBottom: 8 }}>
               <input type="checkbox" id="agree-terms" />
-              <label htmlFor="agree-terms">I agree to the <a href="/legal">Terms of Service</a> and <a href="/legal">Privacy Policy</a>.</label>
+              <label htmlFor="agree-terms">I agree to the <Link to="/legal">Terms of Service</Link> and <Link to="/legal">Privacy Policy</Link>.</label>
             </div>
             <button className="btn btn-primary btn-block" onClick={() => setStep(2)}>Confirm Acceptance</button>
           </div>
@@ -36,7 +38,7 @@ export default function BetaInviteAccept() {
             <div className="empty-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" strokeWidth="1.5"><polyline points="20 6 9 17 4 12"/></svg></div>
             <div className="empty-title">Access Confirmed</div>
             <p className="text-mid" style={{ marginBottom: 20 }}>Your invitation is accepted. Sign in to open your NorthstarOS workspace.</p>
-            <button className="btn btn-primary" onClick={() => window.location.hash = '#/sign-in?org=' + encodeURIComponent('T2 Holdings LLC')}>Continue to Sign In</button>
+            <button className="btn btn-primary" onClick={() => navigate('/sign-in?org=' + encodeURIComponent('T2 Holdings LLC'))}>Continue to Sign In</button>
           </div>
         )}
       </div>
