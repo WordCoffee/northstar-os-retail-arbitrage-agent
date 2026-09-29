@@ -9,7 +9,7 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
 | Card | Status | Commit | Notes |
 |---|---|---|---|
 | P0-T1 State capture | DONE | 1711edd | branch `build/master-plan` created; db backed up; BACKUP_SHA256=A4684F36DCF760870A3B4707D174C72C9A9FB370CAF08010620EB3562C99D0AD |
-| P0-T2 Two-repo reconciliation | PENDING | | |
+| P0-T2 Two-repo reconciliation | DONE | | default B applied; pipeline config reference renamed (config-only, no file move); contract in `docs/DATA_CONTRACT.md` |
 | P0-T3 Constitution diff | PENDING | | |
 | P1-T1 Baseline | PENDING | | |
 | P1-T2 Fix test_frontend_gate.py | PENDING | | |
@@ -31,11 +31,17 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
 
 ## Assumptions
 
-(none yet)
+1. (P0-T2) Applied default **B** for the two-repo decision: Foundation repo is the
+   hosted product; `fba-product-screener` stays a separate repo exchanging data
+   via a documented ingest contract (`docs/DATA_CONTRACT.md`). Owner silent.
 
 ## Open Questions
 
-(none yet)
+- OQ-1 (P0-T2): owner decision A/B/C. Default B applied.
+- OQ-2 (P0-T2): approval to physically rename pipeline `data/northstar.db` ->
+  `data/pipeline_northstar.db` (file move deferred; config reference only).
+- OQ-3 (P0-T2): whether pipeline `data/products.db` is ingested or stays
+  pipeline-internal.
 
 ## Owner Answers
 
