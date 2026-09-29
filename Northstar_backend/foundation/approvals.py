@@ -95,9 +95,8 @@ class ApprovalService:
         # NORTHSTAR_OWNER_SELF_APPROVAL flag is on. While off, a second actor is
         # required even in test mode.
         if decided_by_user_id == req.get("requested_by_user_id"):
-            from .authn import environment as _env
             from . import owner_test_mode as _otm
-            if _otm.is_owner_test_mode(role=decided_by_role, environment=_env()) \
+            if _otm.is_owner_test_mode(role=decided_by_role, environment=_otm.raw_environment()) \
                     and not _otm.self_approval_enabled():
                 self.audit.record(
                     action="approval.decide", actor_user_id=decided_by_user_id,

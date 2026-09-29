@@ -22,9 +22,18 @@ def test_flag_off_is_zero_behavior_change(monkeypatch):
 def test_flag_on_scope(monkeypatch):
     monkeypatch.setenv("NORTHSTAR_OWNER_TEST_MODE", "1")
     assert otm.is_owner_test_mode(role=ADMIN, environment="development") is True
-    assert otm.is_owner_test_mode(role=ADMIN, environment="staging") is True
+    assert otm.is_owner_test_mode(role=ADMIN, environment="test") is True
     assert otm.is_owner_test_mode(role=Role.OPERATOR.value, environment="development") is False
-    assert otm.is_owner_test_mode(role=ADMIN, environment="production_tenant") is False
+    # Fail closed: production, production_tenant, staging, unknown/missing.
+    for env in ("production", "PRODUCTION", "production_tenant", "staging", "", None, "weird"):
+        assert otm.is_owner_test_mode(role=ADMIN, environment=env) is False, env
+
+
+def test_missing_environment_fails_closed(monkeypatch):
+    monkeypatch.setenv("NORTHSTAR_OWNER_TEST_MODE", "1")
+    monkeypatch.delenv("ENVIRONMENT", raising=False)
+    assert otm.raw_environment() is None
+    assert otm.is_owner_test_mode(role=ADMIN, environment=otm.raw_environment()) is False
 
 
 def test_self_approval_defaults_off(monkeypatch):

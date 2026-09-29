@@ -14,7 +14,12 @@ from typing import Optional
 from ..context import RequestContext
 from ..models import OrgEntitlement, utcnow
 from ..repositories import Repositories
+from ..audit import AuditService
+from ..authn import environment as auth_environment
+from .. import owner_test_mode as otm_mod
 from . import tiers as tiers_mod
+
+_OWNER_UNLIMITED = 10 ** 9
 
 
 class EntitlementError(RuntimeError):
@@ -50,7 +55,8 @@ class EntitlementService:
                 out[f] = int(o["value_int"])
         return out
 
-    def entitlements_for_org(self, org_id: str) -> dict:
+    def entitlements_for_org(self, org_id: str,
+                             ctx: Optional[RequestContext] = None) -> dict:
         """Materialize the org's entitlement flags. The STORED row always holds
         the BASE tier flags (never override-inflated); ACTIVE overrides are
         applied on every read so expiry/downgrade takes effect immediately."""
@@ -77,7 +83,7 @@ class EntitlementService:
                  utcnow().isoformat(), org_id, tier))
             self.repos.db.conn.commit()
         flags = self._apply_overrides(org_id, base)
-        return {
+        out = {
             "tier": tier,
             "max_jobs_per_month": flags["max_jobs_per_month"],
             "export_enabled": bool(flags["export_enabled"]),
@@ -86,18 +92,68 @@ class EntitlementService:
             "support_level": flags.get("support_level", "none"),
             "override_allowed": bool(flags.get("override_allowed", False)),
         }
+        # Owner Test Mode (P3-T2): every testable feature is available to the
+        # owner only (gated flags on, limits unbounded; support_level untouched).
+        if ctx is not None and self._is_owner_test_mode(ctx):
+            out["export_enabled"] = True
+            out["advanced_reports"] = True
+            out["override_allowed"] = True
+            out["max_jobs_per_month"] = _OWNER_UNLIMITED
+            out["seat_limit"] = _OWNER_UNLIMITED
+        return out
+
+    # -- Owner Test Mode helpers (P3-T2) --------------------------------------
+
+    def _is_owner_test_mode(self, ctx: RequestContext) -> bool:
+        return otm_mod.is_owner_test_mode(role=ctx.effective_role,
+                                          environment=otm_mod.raw_environment())
+
+    def _audit_bypass(self, ctx: RequestContext, *, action: str, feature: str,
+                      reason: str) -> None:
+        try:
+            AuditService(self.repos).record(
+                action=action, actor_user_id=ctx.user_id,
+                actor_role=ctx.effective_role,
+                organization_id=ctx.effective_organization_id,
+                resource_type="entitlement", resource_id=feature,
+                after_meta={"owner_test_mode": True, "reason": reason,
+                            "feature": feature})
+        except Exception:  # noqa: BLE001 - audit must never break the request
+            pass
+
+    def _increment_monthly_jobs_unbounded(self, org_id: str) -> None:
+        period = self.current_period()
+        conn = self.repos.db.conn
+        self.repos.db.insert_ignore(
+            "usage_counters",
+            {"organization_id": org_id, "period": period,
+             "monthly_jobs_used": 0, "updated_at": utcnow().isoformat()},
+            conflict_cols=("organization_id",))
+        conn.execute(
+            "UPDATE usage_counters SET monthly_jobs_used = monthly_jobs_used + 1, "
+            "period = ?, updated_at = ? WHERE organization_id = ?",
+            (period, utcnow().isoformat(), org_id))
+        conn.commit()
 
     # -- centralized checks ---------------------------------------------------
 
-    def check_feature(self, org_id: str, feature: str) -> bool:
+    def check_feature(self, org_id: str, feature: str,
+                      ctx: Optional[RequestContext] = None) -> bool:
         """Atomic flag check. Unknown features fail closed (False)."""
-        ent = self.entitlements_for_org(org_id)
+        ent = self.entitlements_for_org(org_id, ctx=ctx)
         return bool(ent.get(feature))
 
     def enforce_feature(self, ctx: RequestContext, feature: str) -> None:
         org_id = ctx.effective_organization_id
         if not org_id:
             raise EntitlementError("no_organization", feature=feature)
+        if self._is_owner_test_mode(ctx):
+            # Bypass only when the base (non-owner) tier would have denied it.
+            if not self.check_feature(org_id, feature):
+                self._audit_bypass(ctx, action="owner_test_mode.entitlement_bypass",
+                                   feature=feature,
+                                   reason="feature_enabled_by_owner_test_mode")
+            return
         if not self.check_feature(org_id, feature):
             raise EntitlementError("entitlement_denied",
                                    f"feature {feature} not enabled for this tier",
@@ -110,6 +166,13 @@ class EntitlementService:
         org_id = ctx.effective_organization_id
         if not org_id:
             raise EntitlementError("no_organization", feature=feature)
+        if self._is_owner_test_mode(ctx):
+            base = self.entitlements_for_org(org_id)
+            limit = int(base.get(feature) or 0)
+            if current >= limit:
+                self._audit_bypass(ctx, action="owner_test_mode.quota_bypass",
+                                   feature=feature, reason="quota_would_exceed")
+            return
         ent = self.entitlements_for_org(org_id)
         limit = int(ent.get(feature) or 0)
         if current >= limit:
@@ -185,6 +248,17 @@ class EntitlementService:
         org_id = ctx.effective_organization_id
         if not org_id:
             raise EntitlementError("no_organization", feature="max_jobs_per_month")
+        if self._is_owner_test_mode(ctx):
+            # Record usage (still counted) but do NOT enforce the block.
+            base = self.entitlements_for_org(org_id)
+            limit = int(base.get("max_jobs_per_month") or 0)
+            used = self.jobs_used_this_month(org_id)
+            self._increment_monthly_jobs_unbounded(org_id)
+            if used >= limit:
+                self._audit_bypass(ctx, action="owner_test_mode.quota_bypass",
+                                   feature="max_jobs_per_month",
+                                   reason="monthly_job_limit_exceeded")
+            return
         ent = self.entitlements_for_org(org_id)
         limit = int(ent.get("max_jobs_per_month") or 0)
         if not self._atomic_increment_monthly_jobs(org_id, limit):
@@ -195,7 +269,10 @@ class EntitlementService:
                 "reached; it resets at the start of the next period",
                 feature="max_jobs_per_month", limit=limit, current=used)
 
-    def enforce_seat_limit(self, org_id: str) -> None:
+    def enforce_seat_limit(self, org_id: str,
+                           ctx: Optional[RequestContext] = None) -> None:
+        if ctx is not None and self._is_owner_test_mode(ctx):
+            return
         ent = self.entitlements_for_org(org_id)
         limit = int(ent.get("seat_limit") or 0)
         members = self.repos.memberships.list(where={"organization_id": org_id})

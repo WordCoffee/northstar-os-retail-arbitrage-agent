@@ -4,9 +4,10 @@ A flag-gated, audited operator mode. Off by default and requires the owner role.
 When the flag is off this module returns False everywhere, so behavior is
 unchanged (tested).
 
-Scope (P3-T1): active only for principals whose effective role is
-``internal_platform_admin`` and only when the process environment is NOT
-``production_tenant``.
+Scope (P3-T1/P3-T2): active only for principals whose effective role is
+``internal_platform_admin`` and only in explicitly non-production environments
+(``ALLOWED_ENVIRONMENTS``); production, production_tenant, staging, and
+unknown/missing values fail closed.
 """
 from __future__ import annotations
 
@@ -16,7 +17,10 @@ from typing import Optional
 from .enums import Role
 
 TRUTHY = {"1", "true", "yes", "on"}
-DISALLOWED_ENVIRONMENTS = {"production_tenant"}
+# Fail closed: Owner Test Mode activates ONLY in explicitly identified
+# non-production environments. production, production_tenant, staging, unknown,
+# missing, or invalid values all return False (no bypass).
+ALLOWED_ENVIRONMENTS = frozenset({"development", "test"})
 BANNER_TEXT = "OWNER TEST MODE — bypasses are audited."
 
 
@@ -35,10 +39,18 @@ def self_approval_enabled() -> bool:
     return _truthy("NORTHSTAR_OWNER_SELF_APPROVAL")
 
 
+def raw_environment() -> Optional[str]:
+    """The raw process ENVIRONMENT value (None when unset). Unlike
+    ``authn.environment()`` this does NOT default to development, so a missing
+    environment fails closed for Owner Test Mode."""
+    return os.environ.get("ENVIRONMENT")
+
+
 def is_owner_test_mode(*, role: Optional[str], environment: Optional[str]) -> bool:
     if not flag_enabled():
         return False
-    if (environment or "").strip().lower() in DISALLOWED_ENVIRONMENTS:
+    env = (environment or "").strip().lower()
+    if env not in ALLOWED_ENVIRONMENTS:
         return False
     return role == Role.INTERNAL_PLATFORM_ADMIN.value
 

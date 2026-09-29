@@ -345,9 +345,8 @@ def roles(ctx: RequestContext = Depends(get_context)):
 @router.get("/environment")
 def environment(ctx: RequestContext = Depends(get_context)):
     posture = current_auth_posture()
-    from ..authn import environment as _proc_env
-    from ..owner_test_mode import is_owner_test_mode, self_approval_enabled, banner
-    _otm = is_owner_test_mode(role=ctx.effective_role, environment=_proc_env())
+    from ..owner_test_mode import is_owner_test_mode, self_approval_enabled, banner, raw_environment
+    _otm = is_owner_test_mode(role=ctx.effective_role, environment=raw_environment())
     return {
         "environment": ctx.environment,
         "view_context": ctx.view_context,

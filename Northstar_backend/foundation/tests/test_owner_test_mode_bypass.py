@@ -44,13 +44,15 @@ def _admin_app(monkeypatch):
     return app, st, r["user_id"]
 
 
-def test_active_request_is_audited(monkeypatch):
+def test_unrelated_page_load_does_not_flood_audit(monkeypatch):
     monkeypatch.setenv("NORTHSTAR_OWNER_TEST_MODE", "1")
     app, st, uid = _admin_app(monkeypatch)
     client = TestClient(app)
     client.get("/api/v1/foundation/environment", headers={"X-User-Id": uid})
-    rows = st.repos.audit.list({"action": "owner_test_mode.active"})
-    assert rows, "expected an owner_test_mode.active audit event"
+    client.get("/api/v1/foundation/roles", headers={"X-User-Id": uid})
+    rows = st.repos.audit.list({})
+    otm_rows = [x for x in rows if str(x.get("action", "")).startswith("owner_test_mode.")]
+    assert otm_rows == [], "owner_test_mode must only audit ACTUAL bypasses, not page loads"
 
 
 def _state(tmp_path):

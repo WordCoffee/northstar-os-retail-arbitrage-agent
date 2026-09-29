@@ -205,15 +205,6 @@ def get_context(
         request_id=request_id,
         auth_method=method,
     )
-    # Owner Test Mode (P3-T2): audit every request made while the mode is active.
-    from .. import owner_test_mode as _otm
-    if _otm.is_owner_test_mode(role=role, environment=auth_environment()):
-        try:
-            state.audit.record(action="owner_test_mode.active", actor_user_id=user_id,
-                               actor_role=role, organization_id=org_id,
-                               after_meta={"owner_test_mode": True})
-        except Exception:  # noqa: BLE001 - audit must never break the request
-            pass
     # Stash for the denial-audit middleware (1C-05) so 403/404 responses can be
     # attributed to the authenticated actor without re-parsing the token.
     request.state.ctx = ctx
