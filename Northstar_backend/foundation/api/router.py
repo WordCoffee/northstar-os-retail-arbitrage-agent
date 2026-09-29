@@ -36,6 +36,26 @@ from .state import FoundationState
 router = APIRouter(prefix="/api/v1/foundation", tags=["foundation"])
 
 
+# ---- liveness / readiness (public; also serves Monitoring later) -------------
+
+@router.get("/health")
+def health() -> dict:
+    """Public liveness/readiness probe. No auth, no side effects, no secrets.
+
+    Kept dependency-free so container orchestration and Monitoring can probe it
+    even when the database or auth posture is degraded.
+    """
+    import os as _os
+    backend = "postgres" if _os.environ.get("FOUNDATION_DB_URL") else "sqlite"
+    return {
+        "status": "ok",
+        "service": "northstar-foundation",
+        "version": "foundation-1",
+        "db_backend": backend,
+        "environment": _os.environ.get("ENVIRONMENT", "development"),
+    }
+
+
 # ---- helpers -----------------------------------------------------------------
 
 def _err(code: str, message: str, status: int = 400, **details) -> HTTPException:

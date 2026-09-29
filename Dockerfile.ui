@@ -1,0 +1,14 @@
+# Build the canonical React/Vite SPA, then serve it (plus the API reverse
+# proxy) from Caddy. The SPA uses Vite base /ui/, so it is served under /ui/.
+
+FROM node:20-alpine AS build
+WORKDIR /ui
+COPY northstar-os-ui/package.json northstar-os-ui/package-lock.json* ./
+RUN npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+COPY northstar-os-ui/ ./
+RUN npm run build
+
+FROM caddy:2-alpine
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY --from=build /ui/dist /srv
+EXPOSE 80 443

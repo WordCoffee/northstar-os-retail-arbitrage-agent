@@ -1,0 +1,27 @@
+# Hosted stack entrypoint. UI is served under /ui/ (Vite base); everything
+# under /api/ and the health path is reverse-proxied to the FastAPI service.
+# TLS is added automatically by Caddy when DOMAIN resolves to this host; for
+# plain local http://localhost the :80 site below is used as-is.
+
+{
+	admin off
+}
+
+:80 {
+	encode gzip
+
+	# API + foundation health -> FastAPI.
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+
+	# Canonical SPA under /ui/ (strip the prefix, SPA fallback to index.html).
+	handle_path /ui/* {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+
+	# Bare root -> the UI.
+	redir / /ui/ 302
+}

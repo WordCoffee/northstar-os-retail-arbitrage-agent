@@ -7,3 +7,6 @@ bcrypt
 PyJWT
 httpx
 aiofiles
+croniter
+cryptography
+psycopg[binary]

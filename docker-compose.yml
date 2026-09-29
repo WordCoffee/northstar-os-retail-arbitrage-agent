@@ -1,141 +1,102 @@
-version: "3.9"
+# Hosted stack (P2-T2): api + worker + scheduler + postgres + caddy.
+# The previous local-only Ollama/AutothinK compose file is preserved as
+# docker-compose.local.yml.
+#
+# Local run:  docker compose up --build   -> UI at http://localhost/ui/
+# No secrets are baked in: set real values in a local .env (gitignored) or the
+# environment. Dev defaults below are clearly non-production.
+
+x-foundation-env: &foundation-env
+  FOUNDATION_DB_URL: postgresql://${POSTGRES_USER:-northstar}:${POSTGRES_PASSWORD:-northstar_dev_only}@postgres:5432/${POSTGRES_DB:-northstar}
+  ENVIRONMENT: ${ENVIRONMENT:-development}
+  # Dev posture: allow remote bind while the dev shim is active (P2-T5 replaces
+  # this with real JWT auth on hosted environments).
+  NS_FOUNDATION_ALLOW_REMOTE_DEV: ${NS_FOUNDATION_ALLOW_REMOTE_DEV:-1}
+  NORTHSTAR_UI_MODE: ${NORTHSTAR_UI_MODE:-full}
+  NORTHSTAR_OWNER_TEST_MODE: ${NORTHSTAR_OWNER_TEST_MODE:-0}
+  NORTHSTAR_JWT_SECRET: ${NORTHSTAR_JWT_SECRET:-}
+  NORTHSTAR_JWT_ISSUER: ${NORTHSTAR_JWT_ISSUER:-https://northstar.local}
+  NORTHSTAR_JWT_AUDIENCE: ${NORTHSTAR_JWT_AUDIENCE:-northstar-api}
+  PYTHONUNBUFFERED: "1"
 
 services:
-  # ──────────────────────────────────────────────────────────────
-  # Ollama — local LLM runtime for AutothinK chat
-  # ──────────────────────────────────────────────────────────────
-  ollama:
-    image: ollama/ollama:latest
-    container_name: northstar-ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama-data:/root/.ollama
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "ollama", "list"]
-      interval: 10s
-      timeout: 5s
-      retries: 12
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-
-  # ──────────────────────────────────────────────────────────────
-  # AutothinK Backend — local brain server (port 8100)
-  # ──────────────────────────────────────────────────────────────
-  autothink:
-    build:
-      context: ./autothink
-      dockerfile: Dockerfile
-    container_name: northstar-autothink
-    ports:
-      - "8100:8100"
-    environment:
-      - OLLAMA_HOST=http://ollama:11434
-      - PYTHONUNBUFFERED=1
-    volumes:
-      - ./autothink:/app
-      - ./autothink/ui:/app/ui:ro
-    depends_on:
-      ollama:
-        condition: service_healthy
-    restart: unless-stopped
-    command: >
-      sh -c "ollama pull llama3.2:3b || true &&
-             python -m uvicorn backend.server:app --host 0.0.0.0 --port 8100 --log-level info"
-
-  # ──────────────────────────────────────────────────────────────
-  # Northstar Backend — FastAPI API + static SPA (port 8000)
-  # ──────────────────────────────────────────────────────────────
-  northstar:
-    build:
-      context: ./Northstar_backend
-      dockerfile: Dockerfile
-    container_name: northstar-backend
-    ports:
-      - "8000:8000"
-    environment:
-      - PYTHONUNBUFFERED=1
-      - SCANNER_LIVE_ALLOWED=false
-      - DATAFORSEO_ENABLED=false
-    volumes:
-      - ./Northstar_backend:/app
-      - ./Northstar_backend/static:/app/static:ro
-      - ./Northstar_backend/data:/app/data:ro
-      - ./autothink:/app/autothink:ro   # mount for /autothink static mount
-    depends_on:
-      - autothink
-    restart: unless-stopped
-    command: >
-      sh -c "python -m uvicorn main:app --host 0.0.0.0 --port 8000 --log-level info"
-
-  # ──────────────────────────────────────────────────────────────
-  # PostgreSQL — shared data layer (production)
-  # ──────────────────────────────────────────────────────────────
   postgres:
-    image: supabase/postgres:15.1.1.78
-    container_name: northstar-postgres
-    ports:
-      - "5432:5432"
+    image: postgres:15-alpine
     environment:
-      - POSTGRES_DB=northstar
-      - POSTGRES_USER=northstar
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-northstar_dev}
+      POSTGRES_USER: ${POSTGRES_USER:-northstar}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-northstar_dev_only}
+      POSTGRES_DB: ${POSTGRES_DB:-northstar}
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U northstar"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-northstar} -d ${POSTGRES_DB:-northstar}"]
+      interval: 5s
       timeout: 5s
-      retries: 5
-
-  # ──────────────────────────────────────────────────────────────
-  # Redis — caching + rate limiting
-  # ──────────────────────────────────────────────────────────────
-  redis:
-    image: redis:7-alpine
-    container_name: northstar-redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
+      retries: 20
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
-  # ──────────────────────────────────────────────────────────────
-  # n8n — workflow automation
-  # ──────────────────────────────────────────────────────────────
-  n8n:
-    image: n8nio/n8n:latest
-    container_name: northstar-n8n
-    ports:
-      - "5678:5678"
-    environment:
-      - DB_TYPE=postgresdb
-      - DB_POSTGRESDB_HOST=postgres
-      - DB_POSTGRESDB_PORT=5432
-      - DB_POSTGRESDB_DATABASE=northstar
-      - DB_POSTGRESDB_USER=northstar
-      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:-northstar_dev}
-    volumes:
-      - n8n-data:/home/node/.n8n
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    command: ["python", "foundation_migrate.py"]
+    environment: *foundation-env
     depends_on:
       postgres:
         condition: service_healthy
+    restart: "no"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment: *foundation-env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    expose:
+      - "8000"
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    command: ["python", "foundation_worker.py"]
+    environment: *foundation-env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    command: ["python", "foundation_scheduler.py"]
+    environment: *foundation-env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    depends_on:
+      - api
     restart: unless-stopped
 
 volumes:
-  ollama-data:
   postgres-data:
-  redis-data:
-  n8n-data:

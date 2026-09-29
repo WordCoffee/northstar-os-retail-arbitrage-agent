@@ -1,0 +1,17 @@
+.git
+.gitignore
+**/node_modules
+northstar-os-ui/dist
+**/__pycache__
+**/*.pyc
+*.log
+backups
+.playwright-mcp
+screenshots
+# Virtualenvs (can contain symlinks that break the Docker context)
+venv-phase1c02
+**/venv
+**/venv-wsl
+**/.venv
+Northstar_backend_audit_export
+Northstar OS Computer clone
