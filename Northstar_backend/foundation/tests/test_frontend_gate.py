@@ -303,7 +303,7 @@ def test_v3_shell_invariants():
 
     app = open(os.path.join(UI_SRC, "App.jsx"), encoding="utf-8").read()
     route_count = len(re.findall(r"<Route\s+path=", app))
-    assert route_count == 44, f"expected 44 routes in App.jsx, found {route_count}"
+    assert route_count == 48, f"expected 48 routes in App.jsx, found {route_count}"
 
     # The legacy client (services/api.js) must not be imported by any v3 module.
     v3_dirs = ["pages/internal", "pages/customer", "pages/admin", "pages/public",

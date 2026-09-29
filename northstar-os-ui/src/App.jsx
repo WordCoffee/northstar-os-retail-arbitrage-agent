@@ -41,6 +41,10 @@ import SignIn from './pages/public/SignIn.jsx'
 import Recovery from './pages/public/Recovery.jsx'
 import BetaLanding from './pages/public/BetaLanding.jsx'
 import BetaInviteAccept from './pages/public/BetaInviteAccept.jsx'
+import CustomerLegal from './pages/customer/Legal.jsx'
+import AccountSuspended from './pages/customer/Suspended.jsx'
+import AccountDowngraded from './pages/customer/Downgraded.jsx'
+import CustomerReaccept from './pages/customer/Reaccept.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 function currentRole(session) {
@@ -49,9 +53,21 @@ function currentRole(session) {
     : 'invitee'
 }
 
-function GuardedRoutes({ role }) {
+// Paths reachable without a session (public entry surfaces).
+const PUBLIC_PATHS = ['/sign-in', '/recovery', '/beta', '/beta/accept', '/legal']
+
+function GuardedRoutes({ role, authenticated, loaded }) {
   const location = useLocation()
   const path = location.pathname
+  const isPublic = PUBLIC_PATHS.some(p => path === p || path.startsWith(p + '/'))
+  // Wait for the session to resolve before enforcing the auth gate, otherwise a
+  // dev-session user is briefly treated as signed-out and bounced to /sign-in
+  // (which also drops the deep-link query string).
+  if (!loaded) return null
+  // Internal (non-public) paths require authentication (F4).
+  if (!authenticated && !isPublic) {
+    return <Navigate to="/sign-in" replace />
+  }
   const adminOnly = path === '/beta-ops' || path.startsWith('/beta-ops/') || path === '/admin'
   if (adminOnly && role !== 'platform_admin') {
     return <Navigate to="/home" replace />
@@ -101,6 +117,10 @@ function GuardedRoutes({ role }) {
       <Route path="/recovery" element={<Recovery />} />
       <Route path="/beta" element={<BetaLanding />} />
       <Route path="/beta/accept" element={<BetaInviteAccept />} />
+      <Route path="/legal" element={<CustomerLegal />} />
+      <Route path="/suspended" element={<AccountSuspended />} />
+      <Route path="/downgraded" element={<AccountDowngraded />} />
+      <Route path="/reaccept" element={<CustomerReaccept />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )
@@ -122,6 +142,8 @@ function Shell() {
   const [toolsOpen, setToolsOpen] = useState(false)
 
   const role = currentRole(session)
+  const authenticated = !!session.authenticated
+  const loaded = !!session.loaded
   const path = location.pathname
   const mobileTab = MOBILE_ACTIVE.find(m => path === m.path || path.startsWith(m.path + '/'))
   const mobileActive = toolsOpen ? 'tools' : (mobileTab ? mobileTab.tab : '')
@@ -136,7 +158,9 @@ function Shell() {
       <div className="body-layout">
         <SuiteRail onNavigate={() => setToolsOpen(false)} />
         <main className="main-content">
-          <GuardedRoutes role={role} />
+          {session.suspended
+            ? <AccountSuspended />
+            : <GuardedRoutes role={role} authenticated={authenticated} loaded={loaded} />}
         </main>
       </div>
       <MobileBottomNav active={mobileActive} onToolsClick={() => setToolsOpen(true)} />
