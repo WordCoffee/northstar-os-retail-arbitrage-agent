@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T02:09:11Z",
+  "last_updated": "2026-09-30T02:13:18Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1103,6 +1103,13 @@
       "batch": "P5-T3",
       "summary": "Added Golden Goose persistence (golden_goose_store.py + migration 012) enabling decision round-trip and snapshots; routes queue/get/decision now persist and are org-scoped. Tests: routes 9/0, golden_goose/migration subset 62/0. P5-T3 remains PARTIAL: monthly scheduling not implemented; candidate source depends on P4-T1 coverage.",
       "next_action": "P5-T4 bounded room wiring; verify OA-1 after owner approves Profile 6 extension."
+    },
+    {
+      "ts": "2026-09-30T02:13:18Z",
+      "activity": "chromecontrol_oa1_bridge_recheck",
+      "batch": "OA-1",
+      "summary": "Post owner restart+approval recheck: browser tabs still ['about:blank']; MCP process list shows both chrome-t2 and Profile 6 extension servers running. OA-1 stays PARTIAL; no substitute browser, no global-config edit, no process kill.",
+      "next_action": "P5-T4 bounded slices; OA-1 needs owner-approved stale-process cleanup / confirm override loaded."
     }
   ],
   "owner_action_queue": [
@@ -1115,8 +1122,8 @@
       "safe_default": "stay local",
       "status": "OPEN",
       "owner_response": "Target profile confirmed: C:\\Users\\T2Hol\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6 (Oracle signed in). Owner approves project-local profile selection for extension attachment.",
-      "verification": "RUNTIME MISMATCH DIAGNOSED: the active MCP server for this workspace came from the GLOBAL ~/.config/opencode/opencode.json ('--browser chrome --user-data-dir C:\\Users\\T2Hol\\.config\\opencode\\chrome-t2') - a SEPARATE automation profile, which is why only 'about:blank' appeared. The earlier edit to Default Project\\opencode.json was NOT the active config. FIX: added a PROJECT-LOCAL override in the Northstar repo opencode.jsonc -> mcp.playwright = ['npx','-y','@playwright/mcp@latest','--extension','--profile-dir-name','Profile 6'] (project overrides global). Multiple stale/duplicate MCP processes observed (several chrome-t2 instances + two Profile 6 instances). RESTART REQUIRED; then approve the extension connection in Profile 6.",
-      "how_to_complete": "Owner: restart opencode (loads the project-local override); ensure stale chrome-t2 MCP instances are gone; in Profile 6 Chrome click the Playwright extension Connect and approve. Then reply 'continue'; I verify the real bridge (tabs from Profile 6) + the Oracle tab and do only read-only inspection."
+      "verification": "STILL UNVERIFIED after restart+approval. Browser tool tab list = ['about:blank'] only (not Profile 6). Process evidence: both server types running - multiple '--browser chrome --user-data-dir C:\\Users\\T2Hol\\.config\\opencode\\chrome-t2' instances AND multiple '--extension --profile-dir-name 'Profile 6'' instances; the tool-bound connection still returns the chrome-t2 about:blank. Project-local override in Northstar opencode.jsonc present; global config unchanged; no processes killed; no substitute browser launched.",
+      "how_to_complete": "Owner-approved cleanup likely needed: (a) fully quit opencode and confirm no stray node @playwright/mcp processes remain, or separate owner approval to kill the stale chrome-t2 MCP instances; (b) confirm the project-local override loaded; (c) in Profile 6 approve the extension. Then reply 'continue'."
     },
     {
       "id": "OA-2",
