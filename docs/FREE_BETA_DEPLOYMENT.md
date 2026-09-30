@@ -194,3 +194,23 @@ Add CSP, Referrer-Policy, X-Content-Type-Options, frame policy, Permissions-Poli
 in a controlled card; test when added. HSTS only once hostname + HTTPS are
 stable; no includeSubDomains unless safe; no preload without owner decision.
 Token-bearing invitation URLs must not appear in logs/analytics/referrers/state.
+
+## 23. Verification ledger (actually executed vs pending)
+
+EXECUTED locally:
+- Merged-config validation (`docker compose -f docker-compose.yml -f docker-compose.hosted.yml --env-file deploy/hosted.env.example config`).
+- Port-exposure regression test `Northstar_backend/foundation/tests/test_hosted_compose.py`: only Caddy publishes 80/443; api/postgres/worker/scheduler/migrate publish nothing; no 5432/8000/2375/2376.
+- Guardrail checks: hosted api ENVIRONMENT=staging, NS_FOUNDATION_ALLOW_REMOTE_DEV=0, NORTHSTAR_OWNER_TEST_MODE=0, NORTHSTAR_OWNER_SELF_APPROVAL=0.
+- ARM64 **emulated** build of api + ui under QEMU + arm64 import smoke (early signal only).
+- Prerequisite subset: 165 passed / 7 skipped / 0 failed.
+
+NOT executed (do not claim):
+- `deploy/backup.sh` and `deploy/restore.sh` (no restore drill has run).
+- Any certificate issuance / HTTPS.
+- Any OCI resource eligibility or provisioning.
+- Real ARM64 runtime or migration run (requires the VM).
+- Any hosted runtime behavior.
+
+A backup script existing is NOT a passing restore drill. Free capacity is NOT
+guaranteed. `P2-T5` hosted sign-in and `P2-T6` remain PARTIAL until hosted
+acceptance passes on the real HTTPS hostname.
