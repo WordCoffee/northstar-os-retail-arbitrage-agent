@@ -22,7 +22,7 @@
     "Phase F: Engineering Debt + Golden Goose Hardening",
     "Phase G: Next Batch (FIXES_50 leftovers + partials + hygiene)",
     "Phase H: Private Alpha Launch (dual-engine, operator-only)",
-    "Master-plan completion sprint (Items 1-6): Item 1 (P5-T4 acceptance round-trip) GG 16/0 + acceptance 32/0; Item 2 (P4-T3b rights filter) committed — provenance extractor + GG derived projection, no raw payload leak, data_rights+routes 21/0 and GG suite 30/0. See docs/ASSUMPTIONS_LOG.md. Items 3-6 in progress."
+    "Master-plan completion sprint (Items 1-6): Item 1 (P5-T4 acceptance round-trip) GG 16/0 + acceptance 32/0; Item 2 (P4-T3b rights filter) committed — provenance extractor + GG derived projection, no raw payload leak, data_rights+routes 21/0 and GG suite 30/0; Item 3 (scheduler/snapshot evidence-based scope) — scheduler core verified 41/0, new operator-created monthly_top5 schedule path test (top5 6/0), NO invented cron/retention/snapshot semantics, assumptions A-07..A-09. See docs/ASSUMPTIONS_LOG.md and docs/BUILD_STATE.md. Items 4-6 in progress."
   ],
   "known_issues": [
     {

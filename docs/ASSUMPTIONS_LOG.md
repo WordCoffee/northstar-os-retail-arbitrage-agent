@@ -56,3 +56,42 @@ the owning blocker (typically OA-7).
   INTERNAL_ONLY/UNKNOWN third-party data) but does not grant any additional
   rights beyond the register. Not legal advice.
 - **Status:** OPEN blocking card OA-7.
+
+---
+
+## 2026-09-30 — Item 3: Golden Goose Top-5 scheduler / snapshot evidence-based scope
+
+### A-07 Scheduler core IS implemented and green; the monthly schedule is NOT auto-created
+- **Decision:** The persisted scheduler (`jobs_scheduler.py`) is fully
+  implemented (enqueue-only, atomic occurrence claim, idempotent, concurrency
+  policy, misfire window, org-suspended/owner-revoked guards, org isolation,
+  GET-never-ticks, and it NEVER executes jobs or calls providers). Verified
+  41/0 (jobs + scheduler + worker) plus the new evidence-backed
+  `test_monthly_top5_operator_schedule_path` (top5 suite now 6/0).
+- **Decision (scope):** No default monthly cron cadence is invented or seeded.
+  A `golden_goose.monthly_top5` schedule is only created when an operator
+  explicitly opts in via the scheduler API with an explicit cron/interval and
+  `enabled=true` (provider-backed schedules default disabled). There is no
+  spec/schema/test that mandates a particular cadence, so we do not invent one.
+- **Status:** `golden_goose.monthly_top5` handler registered (deterministic,
+  local, free, idempotent, requires explicit `candidates`). Scheduler = PARTIAL
+  relative to a "fully auto-tuned monthly recap" — the engine + handler are
+  done; a turnkey out-of-the-box monthly schedule and real
+  candidate-source wiring (depends on P4-T1 coverage) are UNKNOWN/not implemented.
+
+### A-08 Snapshot "payloads"/retention/deletion are NOT invented
+- **Decision:** What is evidenced as a snapshot-with-version mechanism is the
+  org-scoped `golden_goose_decisions` table (persists `decision_state`,
+  `purchase_ready`, `scorer_version`, `inputs_hash`, `payload_json`). No
+  additional snapshot schema, retention window, or deletion policy is added,
+  because none is specified in requirements/schema/tests. Marking those as
+  UNKNOWN; logged as a blocker if a turnkey snapshot product is expected.
+- **Status:** Store unchanged in this slice (only `project_item`/derived view
+  added under P4-T3b).
+
+### A-09 Candidate source depends on P4-T1 coverage
+- **Decision:** `select_top5` requires an explicit `candidates` list in the
+  payload. Automatic candidate population from live source pipelines is not
+  implemented and is out of Item 3 scope (depends on P4-T1 coverage).
+- **Status:** documented; not stubbed with fabricated sources.
+
