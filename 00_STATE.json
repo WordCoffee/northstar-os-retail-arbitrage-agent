@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T00:54:44Z",
+  "last_updated": "2026-09-30T00:58:46Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1033,6 +1033,87 @@
       "batch": "P4-T4",
       "summary": "P4-T4 Freshness policy DONE. foundation/freshness.py: per-field max-age (defaults + NORTHSTAR_MAX_AGE_<FIELD>_DAYS env overrides); within max -> OBSERVED (gate-usable); older -> CACHED with age (display only; gate sees UNKNOWN via gate_state); missing/unparseable/future -> UNKNOWN. Tests 7/0. Phase 4 remaining: P4-T3b (wire rights filter into customer/export surfaces, dependency for P5+). P4-T1 still PARTIAL (no end-to-end rerun).",
       "next_action": "P5-T1 resale score spec; keep P4-T1 PARTIAL; deployment BLOCKED on owner."
+    },
+    {
+      "ts": "2026-09-30T00:58:46Z",
+      "activity": "continuous_execution_protocol",
+      "batch": "protocol",
+      "summary": "Adopted docs/CONTINUOUS_EXECUTION_PROTOCOL.md (workflow only; no new permissions); referenced from AGENTS.md; added Owner Action Queue (OA-1..OA-8) to docs/BUILD_STATE.md + 00_STATE.json without erasing history. OA-1 (Oracle signup/home region) OPEN; OA-7 (data rights legal input) OPEN; OA-8 (score name) OPEN with safe default; others DEFERRED.",
+      "next_action": "Offer OA-1 handoff once; resume P5-T1; apply P4-T3b before customer/export surfaces."
+    }
+  ],
+  "owner_action_queue": [
+    {
+      "id": "OA-1",
+      "card": "DEPLOY-F2",
+      "need": "Create Oracle account + choose home region",
+      "when": "now (DEPLOY-F1 ready)",
+      "blocks": "DEPLOY-F2/F3",
+      "safe_default": "stay local",
+      "status": "OPEN"
+    },
+    {
+      "id": "OA-2",
+      "card": "DEPLOY-F3",
+      "need": "Approve exact free-eligible resource packet",
+      "when": "after OA-1 + packet",
+      "blocks": "DEPLOY-F3/F5",
+      "safe_default": "create nothing",
+      "status": "DEFERRED"
+    },
+    {
+      "id": "OA-3",
+      "card": "DEPLOY-F4",
+      "need": "DuckDNS login + approve hostname",
+      "when": "after OA-1",
+      "blocks": "DEPLOY-F4",
+      "safe_default": "manual only",
+      "status": "DEFERRED"
+    },
+    {
+      "id": "OA-4",
+      "card": "DEPLOY-F6",
+      "need": "Interactive owner bootstrap on VM",
+      "when": "after HTTPS stable",
+      "blocks": "P2-T5 hosted sign-in",
+      "safe_default": "none (owner-only)",
+      "status": "DEFERRED"
+    },
+    {
+      "id": "OA-5",
+      "card": "DEPLOY-F7",
+      "need": "1 real tester identity, then 4 more",
+      "when": "after F6 + invite/tenant acceptance",
+      "blocks": "DEPLOY-F7",
+      "safe_default": "no invitations",
+      "status": "DEFERRED"
+    },
+    {
+      "id": "OA-6",
+      "card": "P7-T1",
+      "need": "Set provider caps + arm providers",
+      "when": "adapters+controls exist",
+      "blocks": "P7 provider calls",
+      "safe_default": "disarmed",
+      "status": "DEFERRED"
+    },
+    {
+      "id": "OA-7",
+      "card": "P4-T3",
+      "need": "Legal/vendor rights input (SellerSprite, Amazon-derived, Costco/PalletFly)",
+      "when": "a customer/export surface would serve third-party data",
+      "blocks": "P5+ customer surfaces (P4-T3b)",
+      "safe_default": "keep INTERNAL_ONLY blocked",
+      "status": "OPEN"
+    },
+    {
+      "id": "OA-8",
+      "card": "P5-T1",
+      "need": "Confirm resale score display name",
+      "when": "now",
+      "blocks": "P5-T4 labels",
+      "safe_default": "Resale Score / resale_score",
+      "status": "OPEN"
     }
   ]
 }

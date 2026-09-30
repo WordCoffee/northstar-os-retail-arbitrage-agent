@@ -47,3 +47,5 @@ Per-account knowledge store — facts, preferences, experiences, AI-derived lear
 
 ## Authority order
 1. Full constitution (`docs/OPERATING_CONSTITUTION.md`), 2. resolved user profile (refinements only), 3. benchmark/CI baseline, 4. batch files, 5. this capsule's guardrails as interpreted against the constitution. Nothing below loosens credential hygiene, real-money approval, or git safety.
+
+Execution workflow: `docs/CONTINUOUS_EXECUTION_PROTOCOL.md` governs the continuous build loop (workflow only; no new permissions).

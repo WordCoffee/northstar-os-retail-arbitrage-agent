@@ -49,6 +49,19 @@ Binding update 2026-09-29. Room-readiness labels are separate from card status.
 | DEPLOY-F7 Five-tester rollout | BLOCKED | owner-approved tester identities; after F6 evidence. |
 | DEPLOY-F8 Email (optional later) | BLOCKED | no approved sender domain → manual invite links required. |
 
+## Owner Action Queue (statuses: OPEN/ANSWERED/VERIFIED/DEFERRED/CANCELLED — not card statuses)
+
+| ID | Card | Action needed | Why / when actionable | Blocks | Safe default | Status | Verification evidence | Owner response (non-secret) |
+|---|---|---|---|---|---|---|---|---|
+| OA-1 | DEPLOY-F2 | Create Oracle account; select home region | DEPLOY-F1 ready now; product work continues regardless | DEPLOY-F2/F3 | stay local; no cloud resources | OPEN | signed-in session + region observed (non-secret) | — |
+| OA-2 | DEPLOY-F3 | Approve exact free-eligible resource packet | after OA-1 + packet built | DEPLOY-F3/F5 | create nothing | DEFERRED | console free eligibility + $0 estimate | — |
+| OA-3 | DEPLOY-F4 | DuckDNS login + approve neutral hostname | after OA-1 | DEPLOY-F4 | manual only | DEFERRED | hostname resolves + cert issues | — |
+| OA-4 | DEPLOY-F6 | Run interactive owner bootstrap on VM | after HTTPS stable | P2-T5 hosted sign-in | none (owner-only) | DEFERRED | owner signs in over HTTPS | — |
+| OA-5 | DEPLOY-F7 | Provide 1 real tester identity, then 4 more | after F6 + invite/tenant acceptance | DEPLOY-F7 | no invitations | DEFERRED | invite accepted by tester | — |
+| OA-6 | P7-T1 | Set provider daily/monthly caps; arm providers | when adapters + controls exist | P7 provider calls | all providers disarmed | DEFERRED | cap set + first metered call within cap | — |
+| OA-7 | P4-T3 | Legal/vendor: SellerSprite customer/export/redistribution/AI use; Amazon-derived clearance; Costco/PalletFly customer display | when a customer/export surface would serve third-party data | P5+ customer surfaces (P4-T3b) | keep INTERNAL_ONLY blocked | OPEN | written permission or counsel note | — |
+| OA-8 | P5-T1 | Confirm resale score display name | now (default exists) | P5-T4 room labels | display "Resale Score", code `resale_score` | OPEN | owner confirmation | — |
+
 ## Backup record
 
 - `backups/northstar.db.bak` from `Northstar_backend/data/northstar.db`
