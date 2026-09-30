@@ -191,8 +191,8 @@ a real OAuth flow.
 | Command Center | `/home` (CommandCenter.jsx) | Renders briefing/task/portfolio from **sample data** (banner: `tone="sample"`). No live provider call. |
 | Product Finder (SourceScout) | `/product-finder` | Reads cached scanner result (`Northstar_backend/data/scanner-search-cache.json`); `/api/search*` routes exist. Live scan needs `SCANNER_LIVE_ALLOWED=1` + a provider key. |
 | Golden Goose | `/golden-goose` | Wires `foundation/api.js` → `/api/v1/foundation/golden-goose/*`; persisted, org-scoped queue/review/decisions. `GET /api/golden-goose/health`, `/dry-run`, `/scan-mock` all present. |
-| Creative Studio | `/creative-studio` | **Concept shell** — sample UI only; no image/video provider wired. |
-| SocialPulse | `/socialpulse` | **Concept shell** — sample publishing UI; `social_pulse.py` backend logic exists but no live posting. |
+| Creative Studio | `/creative-studio` | **Working locally with limitations** — browser-persisted creative workspace (briefs/requests/assets/variants/bundles, local `ns-creative-*`); no image/video **generation** — provider required (see SERVICE_READINESS_MATRIX.md). |
+| SocialPulse | `/socialpulse` | **Working locally with limitations** — browser-persisted content ops (campaigns/posts/assets, `ns-social-*`; genuine Draft→…→Scheduled transitions); no publishing/OAuth/analytics — provider required. `social_pulse.py` assisted-copy not wired. |
 | Listing Guardian | `/listings` | **Sample UI** — local listing-health mock; no live listing data. |
 | Keyword Tracker | `/keyword-tracker` | **Concept shell** UI; foundation keyword routes (`/api/v1/foundation/keywords/*`) DO exist backend-side. |
 | Monitoring | `/monitoring` | Backend `/api/monitoring/error-alerts` exists; dashboard page is largely sample/local. |
@@ -243,8 +243,10 @@ return **401 (fail-closed)** — correct posture, not a break.
 
 - **Existing:** `backups/northstar.db.bak` (SQLite backup) and
   `ROllBACK_DRILL.md`/`scripts/rollback_drill.ps1` (git tag → worktree →
-  boot-probe offline rollback to `v0.1.0-alpha`). **No automated DB hot-backup
-  script was found** in this session.
+  boot-probe offline rollback to `v0.1.0-alpha`). These cover **static** backup and
+  a **git-only** rollback drill only. **No automated DB hot-backup script was found**
+  in this session, and there is **no retention policy or scheduled restore
+  verification**.
 - **SQLite backup (manual, safe):** stop the backend, then
   `copy Northstar_backend\data\northstar.db backups\northstar.db.bak` — or use
   the sqlite online backup:
@@ -260,7 +262,9 @@ return **401 (fail-closed)** — correct posture, not a break.
 |---|---|
 | General image generation | **Not implemented** (planned only); no provider client. See SERVICE_GAPS.md. |
 | Short video / clip generation | **Not implemented** at all. |
-| Reference-image / asset generation | **Not implemented** (Creative Studio is a shell). |
+| Reference-image / asset generation | **Generation not implemented** (provider required) — Creative Studio is a working **local** workspace with browser-persisted asset/brief records, **not** a shell. |
+| SocialPulse publishing / OAuth / analytics | **Provider required / unimplemented** — local workflow records persist; no live posting or verified analytics. |
+| Full backend pytest | **23 known pre-existing failures** limited to `test_proof_batch.py` / `test_proof_batch_run.py` because `data/scanner-search-cache.json` is missing; fixture intentionally **not** re-added. |
 | Live Amazon product search | Needs external paid provider (Bright Data unlocker/chocodata/scavio) + `SCANNER_LIVE_ALLOWED=1`; offline uses cache. |
 | Watch / RankLedger / RivalBoard live rank | Parked post-launch; needs SP-API. Skeletons only. |
 | Stripe billing + Postgres | Parked post-launch; before first PAID cohort. |

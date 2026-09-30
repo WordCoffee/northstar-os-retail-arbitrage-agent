@@ -25,8 +25,10 @@
 
 ## 2. Reference-image / asset generation
 
-- **Missing service specification:** Yes — Creative Studio is a Concept shell
-  with no reference-image asset model.
+- **Missing service specification:** Yes — Creative Studio is a working **local**
+  workspace (`feature/creative-social-local`), not a concept shell; it persists
+  browser-side briefs/requests/assets/variants/bundles (`ns-creative-*`), but has
+  no product spec for a reference-image asset model or generation output.
 - **Missing provider integration:** Yes — no image upload/storage/processing path.
 - **Missing code:** No upload endpoint; no asset registry; no reference-vs-live
   diff logic.
@@ -109,7 +111,9 @@
 | Watch/RankLedger/RivalBoard | parked, need SP-API | Missing provider integration |
 | Stripe + Postgres | parked before first PAID cohort | Owner decision / sequencing |
 | n8n/webhook/email | Docker-only, not in local SQLite stack | Scope decision |
-| **Automated DB backup** | Only manual SQLite copy (`backups/northstar.db.bak`); no scheduled hot-backup; ROLLBACK_DRILL is git-only | Owner decision / missing code |
+| **Automated DB backup** | Only manual SQLite copy (`backups/northstar.db.bak`); static backup + git-only rollback drill exist; **no automated hot-backup, retention, or scheduled restore verification** | Owner decision / missing code |
+| **Hosted compose memory limits** | `docker-compose*.yml` specify no explicit memory limits for services | Owner decision |
+| **Backend pytest fixture failure** | Full `pytest` shows **23 known pre-existing failures** confined to `test_proof_batch.py` / `test_proof_batch_run.py` because `data/scanner-search-cache.json` is missing (fixture intentionally **not** re-added) | Known pre-existing test gap |
 
 ---
 
