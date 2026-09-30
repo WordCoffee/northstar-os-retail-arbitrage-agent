@@ -252,6 +252,26 @@ class HandlerRegistry:
         return [asdict(s) for s in self._specs.values()]
 
 
+def _ingest_identity(payload: dict, run_ctx: dict) -> HandlerResult:
+    """P4-T2: idempotent identity ingest from a pipeline artifact."""
+    artifact = (payload or {}).get("artifact")
+    if not isinstance(artifact, dict):
+        return HandlerResult(ok=False, failure_class="permanent_failure",
+                             error_code="artifact_required",
+                             error_summary="ingest artifact payload required")
+    db = (run_ctx or {}).get("db")
+    if db is None:
+        return HandlerResult(ok=True, output={"validated": True, "persisted": False},
+                             output_reference=str(artifact.get("run_id") or ""))
+    from .ingest_identity import ingest
+    summary = ingest(db, artifact)
+    if not summary.get("ok"):
+        return HandlerResult(ok=False, failure_class="permanent_failure",
+                             error_code=str(summary.get("error") or "ingest_failed"))
+    return HandlerResult(ok=True, output=summary,
+                         output_reference=str(artifact.get("run_id") or ""))
+
+
 def build_default_registry() -> HandlerRegistry:
     """The registry bound by the durable job service (fake/local handlers only)."""
     reg = HandlerRegistry()
@@ -302,11 +322,14 @@ def build_default_registry() -> HandlerRegistry:
                        retry_policy={"max_attempts": 1, "backoff_base_seconds": 0,
                                      "backoff_multiplier": 1,
                                      "max_backoff_seconds": 1, "jitter_seconds": 0}),
+        JobHandlerSpec("pipeline.ingest_identity", "1.0", "1.0",
+                       required_permission=PERM_RUN_LOCAL, provider_class="local",
+                       budget_class="free", idempotent=True),
     ]
     handlers: list[HandlerFn] = [
         _immediate_success, _slow_success, _transient_failure, _permanent_failure,
         _timeout, _rate_limit, _malformed_output, _cancellable, _cost_variance,
-        _needs_approval, _fixture_reader, _keyword_import,
+        _needs_approval, _fixture_reader, _keyword_import, _ingest_identity,
     ]
     for spec, handler in zip(specs, handlers):
         reg.register(spec, handler)

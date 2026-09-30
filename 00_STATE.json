@@ -539,7 +539,7 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P4-T2 ingest contract (unblocked); P4-T1 PARTIAL pending companion SellerSprite data + reader wiring; deployment BLOCKED on owner Oracle/hostname",
+  "next_batch": "P4-T3 data-rights register (unblocked); P4-T1 PARTIAL pending end-to-end rerun; deployment BLOCKED on owner",
   "git_baseline": {
     "commit_hash": "97d5366",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T00:16:46Z",
+  "last_updated": "2026-09-30T00:43:28Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1012,6 +1012,13 @@
       "batch": "P4-T1",
       "summary": "P4-T1 PARTIAL. Read-only diagnostic on fba-product-screener/data/northstar.db: crosswalk 7343 rows all pack_match_state=UNKNOWN; sourcing_opportunities 9454 rows all supplier+marketplace pack NULL and conversion_status/confidence NULL; amazon_catalog_records 5086 rows all pack_count NULL; ss_product_observations absent. CANDIDATE cap split: supplier pack unknown 9454/9454; marketplace unknown 9454/9454; true mismatch 0; no padded matches (prior run: LANE A total 9454, CANDIDATE 7379, NONE 2075). TWO UNREAD SOURCES: (1) ssdb.ss_product_observations.pack_count_claimed absent; (2) amazon_identifier_crosswalk.pack_match_state never read. Reader NOT fixed; rerun pending. Report: reports/p4_t1_pack_diagnostic_20260929.md.",
       "next_action": "P4-T2 ingest contract is unblocked; P4-T1 DONE needs SellerSprite data + reader wiring; deployment cards BLOCKED on owner."
+    },
+    {
+      "ts": "2026-09-30T00:43:28Z",
+      "activity": "master_build_plan_P4-T2",
+      "batch": "P4-T2",
+      "summary": "P4-T2 Identity ingest contract DONE (main repo): foundation/ingest_identity.py + migration 011 (additive ingest_runs/identity_pairs/resale_score_inputs); idempotent by run_id + pk; validates ASIN/units/timestamps; keeps supplier pack, marketplace pack, unit_count, net_quantity, package dims DISTINCT; raw+normalized+source+observed_at; freshness OBSERVED/CACHED/UNKNOWN; conflicts counted first-kept; pack_match_state never upgraded. Registered job pipeline.ingest_identity. Tests 10/0; subset 233p/18s. SellerSprite = one-time historical export only; contract not dependent on it. DEPLOY-F1 verification: resolved-config regression test (only Caddy publishes 80/443) + verification ledger (backup/restore NOT executed; ARM emulated-only). CORRECTION: SellerSprite ss_product_observations IS present in companion products.db (109,421 rows; pack_count_claimed non-null 26,436) - earlier absent claim retracted. Companion reader wiring bb48ab8 (pack_match_state corroborative, never upgrades; test 5/0). P4-T1 stays PARTIAL pending full rerun.",
+      "next_action": "P4-T3 data-rights register; keep deployment BLOCKED on owner; do not run live vendor/Amazon calls."
     }
   ]
 }
