@@ -142,6 +142,30 @@ of this branch's scope (router is do-not-touch).
 
 ---
 
+## 4b. Owner-leaning defaults (NOT implemented — recorded as notes only)
+
+> Status: **directives for a later merge/integration decision, not implemented
+> facts.** Nothing below is wired, and none of it changes the honesty boundary
+> described above. Recorded 2026-09-30.
+
+1. **Images — prefer local ComfyUI as the first backend.**
+2. **Router — prefer extending the existing foundation router** before adding a
+   new dedicated creative router.
+3. **Queues — prefer reusing `jobs-durable` for render queues** if no hard
+   mismatch appears.
+4. **Assets — an asset store remains a later required layer** before full
+   creative export/upload maturity.
+5. **Approvals — SocialPulse approvals should ultimately align** with broader
+   platform approval concepts.
+6. **Video — remains disabled** pending explicit provider + spend-cap approval.
+
+**Hold posture:** branch `feature/creative-social-local` is held as-is pending
+(a) main-session shared integration work, (b) the audit-session readiness matrix,
+and (c) a later merge/cherry-pick decision. No provider wiring, publishing,
+analytics, or video spend paths are to be implemented under this branch.
+
+---
+
 ## 5. Recommended next backend integration order
 
 1. **Expose the local image CLI as a real backend route** (new module, e.g.
