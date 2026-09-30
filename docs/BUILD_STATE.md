@@ -33,6 +33,7 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
 | P4-T3 Data rights register + enforcement | DONE | | `foundation/data_rights.py` (authoritative register + `SOURCES`/`rights()`/`customer_safe_rows()`/`export_safe_rows()`/`assert_*`) + `docs/DATA_RIGHTS.md`. Sources actually present labelled INTERNAL_ONLY/CUSTOMER_OK; planned providers NOT_INTEGRATED (rights UNKNOWN). External use requires explicit ALLOWED; UNKNOWN/PROHIBITED blocked; Owner Test Mode does NOT bypass; internal≠redistribution. Tests 9/0. No customer surface emits historical third-party rows yet (P5+); filter is the enforcement boundary. NOT deleted historical data. |
 | P4-T3b Wire rights filter into customer/export surfaces | PENDING | | dependency: apply `customer_safe_rows`/`export_safe_rows` at each customer UI/API/export/cross-tenant/AI call site as P5+ rooms land; affected beta surfaces remain blocked from serving historical third-party data until wired+tested. |
 | P4-T4 Freshness policy | DONE | | `foundation/freshness.py`: per-field max age (defaults + `NORTHSTAR_MAX_AGE_<FIELD>_DAYS` overrides); within max -> OBSERVED (gate-usable); older -> CACHED with age (display only, gate sees UNKNOWN); missing/unparseable/future -> UNKNOWN. Tests 7/0. |
+| P5-T1 Resale Score spec | DONE | | `foundation/resale_score.py` versioned `resale-score-1.0.0`, pure/config-driven; 8 components 0..1 (missing = unavailable `None`, never 0); weighted mean over available only; uncertainty separate labeled penalty; ROI informational only; `purchase_ready` always False. Display "Resale Score"/code `resale_score` (provisional, OA-8). Tests 8/0 (determinism, missing-component, all-missing→None, net floor, ROI informational, penalty, config weights, never-purchase). |
 
 ## Deployment track — Free private beta (OCI Always Free, $0 infra)
 
@@ -53,7 +54,7 @@ Binding update 2026-09-29. Room-readiness labels are separate from card status.
 
 | ID | Card | Action needed | Why / when actionable | Blocks | Safe default | Status | Verification evidence | Owner response (non-secret) |
 |---|---|---|---|---|---|---|---|---|
-| OA-1 | DEPLOY-F2 | Create Oracle account; select home region | DEPLOY-F1 ready now; product work continues regardless | DEPLOY-F2/F3 | stay local; no cloud resources | OPEN | signed-in session + region observed (non-secret) | — |
+| OA-1 | DEPLOY-F2 | Create Oracle account; select home region | DEPLOY-F1 ready now; product work continues regardless | DEPLOY-F2/F3 | stay local; no cloud resources | ANSWERED (owner: signup+MFA complete in Chrome profile "Tyrone · Work", northstarosllc@gmail.com; session verification PENDING — ChromeConnect not implemented in repo, OpenCode browser is a separate profile; no credential entry) | when ChromeConnect available: verify session + observe home region (non-secret) | signup+MFA complete |
 | OA-2 | DEPLOY-F3 | Approve exact free-eligible resource packet | after OA-1 + packet built | DEPLOY-F3/F5 | create nothing | DEFERRED | console free eligibility + $0 estimate | — |
 | OA-3 | DEPLOY-F4 | DuckDNS login + approve neutral hostname | after OA-1 | DEPLOY-F4 | manual only | DEFERRED | hostname resolves + cert issues | — |
 | OA-4 | DEPLOY-F6 | Run interactive owner bootstrap on VM | after HTTPS stable | P2-T5 hosted sign-in | none (owner-only) | DEFERRED | owner signs in over HTTPS | — |
