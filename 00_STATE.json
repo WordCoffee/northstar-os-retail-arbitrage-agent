@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T02:34:36Z",
+  "last_updated": "2026-09-30T02:38:41Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1117,6 +1117,13 @@
       "batch": "OA-1",
       "summary": "Replaced Northstar hard-coded Profile 6 MCP command with the Default Project selection-aware launcher (scripts/chromecontrol-mcp.js, absolute path). Default Project opencode.json already uses the launcher; config/chromecontrol.json extension_profile_dir_name=null (unpinned). Launcher --print-args verified: attach_mode=extension profile=(unpinned) -> --extension, no browser launched. Spawner resolves cached @playwright/mcp cli.js directly (no @latest upgrade). STATUS: STARTUP_SELECTION_WORKING; LIVE_SWITCHING_NOT_IMPLEMENTED (opencode loads MCP config once; use-profile then restart/reconnect). OA-1 stays PARTIAL until real bridge verified; no global config edit, no process kill.",
       "next_action": "Restart opencode to bind launcher; then verify bridge; continue P5-T4."
+    },
+    {
+      "ts": "2026-09-30T02:38:41Z",
+      "activity": "chromecontrol_select_profile_6",
+      "batch": "OA-1",
+      "summary": "Listed 7 Chrome profiles; selected by exact directory Profile 6 (display Work; name Work ambiguous across Profile 2/3/6). use-profile saved extension_profile_dir_name=Profile 6; launcher --print-args resolves --extension --profile-dir-name Profile 6. Reconnect required; did NOT open Oracle in stale chrome-t2; no process kill, no global config edit, no cloud action. STATUS: SELECTED_PROFILE_VERIFICATION_PENDING.",
+      "next_action": "Owner restarts OpenCode + approves extension in Profile 6; reply continue; then verify bridge and open Oracle sign-in page (stop for owner sign-in)."
     }
   ],
   "owner_action_queue": [
@@ -1129,7 +1136,7 @@
       "safe_default": "stay local",
       "status": "OPEN",
       "owner_response": "Target profile confirmed: C:\\Users\\T2Hol\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6 (Oracle signed in). Owner approves project-local profile selection for extension attachment.",
-      "verification": "Stale chrome-t2 MCP PIDs observed: 84420,54584,75172,77768,3536,77476. Active tool connection still binds about:blank from chrome-t2. Correct target = C:\\Users\\T2Hol\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6. Awaiting owner approval to kill stale processes and/or edit active global config.",
+      "verification": "Selected profile saved: directory Profile 6 (display Work); launcher resolves --extension --profile-dir-name Profile 6. Bridge NOT verified in current session (stale chrome-t2). Oracle NOT opened. Reconnect required.",
       "how_to_complete": "Owner-approved cleanup likely needed: (a) fully quit opencode and confirm no stray node @playwright/mcp processes remain, or separate owner approval to kill the stale chrome-t2 MCP instances; (b) confirm the project-local override loaded; (c) in Profile 6 approve the extension. Then reply 'continue'."
     },
     {
