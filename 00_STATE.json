@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T02:07:50Z",
+  "last_updated": "2026-09-30T02:09:11Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1096,6 +1096,13 @@
       "batch": "OA-1",
       "summary": "Diagnosed MCP runtime: active server was global-config chrome-t2 (separate profile) -> about:blank. Added project-local opencode.jsonc mcp.playwright override (--extension --profile-dir-name 'Profile 6'). Stale duplicate MCP processes observed. No substitute browser launched, no profile data copied, no token. Also: prior 'session limit/budget exhausted' labels had no observable limit/error -> reclassified UNVERIFIED; work continues.",
       "next_action": "Owner restarts opencode + approves extension connection; then verify bridge + Oracle tab; continue P5-T4 slices."
+    },
+    {
+      "ts": "2026-09-30T02:09:11Z",
+      "activity": "P5-T3b_gg_persistence",
+      "batch": "P5-T3",
+      "summary": "Added Golden Goose persistence (golden_goose_store.py + migration 012) enabling decision round-trip and snapshots; routes queue/get/decision now persist and are org-scoped. Tests: routes 9/0, golden_goose/migration subset 62/0. P5-T3 remains PARTIAL: monthly scheduling not implemented; candidate source depends on P4-T1 coverage.",
+      "next_action": "P5-T4 bounded room wiring; verify OA-1 after owner approves Profile 6 extension."
     }
   ],
   "owner_action_queue": [

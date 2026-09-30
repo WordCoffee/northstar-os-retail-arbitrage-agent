@@ -412,32 +412,46 @@ def golden_goose_evaluate(body: GoldenGooseEvalBody,
 
 
 @router.get("/golden-goose/queue")
-def golden_goose_queue(ctx: RequestContext = Depends(get_context)):
+def golden_goose_queue(state: FoundationState = Depends(get_state),
+                       ctx: RequestContext = Depends(get_context)):
     from ..permissions import evaluate as eval_perm, PERM_VIEW
+    from ..golden_goose_store import list_items
     allowed, reason = eval_perm(ctx, PERM_VIEW)
     if not allowed:
         raise _err("permission_denied", reason, 403)
-    return {"items": [], "basis": "UNKNOWN",
-            "note": "no opportunities ingested yet; nothing is fabricated"}
+    items = list_items(state.db, ctx.effective_organization_id)
+    return {"items": items, "basis": "OBSERVED" if items else "UNKNOWN",
+            "note": "" if items else "no opportunities ingested yet; nothing is fabricated"}
 
 
 @router.get("/golden-goose/{item_id}")
-def golden_goose_get(item_id: str, ctx: RequestContext = Depends(get_context)):
+def golden_goose_get(item_id: str, state: FoundationState = Depends(get_state),
+                     ctx: RequestContext = Depends(get_context)):
     from ..permissions import evaluate as eval_perm, PERM_VIEW
+    from ..golden_goose_store import get_item, latest_decision
     allowed, reason = eval_perm(ctx, PERM_VIEW)
     if not allowed:
         raise _err("permission_denied", reason, 403)
-    raise _err("not_found", f"no stored golden goose item {item_id}", 404)
+    item = get_item(state.db, ctx.effective_organization_id, item_id)
+    if item is None:
+        raise _err("not_found", f"no stored golden goose item {item_id}", 404)
+    item["latest_decision"] = latest_decision(state.db, ctx.effective_organization_id, item_id)
+    return item
 
 
 @router.post("/golden-goose/{item_id}/decision")
 def golden_goose_decide_route(item_id: str, body: GoldenGooseEvalBody,
+                              state: FoundationState = Depends(get_state),
                               ctx: RequestContext = Depends(get_context)):
     from ..permissions import evaluate as eval_perm, PERM_APPROVE
+    from ..golden_goose_store import record_decision
     allowed, reason = eval_perm(ctx, PERM_APPROVE)
     if not allowed:
         raise _err("permission_denied", reason, 403)
-    return {"item_id": item_id, "decision": _gg_decision(body), "persisted": False}
+    decision = _gg_decision(body)
+    row = record_decision(state.db, ctx.effective_organization_id, item_id, decision)
+    return {"item_id": item_id, "decision": decision, "persisted": True,
+            "decision_id": row["decision_id"]}
 
 
 @router.get("/roles")

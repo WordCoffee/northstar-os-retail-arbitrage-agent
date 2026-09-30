@@ -88,7 +88,41 @@ def test_decision_route_requires_approve_permission(monkeypatch):
     r = c.post("/api/v1/foundation/golden-goose/x/decision", json=body,
                headers={"X-User-Id": admin["user_id"]})
     assert r.status_code == 200 and r.json()["decision"]["decision_state"] == gg.PURCHASE_READY
-    assert r.json()["persisted"] is False
+    assert r.json()["persisted"] is True
+
+
+def test_decision_round_trip_persists(monkeypatch):
+    app, admin, _ = _app(monkeypatch)
+    from Northstar_backend.foundation.golden_goose_store import upsert_item
+    c = TestClient(app)
+    org = admin["organization_id"]
+    upsert_item(app.state.foundation.db, org,
+                {"item_id": "GG-1", "match_state": gg.QUALIFIED_FOR_REVIEW,
+                 "resale_score": 0.8, "net_per_unit": 9.0,
+                 "economics_complete": True, "policy_exclusion_flag": 0})
+    # item is readable and appears in the queue (org-scoped)
+    g = c.get("/api/v1/foundation/golden-goose/GG-1", headers={"X-User-Id": admin["user_id"]})
+    assert g.status_code == 200 and g.json()["item_id"] == "GG-1"
+    q = c.get("/api/v1/foundation/golden-goose/queue", headers={"X-User-Id": admin["user_id"]})
+    assert [i["item_id"] for i in q.json()["items"]] == ["GG-1"] and q.json()["basis"] == "OBSERVED"
+    # record a decision, reload, and see it persisted
+    body = {"gate_inputs": GATES_PASS, "economics_readiness": "COMPLETE", "approval": {"present": True}}
+    d = c.post("/api/v1/foundation/golden-goose/GG-1/decision", json=body,
+               headers={"X-User-Id": admin["user_id"]})
+    assert d.json()["persisted"] is True
+    g2 = c.get("/api/v1/foundation/golden-goose/GG-1", headers={"X-User-Id": admin["user_id"]})
+    assert g2.json()["latest_decision"]["decision_state"] == gg.PURCHASE_READY
+
+
+def test_item_is_tenant_scoped(monkeypatch):
+    app, admin, viewer = _app(monkeypatch)
+    from Northstar_backend.foundation.golden_goose_store import upsert_item
+    c = TestClient(app)
+    upsert_item(app.state.foundation.db, admin["organization_id"],
+                {"item_id": "GG-2", "resale_score": 0.5})
+    # viewer in a different org cannot see it
+    r = c.get("/api/v1/foundation/golden-goose/GG-2", headers={"X-User-Id": viewer["user_id"]})
+    assert r.status_code == 404
 
 
 def test_unauthenticated_evaluate_is_401(monkeypatch):
