@@ -272,6 +272,19 @@ def _ingest_identity(payload: dict, run_ctx: dict) -> HandlerResult:
                          output_reference=str(artifact.get("run_id") or ""))
 
 
+def _gg_top5(payload: dict, run_ctx: dict) -> HandlerResult:
+    """P5-T3: deterministic Top-5 selection (never padded)."""
+    cands = (payload or {}).get("candidates")
+    if not isinstance(cands, list):
+        return HandlerResult(ok=False, failure_class="permanent_failure",
+                             error_code="candidates_required",
+                             error_summary="candidates list required")
+    from .golden_goose_top5 import select_top5
+    out = select_top5(cands, n=int((payload or {}).get("n", 5)),
+                      floor=float((payload or {}).get("floor", 5.00)))
+    return HandlerResult(ok=True, output=out)
+
+
 def build_default_registry() -> HandlerRegistry:
     """The registry bound by the durable job service (fake/local handlers only)."""
     reg = HandlerRegistry()
@@ -325,11 +338,14 @@ def build_default_registry() -> HandlerRegistry:
         JobHandlerSpec("pipeline.ingest_identity", "1.0", "1.0",
                        required_permission=PERM_RUN_LOCAL, provider_class="local",
                        budget_class="free", idempotent=True),
+        JobHandlerSpec("golden_goose.monthly_top5", "1.0", "1.0",
+                       required_permission=PERM_RUN_LOCAL, provider_class="local",
+                       budget_class="free", idempotent=True),
     ]
     handlers: list[HandlerFn] = [
         _immediate_success, _slow_success, _transient_failure, _permanent_failure,
         _timeout, _rate_limit, _malformed_output, _cancellable, _cost_variance,
-        _needs_approval, _fixture_reader, _keyword_import, _ingest_identity,
+        _needs_approval, _fixture_reader, _keyword_import, _ingest_identity, _gg_top5,
     ]
     for spec, handler in zip(specs, handlers):
         reg.register(spec, handler)

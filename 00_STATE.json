@@ -539,7 +539,7 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P5-T3 Golden Goose Top-5 (monthly job)",
+  "next_batch": "P5-T4 wire Golden Goose + Product Finder rooms",
   "git_baseline": {
     "commit_hash": "97d5366",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T01:47:42Z",
+  "last_updated": "2026-09-30T01:50:45Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1068,6 +1068,13 @@
       "batch": "OA-1",
       "summary": "Inspected docs/autothink-chromecontrol.md, config/attachment.json, lib/chromecontrol/connection.js. Supported attachment to the human signed-in profile = existing_default_profile_extension (Playwright MCP Bridge extension) via NORTHSTAR_CC_ATTACH=extension + opencode MCP --extension; browser_approved is configured-only. ChromeControl never launches/copies/kills the Default profile. Presented exact owner steps. OA-1 OPEN (owner action).",
       "next_action": "Resume P5-T3 while owner performs extension attach."
+    },
+    {
+      "ts": "2026-09-30T01:50:45Z",
+      "activity": "master_build_plan_P5-T3",
+      "batch": "P5-T3",
+      "summary": "P5-T3 PARTIAL: foundation/golden_goose_top5.py pure deterministic Top-5 (eligible only, never padded, blocked reasons, inputs_hash) + registered job golden_goose.monthly_top5. Tests 5/0; subset 219p/18s. Remaining: monthly scheduling + persisted snapshots.",
+      "next_action": "P5-T4 rooms wiring; P5-T3 scheduling/snapshots later."
     }
   ],
   "owner_action_queue": [
