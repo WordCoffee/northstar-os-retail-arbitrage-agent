@@ -111,3 +111,27 @@ def latest_decision(db, organization_id: str, item_id: str) -> Optional[dict]:
         return None
     rows.sort(key=lambda r: str(r.get("created_at") or ""))
     return rows[-1]
+
+
+# Derived columns exposed on customer-facing item views. Deliberately excludes
+# ``payload_json`` (the raw embedded item blob, which may carry third-party
+# source fields). P4-T3b policy #5: internal derived records are shown as
+# derived records without exposing raw embedded third-party payload fields.
+_DERIVED_ITEM_FIELDS = (
+    "item_id", "organization_id", "category", "match_state", "resale_score",
+    "net_per_unit", "economics_complete", "policy_exclusion_flag",
+    "created_at", "updated_at",
+)
+
+
+def project_item(item: Optional[dict]) -> Optional[dict]:
+    """Project a stored GG item row to its customer-safe derived view.
+
+    Keeps only derived scalar columns computed from the item — never the raw
+    ``payload_json`` blob (which may embed restricted third-party source
+    fields). Records with no explicit third-party provenance remain ordinary
+    internal, org-scoped derived records and are NOT labeled CUSTOMER_OK.
+    """
+    if not isinstance(item, dict):
+        return None
+    return {k: item.get(k) for k in _DERIVED_ITEM_FIELDS if k in item}

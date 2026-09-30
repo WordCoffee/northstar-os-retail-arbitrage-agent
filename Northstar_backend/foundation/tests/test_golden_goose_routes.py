@@ -125,6 +125,45 @@ def test_item_is_tenant_scoped(monkeypatch):
     assert r.status_code == 404
 
 
+def test_persisted_item_projection_drops_raw_payload(monkeypatch):
+    """P4-T3b: customer-facing item/view responses expose derived fields only —
+    the raw embedded payload (which may carry restricted third-party source
+    fields) is never returned."""
+    app, admin, _ = _app(monkeypatch)
+    from Northstar_backend.foundation.golden_goose_store import upsert_item
+    c = TestClient(app)
+    org = admin["organization_id"]
+    raw = {
+        "item_id": "GG-RAW", "match_state": gg.QUALIFIED_FOR_REVIEW,
+        "resale_score": 0.75, "net_per_unit": 5.5, "economics_complete": True,
+        "policy_exclusion_flag": 0,
+        # embedded restricted third-party source field that must not leak
+        "source": "sellersprite_historical_export",
+        "source_url": "https://x.example/secret",
+        "deep_observation": {"cost": 9.99},
+    }
+    upsert_item(app.state.foundation.db, org, raw)
+    g = c.get("/api/v1/foundation/golden-goose/GG-RAW", headers={"X-User-Id": admin["user_id"]})
+    assert g.status_code == 200
+    body = g.json()
+    # derived fields preserved
+    assert body["item_id"] == "GG-RAW"
+    assert body["match_state"] == gg.QUALIFIED_FOR_REVIEW
+    assert body["resale_score"] == 0.75
+    # raw embedded third-party fields never exposed
+    assert "payload_json" not in body
+    assert "source_url" not in body
+    assert "deep_observation" not in body
+    assert "payload" not in body
+    # record remains a derived opportunity record, not labeled CUSTOMER_OK
+    assert body.get("customer_ok") is None
+    q = c.get("/api/v1/foundation/golden-goose/queue", headers={"X-User-Id": admin["user_id"]})
+    qi = q.json()["items"][0]
+    assert qi["item_id"] == "GG-RAW"
+    assert "payload_json" not in qi and "source_url" not in qi and "deep_observation" not in qi
+
+
+
 def test_unauthenticated_evaluate_is_401(monkeypatch):
     app, admin, _ = _app(monkeypatch)
     c = TestClient(app)

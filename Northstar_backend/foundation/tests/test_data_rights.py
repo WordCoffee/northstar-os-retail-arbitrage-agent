@@ -71,3 +71,30 @@ def test_internal_use_rights_do_not_imply_redistribution():
     # SellerSprite: internal ALLOWED but redistribution UNKNOWN -> blocked
     assert dr.rights("sellersprite_historical_export", dr.USE_INTERNAL) == dr.ALLOWED
     assert dr.external_use_allowed("sellersprite_historical_export", dr.USE_REDISTRIBUTE) is False
+
+
+def test_explicit_source_key_extraction():
+    # registered key present as normal field -> extracted
+    assert dr.explicit_source_key({"source": "sellersprite_historical_export"}) == "sellersprite_historical_export"
+    assert dr.explicit_source_key({"source_key": "manual_observed_capture"}) == "manual_observed_capture"
+    assert dr.explicit_source_key({"provenance_source": "costco_discovery"}) == "costco_discovery"
+    # registered key embedded in a serialized payload_json blob -> extracted
+    import json as _json
+    assert dr.explicit_source_key({"payload_json": _json.dumps({"source": "amazon_catalog_records"})}) == "amazon_catalog_records"
+
+
+def test_unproven_source_labels_do_not_become_provenance():
+    # arbitrary/unregistered labels are NOT inferred as provenance
+    assert dr.explicit_source_key({"source": "import"}) is None
+    assert dr.explicit_source_key({"source_key": "wordsample"}) is None
+    assert dr.explicit_source_key({"source_url": "https://x.example/secret"}) is None
+    # derived/derived-only records with no provenance field -> None
+    assert dr.explicit_source_key({"item_id": "GG-1", "resale_score": 0.5,
+                                   "match_state": "QUALIFIED_FOR_REVIEW"}) is None
+    assert dr.explicit_source_key({}) is None
+    assert dr.explicit_source_key([]) is None
+    assert dr.explicit_source_key(None) is None
+    # a CUSTOMER_OK manual observation IS extracted (retained subject to role controls)
+    assert dr.explicit_source_key({"source": "manual_observed_capture"}) == "manual_observed_capture"
+    # an invalid payload_json string does not crash and yields no provenance
+    assert dr.explicit_source_key({"payload_json": "{not-json"}) is None

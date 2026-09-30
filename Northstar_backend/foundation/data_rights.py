@@ -20,6 +20,7 @@ assert legal clearance.
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -149,6 +150,39 @@ def _reg() -> dict:
 
 
 SOURCES = _reg()
+
+# Explicitly registered source keys (provenance labels that may gate external
+# use). Used to distinguish "this record carries a registered third-party
+# provenance" from "internal derived record with no third-party provenance".
+REGISTERED_KEYS = frozenset(SOURCES.keys())
+
+
+def explicit_source_key(record) -> Optional[str]:
+    """Return the explicitly registered provenance key carried by ``record``,
+    or None when the record carries no explicit third-party provenance.
+
+    Looks at the familiar provenance field names present on customer-facing
+    rows and GG item payloads. Compliant with P4-T3b: provenance is only
+    inferred when a registered key is literally present — never invented.
+    """
+    if not isinstance(record, dict):
+        return None
+    for field in ("source", "source_key", "provenance_source"):
+        v = record.get(field)
+        if v in REGISTERED_KEYS:
+            return v
+    payload = record.get("payload_json")
+    if isinstance(payload, str):
+        try:
+            payload = json.loads(payload)
+        except Exception:
+            payload = None
+    if isinstance(payload, dict):
+        for field in ("source", "source_key", "provenance_source"):
+            v = payload.get(field)
+            if v in REGISTERED_KEYS:
+                return v
+    return None
 
 
 def rights(source_key: str, use: str) -> str:

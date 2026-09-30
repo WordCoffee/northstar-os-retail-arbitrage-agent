@@ -415,11 +415,11 @@ def golden_goose_evaluate(body: GoldenGooseEvalBody,
 def golden_goose_queue(state: FoundationState = Depends(get_state),
                        ctx: RequestContext = Depends(get_context)):
     from ..permissions import evaluate as eval_perm, PERM_VIEW
-    from ..golden_goose_store import list_items
+    from ..golden_goose_store import list_items, project_item
     allowed, reason = eval_perm(ctx, PERM_VIEW)
     if not allowed:
         raise _err("permission_denied", reason, 403)
-    items = list_items(state.db, ctx.effective_organization_id)
+    items = [project_item(i) for i in list_items(state.db, ctx.effective_organization_id) if project_item(i) is not None]
     return {"items": items, "basis": "OBSERVED" if items else "UNKNOWN",
             "note": "" if items else "no opportunities ingested yet; nothing is fabricated"}
 
@@ -428,15 +428,16 @@ def golden_goose_queue(state: FoundationState = Depends(get_state),
 def golden_goose_get(item_id: str, state: FoundationState = Depends(get_state),
                      ctx: RequestContext = Depends(get_context)):
     from ..permissions import evaluate as eval_perm, PERM_VIEW
-    from ..golden_goose_store import get_item, latest_decision
+    from ..golden_goose_store import get_item, latest_decision, project_item
     allowed, reason = eval_perm(ctx, PERM_VIEW)
     if not allowed:
         raise _err("permission_denied", reason, 403)
     item = get_item(state.db, ctx.effective_organization_id, item_id)
     if item is None:
         raise _err("not_found", f"no stored golden goose item {item_id}", 404)
-    item["latest_decision"] = latest_decision(state.db, ctx.effective_organization_id, item_id)
-    return item
+    view = project_item(item)
+    view["latest_decision"] = latest_decision(state.db, ctx.effective_organization_id, item_id)
+    return view
 
 
 @router.post("/golden-goose/{item_id}/decision")
