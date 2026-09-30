@@ -178,6 +178,117 @@ function PersistedQueue() {
   )
 }
 
+function PersistedReview({ id }) {
+  const [st, setSt] = useState({ state: 'loading' })
+  useEffect(() => {
+    let alive = true
+    setSt({ state: 'loading' })
+    foundationApi.goldenGooseItem(id)
+      .then((item) => { if (alive) setSt({ state: 'loaded', item }) })
+      .catch((e) => {
+        if (!alive) return
+        const state = (e && e.status === 404) ? 'not_found'
+          : (e && e.status === 403) ? 'denied'
+            : 'error'
+        setSt({ state, detail: (e && e.code) || null })
+      })
+    return () => { alive = false }
+  }, [id])
+
+  if (st.state === 'loading') {
+    return <div className="card" data-testid="gg-persisted-review"><p data-testid="gg-review-loading">Loading persisted opportunity {id}…</p></div>
+  }
+  if (st.state === 'not_found') {
+    return <div className="card" data-testid="gg-persisted-review"><p data-testid="gg-review-not-found">No persisted opportunity {id} for your organization. Nothing is fabricated.</p></div>
+  }
+  if (st.state === 'denied') {
+    return <div className="card" data-testid="gg-persisted-review"><p data-testid="gg-review-denied">Not available for your organization.</p></div>
+  }
+  if (st.state === 'error') {
+    return <div className="card" data-testid="gg-persisted-review"><p data-testid="gg-review-error">Persisted opportunity unavailable{st.detail ? ' (' + st.detail + ')' : ''}.</p></div>
+  }
+
+  const item = st.item || {}
+  const dec = item.latest_decision || null
+  return (
+    <div className="card" data-testid="gg-persisted-review" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Persisted Opportunity <span data-testid="gg-review-id">{item.item_id}</span></h3>
+        <span className="pill pill-muted" title="Persisted record — organization-scoped, read-only">OBSERVED</span>
+      </div>
+      <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+        <span className="pill pill-muted" title="Stored match state — a status never authorizes a purchase">{item.match_state || 'UNKNOWN'}</span>
+        {item.resale_score == null
+          ? <span className="pill pill-unknown" data-testid="gg-review-score">UNKNOWN</span>
+          : <span className="pill pill-muted" data-testid="gg-review-score" title="Stored resale score — informational, not a purchase authorization">Resale Score {item.resale_score}</span>}
+        {item.net_per_unit != null && <span className="pill pill-muted">Net/unit {item.net_per_unit}</span>}
+        <span className="pill pill-muted" title="Stored policy exclusion flag">{Number(item.policy_exclusion_flag) ? 'Policy excluded' : 'Not policy-excluded'}</span>
+      </div>
+      <div className="card" style={{ padding: 14, background: 'var(--surface-2, rgba(138,138,122,0.06))' }}>
+        <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Latest Recorded Decision</div>
+        {dec
+          ? <div data-testid="gg-review-decision" style={{ fontSize: 13 }}>
+              <span className="pill pill-muted">{dec.decision_state || 'UNKNOWN'}</span>
+              <span style={{ marginLeft: 8 }}>recorded {dec.created_at || 'UNKNOWN'} · review log only, not a purchase authorization</span>
+            </div>
+          : <div data-testid="gg-review-decision" style={{ fontSize: 13 }}><span className="pill pill-unknown">UNKNOWN</span> <span style={{ marginLeft: 8 }}>no decision recorded</span></div>}
+      </div>
+    </div>
+  )
+}
+
+function PersistedDecisions() {
+  const [st, setSt] = useState({ loaded: false, rows: [], error: null })
+  useEffect(() => {
+    let alive = true
+    ;(async () => {
+      try {
+        const q = await foundationApi.goldenGooseQueue()
+        const items = q.items || []
+        const rows = await Promise.all(items.map(async (i) => {
+          try {
+            const full = await foundationApi.goldenGooseItem(i.item_id)
+            return { item_id: i.item_id, decision: full.latest_decision || null, unavailable: false }
+          } catch (e) {
+            return { item_id: i.item_id, decision: null, unavailable: true, denied: !!(e && e.status === 403) }
+          }
+        }))
+        if (alive) setSt({ loaded: true, rows, error: null })
+      } catch (e) {
+        if (alive) setSt({ loaded: true, rows: [], error: (e && e.code) || 'error' })
+      }
+    })()
+    return () => { alive = false }
+  }, [])
+
+  const rows = st.rows.map((r) => ({
+    item_id: r.item_id,
+    state: r.decision ? (r.decision.decision_state || 'UNKNOWN') : (r.unavailable ? (r.denied ? 'DENIED' : 'UNAVAILABLE') : 'UNKNOWN'),
+    when: r.decision ? (r.decision.created_at || 'UNKNOWN') : '—',
+    tone: r.decision ? 'pill-muted' : 'pill-unknown',
+  }))
+
+  return (
+    <div data-testid="gg-persisted-decisions" style={{ marginTop: 20 }}>
+      <div className="card">
+        <div className="card-head">
+          <h3 className="card-title">Persisted Decisions</h3>
+          <span className="pill pill-muted">latest per item · organization-scoped</span>
+        </div>
+        {rows.length > 0 ? (
+          <DataTable columns={[
+            { key: 'item_id', label: 'Item' },
+            { key: 'state', label: 'Latest Decision', render: (v, row) => <span className={`pill ${row.tone}`}>{v}</span> },
+            { key: 'when', label: 'Recorded' },
+          ]} rows={rows} />
+        ) : (
+          <p data-testid="gg-decisions-empty">{st.error ? 'Decisions unavailable for your organization.' : 'No persisted decisions yet. Basis: UNKNOWN.'}</p>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function GoldenGooseDesk() {
   const { toast } = useToast()
   const navigate = useNavigate()
@@ -187,6 +298,7 @@ export default function GoldenGooseDesk() {
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : (id ? 'review' : 'queue')
   const selected = OPPS.find(o => o.id === (id || 'GG-001')) || OPPS[0]
+  const isDemoId = OPPS.some(o => o.id === id)
 
   return (
     <PageLayout
@@ -226,7 +338,7 @@ export default function GoldenGooseDesk() {
         </div>
       )}
 
-      {view === 'review' && oppCard(selected, navigate, toast)}
+      {view === 'review' && ((id && !isDemoId) ? <PersistedReview id={id} /> : oppCard(selected, navigate, toast))}
 
       {view === 'decisions' && (
         <div className="subview">
@@ -246,6 +358,7 @@ export default function GoldenGooseDesk() {
               { key: 'status', label: 'Status', render: (v, row) => <span className={`pill ${row.tone}`}>{v}</span> },
             ]} rows={DECISIONS} />
           </div>
+          <PersistedDecisions />
         </div>
       )}
 

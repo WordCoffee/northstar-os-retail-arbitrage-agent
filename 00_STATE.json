@@ -539,7 +539,7 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P5-T4 continue: item Review + Decisions views wired; P4-T3b filtering",
+  "next_batch": "P5-T4 continue: move inline SAMPLE behind a Demo toggle; apply P4-T3b rights filter where third-party data surfaces; extend acceptance with round-trip; P5-T3 monthly scheduling/snapshots still pending",
   "git_baseline": {
     "commit_hash": "97d5366",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -1138,6 +1138,13 @@
       "batch": "OA-1",
       "summary": "Owner pasted an extension token in chat; token NOT used/stored/echoed/set and flagged EXPOSED -> rotate. Extension reports no clients connected. Browser tabs still about:blank (stale chrome-t2). OA-1 PARTIAL; Oracle not opened; no cloud/DNS/IAM/billing action.",
       "next_action": "Owner restarts OpenCode and approves extension in Profile 6 WITHOUT pasting a token (or sets token locally); then verify bridge; continue P5-T4 Review/Decisions wiring meanwhile."
+    },
+    {
+      "ts": "2026-09-30T05:20:00Z",
+      "activity": "P5-T4_review_decisions_wiring",
+      "batch": "P5-T4",
+      "summary": "Wired Golden Goose item Review + Decisions views to persisted org-scoped routes. GoldenGoose.jsx: PersistedReview (loading/not-found/denied/error/loaded; stored item + UNKNOWN decision) for non-demo ids; PersistedDecisions panel (latest per item; UNKNOWN/DENIED; never fabricated) added to the Decisions view; static SAMPLE (GG-001/GG-002) preserved as an explicit demo fallback. verify-golden-goose.cjs expanded 5/0 -> 16/0 (org-scoped review, not-found, denied, decision round-trip after reload, cross-tenant denied, demo fallback). Regressions: smoke 42/0, guards 11/0, acceptance 27/0, invite 11/0; backend GG subset 29/0. No browser/provider/Amazon/credential action. P5-T4 remains PARTIAL (inline-SAMPLE-behind-Demo-toggle and P4-T3b rights filtering remain).",
+      "next_action": "Move inline SAMPLE behind a Demo toggle; apply P4-T3b filters; extend acceptance with the persisted round-trip."
     }
   ],
   "owner_action_queue": [
@@ -1150,8 +1157,8 @@
       "safe_default": "stay local",
       "status": "OPEN",
       "owner_response": "Target profile confirmed: C:\\Users\\T2Hol\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6 (Oracle signed in). Owner approves project-local profile selection for extension attachment.",
-      "verification": "Bridge still about:blank (stale chrome-t2). Owner pasted a PLAYWRIGHT_MCP_EXTENSION_TOKEN value in chat -> treated as EXPOSED; not used/stored/echoed/set; recommended rotation. Extension reports no connected clients. OA-1 remains PARTIAL.",
-      "how_to_complete": "Owner-approved cleanup likely needed: (a) fully quit opencode and confirm no stray node @playwright/mcp processes remain, or separate owner approval to kill the stale chrome-t2 MCP instances; (b) confirm the project-local override loaded; (c) in Profile 6 approve the extension. Then reply 'continue'."
+      "verification": "ChromeConnect offline baseline green and idle: orchestrator 47/0, chromecontrol 48/0, browser-control 21/0 (116/0). A durable Oracle run (oracle-20260930T000555Z) was created BEFORE any picker as a first bounded run, and the native profile picker launch returned picker_launched (state awaiting_profile_selection). Profile selection/extension attach/Oracle opening/sign-in remain UNVERIFIED and are intentionally DEFERRED by owner instruction. Prior token paste treated as EXPOSED (not used/stored). OA-1 remains PARTIAL/DEFERRED.",
+      "how_to_complete": "When the owner explicitly requests it: run the task-driven ChromeConnect flow (durable task -> visual profile tile -> extension approval if asked -> 'Profile selected.' -> manual sign-in if required -> 'Hey, it signed in.'). No marker tab, profile path, CLI verification, process cleanup, or extension token required."
     },
     {
       "id": "OA-2",
