@@ -52,6 +52,14 @@ Binding update 2026-09-29. Room-readiness labels are separate from card status.
 | DEPLOY-F7 Five-tester rollout | BLOCKED | owner-approved tester identities; after F6 evidence. |
 | DEPLOY-F8 Email (optional later) | BLOCKED | no approved sender domain → manual invite links required. |
 
+## Browser integration (ChromeControl) — selection-aware
+
+- Northstar `opencode.jsonc` now launches the **selection-aware launcher** `Default Project\scripts\chromecontrol-mcp.js` (absolute path); the hard-coded `--profile-dir-name "Profile 6"` pin is removed. Default Project `opencode.json` already uses the same launcher.
+- Selection source: `Default Project\config\chromecontrol.json` (`attach_mode: extension`, `extension_profile_dir_name: null` = **unpinned** default); CLI `node scripts/chromecontrol.js use-profile <dir|name|index>` (rejects unknown/ambiguous).
+- Launcher `--print-args` verified: `attach_mode=extension profile=(unpinned)` → args `--extension`; no browser launched. Spawner resolves the cached `@playwright/mcp` `cli.js` directly (no `@latest` upgrade) and only falls back to npx if the cache is absent.
+- **STARTUP_SELECTION_WORKING**; **LIVE_SWITCHING_NOT_IMPLEMENTED** — opencode loads MCP config once, so changing the saved selection requires reconnect/restart (no in-conversation switch mechanism observed). Supported procedure: run `use-profile`, then restart opencode (or reconnect the MCP). Not claimed DONE without a real two-profile switch.
+- OA-1 stays PARTIAL: the current session's tool connection is still a stale `chrome-t2` MCP (pre-change) until opencode restarts with the launcher; no global config edited, no processes killed.
+
 ## Owner Action Queue (statuses: OPEN/ANSWERED/VERIFIED/DEFERRED/CANCELLED — not card statuses)
 
 | ID | Card | Action needed | Why / when actionable | Blocks | Safe default | Status | Verification evidence | Owner response (non-secret) |

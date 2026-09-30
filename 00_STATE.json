@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T02:13:40Z",
+  "last_updated": "2026-09-30T02:34:36Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1110,6 +1110,13 @@
       "batch": "OA-1",
       "summary": "Post owner restart+approval recheck: browser tabs still ['about:blank']; MCP process list shows both chrome-t2 and Profile 6 extension servers running. OA-1 stays PARTIAL; no substitute browser, no global-config edit, no process kill.",
       "next_action": "P5-T4 bounded slices; OA-1 needs owner-approved stale-process cleanup / confirm override loaded."
+    },
+    {
+      "ts": "2026-09-30T02:34:36Z",
+      "activity": "chromecontrol_selection_aware_launcher",
+      "batch": "OA-1",
+      "summary": "Replaced Northstar hard-coded Profile 6 MCP command with the Default Project selection-aware launcher (scripts/chromecontrol-mcp.js, absolute path). Default Project opencode.json already uses the launcher; config/chromecontrol.json extension_profile_dir_name=null (unpinned). Launcher --print-args verified: attach_mode=extension profile=(unpinned) -> --extension, no browser launched. Spawner resolves cached @playwright/mcp cli.js directly (no @latest upgrade). STATUS: STARTUP_SELECTION_WORKING; LIVE_SWITCHING_NOT_IMPLEMENTED (opencode loads MCP config once; use-profile then restart/reconnect). OA-1 stays PARTIAL until real bridge verified; no global config edit, no process kill.",
+      "next_action": "Restart opencode to bind launcher; then verify bridge; continue P5-T4."
     }
   ],
   "owner_action_queue": [
