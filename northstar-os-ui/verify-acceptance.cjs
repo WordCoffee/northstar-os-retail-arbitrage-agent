@@ -18,7 +18,7 @@ async function stub(page, role, userId) {
     window.__NORTHSTAR_LOCAL_DEV__ = true
     window.__stubCalls = []
     const FOUND = '/api/v1/foundation'
-    window.fetch = (input) => {
+    window.fetch = (input, init) => {
       const url = typeof input === 'string' ? input : input.url
       if (!url.includes(FOUND)) return Promise.reject(new Error('unexpected fetch ' + url))
       const route = url.split(FOUND)[1].split('?')[0]
@@ -28,6 +28,23 @@ async function stub(page, role, userId) {
       if (route === '/me') return json({ user_id: userId, organizations: [], active_organization_id: null, role, permissions: role === 'platform_admin' ? ['platform_admin'] : [] })
       if (route === '/environment') return json({ environment: 'production', view_context: 'normal', ui_mode: 'full', is_preview: false })
       if (route === '/preview/active') return json({ active: false, preview: null })
+      // Golden Goose persisted round-trip (P5-T4): org-scoped item + decision
+      // persist in localStorage so a read-after-write survives reload offline.
+      const GKEY = 'gg-acc-decisions'
+      if (route === '/golden-goose/queue') return json({ items: [{ item_id: 'GG-ACC' }], basis: 'OBSERVED' })
+      const decRoute = route.match(/^\/golden-goose\/([^/]+)\/decision$/)
+      if (decRoute && (init?.method || 'GET').toUpperCase() === 'POST') {
+        const stored = JSON.parse(localStorage.getItem(GKEY) || '{}')
+        stored[decRoute[1]] = { decision_state: 'APPROVAL_REQUIRED', created_at: '2026-09-30T00:00:00Z', purchase_ready: false }
+        localStorage.setItem(GKEY, JSON.stringify(stored))
+        return json({ item_id: decRoute[1], decision: stored[decRoute[1]], persisted: true, decision_id: 'd-' + decRoute[1] })
+      }
+      const one = route.match(/^\/golden-goose\/([^/]+)$/)
+      if (one) {
+        if (one[1] !== 'GG-ACC') return json({ detail: { code: 'not_found' } }, 404)
+        const stored = JSON.parse(localStorage.getItem(GKEY) || '{}')
+        return json({ item_id: 'GG-ACC', match_state: 'QUALIFIED_FOR_REVIEW', resale_score: 0.62, net_per_unit: 4.1, policy_exclusion_flag: 0, latest_decision: stored['GG-ACC'] || null })
+      }
       return json({ detail: { code: 'not_stubbed' } }, 404)
     }
   }, { role, userId })
@@ -166,6 +183,27 @@ async function run() {
   await page.click('button:has-text("Configure Alerts")').catch(() => {})
   await page.waitForTimeout(300)
   ;(await page.evaluate(() => location.pathname + location.search) === before) ? ok('Monitoring "Configure Alerts" does not navigate') : no('Monitoring Configure Alerts navigated')
+
+  // P5-T4: Golden Goose review/decision persisted round-trip (acceptance).
+  {
+    await goPath(page, '/golden-goose?view=decisions')
+    await page.waitForTimeout(700)
+    const before = await page.evaluate(() => document.body.innerText)
+    ;(before.includes('GG-ACC')) ? ok('acceptance: decisions view lists persisted item GG-ACC') : no('acceptance decisions item missing')
+    ;(before.includes('UNKNOWN') || before.includes('No persisted decisions')) ? ok('acceptance: no recorded decision shown UNKNOWN (not invented)') : no('acceptance unknown missing')
+    await page.evaluate(async () => {
+      await window.fetch('/api/v1/foundation/golden-goose/GG-ACC/decision', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
+    })
+    await goPath(page, '/golden-goose/GG-ACC')
+    await page.waitForTimeout(700)
+    const reviewTxt = await page.evaluate(() => document.body.innerText)
+    ;(reviewTxt.includes('GG-ACC')) ? ok('acceptance: review view renders persisted item GG-ACC') : no('acceptance review id missing')
+    ;(reviewTxt.includes('APPROVAL_REQUIRED') || reviewTxt.includes('Approval')) ? ok('acceptance: recorded decision round-trips into review view') : no('acceptance review decision round-trip', 'not shown in ' + reviewTxt.slice(0, 200))
+    await goPath(page, '/golden-goose/GG-404')
+    await page.waitForTimeout(700)
+    const nf = await page.evaluate(() => document.body.innerText)
+    ;(nf.includes('No persisted opportunity') || nf.includes('GG-404')) ? ok('acceptance: missing item shows explicit not-found (no fabrication)') : no('acceptance not-found marker', nf.slice(0, 160))
+  }
 
   await ctx.close()
   await browser.close()
