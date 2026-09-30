@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T02:39:52Z",
+  "last_updated": "2026-09-30T02:42:18Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1131,6 +1131,13 @@
       "batch": "P5-T4",
       "summary": "Added golden-goose client methods and a PersistedQueue panel rendering persisted org-scoped items (basis OBSERVED) or UNKNOWN when empty; new harness verify-golden-goose.cjs 5/0; no regression (smoke 42/0, guards 11/0, acceptance 27/0, invite 11/0). P5-T4 PARTIAL.",
       "next_action": "Wire item Review + Decisions to persisted routes; P4-T3b filter; browser OA-1 pending owner restart."
+    },
+    {
+      "ts": "2026-09-30T02:42:18Z",
+      "activity": "chromecontrol_oa1_token_safety",
+      "batch": "OA-1",
+      "summary": "Owner pasted an extension token in chat; token NOT used/stored/echoed/set and flagged EXPOSED -> rotate. Extension reports no clients connected. Browser tabs still about:blank (stale chrome-t2). OA-1 PARTIAL; Oracle not opened; no cloud/DNS/IAM/billing action.",
+      "next_action": "Owner restarts OpenCode and approves extension in Profile 6 WITHOUT pasting a token (or sets token locally); then verify bridge; continue P5-T4 Review/Decisions wiring meanwhile."
     }
   ],
   "owner_action_queue": [
@@ -1143,7 +1150,7 @@
       "safe_default": "stay local",
       "status": "OPEN",
       "owner_response": "Target profile confirmed: C:\\Users\\T2Hol\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6 (Oracle signed in). Owner approves project-local profile selection for extension attachment.",
-      "verification": "Selected profile saved: directory Profile 6 (display Work); launcher resolves --extension --profile-dir-name Profile 6. Bridge NOT verified in current session (stale chrome-t2). Oracle NOT opened. Reconnect required.",
+      "verification": "Bridge still about:blank (stale chrome-t2). Owner pasted a PLAYWRIGHT_MCP_EXTENSION_TOKEN value in chat -> treated as EXPOSED; not used/stored/echoed/set; recommended rotation. Extension reports no connected clients. OA-1 remains PARTIAL.",
       "how_to_complete": "Owner-approved cleanup likely needed: (a) fully quit opencode and confirm no stray node @playwright/mcp processes remain, or separate owner approval to kill the stale chrome-t2 MCP instances; (b) confirm the project-local override loaded; (c) in Profile 6 approve the extension. Then reply 'continue'."
     },
     {
