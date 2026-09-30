@@ -95,3 +95,49 @@ the owning blocker (typically OA-7).
   implemented and is out of Item 3 scope (depends on P4-T1 coverage).
 - **Status:** documented; not stubbed with fabricated sources.
 
+---
+
+## 2026-09-30 — Item 4: local admin / tenant-isolation / backup-restore scope
+
+### A-10 Admin UI is sample-mode by design; no real operations are performed
+- **Decision:** The `/beta-ops/*` and `/admin` UI surfaces are intentionally
+  sample-mode stubs. Every destructive control (invite Send/Reissue/Revoke,
+  lifecycle action, eligibility verify, report download) is `disabled`. No real
+  invitations, tester contacts, external accounts, email/SMS, or production/
+  cloud changes are made. Backend admin routes are present and guarded, but the
+  completion sprint only verifies the local guardrails, it does not execute
+  privileged actions.
+- **Status:** locked by `northstar-os-ui/verify-admin.cjs` (**34/0**): all admin
+  pages render for `platform_admin`; nav renders; every sample action is
+  disabled; operator and anonymous roles are bounced (to `/home` and `/sign-in`
+  respectively). Admin/tenant/audit backend suites **92/0**.
+
+### A-11 Tenant isolation is enforced at the authorization boundary, not the UI
+- **Decision:** No ORG-scope guard is weakened to let a sample UI reach further.
+  Cross-tenant access is denied by the foundation authorization layer and
+  covered by `test_auth_org_scope.py`, `test_authorization_matrix.py`, and the
+  GG cross-tenant denial in the UI harness. The admin pages are role-gated to
+  `platform_admin` only.
+- **Status:** no new cross-tenant surface added; existing guards unchanged.
+
+### A-12 Local backup/restore drill is SQLite-backed; Postgres scripts are DEPLOY-F5
+- **Decision:** The deploy `backup.sh`/`restore.sh` target PostgreSQL and an
+  approved DEPLOY-F5 destination (not runnable locally). The local completion
+  drill therefore covers the **local SQLite** data layer
+  (`Northstar_backend/data/northstar.db`) using the SQLite online backup API,
+  and re-implements the `restore.sh` disposable-target guard (target name must
+  contain `drill`/`restore`). Backing up/restoring the live DB is **not**
+  performed — the drill seeds and restores only throwaway files.
+- **Status:** `test_backup_restore_drill.py` **2/0** (round-trip parity across
+  tenants + integrity_check + disposable-name guard). Postgres backup/restore to
+  an off-VM destination remains OPEN behind DEPLOY-F5 (owner decision).
+
+### A-13 Exports/assets in admin UI are sample-only and not run live
+- **Decision:** The Reports & Exports surface shows a `Download` control that is
+  `disabled` in sample mode ("Exports use the safe field set only"). No live
+  export runs locally. The evidence-backed P4-T3b exported-safe field set governs
+  any future export surface. No aggregation cross-tenant or external-AI send is
+  performed.
+- **Status:** documented; no export pipeline executed in this sprint.
+
+

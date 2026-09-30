@@ -1,6 +1,6 @@
 {
   "test_baseline": {
-    "python": "2348 passed, 2 known failures (pre-existing protected-hash drift), 3 skipped, 48 subtests; 2026-09-30 foundation full-suite re-run: 3423 passed, 65 skipped, 1 known failure (test_frozen_file_boundary_is_a_static_rule, pre-existing protected-hash drift), 48 subtests",
+    "python": "2348 passed, 2 known failures (pre-existing protected-hash drift), 3 skipped, 48 subtests; 2026-09-30 foundation full-suite re-run: 3423 passed, 65 skipped, 1 known failure (test_frozen_file_boundary_is_a_static_rule, pre-existing protected-hash drift), 48 subtests. Item 4 local completion: foundation suite 757 passed / 59 skipped / 48 subtests; admin/tenant/audit/migration/e2e subset 92/0; backup-restore drill test_backup_restore_drill.py 2/0. Full `Northstar_backend` tree re-run 3410 passed / 62 skipped / 23 failed (all 23 failures are PRE-EXISTING in test_proof_batch.py + test_proof_batch_run.py — FileNotFoundError: data/scanner-search-cache.json missing fixture file in this env; those two test files are unmodified/clean in git, NOT Item 4 regressions). npm run build: 0 errors.",
     "golden_goose": "511 passed, 0 failures (module suite)",
     "ui_shell_functions": "UI 1122 / Shell 293 / Functions 31 passed",
     "updated_at": "2026-09-22",
@@ -22,7 +22,7 @@
     "Phase F: Engineering Debt + Golden Goose Hardening",
     "Phase G: Next Batch (FIXES_50 leftovers + partials + hygiene)",
     "Phase H: Private Alpha Launch (dual-engine, operator-only)",
-    "Master-plan completion sprint (Items 1-6): Item 1 (P5-T4 acceptance round-trip) GG 16/0 + acceptance 32/0; Item 2 (P4-T3b rights filter) committed — provenance extractor + GG derived projection, no raw payload leak, data_rights+routes 21/0 and GG suite 30/0; Item 3 (scheduler/snapshot evidence-based scope) — scheduler core verified 41/0, new operator-created monthly_top5 schedule path test (top5 6/0), NO invented cron/retention/snapshot semantics, assumptions A-07..A-09. See docs/ASSUMPTIONS_LOG.md and docs/BUILD_STATE.md. Items 4-6 in progress."
+    "Master-plan completion sprint (Items 1-6): Item 1 (P5-T4 acceptance round-trip) GG 16/0 + acceptance 32/0; Item 2 (P4-T3b rights filter) committed — provenance extractor + GG derived projection, no raw payload leak, data_rights+routes 21/0 and GG suite 30/0; Item 3 (scheduler/snapshot evidence-based scope) — scheduler core verified 41/0, new operator-created monthly_top5 schedule path test (top5 6/0), NO invented cron/retention/snapshot semantics, assumptions A-07..A-09. Item 4 (local admin/tenant/backup-restore) DONE (LOCAL) — admin UI sample-mode verified (verify-admin.cjs 34/0: all /beta-ops pages render for platform_admin, destructive controls disabled, nav renders, operator→/home + anonymous→/sign-in isolation), backend admin/tenant/audit/migration/e2e suites 92/0, local SQLite backup/restore drill test_backup_restore_drill.py 2/0 (round-trip parity + integrity_check + disposable-name guard), SOP/checklist in docs/ADMIN_SOP_AND_INTEGRITY.md, assumptions A-10..A-13. Items 5-6 in progress. See docs/ASSUMPTIONS_LOG.md and docs/BUILD_STATE.md."
   ],
   "known_issues": [
     {
