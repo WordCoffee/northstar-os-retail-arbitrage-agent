@@ -33,5 +33,14 @@
     "auto": true,
     "keep": { "tokens": 6000 },
     "buffer": 12000
+  },
+
+  "mcp": {
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp@latest", "--extension", "--profile-dir-name", "Profile 6"],
+      "enabled": true,
+      "environment": { "NORTHSTAR_CC_ATTACH": "extension" }
+    }
   }
 }

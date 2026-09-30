@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T02:03:47Z",
+  "last_updated": "2026-09-30T02:07:50Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1089,6 +1089,13 @@
       "batch": "OA-1",
       "summary": "Post-restart bridge check: Playwright MCP tabs = ['about:blank'] only -> extension bridge NOT attached to Profile 6. Stopped for owner interactive approval; no navigation, no separate-browser launch, no profile-data copy.",
       "next_action": "Owner approves extension connection; then verify bridge + Oracle tab (read-only); continue P5-T4."
+    },
+    {
+      "ts": "2026-09-30T02:07:50Z",
+      "activity": "chromecontrol_oa1_runtime_diagnosis",
+      "batch": "OA-1",
+      "summary": "Diagnosed MCP runtime: active server was global-config chrome-t2 (separate profile) -> about:blank. Added project-local opencode.jsonc mcp.playwright override (--extension --profile-dir-name 'Profile 6'). Stale duplicate MCP processes observed. No substitute browser launched, no profile data copied, no token. Also: prior 'session limit/budget exhausted' labels had no observable limit/error -> reclassified UNVERIFIED; work continues.",
+      "next_action": "Owner restarts opencode + approves extension connection; then verify bridge + Oracle tab; continue P5-T4 slices."
     }
   ],
   "owner_action_queue": [
@@ -1101,8 +1108,8 @@
       "safe_default": "stay local",
       "status": "OPEN",
       "owner_response": "Target profile confirmed: C:\\Users\\T2Hol\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6 (Oracle signed in). Owner approves project-local profile selection for extension attachment.",
-      "verification": "Bridge NOT attached after restart: Playwright MCP tab list returned only 'about:blank' (no Profile 6 Chrome tabs / extension pairing). Did not navigate or launch a separate browser. Awaiting owner interactive extension approval in Profile 6.",
-      "how_to_complete": "Owner: ensure Playwright Extension installed+enabled in Profile 6, click the extension's Connect in the Profile 6 Chrome window and approve. Then reply 'continue'; I verify the real bridge + intended Oracle tab and do only the read-only Oracle inspection."
+      "verification": "RUNTIME MISMATCH DIAGNOSED: the active MCP server for this workspace came from the GLOBAL ~/.config/opencode/opencode.json ('--browser chrome --user-data-dir C:\\Users\\T2Hol\\.config\\opencode\\chrome-t2') - a SEPARATE automation profile, which is why only 'about:blank' appeared. The earlier edit to Default Project\\opencode.json was NOT the active config. FIX: added a PROJECT-LOCAL override in the Northstar repo opencode.jsonc -> mcp.playwright = ['npx','-y','@playwright/mcp@latest','--extension','--profile-dir-name','Profile 6'] (project overrides global). Multiple stale/duplicate MCP processes observed (several chrome-t2 instances + two Profile 6 instances). RESTART REQUIRED; then approve the extension connection in Profile 6.",
+      "how_to_complete": "Owner: restart opencode (loads the project-local override); ensure stale chrome-t2 MCP instances are gone; in Profile 6 Chrome click the Playwright extension Connect and approve. Then reply 'continue'; I verify the real bridge (tabs from Profile 6) + the Oracle tab and do only read-only inspection."
     },
     {
       "id": "OA-2",
