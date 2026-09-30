@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T02:00:29Z",
+  "last_updated": "2026-09-30T02:03:47Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1082,6 +1082,13 @@
       "batch": "OA-1",
       "summary": "Verified @playwright/mcp v0.0.83 supports --profile-dir-name in extension mode per its README. Made the exact project-local change in Default Project\\opencode.json: --profile-dir-name \"Default\" -> \"Profile 6\" (owner-confirmed Oracle profile dir). No package upgrade, no new service, no global permission change, no profile-data copy, no token. Checkpoint persisted before the required opencode restart. Bridge verification + read-only Oracle inspection pending restart + interactive approval.",
       "next_action": "Owner restarts opencode; then verify bridge + Oracle tab and do read-only inspection; continue P5-T4."
+    },
+    {
+      "ts": "2026-09-30T02:03:47Z",
+      "activity": "chromecontrol_oa1_bridge_check",
+      "batch": "OA-1",
+      "summary": "Post-restart bridge check: Playwright MCP tabs = ['about:blank'] only -> extension bridge NOT attached to Profile 6. Stopped for owner interactive approval; no navigation, no separate-browser launch, no profile-data copy.",
+      "next_action": "Owner approves extension connection; then verify bridge + Oracle tab (read-only); continue P5-T4."
     }
   ],
   "owner_action_queue": [
@@ -1094,8 +1101,8 @@
       "safe_default": "stay local",
       "status": "OPEN",
       "owner_response": "Target profile confirmed: C:\\Users\\T2Hol\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6 (Oracle signed in). Owner approves project-local profile selection for extension attachment.",
-      "verification": "CONFIG CHANGE MADE (project-local): C:\\Users\\T2Hol\\OneDrive\\Documents\\Default Project\\opencode.json playwright MCP now uses --profile-dir-name \"Profile 6\" (was \"Default\"). Installed @playwright/mcp v0.0.83 supports --profile-dir-name with --extension (package README: \"name of the profile directory in the user data dir to connect to with --extension, for example 'Profile 1'\"). RESTART REQUIRED (opencode config is not hot-reloaded). Bridge attachment NOT yet verified (requires restart + interactive extension approval).",
-      "how_to_complete": "Owner: (1) confirm the Playwright Extension is installed+enabled in Profile 6; (2) restart opencode so the playwright MCP relaunches with the Profile 6 argument; (3) approve the interactive extension connection. Then I verify the real bridge + the intended Oracle tab (not profile enumeration / mcp_attached flag), run the sign-in gate, and do ONLY the read-only Oracle inspection."
+      "verification": "Bridge NOT attached after restart: Playwright MCP tab list returned only 'about:blank' (no Profile 6 Chrome tabs / extension pairing). Did not navigate or launch a separate browser. Awaiting owner interactive extension approval in Profile 6.",
+      "how_to_complete": "Owner: ensure Playwright Extension installed+enabled in Profile 6, click the extension's Connect in the Profile 6 Chrome window and approve. Then reply 'continue'; I verify the real bridge + intended Oracle tab and do only the read-only Oracle inspection."
     },
     {
       "id": "OA-2",
