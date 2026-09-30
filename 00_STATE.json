@@ -539,7 +539,7 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P4-T4 freshness policy",
+  "next_batch": "P5-T1 resale score spec (Phase 5 flagship)",
   "git_baseline": {
     "commit_hash": "97d5366",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T00:53:59Z",
+  "last_updated": "2026-09-30T00:54:44Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1026,6 +1026,13 @@
       "batch": "P4-T3",
       "summary": "P4-T3 Data rights register + enforcement DONE. foundation/data_rights.py (SOURCES + rights()/customer_safe_rows()/export_safe_rows()/assert_*) + docs/DATA_RIGHTS.md. Present sources labelled INTERNAL_ONLY (SellerSprite historical, amazon_catalog_records, costco_discovery, palletfly_historical) or CUSTOMER_OK (manual_observed_capture); planned providers NOT_INTEGRATED with rights UNKNOWN. External uses require explicit ALLOWED; UNKNOWN/PROHIBITED blocked; Owner Test Mode does NOT bypass; internal does not imply redistribution; historical data not deleted. Tests 9/0. No customer surface emits historical third-party rows yet -> P4-T3b dependency recorded; affected beta surfaces blocked until wired.",
       "next_action": "P4-T4 freshness policy; keep P4-T1 PARTIAL (no end-to-end rerun); deployment BLOCKED on owner."
+    },
+    {
+      "ts": "2026-09-30T00:54:44Z",
+      "activity": "master_build_plan_P4-T4",
+      "batch": "P4-T4",
+      "summary": "P4-T4 Freshness policy DONE. foundation/freshness.py: per-field max-age (defaults + NORTHSTAR_MAX_AGE_<FIELD>_DAYS env overrides); within max -> OBSERVED (gate-usable); older -> CACHED with age (display only; gate sees UNKNOWN via gate_state); missing/unparseable/future -> UNKNOWN. Tests 7/0. Phase 4 remaining: P4-T3b (wire rights filter into customer/export surfaces, dependency for P5+). P4-T1 still PARTIAL (no end-to-end rerun).",
+      "next_action": "P5-T1 resale score spec; keep P4-T1 PARTIAL; deployment BLOCKED on owner."
     }
   ]
 }
