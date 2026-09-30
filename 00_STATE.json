@@ -539,11 +539,11 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P4-T1 pack-count diagnostic (needs companion pipeline data; next unblocked)",
+  "next_batch": "P4-T1 pack-count diagnostic (companion pipeline data); deployment blocked on owner (Oracle/hostname)",
   "git_baseline": {
-    "commit_hash": "d61bef2",
+    "commit_hash": "97d5366",
     "committed_at": "2026-09-02T07:30:00Z",
-    "message": "Phase 3 Owner Test Mode complete (P3-T1..T4)",
+    "message": "DEPLOY-F1: free private-beta deployment preflight (OCI Always Free, \\)",
     "files_changed": 508,
     "process_fix": "All future batches MUST commit after each step so git diff/status checks have meaningful baselines. The entire Northstar_backend/ was previously untracked, making post-restart verification impossible without this commit."
   },
@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-29T23:57:34Z",
+  "last_updated": "2026-09-30T00:15:32Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -998,6 +998,13 @@
       "batch": "P3",
       "summary": "Completed Phase 3 locally. P3-T1 flag/scope/banner DONE (0d9354b). P3-T2 bypasses DONE (0f8d0bd): entitlements all-on for owner (non-owner/base unchanged; flag-off restores), quotas counted-but-not-enforced (flag-off restores), RBAC owner holds all perms, env safety allowlist {development,test} via raw ENVIRONMENT (production/production_tenant/staging/unknown/missing fail closed), per-actual-bypass audit only (owner_test_mode=true/actor/org/action/reason/occurred_at; no page-load flood), concept rooms UI-only (no server gate). P3-T3 DONE (7bc4838): 9 tests prove test mode does NOT bypass truth labels (UNKNOWN stays UNKNOWN), unregistered jobs, disabled providers, arming/score!=PURCHASE_READY, separate approval, auth + tenant isolation; frozen-file boundary asserted as static rule (not runtime); provider arming + hard spend caps are P7-T1, not yet implemented (not claimed). P3-T4 DONE (d61bef2): owner-only Demo Dataset toggle with SAMPLE rows in separate demo_observations table, hidden by default, excluded from real observations, toggle never mutates real data, SAMPLE never PURCHASE_READY. Full SQLite foundation suite 700 passed/59 skipped/0 failed. Self-approval still disabled (no amendment).",
       "next_action": "P4-T1 pack-count diagnostic (companion fba-product-screener pipeline data required); hosting deferred per owner answer B."
+    },
+    {
+      "ts": "2026-09-30T00:15:32Z",
+      "activity": "deploy_track_F1",
+      "batch": "DEPLOY",
+      "summary": "Binding deployment update recorded (does not erase local-only history). Owner decision: attempt OCI Always Free, \\ infra, neutral free hostname, no domain/VPS purchase/upgrade/paid fallback/trial credits; rollout owner+disposable -> 1 tester -> 5 -> beyond only by new owner decision; 50-subscriber NOT authorized; brand provisional. Added DEPLOY-F1..F8 to docs/BUILD_STATE.md. DEPLOY-F1 DONE (97d5366): docs/FREE_BETA_DEPLOYMENT.md; docker-compose.hosted.yml (ENVIRONMENT=staging, NS_FOUNDATION_ALLOW_REMOTE_DEV=0, NORTHSTAR_OWNER_TEST_MODE=0, Caddy 80/443 + cert volumes); deploy/hosted.env.example (names only); deploy/images.lock (base digests + linux/arm64); deploy/backup.sh; deploy/restore.sh. ARM64 early signal: ns-api-arm64:f1 and ns-ui-arm64:f1 built under QEMU + arm64 import smoke ok; real ARM acceptance deferred to F5/F6. Hosted compose config validates; prerequisite subset 165 passed/7 skipped/0 failed. No Oracle account/cloud resources created; F2..F8 BLOCKED on owner/capacity/hostname.",
+      "next_action": "Resume P4-T1; keep deployment cards BLOCKED until owner acts; continue unblocked master-plan cards meanwhile."
     }
   ]
 }
