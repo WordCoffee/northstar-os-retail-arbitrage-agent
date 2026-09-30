@@ -238,6 +238,22 @@ class LoginBody(BaseModel):
     password: str
 
 
+class GoldenGooseEvalBody(BaseModel):
+    item_id: Optional[str] = None
+    gate_inputs: dict = {}
+    economics_readiness: Optional[str] = None
+    economics_formula_version: Optional[str] = None
+    component_scores: dict = {}
+    component_availability: dict = {}
+    component_weights: dict = {}
+    uncertainty_penalty: float = 0.0
+    uncertainty_reasons: list = []
+    approval: Optional[dict] = None
+    warnings: list = []
+    sample: bool = False
+    resale_inputs: dict = {}
+
+
 # ---- context / identity ------------------------------------------------------
 
 @router.get("/me", response_model=UserContextResponse)
@@ -365,6 +381,63 @@ def demo_disable(state: FoundationState = Depends(get_state),
     from ..demo_dataset import set_enabled
     return set_enabled(state.db, ctx.effective_organization_id, False,
                        actor_user_id=ctx.user_id, audit=state.audit)
+
+
+# ---- Golden Goose (P5-T2) ----------------------------------------------------
+
+def _gg_decision(body):
+    from ..golden_goose_decision import decide
+    return decide(gate_inputs=body.gate_inputs,
+                  economics_readiness=body.economics_readiness,
+                  economics_formula_version=body.economics_formula_version,
+                  component_scores=body.component_scores,
+                  component_availability=body.component_availability,
+                  component_weights=body.component_weights,
+                  uncertainty_penalty=body.uncertainty_penalty,
+                  uncertainty_reasons=body.uncertainty_reasons,
+                  approval=body.approval, warnings=body.warnings, sample=body.sample)
+
+
+@router.post("/golden-goose/evaluate")
+def golden_goose_evaluate(body: GoldenGooseEvalBody,
+                          ctx: RequestContext = Depends(get_context)):
+    from ..permissions import evaluate as eval_perm, PERM_VIEW
+    from ..resale_score import score as resale_score
+    allowed, reason = eval_perm(ctx, PERM_VIEW)
+    if not allowed:
+        raise _err("permission_denied", reason, 403)
+    decision = _gg_decision(body)
+    return {"item_id": body.item_id, "decision": decision,
+            "resale_score": resale_score(body.resale_inputs or {})}
+
+
+@router.get("/golden-goose/queue")
+def golden_goose_queue(ctx: RequestContext = Depends(get_context)):
+    from ..permissions import evaluate as eval_perm, PERM_VIEW
+    allowed, reason = eval_perm(ctx, PERM_VIEW)
+    if not allowed:
+        raise _err("permission_denied", reason, 403)
+    return {"items": [], "basis": "UNKNOWN",
+            "note": "no opportunities ingested yet; nothing is fabricated"}
+
+
+@router.get("/golden-goose/{item_id}")
+def golden_goose_get(item_id: str, ctx: RequestContext = Depends(get_context)):
+    from ..permissions import evaluate as eval_perm, PERM_VIEW
+    allowed, reason = eval_perm(ctx, PERM_VIEW)
+    if not allowed:
+        raise _err("permission_denied", reason, 403)
+    raise _err("not_found", f"no stored golden goose item {item_id}", 404)
+
+
+@router.post("/golden-goose/{item_id}/decision")
+def golden_goose_decide_route(item_id: str, body: GoldenGooseEvalBody,
+                              ctx: RequestContext = Depends(get_context)):
+    from ..permissions import evaluate as eval_perm, PERM_APPROVE
+    allowed, reason = eval_perm(ctx, PERM_APPROVE)
+    if not allowed:
+        raise _err("permission_denied", reason, 403)
+    return {"item_id": item_id, "decision": _gg_decision(body), "persisted": False}
 
 
 @router.get("/roles")

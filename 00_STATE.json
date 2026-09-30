@@ -539,7 +539,7 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P5-T2 golden goose decision endpoint",
+  "next_batch": "P5-T3 Golden Goose Top-5 (monthly job)",
   "git_baseline": {
     "commit_hash": "97d5366",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T01:38:36Z",
+  "last_updated": "2026-09-30T01:41:57Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1047,6 +1047,13 @@
       "batch": "P5-T1",
       "summary": "P5-T1 Resale Score spec DONE: foundation/resale_score.py versioned resale-score-1.0.0, pure/config-driven; 8 components 0..1 with missing=unavailable None (never 0); weighted mean over available only; uncertainty separate labeled penalty; ROI informational only; purchase_ready always False. Tests 8/0. OA-1 answered by owner (Oracle signup+MFA complete in Chrome profile Tyrone-Work); session verification PENDING because ChromeConnect is not implemented in the repo and the OpenCode browser is a separate profile (no credential entry).",
       "next_action": "P5-T2 decision endpoint; apply P4-T3b before customer/export surfaces."
+    },
+    {
+      "ts": "2026-09-30T01:41:57Z",
+      "activity": "master_build_plan_P5-T2",
+      "batch": "P5-T2",
+      "summary": "P5-T2 Golden Goose decision endpoint DONE: routes POST /golden-goose/evaluate, GET /golden-goose/queue (empty, basis UNKNOWN), GET /golden-goose/{id} (404, no store yet), POST /golden-goose/{id}/decision (PERM_APPROVE). Score alone never PURCHASE_READY; SAMPLE never PURCHASE_READY. Tests 7/0.",
+      "next_action": "P5-T3 Top-5 monthly job; verify OA-1 via ChromeControl project (owner-provided path)."
     }
   ],
   "owner_action_queue": [
