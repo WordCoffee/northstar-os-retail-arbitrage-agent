@@ -140,4 +140,37 @@ the owning blocker (typically OA-7).
   performed.
 - **Status:** documented; no export pipeline executed in this sprint.
 
+---
+
+## 2026-09-30 — Item 5: memory-limits review (evidence-only)
+
+### A-14 No enforced memory limits exist in the hosted/local compose stacks
+- **Decision:** `docker-compose.yml` and `docker-compose.hosted.yml` define **no**
+  `mem_limit` and no `deploy.resources` memory section (read, 2026-09-30). The
+  only `deploy.resources` block anywhere is `docker-compose.local.yml` and it is a
+  **GPU device reservation** (`driver: nvidia, capabilities: [gpu]`) for Ollama —
+  not a memory limit. This matches the OA-2 prep estimate (report
+  `reports/oa2_prep_always_free_packet_20260930T0821Z.md`: four hosted containers
+  ~0.46–0.78 GB RSS of the 12 GB Always-Free A1, leaving ~11 GB headroom).
+- **Decision rule:** do not invent any `mem_limit`/reservation value or claim a
+  measured footprint. Memory sizing out of the Docker stack is UNKNOWN/estimates
+  only, and any explicit cap is a DEPLOY-F3 owner decision. Local SQLite stack is
+  a single process; no container memory policy applies.
+- **Status:** logged as evidence `A-14`; no compose file changed. Explicit
+  `mem_limit`/reservations remain OPEN behind owner approval (DEPLOY-F3).
+
+### A-15 Item 6 runbook already exists (parallel session A); sprint verifies + cites
+- **Decision:** `docs/LOCAL_RUNBOOK.md`, `docs/SERVICE_READINESS_MATRIX.md`, and
+  `docs/SERVICE_GAPS.md` were authored in Parallel Session A (branch
+  `audit/local-readiness`, commit `c5aa054`) and merged into this branch's tree.
+  Item 6 does not re-author them from scratch; it verifies the local end-to-end
+  flow (startup path, migrations/seed/persistence, GG+PF local flows,
+  admin/internal dashboards, scheduler local-or-PARTIAL/UNKNOWN with blocker,
+  backup/restore drill, full test matrix) and records the completion-sprint
+  additions (verify-admin.cjs, verify-golden-goose.cjs, backup/restore drill,
+  admin SOP).
+- **Status:** this sprint adds `docs/ADMIN_SOP_AND_INTEGRITY.md` and the final
+  completion report; the parallel-runbook working-copy edits are pre-existing and
+  NOT committed by this sprint.
+
 
