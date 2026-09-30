@@ -539,7 +539,7 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P5-T1 resale score spec (Phase 5 flagship)",
+  "next_batch": "P5-T2 golden goose decision endpoint",
   "git_baseline": {
     "commit_hash": "97d5366",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T00:58:46Z",
+  "last_updated": "2026-09-30T01:38:36Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1040,6 +1040,13 @@
       "batch": "protocol",
       "summary": "Adopted docs/CONTINUOUS_EXECUTION_PROTOCOL.md (workflow only; no new permissions); referenced from AGENTS.md; added Owner Action Queue (OA-1..OA-8) to docs/BUILD_STATE.md + 00_STATE.json without erasing history. OA-1 (Oracle signup/home region) OPEN; OA-7 (data rights legal input) OPEN; OA-8 (score name) OPEN with safe default; others DEFERRED.",
       "next_action": "Offer OA-1 handoff once; resume P5-T1; apply P4-T3b before customer/export surfaces."
+    },
+    {
+      "ts": "2026-09-30T01:38:36Z",
+      "activity": "master_build_plan_P5-T1",
+      "batch": "P5-T1",
+      "summary": "P5-T1 Resale Score spec DONE: foundation/resale_score.py versioned resale-score-1.0.0, pure/config-driven; 8 components 0..1 with missing=unavailable None (never 0); weighted mean over available only; uncertainty separate labeled penalty; ROI informational only; purchase_ready always False. Tests 8/0. OA-1 answered by owner (Oracle signup+MFA complete in Chrome profile Tyrone-Work); session verification PENDING because ChromeConnect is not implemented in the repo and the OpenCode browser is a separate profile (no credential entry).",
+      "next_action": "P5-T2 decision endpoint; apply P4-T3b before customer/export surfaces."
     }
   ],
   "owner_action_queue": [
@@ -1050,7 +1057,9 @@
       "when": "now (DEPLOY-F1 ready)",
       "blocks": "DEPLOY-F2/F3",
       "safe_default": "stay local",
-      "status": "OPEN"
+      "status": "ANSWERED",
+      "owner_response": "Oracle signup+MFA complete; Chrome profile Tyrone-Work (northstarosllc@gmail.com)",
+      "verification": "PENDING: ChromeConnect not implemented in repo; OpenCode browser is a separate profile; no credential entry"
     },
     {
       "id": "OA-2",
