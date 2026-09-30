@@ -152,8 +152,16 @@ There are **two independent migration systems.** Do not confuse them.
   a sha256 ledger and **refuses to run on drift**. Executed by the Docker
   Compose `migrate` service (depends on healthy `postgres`; api/worker/scheduler
   depend on migrate success). Uses `DB_URL`/`FOUNDATION_DB_URL`.
-- Whether `010_demo_dataset.sql` auto-loads vs. is opt-in is **NOT verified** in
-  this offline session — treat demo data as opt-in until confirmed.
+- **Demo/seed behavior — VERIFIED (auto-load):** the runner globs
+  `migrations_foundation/*.sql` in filename order (skipping `*rollback*`) and
+  applies **every** forward file — including **`010_demo_dataset.sql`**.
+  Therefore the demo dataset **is loaded automatically** whenever forward
+  migrations run against a Postgres `DB_URL`/`FOUNDATION_DB_URL`. When no DB URL
+  is set, the runner prints "SQLite mode, nothing to migrate" and the local
+  SQLite DB is schema'd inline at first boot (see §4A).
+- **Scheduler/durable state** lives in Postgres-only tables (foundation
+  migrations); the local SQLite stack has no scheduler table — scheduler/worker
+  run as Docker services in hosted mode only.
 
 ---
 
@@ -198,6 +206,37 @@ router (`/api/v1/foundation/**`, incl. `admin`, `organizations`, `invites`,
 monitoring (`/api/monitoring/error-alerts`). Unauthenticated foundation reads
 return **401 (fail-closed)** — correct posture, not a break.
 
+### Augmented read-only probe (executed offline, Session A)
+| Endpoint | Result |
+|---|---|
+| Golden Goose `/api/golden-goose/health`, `/entitlements` | **200** (public; working locally) |
+| Foundation `/api/v1/foundation/health` | **200** |
+| Monitoring `/api/monitoring/error-alerts` | **200** |
+| Foundation `/api/v1/foundation/ui-mode` | **200** |
+| Private-beta: `/beta-status`, `/demo/status`, `/preview/active`, `/auth-posture`, `/environment`, `/providers`, `/entitlements` | **401** auth-gated (present; ready once a session/dev-shim exists) |
+| Scheduler: `/api/v1/foundation/schedules`, `/schedules/posture` | **401** auth-gated (present; hosted-only runtime) |
+| Render queue: `/api/v1/foundation/jobs-durable/queue-posture` | **401** auth-gated (present) |
+| Product Finder: `/api/sourcescout`, `/matches`, `/mismatches`, `/review`, `/summary`, `/api/products/finder`, `/api/products/{asin}/canopy|offers` | all in schema (verified); `/api/sourcescout*` read routes reachable |
+
+> Private-beta controls are **wired at the outermost middleware** (`AlphaGateMiddleware` in
+> `main.py`), allowlist-driven (`private_alpha_enabled()` / `is_allowlisted(email)`),
+> and block registration during private alpha — verified by code.
+
+### Persistence / backup / deployment readiness (verified)
+- **Persistence:** local SQLite `Northstar_backend/data/northstar.db` is **7.8 MB
+  with 32 tables** (products, listings, keywords, costco_*, golden-goose
+  `costco_gg_scores`, users, sessions, transactions, memory_entries, etc.).
+  Golden Goose review/decision state is **persisted, org-scoped**.
+- **Product Finder offline cache:** `data/scanner-search-cache.json` (38 KB) and
+  `data/kirkland-discovery.json` (145 KB) present — the room renders cached data
+  without any provider call.
+- **Backup:** `backups/northstar.db.bak` present (7.8 MB, 2026-09-27). See §7.
+- **Deployment package files present:** `Dockerfile.api`, `Dockerfile.ui`,
+  `docker-compose.yml`, `docker-compose.local.yml`, `docker-compose.hosted.yml`,
+  `Caddyfile`, `Procfile`, `wrangler.toml`, `launch-all.ps1`. Root
+  `package.json` `start`/`build`/`dev` wired. **Caveat:** `run-agent.bat` is broken
+  (calls nonexistent `npm run pipeline`).
+
 ---
 
 ## 7. Backup / restore
@@ -239,8 +278,8 @@ Before handing off to Oracle hosting — **no destination changes made here**:
       router mounts (log line `foundation router not mounted` must be absent).
 - [ ] Provide `FOUNDATION_DB_URL`/`POSTGRES_*` and run `foundation_migrate.py`
       (drift-refusing ledger) against target Postgres.
-- [ ] Decide demo seed: confirm whether `010_demo_dataset.sql` should load in
-      the hosted env (NOT verified as auto).
+- [ ] Demo seed: `010_demo_dataset.sql` is a forward migration and **loads
+      automatically** with all forward migrations in a Postgres run (verified).
 - [ ] Ship real credentials ONLY in host secrets (`.env` never committed):
       list of names in §3 above.
 - [ ] Pin `requirements.txt`/Node version for reproducible production builds
@@ -258,6 +297,13 @@ Before handing off to Oracle hosting — **no destination changes made here**:
 | Backend boot (TestClient, offline) | `/health` 200; `/` 307→`/ui`; `/openapi.json` 200 (185 routes) |
 | Router mount | foundation /api/v1/foundation/** ✓; golden-goose /api/golden-goose/** ✓; monitoring ✓ |
 | Unauthenticated foundation read | 401 (fail-closed, expected) |
+| Augmented probe | GG `/health`+`/entitlements` 200; foundation `/health`+`/ui-mode` 200; monitoring 200; scheduler/private-beta/demo/providers 401 auth-gated |
+| Persistence | `data/northstar.db` 7.8 MB, 32 tables (products, costco_*, gg_scores, users, sessions) |
+| Product Finder offline | `/api/sourcescout*` + `/api/products/finder` in schema; caches present (38 KB + 145 KB) |
+| Migration/seed | `foundation_migrate.py` auto-applies all forward `*.sql` incl. `010_demo_dataset.sql` (code-verified) |
+| Private-beta controls | `AlphaGateMiddleware` outermost + allowlist; registration blocked in alpha (code-verified) |
+| Backup/restore | `backups/northstar.db.bak` present (7.8 MB); ROLLBACK_DRILL.md + scripts/rollback_drill.ps1; no automated hot-backup script |
+| Deployment package | Dockerfile.api/ui, x3 compose, Caddyfile, Procfile, wrangler.toml, launch-all.ps1 all present |
 | UI production build | `npm run build` → **0 errors**, 88 modules, 464 KB bundle |
 | Env used | `venv-phase1c02` (fastapi/uvicorn/httpx OK); Node v24.15.0 |
-| Helper added | `Northstar_backend/_audit_bootcheck.py` (rerunnable, offline) |
+| Helper added | `Northstar_backend/_audit_bootcheck.py`, `Northstar_backend/_audit_room_probe.py` (rerunnable, offline) |

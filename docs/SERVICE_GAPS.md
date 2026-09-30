@@ -109,6 +109,7 @@
 | Watch/RankLedger/RivalBoard | parked, need SP-API | Missing provider integration |
 | Stripe + Postgres | parked before first PAID cohort | Owner decision / sequencing |
 | n8n/webhook/email | Docker-only, not in local SQLite stack | Scope decision |
+| **Automated DB backup** | Only manual SQLite copy (`backups/northstar.db.bak`); no scheduled hot-backup; ROLLBACK_DRILL is git-only | Owner decision / missing code |
 
 ---
 
