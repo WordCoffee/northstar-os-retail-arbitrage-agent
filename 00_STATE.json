@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T01:42:59Z",
+  "last_updated": "2026-09-30T01:47:42Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1061,6 +1061,13 @@
       "batch": "OA-1",
       "summary": "Inspected owner-provided AutothinK ChromeControl project (C:\\Users\\T2Hol\\OneDrive\\Documents\\Default Project) and ran chromecontrol:status (read-only). ChromeControl is functional but attached to a SEPARATE profile (ChromeResearchProfile), attachment_mode=disconnected, default_profile_verified=false. The owner's Oracle session is in Chrome profile 'Tyrone - Work'. Profile mismatch -> OA-1 session verification BLOCKED; no cookie/token/profile copying performed. Provided supported connection steps.",
       "next_action": "P5-T3 Top-5 monthly job; OA-1 awaits owner profile attach or non-secret facts."
+    },
+    {
+      "ts": "2026-09-30T01:47:42Z",
+      "activity": "chromecontrol_oa1_attach_steps",
+      "batch": "OA-1",
+      "summary": "Inspected docs/autothink-chromecontrol.md, config/attachment.json, lib/chromecontrol/connection.js. Supported attachment to the human signed-in profile = existing_default_profile_extension (Playwright MCP Bridge extension) via NORTHSTAR_CC_ATTACH=extension + opencode MCP --extension; browser_approved is configured-only. ChromeControl never launches/copies/kills the Default profile. Presented exact owner steps. OA-1 OPEN (owner action).",
+      "next_action": "Resume P5-T3 while owner performs extension attach."
     }
   ],
   "owner_action_queue": [
@@ -1071,10 +1078,10 @@
       "when": "now (DEPLOY-F1 ready)",
       "blocks": "DEPLOY-F2/F3",
       "safe_default": "stay local",
-      "status": "ANSWERED",
+      "status": "OPEN",
       "owner_response": "Oracle signup+MFA complete in Chrome profile 'Tyrone - Work' (northstarosllc@gmail.com)",
-      "verification": "BLOCKED: profile mismatch. ChromeControl (separate project) is configured to C:\\Users\\T2Hol\\AppData\\Local\\NorthstarOS\\ChromeResearchProfile with attachment_mode=disconnected and default_profile_verified=false; the owner's Oracle session is in a different Chrome profile. No cookies/tokens/profile data copied.",
-      "how_to_complete": "Owner: attach ChromeControl to the Chrome session that holds 'Tyrone - Work' via a supported mode (existing_default_profile_extension or existing_default_profile_browser_approved per docs/autothink-chromecontrol.md), then run `npm run chromecontrol:connect`; OR report non-secret Oracle facts (home region, Always Free eligibility) manually. I will then run the sign-in gate + read-only check."
+      "verification": "ACTION REQUIRED (owner). Supported mode exists: existing_default_profile_extension (Playwright MCP Bridge extension). ChromeControl currently separate_profile_cdp/disconnected (ChromeResearchProfile). No profile data copied.",
+      "how_to_complete": "1) Owner installs the Playwright Extension in the signed-in Chrome (https://chromewebstore.google.com/detail/playwright-extension/mmlmfjhmonkocbjadbfplnigmagldckm) - owner action, no silent install. 2) Set env NORTHSTAR_CC_ATTACH=extension (per config/attachment.json). 3) Restart opencode so Playwright MCP relaunches with --extension --profile-dir-name Default (project opencode.json already uses this) - owner-approved config action. 4) On first connection approve the connection / select the intended tab. 5) Optional PLAYWRIGHT_MCP_EXTENSION_TOKEN (from extension status page). 6) Run `npm run chromecontrol:connect-ext` for exact steps; verify with `npm run chromecontrol:connect` and `npm run chromecontrol:status` (default_profile_verified=true only once the bridge is confirmed). CAVEAT: this mode targets the Default profile dir; if 'Tyrone - Work' is a named (non-Default) Chrome profile, confirm which profile dir holds the Oracle session before attaching. Then I run the sign-in gate + read-only inspection (no credentials, no resource creation)."
     },
     {
       "id": "OA-2",
