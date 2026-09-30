@@ -314,6 +314,7 @@ export default function CreativeStudio() {
         <button className="btn btn-sm btn-ghost" onClick={() => go('exports')}>Export Bundle</button>
       </>}
     >
+      <div className="room-bottom-safe">
       <DataNotice tone="sample" title="This room is a local workflow workspace">
         Briefs, requests, assets, variants, and bundles are real records you create here and are stored in this browser.
         No image or video is generated or depicted — there is no wired creative provider in this build. A blocked request
@@ -438,7 +439,14 @@ export default function CreativeStudio() {
                     ? <div className="text-low" style={{ fontSize: 12 }}>No reference assets yet — add them in the Assets tab.</div>
                     : <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                         {assets.map(a => (
-                          <button key={a.id} className={`filter-pill ${refIds.includes(a.id) ? 'active' : ''}`} onClick={() => toggleRef(a.id)} title={`${a.collection} · ${a.state}`}>
+                          <button
+                            key={a.id}
+                            type="button"
+                            aria-pressed={refIds.includes(a.id)}
+                            className={`ref-chip ${refIds.includes(a.id) ? 'selected' : ''}`}
+                            onClick={() => toggleRef(a.id)}
+                            title={`${a.collection} · ${a.state}`}
+                          >
                             {a.name}
                           </button>
                         ))}
@@ -598,9 +606,17 @@ export default function CreativeStudio() {
                 </div>
                 <div className="text-low" style={{ fontSize: 11, marginBottom: 2 }}>{briefName(v.brief)}</div>
                 <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginBottom: 8 }}>{v.note}</div>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  <button className="btn btn-sm btn-ghost" onClick={() => setVariantState(v.id, 'Changes Requested')}>Request Changes</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => setVariantState(v.id, 'Approved')}>Approve</button>
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+                  {v.state === 'Approved' ? (
+                    <span className="pill pill-forest" style={{ fontSize: 10 }} title="Approved — final internal review state; not a publishing authorization">Approved — no action needed</span>
+                  ) : (
+                    <>
+                      {v.state !== 'Changes Requested' && (
+                        <button className="btn btn-sm btn-ghost" onClick={() => setVariantState(v.id, 'Changes Requested')}>Request Changes</button>
+                      )}
+                      <button className="btn btn-sm btn-ghost" onClick={() => setVariantState(v.id, 'Approved')}>Approve</button>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
@@ -766,6 +782,7 @@ export default function CreativeStudio() {
           </div>
         </div>
       )}
+      </div>
     </PageLayout>
   )
 }

@@ -418,3 +418,47 @@ tbody tr:last-child td { border-bottom: none; }
   .grid-cards-4 { grid-template-columns: repeat(4, minmax(200px, 1fr)); overflow-x: auto; padding-bottom: 6px; }
   .split-aside, .split-aside-l, .split-aside-r { grid-template-columns: 1fr; }
 }
+
+/* ── REFERENCE-ASSET CHIPS (Creative Studio image composer) ──
+   These chips sit inside a plain card, not .room-toolbar, so they carry their
+   own base + an unmistakable selected state (filled pine + check mark). */
+.ref-chip {
+  display: inline-flex; align-items: center; gap: 6px; max-width: 100%;
+  padding: 5px 11px; border: 1px solid var(--divider); border-radius: 999px;
+  background: var(--surface); font-size: 12px; color: var(--ink-mid);
+  cursor: pointer; font-family: var(--font-ui); transition: all var(--t-fast);
+}
+.ref-chip:hover { border-color: var(--divider-strong); color: var(--forest); background: var(--surface-hover); }
+.ref-chip.selected {
+  background: var(--forest); color: #fff; border-color: var(--pine-deep);
+  font-weight: 600; box-shadow: 0 0 0 2px var(--forest-glow), var(--shadow-sm);
+}
+.ref-chip.selected::before { content: '✓'; font-weight: 700; line-height: 1; }
+
+/* ── SOCIALPULSE CALENDAR — desktop month grid, phone-width agenda ──
+   The 7-column grid is unreadable at phone widths, so phone view swaps to a
+   compact agenda list built from the same honest local schedule records. */
+.sp-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; font-size: 11px; }
+.sp-cal-agenda { display: none; }
+.sp-agenda-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--divider);
+}
+.sp-agenda-row:last-child { border-bottom: none; }
+.sp-agenda-day {
+  flex-shrink: 0; min-width: 58px; font-family: var(--font-ui);
+  font-size: 11px; font-weight: 700; color: var(--forest);
+}
+@media (max-width: 480px) {
+  .sp-cal-grid { display: none; }
+  .sp-cal-agenda { display: block; }
+}
+
+/* ── MOBILE BOTTOM-NAV CLEARANCE ──
+   The fixed mobile nav must never cover the final room content. Applied to the
+   Creative Studio + SocialPulse room shells, with safe-area clearance so the
+   home indicator on notched phones does not clip the last row. */
+.room-bottom-safe { padding-bottom: 8px; }
+@media (max-width: 900px) {
+  .room-bottom-safe { padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); }
+}

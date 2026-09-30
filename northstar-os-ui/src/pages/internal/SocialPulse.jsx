@@ -25,7 +25,7 @@ import { useEffect, useMemo, useState } from 'react'
 const TABS = [
   { id: 'calendar', label: 'Calendar' },
   { id: 'campaigns', label: 'Campaigns' },
-  { id: 'queue', label: 'Workflow', count: 2 },
+  { id: 'queue', label: 'Workflow' },
   { id: 'composer', label: 'Composer' },
   { id: 'channels', label: 'Channel Fit' },
   { id: 'assets', label: 'Asset Library' },
@@ -114,6 +114,20 @@ const MONTH_CELLS = (() => {
   return cells
 })()
 
+// Exact calendar day-token match. A naive substring test made "Sep 2" match
+// "Sep 28"; parse the day number and compare numerically instead.
+function postsOnDay(posts, day) {
+  return posts.filter(p => {
+    if (!p.when) return false
+    const m = p.when.match(/Sep\s+(\d{1,2})\b/)
+    return !!m && Number(m[1]) === day
+  })
+}
+function dayLabel(when) {
+  const m = when && when.match(/Sep\s+\d{1,2}/)
+  return m ? m[0] : (when || '')
+}
+
 function assetStatePill(state) {
   if (state === 'Approved') return 'pill-muted'
   if (state === 'UNREVIEWED' || state === 'Missing alt text') return 'pill-unknown'
@@ -165,6 +179,19 @@ export default function SocialPulse() {
   const inReview = posts.filter(p => p.state === 'In Review')
   const reviewCount = inReview.length
 
+  // Live Workflow badge — same local state source as the Approvals queue and
+  // the board's "In Review" column. Never a hard-coded number.
+  const tabs = useMemo(
+    () => TABS.map(tb => tb.id === 'queue' ? { ...tb, count: reviewCount } : tb),
+    [reviewCount],
+  )
+  const scheduledPosts = useMemo(
+    () => postsInCampaign
+      .filter(p => p.when)
+      .sort((a, b) => (Number((a.when.match(/Sep\s+(\d{1,2})/) || [])[1] || 0)) - (Number((b.when.match(/Sep\s+(\d{1,2})/) || [])[1] || 0))),
+    [postsInCampaign],
+  )
+
   const advance = (id, next, note) => {
     setPosts(prev => prev.map(p => p.id === id ? { ...p, state: next } : p))
     t(`${id} → ${next}. ${note}`, 'info')
@@ -190,6 +217,7 @@ export default function SocialPulse() {
         <button className="btn btn-sm btn-ghost" onClick={() => go('approvals')}>Send for Approval</button>
       </>}
     >
+      <div className="room-bottom-safe">
       <DataNotice tone="sample" title="Local content operations — not a publisher">
         Campaigns, posts, and approvals are real records stored in this browser. There is no social OAuth and no outbound
         posting. Performance figures require a connected analytics provider and read UNKNOWN until one exists — never a
@@ -214,7 +242,7 @@ export default function SocialPulse() {
         </div>
       </div>
 
-      <RoomTabs tabs={TABS} base="/socialpulse" />
+      <RoomTabs tabs={tabs} base="/socialpulse" />
 
       {view === 'calendar' && (
         <div className="subview">
@@ -224,12 +252,12 @@ export default function SocialPulse() {
                 <h3 className="card-title">September 2026 — {campaign}</h3>
                 <span className="pill pill-muted">{postsInCampaign.length} planned · local records</span>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 6, fontSize: 11 }}>
+              <div className="sp-cal-grid">
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
                   <div key={d} className="text-low" style={{ textAlign: 'center', paddingBottom: 4 }}>{d}</div>
                 ))}
                 {MONTH_CELLS.map((cell, i) => {
-                  const dayPosts = cell.out ? [] : postsInCampaign.filter(p => p.when && p.when.includes(`Sep ${cell.day}`))
+                  const dayPosts = cell.out ? [] : postsOnDay(postsInCampaign, cell.day)
                   return (
                     <div key={i} style={{
                       minHeight: 74,
@@ -253,8 +281,25 @@ export default function SocialPulse() {
                   )
                 })}
               </div>
+
+              {/* Phone-width replacement for the 7-column grid — same honest
+                  local schedule records, rendered as a readable agenda list. */}
+              <div className="sp-cal-agenda">
+                {scheduledPosts.length === 0 ? (
+                  <div className="text-low" style={{ fontSize: 12 }}>No posts have a manual schedule reminder yet.</div>
+                ) : scheduledPosts.map(p => (
+                  <div key={p.id} className="sp-agenda-row">
+                    <div className="sp-agenda-day">{dayLabel(p.when)}</div>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 12, fontWeight: 500 }}>{p.title}</div>
+                      <div className="text-low" style={{ fontSize: 10, marginTop: 2 }}>{p.platform} · {p.state}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               <div className="text-low" style={{ fontSize: 11, marginTop: 12 }}>
-                Only posts with a manual schedule reminder appear on the grid. The calendar is a planning surface — it never triggers a post.
+                Only posts with a manual schedule reminder appear here. The calendar is a planning surface — it never triggers a post.
               </div>
             </div>
 
@@ -416,9 +461,9 @@ export default function SocialPulse() {
                 </div>
                 <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
                   <button className="btn btn-sm" onClick={addDraft}>Save Draft</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => t('Variant suggestions are a local planning aid — review each before scheduling; nothing publishes.', 'info')}>Generate Variants</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => t('Schedule records a manual reminder only — no account is connected.', 'info')}>Schedule</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => { addDraft(); go('approvals') }}>Send for Approval</button>
+                </div>
+                <div className="text-low" style={{ fontSize: 11 }}>
+                  Generate Variants, Schedule, and Send for Approval are in the room actions above — this footer saves the draft only.
                 </div>
               </div>
             </div>
@@ -618,6 +663,7 @@ export default function SocialPulse() {
           </div>
         </div>
       )}
+      </div>
     </PageLayout>
   )
 }
