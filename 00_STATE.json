@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T02:13:18Z",
+  "last_updated": "2026-09-30T02:13:40Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1122,7 +1122,7 @@
       "safe_default": "stay local",
       "status": "OPEN",
       "owner_response": "Target profile confirmed: C:\\Users\\T2Hol\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6 (Oracle signed in). Owner approves project-local profile selection for extension attachment.",
-      "verification": "STILL UNVERIFIED after restart+approval. Browser tool tab list = ['about:blank'] only (not Profile 6). Process evidence: both server types running - multiple '--browser chrome --user-data-dir C:\\Users\\T2Hol\\.config\\opencode\\chrome-t2' instances AND multiple '--extension --profile-dir-name 'Profile 6'' instances; the tool-bound connection still returns the chrome-t2 about:blank. Project-local override in Northstar opencode.jsonc present; global config unchanged; no processes killed; no substitute browser launched.",
+      "verification": "Stale chrome-t2 MCP PIDs observed: 84420,54584,75172,77768,3536,77476. Active tool connection still binds about:blank from chrome-t2. Correct target = C:\\Users\\T2Hol\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6. Awaiting owner approval to kill stale processes and/or edit active global config.",
       "how_to_complete": "Owner-approved cleanup likely needed: (a) fully quit opencode and confirm no stray node @playwright/mcp processes remain, or separate owner approval to kill the stale chrome-t2 MCP instances; (b) confirm the project-local override loaded; (c) in Profile 6 approve the extension. Then reply 'continue'."
     },
     {
