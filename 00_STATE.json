@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T01:41:57Z",
+  "last_updated": "2026-09-30T01:42:59Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1054,6 +1054,13 @@
       "batch": "P5-T2",
       "summary": "P5-T2 Golden Goose decision endpoint DONE: routes POST /golden-goose/evaluate, GET /golden-goose/queue (empty, basis UNKNOWN), GET /golden-goose/{id} (404, no store yet), POST /golden-goose/{id}/decision (PERM_APPROVE). Score alone never PURCHASE_READY; SAMPLE never PURCHASE_READY. Tests 7/0.",
       "next_action": "P5-T3 Top-5 monthly job; verify OA-1 via ChromeControl project (owner-provided path)."
+    },
+    {
+      "ts": "2026-09-30T01:42:59Z",
+      "activity": "chromecontrol_oa1_verification",
+      "batch": "OA-1",
+      "summary": "Inspected owner-provided AutothinK ChromeControl project (C:\\Users\\T2Hol\\OneDrive\\Documents\\Default Project) and ran chromecontrol:status (read-only). ChromeControl is functional but attached to a SEPARATE profile (ChromeResearchProfile), attachment_mode=disconnected, default_profile_verified=false. The owner's Oracle session is in Chrome profile 'Tyrone - Work'. Profile mismatch -> OA-1 session verification BLOCKED; no cookie/token/profile copying performed. Provided supported connection steps.",
+      "next_action": "P5-T3 Top-5 monthly job; OA-1 awaits owner profile attach or non-secret facts."
     }
   ],
   "owner_action_queue": [
@@ -1065,8 +1072,9 @@
       "blocks": "DEPLOY-F2/F3",
       "safe_default": "stay local",
       "status": "ANSWERED",
-      "owner_response": "Oracle signup+MFA complete; Chrome profile Tyrone-Work (northstarosllc@gmail.com)",
-      "verification": "PENDING: ChromeConnect not implemented in repo; OpenCode browser is a separate profile; no credential entry"
+      "owner_response": "Oracle signup+MFA complete in Chrome profile 'Tyrone - Work' (northstarosllc@gmail.com)",
+      "verification": "BLOCKED: profile mismatch. ChromeControl (separate project) is configured to C:\\Users\\T2Hol\\AppData\\Local\\NorthstarOS\\ChromeResearchProfile with attachment_mode=disconnected and default_profile_verified=false; the owner's Oracle session is in a different Chrome profile. No cookies/tokens/profile data copied.",
+      "how_to_complete": "Owner: attach ChromeControl to the Chrome session that holds 'Tyrone - Work' via a supported mode (existing_default_profile_extension or existing_default_profile_browser_approved per docs/autothink-chromecontrol.md), then run `npm run chromecontrol:connect`; OR report non-secret Oracle facts (home region, Always Free eligibility) manually. I will then run the sign-in gate + read-only check."
     },
     {
       "id": "OA-2",
