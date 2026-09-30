@@ -2,6 +2,8 @@ import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import foundationApi from '../../foundation/api.js'
 
 const TABS = [
   { id: 'queue', label: 'Queue', count: 2 },
@@ -150,6 +152,32 @@ function oppCard(opp, navigate, toast) {
   )
 }
 
+function PersistedQueue() {
+  const [st, setSt] = useState({ loaded: false, items: [], basis: 'UNKNOWN' })
+  useEffect(() => {
+    let alive = true
+    foundationApi.goldenGooseQueue()
+      .then((r) => { if (alive) setSt({ loaded: true, items: r.items || [], basis: r.basis || 'UNKNOWN' }) })
+      .catch(() => { if (alive) setSt({ loaded: true, items: [], basis: 'UNKNOWN' }) })
+    return () => { alive = false }
+  }, [])
+  return (
+    <div className="card" data-testid="gg-persisted-queue">
+      <div className="card-head">
+        <h3 className="card-title">Persisted Queue</h3>
+        <span className="pill pill-muted" data-testid="gg-persisted-basis">{st.basis}</span>
+      </div>
+      {st.items.length > 0 ? (
+        <ul data-testid="gg-persisted-items">
+          {st.items.map((i) => <li key={i.item_id}>{i.item_id}{i.resale_score != null ? ' - score ' + i.resale_score : ''}</li>)}
+        </ul>
+      ) : (
+        <p data-testid="gg-persisted-empty">No persisted opportunities yet. Basis: UNKNOWN.</p>
+      )}
+    </div>
+  )
+}
+
 export default function GoldenGooseDesk() {
   const { toast } = useToast()
   const navigate = useNavigate()
@@ -177,6 +205,7 @@ export default function GoldenGooseDesk() {
 
       {view === 'queue' && (
         <div className="subview">
+          <PersistedQueue />
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Opportunity Queue</h3>

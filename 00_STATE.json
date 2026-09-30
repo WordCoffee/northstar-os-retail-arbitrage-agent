@@ -539,7 +539,7 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT \u2014 the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ \u2014 includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P5-T4 wire Golden Goose + Product Finder rooms",
+  "next_batch": "P5-T4 continue: item Review + Decisions views wired; P4-T3b filtering",
   "git_baseline": {
     "commit_hash": "97d5366",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -574,7 +574,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T02:38:41Z",
+  "last_updated": "2026-09-30T02:39:52Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1124,6 +1124,13 @@
       "batch": "OA-1",
       "summary": "Listed 7 Chrome profiles; selected by exact directory Profile 6 (display Work; name Work ambiguous across Profile 2/3/6). use-profile saved extension_profile_dir_name=Profile 6; launcher --print-args resolves --extension --profile-dir-name Profile 6. Reconnect required; did NOT open Oracle in stale chrome-t2; no process kill, no global config edit, no cloud action. STATUS: SELECTED_PROFILE_VERIFICATION_PENDING.",
       "next_action": "Owner restarts OpenCode + approves extension in Profile 6; reply continue; then verify bridge and open Oracle sign-in page (stop for owner sign-in)."
+    },
+    {
+      "ts": "2026-09-30T02:39:52Z",
+      "activity": "P5-T4_slice_persisted_queue",
+      "batch": "P5-T4",
+      "summary": "Added golden-goose client methods and a PersistedQueue panel rendering persisted org-scoped items (basis OBSERVED) or UNKNOWN when empty; new harness verify-golden-goose.cjs 5/0; no regression (smoke 42/0, guards 11/0, acceptance 27/0, invite 11/0). P5-T4 PARTIAL.",
+      "next_action": "Wire item Review + Decisions to persisted routes; P4-T3b filter; browser OA-1 pending owner restart."
     }
   ],
   "owner_action_queue": [

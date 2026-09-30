@@ -85,9 +85,13 @@ async function req(path, opts = {}) {
 }
 
 export const foundationApi = {
-  me: () => req('/me'),
-  roles: () => req('/roles'),
+  me: () => req('/me'),  roles: () => req('/roles'),
   environment: () => req('/environment'),
+  // Golden Goose (P5-T4) — org-scoped persisted routes
+  goldenGooseQueue: () => req('/golden-goose/queue'),
+  goldenGooseItem: (id) => req(`/golden-goose/${id}`),
+  goldenGooseDecision: (id, body) => req(`/golden-goose/${id}/decision`, { method: 'POST', body: JSON.stringify(body || {}) }),
+  goldenGooseEvaluate: (body) => req('/golden-goose/evaluate', { method: 'POST', body: JSON.stringify(body || {}) }),
   organizations: () => req('/organizations'),
   marketplaces: () => req('/marketplaces'),
   products: (limit = 50, offset = 0) => req(`/products?limit=${limit}&offset=${offset}`),
