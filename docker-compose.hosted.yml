@@ -1,0 +1,39 @@
+# Hosted (free private beta) override for docker-compose.yml.
+# ALWAYS combine with the base file and a dedicated untracked env file:
+#   docker compose -f docker-compose.yml -f docker-compose.hosted.yml \
+#       --env-file deploy/hosted.env up -d
+#
+# Hosted posture: ENVIRONMENT=staging; dev shim disabled; Owner Test Mode OFF.
+# Never reuse the local shell-injected dev signing key. Never use the malformed
+# root .env. Provide NORTHSTAR_JWT_SECRET/ISSUER/AUDIENCE in deploy/hosted.env.
+
+x-hosted-env: &hosted-env
+  ENVIRONMENT: staging
+  NS_FOUNDATION_ALLOW_REMOTE_DEV: "0"
+  NORTHSTAR_OWNER_TEST_MODE: "0"
+  NORTHSTAR_OWNER_SELF_APPROVAL: "0"
+
+services:
+  migrate:
+    environment: *hosted-env
+  api:
+    environment: *hosted-env
+  worker:
+    environment: *hosted-env
+  scheduler:
+    environment: *hosted-env
+
+  caddy:
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  caddy-data:
+  caddy-config:

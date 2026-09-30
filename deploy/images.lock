@@ -1,0 +1,20 @@
+# Deployable image pin (DEPLOY-F1). Base-image digests (multi-arch indexes).
+# Pin application images by these digests at DEPLOY-F5; do not deploy mutable
+# `latest` tags. Record the release commit + identifier in the release inventory.
+
+base_images:
+  "python:3.12-slim":    sha256:f77ac9e44ae96ef2c90b8053ea08c31f8be030f824196b0ae4db6d462c84e51f
+  "node:20-alpine":      sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+  "caddy:2-alpine":      sha256:6aeddd44c3078b0f9a35206472a11420648a79c184603ef95957d0a20044cb2b
+  "postgres:15-alpine":  sha256:f7d23353e1b15400d22ebe31189f4d314b87a4c129cc400c8c2d8d4ca127bf81
+
+application_images:
+  api:    built from Dockerfile.api  (tag by release id at DEPLOY-F5)
+  ui:     built from Dockerfile.ui   (tag by release id at DEPLOY-F5)
+  caddy-runtime: built from Dockerfile.ui (caddy stage)
+
+target_platform: linux/arm64
+
+release:
+  commit:  ""      # set at DEPLOY-F5 to the clean release commit
+  release_id: ""   # set at DEPLOY-F5 (e.g. beta-YYYYMMDD-N)

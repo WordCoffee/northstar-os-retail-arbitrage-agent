@@ -15,7 +15,7 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
 | P1-T1 Baseline | DONE | | all four UI harnesses pass (40/8/26/11); backend invite+auth 23 passed + foundation auth subset 108p/7s; costco 217p/0f (plan expected 191 — see Baseline); test_frontend_gate.py 2 failed/23 passed (known) |
 | P1-T2 Fix test_frontend_gate.py | DONE | | replaced retired Sidebar.jsx + "Legacy UI disabled" assertions with v3 invariants; gate 25 passed/0 failed |
 | P1-T3 Frontend defects F1-F11 | DONE | | F1-F8,F11 fixed (F9/F10 deferred to P8). App.jsx hosts F2/F3/F4 and was committed once. Harnesses green: smoke 40/0, guards 11/0, acceptance 26/0, invite 11/0; frontend gate 25/0 |
-| P2-T1 Hosting intake | DONE | | owner silent; default applied: local Docker Compose only, no public URL, no domain/VPS yet |
+| P2-T1 Hosting intake | DONE | | original: owner silent; default applied: local Docker Compose only, no public URL, no domain/VPS. SUPERSEDED for deployment preparation (not erased) by the 2026-09-29 owner decision: attempt OCI Always Free, $0 infra, neutral free hostname; see Owner Answers + Deployment track. |
 | P2-T2 Containerize | DONE | | Dockerfile.api/.ui, Caddyfile, docker-compose.yml (api/worker/scheduler/postgres/caddy/migrate); GET /api/v1/foundation/health added; stack verified: health ok (db_backend=postgres), UI 200 at http://127.0.0.1/ui/. Existing compose preserved as docker-compose.local.yml. Pre-existing malformed root `.env` (line 98) blocks plain `up`; used `--env-file .env.example` |
 | P2-T3 BrowserRouter migration | DONE | | App.jsx HashRouter->BrowserRouter basename="/ui"; BetaInviteAccept links/router nav; four harnesses rewritten to path routing; direct load /ui/golden-goose 200 + renders; smoke 42/0, guards 11/0, acceptance 27/0, invite 11/0; frontend gate 25/0 |
 | P2-T4 Postgres in hosted mode | DONE | | DB_URL canonical (+legacy FOUNDATION_DB_URL); migrate entrypoint records `schema_migrations` + checksum drift; startup check fails closed in hosted env (dev no-op). Compose stack: migrations 7/7, ledger=7, api health ok. SQLite foundation suite 642 passed/58 skipped/0 failed. Postgres suite 45 passed/0 failed against a self-spun disposable PG (127.0.0.1:55443, `northstar-pg-testrun`), torn down after. Test guards decoupled from port 55432 via `NORTHSTAR_PG_TEST_PORT/USER/DB` env. |
@@ -29,6 +29,21 @@ Branch: `build/master-plan`. Base commit: `5967f7e`.
 | P3-T3 Non-bypassed rules | DONE | | `tests/test_owner_test_mode_non_bypass.py` (9/0) with Owner Test Mode ACTIVE: missing gates stay UNKNOWN (never PASS); score alone never PURCHASE_READY; gates+econ still require separate approval; unregistered job types fail closed (`UnknownJobType`); disabled providers fail closed (`provider_disabled`/`ProviderDisabledError`); provider enabled-state not altered by test mode; signed-out request 401; tenant isolation 403 for non-owner; frozen-file boundary asserted as a STATIC repo/process rule (not runtime-tested). NOTE: provider ARMING + hard daily/monthly spend caps are P7-T1 (not implemented) — not claimed as tested. |
 | P3-T4 Demo Dataset toggle | DONE | | `foundation/demo_dataset.py` + migration `010_demo_dataset.sql`: owner-only `/demo/status|enable|disable`; SAMPLE rows in a separate `demo_observations` table (basis=`SAMPLE`, is_sample=1), hidden by default (no settings row), excluded from real `observations`/aggregates; toggling on/off never mutates real data; SAMPLE can never reach PURCHASE_READY (`golden_goose_decision.decide(sample=True)`). Tests 7/0 (+ golden_goose/demo subset 52/0). |
 | P4-T1 Pack-count diagnostic | PENDING | | |
+
+## Deployment track — Free private beta (OCI Always Free, $0 infra)
+
+Binding update 2026-09-29. Room-readiness labels are separate from card status.
+
+| Card | Status | Notes |
+|---|---|---|
+| DEPLOY-F1 Local architecture preflight | DONE | docs/FREE_BETA_DEPLOYMENT.md; docker-compose.hosted.yml (staging posture, remote-dev off, Owner Test Mode off, Caddy 80/443 + cert volumes); deploy/hosted.env.example (names only); deploy/images.lock (base digests + linux/arm64); deploy/backup.sh + deploy/restore.sh. ARM64: `ns-api-arm64:f1` + `ns-ui-arm64:f1` built under QEMU (early signal) + arm64 import smoke ok; real ARM acceptance deferred to F5/F6. Hosted compose config validates; prerequisite subset 165 passed / 7 skipped / 0 failed. No Oracle account/cloud resources created. |
+| DEPLOY-F2 Oracle account handoff | BLOCKED | owner account/verification/MFA/home-region; requires owner action + (optional) ChromeConnect; no cloud resources. |
+| DEPLOY-F3 Resource approval + provisioning | BLOCKED | needs approved free-eligible resource packet + capacity; $0 verification required. |
+| DEPLOY-F4 Hostname + HTTPS | BLOCKED | DuckDNS candidate; owner login + hostname approval. |
+| DEPLOY-F5 Host hardening, deploy, recovery | BLOCKED | depends on F3/F4. |
+| DEPLOY-F6 Hosted acceptance | BLOCKED | depends on F5; P2-T5 hosted sign-in + P2-T6 stay PARTIAL until it passes. |
+| DEPLOY-F7 Five-tester rollout | BLOCKED | owner-approved tester identities; after F6 evidence. |
+| DEPLOY-F8 Email (optional later) | BLOCKED | no approved sender domain → manual invite links required. |
 
 ## Backup record
 
@@ -83,6 +98,7 @@ Resolved in the resume kickoff (addendum, 2026-09-28) — do not re-ask:
 - P0-T2 two-repo: default B (two repos + ingest contract) per prior assumption.
 - P2-T1 hosting: local Compose only until domain/VPS/email supplied.
 - (2026-09-29) **P2-T6 = B: defer hosting, stay local.** Do NOT deploy publicly or purchase infrastructure. Keep P2-T6 and the P2-T5 hosted-HTTPS sign-in acceptance item PARTIAL. Do not re-ask for domain/VPS until the owner says they have them.
+- (2026-09-29) **SUPERSEDES the local-only deployment posture for preparation only.** New owner deployment decision: continue local dev; attempt an Oracle Cloud Infrastructure **Always Free** deployment for a private beta; use a stable neutral free hostname; **$0 infrastructure spend**; no permanent domain, no VPS purchase, no paid upgrade, no paid fallback, no trial-credit use; ask before any payment/upgrade/billable resource. Rollout: owner + disposable accounts → one real tester → five testers only after first external acceptance → beyond five only after measured gates + separate owner decision. The 50-subscriber test is NOT authorized. Public product name stays provisional. The earlier local-only decision is retained as history; this update supersedes it for deployment preparation. Paid AI/data is governed separately and unchanged. Amazon/SP-API/Seller-Central/retail-automation exclusions remain in force.
 
 ## Baseline (P1-T1, 2026-09-28, branch build/master-plan)
 
