@@ -2,12 +2,59 @@ import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import foundationApi from '../../foundation/api.js'
+import { settle } from '../../services/signals.js'
 
 const TABS = [
   { id: 'adapters', label: 'Adapters', count: 4 },
   { id: 'health', label: 'Health' },
   { id: 'config', label: 'Configuration' },
 ]
+
+// ═══ Real provider registry (foundation read; credential NAMES only) ═══
+function FoundationProviderRegistry() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(foundationApi.providers()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', items: r.value.items || [] })
+      else setSt({ phase: (r.error && r.error.status === 401) ? 'auth' : 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+  const badge = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
+    : st.phase === 'auth' ? { l: 'sign-in required', t: 'unknown' }
+      : st.phase === 'error' ? { l: 'unavailable', t: 'unknown' }
+        : { l: 'live · foundation', t: 'muted' }
+  return (
+    <div className="card" data-testid="pa-registry" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Provider registry</h3>
+        <span className={`pill pill-${badge.t}`}>{badge.l}</span>
+      </div>
+      {st.phase === 'loading' && <p style={{ fontSize: 13 }}>Loading provider registry…</p>}
+      {st.phase === 'auth' && <p style={{ fontSize: 13 }}>Sign in to read the provider registry.</p>}
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Provider registry unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {st.phase === 'loaded' && (st.items.length > 0 ? (
+        <DataTable columns={[
+          { key: 'name', label: 'Provider', render: (v, row) => v || row.provider_key },
+          { key: 'provider_key', label: 'Key', render: (v) => <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>{v}</span> },
+          { key: 'category', label: 'Category', render: (v) => <span className="pill pill-muted">{v || 'UNKNOWN'}</span> },
+          { key: 'read_capable', label: 'Access', render: (v, row) => <span className="pill pill-muted">{v ? 'read' : ''}{row.write_capable ? ' + write' : ''}{!v && !row.write_capable ? '—' : ''}</span> },
+          { key: 'credential_ref_names', label: 'Credential names', render: (v) => (v && v.length) ? <span className="inline-flex" style={{ gap: 4, flexWrap: 'wrap' }}>{v.map(n => <span key={n} className="pill pill-muted" style={{ fontSize: 10 }}>{n}</span>)}</span> : <span className="pill pill-muted">none</span> },
+          { key: 'sandbox_supported', label: 'Sandbox', render: (v) => <span className="pill pill-muted">{v ? 'yes' : 'no'}</span> },
+          { key: 'enabled', label: 'Enabled', render: (v) => <span className={`pill ${v ? 'pill-ok' : 'pill-muted'}`} title="Provider arming is an owner decision; disabled by default">{v ? 'enabled' : 'disabled'}</span> },
+          { key: 'health', label: 'Health', render: (v) => <span className="pill pill-muted">{v || 'UNKNOWN'}</span> },
+        ]} rows={st.items} />
+      ) : (
+        <p data-testid="pa-registry-empty" style={{ fontSize: 13 }}>No providers are registered in the foundation yet.</p>
+      ))}
+      <div className="text-low" style={{ fontSize: 11, marginTop: 10 }}>Credential reference <em>names</em> only — values live in the vault and are never exposed. Arming a provider is an owner decision.</div>
+    </div>
+  )
+}
 
 export default function ProviderAdapters() {
   const { toast } = useToast()
@@ -26,8 +73,10 @@ export default function ProviderAdapters() {
       </>}
     >
       <DataNotice tone="internal" title="Controlled provider state">
-        Adapters operate under rate limits and controlled state. Live provider calls are NOT made during normal browsing. Data is cached, observed, or historical.
+        The “Provider registry” card is a live foundation read (credential names only). The adapter status and configuration views below are sample/observed. Live provider calls are NOT made during normal browsing.
       </DataNotice>
+
+      <FoundationProviderRegistry />
 
       <RoomTabs tabs={TABS} base="/provider-adapters" />
 
@@ -35,8 +84,8 @@ export default function ProviderAdapters() {
         <div className="subview">
           <div className="card">
             <div className="card-head">
-              <h3 className="card-title">Adapter Status</h3>
-              <span className="pill pill-muted">4 adapters</span>
+              <h3 className="card-title">Sample adapters (preview)</h3>
+              <span className="pill pill-muted">4 adapters · sample</span>
             </div>
             <DataTable columns={[
               { key: 'adapter', label: 'Adapter' },
