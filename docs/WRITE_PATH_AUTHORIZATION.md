@@ -1,11 +1,11 @@
 # Write-Path Authorization Map (non-creative admin/operator surface)
 
-**Status:** design + scoped activations. **Six actions are ACTIVATED**
+**Status:** design + scoped activations. **Seven actions are ACTIVATED**
 (owner-approved, platform-admin only): **Issue invite**, **Revoke invite**,
-**Grant / activate organization**, **Suspend organization**,
-**Resume organization**, and the read-only **Dashboard export CSV**. Every other
-classified action remains disabled; activation of any further action requires
-explicit owner approval.
+**Grant / activate organization**, **Plan / tier change**, **Suspend
+organization**, **Resume organization**, and the read-only **Dashboard export
+CSV**. Every other classified action remains disabled; activation of any further
+action requires explicit owner approval.
 
 **Scope:** Beta-Ops / Admin / Support / Audit / account write surfaces outside the
 creative-media cluster.
@@ -37,7 +37,7 @@ so the **next authenticated request is blocked**.
 | Action | UI state | Backend route | Risk | Classification |
 |---|---|---|---|---|
 | Grant / activate | **ACTIVATED — OrgDetail (platform-admin only)** | `POST /admin/orgs/{id}/grant` | High (access grant) | **ACTIVATED (owner-approved)** — confirmation + reason; **checklist-gated** (eligible `invited|onboarding`, legal acceptance complete, invite recorded; unknown blocks); audit `org.lifecycle.onboarding` / `org.lifecycle.active`; changes lifecycle state only (no plan/billing/entitlements) |
-| Change plan | no UI | `POST /admin/orgs/{id}/plan` | Medium | ENABLE LATER WITH OWNER APPROVAL |
+| Change plan | **ACTIVATED — OrgDetail (platform-admin only)** | `POST /admin/orgs/{id}/plan` | Medium | **ACTIVATED (owner-approved)** — confirmation + reason; cohorts `free|trial|pro|team` (backend-defined); no-op disabled; audit `admin.plan.change`; updates tier + admin-assigned subscription record and refreshes entitlements (normal semantics; no charge, no override) |
 | Suspend | **ACTIVATED — OrgDetail (platform-admin only)** | `POST /admin/orgs/{id}/suspend` | High (blocks access) | **ACTIVATED (owner-approved)** — confirmation + reason; append-only audit `org.lifecycle.suspended`; eligible from onboarding/active/paused/downgraded |
 | Resume | **ACTIVATED — OrgDetail (platform-admin only)** | `POST /admin/orgs/{id}/resume` | Low–Med (restore) | **ACTIVATED (owner-approved)** — confirmation + reason; audit `org.lifecycle.active`; restores access only (not plan/entitlements); eligible from suspended/paused |
 | Downgrade | disabled (select) | `POST /admin/orgs/{id}/downgrade` | High | REQUIRE PER-EVENT OWNER CONFIRMATION |

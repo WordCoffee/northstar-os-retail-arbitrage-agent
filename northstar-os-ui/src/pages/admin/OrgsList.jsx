@@ -258,6 +258,107 @@ function GrantControl({ id, record, onDone }) {
   )
 }
 
+// ═══ Activated plan/tier change (platform-admin only) ═══
+// Cohorts mirror the backend source of truth (foundation/billing/tiers.py).
+const PLAN_COHORTS = [
+  { cohort: 'free', tier: 'free', label: 'Free (beta)' },
+  { cohort: 'trial', tier: 'trial', label: 'Trial (beta)' },
+  { cohort: 'pro', tier: 'pro', label: 'Pro (beta)' },
+  { cohort: 'team', tier: 'team', label: 'Team (beta)' },
+]
+
+function PlanChangeControl({ id, record, onDone }) {
+  const [cohort, setCohort] = useState('')
+  const [reason, setReason] = useState('')
+  const [confirmed, setConfirmed] = useState(false)
+  const [state, setState] = useState({ phase: 'idle' })
+
+  const currentTier = record ? record.plan_tier : undefined
+  const selected = PLAN_COHORTS.find(c => c.cohort === cohort) || null
+  const noop = !!(selected && currentTier && selected.tier === currentTier)
+  const canSubmit = !!record && !!selected && !noop && confirmed && state.phase !== 'submitting'
+  const blockReason = !record ? 'No organization record loaded.'
+    : !selected ? 'Select a plan to change.'
+      : noop ? 'Already on this plan (no-op).' : null
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (!canSubmit) return
+    setState({ phase: 'submitting' })
+    const r = await settle(foundationApi.adminOrgAction(id, 'plan', { cohort, reason: reason.trim() || undefined }))
+    if (r.ok) {
+      setState({ phase: 'success', value: r.value })
+      setConfirmed(false); setReason('')
+      if (onDone) onDone()
+    } else {
+      const s = r.error && r.error.status, code = r.error && r.error.code
+      setState({
+        phase: s === 401 ? 'auth' : s === 403 ? 'forbidden' : s === 404 ? 'not_found' : 'error',
+        message: code === 'unknown_cohort' ? 'Unknown plan cohort — backend rejected the target.'
+          : (r.error && r.error.message) || `Plan change failed${code ? ` (${code})` : ''}.`,
+      })
+    }
+  }
+
+  return (
+    <div className="card" data-testid="org-plan-change" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Plan / tier</h3>
+        <span className="pill pill-ochre">active · platform admin</span>
+      </div>
+      <AuthorizationNote
+        title="Plan / tier change"
+        status="Active — platform-admin only"
+        route="POST /api/v1/foundation/admin/orgs/{id}/plan"
+        permission="PERM_PLATFORM_ADMIN"
+        audit="admin.plan.change"
+      >
+        Changes the organization&apos;s assigned plan tier and refreshes entitlements for that tier (normal plan semantics). It creates/updates an admin-assigned subscription record — <strong>no charge</strong> and <strong>no entitlement override</strong>. Audited as <span style={{ fontFamily: 'var(--font-mono)' }}>admin.plan.change</span>. Other admin mutations remain disabled.
+      </AuthorizationNote>
+      <div className="inline-flex" style={{ gap: 8, marginBottom: 12 }}>
+        <span className="text-low" style={{ fontSize: 11 }}>Current plan</span>
+        <span className="pill pill-muted" title="Assigned plan tier">{currentTier || 'UNKNOWN'}</span>
+        {record && record.subscription_status && <span className="pill pill-muted">subscription: {record.subscription_status}</span>}
+      </div>
+      <form className="stack" style={{ gap: 10 }} onSubmit={submit}>
+        <div className="field-group">
+          <label className="label">Target plan</label>
+          <select className="field" value={cohort} onChange={e => setCohort(e.target.value)}>
+            <option value="">Select a plan…</option>
+            {PLAN_COHORTS.map(c => <option key={c.cohort} value={c.cohort}>{c.label}</option>)}
+          </select>
+        </div>
+        <div className="field-group">
+          <label className="label">Reason (optional)</label>
+          <input className="field" value={reason} onChange={e => setReason(e.target.value)} placeholder="Why this plan is being assigned" disabled={!record} />
+        </div>
+        <div className="check-row">
+          <input type="checkbox" id="plan-confirm" checked={confirmed} onChange={e => setConfirmed(e.target.checked)} disabled={!record || !selected || noop} />
+          <label htmlFor="plan-confirm">I understand this changes the assigned plan tier and refreshes entitlements for this tier (no charge).</label>
+        </div>
+        {blockReason && <div className="text-low" style={{ fontSize: 12 }}>{blockReason}</div>}
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button
+            className="btn btn-primary"
+            type="submit"
+            disabled={!canSubmit}
+            title={!record ? 'No organization record' : !selected ? 'Select a plan' : noop ? 'Already on this plan' : !confirmed ? 'Confirm before changing' : 'Change plan tier'}
+          >{state.phase === 'submitting' ? 'Changing…' : 'Change plan'}</button>
+          {state.phase === 'success' && (
+            <span className="pill pill-ok" data-testid="org-plan-success">
+              Plan → {(state.value && state.value.plan && state.value.plan.tier) || selected.tier} — audit event admin.plan.change recorded
+            </span>
+          )}
+          {state.phase === 'auth' && <span className="pill pill-unknown">Sign in required — session expired.</span>}
+          {state.phase === 'forbidden' && <span className="pill pill-warn">Not permitted — platform-admin access required.</span>}
+          {state.phase === 'not_found' && <span className="pill pill-warn">{state.message || 'Organization not found.'}</span>}
+          {state.phase === 'error' && <span className="pill pill-warn">{state.message}</span>}
+        </div>
+      </form>
+    </div>
+  )
+}
+
 function LifecycleControls({ id, state, onDone }) {
   const suspendEligible = SUSPEND_ELIGIBLE.includes(state)
   const resumeEligible = RESUME_ELIGIBLE.includes(state)
@@ -335,6 +436,7 @@ function FoundationOrgDetail({ id }) {
             <span className="pill pill-muted">acceptance {o.acceptance_complete ? 'complete' : 'incomplete'}</span>
           </div>
           <GrantControl id={id} record={o} onDone={() => setReloadKey(k => k + 1)} />
+          <PlanChangeControl id={id} record={o} onDone={() => setReloadKey(k => k + 1)} />
           <LifecycleControls id={id} state={o.lifecycle_state} onDone={() => setReloadKey(k => k + 1)} />
           {Array.isArray(o.notes) && o.notes.length > 0 && (
             <div style={{ marginBottom: 8 }}>
