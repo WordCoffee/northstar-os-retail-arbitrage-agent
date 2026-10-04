@@ -45,10 +45,23 @@ const AD_PLACEMENTS = [
 ]
 const AD_CTA = ['Shop now', 'Learn more', 'See the offer', 'Get the deal', 'Compare options']
 
-// ── Local provider posture. Verified against repo: no creative route is
-//    exposed to the UI; the local engine is not connected in this build. ──
+// ── Local provider posture. Verified against the repo (2026-10-04):
+//    → A local image CLI exists (tools/generate_images.py --backend local →
+//      ComfyUI at COMFYUI_URL), but NO HTTP route exposes it to this app.
+//    → No local engine is reachable in this build and MEDIA_GEN_LIVE is off.
+//    → Image AND video generation are therefore PLANNED — NOT ARMED.
+//    Generation truth categories this room must distinguish:
+//      local (available) · gated (provider) · demo-only · planned/not-armed.
+const GEN_STATE = {
+  local: { pill: 'pill-forest', text: 'LOCAL GENERATION AVAILABLE' },
+  gated: { pill: 'pill-ochre', text: 'PROVIDER-GATED' },
+  demo: { pill: 'pill-muted', text: 'DEMO-ONLY' },
+  planned: { pill: 'pill-unknown', text: 'PLANNED — NOT ARMED' },
+}
+
 const IMAGE_PROVIDER = {
   connected: false,
+  state: 'planned',
   label: 'Local image engine',
   engine: 'ComfyUI',
   env: 'COMFYUI_URL',
@@ -57,6 +70,7 @@ const IMAGE_PROVIDER = {
 }
 const VIDEO_PROVIDER = {
   connected: false,
+  state: 'planned',
   label: 'Video / short-clip engine',
   engine: 'fal (Kling / Wan / Veo)',
   env: 'fal provider key',
@@ -64,11 +78,14 @@ const VIDEO_PROVIDER = {
   models: 'No local video pipeline exists in this build',
 }
 
+// Static prerequisite checklist. The app does NOT probe the engine yet (no
+// media route is wired), so each item is labelled with its honest truth state.
 const READINESS = [
-  { key: 'engine', label: 'Local image engine reachable', detail: `${IMAGE_PROVIDER.engine} at ${IMAGE_PROVIDER.env}`, ok: false },
-  { key: 'models', label: 'Model weights installed', detail: IMAGE_PROVIDER.models, ok: false },
-  { key: 'gate', label: 'Media live gate enabled', detail: `${IMAGE_PROVIDER.gate}=1`, ok: false },
-  { key: 'gpu', label: 'GPU available for local render', detail: 'RTX 5080 16GB (per project setup notes)', ok: false },
+  { key: 'route', label: 'Generation route exposed to the app', detail: 'No media endpoint exists — planned, not wired', ok: false },
+  { key: 'engine', label: 'Local engine reachable', detail: `${IMAGE_PROVIDER.engine} at ${IMAGE_PROVIDER.env} (default http://127.0.0.1:8188) — not probed`, ok: false },
+  { key: 'models', label: 'Model weights installed', detail: `${IMAGE_PROVIDER.models} — operator-managed, unknown`, ok: false },
+  { key: 'gate', label: 'Media live gate enabled', detail: `${IMAGE_PROVIDER.gate}=1 (off by default)`, ok: false },
+  { key: 'gpu', label: 'GPU available for local render', detail: 'Operator machine only (RTX 5080 16GB per setup notes) — not probed', ok: false },
 ]
 
 const ASPECTS = ['1:1', '4:5', '9:16', '16:9', '3:2']
@@ -164,15 +181,31 @@ function Thumb({ height = 90, label, note = 'no preview · local record' }) {
 }
 
 function ProviderBoundary({ provider }) {
+  const meta = GEN_STATE[provider.state] || GEN_STATE.planned
   return (
     <div className="alert" style={{ marginBottom: 0 }}>
       <div className="alert-title">
-        <span className="pill pill-unknown">PROVIDER REQUIRED</span> {provider.label} is not connected
+        <span className={`pill ${meta.pill}`}>{meta.text}</span> {provider.label} — no generation route is wired to this app
       </div>
       <div className="alert-text">
-        Expected engine: <strong>{provider.engine}</strong> · env <span className="text-mono">{provider.env}</span> · gate <span className="text-mono">{provider.gate}</span>.
-        {' '}{provider.models}. Nothing is generated until this boundary is satisfied — no placeholder image is shown in its place.
+        This build records <strong>local planning records only</strong>. Nothing is rendered: the app exposes no media
+        endpoint and no local engine is reachable here. Expected engine: <strong>{provider.engine}</strong> · env{' '}
+        <span className="text-mono">{provider.env}</span> · gate <span className="text-mono">{provider.gate}</span>.{' '}
+        {provider.models}. No placeholder image is shown in place of a render.
       </div>
+    </div>
+  )
+}
+
+// Compact legend so the four generation truth states are explicit, not implied.
+function GenerationTruthLegend({ active = 'planned' }) {
+  return (
+    <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap' }}>
+      {Object.entries(GEN_STATE).map(([k, v]) => (
+        <span key={k} className={`pill ${k === active ? v.pill : 'pill-muted'}`} style={{ fontSize: 10, opacity: k === active ? 1 : 0.6 }} title={k === active ? 'This room’s current media state' : 'Not the current state'}>
+          {v.text}
+        </span>
+      ))}
     </div>
   )
 }
@@ -183,18 +216,26 @@ function ReadinessChecklist() {
     <div className="card">
       <div className="card-head">
         <h3 className="card-title" style={{ fontSize: 15 }}>Provider Readiness</h3>
-        <span className={`pill ${okCount === READINESS.length ? 'pill-forest' : 'pill-unknown'}`}>{okCount} / {READINESS.length} ready</span>
+        <span className="pill pill-unknown" title="Static checklist — the app does not probe the engine yet">static · not live-probed</span>
       </div>
       <div className="stack" style={{ gap: 8 }}>
         {READINESS.map(r => (
           <div key={r.key} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-            <span className={`pill ${r.ok ? 'pill-forest' : 'pill-unknown'}`} style={{ flexShrink: 0 }}>{r.ok ? 'ready' : 'not connected'}</span>
+            <span className={`pill ${r.ok ? 'pill-forest' : 'pill-unknown'}`} style={{ flexShrink: 0 }}>{r.ok ? 'ready' : 'not satisfied'}</span>
             <div>
               <div style={{ fontSize: 12, fontWeight: 500 }}>{r.label}</div>
               <div className="text-low" style={{ fontSize: 11 }}>{r.detail}</div>
             </div>
           </div>
         ))}
+      </div>
+      <div className="text-low" style={{ fontSize: 11, marginTop: 12 }}>
+        {okCount} of {READINESS.length} prerequisites satisfied. This checklist is <strong>static</strong> — the app does not
+        probe the local engine, so nothing here is a live check. Arming generation requires a media route plus an
+        operator-side ComfyUI install, model weights, and <span className="text-mono">{IMAGE_PROVIDER.gate}=1</span>.
+      </div>
+      <div style={{ marginTop: 10 }}>
+        <GenerationTruthLegend active={IMAGE_PROVIDER.state} />
       </div>
     </div>
   )
@@ -424,7 +465,7 @@ export default function CreativeStudio() {
       subtitle="Creative operations — work briefs, image and short-clip requests, reference assets, variants, and export bundles."
       actions={<>
         <button className="btn btn-sm" onClick={addBrief}>New Brief</button>
-        <button className="btn btn-sm btn-ghost" onClick={() => { go('composer'); t('Image Composer opened — provider not connected, so no variants generate yet.', 'info') }}>Compose Image</button>
+        <button className="btn btn-sm btn-ghost" onClick={() => { go('composer'); t('Image Composer opened — generation is planned, not armed; only local records are created.', 'info') }}>Compose Image</button>
         <button className="btn btn-sm btn-ghost" onClick={() => go('exports')}>Export Bundle</button>
       </>}
     >
@@ -432,7 +473,7 @@ export default function CreativeStudio() {
       <DataNotice tone="sample" title="This room is a local workflow workspace">
         Briefs, requests, assets, variants, and bundles are real records you create here and are stored in this browser.
         No image or video is generated or depicted — there is no wired creative provider in this build. A blocked request
-        means the local engine is not connected, not that an asset failed.
+        means generation is <strong>planned, not armed</strong>, not that an asset failed.
       </DataNotice>
 
       <div className="card" style={{ marginBottom: 16, padding: '10px 14px' }}>
@@ -621,8 +662,9 @@ export default function CreativeStudio() {
                 </div>
                 <div className="text-low" style={{ fontSize: 11 }}>
                   Queue Image Request stores a real local request record. Generate Variants records draft variant rows for the
-                  active brief. Neither renders an image until {IMAGE_PROVIDER.env} points at a running
-                  {' '}{IMAGE_PROVIDER.engine} and {IMAGE_PROVIDER.gate}=1.
+                  active brief. Neither renders an image: the app has no media route, so generation is{' '}
+                  <strong>planned, not armed</strong>. Arming needs {IMAGE_PROVIDER.env} pointing at a running{' '}
+                  {IMAGE_PROVIDER.engine}, model weights installed, and {IMAGE_PROVIDER.gate}=1.
                 </div>
               </div>
             </div>
@@ -632,9 +674,9 @@ export default function CreativeStudio() {
               <div className="card">
                 <div className="card-head">
                   <h3 className="card-title" style={{ fontSize: 15 }}>Preview</h3>
-                  <span className="pill pill-unknown" style={{ fontSize: 10 }}>provider required</span>
+                  <span className="pill pill-unknown" style={{ fontSize: 10 }}>planned · not armed</span>
                 </div>
-                <Thumb height={150} label={`${aspect} · ${format}`} note="No generated asset — provider required" />
+                <Thumb height={150} label={`${aspect} · ${format}`} note="No generated asset — planned, not armed" />
                 <div className="text-low" style={{ fontSize: 11 }}>
                   This preview stays empty until a connected provider returns an asset. A blank frame here is the honest state, not a failed load.
                 </div>
@@ -830,8 +872,9 @@ export default function CreativeStudio() {
                 </div>
 
                 <div className="text-low" style={{ fontSize: 11 }}>
-                  Video tooling is a planning shell. No local video pipeline exists in this build; a connected
-                  {' '}{VIDEO_PROVIDER.engine} provider plus {VIDEO_PROVIDER.gate}=1 is required before any clip can render.
+                  Video tooling is a planning shell — <strong>planned, not armed</strong>. No local video pipeline exists in
+                  this build and no media route is wired; a connected {VIDEO_PROVIDER.engine} provider plus{' '}
+                  {VIDEO_PROVIDER.gate}=1 is required before any clip can render.
                 </div>
               </div>
             </div>
@@ -839,9 +882,9 @@ export default function CreativeStudio() {
             <div className="card">
               <div className="card-head">
                 <h3 className="card-title" style={{ fontSize: 15 }}>Clip Preview</h3>
-                <span className="pill pill-unknown" style={{ fontSize: 10 }}>provider required</span>
+                <span className="pill pill-unknown" style={{ fontSize: 10 }}>planned · not armed</span>
               </div>
-              <Thumb height={150} label={`${vAspect} · ${vDuration}`} note="No clip — provider required" />
+              <Thumb height={150} label={`${vAspect} · ${vDuration}`} note="No clip — planned, not armed" />
               <div className="stack" style={{ gap: 6 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}><span className="text-low">Purpose</span><span>{vPurpose}</span></div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}><span className="text-low">Source asset</span><span>{vAssetId ? (assets.find(a => a.id === vAssetId)?.name || vAssetId) : 'text-to-video'}</span></div>
