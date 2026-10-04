@@ -69,6 +69,7 @@ function FoundationRoster() {
 
 // Real organization detail (platform-admin read) for real org ids.
 function FoundationOrgDetail({ id }) {
+  const navigate = useNavigate()
   const [st, setSt] = useState({ phase: 'loading' })
   useEffect(() => {
     let alive = true
@@ -119,6 +120,37 @@ function FoundationOrgDetail({ id }) {
               {o.lifecycle_history.map((h, i) => <div key={i} style={{ fontSize: 12, fontFamily: 'var(--font-mono)' }}>{h.to_state || h.state || JSON.stringify(h)} · {h.created_at || h.occurred_at || ''}</div>)}
             </div>
           )}
+
+          <div style={{ marginTop: 14 }}>
+            <div className="card-head" style={{ marginBottom: 8 }}>
+              <h4 style={{ fontSize: 13, color: 'var(--pine)' }}>Support tickets {Array.isArray(o.tickets) ? `(${o.tickets.length})` : ''}</h4>
+              <button className="btn btn-sm btn-ghost" onClick={() => navigate('/beta-ops/support')}>Open support ops</button>
+            </div>
+            {Array.isArray(o.tickets) && o.tickets.length > 0 ? (
+              <DataTable columns={[
+                { key: 'reference_id', label: 'Reference', render: (v, row) => v || row.id },
+                { key: 'subject', label: 'Subject' },
+                { key: 'category', label: 'Category', render: (v) => <span className="pill pill-muted">{v || 'UNKNOWN'}</span> },
+                { key: 'severity', label: 'Severity', render: (v) => <span className={`pill ${v === 'blocker' || v === 'high' ? 'pill-error' : v === 'low' ? 'pill-muted' : 'pill-warn'}`}>{v || 'UNKNOWN'}</span> },
+                { key: 'status', label: 'Status', render: (v) => <span className={`pill ${v === 'resolved' || v === 'closed' ? 'pill-muted' : 'pill-warn'}`}>{v || 'UNKNOWN'}</span> },
+              ]} rows={o.tickets} />
+            ) : <p className="text-low" style={{ fontSize: 12 }}>No support tickets for this organization.</p>}
+          </div>
+
+          <div style={{ marginTop: 14 }}>
+            <div className="card-head" style={{ marginBottom: 8 }}>
+              <h4 style={{ fontSize: 13, color: 'var(--pine)' }}>Recent audit {Array.isArray(o.audit) ? `(${o.audit.length})` : ''}</h4>
+              <button className="btn btn-sm btn-ghost" onClick={() => navigate('/beta-ops/audit')}>Open audit log</button>
+            </div>
+            {Array.isArray(o.audit) && o.audit.length > 0 ? (
+              <DataTable columns={[
+                { key: 'occurred_at', label: 'When', render: (v) => v || 'UNKNOWN' },
+                { key: 'action', label: 'Action', render: (v) => v || 'UNKNOWN' },
+                { key: 'actor_user_id', label: 'Actor', render: (v) => v || 'UNKNOWN' },
+                { key: 'result', label: 'Result', render: (v) => <span className={`pill ${v === 'denied' || v === 'failure' ? 'pill-warn' : 'pill-muted'}`}>{v || 'UNKNOWN'}</span> },
+              ]} rows={o.audit} />
+            ) : <p className="text-low" style={{ fontSize: 12 }}>No audit entries for this organization yet.</p>}
+          </div>
         </>
       ) : (
         <p style={{ fontSize: 13 }}>
