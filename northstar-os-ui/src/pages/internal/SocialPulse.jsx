@@ -43,8 +43,35 @@ const STAGES = [
 ]
 const STAGE_PILL = { Draft: 'pill-muted', 'In Review': 'pill-ochre', Approved: 'pill-forest', 'Publish-ready': 'pill-forest', Scheduled: 'pill-warn' }
 
-const PLATFORMS = ['TikTok', 'Instagram Reels', 'Stories', 'X Thread', 'Pinterest', 'YouTube Shorts', 'Email']
-const VOICES = ['Founder voice', 'Product demo', 'Problem/solution', 'Before/after', 'Deal alert', 'UGC testimonial', 'Trend reaction', 'FAQ answer', 'Top 5 listicle', 'Seasonal promo', 'Lifestyle edit', 'Comparison/alternative']
+// Platform presets — editorial defaults applied to the composer draft. These are
+// operator-applied guidance, NOT live platform rules or enforcement.
+const PLATFORM_PRESETS = [
+  { platform: 'TikTok', aspect: '9:16', caption: 'Short, hook-first; front-load the first line', formats: 'Reel / Short, UGC' },
+  { platform: 'Instagram Reels', aspect: '9:16', caption: 'Reward watch-through; keep captions tight', formats: 'Reel, Product demo' },
+  { platform: 'Stories', aspect: '9:16', caption: 'One idea; single tap-through CTA', formats: 'Image, Poll / question' },
+  { platform: 'X Thread', aspect: '16:9', caption: 'Text-first; one idea per post', formats: 'Thread, Text + image' },
+  { platform: 'Pinterest', aspect: '2:3', caption: 'Keyword in the pin title; durable discovery', formats: 'Pin, Idea Pin' },
+  { platform: 'YouTube Shorts', aspect: '9:16', caption: 'Title carries the search intent', formats: 'Short' },
+  { platform: 'Email', aspect: 'n/a', caption: 'TOS-compliant; no incentives', formats: 'Review request, Hero' },
+]
+const PLATFORMS = PLATFORM_PRESETS.map(p => p.platform)
+
+// Brand-voice / content-format presets — tone guidance applied to the draft.
+const VOICE_PRESETS = [
+  { voice: 'Founder voice', tone: 'First-person, opinionated', use: 'Authority posts, X threads' },
+  { voice: 'Product demo', tone: 'Clear, benefit-led', use: 'Feature walkthroughs, Reels' },
+  { voice: 'Problem/solution', tone: 'Frame the pain, then the fix', use: 'Cold-audience hooks' },
+  { voice: 'Before/after', tone: 'Contrast-led, visual proof', use: 'Reels, Shorts' },
+  { voice: 'Deal alert', tone: 'Urgent, offer-forward', use: 'Promo windows (manual schedule)' },
+  { voice: 'UGC testimonial', tone: 'Authentic, customer-worded', use: 'Social proof, Reels' },
+  { voice: 'Trend reaction', tone: 'Timely, conversational', use: 'Trend-jacking, TikTok' },
+  { voice: 'FAQ answer', tone: 'Helpful, concise', use: 'Objection handling, Stories' },
+  { voice: 'Top 5 listicle', tone: 'Structured, scannable', use: 'Carousels, Pinterest' },
+  { voice: 'Seasonal promo', tone: 'Warm, occasion-tied', use: 'Q4 / seasonal campaigns' },
+  { voice: 'Lifestyle edit', tone: 'Aspirational, in-context', use: 'Brand awareness, Reels' },
+  { voice: 'Comparison/alternative', tone: 'Direct, differentiator-led', use: 'Consideration, Search' },
+]
+const VOICES = VOICE_PRESETS.map(v => v.voice)
 
 // Channel-fit heuristics (editorial guidance, NOT measured performance).
 const CHANNEL_FIT = [
@@ -614,20 +641,53 @@ export default function SocialPulse() {
             Fit notes describe how each channel typically rewards a format. They are heuristics, not analytics results, and are
             not derived from any connected account.
           </DataNotice>
+
+          {activeCampaign && (
+            <div className="card" style={{ marginBottom: 16, padding: '12px 14px' }}>
+              <div className="inline-flex" style={{ gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                <strong style={{ fontSize: 13 }}>{activeCampaign.name}</strong>
+                <span className="pill pill-muted" style={{ fontSize: 10 }}>targets {activeCampaign.channels.length} channel{activeCampaign.channels.length === 1 ? '' : 's'}</span>
+                {activeCampaign.channels.map(ch => {
+                  const n = postsInCampaign.filter(p => p.platform === ch).length
+                  return <span key={ch} className={`pill ${n ? 'pill-muted' : 'pill-warn'}`} style={{ fontSize: 10 }} title={n ? `${n} planned post(s)` : 'No planned post yet — coverage gap'}>{ch}: {n || 'gap'}</span>
+                })}
+                {activeCampaign.channels.length === 0 && <span className="text-low" style={{ fontSize: 11 }}>No channels set on this campaign yet.</span>}
+              </div>
+              <div className="text-low" style={{ fontSize: 10, marginTop: 6 }}>
+                Campaign coverage is local planning state — not platform reporting, and nothing publishes.
+              </div>
+            </div>
+          )}
+
           <div className="grid-cards-3">
             {CHANNEL_FIT.map(ch => {
-              const count = posts.filter(p => p.platform === ch.platform).length
+              const chPosts = postsInCampaign.filter(p => p.platform === ch.platform)
+              const count = chPosts.length
+              const drafts = chPosts.filter(p => p.state === 'Draft').length
+              const pastReview = chPosts.filter(p => ['Approved', 'Publish-ready', 'Scheduled'].includes(p.state)).length
+              const targeted = activeCampaign ? activeCampaign.channels.includes(ch.platform) : false
               return (
                 <div key={ch.platform} className="card" style={{ padding: 14 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                     <strong style={{ fontSize: 13 }}>{ch.platform}</strong>
-                    <span className="pill pill-muted" style={{ fontSize: 10 }}>{ch.aspect}</span>
+                    <div className="inline-flex" style={{ gap: 6 }}>
+                      {targeted && <span className="pill pill-muted" style={{ fontSize: 10 }} title="Targeted by the active campaign">targeted</span>}
+                      <span className="pill pill-muted" style={{ fontSize: 10 }}>{ch.aspect}</span>
+                    </div>
                   </div>
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
                     {ch.formats.map(f => <span key={f} className="pill pill-muted" style={{ fontSize: 10 }}>{f}</span>)}
                   </div>
                   <div style={{ fontSize: 11, color: 'var(--ink-mid)', marginBottom: 8 }}><strong>{ch.strength}.</strong> {ch.note}</div>
-                  <div className="text-low" style={{ fontSize: 11 }}>{count} planned {count === 1 ? 'post' : 'posts'} on this channel</div>
+                  <div className="text-low" style={{ fontSize: 11 }}>
+                    {count} planned in {activeCampaign ? activeCampaign.name : 'this campaign'}{count ? ` · ${drafts} draft · ${pastReview} past review` : ''}
+                  </div>
+                  {targeted && count === 0 && (
+                    <div className="text-low" style={{ fontSize: 10, marginTop: 4 }}>Gap: this campaign targets {ch.platform} but has no planned post.</div>
+                  )}
+                  <div style={{ marginTop: 8 }}>
+                    <button className="btn btn-sm btn-ghost" onClick={() => { setPlatform(ch.platform); go('composer'); t(`Composer opened for ${ch.platform} — editorial fit guidance applied; nothing publishes.`, 'info') }}>Compose for this channel</button>
+                  </div>
                 </div>
               )
             })}
@@ -696,17 +756,42 @@ export default function SocialPulse() {
 
       {view === 'presets' && (
         <div className="subview">
+          <DataNotice tone="concept" title="Presets are operator-applied guidance">
+            Platform and voice presets shape the composer draft. They are editorial defaults — no platform rules are enforced,
+            no account is connected, and nothing here publishes.
+          </DataNotice>
+          <div className="card" style={{ marginBottom: 16 }}>
+            <div className="card-head">
+              <h3 className="card-title" style={{ fontSize: 15 }}>Active draft preset</h3>
+              <span className="pill pill-muted">{activeCampaign ? activeCampaign.name : 'no campaign'}</span>
+            </div>
+            <div className="inline-flex" style={{ gap: 8 }}>
+              <span className="pill pill-forest" style={{ fontSize: 11 }}>Platform: {platform}</span>
+              <span className="pill pill-forest" style={{ fontSize: 11 }}>Voice: {voice}</span>
+              <button className="btn btn-sm btn-ghost" onClick={() => go('composer')}>Open Composer</button>
+            </div>
+            <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>Applied to the next draft you save in the composer.</div>
+          </div>
           <div className="grid-2" style={{ gap: 20, alignItems: 'start' }}>
             <div className="card">
               <div className="card-head">
                 <h3 className="card-title">Platform Presets</h3>
-                <span className="pill pill-muted">{PLATFORMS.length}</span>
+                <span className="pill pill-muted">{PLATFORM_PRESETS.length}</span>
               </div>
-              <div className="stack" style={{ gap: 8 }}>
-                {PLATFORMS.map(p => (
-                  <div key={p} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
-                    <div style={{ fontSize: 13 }}>{p}</div>
-                    <button className="btn btn-sm btn-ghost" onClick={() => { setPlatform(p); t(`${p} preset applied to the active draft.`, 'info') }}>Use</button>
+              <div className="stack" style={{ gap: 10 }}>
+                {PLATFORM_PRESETS.map(p => (
+                  <div key={p.platform} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 500 }}>{p.platform} <span className="text-low">· {p.aspect}</span></div>
+                      <div className="text-low" style={{ fontSize: 11 }}>{p.caption}</div>
+                      <div className="text-low" style={{ fontSize: 10, marginTop: 2 }}>Formats: {p.formats}</div>
+                    </div>
+                    <button
+                      className={`btn btn-sm ${platform === p.platform ? 'btn-ghost' : ''}`}
+                      onClick={() => { setPlatform(p.platform); go('composer'); t(`${p.platform} preset applied to the active draft — editorial defaults only.`, 'info') }}
+                    >
+                      {platform === p.platform ? 'Applied' : 'Apply'}
+                    </button>
                   </div>
                 ))}
               </div>
@@ -714,13 +799,21 @@ export default function SocialPulse() {
             <div className="card">
               <div className="card-head">
                 <h3 className="card-title">Brand Voice &amp; Content Formats</h3>
-                <span className="pill pill-muted">{VOICES.length} formats</span>
+                <span className="pill pill-muted">{VOICE_PRESETS.length} formats</span>
               </div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                {VOICES.map(v => (
-                  <button key={v} className={`filter-pill ${voice === v ? 'active' : ''}`} onClick={() => { setVoice(v); t(`Voice set to ${v}.`, 'info') }}>{v}</button>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+                {VOICE_PRESETS.map(v => (
+                  <button key={v.voice} className={`filter-pill ${voice === v.voice ? 'active' : ''}`} onClick={() => { setVoice(v.voice); t(`Voice set to ${v.voice} — tone guidance only.`, 'info') }}>{v.voice}</button>
                 ))}
               </div>
+              {(() => {
+                const v = VOICE_PRESETS.find(x => x.voice === voice)
+                return v ? (
+                  <div className="text-low" style={{ fontSize: 11 }}>
+                    <strong style={{ color: 'var(--ink-mid)' }}>{v.voice}</strong> — {v.tone}. Best for: {v.use}.
+                  </div>
+                ) : null
+              })()}
             </div>
           </div>
         </div>
