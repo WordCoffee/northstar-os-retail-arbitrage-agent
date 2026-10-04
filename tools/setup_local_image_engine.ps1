@@ -73,15 +73,12 @@ if ($Install) {
   if (-not (Test-Path $ComfyHome)) {
     git clone https://github.com/comfyanonymous/ComfyUI.git $ComfyHome
   }
-  Push-Location $ComfyHome
-  try {
-    python -m venv venv
-    & (Join-Path $ComfyHome 'venv/Scripts/activate.ps1')
-    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
-    pip install -r requirements.txt
-  } finally {
-    Pop-Location
-  }
+  $VenvDir = Join-Path $ComfyHome 'venv'
+  $VenvPy  = Join-Path $VenvDir 'Scripts\python.exe'
+  if (-not (Test-Path $VenvPy)) { python -m venv $VenvDir }
+  & $VenvPy -m pip install --upgrade pip
+  & $VenvPy -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+  & $VenvPy -m pip install -r (Join-Path $ComfyHome 'requirements.txt')
   Write-Host "Install complete. Next (gated): -DownloadWeights." -ForegroundColor Green
 }
 
@@ -89,11 +86,13 @@ if ($Install) {
 if ($DownloadWeights) {
   Assert-OwnerGated "Download model weights"
   Write-Gate "Downloading FLUX.1 Dev FP8 + encoders into $ComfyHome/models (large: ~18GB)."
-  pip install huggingface-hub
-  huggingface-cli download Kijai/flux-fp8 flux1-dev-fp8.safetensors --local-dir (Join-Path $ComfyHome 'models/unet')
-  huggingface-cli download Kijai/flux-fp8 ae.safetensors --local-dir (Join-Path $ComfyHome 'models/vae')
-  huggingface-cli download comfyanonymous/flux_text_encoders clip_l.safetensors --local-dir (Join-Path $ComfyHome 'models/clip')
-  huggingface-cli download comfyanonymous/flux_text_encoders t5xxl_fp8_e4m3fn.safetensors --local-dir (Join-Path $ComfyHome 'models/clip')
+  $VenvPy = Join-Path $ComfyHome 'venv\Scripts\python.exe'
+  & $VenvPy -m pip install huggingface-hub
+  $HfCli = Join-Path $ComfyHome 'venv\Scripts\huggingface-cli.exe'
+  & $HfCli download Kijai/flux-fp8 flux1-dev-fp8.safetensors --local-dir (Join-Path $ComfyHome 'models/unet')
+  & $HfCli download Kijai/flux-fp8 ae.safetensors --local-dir (Join-Path $ComfyHome 'models/vae')
+  & $HfCli download comfyanonymous/flux_text_encoders clip_l.safetensors --local-dir (Join-Path $ComfyHome 'models/clip')
+  & $HfCli download comfyanonymous/flux_text_encoders t5xxl_fp8_e4m3fn.safetensors --local-dir (Join-Path $ComfyHome 'models/clip')
   Write-Host "Weights downloaded. Next (gated): -Start." -ForegroundColor Green
 }
 
