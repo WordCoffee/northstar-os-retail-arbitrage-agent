@@ -317,12 +317,12 @@ export function LifecycleModal() {
       </div>
       <AuthorizationNote
         title="Lifecycle transitions"
-        status="Disabled — owner approval required"
+        status="Suspend/resume active on organization detail — this modal stays disabled"
         route="POST /api/v1/foundation/admin/orgs/{id}/{grant,suspend,resume,downgrade,cancel}"
         permission="PERM_PLATFORM_ADMIN"
         audit="org.lifecycle.<state> (append-only, actor + reason)"
       >
-        Transitions are validated server-side; blocking states (suspended/paused/cancelled/archived) set the org inactive so the next authenticated request is denied. Suspend/resume/grant require explicit owner activation with a recorded reason; <strong>downgrade</strong> and <strong>cancel</strong> require per-event owner confirmation; <strong>archive</strong> is terminal and stays disabled.
+        Transitions are validated server-side; blocking states (suspended/paused/cancelled/archived) set the org inactive so the next authenticated request is denied. <strong>Suspend</strong> and <strong>Resume</strong> are now activated per-organization on the organization detail page (confirmation-gated). Grant, plan/tier, <strong>downgrade</strong>, <strong>cancel</strong>, and <strong>archive</strong> remain disabled.
       </AuthorizationNote>
       <div className="card" style={{ maxWidth: 640 }}>
         <div className="card-head">

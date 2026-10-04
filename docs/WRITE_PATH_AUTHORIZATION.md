@@ -1,9 +1,10 @@
 # Write-Path Authorization Map (non-creative admin/operator surface)
 
-**Status:** design + scoped activations. **Three actions are ACTIVATED**
-(owner-approved, platform-admin only): **Issue invite**, **Revoke invite**, and
-the read-only **Dashboard export CSV**. Every other classified action remains
-disabled; activation of any further action requires explicit owner approval.
+**Status:** design + scoped activations. **Five actions are ACTIVATED**
+(owner-approved, platform-admin only): **Issue invite**, **Revoke invite**,
+**Suspend organization**, **Resume organization**, and the read-only
+**Dashboard export CSV**. Every other classified action remains disabled;
+activation of any further action requires explicit owner approval.
 
 **Scope:** Beta-Ops / Admin / Support / Audit / account write surfaces outside the
 creative-media cluster.
@@ -36,8 +37,8 @@ so the **next authenticated request is blocked**.
 |---|---|---|---|---|
 | Grant / activate | disabled "Verify Eligibility" | `POST /admin/orgs/{id}/grant` | High (access grant) | ENABLE LATER WITH OWNER APPROVAL |
 | Change plan | no UI | `POST /admin/orgs/{id}/plan` | Medium | ENABLE LATER WITH OWNER APPROVAL |
-| Suspend | disabled (select) | `POST /admin/orgs/{id}/suspend` | High (blocks access) | ENABLE LATER WITH OWNER APPROVAL (mandatory reason + confirm) |
-| Resume | no UI | `POST /admin/orgs/{id}/resume` | Low–Med (restore) | ENABLE LATER WITH OWNER APPROVAL |
+| Suspend | **ACTIVATED — OrgDetail (platform-admin only)** | `POST /admin/orgs/{id}/suspend` | High (blocks access) | **ACTIVATED (owner-approved)** — confirmation + reason; append-only audit `org.lifecycle.suspended`; eligible from onboarding/active/paused/downgraded |
+| Resume | **ACTIVATED — OrgDetail (platform-admin only)** | `POST /admin/orgs/{id}/resume` | Low–Med (restore) | **ACTIVATED (owner-approved)** — confirmation + reason; audit `org.lifecycle.active`; restores access only (not plan/entitlements); eligible from suspended/paused |
 | Downgrade | disabled (select) | `POST /admin/orgs/{id}/downgrade` | High | REQUIRE PER-EVENT OWNER CONFIRMATION |
 | Cancel | disabled (select) | `POST /admin/orgs/{id}/cancel` | High (near-terminal) | REQUIRE PER-EVENT OWNER CONFIRMATION |
 | Archive | no UI | `POST /admin/orgs/{id}/archive` | High (terminal) | KEEP DISABLED |

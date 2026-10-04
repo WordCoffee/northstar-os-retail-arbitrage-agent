@@ -1,4 +1,4 @@
-import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
+import { PageLayout, DataTable, DataNotice, AuthorizationNote } from '../../components/Shared.jsx'
 import BetaOpsNav from './BetaOpsNav.jsx'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
@@ -97,9 +97,98 @@ function NoteDraft() {
   )
 }
 
+// ═══ Activated lifecycle controls: suspend / resume (platform-admin only) ═══
+const SUSPEND_ELIGIBLE = ['onboarding', 'active', 'paused', 'downgraded']
+const RESUME_ELIGIBLE = ['suspended', 'paused']
+
+function LifecycleAction({ id, action, label, eligible, blockReason, auditEvent, consequence, onDone }) {
+  const [reason, setReason] = useState('')
+  const [confirmed, setConfirmed] = useState(false)
+  const [state, setState] = useState({ phase: 'idle' })
+  const submit = async (e) => {
+    e.preventDefault()
+    if (!eligible || !confirmed) return
+    setState({ phase: 'submitting' })
+    const r = await settle(foundationApi.adminOrgAction(id, action, { reason: reason.trim() || undefined }))
+    if (r.ok) {
+      setState({ phase: 'success', value: r.value })
+      setConfirmed(false); setReason('')
+      if (onDone) onDone()
+    } else {
+      const s = r.error && r.error.status, code = r.error && r.error.code
+      setState({
+        phase: s === 401 ? 'auth' : s === 403 ? 'forbidden' : s === 404 ? 'not_found' : 'error',
+        message: (r.error && r.error.message) || `Action failed${code ? ` (${code})` : ''}.`,
+      })
+    }
+  }
+  return (
+    <div data-testid={`org-lifecycle-${action}`}>
+      <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>{label}</div>
+      {!eligible && blockReason && <div className="text-low" style={{ fontSize: 12, marginBottom: 6 }}>{blockReason}</div>}
+      {eligible && consequence && <div className="text-low" style={{ fontSize: 12, marginBottom: 6 }}>{consequence}</div>}
+      <form className="stack" style={{ gap: 8 }} onSubmit={submit}>
+        <input className="field" value={reason} onChange={e => setReason(e.target.value)} placeholder="Reason (optional)" disabled={!eligible} />
+        <div className="check-row">
+          <input type="checkbox" id={`lc-${action}-confirm`} checked={confirmed} onChange={e => setConfirmed(e.target.checked)} disabled={!eligible} />
+          <label htmlFor={`lc-${action}-confirm`}>I understand this {action === 'suspend' ? 'suspends' : 'resumes'} the organization.</label>
+        </div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button
+            className={`btn ${action === 'suspend' ? 'btn-danger' : 'btn-primary'}`}
+            type="submit"
+            disabled={!eligible || !confirmed || state.phase === 'submitting'}
+            title={!eligible ? (blockReason || 'Unavailable') : !confirmed ? 'Confirm before proceeding' : label}
+          >{state.phase === 'submitting' ? (action === 'suspend' ? 'Suspending…' : 'Resuming…') : label}</button>
+          {state.phase === 'success' && <span className="pill pill-ok" data-testid={`org-lifecycle-${action}-success`}>{action === 'suspend' ? 'Suspended' : 'Resumed'} — audit event {auditEvent} recorded</span>}
+          {state.phase === 'auth' && <span className="pill pill-unknown">Sign in required — session expired.</span>}
+          {state.phase === 'forbidden' && <span className="pill pill-warn">Not permitted — platform-admin access required.</span>}
+          {state.phase === 'not_found' && <span className="pill pill-warn">Organization not found.</span>}
+          {state.phase === 'error' && <span className="pill pill-warn">{state.message}</span>}
+        </div>
+      </form>
+    </div>
+  )
+}
+
+function LifecycleControls({ id, state, onDone }) {
+  const suspendEligible = SUSPEND_ELIGIBLE.includes(state)
+  const resumeEligible = RESUME_ELIGIBLE.includes(state)
+  const suspendBlock = !state ? 'No lifecycle record loaded.'
+    : state === 'suspended' ? 'Already suspended.'
+      : state === 'invited' ? 'Organization is not yet active (invite stage).'
+        : (state === 'cancelled' || state === 'archived') ? 'Terminal state — suspend is not available.' : null
+  const resumeBlock = !state ? 'No lifecycle record loaded.'
+    : state === 'downgraded' ? 'Resume does not restore plan/entitlements; downgrade is unchanged.'
+      : state === 'active' ? 'Already active.'
+        : (state === 'invited' || state === 'cancelled' || state === 'archived') ? 'Resume is not available from this state.' : null
+  return (
+    <div className="card" data-testid="org-lifecycle-controls" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Lifecycle controls</h3>
+        <span className="pill pill-ochre">active · platform admin</span>
+      </div>
+      <AuthorizationNote
+        title="Lifecycle suspend / resume"
+        status="Active — platform-admin only"
+        route="POST /api/v1/foundation/admin/orgs/{id}/{suspend,resume}"
+        permission="PERM_PLATFORM_ADMIN"
+        audit="org.lifecycle.suspended / org.lifecycle.active"
+      >
+        Suspend sets the org inactive so the next authenticated request is denied. Resume restores access only — it does not restore plans, entitlements, jobs, or credits. Both are append-only audited. All other lifecycle actions remain disabled.
+      </AuthorizationNote>
+      <div className="grid-2" style={{ gap: 16 }}>
+        <LifecycleAction id={id} action="suspend" label="Suspend organization" eligible={suspendEligible} blockReason={suspendBlock} auditEvent="org.lifecycle.suspended" consequence="Suspending immediately blocks the organization on its next request. Reversible via resume." onDone={onDone} />
+        <LifecycleAction id={id} action="resume" label="Resume organization" eligible={resumeEligible} blockReason={resumeBlock} auditEvent="org.lifecycle.active" consequence="Resume restores access only; it does not restore plans, entitlements, jobs, or credits." onDone={onDone} />
+      </div>
+    </div>
+  )
+}
+
 // Real organization detail (platform-admin read) for real org ids.
 function FoundationOrgDetail({ id }) {
   const navigate = useNavigate()
+  const [reloadKey, setReloadKey] = useState(0)
   const [st, setSt] = useState({ phase: 'loading' })
   useEffect(() => {
     let alive = true
@@ -112,7 +201,7 @@ function FoundationOrgDetail({ id }) {
       }
     })
     return () => { alive = false }
-  }, [id])
+  }, [id, reloadKey])
   const badge = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
     : st.phase === 'not_found' ? { l: 'not found', t: 'unknown' }
       : st.phase === 'auth' ? { l: 'sign-in required', t: 'unknown' }
@@ -138,6 +227,7 @@ function FoundationOrgDetail({ id }) {
             <span className="pill pill-muted">onboarding {o.onboarding_complete ? 'complete' : 'incomplete'}</span>
             <span className="pill pill-muted">acceptance {o.acceptance_complete ? 'complete' : 'incomplete'}</span>
           </div>
+          <LifecycleControls id={id} state={o.lifecycle_state} onDone={() => setReloadKey(k => k + 1)} />
           {Array.isArray(o.notes) && o.notes.length > 0 && (
             <div style={{ marginBottom: 8 }}>
               <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Internal notes</div>
