@@ -93,4 +93,9 @@ def test_readiness_route_returns_contract_when_authenticated(client, seeded_stat
     assert body["armed"] is False
     assert body["media_live"] is False
     assert "notes" in body
+    # Path B provider architecture is present but unarmed.
+    assert isinstance(body.get("providers"), list)
+    assert isinstance(body.get("routing_hooks"), dict)
+    assert isinstance(body.get("spend_caps"), dict)
+    assert body["spend_caps"].get("enforced") is False
 

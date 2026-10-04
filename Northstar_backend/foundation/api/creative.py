@@ -65,6 +65,14 @@ def _local_generation_configured() -> bool:
         return False
 
 
+def _media_providers():
+    try:
+        import media_providers as mp  # Northstar_backend on sys.path
+    except ImportError:  # pragma: no cover - repo-root sys.path variant
+        from Northstar_backend import media_providers as mp
+    return mp
+
+
 def _parse_local_endpoint() -> Optional[Tuple[str, int]]:
     url = (os.getenv("COMFYUI_URL", "") or "").strip() or _DEFAULT_COMFY_URL
     try:
@@ -124,6 +132,22 @@ def build_readiness(probe: Callable[[], str] = probe_local_engine) -> Dict[str, 
     else:
         generation, reason = "unavailable", "no_backend"
 
+    # Provider-neutral generation architecture (Path B): roster + capability->
+    # cost routing hooks + planning spend caps. Metadata only — no provider is
+    # contacted, nothing is armed by this, and no key value is ever returned.
+    try:
+        mp = _media_providers()
+        providers = mp.list_providers()
+        capabilities = mp.capabilities()
+        spend_caps = dict(mp.SPEND_CAPS)
+        routing_hooks = {
+            "image_draft": mp.route("image", "draft"),
+            "image_final": mp.route("image", "final"),
+            "video_draft": mp.route("video", "draft"),
+        }
+    except Exception:  # noqa: BLE001 - readiness must never break
+        providers, capabilities, spend_caps, routing_hooks = [], [], {}, {}
+
     return {
         "generation": generation,
         "armed": armed,
@@ -137,6 +161,10 @@ def build_readiness(probe: Callable[[], str] = probe_local_engine) -> Dict[str, 
         "provider_gated": generation == "provider_gated",
         "reason": reason,
         "probe": "performed",
+        "providers": providers,
+        "capabilities": capabilities,
+        "routing_hooks": routing_hooks,
+        "spend_caps": spend_caps,
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "notes": "Readiness only — does not activate generation, publish, or transfer media.",
     }
