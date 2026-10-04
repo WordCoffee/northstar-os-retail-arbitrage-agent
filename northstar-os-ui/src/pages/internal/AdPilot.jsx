@@ -2,6 +2,16 @@ import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+
+// Read-only view of a local cross-room store (handoffs recorded by Creative
+// Studio). Never writes; never implies a live/paid ad system.
+function readLocal(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key)
+    return raw ? JSON.parse(raw) : fallback
+  } catch { return fallback }
+}
 
 const CAMPAIGNS = [
   { name: 'Brand Defense', budget: '$500', spend: '$420', acos: '12.3%', placement: '#2', status: 'Healthy' },
@@ -32,6 +42,8 @@ export default function AdPilot() {
   const navigate = useNavigate()
   const location = useLocation()
   const { toast } = useToast()
+  // Read-only: creative sets handed over from Creative Studio (local handoffs).
+  const [receivedCreative] = useState(() => readLocal('ns-creative-handoffs', []).filter(h => h && h.target === 'AdPilot'))
 
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : 'campaigns'
@@ -90,6 +102,31 @@ export default function AdPilot() {
                 </div>
               ))}
             </div>
+          </div>
+
+          <div className="card" style={{ marginTop: 20 }}>
+            <div className="card-head">
+              <h3 className="card-title">Creative handoffs received</h3>
+              <span className="pill pill-muted">local reference · read-only</span>
+            </div>
+            {receivedCreative.length === 0 ? (
+              <div className="text-low" style={{ fontSize: 12 }}>
+                No creative sets handed over yet. Sending an ad set from Creative Studio records a local reference here —
+                nothing is transferred, and no ad account is connected.
+              </div>
+            ) : (
+              <div className="stack" style={{ gap: 8 }}>
+                {receivedCreative.map(h => (
+                  <div key={h.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 12 }}>{h.what}</div>
+                      <div className="text-low" style={{ fontSize: 10, marginTop: 2 }}>{h.id} · {(h.refs || []).length} refs{(h.refs || []).length ? `: ${h.refs.slice(0, 6).join(', ')}${h.refs.length > 6 ? '…' : ''}` : ''}</div>
+                    </div>
+                    <span className="text-low" style={{ fontSize: 11, flexShrink: 0 }}>{h.at ? new Date(h.at).toLocaleString() : ''}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

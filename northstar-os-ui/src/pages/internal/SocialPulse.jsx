@@ -598,6 +598,10 @@ export default function SocialPulse() {
                 { key: 'platform', label: 'Platform' },
                 { key: 'voice', label: 'Voice preset' },
                 { key: 'state', label: 'State', render: (v) => <span className={`pill ${STAGE_PILL[v] || 'pill-muted'}`} title="Local workflow state — not a publishing authorization">{v}</span> },
+                { key: 'history', label: 'Last transition', render: (v, row) => {
+                  const h = (row.history || []).slice(-1)[0]
+                  return <span className="text-low" style={{ fontSize: 11 }} title="Most recent local workflow transition">{h ? `${h.from ? `${h.from} → ` : ''}${h.to}` : '—'}</span>
+                } },
                 { key: 'open', label: '', render: (v, row) => <button className="btn btn-sm btn-ghost" onClick={() => t(`${row.id} opened in the local workflow — nothing publishes.`, 'info')}>Open</button> },
               ]} rows={postsInCampaign} />
             </div>
