@@ -253,6 +253,24 @@ function ReadinessChecklist({ readiness, probeFailed }) {
             <div className="text-low" style={{ fontSize: 11 }}>Checked: {readiness.checked_at ? new Date(readiness.checked_at).toLocaleString() : '—'} · probe: {readiness.probe || 'performed'}</div>
             <div className="text-low" style={{ fontSize: 11 }}>{readiness.notes}</div>
           </div>
+          {Array.isArray(readiness.providers) && readiness.providers.length > 0 && (
+            <div style={{ marginTop: 12 }}>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Provider architecture · unarmed (planning costs only)</div>
+              <div className="stack" style={{ gap: 6 }}>
+                {readiness.providers.map(p => (
+                  <div key={p.provider} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 11 }}>
+                    <span>{p.label} <span className="text-low">· {(p.kinds || []).join(', ')}</span></span>
+                    <span className="text-low">{p.armed ? 'armed' : p.key_present ? 'gated' : 'no key'}</span>
+                  </div>
+                ))}
+              </div>
+              {readiness.spend_caps && (
+                <div className="text-low" style={{ fontSize: 10, marginTop: 6 }} title="Planning values — not enforced; the ledger records only real provider usage">
+                  Spend caps (planning, not enforced): image ≤ ${readiness.spend_caps.per_image_usd} · clip ≤ ${readiness.spend_caps.per_video_clip_usd} · day ≤ ${readiness.spend_caps.per_day_usd}
+                </div>
+              )}
+            </div>
+          )}
         </>
       ) : (
         <>
