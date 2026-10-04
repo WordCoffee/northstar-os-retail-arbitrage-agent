@@ -3,9 +3,10 @@
 // Verifies the /beta-ops/* admin surface against the Vite dev server:
 //   1. platform_admin can reach every /beta-ops sub-page and its title renders.
 //   2. Destructive/action surfaces remain sample-mode DISABLED (no lifecycle
-//      action, no eligibility apply, no download/export run, no reissue).
-//      EXCEPTIONS: invite ISSUE and REVOKE are now ACTIVATED (platform-admin
-//      only); their controls are present and gated by explicit confirmation.
+//      action, no eligibility apply, no reissue; sample report rows stay sample).
+//      EXCEPTIONS: invite ISSUE, invite REVOKE, and the DASHBOARD EXPORT are now
+//      ACTIVATED (platform-admin only); their controls are present and gated by
+//      explicit confirmation.
 //   3. Internal DataNotices are present (sample/internal, not entitlements).
 //   4. Non-platform_admin roles (operator/customer) are bounced away from /beta-ops.
 //
@@ -143,7 +144,13 @@ async function checkNoticeInnerText(page, ctx) {
   await load(page, '/beta-ops/eligibility')
   await checkDisabledByTitle(page, ['Sample surface — eligibility is not applied'])
   await load(page, '/beta-ops/reports')
+  // Sample report rows keep their disabled title; the live safe-set dashboard
+  // export is additionally present (activated).
   await checkDisabledByTitle(page, ['Export disabled in sample mode'])
+  {
+    const exp = await page.$('[data-testid="bo-dashboard-export"]')
+    ok(!!exp, 'dashboard export surface present (activated)')
+  }
 
   console.log('--- internal DataNotices ---')
   await load(page, '/beta-ops/reports')

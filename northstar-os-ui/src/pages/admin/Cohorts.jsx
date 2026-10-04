@@ -155,22 +155,95 @@ export function SupportOps() {
   )
 }
 
-export function ReportsExports() {
+const EXPORT_FIELDS = ['organization_id', 'organization_name', 'lifecycle_state', 'plan_tier',
+  'subscription_status', 'invite_status', 'acceptance_complete', 'onboarding_complete',
+  'monthly_jobs_used', 'max_jobs_per_month', 'seats_used', 'seat_limit', 'open_tickets',
+  'blocker_tickets', 'last_activity', 'flags']
+const EXPORT_EXCLUDES = ['secret', 'token', 'password', 'card', 'credential', 'provider_key', 'api_key']
+
+// ACTIVATED (owner-approved, platform-admin only): dashboard export CSV (read-only).
+function DashboardExport() {
+  const [confirmed, setConfirmed] = useState(false)
+  const [state, setState] = useState({ phase: 'idle' })
+
+  const download = async () => {
+    if (!confirmed) return
+    setState({ phase: 'submitting' })
+    const r = await settle(foundationApi.adminExportCsv())
+    if (r.ok) {
+      const { filename, text } = r.value
+      try {
+        const blob = new Blob([text], { type: 'text/csv' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url; a.download = filename
+        document.body.appendChild(a); a.click(); a.remove()
+        URL.revokeObjectURL(url)
+      } catch { /* download trigger unavailable */ }
+      setState({ phase: 'success', filename, bytes: text.length })
+      setConfirmed(false)
+    } else {
+      const s = r.error && r.error.status, code = r.error && r.error.code
+      setState({
+        phase: s === 401 ? 'auth' : s === 403 ? 'forbidden' : 'error',
+        message: code === 'export_contains_excluded_data'
+          ? 'Export blocked: the payload contained a disallowed field (safe-set guard).'
+          : (r.error && r.error.message) || `Export failed${code ? ` (${code})` : ''}.`,
+      })
+    }
+  }
+
   return (
-    <PageLayout title="Reports & Exports" subtitle="Operational reports and data exports.">
-      <BetaOpsNav />
-      <DataNotice tone="internal" title="Exports use the safe field set only">
-        Exports contain operational fields only — no secrets, card data, tokens, provider credentials, or cross-org data. Downloaded files are sample until a backend is connected.
-      </DataNotice>
+    <div className="card" data-testid="bo-dashboard-export" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Dashboard export (CSV)</h3>
+        <span className="pill pill-ochre">active · platform admin</span>
+      </div>
       <AuthorizationNote
-        title="Dashboard export readiness"
-        status="Disabled — owner approval required"
+        title="Dashboard export"
+        status="Active — platform-admin only"
         route="GET /api/v1/foundation/admin/dashboard/export"
         permission="PERM_PLATFORM_ADMIN"
         audit="read-only (no write)"
       >
-        A live platform-admin CSV export exists. It emits the safe field set only (org id/name, lifecycle, plan, subscription, invite, acceptance, onboarding, usage, seats, tickets, flags) and hard-rejects any payload containing secrets, tokens, card data, credentials, provider keys, or API keys. Enabling the download requires explicit owner approval.
+        Exports the safe field set only. Secrets, tokens, card data, credentials, provider keys, and API keys are hard-excluded by the backend. This is a read — no write and no audit event.
       </AuthorizationNote>
+      <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Safe fields</div>
+      <div className="inline-flex" style={{ gap: 4, flexWrap: 'wrap', marginBottom: 10 }}>
+        {EXPORT_FIELDS.map(f => <span key={f} className="pill pill-muted" style={{ fontSize: 10, fontFamily: 'var(--font-mono)' }}>{f}</span>)}
+      </div>
+      <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Hard-excluded</div>
+      <div className="inline-flex" style={{ gap: 4, flexWrap: 'wrap', marginBottom: 12 }}>
+        {EXPORT_EXCLUDES.map(f => <span key={f} className="pill pill-warn" style={{ fontSize: 10, fontFamily: 'var(--font-mono)' }}>{f}</span>)}
+      </div>
+      <div className="check-row" style={{ marginBottom: 10 }}>
+        <input type="checkbox" id="export-confirm" checked={confirmed} onChange={e => setConfirmed(e.target.checked)} />
+        <label htmlFor="export-confirm">I understand this exports the safe field set only.</label>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <button
+          className="btn btn-primary"
+          disabled={!confirmed || state.phase === 'submitting'}
+          onClick={download}
+          title={!confirmed ? 'Confirm before exporting' : 'Download the safe-set CSV'}
+        >{state.phase === 'submitting' ? 'Exporting…' : 'Download CSV'}</button>
+        {state.phase === 'success' && <span className="pill pill-ok" data-testid="bo-export-success">Exported {state.filename} ({state.bytes} bytes)</span>}
+        {state.phase === 'auth' && <span className="pill pill-unknown">Sign in required — session expired.</span>}
+        {state.phase === 'forbidden' && <span className="pill pill-warn">Not permitted — platform-admin access required.</span>}
+        {state.phase === 'error' && <span className="pill pill-warn">{state.message}</span>}
+      </div>
+    </div>
+  )
+}
+
+export function ReportsExports() {
+  return (
+    <PageLayout title="Reports & Exports" subtitle="Operational reports and data exports.">
+      <BetaOpsNav />
+      <DataNotice tone="internal" title="Safe-set export + sample reports">
+        The “Dashboard export (CSV)” card is a live, platform-admin export of the safe field set only — no secrets, card data, tokens, provider credentials, or cross-org data. The “Available Reports” rows below are sample until their backends exist.
+      </DataNotice>
+      <DashboardExport />
       <div className="card">
         <div className="card-head">
           <h3 className="card-title">Available Reports</h3>

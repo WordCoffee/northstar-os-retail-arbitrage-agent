@@ -201,6 +201,25 @@ export const foundationApi = {
   adminOrgOverride: (orgId, body) =>
     req(`/admin/orgs/${orgId}/override`, { method: 'POST', body: JSON.stringify(body) }),
   adminExportUrl: '/api/v1/foundation/admin/dashboard/export',
+  // Dashboard export CSV (platform-admin only; safe field set; read-only).
+  adminExportCsv: async () => {
+    const res = await fetch(`${BASE}/admin/dashboard/export`, {
+      credentials: 'include',
+      headers: headers('GET'),
+    })
+    if (!res.ok) {
+      let detail = { code: `http_${res.status}` }
+      try { const j = await res.json(); detail = j.detail || detail } catch { /* csv/plain body */ }
+      const err = new Error((detail && detail.message) || (detail && detail.code) || `http_${res.status}`)
+      err.status = res.status
+      err.code = detail && detail.code
+      throw err
+    }
+    const text = await res.text()
+    const disp = res.headers.get('Content-Disposition') || ''
+    const m = disp.match(/filename="?([^"]+)"?/)
+    return { filename: (m && m[1]) || 'tester-status.csv', text }
+  },
 
   // invite issuance (platform-admin / owner) — the code is shown in the UI only
   invite: (body) => req('/invites', { method: 'POST', body: JSON.stringify(body) }),

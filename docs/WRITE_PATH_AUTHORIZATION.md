@@ -1,9 +1,9 @@
 # Write-Path Authorization Map (non-creative admin/operator surface)
 
-**Status:** design + scoped activations. **Two write actions are ACTIVATED**
-(owner-approved, platform-admin only): **Issue invite** and **Revoke invite**.
-Every other classified action remains disabled; activation of any further action
-requires explicit owner approval.
+**Status:** design + scoped activations. **Three actions are ACTIVATED**
+(owner-approved, platform-admin only): **Issue invite**, **Revoke invite**, and
+the read-only **Dashboard export CSV**. Every other classified action remains
+disabled; activation of any further action requires explicit owner approval.
 
 **Scope:** Beta-Ops / Admin / Support / Audit / account write surfaces outside the
 creative-media cluster.
@@ -54,7 +54,7 @@ so the **next authenticated request is blocked**.
 
 | Action | UI state | Backend route | Permission | Risk | Classification |
 |---|---|---|---|---|---|
-| Dashboard export CSV | disabled "Download" | `GET /admin/dashboard/export` | `PERM_PLATFORM_ADMIN` | Low–Med (safe field set; hard-excludes secrets/tokens/card/credentials) | ENABLE LATER WITH OWNER APPROVAL |
+| Dashboard export CSV | **ACTIVATED — "Download CSV" (platform-admin only)** | `GET /admin/dashboard/export` | `PERM_PLATFORM_ADMIN` | Low–Med (safe field set; hard-excludes secrets/tokens/card/credentials) | **ACTIVATED (owner-approved; read-only, no audit event)** |
 | Sample report downloads | disabled | none (sample) | — | None | OUT OF SCOPE / SAMPLE |
 
 Safe export field set: `organization_id, organization_name, lifecycle_state,
