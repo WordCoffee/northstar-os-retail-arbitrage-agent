@@ -176,6 +176,10 @@ export default function SocialPulse() {
   const [assetQuery, setAssetQuery] = useState('')
   const [queueMode, setQueueMode] = useState('Board')
   const [selectedPosts, setSelectedPosts] = useState([])
+  // Read-only: creative references handed over from Creative Studio (local log).
+  const [receivedCreative] = useState(() => {
+    try { const raw = localStorage.getItem('ns-creative-handoffs'); return raw ? JSON.parse(raw).filter(h => h && h.target === 'SocialPulse') : [] } catch { return [] }
+  })
   const [editCampaignId, setEditCampaignId] = useState(null)
   const [campaignDraft, setCampaignDraft] = useState(null)
 
@@ -803,6 +807,31 @@ export default function SocialPulse() {
             ))}
             {filteredSocialAssets.length === 0 && (
               <div className="text-low" style={{ fontSize: 12 }}>No assets match this filter.</div>
+            )}
+          </div>
+
+          <div className="card" style={{ marginTop: 20 }}>
+            <div className="card-head">
+              <h3 className="card-title" style={{ fontSize: 15 }}>Creative references received</h3>
+              <span className="pill pill-muted">local reference · read-only</span>
+            </div>
+            {receivedCreative.length === 0 ? (
+              <div className="text-low" style={{ fontSize: 12 }}>
+                No creative references handed over yet. Sending a bundle or asset from Creative Studio records a local
+                reference here — nothing is uploaded or published.
+              </div>
+            ) : (
+              <div className="stack" style={{ gap: 8 }}>
+                {receivedCreative.map(h => (
+                  <div key={h.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 12 }}>{h.what}</div>
+                      <div className="text-low" style={{ fontSize: 10, marginTop: 2 }}>{h.id} · {(h.refs || []).length} refs{(h.refs || []).length ? `: ${h.refs.slice(0, 6).join(', ')}${h.refs.length > 6 ? '…' : ''}` : ''}</div>
+                    </div>
+                    <span className="text-low" style={{ fontSize: 11, flexShrink: 0 }}>{h.at ? new Date(h.at).toLocaleString() : ''}</span>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>
