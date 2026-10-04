@@ -2,6 +2,95 @@ import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import signals, { settle } from '../../services/signals.js'
+
+// ═══ Live observability (real reads) ═══
+// Real, read-only checks from the running backend: API error-rate tracker,
+// foundation readiness services, and warehouse counts. Unavailable reads are
+// labelled honestly — never substituted with sample values.
+function LiveObservability() {
+  const [st, setSt] = useState({ loaded: false })
+  useEffect(() => {
+    let alive = true
+    ;(async () => {
+      const [mon, status] = await Promise.all([
+        settle(signals.monitoringAlerts()),
+        settle(signals.systemStatus()),
+      ])
+      if (alive) setSt({ loaded: true, mon, status })
+    })()
+    return () => { alive = false }
+  }, [])
+
+  const env = (r) => (r && r.ok ? (r.value && r.value.data ? r.value.data : r.value) : null)
+  const mon = env(st.mon)
+  const status = env(st.status)
+  const summary = mon && mon.summary ? mon.summary : null
+  const readiness = status && status.readiness ? status.readiness : null
+  const warehouse = status && status.warehouse ? status.warehouse : null
+  const anyOk = (st.mon && st.mon.ok) || (st.status && st.status.ok)
+
+  const rowStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '9px 0', borderBottom: '1px solid var(--divider)' }
+
+  return (
+    <div className="card" data-testid="mon-live" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Live checks</h3>
+        {!st.loaded
+          ? <span className="pill pill-muted">Loading…</span>
+          : anyOk
+            ? <span className="pill pill-muted" title="Live read-only checks from the local backend">live read</span>
+            : <span className="pill pill-unknown" title="Backend reads failed — not fabricated">unavailable</span>}
+      </div>
+
+      <div style={rowStyle}>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 500 }}>API error rate (5xx)</div>
+          <div className="text-low" style={{ fontSize: 11 }}>GET /api/monitoring/error-alerts · rolling window</div>
+        </div>
+        {summary
+          ? <span className="inline-flex" style={{ gap: 6 }}>
+              <span className={`pill ${summary.breached ? 'pill-warn' : 'pill-ok'}`}>{summary.breached ? 'breached' : 'within threshold'}</span>
+              <span className="pill pill-muted">{summary.five_xx_rate == null ? 'UNKNOWN' : (summary.five_xx_rate * 100).toFixed(1) + '%'} · {summary.total_requests ?? 0} req</span>
+            </span>
+          : <span className="pill pill-unknown">unavailable</span>}
+      </div>
+
+      <div style={rowStyle}>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 500 }}>Foundation readiness</div>
+          <div className="text-low" style={{ fontSize: 11 }}>GET /api/v1/status · service readiness</div>
+        </div>
+        {readiness
+          ? <span className="inline-flex" style={{ gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+              <span className={`pill ${readiness.ready ? 'pill-ok' : 'pill-warn'}`} title="Overall readiness across checks">{readiness.ready ? 'ready' : 'not ready'}</span>
+              {Object.entries(readiness.services || {}).map(([k, v]) => (
+                <span key={k} className={`pill ${v ? 'pill-muted' : 'pill-warn'}`} title={`${k}: ${v ? 'ready' : 'not ready'}`}>{k}</span>
+              ))}
+            </span>
+          : <span className="pill pill-unknown">unavailable</span>}
+      </div>
+
+      <div style={{ ...rowStyle, borderBottom: 'none' }}>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 500 }}>Warehouse state</div>
+          <div className="text-low" style={{ fontSize: 11 }}>GET /api/v1/status · live catalog</div>
+        </div>
+        {warehouse
+          ? <span className="inline-flex" style={{ gap: 6 }}>
+              <span className={`pill ${status && status.mode === 'live' ? 'pill-ok' : 'pill-muted'}`}>{status ? status.mode : 'UNKNOWN'}</span>
+              <span className="pill pill-muted" title="Fresh live rows / total live rows / pulls">{warehouse.fresh_rows ?? 'UNKNOWN'} fresh · {warehouse.live_rows ?? 'UNKNOWN'} live · {warehouse.pulls ?? 0} pulls</span>
+            </span>
+          : <span className="pill pill-unknown">unavailable</span>}
+      </div>
+
+      <div className="text-low" style={{ fontSize: 11, marginTop: 10 }} title="Provenance rule">
+        These are live backend reads. Sample-derived checks below are muted and labelled; adverse states keep their distinct colour.
+      </div>
+    </div>
+  )
+}
 
 const TABS = [
   { id: 'alerts', label: 'Alerts', count: 3 },
@@ -106,6 +195,7 @@ export default function Monitoring() {
 
       {view === 'health' && (
         <div className="subview">
+          <LiveObservability />
           <div className="card" style={{ marginBottom: 20 }}>
             <div className="card-head">
               <h3 className="card-title">System Health</h3>
