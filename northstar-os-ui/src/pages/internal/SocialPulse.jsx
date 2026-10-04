@@ -1007,6 +1007,32 @@ export default function SocialPulse() {
               ))}
             </div>
           </div>
+
+          <div className="card" style={{ marginTop: 20 }}>
+            <div className="card-head">
+              <h3 className="card-title" style={{ fontSize: 15 }}>Local workflow by channel</h3>
+              <span className="pill pill-muted">local records · not analytics</span>
+            </div>
+            <DataTable columns={[
+              { key: 'platform', label: 'Channel' },
+              { key: 'planned', label: 'Planned' },
+              { key: 'draft', label: 'Draft' },
+              { key: 'pastReview', label: 'Past review' },
+              { key: 'scheduled', label: 'Scheduled (manual)' },
+            ]} rows={CHANNEL_FIT.map(ch => {
+              const ps = posts.filter(p => p.platform === ch.platform)
+              return {
+                platform: ch.platform,
+                planned: ps.length,
+                draft: ps.filter(p => p.state === 'Draft').length,
+                pastReview: ps.filter(p => ['Approved', 'Publish-ready', 'Scheduled'].includes(p.state)).length,
+                scheduled: ps.filter(p => p.state === 'Scheduled').length,
+              }
+            })} />
+            <div className="text-low" style={{ fontSize: 11, marginTop: 12 }}>
+              Counts are local workflow records only — not reach, engagement, or platform reporting.
+            </div>
+          </div>
         </div>
       )}
       </div>

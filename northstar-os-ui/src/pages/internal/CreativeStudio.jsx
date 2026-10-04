@@ -96,6 +96,7 @@ const STYLE_DIRECTIONS = ['Clean studio', 'Lifestyle / in-use', 'Bold graphic', 
 const VIDEO_PURPOSE = ['UGC / testimonial', 'Product motion', 'Ad hook', 'Storyboard / moodboard']
 const VIDEO_DURATION = ['5s', '15s (Short / TikTok)', '30s']
 const VIDEO_ASPECT = ['9:16 (vertical)', '1:1 (square)', '16:9 (landscape)']
+const VIDEO_INTENT = ['Organic short', 'Paid ad hook', 'Storyboard only', 'Archive']
 
 const BRIEF_STATUS = { Draft: 'pill-muted', Active: 'pill-warn', 'In Review': 'pill-ochre', Archived: 'pill-muted' }
 // Terminal local state before any engine exists. Aligned with the verified
@@ -283,6 +284,8 @@ export default function CreativeStudio() {
   const [vDuration, setVDuration] = useState('15s (Short / TikTok)')
   const [vAspect, setVAspect] = useState('9:16 (vertical)')
   const [vAssetId, setVAssetId] = useState('')
+  const [vCaption, setVCaption] = useState('')
+  const [vIntent, setVIntent] = useState('Organic short')
 
   // brief editing
   const [editBrief, setEditBrief] = useState(false)
@@ -398,6 +401,8 @@ export default function CreativeStudio() {
       format: kind === 'image' ? format : 'Short clip',
       stage: kind === 'image' ? stage : 'Draft (iterate cheap)',
       style: kind === 'image' ? styleDir : '',
+      caption: kind === 'image' ? '' : vCaption,
+      intent: kind === 'image' ? '' : vIntent,
       refs: kind === 'image' ? refIds : (vAssetId ? [vAssetId] : []),
       // No engine exists yet: the honest terminal state is "generation not armed".
       state: REQ_BLOCKED,
@@ -940,6 +945,18 @@ export default function CreativeStudio() {
                     <option value="">None (text-to-video)</option>
                     {assets.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
                   </select>
+                </div>
+                <div className="inline-flex" style={{ gap: 12, alignItems: 'flex-start' }}>
+                  <div className="field-group" style={{ flex: 1, minWidth: 200, marginBottom: 0 }}>
+                    <label className="label" htmlFor="v-caption">Caption / overlay text</label>
+                    <input id="v-caption" className="field" value={vCaption} onChange={e => setVCaption(e.target.value)} placeholder="On-screen caption or overlay copy (planning only)" />
+                  </div>
+                  <div className="field-group" style={{ minWidth: 160, marginBottom: 0 }}>
+                    <label className="label" htmlFor="v-intent">Export intent</label>
+                    <select id="v-intent" className="field" value={vIntent} onChange={e => setVIntent(e.target.value)}>
+                      {VIDEO_INTENT.map(i => <option key={i}>{i}</option>)}
+                    </select>
+                  </div>
                 </div>
                 <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
                   <button className="btn btn-sm" onClick={() => submitRequest('video')}>Queue Clip Request</button>
