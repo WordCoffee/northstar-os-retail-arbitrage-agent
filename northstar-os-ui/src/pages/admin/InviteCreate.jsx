@@ -1,4 +1,4 @@
-import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
+import { PageLayout, DataTable, DataNotice, AuthorizationNote } from '../../components/Shared.jsx'
 import BetaOpsNav from './BetaOpsNav.jsx'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
@@ -92,6 +92,15 @@ export default function InviteCreate() {
                 <option>Cohort 3 — Q4</option>
               </select>
             </div>
+            <AuthorizationNote
+              title="Issuing an invitation"
+              status="Disabled — owner approval required"
+              route="POST /api/v1/foundation/invites"
+              permission="PERM_MANAGE_ORG"
+              audit="invite.issue"
+            >
+              Issuing creates a real, single-use invitation that grants future access to this organization. It is disabled pending explicit owner activation. Enabling it also requires a confirmation step; the email send is stubbed (no real email is sent).
+            </AuthorizationNote>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <button className="btn btn-primary" disabled title="Sample surface — no invite is sent">Send Invitation</button>
               <span className="text-low" style={{ fontSize: 11 }}>Disabled in sample mode — no invite is issued.</span>
@@ -168,6 +177,22 @@ export function InviteDetail() {
             <span className="pill pill-muted">internal · logged</span>
           </div>
           <div className="stack" style={{ gap: 10 }}>
+            <AuthorizationNote
+              title="Revoke invitation"
+              status="Disabled — owner approval required"
+              route="POST /api/v1/foundation/invites/{id}/revoke"
+              permission="PERM_MANAGE_ORG"
+              audit="invite.revoke"
+            >
+              Revoking invalidates a pending invitation. The backend route exists and is audited; activation requires explicit owner approval and a recorded reason.
+            </AuthorizationNote>
+            <AuthorizationNote
+              title="Reissue invitation"
+              status="Out of scope — no backend route"
+              audit="—"
+            >
+              There is no single reissue route. Reissue would compose revoke + issue; it stays disabled until that path is designed and separately authorized.
+            </AuthorizationNote>
             <button className="btn btn-primary" disabled title="Sample surface — no invite is reissued">Reissue Invitation</button>
             <button className="btn btn-danger" disabled title="Sample surface — no invite is revoked">Revoke</button>
             <div className="text-low" style={{ fontSize: 11 }}>Actions are disabled in sample mode. Reissuing or revoking is an operator action and is always logged.</div>
