@@ -57,6 +57,31 @@ const HISTORY_BY_STATE = Object.values(HISTORY.reduce((m, h) => {
 const SEV_ORDER = { High: 3, Medium: 2, Low: 1 }
 const highestSeverity = (list) => list.reduce((a, b) => (SEV_ORDER[b] > SEV_ORDER[a] ? b : a), 'Low')
 
+// Triage grouping: one row per monitored listing (ASIN) with open/total counts,
+// highest severity, and the alert types involved. Operator triage over sample data.
+const ALERT_GROUP = Object.values(ALERTS.reduce((m, a) => {
+  const g = m[a.asin] = m[a.asin] || { asin: a.asin, count: 0, open: 0, severities: [], types: new Set() }
+  g.count += 1
+  if (a.status !== 'Resolved') g.open += 1
+  g.severities.push(a.severity)
+  g.types.add(a.type)
+  return m
+}, {})).map(g => ({ ...g, severity: highestSeverity(g.severities), types: Array.from(g.types).join(', ') }))
+
+function SourceStatusCard() {
+  return (
+    <div className="card" data-testid="lg-source-status" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Watchtower source status</h3>
+        <span className="pill pill-warn" title="No live listing feed is connected">not connected</span>
+      </div>
+      <p className="text-low" style={{ fontSize: 12, margin: 0 }}>
+        No live listing feed is connected. Alerts, diffs and rank signals below are sample triage records — the triage workflow is real operator work, but the feed itself is not live. Escalations hand a listing to ListingForge or Commerce Ops for manual action; no Guardian rule changes a listing automatically.
+      </p>
+    </div>
+  )
+}
+
 const ESCALATIONS = [
   { id: 'ES-01', asin: 'B08L5VJQ7T', reason: 'Prohibited claim in title', target: 'ListingForge', state: 'Awaiting Review', age: '4h' },
   { id: 'ES-02', asin: 'B07XJ8C9F3', reason: 'Listing suppressed — needs attribute fix', target: 'Commerce Ops', state: 'Escalated', age: '1d' },
@@ -111,6 +136,8 @@ export default function ListingGuardian() {
         Alerts, diffs, ranks, and warnings are demonstration records until a connected Listing Guardian backend exists. Rank movement is an indication, not verified fact. Escalation is manual — no rule takes automated action.
       </DataNotice>
 
+      <SourceStatusCard />
+
       <RoomTabs tabs={TABS} base="/listings" />
 
       {view === 'alerts' && (
@@ -133,6 +160,27 @@ export default function ListingGuardian() {
               <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--ochre)' }}>{ESCALATIONS.length}</div>
               <div className="text-low" style={{ fontSize: 11 }}>To ListingForge / Commerce Ops</div>
               <div className="text-low" style={{ fontSize: 10, marginTop: 2 }} title="Count from the sample escalation queue">Basis: sample escalations</div>
+            </div>
+          </div>
+
+          <div className="card" style={{ marginBottom: 20 }}>
+            <div className="card-head">
+              <h3 className="card-title">Triage by listing</h3>
+              <span className="pill pill-muted">{ALERT_GROUP.length} listings · sample</span>
+            </div>
+            <div className="stack" style={{ gap: 8 }}>
+              {ALERT_GROUP.map(g => (
+                <div key={g.asin} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 500, fontFamily: 'var(--font-mono)' }}>{g.asin}</div>
+                    <div className="text-low" style={{ fontSize: 11 }}>{g.types} · {g.open} open / {g.count} total</div>
+                  </div>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                    <span className={`pill ${SEV_PILL[g.severity]}`} title="Highest severity across this listing's alerts">{g.severity}</span>
+                    <button className="btn btn-sm" onClick={() => escalate(g.asin, 'Commerce Ops')}>Escalate</button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
