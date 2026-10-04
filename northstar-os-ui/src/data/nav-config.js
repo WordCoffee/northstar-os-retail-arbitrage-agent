@@ -1,4 +1,8 @@
-export const NAV_GROUPS = [
+import { readinessForRoom } from './readiness.js'
+
+// Raw nav definition. `status`/`statusTone` are derived below from the shared
+// readiness source so nav badges and room badges can never drift apart.
+const RAW_GROUPS = [
   { id: 'command', label: 'Command', icon: 'command', sections: [
     { id: 'command-center', label: 'Command Center', route: '/home', roles: ['operator', 'platform_admin'] },
   ]},
@@ -33,6 +37,17 @@ export const NAV_GROUPS = [
     { id: 'administration', label: 'Administration', route: '/admin', roles: ['platform_admin'] },
   ]},
 ]
+
+// Derive truthful status/statusTone from the shared readiness source. Rooms
+// not mapped (creative/media cluster) keep their existing status untouched.
+export const NAV_GROUPS = RAW_GROUPS.map(g => ({
+  ...g,
+  sections: g.sections.map(s => {
+    const r = readinessForRoom(s.id)
+    if (r) return { ...s, status: r.label, statusTone: r.tone, readinessTitle: r.title }
+    return { ...s, statusTone: s.statusTone || 'muted' }
+  }),
+}))
 
 export function findNavItem(route) {
   for (const g of NAV_GROUPS) {

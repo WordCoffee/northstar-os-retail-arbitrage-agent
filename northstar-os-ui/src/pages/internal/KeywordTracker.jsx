@@ -2,7 +2,119 @@ import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import foundationApi from '../../foundation/api.js'
+
+// ═══ Foundation keyword data (truth-first, read-only) ═══
+// Reads the real, organization-scoped foundation keyword routes. Missing
+// metrics stay UNKNOWN — nothing is fabricated. When the local foundation DB
+// has no imported keyword data, honest empty/unavailable states are shown.
+function KwSection({ title, result, columns, emptyText }) {
+  const rows = result && result.ok ? (result.value.items || []) : []
+  const err = result && !result.ok
+    ? String((result.error && (result.error.code || result.error.status)) || 'error')
+    : null
+  return (
+    <div style={{ marginTop: 14 }}>
+      <div className="card-head" style={{ marginBottom: 8 }}>
+        <h4 style={{ fontSize: 13, color: 'var(--pine)' }}>{title}</h4>
+        {err
+          ? <span className="pill pill-unknown" title="Foundation route not available for this session/organization">{err}</span>
+          : <span className="pill pill-muted">{rows.length}</span>}
+      </div>
+      {err
+        ? <p className="text-low" style={{ fontSize: 12 }}>Not available for this session or organization.</p>
+        : <DataTable columns={columns} rows={rows} emptyText={emptyText} />}
+    </div>
+  )
+}
+
+function FoundationKeywordPanel() {
+  const [st, setSt] = useState({ loaded: false })
+  useEffect(() => {
+    let alive = true
+    const settle = async (p) => {
+      try { return { ok: true, value: await p } } catch (e) { return { ok: false, error: e } }
+    }
+    ;(async () => {
+      const [keywords, gaps, terms] = await Promise.all([
+        settle(foundationApi.keywordSearch('')),
+        settle(foundationApi.keywordGaps()),
+        settle(foundationApi.searchTerms()),
+      ])
+      if (alive) setSt({ loaded: true, keywords, gaps, terms })
+    })()
+    return () => { alive = false }
+  }, [])
+
+  const results = [st.keywords, st.gaps, st.terms]
+  const anyAuth = st.loaded && results.every(r => r && !r.ok && r.error && r.error.status === 401)
+  const badge = !st.loaded
+    ? { label: 'Loading…', tone: 'muted' }
+    : anyAuth
+      ? { label: 'Sign-in required', tone: 'unknown' }
+      : { label: 'Read-only · foundation', tone: 'muted' }
+
+  const confCol = (label = 'Confidence') => ({
+    key: 'confidence', label,
+    render: (v) => v == null
+      ? <span className="pill pill-unknown" title="No confidence recorded — not inferred">UNKNOWN</span>
+      : <span className="pill pill-muted">{v}</span>,
+  })
+  const matchCol = { key: 'match_type', label: 'Match', render: (v) => v ? <span className="pill pill-muted">{v}</span> : <span className="pill pill-unknown">UNKNOWN</span> }
+  const phraseCol = { key: 'normalized_phrase', label: 'Keyword' }
+
+  return (
+    <div className="card" data-testid="kw-foundation" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Foundation keyword data</h3>
+        <span className={`pill pill-${badge.tone}`}>{badge.label}</span>
+      </div>
+      <p className="text-low" style={{ fontSize: 12, marginBottom: 6 }}>
+        Live, organization-scoped read from the foundation keyword service. Absent metrics stay UNKNOWN — nothing is fabricated. Keyword import is an operator action; there is no live provider call here.
+      </p>
+
+      {!st.loaded ? (
+        <p data-testid="kw-foundation-loading" style={{ fontSize: 13 }}>Loading foundation keyword data…</p>
+      ) : anyAuth ? (
+        <p data-testid="kw-foundation-auth" style={{ fontSize: 13 }}>Sign in and select an organization to read foundation keyword data.</p>
+      ) : (
+        <>
+          <KwSection
+            title="Tracked keywords"
+            result={st.keywords}
+            emptyText="No keyword data ingested for your organization yet."
+            columns={[
+              phraseCol, matchCol, confCol(),
+              { key: 'link_count', label: 'Coverage', render: (v, row) => v
+                ? <span className="pill pill-muted" title={`${row.target_count || 0} targets · ${v} linked listings`}>{v} linked</span>
+                : <span className="pill pill-unknown" title="No listing links recorded">No listing</span> },
+              { key: 'freshness_state', label: 'Freshness', render: (v) => v ? <span className="pill pill-muted">{v}</span> : <span className="pill pill-unknown">UNKNOWN</span> },
+            ]}
+          />
+          <KwSection
+            title="Coverage gaps (untargeted keywords)"
+            result={st.gaps}
+            emptyText="No untargeted keywords — no coverage gaps recorded."
+            columns={[phraseCol, matchCol, confCol()]}
+          />
+          <KwSection
+            title="Search terms"
+            result={st.terms}
+            emptyText="No search-term data ingested for your organization yet."
+            columns={[
+              { key: 'normalized_term', label: 'Search term', render: (v, row) => v || row.raw_term || 'UNKNOWN' },
+              { key: 'impressions', label: 'Impressions', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+              { key: 'clicks', label: 'Clicks', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+              { key: 'orders', label: 'Orders', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+              { key: 'source', label: 'Source', render: (v) => v ? <span className="pill pill-muted">{v}</span> : <span className="pill pill-unknown">UNKNOWN</span> },
+            ]}
+          />
+        </>
+      )}
+    </div>
+  )
+}
 
 const TABS = [
   { id: 'sets', label: 'Sets', count: 4 },
@@ -85,9 +197,11 @@ export default function KeywordTracker() {
         <button className="btn btn-sm btn-ghost" onClick={() => toast('Reports export uses cached snapshot data.', 'info')}>Reports</button>
       </>}
     >
-      <DataNotice tone="cached" title="Rankings and movement alerts are a cached snapshot">
-        Position data is a cached snapshot from 2h ago, and the flagged movement alerts derive from that same snapshot. Search volume is estimated and must not be treated as verified traffic. Position changes are indications — verify in Trends before acting.
+      <DataNotice tone="cached" title="Sample preview — plus a live foundation read">
+        The rankings, trends, coverage and alerts below are a cached sample preview. The “Foundation keyword data” card is a live, organization-scoped read from the foundation keyword service (empty until an operator import exists). Search volume is estimated and must not be treated as verified traffic. Position changes are indications — verify in Trends before acting.
       </DataNotice>
+
+      <FoundationKeywordPanel />
 
       <div className="card" style={{ marginBottom: 16, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
         <span className="text-low" style={{ fontSize: 11 }}>Keyword set</span>

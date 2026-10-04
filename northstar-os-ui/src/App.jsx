@@ -194,7 +194,7 @@ function Shell() {
                       onClick={() => { navigate(s.route); setToolsOpen(false) }}
                     >
                       {s.label}
-                      {s.status && <span className={`pill pill-muted`}>{s.status}</span>}
+                      {s.status && <span className={`pill pill-${s.statusTone || 'muted'}`} title={s.readinessTitle || ''}>{s.status}</span>}
                     </button>
                   ))}
                 </div>

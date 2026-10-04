@@ -167,6 +167,7 @@ body {
   margin-bottom: 4px;
   line-height: 1.2;
 }
+.page-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .page-subtitle { font-size: 14px; color: var(--ink-mid); line-height: 1.5; }
 .page-meta { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 

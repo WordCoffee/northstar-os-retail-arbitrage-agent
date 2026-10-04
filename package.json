@@ -4,9 +4,9 @@
   "description": "Northstar OS - Retail Arbitrage Intelligence Platform",
   "private": true,
   "scripts": {
-    "dev": "npm --cwd northstar-os-ui run dev",
-    "build": "npm --cwd northstar-os-ui run build",
-    "preview": "npm --cwd northstar-os-ui run preview",
+    "dev": "npm --prefix northstar-os-ui run dev",
+    "build": "npm --prefix northstar-os-ui run build",
+    "preview": "npm --prefix northstar-os-ui run preview",
     "test": "node Northstar_backend/test_ui_display.cjs",
     "start": "python -m uvicorn Northstar_backend.main:app --host 127.0.0.1 --port 8000",
     "lint": "echo 'Linting not implemented yet'",

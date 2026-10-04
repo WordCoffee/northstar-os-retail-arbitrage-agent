@@ -65,7 +65,10 @@ export default function SuiteRail({ onNavigate }) {
                     >
                       <span className="suite-rail-item-label">{s.label}</span>
                       {s.status && (
-                        <span className={`suite-rail-status status-${s.status.toLowerCase().replace(/\s/g, '-')}`}>{s.status}</span>
+                        <span
+                          className={`pill pill-${s.statusTone || 'muted'} suite-rail-status`}
+                          title={s.readinessTitle || ''}
+                        >{s.status}</span>
                       )}
                     </button>
                   )

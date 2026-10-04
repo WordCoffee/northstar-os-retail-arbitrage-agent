@@ -1,3 +1,6 @@
+import { useLocation } from 'react-router-dom'
+import { readinessForRoute } from '../data/readiness.js'
+
 // ═══ Shared: Evidence Packet Component ═══
 export function EvidencePacket({ title, source, freshness, status, children }) {
   return (
@@ -84,10 +87,19 @@ export function DataNotice({ tone = 'sample', title, children }) {
 
 // ═══ Shared: Section Layout Component ═══
 export function PageLayout({ title, subtitle, actions, children }) {
+  const { pathname } = useLocation()
+  const readiness = readinessForRoute(pathname)
   return (
     <div className="fade-in">
       <div className="page-header">
-        <h1 className="page-title">{title}</h1>
+        <div className="page-title-row">
+          <h1 className="page-title">{title}</h1>
+          {readiness && (
+            <span className={`pill pill-${readiness.tone}`} title={readiness.title}>
+              {readiness.label}
+            </span>
+          )}
+        </div>
         {subtitle && <p className="page-subtitle">{subtitle}</p>}
         {actions && <div className="page-meta">{actions}</div>}
       </div>
