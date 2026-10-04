@@ -261,6 +261,10 @@ export default function CreativeStudio() {
   const [activeBriefId, setActiveBriefId] = useState(briefs[0]?.id || '')
   const [assetFilter, setAssetFilter] = useState('All')
   const [assetQuery, setAssetQuery] = useState('')
+  // Variants & History filters (lineage views)
+  const [variantScope, setVariantScope] = useState('active')
+  const [variantStateFilter, setVariantStateFilter] = useState('All')
+  const [historyFilter, setHistoryFilter] = useState('All')
   const [outputs, setOutputs] = useState(['Ad creatives', 'Listing imagery'])
 
   // composer fields
@@ -311,6 +315,11 @@ export default function CreativeStudio() {
     () => assets.filter(a => (a.attached || []).includes(active?.id || '')),
     [assets, active],
   )
+
+  const filteredVariants = useMemo(() => variants.filter(v =>
+    (variantScope === 'all' || v.brief === (active?.id || '')) &&
+    (variantStateFilter === 'All' || v.state === variantStateFilter),
+  ), [variants, variantScope, variantStateFilter, active])
 
   const filteredAssets = useMemo(() => {
     const q = assetQuery.trim().toLowerCase()
@@ -425,6 +434,17 @@ export default function CreativeStudio() {
   const setVariantState = (id, state) => {
     setVariants(prev => prev.map(v => v.id === id ? { ...v, state } : v))
     t(`Variant ${id} → ${state} (internal review state — not publishing authorization).`, 'info')
+  }
+
+  // Lineage: record a variant row from a queued request (no media is produced).
+  const addVariantFromRequest = (req) => {
+    const id = uid('V')
+    setVariants(prev => [{
+      id, brief: req.briefId || active?.id || '', format: req.format || format,
+      aspect: req.aspect || aspect, state: 'Draft', fromRequest: req.id,
+      note: `Created from request ${req.id} — local record, not generated media.`, createdAt: nowIso(),
+    }, ...prev])
+    t(`Variant ${id} added from request ${req.id} (local lineage record).`, 'info')
   }
 
   // Storyboard beats — local planning records for the short-clip shell.
@@ -936,7 +956,8 @@ export default function CreativeStudio() {
                 columns={[
                   { key: 'id', label: 'ID' },
                   { key: 'kind', label: 'Type', render: (v) => <span className="pill pill-muted">{v === 'video' ? 'Video' : 'Image'}</span> },
-                  { key: 'prompt', label: 'Brief', render: (v) => <span style={{ fontSize: 12 }}>{v.length > 52 ? v.slice(0, 52) + '…' : v}</span> },
+                  { key: 'briefId', label: 'Brief', render: (v) => <span className="text-low" style={{ fontSize: 11 }}>{briefName(v)}</span> },
+                  { key: 'prompt', label: 'Prompt', render: (v) => <span style={{ fontSize: 12 }}>{v.length > 40 ? v.slice(0, 40) + '…' : v}</span> },
                   { key: 'format', label: 'Format' },
                   { key: 'state', label: 'State', render: (v) => <span className={`pill ${pillFor(v)}`} title="Local workflow state — a provider still has to render">{v}</span> },
                   { key: 'actions', label: '', render: (v, row) => (
@@ -947,6 +968,7 @@ export default function CreativeStudio() {
                       {row.state === 'Queued' && (
                         <button className="btn btn-sm btn-ghost" onClick={() => advanceRequest(row.id, 'Error')} title="Simulate the worker error path (local demo)">Simulate error</button>
                       )}
+                      <button className="btn btn-sm btn-ghost" onClick={() => addVariantFromRequest(row)} title="Record a variant row from this request (no media produced)">Add variant</button>
                       <button className="btn btn-sm btn-ghost" onClick={() => removeRequest(row.id)}>Remove</button>
                     </div>
                   ) },
@@ -961,11 +983,19 @@ export default function CreativeStudio() {
       {view === 'variants' && (
         <div className="subview">
           <div className="room-toolbar">
-            <span className="pill pill-muted" style={{ marginRight: 'auto' }}>{active ? active.name : 'no active brief'} · {variants.length} variants · local records</span>
+            <span className="text-low" style={{ fontSize: 11, marginRight: 4 }}>Scope</span>
+            {[['active', 'Active brief'], ['all', 'All briefs']].map(([k, lbl]) => (
+              <button key={k} className={`filter-pill ${variantScope === k ? 'active' : ''}`} onClick={() => setVariantScope(k)}>{lbl}</button>
+            ))}
+            <span className="text-low" style={{ fontSize: 11, marginLeft: 8, marginRight: 4 }}>State</span>
+            {['All', 'Draft', 'In Review', 'Approved', 'Changes Requested'].map(s => (
+              <button key={s} className={`filter-pill ${variantStateFilter === s ? 'active' : ''}`} onClick={() => setVariantStateFilter(s)}>{s}</button>
+            ))}
+            <span className="pill pill-muted" style={{ marginLeft: 'auto' }}>{filteredVariants.length} of {variants.length} · local records</span>
             <button className="btn btn-sm" onClick={addVariant}>Add Variant</button>
           </div>
           <div className="grid-cards-3">
-            {variants.map(v => (
+            {filteredVariants.map(v => (
               <div key={v.id} className="card" style={{ padding: 12 }}>
                 <Thumb height={110} label={`${v.aspect} · ${v.format}`} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
@@ -974,6 +1004,9 @@ export default function CreativeStudio() {
                 </div>
                 <div className="text-low" style={{ fontSize: 11, marginBottom: 2 }}>{briefName(v.brief)}</div>
                 <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginBottom: 8 }}>{v.note}</div>
+                {v.fromRequest && (
+                  <div className="text-low" style={{ fontSize: 10, marginBottom: 8 }} title="Lineage: the queued request this variant was recorded from">From request: {v.fromRequest}</div>
+                )}
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
                   {v.state === 'Approved' ? (
                     <span className="pill pill-forest" style={{ fontSize: 10 }} title="Approved — final internal review state; not a publishing authorization">Approved — no action needed</span>
@@ -988,18 +1021,27 @@ export default function CreativeStudio() {
                 </div>
               </div>
             ))}
+            {filteredVariants.length === 0 && (
+              <div className="text-low" style={{ fontSize: 12 }}>No variants match this scope/state filter.</div>
+            )}
           </div>
 
           <div className="card" style={{ marginTop: 20 }}>
             <div className="card-head">
               <h3 className="card-title" style={{ fontSize: 15 }}>History</h3>
-              <span className="pill pill-muted">local record log</span>
+              <div className="inline-flex" style={{ gap: 6 }}>
+                {['All', 'Requests', 'Variants'].map(f => (
+                  <button key={f} className={`filter-pill ${historyFilter === f ? 'active' : ''}`} onClick={() => setHistoryFilter(f)}>{f}</button>
+                ))}
+                <span className="pill pill-muted">local record log</span>
+              </div>
             </div>
             {(requests.length === 0 && variants.length === 0) ? (
               <div className="text-low" style={{ fontSize: 12 }}>No history yet.</div>
             ) : (
               <div className="stack" style={{ gap: 8 }}>
                 {[...requests.map(r => ({ ...r, _kind: 'request' })), ...variants.map(v => ({ ...v, _kind: 'variant' }))]
+                  .filter(h => historyFilter === 'All' || (historyFilter === 'Requests' ? h._kind === 'request' : h._kind === 'variant'))
                   .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
                   .slice(0, 12)
                   .map((h, i) => (
@@ -1007,6 +1049,8 @@ export default function CreativeStudio() {
                       <div>
                         <span className={`pill ${pillFor(h.state)}`} style={{ marginRight: 8 }}>{h.state}</span>
                         <span style={{ fontSize: 12 }}>{h._kind === 'request' ? `${h.kind === 'video' ? 'Video' : 'Image'} request` : 'Variant'} {h.id}</span>
+                        <span className="text-low" style={{ fontSize: 11, marginLeft: 8 }}>{briefName(h._kind === 'request' ? h.briefId : h.brief)}</span>
+                        {h._kind === 'variant' && h.fromRequest && <span className="text-low" style={{ fontSize: 10, marginLeft: 8 }}>← {h.fromRequest}</span>}
                       </div>
                       <span className="text-low" style={{ fontSize: 11 }}>{h.createdAt ? new Date(h.createdAt).toLocaleString() : '—'}</span>
                     </div>
