@@ -33,7 +33,9 @@ param(
   [switch]$IUnderstandThisIsOwnerGated
 )
 
-$ErrorActionPreference = 'Stop'
+# Native CLIs (git/pip/hf) write progress to stderr; 'Stop' would treat that as a
+# terminating error. Use 'Continue' and rely on explicit `throw` for gating.
+$ErrorActionPreference = 'Continue'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $ComfyHome = if ($env:COMFYUI_HOME) { $env:COMFYUI_HOME } else { Join-Path $RepoRoot 'ComfyUI' }
 $ComfyUrl  = if ($env:COMFYUI_URL) { $env:COMFYUI_URL } else { 'http://127.0.0.1:8188' }
@@ -88,7 +90,9 @@ if ($DownloadWeights) {
   Write-Gate "Downloading FLUX.1 Dev FP8 + encoders into $ComfyHome/models (large: ~18GB)."
   $VenvPy = Join-Path $ComfyHome 'venv\Scripts\python.exe'
   & $VenvPy -m pip install huggingface-hub
-  $HfCli = Join-Path $ComfyHome 'venv\Scripts\huggingface-cli.exe'
+  # huggingface_hub >= 1.x deprecates `huggingface-cli`; use the `hf` entry point.
+  $HfCli = Join-Path $ComfyHome 'venv\Scripts\hf.exe'
+  if (-not (Test-Path $HfCli)) { $HfCli = Join-Path $ComfyHome 'venv\Scripts\huggingface-cli.exe' }
   & $HfCli download Kijai/flux-fp8 flux1-dev-fp8.safetensors --local-dir (Join-Path $ComfyHome 'models/unet')
   & $HfCli download Kijai/flux-fp8 ae.safetensors --local-dir (Join-Path $ComfyHome 'models/vae')
   & $HfCli download comfyanonymous/flux_text_encoders clip_l.safetensors --local-dir (Join-Path $ComfyHome 'models/clip')
