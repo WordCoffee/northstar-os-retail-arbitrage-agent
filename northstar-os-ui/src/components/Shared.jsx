@@ -85,6 +85,27 @@ export function DataNotice({ tone = 'sample', title, children }) {
   )
 }
 
+// ═══ Shared: Authorization Boundary Note ═══
+// Non-activating: explains why a write surface is disabled and what enabling it
+// would require (route / permission / audit). Display only — performs no write.
+export function AuthorizationNote({ title = 'Authorization boundary', status = 'Disabled — owner approval required', route, permission, audit, children }) {
+  return (
+    <div className="alert" data-testid="authz-note" style={{ marginBottom: 16 }}>
+      <div className="alert-title"><span className="pill pill-ochre">{status}</span> {title}</div>
+      <div className="alert-text">
+        {children}
+        {(route || permission || audit) && (
+          <div className="inline-flex" style={{ gap: 6, marginTop: 8, flexWrap: 'wrap' }}>
+            {route && <span className="pill pill-muted" title="Backend route that would perform this write">{route}</span>}
+            {permission && <span className="pill pill-muted" title="Required permission scope">{permission}</span>}
+            {audit && <span className="pill pill-muted" title="Audit event recorded on execution">{audit}</span>}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ═══ Shared: Section Layout Component ═══
 export function PageLayout({ title, subtitle, actions, children }) {
   const { pathname } = useLocation()
