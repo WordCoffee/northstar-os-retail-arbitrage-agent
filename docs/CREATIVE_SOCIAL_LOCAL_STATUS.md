@@ -326,3 +326,30 @@ no credits.
 
 **Generation remains PLANNED / NOT ARMED.** See
 `reports/creative_generation_architecture_pathb_20261004.md`.
+
+---
+
+## 12. Local image-engine dev lane setup (2026-10-04)
+
+A **localhost-only, image-only, operator-controlled** development lane was
+prepared as far as possible without owner-gated actions:
+
+- `Northstar_backend/local_image_engine.py` + `tools/local_image_engine_status.py`
+  — a **read-only** status detector (ComfyUI install, expected weights,
+  localhost reachability, `MEDIA_GEN_LIVE`, GPU, disk). It installs nothing,
+  downloads nothing, starts nothing, and never arms the gate.
+- `tools/setup_local_image_engine.ps1` — localhost-only setup. `-Check` is
+  read-only; `-Install` / `-DownloadWeights` / `-Start` are **owner-gated** and
+  refuse without `-IUnderstandThisIsOwnerGated`. Binds `127.0.0.1` only.
+- `GET /api/v1/foundation/creative/readiness` now returns a `local_setup` block
+  (installed / weights / engine / gate / ready) — read-only.
+- Creative Studio shows the local dev lane when the live route is reachable.
+- Runbook: `docs/LOCAL_IMAGE_ENGINE_SETUP_RUNBOOK.md`.
+
+Detected: GPU **present** (RTX 5080 Laptop 16GB), disk **~110 GB free**,
+ComfyUI **missing**, weights **0/4**, engine **unreachable**, gate **off**.
+`ready_for_local_generation: False` — the only remaining pieces are the four
+owner-gated steps (install, weights, start, `MEDIA_GEN_LIVE=1`).
+
+**Truth semantics:** local readiness ≠ production readiness; engine installed ≠
+generation enabled. Generation remains **PLANNED / NOT ARMED**.
