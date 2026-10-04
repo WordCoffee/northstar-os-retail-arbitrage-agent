@@ -252,3 +252,29 @@ Verified against the repo and the running environment:
   ComfyUI + weights, add a media route, and set `MEDIA_GEN_LIVE=1`. The doc's §5
   recommended route (`foundation/api/creative.py`, `MEDIA_GEN_LIVE` default off,
   `provider_required` when unreachable) remains the minimal safe next step.
+
+---
+
+## 9. Autonomous creative build pass (2026-10-04)
+
+Eight clusters were executed on branch `feature/creative-cluster-launch`
+(`be6e815` → `1ca70ef`), all local and truth-preserving:
+
+- **Creative Studio:** Variants & History lineage (request↔variant, filters,
+  history filters); Production Queue Brief column + "Add variant"; Ad Creative
+  placement/state filters + Brief column + review trail; **local handoff log**
+  (reference-only) with an Exports "Handoff log"; Video/Shorts Caption/overlay +
+  Export intent recorded on the clip request.
+- **SocialPulse:** per-post **workflow audit history**, board "Last:" line,
+  Approvals **multi-select bulk review** + "Recent decisions" trail; room-level
+  "Generate Variants" now records variant draft posts; Workflow List "Last
+  transition"; Asset Library "Creative references received" (read-only);
+  Analytics "Local workflow by channel" breakdown.
+- **AdPilot:** read-only "Creative handoffs received" panel (closes the
+  creative→ad-ops handoff loop).
+- **Mobile:** 22 creative tabs verified at 390px with zero horizontal overflow.
+
+**Truth posture unchanged:** generation PLANNED/NOT ARMED; SocialPulse does not
+publish; no analytics provider; all new state is local workflow/reference
+records. Rooms remain PARTIAL/SAMPLE — no readiness inflation. See
+`reports/creative_autonomous_pass_20261004.md`.
