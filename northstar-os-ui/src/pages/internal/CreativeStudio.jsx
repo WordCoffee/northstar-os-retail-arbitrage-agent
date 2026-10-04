@@ -293,6 +293,8 @@ export default function CreativeStudio() {
   const [adCta, setAdCta] = useState('Shop now')
   const [adAudience, setAdAudience] = useState('Homeowners 30–55')
   const [adPlacements, setAdPlacements] = useState(['top-search', 'feed'])
+  const [adPlacementFilter, setAdPlacementFilter] = useState('All')
+  const [adStateFilter, setAdStateFilter] = useState('All')
 
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : 'briefs'
@@ -320,6 +322,15 @@ export default function CreativeStudio() {
     (variantScope === 'all' || v.brief === (active?.id || '')) &&
     (variantStateFilter === 'All' || v.state === variantStateFilter),
   ), [variants, variantScope, variantStateFilter, active])
+
+  const filteredAdVars = useMemo(() => adVars.filter(v =>
+    (adPlacementFilter === 'All' || v.placementKey === adPlacementFilter) &&
+    (adStateFilter === 'All' || v.state === adStateFilter),
+  ), [adVars, adPlacementFilter, adStateFilter])
+  const adDecisions = useMemo(() => adVars
+    .flatMap(v => (v.history || []).map(h => ({ ...h, id: v.id, placement: v.placement })))
+    .sort((a, b) => (b.at || '').localeCompare(a.at || ''))
+    .slice(0, 6), [adVars])
 
   const filteredAssets = useMemo(() => {
     const q = assetQuery.trim().toLowerCase()
@@ -461,19 +472,22 @@ export default function CreativeStudio() {
   const togglePlacement = (k) => setAdPlacements(prev => prev.includes(k) ? prev.filter(x => x !== k) : [...prev, k])
   const buildAdSet = () => {
     if (!adPlacements.length) { t('Select at least one placement before building an ad set.', 'warn'); return }
+    const at = nowIso()
     const created = adPlacements.map(k => {
       const pl = AD_PLACEMENTS.find(p => p.key === k)
       return {
         id: uid('AV'), briefId: active?.id || '', placementKey: k, placement: pl.label,
         aspect: pl.aspect, hook: adHook.trim() || '(no hook)', offer: adOffer.trim() || '(no offer)',
-        cta: adCta, audience: adAudience, state: 'Draft', note: pl.note, createdAt: nowIso(),
+        cta: adCta, audience: adAudience, state: 'Draft', note: pl.note, createdAt: at,
+        history: [{ at, from: null, to: 'Draft' }],
       }
     })
     setAdVars(prev => [...created, ...prev])
     t(`Built ${created.length} ad-creative variant records across ${adPlacements.length} placement(s) — local planning records; no ad is generated or published.`, 'info')
   }
   const setAdVariantState = (id, state) => {
-    setAdVars(prev => prev.map(v => v.id === id ? { ...v, state } : v))
+    const at = nowIso()
+    setAdVars(prev => prev.map(v => v.id === id ? { ...v, state, history: [...(v.history || []), { at, from: v.state, to: state }] } : v))
     t(`Ad variant ${id} → ${state} (local review state — not a publishing or spend authorization).`, 'info')
   }
   const removeAdVariant = (id) => setAdVars(prev => prev.filter(v => v.id !== id))
@@ -810,8 +824,21 @@ export default function CreativeStudio() {
           <div className="card" style={{ marginTop: 20 }}>
             <div className="card-head">
               <h3 className="card-title">Ad Variant Set</h3>
-              <span className="pill pill-muted">{adVars.length} variants · local records</span>
+              <span className="pill pill-muted">{filteredAdVars.length} of {adVars.length} · local records</span>
             </div>
+            {adVars.length > 0 && (
+              <div className="room-toolbar">
+                <span className="text-low" style={{ fontSize: 11, marginRight: 4 }}>Placement</span>
+                <button className={`filter-pill ${adPlacementFilter === 'All' ? 'active' : ''}`} onClick={() => setAdPlacementFilter('All')}>All</button>
+                {AD_PLACEMENTS.map(pl => (
+                  <button key={pl.key} className={`filter-pill ${adPlacementFilter === pl.key ? 'active' : ''}`} onClick={() => setAdPlacementFilter(pl.key)}>{pl.label}</button>
+                ))}
+                <span className="text-low" style={{ fontSize: 11, marginLeft: 8, marginRight: 4 }}>State</span>
+                {['All', 'Draft', 'Changes Requested', 'Approved'].map(s => (
+                  <button key={s} className={`filter-pill ${adStateFilter === s ? 'active' : ''}`} onClick={() => setAdStateFilter(s)}>{s}</button>
+                ))}
+              </div>
+            )}
             {adVars.length === 0 ? (
               <div className="empty">
                 <div className="empty-title">No ad variants yet</div>
@@ -820,9 +847,10 @@ export default function CreativeStudio() {
             ) : (
               <DataTable columns={[
                 { key: 'id', label: 'ID' },
+                { key: 'briefId', label: 'Brief', render: (v) => <span className="text-low" style={{ fontSize: 11 }}>{briefName(v)}</span> },
                 { key: 'placement', label: 'Placement' },
                 { key: 'aspect', label: 'Aspect', render: (v) => <span className="pill pill-muted">{v}</span> },
-                { key: 'hook', label: 'Hook', render: (v) => <span style={{ fontSize: 12 }}>{v.length > 34 ? v.slice(0, 34) + '…' : v}</span> },
+                { key: 'hook', label: 'Hook', render: (v) => <span style={{ fontSize: 12 }}>{v.length > 30 ? v.slice(0, 30) + '…' : v}</span> },
                 { key: 'cta', label: 'CTA' },
                 { key: 'state', label: 'State', render: (v) => <span className={`pill ${pillFor(v)}`} title="Local review state — not a publishing or spend authorization">{v}</span> },
                 { key: 'actions', label: '', render: (v, row) => (
@@ -836,7 +864,23 @@ export default function CreativeStudio() {
                     <button className="btn btn-sm btn-ghost" onClick={() => removeAdVariant(row.id)}>Remove</button>
                   </div>
                 ) },
-              ]} rows={adVars} />
+              ]} rows={filteredAdVars} />
+            )}
+            {filteredAdVars.length === 0 && adVars.length > 0 && (
+              <div className="text-low" style={{ fontSize: 12 }}>No ad variants match this placement/state filter.</div>
+            )}
+            {adDecisions.length > 0 && (
+              <div style={{ marginTop: 16 }}>
+                <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Recent ad-set decisions · local review trail</div>
+                <div className="stack" style={{ gap: 6 }}>
+                  {adDecisions.map((d, i) => (
+                    <div key={`${d.id}-${i}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, fontSize: 11 }}>
+                      <span className="text-low">{d.from ? `${d.from} → ${d.to}` : `created → ${d.to}`} · {d.id} · {d.placement}</span>
+                      <span className="text-low">{d.at ? new Date(d.at).toLocaleString() : ''}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
             {adVars.length > 0 && (
               <div style={{ marginTop: 14, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
