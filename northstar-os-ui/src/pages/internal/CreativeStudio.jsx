@@ -127,6 +127,14 @@ const SEED_COLLECTIONS = [
   { name: 'Listing imagery', count: 8, note: 'A+ content + main-image sets' },
 ]
 
+// Video storyboard beats — local planning records only (no clip is rendered).
+const SEED_BEATS = [
+  { id: 'SB-01', seconds: 2, text: 'Hook — product on counter, natural light' },
+  { id: 'SB-02', seconds: 4, text: 'Problem — sediment visible in tap water' },
+  { id: 'SB-03', seconds: 5, text: 'Demo — install in under 5 minutes, no tools' },
+  { id: 'SB-04', seconds: 4, text: 'Proof — before/after taste test' },
+]
+
 function Thumb({ height = 90, label, note = 'no preview · local record' }) {
   return (
     <div style={{
@@ -189,6 +197,7 @@ export default function CreativeStudio() {
   const [assets, setAssets] = useLocalRoom('ns-creative-assets', SEED_ASSETS)
   const [variants, setVariants] = useLocalRoom('ns-creative-variants', SEED_VARIANTS)
   const [bundles, setBundles] = useLocalRoom('ns-creative-bundles', [])
+  const [beats, setBeats] = useLocalRoom('ns-creative-video-beats', SEED_BEATS)
 
   const [activeBriefId, setActiveBriefId] = useState(briefs[0]?.id || '')
   const [assetFilter, setAssetFilter] = useState('All')
@@ -208,6 +217,10 @@ export default function CreativeStudio() {
   const [vDuration, setVDuration] = useState('15s (Short / TikTok)')
   const [vAspect, setVAspect] = useState('9:16 (vertical)')
   const [vAssetId, setVAssetId] = useState('')
+
+  // brief editing
+  const [editBrief, setEditBrief] = useState(false)
+  const [briefDraft, setBriefDraft] = useState(null)
 
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : 'briefs'
@@ -237,6 +250,29 @@ export default function CreativeStudio() {
     t('New brief draft created — work-brief inputs are local drafts (sample). No image generates until a local provider is connected.', 'info')
     go('composer')
   }
+
+  // Inline brief editing — a brief is a real local object, so its objective,
+  // audience, brand, and deliverable count are editable after creation.
+  const startEditBrief = () => {
+    if (!active) return
+    setBriefDraft({
+      name: active.name, objective: active.objective, audience: active.audience,
+      brand: active.brand, deliverables: active.deliverables,
+    })
+    setEditBrief(true)
+  }
+  const saveBrief = () => {
+    if (!active || !briefDraft) return
+    const n = Number(briefDraft.deliverables)
+    setBriefs(prev => prev.map(b => b.id === active.id ? {
+      ...b, ...briefDraft,
+      name: (briefDraft.name || '').trim() || b.name,
+      deliverables: Number.isFinite(n) && n > 0 ? n : b.deliverables,
+    } : b))
+    setEditBrief(false)
+    t(`Brief ${active.id} updated (local record).`, 'info')
+  }
+  const setBriefField = (k, v) => setBriefDraft(prev => ({ ...prev, [k]: v }))
 
   const toggleRef = (id) => setRefIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
 
@@ -283,10 +319,34 @@ export default function CreativeStudio() {
     t('Variant record added locally (sample workflow). Not a generated asset.', 'info')
   }
 
+  // Distinct from "Queue Image Request": this records a small set of aspect
+  // variant RECORDS for the active brief. It generates no media — that still
+  // requires a connected provider. (Previously it duplicated queueing.)
+  const generateVariants = () => {
+    if (!active) { t('Select an active brief before adding variants.', 'warn'); return }
+    const aspectSet = ['1:1', '4:5', '9:16']
+    const created = aspectSet.map(a => ({
+      id: uid('V'), brief: active.id, format, aspect: a, state: 'Draft',
+      note: `Draft variant record (${a}) — local workflow record, not generated media.`,
+      createdAt: nowIso(),
+    }))
+    setVariants(prev => [...created, ...prev])
+    t(`Added ${created.length} draft variant records (${aspectSet.join(', ')}) to ${active.name} — workflow records only; no image was generated.`, 'info')
+  }
+
   const setVariantState = (id, state) => {
     setVariants(prev => prev.map(v => v.id === id ? { ...v, state } : v))
     t(`Variant ${id} → ${state} (internal review state — not publishing authorization).`, 'info')
   }
+
+  // Storyboard beats — local planning records for the short-clip shell.
+  const addBeat = () => {
+    setBeats(prev => [...prev, { id: uid('SB'), seconds: 3, text: '' }])
+    t('Storyboard beat added (local planning record — no clip is generated).', 'info')
+  }
+  const updateBeat = (id, patch) => setBeats(prev => prev.map(b => b.id === id ? { ...b, ...patch } : b))
+  const removeBeat = (id) => setBeats(prev => prev.filter(b => b.id !== id))
+  const totalSeconds = beats.reduce((n, b) => n + (Number(b.seconds) || 0), 0)
 
   const toggleOutput = (o) => setOutputs(prev => prev.includes(o) ? prev.filter(x => x !== o) : [...prev, o])
 
@@ -359,22 +419,63 @@ export default function CreativeStudio() {
             <div className="card">
               <div className="card-head">
                 <h3 className="card-title">Active Brief — {active.name}</h3>
-                <span className={`pill ${BRIEF_STATUS[active.status] || 'pill-muted'}`}>{active.status}</span>
+                <div className="inline-flex" style={{ gap: 8 }}>
+                  <span className={`pill ${BRIEF_STATUS[active.status] || 'pill-muted'}`}>{active.status}</span>
+                  {!editBrief && <button className="btn btn-sm btn-ghost" onClick={startEditBrief}>Edit Brief</button>}
+                </div>
               </div>
-              <div className="grid-4" style={{ gap: 16 }}>
-                {[
-                  { label: 'Objective', v: active.objective },
-                  { label: 'Audience', v: active.audience },
-                  { label: 'Brand', v: active.brand },
-                  { label: 'Formats', v: active.formats.join(', ') },
-                ].map(d => (
-                  <div key={d.label}>
-                    <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>{d.label}</div>
-                    <div style={{ fontSize: 13, fontWeight: 500 }}>{d.v}</div>
+              {editBrief && briefDraft ? (
+                <div className="stack" style={{ gap: 12 }}>
+                  <div className="field-group" style={{ marginBottom: 0 }}>
+                    <label className="label" htmlFor="br-name">Brief name</label>
+                    <input id="br-name" className="field" value={briefDraft.name} onChange={e => setBriefField('name', e.target.value)} />
                   </div>
-                ))}
-              </div>
-              <div className="text-low" style={{ fontSize: 11, marginTop: 12 }}>{active.note}</div>
+                  <div className="inline-flex" style={{ gap: 12, alignItems: 'flex-start' }}>
+                    <div className="field-group" style={{ minWidth: 200, marginBottom: 0 }}>
+                      <label className="label" htmlFor="br-objective">Objective</label>
+                      <input id="br-objective" className="field" value={briefDraft.objective} onChange={e => setBriefField('objective', e.target.value)} />
+                    </div>
+                    <div className="field-group" style={{ minWidth: 200, marginBottom: 0 }}>
+                      <label className="label" htmlFor="br-audience">Audience</label>
+                      <input id="br-audience" className="field" value={briefDraft.audience} onChange={e => setBriefField('audience', e.target.value)} />
+                    </div>
+                  </div>
+                  <div className="inline-flex" style={{ gap: 12, alignItems: 'flex-start' }}>
+                    <div className="field-group" style={{ minWidth: 180, marginBottom: 0 }}>
+                      <label className="label" htmlFor="br-brand">Brand / context</label>
+                      <select id="br-brand" className="field" value={briefDraft.brand} onChange={e => setBriefField('brand', e.target.value)}>
+                        {['Word Coffee', 'Mogra Organics', 'Neck Nirvana', 'Northstar OS'].map(b => <option key={b}>{b}</option>)}
+                      </select>
+                    </div>
+                    <div className="field-group" style={{ minWidth: 140, marginBottom: 0 }}>
+                      <label className="label" htmlFor="br-deliverables">Deliverables</label>
+                      <input id="br-deliverables" className="field" type="number" min="1" value={briefDraft.deliverables} onChange={e => setBriefField('deliverables', e.target.value)} />
+                    </div>
+                  </div>
+                  <div className="inline-flex" style={{ gap: 8 }}>
+                    <button className="btn btn-sm" onClick={saveBrief}>Save Brief</button>
+                    <button className="btn btn-sm btn-ghost" onClick={() => setEditBrief(false)}>Cancel</button>
+                  </div>
+                  <div className="text-low" style={{ fontSize: 11 }}>Brief fields are local workspace records — not provider output.</div>
+                </div>
+              ) : (
+                <>
+                  <div className="grid-4" style={{ gap: 16 }}>
+                    {[
+                      { label: 'Objective', v: active.objective },
+                      { label: 'Audience', v: active.audience },
+                      { label: 'Brand', v: active.brand },
+                      { label: 'Deliverables', v: `${active.deliverables} · ${active.formats.join(', ')}` },
+                    ].map(d => (
+                      <div key={d.label}>
+                        <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>{d.label}</div>
+                        <div style={{ fontSize: 13, fontWeight: 500 }}>{d.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-low" style={{ fontSize: 11, marginTop: 12 }}>{active.note}</div>
+                </>
+              )}
             </div>
           )}
         </div>
@@ -455,11 +556,12 @@ export default function CreativeStudio() {
 
                 <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
                   <button className="btn btn-sm" onClick={() => submitRequest('image')}>Queue Image Request</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => submitRequest('image')}>Generate Variants</button>
+                  <button className="btn btn-sm btn-ghost" onClick={generateVariants} title="Records draft variant rows for the active brief — generates no image">Generate Variants</button>
                   <button className="btn btn-sm btn-ghost" onClick={() => { setPrompt(''); setRefIds([]); t('Composer cleared (local).', 'info') }}>Clear</button>
                 </div>
                 <div className="text-low" style={{ fontSize: 11 }}>
-                  Queueing stores a real local request record. It cannot render until {IMAGE_PROVIDER.env} points at a running
+                  Queue Image Request stores a real local request record. Generate Variants records draft variant rows for the
+                  active brief. Neither renders an image until {IMAGE_PROVIDER.env} points at a running
                   {' '}{IMAGE_PROVIDER.engine} and {IMAGE_PROVIDER.gate}=1.
                 </div>
               </div>
@@ -521,8 +623,29 @@ export default function CreativeStudio() {
                 </div>
                 <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
                   <button className="btn btn-sm" onClick={() => submitRequest('video')}>Queue Clip Request</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => t('Video storyboard is a local planning record only — no clip is generated.', 'info')}>Save Storyboard</button>
+                  <button className="btn btn-sm btn-ghost" onClick={() => t(`Storyboard saved locally (${beats.length} beats, ~${totalSeconds}s) — no clip is generated.`, 'info')}>Save Storyboard</button>
                 </div>
+
+                <div style={{ borderTop: '1px solid var(--divider)', paddingTop: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                    <span className="label" style={{ marginBottom: 0 }}>Storyboard beats</span>
+                    <span className="pill pill-muted" style={{ fontSize: 10 }}>{beats.length} beats · ~{totalSeconds}s</span>
+                  </div>
+                  <div className="stack" style={{ gap: 6 }}>
+                    {beats.map((b, i) => (
+                      <div key={b.id} className="inline-flex" style={{ gap: 6, flexWrap: 'nowrap', alignItems: 'center' }}>
+                        <span className="text-low" style={{ fontSize: 10, width: 16, flexShrink: 0 }}>{i + 1}</span>
+                        <input className="field" style={{ flex: 1, minWidth: 0, padding: '5px 8px', fontSize: 12 }} value={b.text} placeholder="Beat description…" onChange={e => updateBeat(b.id, { text: e.target.value })} />
+                        <input className="field" type="number" min="1" style={{ width: 60, flexShrink: 0, padding: '5px 8px', fontSize: 12 }} value={b.seconds} onChange={e => updateBeat(b.id, { seconds: e.target.value })} />
+                        <button className="btn btn-sm btn-ghost" style={{ flexShrink: 0 }} onClick={() => removeBeat(b.id)} title="Remove beat">✕</button>
+                      </div>
+                    ))}
+                    {beats.length === 0 && <div className="text-low" style={{ fontSize: 12 }}>No beats yet — add one to sketch the clip.</div>}
+                  </div>
+                  <button className="btn btn-sm btn-ghost" style={{ marginTop: 8 }} onClick={addBeat}>Add Beat</button>
+                  <div className="text-low" style={{ fontSize: 10, marginTop: 6 }}>Beats are local planning records — no clip is generated from them.</div>
+                </div>
+
                 <div className="text-low" style={{ fontSize: 11 }}>
                   Video tooling is a planning shell. No local video pipeline exists in this build; a connected
                   {' '}{VIDEO_PROVIDER.engine} provider plus {VIDEO_PROVIDER.gate}=1 is required before any clip can render.

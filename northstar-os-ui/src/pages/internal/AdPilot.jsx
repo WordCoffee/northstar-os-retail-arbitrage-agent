@@ -1,15 +1,7 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
-
-const TABS = [
-  { id: 'campaigns', label: 'Campaigns', count: 8 },
-  { id: 'detail', label: 'Campaign Detail' },
-  { id: 'terms', label: 'Search Terms' },
-  { id: 'planner', label: 'Planner' },
-  { id: 'placements', label: 'Placements' },
-  { id: 'rules', label: 'Rules' },
-]
 
 const CAMPAIGNS = [
   { name: 'Brand Defense', budget: '$500', spend: '$420', acos: '12.3%', placement: '#2', status: 'Healthy' },
@@ -17,6 +9,15 @@ const CAMPAIGNS = [
   { name: 'Keyword Harvest', budget: '$400', spend: '$310', acos: '16.8%', placement: '#3', status: 'Healthy' },
   { name: 'Competitor Conquest', budget: '$600', spend: '$590', acos: '31.2%', placement: '#8', status: 'Critical' },
   { name: 'Sponsored Brands', budget: '$300', spend: '$250', acos: '14.5%', placement: '#1', status: 'Healthy' },
+]
+
+const TABS = [
+  { id: 'campaigns', label: 'Campaigns', count: CAMPAIGNS.length },
+  { id: 'detail', label: 'Campaign Detail' },
+  { id: 'terms', label: 'Search Terms' },
+  { id: 'planner', label: 'Planner' },
+  { id: 'placements', label: 'Placements' },
+  { id: 'rules', label: 'Rules' },
 ]
 
 const STATUS_PILL = { Healthy: 'pill-forest', Review: 'pill-warn', Critical: 'pill-ochre' }
@@ -30,6 +31,7 @@ function healthRollup() {
 export default function AdPilot() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { toast } = useToast()
 
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : 'campaigns'
@@ -40,7 +42,7 @@ export default function AdPilot() {
       subtitle="Advertising operations workbench — campaign health, budget, placements, performance."
       actions={<>
         <button className="btn btn-sm" onClick={() => navigate('/adpilot?view=planner')}>Create Campaign</button>
-        <button className="btn btn-sm btn-ghost">Bulk Actions</button>
+        <button className="btn btn-sm btn-ghost" onClick={() => toast('Bulk actions require operator approval and verified tracking — not available against this sample data.', 'info')}>Bulk Actions</button>
       </>}
     >
       <DataNotice tone="sample" title="All performance data is sample/observed data">

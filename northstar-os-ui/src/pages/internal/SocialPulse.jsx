@@ -139,7 +139,7 @@ export default function SocialPulse() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [campaigns] = useLocalRoom('ns-social-campaigns', SEED_CAMPAIGNS)
+  const [campaigns, setCampaigns] = useLocalRoom('ns-social-campaigns', SEED_CAMPAIGNS)
   const [posts, setPosts] = useLocalRoom('ns-social-posts', SEED_POSTS)
   const [assets, setAssets] = useLocalRoom('ns-social-assets', SEED_ASSETS)
 
@@ -204,6 +204,21 @@ export default function SocialPulse() {
       platform, format: 'Reel', voice, state: 'Draft', when: '', note: 'Created locally from the composer.',
     }, ...prev])
     t(`${id} saved as a local draft — nothing publishes.`, 'info')
+  }
+
+  // Create a real local campaign record (previously a no-op toast).
+  const addCampaign = () => {
+    const id = uid('C')
+    const nid = campaigns.length + 1
+    const key = `campaign-${nid}-${id.split('-')[1] || ''}`.replace(/-$/, '')
+    const rec = {
+      id, key, name: `New Campaign ${nid}`, theme: 'Untitled theme',
+      objective: 'Untitled objective', audience: 'Unspecified',
+      state: 'Planned', channels: [], start: '',
+    }
+    setCampaigns(prev => [rec, ...prev])
+    setCampaign(rec.name)
+    t(`"${rec.name}" added as a local planning record (sample) — rename and set channels before use; no channel is connected.`, 'info')
   }
 
   return (
@@ -344,7 +359,7 @@ export default function SocialPulse() {
         <div className="subview">
           <div className="room-toolbar">
             <span className="pill pill-muted" style={{ marginRight: 'auto' }}>{campaigns.length} campaigns · local records</span>
-            <button className="btn btn-sm" onClick={() => t('New campaign is a local planning record (sample) — no channel is connected.', 'info')}>New Campaign</button>
+            <button className="btn btn-sm" onClick={addCampaign}>New Campaign</button>
           </div>
           <div className="grid-cards-3">
             {campaigns.map(c => {
