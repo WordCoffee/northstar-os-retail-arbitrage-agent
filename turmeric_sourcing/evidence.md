@@ -1,5 +1,84 @@
 # Turmeric sourcing — evidence checkpoint
 
+## Run 3 — 2026-10-04 — BLOCKED: ISOLATION UNPROVABLE FOR EVERY PROFILE; ZERO OBSERVATIONS
+
+Zero supplier pages opened. Zero candidates. Zero exclusions. The profile picker was
+**not** launched — see "Why no picker" below. Nothing inferred.
+
+### BLOCKER 1 — no Chrome profile can ever satisfy the isolation proof
+
+Traced end to end, then confirmed against the live preflight result:
+
+| # | Location | Fact |
+|---|---|---|
+| 1 | `scripts/chromecontrol-mcp-server.js:72-85` | `bridgeProfileReport()` asks the transport for `verifyIsolation()`, else `profileReport()`, else **returns `null`** |
+| 2 | `scripts/chromecontrol-playwright-bridge.js:448-462` | exports are `transport, bindProfile, closeSessions, sessionReports, listProfiles, resolveProfile, runningChromeProfiles, verifyAttachment, resolveExecutable, localPlaywrightMcpCli, mcpCommand, OPERATOR_USER_DATA_DIR, chromePath` — **neither `verifyIsolation` nor `profileReport` exists** |
+| 3 | ⇒ | `bridgeProfileReport()` returns `null` **unconditionally** |
+| 4 | `mcp-server.js:278` | `satisfied = !!(bridge && bridge.isolated===true && bridge.signed_out===true)` → always `false` |
+| 5 | `mcp-server.js:118-119` | code comment: *"Isolation cannot be proven from outside the browser. The controller refuses rather than assuming."* |
+| 6 | `lib/chromecontrol/pw-tool.js:193-201` | under `require_isolated`, `isolated` is `false` from the fallback → refusal `isolated_profile_required` |
+| 7 | `chromecontrol-playwright-bridge.js:188` | `verifyAttachment()` **hardcodes** `isolated_profile: false` |
+
+Consequence: preflight and `require_isolated` are gated on a transport capability that is
+**not implemented**. Creating or selecting "Mogra Sourcing" cannot change the result. The
+bridge header (lines 7-22) states this transport exists to attach to the *operator's real
+profile* and must never substitute a fresh isolated one — the isolation concept belongs to
+an unwired path. This is not a misconfiguration that setup can repair.
+
+### BLOCKER 2 — the approved sourcing allowlist cannot be added without breaking the guardrail proof
+
+- `policy.js:13-21` `DOMAIN_ALLOWLIST`; `:24-26` `APPROVED_SUPPLIER_ALLOWLIST`.
+- `policy.js:250-261` `IMMUTABLE_GUARDRAILS` freezes copies **from the live arrays at load**.
+- `policy.js:285-297` `assertGuardrailsIntact()` returns `{intact, fingerprint}`; `fingerprint()`
+  (`:264-279`) hashes the guardrail tables to `3595c933f9c3f163…`.
+
+Adding sourcing origins therefore has two consequences: the reported fingerprint changes away
+from the operator-approved `3595c933…`, and the baseline that `lessons.js`, the gate and the
+test suite compare against no longer matches. `assertGuardrailsIntact().intact` would still read
+`true` (frozen copies derive from the edited arrays at load) — but that is exactly why it must
+not be relied on here: the *approved fingerprint* is what authorises runs, and it moves.
+
+So the read-only sourcing policy cannot be added as a side effect of a sourcing task. It is a
+reviewed change to an immutable safety table, and the operator forbade changing existing policy.
+**`policy.js` was not modified.**
+
+### Profile inventory observed (read-only, `bridge.js profiles`)
+
+| Directory | Name | Signed-in account |
+|---|---|---|
+| Default | T2 | t2holdingsltd@gmail.com |
+| Profile 1 | Ty | mediablitz07@gmail.com |
+| Profile 2 | Work | t2holdingsltd@gmail.com |
+| Profile 3 | Work | fishandcheeseent@gmail.com |
+| Profile 4 | **Mogra** | **mograorganics@gmail.com** |
+| Profile 5 | The Johnsons | mrandmrstj07@gmail.com |
+| Profile 6 | Work | northstarosllc@gmail.com |
+| **Profile 7** | **Northstar Research** | **none — signed out** |
+
+Two things follow.
+
+**A signed-out profile already exists: `Profile 7` "Northstar Research"** (`user_name: null`,
+`has_signed_in_account: false`). It is the closest existing match to the intent behind
+"Mogra Sourcing". It still cannot pass Blocker 1, so it does not unblock the run — but it may
+be preferable to creating another profile.
+
+**Naming hazard.** `Profile 4` is named **"Mogra"** and is signed in as `mograorganics@gmail.com`
+— Mogra Organics, the company this research is about. "Mogra Sourcing" is one rename away from
+it, and `resolveProfile()` has a fuzzy fallback (`chromecontrol-playwright-bridge.js:118`,
+`name.includes(lower)`). Checked explicitly: `"mogra".includes("mogra sourcing")` is `false`, so
+a lookup for "Mogra Sourcing" does **not** fuzzy-match "Mogra" today and fails closed correctly.
+But any shorter reference such as "Mogra" **would** bind to the signed-in client account. The
+new profile must not share a prefix with "Mogra".
+
+### Why no picker was launched
+
+Instruction 6 directs a stop when isolation cannot be proven. It cannot be proven for *any*
+profile, so launching the picker would have required the operator to create a profile that still
+could not pass preflight — a persistent change to their Chrome setup with no possible benefit.
+The picker remains available on request.
+
+---
+
 ## Run 2 — 2026-10-04 — TOOL SURFACE CLEAN, PREFLIGHT HARD STOP, ZERO OBSERVATIONS
 
 Appended above the Run 1 record below. Zero supplier pages were opened in this
