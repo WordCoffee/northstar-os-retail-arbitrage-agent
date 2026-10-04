@@ -301,6 +301,17 @@ export default function CreativeStudio() {
     [briefs, activeBriefId],
   )
 
+  // Variants recorded against the active brief — the lineage basis for the
+  // bundle builder (not a global variant count).
+  const briefVariants = useMemo(
+    () => variants.filter(v => v.brief === (active?.id || '')),
+    [variants, active],
+  )
+  const briefAssets = useMemo(
+    () => assets.filter(a => (a.attached || []).includes(active?.id || '')),
+    [assets, active],
+  )
+
   const filteredAssets = useMemo(() => {
     const q = assetQuery.trim().toLowerCase()
     return assets.filter(a =>
@@ -451,11 +462,15 @@ export default function CreativeStudio() {
 
   const prepareBundle = () => {
     const id = uid('BX')
+    const briefId = active?.id || ''
+    const variantRefs = briefVariants.map(v => v.id)
+    const assetRefs = briefAssets.map(a => a.id)
     setBundles(prev => [{
-      id, briefId: active?.id || '', outputs: [...outputs], basis: 'local workspace records',
+      id, briefId, briefName: active?.name || 'No active brief',
+      outputs: [...outputs], variantRefs, assetRefs, basis: 'local workspace records',
       status: 'Ready for handoff', createdAt: nowIso(),
     }, ...prev])
-    t('Bundle manifest prepared locally — contains references only. Download is unavailable until an asset store is connected.', 'info')
+    t(`Bundle ${id} prepared locally — ${variantRefs.length} variant refs · ${assetRefs.length} asset refs. References only; download needs an asset store.`, 'info')
   }
 
   const briefName = (id) => briefs.find(b => b.id === id)?.name || id || '—'
@@ -1072,7 +1087,7 @@ export default function CreativeStudio() {
               <div className="card-head">
                 <h3 className="card-title">Bundle Builder — {active ? active.name : 'no active brief'}</h3>
               </div>
-              <div className="text-low" style={{ fontSize: 11, marginBottom: 8 }}>Select outputs</div>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 8 }}>Select outputs · basis is the active brief’s lineage</div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
                 {['Ad creatives', 'Social variants', 'Listing imagery'].map(o => (
                   <button key={o} className={`filter-pill ${outputs.includes(o) ? 'active' : ''}`} onClick={() => toggleOutput(o)}>{o}</button>
@@ -1080,15 +1095,18 @@ export default function CreativeStudio() {
               </div>
               <div className="stack" style={{ gap: 8 }}>
                 {[
-                  { item: 'Ad creatives', basis: `${variants.filter(v => v.format === 'Ad creative').length} variant refs` },
-                  { item: 'Listing imagery', basis: `${variants.filter(v => v.format === 'Listing imagery').length} panel refs` },
-                  { item: 'Social variants', basis: `${variants.filter(v => v.format === 'Social variant').length} refs` },
+                  { item: 'Ad creatives', basis: `${briefVariants.filter(v => v.format === 'Ad creative').length} variant refs` },
+                  { item: 'Listing imagery', basis: `${briefVariants.filter(v => v.format === 'Listing imagery').length} panel refs` },
+                  { item: 'Social variants', basis: `${briefVariants.filter(v => v.format === 'Social variant').length} refs` },
                 ].map(r => (
                   <div key={r.item} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
                     <div style={{ fontSize: 13 }}>{r.item}</div>
                     <span className="pill pill-muted" style={{ fontSize: 10 }}>{r.basis}</span>
                   </div>
                 ))}
+              </div>
+              <div className="text-low" style={{ fontSize: 10, marginTop: 8 }}>
+                Lineage for {active ? active.name : 'no active brief'}: {briefVariants.length} variants · {briefAssets.length} attached assets.
               </div>
               <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 <button className="btn btn-sm" onClick={prepareBundle}>Prepare Export</button>
@@ -1098,11 +1116,17 @@ export default function CreativeStudio() {
               {bundles.length > 0 && (
                 <div style={{ marginTop: 16 }}>
                   <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Prepared bundles (local)</div>
-                  <div className="stack" style={{ gap: 6 }}>
+                  <div className="stack" style={{ gap: 0 }}>
                     {bundles.map(b => (
-                      <div key={b.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, fontSize: 12 }}>
-                        <span>{b.id} · {b.outputs.join(', ')}</span>
-                        <span className="pill pill-muted" style={{ fontSize: 10 }}>{b.status}</span>
+                      <div key={b.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ fontSize: 12, fontWeight: 500 }}>{b.id} · {b.briefName || briefName(b.briefId)}</div>
+                          <div className="text-low" style={{ fontSize: 10 }}>{b.outputs.join(', ')} · {(b.variantRefs || []).length} variant refs · {(b.assetRefs || []).length} asset refs</div>
+                        </div>
+                        <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                          <span className="pill pill-muted" style={{ fontSize: 10 }}>{b.status}</span>
+                          <div className="text-low" style={{ fontSize: 10, marginTop: 2 }}>{b.createdAt ? new Date(b.createdAt).toLocaleString() : ''}</div>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -1119,6 +1143,12 @@ export default function CreativeStudio() {
                 {outputs.length ? outputs.map(o => <span key={o} className="pill pill-muted" style={{ fontSize: 10 }}>{o}</span>) : <span className="text-low" style={{ fontSize: 11 }}>No outputs selected</span>}
               </div>
               <Thumb height={120} label="bundle manifest" note="references only — no media packaged" />
+              <div className="text-low" style={{ fontSize: 11, marginTop: 10 }}>Manifest contents (references)</div>
+              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 4 }}>
+                {briefVariants.length === 0 && briefAssets.length === 0 && <span className="text-low" style={{ fontSize: 11 }}>No lineage yet — record variants or attach assets for this brief.</span>}
+                {briefVariants.map(v => <span key={v.id} className="pill pill-muted" style={{ fontSize: 10 }} title={`${v.format} · ${v.aspect} · ${v.state}`}>{v.id}</span>)}
+                {briefAssets.map(a => <span key={a.id} className="pill pill-muted" style={{ fontSize: 10 }} title={a.collection}>{a.id}</span>)}
+              </div>
               <div className="inline-flex" style={{ gap: 8, marginTop: 10 }}>
                 <button className="btn btn-sm" disabled title="Download requires a connected asset store; the bundle manifest is local only">Download Bundle</button>
                 <span className="pill pill-unknown" style={{ fontSize: 10 }}>download unavailable — no asset store</span>
@@ -1131,31 +1161,36 @@ export default function CreativeStudio() {
       {view === 'library' && (
         <div className="subview">
           <MetricTiles columns={4} metrics={[
-            { label: 'Collections', value: String(SEED_COLLECTIONS.length), sub: 'Brand library · sample counts' },
-            { label: 'Assets in library', value: String(totalCollectionItems), sub: 'Sample inventory' },
-            { label: 'Tracked in this room', value: String(assets.length), sub: 'Local asset records' },
+            { label: 'Collections', value: String(SEED_COLLECTIONS.length), sub: 'Brand library structure (sample)' },
+            { label: 'Sample inventory', value: String(totalCollectionItems), sub: 'Sample counts — not a real index' },
+            { label: 'Tracked in this room', value: String(assets.length), sub: 'Real local asset records' },
             { label: 'Unreviewed', value: String(assets.filter(a => a.state === 'UNREVIEWED').length), sub: 'Needs review — not an authorization', tone: 'warn' },
           ]} />
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Creative Collections</h3>
-              <span className="pill pill-muted">brand library · sample counts</span>
+              <span className="pill pill-muted">sample inventory + tracked-local</span>
             </div>
             <div className="grid-cards-4">
-              {SEED_COLLECTIONS.map(c => (
-                <div key={c.name} className="card" style={{ padding: 14 }}>
-                  <Thumb height={72} label="collection" note={`${c.count} items`} />
-                  <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{c.name}</div>
-                  <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>{c.note}</div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span className="pill pill-muted" style={{ fontSize: 10 }}>{c.count} items</span>
-                    <button className="btn btn-sm btn-ghost" onClick={() => t(`${c.name} collection opened (sample inventory).`, 'info')}>Open</button>
+              {SEED_COLLECTIONS.map(c => {
+                const tracked = assets.filter(a => a.collection === c.name).length
+                return (
+                  <div key={c.name} className="card" style={{ padding: 14 }}>
+                    <Thumb height={72} label="collection" note={`${c.count} sample items`} />
+                    <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{c.name}</div>
+                    <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>{c.note}</div>
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
+                      <span className="pill pill-muted" style={{ fontSize: 10 }} title="Static sample inventory count">sample: {c.count}</span>
+                      <span className="pill pill-forest" style={{ fontSize: 10 }} title="Real asset records in this room for this collection">tracked: {tracked}</span>
+                    </div>
+                    <button className="btn btn-sm btn-ghost" onClick={() => { setAssetQuery(c.name); go('assets'); t(`${c.name} — showing tracked assets in this room. Sample inventory counts are illustrative only.`, 'info') }}>Open tracked assets</button>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
             <div className="text-low" style={{ fontSize: 11, marginTop: 14 }} title="Library counts are sample inventory — not publishing or purchase authorization">
-              Collection counts are sample inventory. Opening a collection never publishes or authorizes anything.
+              “sample” counts are static illustrative inventory; “tracked” counts are real asset records stored in this room.
+              Opening a collection never publishes or authorizes anything.
             </div>
           </div>
         </div>
