@@ -56,6 +56,53 @@ function FoundationProviderRegistry() {
   )
 }
 
+// ═══ Provider key presence + scanner gate (real read; names only) ═══
+function ProviderKeyPresence() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(signals.detailedHealth()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', value: r.value })
+      else setSt({ phase: 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+  const v = st.phase === 'loaded' ? st.value : null
+  const providers = v && v.providers ? v.providers : {}
+  const badge = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
+    : st.phase === 'error' ? { l: 'unavailable', t: 'unknown' }
+      : { l: 'live · backend probe', t: 'muted' }
+  const configured = Object.values(providers).filter(s => s === 'configured').length
+  return (
+    <div className="card" data-testid="pa-key-presence" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Provider credential presence</h3>
+        <span className={`pill pill-${badge.t}`}>{badge.l}</span>
+      </div>
+      {st.phase === 'loading' && <p style={{ fontSize: 13 }}>Checking provider credential presence…</p>}
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Provider presence probe unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {v && (
+        <>
+          <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+            <span className={`pill ${v.scanner_mode === 'live_allowed' ? 'pill-warn' : 'pill-muted'}`} title="Live scanner gate — arming is an owner decision">scanner: {v.scanner_mode || 'UNKNOWN'}</span>
+            <span className="pill pill-muted" title="Count of provider keys present in the environment (presence only)">{configured} of {Object.keys(providers).length} configured</span>
+          </div>
+          {Object.keys(providers).length > 0 ? (
+            <DataTable columns={[
+              { key: 'name', label: 'Provider key (name only)' },
+              { key: 'state', label: 'Presence', render: (v) => <span className={`pill ${v === 'configured' ? 'pill-muted' : 'pill-unknown'}`}>{v === 'configured' ? 'configured' : 'not configured'}</span> },
+            ]} rows={Object.entries(providers).map(([name, state]) => ({ name, state }))} />
+          ) : <p className="text-low" style={{ fontSize: 12 }}>No provider keys reported.</p>}
+          <div className="text-low" style={{ fontSize: 11, marginTop: 10 }}>
+            Presence only — credential <em>values</em> are never read or displayed. Arming a provider for live calls is an owner decision; nothing here enables a call.
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
 export default function ProviderAdapters() {
   const { toast } = useToast()
   const location = useLocation()
@@ -77,6 +124,7 @@ export default function ProviderAdapters() {
       </DataNotice>
 
       <FoundationProviderRegistry />
+      <ProviderKeyPresence />
 
       <RoomTabs tabs={TABS} base="/provider-adapters" />
 
