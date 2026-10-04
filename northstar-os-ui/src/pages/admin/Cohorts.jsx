@@ -1,6 +1,90 @@
 import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components/Shared.jsx'
 import BetaOpsNav from './BetaOpsNav.jsx'
 import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import foundationApi from '../../foundation/api.js'
+import { settle } from '../../services/signals.js'
+
+// ═══ Real support queue (org-scoped, tester view) ═══
+function FoundationSupportQueue() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(foundationApi.supportTickets()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', items: r.value.items || [] })
+      else setSt({ phase: (r.error && r.error.status === 401) ? 'auth' : 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+  const badge = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
+    : st.phase === 'auth' ? { l: 'sign-in required', t: 'unknown' }
+      : st.phase === 'error' ? { l: 'unavailable', t: 'unknown' }
+        : { l: 'live · foundation', t: 'muted' }
+  return (
+    <div className="card" data-testid="bo-support-live" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Foundation support queue</h3>
+        <span className={`pill pill-${badge.t}`}>{badge.l}</span>
+      </div>
+      {st.phase === 'loading' && <p style={{ fontSize: 13 }}>Loading support tickets…</p>}
+      {st.phase === 'auth' && <p style={{ fontSize: 13 }}>Sign in as a platform admin to read support tickets.</p>}
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Support queue unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {st.phase === 'loaded' && (st.items.length > 0 ? (
+        <DataTable columns={[
+          { key: 'id', label: 'Ticket' },
+          { key: 'subject', label: 'Subject', render: (v, row) => v || row.title || row.category || 'UNKNOWN' },
+          { key: 'category', label: 'Category', render: (v) => <span className="pill pill-muted">{v || 'UNKNOWN'}</span> },
+          { key: 'severity', label: 'Severity', render: (v, row) => { const s = v || row.priority || 'normal'; return <span className={`pill ${s === 'blocker' || s === 'high' ? 'pill-error' : s === 'low' ? 'pill-muted' : 'pill-warn'}`}>{s}</span> } },
+          { key: 'status', label: 'Status', render: (v) => <span className={`pill ${v === 'open' ? 'pill-warn' : 'pill-muted'}`}>{v || 'UNKNOWN'}</span> },
+          { key: 'created_at', label: 'Created' },
+        ]} rows={st.items} />
+      ) : (
+        <p data-testid="bo-support-empty" style={{ fontSize: 13 }}>No support tickets for this organization. Honest empty state.</p>
+      ))}
+    </div>
+  )
+}
+
+// ═══ Real audit log (org-scoped, observed) ═══
+function FoundationAuditLog() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(foundationApi.audit()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', items: r.value.items || [] })
+      else setSt({ phase: (r.error && r.error.status === 401) ? 'auth' : 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+  const badge = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
+    : st.phase === 'auth' ? { l: 'sign-in required', t: 'unknown' }
+      : st.phase === 'error' ? { l: 'unavailable', t: 'unknown' }
+        : { l: 'live · foundation', t: 'muted' }
+  return (
+    <div className="card" data-testid="bo-audit-live" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Foundation audit log</h3>
+        <span className={`pill pill-${badge.t}`}>{badge.l}</span>
+      </div>
+      {st.phase === 'loading' && <p style={{ fontSize: 13 }}>Loading audit entries…</p>}
+      {st.phase === 'auth' && <p style={{ fontSize: 13 }}>Sign in as a platform admin to read the audit log.</p>}
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Audit log unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {st.phase === 'loaded' && (st.items.length > 0 ? (
+        <DataTable columns={[
+          { key: 'occurred_at', label: 'When', render: (v) => v || 'UNKNOWN' },
+          { key: 'action', label: 'Action', render: (v) => v || 'UNKNOWN' },
+          { key: 'actor_user_id', label: 'Actor', render: (v) => v || 'UNKNOWN' },
+          { key: 'resource_type', label: 'Resource', render: (v, row) => <span className="pill pill-muted">{v || '—'}{row.resource_id ? ' / ' + row.resource_id : ''}</span> },
+          { key: 'result', label: 'Result', render: (v) => <span className={`pill ${v === 'denied' || v === 'failure' ? 'pill-warn' : 'pill-muted'}`}>{v || 'UNKNOWN'}</span> },
+        ]} rows={st.items} />
+      ) : (
+        <p data-testid="bo-audit-empty" style={{ fontSize: 13 }}>No audit entries for this organization yet. Honest empty state.</p>
+      ))}
+    </div>
+  )
+}
 
 const COHORT_PILL = { Complete: 'pill-muted', Active: 'pill-ochre' }
 
@@ -46,16 +130,17 @@ export function SupportOps() {
     <PageLayout title="Support Operations" subtitle="Operational support and escalation queue for beta organizations.">
       <BetaOpsNav />
       <DataNotice tone="internal" title="Support queue is internal">
-        Support records are sample/internal until the beta backend is connected. Responding to a ticket is an operator action and is logged.
+        The “Foundation support queue” is a live read. The sample queue below is demonstration data. Responding to a ticket is an operator action and is logged.
       </DataNotice>
+      <FoundationSupportQueue />
       <MetricTiles columns={2} metrics={[
         { label: 'Open Tickets', value: String(open), sub: 'Require a response', tone: 'warn' },
         { label: 'Resolved', value: String(SUPPORT.length - open), sub: 'Closed this period' },
       ]} />
       <div className="card">
         <div className="card-head">
-          <h3 className="card-title">Ticket Queue</h3>
-          <span className="pill pill-warn">{open} open</span>
+          <h3 className="card-title">Sample queue (preview)</h3>
+          <span className="pill pill-warn">{open} open · sample</span>
         </div>
         <DataTable columns={[
           { key: 'ticket', label: 'Ticket' },
@@ -108,11 +193,12 @@ export function AuditNotes() {
     <PageLayout title="Audit & Notes" subtitle="Operational audit trail and internal notes.">
       <BetaOpsNav />
       <DataNotice tone="internal" title="Audit trail is internal and observed">
-        Audit entries are internal observed records (sample until a backend is connected). They are never edited and are visible only to platform admins.
+        The “Foundation audit log” is a live, read-only read. The sample timeline below is demonstration data. Audit entries are never edited and are visible only to platform admins.
       </DataNotice>
+      <FoundationAuditLog />
       <div className="card">
         <div className="card-head">
-          <h3 className="card-title">Audit Log</h3>
+          <h3 className="card-title">Sample audit log (preview)</h3>
           <span className="pill pill-muted">OBSERVED · sample</span>
         </div>
         <div className="timeline">

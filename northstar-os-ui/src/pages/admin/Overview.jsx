@@ -1,6 +1,88 @@
 import { PageLayout, DataTable, MetricTiles, DataNotice } from '../../components/Shared.jsx'
 import BetaOpsNav from './BetaOpsNav.jsx'
 import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import foundationApi from '../../foundation/api.js'
+import { settle } from '../../services/signals.js'
+
+// ═══ Foundation admin dashboard (real, platform-admin read) ═══
+// Live organization rows from the foundation tester dashboard. Empty until an
+// organization exists — shown honestly. Never fabricates subscribers or usage.
+function FoundationAdminDashboard() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(foundationApi.adminDashboard()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', items: r.value.items || [] })
+      else {
+        const code = r.error && r.error.status
+        setSt({ phase: code === 401 ? 'auth' : code === 403 ? 'forbidden' : 'error', error: r.error })
+      }
+    })
+    return () => { alive = false }
+  }, [])
+
+  const pill = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
+    : st.phase === 'auth' ? { l: 'sign-in required', t: 'unknown' }
+      : st.phase === 'forbidden' ? { l: 'platform-admin only', t: 'unknown' }
+        : st.phase === 'error' ? { l: 'unavailable', t: 'unknown' }
+          : { l: 'live · foundation', t: 'muted' }
+
+  let body = null
+  if (st.phase === 'loading') body = <p style={{ fontSize: 13 }}>Loading foundation organization data…</p>
+  else if (st.phase === 'auth') body = <p style={{ fontSize: 13 }}>Sign in as a platform admin to read the foundation dashboard.</p>
+  else if (st.phase === 'forbidden') body = <p style={{ fontSize: 13 }}>Platform-admin role required for this read.</p>
+  else if (st.phase === 'error') body = <p style={{ fontSize: 13 }}>Foundation dashboard unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>
+  else {
+    const items = st.items
+    const byState = items.reduce((m, o) => { const k = o.lifecycle_state || 'unknown'; m[k] = (m[k] || 0) + 1; return m }, {})
+    const openTickets = items.reduce((s, o) => s + (o.open_tickets || 0), 0)
+    const blockers = items.reduce((s, o) => s + (o.blocker_tickets || 0), 0)
+    const flagged = items.filter(o => (o.flags || []).length > 0)
+    body = (
+      <>
+        <MetricTiles columns={4} metrics={[
+          { label: 'Organizations', value: String(items.length) },
+          { label: 'Open tickets', value: String(openTickets), tone: openTickets ? 'warn' : undefined },
+          { label: 'Blocker tickets', value: String(blockers), tone: blockers ? 'error' : undefined },
+          { label: 'Flagged orgs', value: String(flagged.length), tone: flagged.length ? 'warn' : undefined },
+        ]} />
+        {items.length > 0 && (
+          <DataTable columns={[
+            { key: 'organization_id', label: 'Org' },
+            { key: 'organization_name', label: 'Name' },
+            { key: 'plan_tier', label: 'Plan', render: (v) => <span className="pill pill-muted">{v || 'UNKNOWN'}</span> },
+            { key: 'lifecycle_state', label: 'Lifecycle', render: (v) => <span className={`pill ${v === 'active' ? 'pill-muted' : v === 'suspended' ? 'pill-warn' : 'pill-ochre'}`} title="Lifecycle record — not an authorization">{v || 'UNKNOWN'}</span> },
+            { key: 'seats_used', label: 'Seats', render: (v, row) => <span className="pill pill-muted">{v ?? '?'} / {row.seat_limit ?? '?'}</span> },
+            { key: 'monthly_jobs_used', label: 'Jobs', render: (v, row) => <span className="pill pill-muted">{v ?? '?'} / {row.max_jobs_per_month ?? '?'}</span> },
+            { key: 'open_tickets', label: 'Tickets', render: (v) => <span className={`pill ${v ? 'pill-warn' : 'pill-muted'}`}>{v || 0}</span> },
+            { key: 'flags', label: 'Flags', render: (v) => (v && v.length) ? <span className="inline-flex" style={{ gap: 4, flexWrap: 'wrap' }}>{v.map(f => <span key={f} className="pill pill-ochre" style={{ fontSize: 10 }}>{f}</span>)}</span> : <span className="pill pill-muted">none</span> },
+          ]} rows={items} />
+        )}
+        {items.length === 0 && <p data-testid="bo-admin-empty" style={{ fontSize: 13 }}>No organizations in the foundation yet. This is the honest empty state — no subscriber data is fabricated.</p>}
+        {items.length > 0 && (
+          <div className="inline-flex" style={{ gap: 6, marginTop: 12 }}>
+            {Object.entries(byState).map(([k, n]) => <span key={k} className="pill pill-muted" title="Organizations by lifecycle state">{k}: {n}</span>)}
+          </div>
+        )}
+      </>
+    )
+  }
+
+  return (
+    <div className="card" data-testid="bo-admin-dashboard" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Foundation admin dashboard</h3>
+        <span className={`pill pill-${pill.t}`}>{pill.l}</span>
+      </div>
+      <p className="text-low" style={{ fontSize: 12, marginBottom: 12 }}>
+        Live, platform-admin read of organization lifecycle, plan, seats, usage and ticket flags. Lifecycle state is a record, not an authorization; no action here changes state.
+      </p>
+      {body}
+    </div>
+  )
+}
 
 const SEV_PILL = { Critical: 'pill-error', High: 'pill-warn', Medium: 'pill-ochre' }
 const STATE_PILL = { Active: 'pill-muted', Suspended: 'pill-warn', 'Pending Verification': 'pill-ochre', Complete: 'pill-muted' }
@@ -49,8 +131,10 @@ export default function BetaOpsOverview() {
       <BetaOpsNav />
 
       <DataNotice tone="internal" title="Beta Operations — internal operating queue">
-        Organizations, invites, cohorts, and support records are sample/internal until the beta backend is connected. Lifecycle actions are logged and require operator approval — no action here is autonomous. Not cross-org data for testers.
+        Organizations, invites, cohorts, and support records below are sample/internal records. The “Foundation admin dashboard” card above is a live platform-admin read of the same domains. Lifecycle actions are logged and require operator approval — no action here is autonomous.
       </DataNotice>
+
+      <FoundationAdminDashboard />
 
       <MetricTiles columns={4} metrics={[
         { label: 'Organizations', value: '14', sub: '4 in beta · sample' },
