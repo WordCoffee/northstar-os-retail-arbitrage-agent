@@ -21,7 +21,7 @@ export const READINESS_LEVELS = {
 // (creative-studio, socialpulse, adpilot) are intentionally omitted so their
 // nav status and page surface stay unchanged (owned by the creative session).
 export const ROOM_READINESS = {
-  'command-center': 'sample',
+  'command-center': 'partial', // live system-signals read + real launch pathways; briefing still sample
   'sourcescout': 'cached',
   'golden-goose': 'ready',
   'listing-guardian': 'sample',

@@ -2,7 +2,146 @@ import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import signals, { settle } from '../../services/signals.js'
+
+// ═══ Live local system signals (real reads, honest states) ═══
+// Real read-only signals from the running local backend. Absent/unreachable
+// signals render as "unavailable" — never fabricated. The sample briefing
+// below (tasks/exceptions/activity) is separate and clearly labelled.
+function SignalRow({ label, source, result, render }) {
+  const err = result && !result.ok
+  return (
+    <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '9px 0', borderBottom: '1px solid var(--divider)' }}>
+      <div>
+        <div style={{ fontSize: 13, fontWeight: 500 }}>{label}</div>
+        <div className="text-low" style={{ fontSize: 11 }}>{source}</div>
+      </div>
+      {!result
+        ? <span className="pill pill-muted">Loading…</span>
+        : err
+          ? <span className="pill pill-unknown" title={`Live read failed${err && result.error && result.error.status ? ' (' + result.error.status + ')' : ''} — not fabricated`}>unavailable</span>
+          : render(result.value)}
+    </div>
+  )
+}
+
+function SystemSignals() {
+  const [st, setSt] = useState({ loaded: false })
+  useEffect(() => {
+    let alive = true
+    ;(async () => {
+      const [status, catalog, monitoring, gg] = await Promise.all([
+        settle(signals.systemStatus()),
+        settle(signals.sourceScoutSummary()),
+        settle(signals.monitoringAlerts()),
+        settle(signals.goldenGooseHealth()),
+      ])
+      if (alive) setSt({ loaded: true, status, catalog, monitoring, gg })
+    })()
+    return () => { alive = false }
+  }, [])
+
+  const data = (r) => (r && r.ok ? (r.value && r.value.data ? r.value.data : r.value) : null)
+
+  return (
+    <div className="card" data-testid="cc-system-signals" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">System signals</h3>
+        <span className="pill pill-muted" title="Live, read-only local backend reads — not sample data">live local read</span>
+      </div>
+      <SignalRow
+        label="Data mode &amp; warehouse"
+        source="GET /api/v1/status"
+        result={st.status}
+        render={(v) => {
+          const d = data({ ok: true, value: v }) || {}
+          const wh = d.warehouse || {}
+          return (
+            <span className="inline-flex" style={{ gap: 6 }}>
+              <span className={`pill ${d.mode === 'live' ? 'pill-ok' : 'pill-muted'}`} title="live = warehouse has live rows; demo = no live rows">{d.mode || 'UNKNOWN'}</span>
+              <span className="pill pill-muted" title="Live-stocked warehouse rows (fresh only)">{wh.fresh_rows ?? 'UNKNOWN'} fresh</span>
+              <span className="pill pill-muted" title="Total live warehouse rows">{wh.live_rows ?? 'UNKNOWN'} live</span>
+            </span>
+          )
+        }}
+      />
+      <SignalRow
+        label="Catalog coverage (quantity match)"
+        source="GET /api/sourcescout/summary"
+        result={st.catalog}
+        render={(v) => (
+          <span className="inline-flex" style={{ gap: 6 }}>
+            <span className="pill pill-muted" title="Total cached catalog items">{v.total ?? 'UNKNOWN'} items</span>
+            <span className="pill pill-ok" title="Amazon quantity matches Costco SKU">{v.pass ?? 0} pass</span>
+            <span className="pill pill-warn" title="Amazon quantity differs from Costco SKU">{v.fail ?? 0} fail</span>
+            <span className="pill pill-ochre" title="Costco SKU not found or ambiguous — needs review">{v.review ?? 0} review</span>
+          </span>
+        )}
+      />
+      <SignalRow
+        label="API error rate"
+        source="GET /api/monitoring/error-alerts"
+        result={st.monitoring}
+        render={(v) => {
+          const s = (v && ((v.data && v.data.summary) || v.summary)) || {}
+          const rate = s.five_xx_rate == null ? 'UNKNOWN' : `${(s.five_xx_rate * 100).toFixed(1)}%`
+          return (
+            <span className="inline-flex" style={{ gap: 6 }}>
+              <span className={`pill ${s.breached ? 'pill-warn' : 'pill-ok'}`} title="5xx fraction over the rolling window vs threshold">{s.breached ? 'breached' : 'within threshold'}</span>
+              <span className="pill pill-muted" title="5xx rate · window · sample size">{rate} · {s.total_requests ?? 0} req</span>
+            </span>
+          )
+        }}
+      />
+      <SignalRow
+        label="Golden Goose service"
+        source="GET /api/golden-goose/health"
+        result={st.gg}
+        render={(v) => {
+          const s = (v && ((v.data && v.data.status) || v.status)) || 'UNKNOWN'
+          return <span className={`pill ${s === 'ok' ? 'pill-ok' : 'pill-warn'}`} title="Service health envelope">{s}</span>
+        }}
+      />
+      <div className="text-low" style={{ fontSize: 11, marginTop: 10 }} title="Provenance rule">
+        These are live local reads. When the backend is unreachable the row reads <em>unavailable</em> — it is never substituted with sample numbers.
+      </div>
+    </div>
+  )
+}
+
+const LAUNCH = [
+  { label: 'SourceScout', route: '/product-finder', note: 'Cached product sourcing' },
+  { label: 'Golden Goose', route: '/golden-goose', note: 'Opportunity review desk' },
+  { label: 'Profitability', route: '/profitability', note: 'Economics & scenarios' },
+  { label: 'Commerce Ops', route: '/commerce-ops', note: 'Workflow & approvals' },
+  { label: 'Listing Guardian', route: '/listings', note: 'Listing watchtower' },
+  { label: 'Monitoring', route: '/monitoring', note: 'System observability' },
+]
+
+function LaunchGrid({ navigate }) {
+  return (
+    <div className="card" data-testid="cc-launch-grid" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Launch a service</h3>
+        <span className="pill pill-muted">6 rooms</span>
+      </div>
+      <div className="grid-3" style={{ gap: 12 }}>
+        {LAUNCH.map(l => (
+          <button
+            key={l.route}
+            className="card"
+            onClick={() => navigate(l.route)}
+            style={{ padding: 14, textAlign: 'left', cursor: 'pointer', fontFamily: 'var(--font-ui)', border: '1px solid var(--divider)' }}
+          >
+            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--pine-deep)' }}>{l.label}</div>
+            <div className="text-low" style={{ fontSize: 11, marginTop: 2 }}>{l.note}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -86,9 +225,12 @@ export default function CommandCenter() {
         <button className="btn btn-sm btn-ghost">Briefing Settings</button>
       </>}
     >
-      <DataNotice tone="sample" title="Briefing is demonstration data">
-        Metrics, exceptions, and activity below are sample records with basis labels. No summary state implies purchase authorization or autonomous action.
+      <DataNotice tone="sample" title="Live system signals + sample briefing">
+        The “System signals” card is a live, read-only read from the local backend. Everything below it — briefing metrics, exceptions, activity, portfolio, handoffs — is demonstration data with basis labels. No summary state implies purchase authorization or autonomous action.
       </DataNotice>
+
+      <SystemSignals />
+      <LaunchGrid navigate={navigate} />
 
       <div className="card" style={{ marginBottom: 16, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', padding: '10px 14px' }}>
         <span className="pill pill-muted" title="Active organization (sample)">Active org: Northstar Operations</span>
