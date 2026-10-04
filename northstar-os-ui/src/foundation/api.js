@@ -206,6 +206,8 @@ export const foundationApi = {
   invite: (body) => req('/invites', { method: 'POST', body: JSON.stringify(body) }),
   // org-scoped invite list (email/role/status/expires_at; no code in list read)
   invitesList: () => req('/invites'),
+  // revoke an invite (platform-admin only; audited invite.revoke)
+  inviteRevoke: (id, reason) => req(`/invites/${id}/revoke`, { method: 'POST', body: JSON.stringify({ reason: reason || 'operator revoked' }) }),
 }
 
 export default foundationApi

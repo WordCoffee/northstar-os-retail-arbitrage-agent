@@ -192,7 +192,7 @@ export default function InviteCreate() {
 }
 
 // Real invite status for a real invite id (matched from the org-scoped list).
-function FoundationInviteDetail({ id }) {
+function FoundationInviteDetail({ id, reloadKey = 0, onRecord }) {
   const [st, setSt] = useState({ phase: 'loading' })
   useEffect(() => {
     let alive = true
@@ -201,10 +201,14 @@ function FoundationInviteDetail({ id }) {
       if (r.ok) {
         const item = (r.value.items || []).find(i => i.invite_id === id)
         setSt({ phase: item ? 'loaded' : 'not_found', item })
-      } else setSt({ phase: (r.error && r.error.status === 401) ? 'auth' : 'error', error: r.error })
+        if (onRecord) onRecord(item || null)
+      } else {
+        setSt({ phase: (r.error && r.error.status === 401) ? 'auth' : 'error', error: r.error })
+        if (onRecord) onRecord(null)
+      }
     })
     return () => { alive = false }
-  }, [id])
+  }, [id, reloadKey])
   const badge = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
     : st.phase === 'not_found' ? { l: 'not found', t: 'unknown' }
       : st.phase === 'auth' ? { l: 'sign-in required', t: 'unknown' }
@@ -235,36 +239,101 @@ function FoundationInviteDetail({ id }) {
   )
 }
 
+const REVOKE_ERRORS = {
+  not_found: 'Invitation not found for your organization.',
+}
+
+// ACTIVATED (owner-approved, platform-admin only): revoke a pending invite.
+function RevokeControl({ id, record, onDone }) {
+  const [reason, setReason] = useState('')
+  const [confirmed, setConfirmed] = useState(false)
+  const [state, setState] = useState({ phase: 'idle' })
+  const status = record && record.status
+  const canRevoke = !!record && status === 'pending'
+  const blockReason = !record ? 'No matching invitation record — revoke unavailable.'
+    : status === 'used' ? 'This invitation was already redeemed — it cannot be un-redeemed.'
+      : status === 'revoked' ? 'This invitation is already revoked.'
+        : null
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (!canRevoke || !confirmed) return
+    setState({ phase: 'submitting' })
+    const r = await settle(foundationApi.inviteRevoke(id, reason.trim()))
+    if (r.ok) {
+      setState({ phase: 'success' })
+      setConfirmed(false); setReason('')
+      if (onDone) onDone()
+    } else {
+      const s = r.error && r.error.status, code = r.error && r.error.code
+      setState({ phase: s === 401 ? 'auth' : s === 403 ? 'forbidden' : 'error',
+        message: REVOKE_ERRORS[code] || (r.error && r.error.message) || `Revoke failed${code ? ` (${code})` : ''}.` })
+    }
+  }
+
+  return (
+    <div data-testid="bo-invite-revoke">
+      <AuthorizationNote
+        title="Revoke invitation"
+        status="Active — platform-admin only"
+        route="POST /api/v1/foundation/invites/{id}/revoke"
+        permission="PERM_MANAGE_ORG"
+        audit="invite.revoke"
+      >
+        Revoking invalidates a pending invitation for your organization. Audited as <span style={{ fontFamily: 'var(--font-mono)' }}>invite.revoke</span> with the reason. All other write actions remain disabled.
+      </AuthorizationNote>
+      {blockReason && <div className="text-low" style={{ fontSize: 12, marginBottom: 8 }}>{blockReason}</div>}
+      <form className="stack" style={{ gap: 10 }} onSubmit={submit}>
+        <div className="field-group">
+          <label className="label">Reason (optional)</label>
+          <input className="field" value={reason} onChange={e => setReason(e.target.value)} placeholder="Why this invite is being revoked" disabled={!canRevoke} />
+        </div>
+        <div className="check-row">
+          <input type="checkbox" id="revoke-confirm" checked={confirmed} onChange={e => setConfirmed(e.target.checked)} disabled={!canRevoke} />
+          <label htmlFor="revoke-confirm">I understand this revokes the invitation.</label>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <button
+            className="btn btn-danger"
+            type="submit"
+            disabled={!canRevoke || !confirmed || state.phase === 'submitting'}
+            title={!canRevoke ? (blockReason || 'Revoke unavailable') : !confirmed ? 'Confirm before revoking' : 'Revoke this invitation'}
+          >{state.phase === 'submitting' ? 'Revoking…' : 'Revoke Invitation'}</button>
+          {state.phase === 'success' && <span className="pill pill-ok" data-testid="bo-revoke-success">Revoked — audit event invite.revoke recorded</span>}
+          {state.phase === 'auth' && <span className="pill pill-unknown">Sign in required — session expired.</span>}
+          {state.phase === 'forbidden' && <span className="pill pill-warn">Not permitted — platform-admin access required.</span>}
+          {state.phase === 'error' && <span className="pill pill-warn">{state.message}</span>}
+        </div>
+      </form>
+    </div>
+  )
+}
+
 export function InviteDetail() {
   const { id } = useParams()
+  const inviteId = id || 'INV-2026-09-25-0192'
+  const [record, setRecord] = useState(undefined)
+  const [reloadKey, setReloadKey] = useState(0)
   return (
-    <PageLayout title={`Invite #${id || 'INV-2026-09-25-0192'}`} subtitle="Invitation details and status.">
+    <PageLayout title={`Invite #${inviteId}`} subtitle="Invitation details and status.">
       <BetaOpsNav />
       <div className="stack" style={{ gap: 20 }}>
-        <FoundationInviteDetail id={id || 'INV-2026-09-25-0192'} />
+        <FoundationInviteDetail id={inviteId} reloadKey={reloadKey} onRecord={setRecord} />
         <div className="evidence">
           <div className="evidence-header">
-            <span className="pill pill-warn">Expired</span>
+            <span className="pill pill-muted">sample</span>
             <span className="evidence-source">INV-2026-09-25-0192</span>
             <span className="evidence-freshness">Sent: 2026-09-25</span>
           </div>
-          <p className="evidence-body">Invitation to T2 Holdings LLC for Operator role. <span className="evidence-unknown">This invite has expired and requires reissuance before it can be accepted.</span></p>
+          <p className="evidence-body">Sample invite preview (T2 Holdings LLC · Operator). Live invite state is shown in the record above.</p>
         </div>
         <div className="card">
           <div className="card-head">
             <h3 className="card-title">Actions</h3>
             <span className="pill pill-muted">internal · logged</span>
           </div>
-          <div className="stack" style={{ gap: 10 }}>
-            <AuthorizationNote
-              title="Revoke invitation"
-              status="Disabled — owner approval required"
-              route="POST /api/v1/foundation/invites/{id}/revoke"
-              permission="PERM_MANAGE_ORG"
-              audit="invite.revoke"
-            >
-              Revoking invalidates a pending invitation. The backend route exists and is audited; activation requires explicit owner approval and a recorded reason.
-            </AuthorizationNote>
+          <div className="stack" style={{ gap: 14 }}>
+            <RevokeControl id={inviteId} record={record} onDone={() => setReloadKey(k => k + 1)} />
             <AuthorizationNote
               title="Reissue invitation"
               status="Out of scope — no backend route"
@@ -273,8 +342,6 @@ export function InviteDetail() {
               There is no single reissue route. Reissue would compose revoke + issue; it stays disabled until that path is designed and separately authorized.
             </AuthorizationNote>
             <button className="btn btn-primary" disabled title="Sample surface — no invite is reissued">Reissue Invitation</button>
-            <button className="btn btn-danger" disabled title="Sample surface — no invite is revoked">Revoke</button>
-            <div className="text-low" style={{ fontSize: 11 }}>Actions are disabled in sample mode. Reissuing or revoking is an operator action and is always logged.</div>
           </div>
         </div>
       </div>
