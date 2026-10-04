@@ -4,6 +4,17 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: '/ui/',  // canonical frontend is served under /ui/ by FastAPI
   plugins: [react()],
+  build: {
+    // Split vendor code so the app chunk stays well under the 500 kB warning
+    // threshold. Pure build-config change; no runtime behavior change.
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+        },
+      },
+    },
+  },
   server: {
     port: 8101,
     strictPort: true,
