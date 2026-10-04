@@ -126,6 +126,91 @@ const STALENESS = [
   { src: 'Review Aggregator', last: 'N/A', state: 'Unavailable', tone: 'pill-error', owner: 'Provider Adapters' },
 ]
 
+// ═══ Detailed health (real read from /health/detailed) ═══
+// Data-file checks, scanner mode, test status, readiness services with reasons,
+// and provider key PRESENCE (names only — never values). Honest states.
+function DetailedHealth() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(signals.detailedHealth()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', value: r.value })
+      else setSt({ phase: 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+  const v = st.phase === 'loaded' ? st.value : null
+  const badge = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
+    : st.phase === 'error' ? { l: 'unavailable', t: 'unknown' }
+      : { l: 'live · backend probe', t: 'muted' }
+
+  const checks = v && v.checks ? v.checks : {}
+  const providers = v && v.providers ? v.providers : {}
+  const readiness = v && v.readiness && v.readiness.services ? v.readiness.services : {}
+  const fileChecks = Object.entries(checks).filter(([k]) => k.startsWith('file_'))
+
+  return (
+    <div className="card" data-testid="mon-detailed-health" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Detailed health</h3>
+        <span className={`pill pill-${badge.t}`}>{badge.l}</span>
+      </div>
+      {st.phase === 'loading' && <p style={{ fontSize: 13 }}>Running detailed health probe…</p>}
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Detailed health probe unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {v && (
+        <>
+          <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+            <span className={`pill ${v.scanner_mode === 'live_allowed' ? 'pill-warn' : 'pill-muted'}`} title="Live scanner gate — live calls are owner-gated">scanner: {v.scanner_mode || 'UNKNOWN'}</span>
+            <span className="pill pill-muted">tests: {v.test_status || 'unknown'}</span>
+            {v.timestamp && <span className="pill pill-muted">at {v.timestamp}</span>}
+          </div>
+
+          <div className="grid-2" style={{ gap: 16 }}>
+            <div>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Data file checks</div>
+              <div className="stack" style={{ gap: 6 }}>
+                {fileChecks.length > 0 ? fileChecks.map(([k, val]) => (
+                  <div key={k} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0' }}>
+                    <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)' }}>{k.replace(/^file_/, '')}</span>
+                    <span className={`pill ${val === 'ok' ? 'pill-muted' : 'pill-warn'}`}>{val}</span>
+                  </div>
+                )) : <span className="text-low" style={{ fontSize: 12 }}>No file checks reported.</span>}
+              </div>
+
+              <div className="text-low" style={{ fontSize: 11, margin: '12px 0 6px' }}>Provider keys (presence only)</div>
+              <div className="stack" style={{ gap: 6 }}>
+                {Object.keys(providers).length > 0 ? Object.entries(providers).map(([name, state]) => (
+                  <div key={name} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0' }}>
+                    <span style={{ fontSize: 12 }}>{name}</span>
+                    <span className={`pill ${state === 'configured' ? 'pill-muted' : 'pill-unknown'}`} title="Key presence only — values are never read or shown">{state === 'configured' ? 'configured' : 'not configured'}</span>
+                  </div>
+                )) : <span className="text-low" style={{ fontSize: 12 }}>No provider keys reported.</span>}
+              </div>
+            </div>
+
+            <div>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Readiness services</div>
+              <div className="stack" style={{ gap: 6 }}>
+                {Object.keys(readiness).length > 0 ? Object.entries(readiness).map(([svc, r]) => (
+                  <div key={svc} style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '4px 0' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: 12 }}>{svc}</span>
+                      <span className={`pill ${r && r.ready ? 'pill-ok' : 'pill-warn'}`}>{r && r.ready ? 'ready' : 'not ready'}</span>
+                    </div>
+                    {r && r.reason && <span className="text-low" style={{ fontSize: 11 }}>{r.reason}</span>}
+                  </div>
+                )) : <span className="text-low" style={{ fontSize: 12 }}>No readiness services reported.</span>}
+              </div>
+            </div>
+          </div>
+          <div className="text-low" style={{ fontSize: 11, marginTop: 10 }}>Provider rows show key presence only. This probe performs no live provider call.</div>
+        </>
+      )}
+    </div>
+  )
+}
+
 export default function Monitoring() {
   const { toast } = useToast()
   const navigate = useNavigate()
@@ -196,6 +281,7 @@ export default function Monitoring() {
       {view === 'health' && (
         <div className="subview">
           <LiveObservability />
+          <DetailedHealth />
           <div className="card" style={{ marginBottom: 20 }}>
             <div className="card-head">
               <h3 className="card-title">System Health</h3>
