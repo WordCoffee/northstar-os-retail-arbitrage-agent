@@ -278,3 +278,27 @@ Eight clusters were executed on branch `feature/creative-cluster-launch`
 publish; no analytics provider; all new state is local workflow/reference
 records. Rooms remain PARTIAL/SAMPLE — no readiness inflation. See
 `reports/creative_autonomous_pass_20261004.md`.
+
+---
+
+## 10. Generation readiness route (2026-10-04)
+
+Creative Studio's Provider Readiness is now backed by a **read-only**,
+provider-neutral route: `GET /api/v1/foundation/creative/readiness`
+(`foundation/api/creative.py`; mounted additively in `foundation/app.py` and
+`main.py`). It returns only safe status metadata — generation state
+(`local_available` / `provider_gated` / `planned_not_armed` / `unavailable` /
+`probe_failed`), `armed`/`media_live` booleans, the configured backend id, local
+engine `reachable|unreachable|unknown`, a cloud-key **presence** boolean, reason,
+and `checked_at`. It returns no secrets, tokens, env values, URLs, or provider
+configuration, and performs no generation/upload/publish/transfer.
+
+The only probe is a bounded (0.3 s) **localhost** reachability check of the
+operator's own engine (default ComfyUI at `COMFYUI_URL`). It never installs,
+starts, loads a model, arms `MEDIA_GEN_LIVE`, or contacts a provider.
+
+**Readiness does not equal activation.** `MEDIA_GEN_LIVE` remains false, no
+render/generation route exists, no provider is called, and no credits are
+consumed. The UI shows the live contract when reachable and otherwise falls back
+to the static checklist with an explicit "route not reachable" note. See
+`reports/creative_generation_readiness_20261004.md`.
