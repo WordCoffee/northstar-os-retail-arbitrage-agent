@@ -1,10 +1,11 @@
 # Write-Path Authorization Map (non-creative admin/operator surface)
 
-**Status:** design + scoped activations. **Five actions are ACTIVATED**
+**Status:** design + scoped activations. **Six actions are ACTIVATED**
 (owner-approved, platform-admin only): **Issue invite**, **Revoke invite**,
-**Suspend organization**, **Resume organization**, and the read-only
-**Dashboard export CSV**. Every other classified action remains disabled;
-activation of any further action requires explicit owner approval.
+**Grant / activate organization**, **Suspend organization**,
+**Resume organization**, and the read-only **Dashboard export CSV**. Every other
+classified action remains disabled; activation of any further action requires
+explicit owner approval.
 
 **Scope:** Beta-Ops / Admin / Support / Audit / account write surfaces outside the
 creative-media cluster.
@@ -35,7 +36,7 @@ so the **next authenticated request is blocked**.
 
 | Action | UI state | Backend route | Risk | Classification |
 |---|---|---|---|---|
-| Grant / activate | disabled "Verify Eligibility" | `POST /admin/orgs/{id}/grant` | High (access grant) | ENABLE LATER WITH OWNER APPROVAL |
+| Grant / activate | **ACTIVATED — OrgDetail (platform-admin only)** | `POST /admin/orgs/{id}/grant` | High (access grant) | **ACTIVATED (owner-approved)** — confirmation + reason; **checklist-gated** (eligible `invited|onboarding`, legal acceptance complete, invite recorded; unknown blocks); audit `org.lifecycle.onboarding` / `org.lifecycle.active`; changes lifecycle state only (no plan/billing/entitlements) |
 | Change plan | no UI | `POST /admin/orgs/{id}/plan` | Medium | ENABLE LATER WITH OWNER APPROVAL |
 | Suspend | **ACTIVATED — OrgDetail (platform-admin only)** | `POST /admin/orgs/{id}/suspend` | High (blocks access) | **ACTIVATED (owner-approved)** — confirmation + reason; append-only audit `org.lifecycle.suspended`; eligible from onboarding/active/paused/downgraded |
 | Resume | **ACTIVATED — OrgDetail (platform-admin only)** | `POST /admin/orgs/{id}/resume` | Low–Med (restore) | **ACTIVATED (owner-approved)** — confirmation + reason; audit `org.lifecycle.active`; restores access only (not plan/entitlements); eligible from suspended/paused |

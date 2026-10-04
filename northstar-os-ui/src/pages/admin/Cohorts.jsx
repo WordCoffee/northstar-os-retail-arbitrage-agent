@@ -392,12 +392,12 @@ export function EligibilityChecklist() {
         <div style={{ marginTop: 14 }}>
           <AuthorizationNote
             title="Eligibility → activation"
-            status="Disabled — owner approval required"
+            status="Grant/activate active on organization detail — this checklist stays disabled"
             route="POST /api/v1/foundation/admin/orgs/{id}/grant"
             permission="PERM_PLATFORM_ADMIN"
-            audit="admin grant / org.lifecycle.*"
+            audit="org.lifecycle.onboarding / org.lifecycle.active"
           >
-            Verifying eligibility does not admit an organization by itself. Admission maps to a grant/activate transition, which is audited and requires explicit owner approval.
+            Verifying eligibility does not admit an organization by itself. Admission is now performed per-organization on the organization detail page (checklist-gated, confirmation-gated, audited). This checklist remains a non-authoritative surface and stays disabled.
           </AuthorizationNote>
           <button className="btn btn-primary" disabled title="Sample surface — eligibility is not applied">Verify Eligibility</button>
           <span className="text-low" style={{ fontSize: 11, marginLeft: 10 }}>Disabled in sample mode.</span>

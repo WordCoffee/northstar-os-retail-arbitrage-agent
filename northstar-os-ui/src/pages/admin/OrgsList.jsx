@@ -151,6 +151,113 @@ function LifecycleAction({ id, action, label, eligible, blockReason, auditEvent,
   )
 }
 
+// ═══ Activated grant/activate (platform-admin only; checklist-gated) ═══
+function GrantControl({ id, record, onDone }) {
+  const [reason, setReason] = useState('')
+  const [confirmed, setConfirmed] = useState(false)
+  const [state, setState] = useState({ phase: 'idle' })
+
+  const lc = record ? record.lifecycle_state : undefined
+  const eligible = lc === 'invited' || lc === 'onboarding'
+  const legal = record ? record.acceptance_complete : undefined
+  const inviteStatus = record ? record.invite_status : undefined
+  const inviteOk = !!(inviteStatus && inviteStatus !== 'none' && inviteStatus !== 'revoked')
+  const mandatoryPass = eligible && legal === true && inviteOk
+  const target = lc === 'invited' ? 'onboarding' : 'active'
+  const auditEvent = target === 'onboarding' ? 'org.lifecycle.onboarding' : 'org.lifecycle.active'
+  const label = lc === 'invited' ? 'Admit to onboarding' : 'Activate organization'
+
+  const blockReason = !record ? 'No organization record loaded.'
+    : !eligible ? (lc === 'active' ? 'Already active.'
+      : (lc === 'suspended' || lc === 'paused') ? 'Use resume for suspended/paused organizations.'
+        : (lc === 'cancelled' || lc === 'archived') ? 'Terminal state — activation is not available.'
+          : `Not in an eligible onboarding state (${lc || 'UNKNOWN'}).`)
+      : legal !== true ? 'Legal acceptance is missing or unknown — activation is blocked.'
+        : !inviteOk ? 'No active invite record — activation is blocked.' : null
+
+  const rows = [
+    { label: 'Eligible lifecycle state', value: eligible, note: `state: ${lc || 'UNKNOWN'}` },
+    { label: 'Legal acceptance complete', value: legal === true ? true : legal === false ? false : undefined },
+    { label: 'Invite recorded (not revoked)', value: inviteOk ? true : (record && (inviteStatus === 'none' || inviteStatus === 'revoked')) ? false : undefined, note: `invite: ${inviteStatus || 'UNKNOWN'}` },
+    { label: 'Onboarding checklist complete', value: record && record.onboarding_complete === true ? true : record && record.onboarding_complete === false ? false : undefined, informational: true },
+    { label: 'Audit trail present', value: record && Array.isArray(record.audit) ? record.audit.length > 0 : undefined, informational: true },
+  ]
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (!mandatoryPass || !confirmed) return
+    setState({ phase: 'submitting' })
+    const r = await settle(foundationApi.adminOrgAction(id, 'grant', { reason: reason.trim() || undefined }))
+    if (r.ok) {
+      setState({ phase: 'success', value: r.value })
+      setConfirmed(false); setReason('')
+      if (onDone) onDone()
+    } else {
+      const s = r.error && r.error.status, code = r.error && r.error.code
+      setState({
+        phase: s === 401 ? 'auth' : s === 403 ? 'forbidden' : s === 404 ? 'not_found' : 'error',
+        message: (r.error && r.error.message) || `Activation failed${code ? ` (${code})` : ''}.`,
+      })
+    }
+  }
+
+  const pill = (v) => v === true ? <span className="pill pill-muted">pass</span>
+    : v === false ? <span className="pill pill-warn">fail</span>
+      : <span className="pill pill-unknown">UNKNOWN</span>
+
+  return (
+    <div className="card" data-testid="org-grant" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Admission (grant / activate)</h3>
+        <span className="pill pill-ochre">active · platform admin</span>
+      </div>
+      <AuthorizationNote
+        title="Grant / activate organization"
+        status="Active — platform-admin only"
+        route="POST /api/v1/foundation/admin/orgs/{id}/grant"
+        permission="PERM_PLATFORM_ADMIN"
+        audit={auditEvent}
+      >
+        Admits an eligible onboarding organization to the private beta. It changes lifecycle state only — it does not change plan, billing, credits, or entitlements. Append-only audited. All other lifecycle actions remain disabled.
+      </AuthorizationNote>
+      <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Admission checklist (read-only)</div>
+      <div className="stack" style={{ gap: 4, marginBottom: 12 }}>
+        {rows.map((r, i) => (
+          <div key={i} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid var(--divider)' }}>
+            <div>
+              <span style={{ fontSize: 12 }}>{r.label}</span>
+              {r.note && <span className="text-low" style={{ fontSize: 11 }}> · {r.note}</span>}
+              {r.informational && <span className="text-low" style={{ fontSize: 10 }}> (informational)</span>}
+            </div>
+            {pill(r.value)}
+          </div>
+        ))}
+      </div>
+      {blockReason && <div className="text-low" style={{ fontSize: 12, marginBottom: 8 }}>{blockReason}</div>}
+      <form className="stack" style={{ gap: 8 }} onSubmit={submit}>
+        <input className="field" value={reason} onChange={e => setReason(e.target.value)} placeholder="Reason (optional)" disabled={!mandatoryPass} />
+        <div className="check-row">
+          <input type="checkbox" id="grant-confirm" checked={confirmed} onChange={e => setConfirmed(e.target.checked)} disabled={!mandatoryPass} />
+          <label htmlFor="grant-confirm">I understand this admits the organization to the private beta and activates access.</label>
+        </div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button
+            className="btn btn-primary"
+            type="submit"
+            disabled={!mandatoryPass || !confirmed || state.phase === 'submitting'}
+            title={!mandatoryPass ? (blockReason || 'Checklist incomplete') : !confirmed ? 'Confirm before activating' : label}
+          >{state.phase === 'submitting' ? 'Activating…' : label}</button>
+          {state.phase === 'success' && <span className="pill pill-ok" data-testid="org-grant-success">Activated → {target} — audit event {auditEvent} recorded</span>}
+          {state.phase === 'auth' && <span className="pill pill-unknown">Sign in required — session expired.</span>}
+          {state.phase === 'forbidden' && <span className="pill pill-warn">Not permitted — platform-admin access required.</span>}
+          {state.phase === 'not_found' && <span className="pill pill-warn">Organization not found.</span>}
+          {state.phase === 'error' && <span className="pill pill-warn">{state.message}</span>}
+        </div>
+      </form>
+    </div>
+  )
+}
+
 function LifecycleControls({ id, state, onDone }) {
   const suspendEligible = SUSPEND_ELIGIBLE.includes(state)
   const resumeEligible = RESUME_ELIGIBLE.includes(state)
@@ -227,6 +334,7 @@ function FoundationOrgDetail({ id }) {
             <span className="pill pill-muted">onboarding {o.onboarding_complete ? 'complete' : 'incomplete'}</span>
             <span className="pill pill-muted">acceptance {o.acceptance_complete ? 'complete' : 'incomplete'}</span>
           </div>
+          <GrantControl id={id} record={o} onDone={() => setReloadKey(k => k + 1)} />
           <LifecycleControls id={id} state={o.lifecycle_state} onDone={() => setReloadKey(k => k + 1)} />
           {Array.isArray(o.notes) && o.notes.length > 0 && (
             <div style={{ marginBottom: 8 }}>
