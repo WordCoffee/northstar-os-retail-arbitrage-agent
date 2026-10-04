@@ -175,6 +175,7 @@ export default function SocialPulse() {
   const [assetFilter, setAssetFilter] = useState('All')
   const [assetQuery, setAssetQuery] = useState('')
   const [queueMode, setQueueMode] = useState('Board')
+  const [selectedPosts, setSelectedPosts] = useState([])
   const [editCampaignId, setEditCampaignId] = useState(null)
   const [campaignDraft, setCampaignDraft] = useState(null)
 
@@ -209,6 +210,12 @@ export default function SocialPulse() {
   const inReview = posts.filter(p => p.state === 'In Review')
   const reviewCount = inReview.length
 
+  // Approval / workflow audit trail — derived from each post's local history.
+  const recentDecisions = useMemo(() => posts
+    .flatMap(p => (p.history || []).map(h => ({ ...h, id: p.id, title: p.title })))
+    .sort((a, b) => (b.at || '').localeCompare(a.at || ''))
+    .slice(0, 8), [posts])
+
   // Live Workflow badge — same local state source as the Approvals queue and
   // the board's "In Review" column. Never a hard-coded number.
   const tabs = useMemo(
@@ -231,17 +238,55 @@ export default function SocialPulse() {
   }, [assets, assetFilter, assetQuery])
 
   const advance = (id, next, note) => {
-    setPosts(prev => prev.map(p => p.id === id ? { ...p, state: next } : p))
+    const at = nowIso()
+    setPosts(prev => prev.map(p => p.id === id ? {
+      ...p, state: next,
+      history: [...(p.history || []), { at, from: p.state, to: next, note }],
+    } : p))
     t(`${id} → ${next}. ${note}`, 'info')
   }
+
+  // Bulk review — one state change across many posts, one audit entry each.
+  const advanceMany = (ids, next, note) => {
+    if (!ids.length) return
+    const at = nowIso()
+    setPosts(prev => prev.map(p => ids.includes(p.id) ? {
+      ...p, state: next,
+      history: [...(p.history || []), { at, from: p.state, to: next, note }],
+    } : p))
+    setSelectedPosts([])
+    t(`${ids.length} post${ids.length === 1 ? '' : 's'} → ${next}. ${note}`, 'info')
+  }
+  const toggleSelectPost = (id, on) => setSelectedPosts(prev => on ? [...prev, id] : prev.filter(x => x !== id))
 
   const addDraft = () => {
     const id = uid('SP')
     setPosts(prev => [{
       id, campaign: activeCampaign?.key || campaigns[0]?.key || '', title: hook.slice(0, 40) || 'Untitled draft',
       platform, format: 'Reel', voice, state: 'Draft', when: '', note: 'Created locally from the composer.',
+      history: [{ at: nowIso(), from: null, to: 'Draft', note: 'Created from composer' }],
     }, ...prev])
     t(`${id} saved as a local draft — nothing publishes.`, 'info')
+  }
+
+  // Room-level "Generate Variants": records variant draft posts from the
+  // composer fields (local records — no copy is generated, nothing publishes).
+  const generateVariantDrafts = () => {
+    const combos = [
+      { platform: 'TikTok', voice: 'Before/after' },
+      { platform: 'Stories', voice: 'Problem/solution' },
+      { platform: 'X Thread', voice: 'Founder voice' },
+    ]
+    const base = hook.slice(0, 34) || 'Untitled draft'
+    const at = nowIso()
+    const created = combos.map((c, i) => ({
+      id: uid('SP'), campaign: activeCampaign?.key || campaigns[0]?.key || '',
+      title: `${base} — variant ${i + 1}`, platform: c.platform, format: 'Reel', voice: c.voice,
+      state: 'Draft', when: '', note: 'Variant draft recorded locally from the composer fields — nothing publishes.',
+      history: [{ at, from: null, to: 'Draft', note: 'Variant generated from composer' }],
+    }))
+    setPosts(prev => [...created, ...prev])
+    t(`${created.length} variant draft posts recorded locally from the composer — records only, nothing publishes.`, 'info')
   }
 
   // Create a real local campaign record (previously a no-op toast).
@@ -296,7 +341,7 @@ export default function SocialPulse() {
       subtitle="Social content operations — plan campaigns, draft, review, approve, and mark publish-ready. Nothing publishes from here."
       actions={<>
         <button className="btn btn-sm" onClick={() => go('composer')}>Draft Post</button>
-        <button className="btn btn-sm btn-ghost" onClick={() => t('Variant suggestions are a local planning aid (sample) — nothing publishes.', 'info')}>Generate Variants</button>
+        <button className="btn btn-sm btn-ghost" onClick={generateVariantDrafts}>Generate Variants</button>
         <button className="btn btn-sm btn-ghost" onClick={() => t('Schedule records a manual reminder only — no post publishes autonomously, and no social account is connected.', 'info')}>Schedule</button>
         <button className="btn btn-sm btn-ghost" onClick={() => go('approvals')}>Send for Approval</button>
       </>}
@@ -530,6 +575,11 @@ export default function SocialPulse() {
                           <span className="pill pill-muted" style={{ fontSize: 10 }}>{p.voice}</span>
                         </div>
                         <div className="text-low" style={{ fontSize: 10, marginBottom: 8 }}>{p.note}</div>
+                        {p.history && p.history.length > 0 && (
+                          <div className="text-low" style={{ fontSize: 10, marginBottom: 8 }} title="Most recent local workflow transition">
+                            Last: {p.history[p.history.length - 1].to} · {new Date(p.history[p.history.length - 1].at).toLocaleString()}
+                          </div>
+                        )}
                         <button className="btn btn-sm" onClick={() => advance(p.id, stage.action.next, stage.action.note)}>{stage.action.label}</button>
                       </div>
                     ))}
@@ -830,6 +880,14 @@ export default function SocialPulse() {
               <h3 className="card-title">Approval Queue</h3>
               <span className={`pill ${reviewCount ? 'pill-ochre' : 'pill-muted'}`}>{reviewCount} awaiting</span>
             </div>
+            {inReview.length > 0 && (
+              <div className="room-toolbar">
+                <span className="text-low" style={{ fontSize: 11, marginRight: 4 }}>{selectedPosts.length} selected</span>
+                <button className="btn btn-sm" disabled={!selectedPosts.length} onClick={() => advanceMany(selectedPosts, 'Approved', 'Bulk approved — still requires publish-ready + a manual schedule; nothing publishes.')}>Approve selected</button>
+                <button className="btn btn-sm btn-ghost" disabled={!selectedPosts.length} onClick={() => advanceMany(selectedPosts, 'Draft', 'Bulk returned to draft with requested changes.')}>Return selected</button>
+                {selectedPosts.length > 0 && <button className="btn btn-sm btn-ghost" onClick={() => setSelectedPosts([])}>Clear</button>}
+              </div>
+            )}
             {inReview.length === 0 ? (
               <div className="empty">
                 <div className="empty-title">Nothing awaiting review</div>
@@ -838,6 +896,14 @@ export default function SocialPulse() {
               </div>
             ) : (
               <DataTable columns={[
+                { key: 'select', label: '', render: (v, row) => (
+                  <input
+                    type="checkbox"
+                    checked={selectedPosts.includes(row.id)}
+                    onChange={e => toggleSelectPost(row.id, e.target.checked)}
+                    aria-label={`Select ${row.id}`}
+                  />
+                ) },
                 { key: 'id', label: 'ID' },
                 { key: 'title', label: 'Draft' },
                 { key: 'campaign', label: 'Campaign', render: (v) => campaignName(v) },
@@ -849,6 +915,28 @@ export default function SocialPulse() {
                   </div>
                 ) },
               ]} rows={inReview} />
+            )}
+          </div>
+
+          <div className="card" style={{ marginTop: 20 }}>
+            <div className="card-head">
+              <h3 className="card-title" style={{ fontSize: 15 }}>Recent decisions</h3>
+              <span className="pill pill-muted">local audit trail · not publishing history</span>
+            </div>
+            {recentDecisions.length === 0 ? (
+              <div className="text-low" style={{ fontSize: 12 }}>No decisions recorded yet. Approve or return a draft to build the local trail.</div>
+            ) : (
+              <div className="stack" style={{ gap: 8 }}>
+                {recentDecisions.map((d, i) => (
+                  <div key={`${d.id}-${i}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
+                    <div style={{ minWidth: 0 }}>
+                      <span className="text-low" style={{ fontSize: 11, marginRight: 8 }}>{d.from ? `${d.from} → ${d.to}` : `created → ${d.to}`}</span>
+                      <span style={{ fontSize: 12 }}>{d.id} · {d.title}</span>
+                    </div>
+                    <span className="text-low" style={{ fontSize: 11, flexShrink: 0 }}>{d.at ? new Date(d.at).toLocaleString() : '—'}</span>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>
