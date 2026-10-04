@@ -39,6 +39,8 @@ export const signals = {
   sourceScoutReview: () => get('/api/sourcescout/review'),
   monitoringAlerts: () => get('/api/monitoring/error-alerts'),
   goldenGooseHealth: () => get('/api/golden-goose/health'),
+  // Public, no-secrets invite validation (single invite by code).
+  inviteLookup: (code) => get(`/api/v1/invites/${encodeURIComponent(code)}`),
 }
 
 // Never-rejecting wrapper. Returns { ok, value } or { ok:false, error } so a
