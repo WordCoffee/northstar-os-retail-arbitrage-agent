@@ -1,5 +1,5 @@
-import { useState } from 'react'
-
+// Account recovery. No recovery backend is wired in this beta — the surface is
+// honest about that and does not present a working control.
 export default function Recovery() {
   return (
     <div className="fade-in">
@@ -9,21 +9,25 @@ export default function Recovery() {
           <p className="text-mid" style={{ fontSize: 13 }}>Reset your credentials or verify your identity.</p>
         </div>
         <div className="card">
+          <div className="alert-warn" style={{ marginBottom: 16 }}>
+            <div className="alert-title">Recovery is not connected in this beta</div>
+            <div className="alert-text">Self-service recovery is not wired yet. Contact your organization operator or the beta support channel to restore access.</div>
+          </div>
           <div className="stack" style={{ gap: 16 }}>
             <div className="field-group">
               <label className="label">Organization ID</label>
-              <input className="field" placeholder="Enter your organization identifier" />
+              <input className="field" placeholder="Enter your organization identifier" disabled />
             </div>
             <div className="field-group">
               <label className="label">Verification Method</label>
-              <select className="field">
+              <select className="field" disabled>
                 <option>Email verification</option>
                 <option>Organization admin recovery</option>
                 <option>Hardware key</option>
               </select>
             </div>
-            <button className="btn btn-primary btn-block">Send Recovery Link</button>
-            <p className="text-low" style={{ fontSize: 12, textAlign: 'center' }}>Recovery links expire after 48 hours.</p>
+            <button className="btn btn-primary btn-block" disabled title="Recovery is not wired in this beta">Send Recovery Link</button>
+            <p className="text-low" style={{ fontSize: 12, textAlign: 'center' }}>No recovery link is sent. Access restoration is an operator action during the beta.</p>
           </div>
         </div>
       </div>
