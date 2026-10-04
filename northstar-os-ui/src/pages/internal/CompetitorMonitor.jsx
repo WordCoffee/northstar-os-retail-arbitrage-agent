@@ -1,7 +1,74 @@
-import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
+import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import signals, { settle } from '../../services/signals.js'
+
+const short = (t, n = 58) => (t && t.length > n ? t.slice(0, n - 1) + '…' : t)
+
+// ═══ Cached market observations (real read, explicitly labelled) ═══
+// Derives observed price/rating/review signals from the real SourceScout cached
+// catalog. This is NOT live competitor tracking — it is a cached-catalog read,
+// labelled as such. Empty/unavailable states are honest.
+function CachedMarketObservations() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(signals.sourceScout()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', items: r.value.items || [] })
+      else setSt({ phase: (r.error && r.error.status === 401) ? 'auth' : 'error' })
+    })
+    return () => { alive = false }
+  }, [])
+
+  if (st.phase === 'loading') {
+    return <div className="card" data-testid="cm-cached-market" style={{ marginBottom: 20 }}><p style={{ fontSize: 13 }}>Loading cached market observations…</p></div>
+  }
+  if (st.phase !== 'loaded') {
+    return (
+      <div className="card" data-testid="cm-cached-market" style={{ marginBottom: 20 }}>
+        <div className="card-head"><h3 className="card-title">Cached market observations</h3><span className="pill pill-unknown">unavailable</span></div>
+        <p className="text-low" style={{ fontSize: 12 }}>SourceScout cached catalog could not be read. No observations are fabricated.</p>
+      </div>
+    )
+  }
+
+  const items = st.items
+  const rated = items.filter(i => i.rating && i.rating.value != null)
+  const votesTotal = rated.reduce((s, i) => s + (i.rating.votes_count || 0), 0)
+  const prices = items.map(i => i.price).filter(p => typeof p === 'number')
+  const avgPrice = prices.length ? (prices.reduce((a, b) => a + b, 0) / prices.length) : null
+  const top = [...rated].sort((a, b) => (b.rating.votes_count || 0) - (a.rating.votes_count || 0)).slice(0, 6)
+
+  return (
+    <div className="card" data-testid="cm-cached-market" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Cached market observations</h3>
+        <span className="pill pill-muted" title="Observed SourceScout cached catalog — not live competitor tracking">cached catalog · observed</span>
+      </div>
+      <p className="text-low" style={{ fontSize: 12, marginBottom: 12 }}>
+        Observed price, rating and review signals from the SourceScout cached catalog. This is cached observation data, not live competitor tracking — competitor-specific rows below remain sample.
+      </p>
+      <MetricTiles columns={4} metrics={[
+        { label: 'Tracked ASINs', value: String(items.length) },
+        { label: 'With rating', value: String(rated.length), sub: 'observed ratings present' },
+        { label: 'Avg observed price', value: avgPrice == null ? 'UNKNOWN' : '$' + avgPrice.toFixed(2) },
+        { label: 'Total review votes', value: votesTotal.toLocaleString() },
+      ]} />
+      <DataTable columns={[
+        { key: 'title', label: 'Observation', render: (v, row) => <span title={v}>{short(v)}</span> },
+        { key: 'price', label: 'Observed Price', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : '$' + Number(v).toFixed(2) },
+        { key: 'rating', label: 'Rating', render: (v, row) => row.rating && row.rating.value != null
+          ? <span className="pill pill-muted" title={`${row.rating.votes_count || 0} votes`}>{row.rating.value}</span>
+          : <span className="pill pill-unknown">UNKNOWN</span> },
+        { key: 'votes', label: 'Votes', render: (v, row) => row.rating && row.rating.votes_count != null ? (row.rating.votes_count).toLocaleString() : <span className="pill pill-unknown">UNKNOWN</span> },
+        { key: 'quantity_match', label: 'Quantity Match', render: (v) => <span className={`pill ${v && v.status === 'PASS' ? 'pill-ok' : v && v.status === 'FAIL' ? 'pill-warn' : 'pill-ochre'}`}>{v ? v.status : 'UNKNOWN'}</span> },
+      ]} rows={top} />
+    </div>
+  )
+}
 
 const TABS = [
   { id: 'landscape', label: 'Landscape', count: 8 },
@@ -26,8 +93,10 @@ export default function CompetitorMonitor() {
       </>}
     >
       <DataNotice tone="sample" title="Competitive data is observed or sample">
-        Brand, price, and rank records are demonstration data until provider observations are connected. Watchlist entries are indications, not verified market positions.
+        Brand, price, and rank records below are demonstration data until provider observations are connected. The “Cached market observations” card is a real SourceScout cached-catalog read, labelled as cached observation — not live competitor tracking. Watchlist entries are indications, not verified market positions.
       </DataNotice>
+
+      <CachedMarketObservations />
 
       <RoomTabs tabs={TABS} base="/competitor-monitor" />
 
