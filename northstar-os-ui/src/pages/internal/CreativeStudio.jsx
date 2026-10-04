@@ -3,6 +3,7 @@ import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
+import { foundationApi } from '../../foundation/api.js'
 
 // ═══════════════════════════════════════════════════════════════════════════
 // CREATIVE STUDIO — service-local creative operations workspace.
@@ -57,6 +58,16 @@ const GEN_STATE = {
   gated: { pill: 'pill-ochre', text: 'PROVIDER-GATED' },
   demo: { pill: 'pill-muted', text: 'DEMO-ONLY' },
   planned: { pill: 'pill-unknown', text: 'PLANNED — NOT ARMED' },
+  unavailable: { pill: 'pill-clay', text: 'UNAVAILABLE' },
+  probe_failed: { pill: 'pill-clay', text: 'PROBE FAILED' },
+}
+// Live readiness contract state -> legend key.
+const GEN_KEY = {
+  local_available: 'local',
+  provider_gated: 'gated',
+  planned_not_armed: 'planned',
+  unavailable: 'unavailable',
+  probe_failed: 'probe_failed',
 }
 
 const IMAGE_PROVIDER = {
@@ -215,32 +226,60 @@ function GenerationTruthLegend({ active = 'planned' }) {
   )
 }
 
-function ReadinessChecklist() {
+function ReadinessChecklist({ readiness, probeFailed }) {
   const okCount = READINESS.filter(r => r.ok).length
+  const live = readiness && typeof readiness.generation === 'string'
+  const key = live ? (GEN_KEY[readiness.generation] || 'planned') : IMAGE_PROVIDER.state
+  const meta = GEN_STATE[key] || GEN_STATE.planned
   return (
     <div className="card">
       <div className="card-head">
         <h3 className="card-title" style={{ fontSize: 15 }}>Provider Readiness</h3>
-        <span className="pill pill-unknown" title="Static checklist — the app does not probe the engine yet">static · not live-probed</span>
+        <span className={`pill ${live ? 'pill-muted' : 'pill-unknown'}`} title={live ? 'Live readiness probe (read-only; does not activate generation)' : 'Static checklist — the app does not probe the engine yet'}>
+          {live ? 'live · read-only' : 'static · not live-probed'}
+        </span>
       </div>
-      <div className="stack" style={{ gap: 8 }}>
-        {READINESS.map(r => (
-          <div key={r.key} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-            <span className={`pill ${r.ok ? 'pill-forest' : 'pill-unknown'}`} style={{ flexShrink: 0 }}>{r.ok ? 'ready' : 'not satisfied'}</span>
-            <div>
-              <div style={{ fontSize: 12, fontWeight: 500 }}>{r.label}</div>
-              <div className="text-low" style={{ fontSize: 11 }}>{r.detail}</div>
-            </div>
+
+      {live ? (
+        <>
+          <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+            <span className={`pill ${meta.pill}`}>{meta.text}</span>
+            <span className="pill pill-muted" style={{ fontSize: 10 }}>backend: {readiness.backend}</span>
+            <span className="pill pill-muted" style={{ fontSize: 10 }}>local engine: {readiness.local_engine?.state || 'unknown'}</span>
+            <span className="pill pill-muted" style={{ fontSize: 10 }}>media gate: {readiness.armed ? 'armed' : 'off'}</span>
           </div>
-        ))}
-      </div>
-      <div className="text-low" style={{ fontSize: 11, marginTop: 12 }}>
-        {okCount} of {READINESS.length} prerequisites satisfied. This checklist is <strong>static</strong> — the app does not
-        probe the local engine, so nothing here is a live check. Arming generation requires a media route plus an
-        operator-side ComfyUI install, model weights, and <span className="text-mono">{IMAGE_PROVIDER.gate}=1</span>.
-      </div>
+          <div className="stack" style={{ gap: 6 }}>
+            <div className="text-low" style={{ fontSize: 11 }}>Reason: <span className="text-mono">{readiness.reason}</span></div>
+            <div className="text-low" style={{ fontSize: 11 }}>Checked: {readiness.checked_at ? new Date(readiness.checked_at).toLocaleString() : '—'} · probe: {readiness.probe || 'performed'}</div>
+            <div className="text-low" style={{ fontSize: 11 }}>{readiness.notes}</div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="stack" style={{ gap: 8 }}>
+            {READINESS.map(r => (
+              <div key={r.key} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                <span className={`pill ${r.ok ? 'pill-forest' : 'pill-unknown'}`} style={{ flexShrink: 0 }}>{r.ok ? 'ready' : 'not satisfied'}</span>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 500 }}>{r.label}</div>
+                  <div className="text-low" style={{ fontSize: 11 }}>{r.detail}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-low" style={{ fontSize: 11, marginTop: 12 }}>
+            {okCount} of {READINESS.length} prerequisites satisfied. This checklist is <strong>static</strong> — the app does not
+            probe the local engine, so nothing here is a live check. Arming generation requires a media route plus an
+            operator-side ComfyUI install, model weights, and <span className="text-mono">{IMAGE_PROVIDER.gate}=1</span>.
+          </div>
+          <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>
+            {probeFailed ? 'Live readiness probe unavailable (route not reachable in this build) — showing the static checklist. Readiness never activates generation.' : 'Loading live readiness…'}
+          </div>
+        </>
+      )}
+
       <div style={{ marginTop: 10 }}>
-        <GenerationTruthLegend active={IMAGE_PROVIDER.state} />
+        <GenerationTruthLegend active={key} />
       </div>
     </div>
   )
@@ -268,6 +307,10 @@ export default function CreativeStudio() {
   const [variantStateFilter, setVariantStateFilter] = useState('All')
   const [historyFilter, setHistoryFilter] = useState('All')
   const [outputs, setOutputs] = useState(['Ad creatives', 'Listing imagery'])
+  // Live media readiness (read-only). null until probed; probeFailed when the
+  // route is not reachable (e.g. local harness) -> static fallback is shown.
+  const [readiness, setReadiness] = useState(null)
+  const [readinessProbeFailed, setReadinessProbeFailed] = useState(false)
 
   // composer fields
   const [prompt, setPrompt] = useState('')
@@ -348,6 +391,16 @@ export default function CreativeStudio() {
   useEffect(() => {
     if (briefs.length && !briefs.some(b => b.id === activeBriefId)) setActiveBriefId(briefs[0].id)
   }, [briefs, activeBriefId])
+
+  // Read-only media readiness probe. Never activates generation; on any error
+  // (route absent, auth, network) we fall back to the static checklist.
+  useEffect(() => {
+    let alive = true
+    foundationApi.mediaReadiness()
+      .then(r => { if (alive) { setReadiness(r); setReadinessProbeFailed(false) } })
+      .catch(() => { if (alive) { setReadiness(null); setReadinessProbeFailed(true) } })
+    return () => { alive = false }
+  }, [])
 
   const addBrief = () => {
     const id = uid('BR')
@@ -515,13 +568,18 @@ export default function CreativeStudio() {
 
   // Local handoff log — records what was handed to an adjacent room (references
   // only; nothing is transferred, published, or uploaded). Persisted
-  // synchronously so the entry survives the immediate room navigation.
+  // synchronously BEFORE setState so the entry survives the immediate room
+  // navigation (the component unmounts on navigate).
   const recordHandoff = (target, what, refs) => {
-    setHandoffs(prev => {
-      const next = [{ id: uid('HX'), target, what, refs: refs || [], at: nowIso() }, ...prev].slice(0, 20)
-      try { localStorage.setItem('ns-creative-handoffs', JSON.stringify(next)) } catch { /* storage unavailable */ }
-      return next
-    })
+    const entry = { id: uid('HX'), target, what, refs: refs || [], at: nowIso() }
+    let next = [entry]
+    try {
+      const raw = localStorage.getItem('ns-creative-handoffs')
+      const cur = raw ? JSON.parse(raw) : []
+      next = [entry, ...(Array.isArray(cur) ? cur : [])].slice(0, 20)
+      localStorage.setItem('ns-creative-handoffs', JSON.stringify(next))
+    } catch { /* storage unavailable */ }
+    setHandoffs(next)
   }
 
   const briefName = (id) => briefs.find(b => b.id === id)?.name || id || '—'
@@ -740,7 +798,7 @@ export default function CreativeStudio() {
             </div>
 
             <div className="stack" style={{ gap: 16 }}>
-              <ReadinessChecklist />
+              <ReadinessChecklist readiness={readiness} probeFailed={readinessProbeFailed} />
               <div className="card">
                 <div className="card-head">
                   <h3 className="card-title" style={{ fontSize: 15 }}>Preview</h3>

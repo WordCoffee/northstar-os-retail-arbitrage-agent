@@ -129,6 +129,9 @@ export const foundationApi = {
   // public UI-mode signal (works before auth; local stack = private_beta)
   uiMode: () => req('/ui-mode'),
 
+  // creative media readiness (read-only, provider-neutral; does NOT generate)
+  mediaReadiness: () => req('/creative/readiness'),
+
   // auth session (P2-T5b): cookie transport, no token returned to JS
   login: (email, password) => req('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   logout: () => req('/auth/logout', { method: 'POST' }),
