@@ -25,6 +25,7 @@ import { useEffect, useMemo, useState } from 'react'
 const TABS = [
   { id: 'briefs', label: 'Briefs' },
   { id: 'composer', label: 'Image Composer' },
+  { id: 'adcreative', label: 'Ad Creative' },
   { id: 'video', label: 'Video / Shorts' },
   { id: 'queue', label: 'Production Queue' },
   { id: 'variants', label: 'Variants & History' },
@@ -32,6 +33,17 @@ const TABS = [
   { id: 'exports', label: 'Exports' },
   { id: 'library', label: 'Library' },
 ]
+
+// Ad-creative framing — placements are editorial guidance for variant planning,
+// NOT live ad-platform reporting. Each yields a placement-appropriate aspect.
+const AD_PLACEMENTS = [
+  { key: 'top-search', label: 'Top of Search', aspect: '16:9', note: 'Highest intent — lead with the offer and a clear headline.' },
+  { key: 'product-pages', label: 'Product Pages', aspect: '1:1', note: 'Comparison shoppers — show the offer, rating, and pack.' },
+  { key: 'reels', label: 'Reels / Shorts', aspect: '9:16', note: 'Sound-off hook in the first two seconds.' },
+  { key: 'stories', label: 'Stories', aspect: '9:16', note: 'Single benefit + one tap-through CTA.' },
+  { key: 'feed', label: 'Social Feed', aspect: '4:5', note: 'Thumb-stopping visual; the caption carries the offer.' },
+]
+const AD_CTA = ['Shop now', 'Learn more', 'See the offer', 'Get the deal', 'Compare options']
 
 // ── Local provider posture. Verified against repo: no creative route is
 //    exposed to the UI; the local engine is not connected in this build. ──
@@ -63,6 +75,7 @@ const ASPECTS = ['1:1', '4:5', '9:16', '16:9', '3:2']
 const SIZES = ['1024px (1MP)', '1280×720', '1536px', '2048px (4MP · 4× cost)']
 const STAGES = ['Draft (iterate cheap)', 'Final (top tier)']
 const FORMATS = ['Ad creative', 'Social variant', 'Listing imagery', 'A+ content', 'Email hero']
+const STYLE_DIRECTIONS = ['Clean studio', 'Lifestyle / in-use', 'Bold graphic', 'Editorial', 'Flat lay', 'UGC / candid']
 const VIDEO_PURPOSE = ['UGC / testimonial', 'Product motion', 'Ad hook', 'Storyboard / moodboard']
 const VIDEO_DURATION = ['5s', '15s (Short / TikTok)', '30s']
 const VIDEO_ASPECT = ['9:16 (vertical)', '1:1 (square)', '16:9 (landscape)']
@@ -198,9 +211,11 @@ export default function CreativeStudio() {
   const [variants, setVariants] = useLocalRoom('ns-creative-variants', SEED_VARIANTS)
   const [bundles, setBundles] = useLocalRoom('ns-creative-bundles', [])
   const [beats, setBeats] = useLocalRoom('ns-creative-video-beats', SEED_BEATS)
+  const [adVars, setAdVars] = useLocalRoom('ns-creative-ad-variants', [])
 
   const [activeBriefId, setActiveBriefId] = useState(briefs[0]?.id || '')
   const [assetFilter, setAssetFilter] = useState('All')
+  const [assetQuery, setAssetQuery] = useState('')
   const [outputs, setOutputs] = useState(['Ad creatives', 'Listing imagery'])
 
   // composer fields
@@ -210,6 +225,7 @@ export default function CreativeStudio() {
   const [size, setSize] = useState('1024px (1MP)')
   const [format, setFormat] = useState('Ad creative')
   const [stage, setStage] = useState('Draft (iterate cheap)')
+  const [styleDir, setStyleDir] = useState('Clean studio')
   const [refIds, setRefIds] = useState([])
 
   // video fields
@@ -222,6 +238,13 @@ export default function CreativeStudio() {
   const [editBrief, setEditBrief] = useState(false)
   const [briefDraft, setBriefDraft] = useState(null)
 
+  // ad creative fields
+  const [adHook, setAdHook] = useState('Stop buying filters that miss the sediment.')
+  const [adOffer, setAdOffer] = useState('Save 20% on the countertop filter set')
+  const [adCta, setAdCta] = useState('Shop now')
+  const [adAudience, setAdAudience] = useState('Homeowners 30–55')
+  const [adPlacements, setAdPlacements] = useState(['top-search', 'feed'])
+
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : 'briefs'
 
@@ -232,6 +255,14 @@ export default function CreativeStudio() {
     () => briefs.find(b => b.id === activeBriefId) || briefs[0] || null,
     [briefs, activeBriefId],
   )
+
+  const filteredAssets = useMemo(() => {
+    const q = assetQuery.trim().toLowerCase()
+    return assets.filter(a =>
+      (assetFilter === 'All' || a.type === assetFilter) &&
+      (!q || a.name.toLowerCase().includes(q) || (a.collection || '').toLowerCase().includes(q)),
+    )
+  }, [assets, assetFilter, assetQuery])
 
   // Keep the active brief valid after the store changes.
   useEffect(() => {
@@ -289,6 +320,7 @@ export default function CreativeStudio() {
       size: kind === 'image' ? size : vDuration,
       format: kind === 'image' ? format : 'Short clip',
       stage: kind === 'image' ? stage : 'Draft (iterate cheap)',
+      style: kind === 'image' ? styleDir : '',
       refs: kind === 'image' ? refIds : (vAssetId ? [vAssetId] : []),
       // No provider is connected: the honest terminal state is "blocked".
       state: 'Blocked — provider required',
@@ -347,6 +379,28 @@ export default function CreativeStudio() {
   const updateBeat = (id, patch) => setBeats(prev => prev.map(b => b.id === id ? { ...b, ...patch } : b))
   const removeBeat = (id) => setBeats(prev => prev.filter(b => b.id !== id))
   const totalSeconds = beats.reduce((n, b) => n + (Number(b.seconds) || 0), 0)
+
+  // Ad-creative variant set — one local record per selected placement, framed
+  // by hook/offer/CTA. No ad is generated or published.
+  const togglePlacement = (k) => setAdPlacements(prev => prev.includes(k) ? prev.filter(x => x !== k) : [...prev, k])
+  const buildAdSet = () => {
+    if (!adPlacements.length) { t('Select at least one placement before building an ad set.', 'warn'); return }
+    const created = adPlacements.map(k => {
+      const pl = AD_PLACEMENTS.find(p => p.key === k)
+      return {
+        id: uid('AV'), briefId: active?.id || '', placementKey: k, placement: pl.label,
+        aspect: pl.aspect, hook: adHook.trim() || '(no hook)', offer: adOffer.trim() || '(no offer)',
+        cta: adCta, audience: adAudience, state: 'Draft', note: pl.note, createdAt: nowIso(),
+      }
+    })
+    setAdVars(prev => [...created, ...prev])
+    t(`Built ${created.length} ad-creative variant records across ${adPlacements.length} placement(s) — local planning records; no ad is generated or published.`, 'info')
+  }
+  const setAdVariantState = (id, state) => {
+    setAdVars(prev => prev.map(v => v.id === id ? { ...v, state } : v))
+    t(`Ad variant ${id} → ${state} (local review state — not a publishing or spend authorization).`, 'info')
+  }
+  const removeAdVariant = (id) => setAdVars(prev => prev.filter(v => v.id !== id))
 
   const toggleOutput = (o) => setOutputs(prev => prev.includes(o) ? prev.filter(x => x !== o) : [...prev, o])
 
@@ -532,6 +586,12 @@ export default function CreativeStudio() {
                       {STAGES.map(s => <option key={s}>{s}</option>)}
                     </select>
                   </div>
+                  <div className="field-group" style={{ minWidth: 180, marginBottom: 0 }}>
+                    <label className="label" htmlFor="cs-style">Style direction</label>
+                    <select id="cs-style" className="field" value={styleDir} onChange={e => setStyleDir(e.target.value)}>
+                      {STYLE_DIRECTIONS.map(s => <option key={s}>{s}</option>)}
+                    </select>
+                  </div>
                 </div>
 
                 <div>
@@ -580,6 +640,129 @@ export default function CreativeStudio() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {view === 'adcreative' && (
+        <div className="subview">
+          <DataNotice tone="internal" title="Ad-creative variants are local planning records">
+            Hook, offer, and CTA framing plus placement targeting are recorded locally. No ad is generated, no ad account is
+            connected, and placement guidance is editorial — not live ad-platform reporting. Nothing here authorizes spend.
+          </DataNotice>
+
+          <div className="split-aside" style={{ marginTop: 16 }}>
+            <div className="card">
+              <div className="card-head">
+                <h3 className="card-title">Ad Creative Brief</h3>
+                <span className="pill pill-muted">{active ? active.name : 'no active brief'}</span>
+              </div>
+              <div className="stack" style={{ gap: 12 }}>
+                <div className="field-group" style={{ marginBottom: 0 }}>
+                  <label className="label" htmlFor="ad-hook">Hook / headline</label>
+                  <input id="ad-hook" className="field" value={adHook} onChange={e => setAdHook(e.target.value)} />
+                </div>
+                <div className="field-group" style={{ marginBottom: 0 }}>
+                  <label className="label" htmlFor="ad-offer">Offer</label>
+                  <input id="ad-offer" className="field" value={adOffer} onChange={e => setAdOffer(e.target.value)} />
+                </div>
+                <div className="inline-flex" style={{ gap: 12, alignItems: 'flex-start' }}>
+                  <div className="field-group" style={{ minWidth: 180, marginBottom: 0 }}>
+                    <label className="label" htmlFor="ad-cta">Call to action</label>
+                    <select id="ad-cta" className="field" value={adCta} onChange={e => setAdCta(e.target.value)}>
+                      {AD_CTA.map(c => <option key={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div className="field-group" style={{ minWidth: 200, marginBottom: 0 }}>
+                    <label className="label" htmlFor="ad-audience">Audience</label>
+                    <input id="ad-audience" className="field" value={adAudience} onChange={e => setAdAudience(e.target.value)} />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="label">Placements (targeting)</div>
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    {AD_PLACEMENTS.map(pl => (
+                      <button
+                        key={pl.key}
+                        type="button"
+                        aria-pressed={adPlacements.includes(pl.key)}
+                        className={`filter-pill ${adPlacements.includes(pl.key) ? 'active' : ''}`}
+                        onClick={() => togglePlacement(pl.key)}
+                        title={pl.note}
+                      >
+                        {pl.label} · {pl.aspect}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
+                  <button className="btn btn-sm" onClick={buildAdSet}>Build Ad Set</button>
+                  <button className="btn btn-sm btn-ghost" onClick={() => { setAdHook(''); setAdOffer(''); t('Ad brief cleared (local).', 'info') }}>Clear</button>
+                </div>
+                <div className="text-low" style={{ fontSize: 11 }}>
+                  Building records one variant per selected placement with a placement-appropriate aspect. No image is
+                  generated — a connected provider is still required to render any creative.
+                </div>
+              </div>
+            </div>
+
+            <div className="stack" style={{ gap: 16 }}>
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Placement Fit</h3>
+                  <span className="pill pill-unverified" style={{ fontSize: 10 }} title="Editorial guidance — not measured performance">guidance</span>
+                </div>
+                <div className="stack" style={{ gap: 8 }}>
+                  {AD_PLACEMENTS.map(pl => (
+                    <div key={pl.key}>
+                      <div style={{ fontSize: 12, fontWeight: 500 }}>{pl.label} <span className="text-low">· {pl.aspect}</span></div>
+                      <div className="text-low" style={{ fontSize: 11 }}>{pl.note}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="card" style={{ marginTop: 20 }}>
+            <div className="card-head">
+              <h3 className="card-title">Ad Variant Set</h3>
+              <span className="pill pill-muted">{adVars.length} variants · local records</span>
+            </div>
+            {adVars.length === 0 ? (
+              <div className="empty">
+                <div className="empty-title">No ad variants yet</div>
+                <div className="empty-text">Pick placements and build an ad set to record placement-aware variants here. Nothing is generated or published.</div>
+              </div>
+            ) : (
+              <DataTable columns={[
+                { key: 'id', label: 'ID' },
+                { key: 'placement', label: 'Placement' },
+                { key: 'aspect', label: 'Aspect', render: (v) => <span className="pill pill-muted">{v}</span> },
+                { key: 'hook', label: 'Hook', render: (v) => <span style={{ fontSize: 12 }}>{v.length > 34 ? v.slice(0, 34) + '…' : v}</span> },
+                { key: 'cta', label: 'CTA' },
+                { key: 'state', label: 'State', render: (v) => <span className={`pill ${pillFor(v)}`} title="Local review state — not a publishing or spend authorization">{v}</span> },
+                { key: 'actions', label: '', render: (v, row) => (
+                  <div className="inline-flex" style={{ gap: 6 }}>
+                    {row.state === 'Approved'
+                      ? <span className="text-low" style={{ fontSize: 10 }}>Approved</span>
+                      : <>
+                          <button className="btn btn-sm btn-ghost" onClick={() => setAdVariantState(row.id, 'Changes Requested')}>Request Changes</button>
+                          <button className="btn btn-sm btn-ghost" onClick={() => setAdVariantState(row.id, 'Approved')}>Approve</button>
+                        </>}
+                    <button className="btn btn-sm btn-ghost" onClick={() => removeAdVariant(row.id)}>Remove</button>
+                  </div>
+                ) },
+              ]} rows={adVars} />
+            )}
+            {adVars.length > 0 && (
+              <div style={{ marginTop: 14, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <button className="btn btn-sm btn-ghost" onClick={() => { navigate('/adpilot'); t('Ad set handed to AdPilot — planning references only; nothing was published or spent.', 'info') }}>Send to AdPilot</button>
+                <button className="btn btn-sm btn-ghost" onClick={() => { navigate('/socialpulse'); t('Ad set handed to SocialPulse — references only; uncertainty preserved.', 'info') }}>Send to SocialPulse</button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -779,10 +962,18 @@ export default function CreativeStudio() {
             {['All', 'Brand', 'Photo', 'Ad', 'A+'].map(f => (
               <button key={f} className={`filter-pill ${assetFilter === f ? 'active' : ''}`} onClick={() => setAssetFilter(f)}>{f}</button>
             ))}
+            <input
+              className="field"
+              style={{ width: 200, padding: '5px 10px', fontSize: 12 }}
+              placeholder="Search assets or collections…"
+              value={assetQuery}
+              onChange={e => setAssetQuery(e.target.value)}
+              aria-label="Search assets"
+            />
             <button className="btn btn-sm" style={{ marginLeft: 'auto' }} onClick={() => t('Asset upload is not connected — this room records asset metadata only. Nothing is uploaded.', 'warn')}>Upload Asset</button>
           </div>
           <div className="grid-cards-3">
-            {assets.filter(a => assetFilter === 'All' || a.type === assetFilter).map(a => (
+            {filteredAssets.map(a => (
               <div key={a.id} className="card" style={{ padding: 12 }}>
                 <Thumb label={a.type} note="reference asset · metadata only" />
                 <div style={{ fontSize: 12, fontWeight: 500, marginBottom: 6 }}>{a.name}</div>
@@ -797,9 +988,17 @@ export default function CreativeStudio() {
                 <div className="text-low" style={{ fontSize: 10, marginTop: 6 }}>
                   {a.attached.length ? `Attached to ${a.attached.map(briefName).join(', ')}` : 'Not attached'}
                 </div>
+                <div style={{ marginTop: 8 }}>
+                  <button
+                    className="btn btn-sm btn-ghost"
+                    onClick={() => { setRefIds([a.id]); setAssetFilter('All'); go('composer'); t(`${a.name} set as the composer reference asset (frame consistency) — local only.`, 'info') }}
+                  >
+                    Use as reference
+                  </button>
+                </div>
               </div>
             ))}
-            {assets.filter(a => assetFilter === 'All' || a.type === assetFilter).length === 0 && (
+            {filteredAssets.length === 0 && (
               <div className="text-low" style={{ fontSize: 12 }}>No assets match this filter.</div>
             )}
           </div>
