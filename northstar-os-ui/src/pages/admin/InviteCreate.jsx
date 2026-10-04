@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import foundationApi from '../../foundation/api.js'
 import { settle } from '../../services/signals.js'
+import { useSession } from '../../foundation/session.jsx'
 
 // ═══ Real, org-scoped invite list (no invite code in the list read) ═══
 function inviteStatus(inv) {
@@ -15,7 +16,7 @@ function inviteStatus(inv) {
   return { label: inv.status || 'UNKNOWN', tone: 'pill-muted' }
 }
 
-export function FoundationInviteList() {
+export function FoundationInviteList({ reloadKey = 0 }) {
   const navigate = useNavigate()
   const [st, setSt] = useState({ phase: 'loading' })
   useEffect(() => {
@@ -26,7 +27,7 @@ export function FoundationInviteList() {
       else setSt({ phase: (r.error && r.error.status === 401) ? 'auth' : 'error', error: r.error })
     })
     return () => { alive = false }
-  }, [])
+  }, [reloadKey])
 
   const badge = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
     : st.phase === 'auth' ? { l: 'sign-in required', t: 'unknown' }
@@ -57,55 +58,133 @@ export function FoundationInviteList() {
   )
 }
 
+// Backend-valid invitation roles (foundation InviteService.issue).
+const INVITE_ROLES = [
+  { value: 'operator', label: 'Operator' },
+  { value: 'viewer', label: 'Viewer' },
+  { value: 'analyst', label: 'Analyst' },
+  { value: 'organization_admin', label: 'Organization Admin' },
+  { value: 'organization_owner', label: 'Organization Owner' },
+]
+
+const ISSUE_ERRORS = {
+  invalid_email: 'That email address is not valid.',
+  invite_pending: 'An invitation is already pending for that email.',
+  no_organization: 'No active organization context for this admin session — issuing is not possible.',
+  invalid_role: 'That role is not permitted for invitations.',
+}
+
+// ACTIVATED (owner-approved, platform-admin only): issue a real single-use invite.
 export default function InviteCreate() {
+  const session = useSession()
+  const [email, setEmail] = useState('')
+  const [role, setRole] = useState('operator')
+  const [confirmed, setConfirmed] = useState(false)
+  const [state, setState] = useState({ phase: 'idle' })
+  const [reloadKey, setReloadKey] = useState(0)
+
+  const orgName = session.activeOrganizationId
+    || (session.organizations && session.organizations[0] && session.organizations[0].name) || ''
+  const hasOrg = !!session.activeOrganizationId
+
+  const issue = async (e) => {
+    e.preventDefault()
+    if (!hasOrg) { setState({ phase: 'error', message: ISSUE_ERRORS.no_organization }); return }
+    if (!email.trim()) { setState({ phase: 'error', message: ISSUE_ERRORS.invalid_email }); return }
+    if (!confirmed) { setState({ phase: 'error', message: 'Confirm that this creates a real invitation.' }); return }
+    setState({ phase: 'submitting' })
+    const r = await settle(foundationApi.invite({ email: email.trim(), role }))
+    if (r.ok) {
+      setState({ phase: 'success', invite: r.value })
+      setEmail(''); setConfirmed(false)
+      setReloadKey(k => k + 1)
+    } else {
+      const status = r.error && r.error.status
+      const code = r.error && r.error.code
+      const phase = status === 401 ? 'auth' : status === 403 ? 'forbidden' : 'error'
+      setState({ phase, message: ISSUE_ERRORS[code] || (r.error && r.error.message) || `Issue failed${code ? ` (${code})` : ''}.` })
+    }
+  }
+
+  const canSubmit = hasOrg && !!email.trim() && confirmed && state.phase !== 'submitting'
+
   return (
     <PageLayout title="Create Invitation" subtitle="Issue an invitation for a new organization to the private beta.">
       <BetaOpsNav />
       <DataNotice tone="internal" title="Invitations are operator-issued">
-        Creating an invitation is an operator action and is logged. The “Foundation invitation list” is a live read. In the sample form below nothing is emailed or granted automatically; invite states are internal records, not entitlements.
+        Issuing an invitation is a real, audited operator action (platform-admin only). The “Foundation invitation list” is a live read. The email send is stubbed — no email is sent — and the invite code is shown once to the issuing admin.
       </DataNotice>
-      <FoundationInviteList />
-      <div style={{ maxWidth: 500 }}>
-        <div className="card">
+      <FoundationInviteList reloadKey={reloadKey} />
+      <div style={{ maxWidth: 520 }}>
+        <div className="card" data-testid="bo-invite-issue">
           <div className="card-head">
-            <h3 className="card-title">Invitation Details</h3>
-            <span className="pill pill-muted">sample</span>
+            <h3 className="card-title">Issue an invitation</h3>
+            <span className="pill pill-ochre">active · platform admin</span>
           </div>
-          <div className="stack" style={{ gap: 16 }}>
+          <AuthorizationNote
+            title="Issuing an invitation"
+            status="Active — platform-admin only"
+            route="POST /api/v1/foundation/invites"
+            permission="PERM_MANAGE_ORG"
+            audit="invite.issue"
+          >
+            This creates a real, single-use invitation scoped to your active organization. It is audited (`invite.issue`; email domain only). No email is sent; share the code securely. All other write actions remain disabled.
+          </AuthorizationNote>
+
+          <div className="inline-flex" style={{ gap: 8, marginBottom: 12 }}>
+            <span className="text-low" style={{ fontSize: 11 }}>Active organization</span>
+            {hasOrg
+              ? <span className="pill pill-muted" title="Invite is issued for this organization">{orgName || session.activeOrganizationId}</span>
+              : <span className="pill pill-warn" title="No active organization — issuing will be denied">none — issuing unavailable</span>}
+          </div>
+
+          <form className="stack" style={{ gap: 14 }} onSubmit={issue}>
             <div className="field-group">
-              <label className="label">Organization Name</label>
-              <input className="field" placeholder="Enter organization name" />
+              <label className="label">Invitee email</label>
+              <input className="field" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="person@example.com" />
             </div>
             <div className="field-group">
               <label className="label">Role</label>
-              <select className="field">
-                <option>Operator</option>
-                <option>Platform Admin</option>
-                <option>Customer</option>
+              <select className="field" value={role} onChange={e => setRole(e.target.value)}>
+                {INVITE_ROLES.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
               </select>
             </div>
-            <div className="field-group">
-              <label className="label">Cohort</label>
-              <select className="field">
-                <option>Cohort 1 — Q3</option>
-                <option>Cohort 2 — Q4</option>
-                <option>Cohort 3 — Q4</option>
-              </select>
+            <div className="check-row">
+              <input type="checkbox" id="invite-confirm" checked={confirmed} onChange={e => setConfirmed(e.target.checked)} />
+              <label htmlFor="invite-confirm">I understand this creates a real, single-use invitation that grants future access.</label>
             </div>
-            <AuthorizationNote
-              title="Issuing an invitation"
-              status="Disabled — owner approval required"
-              route="POST /api/v1/foundation/invites"
-              permission="PERM_MANAGE_ORG"
-              audit="invite.issue"
-            >
-              Issuing creates a real, single-use invitation that grants future access to this organization. It is disabled pending explicit owner activation. Enabling it also requires a confirmation step; the email send is stubbed (no real email is sent).
-            </AuthorizationNote>
+
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <button className="btn btn-primary" disabled title="Sample surface — no invite is sent">Send Invitation</button>
-              <span className="text-low" style={{ fontSize: 11 }}>Disabled in sample mode — no invite is issued.</span>
+              <button
+                className="btn btn-primary"
+                type="submit"
+                disabled={!canSubmit}
+                title={!hasOrg ? 'No active organization context' : !confirmed ? 'Confirm before issuing' : 'Issue a real single-use invitation'}
+              >{state.phase === 'submitting' ? 'Issuing…' : 'Issue Invitation'}</button>
+              {!hasOrg && <span className="text-low" style={{ fontSize: 11 }}>No active organization — issuing is denied.</span>}
+              {hasOrg && !confirmed && <span className="text-low" style={{ fontSize: 11 }}>Confirmation required.</span>}
             </div>
-          </div>
+
+            {state.phase === 'success' && state.invite && (
+              <div className="alert" data-testid="bo-invite-success" style={{ marginBottom: 0 }}>
+                <div className="alert-title"><span className="pill pill-ok">Issued</span> Invitation created</div>
+                <div className="alert-text">
+                  Invite for <strong>{state.invite.email}</strong> ({state.invite.role}) · status {state.invite.status}{state.invite.expires_at ? ` · expires ${state.invite.expires_at}` : ''}.
+                  <div style={{ marginTop: 8 }}>
+                    <span className="text-low" style={{ fontSize: 11 }}>Invite code (shown once — share securely):</span>
+                    <div className="inline-flex" style={{ gap: 8, marginTop: 4 }}>
+                      <span className="pill pill-muted" style={{ fontFamily: 'var(--font-mono)' }} data-testid="bo-invite-code">{state.invite.invite_code || 'UNKNOWN'}</span>
+                      <button type="button" className="btn btn-sm btn-ghost" onClick={() => { try { navigator.clipboard.writeText(state.invite.invite_code || '') } catch { /* clipboard unavailable */ } }}>Copy</button>
+                    </div>
+                  </div>
+                  <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>Audit event <span style={{ fontFamily: 'var(--font-mono)' }}>invite.issue</span> recorded. The list above now shows this pending invite (without the code).</div>
+                </div>
+              </div>
+            )}
+            {state.phase === 'auth' && <span className="pill pill-unknown" data-testid="bo-invite-auth">Sign in required — session expired.</span>}
+            {state.phase === 'forbidden' && <span className="pill pill-warn" data-testid="bo-invite-forbidden">Not permitted — platform-admin access required.</span>}
+            {state.phase === 'error' && <span className="pill pill-warn" data-testid="bo-invite-error">{state.message}</span>}
+          </form>
         </div>
       </div>
     </PageLayout>

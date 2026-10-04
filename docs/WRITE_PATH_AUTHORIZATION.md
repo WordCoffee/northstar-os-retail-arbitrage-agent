@@ -1,7 +1,9 @@
 # Write-Path Authorization Map (non-creative admin/operator surface)
 
-**Status:** design + non-activating wiring. **No write action was enabled by this
-document.** Activation of any classified action requires explicit owner approval.
+**Status:** design + scoped activations. **One write action is ACTIVATED:**
+**Issue invite — platform-admin only** (owner-approved). Every other classified
+action remains disabled; activation of any further action requires explicit
+owner approval.
 
 **Scope:** Beta-Ops / Admin / Support / Audit / account write surfaces outside the
 creative-media cluster.
@@ -19,7 +21,7 @@ creative-media cluster.
 
 | Action | UI state | Backend route | Permission | Audit | Risk | Classification | Required on activation |
 |---|---|---|---|---|---|---|---|
-| Issue invite | disabled "Send Invitation" | `POST /api/v1/foundation/invites` | `PERM_MANAGE_ORG` | `invite.issue` (email domain only) | Medium (grants future access) | ENABLE LATER WITH OWNER APPROVAL | explicit owner activation; confirm dialog; show invite code once |
+| Issue invite | **ACTIVATED — "Issue Invitation" (platform-admin only)** | `POST /api/v1/foundation/invites` | `PERM_MANAGE_ORG` | `invite.issue` (email domain only) | Medium (grants future access) | **ACTIVATED (owner-approved)** | confirmation checkbox required; invite code shown once to the issuing admin; list refresh; honest 401/403/400/no-org states |
 | Reissue invite | disabled "Reissue Invitation" | **none** (compose revoke + issue) | — | — | Medium | OUT OF SCOPE / MISSING BACKEND | add route (or compose) before enabling |
 | Revoke invite | disabled "Revoke" | `POST /api/v1/foundation/invites/{id}/revoke` | `PERM_MANAGE_ORG` | `invite.revoke` | Medium (revokes pending access) | ENABLE LATER WITH OWNER APPROVAL | owner activation; confirm; reason |
 

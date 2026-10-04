@@ -2,8 +2,10 @@
 //
 // Verifies the /beta-ops/* admin surface against the Vite dev server:
 //   1. platform_admin can reach every /beta-ops sub-page and its title renders.
-//   2. Every destructive/action surface is sample-mode DISABLED (no invite,
-//      no lifecycle action, no eligibility apply, no download/export run).
+//   2. Destructive/action surfaces remain sample-mode DISABLED (no lifecycle
+//      action, no eligibility apply, no download/export run, no reissue/revoke).
+//      EXCEPTION: invite ISSUE is now ACTIVATED (platform-admin only); its
+//      button is present and gated by org-context + explicit confirmation.
 //   3. Internal DataNotices are present (sample/internal, not entitlements).
 //   4. Non-platform_admin roles (operator/customer) are bounced away from /beta-ops.
 //
@@ -119,7 +121,15 @@ async function checkNoticeInnerText(page, ctx) {
 
   console.log('--- destructive/action surfaces are DISABLED (sample mode) ---')
   await load(page, '/beta-ops/invites')
-  await checkDisabledByTitle(page, ['Sample surface — no invite is sent'])
+  // Invite ISSUE is activated (platform-admin only); the surface must be present
+  // and clearly not a sample stub. Enablement additionally requires org context
+  // + confirmation, so the button may be disabled in the stubbed no-org session.
+  {
+    const issueBtn = await page.$('button:has-text("Issue Invitation")')
+    ok(!!issueBtn, 'invite issue surface present (activated)')
+    const body = await page.evaluate(() => document.body.innerText)
+    ok(!/no invite is issued/i.test(body), 'invite page no longer claims sample-only issue')
+  }
   await load(page, '/beta-ops/invites/INV-2026-09-25-0192')
   await checkDisabledByTitle(page, [
     'Sample surface — no invite is reissued',
