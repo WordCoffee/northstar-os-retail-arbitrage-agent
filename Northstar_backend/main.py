@@ -2193,11 +2193,14 @@ def product_finder_route(
 try:
     from foundation.api.state import FoundationState as _FoundationState
     from foundation.api.router import router as _foundation_router
+    from foundation.api.creative import router as _creative_router
     from foundation.authn import assert_startup_posture as _assert_auth_posture
 
     _assert_auth_posture()
     app.state.foundation = _FoundationState.build()
     app.include_router(_foundation_router)
+    # Creative media readiness (read-only, provider-neutral; no generation).
+    app.include_router(_creative_router)
 except Exception as _foundation_exc:  # pragma: no cover - defensive mount
     import logging as _logging
 

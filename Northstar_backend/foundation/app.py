@@ -18,6 +18,7 @@ from fastapi import FastAPI
 
 from .api.state import FoundationState
 from .api.router import router as foundation_router
+from .api.creative import router as creative_router
 from .authn import assert_startup_posture
 
 try:
@@ -43,6 +44,8 @@ def create_app(db_path: Optional[str] = None) -> FastAPI:
                   lifespan=lifespan)
     app.state.foundation = state
     app.include_router(foundation_router)
+    # Creative media readiness (read-only, provider-neutral; no generation).
+    app.include_router(creative_router)
 
     # Canonical React/Vite UI (loopback-only production build). Hash routing
     # keeps deep links client-side; the index fallback covers direct loads.
