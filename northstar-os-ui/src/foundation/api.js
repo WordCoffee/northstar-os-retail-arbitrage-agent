@@ -204,6 +204,8 @@ export const foundationApi = {
 
   // invite issuance (platform-admin / owner) — the code is shown in the UI only
   invite: (body) => req('/invites', { method: 'POST', body: JSON.stringify(body) }),
+  // org-scoped invite list (email/role/status/expires_at; no code in list read)
+  invitesList: () => req('/invites'),
 }
 
 export default foundationApi

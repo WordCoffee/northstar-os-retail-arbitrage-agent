@@ -32,6 +32,7 @@ async function get(path) {
 export const signals = {
   systemStatus: () => get('/api/v1/status'),
   health: () => get('/health'),
+  detailedHealth: () => get('/health/detailed'),
   sourceScout: () => get('/api/sourcescout'),
   sourceScoutSummary: () => get('/api/sourcescout/summary'),
   sourceScoutMatches: () => get('/api/sourcescout/matches'),
