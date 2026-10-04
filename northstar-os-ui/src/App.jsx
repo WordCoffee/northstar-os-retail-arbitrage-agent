@@ -35,7 +35,7 @@ import InternalAdmin from './pages/internal/Admin.jsx'
 import CustomerSetup from './pages/customer/Setup.jsx'
 import CustomerDocuments from './pages/customer/Documents.jsx'
 import CustomerPlan from './pages/customer/PlanUsage.jsx'
-import CustomerSupport from './pages/customer/Support.jsx'
+import CustomerSupport, { TicketDetail as CustomerTicketDetail } from './pages/customer/Support.jsx'
 import CustomerAccount from './pages/customer/AccountStatus.jsx'
 import SignIn from './pages/public/SignIn.jsx'
 import Recovery from './pages/public/Recovery.jsx'
@@ -112,6 +112,7 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/documents" element={<CustomerDocuments />} />
       <Route path="/plan" element={<CustomerPlan />} />
       <Route path="/support" element={<CustomerSupport />} />
+      <Route path="/support/:id" element={<CustomerTicketDetail />} />
       <Route path="/account" element={<CustomerAccount />} />
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/recovery" element={<Recovery />} />

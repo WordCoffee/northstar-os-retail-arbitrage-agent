@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import foundationApi from '../../foundation/api.js'
 import { settle } from '../../services/signals.js'
@@ -8,6 +9,7 @@ const SEVERITIES = ['blocker', 'high', 'medium', 'low']
 
 // ═══ Real ticket queue (organization-scoped, tester view) ═══
 export function TicketQueue() {
+  const navigate = useNavigate()
   const [st, setSt] = useState({ phase: 'loading' })
   const [reload, setReload] = useState(0)
 
@@ -43,6 +45,7 @@ export function TicketQueue() {
           { key: 'severity', label: 'Severity', render: (v) => <span className={`pill ${v === 'blocker' || v === 'high' ? 'pill-error' : v === 'low' ? 'pill-muted' : 'pill-warn'}`}>{v || 'UNKNOWN'}</span> },
           { key: 'status', label: 'Status', render: (v) => <span className={`pill ${v === 'resolved' || v === 'closed' ? 'pill-muted' : 'pill-warn'}`}>{v || 'UNKNOWN'}</span> },
           { key: 'created_at', label: 'Created' },
+          { key: 'open', label: '', render: (v, row) => <button className="btn btn-sm btn-ghost" onClick={() => navigate(`/support/${row.id}`)}>Open</button> },
         ]} rows={st.items} />
       ) : (
         <p data-testid="support-empty" style={{ fontSize: 13 }}>You have no support tickets yet.</p>
@@ -124,17 +127,46 @@ export default function SupportCenter() {
 }
 
 export function TicketDetail() {
+  const { id } = useParams()
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(foundationApi.supportTicket(id)).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', ticket: r.value })
+      else setSt({ phase: (r.error && r.error.status === 404) ? 'not_found' : (r.error && r.error.status === 401) ? 'auth' : 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [id])
+  const t = st.phase === 'loaded' ? st.ticket : null
   return (
-    <PageLayout title="Ticket" subtitle="Ticket detail is sample until a ticket id is opened from the queue.">
-      <div className="stack" style={{ gap: 16 }}>
-        <div className="evidence">
-          <div className="evidence-header">
-            <span className="pill pill-warn">sample</span>
-            <span className="evidence-source">Ticket detail</span>
+    <PageLayout title={`Ticket ${t && (t.reference_id || t.id) ? (t.reference_id || t.id) : '#' + (id || '')}`} subtitle="Your support ticket detail.">
+      {st.phase === 'loading' && <p style={{ fontSize: 13 }}>Loading ticket…</p>}
+      {st.phase === 'not_found' && <p style={{ fontSize: 13 }}>No ticket with this id for your organization — nothing is fabricated.</p>}
+      {st.phase === 'auth' && <p style={{ fontSize: 13 }}>Sign in to view this ticket.</p>}
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Ticket unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {t && (
+        <div className="stack" style={{ gap: 16 }}>
+          <div className="evidence">
+            <div className="evidence-header">
+              <span className={`pill ${t.status === 'resolved' || t.status === 'closed' ? 'pill-muted' : 'pill-warn'}`}>{t.status || 'UNKNOWN'}</span>
+              <span className="evidence-source">{t.reference_id || t.id}</span>
+              <span className="evidence-freshness">{t.created_at || ''}</span>
+            </div>
+            <p className="evidence-body"><strong>{t.subject || 'UNKNOWN'}</strong>{t.category ? ` · ${t.category}` : ''}{t.severity ? ` · ${t.severity}` : ''}</p>
           </div>
-          <p className="evidence-body">Open a ticket from the Support Center queue to view its live detail. This placeholder carries no fabricated ticket data.</p>
+          <div className="card">
+            <div className="card-head"><h3 className="card-title">Description</h3></div>
+            <div style={{ fontSize: 13 }}>{t.description || 'UNKNOWN'}</div>
+          </div>
+          {t.tester_visible_note && (
+            <div className="card">
+              <div className="card-head"><h3 className="card-title">Support response</h3></div>
+              <div style={{ fontSize: 13 }}>{t.tester_visible_note}</div>
+            </div>
+          )}
         </div>
-      </div>
+      )}
     </PageLayout>
   )
 }
