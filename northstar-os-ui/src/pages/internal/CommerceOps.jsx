@@ -143,7 +143,7 @@ export default function CommerceOps() {
       subtitle="Workflow control room — sourcing validation, pack verification, invoice readiness, approvals, and operator decisions."
       actions={<>
         <button className="btn btn-sm" onClick={() => toast('New workflow requires a product set and operator owner — sample mode.', 'info')}>New Workflow</button>
-        <button className="btn btn-sm btn-ghost">Filter</button>
+        <button className="btn btn-sm btn-ghost" onClick={() => toast('Use the filter pills above to narrow the workflow queue.', 'info')}>Filter</button>
       </>}
     >
       <DataNotice tone="sample" title="Workflow items are sample records">

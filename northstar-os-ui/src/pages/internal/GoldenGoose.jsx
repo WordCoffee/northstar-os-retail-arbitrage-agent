@@ -306,7 +306,7 @@ export default function GoldenGooseDesk() {
       subtitle="Review desk for surfaced opportunities — judgment, not recommendations."
       actions={<>
         <button className="btn btn-sm" onClick={() => navigate('/golden-goose?view=queue')}>New Analysis</button>
-        <button className="btn btn-sm btn-ghost">Settings</button>
+        <button className="btn btn-sm btn-ghost" onClick={() => toast('Opportunity desk settings are not connected yet.', 'info')}>Settings</button>
       </>}
     >
       <DataNotice tone="sample" title="Evidence-based surfacing — fictional sample data">

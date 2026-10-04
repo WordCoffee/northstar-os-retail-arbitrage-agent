@@ -194,7 +194,7 @@ export default function AutothinK() {
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
                 <button className="btn btn-sm" onClick={() => toast('Run queued (sample) — engine will cite sources in every output.', 'info')}>Queue Research Run</button>
-                <button className="btn btn-sm btn-ghost">Save Draft</button>
+                <button className="btn btn-sm btn-ghost" onClick={() => toast('Draft saving is not connected — composer runs are sample.', 'info')}>Save Draft</button>
               </div>
             </div>
           </div>

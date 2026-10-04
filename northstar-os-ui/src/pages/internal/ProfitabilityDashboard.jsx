@@ -203,7 +203,7 @@ export default function ProfitabilityDashboard() {
         <button className="btn btn-sm" onClick={createScenario}>Create Scenario</button>
         <button className="btn btn-sm" onClick={exportReport}>Export Report</button>
         <button className="btn btn-sm btn-ghost" onClick={sendToCommerceOps}>Send to Commerce Ops</button>
-        <button className="btn btn-sm btn-ghost">Refresh Data</button>
+        <button className="btn btn-sm btn-ghost" onClick={() => toast('Refresh requires a live provider — the data shown is local/cached.', 'info')}>Refresh Data</button>
       </>}
     >
       <DataNotice tone="assumption" title="Live economics engine + assumed portfolio context">

@@ -278,7 +278,7 @@ export default function CommandCenter() {
       actions={<>
         <button className="btn btn-sm" onClick={openPriorityQueue} title="Open the priority workflow queue in Commerce Ops">Open Priority Queue</button>
         <button className="btn btn-sm btn-ghost" onClick={() => toast('New scan requires a connected provider — sample mode.', 'info')}>New Scan</button>
-        <button className="btn btn-sm btn-ghost">Briefing Settings</button>
+        <button className="btn btn-sm btn-ghost" onClick={() => toast('Briefing settings are not connected yet.', 'info')}>Briefing Settings</button>
       </>}
     >
       <DataNotice tone="sample" title="Live system signals + sample briefing">
