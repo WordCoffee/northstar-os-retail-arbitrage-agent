@@ -271,6 +271,15 @@ function ReadinessChecklist({ readiness, probeFailed }) {
               )}
             </div>
           )}
+          {readiness.local_setup && (
+            <div style={{ marginTop: 12 }}>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Local dev lane · ComfyUI (image only · localhost)</div>
+              <div className="text-low" style={{ fontSize: 11 }}>
+                {readiness.local_setup.comfyui_installed ? 'installed' : 'not installed'} · weights {readiness.local_setup.weights_found}/{readiness.local_setup.weights_expected} · engine {readiness.local_setup.engine_reachable} · gate {readiness.local_setup.media_gate ? 'on' : 'off'}
+              </div>
+              <div className="text-low" style={{ fontSize: 10, marginTop: 2 }}>{readiness.local_setup.note}</div>
+            </div>
+          )}
         </>
       ) : (
         <>
