@@ -255,6 +255,7 @@ export default function CreativeStudio() {
   const [assets, setAssets] = useLocalRoom('ns-creative-assets', SEED_ASSETS)
   const [variants, setVariants] = useLocalRoom('ns-creative-variants', SEED_VARIANTS)
   const [bundles, setBundles] = useLocalRoom('ns-creative-bundles', [])
+  const [handoffs, setHandoffs] = useLocalRoom('ns-creative-handoffs', [])
   const [beats, setBeats] = useLocalRoom('ns-creative-video-beats', SEED_BEATS)
   const [adVars, setAdVars] = useLocalRoom('ns-creative-ad-variants', [])
 
@@ -505,6 +506,17 @@ export default function CreativeStudio() {
       status: 'Ready for handoff', createdAt: nowIso(),
     }, ...prev])
     t(`Bundle ${id} prepared locally — ${variantRefs.length} variant refs · ${assetRefs.length} asset refs. References only; download needs an asset store.`, 'info')
+  }
+
+  // Local handoff log — records what was handed to an adjacent room (references
+  // only; nothing is transferred, published, or uploaded). Persisted
+  // synchronously so the entry survives the immediate room navigation.
+  const recordHandoff = (target, what, refs) => {
+    setHandoffs(prev => {
+      const next = [{ id: uid('HX'), target, what, refs: refs || [], at: nowIso() }, ...prev].slice(0, 20)
+      try { localStorage.setItem('ns-creative-handoffs', JSON.stringify(next)) } catch { /* storage unavailable */ }
+      return next
+    })
   }
 
   const briefName = (id) => briefs.find(b => b.id === id)?.name || id || '—'
@@ -884,8 +896,8 @@ export default function CreativeStudio() {
             )}
             {adVars.length > 0 && (
               <div style={{ marginTop: 14, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <button className="btn btn-sm btn-ghost" onClick={() => { navigate('/adpilot'); t('Ad set handed to AdPilot — planning references only; nothing was published or spent.', 'info') }}>Send to AdPilot</button>
-                <button className="btn btn-sm btn-ghost" onClick={() => { navigate('/socialpulse'); t('Ad set handed to SocialPulse — references only; uncertainty preserved.', 'info') }}>Send to SocialPulse</button>
+                <button className="btn btn-sm btn-ghost" onClick={() => { recordHandoff('AdPilot', `Ad set (${adVars.length} variants)`, adVars.map(v => v.id)); navigate('/adpilot'); t('Ad set handed to AdPilot — planning references only; nothing was published or spent.', 'info') }}>Send to AdPilot</button>
+                <button className="btn btn-sm btn-ghost" onClick={() => { recordHandoff('SocialPulse', `Ad set (${adVars.length} variants)`, adVars.map(v => v.id)); navigate('/socialpulse'); t('Ad set handed to SocialPulse — references only; uncertainty preserved.', 'info') }}>Send to SocialPulse</button>
               </div>
             )}
           </div>
@@ -1150,7 +1162,7 @@ export default function CreativeStudio() {
                   </button>
                   <button
                     className="btn btn-sm btn-ghost"
-                    onClick={() => { navigate('/socialpulse'); t(`${a.name} handed to SocialPulse as a reference — metadata only; no upload or publish.`, 'info') }}
+                    onClick={() => { recordHandoff('SocialPulse', `Asset ${a.name}`, [a.id]); navigate('/socialpulse'); t(`${a.name} handed to SocialPulse as a reference — metadata only; no upload or publish.`, 'info') }}
                   >
                     Send to SocialPulse
                   </button>
@@ -1198,8 +1210,8 @@ export default function CreativeStudio() {
               </div>
               <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 <button className="btn btn-sm" onClick={prepareBundle}>Prepare Export</button>
-                <button className="btn btn-sm btn-ghost" onClick={() => { navigate('/socialpulse'); t('Bundle handed to SocialPulse — reference only, uncertainty preserved.', 'info') }}>Send to SocialPulse</button>
-                <button className="btn btn-sm btn-ghost" onClick={() => { navigate('/listingforge'); t('Bundle handed to ListingForge — reference only, uncertainty preserved.', 'info') }}>Send to ListingForge</button>
+                <button className="btn btn-sm btn-ghost" onClick={() => { recordHandoff('SocialPulse', `Bundle outputs: ${outputs.join(', ') || 'none selected'}`, [...briefVariants.map(v => v.id), ...briefAssets.map(a => a.id)]); navigate('/socialpulse'); t('Bundle handed to SocialPulse — reference only, uncertainty preserved.', 'info') }}>Send to SocialPulse</button>
+                <button className="btn btn-sm btn-ghost" onClick={() => { recordHandoff('ListingForge', `Bundle outputs: ${outputs.join(', ') || 'none selected'}`, [...briefVariants.map(v => v.id), ...briefAssets.map(a => a.id)]); navigate('/listingforge'); t('Bundle handed to ListingForge — reference only, uncertainty preserved.', 'info') }}>Send to ListingForge</button>
               </div>
               {bundles.length > 0 && (
                 <div style={{ marginTop: 16 }}>
@@ -1242,6 +1254,29 @@ export default function CreativeStudio() {
                 <span className="pill pill-unknown" style={{ fontSize: 10 }}>download unavailable — no asset store</span>
               </div>
             </div>
+          </div>
+
+          <div className="card" style={{ marginTop: 20 }}>
+            <div className="card-head">
+              <h3 className="card-title" style={{ fontSize: 15 }}>Handoff log</h3>
+              <span className="pill pill-muted">local record · references only</span>
+            </div>
+            {handoffs.length === 0 ? (
+              <div className="text-low" style={{ fontSize: 12 }}>No handoffs recorded yet. Sending a bundle or ad set to an adjacent room records a local reference entry here — nothing is transferred.</div>
+            ) : (
+              <div className="stack" style={{ gap: 8 }}>
+                {handoffs.map(h => (
+                  <div key={h.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
+                    <div style={{ minWidth: 0 }}>
+                      <span className="pill pill-muted" style={{ fontSize: 10, marginRight: 8 }}>{h.target}</span>
+                      <span style={{ fontSize: 12 }}>{h.what}</span>
+                      <div className="text-low" style={{ fontSize: 10, marginTop: 2 }}>{h.id} · {(h.refs || []).length} refs{(h.refs || []).length ? `: ${h.refs.slice(0, 6).join(', ')}${h.refs.length > 6 ? '…' : ''}` : ''}</div>
+                    </div>
+                    <span className="text-low" style={{ fontSize: 11, flexShrink: 0 }}>{h.at ? new Date(h.at).toLocaleString() : ''}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
