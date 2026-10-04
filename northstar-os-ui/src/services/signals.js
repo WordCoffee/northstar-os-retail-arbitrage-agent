@@ -10,6 +10,29 @@
 // { status, code } so callers can render honest loading / unavailable / empty /
 // auth-blocked states. Nothing here fabricates data.
 
+function fail(res, detail) {
+  const err = new Error((detail && detail.message) || (detail && detail.code) || `http_${res.status}`)
+  err.status = res.status
+  err.code = detail && detail.code
+  return err
+}
+
+// Read-only POST (semantic reads like search — no mutation is implied).
+async function postJson(path, body) {
+  const res = await fetch(path, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(body || {}),
+  })
+  if (!res.ok) {
+    let detail = { code: `http_${res.status}` }
+    try { const j = await res.json(); detail = j.detail || j.error || detail } catch { /* non-JSON */ }
+    throw fail(res, detail)
+  }
+  return res.json()
+}
+
 async function get(path) {
   const res = await fetch(path, {
     credentials: 'include',
@@ -46,6 +69,14 @@ export const signals = {
   autothinkModels: () => get('/api/autothink/models'),
   autothinkHistory: (limit = 20) => get(`/api/autothink/history?limit=${limit}`),
   brainModels: () => get('/api/v1/models'),
+  // Memory Bank / Learning (local, read-only; search is a semantic read).
+  memorySearch: (intent, opts = {}) => postJson('/api/v1/memory/search', {
+    intent: intent || '',
+    account_id: opts.accountId || 'default',
+    entry_type: opts.entryType || null,
+    limit: opts.limit || 10,
+  }),
+  learningPlaybooks: (accountId = 'default') => get(`/api/v1/learning/playbooks?account_id=${encodeURIComponent(accountId)}`),
 }
 
 // Never-rejecting wrapper. Returns { ok, value } or { ok:false, error } so a
