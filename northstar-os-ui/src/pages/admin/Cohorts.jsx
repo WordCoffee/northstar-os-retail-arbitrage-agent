@@ -1,4 +1,4 @@
-import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components/Shared.jsx'
+import { PageLayout, DataTable, DataNotice, MetricTiles, AuthorizationNote } from '../../components/Shared.jsx'
 import BetaOpsNav from './BetaOpsNav.jsx'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
@@ -162,6 +162,15 @@ export function ReportsExports() {
       <DataNotice tone="internal" title="Exports use the safe field set only">
         Exports contain operational fields only — no secrets, card data, tokens, provider credentials, or cross-org data. Downloaded files are sample until a backend is connected.
       </DataNotice>
+      <AuthorizationNote
+        title="Dashboard export readiness"
+        status="Disabled — owner approval required"
+        route="GET /api/v1/foundation/admin/dashboard/export"
+        permission="PERM_PLATFORM_ADMIN"
+        audit="read-only (no write)"
+      >
+        A live platform-admin CSV export exists. It emits the safe field set only (org id/name, lifecycle, plan, subscription, invite, acceptance, onboarding, usage, seats, tickets, flags) and hard-rejects any payload containing secrets, tokens, card data, credentials, provider keys, or API keys. Enabling the download requires explicit owner approval.
+      </AuthorizationNote>
       <div className="card">
         <div className="card-head">
           <h3 className="card-title">Available Reports</h3>
@@ -233,6 +242,15 @@ export function LifecycleModal() {
         <div className="alert-title">This action is irreversible</div>
         <div className="alert-text">Suspending an organization blocks all product features. The action is logged and requires operator approval — it is never automated.</div>
       </div>
+      <AuthorizationNote
+        title="Lifecycle transitions"
+        status="Disabled — owner approval required"
+        route="POST /api/v1/foundation/admin/orgs/{id}/{grant,suspend,resume,downgrade,cancel}"
+        permission="PERM_PLATFORM_ADMIN"
+        audit="org.lifecycle.<state> (append-only, actor + reason)"
+      >
+        Transitions are validated server-side; blocking states (suspended/paused/cancelled/archived) set the org inactive so the next authenticated request is denied. Suspend/resume/grant require explicit owner activation with a recorded reason; <strong>downgrade</strong> and <strong>cancel</strong> require per-event owner confirmation; <strong>archive</strong> is terminal and stays disabled.
+      </AuthorizationNote>
       <div className="card" style={{ maxWidth: 640 }}>
         <div className="card-head">
           <h3 className="card-title">Change Lifecycle State</h3>
@@ -252,8 +270,12 @@ export function LifecycleModal() {
             </select>
           </div>
           <div className="field-group">
-            <label className="label">Reason</label>
+            <label className="label">Reason <span className="text-low" style={{ fontSize: 11 }}>(required for any enabled transition)</span></label>
             <textarea className="field" placeholder="Provide reason for this action..." />
+          </div>
+          <div className="field-group">
+            <label className="label">Typed confirmation <span className="text-low" style={{ fontSize: 11 }}>(scaffold — enablement pending owner approval)</span></label>
+            <input className="field" placeholder="Type the action name to confirm" disabled title="Confirmation is scaffolded; the action cannot be applied until owner approval" />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <button className="btn btn-danger" disabled title="Sample surface — no lifecycle action is applied">Confirm Lifecycle Action</button>
@@ -295,6 +317,15 @@ export function EligibilityChecklist() {
           ))}
         </div>
         <div style={{ marginTop: 14 }}>
+          <AuthorizationNote
+            title="Eligibility → activation"
+            status="Disabled — owner approval required"
+            route="POST /api/v1/foundation/admin/orgs/{id}/grant"
+            permission="PERM_PLATFORM_ADMIN"
+            audit="admin grant / org.lifecycle.*"
+          >
+            Verifying eligibility does not admit an organization by itself. Admission maps to a grant/activate transition, which is audited and requires explicit owner approval.
+          </AuthorizationNote>
           <button className="btn btn-primary" disabled title="Sample surface — eligibility is not applied">Verify Eligibility</button>
           <span className="text-low" style={{ fontSize: 11, marginLeft: 10 }}>Disabled in sample mode.</span>
         </div>
