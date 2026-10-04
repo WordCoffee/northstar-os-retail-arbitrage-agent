@@ -73,6 +73,14 @@ def _media_providers():
     return mp
 
 
+def _local_image_engine():
+    try:
+        import local_image_engine as lie  # Northstar_backend on sys.path
+    except ImportError:  # pragma: no cover - repo-root sys.path variant
+        from Northstar_backend import local_image_engine as lie
+    return lie
+
+
 def _parse_local_endpoint() -> Optional[Tuple[str, int]]:
     url = (os.getenv("COMFYUI_URL", "") or "").strip() or _DEFAULT_COMFY_URL
     try:
@@ -148,6 +156,13 @@ def build_readiness(probe: Callable[[], str] = probe_local_engine) -> Dict[str, 
     except Exception:  # noqa: BLE001 - readiness must never break
         providers, capabilities, spend_caps, routing_hooks = [], [], {}, {}
 
+    # Local image-engine dev lane (read-only): what is installed vs the exact
+    # owner-gated step still required. Never installs, downloads, or arms.
+    try:
+        local_setup = _local_image_engine().build_local_setup(engine_state=local_state)
+    except Exception:  # noqa: BLE001
+        local_setup = {}
+
     return {
         "generation": generation,
         "armed": armed,
@@ -165,6 +180,7 @@ def build_readiness(probe: Callable[[], str] = probe_local_engine) -> Dict[str, 
         "capabilities": capabilities,
         "routing_hooks": routing_hooks,
         "spend_caps": spend_caps,
+        "local_setup": local_setup,
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "notes": "Readiness only — does not activate generation, publish, or transfer media.",
     }
