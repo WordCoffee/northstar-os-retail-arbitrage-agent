@@ -2,7 +2,9 @@ import { PageLayout, DataTable, MetricTiles, DataNotice } from '../../components
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import foundationApi from '../../foundation/api.js'
+import { settle } from '../../services/signals.js'
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -29,6 +31,149 @@ const SCENARIOS = [
   { name: 'Constrained', note: 'Assumes capital cap + MOQ floor', profit: 'NOT CALCULATED' },
   { name: 'Worst Case', note: 'Assumes aged-stock discounting', profit: 'NOT CALCULATED' },
 ]
+
+// ═══ Authoritative economics engine (backend calculator) ═══
+// The backend is the ONLY authoritative calculator. Inputs are operator-supplied;
+// missing inputs stay UNKNOWN and purchase_ready stays false unless every gate is
+// verified. Nothing here defines its own formula.
+function EngineValue({ label, value, tone, title }) {
+  const unknown = value == null
+  return (
+    <div title={title || ''}>
+      <div className="text-low" style={{ fontSize: 11 }}>{label}</div>
+      <div style={{ fontSize: 16, fontWeight: 700, color: unknown ? 'var(--ink-soft)' : (tone || 'var(--pine-deep)') }}>
+        {unknown ? 'UNKNOWN' : value}
+      </div>
+    </div>
+  )
+}
+
+function EconomicsEngine() {
+  const [contract, setContract] = useState(null)
+  const [form, setForm] = useState({ selling_price: '', acquisition_cost: '', referral_fee_rate: '', fba_fulfillment_fee: '', advertising_cost: '', quantity: '1' })
+  const [result, setResult] = useState({ state: 'idle' })
+
+  useEffect(() => {
+    let alive = true
+    settle(foundationApi.economicsContract()).then(r => { if (alive) setContract(r) })
+    return () => { alive = false }
+  }, [])
+
+  const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }))
+
+  const compute = async () => {
+    setResult({ state: 'loading' })
+    const num = (v) => (v === '' || v == null ? undefined : Number(v))
+    const input = { marketplace: 'amazon.com', currency: 'USD' }
+    const sp = num(form.selling_price), ac = num(form.acquisition_cost)
+    const rr = num(form.referral_fee_rate), fba = num(form.fba_fulfillment_fee), q = num(form.quantity), ads = num(form.advertising_cost)
+    if (sp !== undefined) input.selling_price = sp
+    if (ac !== undefined) input.acquisition_cost = ac
+    if (rr !== undefined) input.referral_fee_rate = rr / 100
+    if (fba !== undefined) input.fba_fulfillment_fee = fba
+    if (ads !== undefined) input.advertising_cost = ads
+    if (q !== undefined) input.quantity = q
+    const r = await settle(foundationApi.economicsCompute(input))
+    if (r.ok) setResult({ state: 'done', value: r.value })
+    else setResult({ state: (r.error && r.error.status === 401) ? 'auth' : 'error', error: r.error })
+  }
+
+  const cState = !contract ? 'loading' : contract.ok ? 'ok' : (contract.error && contract.error.status === 401 ? 'auth' : 'error')
+  const cMeta = contract && contract.ok ? contract.value : null
+  const out = result.state === 'done' ? result.value : null
+
+  return (
+    <div className="card" data-testid="pd-economics-engine" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Economics engine</h3>
+        {cState === 'loading' && <span className="pill pill-muted">Loading contract…</span>}
+        {cState === 'ok' && <span className="pill pill-muted" title="Canonical formula version (backend-authoritative)">formula {cMeta.formula_version}</span>}
+        {cState === 'auth' && <span className="pill pill-unknown">sign-in required</span>}
+        {cState === 'error' && <span className="pill pill-unknown">unavailable</span>}
+      </div>
+      <p className="text-low" style={{ fontSize: 12, marginBottom: 12 }}>
+        Authoritative, backend-computed unit economics. Inputs are operator-supplied; missing inputs stay UNKNOWN and no result authorizes a purchase. Values below are computed by the backend — the UI defines no formula of its own.
+      </p>
+
+      <div className="grid-4" style={{ gap: 12, marginBottom: 12 }}>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Selling price (USD)</span>
+          <input type="number" min="0" step="0.01" value={form.selling_price} onChange={set('selling_price')} placeholder="—" style={{ padding: '6px 8px', border: '1px solid var(--divider-mid)', borderRadius: 6, fontFamily: 'var(--font-ui)' }} />
+        </label>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Acquisition cost (USD)</span>
+          <input type="number" min="0" step="0.01" value={form.acquisition_cost} onChange={set('acquisition_cost')} placeholder="—" style={{ padding: '6px 8px', border: '1px solid var(--divider-mid)', borderRadius: 6, fontFamily: 'var(--font-ui)' }} />
+        </label>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Referral fee (%)</span>
+          <input type="number" min="0" step="0.1" value={form.referral_fee_rate} onChange={set('referral_fee_rate')} placeholder="e.g. 15" style={{ padding: '6px 8px', border: '1px solid var(--divider-mid)', borderRadius: 6, fontFamily: 'var(--font-ui)' }} />
+        </label>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>FBA fulfillment fee (USD)</span>
+          <input type="number" min="0" step="0.01" value={form.fba_fulfillment_fee} onChange={set('fba_fulfillment_fee')} placeholder="—" style={{ padding: '6px 8px', border: '1px solid var(--divider-mid)', borderRadius: 6, fontFamily: 'var(--font-ui)' }} />
+        </label>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Advertising cost (USD)</span>
+          <input type="number" min="0" step="0.01" value={form.advertising_cost} onChange={set('advertising_cost')} placeholder="0 if none" style={{ padding: '6px 8px', border: '1px solid var(--divider-mid)', borderRadius: 6, fontFamily: 'var(--font-ui)' }} />
+        </label>
+      </div>
+
+      <div className="inline-flex" style={{ gap: 8, alignItems: 'center', marginBottom: 14 }}>
+        <button className="btn btn-sm" onClick={compute} disabled={result.state === 'loading'}>
+          {result.state === 'loading' ? 'Calculating…' : 'Calculate with backend engine'}
+        </button>
+        <label className="inline-flex" style={{ gap: 6, alignItems: 'center' }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Quantity</span>
+          <input type="number" min="1" step="1" value={form.quantity} onChange={set('quantity')} style={{ width: 64, padding: '4px 6px', border: '1px solid var(--divider-mid)', borderRadius: 6, fontFamily: 'var(--font-ui)' }} />
+        </label>
+      </div>
+
+      {result.state === 'idle' && (
+        <p className="text-low" style={{ fontSize: 12 }}>Enter verified inputs, then calculate. Empty or partial inputs return an honest not-calculable result — never a fabricated number.</p>
+      )}
+      {result.state === 'auth' && (
+        <p className="text-low" style={{ fontSize: 12 }}>Sign in and select an organization to use the economics engine.</p>
+      )}
+      {result.state === 'error' && (
+        <p className="text-low" style={{ fontSize: 12 }}>Economics engine unavailable{result.error && result.error.code ? ` (${result.error.code})` : ''}.</p>
+      )}
+      {out && (
+        <div data-testid="pd-engine-result">
+          <div className="inline-flex" style={{ gap: 8, marginBottom: 12 }}>
+            <span className={`pill ${out.readiness === 'PURCHASE_READY' ? 'pill-ok' : 'pill-unknown'}`} title="Readiness is gate-driven; a score alone never yields PURCHASE_READY">{out.readiness}</span>
+            <span className={`pill ${out.purchase_ready ? 'pill-ok' : 'pill-muted'}`} title="Purchase authorization is never granted by the calculator">{out.purchase_ready ? 'purchase-ready (gates passed)' : 'purchase NOT authorized'}</span>
+          </div>
+          <div className="grid-4" style={{ gap: 16, marginBottom: 12 }}>
+            <EngineValue label="Contribution profit (after ads)" value={out.contribution_profit_after_ads} title="Backend-computed contribution after advertising" />
+            <EngineValue label="Pre-ad contribution" value={out.pre_ad_contribution} />
+            <EngineValue label="Margin on revenue" value={out.margin_on_revenue} />
+            <EngineValue label="ROI on invested cost" value={out.roi_on_invested_cost} title={`ROI denominator: ${out.roi_denominator_label}`} />
+            <EngineValue label="Gross revenue" value={out.gross_revenue} />
+            <EngineValue label="Marketplace fees" value={out.marketplace_fees} />
+            <EngineValue label="Payout before ads" value={out.marketplace_payout_before_ads} />
+            <EngineValue label="Landed inventory cost" value={out.landed_inventory_cost} />
+          </div>
+          {out.missing_inputs && out.missing_inputs.length > 0 && (
+            <div style={{ marginBottom: 8 }}>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Missing inputs — stays UNKNOWN until supplied</div>
+              <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap' }}>
+                {out.missing_inputs.map(m => <span key={m} className="pill pill-unknown" style={{ fontSize: 10 }}>{m}</span>)}
+              </div>
+            </div>
+          )}
+          {out.explanation && out.explanation.length > 0 && (
+            <details>
+              <summary className="text-low" style={{ fontSize: 11, cursor: 'pointer' }}>Calculation steps ({out.explanation.length})</summary>
+              <ul className="text-low" style={{ fontSize: 11, marginTop: 6 }}>
+                {out.explanation.map((e, i) => <li key={i}>{e}</li>)}
+              </ul>
+            </details>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function ProfitabilityDashboard() {
   const { toast } = useToast()
@@ -61,9 +206,11 @@ export default function ProfitabilityDashboard() {
         <button className="btn btn-sm btn-ghost">Refresh Data</button>
       </>}
     >
-      <DataNotice tone="assumption" title="Margin and fee context is assumed, not verified">
-        Set B margins show UNKNOWN — fee basis is assumed, not verified. Restock recommendations should account for this uncertainty. No figures imply purchase authorization.
+      <DataNotice tone="assumption" title="Live economics engine + assumed portfolio context">
+        The “Economics engine” card computes real, backend-authoritative unit economics from the inputs you supply. The portfolio sets below remain sample/assumed context — Set B margin is UNKNOWN because fee basis is assumed. No figure implies purchase authorization.
       </DataNotice>
+
+      <EconomicsEngine />
 
       <RoomTabs tabs={TABS} base="/profitability" />
 

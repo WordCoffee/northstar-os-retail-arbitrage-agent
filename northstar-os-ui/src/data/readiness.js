@@ -27,7 +27,7 @@ export const ROOM_READINESS = {
   'listing-guardian': 'sample',
   'keyword-tracker': 'partial', // sample preview + live foundation keyword read (truth-first, additive)
   'competitor-monitor': 'sample',
-  'profitability': 'sample',
+  'profitability': 'partial', // backend economics engine + sample portfolio context
   'commerce-ops': 'sample',
   'monitoring': 'partial',
   'autothink': 'provider',
