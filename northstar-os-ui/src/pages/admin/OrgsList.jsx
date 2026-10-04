@@ -67,6 +67,36 @@ function FoundationRoster() {
   )
 }
 
+// Local-only note draft. Posting an internal note is a real write and is NOT
+// performed here — this keeps drafts in the browser and says so plainly.
+function NoteDraft() {
+  const [text, setText] = useState('')
+  const [drafts, setDrafts] = useState([])
+  const save = () => {
+    if (!text.trim()) return
+    setDrafts(d => [...d, { text: text.trim(), at: new Date().toISOString() }])
+    setText('')
+  }
+  return (
+    <div data-testid="org-note-draft" style={{ marginTop: 10 }}>
+      <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Draft internal note <span className="pill pill-muted" style={{ fontSize: 10 }}>local only · not posted</span></div>
+      <textarea className="field" value={text} onChange={e => setText(e.target.value)} placeholder="Draft a note… it stays in this browser and is not sent." rows={2} />
+      <div className="inline-flex" style={{ gap: 8, marginTop: 6, alignItems: 'center' }}>
+        <button className="btn btn-sm btn-ghost" onClick={save}>Save local draft</button>
+        <span className="pill pill-unknown" title="Drafting is local-only; posting is a real audited write requiring owner approval">not posted</span>
+      </div>
+      {drafts.length > 0 && (
+        <div className="stack" style={{ gap: 4, marginTop: 8 }}>
+          {drafts.map((d, i) => <div key={i} className="text-low" style={{ fontSize: 12 }}>draft · {d.at.slice(0, 19).replace('T', ' ')} — {d.text}</div>)}
+        </div>
+      )}
+      <div className="text-low" style={{ fontSize: 11, marginTop: 6 }}>
+        Posting an internal note is a real write (POST /api/v1/foundation/admin/orgs/&lt;id&gt;/notes, PERM_PLATFORM_ADMIN, audit <span style={{ fontFamily: 'var(--font-mono)' }}>admin.note.add</span>) and requires owner approval. This composer never posts.
+      </div>
+    </div>
+  )
+}
+
 // Real organization detail (platform-admin read) for real org ids.
 function FoundationOrgDetail({ id }) {
   const navigate = useNavigate()
@@ -114,6 +144,7 @@ function FoundationOrgDetail({ id }) {
               {o.notes.map((n, i) => <div key={i} style={{ fontSize: 12 }}>{n.note || n.text || JSON.stringify(n)}</div>)}
             </div>
           )}
+          <NoteDraft />
           {Array.isArray(o.lifecycle_history) && o.lifecycle_history.length > 0 && (
             <div>
               <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Lifecycle history</div>
