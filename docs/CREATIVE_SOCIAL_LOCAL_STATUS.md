@@ -198,3 +198,36 @@ analytics, or video spend paths are to be implemented under this branch.
 
 Both harnesses run against the local preview server with stubbed foundation
 `fetch`; no external accounts or providers are contacted.
+
+---
+
+## 7. Creative-cluster update (2026-10-04, branch `feature/creative-cluster-launch`)
+
+Additions on top of the above; honesty boundary unchanged (nothing publishes,
+nothing renders, no analytics):
+
+- **Creative Studio — Ad Creative tab (Ad Creator role).** Hook / offer / CTA +
+  audience + placement targeting (Top of Search, Product Pages, Reels / Shorts,
+  Stories, Social Feed). “Build Ad Set” records one placement-aware variant per
+  selected placement; variants move through local Draft → Changes Requested →
+  Approved; Placement Fit is labelled **editorial guidance, not measured
+  performance**; handoff to AdPilot / SocialPulse is reference-only. No ad is
+  generated, no account is connected, nothing authorizes spend.
+- **Creative Studio — image composer** gains a **Style direction** control
+  recorded on each local request; **Generate Variants** now records 3 draft
+  variant rows for the active brief instead of duplicating “Queue Image Request”.
+- **Creative Studio — Video / Shorts** gains a local **storyboard beat list**
+  (numbered beats, per-beat seconds, total duration); no clip is generated.
+- **Creative Studio — Briefs** are editable (name/objective/audience/brand/
+  deliverables) as real local records.
+- **Creative Studio — Assets** gains search (name/collection) and a
+  **Use as reference** handoff into the composer.
+- **SocialPulse — New Campaign** creates a real local campaign record.
+- **AdPilot** Campaigns badge derives from the real row count; “Bulk Actions” is
+  wired to an honest approval/tracking boundary (was dead).
+- **Shared CSS** — `.filter-pill` is a global styled chip (base/hover/active/
+  focus); creative-room card grids stack to one column at ≤480px.
+
+These remain **local records only**. The provider-dependent capabilities in §3
+(image/video generation, publishing, analytics, asset store) are unchanged and
+still gated on the decisions in §4/§5.
