@@ -28,7 +28,7 @@ export const ROOM_READINESS = {
   'keyword-tracker': 'partial', // sample preview + live foundation keyword read (truth-first, additive)
   'competitor-monitor': 'sample',
   'profitability': 'partial', // backend economics engine + sample portfolio context
-  'commerce-ops': 'sample',
+  'commerce-ops': 'partial', // real foundation approvals read + sample workflow
   'monitoring': 'partial',
   'autothink': 'provider',
   'memory-bank': 'internal',

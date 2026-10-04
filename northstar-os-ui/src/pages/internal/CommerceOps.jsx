@@ -2,7 +2,61 @@ import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import foundationApi from '../../foundation/api.js'
+import { settle } from '../../services/signals.js'
+
+// ═══ Foundation approval checkpoints (real, org-scoped) ═══
+// Reads the real approval_requests for this organization. Approving is an
+// operator action elsewhere; this panel is a read-only queue. Empty locally
+// until an approval is requested — shown honestly, never fabricated.
+function FoundationApprovals() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(foundationApi.approvals()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', items: r.value.items || [] })
+      else setSt({ phase: (r.error && r.error.status === 401) ? 'auth' : 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+
+  const statePill = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
+    : st.phase === 'auth' ? { l: 'sign-in required', t: 'unknown' }
+      : st.phase === 'error' ? { l: 'unavailable', t: 'unknown' }
+        : { l: 'read-only · foundation', t: 'muted' }
+
+  return (
+    <div className="card" data-testid="co-foundation-approvals" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Foundation approvals</h3>
+        <span className={`pill pill-${statePill.t}`}>{statePill.l}</span>
+      </div>
+      <p className="text-low" style={{ fontSize: 12, marginBottom: 8 }}>
+        Live, organization-scoped approval requests from the foundation service. Recording a decision is an operator action; this panel never auto-approves and no approval implies purchase authorization on its own.
+      </p>
+      {st.phase === 'loading' && <p style={{ fontSize: 13 }}>Loading approval requests…</p>}
+      {st.phase === 'auth' && <p style={{ fontSize: 13 }}>Sign in and select an organization to read foundation approval requests.</p>}
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Approval queue unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {st.phase === 'loaded' && (
+        st.items.length > 0 ? (
+          <DataTable columns={[
+            { key: 'id', label: 'Request' },
+            { key: 'capability', label: 'Capability' },
+            { key: 'safety_class', label: 'Safety Class' },
+            { key: 'risk_level', label: 'Risk', render: (v) => <span className={`pill ${v === 'high' ? 'pill-warn' : v === 'critical' ? 'pill-error' : 'pill-muted'}`} title="Foundation risk level">{v || 'UNKNOWN'}</span> },
+            { key: 'required_approver_role', label: 'Required Approver' },
+            { key: 'state', label: 'State', render: (v) => <span className={`pill ${v === 'REQUESTED' ? 'pill-ochre' : v === 'GRANTED' ? 'pill-ok' : 'pill-muted'}`}>{v || 'UNKNOWN'}</span> },
+            { key: 'expires_at', label: 'Expires' },
+          ]} rows={st.items} />
+        ) : (
+          <p data-testid="co-approvals-empty" style={{ fontSize: 13 }}>No foundation approval requests for your organization yet.</p>
+        )
+      )}
+    </div>
+  )
+}
 
 const TABS = [
   { id: 'workflow', label: 'Workflow', count: 5 },
@@ -223,6 +277,7 @@ export default function CommerceOps() {
           <DataNotice tone="internal" title="Approvals require explicit operator sign-off">
             No approval step auto-completes. A green or positive signal anywhere in NorthstarOS never implies purchase authorization.
           </DataNotice>
+          <FoundationApprovals />
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Approval Checkpoints</h3>
