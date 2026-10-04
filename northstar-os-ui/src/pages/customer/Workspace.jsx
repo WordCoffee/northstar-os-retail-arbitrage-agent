@@ -2,6 +2,52 @@ import { PageLayout, DataTable, MetricTiles, DataNotice } from '../../components
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import foundationApi from '../../foundation/api.js'
+import { settle } from '../../services/signals.js'
+
+// ═══ Real organization entitlements (foundation read) ═══
+function WorkspaceEntitlements() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(foundationApi.entitlements()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', value: r.value })
+      else setSt({ phase: (r.error && r.error.status === 401) ? 'auth' : 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+  const v = st.phase === 'loaded' ? st.value : null
+  const badge = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
+    : st.phase === 'auth' ? { l: 'sign-in required', t: 'unknown' }
+      : st.phase === 'error' ? { l: 'unavailable', t: 'unknown' }
+        : { l: 'live · foundation', t: 'muted' }
+  return (
+    <div className="card" data-testid="ws-entitlements" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Your entitlements</h3>
+        <span className={`pill pill-${badge.t}`}>{badge.l}</span>
+      </div>
+      {st.phase === 'loading' && <p style={{ fontSize: 13 }}>Loading entitlements…</p>}
+      {st.phase === 'auth' && <p style={{ fontSize: 13 }}>Sign in to view your entitlements.</p>}
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Entitlements unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {v && (
+        <>
+          <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
+            <span className="pill pill-muted" title="Plan tier from the entitlement service">tier: {v.tier || 'UNKNOWN'}</span>
+            <span className="pill pill-muted">jobs/mo: {v.max_jobs_per_month ?? 'UNKNOWN'}</span>
+            <span className="pill pill-muted">seats: {v.seat_limit ?? 'UNKNOWN'}</span>
+            <span className="pill pill-muted">export: {v.export_enabled ? 'enabled' : 'disabled'}</span>
+            <span className="pill pill-muted">advanced reports: {v.advanced_reports ? 'yes' : 'no'}</span>
+            <span className="pill pill-muted">support: {v.support_level || 'none'}</span>
+          </div>
+          <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>These flags are the authoritative entitlements for your organization. Service availability below is a capability map, not an entitlement list.</div>
+        </>
+      )}
+    </div>
+  )
+}
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -38,9 +84,11 @@ export default function CustomerWorkspace() {
         <button className="btn btn-sm btn-ghost" onClick={() => navigate('/support')}>Contact Support</button>
       </>}
     >
-      <DataNotice tone="sample" title="Workspace records are sample data">
-        Usage, quota, and plan figures are demonstration data. Real usage requires a connected customer backend.
+      <DataNotice tone="sample" title="Live entitlements + sample workspace figures">
+        “Your entitlements” is a live foundation read. The plan/usage figures and open tasks below are demonstration data.
       </DataNotice>
+
+      <WorkspaceEntitlements />
 
       <RoomTabs tabs={TABS} base="/customer-workspace" />
 
@@ -82,7 +130,7 @@ export default function CustomerWorkspace() {
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Entitled Services</h3>
-              <span className="pill pill-forest">Full Access</span>
+              <span className="pill pill-muted">sample · capability map</span>
             </div>
             {SERVICES.map(s => (
               <div key={s.name} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--divider)' }}>
