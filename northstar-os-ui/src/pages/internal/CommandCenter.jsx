@@ -4,6 +4,62 @@ import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import signals, { settle } from '../../services/signals.js'
+import foundationApi from '../../foundation/api.js'
+
+// ═══ Live work queues (real foundation reads) ═══
+function WorkQueues({ navigate }) {
+  const [st, setSt] = useState({ loaded: false })
+  useEffect(() => {
+    let alive = true
+    ;(async () => {
+      const [gg, ap] = await Promise.all([
+        settle(foundationApi.goldenGooseQueue()),
+        settle(foundationApi.approvals()),
+      ])
+      if (alive) setSt({ loaded: true, gg, ap })
+    })()
+    return () => { alive = false }
+  }, [])
+  const ggItems = st.gg && st.gg.ok ? (st.gg.value.items || []) : null
+  const apItems = st.ap && st.ap.ok ? (st.ap.value.items || []) : null
+  const pending = apItems ? apItems.filter(a => (a.state || '') === 'REQUESTED').length : null
+  const row = (label, value, tone, route, note) => (
+    <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '9px 0', borderBottom: '1px solid var(--divider)' }}>
+      <div>
+        <div style={{ fontSize: 13, fontWeight: 500 }}>{label}</div>
+        <div className="text-low" style={{ fontSize: 11 }}>{note}</div>
+      </div>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <span className={`pill ${tone}`}>{value}</span>
+        <button className="btn btn-sm btn-ghost" onClick={() => navigate(route)}>Open</button>
+      </div>
+    </div>
+  )
+  return (
+    <div className="card" data-testid="cc-work-queues" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Work queues</h3>
+        <span className="pill pill-muted">live · foundation</span>
+      </div>
+      {!st.loaded && <p style={{ fontSize: 13 }}>Reading work queues…</p>}
+      {st.loaded && (
+        <>
+          {row('Golden Goose persisted queue',
+            ggItems == null ? 'unavailable' : String(ggItems.length),
+            ggItems == null ? 'pill-unknown' : 'pill-muted',
+            '/golden-goose',
+            st.gg && st.gg.ok ? `basis: ${st.gg.value.basis || 'UNKNOWN'}` : 'not readable')}
+          {row('Foundation approvals pending',
+            pending == null ? 'unavailable' : String(pending),
+            pending == null ? 'pill-unknown' : (pending > 0 ? 'pill-ochre' : 'pill-muted'),
+            '/commerce-ops?view=approvals',
+            apItems == null ? 'not readable' : `${apItems.length} total request${apItems.length === 1 ? '' : 's'}`)}
+          <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>Live counts from the foundation service. Empty is a valid, honest state.</div>
+        </>
+      )}
+    </div>
+  )
+}
 
 // ═══ Live local system signals (real reads, honest states) ═══
 // Real read-only signals from the running local backend. Absent/unreachable
@@ -230,6 +286,7 @@ export default function CommandCenter() {
       </DataNotice>
 
       <SystemSignals />
+      <WorkQueues navigate={navigate} />
       <LaunchGrid navigate={navigate} />
 
       <div className="card" style={{ marginBottom: 16, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', padding: '10px 14px' }}>
