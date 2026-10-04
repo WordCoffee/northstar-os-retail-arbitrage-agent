@@ -231,3 +231,24 @@ nothing renders, no analytics):
 These remain **local records only**. The provider-dependent capabilities in §3
 (image/video generation, publishing, analytics, asset store) are unchanged and
 still gated on the decisions in §4/§5.
+
+---
+
+## 8. Media-generation truth verification (2026-10-04)
+
+Verified against the repo and the running environment:
+
+- A local image **CLI** exists (`tools/generate_images.py --backend local` →
+  ComfyUI at `COMFYUI_URL`), and `shared/model-suite.json` maps V1/V2/V3
+  generation to `comfyui:flux2-klein-4b`. **However, no HTTP route exposes it to
+  the app, no local engine is reachable, and `MEDIA_GEN_LIVE` is off.** Image and
+  video generation are therefore labelled **PLANNED — NOT ARMED**, not merely
+  "provider required".
+- Creative Studio now shows an explicit 4-state generation legend (**local
+  available · provider-gated · demo-only · planned/not-armed**) and a **static**
+  Provider Readiness checklist (5 items, including "generation route exposed to
+  the app"), explicitly labelled *not live-probed*.
+- **Not viable yet in this environment.** Arming requires the owner to install
+  ComfyUI + weights, add a media route, and set `MEDIA_GEN_LIVE=1`. The doc's §5
+  recommended route (`foundation/api/creative.py`, `MEDIA_GEN_LIVE` default off,
+  `provider_required` when unreachable) remains the minimal safe next step.
