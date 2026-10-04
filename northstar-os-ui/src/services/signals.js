@@ -42,6 +42,10 @@ export const signals = {
   goldenGooseHealth: () => get('/api/golden-goose/health'),
   // Public, no-secrets invite validation (single invite by code).
   inviteLookup: (code) => get(`/api/v1/invites/${encodeURIComponent(code)}`),
+  // AutothinK / Brain engine reads (presence-only; no credential values).
+  autothinkModels: () => get('/api/autothink/models'),
+  autothinkHistory: (limit = 20) => get(`/api/autothink/history?limit=${limit}`),
+  brainModels: () => get('/api/v1/models'),
 }
 
 // Never-rejecting wrapper. Returns { ok, value } or { ok:false, error } so a
