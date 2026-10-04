@@ -20,7 +20,7 @@ const TABS = [
   { id: 'rules', label: 'Rules' },
 ]
 
-const STATUS_PILL = { Healthy: 'pill-forest', Review: 'pill-warn', Critical: 'pill-ochre' }
+const STATUS_PILL = { Healthy: 'pill-muted', Review: 'pill-ochre', Critical: 'pill-clay' }
 
 function healthRollup() {
   const c = { Healthy: 0, Review: 0, Critical: 0 }
@@ -41,12 +41,14 @@ export default function AdPilot() {
       title="AdPilot"
       subtitle="Advertising operations workbench — campaign health, budget, placements, performance."
       actions={<>
-        <button className="btn btn-sm" onClick={() => navigate('/adpilot?view=planner')}>Create Campaign</button>
+        <button className="btn btn-sm" onClick={() => navigate('/adpilot?view=planner')}>Open Planner</button>
         <button className="btn btn-sm btn-ghost" onClick={() => toast('Bulk actions require operator approval and verified tracking — not available against this sample data.', 'info')}>Bulk Actions</button>
       </>}
     >
       <DataNotice tone="sample" title="All performance data is sample/observed data">
-        Do not use for purchase authorization or budget spend decisions. Actual costs and conversions require verified tracking.
+        Do not use for purchase authorization or budget spend decisions. Actual costs and conversions require verified
+        tracking. Status and suggestion colors are muted because none of this is live-verified — green is reserved for
+        live-verified checks.
       </DataNotice>
 
       <RoomTabs tabs={TABS} base="/adpilot" />
@@ -78,7 +80,7 @@ export default function AdPilot() {
               {[
                 { campaign: 'Competitor Conquest', pace: '98% of budget', note: 'Spend pacing ahead of cycle — review before renewal', tone: 'var(--clay)', meter: 'meter-fill-ochre', w: 98 },
                 { campaign: 'Product Launch — Water Filter', pace: '95% of budget', note: 'High spend with ACoS above target', tone: 'var(--ochre)', meter: 'meter-fill-ochre', w: 95 },
-                { campaign: 'Brand Defense', pace: '84% of budget', note: 'Pacing within expected range', tone: 'var(--pine)', meter: 'meter-fill-forest', w: 84 },
+                { campaign: 'Brand Defense', pace: '84% of budget', note: 'Pacing within expected range', tone: 'var(--ink-mid)', meter: 'meter-fill-muted', w: 84 },
               ].map(b => (
                 <div key={b.campaign}>
                   <div style={{ fontSize: 13, fontWeight: 500 }}>{b.campaign}</div>
@@ -152,7 +154,7 @@ export default function AdPilot() {
                 <div><div style={{ fontSize: 13, fontWeight: 500 }}>Increase bid: "water filter"</div><div className="text-low" style={{ fontSize: 11 }}>Top 3 position achievable (+$0.15)</div></div>
                 <div className="inline-flex" style={{ gap: 6 }}>
                   <span className="pill pill-unverified" style={{ fontSize: 10 }} title="Modeled suggestion — not verified tracking">assumption</span>
-                  <span className="pill pill-forest">High Priority</span>
+                  <span className="pill pill-muted" title="Priority is a modeled suggestion on sample data — not verified tracking">High Priority</span>
                 </div>
               </div>
               <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
@@ -203,7 +205,7 @@ export default function AdPilot() {
               { key: 'clicks', label: 'Clicks' },
               { key: 'spend', label: 'Spend' },
               { key: 'acos', label: 'ACoS' },
-              { key: 'suggestion', label: 'Suggestion', render: (v) => <span className={`pill ${v === 'Harvest' ? 'pill-forest' : v === 'Add Negative' ? 'pill-ochre' : 'pill-warn'}`}>{v}</span> },
+              { key: 'suggestion', label: 'Suggestion', render: (v) => <span className={`pill ${v === 'Add Negative' ? 'pill-ochre' : v === 'Harvest' ? 'pill-muted' : 'pill-warn'}`} title="Planning aid on sample data — not verified tracking">{v}</span> },
             ]} rows={[
               { term: 'water filter', impressions: 24500, clicks: 1820, spend: '$54.10', acos: '11.2%', suggestion: 'Harvest' },
               { term: 'water purifier', impressions: 18200, clicks: 1340, spend: '$68.70', acos: '19.8%', suggestion: 'Monitor' },

@@ -130,7 +130,7 @@ async function run() {
 
   await navAction('/listings', 'button:has-text("New Rule")', '/ui/listings?view=escalations', 'ListingGuardian New Rule')
   await navAction('/listingforge', 'button:has-text("Create Listing")', '/ui/listingforge?view=editor', 'ListingForge Create Listing')
-  await navAction('/adpilot', 'button:has-text("Create Campaign")', '/ui/adpilot?view=planner', 'AdPilot Create Campaign')
+  await navAction('/adpilot', 'button:has-text("Open Planner")', '/ui/adpilot?view=planner', 'AdPilot Open Planner')
   await navAction('/autothink', 'button:has-text("New Research Run")', '/ui/autothink?view=composer', 'AutothinK New Research Run')
   await navAction('/product-finder', 'button:has-text("Saved Sets")', '/ui/product-finder?view=saved', 'ProductFinder Saved Sets')
   await navAction('/golden-goose', 'table button:has-text("Open") >> nth=0', '/ui/golden-goose/GG-001', 'GoldenGoose row Open')

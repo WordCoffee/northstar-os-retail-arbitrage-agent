@@ -146,7 +146,10 @@ export default function SocialPulse() {
   const [campaign, setCampaign] = useState('Set A Launch')
   const [voice, setVoice] = useState('Founder voice')
   const [assetFilter, setAssetFilter] = useState('All')
+  const [assetQuery, setAssetQuery] = useState('')
   const [queueMode, setQueueMode] = useState('Board')
+  const [editCampaignId, setEditCampaignId] = useState(null)
+  const [campaignDraft, setCampaignDraft] = useState(null)
 
   // composer fields
   const [hook, setHook] = useState('Stop buying filters that miss the sediment.')
@@ -192,6 +195,14 @@ export default function SocialPulse() {
     [postsInCampaign],
   )
 
+  const filteredSocialAssets = useMemo(() => {
+    const q = assetQuery.trim().toLowerCase()
+    return assets.filter(a =>
+      (assetFilter === 'All' || a.type === assetFilter) &&
+      (!q || a.name.toLowerCase().includes(q) || (a.tag || '').toLowerCase().includes(q)),
+    )
+  }, [assets, assetFilter, assetQuery])
+
   const advance = (id, next, note) => {
     setPosts(prev => prev.map(p => p.id === id ? { ...p, state: next } : p))
     t(`${id} → ${next}. ${note}`, 'info')
@@ -219,6 +230,37 @@ export default function SocialPulse() {
     setCampaigns(prev => [rec, ...prev])
     setCampaign(rec.name)
     t(`"${rec.name}" added as a local planning record (sample) — rename and set channels before use; no channel is connected.`, 'info')
+  }
+
+  // Campaign editing — a campaign is a real local object, so its fields are
+  // editable after creation (parity with Creative Studio brief editing).
+  const startEditCampaign = (c) => {
+    setCampaignDraft({
+      name: c.name, theme: c.theme, objective: c.objective, audience: c.audience,
+      state: c.state, channels: (c.channels || []).join(', '),
+    })
+    setEditCampaignId(c.id)
+  }
+  const setCampaignField = (k, v) => setCampaignDraft(prev => ({ ...prev, [k]: v }))
+  const saveCampaign = (id) => {
+    if (!campaignDraft) return
+    const orig = campaigns.find(c => c.id === id)
+    const name = (campaignDraft.name || '').trim() || (orig ? orig.name : '')
+    const channels = campaignDraft.channels.split(',').map(s => s.trim()).filter(Boolean)
+    setCampaigns(prev => prev.map(c => c.id === id ? { ...c, ...campaignDraft, name, channels } : c))
+    if (orig && campaign === orig.name) setCampaign(name)
+    setEditCampaignId(null)
+    t(`Campaign "${name}" updated (local record).`, 'info')
+  }
+
+  // Asset ⇄ post linkage — real local attachment state (references only).
+  const attachAsset = (assetId, postId) => {
+    if (!postId) return
+    setAssets(prev => prev.map(a => a.id === assetId ? { ...a, attached: a.attached.includes(postId) ? a.attached : [...a.attached, postId] } : a))
+    t('Asset attached to the post (local selection — reference only, nothing uploads).', 'info')
+  }
+  const detachAsset = (assetId, postId) => {
+    setAssets(prev => prev.map(a => a.id === assetId ? { ...a, attached: a.attached.filter(x => x !== postId) } : a))
   }
 
   return (
@@ -265,7 +307,7 @@ export default function SocialPulse() {
             <div className="card">
               <div className="card-head">
                 <h3 className="card-title">September 2026 — {campaign}</h3>
-                <span className="pill pill-muted">{postsInCampaign.length} planned · local records</span>
+                <span className="pill pill-muted" title="Static sample planning month — not a live calendar">sample planning month · {postsInCampaign.length} planned records</span>
               </div>
               <div className="sp-cal-grid">
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
@@ -364,20 +406,67 @@ export default function SocialPulse() {
           <div className="grid-cards-3">
             {campaigns.map(c => {
               const campPosts = postsInCampaignFor(c.key, posts)
+              const editing = editCampaignId === c.id && campaignDraft
               return (
                 <div key={c.id} className="card" style={{ padding: 14 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                    <strong style={{ fontSize: 13 }}>{c.name}</strong>
-                    <span className={`pill ${c.state === 'Active' ? 'pill-forest' : c.state === 'Planned' ? 'pill-muted' : 'pill-warn'}`}>{c.state}</span>
-                  </div>
-                  <div style={{ fontSize: 12, color: 'var(--ink-mid)', marginBottom: 6 }}>{c.theme} · {c.audience}</div>
-                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
-                    {c.channels.map(ch => <span key={ch} className="pill pill-muted" style={{ fontSize: 10 }}>{ch}</span>)}
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span className="text-low" style={{ fontSize: 11 }}>{campPosts.length} posts · {campPosts.filter(p => p.state === 'Draft').length} draft</span>
-                    <button className="btn btn-sm btn-ghost" onClick={() => { setCampaign(c.name); go('queue') }}>Open Workflow</button>
-                  </div>
+                  {editing ? (
+                    <div className="stack" style={{ gap: 10 }}>
+                      <div className="field-group" style={{ marginBottom: 0 }}>
+                        <label className="label" htmlFor={`c-name-${c.id}`}>Campaign name</label>
+                        <input id={`c-name-${c.id}`} className="field" value={campaignDraft.name} onChange={e => setCampaignField('name', e.target.value)} />
+                      </div>
+                      <div className="inline-flex" style={{ gap: 10, alignItems: 'flex-start' }}>
+                        <div className="field-group" style={{ minWidth: 140, marginBottom: 0 }}>
+                          <label className="label" htmlFor={`c-theme-${c.id}`}>Theme</label>
+                          <input id={`c-theme-${c.id}`} className="field" value={campaignDraft.theme} onChange={e => setCampaignField('theme', e.target.value)} />
+                        </div>
+                        <div className="field-group" style={{ minWidth: 140, marginBottom: 0 }}>
+                          <label className="label" htmlFor={`c-aud-${c.id}`}>Audience</label>
+                          <input id={`c-aud-${c.id}`} className="field" value={campaignDraft.audience} onChange={e => setCampaignField('audience', e.target.value)} />
+                        </div>
+                      </div>
+                      <div className="field-group" style={{ marginBottom: 0 }}>
+                        <label className="label" htmlFor={`c-obj-${c.id}`}>Objective</label>
+                        <input id={`c-obj-${c.id}`} className="field" value={campaignDraft.objective} onChange={e => setCampaignField('objective', e.target.value)} />
+                      </div>
+                      <div className="inline-flex" style={{ gap: 10, alignItems: 'flex-start' }}>
+                        <div className="field-group" style={{ minWidth: 110, marginBottom: 0 }}>
+                          <label className="label" htmlFor={`c-state-${c.id}`}>State</label>
+                          <select id={`c-state-${c.id}`} className="field" value={campaignDraft.state} onChange={e => setCampaignField('state', e.target.value)}>
+                            {['Planned', 'Active', 'Archived'].map(s => <option key={s}>{s}</option>)}
+                          </select>
+                        </div>
+                        <div className="field-group" style={{ flex: 1, minWidth: 160, marginBottom: 0 }}>
+                          <label className="label" htmlFor={`c-ch-${c.id}`}>Channels (comma-separated)</label>
+                          <input id={`c-ch-${c.id}`} className="field" value={campaignDraft.channels} onChange={e => setCampaignField('channels', e.target.value)} placeholder="Instagram Reels, TikTok" />
+                        </div>
+                      </div>
+                      <div className="inline-flex" style={{ gap: 8 }}>
+                        <button className="btn btn-sm" onClick={() => saveCampaign(c.id)}>Save Campaign</button>
+                        <button className="btn btn-sm btn-ghost" onClick={() => setEditCampaignId(null)}>Cancel</button>
+                      </div>
+                      <div className="text-low" style={{ fontSize: 10 }}>Campaign fields are local planning records — no channel is connected.</div>
+                    </div>
+                  ) : (
+                    <>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                        <strong style={{ fontSize: 13 }}>{c.name}</strong>
+                        <span className={`pill ${c.state === 'Active' ? 'pill-forest' : c.state === 'Planned' ? 'pill-muted' : 'pill-warn'}`}>{c.state}</span>
+                      </div>
+                      <div style={{ fontSize: 12, color: 'var(--ink-mid)', marginBottom: 6 }}>{c.theme} · {c.audience}</div>
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+                        {c.channels.map(ch => <span key={ch} className="pill pill-muted" style={{ fontSize: 10 }}>{ch}</span>)}
+                        {c.channels.length === 0 && <span className="text-low" style={{ fontSize: 10 }}>No channels set</span>}
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span className="text-low" style={{ fontSize: 11 }}>{campPosts.length} posts · {campPosts.filter(p => p.state === 'Draft').length} draft</span>
+                        <div className="inline-flex" style={{ gap: 6 }}>
+                          <button className="btn btn-sm btn-ghost" onClick={() => startEditCampaign(c)}>Edit</button>
+                          <button className="btn btn-sm btn-ghost" onClick={() => { setCampaign(c.name); go('queue') }}>Open Workflow</button>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               )
             })}
@@ -552,10 +641,18 @@ export default function SocialPulse() {
             {['All', 'Image', 'Video'].map(f => (
               <button key={f} className={`filter-pill ${assetFilter === f ? 'active' : ''}`} onClick={() => setAssetFilter(f)}>{f}</button>
             ))}
+            <input
+              className="field"
+              style={{ width: 200, padding: '5px 10px', fontSize: 12 }}
+              placeholder="Search assets or tags…"
+              value={assetQuery}
+              onChange={e => setAssetQuery(e.target.value)}
+              aria-label="Search assets"
+            />
             <button className="btn btn-sm" style={{ marginLeft: 'auto' }} onClick={() => t('Asset upload is not connected — this room records asset metadata and attachment state only.', 'warn')}>Upload Asset</button>
           </div>
           <div className="grid-cards-3">
-            {assets.filter(a => assetFilter === 'All' || a.type === assetFilter).map(a => (
+            {filteredSocialAssets.map(a => (
               <div key={a.id} className="card" style={{ padding: 12 }}>
                 <div style={{ height: 90, borderRadius: 6, background: 'linear-gradient(135deg, rgba(138,138,122,0.10), rgba(29,90,29,0.08))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: 'var(--ink-soft)', marginBottom: 10 }}>
                   {a.type} preview
@@ -566,11 +663,31 @@ export default function SocialPulse() {
                   <span className={`pill ${assetStatePill(a.state)}`} style={{ fontSize: 10 }} title="Internal asset state — not an authorization">{a.state}</span>
                 </div>
                 <div className="text-low" style={{ fontSize: 10, marginTop: 6 }}>
-                  {a.attached.length ? `Attached to ${a.attached.join(', ')}` : 'Not attached to a post'}
+                  {a.attached.length ? 'Attached to:' : 'Not attached to a post'}
                 </div>
+                {a.attached.length > 0 && (
+                  <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 4 }}>
+                    {a.attached.map(pid => (
+                      <span key={pid} className="pill pill-muted inline-flex" style={{ fontSize: 10, gap: 4 }} title={posts.find(x => x.id === pid)?.title || pid}>
+                        {pid}
+                        <button className="btn btn-sm btn-ghost" style={{ padding: '0 3px', fontSize: 10, lineHeight: 1 }} onClick={() => detachAsset(a.id, pid)} title="Detach">×</button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <select
+                  className="field"
+                  style={{ marginTop: 8, padding: '4px 8px', fontSize: 11 }}
+                  value=""
+                  onChange={e => attachAsset(a.id, e.target.value)}
+                  aria-label={`Attach ${a.name} to a post`}
+                >
+                  <option value="">Attach to post…</option>
+                  {posts.map(p => <option key={p.id} value={p.id}>{p.id} — {p.title}</option>)}
+                </select>
               </div>
             ))}
-            {assets.filter(a => assetFilter === 'All' || a.type === assetFilter).length === 0 && (
+            {filteredSocialAssets.length === 0 && (
               <div className="text-low" style={{ fontSize: 12 }}>No assets match this filter.</div>
             )}
           </div>

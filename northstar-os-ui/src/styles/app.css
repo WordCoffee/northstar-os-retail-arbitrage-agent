@@ -332,6 +332,7 @@ tbody tr:last-child td { border-bottom: none; }
 .meter { width: 100%; height: 6px; background: var(--surface-active); border-radius: 3px; overflow: hidden; }
 .meter-fill { height: 100%; border-radius: 3px; transition: width var(--t-slow); }
 .meter-fill-forest { background: var(--forest); }
+.meter-fill-muted { background: var(--ink-faint); }
 
 .divider { height: 1px; background: var(--divider); border: none; margin: 20px 0; }
 .divider-mid { background: var(--divider-mid); }

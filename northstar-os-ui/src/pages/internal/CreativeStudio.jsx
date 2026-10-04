@@ -98,9 +98,13 @@ const VIDEO_DURATION = ['5s', '15s (Short / TikTok)', '30s']
 const VIDEO_ASPECT = ['9:16 (vertical)', '1:1 (square)', '16:9 (landscape)']
 
 const BRIEF_STATUS = { Draft: 'pill-muted', Active: 'pill-warn', 'In Review': 'pill-ochre', Archived: 'pill-muted' }
+// Terminal local state before any engine exists. Aligned with the verified
+// media truth (no route wired, engine not reachable) — "planned, not armed",
+// not "provider required".
+const REQ_BLOCKED = 'Blocked — generation not armed'
 const REQUEST_STATE = {
   Draft: 'pill-muted',
-  'Blocked — provider required': 'pill-unknown',
+  [REQ_BLOCKED]: 'pill-unknown',
   Queued: 'pill-warn',
   'In Review': 'pill-ochre',
   Approved: 'pill-forest',
@@ -319,7 +323,7 @@ export default function CreativeStudio() {
       note: 'Local draft — complete the work brief.', createdAt: nowIso(),
     }, ...prev])
     setActiveBriefId(id)
-    t('New brief draft created — work-brief inputs are local drafts (sample). No image generates until a local provider is connected.', 'info')
+    t('New brief draft created — work-brief inputs are local drafts (sample). No image generates until local generation is armed.', 'info')
     go('composer')
   }
 
@@ -363,14 +367,14 @@ export default function CreativeStudio() {
       stage: kind === 'image' ? stage : 'Draft (iterate cheap)',
       style: kind === 'image' ? styleDir : '',
       refs: kind === 'image' ? refIds : (vAssetId ? [vAssetId] : []),
-      // No provider is connected: the honest terminal state is "blocked".
-      state: 'Blocked — provider required',
-      providerState: 'not_connected',
-      note: kind === 'image' ? 'Awaiting connected local image provider.' : 'Awaiting connected video provider.',
+      // No engine exists yet: the honest terminal state is "generation not armed".
+      state: REQ_BLOCKED,
+      providerState: 'not_armed',
+      note: kind === 'image' ? 'Awaiting armed local image generation (planned, not armed).' : 'Awaiting armed video generation (planned, not armed).',
       createdAt: nowIso(),
     }
     setRequests(prev => [rec, ...prev])
-    t(`${kind === 'image' ? 'Image' : 'Video'} request queued locally — blocked until a provider is connected. Nothing was generated.`, 'info')
+    t(`${kind === 'image' ? 'Image' : 'Video'} request queued locally — blocked because generation is planned, not armed. Nothing was generated.`, 'info')
   }
 
   const advanceRequest = (id, nextState) => {
@@ -456,7 +460,7 @@ export default function CreativeStudio() {
 
   const briefName = (id) => briefs.find(b => b.id === id)?.name || id || '—'
   const totalCollectionItems = SEED_COLLECTIONS.reduce((n, c) => n + c.count, 0)
-  const blockedCount = requests.filter(r => r.state === 'Blocked — provider required').length
+  const blockedCount = requests.filter(r => r.state === REQ_BLOCKED).length
   const queuedCount = requests.filter(r => r.state === 'Queued').length
 
   return (
@@ -898,7 +902,7 @@ export default function CreativeStudio() {
         <div className="subview">
           <MetricTiles columns={3} metrics={[
             { label: 'Requests', value: String(requests.length), sub: 'Local records' },
-            { label: 'Blocked — provider required', value: String(blockedCount), sub: 'Honest terminal state', tone: blockedCount ? 'warn' : undefined },
+            { label: 'Blocked — generation not armed', value: String(blockedCount), sub: 'Honest terminal state', tone: blockedCount ? 'warn' : undefined },
             { label: 'Queued', value: String(queuedCount), sub: 'Awaiting a worker' },
           ]} />
           <div className="card">
@@ -909,7 +913,7 @@ export default function CreativeStudio() {
             {requests.length === 0 ? (
               <div className="empty">
                 <div className="empty-title">No requests yet</div>
-                <div className="empty-text">Queue an image or video request from the composer to record it here. Until a provider is connected, requests stay blocked — they never fake a completion.</div>
+                <div className="empty-text">Queue an image or video request from the composer to record it here. Until local generation is armed, requests stay blocked — they never fake a completion.</div>
                 <button className="btn btn-sm" style={{ marginTop: 12 }} onClick={() => go('composer')}>Open Image Composer</button>
               </div>
             ) : (
@@ -922,7 +926,7 @@ export default function CreativeStudio() {
                   { key: 'state', label: 'State', render: (v) => <span className={`pill ${pillFor(v)}`} title="Local workflow state — a provider still has to render">{v}</span> },
                   { key: 'actions', label: '', render: (v, row) => (
                     <div className="inline-flex" style={{ gap: 6 }}>
-                      {row.state === 'Blocked — provider required' && (
+                      {row.state === REQ_BLOCKED && (
                         <button className="btn btn-sm btn-ghost" onClick={() => advanceRequest(row.id, 'Queued')} title="Queueing does not connect a provider">Queue anyway</button>
                       )}
                       {row.state === 'Queued' && (
@@ -1031,12 +1035,21 @@ export default function CreativeStudio() {
                 <div className="text-low" style={{ fontSize: 10, marginTop: 6 }}>
                   {a.attached.length ? `Attached to ${a.attached.map(briefName).join(', ')}` : 'Not attached'}
                 </div>
-                <div style={{ marginTop: 8 }}>
+                <div className="text-low" style={{ fontSize: 10, marginTop: 2 }} title="Variants recorded against the attached brief(s) — local linkage, not a rendered asset">
+                  Linked variants: {variants.filter(v => a.attached.includes(v.brief)).length}
+                </div>
+                <div className="inline-flex" style={{ gap: 6, marginTop: 8 }}>
                   <button
                     className="btn btn-sm btn-ghost"
                     onClick={() => { setRefIds([a.id]); setAssetFilter('All'); go('composer'); t(`${a.name} set as the composer reference asset (frame consistency) — local only.`, 'info') }}
                   >
                     Use as reference
+                  </button>
+                  <button
+                    className="btn btn-sm btn-ghost"
+                    onClick={() => { navigate('/socialpulse'); t(`${a.name} handed to SocialPulse as a reference — metadata only; no upload or publish.`, 'info') }}
+                  >
+                    Send to SocialPulse
                   </button>
                 </div>
               </div>
