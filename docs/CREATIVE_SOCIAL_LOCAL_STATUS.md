@@ -302,3 +302,27 @@ render/generation route exists, no provider is called, and no credits are
 consumed. The UI shows the live contract when reachable and otherwise falls back
 to the static checklist with an explicit "route not reachable" note. See
 `reports/creative_generation_readiness_20261004.md`.
+
+---
+
+## 11. Provider-neutral generation architecture (Path B, 2026-10-04)
+
+Owner-approved **Path B (cloud-production architecture, unarmed)**. No ComfyUI
+install, no weights, no `MEDIA_GEN_LIVE`, no render route, no provider contact,
+no credits.
+
+- `Northstar_backend/media_providers.py` declares the hosted image/video
+  generation **interface**: a provider registry derived from
+  `shared/model-suite.json` (fal, OpenRouter, Replicate) with capability kinds,
+  models, and planning costs; capability→cost **routing hooks**
+  (`route`/`estimate_cost`); a generation **plan** (`plan_generation`) that
+  returns only `not_armed` / `provider_required` / `ready` and never calls a
+  provider; and **planning spend caps** (`SPEND_CAPS`, `enforced=False`, not
+  written to any ledger). Key **presence** only — values are never read.
+- `GET /api/v1/foundation/creative/readiness` now also returns `providers`,
+  `capabilities`, `routing_hooks`, and `spend_caps` (metadata only, no secrets).
+- Creative Studio's Provider Readiness lists the unarmed provider roster and
+  planning spend caps. No generation control exists.
+
+**Generation remains PLANNED / NOT ARMED.** See
+`reports/creative_generation_architecture_pathb_20261004.md`.
