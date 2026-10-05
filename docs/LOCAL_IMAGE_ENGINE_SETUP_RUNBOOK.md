@@ -10,15 +10,18 @@
 python tools/local_image_engine_status.py
 ```
 
-Last run:
+Last run (after the approved install + weights download):
 - GPU: **present** — NVIDIA GeForce RTX 5080 Laptop GPU, 16303 MiB
-- Disk free: **~110 GB** (guide budgets ~50–60 GB)
-- ComfyUI installed: **missing**
-- Weights: **0/4** expected files present
-- Local engine reachable: **unreachable** (127.0.0.1:8188)
+- Disk free: **~82 GB** (guide budgets ~50–60 GB)
+- ComfyUI installed: **present** — `C:\Users\T2Hol\ComfyUI` (venv + torch 2.11.0+cu128)
+- Weights: **4/4** expected files present
+  (flux1-dev-fp8.safetensors 11.08 GB · flux-vae-bf16.safetensors 0.16 GB ·
+  clip_l.safetensors 0.23 GB · t5xxl_fp8_e4m3fn.safetensors 4.56 GB)
+- Local engine reachable: **unreachable** (127.0.0.1:8188 — not started; gated)
 - Media gate: **off**
 
-`ready_for_local_generation: False`.
+`ready_for_local_generation: False` — engine not started and the gate is off
+(the two remaining owner-gated steps).
 
 ## What is already wired (no owner action)
 

@@ -346,10 +346,13 @@ prepared as far as possible without owner-gated actions:
 - Creative Studio shows the local dev lane when the live route is reachable.
 - Runbook: `docs/LOCAL_IMAGE_ENGINE_SETUP_RUNBOOK.md`.
 
-Detected: GPU **present** (RTX 5080 Laptop 16GB), disk **~110 GB free**,
-ComfyUI **missing**, weights **0/4**, engine **unreachable**, gate **off**.
-`ready_for_local_generation: False` — the only remaining pieces are the four
-owner-gated steps (install, weights, start, `MEDIA_GEN_LIVE=1`).
+Detected after the approved install (owner-approved steps 1–2): GPU
+**present** (RTX 5080 Laptop 16GB), disk **~82 GB free**, ComfyUI **installed**
+(`C:\Users\T2Hol\ComfyUI`, torch 2.11.0+cu128), weights **4/4** (~16 GB), engine
+**unreachable** (not started), gate **off**.
+`ready_for_local_generation: False` — only the two remaining owner-gated steps
+(start the engine, set `MEDIA_GEN_LIVE=1`) are outstanding. See
+`reports/local_generation_install_20261004.md`.
 
 **Truth semantics:** local readiness ≠ production readiness; engine installed ≠
 generation enabled. Generation remains **PLANNED / NOT ARMED**.
