@@ -55,7 +55,9 @@ def main(argv=None) -> int:
     if args.json:
         print(json.dumps(status, indent=2))
         return 0
-    print("Local creative media suite — stage/model status (read-only, nothing installed by this)")
+    print(f"Local creative media suite — engine: {status.get('engine')} (read-only; nothing installed by this)")
+    print(f"hybrid rule: {status.get('hybrid_rule')}")
+    print(f"render modes: draft->final via {status.get('render_modes', {}).get('draft', {}).get('stage_model')} -> {status.get('render_modes', {}).get('final', {}).get('stage_model')}")
     for st in status["stages"]:
         print(f"\n[{st['install_state']:>9}] {st['label']}")
         for m in st["models"]:
