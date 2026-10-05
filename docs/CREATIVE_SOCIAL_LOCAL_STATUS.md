@@ -360,17 +360,23 @@ generated yet** (the first real generation is a separate owner-gated step). See
 ## 13. Local creative media suite — model chaining (2026-10-04)
 
 A provider-neutral **model-chaining suite** for 16 GB: run one specialist per
-stage, free VRAM between stages, assemble with ffmpeg. Registry + planner +
+stage, free VRAM between stages, assemble with ffmpeg. **Engine: ComfyUI
+(headless)** — the planner submits workflow templates to ComfyUI's API via
+`Northstar_backend/comfyui_client.py` (no invented graphs). Registry + planner +
 status live in `Northstar_backend/creative_pipeline.py`
-(CLI `tools/creative_suite_status.py`; readiness `pipeline` block). Stages:
-image, voice, lipsync, video, music, upscale, mux. Goals: `product_image`,
-`ugc_talking_head`, `cinematic_short`, `ad_short`.
+(CLI `tools/creative_suite_status.py`; readiness `pipeline` block).
 
-Preferred **commercial-safe** models: FLUX.2 Klein 4B (Apache), Chatterbox
-(MIT), LatentSync 1.6 (Apache), Wan 2.2 TI2V-5B (Apache), ACE-Step (Apache),
-ffmpeg. The planner prefers `commercial_ok` models and reports per-model install
-state; it never executes. Each model install is owner-gated (download) and video
-enablement is owner-gated. See `docs/LOCAL_CREATIVE_SUITE.md`.
+Revised stack (2026-10-05): keyframes **FLUX.2 / Qwen-Image-Edit**; fast draft
+video **LTX-Video 2.3** (native audio); hero **Wan 2.2 14B** (GGUF Q5/Q6);
+talking-head **Wan 2.2 S2V / InfiniteTalk** (LatentSync as fix-up); voice
+**Chatterbox**; music **ACE-Step**; upscale **SeedVR2**; interpolate **RIFE**;
+assembly **ffmpeg NVENC**. Draft→final: iterate cheap on LTX, re-render approved
+seeds on Wan. **Hybrid:** local for volume, cloud for physics-heavy cinematic.
+
+**Environment gaps vs the plan:** this machine has **~15.4 GB RAM** (plan wants
+64 GB) and **~115 GB free** (plan wants 1 TB+) → the 14B hero path will thrash and
+the full model set won't fit. See `docs/LOCAL_CREATIVE_SUITE.md`. Each model
+install is owner-gated; video enablement is owner-gated.
 
 **Truth semantics:** local readiness ≠ production readiness; engine installed ≠
 generation enabled. Generation remains **PLANNED / NOT ARMED**.
