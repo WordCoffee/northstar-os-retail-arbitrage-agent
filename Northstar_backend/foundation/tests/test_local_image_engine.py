@@ -17,10 +17,10 @@ def test_weights_missing_when_no_home():
 
 
 def test_weights_found_in_temp_home(tmp_path: Path):
-    for name, dirs in lie.EXPECTED_WEIGHTS:
+    for names, dirs in lie.EXPECTED_WEIGHTS:
         d = tmp_path / dirs[0]
         d.mkdir(parents=True, exist_ok=True)
-        (d / name).write_bytes(b"stub")
+        (d / names[0]).write_bytes(b"stub")
     w = lie.weights_status(tmp_path)
     assert w["checked"] is True
     assert w["missing"] == []
@@ -43,7 +43,8 @@ def test_media_gate_off_by_default(monkeypatch):
 
 
 def test_local_setup_not_ready_without_engine(monkeypatch):
-    monkeypatch.setenv("COMFYUI_HOME", "")
+    # Hermetic: ignore any real ComfyUI install on this machine.
+    monkeypatch.setattr(lie, "candidate_comfyui_homes", lambda: [])
     monkeypatch.delenv("MEDIA_GEN_LIVE", raising=False)
     s = lie.build_local_setup(engine_state="unreachable")
     assert s["comfyui_installed"] is False
@@ -54,10 +55,10 @@ def test_local_setup_not_ready_without_engine(monkeypatch):
 
 
 def test_local_setup_ready_requires_all_four(tmp_path: Path, monkeypatch):
-    for name, dirs in lie.EXPECTED_WEIGHTS:
+    for names, dirs in lie.EXPECTED_WEIGHTS:
         d = tmp_path / dirs[0]
         d.mkdir(parents=True, exist_ok=True)
-        (d / name).write_bytes(b"stub")
+        (d / names[0]).write_bytes(b"stub")
     (tmp_path / "main.py").write_text("# stub")
     monkeypatch.setenv("COMFYUI_HOME", str(tmp_path))
     monkeypatch.setenv("MEDIA_GEN_LIVE", "1")
@@ -67,10 +68,10 @@ def test_local_setup_ready_requires_all_four(tmp_path: Path, monkeypatch):
 
 def test_installed_is_not_enabled(tmp_path: Path, monkeypatch):
     """Engine present + weights present, but gate off -> NOT ready (installed != enabled)."""
-    for name, dirs in lie.EXPECTED_WEIGHTS:
+    for names, dirs in lie.EXPECTED_WEIGHTS:
         d = tmp_path / dirs[0]
         d.mkdir(parents=True, exist_ok=True)
-        (d / name).write_bytes(b"stub")
+        (d / names[0]).write_bytes(b"stub")
     (tmp_path / "main.py").write_text("# stub")
     monkeypatch.setenv("COMFYUI_HOME", str(tmp_path))
     monkeypatch.delenv("MEDIA_GEN_LIVE", raising=False)

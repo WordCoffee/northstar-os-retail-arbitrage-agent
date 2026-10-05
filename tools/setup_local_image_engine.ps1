@@ -94,7 +94,9 @@ if ($DownloadWeights) {
   $HfCli = Join-Path $ComfyHome 'venv\Scripts\hf.exe'
   if (-not (Test-Path $HfCli)) { $HfCli = Join-Path $ComfyHome 'venv\Scripts\huggingface-cli.exe' }
   & $HfCli download Kijai/flux-fp8 flux1-dev-fp8.safetensors --local-dir (Join-Path $ComfyHome 'models/unet')
-  & $HfCli download Kijai/flux-fp8 ae.safetensors --local-dir (Join-Path $ComfyHome 'models/vae')
+  # VAE: the BFL repos' ae.safetensors is gated; the Kijai mirror's
+  # flux-vae-bf16.safetensors is the same FLUX VAE and is not gated.
+  & $HfCli download Kijai/flux-fp8 flux-vae-bf16.safetensors --local-dir (Join-Path $ComfyHome 'models/vae')
   & $HfCli download comfyanonymous/flux_text_encoders clip_l.safetensors --local-dir (Join-Path $ComfyHome 'models/clip')
   & $HfCli download comfyanonymous/flux_text_encoders t5xxl_fp8_e4m3fn.safetensors --local-dir (Join-Path $ComfyHome 'models/clip')
   Write-Host "Weights downloaded. Next (gated): -Start." -ForegroundColor Green

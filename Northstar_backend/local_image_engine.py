@@ -25,12 +25,16 @@ PROBE_TIMEOUT_S = 0.3
 COMFYUI_HOME_ENV = "COMFYUI_HOME"
 
 # Expected weight files (from docs/LOCAL_IMAGE_GEN_SETUP.md) and the ComfyUI
-# model dirs they may live in. Presence-only; nothing is downloaded.
+# model dirs they may live in. Each entry is (acceptable_names, dirs): the VAE is
+# published as `ae.safetensors` in the gated BFL repos and as
+# `flux-vae-bf16.safetensors` in the non-gated Kijai mirror, so both are accepted.
+# Presence-only; nothing is downloaded.
 EXPECTED_WEIGHTS = [
-    ("flux1-dev-fp8.safetensors", ["models/unet", "models/diffusion_models"]),
-    ("ae.safetensors", ["models/vae"]),
-    ("clip_l.safetensors", ["models/clip", "models/text_encoders"]),
-    ("t5xxl_fp8_e4m3fn.safetensors", ["models/clip", "models/text_encoders"]),
+    (("flux1-dev-fp8.safetensors", "flux1-dev-fp8-e4m3fn.safetensors"),
+     ["models/unet", "models/diffusion_models"]),
+    (("ae.safetensors", "flux-vae-bf16.safetensors"), ["models/vae"]),
+    (("clip_l.safetensors",), ["models/clip", "models/text_encoders"]),
+    (("t5xxl_fp8_e4m3fn.safetensors",), ["models/clip", "models/text_encoders"]),
 ]
 
 
@@ -101,18 +105,21 @@ def comfyui_reachable(url: str = DEFAULT_COMFY_URL, timeout: float = PROBE_TIMEO
 
 def weights_status(home: Optional[Path]) -> Dict[str, object]:
     if not home:
-        return {"found": [], "missing": [w for w, _ in EXPECTED_WEIGHTS], "checked": False}
+        return {"found": [], "missing": [names[0] for names, _ in EXPECTED_WEIGHTS], "checked": False}
     found, missing = [], []
-    for name, dirs in EXPECTED_WEIGHTS:
+    for names, dirs in EXPECTED_WEIGHTS:
         hit = False
         for d in dirs:
-            try:
-                if (home / d / name).is_file():
-                    hit = True
-                    break
-            except OSError:
-                continue
-        (found if hit else missing).append(name)
+            for n in names:
+                try:
+                    if (home / d / n).is_file():
+                        hit = True
+                        break
+                except OSError:
+                    continue
+            if hit:
+                break
+        (found if hit else missing).append(names[0])
     return {"found": found, "missing": missing, "checked": True}
 
 
