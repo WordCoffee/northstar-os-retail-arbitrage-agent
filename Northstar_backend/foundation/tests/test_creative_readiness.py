@@ -100,4 +100,6 @@ def test_readiness_route_returns_contract_when_authenticated(client, seeded_stat
     assert body["spend_caps"].get("enforced") is False
     assert isinstance(body.get("local_setup"), dict)
     assert body["local_setup"].get("ready_for_local_generation") is False
+    assert isinstance(body.get("pipeline"), dict)
+    assert "stages" in body["pipeline"]
 

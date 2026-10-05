@@ -81,6 +81,14 @@ def _local_image_engine():
     return lie
 
 
+def _creative_pipeline():
+    try:
+        import creative_pipeline as cp  # Northstar_backend on sys.path
+    except ImportError:  # pragma: no cover - repo-root sys.path variant
+        from Northstar_backend import creative_pipeline as cp
+    return cp
+
+
 def _parse_local_endpoint() -> Optional[Tuple[str, int]]:
     url = (os.getenv("COMFYUI_URL", "") or "").strip() or _DEFAULT_COMFY_URL
     try:
@@ -163,6 +171,12 @@ def build_readiness(probe: Callable[[], str] = probe_local_engine) -> Dict[str, 
     except Exception:  # noqa: BLE001
         local_setup = {}
 
+    # Model-chaining creative suite (registry + per-stage install state). Read-only.
+    try:
+        pipeline = _creative_pipeline().pipeline_status()
+    except Exception:  # noqa: BLE001
+        pipeline = {}
+
     return {
         "generation": generation,
         "armed": armed,
@@ -181,6 +195,7 @@ def build_readiness(probe: Callable[[], str] = probe_local_engine) -> Dict[str, 
         "routing_hooks": routing_hooks,
         "spend_caps": spend_caps,
         "local_setup": local_setup,
+        "pipeline": pipeline,
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "notes": "Readiness only — does not activate generation, publish, or transfer media.",
     }
