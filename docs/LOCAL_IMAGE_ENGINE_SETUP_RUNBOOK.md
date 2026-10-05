@@ -17,11 +17,12 @@ Last run (after the approved install + weights download):
 - Weights: **4/4** expected files present
   (flux1-dev-fp8.safetensors 11.08 GB · flux-vae-bf16.safetensors 0.16 GB ·
   clip_l.safetensors 0.23 GB · t5xxl_fp8_e4m3fn.safetensors 4.56 GB)
-- Local engine reachable: **unreachable** (127.0.0.1:8188 — not started; gated)
+- Local engine reachable: **reachable** — ComfyUI 0.38.0 serving on `127.0.0.1:8188`
+  (localhost only; HTTP 200 on `/system_stats`)
 - Media gate: **off**
 
-`ready_for_local_generation: False` — engine not started and the gate is off
-(the two remaining owner-gated steps).
+`ready_for_local_generation: False` — only the media gate remains (owner-gated
+step 4).
 
 ## What is already wired (no owner action)
 

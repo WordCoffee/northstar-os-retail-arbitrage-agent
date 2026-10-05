@@ -43,11 +43,12 @@
 `ready_for_local_generation: False` — only steps 3–4 remain.
 
 ## Still owner-gated (not performed)
-3. Start ComfyUI (localhost only): `... -Start -IUnderstandThisIsOwnerGated`
-4. Set `MEDIA_GEN_LIVE=1`
+3. ~~Start ComfyUI (localhost only)~~ — **done** (owner-approved): ComfyUI 0.38.0
+   running on `127.0.0.1:8188`.
+4. **Set `MEDIA_GEN_LIVE=1`** — still owner-gated.
 Also gated: video enablement, cloud/paid providers, any non-localhost exposure.
 
-**Generation remains PLANNED / NOT ARMED.**
+**Generation remains PLANNED / NOT ARMED** (gate off).
 
 ---
 
