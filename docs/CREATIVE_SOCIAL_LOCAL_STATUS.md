@@ -355,5 +355,22 @@ ComfyUI 0.38.0 on `127.0.0.1:8188`), weights **4/4** (~16 GB), gate **on**
 generated yet** (the first real generation is a separate owner-gated step). See
 `reports/local_generation_install_20261004.md`.
 
+---
+
+## 13. Local creative media suite — model chaining (2026-10-04)
+
+A provider-neutral **model-chaining suite** for 16 GB: run one specialist per
+stage, free VRAM between stages, assemble with ffmpeg. Registry + planner +
+status live in `Northstar_backend/creative_pipeline.py`
+(CLI `tools/creative_suite_status.py`; readiness `pipeline` block). Stages:
+image, voice, lipsync, video, music, upscale, mux. Goals: `product_image`,
+`ugc_talking_head`, `cinematic_short`, `ad_short`.
+
+Preferred **commercial-safe** models: FLUX.2 Klein 4B (Apache), Chatterbox
+(MIT), LatentSync 1.6 (Apache), Wan 2.2 TI2V-5B (Apache), ACE-Step (Apache),
+ffmpeg. The planner prefers `commercial_ok` models and reports per-model install
+state; it never executes. Each model install is owner-gated (download) and video
+enablement is owner-gated. See `docs/LOCAL_CREATIVE_SUITE.md`.
+
 **Truth semantics:** local readiness ≠ production readiness; engine installed ≠
 generation enabled. Generation remains **PLANNED / NOT ARMED**.
