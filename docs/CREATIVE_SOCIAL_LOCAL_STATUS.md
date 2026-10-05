@@ -346,12 +346,14 @@ prepared as far as possible without owner-gated actions:
 - Creative Studio shows the local dev lane when the live route is reachable.
 - Runbook: `docs/LOCAL_IMAGE_ENGINE_SETUP_RUNBOOK.md`.
 
-Detected after the approved install + engine start (owner-approved steps 1–3):
-GPU **present** (RTX 5080 Laptop 16GB), disk **~82 GB free**, ComfyUI
-**installed and running** (`C:\Users\T2Hol\ComfyUI`, torch 2.11.0+cu128;
-ComfyUI 0.38.0 on `127.0.0.1:8188`), weights **4/4** (~16 GB), gate **off**.
-`ready_for_local_generation: False` — only the media gate (owner-gated step 4)
-is outstanding. See `reports/local_generation_install_20261004.md`.
+Detected after the approved install + engine start + arming (owner-approved
+steps 1–4): GPU **present** (RTX 5080 Laptop 16GB), disk **~115 GB free**,
+ComfyUI **installed and running** (`C:\Users\T2Hol\ComfyUI`, torch 2.11.0+cu128;
+ComfyUI 0.38.0 on `127.0.0.1:8188`), weights **4/4** (~16 GB), gate **on**
+(`MEDIA_GEN_LIVE=1` in the gitignored repo-root `.env`).
+`ready_for_local_generation: True` — the lane is armed. **Nothing has been
+generated yet** (the first real generation is a separate owner-gated step). See
+`reports/local_generation_install_20261004.md`.
 
 **Truth semantics:** local readiness ≠ production readiness; engine installed ≠
 generation enabled. Generation remains **PLANNED / NOT ARMED**.

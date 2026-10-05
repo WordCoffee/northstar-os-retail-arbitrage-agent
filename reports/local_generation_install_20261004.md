@@ -45,10 +45,13 @@
 ## Still owner-gated (not performed)
 3. ~~Start ComfyUI (localhost only)~~ — **done** (owner-approved): ComfyUI 0.38.0
    running on `127.0.0.1:8188`.
-4. **Set `MEDIA_GEN_LIVE=1`** — still owner-gated.
+4. ~~Set `MEDIA_GEN_LIVE=1`~~ — **done** (owner-approved): set in the repo-root
+   `.env` (gitignored, non-secret); `ready_for_local_generation: True`.
+5. **Starting the first real generation** — still owner-gated.
 Also gated: video enablement, cloud/paid providers, any non-localhost exposure.
 
-**Generation remains PLANNED / NOT ARMED** (gate off).
+**Generation remains unexecuted** — the lane is armed but nothing has been
+generated yet.
 
 ---
 

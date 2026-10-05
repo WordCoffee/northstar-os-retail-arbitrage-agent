@@ -19,10 +19,15 @@ Last run (after the approved install + weights download):
   clip_l.safetensors 0.23 GB · t5xxl_fp8_e4m3fn.safetensors 4.56 GB)
 - Local engine reachable: **reachable** — ComfyUI 0.38.0 serving on `127.0.0.1:8188`
   (localhost only; HTTP 200 on `/system_stats`)
-- Media gate: **off**
+- Media gate: **on** — `MEDIA_GEN_LIVE=1` in the repo-root `.env` (owner-approved,
+  local dev only; the app loads it at startup via its own config modules)
 
-`ready_for_local_generation: False` — only the media gate remains (owner-gated
-step 4).
+`ready_for_local_generation: True` — all four setup steps are complete.
+
+**Arming / disarming:** the gate lives in the repo-root `.env` (gitignored,
+non-secret). Disarm with `MEDIA_GEN_LIVE=0` or by removing the line. `MEDIA_GEN_LIVE`
+is the single arming switch; nothing generates unless it is `1` **and** the engine
+is reachable.
 
 ## What is already wired (no owner action)
 
