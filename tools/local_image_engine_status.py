@@ -22,28 +22,11 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 
-def _apply_media_flag_from_env_file() -> None:
-    """Targeted, NON-SECRET read of the repo-root .env so this CLI's gate reading
-    matches the running app (which loads .env at startup). Only the
-    MEDIA_GEN_LIVE line is read; no other value is ever read or printed."""
-    import os
-    if str(os.getenv("MEDIA_GEN_LIVE", "") or "").strip():
-        return
-    try:
-        for line in (_ROOT / ".env").read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if line.startswith("MEDIA_GEN_LIVE="):
-                os.environ["MEDIA_GEN_LIVE"] = line.split("=", 1)[1].strip()
-                return
-    except OSError:
-        return
-
-
 from Northstar_backend import local_image_engine as lie  # noqa: E402
 
 
 def main(argv=None) -> int:
-    _apply_media_flag_from_env_file()
+    lie.apply_env_file_media_flag()  # match the app's gate reading (targeted, non-secret)
     ap = argparse.ArgumentParser(description="Read-only local image-engine status (no install, no arming).")
     ap.add_argument("--json", action="store_true", help="emit JSON")
     args = ap.parse_args(argv)

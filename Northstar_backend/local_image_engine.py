@@ -153,6 +153,24 @@ def media_gate_on() -> bool:
     return str(os.getenv("MEDIA_GEN_LIVE", "") or "").strip() == "1"
 
 
+def apply_env_file_media_flag() -> None:
+    """Targeted, NON-SECRET read of the repo-root .env so a standalone process's
+    gate reading matches the running app (which loads .env at startup via its own
+    config modules). Only the MEDIA_GEN_LIVE line is read; no other value is ever
+    read or printed. No-op if the env var is already set."""
+    if str(os.getenv("MEDIA_GEN_LIVE", "") or "").strip():
+        return
+    try:
+        env_path = repo_root() / ".env"
+        for line in env_path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if line.startswith("MEDIA_GEN_LIVE="):
+                os.environ["MEDIA_GEN_LIVE"] = line.split("=", 1)[1].strip()
+                return
+    except OSError:
+        return
+
+
 def build_local_setup(engine_state: Optional[str] = None) -> Dict[str, object]:
     """Cheap subset for the readiness route (no GPU/disk probing).
 
