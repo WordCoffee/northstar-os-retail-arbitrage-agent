@@ -106,9 +106,10 @@ if ($DownloadWeights) {
 if ($Start) {
   Assert-OwnerGated "Start ComfyUI"
   Write-Gate "Starting ComfyUI on 127.0.0.1:8188 (localhost only; --lowvram for 16GB)."
+  $VenvPy = Join-Path $ComfyHome 'venv\Scripts\python.exe'
   Push-Location $ComfyHome
   try {
-    python main.py --lowvram --listen 127.0.0.1 --port 8188
+    & $VenvPy main.py --lowvram --listen 127.0.0.1 --port 8188
   } finally {
     Pop-Location
   }
