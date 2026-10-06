@@ -106,6 +106,10 @@ const SIZES = ['1024px (1MP)', '1280×720', '1536px', '2048px (4MP · 4× cost)'
 // Long-edge pixels per resolution option, and an aspect→pixel helper. FLUX is
 // happiest on multiples of 16, so both edges snap to /16 within the backend cap.
 const SIZE_LONG = { '1024px (1MP)': 1024, '1280×720': 1280, '1536px': 1536, '2048px (4MP · 4× cost)': 2048 }
+// Must match MAX_PROMPT_CHARS in Northstar_backend/local_image_gen.py. The soft
+// mark is where FLUX starts ignoring the tail — well below the hard limit.
+const PROMPT_MAX = 12000
+const PROMPT_SOFT = 1800
 function sizeToDims(aspect, size) {
   const long = SIZE_LONG[size] || 1024
   const [aw, ah] = String(aspect || '1:1').split(':').map(Number)
@@ -784,10 +788,19 @@ export default function CreativeStudio() {
                 <div className="field-group" style={{ marginBottom: 0 }}>
                   <label className="label" htmlFor="cs-prompt">Prompt / work brief</label>
                   <textarea
-                    id="cs-prompt" className="field" rows={4} value={prompt}
+                    id="cs-prompt" className="field" rows={6} value={prompt}
                     onChange={e => setPrompt(e.target.value)}
                     placeholder="Describe the intended image: subject, mood, composition, copy to render, and where it will be used…"
                   />
+                  <div className="text-low" style={{ fontSize: 11, marginTop: 6, display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+                    <span>
+                      {prompt.length} characters
+                      {prompt.length > PROMPT_SOFT && ' — the model truncates long prompts; put the essential description first.'}
+                    </span>
+                    {prompt.length > PROMPT_MAX - 1000 && (
+                      <span style={{ color: 'var(--status-error, #b4432f)', flexShrink: 0 }}>limit {PROMPT_MAX}</span>
+                    )}
+                  </div>
                 </div>
                 <div className="inline-flex" style={{ gap: 12, alignItems: 'flex-start' }}>
                   <div className="field-group" style={{ minWidth: 180, marginBottom: 0 }}>

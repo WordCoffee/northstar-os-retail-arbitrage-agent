@@ -34,7 +34,7 @@ def test_workflow_is_the_proven_flux_graph():
 
 @pytest.mark.parametrize("kwargs,code", [
     (dict(prompt="   ", width=1024, height=1024, steps=28), "empty_prompt"),
-    (dict(prompt="x" * 4001, width=1024, height=1024, steps=28), "prompt_too_long"),
+    (dict(prompt="x" * (lig.MAX_PROMPT_CHARS + 1), width=1024, height=1024, steps=28), "prompt_too_long"),
     (dict(prompt="x", width=64, height=1024, steps=28), "bad_dimension"),
     (dict(prompt="x", width=1024, height=99999, steps=28), "bad_dimension"),
     (dict(prompt="x", width=1024, height=1024, steps=0), "bad_steps"),

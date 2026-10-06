@@ -47,6 +47,10 @@ MAX_STEPS = 60
 MIN_DIM = 256
 MAX_DIM = 2048
 MAX_IMAGE_BYTES = 32 * 1024 * 1024  # 32 MiB hard cap on a single render
+# Generous bound so a real design brief fits. This is a guard against unbounded
+# input, NOT the model's usable length: FLUX truncates well before this, so the
+# UI warns above ~1800 chars that the tail will be ignored.
+MAX_PROMPT_CHARS = 12000
 POLL_INTERVAL_S = 2.0
 DEFAULT_TIMEOUT_S = 600.0
 
@@ -151,8 +155,12 @@ def build_flux_workflow(prompt: str, width: int, height: int, steps: int,
 def _validate(prompt: str, width: int, height: int, steps: int) -> None:
     if not (prompt or "").strip():
         raise GenerationError("empty_prompt", "a prompt is required", status=400)
-    if len(prompt) > 4000:
-        raise GenerationError("prompt_too_long", "prompt exceeds 4000 characters", status=400)
+    if len(prompt) > MAX_PROMPT_CHARS:
+        raise GenerationError(
+            "prompt_too_long",
+            f"prompt is {len(prompt)} characters; the limit is {MAX_PROMPT_CHARS}. "
+            "Put the essential description first — the model truncates long prompts anyway.",
+            status=400)
     for name, v in (("width", width), ("height", height)):
         if not isinstance(v, int) or not (MIN_DIM <= v <= MAX_DIM):
             raise GenerationError("bad_dimension",
