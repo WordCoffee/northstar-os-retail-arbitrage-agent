@@ -132,6 +132,12 @@ export const foundationApi = {
   // creative media readiness (read-only, provider-neutral; does NOT generate)
   mediaReadiness: () => req('/creative/readiness'),
 
+  // creative LOCAL generation (armed only: MEDIA_GEN_LIVE=1 + loopback engine).
+  // Resolves { ok, image (data URL), seconds, width, height, steps, seed,
+  // prompt_id, bytes, mime, engine }. Refusals throw with err.code =
+  // media_gate_off | engine_unreachable | timeout | engine_rejected | ...
+  generateImage: (body) => req('/creative/generate', { method: 'POST', body: JSON.stringify(body || {}) }),
+
   // auth session (P2-T5b): cookie transport, no token returned to JS
   login: (email, password) => req('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   logout: () => req('/auth/logout', { method: 'POST' }),

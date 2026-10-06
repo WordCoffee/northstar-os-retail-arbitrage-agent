@@ -1,30 +1,41 @@
-"""Creative media readiness — READ-ONLY, provider-neutral.
+"""Creative media — readiness (read-only) + local generation (armed).
 
-This module answers ONE question truthfully: is media generation armed, and if
-not, why? It never generates, uploads, publishes, transfers, or exports
-anything, and it contacts no external provider. It returns only safe status
-metadata (booleans and safe identifiers) — never secrets, tokens, raw
-environment values, or provider configuration.
+Two clearly separated halves:
 
-The only probe is a bounded localhost reachability check of the operator's own
-engine (default ComfyUI at ``COMFYUI_URL``). It does not install, start, or load
-anything. This is a *readiness* signal, not an activation: readiness does not
-enable generation.
+* ``GET /readiness`` is **READ-ONLY, provider-neutral**. It answers one question
+  truthfully: is media generation armed, and if not, why? It never generates,
+  uploads, publishes, transfers, or exports anything, and it contacts no
+  external provider. It returns only safe status metadata (booleans and safe
+  identifiers) — never secrets, tokens, raw environment values, or provider
+  configuration. Its only probe is a bounded localhost reachability check of the
+  operator's own engine (default ComfyUI at ``COMFYUI_URL``); it does not
+  install, start, or load anything. Readiness never activates generation.
+
+* ``POST /generate`` is the **armed** half: it renders ONE image on the
+  operator's own localhost engine. It refuses unless ``MEDIA_GEN_LIVE=1`` is in
+  effect and the engine is loopback-reachable. It contacts no cloud provider,
+  reads no credential, and returns the PNG inline plus provenance. All refusal
+  and failure modes carry a stable ``code`` so the UI can state the truth rather
+  than imply a mystery.
 """
 from __future__ import annotations
 
 import os
 import socket
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Callable, Dict, Optional, Tuple
 from urllib.parse import urlparse
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Body, Depends, HTTPException
 
 from ..context import RequestContext
 from .deps import get_context
 
 router = APIRouter(prefix="/api/v1/foundation/creative", tags=["creative"])
+
+# Where armed renders are persisted (gitignored; regenerate on demand).
+_CREATIVE_OUT = Path(__file__).resolve().parents[3] / "generated_images" / "creative"
 
 _DEFAULT_COMFY_URL = "http://127.0.0.1:8188"
 _PROBE_TIMEOUT_S = 0.3
@@ -87,6 +98,14 @@ def _creative_pipeline():
     except ImportError:  # pragma: no cover - repo-root sys.path variant
         from Northstar_backend import creative_pipeline as cp
     return cp
+
+
+def _local_image_gen():
+    try:
+        import local_image_gen as lig  # Northstar_backend on sys.path
+    except ImportError:  # pragma: no cover - repo-root sys.path variant
+        from Northstar_backend import local_image_gen as lig
+    return lig
 
 
 def _parse_local_endpoint() -> Optional[Tuple[str, int]]:
@@ -206,3 +225,69 @@ def readiness(ctx: RequestContext = Depends(get_context)) -> Dict[str, object]:
     """Read-only media-generation readiness (authenticated, no secrets, no
     generation). The ``ctx`` dependency enforces the standard auth posture."""
     return build_readiness(probe=probe_local_engine)
+
+
+# --------------------------------------------------------------------------- #
+# GENERATION — the one state-changing endpoint in this module (armed, local)
+# --------------------------------------------------------------------------- #
+
+def _int_field(body: Dict[str, object], key: str, default: int) -> int:
+    value = body.get(key, default)
+    try:
+        return int(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=400, detail={
+            "code": "bad_request", "message": f"{key} must be an integer",
+        })
+
+
+@router.post("/generate")
+def generate(
+    body: Dict[str, object] = Body(...),
+    ctx: RequestContext = Depends(get_context),
+) -> Dict[str, object]:
+    """Render ONE image on the operator's own local engine.
+
+    Refuses unless ``MEDIA_GEN_LIVE=1`` is armed AND the loopback engine is
+    reachable. Returns the PNG as a data URL plus provenance metadata. Contacts
+    no cloud provider; reads and returns no credential.
+    """
+    gen = _local_image_gen()
+
+    prompt = str(body.get("prompt") or "")
+    width = _int_field(body, "width", 1024)
+    height = _int_field(body, "height", 1024)
+    steps = _int_field(body, "steps", 28)
+
+    seed = body.get("seed")
+    if seed is not None:
+        try:
+            seed = int(seed)  # type: ignore[arg-type]
+        except (TypeError, ValueError):
+            raise HTTPException(status_code=400, detail={
+                "code": "bad_request", "message": "seed must be an integer",
+            })
+
+    try:
+        result = gen.generate_image(
+            prompt, width=width, height=height, steps=steps, seed=seed,
+            save_dir=_CREATIVE_OUT,
+        )
+    except gen.GenerationError as exc:
+        raise HTTPException(status_code=exc.status, detail={
+            "code": exc.code, "message": exc.message,
+        }) from exc
+
+    return {
+        "ok": True,
+        "prompt_id": result["prompt_id"],
+        "seconds": result["seconds"],
+        "width": result["width"],
+        "height": result["height"],
+        "steps": result["steps"],
+        "seed": result["seed"],
+        "engine": result["engine"],
+        "bytes": result["bytes"],
+        "mime": result["mime"],
+        "image": gen.to_data_url(result),
+    }

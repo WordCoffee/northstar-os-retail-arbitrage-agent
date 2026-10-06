@@ -22,3 +22,6 @@ Northstar_backend_audit_export/
 # output dirs are now ignored going forward. History rewrite = operator decision.
 data/scored/
 data/normalized/
+
+# Local Creative Studio renders (UI output; regenerate on demand)
+generated_images/creative/

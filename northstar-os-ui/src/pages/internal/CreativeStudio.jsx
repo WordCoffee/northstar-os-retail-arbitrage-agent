@@ -12,15 +12,16 @@ import { foundationApi } from '../../foundation/api.js'
 //   • Briefs, compose requests, reference assets, variants, and export bundles
 //     are REAL LOCAL workspace records (persisted in this browser). They are
 //     the operator's own planning/record data — not provider output.
-//   • NO image or video is ever generated or depicted here. There is no wired
-//     image/video provider in this build. Preview surfaces show an explicit
-//     "local provider required" boundary instead of a fabricated asset.
-//   • A local image CLI exists in-repo (tools/generate_images.py → ComfyUI,
-//     plus pollinations/cloudflare/huggingface) and model_router.resolve_vision
-//     resolves local generation to `comfyui`, gated by MEDIA_GEN_LIVE. Neither
-//     is exposed to this UI yet, so the room states that boundary rather than
-//     pretending a pipeline exists.
-//   • No video pipeline exists anywhere in the repo.
+//   • The Image Composer is WIRED to the local engine: "Generate Image" POSTs
+//     to /creative/generate, which renders on the operator's own localhost
+//     ComfyUI (FLUX) and returns the real PNG. It is armed only when
+//     MEDIA_GEN_LIVE=1 and the engine is reachable; otherwise it reports the
+//     exact refusal code (media_gate_off / engine_unreachable / timeout).
+//     Nothing is fabricated — the preview shows the returned bytes or nothing.
+//   • "Queue Image Request" and "Generate Variants" remain planning records and
+//     generate nothing; they are kept distinct from "Generate Image".
+//   • Video: still no pipeline anywhere in the repo. The video tab stays
+//     planning-only.
 // ═══════════════════════════════════════════════════════════════════════════
 
 const TABS = [
@@ -101,6 +102,17 @@ const READINESS = [
 
 const ASPECTS = ['1:1', '4:5', '9:16', '16:9', '3:2']
 const SIZES = ['1024px (1MP)', '1280×720', '1536px', '2048px (4MP · 4× cost)']
+
+// Long-edge pixels per resolution option, and an aspect→pixel helper. FLUX is
+// happiest on multiples of 16, so both edges snap to /16 within the backend cap.
+const SIZE_LONG = { '1024px (1MP)': 1024, '1280×720': 1280, '1536px': 1536, '2048px (4MP · 4× cost)': 2048 }
+function sizeToDims(aspect, size) {
+  const long = SIZE_LONG[size] || 1024
+  const [aw, ah] = String(aspect || '1:1').split(':').map(Number)
+  const r = (aw > 0 && ah > 0) ? aw / ah : 1
+  const snap = (n) => Math.max(256, Math.min(2048, Math.round(n / 16) * 16))
+  return r >= 1 ? [snap(long), snap(long / r)] : [snap(long * r), snap(long)]
+}
 const STAGES = ['Draft (iterate cheap)', 'Final (top tier)']
 const FORMATS = ['Ad creative', 'Social variant', 'Listing imagery', 'A+ content', 'Email hero']
 const STYLE_DIRECTIONS = ['Clean studio', 'Lifestyle / in-use', 'Bold graphic', 'Editorial', 'Flat lay', 'UGC / candid']
@@ -201,13 +213,13 @@ function ProviderBoundary({ provider }) {
   return (
     <div className="alert" style={{ marginBottom: 0 }}>
       <div className="alert-title">
-        <span className={`pill ${meta.pill}`}>{meta.text}</span> {provider.label} — no generation route is wired to this app
+        <span className={`pill ${meta.pill}`}>{meta.text}</span> {provider.label} — local lane, armed by {provider.gate}
       </div>
       <div className="alert-text">
-        This build records <strong>local planning records only</strong>. Nothing is rendered: the app exposes no media
-        endpoint and no local engine is reachable here. Expected engine: <strong>{provider.engine}</strong> · env{' '}
-        <span className="text-mono">{provider.env}</span> · gate <span className="text-mono">{provider.gate}</span>.{' '}
-        {provider.models}. No placeholder image is shown in place of a render.
+        <strong>Generate Image</strong> renders on your own machine via <strong>{provider.engine}</strong> and returns the real PNG.
+        It is refused unless <span className="text-mono">{provider.env}</span> points at a running engine, weights are installed, and{' '}
+        <span className="text-mono">{provider.gate}=1</span>. No cloud provider is contacted and no placeholder image is ever shown in
+        place of a render.
       </div>
     </div>
   )
@@ -348,6 +360,13 @@ export default function CreativeStudio() {
   const [stage, setStage] = useState('Draft (iterate cheap)')
   const [styleDir, setStyleDir] = useState('Clean studio')
   const [refIds, setRefIds] = useState([])
+
+  // Live local generation (the armed lane). The image shown is the real
+  // returned PNG — never a placeholder. genError carries the honest code.
+  const [genState, setGenState] = useState('idle') // idle | running | done | error
+  const [genImage, setGenImage] = useState(null)
+  const [genMeta, setGenMeta] = useState(null)
+  const [genError, setGenError] = useState(null)
 
   // video fields
   const [vPurpose, setVPurpose] = useState('UGC / testimonial')
@@ -494,6 +513,26 @@ export default function CreativeStudio() {
     t(`${kind === 'image' ? 'Image' : 'Video'} request queued locally — blocked because generation is planned, not armed. Nothing was generated.`, 'info')
   }
 
+  // Real local render. The backend is the authority on both preconditions
+  // (MEDIA_GEN_LIVE armed + loopback engine reachable); it refuses with a
+  // stable code and nothing is written to the preview.
+  const runGenerate = async () => {
+    if (!prompt.trim()) { t('Add a prompt before generating.', 'warn'); return }
+    const [w, h] = sizeToDims(aspect, size)
+    setGenState('running'); setGenError(null)
+    try {
+      const r = await foundationApi.generateImage({ prompt: prompt.trim(), width: w, height: h, steps: 28 })
+      setGenImage(r.image); setGenMeta(r); setGenState('done')
+      t(`Rendered ${r.width}×${r.height} locally in ${r.seconds}s (seed ${r.seed}).`, 'info')
+    } catch (e) {
+      const code = e?.code || 'generation_failed'
+      setGenImage(null); setGenMeta(null)
+      setGenState('error')
+      setGenError({ code, message: e?.message || 'Generation failed.' })
+      t(`Generation refused: ${code}. Nothing was rendered.`, 'warn')
+    }
+  }
+
   const advanceRequest = (id, nextState) => {
     setRequests(prev => prev.map(r => r.id === id ? { ...r, state: nextState } : r))
     t(`Request ${id} → ${nextState} (local record only).`, 'info')
@@ -627,8 +666,9 @@ export default function CreativeStudio() {
       <div className="room-bottom-safe">
       <DataNotice tone="sample" title="This room is a local workflow workspace">
         Briefs, requests, assets, variants, and bundles are real records you create here and are stored in this browser.
-        No image or video is generated or depicted — there is no wired creative provider in this build. A blocked request
-        means generation is <strong>planned, not armed</strong>, not that an asset failed.
+        The <strong>Image Composer</strong> additionally renders on your own localhost engine when armed. Video remains
+        planning-only — no video pipeline exists. A blocked <em>request record</em> means generation is not armed, not that
+        an asset failed.
       </DataNotice>
 
       <div className="card" style={{ marginBottom: 16, padding: '10px 14px' }}>
@@ -811,15 +851,18 @@ export default function CreativeStudio() {
                 </div>
 
                 <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
-                  <button className="btn btn-sm" onClick={() => submitRequest('image')}>Queue Image Request</button>
+                  <button className="btn btn-sm" onClick={runGenerate} disabled={genState === 'running'}>
+                    {genState === 'running' ? 'Rendering…' : 'Generate Image'}
+                  </button>
+                  <button className="btn btn-sm btn-ghost" onClick={() => submitRequest('image')}>Queue Request (record only)</button>
                   <button className="btn btn-sm btn-ghost" onClick={generateVariants} title="Records draft variant rows for the active brief — generates no image">Generate Variants</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => { setPrompt(''); setRefIds([]); t('Composer cleared (local).', 'info') }}>Clear</button>
+                  <button className="btn btn-sm btn-ghost" onClick={() => { setPrompt(''); setRefIds([]); setGenImage(null); setGenMeta(null); setGenState('idle'); setGenError(null); t('Composer cleared (local).', 'info') }}>Clear</button>
                 </div>
                 <div className="text-low" style={{ fontSize: 11 }}>
-                  Queue Image Request stores a real local request record. Generate Variants records draft variant rows for the
-                  active brief. Neither renders an image: the app has no media route, so generation is{' '}
-                  <strong>planned, not armed</strong>. Arming needs {IMAGE_PROVIDER.env} pointing at a running{' '}
-                  {IMAGE_PROVIDER.engine}, model weights installed, and {IMAGE_PROVIDER.gate}=1.
+                  <strong>Generate Image</strong> renders on your own localhost engine (<strong>{IMAGE_PROVIDER.engine}</strong>) and returns the
+                  real PNG. It is armed only when <span className="text-mono">{IMAGE_PROVIDER.gate}=1</span> and the engine is reachable, and it
+                  reports the exact refusal code otherwise. <strong>Queue Request</strong> and <strong>Generate Variants</strong> only record
+                  planning rows — they render nothing.
                 </div>
               </div>
             </div>
@@ -829,12 +872,45 @@ export default function CreativeStudio() {
               <div className="card">
                 <div className="card-head">
                   <h3 className="card-title" style={{ fontSize: 15 }}>Preview</h3>
-                  <span className="pill pill-unknown" style={{ fontSize: 10 }}>planned · not armed</span>
+                  <span
+                    className={`pill ${genState === 'done' ? 'pill-forest' : genState === 'error' ? 'pill-error' : genState === 'running' ? 'pill-warn' : 'pill-muted'}`}
+                    style={{ fontSize: 10 }}
+                  >
+                    {genState === 'done' ? 'local render' : genState === 'running' ? 'rendering…' : genState === 'error' ? 'refused' : 'no render yet'}
+                  </span>
                 </div>
-                <Thumb height={150} label={`${aspect} · ${format}`} note="No generated asset — planned, not armed" />
-                <div className="text-low" style={{ fontSize: 11 }}>
-                  This preview stays empty until a connected provider returns an asset. A blank frame here is the honest state, not a failed load.
-                </div>
+                {genState === 'done' && genImage ? (
+                  <>
+                    <img
+                      src={genImage}
+                      alt="Local render"
+                      style={{ width: '100%', borderRadius: 6, border: '1px solid var(--divider-mid)', display: 'block' }}
+                    />
+                    <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>
+                      {genMeta?.width}×{genMeta?.height} · {genMeta?.seconds}s · {genMeta?.steps} steps · seed {genMeta?.seed} ·{' '}
+                      {Math.round((genMeta?.bytes || 0) / 1024)} KB · localhost {IMAGE_PROVIDER.engine}
+                    </div>
+                    <div className="inline-flex" style={{ gap: 8, marginTop: 8 }}>
+                      <a className="btn btn-sm btn-ghost" href={genImage} download={`northstar-${genMeta?.seed}.png`}>Download PNG</a>
+                    </div>
+                  </>
+                ) : genState === 'error' ? (
+                  <div className="alert" style={{ marginBottom: 0 }}>
+                    <div className="alert-title">Not rendered — <span className="text-mono">{genError?.code}</span></div>
+                    <div className="alert-text">{genError?.message}</div>
+                  </div>
+                ) : (
+                  <>
+                    <Thumb
+                      height={150}
+                      label={`${aspect} · ${format}`}
+                      note={genState === 'running' ? 'Rendering on your local engine…' : 'No render yet — press Generate Image'}
+                    />
+                    <div className="text-low" style={{ fontSize: 11 }}>
+                      The preview shows the real returned PNG, or nothing. It never shows a fabricated asset.
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
