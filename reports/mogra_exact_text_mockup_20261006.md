@@ -102,7 +102,7 @@ Any service reuses it with one call:
 |-------|--------|
 | `resolve_models()` | `comfy_up` + `gguf_node` true; clip/vae/t2i_unet/edit_unet resolved; `qwen_ready` + `qwen_edit_ready` true |
 | Qwen-Image-2512 t2i, 896×1152, 20 steps | scene in **131.5 s** |
-| Qwen-Image-Edit-2511 GGUF, 20 steps | **first run FAILED** on the truncated model (`cannot reshape … 24294816 … (18432,1728)`, 6.44 s); re-run after full re-download — see re-validation below |
+| Qwen-Image-Edit-2511 GGUF, 20 steps | first run FAILED on the truncated model (`cannot reshape … (18432,1728)`, 6.44 s); after full re-download → **edit executed in 203.0 s** |
 | `POST /api/creative/mockup` (`generate=true`) | **HTTP 200 in 123.7 s** → 958,947-byte PNG + sidecar, lane `qwen-image-2512` |
 | `GET /api/creative/health` `/presets` `/mogra-mockup` `/static/mockup.html` | all **200** |
 | CLI composite smoke | `OK lane=composited_only` → real PNGs |
@@ -110,6 +110,7 @@ Any service reuses it with one call:
 
 Artifacts under `generated_images/mogra_mockups/` (git-ignored):
 `live_mockup_turmeric.png` (AI turmeric jar + exact text),
+`live_mockup_turmeric_edited.png` (Edit-2511 refined + exact text),
 `mogra_organic_black_peppercorns_*.png` (AI pouch + exact text),
 `smoke_turmeric_jar.png`, `smoke_rect_peppercorns.png` (composite-only).
 
@@ -121,7 +122,16 @@ that curvature does not destroy label content.
 
 **Second bug found and fixed:** the pre-existing Edit-2511 GGUF was truncated and
 failed to load (`cannot reshape array of size 24294816 into shape (18432,1728)`);
-re-downloaded in full.
+re-downloaded in full from `unsloth/Qwen-Image-Edit-2511-GGUF`.
+
+**Third bug found and fixed:** `ComfyClient.wait_for` only returned on non-empty
+`outputs`, so a failed ComfyUI run (empty outputs + `status_str == "error"`) hung
+until the 900 s timeout instead of raising. It now detects `status_str == "error"`
+immediately and surfaces the ComfyUI message.
+
+After the fixes the full edit path was re-run live: Qwen-Image-Edit-2511 refined
+the generated scene in **203.0 s**, then exact text was composited onto the edited
+render in **4.5 s** → `generated_images/mogra_mockups/live_mockup_turmeric_edited.png`.
 
 ---
 

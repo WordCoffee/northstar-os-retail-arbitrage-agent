@@ -203,7 +203,7 @@ Machine: RTX 5080 Laptop 16 GB VRAM, 16 GB RAM, Python 3.14, Pillow 12.3.
 |-------|--------|
 | `resolve_models()` against live ComfyUI | `comfy_up` + `gguf_node` true; clip, vae, t2i_unet, edit_unet all resolved; `qwen_ready` + `qwen_edit_ready` true |
 | Qwen-Image-2512 t2i, 896×1152, 20 steps | scene generated in **131.5 s** |
-| Qwen-Image-Edit-2511 (GGUF), 20 steps | edit executed after re-download (see note) |
+| Qwen-Image-Edit-2511 (GGUF), 20 steps | edit executed in **203.0 s** (after re-downloading the truncated model) |
 | `POST /api/creative/mockup` (`generate=true`) | **HTTP 200 in 123.7 s** → 958,947-byte PNG + JSON sidecar, lane `qwen-image-2512` |
 | `GET /api/creative/health`, `/presets`, `/mogra-mockup` | all **200** |
 | Offline tests | **38 passed** (`test_creative_mockup.py` + `test_creative_routes.py`) |
@@ -211,8 +211,8 @@ Machine: RTX 5080 Laptop 16 GB VRAM, 16 GB RAM, Python 3.14, Pillow 12.3.
 
 Sample outputs (git-ignored, regenerable) under `generated_images/mogra_mockups/`:
 `live_mockup_turmeric.png` and `mogra_organic_black_peppercorns_*.png` (AI scene +
-exact text), plus `smoke_turmeric_jar.png` / `smoke_rect_peppercorns.png`
-(composite-only).
+exact text), `live_mockup_turmeric_edited.png` (Edit-2511 refined + exact text),
+plus `smoke_turmeric_jar.png` / `smoke_rect_peppercorns.png` (composite-only).
 
 **Edit model note:** the pre-existing `qwen-image-edit-2511-Q4_K_M.gguf` was a
 **truncated 3.16 GB download** (a 20B Q4_K_M is ~12.34 GB) and failed to load with

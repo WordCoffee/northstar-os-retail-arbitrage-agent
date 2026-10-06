@@ -182,11 +182,14 @@ class ComfyClient:
         while time.time() < deadline:
             entry = self.history(prompt_id)
             rec = entry.get(prompt_id)
-            if rec and rec.get("outputs"):
+            if rec:
                 status = (rec.get("status") or {}).get("status_str")
                 if status == "error":
-                    raise ComfyUIError(f"ComfyUI execution error: {rec.get('status')}")
-                return rec
+                    msgs = (rec.get("status") or {}).get("messages") or []
+                    detail = msgs[-1] if msgs else rec.get("status")
+                    raise ComfyUIError(f"ComfyUI execution error: {detail}")
+                if rec.get("outputs"):
+                    return rec
             time.sleep(poll)
         raise ComfyUIError(f"timed out after {timeout:.0f}s waiting for {prompt_id}")
 
