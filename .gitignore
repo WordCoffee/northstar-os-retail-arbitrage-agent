@@ -22,3 +22,6 @@ Northstar_backend_audit_export/
 # output dirs are now ignored going forward. History rewrite = operator decision.
 data/scored/
 data/normalized/
+
+# Mogra mockup workflow outputs (generated locally; always regenerable)
+generated_images/mogra_mockups/

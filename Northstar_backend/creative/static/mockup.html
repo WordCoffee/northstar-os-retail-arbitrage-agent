@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mogra Organics — Mockup Studio</title>
+<style>
+  :root{
+    --bone:#F6F2E9; --paper:#FFFDF8; --ink:#1A2C22; --pine:#1F5E3F;
+    --muted:#627065; --line:#D8D2C4; --shadow:0 6px 24px rgba(26,44,34,.10);
+    --sans:"DM Sans",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    --serif:"Libre Baskerville",Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bone);color:var(--ink);font-family:var(--sans);}
+  header{padding:28px 32px 8px;}
+  h1{font-family:var(--serif);font-size:30px;margin:0 0 4px;}
+  header p{margin:0;color:var(--muted);}
+  .wrap{display:grid;grid-template-columns:420px 1fr;gap:24px;padding:20px 32px 48px;}
+  @media(max-width:1000px){.wrap{grid-template-columns:1fr;}}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;
+        padding:20px;box-shadow:var(--shadow);}
+  .card h2{font-family:var(--serif);font-size:18px;margin:0 0 14px;}
+  label{display:block;font-size:13px;font-weight:600;margin:12px 0 4px;color:var(--ink);}
+  select,input[type=text],textarea{width:100%;padding:10px 12px;border:1px solid var(--line);
+        border-radius:9px;font-family:var(--sans);font-size:14px;background:#fff;color:var(--ink);}
+  textarea{min-height:66px;resize:vertical;}
+  .drop{border:2px dashed var(--line);border-radius:14px;padding:26px 16px;text-align:center;
+        background:#fff;cursor:pointer;transition:.15s;}
+  .drop:hover,.drop.hot{border-color:var(--pine);background:#F2F8F4;}
+  .drop strong{display:block;font-size:16px;margin-bottom:4px;}
+  .drop small{color:var(--muted);}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .check{display:flex;align-items:center;gap:8px;margin-top:12px;font-weight:600;font-size:13px;}
+  .check input{width:auto;}
+  .primary{width:100%;margin-top:18px;padding:16px;border:0;border-radius:11px;
+        background:var(--pine);color:#fff;font-size:16px;font-weight:700;cursor:pointer;
+        font-family:var(--sans);}
+  .primary:disabled{opacity:.5;cursor:not-allowed;}
+  .secondary{padding:9px 14px;border:1px solid var(--line);background:#fff;border-radius:9px;
+        cursor:pointer;font-size:13px;font-weight:600;}
+  details{margin-top:14px;}
+  summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--pine);}
+  .grid4{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+  .grid4 input{padding:8px;}
+  .preview{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:700px){.preview{grid-template-columns:1fr;}}
+  .pane{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;
+        min-height:320px;display:flex;flex-direction:column;}
+  .pane h3{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 8px;}
+  .pane img{max-width:100%;border-radius:8px;display:block;margin:auto;}
+  .pane .empty{margin:auto;color:var(--muted);font-size:13px;text-align:center;}
+  .status{margin-top:16px;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.5;}
+  .status.ok{background:#EAF6EF;border:1px solid #BFE3CD;}
+  .status.err{background:#FBECEC;border:1px solid #E9C3C3;}
+  .status.info{background:#F0F2F6;border:1px solid #D5DAE3;}
+  .status a{color:var(--pine);font-weight:700;}
+  .lane{font-size:12px;color:var(--muted);margin-top:6px;}
+  .actions{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Mogra Organics — Mockup Studio</h1>
+  <p>Upload a product image or generate a base scene, then stamp <b>exact</b> packaging text.</p>
+</header>
+
+<div class="wrap">
+  <!-- ---------- controls ---------- -->
+  <div class="card">
+    <h2>1 · Base image</h2>
+    <div id="drop" class="drop">
+      <strong>Click to upload, or drop an image here</strong>
+      <small>PNG / JPG · used as the base for your label</small>
+      <input id="file" type="file" accept="image/*" hidden />
+    </div>
+    <div class="check">
+      <input id="gen" type="checkbox" />
+      <label for="gen" style="margin:0">Or generate a base scene with local AI</label>
+    </div>
+    <label for="scenePrompt">Scene prompt (optional)</label>
+    <textarea id="scenePrompt" placeholder="leave blank to auto-build from container + product"></textarea>
+
+    <h2 style="margin-top:22px">2 · Presets</h2>
+    <label for="container">Container</label>
+    <select id="container"></select>
+    <label for="product">Product</label>
+    <select id="product"></select>
+    <label for="surface">Surface zone</label>
+    <select id="surface"></select>
+    <label for="style">Label style</label>
+    <select id="style"></select>
+
+    <details>
+      <summary>Advanced — label zone corners &amp; curvature</summary>
+      <div class="grid4" id="quadFields"></div>
+      <label for="curvature">Curvature (0 – 0.4)</label>
+      <input id="curvature" type="text" value="0" />
+    </details>
+  </div>
+
+  <!-- ---------- text + preview ---------- -->
+  <div>
+    <div class="card">
+      <h2>3 · Exact text</h2>
+      <div class="row">
+        <div><label for="brand">Brand</label><input id="brand" type="text" value="Mogra Organics" /></div>
+        <div><label for="tagline">Tagline</label><input id="tagline" type="text" value="Fuel Your Focus." /></div>
+      </div>
+      <label for="productName">Product name</label>
+      <input id="productName" type="text" />
+      <div class="row">
+        <div><label for="descriptor">Descriptor</label><input id="descriptor" type="text" /></div>
+        <div><label for="netWeight">Net weight</label><input id="netWeight" type="text" /></div>
+      </div>
+      <label for="ingredients">Ingredients (optional placeholder)</label>
+      <input id="ingredients" type="text" placeholder="leave blank — nothing is invented" />
+      <label for="rear">Rear-label placeholders (one per line, optional)</label>
+      <textarea id="rear" placeholder="e.g. STORE IN A COOL, DRY PLACE"></textarea>
+      <button id="go" class="primary">Generate Final Mockup</button>
+      <div id="status" class="status info">Ready. Upload an image or tick “generate a base scene”.</div>
+      <div id="lane" class="lane"></div>
+    </div>
+
+    <div class="card" style="margin-top:24px">
+      <h2>4 · Preview</h2>
+      <div class="preview">
+        <div class="pane"><h3>Base / source</h3><div id="srcEmpty" class="empty">No image yet</div><img id="srcImg" hidden /></div>
+        <div class="pane"><h3>Final mockup</h3><div id="outEmpty" class="empty">Nothing generated yet</div><img id="outImg" hidden /></div>
+      </div>
+      <div class="actions" id="outActions" hidden>
+        <button class="secondary" onclick="window.open(document.getElementById('outImg').src,'_blank')">Open full size</button>
+        <a id="dl" class="secondary" style="text-decoration:none" download>Download PNG</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let CATALOG = null, quad = null;
+
+function quadFromPreset(q){ return q.map(p=>[Number(p[0]),Number(p[1])]); }
+function renderQuadFields(){
+  if(!quad) return;
+  const names=['ul','ur','lr','ll'];
+  $('quadFields').innerHTML = quad.map((p,i)=>
+    `<div><label style="margin-top:6px">${names[i]} x,y</label>
+     <input type="text" data-i="${i}" value="${p[0].toFixed(3)},${p[1].toFixed(3)}"/></div>`).join('');
+  $('quadFields').querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('change',()=>{
+      const i=+inp.dataset.i, parts=inp.value.split(',').map(Number);
+      if(parts.length===2 && parts.every(n=>!isNaN(n))) quad[i]=parts;
+    });
+  });
+}
+function setStatus(kind,html){ const s=$('status'); s.className='status '+kind; s.innerHTML=html; }
+function fillField(id,v){ if(v!==null&&v!==undefined) $(id).value=v; }
+
+function applyProduct(){
+  const p = CATALOG.products[$('product').value]; if(!p) return;
+  fillField('brand',p.brand); fillField('tagline',p.tagline);
+  fillField('productName',p.product_name); fillField('descriptor',p.descriptor);
+  fillField('netWeight',p.net_weight);
+}
+function applyZone(){
+  const cid=$('container').value, sid=$('surface').value;
+  if(cid){ const c=CATALOG.containers[cid]; quad=quadFromPreset(c.quad_norm);
+    $('curvature').value=(c.curvature||0).toFixed(2);
+    if(c.default_style) $('style').value=c.default_style; }
+  else if(sid){ const s=CATALOG.surfaces[sid]; quad=quadFromPreset(s.quad_norm);
+    $('curvature').value=(s.curvature||0).toFixed(2);
+    if(s.style) $('style').value=s.style; }
+  renderQuadFields();
+}
+
+async function loadCatalog(){
+  const r = await fetch('/api/creative/presets'); CATALOG = await r.json();
+  const opt=(k,v)=>`<option value="${k}">${v.label||v.name||k}</option>`;
+  $('container').innerHTML = '<option value="">— none / use surface —</option>' +
+    Object.entries(CATALOG.containers).map(([k,v])=>opt(k,v)).join('');
+  $('product').innerHTML = Object.entries(CATALOG.products).map(([k,v])=>opt(k,v)).join('');
+  $('surface').innerHTML = Object.entries(CATALOG.surfaces).map(([k,v])=>opt(k,v)).join('');
+  $('style').innerHTML = Object.entries(CATALOG.styles).map(([k,v])=>opt(k,v)).join('');
+  applyProduct(); applyZone();
+  try{
+    const h = await (await fetch('/api/creative/health')).json();
+    $('lane').textContent = `ComfyUI: ${h.comfyui.up?'up':'down'} · Qwen t2i: ${h.qwen_ready?'ready':'missing'} · Qwen edit: ${h.qwen_edit_ready?'ready':'missing'}`;
+  }catch(e){}
+}
+
+// ---- upload ----
+let sourceB64 = null;
+function readFile(f){
+  if(!f) return;
+  const rd = new FileReader();
+  rd.onload = e => { sourceB64 = e.target.result;
+    $('srcImg').src = sourceB64; $('srcImg').hidden=false; $('srcEmpty').hidden=true;
+    setStatus('info','Image loaded. Fill the text fields and press Generate.'); };
+  rd.readAsDataURL(f);
+}
+$('drop').onclick = ()=>$('file').click();
+$('file').onchange = e=>readFile(e.target.files[0]);
+['dragover','dragenter'].forEach(ev=>$('drop').addEventListener(ev,e=>{e.preventDefault();$('drop').classList.add('hot');}));
+['dragleave','drop'].forEach(ev=>$('drop').addEventListener(ev,e=>{e.preventDefault();$('drop').classList.remove('hot');}));
+$('drop').addEventListener('drop',e=>readFile(e.dataTransfer.files[0]));
+
+$('product').onchange = applyProduct;
+$('container').onchange = applyZone;
+$('surface').onchange = applyZone;
+
+// ---- generate ----
+$('go').onclick = async () => {
+  if(!sourceB64 && !$('gen').checked){
+    setStatus('err','Choose a base image or tick “generate a base scene with local AI”.'); return;
+  }
+  const body = {
+    product: $('product').value,
+    container: $('container').value || null,
+    surface: $('surface').value,
+    style: $('style').value,
+    quad: quad, curvature: parseFloat($('curvature').value)||0,
+    brand: $('brand').value, tagline: $('tagline').value,
+    product_name: $('productName').value, descriptor: $('descriptor').value,
+    net_weight: $('netWeight').value, ingredients: $('ingredients').value,
+    rear_placeholders: $('rear').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    generate: $('gen').checked,
+    scene_prompt: $('scenePrompt').value || null,
+  };
+  if(sourceB64) body.source_base64 = sourceB64;
+  $('go').disabled = true; setStatus('info','Working… generating scene and stamping exact text.');
+  try{
+    const r = await fetch('/api/creative/mockup',{method:'POST',
+      headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+    const j = await r.json();
+    if(!r.ok) throw new Error(j.detail||('HTTP '+r.status));
+    $('outImg').src = j.url; $('outImg').hidden=false; $('outEmpty').hidden=true;
+    $('dl').href = j.url; $('outActions').hidden=false;
+    setStatus('ok',`Done. Scene lane: <b>${j.lane}</b>. <a href="${j.url}" target="_blank">Open PNG</a>`);
+  }catch(e){ setStatus('err','Failed: '+e.message); }
+  finally{ $('go').disabled=false; }
+};
+
+loadCatalog();
+</script>
+</body>
+</html>

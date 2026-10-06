@@ -222,6 +222,17 @@ def serve_golden_goose():
     return FileResponse(_GOOSE_STATIC / "golden-goose-panel.html")
 
 
+# Creative mockup lane — local image/text workflow (/api/creative/*, /mogra-mockup)
+# Additive, local-only: deterministic exact-text compositor + optional local
+# ComfyUI scene generation. Never required for the rest of the app to boot.
+try:
+    from creative.routes import mount_creative  # noqa: E402
+    mount_creative(app)
+    logger.info("Creative mockup lane mounted (/api/creative/*, /mogra-mockup)")
+except Exception as _exc:  # pragma: no cover - optional local lane
+    logger.warning(f"Creative mockup lane unavailable: {_exc}")
+
+
 KIRKLAND_CATALOG = [
     {
         "name": "Kirkland Signature Organic K-Cups Variety Pack (120ct)",
