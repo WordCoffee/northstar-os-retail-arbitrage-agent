@@ -10,9 +10,15 @@ import { LOCAL_DEV } from '../../foundation/dev.js'
 // environments ignore those headers, so this grants no production access and
 // cannot bypass a real auth posture. Role is deliberately "operator" so
 // internal-only surfaces (/beta-ops, /admin) remain guarded.
+//
+// orgId is intentionally EMPTY. The foundation DB is a fresh temp SQLite per
+// server start and seeds no users or orgs, so this shim user has no memberships:
+// requesting an org would 403 (cross_organization_access_denied) and strand the
+// operator on /sign-in. With the user only, /me resolves and
+// active_organization_id is null.
 const LOCAL_DEMO_IDENTIFIER = 'T2'
 const LOCAL_DEMO_PASSWORD = '123abc'
-const LOCAL_DEMO_SESSION = { userId: 'demo-t2', orgId: 'org-t2', role: 'operator', env: 'production' }
+const LOCAL_DEMO_SESSION = { userId: 'demo-t2', orgId: '', role: 'operator', env: 'production' }
 
 export default function SignIn() {
   const navigate = useNavigate()

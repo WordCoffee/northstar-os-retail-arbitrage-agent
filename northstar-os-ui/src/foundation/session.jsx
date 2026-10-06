@@ -81,6 +81,17 @@ export function SessionProvider({ children }) {
         setSession((s) => ({ ...ANON, loaded: true, authenticated: false }))
         return
       }
+      // A stale local dev session can carry an org the shim user is not a member
+      // of (the foundation DB seeds none), which would strand the operator on
+      // /sign-in forever. Drop the org and retry once — setDev re-runs refresh.
+      if (e.status === 403 && (e.detail?.code || e.code) === 'cross_organization_access_denied') {
+        const current = getDevSession()
+        if (current.orgId) {
+          setDevSession({ ...current, orgId: '' })
+          setDev(getDevSession())
+          return
+        }
+      }
       // 403 with org_lifecycle_blocked → account suspended/paused/cancelled:
       // show a clear account-status screen instead of a generic error.
       if (e.status === 403 && (e.detail?.code || e.code) === 'org_lifecycle_blocked') {
