@@ -226,6 +226,15 @@
       "evidence": "probe-20260914T2043Z_unwrangle_amazon_detail_B00BH3HPZW.json (provider-probes/); 2026-09-14 history entry; prior quota evidence in confirmed_facts (2026-09-05 diagnostics)",
       "status": "open",
       "status_updated_at": "2026-09-14T20:43:00Z"
+    },
+    {
+      "id": "mogra_mockup_quad_vs_ai_label_zone_alignment",
+      "discovered_in": "Mogra exact-text mockup live validation, 2026-10-06",
+      "discovered_at": "2026-10-06T04:05:00Z",
+      "description": "The Qwen scene lane renders its own faint blank label zone that may not exactly match the preset label quad, so the composited bone panel can sit slightly off-centre within it. Fix options: prompt harder for a flat panel; run Qwen-Image-Edit-2511 to blank/align the panel then re-compose; or tune per-container quads. Also: exact brand typography depends on OS fonts (C:/Windows/Fonts) until Mogra brand fonts are bundled; curvature is a single-parameter cylindrical approximation (no vertical bow).",
+      "resolution": "",
+      "status": "open",
+      "severity": "low"
     }
   ],
   "completed_batches": [
@@ -540,7 +549,7 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT — the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ — includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "P5-T4 continue: move inline SAMPLE behind a Demo toggle; apply P4-T3b rights filter where third-party data surfaces; extend acceptance with round-trip; P5-T3 monthly scheduling/snapshots still pending",
+  "next_batch": "MOGRA-IMAGE-TEXT follow-ups: (a) run Qwen-Image-Edit-2511 to blank/align the label panel before compositing; (b) tune per-container quads to the AI blank zone; (c) bundle Mogra brand fonts for exact typography; (d) optionally surface /mogra-mockup inside the React Creative Studio room (foundation router intentionally untouched).",
   "git_baseline": {
     "commit_hash": "97d5366",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -575,7 +584,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T02:42:18Z",
+  "last_updated": "2026-10-06T04:05:00Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1365,6 +1374,12 @@
       "batch": "OA-2",
       "summary": "Owner said 'try again'; retried Cloud Shell and this time the terminal rendered (prompt northstar@cloudshell:~ (us-chicago-1)). Ran the read-only capacity report via the pre-authenticated OCI CLI: oci compute compute-capacity-report create per AD for VM.Standard.A1.Flex at both 1 OCPU/6 GB and 2 OCPU/12 GB, no fault domain. EXACT RESULTS: AD-1 (sqDB:US-CHICAGO-1-AD-1) 1/6 = OUT_OF_HOST_CAPACITY (available-count null); AD-1 2/12 = OUT_OF_HOST_CAPACITY (null); AD-2 1/6 = OUT_OF_HOST_CAPACITY (null); AD-2 2/12 = OUT_OF_HOST_CAPACITY (null); AD-3 1/6 = OUT_OF_HOST_CAPACITY (null); AD-3 2/12 = OUT_OF_HOST_CAPACITY (null). fault-domain null; nvmes 0. Source: 2026-09-30T15:5xZ, Oracle Cloud Shell, tenancy northstarosllc, user northstarosllc@gmail.com, region us-chicago-1. Read-only; no resources created/modified; network unchanged. A1 still visibly 'Always Free-eligible'; no paid/trial/upgrade indication. Per rule (report shows no capacity) STOPPED. Recommended next manual recheck ~2026-10-01T04:00-08:00Z (off-peak) and periodically every ~6-12h; re-run report; if availability-status != OUT_OF_HOST_CAPACITY with non-null available-count, request exactly one create attempt in the named AD. Report: reports/oa2_capacity_report_result_20260930T1556Z.md.",
       "next_action": "STOP. Await owner: next manual recheck ~2026-10-01T04:00-08:00Z (or later), re-run the capacity report; if capacity appears, authorize one create attempt in the named AD. No create proposed now."
+    },
+    {
+      "ts": "2026-10-06T04:05:00Z",
+      "activity": "mogra_exact_text_mockup_workflow",
+      "batch": "MOGRA-IMAGE-TEXT",
+      "summary": "Built the reusable NorthstarOS image/text generation lane on branch feature/mogra-exact-text-mockup (worktree northstar-wt-mogra). INSTALLED/VALIDATED local Qwen image lane: text encoder qwen_2.5_vl_7b_nvfp4.safetensors (5.69 GB, Comfy-Org/Qwen-Image_ComfyUI), VAE qwen_image_vae.safetensors (0.24 GB), and Qwen-Image-2512 Q4_K_M GGUF (12.34 GB, unsloth), alongside the already-present Qwen-Image-Edit-2511 Q4_K_M GGUF (3.16 GB) and ComfyUI-GGUF node. NEW PACKAGE Northstar_backend/creative/: exact_text.py (deterministic exact-text compositor: rectangle / 4-corner quad perspective warp / cylindrical curvature; brand-content guard that refuses invented seals, nutrition facts, UPCs, lot codes, supplier/legal text), comfy_client.py (ComfyUI client + Qwen-Image-2512 t2i, Qwen-Image-Edit-2511 and FLUX GGUF workflow builders mirroring ComfyUI blueprints + model resolution), presets.py (Mogra brand + 3 containers + 3 products + generic surface zones + styles), mogra_mockup.py (build_mockup pipeline + CLI with JSON sidecar), routes.py + static/mockup.html (/api/creative/* and a beginner /mogra-mockup UI), and main.py mounts the lane additively/local-only. LIVE VALIDATION on RTX 5080 16GB: resolve_models -> qwen_ready + qwen_edit_ready true; Qwen-Image-2512 t2i scene 896x1152 in 131.5s; full POST /api/creative/mockup generate=true -> HTTP 200 in 123.7s producing a 958,947-byte PNG + JSON sidecar (lane qwen-image-2512); app endpoints /api/creative/health, /presets, /mogra-mockup all 200. 37 offline pytest tests pass (36 mockup + routes). RULE ENFORCED: AI generates/edits the scene only; every final glyph is a deterministic programmatic overlay, never AI-guessed."
     }
   ]
 }

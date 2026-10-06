@@ -248,7 +248,7 @@ def resolve_models(client: Optional[ComfyClient] = None) -> Dict[str, Any]:
         "source": "disk",
     }
 
-    clips = unets = vaes = None
+    clips = unets = vaes = unets_plain = None
     c = client or ComfyClient()
     if c.is_up():
         result["comfy_up"] = True
@@ -259,6 +259,10 @@ def resolve_models(client: Optional[ComfyClient] = None) -> Dict[str, Any]:
             unets = _choices(gguf_info, "UnetLoaderGGUF", "unet_name")
         except Exception:
             unets = None
+        try:
+            unets_plain = _choices(c.object_info("UNETLoader"), "UNETLoader", "unet_name")
+        except Exception:
+            unets_plain = None
         try:
             clips = _choices(c.object_info("CLIPLoader"), "CLIPLoader", "clip_name")
         except Exception:
@@ -282,7 +286,13 @@ def resolve_models(client: Optional[ComfyClient] = None) -> Dict[str, Any]:
     result["vae"] = pick(QWEN_VAE_DEFAULT, vaes, exp["vae"].exists())
     result["t2i_unet"] = pick(QWEN_T2I_UNET_DEFAULT, unets, exp["t2i_unet"].exists())
     result["edit_unet"] = pick(QWEN_EDIT_UNET_DEFAULT, unets, exp["edit_unet"].exists())
-    result["flux_unet"] = pick(FLUX_UNET_DEFAULT, unets, exp["flux_unet"].exists())
+    if not result["edit_unet"]:
+        result["edit_unet"] = pick(QWEN_EDIT_UNET_DEFAULT, unets_plain, False)
+    result["edit_unet_loader"] = (
+        "gguf" if (result["edit_unet"] or "").lower().endswith(".gguf")
+        else ("unet" if result["edit_unet"] else None)
+    )
+    result["flux_unet"] = pick(FLUX_UNET_DEFAULT, unets_plain, exp["flux_unet"].exists())
     result["qwen_ready"] = bool(result["clip"] and result["vae"] and result["t2i_unet"])
     result["qwen_edit_ready"] = bool(result["clip"] and result["vae"] and result["edit_unet"])
     return result
@@ -294,6 +304,18 @@ def resolve_models(client: Optional[ComfyClient] = None) -> Dict[str, Any]:
 
 def _seed(seed: Optional[int]) -> int:
     return int(seed) if seed is not None else random.randint(0, 2 ** 31 - 1)
+
+
+def _unet_loader(unet_name: str) -> Dict[str, Any]:
+    """Pick the right UNET loader node: GGUF quant vs regular safetensors.
+
+    Lets the same workflow builder serve a GGUF lane (``UnetLoaderGGUF``, needs
+    the ComfyUI-GGUF node) or an official safetensors lane (``UNETLoader``).
+    """
+    if unet_name.lower().endswith(".gguf"):
+        return {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": unet_name}}
+    return {"class_type": "UNETLoader",
+            "inputs": {"unet_name": unet_name, "weight_dtype": "default"}}
 
 
 def qwen_t2i_workflow(
@@ -318,7 +340,7 @@ def qwen_t2i_workflow(
         "1": {"class_type": "CLIPLoader",
               "inputs": {"clip_name": clip_name, "type": "qwen_image", "device": "default"}},
         "2": {"class_type": "VAELoader", "inputs": {"vae_name": vae_name}},
-        "3": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": unet_name}},
+        "3": _unet_loader(unet_name),
         "4": {"class_type": "ModelSamplingAuraFlow",
               "inputs": {"model": ["3", 0], "shift": shift}},
         "5": {"class_type": "CLIPTextEncode",
@@ -360,7 +382,7 @@ def qwen_edit_workflow(
         "1": {"class_type": "CLIPLoader",
               "inputs": {"clip_name": clip_name, "type": "qwen_image", "device": "default"}},
         "2": {"class_type": "VAELoader", "inputs": {"vae_name": vae_name}},
-        "3": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": unet_name}},
+        "3": _unet_loader(unet_name),
         "4": {"class_type": "ModelSamplingAuraFlow",
               "inputs": {"model": ["3", 0], "shift": shift}},
         "5": {"class_type": "CFGNorm", "inputs": {"model": ["4", 0], "strength": 1.0}},

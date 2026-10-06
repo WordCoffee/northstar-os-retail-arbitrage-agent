@@ -230,6 +230,16 @@ def test_qwen_edit_graph_is_valid():
             "FluxKontextImageScale", "KSampler"} <= types
 
 
+def test_unet_loader_switches_on_quant_format():
+    g = comfy_client.qwen_edit_workflow("x", "src.png",
+                                        unet_name="qwen-image-edit-2511-Q4_K_M.gguf")
+    assert g["3"]["class_type"] == "UnetLoaderGGUF"
+    s = comfy_client.qwen_edit_workflow("x", "src.png",
+                                        unet_name="qwen_image_edit_2511_fp8mixed.safetensors")
+    assert s["3"]["class_type"] == "UNETLoader"
+    _assert_valid_graph(s)
+
+
 def test_flux_fallback_graph_is_valid():
     wf = comfy_client.flux_t2i_workflow("clean product scene, no text")
     _assert_valid_graph(wf)

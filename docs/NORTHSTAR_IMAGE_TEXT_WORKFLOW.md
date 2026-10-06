@@ -195,7 +195,38 @@ service can re-render deterministically.
 
 ---
 
-## 8. Known limitations / next steps
+## 8. Validation evidence (live, this pass)
+
+Machine: RTX 5080 Laptop 16 GB VRAM, 16 GB RAM, Python 3.14, Pillow 12.3.
+
+| Check | Result |
+|-------|--------|
+| `resolve_models()` against live ComfyUI | `comfy_up` + `gguf_node` true; clip, vae, t2i_unet, edit_unet all resolved; `qwen_ready` + `qwen_edit_ready` true |
+| Qwen-Image-2512 t2i, 896×1152, 20 steps | scene generated in **131.5 s** |
+| Qwen-Image-Edit-2511 (GGUF), 20 steps | edit executed after re-download (see note) |
+| `POST /api/creative/mockup` (`generate=true`) | **HTTP 200 in 123.7 s** → 958,947-byte PNG + JSON sidecar, lane `qwen-image-2512` |
+| `GET /api/creative/health`, `/presets`, `/mogra-mockup` | all **200** |
+| Offline tests | **38 passed** (`test_creative_mockup.py` + `test_creative_routes.py`) |
+| Exact-text composite speed | ~4 s per 896×1152 image (deterministic) |
+
+Sample outputs (git-ignored, regenerable) under `generated_images/mogra_mockups/`:
+`live_mockup_turmeric.png` and `mogra_organic_black_peppercorns_*.png` (AI scene +
+exact text), plus `smoke_turmeric_jar.png` / `smoke_rect_peppercorns.png`
+(composite-only).
+
+**Edit model note:** the pre-existing `qwen-image-edit-2511-Q4_K_M.gguf` was a
+**truncated 3.16 GB download** (a 20B Q4_K_M is ~12.34 GB) and failed to load with
+`cannot reshape array of size 24294816 into shape (18432,1728)`. It was retired to
+`*.gguf.truncated` and re-downloaded in full from `unsloth/Qwen-Image-Edit-2511-GGUF`.
+
+**Hardware note:** the official fp8mixed Edit-2511 safetensors is ~19 GB; on a
+16 GB-RAM box the 12.34 GB Q4_K_M GGUF is the correct lane. The loader
+auto-selects GGUF vs safetensors by file extension, so an fp8 upgrade is a
+one-file change.
+
+---
+
+## 9. Known limitations / next steps
 
 * Generation speed depends on the local GPU; the Q4_K_M lanes are chosen for a
   16 GB card. Very large source images are downscaled by `FluxKontextImageScale`
