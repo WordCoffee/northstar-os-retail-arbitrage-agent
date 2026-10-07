@@ -4,6 +4,102 @@ import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import foundationApi from '../../foundation/api.js'
+import { settle } from '../../services/signals.js'
+
+// ═══ Real decision-control evaluate (backend gate policy) ═══
+// A numeric score never sets PURCHASE_READY; mandatory gates + explicit approval do.
+const GG_GATES = ['product_identity', 'variation_identity', 'pack_identity', 'economics_complete',
+  'cost_known', 'fees_known', 'eligibility', 'sourcing_route', 'documentation', 'brand_permission']
+const GATE_OPTS = ['PASS', 'FAIL', 'UNKNOWN', 'NOT_APPLICABLE']
+const READINESS_OPTS = ['COMPLETE_VERIFIED', 'COMPLETE_ESTIMATED', 'SOURCE_UNVERIFIED', 'UNKNOWN']
+
+function EvaluatePanel() {
+  const [form, setForm] = useState({ item_id: '', economics_readiness: 'COMPLETE_VERIFIED', sample: false, approved: false })
+  const [gates, setGates] = useState(() => Object.fromEntries(GG_GATES.map(g => [g, 'PASS'])))
+  const [state, setState] = useState({ phase: 'idle' })
+
+  const run = async () => {
+    setState({ phase: 'submitting' })
+    const body = {
+      item_id: form.item_id || undefined,
+      gate_inputs: gates,
+      economics_readiness: form.economics_readiness,
+      approval: form.approved ? { state: 'GRANTED' } : { state: 'none' },
+      sample: form.sample,
+    }
+    const r = await settle(foundationApi.goldenGooseEvaluate(body))
+    if (r.ok) setState({ phase: 'done', value: r.value })
+    else setState({ phase: (r.error && r.error.status === 401) ? 'auth' : 'error', message: (r.error && r.error.message) || 'Evaluate failed.' })
+  }
+
+  const dec = state.phase === 'done' && state.value ? state.value.decision : null
+
+  return (
+    <div className="card" data-testid="gg-evaluate" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Evaluate opportunity (decision control)</h3>
+        <span className="pill pill-muted">backend gate policy</span>
+      </div>
+      <p className="text-low" style={{ fontSize: 12, marginBottom: 12 }}>
+        Set the mandatory gates and economics readiness; the backend decides the review/purchase state. A score alone never yields PURCHASE_READY — mandatory gates and explicit approval control readiness.
+      </p>
+      <div className="grid-3" style={{ gap: 12, marginBottom: 12 }}>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Item id (optional)</span>
+          <input className="field" value={form.item_id} onChange={e => setForm(f => ({ ...f, item_id: e.target.value }))} placeholder="e.g. GG-001" />
+        </label>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Economics readiness</span>
+          <select className="field" value={form.economics_readiness} onChange={e => setForm(f => ({ ...f, economics_readiness: e.target.value }))}>
+            {READINESS_OPTS.map(r => <option key={r} value={r}>{r}</option>)}
+          </select>
+        </label>
+        <div className="stack" style={{ gap: 8, justifyContent: 'center' }}>
+          <div className="check-row"><input type="checkbox" id="gg-sample" checked={form.sample} onChange={e => setForm(f => ({ ...f, sample: e.target.checked }))} /><label htmlFor="gg-sample">Sample row (never purchase-ready)</label></div>
+          <div className="check-row"><input type="checkbox" id="gg-approve" checked={form.approved} onChange={e => setForm(f => ({ ...f, approved: e.target.checked }))} /><label htmlFor="gg-approve">Approval granted (explicit)</label></div>
+        </div>
+      </div>
+      <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Mandatory gates</div>
+      <div className="grid-5" style={{ gap: 10, marginBottom: 12 }}>
+        {GG_GATES.map(g => (
+          <label key={g} className="stack" style={{ gap: 3 }}>
+            <span className="text-low" style={{ fontSize: 10 }}>{g}</span>
+            <select className="field" value={gates[g]} onChange={e => setGates(s => ({ ...s, [g]: e.target.value }))}>
+              {GATE_OPTS.map(o => <option key={o} value={o}>{o}</option>)}
+            </select>
+          </label>
+        ))}
+      </div>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <button className="btn btn-sm" onClick={run} disabled={state.phase === 'submitting'}>{state.phase === 'submitting' ? 'Evaluating…' : 'Evaluate'}</button>
+        {state.phase === 'auth' && <span className="pill pill-unknown">Sign in required.</span>}
+        {state.phase === 'error' && <span className="pill pill-warn">{state.message}</span>}
+      </div>
+      {dec && (
+        <div data-testid="gg-evaluate-result" style={{ marginTop: 14 }}>
+          <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+            <span className={`pill ${dec.decision_state === 'PURCHASE_READY' ? 'pill-ok' : dec.decision_state === 'APPROVAL_REQUIRED' ? 'pill-ochre' : 'pill-muted'}`}>{dec.decision_state}</span>
+            <span className={`pill ${dec.purchase_ready ? 'pill-ok' : 'pill-muted'}`} title="Purchase authorization is never granted by a score">{dec.purchase_ready ? 'purchase-ready' : 'purchase NOT authorized'}</span>
+            {dec.overall_score != null && <span className="pill pill-muted">score {dec.overall_score}</span>}
+            {state.value.resale_score != null && <span className="pill pill-muted">resale {state.value.resale_score}</span>}
+            <span className="pill pill-muted">approval: {dec.approval_state}</span>
+          </div>
+          {dec.missing_information && dec.missing_information.length > 0 && (
+            <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
+              <span className="text-low" style={{ fontSize: 11 }}>Missing:</span>
+              {dec.missing_information.map(m => <span key={m} className="pill pill-unknown" style={{ fontSize: 10 }}>{m}</span>)}
+            </div>
+          )}
+          {dec.warnings && dec.warnings.length > 0 && (
+            <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap' }}>
+              {dec.warnings.map((w, i) => <span key={i} className="pill pill-warn" style={{ fontSize: 10 }}>{w}</span>)}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
 
 const TABS = [
   { id: 'queue', label: 'Queue', count: 2 },
@@ -310,8 +406,10 @@ export default function GoldenGooseDesk() {
       </>}
     >
       <DataNotice tone="sample" title="Evidence-based surfacing — fictional sample data">
-        Opportunities are surfaced based on algorithmic analysis of market signals. Confidence levels reflect data quality, not purchase recommendations. All data is fictional sample data.
+        Opportunities are surfaced based on algorithmic analysis of market signals. Confidence levels reflect data quality, not purchase recommendations. The evaluate panel is a real backend decision-control; the opportunity queue below is fictional sample data.
       </DataNotice>
+
+      <EvaluatePanel />
 
       <RoomTabs tabs={TABS} base="/golden-goose" />
 
