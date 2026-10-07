@@ -78,6 +78,103 @@ def _label_components(mask: Any) -> Tuple[List[Dict[str, Any]], List[List[int]]]
     return comps, labels
 
 
+def _snap_to_edges(x0: int, y0: int, x1: int, y1: int, gx: Any, gy: Any,
+                   w: int, h: int, *, margin: int = 16,
+                   v_thresh: float = 0.020, h_thresh: float = 0.020) -> Tuple[int, int, int, int]:
+    """Extend a bright core to the nearest strong straight edge on each side.
+
+    Printed labels are bounded by crisp edges; shading (glass, folds) can push
+    part of the panel below the brightness threshold. Snapping recovers the true
+    extent without inventing one, because it only moves to a real edge nearby.
+    """
+    try:
+        import numpy as np
+    except Exception:  # pragma: no cover
+        return x0, y0, x1, y1
+
+    yspan = slice(max(0, y0), min(h, y1 + 1))
+    xspan = slice(max(0, x0), min(w, x1 + 1))
+    vprof = gx[yspan, :].mean(axis=0) if yspan.stop > yspan.start else None
+    hprof = gy[:, xspan].mean(axis=1) if xspan.stop > xspan.start else None
+
+    def first_above(prof, start, stop, step, thresh):
+        i = start
+        while (i - stop) * step <= 0:
+            if 0 <= i < len(prof) and prof[i] >= thresh:
+                return i
+            i += step
+        return None
+
+    if vprof is not None:
+        r = first_above(vprof, x1 + 1, min(w - 1, x1 + margin), 1, v_thresh)
+        if r is not None:
+            x1 = r
+        l = first_above(vprof, x0 - 1, max(0, x0 - margin), -1, v_thresh)
+        if l is not None:
+            x0 = l
+    if hprof is not None:
+        d = first_above(hprof, y1 + 1, min(h - 1, y1 + margin), 1, h_thresh)
+        if d is not None:
+            y1 = d
+        t = first_above(hprof, y0 - 1, max(0, y0 - margin), -1, h_thresh)
+        if t is not None:
+            y0 = t
+    return x0, y0, x1, y1
+
+
+def _runs(flags: Any) -> List[Tuple[int, int]]:
+    """Maximal runs of True in a 1-D boolean array-like."""
+    out: List[Tuple[int, int]] = []
+    start = None
+    for i, v in enumerate(flags):
+        if v and start is None:
+            start = i
+        elif not v and start is not None:
+            out.append((start, i - 1))
+            start = None
+    if start is not None:
+        out.append((start, len(flags) - 1))
+    return out
+
+
+def _split_rows_gap(sub: Any) -> List[Tuple[int, int]]:
+    return _runs(sub.any(axis=1))
+
+
+def _split_rows_edges(sub: Any, grad_band: Any, *, edge_thresh: float = 0.03,
+                      min_h: int = 12, depth: int = 3) -> List[Tuple[int, int]]:
+    """Split a row band at the strongest internal horizontal edge.
+
+    A printed label is bounded by crisp straight edges; a bright product window
+    continuous with the label usually is not. Only splits when both sides stay
+    tall enough, so well-behaved single panels are left untouched.
+    """
+    try:
+        import numpy as np
+    except Exception:  # pragma: no cover
+        return [(0, sub.shape[0] - 1)]
+    if depth <= 0 or sub.shape[0] < 2 * min_h:
+        return [(0, sub.shape[0] - 1)]
+    col_any = sub.any(axis=0)
+    if not col_any.any():
+        return [(0, sub.shape[0] - 1)]
+    x0, x1 = int(np.argmax(col_any)), int(len(col_any) - 1 - np.argmax(col_any[::-1]))
+    band = grad_band[:, x0:x1 + 1]
+    row_edge = band.mean(axis=1)
+    # ignore the outer 1px so the region's own boundary is not chosen
+    inner = row_edge[min_h:sub.shape[0] - min_h]
+    if inner.size == 0:
+        return [(0, sub.shape[0] - 1)]
+    k = int(np.argmax(inner)) + min_h
+    if row_edge[k] < edge_thresh:
+        return [(0, sub.shape[0] - 1)]
+    top = _split_rows_edges(sub[:k, :], grad_band[:k, :], edge_thresh=edge_thresh,
+                            min_h=min_h, depth=depth - 1)
+    bot = _split_rows_edges(sub[k:, :], grad_band[k:, :], edge_thresh=edge_thresh,
+                            min_h=min_h, depth=depth - 1)
+    return top + [(a + k, b + k) for a, b in bot]
+
+
 def detect_label_zone(image: Image.Image, *, max_side: int = 192,
                       val_min: float = 0.62, sat_max: float = 0.20,
                       min_area_frac: float = 0.02, max_area_frac: float = 0.5,
@@ -86,7 +183,13 @@ def detect_label_zone(image: Image.Image, *, max_side: int = 192,
                       pad_frac: float = 0.01, dilate_iters: int = 2,
                       min_confidence: float = 0.25,
                       ) -> Optional[Dict[str, Any]]:
-    """Return ``{"quad_norm": [...], "confidence": float, "bbox_px": [...]}`` or None."""
+    """Return ``{"quad_norm": [...], "confidence": float, "bbox_px": [...]}`` or None.
+
+    Dilation is only used to *find* the candidate panel. The candidate is then
+    split back on the undilated mask wherever a full-width/height gap exists, so
+    a bright product window next to the label cannot be fused into it. Panels are
+    flat and smooth, so among plausible sub-regions the smoothest wins.
+    """
     try:
         import numpy as np
     except Exception:  # pragma: no cover
@@ -104,51 +207,71 @@ def detect_label_zone(image: Image.Image, *, max_side: int = 192,
     mn = arr.min(axis=2)
     sat = np.where(mx > 1e-6, (mx - mn) / np.maximum(mx, 1e-6), 0.0)
     mask = (mx >= val_min) & (sat <= sat_max)
-
-    dil = _dilate(mask, dilate_iters)
-    comps, labels = _label_components(dil)
     h, w = mask.shape
     total = float(h * w)
 
-    best: Optional[Dict[str, Any]] = None
+    # Local gradient magnitude (blank panels are much smoother than product fill).
+    gray = arr.mean(axis=2)
+    gy = np.zeros_like(gray)
+    gx = np.zeros_like(gray)
+    gy[1:, :] = np.abs(gray[1:, :] - gray[:-1, :])
+    gx[:, 1:] = np.abs(gray[:, 1:] - gray[:, :-1])
+    grad = gx + gy
+
+    dil = _dilate(mask, dilate_iters)
+    comps, labels = _label_components(dil)
+    labels_np = np.asarray(labels)
+
+    regions: List[Dict[str, Any]] = []
     for c in comps:
         if c["border"]:
             continue
         minx, miny, maxx, maxy = c["bbox"]
-        bw = maxx - minx + 1
-        bh = maxy - miny + 1
-        if bw < 4 or bh < 4:
+        sub = mask[miny:maxy + 1, minx:maxx + 1]
+        if sub.size == 0:
             continue
-        area_frac = c["area"] / total
-        if not (min_area_frac <= area_frac <= max_area_frac):
-            continue
-        rect = c["area"] / float(bw * bh)
-        if rect < min_rectangularity:
-            continue
-        aspect = bw / float(bh)
-        if not (aspect_range[0] <= aspect <= aspect_range[1]):
-            continue
-        if best is None or c["area"] > best["area"]:
-            best = c
+        # Split the candidate on the RAW mask: row gaps, then horizontal edges,
+        # then column gaps.
+        for ry0, ry1 in _split_rows_gap(sub):
+            band_mask = sub[ry0:ry1 + 1, :]
+            band_grad = grad[miny + ry0:miny + ry1 + 1, minx:maxx + 1]
+            for by0, by1 in _split_rows_edges(band_mask, band_grad):
+                band = band_mask[by0:by1 + 1, :]
+                for rx0, rx1 in _runs(band.any(axis=0)):
+                    box = band[:, rx0:rx1 + 1]
+                    area = int(box.sum())
+                    bw, bh = box.shape[1], box.shape[0]
+                    if bw < 4 or bh < 4:
+                        continue
+                    area_frac = area / total
+                    if not (min_area_frac <= area_frac <= max_area_frac):
+                        continue
+                    rect = area / float(bw * bh)
+                    if rect < min_rectangularity:
+                        continue
+                    aspect = bw / float(bh)
+                    if not (aspect_range[0] <= aspect <= aspect_range[1]):
+                        continue
+                    gy0, gy1 = miny + ry0 + by0, miny + ry0 + by1
+                    g = float(band_grad[by0:by1 + 1, rx0:rx1 + 1][box].mean())
+                    regions.append({
+                        "bbox": (minx + rx0, gy0, minx + rx1, gy1),
+                        "area": area, "bw": bw, "bh": bh, "rect": rect,
+                        "area_frac": area_frac, "grad": g,
+                        "score": area_frac * rect * (1.0 / (1.0 + 25.0 * g)),
+                    })
 
-    if best is None:
+    if not regions:
         return None
+    best = max(regions, key=lambda r: r["score"])
 
-    # Tighten the box against the ORIGINAL (undilated) mask for this component.
-    labels_np = np.asarray(labels)
-    sel = (labels_np == best["id"]) & mask
-    if sel.any():
-        ys, xs = np.where(sel)
-        minx, maxx = int(xs.min()), int(xs.max())
-        miny, maxy = int(ys.min()), int(ys.max())
-        area = int(sel.sum())
-    else:  # pragma: no cover - defensive
+    minx, miny, maxx, maxy = best["bbox"]
+    minx, miny, maxx, maxy = _snap_to_edges(minx, miny, maxx, maxy, gx, gy, w, h,
+                                            margin=max(4, int(0.09 * w)))
+    bw, bh = maxx - minx + 1, maxy - miny + 1
+    if bw < 4 or bh < 4:
         minx, miny, maxx, maxy = best["bbox"]
-        area = best["area"]
-    bw = maxx - minx + 1
-    bh = maxy - miny + 1
-    rect = area / float(bw * bh)
-
+        bw, bh = best["bw"], best["bh"]
     SX = w0 / float(w)
     SY = h0 / float(h)
     x0 = max(0.0, (minx - pad_frac * bw) * SX)
@@ -160,16 +283,16 @@ def detect_label_zone(image: Image.Image, *, max_side: int = 192,
 
     quad: Quad = [[x0 / w0, y0 / h0], [x1 / w0, y0 / h0],
                   [x1 / w0, y1 / h0], [x0 / w0, y1 / h0]]
-    area_frac = area / total
-    confidence = round(min(1.0, rect * min(1.0, area_frac / 0.10)), 3)
+    confidence = round(min(1.0, best["rect"] * min(1.0, best["area_frac"] / 0.10)), 3)
     if confidence < min_confidence:
         # Too weak to trust — better to use the preset quad than a bad guess.
         return None
     return {
         "quad_norm": [[round(px, 5), round(py, 5)] for px, py in quad],
         "confidence": confidence,
-        "area_frac": round(area_frac, 4),
-        "rectangularity": round(rect, 3),
+        "area_frac": round(best["area_frac"], 4),
+        "rectangularity": round(best["rect"], 3),
+        "smoothness": round(best["grad"], 4),
         "bbox_px": [round(x0), round(y0), round(x1), round(y1)],
     }
 

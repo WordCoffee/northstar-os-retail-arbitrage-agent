@@ -350,23 +350,71 @@ def render_label_layer(spec: LabelSpec, size: Tuple[int, int],
 
     inner_w = w - 2 * pad
     cx = w / 2
+    avail_h = h - 2 * pad
 
-    # Base type scale relative to layer height, then width-fitted so nothing clips.
-    f_brand = _fit_font(draw, spec.brand, h * 0.115, serif=serif, bold=True, max_w=inner_w)
-    f_tag = _fit_font(draw, spec.tagline, h * 0.052, serif=serif, bold=False, max_w=inner_w)
-    f_prod = _fit_wrap_font(draw, spec.product_name, h * 0.150, serif=serif, bold=True,
-                            max_w=inner_w)
-    f_desc = _fit_wrap_font(draw, spec.descriptor, h * 0.062, serif=serif, bold=False,
-                            max_w=inner_w)
-    f_weight = _fit_font(draw, spec.net_weight, h * 0.066, serif=False, bold=True,
-                         max_w=inner_w)
-    f_small = load_font(int(h * 0.044), serif=False, bold=False)
+    def _fonts(scale: float) -> Dict[str, ImageFont.FreeTypeFont]:
+        sc = max(0.40, float(scale))
+        t = ImageDraw.Draw(Image.new("RGBA", (8, 8)))
+        return {
+            "brand": _fit_font(t, spec.brand, h * 0.115 * sc, serif=serif, bold=True, max_w=inner_w),
+            "tag": _fit_font(t, spec.tagline, h * 0.052 * sc, serif=serif, bold=False, max_w=inner_w),
+            "prod": _fit_wrap_font(t, spec.product_name, h * 0.150 * sc, serif=serif, bold=True,
+                                   max_w=inner_w),
+            "desc": _fit_wrap_font(t, spec.descriptor, h * 0.062 * sc, serif=serif, bold=False,
+                                   max_w=inner_w),
+            "weight": _fit_font(t, spec.net_weight, h * 0.066 * sc, serif=False, bold=True,
+                                max_w=inner_w),
+            "small": load_font(int(h * 0.044 * sc), serif=False, bold=False),
+        }
 
-    y = pad
+    def _est_height(fs: Dict[str, ImageFont.FreeTypeFont], scale: float) -> float:
+        t = ImageDraw.Draw(Image.new("RGBA", (8, 8)))
+
+        def lh(txt: str, font: ImageFont.FreeTypeFont) -> float:
+            b = t.textbbox((0, 0), txt or " ", font=font)
+            return float(b[3] - b[1])
+
+        total = 0.0
+        if spec.brand:
+            total += lh(spec.brand, fs["brand"])
+        if spec.tagline:
+            total += h * 0.010 * scale + lh(spec.tagline, fs["tag"])
+        if spec.brand or spec.tagline:
+            total += h * 0.028 * scale + h * 0.006 * scale
+        for ln in _wrap(t, spec.product_name, fs["prod"], inner_w):
+            total += h * 0.010 * scale + lh(ln, fs["prod"])
+        for ln in _wrap(t, spec.descriptor, fs["desc"], inner_w):
+            total += h * 0.010 * scale + lh(ln, fs["desc"])
+        extra: List[Tuple[str, ImageFont.FreeTypeFont]] = []
+        if spec.net_weight:
+            extra.append((spec.net_weight, fs["weight"]))
+        if spec.ingredients:
+            for wl in _wrap(t, f"Ingredients: {spec.ingredients}", fs["small"], inner_w):
+                extra.append((wl, fs["small"]))
+        for ln in list(spec.extra_lines) + list(spec.rear_placeholders):
+            for wl in _wrap(t, ln, fs["small"], inner_w):
+                extra.append((wl, fs["small"]))
+        if extra:
+            total += h * 0.020 * scale
+            total += sum(lh(tx, f) + h * 0.014 * scale for tx, f in extra)
+        return total
+
+    # Vertical auto-fit: shrink all type (and gaps) until the whole block, including
+    # the bottom-anchored extras, fits the panel. Short panels can never clip copy.
+    s = 1.0
+    for cand in (1.0, 0.95, 0.90, 0.85, 0.80, 0.74, 0.68, 0.62, 0.56, 0.50, 0.44):
+        if _est_height(_fonts(cand), cand) <= avail_h or cand == 0.44:
+            s = cand
+            break
+    _f = _fonts(s)
+    f_brand, f_tag, f_prod = _f["brand"], _f["tag"], _f["prod"]
+    f_desc, f_weight, f_small = _f["desc"], _f["weight"], _f["small"]
+
+    y = float(pad)
     if spec.brand:
         y = _draw_centered(draw, spec.brand, f_brand, cx, y, ink)
     if spec.tagline:
-        y += int(h * 0.010)
+        y += int(h * 0.010 * s)
         y = _draw_centered(draw, spec.tagline, f_tag, cx, y, accent)
 
     if spec.brand or spec.tagline:
@@ -380,10 +428,10 @@ def render_label_layer(spec: LabelSpec, size: Tuple[int, int],
     block: List[Tuple[str, ImageFont.FreeTypeFont, RGBAColor, int]] = []
     if spec.product_name:
         for ln in _wrap(draw, spec.product_name, f_prod, inner_w):
-            block.append((ln, f_prod, ink, int(h * 0.010)))
+            block.append((ln, f_prod, ink, int(h * 0.010 * s)))
     if spec.descriptor:
         for ln in _wrap(draw, spec.descriptor, f_desc, inner_w):
-            block.append((ln, f_desc, muted, int(h * 0.010)))
+            block.append((ln, f_desc, muted, int(h * 0.010 * s)))
     for ln, font, color, gap in block:
         y += gap
         y = _draw_centered(draw, ln, font, cx, y, color)
@@ -403,11 +451,11 @@ def render_label_layer(spec: LabelSpec, size: Tuple[int, int],
 
     # Anchor trailing extras to the bottom of the panel.
     if extras:
-        gap = int(h * 0.014)
+        gap = int(h * 0.014 * s)
         heights = [draw.textbbox((0, 0), t, font=f)[3] - draw.textbbox((0, 0), t, font=f)[1]
                    for t, f, _ in extras]
         block_h = sum(heights) + gap * (len(extras) - 1)
-        y = max(y + int(h * 0.02), h - pad - block_h)
+        y = max(y + int(h * 0.02 * s), h - pad - block_h)
         for (ln, font, color), hh in zip(extras, heights):
             _draw_centered(draw, ln, font, cx, y, color)
             y += hh + gap

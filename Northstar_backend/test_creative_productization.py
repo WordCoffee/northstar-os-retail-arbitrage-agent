@@ -88,6 +88,39 @@ def test_detect_result_serialisable():
     json.dumps(zone)
 
 
+def test_detect_does_not_merge_adjacent_bright_window():
+    # A bright label sits directly above a bright but textured product window with
+    # a crisp edge between them: detection must stop at that edge.
+    import random
+    im = Image.new("RGB", (400, 600), (30, 70, 45))
+    d = ImageDraw.Draw(im)
+    d.rectangle([80, 120, 320, 300], fill=(250, 249, 245))   # smooth label
+    d.rectangle([80, 305, 320, 470], fill=(243, 238, 225))   # bright window
+    rnd = random.Random(1)
+    for _ in range(6000):                                    # texture the window
+        im.putpixel((rnd.randint(81, 319), rnd.randint(306, 469)),
+                    (rnd.randint(190, 255), rnd.randint(180, 245), rnd.randint(160, 230)))
+    zone = label_zone.detect_label_zone(im)
+    assert zone is not None
+    ys = [p[1] for p in zone["quad_norm"]]
+    assert max(ys) < 0.56, f"panel bled into the window: {zone['quad_norm']}"
+
+
+def test_detect_snaps_out_to_shaded_panel_edge():
+    # Panel whose right side is shaded below threshold, ending at a crisp edge:
+    # the box should extend to that edge, not stop at the bright core.
+    im = Image.new("RGB", (400, 400), (30, 70, 45))
+    d = ImageDraw.Draw(im)
+    d.rectangle([100, 120, 240, 280], fill=(250, 249, 245))  # bright core
+    for x in range(241, 300):                                # soft shading ramp
+        v = int(245 - (245 - 150) * (x - 241) / 59.0)
+        d.line([(x, 120), (x, 280)], fill=(v, v, v - 6))
+    zone = label_zone.detect_label_zone(im)
+    assert zone is not None
+    xs = [p[0] for p in zone["quad_norm"]]
+    assert max(xs) > 0.72, f"box did not snap to the shaded edge: {zone['quad_norm']}"
+
+
 # ---------------------------------------------------------------------------
 # Pipeline: alignment
 # ---------------------------------------------------------------------------

@@ -100,6 +100,9 @@ or 4-corner quad** and alpha-composites it onto the scene.
   Font License 1.1 — ship in `creative/assets/fonts/` and load with variable-font
   weights, so exact text renders in brand typography. OS fonts are only a fallback,
   and `brand_fonts()` reports which was used.
+* **Vertical auto-fit.** Type and line gaps shrink (down to 44%) until the whole
+  block — including bottom-anchored net weight — fits the panel, so a short or
+  wide label zone can never clip copy.
 
 Brand rules encoded: brand is always **`Mogra Organics`**; default tagline is
 **`Fuel Your Focus.`**; no sun/sunrise/sunburst/celestial mark; premium polished
@@ -224,6 +227,9 @@ Machine: RTX 5080 Laptop 16 GB VRAM, 16 GB RAM, Python 3.14, Pillow 12.3.
 | Blank-panel prep (`panel_prep="edit_blank"`) | Edit-2511 panel-preserving prompt blanked the label in **203 s**, then auto-align succeeded |
 | React Creative Studio lane | `?view=mockups` renders; presets load live from `/api/creative`; `verify-mockup-lane.cjs` **6/6** |
 | UI harnesses | smoke **43/0**, acceptance **33/0**, guards **11/0**, invite-flow **11/0** |
+| Detection fix (merged-region splitting + edge snapping) | a2 label box corrected 0.776 → 0.592 (conf 0.979, no window bleed); a1 right edge 0.526 → 0.614; a3 → 0.565 |
+| Text auto-fit | a2 short panel no longer clips the descriptor; 60 offline tests pass |
+| Edit-2511 prep, rerun with the outside-panel gate | rejected on all 3 assets (outside-panel change 5.6–8.4% > 5%, or panel lost) → deterministic composite used |
 
 Sample outputs (git-ignored, regenerable) under `generated_images/mogra_mockups/`:
 `live_mockup_turmeric.png` and `mogra_organic_black_peppercorns_*.png` (AI scene +
@@ -251,9 +257,12 @@ one-file change.
   cylindrical unwrap (no vertical bow). It reads well on jars; a mesh unwrap is a
   future upgrade.
 * Blank-panel detection is a deterministic brightness/saturation heuristic tuned
-  on the Mogra scenes. It can under-cover a panel with a strong shading gradient
-  (the shaded right edge is excluded) and falls back to the preset when weak. The
-  Edit-2511 `edit_blank` prep runs first when a pristine panel is wanted.
+  on the Mogra scenes. It splits a candidate on raw-mask gaps and strong internal
+  edges (so a bright product window beside the label is not fused into it) and
+  snaps out to the nearest strong straight edge (so a shaded part of the panel is
+  recovered). It can still miss a panel with no crisp edges at all, in which case
+  it falls back to the preset. The Edit-2511 `edit_blank` prep runs first when a
+  pristine panel is wanted.
 * Brand fonts are bundled and used by the compositor. In the web UI they are
   registered under scoped family names (`NSBrandSerif`/`NSBrandSans`) and applied
   only inside the mockup lane, so no other room's typography changes. A global
