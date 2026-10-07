@@ -29,8 +29,8 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
 
-from . import comfy_client, mogra_mockup, presets
-from .exact_text import BrandContentError, LabelSpec, compose_exact_text
+from . import comfy_client, label_zone, mogra_mockup, presets
+from .exact_text import BrandContentError, LabelSpec, brand_fonts, compose_exact_text
 
 router = APIRouter(prefix="/api/creative", tags=["creative"])
 
@@ -108,6 +108,7 @@ def health() -> Dict[str, Any]:
         "on_disk": models["on_disk"],
         "qwen_ready": models["qwen_ready"],
         "qwen_edit_ready": models["qwen_edit_ready"],
+        "fonts": brand_fonts(),
         "output_dir": str(_out_dir()),
     }
 
@@ -130,6 +131,15 @@ def compose(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
     if base is None:
         raise HTTPException(status_code=400,
                             detail="provide source_base64 or source_path")
+    align_info = {"mode": body.get("align", "preset"), "source": "preset"}
+    if align_info["mode"] == "auto":
+        zone = label_zone.detect_label_zone(base)
+        if zone:
+            surface["quad_norm"] = zone["quad_norm"]
+            align_info.update({"source": "detected", "confidence": zone["confidence"],
+                               "zone": zone})
+        else:
+            align_info["source"] = "preset_fallback"
     try:
         out, params = compose_exact_text(base, spec, surface, surface["style"],
                                          supersample=int(body.get("supersample", 2)),
@@ -144,7 +154,19 @@ def compose(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
     out_path = _out_dir() / name
     out.convert("RGB").save(out_path, format="PNG")
     return {"ok": True, "output": str(out_path),
-            "url": f"/api/creative/file/{out_path.name}", "params": params}
+            "url": f"/api/creative/file/{out_path.name}", "params": params,
+            "align": align_info}
+
+
+@router.post("/detect-zone")
+def detect_zone(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    """Return the detected blank label zone (normalized quad) for an image."""
+    base = _decode_source(body.get("source_base64"), body.get("source_path"))
+    if base is None:
+        raise HTTPException(status_code=400,
+                            detail="provide source_base64 or source_path")
+    zone = label_zone.detect_label_zone(base)
+    return {"ok": True, "zone": zone, "found": zone is not None}
 
 
 @router.post("/generate-scene")
@@ -197,6 +219,8 @@ def mockup(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
             rear_placeholders=body.get("rear_placeholders"),
             extra_lines=body.get("extra_lines"),
             enforce_brand=bool(body.get("enforce_brand", True)),
+            align=body.get("align", "preset"),
+            panel_prep=body.get("panel_prep"),
         )
     except BrandContentError as exc:
         raise HTTPException(status_code=422, detail=str(exc))

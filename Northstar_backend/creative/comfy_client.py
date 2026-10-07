@@ -541,3 +541,27 @@ def edit_scene(prompt: str, source_path: str | os.PathLike,
     out_path.write_bytes(data)
     return {"lane": "qwen-image-edit-2511", "output": str(out_path),
             "source": str(source_path), "prompt": prompt, "seed": seed}
+
+
+# Controlled prep prompt: tidy the label zone only. It must not introduce text —
+# final text is always the deterministic compositor's job.
+PANEL_PREP_PROMPT = (
+    "Do not remove, move or resize the existing front label panel. Repaint only "
+    "the inside of the existing label panel as a clean, flat, solid blank surface. "
+    "Keep its exact position, size and shape, and keep the container, product, "
+    "lighting, reflections, background and overall composition identical. Add no "
+    "text, letters, numbers, logos, icons or artwork anywhere."
+)
+
+
+def blank_panel(source_path: str | os.PathLike, out_path: str | os.PathLike, *,
+                prompt: Optional[str] = None, steps: int = 16, cfg: float = 4.0,
+                seed: Optional[int] = None,
+                client: Optional[ComfyClient] = None) -> Dict[str, Any]:
+    """Optional prep stage: use Edit-2511 to blank/tidy the label panel.
+
+    Raises ``ComfyUIError`` if the edit lane is not available — callers should
+    treat that as an honest "prep unavailable", never as a silent skip.
+    """
+    return edit_scene(prompt or PANEL_PREP_PROMPT, source_path, out_path,
+                      steps=steps, cfg=cfg, seed=seed, client=client)

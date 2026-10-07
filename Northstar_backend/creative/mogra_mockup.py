@@ -30,7 +30,7 @@ from typing import Any, Dict, List, Optional
 
 from PIL import Image
 
-from . import comfy_client, presets
+from . import comfy_client, label_zone, presets
 from .exact_text import LabelSpec, compose_exact_text
 
 
@@ -130,6 +130,8 @@ def build_mockup(*, product: Dict[str, Any] | str,
                  rear_placeholders: Optional[List[str]] = None,
                  extra_lines: Optional[List[str]] = None,
                  enforce_brand: bool = True,
+                 align: str = "preset",
+                 panel_prep: Optional[str] = None,
                  out_path: Optional[str | os.PathLike] = None,
                  write_sidecar: bool = True,
                  client: Optional[comfy_client.ComfyClient] = None,
@@ -176,6 +178,34 @@ def build_mockup(*, product: Dict[str, Any] | str,
     else:
         raise ValueError("provide source_image=... or generate=True")
 
+    # Controlled prep stage: optionally let Edit-2511 blank the label panel
+    # before the deterministic text is composited. Never adds text itself.
+    prep_info: Dict[str, Any] = {"mode": panel_prep, "applied": False}
+    if panel_prep and panel_prep != "none":
+        if panel_prep != "edit_blank":
+            raise ValueError(f"unknown panel_prep: {panel_prep!r} (use 'edit_blank' or None)")
+        prep_dir = out_dir / "prep"
+        prep_dir.mkdir(parents=True, exist_ok=True)
+        prep_path = prep_dir / f"blank_{pkey}_{_stamp()}.png"
+        comfy_client.blank_panel(source_used, prep_path, client=client)
+        base = Image.open(prep_path).convert("RGBA")
+        prep_info.update({"applied": True, "output": str(prep_path)})
+        if lane == "composited_only":
+            lane = "qwen-image-edit-2511+composited"
+        else:
+            lane = f"{lane}+edit_blank"
+
+    # Alignment: fit the exact-text panel to the model's own blank label zone.
+    align_info: Dict[str, Any] = {"mode": align, "source": "preset"}
+    if align == "auto":
+        zone = label_zone.detect_label_zone(base)
+        if zone:
+            surface["quad_norm"] = zone["quad_norm"]
+            align_info.update({"source": "detected", "confidence": zone["confidence"],
+                               "zone": zone})
+        else:
+            align_info["source"] = "preset_fallback"
+
     composited, params = compose_exact_text(base, spec, surface, surface["style"],
                                             enforce_brand=enforce_brand,
                                             return_params=True)
@@ -190,6 +220,8 @@ def build_mockup(*, product: Dict[str, Any] | str,
         "spec": spec.__dict__,
         "surface_label": surface.get("label"),
         "style_key": surface.get("style_key"),
+        "align": align_info,
+        "panel_prep": prep_info,
     }
     if write_sidecar:
         sidecar = out.with_suffix(".json")
@@ -250,6 +282,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--height", type=int, default=1024)
     ap.add_argument("--steps", type=int, default=20)
     ap.add_argument("--seed", type=int, default=None)
+    ap.add_argument("--align", choices=["preset", "auto"], default="preset",
+                    help="fit the label panel to the detected blank zone")
+    ap.add_argument("--panel-prep", choices=["edit_blank"], default=None,
+                    help="optional Edit-2511 blank-panel repair before compositing")
     ap.add_argument("--json", action="store_true", help="print full result JSON")
     args = ap.parse_args(argv)
 
@@ -269,6 +305,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             ingredients=args.ingredients, out_path=args.out,
             brand=args.brand, tagline=args.tagline, product_name=args.product_name,
             descriptor=args.descriptor, net_weight=args.net_weight,
+            align=args.align, panel_prep=args.panel_prep,
         )
     except Exception as exc:  # honest, single-line failure
         print(f"ERROR: {exc}", file=sys.stderr)

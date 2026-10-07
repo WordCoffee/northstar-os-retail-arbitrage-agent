@@ -85,6 +85,7 @@ async function run() {
     ['/socialpulse?view=queue', 'Drafts', 'deep /socialpulse?view=queue'],
     ['/creative-studio?view=variants', 'Add Variant', 'deep /creative-studio?view=variants'],
     ['/creative-studio?view=exports', 'Bundle Builder', 'deep /creative-studio?view=exports'],
+    ['/creative-studio?view=mockups', 'Exact-Text Mockups', 'deep /creative-studio?view=mockups'],
     ['/golden-goose?view=review', 'What Remains Unknown', 'deep /golden-goose?view=review'],
     ['/golden-goose?view=decisions', 'internal review history', 'deep /golden-goose?view=decisions'],
     ['/golden-goose?view=history', 'Historical log', 'deep /golden-goose?view=history'],

@@ -115,3 +115,59 @@ def test_file_endpoint_blocks_traversal(client):
     assert client.get("/api/creative/file/not-a-real-file.png").status_code == 404
     r = client.get("/api/creative/file/bad%20name.png")
     assert r.status_code in (400, 404)
+
+
+# ---------------------------------------------------------------------------
+# Productization additions: fonts, zone detection, auto-align
+# ---------------------------------------------------------------------------
+
+def _panel_png_b64():
+    from PIL import ImageDraw
+    im = Image.new("RGB", (400, 400), (34, 78, 46))
+    ImageDraw.Draw(im).rectangle([120, 120, 280, 280], fill=(250, 249, 245))
+    buf = io.BytesIO()
+    im.save(buf, format="PNG")
+    return base64.b64encode(buf.getvalue()).decode("ascii")
+
+
+def test_health_reports_bundled_fonts(client):
+    r = client.get("/api/creative/health")
+    assert r.status_code == 200
+    fonts = r.json()["fonts"]
+    assert fonts["bundled"] is True
+    assert "Open Font License" in fonts["license"]
+
+
+def test_detect_zone_endpoint(client):
+    r = client.post("/api/creative/detect-zone", json={"source_base64": _panel_png_b64()})
+    assert r.status_code == 200
+    j = r.json()
+    assert j["found"] is True
+    assert len(j["zone"]["quad_norm"]) == 4
+
+
+def test_compose_align_auto_reports_detected(client):
+    body = {
+        "product": "organic_turmeric_powder",
+        "container": "mogra_5lb_clear_handled_pet_jar",
+        "source_base64": _panel_png_b64(),
+        "align": "auto",
+        "filename": "unit_align.png",
+    }
+    r = client.post("/api/creative/compose", json=body)
+    assert r.status_code == 200, r.text
+    assert r.json()["align"]["source"] == "detected"
+
+
+def test_mockup_align_auto_offline(client):
+    body = {
+        "product": "organic_black_peppercorns",
+        "container": "mogra_32oz_standup_pouch",
+        "source_base64": _panel_png_b64(),
+        "align": "auto",
+    }
+    r = client.post("/api/creative/mockup", json=body)
+    assert r.status_code == 200, r.text
+    j = r.json()
+    assert j["align"]["source"] == "detected"
+    assert j["lane"] == "composited_only"

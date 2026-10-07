@@ -126,6 +126,7 @@ async function run() {
     ['/socialpulse?view=composer', 'Platform Preview'],
     ['/socialpulse?view=queue', 'Drafts'],
     ['/creative-studio?view=variants', 'Add Variant'],
+    ['/creative-studio?view=mockups', 'Exact-Text Mockups'],
     ['/listings?view=history', 'Change Timeline'],
     ['/listings?view=diffs', 'Detected Changes'],
     ['/keyword-tracker?view=coverage', 'Coverage Gaps'],

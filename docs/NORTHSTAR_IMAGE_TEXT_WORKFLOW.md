@@ -38,7 +38,8 @@ Each step is a module, usable independently or through the one-call pipeline.
 | Step | Module | Function |
 |------|--------|----------|
 | 1. Scene generation | `creative.comfy_client` | `generate_scene`, `edit_scene` |
-| 2. Zone prep | `creative.presets` | container/surface `quad_norm` + `curvature` |
+| 2. Zone prep | `creative.presets` / `creative.label_zone` | preset quad, or deterministic blank-panel detection (`align="auto"`) |
+| 2b. Panel repair (optional) | `creative.comfy_client.blank_panel` | Edit-2511 blanks/cleans the label panel in place (`panel_prep="edit_blank"`) |
 | 3. Exact text | `creative.exact_text` | `compose_exact_text`, `render_label_layer` |
 | 4. Surface warp | `creative.exact_text` | `warp_to_quad`, `quad_homography` |
 | 5. Orchestration | `creative.mogra_mockup` | `build_mockup` (writes PNG + sidecar) |
@@ -95,6 +96,10 @@ or 4-corner quad** and alpha-composites it onto the scene.
   legal statements) in Mogra brand mode. It fails loudly rather than inventing.
 * **Reusable surfaces.** Same compositor serves plain rectangles, angled product
   faces, card/banner/hero overlays, and UI screenshot annotations.
+* **Bundled brand fonts.** Libre Baskerville (serif) + DM Sans (sans) — SIL Open
+  Font License 1.1 — ship in `creative/assets/fonts/` and load with variable-font
+  weights, so exact text renders in brand typography. OS fonts are only a fallback,
+  and `brand_fonts()` reports which was used.
 
 Brand rules encoded: brand is always **`Mogra Organics`**; default tagline is
 **`Fuel Your Focus.`**; no sun/sunrise/sunburst/celestial mark; premium polished
@@ -162,13 +167,20 @@ python -m creative.mogra_mockup --product organic_turmeric_powder `
 # composite exact text onto your own base image
 python -m creative.mogra_mockup --product organic_black_peppercorns `
   --surface plain_rectangle --source base.png --out tagged.png
+
+# auto-fit the panel to the model's blank label zone (+ optional Edit-2511 prep)
+python -m creative.mogra_mockup --product organic_turmeric_powder `
+  --container mogra_5lb_clear_handled_pet_jar --source scene.png `
+  --align auto --panel-prep edit_blank --out final.png
 ```
 Run the CLI with `Northstar_backend` on the path
 (`cd Northstar_backend` first, or `python -m creative.mogra_mockup ...` from there).
 
 **API:** `GET /api/creative/presets`, `GET /api/creative/health`,
 `POST /api/creative/compose`, `POST /api/creative/generate-scene`,
-`POST /api/creative/mockup`, `GET /api/creative/file/{name}`.
+`POST /api/creative/detect-zone`, `POST /api/creative/mockup`,
+`GET /api/creative/file/{name}`. `compose`/`mockup` accept
+`align: "preset" | "auto"` and `panel_prep: "edit_blank" | null`.
 
 ---
 
@@ -206,8 +218,12 @@ Machine: RTX 5080 Laptop 16 GB VRAM, 16 GB RAM, Python 3.14, Pillow 12.3.
 | Qwen-Image-Edit-2511 (GGUF), 20 steps | edit executed in **203.0 s** (after re-downloading the truncated model) |
 | `POST /api/creative/mockup` (`generate=true`) | **HTTP 200 in 123.7 s** → 958,947-byte PNG + JSON sidecar, lane `qwen-image-2512` |
 | `GET /api/creative/health`, `/presets`, `/mogra-mockup` | all **200** |
-| Offline tests | **38 passed** (`test_creative_mockup.py` + `test_creative_routes.py`) |
+| Offline tests | **58 passed** (`test_creative_mockup.py`, `test_creative_routes.py`, `test_creative_productization.py`) |
 | Exact-text composite speed | ~4 s per 896×1152 image (deterministic) |
+| Auto-alignment (`align="auto"`) | fits the model's own blank panel — jar conf **0.834** raw / **0.877** after prep; pouch conf **0.677**; falls back to the preset when detection is weak (`confidence < 0.25`) |
+| Blank-panel prep (`panel_prep="edit_blank"`) | Edit-2511 panel-preserving prompt blanked the label in **203 s**, then auto-align succeeded |
+| React Creative Studio lane | `?view=mockups` renders; presets load live from `/api/creative`; `verify-mockup-lane.cjs` **6/6** |
+| UI harnesses | smoke **43/0**, acceptance **33/0**, guards **11/0**, invite-flow **11/0** |
 
 Sample outputs (git-ignored, regenerable) under `generated_images/mogra_mockups/`:
 `live_mockup_turmeric.png` and `mogra_organic_black_peppercorns_*.png` (AI scene +
@@ -231,12 +247,19 @@ one-file change.
 * Generation speed depends on the local GPU; the Q4_K_M lanes are chosen for a
   16 GB card. Very large source images are downscaled by `FluxKontextImageScale`
   before editing.
-* Curvature is a single-parameter barrel approximation, not a true cylindrical
-  unwrap. It reads well on jars; a mesh unwrap is a future upgrade.
-* Fonts come from the OS (`C:\Windows\Fonts`) with a deterministic default
-  fallback. Bundle brand fonts before shipping exact brand typography.
-* Not wired into the React Creative Studio room yet — the standalone
-  `/mogra-mockup` page and the API are the integration surface. The foundation
-  router is intentionally untouched.
+* Curvature is a single-parameter cylindrical approximation, not a true
+  cylindrical unwrap (no vertical bow). It reads well on jars; a mesh unwrap is a
+  future upgrade.
+* Blank-panel detection is a deterministic brightness/saturation heuristic tuned
+  on the Mogra scenes. It can under-cover a panel with a strong shading gradient
+  (the shaded right edge is excluded) and falls back to the preset when weak. The
+  Edit-2511 `edit_blank` prep runs first when a pristine panel is wanted.
+* Brand fonts are bundled and used by the compositor. In the web UI they are
+  registered under scoped family names (`NSBrandSerif`/`NSBrandSans`) and applied
+  only inside the mockup lane, so no other room's typography changes. A global
+  `--font-serif`/`--font-ui` switch to the bundled fonts is a deliberate,
+  separate decision.
+* The React lane lives inside Creative Studio (`?view=mockups`) plus the
+  standalone `/mogra-mockup` page; the foundation router is intentionally untouched.
 * No certification seals / nutrition panels / UPCs by design; the compositor
   refuses them.

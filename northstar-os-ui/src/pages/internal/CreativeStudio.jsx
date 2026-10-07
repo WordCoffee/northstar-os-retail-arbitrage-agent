@@ -1,5 +1,6 @@
 import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import MockupStudio from '../../components/MockupStudio.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
@@ -25,6 +26,7 @@ import { useEffect, useMemo, useState } from 'react'
 const TABS = [
   { id: 'briefs', label: 'Briefs' },
   { id: 'composer', label: 'Image Composer' },
+  { id: 'mockups', label: 'Exact-Text Mockups' },
   { id: 'video', label: 'Video / Shorts' },
   { id: 'queue', label: 'Production Queue' },
   { id: 'variants', label: 'Variants & History' },
@@ -473,6 +475,8 @@ export default function CreativeStudio() {
           </div>
         </div>
       )}
+
+      {view === 'mockups' && <MockupStudio />}
 
       {view === 'video' && (
         <div className="subview">

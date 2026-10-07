@@ -71,21 +71,110 @@ def _find_font_file(serif: bool, bold: bool) -> Optional[Path]:
     return None
 
 
+# --- bundled brand fonts (SIL Open Font License 1.1) ------------------------
+# Libre Baskerville (display/serif) + DM Sans (UI/sans) are the Northstar OS
+# design-system fonts, adopted as the Mogra display/UI fonts. Both are OFL 1.1
+# and shipped under assets/fonts/ with their license texts. If they are absent,
+# the compositor falls back to OS fonts and reports that honestly.
+_BRAND_FONT_DIR = Path(__file__).resolve().parent / "assets" / "fonts"
+_BRAND_FILES = {
+    (True, True): "LibreBaskerville-VF.ttf",
+    (True, False): "LibreBaskerville-VF.ttf",
+    (False, True): "DMSans-VF.ttf",
+    (False, False): "DMSans-VF.ttf",
+}
+_BRAND_WEIGHT = {(True, True): 700, (True, False): 400, (False, True): 700, (False, False): 500}
+
+
+def _brand_font_dir() -> Path:
+    env = os.environ.get("NORTHSTAR_BRAND_FONT_DIR")
+    return Path(env) if env else _BRAND_FONT_DIR
+
+
+def _norm_axis(name: Any) -> str:
+    try:
+        return (name.decode() if isinstance(name, (bytes, bytearray)) else str(name)).lower()
+    except Exception:
+        return ""
+
+
+def _apply_weight(font: ImageFont.FreeTypeFont, weight: int) -> None:
+    """Set variable-font axes (weight, optical size) if the face supports them."""
+    try:
+        axes = font.get_variation_axes()
+    except Exception:
+        return
+    if not axes:
+        return
+    values: List[float] = []
+    for a in axes:
+        nm = _norm_axis(a.get("name", ""))
+        try:
+            if "weight" in nm:
+                values.append(float(weight))
+            elif "optical" in nm or nm == "opsz":
+                values.append(14.0)
+            else:
+                values.append(float(a.get("default", a.get("minimum", 0))))
+        except Exception:
+            values.append(float(a.get("default", a.get("minimum", 0)) or 0))
+    try:
+        font.set_variation_by_axes(values)
+    except Exception:
+        pass
+
+
+def brand_fonts() -> Dict[str, Any]:
+    """Report the bundled brand fonts (honest: says when it falls back)."""
+    d = _brand_font_dir()
+    serif = d / "LibreBaskerville-VF.ttf"
+    sans = d / "DMSans-VF.ttf"
+    bundled = serif.exists() and sans.exists()
+    return {
+        "dir": str(d),
+        "bundled": bundled,
+        "serif": serif.name if serif.exists() else None,
+        "sans": sans.name if sans.exists() else None,
+        "license": "SIL Open Font License 1.1",
+        "source": "brand" if bundled else "system_fallback",
+    }
+
+
+def font_source(serif: bool, bold: bool) -> str:
+    """Which face ``load_font`` will use: bundled brand font or OS fallback."""
+    fe = _BRAND_FILES[(serif, bold)]
+    if (_brand_font_dir() / fe).exists():
+        return "brand"
+    if _find_font_file(serif, bold) is not None:
+        return "system"
+    return "default"
+
+
 _FONT_CACHE: Dict[Tuple[bool, bool, int], ImageFont.FreeTypeFont] = {}
 
 
 def load_font(size: int, *, serif: bool = False, bold: bool = False) -> ImageFont.FreeTypeFont:
-    """Load a real font at ``size`` px, with a deterministic default fallback."""
+    """Load a real font at ``size`` px.
+
+    Prefers the bundled brand font (correct weight via variable axes), then an
+    OS font, then Pillow's default — deterministic at every step.
+    """
     size = max(6, int(size))
     key = (serif, bold, size)
     cached = _FONT_CACHE.get(key)
     if cached is not None:
         return cached
-    path = _find_font_file(serif, bold)
-    if path is not None:
-        font = ImageFont.truetype(str(path), size)
-    else:  # pragma: no cover - only when no system font is discoverable
-        font = ImageFont.load_default(size=size)
+
+    brand_path = _brand_font_dir() / _BRAND_FILES[(serif, bold)]
+    if brand_path.exists():
+        font = ImageFont.truetype(str(brand_path), size)
+        _apply_weight(font, _BRAND_WEIGHT[(serif, bold)])
+    else:
+        path = _find_font_file(serif, bold)
+        if path is not None:
+            font = ImageFont.truetype(str(path), size)
+        else:  # pragma: no cover - only when no font at all is discoverable
+            font = ImageFont.load_default(size=size)
     _FONT_CACHE[key] = font
     return font
 
