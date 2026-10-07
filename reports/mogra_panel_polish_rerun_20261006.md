@@ -3,7 +3,7 @@
 **Date:** 2026-10-06
 **Worktree:** `C:\Users\T2Hol\Desktop\northstar-wt-mogra`
 **Branch:** `feature/mogra-exact-text-mockup`
-**Base commit:** `b041a64`
+**Base commit:** `2e20544` (a parallel "creative services Batch A (UI)" commit landed under this branch between missions)
 **Class:** controlled local batch (image only, one job at a time, no public exposure). Model: GLM-5.3-Flash (approved switch for rendered-image quality judgment).
 
 ---
