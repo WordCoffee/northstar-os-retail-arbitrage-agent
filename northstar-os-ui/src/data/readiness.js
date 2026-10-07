@@ -25,7 +25,7 @@ export const ROOM_READINESS = {
   'sourcescout': 'cached',
   'golden-goose': 'ready',
   'listing-guardian': 'partial', // real local listing/identity records + sample triage
-  'keyword-tracker': 'partial', // sample preview + live foundation keyword read (truth-first, additive)
+  'keyword-tracker': 'ready', // fully derived from local keyword store + foundation keyword service
   'competitor-monitor': 'partial', // real local product/source observations + sample competitor rows
   'profitability': 'partial', // backend economics engine + sample portfolio context
   'commerce-ops': 'partial', // real foundation approvals read + sample workflow
