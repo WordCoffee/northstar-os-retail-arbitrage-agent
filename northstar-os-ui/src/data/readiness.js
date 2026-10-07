@@ -24,7 +24,7 @@ export const ROOM_READINESS = {
   'command-center': 'partial', // live system-signals read + real launch pathways; briefing still sample
   'sourcescout': 'cached',
   'golden-goose': 'ready',
-  'listing-guardian': 'sample',
+  'listing-guardian': 'partial', // real local listing/identity records + sample triage
   'keyword-tracker': 'partial', // sample preview + live foundation keyword read (truth-first, additive)
   'competitor-monitor': 'sample',
   'profitability': 'partial', // backend economics engine + sample portfolio context

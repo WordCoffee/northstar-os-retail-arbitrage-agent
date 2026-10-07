@@ -4,7 +4,56 @@ import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import foundationApi from '../../foundation/api.js'
-import { settle } from '../../services/signals.js'
+import signals, { settle } from '../../services/signals.js'
+
+// ═══ Real identity/pack resolution workflow (local read-only) ═══
+function RealWorkflowQueue() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(signals.ncCommerceOpsQueue()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', value: r.value })
+      else setSt({ phase: 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+  const v = st.phase === 'loaded' ? st.value : null
+  const items = v && Array.isArray(v.items) ? v.items : []
+  const runs = v && v.summary && Array.isArray(v.summary.recent_runs) ? v.summary.recent_runs : []
+  return (
+    <div className="card" data-testid="co-real-queue" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Identity resolution queue</h3>
+        <span className={`pill pill-${st.phase === 'error' ? 'unknown' : 'muted'}`}>{st.phase === 'loading' ? 'Loading…' : st.phase === 'error' ? 'unavailable' : `${items.length} items · local`}</span>
+      </div>
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Queue unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {st.phase === 'loaded' && (items.length > 0 ? (
+        <DataTable columns={[
+          { key: 'costco_item_number', label: 'Item' },
+          { key: 'missing_identity_fields', label: 'Missing identity', render: (x) => <span className="pill pill-ochre">{x || '—'}</span> },
+          { key: 'missing_physical_fields', label: 'Missing physical', render: (x) => <span className="pill pill-ochre">{x || '—'}</span> },
+          { key: 'possible_next_source', label: 'Next source', render: (x) => x || '—' },
+          { key: 'created_at', label: 'Queued', render: (x) => x ? String(x).slice(0, 19).replace('T', ' ') : '—' },
+        ]} rows={items} />
+      ) : <p className="text-low" style={{ fontSize: 13 }}>No identity-resolution items queued. Honest empty state.</p>)}
+      {runs.length > 0 && (
+        <div style={{ marginTop: 12 }}>
+          <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Recent pipeline runs</div>
+          <div className="stack" style={{ gap: 4 }}>
+            {runs.map((r, i) => (
+              <div key={i} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0' }}>
+                <span style={{ fontSize: 12 }}>{r.run_name || r.run_id}</span>
+                <span className={`pill ${r.status === 'completed' ? 'pill-muted' : 'pill-warn'}`}>{r.status || 'UNKNOWN'}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>Real local workflow data (read-only). No provider call is made.</div>
+    </div>
+  )
+}
 
 // ═══ Foundation approval checkpoints (real, org-scoped) ═══
 // Reads the real approval_requests for this organization. Approving is an
@@ -196,6 +245,7 @@ export default function CommerceOps() {
         </div>
       ) : (
         <div className="subview">
+          <RealWorkflowQueue />
           <div className="card" style={{ marginBottom: 20 }}>
             <div className="card-head">
               <h3 className="card-title">Critical Next Actions</h3>

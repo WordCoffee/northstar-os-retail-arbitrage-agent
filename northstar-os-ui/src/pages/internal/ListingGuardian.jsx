@@ -2,7 +2,54 @@ import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import signals, { settle } from '../../services/signals.js'
+
+// ═══ Real listing + identity-enrichment health (local read-only) ═══
+function RealListingHealth() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(signals.ncListingsHealth()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', value: r.value })
+      else setSt({ phase: 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+  const v = st.phase === 'loaded' ? st.value : null
+  const items = v && Array.isArray(v.items) ? v.items : []
+  const s = (v && v.summary) || {}
+  const capture = s.identifier_capture || {}
+  return (
+    <div className="card" data-testid="lg-real-health" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Listing &amp; identity records</h3>
+        <span className={`pill pill-${st.phase === 'error' ? 'unknown' : 'muted'}`}>{st.phase === 'loading' ? 'Loading…' : st.phase === 'error' ? 'unavailable' : `${items.length} listings · local`}</span>
+      </div>
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Listing records unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {st.phase === 'loaded' && (
+        <>
+          {items.length > 0 ? (
+            <DataTable columns={[
+              { key: 'asin', label: 'ASIN' },
+              { key: 'title', label: 'Title', render: (x) => <span title={x}>{x && x.length > 46 ? x.slice(0, 45) + '…' : x}</span> },
+              { key: 'status', label: 'Status', render: (x) => <span className="pill pill-muted">{x || 'UNKNOWN'}</span> },
+              { key: 'overall_score', label: 'Score', render: (x) => x == null ? <span className="pill pill-unknown">UNKNOWN</span> : <span className="pill pill-muted">{x}</span> },
+              { key: 'updated_at', label: 'Updated', render: (x) => x ? String(x).slice(0, 19).replace('T', ' ') : '—' },
+            ]} rows={items} />
+          ) : <p className="text-low" style={{ fontSize: 13 }}>No listing records yet. Honest empty state.</p>}
+          <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap', marginTop: 12 }}>
+            <span className="pill pill-muted" title="Identity enrichment records">{s.enrichment_records ?? 0} enrichment</span>
+            <span className="pill pill-muted" title="Evidence rows">{s.evidence_rows ?? 0} evidence</span>
+            {Object.entries(capture).map(([k, n]) => <span key={k} className="pill pill-ochre" style={{ fontSize: 10 }}>{k}: {n}</span>)}
+          </div>
+          <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>Real local listing/identity records (read-only). Listing-health feed is local, not a live Amazon feed.</div>
+        </>
+      )}
+    </div>
+  )
+}
 
 const TABS = [
   { id: 'alerts', label: 'Alerts', count: 5 },
@@ -137,6 +184,7 @@ export default function ListingGuardian() {
       </DataNotice>
 
       <SourceStatusCard />
+      <RealListingHealth />
 
       <RoomTabs tabs={TABS} base="/listings" />
 

@@ -77,6 +77,15 @@ export const signals = {
     limit: opts.limit || 10,
   }),
   learningPlaybooks: (accountId = 'default') => get(`/api/v1/learning/playbooks?account_id=${encodeURIComponent(accountId)}`),
+  // Non-creative read-only projections over local SQLite data.
+  ncCommerceOpsQueue: (limit = 200) => get(`/api/v1/noncreative/commerce-ops/queue?limit=${limit}`),
+  ncListingsHealth: (limit = 200) => get(`/api/v1/noncreative/listings/health?limit=${limit}`),
+  ncCompetitorObservations: (limit = 200) => get(`/api/v1/noncreative/competitor/observations?limit=${limit}`),
+  ncActivity: (limit = 50) => get(`/api/v1/noncreative/activity?limit=${limit}`),
+  ncKeywords: (limit = 200) => get(`/api/v1/noncreative/keywords?limit=${limit}`),
+  ncSources: (limit = 100) => get(`/api/v1/noncreative/sources?limit=${limit}`),
+  ncSessions: (limit = 100) => get(`/api/v1/noncreative/sessions?limit=${limit}`),
+  ncAccounts: (limit = 100) => get(`/api/v1/noncreative/accounts?limit=${limit}`),
 }
 
 // Never-rejecting wrapper. Returns { ok, value } or { ok:false, error } so a
