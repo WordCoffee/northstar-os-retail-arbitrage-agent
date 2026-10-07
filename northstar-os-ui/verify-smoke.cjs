@@ -135,7 +135,11 @@ async function run() {
   await navAction('/product-finder', 'button:has-text("Saved Sets")', '/ui/product-finder?view=saved', 'ProductFinder Saved Sets')
   await navAction('/golden-goose', 'table button:has-text("Open") >> nth=0', '/ui/golden-goose/GG-001', 'GoldenGoose row Open')
   await navAction('/golden-goose/GG-001', 'button:has-text("Open SourceScout")', '/ui/product-finder/B08L5VJQ7T', 'GoldenGoose Open SourceScout')
-  await navAction('/commerce-ops', 'table button:has-text("Open") >> nth=0', '/ui/commerce-ops/CO-01', 'CommerceOps row Open')
+  // Commerce Ops is now real-data driven; the queue may be empty in the stubbed
+  // (non-foundation fetch) harness, so assert the surface rather than a row nav.
+  await page.goto(urlFor('/commerce-ops'))
+  await page.waitForSelector('.app', { timeout: 8000 })
+  ok(!!(await page.$('button:has-text("New Workflow")')), 'CommerceOps surface present (New Workflow)')
 
   // ---- wired action: toast ----
   await navAction('/commerce-ops', 'button:has-text("New Workflow")', '/ui/commerce-ops', 'CommerceOps New Workflow (no nav)')
