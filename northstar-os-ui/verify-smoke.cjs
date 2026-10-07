@@ -79,7 +79,7 @@ async function run() {
 
   // ---- deep links (path routing) ----
   const deepLinks = [
-    ['/home?view=exceptions', 'for routing', 'deep /home?view=exceptions'],
+    ['/home', 'System signals', 'deep /home (system signals)'],
     ['/socialpulse?view=composer', 'Platform Preview', 'deep /socialpulse?view=composer'],
     ['/socialpulse?view=presets', 'Brand Voice', 'deep /socialpulse?view=presets'],
     ['/socialpulse?view=queue', 'Drafts', 'deep /socialpulse?view=queue'],
@@ -88,9 +88,8 @@ async function run() {
     ['/golden-goose?view=review', 'What Remains Unknown', 'deep /golden-goose?view=review'],
     ['/golden-goose?view=decisions', 'internal review history', 'deep /golden-goose?view=decisions'],
     ['/golden-goose?view=history', 'Historical log', 'deep /golden-goose?view=history'],
-    ['/home?view=activity', 'Assigned-Owner Visibility', 'deep /home?view=activity'],
-    ['/home?view=exposure', 'not authorizations', 'deep /home?view=exposure'],
-    ['/home?view=handoffs', 'Handoff Queue', 'deep /home?view=handoffs'],
+    ['/home', 'Work queues', 'deep /home (work queues)'],
+    ['/home', 'Launch a service', 'deep /home (launch grid)'],
     ['/profitability?view=scenarios', 'Scenario Calculator', 'deep /profitability?view=scenarios'],
     ['/profitability?view=fee', 'Set-Level Fee Basis', 'deep /profitability?view=fee'],
     ['/commerce-ops?view=approvals', 'Approval Checkpoints', 'deep /commerce-ops?view=approvals'],
