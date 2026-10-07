@@ -1,5 +1,6 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import KeywordLane from '../../components/KeywordLane.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
@@ -118,6 +119,7 @@ function FoundationKeywordPanel() {
 
 const TABS = [
   { id: 'sets', label: 'Sets', count: 4 },
+  { id: 'lane', label: 'Live Lane' },
   { id: 'trends', label: 'Trends' },
   { id: 'coverage', label: 'Coverage' },
   { id: 'alerts', label: 'Alerts', count: 2 },
@@ -212,6 +214,8 @@ export default function KeywordTracker() {
       </div>
 
       <RoomTabs tabs={TABS} base="/keyword-tracker" />
+
+      {view === 'lane' && <KeywordLane />}
 
       {view === 'sets' && (
         <div className="subview">

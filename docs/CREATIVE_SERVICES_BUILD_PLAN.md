@@ -310,6 +310,11 @@ acceptance 36/0, guards 11/0, mockup-lane 6/0, service-lanes 3/0.
   11/0, mockup-lane 6/0, service-lanes 3/0. Live: guardian audit `attention` 4/5;
   competitor deltas price −3.00, rank −32.
 
-**Next:** wire Keyword Tracker to the existing foundation `/keywords` routes; then
-the remaining parity polish per §5 (real previews, density, light data-viz) and a
-S3/MinIO parity test for the object-store backend.
+**Keyword Tracker: DONE.** New **Live Lane** (`?view=lane`) reads the existing
+foundation `/keywords/search` + `/keywords/gaps` routes through the authenticated
+API, with honest backend-error and empty states (never fabricates keyword data).
+Harness: smoke **51/0** (+1).
+
+**Next:** parity polish per §5 (real previews, density, light data-viz) and an
+S3/MinIO parity test for the object-store backend; when the owner supplies cloud
+keys, the cloud/video lanes are already wired and only need `MEDIA_GEN_LIVE=1`.
