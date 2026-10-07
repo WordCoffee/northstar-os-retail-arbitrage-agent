@@ -32,6 +32,11 @@ _DEFAULT_VOICE = {
 }
 
 
+def _llm_enabled() -> bool:
+    """Local-LLM use can be disabled globally (env) or per request (empty model)."""
+    return str(os.environ.get("NORTHSTAR_CREATIVE_LLM", "1")).strip().lower() not in ("0", "false", "off", "no")
+
+
 def load_brand_voice(brand: str) -> Dict[str, Any]:
     """Load brand voice profile from memory or return defaults."""
     try:
@@ -85,6 +90,8 @@ def generate_caption(
     # Try LLM
     caption = ""
     try:
+        if not model or not _llm_enabled():
+            raise RuntimeError("llm disabled")
         import httpx
         ollama_host = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
         resp = httpx.post(

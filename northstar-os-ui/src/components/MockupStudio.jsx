@@ -163,7 +163,7 @@ export default function MockupStudio() {
 
   if (loadError) {
     return (
-      <div className="subview mockup-studio">
+      <div className="subview ns-lane">
         <DataNotice tone="unknown" title="Local lane unavailable">{loadError}</DataNotice>
       </div>
     )
@@ -175,7 +175,7 @@ export default function MockupStudio() {
   const Y = catalog?.styles || {}
 
   return (
-    <div className="subview mockup-studio">
+    <div className="subview ns-lane">
       <DataNotice tone="internal" title="Local lane — exact text is deterministic">
         The scene is generated or edited by the local Qwen lane; every final glyph is applied by the
         deterministic text compositor. AI text is never treated as final packaging copy. This lane is

@@ -1,10 +1,12 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import ListingForgeLane from '../../components/ListingForgeLane.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 const TABS = [
   { id: 'listings', label: 'Listings', count: 24 },
   { id: 'editor', label: 'Editor' },
+  { id: 'lane', label: 'Local Lane' },
   { id: 'templates', label: 'Templates' },
   { id: 'assets', label: 'Assets' },
   { id: 'revisions', label: 'Revision Log' },
@@ -44,6 +46,8 @@ export default function ListingForge() {
       </DataNotice>
 
       <RoomTabs tabs={TABS} base="/listingforge" />
+
+      {view === 'lane' && <ListingForgeLane />}
 
       {view === 'listings' && (
         <div className="subview">

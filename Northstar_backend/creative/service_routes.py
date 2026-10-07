@@ -72,7 +72,8 @@ def listing_generate(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
 
     brand_voice = body.get("brand_voice")
     top_keywords = body.get("top_keywords")
-    model = body.get("model", "northstar-qwen3:rev1")
+    use_llm = bool(body.get("use_llm", True))
+    model = body.get("model", "northstar-qwen3:rev1") if use_llm else ""
 
     title = listing_forge.generate_title(product, brand_voice=brand_voice,
                                         top_keywords=top_keywords,
@@ -136,7 +137,7 @@ def social_caption(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
         product, platform=body.get("platform", "instagram"),
         brand=body.get("brand", "Mogra Organics"),
         angle=body.get("angle", "quality"), voice=body.get("voice"),
-        model=body.get("model", "northstar-qwen3:rev1"))
+        model=(body.get("model", "northstar-qwen3:rev1") if body.get("use_llm", True) else ""))
     return {"ok": True, "review_required": mod["review_required"],
             "moderation": mod, **result,
             "basis": "social_pulse local lane (template fallback; local LLM when available)"}

@@ -243,7 +243,19 @@ action when the owner says go.
 - 23 new offline tests (81 total across the creative suite); live smoke green;
   UI harnesses unchanged (smoke 43/0, mockup-lane 6/0, acceptance 33/0).
 
-**Next (Batch A continued):** wire the three rooms to their lanes (real data +
-empty states + truth labels), then Batch B (Creative Studio assets/variants/
-exports), Batch C (visual polish), Batch D (cloud finals / video / storage /
-OAuth write actions behind the arming flags).
+**Batch A continued — room wiring: DONE.** Each creative room now has a
+**Local Lane** tab that calls its real API end-to-end:
+- ListingForge → title/bullets/description/terms/score/compliance (`?view=lane`)
+- SocialPulse → captions + **brand-voice upload** (`?view=lane`)
+- AdPilot → bid recommendation + target ACoS, recommendation-only (`?view=lane`)
+Added a fast template-only path (`use_llm=false` per request, or
+`NORTHSTAR_CREATIVE_LLM=0`) so drafts are instant when the local LLM is busy.
+New harness `verify-service-lanes.cjs` (3/0) drives each lane against the real
+API. Fixed a real render crash (search-terms string vs array). Suite now:
+pytest 81; harnesses smoke 46/0, acceptance 36/0, guards 11/0, mockup-lane 6/0,
+service-lanes 3/0, invite-flow 11/0.
+
+**Next:** Batch B — Creative Studio deepening (asset registry, variant sets,
+export bundles tied to the exact-text lane); then Batch C (visual polish); then
+Batch D (cloud finals / video / object-store backend / OAuth write actions behind
+the arming flags).

@@ -416,9 +416,16 @@ def _build_description_prompt(product: Dict, brand_voice: Optional[Dict]) -> str
 # LLM integration
 # ---------------------------------------------------------------------------
 
+def _llm_enabled() -> bool:
+    """Local-LLM use can be disabled globally (env) or per request (empty model)."""
+    return str(os.environ.get("NORTHSTAR_CREATIVE_LLM", "1")).strip().lower() not in ("0", "false", "off", "no")
+
+
 def _call_llm(prompt: str, model: str = "northstar-qwen3:rev1",
               num_options: int = 1) -> List[str]:
-    """Call local Ollama LLM for generation."""
+    """Call local Ollama LLM for generation (fast template fallback if disabled)."""
+    if not model or not _llm_enabled():
+        return []
     import httpx
     ollama_host = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 

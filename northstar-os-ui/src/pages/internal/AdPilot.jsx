@@ -1,5 +1,6 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import AdPilotLane from '../../components/AdPilotLane.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 const TABS = [
@@ -7,6 +8,7 @@ const TABS = [
   { id: 'detail', label: 'Campaign Detail' },
   { id: 'terms', label: 'Search Terms' },
   { id: 'planner', label: 'Planner' },
+  { id: 'lane', label: 'Local Lane' },
   { id: 'placements', label: 'Placements' },
   { id: 'rules', label: 'Rules' },
 ]
@@ -48,6 +50,8 @@ export default function AdPilot() {
       </DataNotice>
 
       <RoomTabs tabs={TABS} base="/adpilot" />
+
+      {view === 'lane' && <AdPilotLane />}
 
       {view === 'campaigns' && (
         <div className="subview">

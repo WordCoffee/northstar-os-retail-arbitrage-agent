@@ -1,5 +1,6 @@
 import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import SocialPulseLane from '../../components/SocialPulseLane.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
@@ -27,6 +28,7 @@ const TABS = [
   { id: 'campaigns', label: 'Campaigns' },
   { id: 'queue', label: 'Workflow', count: 2 },
   { id: 'composer', label: 'Composer' },
+  { id: 'lane', label: 'Local Lane' },
   { id: 'channels', label: 'Channel Fit' },
   { id: 'assets', label: 'Asset Library' },
   { id: 'presets', label: 'Presets' },
@@ -215,6 +217,8 @@ export default function SocialPulse() {
       </div>
 
       <RoomTabs tabs={TABS} base="/socialpulse" />
+
+      {view === 'lane' && <SocialPulseLane />}
 
       {view === 'calendar' && (
         <div className="subview">

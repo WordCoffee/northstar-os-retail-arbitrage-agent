@@ -438,33 +438,33 @@ tbody tr:last-child td { border-bottom: none; }
   font-style: normal;
   font-display: swap;
 }
-.mockup-studio { font-family: 'NSBrandSans', system-ui, -apple-system, 'Segoe UI', sans-serif; }
-.mockup-studio .ms-serif { font-family: 'NSBrandSerif', Georgia, 'Times New Roman', serif; }
-.mockup-studio .ms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.mockup-studio .ms-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-.mockup-studio label { display: block; font-size: 12px; font-weight: 600; margin: 10px 0 4px; }
-.mockup-studio input[type=text], .mockup-studio select, .mockup-studio textarea {
+.ns-lane { font-family: 'NSBrandSans', system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.ns-lane .ms-serif { font-family: 'NSBrandSerif', Georgia, 'Times New Roman', serif; }
+.ns-lane .ms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ns-lane .ms-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.ns-lane label { display: block; font-size: 12px; font-weight: 600; margin: 10px 0 4px; }
+.ns-lane input[type=text], .ns-lane select, .ns-lane textarea {
   width: 100%; padding: 8px 10px; border: 1px solid var(--divider-mid); border-radius: 8px;
   font-family: inherit; font-size: 13px; background: var(--surface); color: var(--ink);
 }
-.mockup-studio textarea { min-height: 54px; resize: vertical; }
-.mockup-studio .ms-check { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 13px; font-weight: 600; }
-.mockup-studio .ms-check input { width: auto; }
-.mockup-studio .ms-drop {
+.ns-lane textarea { min-height: 54px; resize: vertical; }
+.ns-lane .ms-check { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 13px; font-weight: 600; }
+.ns-lane .ms-check input { width: auto; }
+.ns-lane .ms-drop {
   border: 2px dashed var(--divider-mid); border-radius: 12px; padding: 20px; text-align: center;
   cursor: pointer; background: var(--surface);
 }
-.mockup-studio .ms-drop:hover { border-color: var(--forest); }
-.mockup-studio .ms-drop strong { display: block; font-size: 14px; margin-bottom: 3px; }
-.mockup-studio .ms-drop small { color: var(--ink-soft); }
-.mockup-studio .ms-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.mockup-studio .ms-pane {
+.ns-lane .ms-drop:hover { border-color: var(--forest); }
+.ns-lane .ms-drop strong { display: block; font-size: 14px; margin-bottom: 3px; }
+.ns-lane .ms-drop small { color: var(--ink-soft); }
+.ns-lane .ms-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ns-lane .ms-pane {
   border: 1px solid var(--divider-mid); border-radius: 10px; background: var(--surface);
   padding: 10px; min-height: 260px; display: flex; flex-direction: column;
 }
-.mockup-studio .ms-pane h4 { margin: 0 0 8px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
-.mockup-studio .ms-pane img { max-width: 100%; border-radius: 6px; margin: auto; display: block; }
-.mockup-studio .ms-empty { margin: auto; color: var(--ink-soft); font-size: 12px; text-align: center; }
+.ns-lane .ms-pane h4 { margin: 0 0 8px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
+.ns-lane .ms-pane img { max-width: 100%; border-radius: 6px; margin: auto; display: block; }
+.ns-lane .ms-empty { margin: auto; color: var(--ink-soft); font-size: 12px; text-align: center; }
 @media (max-width: 900px) {
-  .mockup-studio .ms-grid, .mockup-studio .ms-grid-3, .mockup-studio .ms-preview { grid-template-columns: 1fr; }
+  .ns-lane .ms-grid, .ns-lane .ms-grid-3, .ns-lane .ms-preview { grid-template-columns: 1fr; }
 }
