@@ -351,3 +351,33 @@ def _score_caption(caption, platform, hashtags, voice):
     if len(caption) > 50:
         score += 10
     return min(100, score)
+
+
+# ---------------------------------------------------------------------------
+# Brand voice persistence (the "upload your brand voice" path)
+# ---------------------------------------------------------------------------
+
+def save_brand_voice(
+    brand: str,
+    profile: Dict[str, Any],
+    account_id: str = "default",
+) -> str:
+    """Persist a brand voice profile so ``load_brand_voice(brand)`` returns it.
+
+    This is the same path a customer uses to upload their own voice: store a
+    profile keyed by brand, and every SocialPulse generation picks it up.
+    Returns the memory entry id.
+    """
+    import sys
+    sys.path.insert(0, os.path.dirname(__file__))
+    import memory_bank
+
+    payload = {**_DEFAULT_VOICE, **(profile or {}), "brand": brand}
+    return memory_bank.ingest(
+        content=json.dumps(payload),
+        entry_type="brand_voice",
+        account_id=account_id,
+        source="brand_voice_upload",
+        confidence=1.0,
+        tags=[brand],
+    )

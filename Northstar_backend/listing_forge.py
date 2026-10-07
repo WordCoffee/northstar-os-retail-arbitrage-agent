@@ -456,3 +456,43 @@ def _parse_bullets(llm_output: str) -> List[str]:
         if line and len(line) > 10:
             bullets.append(line[:MAX_BULLET_LENGTH])
     return bullets[:MAX_BULLETS]
+
+
+# ---------------------------------------------------------------------------
+# Public composite helpers (used by the local /api/listing-forge lane)
+# ---------------------------------------------------------------------------
+
+def score_listing(
+    product: Dict[str, Any],
+    title: str = "",
+    bullets: Optional[List[str]] = None,
+    description: str = "",
+    keywords: Optional[List[str]] = None,
+) -> Dict[str, Any]:
+    """Composite 0-100 listing score with a per-field breakdown."""
+    bullets = bullets or []
+    title_s = _score_title(title, product, keywords) if title else 0.0
+    bullet_s = (sum(_score_bullet(b, product, keywords) for b in bullets) / len(bullets)) if bullets else 0.0
+    desc_s = _score_description(description, product) if description else 0.0
+    composite = round(0.5 * title_s + 0.35 * bullet_s + 0.15 * desc_s, 1)
+    return {
+        "composite": composite,
+        "title": round(title_s, 1),
+        "bullets": round(bullet_s, 1),
+        "description": round(desc_s, 1),
+        "basis": "rule-based scoring (deterministic)",
+    }
+
+
+def check_compliance(
+    title: str = "",
+    bullets: Optional[List[str]] = None,
+    brand: str = "",
+) -> Dict[str, Any]:
+    """Rule-based compliance screen for a draft listing."""
+    violations: List[Dict[str, Any]] = []
+    if title:
+        violations += _check_compliance_title(title, brand)
+    if bullets:
+        violations += _check_compliance_bullets(bullets)
+    return {"ok": not violations, "violations": violations}

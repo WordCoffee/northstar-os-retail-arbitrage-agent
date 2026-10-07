@@ -203,3 +203,47 @@ Suite-level visual upgrades (apply to every creative room):
   never as fake "complete".
 - The exact-text rule is never weakened; AI text is never final packaging text.
 - Local-only stays local-only; no public exposure without a separate decision.
+
+---
+
+## 9. Approved scope (owner decisions, 2026-10-06)
+
+Owner directives recorded:
+
+| # | Decision | Owner's answer | Consequence |
+|---|---|---|---|
+| G1 | Services | **Everything** — build out every creative service/feature; stop only to choose | Full program: ListingForge, SocialPulse, AdPilot, Creative Studio, Keyword Tracker, Guardian, Competitor Monitor |
+| G2 | Media providers | **Local *and* cloud, both fully usable** | Local ComfyUI lane + fal/OpenRouter/Replicate clients, each armed independently |
+| G3 | Video | **In scope (later)** | Video lane designed; built after images |
+| G4 | Storage | **Add object store** | `creative/storage.py`: local backend (default) + S3-compatible backend |
+| G5 | Moderation | **Adopt allowlist + review step** | `creative/moderation.py`: deterministic deny rules + `review_required` on generated creative |
+| G6 | Publishing / ad spend | **Design OAuth + approval; enable write actions** | Write paths built and wired, armed only by explicit env flag + per-action approval |
+| G7 | Brand voice / fonts | **Build the full upload path** (customers upload their own too) | `POST /api/social/brand-voice` → `memory_bank`; `load_brand_voice` picks it up |
+
+**Live-action guardrail (kept explicit).** Real-money ad spend and the first
+public post are the two actions the constitution still gates at the *moment of
+arming*. Both paths are built and wired, default-OFF
+(`NORTHSTAR_ADS_WRITE_ARMED`, `NORTHSTAR_SOCIAL_PUBLISH_ARMED`), each requiring a
+fresh per-action approval. "Enable" is therefore a one-switch + one-confirmation
+action when the owner says go.
+
+### Progress
+
+**Batch A — backend lanes: DONE (commit pending).** Built and tested:
+- `creative/moderation.py` — allowlist + deny rules (word-boundary; refuses invented
+  seals/nutrition/UPC) + `review_required`.
+- `creative/storage.py` — local + S3-compatible backend behind one interface;
+  honest `storage_status()` (no secret reads).
+- `creative/providers.py` — local + cloud readiness (presence-only), arming flags,
+  `write_policy()`.
+- `creative/service_routes.py` — `/api/listing-forge/*`, `/api/social/*`
+  (+ brand-voice upload), `/api/ad-pilot/*`, `/api/creative/capabilities`.
+- Public helpers added: `listing_forge.score_listing/check_compliance`,
+  `social_pulse.save_brand_voice`.
+- 23 new offline tests (81 total across the creative suite); live smoke green;
+  UI harnesses unchanged (smoke 43/0, mockup-lane 6/0, acceptance 33/0).
+
+**Next (Batch A continued):** wire the three rooms to their lanes (real data +
+empty states + truth labels), then Batch B (Creative Studio assets/variants/
+exports), Batch C (visual polish), Batch D (cloud finals / video / storage /
+OAuth write actions behind the arming flags).

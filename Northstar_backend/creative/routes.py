@@ -20,6 +20,7 @@ from __future__ import annotations
 import base64
 import binascii
 import io
+import logging
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -31,6 +32,8 @@ from PIL import Image
 
 from . import comfy_client, label_zone, mogra_mockup, presets
 from .exact_text import BrandContentError, LabelSpec, brand_fonts, compose_exact_text
+
+_log = logging.getLogger("northstar.creative")
 
 router = APIRouter(prefix="/api/creative", tags=["creative"])
 
@@ -254,6 +257,16 @@ def recent(limit: int = 12) -> Dict[str, Any]:
 def mount_creative(app: Any) -> None:
     """Register the router, the UI page, and the static assets on ``app``."""
     app.include_router(router)
+    # Creative service lanes (additive, local-first): listing-forge / social / ad-pilot
+    try:
+        from . import service_routes
+        for r in (service_routes.listing_router, service_routes.social_router,
+                  service_routes.adpilot_router, service_routes.capabilities_router):
+            app.include_router(r)
+        _log.info("Creative service lanes mounted "
+                  "(/api/listing-forge/*, /api/social/*, /api/ad-pilot/*, /api/creative/capabilities)")
+    except Exception as exc:  # keep the mockup lane alive if a lane fails to load
+        _log.warning("Creative service lanes unavailable: %s", exc)
     if STATIC_DIR.exists():
         app.mount("/api/creative/static", StaticFiles(directory=str(STATIC_DIR)),
                   name="creative-static")
