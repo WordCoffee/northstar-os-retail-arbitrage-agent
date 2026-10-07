@@ -1,9 +1,14 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
-import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import signals, { settle } from '../../services/signals.js'
+
+const TABS = [
+  { id: 'runs', label: 'Runs' },
+  { id: 'composer', label: 'Composer' },
+  { id: 'output', label: 'Output Detail' },
+]
 
 // ═══ Real engine status (presence-only; no credential values) ═══
 function AutothinKStatus() {
@@ -36,8 +41,9 @@ function AutothinKStatus() {
         <>
           <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
             <span className={`pill ${v.local_available ? 'pill-ok' : 'pill-warn'}`} title="Local Ollama reachable">{v.local_available ? 'local ready' : 'local not reachable'}</span>
-            <span className={`pill ${v.cloud_available ? 'pill-ochre' : 'pill-muted'}`} title="Cloud provider key present">{v.cloud_available ? 'cloud key present' : 'no cloud key'}</span>
+            <span className={`pill ${v.cloud_available ? 'pill-ochre' : 'pill-muted'}`} title="Cloud provider key present (e.g. OpenRouter)">{v.cloud_available ? 'cloud key present' : 'no cloud key'}</span>
             <span className={`pill ${v.cloud_live_armed ? 'pill-warn' : 'pill-muted'}`} title="Cloud live arming — owner-gated">cloud armed: {v.cloud_live_armed ? 'yes' : 'no'}</span>
+            <span className="pill pill-muted" title="Cloud provider">{v.cloud_provider || 'openrouter'}</span>
             <span className="pill pill-muted" title="Default local model">local: {v.default_local_model || 'UNKNOWN'}</span>
             <span className="pill pill-muted" title="Default cloud model">cloud: {v.default_cloud_model || 'UNKNOWN'}</span>
           </div>
@@ -90,39 +96,97 @@ function AutothinKHistory() {
   )
 }
 
-const TABS = [
-  { id: 'runs', label: 'Runs', count: 4 },
-  { id: 'composer', label: 'Composer' },
-  { id: 'output', label: 'Output Detail' },
-]
+// ═══ Real composer: local Ollama or cloud (OpenRouter) — provider-gated ═══
+function AutothinKComposer({ onResult }) {
+  const [avail, setAvail] = useState(null)
+  const [form, setForm] = useState({ query: '', provider: 'local', tier: 'T2' })
+  const [state, setState] = useState({ phase: 'idle' })
 
-const RUNS = [
-  { id: 'R-01', topic: 'Competitor Pricing Shift', engine: 'Ling 3.0 Flash', status: 'Complete', started: '2026-09-22', output: '3 insights', tone: 'pill-forest' },
-  { id: 'R-02', topic: 'Buy Box Risk Assessment', engine: 'Ling 3.0 Flash', status: 'Running', started: '2026-09-25', output: '—', tone: 'pill-ochre' },
-  { id: 'R-03', topic: 'Margin Hypothesis Scan', engine: 'Northstar Inline', status: 'Queued', started: '—', output: '—', tone: 'pill-muted' },
-  { id: 'R-04', topic: 'Listing Copy Quality', engine: 'Ling 3.0 Flash', status: 'Complete', started: '2026-09-20', output: '2 insights', tone: 'pill-forest' },
-]
+  useEffect(() => {
+    let alive = true
+    settle(signals.autothinkModels()).then(r => { if (alive) setAvail(r.ok ? r.value : null) })
+    return () => { alive = false }
+  }, [])
+
+  const localOk = !!(avail && avail.local_available)
+  const cloudOk = !!(avail && avail.cloud_available)
+  const providerOk = form.provider === 'local' ? localOk : cloudOk
+  const canRun = providerOk && form.query.trim().length > 0 && state.phase !== 'submitting'
+
+  const run = async () => {
+    if (!canRun) return
+    setState({ phase: 'submitting' })
+    const r = await settle(signals.autothinkRun({ query: form.query.trim(), provider: form.provider, tier: form.tier }))
+    if (r.ok) {
+      setState({ phase: 'done', value: r.value })
+      if (onResult) onResult(r.value)
+    } else {
+      setState({ phase: 'error', message: (r.error && r.error.message) || 'Run failed.' })
+    }
+  }
+
+  return (
+    <div className="card" data-testid="at-composer">
+      <div className="card-head">
+        <h3 className="card-title">Research Run Composer</h3>
+        <span className={`pill ${providerOk ? 'pill-muted' : 'pill-unknown'}`}>{providerOk ? 'provider ready' : 'provider not ready'}</span>
+      </div>
+      <div className="stack" style={{ gap: 12 }}>
+        <div className="field-row" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={{ fontSize: 12, color: 'var(--ink-mid)' }}>Research Topic</label>
+          <input className="input field" placeholder="e.g., Buy Box risk on Set A ASINs" value={form.query} onChange={e => setForm(f => ({ ...f, query: e.target.value }))} />
+        </div>
+        <div className="grid-2" style={{ gap: 12 }}>
+          <div className="field-row" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={{ fontSize: 12, color: 'var(--ink-mid)' }}>Provider</label>
+            <select className="select field" value={form.provider} onChange={e => setForm(f => ({ ...f, provider: e.target.value }))}>
+              <option value="local">Local (Ollama) {localOk ? '— ready' : '— not reachable'}</option>
+              <option value="cloud">Cloud (OpenRouter) {cloudOk ? '— key present' : '— no key'}</option>
+            </select>
+          </div>
+          <div className="field-row" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={{ fontSize: 12, color: 'var(--ink-mid)' }}>Tier</label>
+            <select className="select field" value={form.tier} onChange={e => setForm(f => ({ ...f, tier: e.target.value }))}>
+              <option value="T1">T1</option>
+              <option value="T2">T2</option>
+              <option value="T3">T3</option>
+            </select>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <button className="btn btn-sm" onClick={run} disabled={!canRun}>{state.phase === 'submitting' ? 'Running…' : 'Run Research Task'}</button>
+          {!providerOk && <span className="text-low" style={{ fontSize: 11 }}>{form.provider === 'local' ? 'Local Ollama is not reachable.' : 'No cloud key present (OpenRouter).'}</span>}
+        </div>
+        {state.phase === 'error' && <span className="pill pill-warn">{state.message}</span>}
+        {state.phase === 'done' && (
+          <div className="alert" style={{ marginBottom: 0 }}>
+            <div className="alert-title"><span className={`pill ${state.value.ok ? 'pill-ok' : 'pill-warn'}`}>{state.value.ok ? 'ok' : 'failed'}</span> {state.value.model || 'UNKNOWN'} · {state.value.provider}</div>
+            <div className="alert-text" style={{ whiteSpace: 'pre-wrap' }}>{state.value.content || state.value.reason || 'No content returned.'}</div>
+          </div>
+        )}
+        <div className="text-low" style={{ fontSize: 11 }}>A research run never fabricates claims — every output cites its source or says UNKNOWN. Cloud (OpenRouter) calls are owner-armed and spend-gated.</div>
+      </div>
+    </div>
+  )
+}
 
 export default function AutothinK() {
-  const { toast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
-
+  const [lastResult, setLastResult] = useState(null)
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : 'runs'
-
-  const newRun = () => navigate('/autothink?view=composer')
 
   return (
     <PageLayout
       title="AutothinK"
-      subtitle="Research run workspace — compose research tasks, review outputs, and track the knowledge plane in action."
+      subtitle="Research run workspace — compose research tasks, review outputs, and track the knowledge plane."
       actions={<>
-        <button className="btn btn-sm" onClick={newRun}>New Research Run</button>
+        <button className="btn btn-sm" onClick={() => navigate('/autothink?view=composer')}>New Research Run</button>
       </>}
     >
-      <DataNotice tone="sample" title="Live engine status + sample runs">
-        “Engine status” and “Session history” are live local reads. The research runs, composer, and output below are sample data. A research run never fabricates claims — every output cites its data source or says UNKNOWN. Running a task is provider-gated (local Ollama or an armed cloud provider).
+      <DataNotice tone="internal" title="Live engine + real runs">
+        “Engine status”, “Session history”, and the composer are live reads/calls. Running a task is provider-gated (local Ollama or an armed OpenRouter cloud key). No fabricated outputs.
       </DataNotice>
 
       <AutothinKStatus />
@@ -132,72 +196,12 @@ export default function AutothinK() {
       {view === 'runs' && (
         <div className="subview">
           <AutothinKHistory />
-
-          <div className="card">
-            <div className="card-head">
-              <h3 className="card-title">Sample runs (preview)</h3>
-              <span className="pill pill-muted">4 runs · sample</span>
-            </div>
-            <DataTable columns={[
-              { key: 'id', label: 'ID' },
-              { key: 'topic', label: 'Topic' },
-              { key: 'engine', label: 'Engine' },
-              { key: 'status', label: 'Status', render: (v, row) => <span className={`pill ${row.tone}`}>{v}</span> },
-              { key: 'started', label: 'Started' },
-              { key: 'output', label: 'Output' },
-            ]} rows={RUNS} />
-          </div>
-
-          <div className="card">
-            <div className="card-head">
-              <h3 className="card-title">How Outputs Are Grounded</h3>
-            </div>
-            <div className="stack" style={{ gap: 8 }}>
-              <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                <div style={{ fontSize: 13 }}>Every insight cites its data source or states UNKNOWN</div>
-                <span className="pill pill-forest">Enforced</span>
-              </div>
-              <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                <div style={{ fontSize: 13 }}>Engine choice is explicit per run — no silent delegation</div>
-                <span className="pill pill-muted">Explicit</span>
-              </div>
-              <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                <div style={{ fontSize: 13 }}>Outputs feed Memory Bank and shared data layer only after review</div>
-                <span className="pill pill-ochre">Review Gate</span>
-              </div>
-            </div>
-          </div>
         </div>
       )}
 
       {view === 'composer' && (
         <div className="subview">
-          <div className="card">
-            <div className="card-head">
-              <h3 className="card-title">Research Run Composer</h3>
-            </div>
-            <div className="stack" style={{ gap: 12 }}>
-              <div className="field-row" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <label style={{ fontSize: 12, color: 'var(--ink-mid)' }}>Research Topic</label>
-                <input className="input" placeholder="e.g., Buy Box risk on Set A ASINs" defaultValue="Competitor Pricing Shift" />
-              </div>
-              <div className="field-row" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <label style={{ fontSize: 12, color: 'var(--ink-mid)' }}>Engine</label>
-                <select className="select">
-                  <option>Ling 3.0 Flash</option>
-                  <option>Northstar Inline</option>
-                </select>
-              </div>
-              <div className="field-row" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <label style={{ fontSize: 12, color: 'var(--ink-mid)' }}>Data Sources Allowed</label>
-                <input className="input" placeholder="e.g., Listing Guardian, Keyword Tracker, Monitoring" />
-              </div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button className="btn btn-sm" onClick={() => toast('Run queued (sample) — engine will cite sources in every output.', 'info')}>Queue Research Run</button>
-                <button className="btn btn-sm btn-ghost" onClick={() => toast('Draft saving is not connected — composer runs are sample.', 'info')}>Save Draft</button>
-              </div>
-            </div>
-          </div>
+          <AutothinKComposer onResult={setLastResult} />
         </div>
       )}
 
@@ -205,28 +209,12 @@ export default function AutothinK() {
         <div className="subview">
           <div className="card">
             <div className="card-head">
-              <h3 className="card-title">R-02 — Buy Box Risk Assessment</h3>
-              <span className="pill pill-ochre">Running</span>
+              <h3 className="card-title">Output Detail</h3>
+              <span className="pill pill-muted">{lastResult ? (lastResult.model || 'UNKNOWN') : 'no run yet'}</span>
             </div>
-            <div className="stack" style={{ gap: 8 }}>
-              <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                <div>
-                  <div style={{ fontSize: 13 }}>Buy box position may shift on Set A — engine gathering seller-side data</div>
-                  <div className="text-low" style={{ fontSize: 11 }}>Sources: Monitoring · Status: IN PROGRESS</div>
-                </div>
-                <span className="pill pill-muted">Streaming</span>
-              </div>
-              <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                <div>
-                  <div style={{ fontSize: 13 }}>Seller count on B08L5VJQ7T</div>
-                  <div className="text-low" style={{ fontSize: 11 }}>Status: UNKNOWN — provider data not connected</div>
-                </div>
-                <span className="pill pill-unknown">UNKNOWN</span>
-              </div>
-            </div>
-            <div style={{ marginTop: 16 }}>
-              <button className="btn btn-sm btn-ghost" onClick={() => toast('Saved to Memory Bank (sample).', 'info')}>Send to Memory Bank</button>
-            </div>
+            {lastResult ? (
+              <div style={{ fontSize: 13, whiteSpace: 'pre-wrap' }}>{lastResult.content || lastResult.reason || 'No content returned.'}</div>
+            ) : <p style={{ fontSize: 13 }}>Run a research task in the Composer to see its output here. Honest empty state.</p>}
           </div>
         </div>
       )}

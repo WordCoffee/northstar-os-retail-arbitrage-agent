@@ -68,6 +68,7 @@ export const signals = {
   // AutothinK / Brain engine reads (presence-only; no credential values).
   autothinkModels: () => get('/api/autothink/models'),
   autothinkHistory: (limit = 20) => get(`/api/autothink/history?limit=${limit}`),
+  autothinkRun: (body) => postJson('/api/autothink/run', body),
   brainModels: () => get('/api/v1/models'),
   // Memory Bank / Learning (local, read-only; search is a semantic read).
   memorySearch: (intent, opts = {}) => postJson('/api/v1/memory/search', {
