@@ -29,7 +29,7 @@ export const ROOM_READINESS = {
   'competitor-monitor': 'partial', // real local product/source observations + sample competitor rows
   'profitability': 'partial', // backend economics engine + sample portfolio context
   'commerce-ops': 'partial', // real foundation approvals read + sample workflow
-  'monitoring': 'partial',
+  'monitoring': 'ready', // fully derived from live local reads (error tracker, readiness, refresh registry)
   'autothink': 'provider',
   'memory-bank': 'internal',
   'shared-data': 'internal',
