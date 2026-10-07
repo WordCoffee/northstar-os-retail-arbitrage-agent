@@ -26,7 +26,7 @@ export const ROOM_READINESS = {
   'golden-goose': 'ready',
   'listing-guardian': 'partial', // real local listing/identity records + sample triage
   'keyword-tracker': 'partial', // sample preview + live foundation keyword read (truth-first, additive)
-  'competitor-monitor': 'sample',
+  'competitor-monitor': 'partial', // real local product/source observations + sample competitor rows
   'profitability': 'partial', // backend economics engine + sample portfolio context
   'commerce-ops': 'partial', // real foundation approvals read + sample workflow
   'monitoring': 'partial',

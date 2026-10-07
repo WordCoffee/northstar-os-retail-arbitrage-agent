@@ -76,6 +76,67 @@ const TABS = [
   { id: 'watchlist', label: 'Watchlist', count: 2 },
 ]
 
+// ═══ Real local market observations (products + costco source products) ═══
+function RealMarketObservations() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(signals.ncCompetitorObservations()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', value: r.value })
+      else setSt({ phase: 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+  const v = st.phase === 'loaded' ? st.value : null
+  const items = v && Array.isArray(v.items) ? v.items : []
+  const s = (v && v.summary) || {}
+  const src = s.source_products && Array.isArray(s.source_products) ? s.source_products.slice(0, 8) : []
+  return (
+    <div className="card" data-testid="cm-real-observations" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Local market observations</h3>
+        <span className={`pill pill-${st.phase === 'error' ? 'unknown' : 'muted'}`}>{st.phase === 'loading' ? 'Loading…' : st.phase === 'error' ? 'unavailable' : `${items.length} products · local`}</span>
+      </div>
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Market observations unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {st.phase === 'loaded' && (
+        <>
+          <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+            <span className="pill pill-muted">{s.products ?? 0} products</span>
+            <span className="pill pill-muted">{s.source_products?.length ?? 0} source products</span>
+            <span className="pill pill-muted">{s.distinct_brands ?? 0} brands</span>
+            <span className="pill pill-muted">avg source price: {s.source_avg_price == null ? 'UNKNOWN' : '$' + s.source_avg_price}</span>
+          </div>
+          {items.length > 0 ? (
+            <DataTable columns={[
+              { key: 'asin', label: 'ASIN' },
+              { key: 'title', label: 'Product', render: (x) => <span title={x}>{x && x.length > 42 ? x.slice(0, 41) + '…' : x}</span> },
+              { key: 'brand', label: 'Brand', render: (x) => x || 'UNKNOWN' },
+              { key: 'amazon_price', label: 'Amazon', render: (x) => x == null ? <span className="pill pill-unknown">UNKNOWN</span> : '$' + Number(x).toFixed(2) },
+              { key: 'costco_cost', label: 'Costco', render: (x) => x == null ? <span className="pill pill-unknown">UNKNOWN</span> : '$' + Number(x).toFixed(2) },
+              { key: 'roi_pct', label: 'ROI', render: (x) => x == null ? <span className="pill pill-unknown">UNKNOWN</span> : <span className="pill pill-muted">{x}%</span> },
+            ]} rows={items.slice(0, 25)} />
+          ) : <p className="text-low" style={{ fontSize: 13 }}>No local product observations. Honest empty state.</p>}
+          {src.length > 0 && (
+            <div style={{ marginTop: 12 }}>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Recent source products (Costco)</div>
+              <div className="stack" style={{ gap: 4 }}>
+                {src.map((r, i) => (
+                  <div key={i} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0' }}>
+                    <span style={{ fontSize: 12 }} title={r.title_normalized}>{r.costco_item_number} · {(r.brand_normalized || 'UNKNOWN')}</span>
+                    <span className="pill pill-muted">{r.costco_price == null ? 'UNKNOWN' : '$' + Number(r.costco_price).toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>Real local catalog/market records (read-only). Not live competitor tracking.</div>
+        </>
+      )}
+    </div>
+  )
+}
+
 export default function CompetitorMonitor() {
   const { toast } = useToast()
   const location = useLocation()
@@ -97,6 +158,7 @@ export default function CompetitorMonitor() {
       </DataNotice>
 
       <CachedMarketObservations />
+      <RealMarketObservations />
 
       <RoomTabs tabs={TABS} base="/competitor-monitor" />
 

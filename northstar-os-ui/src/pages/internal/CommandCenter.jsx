@@ -166,6 +166,70 @@ function SystemSignals() {
   )
 }
 
+// ═══ Real local activity (pipeline runs + audit + campaigns) ═══
+function RealActivity() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(signals.ncActivity()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', value: r.value })
+      else setSt({ phase: 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+  const v = st.phase === 'loaded' ? st.value : null
+  const runs = v && Array.isArray(v.items) ? v.items : []
+  const s = (v && v.summary) || {}
+  const audit = Array.isArray(s.audit) ? s.audit.slice(0, 5) : []
+  const campaigns = Array.isArray(s.campaigns) ? s.campaigns.slice(0, 5) : []
+  return (
+    <div className="card" data-testid="cc-real-activity" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Local activity</h3>
+        <span className={`pill pill-${st.phase === 'error' ? 'unknown' : 'muted'}`}>{st.phase === 'loading' ? 'Loading…' : st.phase === 'error' ? 'unavailable' : `${runs.length} runs · local`}</span>
+      </div>
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Activity unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {st.phase === 'loaded' && (
+        <>
+          {runs.length > 0 ? (
+            <DataTable columns={[
+              { key: 'run_name', label: 'Run' },
+              { key: 'status', label: 'Status', render: (x) => <span className={`pill ${x === 'completed' ? 'pill-muted' : 'pill-warn'}`}>{x || 'UNKNOWN'}</span> },
+              { key: 'created_at', label: 'Started', render: (x) => x ? String(x).slice(0, 19).replace('T', ' ') : '—' },
+            ]} rows={runs} />
+          ) : <p className="text-low" style={{ fontSize: 13 }}>No pipeline runs recorded. Honest empty state.</p>}
+          <div className="grid-2" style={{ gap: 16, marginTop: 12 }}>
+            <div>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Recent audit</div>
+              <div className="stack" style={{ gap: 4 }}>
+                {audit.length > 0 ? audit.map((a, i) => (
+                  <div key={i} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0' }}>
+                    <span style={{ fontSize: 12 }}>{a.action}</span>
+                    <span className="pill pill-muted" style={{ fontSize: 10 }}>{a.entity_type || '—'}</span>
+                  </div>
+                )) : <span className="text-low" style={{ fontSize: 12 }}>No audit entries.</span>}
+              </div>
+            </div>
+            <div>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Campaigns</div>
+              <div className="stack" style={{ gap: 4 }}>
+                {campaigns.length > 0 ? campaigns.map((c, i) => (
+                  <div key={i} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0' }}>
+                    <span style={{ fontSize: 12 }}>{c.campaign_name}</span>
+                    <span className={`pill ${c.status === 'enabled' ? 'pill-muted' : 'pill-warn'}`} style={{ fontSize: 10 }}>{c.status || 'UNKNOWN'}</span>
+                  </div>
+                )) : <span className="text-low" style={{ fontSize: 12 }}>No campaigns.</span>}
+              </div>
+            </div>
+          </div>
+          <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>Real local activity (read-only). No provider call.</div>
+        </>
+      )}
+    </div>
+  )
+}
+
 const LAUNCH = [
   { label: 'SourceScout', route: '/product-finder', note: 'Cached product sourcing' },
   { label: 'Golden Goose', route: '/golden-goose', note: 'Opportunity review desk' },
@@ -287,6 +351,7 @@ export default function CommandCenter() {
 
       <SystemSignals />
       <WorkQueues navigate={navigate} />
+      <RealActivity />
       <LaunchGrid navigate={navigate} />
 
       <div className="card" style={{ marginBottom: 16, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', padding: '10px 14px' }}>
