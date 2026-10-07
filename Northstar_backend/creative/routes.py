@@ -264,7 +264,8 @@ def mount_creative(app: Any) -> None:
         from . import service_routes
         for r in (service_routes.listing_router, service_routes.social_router,
                   service_routes.adpilot_router, service_routes.capabilities_router,
-                  service_routes.assets_router):
+                  service_routes.assets_router, service_routes.media_router,
+                  service_routes.approvals_router):
             app.include_router(r)
         _log.info("Creative service lanes mounted "
                   "(/api/listing-forge/*, /api/social/*, /api/ad-pilot/*, /api/creative/capabilities)")

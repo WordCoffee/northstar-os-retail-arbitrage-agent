@@ -2,6 +2,7 @@ import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components
 import RoomTabs from '../../components/RoomTabs.jsx'
 import MockupStudio from '../../components/MockupStudio.jsx'
 import AssetRegistry from '../../components/AssetRegistry.jsx'
+import CloudApprovals from '../../components/CloudApprovals.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
@@ -29,6 +30,7 @@ const TABS = [
   { id: 'composer', label: 'Image Composer' },
   { id: 'mockups', label: 'Exact-Text Mockups' },
   { id: 'registry', label: 'Registry & Bundles' },
+  { id: 'cloud', label: 'Cloud & Approvals' },
   { id: 'video', label: 'Video / Shorts' },
   { id: 'queue', label: 'Production Queue' },
   { id: 'variants', label: 'Variants & History' },
@@ -481,6 +483,8 @@ export default function CreativeStudio() {
       {view === 'mockups' && <MockupStudio />}
 
       {view === 'registry' && <AssetRegistry />}
+
+      {view === 'cloud' && <CloudApprovals />}
 
       {view === 'video' && (
         <div className="subview">

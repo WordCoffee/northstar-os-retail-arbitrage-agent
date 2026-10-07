@@ -14,17 +14,24 @@ fallbacks and upgrades to the local LLM (Ollama) when it is present.
 
 from __future__ import annotations
 
+import base64
+import time
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Body, HTTPException, Query
 
-from . import moderation, providers, storage
+from . import approvals, cloud, moderation, providers, storage, video
 from . import assets as asset_store
 from . import bundles as bundle_store
 
 import ad_pilot
 import listing_forge
 import social_pulse
+
+
+def _stamp() -> str:
+    return time.strftime("%Y%m%d_%H%M%S")
 
 # ---------------------------------------------------------------------------
 # shared helpers
@@ -374,3 +381,116 @@ def create_bundle(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
     if not isinstance(ids, list) or not ids:
         raise HTTPException(status_code=400, detail="asset_ids (array) is required")
     return bundle_store.create_bundle(ids, name=body.get("name", "creative-bundle"))
+
+
+@assets_router.post("/assets/upload")
+def upload_asset(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    """Upload/register an external asset (base64) into the local registry."""
+    data_b64 = body.get("data_base64")
+    name = body.get("filename")
+    if not data_b64 or not name:
+        raise HTTPException(status_code=400, detail="data_base64 and filename are required")
+    try:
+        raw = base64.b64decode(str(data_b64).split(",", 1)[-1])
+    except Exception:
+        raise HTTPException(status_code=400, detail="data_base64 is not valid base64")
+    safe = Path(name).name
+    info = storage.get_backend().put(safe, raw, body.get("content_type", "image/png"))
+    asset = asset_store.register(
+        key=safe, url=f"/api/creative/file/{safe}", kind=body.get("kind", "image"),
+        product=body.get("product"), container=body.get("container"),
+        meta={"source": "upload"})
+    return {"ok": True, "asset": asset, "bytes": info["bytes"]}
+
+
+# ---------------------------------------------------------------------------
+# Cloud media (gated) + video (gated) — /api/creative/cloud*, /api/creative/video*
+
+
+media_router = APIRouter(prefix="/api/creative", tags=["creative-media"])
+
+
+@media_router.post("/cloud/generate")
+def cloud_generate(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    prompt = body.get("prompt")
+    if not prompt:
+        raise HTTPException(status_code=400, detail="prompt is required")
+    provider = body.get("provider", "fal")
+    _screen({"prompt": prompt})
+    out = storage._local_root() / f"cloud_{provider}_{_stamp()}.png"
+    try:
+        res = cloud.generate(prompt, provider, out, model=body.get("model"),
+                             image_size=body.get("image_size", "1024x1024"),
+                             num_images=int(body.get("num_images", 1)))
+    except cloud.ProviderUnavailable as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+    return {"ok": True, **res, "url": f"/api/creative/file/{out.name}"}
+
+
+@media_router.get("/video/models")
+def video_models() -> Dict[str, Any]:
+    return {"ok": True, **video.video_catalog()}
+
+
+@media_router.get("/video/estimate")
+def video_estimate(model: str, seconds: float = 5.0, audio: bool = False) -> Dict[str, Any]:
+    return {"ok": True, "model": model, "seconds": seconds,
+            "cost_estimate": video.estimate_video_cost(model, seconds, audio=audio)}
+
+
+@media_router.post("/video/generate")
+def video_generate(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    prompt = body.get("prompt")
+    model = body.get("model", "kling-2.6-pro")
+    if not prompt:
+        raise HTTPException(status_code=400, detail="prompt is required")
+    _screen({"prompt": prompt})
+    try:
+        res = video.generate_video(model, prompt, image_url=body.get("image_url"),
+                                   duration=int(body.get("duration", 5)),
+                                   aspect=body.get("aspect", "9:16"))
+    except cloud.ProviderUnavailable as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return {"ok": True, **res}
+
+
+# ---------------------------------------------------------------------------
+# Write-action approvals — /api/creative/approvals*
+
+
+approvals_router = APIRouter(prefix="/api/creative", tags=["creative-approvals"])
+
+
+@approvals_router.get("/approvals")
+def list_approvals(status: Optional[str] = None) -> Dict[str, Any]:
+    return {"ok": True, "posture": approvals.posture(),
+            "requests": approvals.list_requests(status)}
+
+
+@approvals_router.post("/approvals")
+def create_approval(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    kind = body.get("kind")
+    if kind not in approvals.WRITE_KINDS:
+        raise HTTPException(status_code=400,
+                            detail=f"kind must be one of {sorted(approvals.WRITE_KINDS)}")
+    rec = approvals.request(kind, body.get("payload") or {},
+                            requested_by=body.get("requested_by", "operator"),
+                            note=body.get("note", ""))
+    return {"ok": True, "request": rec}
+
+
+@approvals_router.post("/approvals/{rid}/decide")
+def decide_approval(rid: str, body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    try:
+        rec = approvals.decide(rid, approve=bool(body.get("approve")),
+                               by=body.get("by", "operator"), note=body.get("note", ""))
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    return {"ok": True, "request": rec}
+
+
+@approvals_router.post("/approvals/{rid}/execute")
+def execute_approval(rid: str) -> Dict[str, Any]:
+    return approvals.execute(rid)

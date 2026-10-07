@@ -87,6 +87,7 @@ async function run() {
     ['/creative-studio?view=exports', 'Bundle Builder', 'deep /creative-studio?view=exports'],
     ['/creative-studio?view=mockups', 'Exact-Text Mockups', 'deep /creative-studio?view=mockups'],
     ['/creative-studio?view=registry', 'Create export bundle', 'deep /creative-studio?view=registry'],
+    ['/creative-studio?view=cloud', 'Video cost estimator', 'deep /creative-studio?view=cloud'],
     ['/listingforge?view=lane', 'Generate Local Draft', 'deep /listingforge?view=lane'],
     ['/adpilot?view=lane', 'Recommend Bid', 'deep /adpilot?view=lane'],
     ['/socialpulse?view=lane', 'Generate Caption', 'deep /socialpulse?view=lane'],

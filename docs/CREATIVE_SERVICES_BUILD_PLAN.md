@@ -272,6 +272,30 @@ bundles over the storage layer:
   36/0, guards 11/0, mockup-lane 6/0, service-lanes 3/0. Live: scan indexed 33
   assets, a 3-asset bundle produced a downloadable 1.14 MB ZIP.
 
-**Next:** Batch C — visual polish (parity upgrades per §5: real previews, empty
-states, density, restrained motion, data-viz); then Batch D — cloud finals / video
-/ object-store backend / OAuth write actions behind the arming flags.
+**Batch D — cloud / video / approvals / uploads: DONE (backend + surface).**
+- `creative/cloud.py` — fal / OpenRouter / Replicate image clients, **gated**
+  (key present + `MEDIA_GEN_LIVE=1`); pure request builders; cost estimates.
+- `creative/video.py` — fal video spec (Wan / FLUX-3 draft / Kling 2.6 / Kling v3
+  i2v / Veo 3.1-fast), per-second cost, watermark flags, gated submit.
+- `creative/approvals.py` — local **write-action approval queue** for
+  `social_publish` / `ads_write`: request → decide → execute, audit-logged, honest
+  `write_actions_disarmed` / `not_approved` / `no_live_client` results.
+- API: `/api/creative/cloud/generate` (503 until armed), `/api/creative/video/*`,
+  `/api/creative/approvals*`, `/api/creative/assets/upload`.
+- Tests +21 (113 total).
+
+**Batch C — visual polish: DONE (core primitives).**
+- Shared `EmptyState` + `SectionHeader` primitives; `.empty-state` and restrained
+  `.fade-in` motion (respects `prefers-reduced-motion`).
+- New Creative Studio tab **Cloud & Approvals** (`?view=cloud`): arming posture
+  (local + cloud + write flags), video cost estimator, and the write-action
+  approval queue. Harness deep-link added.
+
+Live: video estimate `kling-2.6-pro` 15s+audio → **$2.10**; cloud generate →
+**503** (gated, not armed); approval `ads_write` → approved → execute →
+`write_actions_disarmed` (honest). Suite: pytest **113**; harnesses smoke **48/0**,
+acceptance 36/0, guards 11/0, mockup-lane 6/0, service-lanes 3/0.
+
+**Next:** wire Keyword Tracker to the existing foundation `/keywords` routes; give
+Listing Guardian / Competitor Monitor honest local lanes (data-source gated); add
+the remaining parity polish per §5 (real previews, density, light data-viz).

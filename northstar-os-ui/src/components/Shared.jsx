@@ -106,6 +106,32 @@ export function AuthorizationNote({ title = 'Authorization boundary', status = '
   )
 }
 
+// ═══ Shared: Empty State ═══
+// First-class empty surface (the blueprint's #1 complaint: rooms must not feel
+// empty or generic). Uses the existing .empty-title type scale.
+export function EmptyState({ title, children, icon }) {
+  return (
+    <div className="empty-state">
+      {icon ? <div className="empty-icon" aria-hidden="true">{icon}</div> : null}
+      {title ? <div className="empty-title">{title}</div> : null}
+      {children ? <div className="text-low" style={{ fontSize: 13, maxWidth: 460, margin: '0 auto' }}>{children}</div> : null}
+    </div>
+  )
+}
+
+// ═══ Shared: Section Header ═══
+export function SectionHeader({ title, sub, right }) {
+  return (
+    <div className="card-head" style={{ marginBottom: 10 }}>
+      <div>
+        <h3 className="card-title" style={{ margin: 0 }}>{title}</h3>
+        {sub ? <div className="text-low" style={{ fontSize: 12, marginTop: 2 }}>{sub}</div> : null}
+      </div>
+      {right ? <div>{right}</div> : null}
+    </div>
+  )
+}
+
 // ═══ Shared: Section Layout Component ═══
 export function PageLayout({ title, subtitle, actions, children }) {
   const { pathname } = useLocation()
