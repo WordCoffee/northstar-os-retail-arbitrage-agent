@@ -296,6 +296,20 @@ Live: video estimate `kling-2.6-pro` 15s+audio → **$2.10**; cloud generate →
 `write_actions_disarmed` (honest). Suite: pytest **113**; harnesses smoke **48/0**,
 acceptance 36/0, guards 11/0, mockup-lane 6/0, service-lanes 3/0.
 
-**Next:** wire Keyword Tracker to the existing foundation `/keywords` routes; give
-Listing Guardian / Competitor Monitor honest local lanes (data-source gated); add
-the remaining parity polish per §5 (real previews, density, light data-viz).
+**Adjacent rooms: DONE.** Real local capability (no live data source needed):
+- `creative/listing_guardian.py` — **Listing Guardian audit** of pasted listing text
+  (weighted checks: title length, bullets, description, keyword coverage,
+  compliance) via the ListingForge engine. `/api/listing-guardian/audit`.
+- `creative/competitor_monitor.py` — **Competitor Monitor watch desk**: add
+  competitors, record snapshots, exact deltas between snapshots (fields absent in
+  the newest snapshot are reported as `not_reported`, not as changes).
+  `/api/competitor-monitor/watchlist*`.
+- UI: **Local Lane** tabs in Listing Guardian (`?view=lane`) and Competitor Monitor
+  (`?view=lane`).
+- Tests: +10 (123 total). Harnesses: smoke **50/0** (+2), acceptance 36/0, guards
+  11/0, mockup-lane 6/0, service-lanes 3/0. Live: guardian audit `attention` 4/5;
+  competitor deltas price −3.00, rank −32.
+
+**Next:** wire Keyword Tracker to the existing foundation `/keywords` routes; then
+the remaining parity polish per §5 (real previews, density, light data-viz) and a
+S3/MinIO parity test for the object-store backend.

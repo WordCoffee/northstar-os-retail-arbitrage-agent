@@ -24,6 +24,7 @@ from fastapi import APIRouter, Body, HTTPException, Query
 from . import approvals, cloud, moderation, providers, storage, video
 from . import assets as asset_store
 from . import bundles as bundle_store
+from . import competitor_monitor, listing_guardian
 
 import ad_pilot
 import listing_forge
@@ -494,3 +495,60 @@ def decide_approval(rid: str, body: Dict[str, Any] = Body(...)) -> Dict[str, Any
 @approvals_router.post("/approvals/{rid}/execute")
 def execute_approval(rid: str) -> Dict[str, Any]:
     return approvals.execute(rid)
+
+
+# ---------------------------------------------------------------------------
+# Listing Guardian + Competitor Monitor — local, no live source required
+
+
+guardian_router = APIRouter(prefix="/api/listing-guardian", tags=["listing-guardian"])
+
+
+@guardian_router.post("/audit")
+def guardian_audit(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    listing = body.get("listing") if isinstance(body.get("listing"), dict) else body
+    _screen({"title": listing.get("title", ""), "bullets": listing.get("bullets") or [],
+             "description": listing.get("description", "")})
+    return listing_guardian.audit(listing)
+
+
+competitor_router = APIRouter(prefix="/api/competitor-monitor", tags=["competitor-monitor"])
+
+
+@competitor_router.get("/watchlist")
+def cm_list() -> Dict[str, Any]:
+    return {"ok": True, "entries": competitor_monitor.list_watch(),
+            "overview": competitor_monitor.overview()}
+
+
+@competitor_router.post("/watchlist")
+def cm_add(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    name = body.get("name")
+    if not name:
+        raise HTTPException(status_code=400, detail="name is required")
+    entry = competitor_monitor.add(name, url=body.get("url", ""),
+                                   asin=body.get("asin", ""), notes=body.get("notes", ""))
+    return {"ok": True, "entry": entry}
+
+
+@competitor_router.delete("/watchlist/{wid}")
+def cm_remove(wid: str) -> Dict[str, Any]:
+    return {"ok": True, "removed": competitor_monitor.remove(wid)}
+
+
+@competitor_router.post("/watchlist/{wid}/snapshot")
+def cm_snapshot(wid: str, body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    data = body.get("data") if isinstance(body.get("data"), dict) else body
+    try:
+        snap = competitor_monitor.snapshot(wid, data)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    return {"ok": True, "snapshot": snap, "deltas": competitor_monitor.deltas(wid)}
+
+
+@competitor_router.get("/watchlist/{wid}/deltas")
+def cm_deltas(wid: str) -> Dict[str, Any]:
+    try:
+        return {"ok": True, **competitor_monitor.deltas(wid)}
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))

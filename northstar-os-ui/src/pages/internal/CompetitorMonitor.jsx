@@ -1,5 +1,6 @@
 import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import CompetitorMonitorLane from '../../components/CompetitorMonitorLane.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
@@ -74,6 +75,7 @@ const TABS = [
   { id: 'landscape', label: 'Landscape', count: 8 },
   { id: 'changes', label: 'Price Changes', count: 14 },
   { id: 'watchlist', label: 'Watchlist', count: 2 },
+  { id: 'lane', label: 'Local Lane' },
 ]
 
 export default function CompetitorMonitor() {
@@ -99,6 +101,8 @@ export default function CompetitorMonitor() {
       <CachedMarketObservations />
 
       <RoomTabs tabs={TABS} base="/competitor-monitor" />
+
+      {view === 'lane' && <CompetitorMonitorLane />}
 
       {view === 'landscape' && (
         <div className="subview">

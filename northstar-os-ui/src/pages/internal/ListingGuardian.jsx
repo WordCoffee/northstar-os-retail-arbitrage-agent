@@ -1,5 +1,6 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import ListingGuardianLane from '../../components/ListingGuardianLane.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
@@ -8,6 +9,7 @@ const TABS = [
   { id: 'alerts', label: 'Alerts', count: 5 },
   { id: 'diffs', label: 'Diffs', count: 3 },
   { id: 'history', label: 'History' },
+  { id: 'lane', label: 'Local Lane' },
   { id: 'escalations', label: 'Escalations' },
 ]
 
@@ -139,6 +141,8 @@ export default function ListingGuardian() {
       <SourceStatusCard />
 
       <RoomTabs tabs={TABS} base="/listings" />
+
+      {view === 'lane' && <ListingGuardianLane />}
 
       {view === 'alerts' && (
         <div className="subview">
