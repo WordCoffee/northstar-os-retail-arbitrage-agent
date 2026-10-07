@@ -128,6 +128,15 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if path in ("/health", "/health/detailed") or path.startswith(("/static", "/ui")):
             return await call_next(request)
 
+        # Optional: exempt the local creative operator lanes (heavy mockup/bundle
+        # batches can exceed 30/min). Default OFF — enable explicitly in a local
+        # session with NORTHSTAR_RATE_LIMIT_EXEMPT_CREATIVE=1. The deployed default
+        # is unchanged.
+        if (os.getenv("NORTHSTAR_RATE_LIMIT_EXEMPT_CREATIVE", "").strip() == "1"
+                and path.startswith(("/api/creative", "/api/listing-forge", "/api/social",
+                                     "/api/ad-pilot", "/mogra-mockup"))):
+            return await call_next(request)
+
         client_id = self._get_client_id(request)
         plan = self._get_plan(request)
         limited, info = self._is_rate_limited(client_id, plan)
