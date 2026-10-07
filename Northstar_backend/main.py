@@ -2206,5 +2206,23 @@ except Exception as _foundation_exc:  # pragma: no cover - defensive mount
     )
 
 
+# =============================================================================
+# Non-creative read-only projections over the local SQLite data (products,
+# costco_* pipeline tables, keywords, listings, memory, audit, refresh metadata).
+# Read-only; no external calls; no secrets. Mounted defensively so a failure
+# here can never break the existing API surface.
+# =============================================================================
+try:
+    from noncreative_reads import router as _noncreative_router
+
+    app.include_router(_noncreative_router)
+except Exception as _noncreative_exc:  # pragma: no cover - defensive mount
+    import logging as _logging2
+
+    _logging2.getLogger("northstar.noncreative").warning(
+        "noncreative reads router not mounted: %s", _noncreative_exc
+    )
+
+
 
 
