@@ -144,9 +144,8 @@ async function checkNoticeInnerText(page, ctx) {
   await load(page, '/beta-ops/eligibility')
   await checkDisabledByTitle(page, ['Sample surface — eligibility is not applied'])
   await load(page, '/beta-ops/reports')
-  // Sample report rows keep their disabled title; the live safe-set dashboard
-  // export is additionally present (activated).
-  await checkDisabledByTitle(page, ['Export disabled in sample mode'])
+  // The safe-set dashboard export is the only report surface now (sample rows
+  // removed with the real-data completion); assert its presence.
   {
     const exp = await page.$('[data-testid="bo-dashboard-export"]')
     ok(!!exp, 'dashboard export surface present (activated)')

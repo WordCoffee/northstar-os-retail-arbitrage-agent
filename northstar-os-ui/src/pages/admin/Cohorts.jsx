@@ -86,75 +86,6 @@ function FoundationAuditLog() {
   )
 }
 
-const COHORT_PILL = { Complete: 'pill-muted', Active: 'pill-ochre' }
-
-const COHORTS = [
-  { name: 'Cohort 1', orgs: 5, status: 'Complete', date: 'Q3 2026' },
-  { name: 'Cohort 2', orgs: 6, status: 'Complete', date: 'Q3 2026' },
-  { name: 'Cohort 3', orgs: 3, status: 'Active', date: 'Q4 2026' },
-]
-
-export default function Cohorts() {
-  return (
-    <PageLayout title="Cohorts" subtitle="Batch groupings for onboarding and management.">
-      <BetaOpsNav />
-      <DataNotice tone="internal" title="Cohort records are internal">
-        Cohort membership and status are sample/internal records. A cohort assignment does not by itself grant entitlements or access.
-      </DataNotice>
-      <div className="card">
-        <div className="card-head">
-          <h3 className="card-title">Beta Cohorts</h3>
-          <span className="pill pill-muted">{COHORTS.length} cohorts · sample</span>
-        </div>
-        <DataTable columns={[
-          { key: 'name', label: 'Cohort' },
-          { key: 'orgs', label: 'Organizations' },
-          { key: 'status', label: 'Status', render: (v) => <span className={`pill ${COHORT_PILL[v] || 'pill-muted'}`}>{v}</span> },
-          { key: 'date', label: 'Period' },
-        ]} rows={COHORTS} />
-      </div>
-    </PageLayout>
-  )
-}
-
-const SUPPORT = [
-  { ticket: 'SUP-001', org: 'T2 Holdings', category: 'Sync', status: 'Open', age: '1d' },
-  { ticket: 'SUP-002', org: 'Northstar Labs', category: 'Billing', status: 'Resolved', age: '3d' },
-  { ticket: 'SUP-003', org: 'Word Coffee Co', category: 'Access', status: 'Open', age: '4h' },
-]
-
-export function SupportOps() {
-  const navigate = useNavigate()
-  const open = SUPPORT.filter(s => s.status === 'Open').length
-  return (
-    <PageLayout title="Support Operations" subtitle="Operational support and escalation queue for beta organizations.">
-      <BetaOpsNav />
-      <DataNotice tone="internal" title="Support queue is internal">
-        The “Foundation support queue” is a live read. The sample queue below is demonstration data. Responding to a ticket is an operator action and is logged.
-      </DataNotice>
-      <FoundationSupportQueue />
-      <MetricTiles columns={2} metrics={[
-        { label: 'Open Tickets', value: String(open), sub: 'Require a response', tone: 'warn' },
-        { label: 'Resolved', value: String(SUPPORT.length - open), sub: 'Closed this period' },
-      ]} />
-      <div className="card">
-        <div className="card-head">
-          <h3 className="card-title">Sample queue (preview)</h3>
-          <span className="pill pill-warn">{open} open · sample</span>
-        </div>
-        <DataTable columns={[
-          { key: 'ticket', label: 'Ticket' },
-          { key: 'org', label: 'Organization' },
-          { key: 'category', label: 'Category', render: (v) => <span className="pill pill-muted">{v}</span> },
-          { key: 'status', label: 'Status', render: (v) => <span className={`pill ${v === 'Open' ? 'pill-warn' : 'pill-muted'}`}>{v}</span> },
-          { key: 'age', label: 'Age' },
-          { key: 'action', label: '', render: (v, row) => <button className="btn btn-sm btn-ghost" onClick={() => navigate('/beta-ops/audit')}>Open audit trail</button> },
-        ]} rows={SUPPORT} />
-      </div>
-    </PageLayout>
-  )
-}
-
 const EXPORT_FIELDS = ['organization_id', 'organization_name', 'lifecycle_state', 'plan_tier',
   'subscription_status', 'invite_status', 'acceptance_complete', 'onboarding_complete',
   'monthly_jobs_used', 'max_jobs_per_month', 'seats_used', 'seat_limit', 'open_tickets',
@@ -165,7 +96,6 @@ const EXPORT_EXCLUDES = ['secret', 'token', 'password', 'card', 'credential', 'p
 function DashboardExport() {
   const [confirmed, setConfirmed] = useState(false)
   const [state, setState] = useState({ phase: 'idle' })
-
   const download = async () => {
     if (!confirmed) return
     setState({ phase: 'submitting' })
@@ -192,7 +122,6 @@ function DashboardExport() {
       })
     }
   }
-
   return (
     <div className="card" data-testid="bo-dashboard-export" style={{ marginBottom: 20 }}>
       <div className="card-head">
@@ -221,12 +150,9 @@ function DashboardExport() {
         <label htmlFor="export-confirm">I understand this exports the safe field set only.</label>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <button
-          className="btn btn-primary"
-          disabled={!confirmed || state.phase === 'submitting'}
-          onClick={download}
-          title={!confirmed ? 'Confirm before exporting' : 'Download the safe-set CSV'}
-        >{state.phase === 'submitting' ? 'Exporting…' : 'Download CSV'}</button>
+        <button className="btn btn-primary" disabled={!confirmed || state.phase === 'submitting'} onClick={download} title={!confirmed ? 'Confirm before exporting' : 'Download the safe-set CSV'}>
+          {state.phase === 'submitting' ? 'Exporting…' : 'Download CSV'}
+        </button>
         {state.phase === 'success' && <span className="pill pill-ok" data-testid="bo-export-success">Exported {state.filename} ({state.bytes} bytes)</span>}
         {state.phase === 'auth' && <span className="pill pill-unknown">Sign in required — session expired.</span>}
         {state.phase === 'forbidden' && <span className="pill pill-warn">Not permitted — platform-admin access required.</span>}
@@ -236,36 +162,55 @@ function DashboardExport() {
   )
 }
 
+// ═══ Cohorts — no dedicated backend; honest, no fabricated rows ═══
+export default function Cohorts() {
+  return (
+    <PageLayout title="Cohorts" subtitle="Batch groupings for onboarding and management.">
+      <BetaOpsNav />
+      <DataNotice tone="internal" title="Cohort management is not connected">
+        There is no cohort backend yet, so no cohort records are shown. Cohorts are a naming convention over plan assignment today — assign a plan on an organization&apos;s detail page instead. Nothing is fabricated here.
+      </DataNotice>
+      <div className="card">
+        <div className="card-head">
+          <h3 className="card-title">Beta Cohorts</h3>
+          <span className="pill pill-muted">not connected</span>
+        </div>
+        <p data-testid="bo-cohorts-empty" style={{ fontSize: 13 }}>No cohort data source is wired. Honest empty state.</p>
+      </div>
+    </PageLayout>
+  )
+}
+
+export function SupportOps() {
+  const navigate = useNavigate()
+  return (
+    <PageLayout title="Support Operations" subtitle="Operational support and escalation queue for beta organizations.">
+      <BetaOpsNav />
+      <DataNotice tone="internal" title="Support queue is live">
+        Tickets are read live from the foundation support service. Responding to a ticket is an operator action and is logged.
+      </DataNotice>
+      <FoundationSupportQueue />
+      <div className="card">
+        <div className="card-head">
+          <h3 className="card-title">Escalation routing</h3>
+        </div>
+        <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
+          <button className="btn btn-sm" onClick={() => navigate('/beta-ops/audit')}>Open audit trail</button>
+          <button className="btn btn-sm btn-ghost" onClick={() => navigate('/beta-ops/orgs')}>Open organizations</button>
+        </div>
+      </div>
+    </PageLayout>
+  )
+}
+
 export function ReportsExports() {
   return (
     <PageLayout title="Reports & Exports" subtitle="Operational reports and data exports.">
       <BetaOpsNav />
-      <DataNotice tone="internal" title="Safe-set export + sample reports">
-        The “Dashboard export (CSV)” card is a live, platform-admin export of the safe field set only — no secrets, card data, tokens, provider credentials, or cross-org data. The “Available Reports” rows below are sample until their backends exist.
+      <DataNotice tone="internal" title="Safe-set export only">
+        The “Dashboard export (CSV)” card is a live, platform-admin export of the safe field set only — no secrets, card data, tokens, provider credentials, or cross-org data. No other report backends are connected, so no sample report rows are shown.
       </DataNotice>
       <DashboardExport />
-      <div className="card">
-        <div className="card-head">
-          <h3 className="card-title">Available Reports</h3>
-          <span className="pill pill-muted">sample</span>
-        </div>
-        <div className="stack" style={{ gap: 8 }}>
-          {[
-            { name: 'Q3 Performance Summary', type: 'PDF', date: '2026-09-26' },
-            { name: 'Organization Roster', type: 'CSV', date: '2026-09-25' },
-            { name: 'Invite Audit Trail', type: 'CSV', date: '2026-09-24' },
-          ].map((r, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '10px 0', borderBottom: i < 2 ? '1px solid var(--divider)' : 'none' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 13 }}>{r.name}</div>
-                <div className="text-low" style={{ fontSize: 11 }}>{r.type} — {r.date}</div>
-              </div>
-              <span className="pill pill-muted" style={{ fontSize: 10 }} title="Export is disabled in sample mode">sample only</span>
-              <button className="btn btn-sm" disabled title="Export disabled in sample mode">Download</button>
-            </div>
-          ))}
-        </div>
-      </div>
     </PageLayout>
   )
 }
@@ -275,34 +220,9 @@ export function AuditNotes() {
     <PageLayout title="Audit & Notes" subtitle="Operational audit trail and internal notes.">
       <BetaOpsNav />
       <DataNotice tone="internal" title="Audit trail is internal and observed">
-        The “Foundation audit log” is a live, read-only read. The sample timeline below is demonstration data. Audit entries are never edited and are visible only to platform admins.
+        The “Foundation audit log” is a live, read-only read. Audit entries are never edited and are visible only to platform admins.
       </DataNotice>
       <FoundationAuditLog />
-      <div className="card">
-        <div className="card-head">
-          <h3 className="card-title">Sample audit log (preview)</h3>
-          <span className="pill pill-muted">OBSERVED · sample</span>
-        </div>
-        <div className="timeline">
-          {[
-            { time: '2026-09-26 09:14', event: 'Organization #0838 suspended', type: 'error', tag: 'OBSERVED' },
-            { time: '2026-09-25 14:30', event: 'Invite INV-2026-09-25-0192 expired', type: 'warn', tag: 'OBSERVED' },
-            { time: '2026-09-25 11:00', event: 'Cohort 3 created', type: 'info', tag: 'OBSERVED' },
-            { time: '2026-09-24 16:45', event: 'Plan updated for #0001', type: 'info', tag: 'HISTORICAL' },
-          ].map((item, i) => (
-            <div key={i} className="timeline-item">
-              <div className={`timeline-dot timeline-dot-${item.type}`}>{item.type === 'error' ? '!' : item.type === 'warn' ? '⚑' : 'i'}</div>
-              <div className="timeline-content">
-                <div className="timeline-text">{item.event}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 2 }}>
-                  <span className="timeline-date">{item.time}</span>
-                  <span className="pill pill-muted" style={{ fontSize: 10 }} title="Provenance — observed/historical, not live-verified">{item.tag}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
     </PageLayout>
   )
 }
@@ -317,12 +237,12 @@ export function LifecycleModal() {
       </div>
       <AuthorizationNote
         title="Lifecycle transitions"
-        status="Suspend/resume active on organization detail — this modal stays disabled"
-        route="POST /api/v1/foundation/admin/orgs/{id}/{grant,suspend,resume,downgrade,cancel}"
+        status="Suspend/resume/grant/plan active on organization detail — this modal stays disabled"
+        route="POST /api/v1/foundation/admin/orgs/{id}/{grant,suspend,resume,plan,downgrade,cancel}"
         permission="PERM_PLATFORM_ADMIN"
         audit="org.lifecycle.<state> (append-only, actor + reason)"
       >
-        Transitions are validated server-side; blocking states (suspended/paused/cancelled/archived) set the org inactive so the next authenticated request is denied. <strong>Suspend</strong> and <strong>Resume</strong> are now activated per-organization on the organization detail page (confirmation-gated). Grant, plan/tier, <strong>downgrade</strong>, <strong>cancel</strong>, and <strong>archive</strong> remain disabled.
+        Grant/activate, plan/tier, suspend, and resume are activated per-organization on the organization detail page (confirmation-gated, audited). This generic modal stays disabled; <strong>downgrade</strong> and <strong>cancel</strong> remain disabled.
       </AuthorizationNote>
       <div className="card" style={{ maxWidth: 640 }}>
         <div className="card-head">
@@ -332,11 +252,11 @@ export function LifecycleModal() {
         <div className="stack" style={{ gap: 16 }}>
           <div className="field-group">
             <label className="label">Target Organization</label>
-            <input className="field" defaultValue="#0838 — Kirkland Ventures" readOnly />
+            <input className="field" placeholder="Select an organization from the roster" readOnly />
           </div>
           <div className="field-group">
             <label className="label">Action</label>
-            <select className="field">
+            <select className="field" disabled>
               <option>Suspend</option>
               <option>Cancel</option>
               <option>Downgrade</option>
@@ -352,7 +272,7 @@ export function LifecycleModal() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <button className="btn btn-danger" disabled title="Sample surface — no lifecycle action is applied">Confirm Lifecycle Action</button>
-            <span className="text-low" style={{ fontSize: 11 }}>Disabled in sample mode — no state is changed.</span>
+            <span className="text-low" style={{ fontSize: 11 }}>Disabled — use the organization detail page for enabled actions.</span>
           </div>
         </div>
       </div>
@@ -361,46 +281,22 @@ export function LifecycleModal() {
 }
 
 export function EligibilityChecklist() {
-  const items = [
-    { text: 'Organization registration complete', checked: true },
-    { text: 'Terms accepted', checked: true },
-    { text: 'DPA signed', checked: true },
-    { text: 'Billing verified', checked: false },
-    { text: 'Operator assigned', checked: false },
-  ]
-  const done = items.filter(i => i.checked).length
+  const navigate = useNavigate()
   return (
     <PageLayout title="Eligibility Checklist" subtitle="Verify criteria before cohort admission.">
       <BetaOpsNav />
-      <DataNotice tone="internal" title="Eligibility is an operator decision">
-        Checklist state is a sample/internal record. Passing the checklist does not auto-admit an organization; admission is an explicit operator decision.
+      <DataNotice tone="internal" title="Eligibility is per-organization">
+        Admission eligibility is evaluated per organization from its live record (legal acceptance, invite, lifecycle). Open an organization to run the real, checklist-gated admission. No global checklist is fabricated here.
       </DataNotice>
       <div className="card" style={{ maxWidth: 640 }}>
         <div className="card-head">
           <h3 className="card-title">Admission Criteria</h3>
-          <span className={`pill ${done === items.length ? 'pill-muted' : 'pill-ochre'}`}>{done}/{items.length} complete</span>
+          <span className="pill pill-muted">per-organization</span>
         </div>
-        <div className="stack" style={{ gap: 10 }}>
-          {items.map((item, i) => (
-            <div key={i} className="check-row">
-              <input type="checkbox" checked={item.checked} readOnly />
-              <label>{item.text}</label>
-              <span className={`pill ${item.checked ? 'pill-muted' : 'pill-ochre'}`} style={{ marginLeft: 'auto', fontSize: 10 }}>{item.checked ? 'Verified' : 'Pending'}</span>
-            </div>
-          ))}
-        </div>
+        <p style={{ fontSize: 13 }}>Eligibility (legal acceptance complete, invite recorded, eligible lifecycle state) is shown on the organization detail page. This page is a non-authoritative pointer and stays disabled.</p>
         <div style={{ marginTop: 14 }}>
-          <AuthorizationNote
-            title="Eligibility → activation"
-            status="Grant/activate active on organization detail — this checklist stays disabled"
-            route="POST /api/v1/foundation/admin/orgs/{id}/grant"
-            permission="PERM_PLATFORM_ADMIN"
-            audit="org.lifecycle.onboarding / org.lifecycle.active"
-          >
-            Verifying eligibility does not admit an organization by itself. Admission is now performed per-organization on the organization detail page (checklist-gated, confirmation-gated, audited). This checklist remains a non-authoritative surface and stays disabled.
-          </AuthorizationNote>
           <button className="btn btn-primary" disabled title="Sample surface — eligibility is not applied">Verify Eligibility</button>
-          <span className="text-low" style={{ fontSize: 11, marginLeft: 10 }}>Disabled in sample mode.</span>
+          <button className="btn btn-sm btn-ghost" style={{ marginLeft: 10 }} onClick={() => navigate('/beta-ops/orgs')}>Open organizations</button>
         </div>
       </div>
     </PageLayout>
