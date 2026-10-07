@@ -393,6 +393,140 @@ function LifecycleControls({ id, state, onDone }) {
   )
 }
 
+// ═══ ACTIVATED: entitlement override (platform-admin only) ═══
+const ENTITLEMENT_FEATURES = ['max_jobs_per_month', 'export_enabled', 'advanced_reports', 'seat_limit', 'support_level', 'override_allowed']
+
+function EntitlementOverrideControl({ id, onDone }) {
+  const [form, setForm] = useState({ feature: 'export_enabled', value: 'true', reason: '', permanent: false })
+  const [confirmed, setConfirmed] = useState(false)
+  const [state, setState] = useState({ phase: 'idle' })
+  const can = confirmed && state.phase !== 'submitting'
+  const submit = async (e) => {
+    e.preventDefault()
+    if (!can) return
+    setState({ phase: 'submitting' })
+    const raw = form.value.trim()
+    const value = raw === 'true' ? true : raw === 'false' ? false : (raw !== '' && !Number.isNaN(Number(raw)) ? Number(raw) : raw)
+    const r = await settle(foundationApi.adminOrgAction(id, 'override', {
+      feature: form.feature, value, reason: form.reason.trim() || undefined, permanent: form.permanent,
+    }))
+    if (r.ok) { setState({ phase: 'success', value: r.value }); setConfirmed(false); if (onDone) onDone() }
+    else {
+      const s = r.error && r.error.status
+      setState({ phase: s === 401 ? 'auth' : s === 403 ? 'forbidden' : s === 404 ? 'not_found' : 'error', message: (r.error && r.error.message) || 'Override failed.' })
+    }
+  }
+  return (
+    <div className="card" data-testid="org-override" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Entitlement override</h3>
+        <span className="pill pill-ochre">active · platform admin</span>
+      </div>
+      <AuthorizationNote
+        title="Entitlement override"
+        status="Active — per-event confirmation"
+        route="POST /api/v1/foundation/admin/orgs/{id}/override"
+        permission="PERM_PLATFORM_ADMIN"
+        audit="admin.override.set"
+      >
+        Sets a per-organization entitlement override (feature/value/reason) and refreshes entitlements immediately. Audited as <span style={{ fontFamily: 'var(--font-mono)' }}>admin.override.set</span>. Use only for scoped beta exceptions.
+      </AuthorizationNote>
+      <form className="stack" style={{ gap: 10 }} onSubmit={submit}>
+        <div className="grid-2" style={{ gap: 12 }}>
+          <label className="stack" style={{ gap: 4 }}>
+            <span className="text-low" style={{ fontSize: 11 }}>Feature</span>
+            <select className="field" value={form.feature} onChange={e => setForm(f => ({ ...f, feature: e.target.value }))}>
+              {ENTITLEMENT_FEATURES.map(x => <option key={x} value={x}>{x}</option>)}
+            </select>
+          </label>
+          <label className="stack" style={{ gap: 4 }}>
+            <span className="text-low" style={{ fontSize: 11 }}>Value (true/false/number)</span>
+            <input className="field" value={form.value} onChange={e => setForm(f => ({ ...f, value: e.target.value }))} placeholder="true" />
+          </label>
+        </div>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Reason (optional)</span>
+          <input className="field" value={form.reason} onChange={e => setForm(f => ({ ...f, reason: e.target.value }))} placeholder="Why this override" />
+        </label>
+        <div className="check-row"><input type="checkbox" id="ovr-perm" checked={form.permanent} onChange={e => setForm(f => ({ ...f, permanent: e.target.checked }))} /><label htmlFor="ovr-perm">Permanent (no expiry)</label></div>
+        <div className="check-row"><input type="checkbox" id="ovr-confirm" checked={confirmed} onChange={e => setConfirmed(e.target.checked)} /><label htmlFor="ovr-confirm">I understand this changes this organization&apos;s entitlements.</label></div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button className="btn btn-primary" type="submit" disabled={!can}>{state.phase === 'submitting' ? 'Applying…' : 'Apply override'}</button>
+          {state.phase === 'success' && <span className="pill pill-ok">Override applied — audit event admin.override.set recorded</span>}
+          {state.phase === 'auth' && <span className="pill pill-unknown">Sign in required.</span>}
+          {state.phase === 'forbidden' && <span className="pill pill-warn">Not permitted — platform-admin required.</span>}
+          {state.phase === 'not_found' && <span className="pill pill-warn">Organization not found.</span>}
+          {state.phase === 'error' && <span className="pill pill-warn">{state.message}</span>}
+        </div>
+      </form>
+    </div>
+  )
+}
+
+// ═══ ACTIVATED: cancel / archive (platform-admin only; typed confirmation) ═══
+function DestructiveLifecycleControl({ id, state: lc, onDone }) {
+  const [action, setAction] = useState('cancel')
+  const [reason, setReason] = useState('')
+  const [typed, setTyped] = useState('')
+  const [st, setSt] = useState({ phase: 'idle' })
+  const can = typed.trim().toUpperCase() === action.toUpperCase() && st.phase !== 'submitting'
+  const submit = async (e) => {
+    e.preventDefault()
+    if (!can) return
+    setSt({ phase: 'submitting' })
+    const r = await settle(foundationApi.adminOrgAction(id, action, { reason: reason.trim() || undefined }))
+    if (r.ok) { setSt({ phase: 'success', value: r.value }); setTyped(''); setReason(''); if (onDone) onDone() }
+    else {
+      const s = r.error && r.error.status
+      setSt({ phase: s === 401 ? 'auth' : s === 403 ? 'forbidden' : s === 404 ? 'not_found' : 'error', message: (r.error && r.error.message) || `${action} failed.` })
+    }
+  }
+  return (
+    <div className="card" data-testid="org-destructive" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Cancel / Archive</h3>
+        <span className="pill pill-error">active · irreversible</span>
+      </div>
+      <AuthorizationNote
+        title="Cancel / archive organization"
+        status="Active — typed confirmation required"
+        route="POST /api/v1/foundation/admin/orgs/{id}/{cancel,archive}"
+        permission="PERM_PLATFORM_ADMIN"
+        audit="org.lifecycle.cancelled / org.lifecycle.archived"
+      >
+        Cancel blocks the organization (near-terminal); archive is terminal. Both are append-only audited and require typing the action name to confirm. Current lifecycle: <strong>{lc || 'UNKNOWN'}</strong>.
+      </AuthorizationNote>
+      <form className="stack" style={{ gap: 10 }} onSubmit={submit}>
+        <div className="grid-2" style={{ gap: 12 }}>
+          <label className="stack" style={{ gap: 4 }}>
+            <span className="text-low" style={{ fontSize: 11 }}>Action</span>
+            <select className="field" value={action} onChange={e => { setAction(e.target.value); setTyped('') }}>
+              <option value="cancel">Cancel</option>
+              <option value="archive">Archive</option>
+            </select>
+          </label>
+          <label className="stack" style={{ gap: 4 }}>
+            <span className="text-low" style={{ fontSize: 11 }}>Reason (optional)</span>
+            <input className="field" value={reason} onChange={e => setReason(e.target.value)} placeholder="Why this action" />
+          </label>
+        </div>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Type “{action}” to confirm</span>
+          <input className="field" value={typed} onChange={e => setTyped(e.target.value)} placeholder={action} />
+        </label>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button className="btn btn-danger" type="submit" disabled={!can}>{st.phase === 'submitting' ? 'Applying…' : `Confirm ${action}`}</button>
+          {st.phase === 'success' && <span className="pill pill-ok">{action === 'cancel' ? 'Cancelled' : 'Archived'} — audit event recorded</span>}
+          {st.phase === 'auth' && <span className="pill pill-unknown">Sign in required.</span>}
+          {st.phase === 'forbidden' && <span className="pill pill-warn">Not permitted — platform-admin required.</span>}
+          {st.phase === 'not_found' && <span className="pill pill-warn">Organization not found.</span>}
+          {st.phase === 'error' && <span className="pill pill-warn">{st.message}</span>}
+        </div>
+      </form>
+    </div>
+  )
+}
+
 // Real organization detail (platform-admin read) for real org ids.
 function FoundationOrgDetail({ id }) {
   const navigate = useNavigate()
@@ -438,6 +572,8 @@ function FoundationOrgDetail({ id }) {
           <GrantControl id={id} record={o} onDone={() => setReloadKey(k => k + 1)} />
           <PlanChangeControl id={id} record={o} onDone={() => setReloadKey(k => k + 1)} />
           <LifecycleControls id={id} state={o.lifecycle_state} onDone={() => setReloadKey(k => k + 1)} />
+          <EntitlementOverrideControl id={id} onDone={() => setReloadKey(k => k + 1)} />
+          <DestructiveLifecycleControl id={id} state={o.lifecycle_state} onDone={() => setReloadKey(k => k + 1)} />
           {Array.isArray(o.notes) && o.notes.length > 0 && (
             <div style={{ marginBottom: 8 }}>
               <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Internal notes</div>

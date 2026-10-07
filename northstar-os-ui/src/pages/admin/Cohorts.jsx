@@ -181,15 +181,94 @@ export default function Cohorts() {
   )
 }
 
+const TRIAGE_STATUSES = ['new', 'acknowledged', 'investigating', 'resolved', 'closed']
+
+// ═══ ACTIVATED: support triage write (platform-admin only) ═══
+function SupportTriage() {
+  const [form, setForm] = useState({ ticket_id: '', status: 'acknowledged', assignee: '', internal_note: '', tester_visible_note: '' })
+  const [confirmed, setConfirmed] = useState(false)
+  const [st, setSt] = useState({ phase: 'idle' })
+  const can = !!form.ticket_id.trim() && confirmed && st.phase !== 'submitting'
+  const submit = async (e) => {
+    e.preventDefault()
+    if (!can) return
+    setSt({ phase: 'submitting' })
+    const r = await settle(foundationApi.supportTriage(form.ticket_id.trim(), {
+      status: form.status,
+      assignee: form.assignee.trim() || undefined,
+      internal_note: form.internal_note.trim() || undefined,
+      tester_visible_note: form.tester_visible_note.trim() || undefined,
+    }))
+    if (r.ok) { setSt({ phase: 'success' }); setConfirmed(false) }
+    else {
+      const s = r.error && r.error.status
+      setSt({ phase: s === 401 ? 'auth' : s === 403 ? 'forbidden' : s === 404 ? 'not_found' : 'error', message: (r.error && r.error.message) || 'Triage failed.' })
+    }
+  }
+  return (
+    <div className="card" data-testid="bo-support-triage" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Triage ticket</h3>
+        <span className="pill pill-ochre">active · platform admin</span>
+      </div>
+      <AuthorizationNote
+        title="Support triage"
+        status="Active — platform-admin only"
+        route="POST /api/v1/foundation/support/tickets/{id}/triage"
+        permission="PERM_PLATFORM_ADMIN"
+        audit="support triage (status/notes)"
+      >
+        Updates a ticket&apos;s status, assignee, internal note, and tester-visible note. Internal notes are never exposed to testers. Audited.
+      </AuthorizationNote>
+      <form className="stack" style={{ gap: 10 }} onSubmit={submit}>
+        <div className="grid-2" style={{ gap: 12 }}>
+          <label className="stack" style={{ gap: 4 }}>
+            <span className="text-low" style={{ fontSize: 11 }}>Ticket id</span>
+            <input className="field" value={form.ticket_id} onChange={e => setForm(f => ({ ...f, ticket_id: e.target.value }))} placeholder="ticket id from the queue" />
+          </label>
+          <label className="stack" style={{ gap: 4 }}>
+            <span className="text-low" style={{ fontSize: 11 }}>Status</span>
+            <select className="field" value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value }))}>
+              {TRIAGE_STATUSES.map(x => <option key={x} value={x}>{x}</option>)}
+            </select>
+          </label>
+        </div>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Assignee (optional)</span>
+          <input className="field" value={form.assignee} onChange={e => setForm(f => ({ ...f, assignee: e.target.value }))} placeholder="operator id" />
+        </label>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Internal note (not shown to testers)</span>
+          <input className="field" value={form.internal_note} onChange={e => setForm(f => ({ ...f, internal_note: e.target.value }))} placeholder="internal" />
+        </label>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Tester-visible note (optional)</span>
+          <input className="field" value={form.tester_visible_note} onChange={e => setForm(f => ({ ...f, tester_visible_note: e.target.value }))} placeholder="shared with tester" />
+        </label>
+        <div className="check-row"><input type="checkbox" id="tri-confirm" checked={confirmed} onChange={e => setConfirmed(e.target.checked)} /><label htmlFor="tri-confirm">I understand this updates the ticket and is logged.</label></div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button className="btn btn-primary" type="submit" disabled={!can}>{st.phase === 'submitting' ? 'Saving…' : 'Save triage'}</button>
+          {st.phase === 'success' && <span className="pill pill-ok">Triage saved — audited</span>}
+          {st.phase === 'auth' && <span className="pill pill-unknown">Sign in required.</span>}
+          {st.phase === 'forbidden' && <span className="pill pill-warn">Not permitted — platform-admin required.</span>}
+          {st.phase === 'not_found' && <span className="pill pill-warn">Ticket not found.</span>}
+          {st.phase === 'error' && <span className="pill pill-warn">{st.message}</span>}
+        </div>
+      </form>
+    </div>
+  )
+}
+
 export function SupportOps() {
   const navigate = useNavigate()
   return (
     <PageLayout title="Support Operations" subtitle="Operational support and escalation queue for beta organizations.">
       <BetaOpsNav />
       <DataNotice tone="internal" title="Support queue is live">
-        Tickets are read live from the foundation support service. Responding to a ticket is an operator action and is logged.
+        Tickets are read live from the foundation support service. Triage and responses are operator actions and are logged.
       </DataNotice>
       <FoundationSupportQueue />
+      <SupportTriage />
       <div className="card">
         <div className="card-head">
           <h3 className="card-title">Escalation routing</h3>

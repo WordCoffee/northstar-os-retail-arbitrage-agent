@@ -1,11 +1,11 @@
 # Write-Path Authorization Map (non-creative admin/operator surface)
 
-**Status:** design + scoped activations. **Seven actions are ACTIVATED**
-(owner-approved, platform-admin only): **Issue invite**, **Revoke invite**,
-**Grant / activate organization**, **Plan / tier change**, **Suspend
-organization**, **Resume organization**, and the read-only **Dashboard export
-CSV**. Every other classified action remains disabled; activation of any further
-action requires explicit owner approval.
+**Status:** scoped activations (owner-approved, platform-admin only):
+**Issue invite**, **Revoke invite**, **Grant / activate**, **Plan / tier
+change**, **Suspend**, **Resume**, **Entitlement override**, **Cancel**,
+**Archive**, **Support triage**, and the read-only **Dashboard export CSV**.
+Each write is confirmation-gated and append-only audited. (Reissue invite has
+no backend route and remains unavailable.)
 
 **Scope:** Beta-Ops / Admin / Support / Audit / account write surfaces outside the
 creative-media cluster.
@@ -41,16 +41,16 @@ so the **next authenticated request is blocked**.
 | Suspend | **ACTIVATED — OrgDetail (platform-admin only)** | `POST /admin/orgs/{id}/suspend` | High (blocks access) | **ACTIVATED (owner-approved)** — confirmation + reason; append-only audit `org.lifecycle.suspended`; eligible from onboarding/active/paused/downgraded |
 | Resume | **ACTIVATED — OrgDetail (platform-admin only)** | `POST /admin/orgs/{id}/resume` | Low–Med (restore) | **ACTIVATED (owner-approved)** — confirmation + reason; audit `org.lifecycle.active`; restores access only (not plan/entitlements); eligible from suspended/paused |
 | Downgrade | disabled (select) | `POST /admin/orgs/{id}/downgrade` | High | REQUIRE PER-EVENT OWNER CONFIRMATION |
-| Cancel | disabled (select) | `POST /admin/orgs/{id}/cancel` | High (near-terminal) | REQUIRE PER-EVENT OWNER CONFIRMATION |
-| Archive | no UI | `POST /admin/orgs/{id}/archive` | High (terminal) | KEEP DISABLED |
+| Cancel | **ACTIVATED — OrgDetail (typed confirm)** | `POST /admin/orgs/{id}/cancel` | High (near-terminal) | **ACTIVATED (owner-approved)** — typed confirmation + reason; audit `org.lifecycle.cancelled` |
+| Archive | **ACTIVATED — OrgDetail (typed confirm)** | `POST /admin/orgs/{id}/archive` | High (terminal) | **ACTIVATED (owner-approved)** — typed confirmation + reason; audit `org.lifecycle.archived` |
 
 ## 3. Entitlements / notes / support
 
 | Action | UI state | Backend route | Permission | Audit | Risk | Classification |
 |---|---|---|---|---|---|---|
-| Entitlement override | no UI | `POST /admin/orgs/{id}/override` | `PERM_PLATFORM_ADMIN` | `admin.override.set` | Medium | REQUIRE PER-EVENT OWNER CONFIRMATION |
-| Add internal note | absent (draft only this pass) | `POST /admin/orgs/{id}/notes` | `PERM_PLATFORM_ADMIN` | `admin.note.add` | Low (non-destructive, internal-only) | SAFE LOCAL ENABLE NOW (draft-only implemented) |
-| Support triage write | absent | `POST /support/tickets/{id}/triage` | `PERM_PLATFORM_ADMIN` | support audit | Medium | OUT OF SCOPE / MISSING UI |
+| Entitlement override | **ACTIVATED — OrgDetail (confirm)** | `POST /admin/orgs/{id}/override` | `PERM_PLATFORM_ADMIN` | `admin.override.set` | Medium | **ACTIVATED (owner-approved)** — feature/value/reason + confirm; refreshes entitlements |
+| Add internal note | draft only (OrgDetail) | `POST /admin/orgs/{id}/notes` | `PERM_PLATFORM_ADMIN` | `admin.note.add` | Low (non-destructive, internal-only) | SAFE LOCAL ENABLE NOW (draft-only implemented) |
+| Support triage write | **ACTIVATED — Beta-Ops Support** | `POST /support/tickets/{id}/triage` | `PERM_PLATFORM_ADMIN` | support audit | Medium | **ACTIVATED (owner-approved)** — status/assignee/notes + confirm; internal notes never exposed to testers |
 
 ## 4. Export / reports
 

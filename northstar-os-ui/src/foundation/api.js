@@ -183,6 +183,7 @@ export const foundationApi = {
   supportTickets: () => req('/support/tickets'),
   supportSubmit: (body) => req('/support/tickets', { method: 'POST', body: JSON.stringify(body) }),
   supportTicket: (id) => req(`/support/tickets/${id}`),
+  supportTriage: (id, body) => req(`/support/tickets/${id}/triage`, { method: 'POST', body: JSON.stringify(body || {}) }),
   legalDocuments: () => req('/legal/documents'),
   legalAcceptanceStatus: () => req('/legal/acceptance/status'),
   legalAccept: (body) => req('/legal/acceptance', { method: 'POST', body: JSON.stringify(body) }),
