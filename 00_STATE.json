@@ -549,7 +549,7 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT — the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ — includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "MOGRA-IMAGE-TEXT-PROD follow-ups: (a) optionally switch the global UI --font-serif/--font-ui to the bundled brand fonts (deliberate, affects all rooms); (b) tune label_zone thresholds per container; (c) consider non-axis-aligned quad fitting for curved panels; (d) wire SocialPulse/Creative Studio export to the lane.",
+  "next_batch": "CREATIVE-SERVICES follow-ups: (a) parity polish per plan §5 (real previews, density, light data-viz); (b) arm cloud/video when owner supplies fal/OpenRouter/Replicate keys (MEDIA_GEN_LIVE=1); (c) point storage at S3/MinIO when chosen; (d) enable OAuth write clients before any live publishing/ad spend; (e) bundle Mogra brand fonts/apparel assets as the owner uploads them.",
   "git_baseline": {
     "commit_hash": "97d5366",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -584,7 +584,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-10-06T22:45:00Z",
+  "last_updated": "2026-10-07T00:30:00Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1392,6 +1392,12 @@
       "activity": "creative_services_batch_a_backend_lanes",
       "batch": "CREATIVE-SERVICES",
       "summary": "Creative services program kicked off (owner approved full build-out: all creative services/features, local AND cloud lanes, video later, object store, moderation+review, OAuth/approval write actions, customer brand-voice upload path). Plan: docs/CREATIVE_SERVICES_BUILD_PLAN.md. BATCH A BACKEND DONE: routed the three previously-unrouted creative modules as additive local APIs — /api/listing-forge/* (listing_forge.py), /api/social/* incl. brand-voice upload (social_pulse.py), /api/ad-pilot/* planning-only (ad_pilot.py) — plus /api/creative/capabilities. New creative/ modules: moderation.py (deterministic allowlist + word-boundary deny rules refusing invented seals/nutrition/UPC; review_required on generated creative), storage.py (local + S3-compatible backend behind one interface; honest storage_status, no secret reads), providers.py (local+cloud readiness presence-only; arming flags; write_policy). Added public helpers listing_forge.score_listing/check_compliance and social_pulse.save_brand_voice (writes memory_bank brand_voice; load_brand_voice picks it up). 23 new offline tests (81 total in the creative suite: 58 + 23). LIVE SMOKE on :8000: capabilities lists 4 services; listing generate -> real title/score 81.2/review_required; social caption + brand-voice read OK; ad-pilot bid -> recommended 0.71/decrease. UI harnesses unchanged: smoke 43/0, mockup-lane 6/0, acceptance 33/0. GUARDRAIL: real ad-spend and first public post remain default-OFF behind NORTHSTAR_ADS_WRITE_ARMED / NORTHSTAR_SOCIAL_PUBLISH_ARMED + per-action approval. NEXT: wire the ListingForge/SocialPulse/AdPilot rooms to their lanes (real data + empty states + truthful readiness labels)."
+    },
+    {
+      "ts": "2026-10-07T00:30:00Z",
+      "activity": "creative_services_full_buildout",
+      "batch": "CREATIVE-SERVICES",
+      "summary": "Full creative-services build-out (owner approved: every creative service/feature, local AND cloud lanes, video in scope, object store, moderation+review, OAuth/approval write actions, customer brand-voice upload path). Plan: docs/CREATIVE_SERVICES_BUILD_PLAN.md. SHIPPED: (A) routed the three unrouted modules as local APIs (/api/listing-forge/*, /api/social/* incl. brand-voice upload, /api/ad-pilot/* planning-only) + /api/creative/capabilities; added moderation.py (allowlist + word-boundary deny rules), storage.py (local + S3-compatible, no secret reads), providers.py (presence-only arming); ListingForge/SocialPulse/AdPilot 'Local Lane' tabs. (B) asset registry (assets.py) + variant sets + export bundles (bundles.py, ZIP+manifest) with auto-registration from the exact-text lane; Creative Studio 'Registry & Bundles' tab. (C) shared EmptyState/SectionHeader + restrained motion. (D) gated cloud.py (fal/OpenRouter/Replicate), video.py (Wan/FLUX-3/Kling/Veo spec + per-second cost), approvals.py (write-action approval queue, audited, honest blocks), asset upload endpoint; Creative Studio 'Cloud & Approvals' tab. ADJACENT ROOMS: listing_guardian.py (local listing-health audit), competitor_monitor.py (local watch desk + exact deltas) with Local Lane tabs; Keyword Tracker 'Live Lane' over the existing foundation /keywords routes. GUARDRAIL HELD: real ad-spend and the first public post remain default-OFF behind NORTHSTAR_ADS_WRITE_ARMED / NORTHSTAR_SOCIAL_PUBLISH_ARMED + a recorded approval; cloud media requires its key + MEDIA_GEN_LIVE=1. VERIFIED: pytest 127 passed (8 creative test files); npm build 0 errors (95 modules); harnesses smoke 51/0, acceptance 36/0, guards 11/0, invite-flow 11/0, mockup-lane 6/0, service-lanes 3/0. LIVE: mockup t2i+compose, edit+align, 33-asset scan, 1.14MB bundle ZIP download, cloud 503-gated, video estimate $2.10, approval flow write_actions_disarmed, guardian audit 4/5, competitor deltas price -3.00/rank -32."
     }
   ]
 }
