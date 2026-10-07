@@ -4,6 +4,7 @@ import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import foundationApi from '../../foundation/api.js'
+import signals, { settle } from '../../services/signals.js'
 
 // ═══ Foundation keyword data (truth-first, read-only) ═══
 // Reads the real, organization-scoped foundation keyword routes. Missing
@@ -202,6 +203,7 @@ export default function KeywordTracker() {
       </DataNotice>
 
       <FoundationKeywordPanel />
+      <RealKeywordSets />
 
       <div className="card" style={{ marginBottom: 16, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
         <span className="text-low" style={{ fontSize: 11 }}>Keyword set</span>

@@ -94,6 +94,65 @@ const TABS = [
   { id: 'provenance', label: 'Provenance' },
 ]
 
+// ═══ Real local source/refresh registry (read-only) ═══
+function RealSourceRegistry() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    settle(signals.ncSources()).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', value: r.value })
+      else setSt({ phase: 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [])
+  const v = st.phase === 'loaded' ? st.value : null
+  const refresh = v && Array.isArray(v.items) ? v.items : []
+  const s = (v && v.summary) || {}
+  const pulls = Array.isArray(s.live_pulls) ? s.live_pulls.slice(0, 6) : []
+  return (
+    <div className="card" data-testid="sdl-source-registry" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Source refresh registry</h3>
+        <span className={`pill pill-${st.phase === 'error' ? 'unknown' : 'muted'}`}>{st.phase === 'loading' ? 'Loading…' : st.phase === 'error' ? 'unavailable' : `${refresh.length} refreshes · local`}</span>
+      </div>
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Source registry unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {st.phase === 'loaded' && (
+        <>
+          {refresh.length > 0 ? (
+            <DataTable columns={[
+              { key: 'provider', label: 'Provider' },
+              { key: 'refresh_type', label: 'Type', render: (x) => <span className="pill pill-muted">{x || '—'}</span> },
+              { key: 'status', label: 'Status', render: (x) => <span className={`pill ${x === 'partial' ? 'pill-warn' : 'pill-muted'}`}>{x || 'UNKNOWN'}</span> },
+              { key: 'records_imported', label: 'Imported', render: (x) => x ?? 0 },
+              { key: 'records_failed', label: 'Failed', render: (x) => <span className={`pill ${x ? 'pill-warn' : 'pill-muted'}`}>{x ?? 0}</span> },
+              { key: 'started_at', label: 'Started', render: (x) => x ? String(x).slice(0, 19).replace('T', ' ') : '—' },
+            ]} rows={refresh} />
+          ) : <p className="text-low" style={{ fontSize: 13 }}>No refresh records. Honest empty state.</p>}
+          <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap', marginTop: 12 }}>
+            <span className="pill pill-muted">{s.live_pulls ?? 0} live pulls</span>
+            <span className="pill pill-muted">{s.pipeline_runs ?? 0} pipeline runs</span>
+          </div>
+          {pulls.length > 0 && (
+            <div style={{ marginTop: 12 }}>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Recent live pulls</div>
+              <div className="stack" style={{ gap: 4 }}>
+                {pulls.map((p, i) => (
+                  <div key={i} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0' }}>
+                    <span style={{ fontSize: 12 }}>{p.query} · {p.provider_id}</span>
+                    <span className={`pill ${p.ok ? 'pill-muted' : 'pill-warn'}`} style={{ fontSize: 10 }}>{p.rows_returned ?? 0} rows</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>Real local refresh/live-pull metadata (read-only). No provider call is made by this view.</div>
+        </>
+      )}
+    </div>
+  )
+}
+
 export default function SharedDataLayer() {
   const { toast } = useToast()
   const location = useLocation()
@@ -115,6 +174,7 @@ export default function SharedDataLayer() {
       </DataNotice>
 
       <SharedDataLive />
+      <RealSourceRegistry />
 
       <RoomTabs tabs={TABS} base="/shared-data" />
 
