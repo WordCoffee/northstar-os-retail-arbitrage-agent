@@ -549,7 +549,7 @@
       "details": "The earlier 926628 read timeout (10:19Z, 120s) was TRANSIENT — the same item succeeded on retry with a 180s timeout (HTTP 200, probable_match). Prices confirmed live inside the JSON-LD offers structure (not top-level). All 5 full raw-HTML fixtures committed to Northstar_backend/fixtures/brightdata_costco/ — includes a genuine content-404 page (1493188) for negative-path parser tests. 1493188 requires an alternate lookup (search-by-title or slug URL); the flat /.product.<id>.html pattern is not universal across Costco items."
     }
   ],
-  "next_batch": "CREATIVE-SERVICES follow-ups: (a) parity polish per plan §5 (real previews, density, light data-viz); (b) arm cloud/video when owner supplies fal/OpenRouter/Replicate keys (MEDIA_GEN_LIVE=1); (c) point storage at S3/MinIO when chosen; (d) enable OAuth write clients before any live publishing/ad spend; (e) bundle Mogra brand fonts/apparel assets as the owner uploads them.",
+  "next_batch": "CREATIVE-SERVICES: owner supplies media keys (FAL_KEY/OPENROUTER_API_KEY/REPLICATE_API_TOKEN + MEDIA_GEN_LIVE=1) and/or S3 (NORTHSTAR_S3_BUCKET + NORTHSTAR_MEDIA_STORAGE=s3) and/or a social or Amazon Ads credential; then flip the matching arm flag and run one live smoke. Real ad spend and the first public post still need a fresh explicit operator go-ahead at that moment.",
   "git_baseline": {
     "commit_hash": "97d5366",
     "committed_at": "2026-09-02T07:30:00Z",
@@ -584,7 +584,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-10-07T00:30:00Z",
+  "last_updated": "2026-10-07T01:20:00Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1398,6 +1398,12 @@
       "activity": "creative_services_full_buildout",
       "batch": "CREATIVE-SERVICES",
       "summary": "Full creative-services build-out (owner approved: every creative service/feature, local AND cloud lanes, video in scope, object store, moderation+review, OAuth/approval write actions, customer brand-voice upload path). Plan: docs/CREATIVE_SERVICES_BUILD_PLAN.md. SHIPPED: (A) routed the three unrouted modules as local APIs (/api/listing-forge/*, /api/social/* incl. brand-voice upload, /api/ad-pilot/* planning-only) + /api/creative/capabilities; added moderation.py (allowlist + word-boundary deny rules), storage.py (local + S3-compatible, no secret reads), providers.py (presence-only arming); ListingForge/SocialPulse/AdPilot 'Local Lane' tabs. (B) asset registry (assets.py) + variant sets + export bundles (bundles.py, ZIP+manifest) with auto-registration from the exact-text lane; Creative Studio 'Registry & Bundles' tab. (C) shared EmptyState/SectionHeader + restrained motion. (D) gated cloud.py (fal/OpenRouter/Replicate), video.py (Wan/FLUX-3/Kling/Veo spec + per-second cost), approvals.py (write-action approval queue, audited, honest blocks), asset upload endpoint; Creative Studio 'Cloud & Approvals' tab. ADJACENT ROOMS: listing_guardian.py (local listing-health audit), competitor_monitor.py (local watch desk + exact deltas) with Local Lane tabs; Keyword Tracker 'Live Lane' over the existing foundation /keywords routes. GUARDRAIL HELD: real ad-spend and the first public post remain default-OFF behind NORTHSTAR_ADS_WRITE_ARMED / NORTHSTAR_SOCIAL_PUBLISH_ARMED + a recorded approval; cloud media requires its key + MEDIA_GEN_LIVE=1. VERIFIED: pytest 127 passed (8 creative test files); npm build 0 errors (95 modules); harnesses smoke 51/0, acceptance 36/0, guards 11/0, invite-flow 11/0, mockup-lane 6/0, service-lanes 3/0. LIVE: mockup t2i+compose, edit+align, 33-asset scan, 1.14MB bundle ZIP download, cloud 503-gated, video estimate $2.10, approval flow write_actions_disarmed, guardian audit 4/5, competitor deltas price -3.00/rank -32."
+    },
+    {
+      "ts": "2026-10-07T01:20:00Z",
+      "activity": "creative_services_items_1_4",
+      "batch": "CREATIVE-SERVICES",
+      "summary": "Completed the four follow-up items from the creative-services plan. (1) CLOUD/VIDEO PATH: build_mockup gained scene_lane='auto'|'local'|'cloud' so the product actually uses the cloud lane when the local ComfyUI lane is not ready, raising an honest ComfyUIError when neither lane is available; GET /api/creative/doctor reports exactly which env vars are missing to arm (presence-only, no secret values). (2) OBJECT STORE END-TO-END: /api/creative/file/{name} now redirects to a signed S3 URL when NORTHSTAR_MEDIA_STORAGE=s3 (local still streams from disk); the doctor probes a storage round-trip; parity tests with an injected fake boto3. (3) LIVE WRITE CLIENTS: new creative/write_clients.py implements real Instagram/Facebook/X/TikTok/LinkedIn publish and Amazon Ads write clients, credential-gated; approvals.execute now dispatches and returns executed / not_configured (with the exact missing env names) / not_approved / write_actions_disarmed — never a fake success. (4) PARITY POLISH: dependency-free MiniBars data-viz (assets-by-kind, video cost-by-model) plus shared EmptyState/SectionHeader and restrained motion. CREDENTIAL STATE ON THIS MACHINE: NONE configured (no .env, no env vars), so live cloud/video and live publishing/spend were built and gated but NOT executed. VERIFIED: pytest 138 passed; npm build 0 errors; harnesses smoke 51/0, acceptance 36/0, guards 11/0, invoke 11/0, mockup-lane 6/0, service-lanes 3/0; live doctor reports missing_to_arm = MEDIA_GEN_LIVE=1, FAL_KEY, OPENROUTER_API_KEY, REPLICATE_API_TOKEN, NORTHSTAR_SOCIAL_PUBLISH_ARMED=1, NORTHSTAR_ADS_WRITE_ARMED=1."
     }
   ]
 }
