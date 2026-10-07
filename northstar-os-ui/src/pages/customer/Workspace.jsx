@@ -1,127 +1,96 @@
 import { PageLayout, DataTable, MetricTiles, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
-import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import foundationApi from '../../foundation/api.js'
 import { settle } from '../../services/signals.js'
 
-// ═══ Real organization entitlements (foundation read) ═══
-function WorkspaceEntitlements() {
-  const [st, setSt] = useState({ phase: 'loading' })
-  useEffect(() => {
-    let alive = true
-    settle(foundationApi.entitlements()).then(r => {
-      if (!alive) return
-      if (r.ok) setSt({ phase: 'loaded', value: r.value })
-      else setSt({ phase: (r.error && r.error.status === 401) ? 'auth' : 'error', error: r.error })
-    })
-    return () => { alive = false }
-  }, [])
-  const v = st.phase === 'loaded' ? st.value : null
-  const badge = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
-    : st.phase === 'auth' ? { l: 'sign-in required', t: 'unknown' }
-      : st.phase === 'error' ? { l: 'unavailable', t: 'unknown' }
-        : { l: 'live · foundation', t: 'muted' }
-  return (
-    <div className="card" data-testid="ws-entitlements" style={{ marginBottom: 20 }}>
-      <div className="card-head">
-        <h3 className="card-title">Your entitlements</h3>
-        <span className={`pill pill-${badge.t}`}>{badge.l}</span>
-      </div>
-      {st.phase === 'loading' && <p style={{ fontSize: 13 }}>Loading entitlements…</p>}
-      {st.phase === 'auth' && <p style={{ fontSize: 13 }}>Sign in to view your entitlements.</p>}
-      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Entitlements unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
-      {v && (
-        <>
-          <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
-            <span className="pill pill-muted" title="Plan tier from the entitlement service">tier: {v.tier || 'UNKNOWN'}</span>
-            <span className="pill pill-muted">jobs/mo: {v.max_jobs_per_month ?? 'UNKNOWN'}</span>
-            <span className="pill pill-muted">seats: {v.seat_limit ?? 'UNKNOWN'}</span>
-            <span className="pill pill-muted">export: {v.export_enabled ? 'enabled' : 'disabled'}</span>
-            <span className="pill pill-muted">advanced reports: {v.advanced_reports ? 'yes' : 'no'}</span>
-            <span className="pill pill-muted">support: {v.support_level || 'none'}</span>
-          </div>
-          <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>These flags are the authoritative entitlements for your organization. Service availability below is a capability map, not an entitlement list.</div>
-        </>
-      )}
-    </div>
-  )
-}
-
 const TABS = [
   { id: 'overview', label: 'Overview' },
-  { id: 'services', label: 'Entitled Services', count: 8 },
+  { id: 'services', label: 'Entitled Services' },
   { id: 'plan', label: 'Plan & Usage' },
   { id: 'activity', label: 'What Changed' },
 ]
 
+// Capability map — what the suite offers (NOT entitlement-derived).
 const SERVICES = [
   { name: 'SourceScout', route: '/product-finder', status: 'Available', tone: 'forest' },
   { name: 'Golden Goose Finder', route: '/golden-goose', status: 'Available', tone: 'forest' },
-  { name: 'ListingForge', route: '/listingforge', status: 'Available', tone: 'forest' },
-  { name: 'AdPilot', route: '/adpilot', status: 'Available', tone: 'forest' },
   { name: 'Profitability Dashboard', route: '/profitability', status: 'Available', tone: 'forest' },
-  { name: 'Commerce Ops', route: '/commerce-ops', status: 'Limited', tone: 'ochre' },
-  { name: 'SocialPulse', route: '/socialpulse', status: 'Concept', tone: 'unknown' },
-  { name: 'Creative Studio', route: '/creative-studio', status: 'Concept', tone: 'unknown' },
+  { name: 'Commerce Ops', route: '/commerce-ops', status: 'Available', tone: 'forest' },
+  { name: 'Monitoring', route: '/monitoring', status: 'Available', tone: 'forest' },
+  { name: 'Listing Guardian', route: '/listings', status: 'Limited', tone: 'ochre' },
+  { name: 'Keyword Tracker', route: '/keyword-tracker', status: 'Available', tone: 'forest' },
 ]
 
+// ═══ Real organization entitlements + plan/usage (foundation read) ═══
+function useAccount() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    ;(async () => {
+      const [ent, plan] = await Promise.all([
+        settle(foundationApi.entitlements()),
+        settle(foundationApi.planUsage()),
+      ])
+      if (alive) setSt({ phase: 'loaded', ent, plan })
+    })()
+    return () => { alive = false }
+  }, [])
+  const ent = st.ent && st.ent.ok ? st.ent.value : null
+  const plan = st.plan && st.plan.ok ? st.plan.value : null
+  const anyAuth = st.phase === 'loaded' && [st.ent, st.plan].every(r => r && !r.ok && r.error && r.error.status === 401)
+  return { phase: st.phase, ent, plan, anyAuth }
+}
+
+function StateLine({ phase, anyAuth, children }) {
+  if (phase === 'loading') return <p style={{ fontSize: 13 }}>Loading…</p>
+  if (anyAuth) return <p style={{ fontSize: 13 }}>Sign in to view your workspace.</p>
+  return children
+}
+
 export default function CustomerWorkspace() {
-  const { toast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
-
+  const a = useAccount()
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : 'overview'
+  const ent = a.ent
+  const plan = a.plan
+  const usage = plan && plan.usage ? plan.usage : null
+  const seats = plan && plan.seats ? plan.seats : null
 
   return (
     <PageLayout
       title="Customer Workspace"
-      subtitle="Your NorthstarOS briefing — entitlements, actions, service access, and account state."
+      subtitle="Your NorthstarOS briefing — entitlements, usage, service access, and account state."
       actions={<>
         <button className="btn btn-sm" onClick={() => navigate('/plan')}>View Plan Details</button>
         <button className="btn btn-sm btn-ghost" onClick={() => navigate('/support')}>Contact Support</button>
       </>}
     >
-      <DataNotice tone="sample" title="Live entitlements + sample workspace figures">
-        “Your entitlements” is a live foundation read. The plan/usage figures and open tasks below are demonstration data.
+      <DataNotice tone="internal" title="Live entitlements — no fabricated figures">
+        Entitlements, lifecycle, usage, and seats are live, organization-scoped reads. Empty/unknown is shown honestly; no sample usage or task figures are invented.
       </DataNotice>
-
-      <WorkspaceEntitlements />
 
       <RoomTabs tabs={TABS} base="/customer-workspace" />
 
       {view === 'overview' && (
         <div className="subview">
-          <div className="alert alert-warn" style={{ marginBottom: 20 }}>
-            <div className="alert-title">2 Actions Required</div>
-            <div className="alert-text">Review Product Set #47 (2 items flagged). Accept updated Terms (updated 2026-09-25).</div>
-          </div>
-          <MetricTiles metrics={[
-            { label: 'Plan', value: 'Business', sub: 'Renewal Sep 2026' },
-            { label: 'Usage', value: '68%', sub: 'Monthly quota', tone: 'warn' },
-            { label: 'Entitled Services', value: '5', sub: 'Access level: Full' },
-            { label: 'Actions Required', value: '2', sub: 'Review needed', tone: 'warn' },
-          ]} columns={4} />
-          <div className="card">
-            <div className="card-head">
-              <h3 className="card-title">Open Tasks</h3>
-              <span className="pill pill-clay">2 pending</span>
+          <StateLine phase={a.phase} anyAuth={a.anyAuth}>
+            <MetricTiles metrics={[
+              { label: 'Plan tier', value: (ent && ent.tier) || (plan && plan.tier) || 'UNKNOWN' },
+              { label: 'Lifecycle', value: (plan && plan.lifecycle_state) || 'UNKNOWN' },
+              { label: 'Jobs this period', value: usage && usage.max_jobs_per_month != null ? `${usage.monthly_jobs_used} / ${usage.max_jobs_per_month}` : 'UNKNOWN' },
+              { label: 'Seats', value: seats && seats.limit != null ? `${seats.used} / ${seats.limit}` : 'UNKNOWN' },
+            ]} columns={4} />
+            <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
+              <span className={`pill ${ent && ent.export_enabled ? 'pill-muted' : 'pill-unknown'}`}>export: {ent ? (ent.export_enabled ? 'enabled' : 'disabled') : 'UNKNOWN'}</span>
+              <span className="pill pill-muted">advanced reports: {ent ? (ent.advanced_reports ? 'yes' : 'no') : 'UNKNOWN'}</span>
+              <span className="pill pill-muted">support: {ent ? (ent.support_level || 'none') : 'UNKNOWN'}</span>
             </div>
-            {[
-              { task: 'Review Product Set #47', note: '2 items flagged for confirmation', state: 'Review', tone: 'pill-warn' },
-              { task: 'Accept updated Terms', note: 'Terms updated 2026-09-25', state: 'Pending', tone: 'pill-ochre' },
-            ].map(t => (
-              <div key={t.task} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--divider)' }}>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 500 }}>{t.task}</div>
-                  <div className="text-low" style={{ fontSize: 11 }}>{t.note}</div>
-                </div>
-                <span className={`pill ${t.tone}`}>{t.state}</span>
-              </div>
-            ))}
-          </div>
+            <p className="text-low" style={{ fontSize: 11, marginTop: 10 }}>No per-user task backend is connected, so no open-tasks list is shown.</p>
+          </StateLine>
         </div>
       )}
 
@@ -130,7 +99,7 @@ export default function CustomerWorkspace() {
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Entitled Services</h3>
-              <span className="pill pill-muted">sample · capability map</span>
+              <span className="pill pill-muted">capability map · not entitlement-derived</span>
             </div>
             {SERVICES.map(s => (
               <div key={s.name} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--divider)' }}>
@@ -144,27 +113,31 @@ export default function CustomerWorkspace() {
                 </div>
               </div>
             ))}
+            <div className="text-low" style={{ fontSize: 11, marginTop: 10 }}>Service availability is a capability map. Your actual entitlements are shown on the Overview and Plan tabs.</div>
           </div>
         </div>
       )}
 
       {view === 'plan' && (
         <div className="subview">
-          <div className="card">
-            <div className="card-head">
-              <h3 className="card-title">Plan &amp; Usage</h3>
-              <span className="pill pill-forest">Business</span>
+          <StateLine phase={a.phase} anyAuth={a.anyAuth}>
+            <div className="card">
+              <div className="card-head">
+                <h3 className="card-title">Plan &amp; Usage</h3>
+                <span className="pill pill-muted">{plan ? (plan.tier || 'UNKNOWN') : 'UNKNOWN'}</span>
+              </div>
+              <DataTable columns={[
+                { key: 'label', label: 'Item' },
+                { key: 'value', label: 'Value' },
+              ]} rows={[
+                { label: 'Lifecycle state', value: (plan && plan.lifecycle_state) || 'UNKNOWN' },
+                { label: 'Jobs this period', value: usage && usage.max_jobs_per_month != null ? `${usage.monthly_jobs_used} / ${usage.max_jobs_per_month}` : 'UNKNOWN' },
+                { label: 'Period', value: (usage && usage.period) || 'UNKNOWN' },
+                { label: 'Seats', value: seats && seats.limit != null ? `${seats.used} / ${seats.limit}` : 'UNKNOWN' },
+                { label: 'Reset rule', value: (plan && plan.reset_rule) || 'UNKNOWN' },
+              ]} />
             </div>
-            <DataTable columns={[
-              { key: 'label', label: 'Item' },
-              { key: 'value', label: 'Value' },
-            ]} rows={[
-              { label: 'Monthly Quota', value: '68% used' },
-              { label: 'API Calls', value: '4,200 / 6,000' },
-              { label: 'Data Retention', value: '90 days' },
-              { label: 'Renewal Date', value: 'Sep 2026' },
-            ]} />
-          </div>
+          </StateLine>
         </div>
       )}
 
@@ -173,21 +146,9 @@ export default function CustomerWorkspace() {
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">What Changed</h3>
+              <span className="pill pill-muted">not connected</span>
             </div>
-            <div className="stack" style={{ gap: 8 }}>
-              <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                <div style={{ fontSize: 13 }}>2026-09-25 — Terms updated</div>
-                <span className="pill pill-ochre">Action</span>
-              </div>
-              <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                <div style={{ fontSize: 13 }}>2026-09-24 — Product Set #47 updated</div>
-                <span className="pill pill-ochre">Action</span>
-              </div>
-              <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                <div style={{ fontSize: 13 }}>2026-09-20 — Plan upgraded to Business</div>
-                <span className="pill pill-forest">Change</span>
-              </div>
-            </div>
+            <p style={{ fontSize: 13 }}>No customer activity feed backend is connected. Honest empty state.</p>
           </div>
         </div>
       )}

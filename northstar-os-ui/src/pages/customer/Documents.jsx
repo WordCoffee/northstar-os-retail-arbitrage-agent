@@ -85,18 +85,9 @@ export default function DocumentsLib() {
       <div className="card">
         <div className="card-head">
           <h3 className="card-title">Operational records</h3>
-          <span className="pill pill-muted">sample</span>
+          <span className="pill pill-muted">not connected</span>
         </div>
-        <DataTable columns={[
-          { key: 'name', label: 'Document' },
-          { key: 'type', label: 'Type' },
-          { key: 'date', label: 'Date' },
-          { key: 'status', label: 'Status', render: (v) => <span className="pill pill-muted">{v}</span> },
-        ]} rows={[
-          { name: 'Service Agreement', type: 'Contract', date: '2026-09-01', status: 'Active' },
-          { name: 'DPA v2.1', type: 'Compliance', date: '2026-08-15', status: 'Active' },
-          { name: 'Beta Addendum', type: 'Agreement', date: '2026-06-01', status: 'Pending' },
-        ]} />
+        <p style={{ fontSize: 13 }}>No operational-records backend is connected. Honest empty state — no fabricated records.</p>
       </div>
     </PageLayout>
   )

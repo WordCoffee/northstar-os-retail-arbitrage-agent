@@ -1,7 +1,9 @@
 import { PageLayout, DataNotice } from '../../components/Shared.jsx'
+import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import foundationApi from '../../foundation/api.js'
 import { settle } from '../../services/signals.js'
+import { useSession } from '../../foundation/session.jsx'
 
 // ═══ Real onboarding checklist (organization-scoped foundation read) ═══
 function FoundationOnboarding() {
@@ -15,16 +17,13 @@ function FoundationOnboarding() {
     })
     return () => { alive = false }
   }, [])
-
   const badge = st.phase === 'loading' ? { l: 'Loading…', t: 'muted' }
     : st.phase === 'auth' ? { l: 'sign-in required', t: 'unknown' }
       : st.phase === 'error' ? { l: 'unavailable', t: 'unknown' }
         : { l: 'live · foundation', t: 'muted' }
-
   const v = st.phase === 'loaded' ? st.value : null
   const steps = v && Array.isArray(v.steps) ? v.steps : []
   const checklist = v && v.checklist ? v.checklist : {}
-
   return (
     <div className="card" data-testid="setup-onboarding" style={{ marginBottom: 20 }}>
       <div className="card-head">
@@ -58,10 +57,14 @@ function FoundationOnboarding() {
 }
 
 export default function CustomerSetup() {
+  const navigate = useNavigate()
+  const session = useSession()
+  const orgName = session.activeOrganizationId
+    || (session.organizations && session.organizations[0] && session.organizations[0].name) || ''
   return (
     <PageLayout title="Setup & Onboarding" subtitle="Complete your workspace configuration.">
-      <DataNotice tone="internal" title="Onboarding is a live foundation read">
-        The “Onboarding status” card is a live, organization-scoped read. The organization profile and legal acceptance below are sample until they are wired to the account backend.
+      <DataNotice tone="internal" title="Live onboarding + session identity">
+        “Onboarding status” is a live, organization-scoped read. The organization identity below is the current session; legal acceptance lives on the Legal page. No fabricated profile data.
       </DataNotice>
 
       <FoundationOnboarding />
@@ -69,36 +72,21 @@ export default function CustomerSetup() {
       <div style={{ maxWidth: 600 }}>
         <div className="card">
           <div className="card-head">
-            <h3 className="card-title">Organization Profile</h3>
-            <span className="pill pill-muted">sample</span>
+            <h3 className="card-title">Organization</h3>
+            <span className="pill pill-muted">live · session</span>
           </div>
-          <div className="field-group" style={{ marginTop: 16 }}>
-            <label className="label">Organization Name</label>
-            <input className="field" defaultValue="T2 Holdings LLC" />
-          </div>
-          <div className="field-group">
-            <label className="label">Primary Contact</label>
-            <input className="field" defaultValue="T2 Holdings — Operations" />
+          <div className="inline-flex" style={{ gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
+            <span className="pill pill-muted">{orgName || 'no active organization'}</span>
+            <span className="pill pill-muted">role: {session.role || 'UNKNOWN'}</span>
           </div>
         </div>
         <div className="card">
           <div className="card-head">
-            <h3 className="card-title">Legal Acceptance</h3>
-            <span className="pill pill-muted">sample · see Documents for live status</span>
+            <h3 className="card-title">Legal acceptance</h3>
+            <span className="pill pill-muted">see Legal page</span>
           </div>
-          <div className="stack" style={{ gap: 10, marginTop: 12 }}>
-            {[
-              { name: 'Terms of Service', accepted: true },
-              { name: 'Privacy Policy', accepted: true },
-              { name: 'Data Processing Agreement', accepted: false },
-            ].map((item, i) => (
-              <div key={i} className="check-row">
-                <input type="checkbox" checked={item.accepted} readOnly />
-                <label>{item.name}</label>
-                <span className={`pill ${item.accepted ? 'pill-muted' : 'pill-ochre'}`} style={{ marginLeft: 'auto' }}>{item.accepted ? 'sample: accepted' : 'sample: pending'}</span>
-              </div>
-            ))}
-          </div>
+          <p style={{ fontSize: 13 }}>Legal documents and your acceptance status are shown live on the Legal page.</p>
+          <button className="btn btn-sm btn-ghost" onClick={() => navigate('/legal')}>Open Legal</button>
         </div>
       </div>
     </PageLayout>

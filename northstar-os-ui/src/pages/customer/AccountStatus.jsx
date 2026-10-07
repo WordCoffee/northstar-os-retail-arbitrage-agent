@@ -2,6 +2,7 @@ import { PageLayout, MetricTiles, DataTable, DataNotice } from '../../components
 import { useState, useEffect } from 'react'
 import foundationApi from '../../foundation/api.js'
 import { settle } from '../../services/signals.js'
+import { useSession } from '../../foundation/session.jsx'
 
 // ═══ Real account condition (foundation entitlements + plan/usage) ═══
 function AccountLive() {
@@ -52,29 +53,29 @@ function AccountLive() {
 }
 
 export default function AccountStatus() {
+  const session = useSession()
   return (
     <PageLayout title="Account Status" subtitle="Your current account condition and entitlements.">
-      <DataNotice tone="sample" title="Live account condition + sample details">
-        “Account condition” is a live foundation read. The account-detail fields below are demonstration data.
+      <DataNotice tone="internal" title="Live account condition and session identity">
+        “Account condition” is a live foundation read; the session identity below is the current resolved session. No fabricated account details.
       </DataNotice>
 
       <AccountLive />
 
       <div className="card">
         <div className="card-head">
-          <h3 className="card-title">Account Details</h3>
-          <span className="pill pill-muted">sample</span>
+          <h3 className="card-title">Session identity</h3>
+          <span className="pill pill-muted">live · session</span>
         </div>
         <DataTable columns={[
           { key: 'field', label: 'Field' },
           { key: 'value', label: 'Value' },
         ]} rows={[
-          { field: 'Organization', value: 'T2 Holdings LLC' },
-          { field: 'Role', value: 'Operator' },
-          { field: 'Created', value: '2026-06-01' },
-          { field: 'Last Login', value: '2026-09-26 09:14' },
-          { field: 'UI Mode', value: 'Full' },
-          { field: 'Environment', value: 'Production' },
+          { field: 'User', value: session.userId || 'UNKNOWN' },
+          { field: 'Role', value: session.role || 'UNKNOWN' },
+          { field: 'Active organization', value: session.activeOrganizationId || 'none' },
+          { field: 'Environment', value: session.environment || 'UNKNOWN' },
+          { field: 'UI mode', value: session.uiMode || 'UNKNOWN' },
         ]} />
       </div>
     </PageLayout>
