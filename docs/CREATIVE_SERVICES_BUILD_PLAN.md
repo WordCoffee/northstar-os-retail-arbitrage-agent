@@ -315,6 +315,29 @@ foundation `/keywords/search` + `/keywords/gaps` routes through the authenticate
 API, with honest backend-error and empty states (never fabricates keyword data).
 Harness: smoke **51/0** (+1).
 
-**Next:** parity polish per §5 (real previews, density, light data-viz) and an
-S3/MinIO parity test for the object-store backend; when the owner supplies cloud
-keys, the cloud/video lanes are already wired and only need `MEDIA_GEN_LIVE=1`.
+**Items 1–4 completed.**
+1. **Cloud/video wired into the product path** — `build_mockup(scene_lane="auto"|"local"|"cloud")`
+   actually falls back to the cloud lane when the local ComfyUI lane is not ready,
+   and reports honestly when neither lane is available. `GET /api/creative/doctor`
+   reports exactly which env vars are missing to arm (no secret values read).
+2. **Object store end-to-end** — the asset file route now redirects to a signed
+   S3 URL when `NORTHSTAR_MEDIA_STORAGE=s3` (local still streams from disk); storage
+   round-trip is probed by the doctor. Parity tests with fake boto3.
+3. **Live write clients** — `creative/write_clients.py` implements the real
+   social-publish (Instagram/Facebook/X/TikTok/LinkedIn) and Amazon Ads write
+   clients, credential-gated; `approvals.execute` now dispatches and returns
+   `executed` / `not_configured` (with the exact missing env) / `not_approved` /
+   `write_actions_disarmed` — never a fake success.
+4. **Parity polish** — dependency-free `MiniBars` data-viz (assets-by-kind in the
+   registry; video cost-by-model in Cloud & Approvals), plus the shared
+   `EmptyState`/`SectionHeader` primitives and restrained motion.
+
+Credential state on this machine: **none configured** (no `.env`, no keys), so
+live cloud/video and live publishing/spend were built and gated but not executed.
+Tests: **138 passed**; harnesses smoke 51/0, acceptance 36/0, guards 11/0,
+mockup-lane 6/0, service-lanes 3/0; build 0 errors.
+
+**To go live (owner):** set `FAL_KEY`/`OPENROUTER_API_KEY`/`REPLICATE_API_TOKEN`
+and `MEDIA_GEN_LIVE=1` for cloud media; `NORTHSTAR_S3_BUCKET`+`NORTHSTAR_MEDIA_STORAGE=s3`
+for object storage; a platform token + `NORTHSTAR_SOCIAL_PUBLISH_ARMED=1` (or Amazon
+Ads creds + `NORTHSTAR_ADS_WRITE_ARMED=1`) plus an approved request for write actions.

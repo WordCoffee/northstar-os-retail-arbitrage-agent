@@ -24,13 +24,15 @@ WRITE_KINDS: Dict[str, Dict[str, Any]] = {
     "social_publish": {
         "flag": "NORTHSTAR_SOCIAL_PUBLISH_ARMED",
         "approval_kind": "public_exposure",
-        "live_client": False,
+        "live_client": True,
+        "dispatch": "social",
         "label": "Publish social post",
     },
     "ads_write": {
         "flag": "NORTHSTAR_ADS_WRITE_ARMED",
         "approval_kind": "real_money",
-        "live_client": False,
+        "live_client": True,
+        "dispatch": "ads",
         "label": "Apply ad change (spend)",
     },
 }
@@ -146,17 +148,45 @@ def execute(rid: str) -> Dict[str, Any]:
         return {"ok": True, "executed": False, "reason": "no_live_client",
                 "note": "write path is armed and approved; the live provider client is not enabled"}
 
-    # A real live client would run here (not present on this box).
-    audit = audit + [{"ts": _now(), "event": "execute_blocked", "reason": "no_live_client"}]
-    _update(rid, audit=audit)
-    return {"ok": True, "executed": False, "reason": "no_live_client"}
+    # Armed + approved + live client: dispatch to the real provider client.
+    from . import write_clients
+    dispatch = cfg.get("dispatch")
+    try:
+        if dispatch == "social":
+            platform = (rec.get("payload") or {}).get("platform", "x")
+            result = write_clients.publish(platform, rec.get("payload") or {})
+        elif dispatch == "ads":
+            result = write_clients.ads_write(rec.get("payload") or {})
+        else:
+            raise write_clients.WriteUnavailable("no dispatch configured", ["dispatch"])
+    except write_clients.WriteUnavailable as exc:
+        audit = audit + [{"ts": _now(), "event": "execute_blocked",
+                          "reason": "not_configured", "missing": exc.missing}]
+        _update(rid, audit=audit, status="approved_not_configured")
+        return {"ok": True, "executed": False, "reason": "not_configured",
+                "missing": exc.missing,
+                "note": "approved and armed, but the provider credential is not configured"}
+
+    audit = audit + [{"ts": _now(), "event": "executed", "result": result}]
+    _update(rid, audit=audit, status="executed")
+    return {"ok": True, "executed": True, "result": result}
 
 
 def posture() -> Dict[str, Any]:
+    from . import write_clients
+    social = write_clients.social_platforms_status()
+    ads = write_clients.ads_status()
+    kinds: Dict[str, Any] = {}
+    for k, v in WRITE_KINDS.items():
+        configured = ads["ready"] if v.get("dispatch") == "ads" else any(
+            p["present"] for p in social.values())
+        kinds[k] = {"label": v["label"], "approval_kind": v["approval_kind"],
+                    "armed": providers.flag(v["flag"]), "arm_env": v["flag"],
+                    "live_client": v["live_client"], "configured": configured}
     return {
-        "kinds": {k: {"label": v["label"], "approval_kind": v["approval_kind"],
-                      "armed": providers.flag(v["flag"]), "arm_env": v["flag"],
-                      "live_client": v["live_client"]} for k, v in WRITE_KINDS.items()},
+        "kinds": kinds,
+        "social_platforms": social,
+        "ads": ads,
         "pending": len(list_requests("pending")),
-        "note": "write actions require an approved request AND an armed flag; no fake success",
+        "note": "write actions require an approved request AND an armed flag AND a configured credential; no fake success",
     }

@@ -132,6 +132,9 @@ def build_mockup(*, product: Dict[str, Any] | str,
                  enforce_brand: bool = True,
                  align: str = "preset",
                  panel_prep: Optional[str] = None,
+                 scene_lane: str = "auto",
+                 cloud_provider: str = "fal",
+                 cloud_model: Optional[str] = None,
                  out_path: Optional[str | os.PathLike] = None,
                  write_sidecar: bool = True,
                  client: Optional[comfy_client.ComfyClient] = None,
@@ -168,11 +171,31 @@ def build_mockup(*, product: Dict[str, Any] | str,
         gen_dir = out_dir / "scenes"
         gen_dir.mkdir(parents=True, exist_ok=True)
         gen_path = gen_dir / f"scene_{pkey}_{_stamp()}.png"
-        gen = comfy_client.generate_scene(scene_prompt, gen_path, width=width,
-                                          height=height, steps=steps, seed=seed,
-                                          client=client)
-        lane = gen["lane"]
-        source_used = gen["output"]
+
+        # Scene lane: local ComfyUI (default), cloud provider, or auto-fallback.
+        models = comfy_client.resolve_models(client)
+        local_ready = bool(models.get("comfy_up") and models.get("qwen_ready"))
+        use_cloud = (scene_lane == "cloud") or (scene_lane == "auto" and not local_ready)
+
+        if use_cloud:
+            from . import cloud
+            try:
+                cres = cloud.generate(scene_prompt, cloud_provider, gen_path,
+                                      model=cloud_model, image_size=f"{width}x{height}")
+            except cloud.ProviderUnavailable as exc:
+                raise comfy_client.ComfyUIError(
+                    f"no scene lane available: local ComfyUI not ready "
+                    f"(up={models.get('comfy_up')}, qwen_ready={models.get('qwen_ready')}) "
+                    f"and cloud not armed ({exc})"
+                ) from exc
+            lane = f"cloud:{cloud_provider}"
+            source_used = cres["output"]
+        else:
+            gen = comfy_client.generate_scene(scene_prompt, gen_path, width=width,
+                                              height=height, steps=steps, seed=seed,
+                                              client=client)
+            lane = gen["lane"]
+            source_used = gen["output"]
         with Image.open(source_used) as im:
             base = im.convert("RGBA")
     else:
@@ -222,6 +245,7 @@ def build_mockup(*, product: Dict[str, Any] | str,
         "style_key": surface.get("style_key"),
         "align": align_info,
         "panel_prep": prep_info,
+        "scene_lane": scene_lane,
     }
     if write_sidecar:
         sidecar = out.with_suffix(".json")
@@ -297,6 +321,10 @@ def main(argv: Optional[List[str]] = None) -> int:
                     help="fit the label panel to the detected blank zone")
     ap.add_argument("--panel-prep", choices=["edit_blank"], default=None,
                     help="optional Edit-2511 blank-panel repair before compositing")
+    ap.add_argument("--scene-lane", choices=["auto", "local", "cloud"], default="auto",
+                    help="scene generation lane (auto falls back to cloud when local is down)")
+    ap.add_argument("--cloud-provider", default="fal", help="fal | openrouter | replicate")
+    ap.add_argument("--cloud-model", default=None)
     ap.add_argument("--json", action="store_true", help="print full result JSON")
     args = ap.parse_args(argv)
 
@@ -317,6 +345,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             brand=args.brand, tagline=args.tagline, product_name=args.product_name,
             descriptor=args.descriptor, net_weight=args.net_weight,
             align=args.align, panel_prep=args.panel_prep,
+            scene_lane=args.scene_lane, cloud_provider=args.cloud_provider,
+            cloud_model=args.cloud_model,
         )
     except Exception as exc:  # honest, single-line failure
         print(f"ERROR: {exc}", file=sys.stderr)

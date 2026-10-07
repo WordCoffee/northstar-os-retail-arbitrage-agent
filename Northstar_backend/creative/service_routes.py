@@ -21,7 +21,7 @@ from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Body, HTTPException, Query
 
-from . import approvals, cloud, moderation, providers, storage, video
+from . import approvals, cloud, moderation, providers, storage, video, write_clients
 from . import assets as asset_store
 from . import bundles as bundle_store
 from . import competitor_monitor, listing_guardian
@@ -431,6 +431,40 @@ def cloud_generate(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
 @media_router.get("/video/models")
 def video_models() -> Dict[str, Any]:
     return {"ok": True, **video.video_catalog()}
+
+
+@media_router.get("/doctor")
+def doctor() -> Dict[str, Any]:
+    """Readiness doctor: exactly what is configured and what is missing to arm.
+
+    Runs a real storage round-trip probe. Never reads or returns a secret value.
+    """
+    ps = providers.provider_status()
+    st = storage.storage_status()
+    try:
+        be = storage.get_backend()
+        be.put("_doctor_probe.txt", b"ok", "text/plain")
+        probe = {"backend": getattr(be, "name", "?"),
+                 "roundtrip": be.get("_doctor_probe.txt") == b"ok"}
+    except Exception as exc:
+        probe = {"roundtrip": False, "error": str(exc)[:160]}
+
+    missing: List[str] = []
+    if not ps["media_live_armed"]:
+        missing.append("MEDIA_GEN_LIVE=1")
+    for _name, c in ps["cloud"].items():
+        if not c["present"]:
+            missing.append(c["key_env"])
+    for _k, v in ps["write"].items():
+        if not v["armed"]:
+            missing.append(f"{v['env']}=1")
+    return {"ok": True, "providers": ps,
+            "storage": {**st, "probe": probe},
+            "moderation": moderation.policy(),
+            "write_clients": {"social": write_clients.social_platforms_status(),
+                              "ads": write_clients.ads_status()},
+            "missing_to_arm": missing,
+            "note": "capabilities activate when the listed env vars are set; nothing is faked"}
 
 
 @media_router.get("/video/estimate")

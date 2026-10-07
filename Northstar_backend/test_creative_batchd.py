@@ -160,12 +160,13 @@ def test_approval_execute_requires_approval():
     assert out["executed"] is False and out["reason"] == "not_approved"
 
 
-def test_approval_armed_but_no_live_client(monkeypatch):
+def test_approval_armed_but_not_configured(monkeypatch):
     monkeypatch.setenv("NORTHSTAR_ADS_WRITE_ARMED", "1")
     rec = approvals.request("ads_write", {"cid": "1"})
     approvals.decide(rec["id"], approve=True, by="owner")
     out = approvals.execute(rec["id"])
-    assert out["executed"] is False and out["reason"] == "no_live_client"
+    assert out["executed"] is False and out["reason"] == "not_configured"
+    assert "AMAZON_ADS_REFRESH_TOKEN" in out["missing"]
 
 
 def test_approval_reject():

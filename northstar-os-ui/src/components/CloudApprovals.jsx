@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { DataNotice, EmptyState, SectionHeader } from './Shared.jsx'
+import { DataNotice, EmptyState, MiniBars, SectionHeader } from './Shared.jsx'
 
 // Creative Studio — Cloud Providers & Write-Action Approvals (Batch D surface).
 // Shows the arming posture (local + cloud), a video cost estimator, and the
@@ -141,6 +141,21 @@ export default function CloudApprovals() {
           {estOut && (
             <div className="text-low" style={{ fontSize: 12, marginTop: 10 }}>
               {estOut.model} · {estOut.seconds}s → <b>${estOut.cost_estimate ?? 'n/a'}</b>
+            </div>
+          )}
+          {Object.keys(videoModels).length > 0 && (
+            <div style={{ marginTop: 12 }}>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 2 }}>
+                cost for {est.seconds}s across models
+              </div>
+              <MiniBars
+                data={Object.entries(videoModels).map(([k, v]) => ({
+                  label: k.replace(/-/g, ' '),
+                  value: Math.round((est.audio && v.cost_per_s_audio ? v.cost_per_s_audio : v.cost_per_s) * (Number(est.seconds) || 0) * 100) / 100,
+                }))}
+                tone="var(--ochre)"
+                valueFormat={(v) => `$${v}`}
+              />
             </div>
           )}
         </div>

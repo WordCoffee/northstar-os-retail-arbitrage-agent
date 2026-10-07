@@ -22,16 +22,17 @@ import binascii
 import io
 import logging
 import mimetypes
+import os
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Body, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
 
-from . import comfy_client, label_zone, mogra_mockup, presets
+from . import comfy_client, label_zone, mogra_mockup, presets, storage
 from .exact_text import BrandContentError, LabelSpec, brand_fonts, compose_exact_text
 
 _log = logging.getLogger("northstar.creative")
@@ -225,6 +226,9 @@ def mockup(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
             enforce_brand=bool(body.get("enforce_brand", True)),
             align=body.get("align", "preset"),
             panel_prep=body.get("panel_prep"),
+            scene_lane=body.get("scene_lane", "auto"),
+            cloud_provider=body.get("cloud_provider", "fal"),
+            cloud_model=body.get("cloud_model"),
         )
     except BrandContentError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
@@ -236,7 +240,18 @@ def mockup(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
 
 
 @router.get("/file/{name}")
-def get_file(name: str) -> FileResponse:
+def get_file(name: str):
+    """Serve a produced asset from the configured storage backend.
+
+    Local (default) streams the file from disk. The S3-compatible backend
+    redirects to a signed URL, so downloads work identically in hosted mode.
+    """
+    if (os.environ.get("NORTHSTAR_MEDIA_STORAGE", "local").strip().lower() == "s3"):
+        try:
+            return RedirectResponse(storage.get_backend().url(name), status_code=307)
+        except Exception as exc:  # pragma: no cover - depends on S3 config
+            raise HTTPException(status_code=404,
+                                detail=f"asset not available on the configured store: {exc}")
     p = _safe_output(name)
     if not p.exists():
         raise HTTPException(status_code=404, detail="not found")

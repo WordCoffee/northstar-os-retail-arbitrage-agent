@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { DataNotice } from './Shared.jsx'
+import { DataNotice, EmptyState, MiniBars } from './Shared.jsx'
 
 // Creative Studio — Asset Registry & Export Bundles (local lane).
 // Real local asset index over the creative media root: list/generate mockups,
@@ -92,6 +92,20 @@ export default function AssetRegistry() {
               <span key={s.set} className="pill pill-muted" title={s.set}>{s.set} · {s.count}</span>
             ))}
           </div>
+        </div>
+      )}
+
+      {assets.length > 0 && (
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div className="card-head">
+            <h3 className="card-title">Assets by kind</h3>
+            <span className="text-low" style={{ fontSize: 11 }}>density of the local store</span>
+          </div>
+          <MiniBars
+            data={Object.entries(
+              assets.reduce((acc, a) => { const k = a.kind || 'other'; acc[k] = (acc[k] || 0) + 1; return acc }, {}),
+            ).map(([label, value]) => ({ label, value }))}
+          />
         </div>
       )}
 

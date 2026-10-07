@@ -106,6 +106,31 @@ export function AuthorizationNote({ title = 'Authorization boundary', status = '
   )
 }
 
+// ═══ Shared: Mini bars (dependency-free data-viz) ═══
+// Small, restrained bar chart for counts/costs. No chart library, no animation
+// beyond the shared fade. `data` = [{ label, value }].
+export function MiniBars({ data, height = 58, tone = 'var(--forest)', valueFormat, columns }) {
+  const items = (data || []).filter(Boolean)
+  if (items.length === 0) return null
+  const max = Math.max(1, ...items.map((d) => Number(d.value) || 0))
+  const fmt = valueFormat || ((v) => String(v))
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${columns || items.length}, 1fr)`, gap: 8, alignItems: 'end', height }}>
+      {items.map((d, i) => {
+        const v = Number(d.value) || 0
+        const h = Math.max(2, Math.round((v / max) * (height - 18)))
+        return (
+          <div key={i} title={`${d.label}: ${fmt(v)}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, height: '100%', justifyContent: 'flex-end' }}>
+            <span style={{ fontSize: 10, color: 'var(--ink-soft)' }}>{fmt(v)}</span>
+            <div style={{ width: '100%', height: h, background: tone, borderRadius: 3, opacity: 0.85 }} />
+            <span style={{ fontSize: 10, color: 'var(--ink-soft)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>{d.label}</span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 // ═══ Shared: Empty State ═══
 // First-class empty surface (the blueprint's #1 complaint: rooms must not feel
 // empty or generic). Uses the existing .empty-title type scale.
