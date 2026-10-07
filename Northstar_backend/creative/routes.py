@@ -21,6 +21,7 @@ import base64
 import binascii
 import io
 import logging
+import mimetypes
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -239,7 +240,8 @@ def get_file(name: str) -> FileResponse:
     p = _safe_output(name)
     if not p.exists():
         raise HTTPException(status_code=404, detail="not found")
-    return FileResponse(p, media_type="image/png")
+    media = mimetypes.guess_type(str(p))[0] or "application/octet-stream"
+    return FileResponse(p, media_type=media)
 
 
 @router.get("/recent")
@@ -261,7 +263,8 @@ def mount_creative(app: Any) -> None:
     try:
         from . import service_routes
         for r in (service_routes.listing_router, service_routes.social_router,
-                  service_routes.adpilot_router, service_routes.capabilities_router):
+                  service_routes.adpilot_router, service_routes.capabilities_router,
+                  service_routes.assets_router):
             app.include_router(r)
         _log.info("Creative service lanes mounted "
                   "(/api/listing-forge/*, /api/social/*, /api/ad-pilot/*, /api/creative/capabilities)")

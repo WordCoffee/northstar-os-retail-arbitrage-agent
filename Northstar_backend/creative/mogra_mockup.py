@@ -227,6 +227,17 @@ def build_mockup(*, product: Dict[str, Any] | str,
         sidecar = out.with_suffix(".json")
         sidecar.write_text(json.dumps(result, indent=2), encoding="utf-8")
         result["sidecar"] = str(sidecar)
+
+    # Best-effort: register the produced asset so the Creative Studio asset
+    # registry + variant sets pick it up automatically.
+    try:
+        from . import assets
+        result["asset"] = assets.register_file(
+            out, kind="mockup", product=str(pkey), container=container or surface_key,
+            meta={"lane": lane, "align": align_info.get("source"),
+                  "style": surface.get("style_key")})
+    except Exception:
+        result["asset"] = None
     return result
 
 

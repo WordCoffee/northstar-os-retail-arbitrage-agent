@@ -125,7 +125,7 @@ class S3Backend:
 
 
 def _local_root() -> Path:
-    env = os.environ.get("NORTHSTAR_MEDIA_DIR")
+    env = os.environ.get("NORTHSTAR_MEDIA_DIR") or os.environ.get("NORTHSTAR_MOCKUP_OUT")
     if env:
         return Path(env)
     # Reuse the creative output dir so existing assets are already addressable.

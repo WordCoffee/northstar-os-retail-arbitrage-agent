@@ -255,7 +255,23 @@ API. Fixed a real render crash (search-terms string vs array). Suite now:
 pytest 81; harnesses smoke 46/0, acceptance 36/0, guards 11/0, mockup-lane 6/0,
 service-lanes 3/0, invite-flow 11/0.
 
-**Next:** Batch B — Creative Studio deepening (asset registry, variant sets,
-export bundles tied to the exact-text lane); then Batch C (visual polish); then
-Batch D (cloud finals / video / object-store backend / OAuth write actions behind
-the arming flags).
+**Batch B — Creative Studio deepening: DONE.** Local asset registry + export
+bundles over the storage layer:
+- `creative/assets.py` — file-backed index (`assets.json`) over the media root:
+  register / list / get / **variant sets** (grouped by product+container) / `scan`.
+- `creative/bundles.py` — packages selected assets into a ZIP (manifest + files),
+  stores it via the storage backend, registers it as a `bundle` asset.
+- API: `/api/creative/assets` (list + sets), `/api/creative/assets/scan`,
+  `/api/creative/assets/register`, `/api/creative/bundles` (create/list);
+  the file route now serves correct MIME types (ZIP downloads work).
+- The exact-text lane **auto-registers** every mockup it produces, so the registry
+  and variant sets populate as you work.
+- UI: new Creative Studio tab **Registry & Bundles** (`?view=registry`) — thumbnails,
+  variant sets, multi-select → Create Bundle → download ZIP.
+- Tests: +11 (92 total). Harnesses: smoke 47/0 (+1 registry deep-link), acceptance
+  36/0, guards 11/0, mockup-lane 6/0, service-lanes 3/0. Live: scan indexed 33
+  assets, a 3-asset bundle produced a downloadable 1.14 MB ZIP.
+
+**Next:** Batch C — visual polish (parity upgrades per §5: real previews, empty
+states, density, restrained motion, data-viz); then Batch D — cloud finals / video
+/ object-store backend / OAuth write actions behind the arming flags.

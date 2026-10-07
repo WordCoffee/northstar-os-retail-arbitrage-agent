@@ -19,6 +19,8 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Body, HTTPException, Query
 
 from . import moderation, providers, storage
+from . import assets as asset_store
+from . import bundles as bundle_store
 
 import ad_pilot
 import listing_forge
@@ -321,3 +323,54 @@ def capabilities() -> Dict[str, Any]:
         "moderation": moderation.policy(),
         "policy": providers.policy(),
     }
+
+
+# ---------------------------------------------------------------------------
+# Asset registry + export bundles — /api/creative/assets*, /api/creative/bundles
+
+
+assets_router = APIRouter(prefix="/api/creative", tags=["creative-assets"])
+
+
+@assets_router.get("/assets")
+def list_assets(kind: Optional[str] = None, product: Optional[str] = None,
+                container: Optional[str] = None, limit: int = 500) -> Dict[str, Any]:
+    return {
+        "ok": True,
+        "assets": asset_store.list_assets(kind=kind, product=product,
+                                          container=container, limit=limit),
+        "sets": asset_store.sets(),
+        "index": str(asset_store._index_path()),
+        "storage": storage.storage_status(),
+    }
+
+
+@assets_router.post("/assets/scan")
+def scan_assets() -> Dict[str, Any]:
+    """Register any media files already on disk that are not yet indexed."""
+    return asset_store.scan()
+
+
+@assets_router.post("/assets/register")
+def register_asset(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    key = body.get("key")
+    if not key:
+        raise HTTPException(status_code=400, detail="key is required")
+    asset = asset_store.register(
+        key=key, url=body.get("url"), kind=body.get("kind", "image"),
+        product=body.get("product"), container=body.get("container"),
+        tags=body.get("tags"), meta=body.get("meta"))
+    return {"ok": True, "asset": asset}
+
+
+@assets_router.get("/bundles")
+def list_bundles() -> Dict[str, Any]:
+    return {"ok": True, "bundles": asset_store.list_assets(kind="bundle")}
+
+
+@assets_router.post("/bundles")
+def create_bundle(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    ids = body.get("asset_ids")
+    if not isinstance(ids, list) or not ids:
+        raise HTTPException(status_code=400, detail="asset_ids (array) is required")
+    return bundle_store.create_bundle(ids, name=body.get("name", "creative-bundle"))
