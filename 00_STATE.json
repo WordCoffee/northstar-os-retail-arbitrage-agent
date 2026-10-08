@@ -1,4 +1,17 @@
 {
+  "creative_shared_services": {
+    "status": "implemented",
+    "date": "2026-10-07",
+    "report": "reports/shared_creative_services_20261007.md",
+    "docs": "docs/creative/CAPABILITY_MAP.md, docs/creative/LICENSE_MANIFEST.md, docs/creative/SETUP.md",
+    "components_installed": 20,
+    "quarantined": ["flux1-dev-fp8 (FLUX.1 [dev] non-commercial)"],
+    "defaults": {"draft": "z-image-turbo", "standard": "sdxl-base-1.0", "high": "qwen-image-2512"},
+    "modules": ["registry", "router", "jobs", "provenance", "stages", "pipeline", "workflows", "workers"],
+    "endpoints": ["/api/creative/components", "/api/creative/lanes", "/api/creative/workers", "/api/creative/pipeline", "/api/creative/jobs"],
+    "tests": "133 creative tests passed (18 new: test_creative_shared_services.py)",
+    "pending": "owner visual approval; legacy tools/generate_images.py and WT-C foundation/api/creative.py not yet routed through the shared router"
+  },
   "test_baseline": {
     "python": "2348 passed, 2 known failures (pre-existing protected-hash drift), 3 skipped, 48 subtests; 2026-09-30 foundation full-suite re-run: 3423 passed, 65 skipped, 1 known failure (test_frozen_file_boundary_is_a_static_rule, pre-existing protected-hash drift), 48 subtests. Item 4 local completion: foundation suite 757 passed / 59 skipped / 48 subtests; admin/tenant/audit/migration/e2e subset 92/0; backup-restore drill test_backup_restore_drill.py 2/0. Full `Northstar_backend` tree re-run 3410 passed / 62 skipped / 23 failed (all 23 failures are PRE-EXISTING in test_proof_batch.py + test_proof_batch_run.py — FileNotFoundError: data/scanner-search-cache.json missing fixture file in this env; those two test files are unmodified/clean in git, NOT Item 4 regressions). npm run build: 0 errors.",
     "golden_goose": "511 passed, 0 failures (module suite)",
