@@ -115,7 +115,10 @@ def main() -> int:
     if args.mask:
         payload["mask"] = args.mask
     if args.payload_json:
-        payload.update(json.loads(args.payload_json))
+        raw = args.payload_json
+        if raw.startswith("@"):
+            raw = Path(raw[1:]).read_text(encoding="utf-8-sig")
+        payload.update(json.loads(raw))
 
     pre = gpu_stats() if args.cold else None
     t0 = time.time()
@@ -152,6 +155,12 @@ def main() -> int:
         except Exception:
             pass
 
+    source = args.source or payload.get("source")
+    if args.task in ("generate", "packaging_concept"):
+        input_source = "reused" if source else "freshly-generated"
+    else:
+        input_source = "reused" if source else "none"
+    cached_nodes = result.get("cached_nodes") or j.get("cached_nodes") or []
     rec = {
         "label": args.label, "task": args.task, "mode": args.mode, "requested_lane": args.lane,
         "lane": lane, "component": result.get("component") or primary.get("component"),
@@ -160,16 +169,26 @@ def main() -> int:
         "workflow": primary.get("workflow") or result.get("workflow"),
         "sampling": primary.get("preset") or result.get("preset"),
         "dimensions": [args.width, args.height],
+        "input_source": input_source,
         "full_job_stages": stages or ([result.get("lane")] if result.get("lane") else []),
+        "comfy_prompt_id": result.get("prompt_id"),
+        "comfy_execution_s": result.get("execution_s"),
+        "comfy_cached_nodes": cached_nodes,
+        "cache_hits": len(cached_nodes),
+        "model_load_included": result.get("model_load_included"),
+        "stage_times": j.get("stage_times"),
+        "interval_s": j.get("interval_s"),
         "status": j["status"], "total_s": total,
-        "peak_device_vram_mb": peak, "cold": bool(args.cold), "pre_gpu": pre,
+        "max_observed_device_vram_mb": peak, "cold": bool(args.cold), "pre_gpu": pre,
         "retries": retries,
         "output": j.get("output"), "output_check": decode,
         "rejected": not decode.get("ok"),
         "provenance": j.get("provenance"), "error": j.get("error"),
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
-        "metric_note": ("peak_device_vram_mb is nvidia-smi memory.used — device-wide "
-                        "(all processes), sampled ~1.5 s; not per-process allocated/reserved."),
+        "metric_note": ("max_observed_device_vram_mb is the maximum nvidia-smi "
+                        "memory.used seen across samples at a ~1.5 s interval — "
+                        "device-wide (all processes), NOT continuous peak, NOT "
+                        "per-process allocated/reserved."),
     }
     p = OUT / f"{args.label}_{int(time.time())}.json"
     p.write_text(json.dumps(rec, indent=2), encoding="utf-8")

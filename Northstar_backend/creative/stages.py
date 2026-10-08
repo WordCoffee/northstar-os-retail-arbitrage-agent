@@ -37,14 +37,40 @@ def unload_comfy_models() -> bool:
         return False
 
 
-def _run(workflow: Dict[str, Any], out_path: Path, *, timeout: float = 1200.0) -> bytes:
+def _run_meta(workflow: Dict[str, Any], out_path: Path, *, timeout: float = 1200.0) -> Dict[str, Any]:
+    """Queue + wait + fetch, returning execution metadata for provenance/benchmarks.
+
+    ``execution_s`` includes any ComfyUI model loading performed for this graph
+    (models are unloaded between jobs by policy). ``cached_nodes`` lists nodes
+    ComfyUI served from its execution cache.
+    """
     client = comfy_client.ComfyClient()
     if not client.is_up():
         raise StageError(f"ComfyUI not reachable at {comfy_client.comfy_base_url()}")
-    data = client.run(workflow, timeout=timeout)
+    t0 = time.time()
+    prompt_id = client.queue_prompt(workflow)
+    rec = client.wait_for(prompt_id, timeout=timeout)
+    execution_s = round(time.time() - t0, 3)
+    cached: List[str] = []
+    for msg in ((rec.get("status") or {}).get("messages") or []):
+        if msg and msg[0] == "execution_cached":
+            cached = list((msg[1] or {}).get("nodes") or [])
+    ref = None
+    for _node, node_out in (rec.get("outputs") or {}).items():
+        if node_out.get("images"):
+            ref = node_out["images"][0]
+            break
+    if not ref:
+        raise StageError("workflow completed but produced no image")
+    data = client.fetch_image(ref)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_bytes(data)
-    return data
+    return {"bytes": data, "prompt_id": prompt_id, "execution_s": execution_s,
+            "cached_nodes": cached, "output": str(out_path), "model_load_included": True}
+
+
+def _run(workflow: Dict[str, Any], out_path: Path, *, timeout: float = 1200.0) -> bytes:
+    return _run_meta(workflow, out_path, timeout=timeout)["bytes"]
 
 
 def _run_collect(workflow: Dict[str, Any], out_dir: Path, *, timeout: float = 1200.0
@@ -117,16 +143,19 @@ def generate(prompt: str, out_path: str | os.PathLike, *, mode: str = "standard"
         try:
             wf = workflows.build(wf_name, prompt, **kwargs)
             out = Path(out_path)
-            _run(wf, out, timeout=1200.0)
+            meta = _run_meta(wf, out, timeout=1200.0)
             side = provenance.write_sidecar(
                 out, task="generate", lane=entry["lane"],
                 component=entry.get("component"), params=kwargs,
                 inputs=[], stages=[{"stage": "generate", "lane": entry["lane"]}],
-                extras={"prompt": prompt, "mode": mode})
+                extras={"prompt": prompt, "mode": mode, "prompt_id": meta["prompt_id"]})
             return {"ok": True, "output": str(out), "lane": entry["lane"],
                     "component": entry.get("component"), "mode": mode,
                     "model_file": entry.get("model_file"), "workflow": wf_name,
                     "preset": p, "provenance": str(side),
+                    "prompt_id": meta["prompt_id"], "execution_s": meta["execution_s"],
+                    "cached_nodes": meta["cached_nodes"],
+                    "model_load_included": meta["model_load_included"],
                     "fallbacks_available": plan.get("fallbacks", [])}
         except Exception as exc:
             errors.append(f"{entry.get('lane')}: {exc}")
@@ -134,6 +163,44 @@ def generate(prompt: str, out_path: str | os.PathLike, *, mode: str = "standard"
             continue
 
     raise StageError("all generation lanes failed: " + " | ".join(errors))
+
+
+def edit(prompt: str, source_path: str | os.PathLike, out_path: str | os.PathLike, *,
+         mode: str = "standard", steps: Optional[int] = None, cfg: Optional[float] = None,
+         seed: Optional[int] = None, lane: Optional[str] = None) -> Dict[str, Any]:
+    """Instruction-based edit via the routed edit lane (Qwen-Image-Edit-2511).
+
+    Applies the approved-component policy + explicit routing + provenance. Used
+    for the Mogra panel-prep step and any other region/instruction edit.
+    """
+    plan = router.route("edit", mode)
+    entry = plan.get("primary")
+    if lane:
+        pool = ([plan["primary"]] if plan.get("primary") else []) + list(plan.get("fallbacks", []))
+        entry = next((e for e in pool if e.get("lane") == lane), entry)
+    if not entry:
+        raise StageError(plan.get("error") or "no edit lane available")
+    client = comfy_client.ComfyClient()
+    if not client.is_up():
+        raise StageError("ComfyUI not reachable for edit")
+    preset = entry.get("preset") or {}
+    name = client.upload_image(source_path)
+    wf = comfy_client.qwen_edit_workflow(
+        prompt, name, steps=int(steps or preset.get("steps", 20)),
+        cfg=float(cfg if cfg is not None else preset.get("cfg", 4.0)),
+        seed=seed, unet_name=None, clip_name=None, vae_name=None)
+    out = Path(out_path)
+    meta = _run_meta(wf, out)
+    side = provenance.write_sidecar(out, task="edit", lane=entry["lane"],
+                                    component=entry.get("component"),
+                                    params={"steps": steps, "cfg": cfg, "mode": mode},
+                                    inputs=[str(source_path)],
+                                    stages=[{"stage": "edit", "lane": entry["lane"]}])
+    return {"ok": True, "output": str(out), "lane": entry["lane"],
+            "component": entry.get("component"), "provenance": str(side),
+            "prompt_id": meta["prompt_id"], "execution_s": meta["execution_s"],
+            "cached_nodes": meta["cached_nodes"],
+            "model_load_included": meta["model_load_included"]}
 
 
 def upscale(image_path: str | os.PathLike, out_path: str | os.PathLike, *,

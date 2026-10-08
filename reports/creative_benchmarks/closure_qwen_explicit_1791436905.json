@@ -1,0 +1,59 @@
+{
+  "label": "closure_qwen_explicit",
+  "task": "generate",
+  "mode": "standard",
+  "requested_lane": "qwen-t2i",
+  "lane": "qwen-t2i",
+  "component": "qwen-image-2512",
+  "family": "sdxl",
+  "model_file": "qwen-image-2512-Q4_K_M.gguf",
+  "precision": "gguf-q4_k_m",
+  "workflow": "sdxl_t2i",
+  "sampling": {
+    "steps": 25,
+    "cfg": 7.0,
+    "width": 1024,
+    "height": 1024,
+    "sampler": "dpmpp_2m",
+    "scheduler": "karras"
+  },
+  "dimensions": [
+    1024,
+    1024
+  ],
+  "input_source": "freshly-generated",
+  "full_job_stages": [
+    "generate"
+  ],
+  "comfy_prompt_id": "f4d774b6-3428-445f-858e-c5e7ddde2c62",
+  "comfy_execution_s": 122.7,
+  "comfy_cached_nodes": [],
+  "cache_hits": 0,
+  "model_load_included": true,
+  "stage_times": {
+    "total_interval_s": 123.02,
+    "comfy_execution_s": 122.7,
+    "stages": []
+  },
+  "interval_s": 123.02,
+  "status": "done",
+  "total_s": 123.18,
+  "max_observed_device_vram_mb": 13995.0,
+  "cold": false,
+  "pre_gpu": null,
+  "retries": 0,
+  "output": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\gen_20261008_001942_82889.png",
+  "output_check": {
+    "ok": true,
+    "size": [
+      1024,
+      1024
+    ],
+    "mode": "RGB"
+  },
+  "rejected": false,
+  "provenance": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\gen_20261008_001942_82889.png.json",
+  "error": null,
+  "timestamp": "2026-10-08T00:21:45",
+  "metric_note": "max_observed_device_vram_mb is the maximum nvidia-smi memory.used seen across samples at a ~1.5 s interval \u2014 device-wide (all processes), NOT continuous peak, NOT per-process allocated/reserved."
+}

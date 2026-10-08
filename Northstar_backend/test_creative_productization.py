@@ -191,11 +191,13 @@ def test_build_mockup_panel_prep_then_align(tmp_path, monkeypatch):
     src = tmp_path / "base.png"
     _panel_image(500, 500).save(src)
 
-    def fake_blanks(source_path, out_path, **kw):
+    def fake_blanks(prompt, source_path, out_path, **kw):
         _panel_image(500, 500).save(out_path)  # pretend Edit-2511 blanked it
-        return {"lane": "qwen-image-edit-2511", "output": str(out_path)}
+        return {"lane": "qwen-edit", "output": str(out_path)}
 
-    monkeypatch.setattr(comfy_client, "blank_panel", fake_blanks)
+    # Panel prep now routes through the shared edit service (stages.edit).
+    from creative import stages as _stages
+    monkeypatch.setattr(_stages, "edit", fake_blanks)
     res = mogra_mockup.build_mockup(
         product="organic_turmeric_powder",
         container="mogra_5lb_clear_handled_pet_jar",

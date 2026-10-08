@@ -213,9 +213,16 @@ def build_mockup(*, product: Dict[str, Any] | str,
         prep_dir = out_dir / "prep"
         prep_dir.mkdir(parents=True, exist_ok=True)
         prep_path = prep_dir / f"blank_{pkey}_{_stamp()}.png"
-        comfy_client.blank_panel(source_used, prep_path, client=client)
+        # Route the panel-prep edit through the shared edit service (approved-
+        # component policy, explicit routing, provenance) instead of calling the
+        # ComfyUI client directly. Behaviour (prompt, no text) is preserved.
+        from . import stages
+        edit_res = stages.edit(comfy_client.PANEL_PREP_PROMPT, source_used, prep_path,
+                               mode="standard")
         base = Image.open(prep_path).convert("RGBA")
-        prep_info.update({"applied": True, "output": str(prep_path)})
+        prep_info.update({"applied": True, "output": str(prep_path),
+                          "lane": edit_res.get("lane"),
+                          "provenance": edit_res.get("provenance")})
         if lane == "composited_only":
             lane = "qwen-image-edit-2511+composited"
         else:

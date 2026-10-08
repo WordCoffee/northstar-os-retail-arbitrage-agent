@@ -19,7 +19,17 @@
       "video_audio": "cloud video gated infrastructure-only; local video/timeline/TTS missing; STT working",
       "pending": "owner visual approval of quality defaults + representative samples; WT-C delegation application; weight SHA-256 cross-check vs upstream"
     },
-    "pending": "owner visual approval; WT-C foundation delegation; weight SHA-256 upstream cross-check"
+    "pending": "owner visual approval of quality defaults + representative samples",
+    "closure_20261008": {
+      "report": "reports/creative_image_closure_20261008.md",
+      "wtc_delegation": "applied in WT-C worktree (commit 75ecb85) and tested via endpoints (readiness 200, generate 200 on z-image-draft)",
+      "panel_prep": "mogra_mockup Edit-2511 prep now routes through creative.stages.edit (queue/cancellation/policy/provenance)",
+      "benchmark_paths": "records input_source, prompt_id, execution_s, cache_hits, model_load_included, stage_times, interval_s, max_observed_device_vram_mb",
+      "integrity": "reports/creative_integrity_20261008.md — 10/11 match upstream SHA-256; real-esrgan upstream_unavailable",
+      "owner_review_set": "generated_images/creative/review_set + reports/creative_owner_review/review_sheet.md",
+      "video_plan": "docs/creative/VIDEO_AUDIO_PLAN.md (PROPOSED; not implemented)",
+      "tests": "138 creative tests passed"
+    }
   },
   "test_baseline": {
     "python": "2348 passed, 2 known failures (pre-existing protected-hash drift), 3 skipped, 48 subtests; 2026-09-30 foundation full-suite re-run: 3423 passed, 65 skipped, 1 known failure (test_frozen_file_boundary_is_a_static_rule, pre-existing protected-hash drift), 48 subtests. Item 4 local completion: foundation suite 757 passed / 59 skipped / 48 subtests; admin/tenant/audit/migration/e2e subset 92/0; backup-restore drill test_backup_restore_drill.py 2/0. Full `Northstar_backend` tree re-run 3410 passed / 62 skipped / 23 failed (all 23 failures are PRE-EXISTING in test_proof_batch.py + test_proof_batch_run.py — FileNotFoundError: data/scanner-search-cache.json missing fixture file in this env; those two test files are unmodified/clean in git, NOT Item 4 regressions). npm run build: 0 errors.",

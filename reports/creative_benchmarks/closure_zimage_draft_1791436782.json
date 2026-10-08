@@ -1,0 +1,59 @@
+{
+  "label": "closure_zimage_draft",
+  "task": "generate",
+  "mode": "draft",
+  "requested_lane": "z-image-draft",
+  "lane": "z-image-draft",
+  "component": "z-image-turbo",
+  "family": "z-image",
+  "model_file": "z_image_turbo_nvfp4.safetensors",
+  "precision": "nvfp4",
+  "workflow": "z_image_t2i",
+  "sampling": {
+    "steps": 8,
+    "cfg": 1.0,
+    "width": 1024,
+    "height": 1024,
+    "sampler": "euler",
+    "scheduler": "simple"
+  },
+  "dimensions": [
+    1024,
+    1024
+  ],
+  "input_source": "freshly-generated",
+  "full_job_stages": [
+    "generate"
+  ],
+  "comfy_prompt_id": "9dcfa040-26df-4ba4-b906-950cfdb1dc60",
+  "comfy_execution_s": 16.625,
+  "comfy_cached_nodes": [],
+  "cache_hits": 0,
+  "model_load_included": true,
+  "stage_times": {
+    "total_interval_s": 16.94,
+    "comfy_execution_s": 16.625,
+    "stages": []
+  },
+  "interval_s": 16.94,
+  "status": "done",
+  "total_s": 17.19,
+  "max_observed_device_vram_mb": 13131.0,
+  "cold": false,
+  "pre_gpu": null,
+  "retries": 0,
+  "output": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\gen_20261008_001925_65565.png",
+  "output_check": {
+    "ok": true,
+    "size": [
+      1024,
+      1024
+    ],
+    "mode": "RGB"
+  },
+  "rejected": false,
+  "provenance": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\gen_20261008_001925_65565.png.json",
+  "error": null,
+  "timestamp": "2026-10-08T00:19:42",
+  "metric_note": "max_observed_device_vram_mb is the maximum nvidia-smi memory.used seen across samples at a ~1.5 s interval \u2014 device-wide (all processes), NOT continuous peak, NOT per-process allocated/reserved."
+}

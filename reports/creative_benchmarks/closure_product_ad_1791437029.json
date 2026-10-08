@@ -1,0 +1,56 @@
+{
+  "label": "closure_product_ad",
+  "task": "product_ad",
+  "mode": "standard",
+  "requested_lane": null,
+  "lane": null,
+  "component": null,
+  "family": null,
+  "model_file": "",
+  "precision": "unspecified",
+  "workflow": null,
+  "sampling": null,
+  "dimensions": [
+    1024,
+    1024
+  ],
+  "input_source": "reused",
+  "full_job_stages": [
+    "mask",
+    "compose_text"
+  ],
+  "comfy_prompt_id": null,
+  "comfy_execution_s": null,
+  "comfy_cached_nodes": [],
+  "cache_hits": 0,
+  "model_load_included": null,
+  "stage_times": {
+    "total_interval_s": 1.88,
+    "comfy_execution_s": null,
+    "stages": [
+      "mask",
+      "compose_text"
+    ]
+  },
+  "interval_s": 1.88,
+  "status": "done",
+  "total_s": 3.22,
+  "max_observed_device_vram_mb": 971.0,
+  "cold": false,
+  "pre_gpu": null,
+  "retries": 0,
+  "output": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\pa_20261008_002348_28500.png",
+  "output_check": {
+    "ok": true,
+    "size": [
+      896,
+      1152
+    ],
+    "mode": "RGB"
+  },
+  "rejected": false,
+  "provenance": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\pa_20261008_002348_28500.png.json",
+  "error": null,
+  "timestamp": "2026-10-08T00:23:49",
+  "metric_note": "max_observed_device_vram_mb is the maximum nvidia-smi memory.used seen across samples at a ~1.5 s interval \u2014 device-wide (all processes), NOT continuous peak, NOT per-process allocated/reserved."
+}

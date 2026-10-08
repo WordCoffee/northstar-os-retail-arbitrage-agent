@@ -33,30 +33,36 @@ def _check(store, jid):
         raise jobmod.JobCancelled("cancelled by operator")
 
 
+_TASKS = {
+    "generate": "_task_generate",
+    "upscale": "_task_upscale",
+    "mask": "_task_mask",
+    "compose_text": "_task_compose",
+    "edit": "_task_edit",
+    "inpaint": "_task_inpaint",
+    "condition": "_task_condition",
+    "control": "_task_control",
+    "ad_layout": "_task_ad_layout",
+    "product_ad": "_task_product_ad",
+    "packaging_concept": "_task_packaging_concept",
+}
+
+
 def run_job(jid: str, payload: Dict[str, Any], store) -> Dict[str, Any]:
     task = payload.get("task") or "generate"
     _check(store, jid)
-    if task == "generate":
-        return _task_generate(jid, payload, store)
-    if task == "upscale":
-        return _task_upscale(jid, payload, store)
-    if task == "mask":
-        return _task_mask(jid, payload, store)
-    if task == "compose_text":
-        return _task_compose(jid, payload, store)
-    if task == "inpaint":
-        return _task_inpaint(jid, payload, store)
-    if task == "condition":
-        return _task_condition(jid, payload, store)
-    if task == "control":
-        return _task_control(jid, payload, store)
-    if task == "ad_layout":
-        return _task_ad_layout(jid, payload, store)
-    if task == "product_ad":
-        return _task_product_ad(jid, payload, store)
-    if task == "packaging_concept":
-        return _task_packaging_concept(jid, payload, store)
-    raise ValueError(f"unknown creative task: {task}")
+    fn_name = _TASKS.get(task)
+    if not fn_name:
+        raise ValueError(f"unknown creative task: {task}")
+    t0 = time.time()
+    result = globals()[fn_name](jid, payload, store)
+    interval = round(time.time() - t0, 2)
+    store.update(jid, interval_s=interval,
+                 stage_times={"total_interval_s": interval,
+                              "comfy_execution_s": result.get("execution_s"),
+                              "stages": [s.get("stage") for s in (result.get("stages") or [])
+                                         if isinstance(s, dict)]})
+    return result
 
 
 def _finish(store, jid, result: Dict[str, Any], *, lane: str, sidecar: Optional[str] = None):
@@ -64,6 +70,9 @@ def _finish(store, jid, result: Dict[str, Any], *, lane: str, sidecar: Optional[
                  images=[v for v in (result.get("output"), result.get("mask"),
                                      result.get("cutout")) if v],
                  provenance=sidecar or result.get("provenance"),
+                 execution_s=result.get("execution_s"),
+                 cached_nodes=result.get("cached_nodes"),
+                 model_load_included=result.get("model_load_included"),
                  result=result,
                  progress={"stage": "complete", "message": "done"})
 
@@ -126,6 +135,21 @@ def _task_compose(jid, payload, store):
     out = _out("compose")
     res = stages.compose_text(src, out, spec, surface)
     _finish(store, jid, res, lane="exact_text")
+    return res
+
+
+def _task_edit(jid, payload, store):
+    src = payload.get("source")
+    if not src or not Path(src).exists():
+        raise ValueError("edit requires an existing 'source' image")
+    mode = payload.get("mode", "standard")
+    store.progress(jid, stage="edit", message=f"routing edit ({mode})")
+    out = _out("edit")
+    res = stages.edit(payload.get("prompt", ""), src, out, mode=mode,
+                      steps=payload.get("steps"), cfg=payload.get("cfg"),
+                      seed=payload.get("seed"), lane=payload.get("lane"))
+    stages.unload_comfy_models()
+    _finish(store, jid, res, lane=res.get("lane", "edit"))
     return res
 
 
@@ -218,7 +242,7 @@ def _task_product_ad(jid, payload, store):
         stages_list.append({"stage": "compose_text", "out": res["output"]})
         base = res["output"]
     out = base
-    res = {"ok": True, "output": out, "stages": stages_list}
+    res = {"ok": True, "output": out, "lane": "product_ad", "stages": stages_list}
     side = prov.write_sidecar(out, task="product_ad", lane="shared_pipeline",
                               component="birefnet", params=payload,
                               inputs=[source], stages=stages_list)
