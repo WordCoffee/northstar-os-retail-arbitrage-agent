@@ -89,7 +89,9 @@ HOSTED_MODELS: List[Dict[str, Any]] = [
         "id": "step-5-preview-free",
         "short_id": "step-5-preview-free",
         "name": "Step 5 Preview Free",
-        "role": "policy_default",
+        "role": "default",
+        "intended_role": "default",
+        "allowed_for_creative": False,
         "provider": GO_PROVIDER_ID,
         "family": "step",
         "context": 128000,
@@ -108,7 +110,9 @@ HOSTED_MODELS: List[Dict[str, Any]] = [
         "id": "deepseek-v4.1-flash",
         "short_id": "deepseek-v4.1-flash",
         "name": "DeepSeek V4.1 Flash",
-        "role": "standard",
+        "role": "fallback",
+        "intended_role": "fallback",
+        "allowed_for_creative": False,
         "provider": GO_PROVIDER_ID,
         "family": "deepseek",
         "context": 128000,
@@ -119,14 +123,16 @@ HOSTED_MODELS: List[Dict[str, Any]] = [
         "pricing_source": "OpenCode published per-1M-token rates",
         "pricing_observed_at": "2026-10-08T00:00:00Z",
         "verified_usability": False,
-        "availability_note": "Not independently verified through the OpenCode Go endpoint. Becomes the fallback only after its own real Go completion succeeds.",
+        "availability_note": "Not independently verified through the OpenCode Go endpoint. FALLBACK role only: usable after its own successful real completion, never automatically.",
         "notes": "Lower-cost fallback candidate for lightweight, repetitive engineering work.",
     },
     {
         "id": "glm-5.3-flash",
         "short_id": "glm-5.3-flash",
         "name": "GLM-5.3-Flash",
-        "role": "alternative",
+        "role": "experimental",
+        "intended_role": "experimental",
+        "allowed_for_creative": False,
         "provider": GO_PROVIDER_ID,
         "family": "glm",
         "context": 128000,
@@ -144,7 +150,9 @@ HOSTED_MODELS: List[Dict[str, Any]] = [
         "id": "mimo-v2.6-flash-free",
         "short_id": "mimo-v2.6-flash-free",
         "name": "MiMo-V2.6-Flash Free",
-        "role": "budget",
+        "role": "experimental",
+        "intended_role": "experimental",
+        "allowed_for_creative": False,
         "provider": GO_PROVIDER_ID,
         "family": "mimo",
         "context": 128000,
@@ -169,6 +177,8 @@ HOSTED_ESCALATION_MODELS: List[Dict[str, Any]] = [
         "short_id": "kimi-k2.7-code",
         "name": "Kimi K2.7 Code",
         "role": "escalation",
+        "intended_role": "escalation",
+        "allowed_for_creative": False,
         "provider": GO_PROVIDER_ID,
         "family": "kimi",
         "context": 128000,
@@ -179,12 +189,61 @@ HOSTED_ESCALATION_MODELS: List[Dict[str, Any]] = [
         "pricing_source": "OpenCode published per-1M-token rates",
         "pricing_observed_at": "2026-10-08T00:00:00Z",
         "verified_usability": False,
-        "availability_note": "Not yet verified through the OpenCode Go endpoint. Escalation only, never automatic.",
+        "availability_note": "Not independently verified through the OpenCode Go endpoint. ESCALATION role only: usable after its own successful real completion, never automatically.",
         "notes": "Escalation target for quality/stall recovery.",
     },
 ]
 
 HOSTED_MODEL_IDS = {m["id"] for m in HOSTED_MODELS} | {m["id"] for m in HOSTED_ESCALATION_MODELS}
+
+# Intended roles (spec vocabulary). A role is descriptive intent only — it never
+# grants usability. ``verified_usability`` is the sole gate.
+INTENDED_ROLES = {
+    "step-5-preview-free": "default",     # non-creative hosted reasoning only
+    "deepseek-v4.1-flash": "fallback",     # usable only after its own verification
+    "glm-5.3-flash": "experimental",
+    "mimo-v2.6-flash-free": "experimental",
+    "kimi-k2.7-code": "escalation",       # usable only after its own verification
+}
+
+# Creative separation: hosted reasoning models are NOT the creative remodel
+# renderer. No hosted text model may be used for image/video generation.
+HOSTED_REASONING_IS_CREATIVE_RENDERER = False
+
+
+class ModelNotUsableError(ValueError):
+    """A specifically requested model is not verified usable.
+
+    Subclasses ValueError so existing ``assertRaises(ValueError)`` callers and
+    callers that treat unknown ids uniformly keep working.
+    """
+
+    def __init__(self, model_id: str, reason: str) -> None:
+        self.model_id = model_id
+        self.reason = reason
+        super().__init__(f"{model_id}: {reason}")
+
+
+class NoVerifiedModelError(ValueError):
+    """No hosted reasoning model has a verified real completion."""
+
+
+def intended_role(model_id: str) -> str:
+    return INTENDED_ROLES.get(model_id, "experimental")
+
+
+def model_is_usable(model_id: str) -> bool:
+    """True only when the model carries verified_usability=True."""
+    m = next((x for x in HOSTED_MODELS + HOSTED_ESCALATION_MODELS if x["id"] == model_id), None)
+    return bool(m and m.get("verified_usability"))
+
+
+def verified_models() -> List[str]:
+    return [
+        m["id"] for m in HOSTED_MODELS + HOSTED_ESCALATION_MODELS
+        if m.get("verified_usability")
+    ]
+
 
 # The temporary *policy* preference for non-creative internal work. This is a
 # display/selection hint only — it is NOT a runtime default until verified.
@@ -309,25 +368,99 @@ class ReasoningProvider(BaseAdapter):
         """The model proven usable by a real completion, or None."""
         return VERIFIED_GO_MODEL if VERIFIED_GO_MODEL in HOSTED_MODEL_IDS else None
 
-    def resolve_model(self, requested: Optional[str]) -> Optional[str]:
-        """Resolve a model request to a bare Go model id.
+    def models_status(self) -> List[Dict[str, Any]]:
+        """Per-model status for the API.
 
-        Returns None when nothing was requested and no model is verified — the
-        caller must then fail closed rather than guess a model.
-        Raises ValueError for an id outside the Go catalog.
+        Each entry carries provider id, base URL, endpoint, configured/enabled
+        state, verified usability, and intended role, so the UI can distinguish
+        configured vs verified vs active default without guessing.
+        """
+        configured = self.key_present()
+        enabled = self.enabled()
+        runtime_default = self.verified_model()
+        entries: List[Dict[str, Any]] = []
+        for m in self.all_models():
+            entry = dict(m)
+            entry.update({
+                "provider": GO_PROVIDER_ID,
+                "base_url": GO_BASE_URL,
+                "endpoint": self.endpoint,
+                "configured": configured,
+                "enabled": enabled,
+                "armed": self.armed(),
+                "verified_usability": bool(m.get("verified_usability")),
+                "intended_role": intended_role(m["id"]),
+                "allowed_for_creative": False,
+                "is_runtime_default": m["id"] == runtime_default,
+                "policy_preferred": m["id"] == POLICY_PREFERRED_MODEL,
+                "usable": bool(m.get("verified_usability")) and self.armed(),
+            })
+            entries.append(entry)
+        return entries
+
+    def status(self) -> Dict[str, Any]:
+        """Top-level hosted-reasoning status (no secrets)."""
+        return {
+            "provider": GO_PROVIDER_ID,
+            "base_url": GO_BASE_URL,
+            "chat_endpoint": GO_CHAT_ENDPOINT,
+            "endpoint": self.endpoint,
+            "credential_env": KEY_ENV_VARS[0],
+            "enable_env": ENABLED_ENV_VAR,
+            "configured": self.key_present(),
+            "enabled": self.enabled(),
+            "armed": self.armed(),
+            "policy_preferred_model": POLICY_PREFERRED_MODEL,
+            "verified_model": self.verified_model(),
+            "runtime_default_model": self.verified_model() if self.armed() else None,
+            "verified_usability": self.verified_model() is not None,
+            "verified_models": verified_models(),
+            "unverified_models": [
+                m["id"] for m in HOSTED_MODELS + HOSTED_ESCALATION_MODELS
+                if not m.get("verified_usability")
+            ],
+            "hosted_reasoning_is_creative_renderer": HOSTED_REASONING_IS_CREATIVE_RENDERER,
+            "note": (
+                "OpenCode Go configured, but no runtime model verified."
+                if self.verified_model() is None
+                else "One model has a verified completion through OpenCode Go."
+            ),
+        }
+
+    def resolve_model(self, requested: Optional[str]) -> Optional[str]:
+        """Resolve a model request to a verified, bare Go model id.
+
+        Fail-closed rules:
+        - Nothing requested -> the verified model (or None if none is verified).
+        - Explicit request that is not in the Go catalog -> ValueError.
+        - Explicit request that is in the catalog but NOT verified ->
+          ModelNotUsableError. No silent substitution of another model.
         """
         if requested is None or not str(requested).strip():
-            return self.verified_model()
+            vm = self.verified_model()
+            if vm is None:
+                raise NoVerifiedModelError(
+                    "No hosted reasoning model is verified usable; none was substituted."
+                )
+            return vm
+
         requested = str(requested).strip()
-        if requested in HOSTED_MODEL_IDS:
-            return requested
-        # Tolerate the earlier provider-prefixed form so stored selections work.
-        for prefix in ("opencode-go/", "opencode/"):
-            if requested.startswith(prefix):
-                bare = requested[len(prefix):]
-                if bare in HOSTED_MODEL_IDS:
-                    return bare
-        raise ValueError(f"Model {requested!r} is not in the OpenCode Go catalog.")
+        if requested not in HOSTED_MODEL_IDS:
+            # Tolerate the earlier provider-prefixed form so stored selections work.
+            for prefix in ("opencode-go/", "opencode/"):
+                if requested.startswith(prefix):
+                    bare = requested[len(prefix):]
+                    if bare in HOSTED_MODEL_IDS:
+                        requested = bare
+                        break
+        if requested not in HOSTED_MODEL_IDS:
+            raise ValueError(f"Model {requested!r} is not in the OpenCode Go catalog.")
+        if not model_is_usable(requested):
+            raise ModelNotUsableError(
+                requested,
+                "not verified usable through OpenCode Go; no model was substituted.",
+            )
+        return requested
 
     def complete(self, request: ReasoningRequest) -> ProviderResponse:
         """Non-streaming completion. Implemented by subclasses."""
@@ -388,10 +521,9 @@ class OpenCodeGoProvider(ReasoningProvider):
             "x-opencode-session": self.make_session_id(session_id),
         }
 
-    def _body(self, request: ReasoningRequest) -> Optional[Dict[str, Any]]:
+    def _body(self, request: ReasoningRequest) -> Dict[str, Any]:
+        # Fail-closed: raises on unverified / unknown / no-verified-model.
         model = self.resolve_model(request.model)
-        if model is None:
-            return None
         body: Dict[str, Any] = {
             "model": model,
             "messages": request.messages,
@@ -489,16 +621,32 @@ class OpenCodeGoProvider(ReasoningProvider):
                 error="OpenCode Go key is present but the provider is not armed. Set OPENCODE_GO_ENABLED=1 after explicit operator approval.",
             )
 
-        body = self._body(request)
-        if body is None:
+        try:
+            body = self._body(request)
+        except ModelNotUsableError as exc:
             return ProviderResponse(
                 success=False,
                 status=ProviderStatus.BLOCKED,
                 provider=GO_PROVIDER_ID,
                 error=(
-                    "No OpenCode Go model was selected and no model is verified usable. "
-                    "Select a model explicitly. No runtime default is assumed."
+                    f"Requested hosted reasoning model {exc.model_id!r} is not verified "
+                    f"usable through OpenCode Go ({exc.reason}). Select the verified "
+                    f"model ({self.verified_model() or 'none available'})."
                 ),
+            )
+        except NoVerifiedModelError as exc:
+            return ProviderResponse(
+                success=False,
+                status=ProviderStatus.BLOCKED,
+                provider=GO_PROVIDER_ID,
+                error=str(exc),
+            )
+        except ValueError as exc:
+            return ProviderResponse(
+                success=False,
+                status=ProviderStatus.BLOCKED,
+                provider=GO_PROVIDER_ID,
+                error=str(exc),
             )
 
         with self._sem:
@@ -588,13 +736,33 @@ class OpenCodeGoProvider(ReasoningProvider):
             )
             return
 
-        body = self._body(request)
-        if body is None:
+        try:
+            body = self._body(request)
+        except ModelNotUsableError as exc:
             yield ProviderResponse(
                 success=False,
                 status=ProviderStatus.BLOCKED,
                 provider=GO_PROVIDER_ID,
-                error="No OpenCode Go model was selected and no model is verified usable.",
+                error=(
+                    f"Requested hosted reasoning model {exc.model_id!r} is not verified "
+                    f"usable through OpenCode Go ({exc.reason}). No model was substituted."
+                ),
+            )
+            return
+        except NoVerifiedModelError as exc:
+            yield ProviderResponse(
+                success=False,
+                status=ProviderStatus.BLOCKED,
+                provider=GO_PROVIDER_ID,
+                error=str(exc),
+            )
+            return
+        except ValueError as exc:
+            yield ProviderResponse(
+                success=False,
+                status=ProviderStatus.BLOCKED,
+                provider=GO_PROVIDER_ID,
+                error=str(exc),
             )
             return
 
@@ -697,7 +865,7 @@ class MockReasoningProvider(ReasoningProvider):
 
     def complete(self, request: ReasoningRequest) -> ProviderResponse:
         self.calls.append(request)
-        model = self.resolve_model(request.model) or "unverified"
+        model = self.resolve_model(request.model)
         return ProviderResponse(
             success=True,
             status=ProviderStatus.OK,

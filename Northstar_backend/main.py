@@ -1069,30 +1069,23 @@ def autothink_history(limit: int = 20):
 def reasoning_models():
     """Selectable OpenCode Go models, with verified-runtime state.
 
-    A model is only reported usable once a real completion has succeeded
-    through the OpenCode Go endpoint. No runtime default is implied when
-    nothing is verified.
+    For each model the response carries provider id, base URL, endpoint,
+    configured/enabled state, verified usability and intended role, so the UI
+    can distinguish configured vs verified vs the active default. No secret is
+    returned.
     """
     provider = OpenCodeGoProvider()
-    verified = provider.verified_model()
+    status = provider.status()
     return {
-        "provider": "opencode-go",
-        "base_url": reasoning_provider_module.GO_BASE_URL,
-        "chat_endpoint": reasoning_provider_module.GO_CHAT_ENDPOINT,
-        "models": HOSTED_MODELS,
-        "escalation_models": provider.escalation_models(),
-        "policy_preferred_model": reasoning_provider_module.POLICY_PREFERRED_MODEL,
-        "verified_model": verified,
-        "runtime_default_model": verified,
-        "default_model": verified,
-        "verified_usability": verified is not None,
-        "available": provider.available(),
-        "armed": provider.armed(),
-        "note": (
-            "OpenCode Go configured, but no runtime model verified."
-            if verified is None
-            else "One model has a verified completion through OpenCode Go."
-        ),
+        **status,
+        "models": provider.models_status(),
+        "escalation_models": [
+            m for m in provider.models_status()
+            if m["intended_role"] == "escalation"
+        ],
+        "default_model": status["runtime_default_model"],
+        "available": status["configured"],
+        "armed": status["armed"],
     }
 
 

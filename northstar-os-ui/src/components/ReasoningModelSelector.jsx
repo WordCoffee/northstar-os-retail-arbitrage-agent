@@ -68,11 +68,13 @@ export function useReasoningModel() {
   const escalation = catalog?.escalation_models || []
   const selectedModel = [...models, ...escalation].find(m => m.id === selected) || models[0]
 
-  return { selected, selectedModel, catalog, phase, persist, models, escalation }
+  return { selected, selectedModel, catalog, phase, persist, models, escalation, runtimeDefault: catalog?.runtime_default_model, policyPreferred: catalog?.policy_preferred_model }
 }
 
 export default function ReasoningModelSelector({ value, onChange, showPricing = true, showArmed = true, showEscalation = true }) {
   const { models, escalation, catalog, phase } = useReasoningModel()
+  const configured = catalog?.configured
+  const enabled = catalog?.enabled
   const armed = catalog?.armed
   const available = catalog?.available
   const verified = !!(catalog && catalog.verified_usability)
@@ -111,10 +113,30 @@ export default function ReasoningModelSelector({ value, onChange, showPricing = 
       </select>
       {showArmed && (
         <span
-          className={`pill ${armed ? 'pill-ok' : available ? 'pill-ochre' : 'pill-muted'}`}
-          title={armed ? 'OpenCode Go armed and ready' : available ? 'Key present but not armed' : 'Not configured'}
+          className={`pill ${armed ? 'pill-ok' : enabled ? 'pill-ochre' : configured ? 'pill-ochre' : 'pill-muted'}`}
+          title={
+            armed
+              ? 'OpenCode Go configured, enabled and armed'
+              : enabled
+                ? 'Enabled but no key present'
+                : configured
+                  ? 'Key present but OPENCODE_GO_ENABLED is not set'
+                  : 'Not configured (OPENCODE_GO_API_KEY unset)'
+          }
         >
-          {armed ? 'armed' : available ? 'not armed' : 'not configured'}
+          {armed ? 'armed' : enabled ? 'enabled, no key' : configured ? 'not enabled' : 'not configured'}
+        </span>
+      )}
+      {showArmed && (
+        <span
+          className={`pill ${verified ? 'pill-ok' : 'pill-ochre'}`}
+          title={
+            verified
+              ? 'At least one model has a real completion through OpenCode Go'
+              : 'No model has a verified completion yet; none is used as a runtime default'
+          }
+        >
+          {verified ? 'verified model present' : 'no model verified'}
         </span>
       )}
       {showPricing && value && (
@@ -144,6 +166,13 @@ export default function ReasoningModelSelector({ value, onChange, showPricing = 
           no runtime model verified
         </span>
       )}
+      <span
+        className="text-low"
+        style={{ fontSize: 10, flexBasis: '100%' }}
+        title="Hosted reasoning models are text models for non-creative work. They are never the creative remodel / property-image renderer."
+      >
+        Hosted reasoning models serve non-creative tasks only — never the creative remodel renderer.
+      </span>
     </div>
   )
 }

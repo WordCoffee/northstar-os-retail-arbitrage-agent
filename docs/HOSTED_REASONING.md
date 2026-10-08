@@ -137,17 +137,44 @@ Only `step-5-preview-free` has a proven real completion through the corrected
 Go endpoint. Every other model is reported unverified, and no unverified model
 is ever a runtime default or an automatic fallback.
 
-## Availability guardrail
+## Availability guardrail (hardened)
 
-The adapter enforces:
+The adapter enforces fail-closed model selection:
 
 - `VERIFIED_GO_MODEL` holds the single model with a proven real Go completion;
-  it is also `RUNTIME_DEFAULT_MODEL`.
+  it is also `RUNTIME_DEFAULT_MODEL` when the provider is armed.
 - `verified_usability` is per-model, so the UI can never imply an unverified
   default.
-- `resolve_model(requested)` passes an explicit selection through unchanged and
-  falls back **only** to the verified model when nothing is requested.
-- No automatic substitution, and no automatic fallback to a different provider.
+- `resolve_model(requested)` behaves as:
+  - **Nothing requested** → the verified model; if none is verified it raises
+    `NoVerifiedModelError`.
+  - **Explicit id not in the Go catalog** → `ValueError`.
+  - **Explicit id in the catalog but not verified** → `ModelNotUsableError`
+    (a `ValueError` subclass). **No silent substitution of another model.**
+- `complete()` / `complete_stream()` convert those conditions into a structured
+    `ProviderResponse` with `status=BLOCKED` and a clear message, instead of
+  guessing a model.
+- `DEFAULT_TASK_MODEL` is `None` in `reasoning_tasks.py` — no task assumes a
+  runtime default.
+
+### Intended roles
+
+| Bare ID | Intended role | Rule |
+|---------|---------------|------|
+| `step-5-preview-free` | `default` | Non-creative hosted reasoning only. Verified. |
+| `deepseek-v4.1-flash` | `fallback` | Fallback **only after** its own successful verification. |
+| `kimi-k2.7-code` | `escalation` | Escalation **only after** its own successful verification; explicit, never automatic. |
+| `glm-5.3-flash` | `experimental` | Not verified. |
+| `mimo-v2.6-flash-free` | `experimental` | Not verified. |
+
+Every model carries `allowed_for_creative: false`, and the API exposes
+`hosted_reasoning_is_creative_renderer: false`.
+
+**Live probe of the fail-closed behaviour (2026-10-08, no secrets printed):**
+each model was submitted individually and only `step-5-preview-free` returned
+`success=True`; every other model returned `status=blocked` with a
+"not verified usable" message. With no model requested, the request resolved to
+`step-5-preview-free`.
 
 **Live verification performed (2026-10-08):** one minimal, non-destructive
 completion request — model `step-5-preview-free`, `max_tokens=8`, prompt
@@ -238,6 +265,19 @@ The selector persists the chosen model in `localStorage`
 override is available on each reasoning surface. The actual provider/model used
 is shown on the request and the resulting proposal.
 
+The models/status API returns, per model:
+
+- `provider` (always `opencode-go`), `base_url`, `endpoint`
+- `configured` (key present), `enabled` (flag set), `armed` (both)
+- `verified_usability`, `intended_role`, `allowed_for_creative`
+- `is_runtime_default`, `policy_preferred`, `usable`
+
+Top-level status adds `verified_model`, `runtime_default_model`,
+`verified_models`, `unverified_models`, `policy_preferred_model`,
+`credential_env`, `enable_env`, `hosted_reasoning_is_creative_renderer`, and a
+`note`. `runtime_default_model` is `None` when the provider is not armed, so
+"configured", "verified" and "active default" stay three distinct states.
+
 ## Live-test controls
 
 Owner-triggered comparison tests are available on:
@@ -267,11 +307,15 @@ python -m unittest tests.test_reasoning_provider tests.test_reasoning_tasks test
 - [x] OpenCode Go contract exact (base, endpoint, auth, bare IDs, provider id)
 - [x] Non-creative consumers integrated (AutothinK, ListingForge, AdPilot, Spreadsheet Lab)
 - [x] Manual proposal/review/export workflow
-- [x] Mocked tests passing
+- [x] Mocked tests passing (65 tests)
 - [x] Owner-triggered live-test controls in UI
 - [x] Configuration and credential instructions
 - [x] Accurate provider-usage constraints documented
 - [x] Real OpenCode Go completion verified for `step-5-preview-free` (HTTP 200)
+- [x] Fail-closed model selection (no silent fallback to an unverified model)
+- [x] Status API distinguishes configured / enabled / verified / active default
+- [x] Intended roles: default, fallback, escalation, experimental
+- [x] Creative separation enforced (`allowed_for_creative: false` on every model)
 - [ ] Owner-approved for routine use
 
 ## Unresolved issues

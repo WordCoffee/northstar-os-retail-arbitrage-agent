@@ -40,15 +40,47 @@ class ReasoningRouteTests(unittest.TestCase):
         self.assertEqual(data["verified_model"], "step-5-preview-free")
         self.assertEqual(data["runtime_default_model"], "step-5-preview-free")
         self.assertTrue(data["verified_usability"])
-        self.assertEqual(data["policy_preferred_model"], "step-5-preview-free")
         self.assertEqual(data["provider"], "opencode-go")
         self.assertEqual(data["chat_endpoint"], "https://opencode.ai/zen/go/v1/chat/completions")
+        self.assertEqual(data["base_url"], "https://opencode.ai/zen/go/v1")
+        self.assertTrue(data["configured"])
+        self.assertTrue(data["enabled"])
+        self.assertTrue(data["armed"])
         self.assertIn("One model has a verified completion", data["note"])
-        ids = {m["id"] for m in data["models"]}
-        self.assertIn("step-5-preview-free", ids)
-        self.assertIn("deepseek-v4.1-flash", ids)
-        self.assertIn("glm-5.3-flash", ids)
-        self.assertIn("mimo-v2.6-flash-free", ids)
+        self.assertFalse(data["hosted_reasoning_is_creative_renderer"])
+        self.assertTrue(all(not m.get("is_runtime_default") for m in data["escalation_models"]))
+
+    def test_reasoning_models_report_per_model_state(self):
+        r = self.client.get("/api/v1/reasoning/models")
+        self.assertEqual(r.status_code, 200)
+        models = r.json()["models"]
+        self.assertTrue(len(models) >= 4)
+        for m in models:
+            for field in ("provider", "base_url", "endpoint", "configured",
+                          "enabled", "verified_usability", "intended_role",
+                          "allowed_for_creative"):
+                self.assertIn(field, m)
+            self.assertEqual(m["provider"], "opencode-go")
+            self.assertEqual(m["base_url"], "https://opencode.ai/zen/go/v1")
+            self.assertEqual(m["endpoint"], "https://opencode.ai/zen/go/v1/chat/completions")
+            self.assertFalse(m["allowed_for_creative"])
+
+        by_id = {m["id"]: m for m in models}
+        # Intended roles per the hardening policy.
+        self.assertEqual(by_id["step-5-preview-free"]["intended_role"], "default")
+        self.assertEqual(by_id["deepseek-v4.1-flash"]["intended_role"], "fallback")
+        self.assertEqual(by_id["kimi-k2.7-code"]["intended_role"], "escalation")
+        self.assertEqual(by_id["glm-5.3-flash"]["intended_role"], "experimental")
+
+        # Configured vs verified vs active default are three distinct states.
+        for m in models:
+            self.assertTrue(m["configured"])
+        self.assertTrue(by_id["step-5-preview-free"]["verified_usability"])
+        self.assertFalse(by_id["deepseek-v4.1-flash"]["verified_usability"])
+        self.assertTrue(by_id["step-5-preview-free"]["is_runtime_default"])
+        self.assertFalse(by_id["deepseek-v4.1-flash"]["is_runtime_default"])
+        self.assertTrue(by_id["step-5-preview-free"]["usable"])
+        self.assertFalse(by_id["deepseek-v4.1-flash"]["usable"])
 
     def test_listing_proposal_endpoint(self):
         self._patch_provider(json.dumps({

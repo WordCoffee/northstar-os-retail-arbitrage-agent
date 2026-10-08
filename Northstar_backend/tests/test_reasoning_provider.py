@@ -19,14 +19,19 @@ from adapters.reasoning_provider import (
     HOSTED_ESCALATION_MODELS,
     HOSTED_MODEL_IDS,
     HOSTED_MODELS,
+    HOSTED_REASONING_IS_CREATIVE_RENDERER,
     POLICY_PREFERRED_MODEL,
     RUNTIME_DEFAULT_MODEL,
     VERIFIED_GO_MODEL,
+    ModelNotUsableError,
     MockReasoningProvider,
+    NoVerifiedModelError,
     OpenCodeGoProvider,
     ReasoningRequest,
     ReasoningUsage,
     get_reasoning_provider,
+    intended_role,
+    verified_models,
 )
 
 
@@ -157,24 +162,107 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(p.resolve_model(""), VERIFIED_GO_MODEL)
         self.assertEqual(p.resolve_model("  "), VERIFIED_GO_MODEL)
 
-    def test_resolve_model_accepts_explicit_id(self):
+    def test_resolve_model_accepts_verified_id(self):
         p = OpenCodeGoProvider()
-        self.assertEqual(p.resolve_model("glm-5.3-flash"), "glm-5.3-flash")
+        self.assertEqual(p.resolve_model("step-5-preview-free"), "step-5-preview-free")
+
+    def test_resolve_model_rejects_unverified_model(self):
+        # Hardening: an unverified model must never be selected silently.
+        p = OpenCodeGoProvider()
+        with self.assertRaises(ModelNotUsableError):
+            p.resolve_model("glm-5.3-flash")
+        with self.assertRaises(ModelNotUsableError):
+            p.resolve_model("deepseek-v4.1-flash")
+        with self.assertRaises(ModelNotUsableError):
+            p.resolve_model("kimi-k2.7-code")
 
     def test_resolve_model_rejects_dropped_paid_mimo_id(self):
-        # OpenCode Go publishes mimo-v2.6-flash-free; the paid id is not in the catalog.
+        # OpenCode Go publishes mimo-v2.6-flash-free; the paid id is not in the
+        # catalog at all, so it is an unknown-id error (not an unverified one).
         p = OpenCodeGoProvider()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as ctx:
             p.resolve_model("mimo-v2.6-flash")
+        self.assertIn("not in the OpenCode Go catalog", str(ctx.exception))
 
-    def test_resolve_model_accepts_free_mimo_id(self):
+    def test_resolve_model_rejects_unverified_free_mimo_id(self):
         p = OpenCodeGoProvider()
-        self.assertEqual(p.resolve_model("mimo-v2.6-flash-free"), "mimo-v2.6-flash-free")
+        with self.assertRaises(ModelNotUsableError):
+            p.resolve_model("mimo-v2.6-flash-free")
 
     def test_resolve_model_rejects_unknown(self):
         p = OpenCodeGoProvider()
         with self.assertRaises(ValueError):
             p.resolve_model("openai/gpt-5")
+
+    def test_intended_roles(self):
+        self.assertEqual(intended_role("step-5-preview-free"), "default")
+        self.assertEqual(intended_role("deepseek-v4.1-flash"), "fallback")
+        self.assertEqual(intended_role("kimi-k2.7-code"), "escalation")
+        self.assertEqual(intended_role("glm-5.3-flash"), "experimental")
+        self.assertEqual(intended_role("mimo-v2.6-flash-free"), "experimental")
+        self.assertTrue(ModelNotUsableError.__mro__.__contains__(ValueError))
+
+    def test_no_model_is_allowed_for_creative(self):
+        for m in HOSTED_MODELS + HOSTED_ESCALATION_MODELS:
+            self.assertFalse(m.get("allowed_for_creative"))
+        self.assertFalse(HOSTED_REASONING_IS_CREATIVE_RENDERER)
+
+    def test_models_status_exposes_contract_and_state(self):
+        with mock.patch.dict(os.environ, {"OPENCODE_GO_API_KEY": "set", "OPENCODE_GO_ENABLED": "1"}, clear=False):
+            entries = OpenCodeGoProvider().models_status()
+        by_id = {e["id"]: e for e in entries}
+        self.assertEqual(
+            set(by_id),
+            {
+                "step-5-preview-free", "deepseek-v4.1-flash", "glm-5.3-flash",
+                "mimo-v2.6-flash-free", "kimi-k2.7-code",
+            },
+        )
+        for e in entries:
+            self.assertEqual(e["provider"], "opencode-go")
+            self.assertEqual(e["base_url"], "https://opencode.ai/zen/go/v1")
+            self.assertEqual(e["endpoint"], "https://opencode.ai/zen/go/v1/chat/completions")
+            self.assertFalse(e["allowed_for_creative"])
+        # Only the verified model is the active default.
+        defaults = [e["id"] for e in entries if e["is_runtime_default"]]
+        self.assertEqual(defaults, ["step-5-preview-free"])
+        # Configured and verified are distinct concepts.
+        for e in entries:
+            self.assertTrue(e["configured"] and e["enabled"])
+            self.assertIsInstance(e["verified_usability"], bool)
+        self.assertTrue(by_id["step-5-preview-free"]["verified_usability"])
+        self.assertFalse(by_id["deepseek-v4.1-flash"]["verified_usability"])
+        self.assertFalse(by_id["kimi-k2.7-code"]["verified_usability"])
+
+    def test_status_distinguishes_configured_verified_and_default(self):
+        with mock.patch.dict(os.environ, {"OPENCODE_GO_API_KEY": "set", "OPENCODE_GO_ENABLED": "1"}, clear=False):
+            st = OpenCodeGoProvider().status()
+        self.assertTrue(st["configured"])
+        self.assertTrue(st["enabled"])
+        self.assertTrue(st["armed"])
+        self.assertTrue(st["verified_usability"])
+        self.assertEqual(st["verified_model"], "step-5-preview-free")
+        self.assertEqual(st["runtime_default_model"], "step-5-preview-free")
+        self.assertEqual(st["verified_models"], ["step-5-preview-free"])
+        self.assertEqual(
+            set(st["unverified_models"]),
+            {"deepseek-v4.1-flash", "glm-5.3-flash", "mimo-v2.6-flash-free", "kimi-k2.7-code"},
+        )
+        self.assertFalse(st["hosted_reasoning_is_creative_renderer"])
+
+    def test_status_reports_unconfigured_without_key(self):
+        with mock.patch.dict(os.environ, {}, clear=True):
+            for k in list(os.environ.keys()):
+                if k.startswith("OPENCODE_GO"):
+                    del os.environ[k]
+            st = OpenCodeGoProvider().status()
+        self.assertFalse(st["configured"])
+        self.assertFalse(st["enabled"])
+        self.assertFalse(st["armed"])
+        # A model can be verified yet have no runtime default when unconfigured.
+        self.assertTrue(st["verified_usability"])
+        self.assertIsNone(st["runtime_default_model"])
+        self.assertIn("One model has a verified completion", st["note"])
 
 
 class AvailabilityTests(unittest.TestCase):
@@ -243,29 +331,29 @@ class CompleteTests(unittest.TestCase):
                 provider="opencode-go",
                 data={
                     "choices": [{"message": {"content": "hello"}}],
-                    "model": "deepseek-v4.1-flash",
+                    "model": "step-5-preview-free",
                     "usage": {"prompt_tokens": 10, "completion_tokens": 5},
                 },
                 latency_ms=123.0,
                 http_status=200,
             )
             p = OpenCodeGoProvider()
-            req = ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="deepseek-v4.1-flash")
+            req = ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="step-5-preview-free")
             resp = p.complete(req)
             self.assertTrue(resp.success)
             self.assertEqual(resp.data["content"], "hello")
-            self.assertEqual(resp.data["model"], "deepseek-v4.1-flash")
+            self.assertEqual(resp.data["model"], "step-5-preview-free")
             self.assertEqual(resp.data["usage"]["prompt_tokens"], 10)
             self.assertEqual(resp.data["usage"]["completion_tokens"], 5)
             self.assertAlmostEqual(
                 resp.data["estimated_cost_usd"],
-                10 * 0.30 / 1_000_000 + 5 * 1.20 / 1_000_000,
+                0.0,
                 delta=1e-6,
             )
             self.assertEqual(resp.latency_ms, 123.0)
 
             call_kwargs = mock_timed.call_args.kwargs
-            self.assertEqual(call_kwargs["json"]["model"], "deepseek-v4.1-flash")
+            self.assertEqual(call_kwargs["json"]["model"], "step-5-preview-free")
             self.assertEqual(
                 call_kwargs["headers"]["Authorization"],
                 "Bearer " + os.environ["OPENCODE_GO_API_KEY"],
@@ -301,7 +389,7 @@ class CompleteTests(unittest.TestCase):
                 http_status=200,
             )
             p = OpenCodeGoProvider()
-            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="deepseek-v4.1-flash"))
+            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="step-5-preview-free"))
             self.assertFalse(resp.success)
             self.assertEqual(resp.status, ProviderStatus.ERROR)
             self.assertIn("Malformed", resp.error)
@@ -319,7 +407,7 @@ class CompleteTests(unittest.TestCase):
                 resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}]))
             self.assertFalse(resp.success)
             self.assertEqual(resp.status, ProviderStatus.BLOCKED)
-            self.assertIn("No OpenCode Go model was selected", resp.error)
+            self.assertIn("No hosted reasoning model is verified usable", resp.error)
 
     @mock.patch("adapters.reasoning_provider.BaseAdapter._timed_request")
     def test_complete_rate_limited(self, mock_timed):
@@ -338,7 +426,7 @@ class CompleteTests(unittest.TestCase):
                 http_status=429,
             )
             p = OpenCodeGoProvider()
-            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="deepseek-v4.1-flash"))
+            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="step-5-preview-free"))
             self.assertFalse(resp.success)
             self.assertEqual(resp.status, ProviderStatus.RATE_LIMITED)
 
@@ -379,7 +467,7 @@ class StreamTests(unittest.TestCase):
 
             mock_get_client.return_value = FakeClient()
             p = OpenCodeGoProvider()
-            chunks = list(p.complete_stream(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="deepseek-v4.1-flash")))
+            chunks = list(p.complete_stream(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="step-5-preview-free")))
             self.assertEqual(len(chunks), 3)
             self.assertTrue(all(c.success for c in chunks))
             self.assertEqual(chunks[0].data["content"], "Hello ")
