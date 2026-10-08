@@ -30,7 +30,7 @@ not fully integrated, `PLANNED` = contract only, `MISSING` = no implementation.
 
 | Component | Family | Role | License | Commercial | Status |
 |---|---|---|---|---|---|
-| `qwen-image-2512` | qwen-image | generate | Apache-2.0 | allowed | installed |
+| `qwen-image-2512` | qwen-image | generate (t2i) | Apache-2.0 | allowed | **RETIRED 2026-10-08** (authorized creative cleanup; weight removed, recoverable) |
 | `qwen-image-edit-2511` | qwen-image | edit | Apache-2.0 | allowed | installed |
 | `sdxl-base-1.0` | sdxl | generate | CreativeML Open RAIL++-M | allowed | install (this mission) |
 | `z-image-turbo` | z-image | generate (fast) | Apache-2.0 | allowed | install (this mission) |
@@ -87,5 +87,8 @@ installed component sizes + SHA-256, job logs, and the representative sample set
 | edit | Qwen-Image-Edit-2511 | same | same |
 | inpaint | SDXL + SetLatentNoiseMask | same | same |
 
-Qwen is routed by **editing capability** and explicit opt-in only — never a generic
-"high quality" label. Quality defaults are provisional pending owner visual review.
+Qwen-Image-Edit-2511 is routed by the **editing capability** only — never a generic
+"high quality" label. The Qwen-Image-2512 t2i weight (and its explicit `qwen-t2i`
+lane) was **retired on 2026-10-08** under the authorized creative cleanup; generation
+is covered by SDXL (standard/high) and Z-Image (draft). Quality defaults are
+provisional pending owner visual review.

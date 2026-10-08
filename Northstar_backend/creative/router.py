@@ -77,9 +77,11 @@ _PREFERENCE: Dict[str, Dict[str, List[tuple]]] = {
 
 # Installed, approved lanes that are available only by explicit request (`lane=`)
 # or by their capability, never as an implicit default for a different capability.
-_SELECTABLE: List[tuple] = [
-    ("qwen-t2i", "qwen-image-2512", "qwen-image"),
-]
+# NOTE (2026-10-08): the qwen-t2i lane was retired with its weight
+# (qwen-image-2512) under the authorized creative cleanup; generation is covered
+# by SDXL (standard/high) and Z-Image (draft). Qwen-Image-Edit-2511 remains the
+# retained editing lane.
+_SELECTABLE: List[tuple] = []
 
 _LANE_WORKFLOW = {
     "z-image-draft": "z_image_t2i",

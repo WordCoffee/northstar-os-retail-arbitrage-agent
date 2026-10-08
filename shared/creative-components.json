@@ -33,8 +33,10 @@
       ],
       "restrictions": [],
       "sha256": "b2a5f6249eb58ee10c9e2ce8cb1114b89897db23de2fdf7dc49140800aa928fc",
-      "status": "approved",
-      "present": true
+      "status": "retired",
+      "present": false,
+      "retired_at": "2026-10-08",
+      "retired_reason": "Authorized creative cleanup: non-default t2i lane removed to free disk; SDXL (standard/high) and Z-Image (draft) cover generation. Re-download from https://huggingface.co/unsloth/Qwen-Image-2512-GGUF (sha256 b2a5f624...) if needed."
     },
     {
       "id": "qwen-image-edit-2511",

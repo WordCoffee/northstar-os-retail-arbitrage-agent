@@ -15,7 +15,7 @@ sources on 2026-10-07. **This is a factual manifest, not legal certification.**
 
 | Component | Role | License | Weight source | Commercial | Notes |
 |---|---|---|---|---|---|
-| qwen-image-2512 | generate | Apache-2.0 | Qwen (HuggingFace) | allowed | high-quality lane |
+| qwen-image-2512 | generate | Apache-2.0 | Qwen (HuggingFace) | allowed | **RETIRED 2026-10-08** — weight removed (recoverable; sha256 b2a5f624…) |
 | qwen-image-edit-2511 | edit | Apache-2.0 | Qwen | allowed | region edits |
 | qwen-clip (Qwen2.5-VL) | text-encoder | Apache-2.0 | Qwen | allowed | |
 | qwen-vae | vae | Apache-2.0 | Qwen | allowed | |

@@ -73,9 +73,9 @@ def test_router_high_prefers_sdxl_not_qwen(monkeypatch):
     plan = router.route("generate", "high")
     assert plan["primary"]["lane"] == "sdxl-high"
     assert plan["primary"]["component"] == "sdxl-base-1.0"
-    # Qwen is explicit-opt-in only for generation, never an implicit default
+    # Qwen is never an implicit default for generation (its t2i weight was retired).
     assert all(f["lane"] != "qwen-t2i" for f in plan["fallbacks"])
-    assert "qwen-t2i" in [e["lane"] for e in plan["explicit_lanes"]]
+    assert "qwen-t2i" not in [e["lane"] for e in plan["explicit_lanes"]]
 
 
 def test_router_edit_uses_qwen_edit(monkeypatch):

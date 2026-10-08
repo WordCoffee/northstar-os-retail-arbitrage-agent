@@ -29,6 +29,15 @@
       "owner_review_set": "generated_images/creative/review_set + reports/creative_owner_review/review_sheet.md",
       "video_plan": "docs/creative/VIDEO_AUDIO_PLAN.md (PROPOSED; not implemented)",
       "tests": "138 creative tests passed"
+    },
+    "cleanup_20261008": {
+      "report": "reports/creative_cleanup_20261008.md",
+      "removed_creative": ["qwen-image-2512-Q4_K_M.gguf (12.34 GB, sha256 b2a5f624...)"],
+      "retained_due_to_dependency": ["qwen-image-edit-2511 (retained edit capability + panel prep)"],
+      "protected_by_boundary": ["qwen_2.5_vl_7b_nvfp4 (Qwen vision)", "qwen_3_4b_fp8_mixed (Z-Image encoder)", "Ollama qwen3:4b/qwen3:14b/northstar-qwen3:rev1/qwen2.5vl:7b"],
+      "non_creative_unchanged": "Ollama 4 models + 17 blobs/16.52 GB identical before/after; no cache cleanup",
+      "disk_free_gb": "35.4 -> 47.7",
+      "left_untouched_uncertain": ["flux1-dev-fp8 + companions (quarantined, not authorized)", "qwen_image_vae (small)"]
     }
   },
   "test_baseline": {
