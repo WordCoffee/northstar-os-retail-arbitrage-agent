@@ -21,6 +21,7 @@ import logging
 from typing import Any, Dict, List, Optional
 
 from adapters.reasoning_provider import (
+    GO_PROVIDER_ID,
     HOSTED_MODELS,
     ReasoningProvider,
     ReasoningRequest,
@@ -30,11 +31,10 @@ from adapters.base import ProviderResponse, ProviderStatus
 
 logger = logging.getLogger(__name__)
 
-# Temporary routing policy: Step 5 Preview Free is the default for all
-# non-creative operational work while it remains free on OpenCode Go.
-# DeepSeek V4.1 Flash is the intentional lower-cost fallback. Escalation to
-# Kimi K2.7 Code is an explicit operator decision — never automatic.
-DEFAULT_TASK_MODEL = "step-5-preview-free"
+# No model is assumed at runtime. A task must name a model explicitly, or the
+# adapter fails closed. Step 5 Preview Free is a *policy preference* for
+# non-creative internal work only and is not a verified runtime default.
+DEFAULT_TASK_MODEL = None
 
 
 def _provider() -> ReasoningProvider:
@@ -58,15 +58,16 @@ def _safe_json_parse(text: str) -> Optional[Dict[str, Any]]:
         return None
 
 
-def _task_provenance(model: str, task_type: str, latency_ms: Optional[float]) -> Dict[str, Any]:
+def _task_provenance(model: Optional[str], task_type: str, latency_ms: Optional[float]) -> Dict[str, Any]:
     meta = next((m for m in HOSTED_MODELS if m["id"] == model), {})
     return {
-        "provider": "opencode-go",
+        "provider": GO_PROVIDER_ID,
         "model": model,
         "task_type": task_type,
         "latency_ms": latency_ms,
         "pricing_source": meta.get("pricing_source"),
         "pricing_observed_at": meta.get("pricing_observed_at"),
+        "verified_usability": bool(meta.get("verified_usability")) if meta else None,
     }
 
 

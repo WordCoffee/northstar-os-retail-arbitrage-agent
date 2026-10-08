@@ -1,9 +1,36 @@
-# Hosted Reasoning (OpenCode Zen)
+# Hosted Reasoning (OpenCode Go)
 
 Temporary, provider-neutral hosted-reasoning integration for private Northstar
 testing. This adapter lets internal non-creative services call cloud language
-models through **OpenCode Zen** while preserving the local creative pipeline and
+models through **OpenCode Go** while preserving the local creative pipeline and
 all local non-creative models.
+
+> **Correction (2026-10-08).** An earlier revision of this integration pointed at
+> `https://opencode.ai/zen/v1/chat/completions`. That is the **generic
+> pay-as-you-go OpenCode route**, a different surface with different billing and
+> routing. This document and the adapter now use the **OpenCode Go** contract
+> only. Live probing proved the two surfaces behave differently: the generic
+> route refused the free-tier models, while OpenCode Go returned a real
+> completion. Never use the generic route for this integration.
+
+## OpenCode Go contract (exact)
+
+| Item | Value |
+|------|-------|
+| Credential env var | `OPENCODE_GO_API_KEY` |
+| Enable flag | `OPENCODE_GO_ENABLED=1` |
+| Base URL | `https://opencode.ai/zen/go/v1` |
+| Chat-completions endpoint | `https://opencode.ai/zen/go/v1/chat/completions` |
+| Auth header | `Authorization: Bearer <OPENCODE_GO_API_KEY>` |
+| Model IDs | bare IDs, passed through exactly as selected |
+| Provider id | `opencode-go` |
+
+- Model IDs are **bare** — e.g. `step-5-preview-free`, `deepseek-v4.1-flash`,
+  `kimi-k2.7-code`. No prefix is added or rewritten.
+- Only `OPENCODE_GO_API_KEY` is read as a credential. No other key name is
+  consulted.
+- Authorization headers are never logged. Requests are never logged with
+  payloads.
 
 ## Scope
 
@@ -16,58 +43,10 @@ all local non-creative models.
   deterministic validation → before/after owner review → approved Excel/CSV
   export → manual upload by the owner.
 
-## Verified configuration (2026-10-08)
-
-**Documented endpoint** (https://opencode.ai/docs/zen/#endpoints):
-
-```
-https://opencode.ai/zen/v1/chat/completions
-```
-
-> The `/zen/go/v1/chat/completions` path that appeared in the original request
-> is **not** the documented Zen endpoint. It returned
-> `HTTP 400 Model is unavailable` for every model. The documented path above was
-> verified live: auth and model routing both succeed.
-
-**Verified models** (bare Zen IDs — no `opencode-go/` prefix):
-
-| Role | ID | Input $/1M | Output $/1M | Cached read $/1M | Live status |
-|------|----|------------|-------------|------------------|-------------|
-| Policy default | `step-5-preview-free` | Free | Free | Free | **403 FreeTierError — provider-blocked** |
-| Standard | `deepseek-v4.1-flash` | $0.30 | $1.20 | $0.006 | 402 Insufficient account funds |
-| Alternative | `glm-5.3-flash` | $0.15 | $0.50 | $0.03 | 402 Insufficient account funds |
-| Budget | `mimo-v2.6-flash-free` | Free | Free | Free | **403 FreeTierError — provider-blocked** |
-| Escalation | `kimi-k2.7-code` | $0.95 | $4.00 | $0.19 | 402 Insufficient account funds |
-
-Pricing source: OpenCode Zen docs (https://opencode.ai/docs/zen/), observed
-2026-10-08. The catalogue values differ from the generic model catalogue
-(DeepSeek V4.1 Flash is $0.30/$1.20 on Zen, not $0.15/$0.60); the Zen figures
-above are authoritative for this endpoint.
-
-### Live provider findings
-
-| Model | HTTP | Body |
-|-------|------|------|
-| `step-5-preview-free` | 403 | `{"error":{"type":"FreeTierError","message":"OpenCode's free tier can only be used from within OpenCode"}}` |
-| `mimo-v2.6-flash-free` | 403 | same FreeTierError |
-| `deepseek-v4.1-flash` | 402 | `{"error":{"type":"server_error","message":"Upstream request failed: Insufficient account funds"}}` |
-| `glm-5.3-flash` | 402 | same insufficient funds |
-| `kimi-k2.7-code` | 402 | same insufficient funds |
-
-Interpretation:
-
-- The integration is **transport/auth/routing verified** — paid requests reach
-  the provider and are rejected only for balance.
-- **Free-tier models cannot be used by this integration at all.** Zen restricts
-  its free tier to callers inside OpenCode. The Step 5 policy default is
-  therefore provider-blocked and the UI says so; no substitute model is used
-  silently.
-- Zen publishes `mimo-v2.6-flash-free`, not a paid `mimo-v2.6-flash`.
-
-## TEMPORARY MODEL ROUTING POLICY — STEP 5 DEFAULT FOR NON-CREATIVE WORK
+## TEMPORARY MODEL-ROUTING POLICY — STEP 5 DEFAULT FOR NON-CREATIVE WORK
 
 **Purpose:** temporarily use Step 5 Preview Free as the default model for all
-non-creative operational work while it remains free on OpenCode Zen. This is a
+non-creative operational work while it remains free on OpenCode Go. This is a
 temporary cost-saving and orchestration policy, not a permanent architecture
 decision.
 
@@ -75,27 +54,27 @@ decision.
 non-creative tasks unless a task clearly belongs to a specialized model category
 defined below.
 
-**What counts as non-creative work** — planning implementation steps; repo
-analysis and codebase navigation; debugging application logic; writing or
-updating backend code; frontend non-visual business logic; API integrations;
-database queries, schema work, migrations, data cleanup; auth, sessions, roles,
-permissions, billing logic; admin tools and internal dashboards; listing
-workflows, CMS flows, sync jobs, cron jobs, queues, notifications; logging,
-telemetry, monitoring, alerting, error triage; writing/fixing/running tests;
-CI/CD, deployment scripts, environment handling, infrastructure glue;
-documentation, technical specs, implementation plans, task breakdowns;
-cross-service coordination and "manager" tasks across the platform.
+**Non-creative work includes:** planning implementation steps; repo analysis and
+codebase navigation; debugging application logic; writing or updating backend
+code; frontend non-visual business logic; API integrations; database queries,
+schema work, migrations, data cleanup; auth, sessions, roles, permissions,
+billing logic; admin tools and internal dashboards; listings workflows, CMS
+flows, sync jobs, cron jobs, queues, notifications; logging, telemetry,
+monitoring, alerting, error triage; writing/fixing/running tests; CI/CD,
+deployment scripts, environment handling, infrastructure glue; documentation,
+technical specs, implementation plans, task breakdowns; cross-service
+coordination and "manager" tasks across the platform.
 
-**What Step 5 should manage by default:** listings-related services; general
+**Step 5 should manage by default:** listings-related services; general
 application services; back-office and operational workflows; integrations
 between services; task decomposition and execution planning; most day-to-day
 engineering work that is not image-generation creativity.
 
-**What Step 5 should NOT manage by default:** creative remodel image
-generation; interior/exterior redesign rendering; ComfyUI creative prompt
-generation where a specialized image model is required; aesthetic design
-ideation; final creative judgment on remodel outputs; any task whose main goal
-is generating or editing property imagery.
+**Step 5 should NOT manage by default:** creative remodel image generation;
+interior/exterior redesign rendering; creative-pipeline prompt generation where
+a specialized image model is required; aesthetic design ideation; final creative
+judgment on remodel outputs; any task whose main goal is generating or editing
+property imagery.
 
 **Creative-model rule:** for creative remodel, staging, landscaping, image
 editing, or visual transformation tasks, use the dedicated creative/image
@@ -115,32 +94,26 @@ must not replace the creative rendering stack.
 **Escalation policy:**
 
 - If Step 5 loops, stalls, loses context, or produces weak code quality,
-  escalate to **Kimi K2.7 Code**.
+  escalate to **Kimi K2.7 Code** (explicit, never automatic).
 - Lightweight, repetitive, cheap-to-run engineering work may intentionally use
   **DeepSeek V4.1 Flash** as a lower-cost fallback.
 - Step 5 is the temporary default, not mandatory in every case.
 
-**Execution standards for Step 5:** do not claim completion without
-verification; read relevant files before editing; make the smallest correct
-change set; preserve existing architecture unless a change is explicitly
-required; run available tests, linting, and type checks; report exact files
-changed, exact commands run, exact outcomes; if uncertain, stop and state the
-uncertainty rather than inventing a result.
+**Execution standards:** do not claim completion without verification; read
+relevant files before editing; make the smallest correct change set; preserve
+existing architecture unless a change is explicitly required; run available
+tests, linting, and type checks; report exact files changed, exact commands
+run, exact outcomes; if uncertain, stop and state the uncertainty rather than
+inventing a result.
 
 **Northstar-specific priority:** Step 5 is the default manager for all
 non-creative platform work — listings, service coordination, backend
 workflows, agent logic, business rules, dashboard/admin work, and operational
 debugging.
 
-**Implementation note:** because Zen free-tier models are provider-blocked for
-external callers, `step-5-preview-free` is configured as the default with
-`provider_blocked: true`. The selector shows it as *provider-blocked*, and any
-run against it returns the Zen 403 FreeTierError verbatim. Nothing substitutes
-another model automatically.
-
 **Temporary policy note:** this routing policy is temporary and remains in
-effect only while Step 5 Preview Free is available and performing well enough to
-justify default use.
+effect only while Step 5 Preview Free is available and performing well enough
+to justify default use.
 
 **Removal condition:** once Step 5 Preview Free is no longer free — or if its
 quality becomes unreliable — revert default non-creative routing back to the
@@ -150,18 +123,53 @@ prior preferred model (`deepseek-v4.1-flash`).
 mean Step 5 becomes the default creative remodel renderer. Creative
 property-image generation must remain on the specialized visual pipeline.
 
+## Model catalog
+
+| Role | Bare ID | Input $/1M | Output $/1M | Verified through Go |
+|------|---------|------------|-------------|---------------------|
+| Preferred (non-creative) | `step-5-preview-free` | Free | Free | **Yes — HTTP 200, 2026-10-08** |
+| Standard | `deepseek-v4.1-flash` | $0.30 | $1.20 | No (not yet independently probed) |
+| Alternative | `glm-5.3-flash` | $0.15 | $0.50 | No |
+| Budget | `mimo-v2.6-flash-free` | Free | Free | No |
+| Escalation | `kimi-k2.7-code` | $0.95 | $4.00 | No |
+
+Only `step-5-preview-free` has a proven real completion through the corrected
+Go endpoint. Every other model is reported unverified, and no unverified model
+is ever a runtime default or an automatic fallback.
+
+## Availability guardrail
+
+The adapter enforces:
+
+- `VERIFIED_GO_MODEL` holds the single model with a proven real Go completion;
+  it is also `RUNTIME_DEFAULT_MODEL`.
+- `verified_usability` is per-model, so the UI can never imply an unverified
+  default.
+- `resolve_model(requested)` passes an explicit selection through unchanged and
+  falls back **only** to the verified model when nothing is requested.
+- No automatic substitution, and no automatic fallback to a different provider.
+
+**Live verification performed (2026-10-08):** one minimal, non-destructive
+completion request — model `step-5-preview-free`, `max_tokens=8`, prompt
+`ping` — against
+`https://opencode.ai/zen/go/v1/chat/completions`.
+Result: **HTTP 200, success, model id echoed unchanged.** No provider error.
+
+The earlier `403` free-tier refusal was observed only on the generic
+pay-as-you-go route, not on Go.
+
 ## Configuration
 
 Copy these keys into your local `.env` (gitignored, never committed):
 
 ```bash
 # Required
-OPENCODE_GO_API_KEY=your_opencode_zen_key_here
+OPENCODE_GO_API_KEY=your_opencode_go_key_here
 OPENCODE_GO_ENABLED=1
 
 # Optional overrides
-# OPENCODE_API_KEY=                     # Zen-documented alias; either works
-# OPENCODE_GO_ENDPOINT=https://opencode.ai/zen/v1/chat/completions
+# OPENCODE_GO_ENDPOINT=https://opencode.ai/zen/go/v1/chat/completions
+# OPENCODE_GO_MODEL=step-5-preview-free
 # OPENCODE_GO_MAX_CONCURRENCY=2
 # OPENCODE_GO_TIMEOUT_SECONDS=120
 # OPENCODE_GO_MAX_TOKENS=4096
@@ -172,40 +180,47 @@ OPENCODE_GO_ENABLED=1
 enough — the adapter is intentionally fail-closed so paid usage is never
 automatic.
 
+> **Operational note:** the FastAPI app does not itself load `.env`. Set the
+> variables in the shell/environment (or via the compose `env_file`) before
+> starting the server. This is the pre-existing behaviour and is unchanged here.
+
 ## Architecture
 
 - `Northstar_backend/adapters/reasoning_provider.py` — common
   `ReasoningProvider` interface and `OpenCodeGoProvider` implementation.
-  Includes `_classify_provider_error` for FreeTier / insufficient-funds / auth /
-  rate-limit conditions.
+  Includes `_classify_provider_error` for free-tier / insufficient-balance /
+  auth / not-found / rate-limit conditions.
 - `Northstar_backend/reasoning_tasks.py` — task-specific workflows
   (listing/ad/spreadsheet/generic) with deterministic validation.
 - `Northstar_backend/main.py` — routes under `/api/v1/reasoning/*`.
 - `northstar-os-ui/src/components/ReasoningModelSelector.jsx` — selectable
-  model UI with persisted default and provider-blocked badge.
+  model UI with persisted default and verified/unverified badge.
 - `northstar-os-ui/src/pages/internal/SpreadsheetLab.jsx`,
   `ListingForge.jsx`, `AdPilot.jsx`, `AutothinK.jsx` — consumer surfaces.
 
 ## Provider constraints
 
-- OpenCode documents Zen as serving "models that work well as coding agents";
-  this integration uses it for Northstar's planning/reasoning tasks (listing
-  analysis, ad-copy drafting, spreadsheet classification, AutothinK research).
+- OpenCode documents Go/Zen as serving "models that work well as coding
+  agents"; this integration uses it for Northstar's planning/reasoning tasks
+  (listing analysis, ad-copy drafting, spreadsheet classification, AutothinK
+  research).
 - The adapter uses a truthful User-Agent (`NorthstarOS/<version>
   private-testing (non-creative-reasoning)`) and a stable
   `x-opencode-session` value per conversation.
 - We do not disguise listing/ad requests as coding work, spoof another client,
-  or attempt to bypass provider restrictions.
-- **No paid Zen balance fallback and no other paid provider is enabled
-  automatically.** The selected model's error is surfaced verbatim.
+  or attempt to bypass provider restrictions. If a provider restriction is
+  returned, it is reported verbatim and nothing is substituted.
+- **No paid balance fallback and no other paid provider is enabled
+  automatically.**
 
 ## Security / privacy
 
 - API key is server-side only; it never reaches the browser, logs, reports, or
-  git. The backend accepts `OPENCODE_GO_API_KEY` or `OPENCODE_API_KEY`.
+  git. Only `OPENCODE_GO_API_KEY` is read as a credential.
 - Only task-relevant data is sent.
 - Reasoning endpoints are protected by existing foundation authentication.
 - No public tunnels, firewall rules, or creative-service access are altered.
+- Presence checks report only that a variable is set — never its value.
 
 ## Cost and limit controls
 
@@ -219,10 +234,9 @@ automatic.
 ## UI model selection
 
 The selector persists the chosen model in `localStorage`
-(`ns-reasoning-model-v2`). The configured default is `step-5-preview-free`
-(policy default, currently provider-blocked). Per-task override is available on
-each reasoning surface. The actual provider/model used is shown on the request
-and the resulting proposal.
+(`ns-reasoning-model-v2`). The runtime default is the verified model. Per-task
+override is available on each reasoning surface. The actual provider/model used
+is shown on the request and the resulting proposal.
 
 ## Live-test controls
 
@@ -232,13 +246,7 @@ Owner-triggered comparison tests are available on:
 2. **AdPilot → Planner → Hosted ad-copy proposal**
 3. **Spreadsheet Lab → Upload/paste CSV → Analyze with hosted reasoning**
 
-These use the same sanitized inputs across selectable models. Score factual
-correctness, schema compliance, usefulness, repetition, latency, and token
-usage.
-
 Do **not** execute live comparison requests without explicit owner approval.
-A full comparison is currently blocked because every selectable model either
-returns FreeTierError (free models) or insufficient funds (paid models).
 
 ## Test results
 
@@ -256,33 +264,35 @@ python -m unittest tests.test_reasoning_provider tests.test_reasoning_tasks test
 ## Status checklist
 
 - [x] Provider-neutral adapter implemented
-- [x] Three verified model configurations selectable (+ escalation)
+- [x] OpenCode Go contract exact (base, endpoint, auth, bare IDs, provider id)
 - [x] Non-creative consumers integrated (AutothinK, ListingForge, AdPilot, Spreadsheet Lab)
-- [x] Policy default = Step 5 Preview Free
 - [x] Manual proposal/review/export workflow
 - [x] Mocked tests passing
 - [x] Owner-triggered live-test controls in UI
 - [x] Configuration and credential instructions
 - [x] Accurate provider-usage constraints documented
-- [x] Live transport/auth/routing verified (402/403 observed)
-- [ ] Live model output comparison — **blocked**: no usable model without Zen balance
+- [x] Real OpenCode Go completion verified for `step-5-preview-free` (HTTP 200)
 - [ ] Owner-approved for routine use
 
 ## Unresolved issues
 
-1. **No usable model without a Zen balance.** Every paid model returns 402
-   Insufficient account funds; every free model returns 403 FreeTierError.
-2. **Step 5 policy default is provider-blocked.** Either add Zen balance and
-   keep DeepSeek as the working default, or drop the Step 5 default per the
-   removal condition.
-3. The `/zen/go/v1/chat/completions` endpoint from the original request is not
-   the documented path; `/zen/v1/chat/completions` is used instead.
-4. The generic model catalogue's DeepSeek pricing differs from Zen's; Zen is
-   authoritative for this endpoint.
+1. Only `step-5-preview-free` has been verified end-to-end.
+   `deepseek-v4.1-flash`, `glm-5.3-flash`, `mimo-v2.6-flash-free`, and
+   `kimi-k2.7-code` are catalogued but unverified — each needs its own real Go
+   completion before it is treated as usable.
+2. The FastAPI app does not load `.env` itself; operators must export the
+   variables in the environment. Pre-existing behaviour, unchanged.
+3. `.env` line 98 is a raw `retailerapi.com key: <value>` entry that
+   `python-dotenv` cannot parse; it is skipped non-fatally. Worth converting to
+   `KEY=value` if that credential is ever needed by the app.
 
-## Commits
+## Commits (hosted reasoning)
 
-- `dd5e8d9` — hosted reasoning backend adapter, tasks, routes, config, mocked tests
-- `27b3e9f` — hosted reasoning UI integration
-- `18ea970` — route-level integration tests
-- `7eaa0d5` — configuration and constraint documentation
+- `dd5e8d9` backend adapter, tasks, routes, config, mocked tests
+- `27b3e9f` UI integration
+- `18ea970` route-level integration tests
+- `7eaa0d5` configuration and constraint documentation
+- `ecf6b4c` final integration report
+- `a2dc683` earlier Zen-path revision (superseded)
+- `191d7cd` live verification report
+- see this session's final commit for the OpenCode Go correction

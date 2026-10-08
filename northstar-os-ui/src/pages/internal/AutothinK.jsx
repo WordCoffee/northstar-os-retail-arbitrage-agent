@@ -114,8 +114,9 @@ function AutothinKComposer({ onResult }) {
   const localOk = !!(avail && avail.local_available)
   const cloudOk = !!(avail && avail.cloud_available)
   const hostedArmed = !!(catalog && catalog.armed)
+  const hostedVerified = !!(catalog && catalog.verified_usability)
   const hostedSelected = selectedModel
-  const hostedBlocked = !!(hostedSelected && hostedSelected.provider_blocked)
+  const hostedUnverified = !!(hostedSelected && !hostedSelected.verified_usability)
   const providerOk = form.provider === 'local' ? localOk
     : form.provider === 'cloud' ? cloudOk
       : hostedArmed
@@ -168,7 +169,7 @@ function AutothinKComposer({ onResult }) {
             <select className="select field" value={form.provider} onChange={e => setForm(f => ({ ...f, provider: e.target.value }))}>
               <option value="local">Local (Ollama) {localOk ? '— ready' : '— not reachable'}</option>
               <option value="cloud">Cloud (OpenRouter) {cloudOk ? '— key present' : '— no key'}</option>
-              <option value="hosted">Hosted (OpenCode Zen) {hostedArmed ? '— armed' : '— not armed'}</option>
+              <option value="hosted">Hosted (OpenCode Go) {hostedArmed ? '— armed' : '— not armed'}</option>
             </select>
           </div>
           {form.provider === 'hosted' ? (
@@ -187,9 +188,9 @@ function AutothinKComposer({ onResult }) {
             </div>
           )}
         </div>
-        {form.provider === 'hosted' && hostedBlocked && (
+        {form.provider === 'hosted' && hostedUnverified && (
           <div className="text-low" style={{ fontSize: 11 }}>
-            ⚠ The selected hosted model is provider-blocked: {hostedSelected?.availability_note} Choose another model; no automatic fallback occurs.
+            ⚠ {hostedSelected?.name || 'The selected model'} has not been independently verified through the OpenCode Go endpoint. Only {catalog?.runtime_default_model || 'the verified model'} has a successful completion; no automatic fallback occurs.
           </div>
         )}
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -203,7 +204,7 @@ function AutothinKComposer({ onResult }) {
             <div className="alert-text" style={{ whiteSpace: 'pre-wrap' }}>{state.value.content || state.value.reason || 'No content returned.'}</div>
           </div>
         )}
-        <div className="text-low" style={{ fontSize: 11 }}>A research run never fabricates claims — every output cites its source or says UNKNOWN. Cloud (OpenRouter) and hosted (OpenCode Zen) calls are owner-armed and spend-gated; if a model is unavailable or provider-blocked the run fails with that reason rather than substituting another model.</div>
+        <div className="text-low" style={{ fontSize: 11 }}>A research run never fabricates claims — every output cites its source or says UNKNOWN. Cloud (OpenRouter) and hosted (OpenCode Go) calls are owner-armed and spend-gated. If a hosted model is unavailable the run fails with that reason rather than substituting another model.</div>
       </div>
     </div>
   )

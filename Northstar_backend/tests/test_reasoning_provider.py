@@ -13,9 +13,15 @@ from unittest import mock
 
 from adapters.base import ProviderStatus
 from adapters.reasoning_provider import (
-    DEFAULT_MODEL_ID,
+    GO_BASE_URL,
+    GO_CHAT_ENDPOINT,
+    GO_PROVIDER_ID,
+    HOSTED_ESCALATION_MODELS,
     HOSTED_MODEL_IDS,
     HOSTED_MODELS,
+    POLICY_PREFERRED_MODEL,
+    RUNTIME_DEFAULT_MODEL,
+    VERIFIED_GO_MODEL,
     MockReasoningProvider,
     OpenCodeGoProvider,
     ReasoningRequest,
@@ -35,23 +41,65 @@ class CatalogTests(unittest.TestCase):
         self.assertTrue(expected.issubset(HOSTED_MODEL_IDS))
 
     def test_default_is_step5_preview_free(self):
-        self.assertEqual(DEFAULT_MODEL_ID, "step-5-preview-free")
+        self.assertEqual(POLICY_PREFERRED_MODEL, "step-5-preview-free")
+
+    def test_runtime_default_requires_verification(self):
+        # Guardrail: the runtime default is only ever the verified model.
+        self.assertIsNotNone(VERIFIED_GO_MODEL)
+        self.assertEqual(RUNTIME_DEFAULT_MODEL, VERIFIED_GO_MODEL)
+        self.assertTrue(
+            any(m["id"] == VERIFIED_GO_MODEL and m.get("verified_usability")
+                for m in HOSTED_MODELS + HOSTED_ESCALATION_MODELS),
+        )
+
+    def test_go_endpoint_contract_is_exact(self):
+        self.assertEqual(GO_BASE_URL, "https://opencode.ai/zen/go/v1")
+        self.assertEqual(GO_CHAT_ENDPOINT, "https://opencode.ai/zen/go/v1/chat/completions")
+        p = OpenCodeGoProvider()
+        self.assertEqual(p.endpoint, "https://opencode.ai/zen/go/v1/chat/completions")
+
+    def test_provider_identifier_is_opencode_go(self):
+        self.assertEqual(GO_PROVIDER_ID, "opencode-go")
+        for m in HOSTED_MODELS + HOSTED_ESCALATION_MODELS:
+            self.assertEqual(m["provider"], "opencode-go")
+
+    def test_model_ids_are_bare(self):
+        for m in HOSTED_MODELS + HOSTED_ESCALATION_MODELS:
+            self.assertEqual(m["id"], m["short_id"])
+            self.assertNotIn("/", m["id"])
+
+    def test_exactly_one_model_is_verified(self):
+        verified = [m for m in HOSTED_MODELS + HOSTED_ESCALATION_MODELS if m.get("verified_usability")]
+        self.assertEqual([m["id"] for m in verified], ["step-5-preview-free"])
+
+    def test_verified_model_has_a_verified_at_stamp(self):
+        m = next(x for x in HOSTED_MODELS if x["id"] == VERIFIED_GO_MODEL)
+        self.assertTrue(m.get("verified_usability"))
+        self.assertTrue(m.get("verified_at"))
+
+    def test_runtime_default_is_the_verified_model(self):
+        self.assertEqual(VERIFIED_GO_MODEL, "step-5-preview-free")
+        self.assertEqual(RUNTIME_DEFAULT_MODEL, VERIFIED_GO_MODEL)
+        p = OpenCodeGoProvider()
+        self.assertEqual(p.verified_model(), "step-5-preview-free")
+        self.assertEqual(p.resolve_model(None), "step-5-preview-free")
 
     def test_legacy_prefixed_id_is_stripped(self):
         p = OpenCodeGoProvider()
         self.assertEqual(p.resolve_model("opencode-go/step-5-preview-free"), "step-5-preview-free")
 
-    def test_free_models_are_marked_provider_blocked(self):
-        for m in HOSTED_MODELS:
-            if m["cost_per_1m_input"] == 0.0:
-                self.assertTrue(
-                    m.get("provider_blocked"),
-                    f"{m['id']} is free but not marked provider_blocked",
-                )
+    def test_endpoint_override_env(self):
+        with mock.patch.dict(os.environ, {"OPENCODE_GO_ENDPOINT": "https://example.invalid/go/v1/chat/completions"}, clear=False):
+            self.assertEqual(OpenCodeGoProvider().endpoint, "https://example.invalid/go/v1/chat/completions")
 
     def test_documented_endpoint_default(self):
         p = OpenCodeGoProvider()
-        self.assertEqual(p.endpoint, "https://opencode.ai/zen/v1/chat/completions")
+        self.assertEqual(p.endpoint, "https://opencode.ai/zen/go/v1/chat/completions")
+
+    def test_not_found_is_classified_as_not_found(self):
+        r = OpenCodeGoProvider._classify_provider_error(404, '{"error":"not found"}')
+        self.assertIsNotNone(r)
+        self.assertEqual(r.status, ProviderStatus.NOT_FOUND)
 
     def test_free_tier_error_is_classified_as_blocked(self):
         r = OpenCodeGoProvider._classify_provider_error(
@@ -102,19 +150,19 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual([m["id"] for m in free], ["step-5-preview-free", "mimo-v2.6-flash-free"])
         self.assertEqual(len(paid), 2)
 
-    def test_resolve_model_defaults(self):
+    def test_resolve_model_defaults_to_verified_only(self):
         p = OpenCodeGoProvider()
-        self.assertEqual(p.resolve_model(None), DEFAULT_MODEL_ID)
+        # With nothing requested, only the verified model may be used — never a guess.
+        self.assertEqual(p.resolve_model(None), VERIFIED_GO_MODEL)
+        self.assertEqual(p.resolve_model(""), VERIFIED_GO_MODEL)
+        self.assertEqual(p.resolve_model("  "), VERIFIED_GO_MODEL)
 
-    def test_resolve_model_accepts_full_id(self):
+    def test_resolve_model_accepts_explicit_id(self):
         p = OpenCodeGoProvider()
-        self.assertEqual(
-            p.resolve_model("glm-5.3-flash"),
-            "glm-5.3-flash",
-        )
+        self.assertEqual(p.resolve_model("glm-5.3-flash"), "glm-5.3-flash")
 
     def test_resolve_model_rejects_dropped_paid_mimo_id(self):
-        # Zen only publishes mimo-v2.6-flash-free; the paid id is not in the catalog.
+        # OpenCode Go publishes mimo-v2.6-flash-free; the paid id is not in the catalog.
         p = OpenCodeGoProvider()
         with self.assertRaises(ValueError):
             p.resolve_model("mimo-v2.6-flash")
@@ -192,7 +240,7 @@ class CompleteTests(unittest.TestCase):
             mock_timed.return_value = BaseProviderResponse(
                 success=True,
                 status=ProviderStatus.OK,
-                provider="opencode_go",
+                provider="opencode-go",
                 data={
                     "choices": [{"message": {"content": "hello"}}],
                     "model": "deepseek-v4.1-flash",
@@ -202,7 +250,7 @@ class CompleteTests(unittest.TestCase):
                 http_status=200,
             )
             p = OpenCodeGoProvider()
-            req = ReasoningRequest(messages=[{"role": "user", "content": "hi"}])
+            req = ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="deepseek-v4.1-flash")
             resp = p.complete(req)
             self.assertTrue(resp.success)
             self.assertEqual(resp.data["content"], "hello")
@@ -217,7 +265,11 @@ class CompleteTests(unittest.TestCase):
             self.assertEqual(resp.latency_ms, 123.0)
 
             call_kwargs = mock_timed.call_args.kwargs
-            self.assertEqual(call_kwargs["json"]["model"], DEFAULT_MODEL_ID)
+            self.assertEqual(call_kwargs["json"]["model"], "deepseek-v4.1-flash")
+            self.assertEqual(
+                call_kwargs["headers"]["Authorization"],
+                "Bearer " + os.environ["OPENCODE_GO_API_KEY"],
+            )
             self.assertEqual(
                 call_kwargs["headers"]["User-Agent"],
                 "NorthstarOS/2.0.0 private-testing (non-creative-reasoning)",
@@ -243,16 +295,31 @@ class CompleteTests(unittest.TestCase):
             mock_timed.return_value = BaseProviderResponse(
                 success=True,
                 status=ProviderStatus.OK,
-                provider="opencode_go",
+                provider="opencode-go",
                 data={"choices": []},
                 latency_ms=10.0,
                 http_status=200,
             )
             p = OpenCodeGoProvider()
-            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}]))
+            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="deepseek-v4.1-flash"))
             self.assertFalse(resp.success)
             self.assertEqual(resp.status, ProviderStatus.ERROR)
             self.assertIn("Malformed", resp.error)
+
+    @mock.patch("adapters.reasoning_provider.BaseAdapter._timed_request")
+    def test_complete_without_a_selected_model_fails_closed(self, mock_timed):
+        with mock.patch.dict(
+            os.environ,
+            {"OPENCODE_GO_API_KEY": "set", "OPENCODE_GO_ENABLED": "1"},
+            clear=False,
+        ):
+            mock_timed.side_effect = AssertionError("no HTTP call should be made without a model")
+            p = OpenCodeGoProvider()
+            with mock.patch.object(OpenCodeGoProvider, "verified_model", return_value=None):
+                resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}]))
+            self.assertFalse(resp.success)
+            self.assertEqual(resp.status, ProviderStatus.BLOCKED)
+            self.assertIn("No OpenCode Go model was selected", resp.error)
 
     @mock.patch("adapters.reasoning_provider.BaseAdapter._timed_request")
     def test_complete_rate_limited(self, mock_timed):
@@ -266,12 +333,12 @@ class CompleteTests(unittest.TestCase):
             mock_timed.return_value = BaseProviderResponse(
                 success=False,
                 status=ProviderStatus.RATE_LIMITED,
-                provider="opencode_go",
+                provider="opencode-go",
                 error="Rate limited after retries",
                 http_status=429,
             )
             p = OpenCodeGoProvider()
-            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}]))
+            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="deepseek-v4.1-flash"))
             self.assertFalse(resp.success)
             self.assertEqual(resp.status, ProviderStatus.RATE_LIMITED)
 
@@ -279,7 +346,7 @@ class CompleteTests(unittest.TestCase):
 class UsageTests(unittest.TestCase):
     def test_estimated_cost_usd(self):
         u = ReasoningUsage(prompt_tokens=1_000_000, completion_tokens=1_000_000)
-        # DeepSeek V4.1 Flash per Zen docs: $0.30 in, $1.20 out
+        # DeepSeek V4.1 Flash per OpenCode published rates: $0.30 in, $1.20 out
         self.assertAlmostEqual(
             u.estimated_cost_usd("deepseek-v4.1-flash"),
             1.50,
@@ -312,7 +379,7 @@ class StreamTests(unittest.TestCase):
 
             mock_get_client.return_value = FakeClient()
             p = OpenCodeGoProvider()
-            chunks = list(p.complete_stream(ReasoningRequest(messages=[{"role": "user", "content": "hi"}])))
+            chunks = list(p.complete_stream(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="deepseek-v4.1-flash")))
             self.assertEqual(len(chunks), 3)
             self.assertTrue(all(c.success for c in chunks))
             self.assertEqual(chunks[0].data["content"], "Hello ")

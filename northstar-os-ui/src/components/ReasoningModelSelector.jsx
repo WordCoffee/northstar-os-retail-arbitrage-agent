@@ -4,8 +4,8 @@ import foundationApi from '../foundation/api.js'
 const STORAGE_KEY = 'ns-reasoning-model-v2'
 
 const ROLE_LABEL = {
-  default: 'Default (non-creative policy)',
-  standard: 'Standard (low-cost fallback)',
+  policy_default: 'Preferred (non-creative)',
+  standard: 'Standard',
   alternative: 'Alternative',
   budget: 'Budget',
   escalation: 'Escalation (explicit only)',
@@ -27,7 +27,7 @@ function formatCost(c) {
 
 function modelTitle(m) {
   if (!m) return ''
-  const bits = [`${m.provider}/${m.id}`]
+  const bits = [`OpenCode Go · ${m.id}`]
   if (m.availability_note) bits.push(m.availability_note)
   if (m.notes) bits.push(m.notes)
   return bits.join(' — ')
@@ -75,10 +75,11 @@ export default function ReasoningModelSelector({ value, onChange, showPricing = 
   const { models, escalation, catalog, phase } = useReasoningModel()
   const armed = catalog?.armed
   const available = catalog?.available
+  const verified = !!(catalog && catalog.verified_usability)
 
   return (
     <div className="reasoning-model-selector" style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-      <label htmlFor="reasoning-model" className="text-low" style={{ fontSize: 12 }}>Hosted reasoning model</label>
+      <label htmlFor="reasoning-model" className="text-low" style={{ fontSize: 12 }}>OpenCode Go model</label>
       <select
         id="reasoning-model"
         className="field"
@@ -90,10 +91,10 @@ export default function ReasoningModelSelector({ value, onChange, showPricing = 
         {phase === 'loading' && <option value="">Loading…</option>}
         {phase !== 'loading' && (models.length + escalation.length) === 0 && <option value="">No models</option>}
         {models.length > 0 && (
-          <optgroup label="Selectable (non-creative)">
+          <optgroup label="Selectable — OpenCode Go">
             {models.map(m => (
               <option key={m.id} value={m.id} title={modelTitle(m)}>
-                {m.name} · {ROLE_LABEL[m.role] || m.role}{m.provider_blocked ? ' · provider-blocked' : ''}
+                {m.name} · {ROLE_LABEL[m.role] || m.role}{m.verified_usability ? '' : ' · unverified'}
               </option>
             ))}
           </optgroup>
@@ -128,16 +129,21 @@ export default function ReasoningModelSelector({ value, onChange, showPricing = 
       {value && (() => {
         const m = [...models, ...escalation].find(x => x.id === value)
         if (!m) return null
-        return m.provider_blocked ? (
-          <span className="pill pill-warn" title={modelTitle(m)}>
-            provider-blocked
+        return m.verified_usability ? (
+          <span className="pill pill-ok" title={modelTitle(m)}>
+            verified via Go
           </span>
         ) : (
           <span className="pill pill-muted" title={modelTitle(m)}>
-            selectable
+            unverified — no Go completion yet
           </span>
         )
       })()}
+      {value && !verified && (
+        <span className="pill pill-warn" title="No model has a verified completion through the OpenCode Go endpoint">
+          no runtime model verified
+        </span>
+      )}
     </div>
   )
 }

@@ -1,26 +1,38 @@
 """Provider-neutral hosted-reasoning adapter for Northstar OS non-creative services.
 
-This adapter implements a common reasoning-provider interface over the OpenCode
-Go endpoint (https://opencode.ai/zen/go/v1/chat/completions). It is designed as a
-temporary, manually-operated integration for private Northstar testing — it does
-NOT replace the local creative pipeline or local non-creative models.
+This adapter implements a common reasoning-provider interface over the
+**OpenCode Go** endpoints. It is designed as a temporary, manually-operated
+integration for private Northstar testing — it does NOT replace the local
+creative pipeline or local non-creative models.
+
+OpenCode Go contract (exact):
+- Base URL:       https://opencode.ai/zen/go/v1
+- Chat endpoint:  https://opencode.ai/zen/go/v1/chat/completions
+- Auth:           Authorization: Bearer <OPENCODE_GO_API_KEY>
+- Model IDs:      bare IDs, e.g. ``step-5-preview-free``
+- Credential env: OPENCODE_GO_API_KEY
+- Enable flag:    OPENCODE_GO_ENABLED=1
+
+This is the OpenCode Go transport. The generic OpenCode pay-as-you-go route
+(/zen/v1/...) is a DIFFERENT surface with different billing and routing
+behaviour and is intentionally NOT used here.
 
 Design goals:
 - Configurable provider/model (current implementation: OpenCode Go).
-- Server-side credentials only (OPENCODE_GO_API_KEY).
+- Server-side credentials only.
 - Streaming support where useful.
 - Timeouts, cancellation-friendly clients, bounded concurrency, retries.
 - Usage/provenance reporting.
 - Structured error handling.
 - Mockable transport for tests.
 
-Constraint note (OpenCode Go): provider documentation qualifies this endpoint as
-typical coding-agent traffic. This adapter is used for Northstar's internal
-planning/reasoning tasks (listing proposals, ad-copy proposals, spreadsheet
-analysis, AutothinK reasoning). We do not disguise marketplace-listing or
-advertising requests as coding work, spoof another client, or bypass provider
-restrictions. The User-Agent truthfully identifies the caller as
-"NorthstarOS/<version> private-testing".
+Availability rule: a model is only reported as usable once a real completion has
+succeeded through the corrected Go endpoint. Unverified models are never made a
+runtime default, and never auto-substituted.
+
+Constraint note: we do not disguise listing/ad requests as coding work, spoof
+another client, or bypass provider restrictions. The User-Agent truthfully
+identifies the caller as "NorthstarOS/<version> private-testing".
 """
 
 from __future__ import annotations
@@ -41,95 +53,115 @@ logger = logging.getLogger(__name__)
 # Stable application identifier. Bumped only when the adapter contract changes.
 ADAPTER_VERSION = "2.0.0"
 
-# Catalog of verified selectable models, configured against the documented
-# OpenCode Zen endpoints (https://opencode.ai/docs/zen/). Pricing values are the
-# Zen published per-1M-token rates observed at configuration time.
+# ---------------------------------------------------------------------------
+# OpenCode Go transport contract
+# ---------------------------------------------------------------------------
+
+GO_BASE_URL = "https://opencode.ai/zen/go/v1"
+GO_CHAT_ENDPOINT = f"{GO_BASE_URL}/chat/completions"
+GO_PROVIDER_ID = "opencode-go"
+
+# Environment contract
+KEY_ENV_VARS = ("OPENCODE_GO_API_KEY",)          # credential (never logged)
+ENABLED_ENV_VAR = "OPENCODE_GO_ENABLED"          # "1" arms live execution
+
+# ---------------------------------------------------------------------------
+# Selectable model catalog (bare Go model IDs)
+# ---------------------------------------------------------------------------
+
+# TEMPORARY MODEL-ROUTING POLICY (see docs/HOSTED_REASONING.md):
+#   Step 5 Preview Free is a temporary *preferred* model for non-creative
+#   internal engineering / management work only.
+#   Non-creative = listings workflows, backend logic, APIs, database work,
+#   admin/dashboard work, integrations, test writing, debugging, service
+#   orchestration, logging, implementation planning.
+#   Creative remodel rendering, visual staging, landscaping renders, image
+#   editing and the property-image generation pipeline MUST NOT use Step 5 as
+#   their primary model; they stay on the specialised image pipeline.
 #
-# TEMPORARY ROUTING POLICY (see docs/HOSTED_REASONING.md):
-# Step 5 Preview Free is the DEFAULT for all non-creative operational work
-# while it remains free AND usable. PROVIDER CONSTRAINT: Zen free-tier
-# models return 403 FreeTierError ("can only be used from within OpenCode") for
-# external callers, so the policy default is currently provider-blocked and the
-# integration reports that honestly instead of silently substituting.
-# DeepSeek V4.1 Flash is the intentional lower-cost fallback (requires balance).
-# Escalation models are listed separately and are NEVER auto-selected.
+# AVAILABILITY GUARDRAIL: no model is treated as usable, and none becomes a
+# runtime default, until a real completion succeeds through the Go endpoint.
+# ``verified_usability`` is therefore False until a live completion is proven.
+# Nothing is auto-substituted when a model is unavailable.
+
 HOSTED_MODELS: List[Dict[str, Any]] = [
     {
         "id": "step-5-preview-free",
         "short_id": "step-5-preview-free",
         "name": "Step 5 Preview Free",
-        "role": "default",
-        "provider": "opencode-go",
+        "role": "policy_default",
+        "provider": GO_PROVIDER_ID,
         "family": "step",
         "context": 128000,
         "cost_per_1m_input": 0.0,
         "cost_per_1m_output": 0.0,
         "cost_per_1m_cache_read": 0.0,
         "cost_per_1m_cache_write": 0.0,
-        "pricing_source": "OpenCode Zen docs (https://opencode.ai/docs/zen/)",
+        "pricing_source": "not applicable (free tier)",
         "pricing_observed_at": "2026-10-08T00:00:00Z",
-        "provider_blocked": True,
-        "availability_note": "Zen free tier returns 403 FreeTierError for callers outside OpenCode, so this model cannot be used by this integration.",
-        "notes": "TEMPORARY default for all non-creative operational work while free AND usable.",
+        "verified_usability": True,
+        "verified_at": "2026-10-08T00:00:00Z",
+        "availability_note": "VERIFIED through the OpenCode Go endpoint: a real completion returned HTTP 200 (model id echoed unchanged).",
+        "notes": "Temporary preferred model for non-creative internal engineering/management tasks. Not used for creative/image work.",
     },
     {
         "id": "deepseek-v4.1-flash",
         "short_id": "deepseek-v4.1-flash",
         "name": "DeepSeek V4.1 Flash",
         "role": "standard",
-        "provider": "opencode-go",
+        "provider": GO_PROVIDER_ID,
         "family": "deepseek",
         "context": 128000,
         "cost_per_1m_input": 0.30,
         "cost_per_1m_output": 1.20,
         "cost_per_1m_cache_read": 0.006,
         "cost_per_1m_cache_write": 0.0,
-        "pricing_source": "OpenCode Zen docs (https://opencode.ai/docs/zen/)",
+        "pricing_source": "OpenCode published per-1M-token rates",
         "pricing_observed_at": "2026-10-08T00:00:00Z",
-        "provider_blocked": False,
-        "availability_note": "Requires a positive Zen balance (live probe returned 402 Insufficient account funds).",
-        "notes": "Intentional lower-cost fallback when Step 5 is unavailable.",
+        "verified_usability": False,
+        "availability_note": "Not independently verified through the OpenCode Go endpoint. Becomes the fallback only after its own real Go completion succeeds.",
+        "notes": "Lower-cost fallback candidate for lightweight, repetitive engineering work.",
     },
     {
         "id": "glm-5.3-flash",
         "short_id": "glm-5.3-flash",
         "name": "GLM-5.3-Flash",
         "role": "alternative",
-        "provider": "opencode-go",
+        "provider": GO_PROVIDER_ID,
         "family": "glm",
         "context": 128000,
         "cost_per_1m_input": 0.15,
         "cost_per_1m_output": 0.50,
         "cost_per_1m_cache_read": 0.03,
         "cost_per_1m_cache_write": 0.0,
-        "pricing_source": "OpenCode Zen docs (https://opencode.ai/docs/zen/)",
+        "pricing_source": "OpenCode published per-1M-token rates",
         "pricing_observed_at": "2026-10-08T00:00:00Z",
-        "provider_blocked": False,
-        "availability_note": "Requires a positive Zen balance (live probe returned 402 Insufficient account funds).",
-        "notes": "Alternative flash model. Cache-read is more expensive than DeepSeek.",
+        "verified_usability": False,
+        "availability_note": "Not yet verified through the OpenCode Go endpoint.",
+        "notes": "Alternative model.",
     },
     {
         "id": "mimo-v2.6-flash-free",
         "short_id": "mimo-v2.6-flash-free",
         "name": "MiMo-V2.6-Flash Free",
         "role": "budget",
-        "provider": "opencode-go",
+        "provider": GO_PROVIDER_ID,
         "family": "mimo",
         "context": 128000,
         "cost_per_1m_input": 0.0,
         "cost_per_1m_output": 0.0,
         "cost_per_1m_cache_read": 0.0,
         "cost_per_1m_cache_write": 0.0,
-        "pricing_source": "OpenCode Zen docs (https://opencode.ai/docs/zen/)",
+        "pricing_source": "not applicable (free tier)",
         "pricing_observed_at": "2026-10-08T00:00:00Z",
-        "provider_blocked": True,
-        "availability_note": "Zen free tier returns 403 FreeTierError for callers outside OpenCode, so this model cannot be used by this integration.",
-        "notes": "Budget alternative (free tier), currently provider-blocked for external callers.",
+        "verified_usability": False,
+        "availability_note": "Not yet verified through the OpenCode Go endpoint.",
+        "notes": "Budget candidate.",
     },
 ]
 
 # Escalation models — NEVER selected automatically. Used only via explicit
-# configuration or an operator action when the default model loops, stalls,
+# configuration or an operator action when the working model loops, stalls,
 # loses context, or produces weak code quality.
 HOSTED_ESCALATION_MODELS: List[Dict[str, Any]] = [
     {
@@ -137,32 +169,41 @@ HOSTED_ESCALATION_MODELS: List[Dict[str, Any]] = [
         "short_id": "kimi-k2.7-code",
         "name": "Kimi K2.7 Code",
         "role": "escalation",
-        "provider": "opencode-go",
+        "provider": GO_PROVIDER_ID,
         "family": "kimi",
         "context": 128000,
         "cost_per_1m_input": 0.95,
         "cost_per_1m_output": 4.00,
         "cost_per_1m_cache_read": 0.19,
         "cost_per_1m_cache_write": 0.0,
-        "pricing_source": "OpenCode Zen docs (https://opencode.ai/docs/zen/)",
+        "pricing_source": "OpenCode published per-1M-token rates",
         "pricing_observed_at": "2026-10-08T00:00:00Z",
-        "provider_blocked": False,
-        "availability_note": "Requires a positive Zen balance.",
-        "notes": "Escalation target for quality/stall recovery. Explicit operator action only — never automatic.",
+        "verified_usability": False,
+        "availability_note": "Not yet verified through the OpenCode Go endpoint. Escalation only, never automatic.",
+        "notes": "Escalation target for quality/stall recovery.",
     },
 ]
 
 HOSTED_MODEL_IDS = {m["id"] for m in HOSTED_MODELS} | {m["id"] for m in HOSTED_ESCALATION_MODELS}
-DEFAULT_MODEL_ID = "step-5-preview-free"
 
-# Documented Zen endpoint (https://opencode.ai/docs/zen/#endpoints).
-# Models under the openai-compatible family use /chat/completions.
-DEFAULT_ENDPOINT = "https://opencode.ai/zen/v1/chat/completions"
+# The temporary *policy* preference for non-creative internal work. This is a
+# display/selection hint only — it is NOT a runtime default until verified.
+POLICY_PREFERRED_MODEL = "step-5-preview-free"
 
-# Credential env var names, in priority order. Zen documents OPENCODE_API_KEY;
-# OPENCODE_GO_API_KEY is the Northstar-local alias used in .env.
-KEY_ENV_VARS = ("OPENCODE_GO_API_KEY", "OPENCODE_API_KEY")
+# Verified 2026-10-08: one minimal non-destructive completion
+# (model=step-5-preview-free, max_tokens=8) returned HTTP 200 through
+# https://opencode.ai/zen/go/v1/chat/completions. The generic pay-as-you-go
+# OpenCode route (/zen/v1/...) had previously returned a free-tier refusal, so
+# the two surfaces are confirmed to behave differently.
+VERIFIED_GO_MODEL: Optional[str] = "step-5-preview-free"
 
+# The runtime default is the verified model. No other model is a default.
+RUNTIME_DEFAULT_MODEL: Optional[str] = VERIFIED_GO_MODEL
+
+
+# ---------------------------------------------------------------------------
+# Usage
+# ---------------------------------------------------------------------------
 
 @dataclass
 class ReasoningUsage:
@@ -173,6 +214,10 @@ class ReasoningUsage:
     cache_write_tokens: Optional[int] = None
 
     def estimated_cost_usd(self, model_id: str) -> Optional[float]:
+        cost = self._cost_for(model_id)
+        return None if cost is None else round(cost, 8)
+
+    def _cost_for(self, model_id: str) -> Optional[float]:
         model = next((m for m in HOSTED_MODELS if m["id"] == model_id), None)
         if not model:
             return None
@@ -183,7 +228,7 @@ class ReasoningUsage:
             cost += self.completion_tokens * (model["cost_per_1m_output"] / 1_000_000)
         if self.cache_read_tokens:
             cost += self.cache_read_tokens * (model["cost_per_1m_cache_read"] / 1_000_000)
-        return round(cost, 6)
+        return cost
 
 
 @dataclass
@@ -199,18 +244,15 @@ class ReasoningRequest:
 
 
 class ReasoningProvider(BaseAdapter):
-    """Common interface for a hosted reasoning provider.
-
-    Subclasses implement the transport; this base class exposes the catalog and
-    helpers that are independent of HTTP details.
-    """
+    """Common interface for a hosted reasoning provider."""
 
     name: str = "reasoning"
-    # Accept either the Northstar-local alias or the Zen-documented name.
+    # Credential names only — values are never read into logs.
     required_env: List[str] = []
     optional_env: List[str] = [
         "OPENCODE_GO_ENDPOINT",
-        "OPENCODE_GO_ENABLED",
+        ENABLED_ENV_VAR,
+        "OPENCODE_GO_MODEL",
         "OPENCODE_GO_MAX_CONCURRENCY",
         "OPENCODE_GO_TIMEOUT_SECONDS",
         "OPENCODE_GO_MAX_TOKENS",
@@ -219,63 +261,76 @@ class ReasoningProvider(BaseAdapter):
 
     def __init__(self) -> None:
         super().__init__()
-        self._default_model = DEFAULT_MODEL_ID
+        self._default_model = POLICY_PREFERRED_MODEL
+
+    # ------------------------------------------------------------------
+    # Credential presence (never reads a value into logs)
+    # ------------------------------------------------------------------
 
     def key_present(self) -> bool:
-        """True when any accepted API key env var is set (value never read)."""
+        """True when the OpenCode Go API key env var is set (value never read)."""
         return any(str(os.environ.get(k, "") or "").strip() for k in KEY_ENV_VARS)
 
     def _api_key(self) -> Optional[str]:
-        """Read the API key from the first configured env var (never logged)."""
+        """Read the API key (never logged, never returned by any public API)."""
         for k in KEY_ENV_VARS:
             val = str(os.environ.get(k, "") or "").strip()
             if val:
                 return val
         return None
 
-    def available(self) -> bool:
-        """True when the provider is explicitly enabled AND the key is present.
-
-        A key alone does not enable the provider; OPENCODE_GO_ENABLED=1 is
-        required so that paid calls are never automatic.
-        """
-        return self.armed()
+    def enabled(self) -> bool:
+        """True only when OPENCODE_GO_ENABLED is explicitly '1'."""
+        return str(os.environ.get(ENABLED_ENV_VAR, "") or "").strip() == "1"
 
     def armed(self) -> bool:
-        """True when live calls are explicitly approved (OPENCODE_GO_ENABLED=1)."""
-        return str(os.environ.get("OPENCODE_GO_ENABLED", "") or "").strip() == "1" and self.key_present()
+        """Live execution requires BOTH the flag and a key present."""
+        return self.enabled() and self.key_present()
+
+    def available(self) -> bool:
+        """Configured = key present and flag set. Closed by default."""
+        return self.armed()
+
+    # ------------------------------------------------------------------
+    # Catalog
+    # ------------------------------------------------------------------
 
     def models(self) -> List[Dict[str, Any]]:
-        """Return the selectable hosted model catalog with timestamped pricing."""
+        """Selectable hosted model catalog (bare Go model IDs)."""
         return [dict(m) for m in HOSTED_MODELS]
 
     def escalation_models(self) -> List[Dict[str, Any]]:
-        """Escalation models. Never auto-selected — explicit operator action only."""
         return [dict(m) for m in HOSTED_ESCALATION_MODELS]
 
     def all_models(self) -> List[Dict[str, Any]]:
-        """Primary + escalation models (for UI display)."""
         return [dict(m) for m in HOSTED_MODELS] + [dict(m) for m in HOSTED_ESCALATION_MODELS]
 
-    def resolve_model(self, requested: Optional[str]) -> str:
-        """Resolve a model request to a concrete, verified model id.
+    def verified_model(self) -> Optional[str]:
+        """The model proven usable by a real completion, or None."""
+        return VERIFIED_GO_MODEL if VERIFIED_GO_MODEL in HOSTED_MODEL_IDS else None
 
-        Raises ValueError if the requested model is not in the verified catalog.
-        The legacy ``opencode-go/<id>`` prefix is accepted and stripped so
-        existing stored selections keep working.
+    def resolve_model(self, requested: Optional[str]) -> Optional[str]:
+        """Resolve a model request to a bare Go model id.
+
+        Returns None when nothing was requested and no model is verified — the
+        caller must then fail closed rather than guess a model.
+        Raises ValueError for an id outside the Go catalog.
         """
-        if not requested:
-            return self._default_model
+        if requested is None or not str(requested).strip():
+            return self.verified_model()
+        requested = str(requested).strip()
         if requested in HOSTED_MODEL_IDS:
             return requested
-        if requested.startswith("opencode-go/"):
-            bare = requested[len("opencode-go/"):]
-            if bare in HOSTED_MODEL_IDS:
-                return bare
-        raise ValueError(f"Model {requested!r} is not in the verified hosted catalog.")
+        # Tolerate the earlier provider-prefixed form so stored selections work.
+        for prefix in ("opencode-go/", "opencode/"):
+            if requested.startswith(prefix):
+                bare = requested[len(prefix):]
+                if bare in HOSTED_MODEL_IDS:
+                    return bare
+        raise ValueError(f"Model {requested!r} is not in the OpenCode Go catalog.")
 
     def complete(self, request: ReasoningRequest) -> ProviderResponse:
-        """Non-streaming completion. Must be implemented by subclasses."""
+        """Non-streaming completion. Implemented by subclasses."""
         raise NotImplementedError
 
     def complete_stream(self, request: ReasoningRequest) -> Iterator[ProviderResponse]:
@@ -284,34 +339,37 @@ class ReasoningProvider(BaseAdapter):
 
     @staticmethod
     def make_session_id(existing: Optional[str]) -> str:
-        """Return a stable x-opencode-session value per conversation.
-
-        The value is a deterministic UUID5 derived from the supplied id, or a
-        fresh UUID4 when none is supplied. It never contains secrets.
-        """
+        """A stable, non-secret session identifier per conversation."""
         if existing:
             return str(uuid.uuid5(uuid.NAMESPACE_OID, f"northstar:{existing}"))
         return str(uuid.uuid4())
 
 
+# ---------------------------------------------------------------------------
+# OpenCode Go provider
+# ---------------------------------------------------------------------------
+
 class OpenCodeGoProvider(ReasoningProvider):
-    """OpenCode Go / Zen hosted-reasoning provider.
+    """OpenCode Go hosted-reasoning provider.
 
-    Endpoint: https://opencode.ai/zen/v1/chat/completions (documented).
-    Auth: OPENCODE_GO_API_KEY (or OPENCODE_API_KEY), server-side only.
+    Transport contract:
+        base:      https://opencode.ai/zen/go/v1
+        chat:      https://opencode.ai/zen/go/v1/chat/completions
+        auth:      Authorization: Bearer <OPENCODE_GO_API_KEY>
+        models:    bare Go model IDs
 
-    Provider constraint: Zen free-tier models return 403 FreeTierError for
-    callers outside OpenCode. Paid models require a positive Zen balance.
-    Both are surfaced as clear, structured errors — never silently substituted.
+    This is the OpenCode Go surface. The generic pay-as-you-go OpenCode route
+    (/zen/v1/...) is a different provider surface with different billing and
+    routing; it is not used here. Authorization headers are never logged.
     """
 
-    name = "opencode_go"
+    name = GO_PROVIDER_ID
 
     def __init__(self) -> None:
         super().__init__()
         self.endpoint = (
             os.environ.get("OPENCODE_GO_ENDPOINT")
-            or DEFAULT_ENDPOINT
+            or GO_CHAT_ENDPOINT
         )
         self.timeout_s = float(os.environ.get("OPENCODE_GO_TIMEOUT_SECONDS") or "120")
         self.max_tokens_default = int(os.environ.get("OPENCODE_GO_MAX_TOKENS") or "4096")
@@ -319,71 +377,21 @@ class OpenCodeGoProvider(ReasoningProvider):
         max_concurrency = int(os.environ.get("OPENCODE_GO_MAX_CONCURRENCY") or "2")
         self._sem = threading.Semaphore(max(1, max_concurrency))
 
+    # -- transport helpers ------------------------------------------------
+
     def _headers(self, session_id: Optional[str]) -> Dict[str, str]:
+        key = self._api_key()
         return {
-            "Authorization": "Bearer " + (self._api_key() or ""),
+            "Authorization": "Bearer " + (key or ""),
             "Content-Type": "application/json",
             "User-Agent": f"NorthstarOS/{ADAPTER_VERSION} private-testing (non-creative-reasoning)",
             "x-opencode-session": self.make_session_id(session_id),
         }
 
-    @staticmethod
-    def _error_text(resp: ProviderResponse) -> str:
-        """Best-effort error body text for classification (never a secret)."""
-        data = getattr(resp, "data", None)
-        if isinstance(data, dict):
-            if "raw" in data:
-                return str(data.get("raw") or "")
-            return json.dumps(data, default=str)
-        return str(getattr(resp, "error", "") or "")
-
-    @classmethod
-    def _classify_provider_error(cls, status_code: int, body_text: str):
-        """Translate a Zen error body into a clear, structured ProviderResponse.
-
-        Returns None when the error is not one of the known provider conditions.
-        """
-        text = (body_text or "").lower()
-        if status_code == 403 or "freetiererror" in text or "free tier" in text:
-            return ProviderResponse(
-                success=False,
-                status=ProviderStatus.BLOCKED,
-                provider="opencode_go",
-                error=(
-                    "Zen free-tier model refused: OpenCode's free tier can only be used "
-                    "from within OpenCode. Select a paid model (DeepSeek V4.1 Flash) "
-                    "after adding Zen balance. No model was substituted."
-                ),
-                http_status=status_code,
-            )
-        if status_code == 402 or "insufficient" in text or "funds" in text:
-            return ProviderResponse(
-                success=False,
-                status=ProviderStatus.CREDITS_EXHAUSTED,
-                provider="opencode_go",
-                error="Zen balance is insufficient for this paid model. Add credits or select a free-tier model (provider-restricted).",
-                http_status=status_code,
-            )
-        if status_code == 401:
-            return ProviderResponse(
-                success=False,
-                status=ProviderStatus.AUTH_ERROR,
-                provider="opencode_go",
-                error="Zen rejected the API key (HTTP 401).",
-                http_status=status_code,
-            )
-        if status_code == 429 or "rate limit" in text:
-            return ProviderResponse(
-                success=False,
-                status=ProviderStatus.RATE_LIMITED,
-                provider="opencode_go",
-                error="Zen rate/usage limit reached. Wait before retrying.",
-                http_status=status_code,
-            )
-        return None
-
-    def _body(self, request: ReasoningRequest) -> Dict[str, Any]:
+    def _body(self, request: ReasoningRequest) -> Optional[Dict[str, Any]]:
         model = self.resolve_model(request.model)
+        if model is None:
+            return None
         body: Dict[str, Any] = {
             "model": model,
             "messages": request.messages,
@@ -398,15 +406,71 @@ class OpenCodeGoProvider(ReasoningProvider):
         return body
 
     @staticmethod
-    def _parse_usage(payload: Dict[str, Any]) -> ReasoningUsage:
-        usage = payload.get("usage") or {}
-        return ReasoningUsage(
-            prompt_tokens=usage.get("prompt_tokens"),
-            completion_tokens=usage.get("completion_tokens"),
-            total_tokens=usage.get("total_tokens"),
-            cache_read_tokens=usage.get("prompt_cache_hit_tokens") or usage.get("cache_read_tokens"),
-            cache_write_tokens=usage.get("prompt_cache_miss_tokens") or usage.get("cache_write_tokens"),
-        )
+    def _error_text(resp: ProviderResponse) -> str:
+        """Best-effort error body text for classification (never a secret)."""
+        data = getattr(resp, "data", None)
+        if isinstance(data, dict):
+            if "raw" in data:
+                return str(data.get("raw") or "")
+            return json.dumps(data, default=str)
+        return str(getattr(resp, "error", "") or "")
+
+    @classmethod
+    def _classify_provider_error(cls, status_code: int, body_text: str):
+        """Translate a Go error body into a clear, structured response.
+
+        Returns None when the error is not one of the known conditions. The
+        provider message is summarised, never quoted verbatim with payload.
+        """
+        text = (body_text or "").lower()
+        if status_code == 403 or "freetiererror" in text or "free tier" in text:
+            return ProviderResponse(
+                success=False,
+                status=ProviderStatus.BLOCKED,
+                provider=GO_PROVIDER_ID,
+                error=(
+                    "OpenCode Go refused this free-tier model: the provider states the free "
+                    "tier can only be used from inside OpenCode. Step 5 Preview Free is "
+                    "unavailable to this external runtime provider path. "
+                    "No model was substituted."
+                ),
+                http_status=status_code,
+            )
+        if status_code == 402 or "insufficient" in text or "funds" in text or "balance" in text:
+            return ProviderResponse(
+                success=False,
+                status=ProviderStatus.CREDITS_EXHAUSTED,
+                provider=GO_PROVIDER_ID,
+                error="OpenCode Go reports insufficient balance for this model.",
+                http_status=status_code,
+            )
+        if status_code == 401:
+            return ProviderResponse(
+                success=False,
+                status=ProviderStatus.AUTH_ERROR,
+                provider=GO_PROVIDER_ID,
+                error="OpenCode Go rejected the API key (HTTP 401).",
+                http_status=status_code,
+            )
+        if status_code == 404:
+            return ProviderResponse(
+                success=False,
+                status=ProviderStatus.NOT_FOUND,
+                provider=GO_PROVIDER_ID,
+                error="OpenCode Go route not found (HTTP 404) - check the base URL.",
+                http_status=status_code,
+            )
+        if status_code == 429 or "rate limit" in text:
+            return ProviderResponse(
+                success=False,
+                status=ProviderStatus.RATE_LIMITED,
+                provider=GO_PROVIDER_ID,
+                error="OpenCode Go rate/usage limit reached. Wait before retrying.",
+                http_status=status_code,
+            )
+        return None
+
+    # -- completion -------------------------------------------------------
 
     def complete(self, request: ReasoningRequest) -> ProviderResponse:
         """Execute a non-streaming chat completion against OpenCode Go."""
@@ -414,26 +478,34 @@ class OpenCodeGoProvider(ReasoningProvider):
             return ProviderResponse(
                 success=False,
                 status=ProviderStatus.AUTH_ERROR,
-                provider=self.name,
+                provider=GO_PROVIDER_ID,
                 error="OpenCode Go is not configured (OPENCODE_GO_API_KEY missing).",
             )
-        if not self.armed():
+        if not self.enabled():
             return ProviderResponse(
                 success=False,
                 status=ProviderStatus.BLOCKED,
-                provider=self.name,
+                provider=GO_PROVIDER_ID,
                 error="OpenCode Go key is present but the provider is not armed. Set OPENCODE_GO_ENABLED=1 after explicit operator approval.",
             )
 
         body = self._body(request)
-        url = self.endpoint
-        headers = self._headers(request.session_id)
+        if body is None:
+            return ProviderResponse(
+                success=False,
+                status=ProviderStatus.BLOCKED,
+                provider=GO_PROVIDER_ID,
+                error=(
+                    "No OpenCode Go model was selected and no model is verified usable. "
+                    "Select a model explicitly. No runtime default is assumed."
+                ),
+            )
 
         with self._sem:
             resp = self._timed_request(
                 "POST",
-                url,
-                headers=headers,
+                self.endpoint,
+                headers=self._headers(request.session_id),
                 json=body,
                 timeout=self.timeout_s,
                 retries=self.retries,
@@ -446,7 +518,7 @@ class OpenCodeGoProvider(ReasoningProvider):
                 return classified
             return resp
 
-        payload = resp.data
+        payload = resp.data if isinstance(resp.data, dict) else {}
         try:
             content = payload["choices"][0]["message"]["content"]
             model = payload.get("model", body["model"])
@@ -454,8 +526,8 @@ class OpenCodeGoProvider(ReasoningProvider):
             return ProviderResponse(
                 success=False,
                 status=ProviderStatus.ERROR,
-                provider=self.name,
-                error=f"Malformed response from OpenCode Go: {exc}",
+                provider=GO_PROVIDER_ID,
+                error=f"Malformed response from OpenCode Go: {type(exc).__name__}",
                 http_status=resp.http_status,
                 latency_ms=resp.latency_ms,
             )
@@ -466,7 +538,7 @@ class OpenCodeGoProvider(ReasoningProvider):
         return ProviderResponse(
             success=True,
             status=ProviderStatus.OK,
-            provider=self.name,
+            provider=GO_PROVIDER_ID,
             data={
                 "content": content,
                 "model": model,
@@ -478,60 +550,73 @@ class OpenCodeGoProvider(ReasoningProvider):
             latency_ms=resp.latency_ms,
             http_status=resp.http_status,
             metadata={
-                "endpoint": url,
-                "pricing_source": "OpenCode model catalog",
+                "base_url": GO_BASE_URL,
+                "endpoint": self.endpoint,
+                "provider": GO_PROVIDER_ID,
+                "pricing_source": "OpenCode published per-1M-token rates",
                 "pricing_observed_at": "2026-10-08T00:00:00Z",
             },
         )
 
-    def complete_stream(self, request: ReasoningRequest) -> Iterator[ProviderResponse]:
-        """Execute a streaming completion. Yields partial content chunks.
+    @staticmethod
+    def _parse_usage(payload: Dict[str, Any]) -> "ReasoningUsage":
+        usage = payload.get("usage") or {}
+        return ReasoningUsage(
+            prompt_tokens=usage.get("prompt_tokens"),
+            completion_tokens=usage.get("completion_tokens"),
+            total_tokens=usage.get("total_tokens"),
+            cache_read_tokens=usage.get("prompt_cache_hit_tokens") or usage.get("cache_read_tokens"),
+            cache_write_tokens=usage.get("prompt_cache_miss_tokens") or usage.get("cache_write_tokens"),
+        )
 
-        Each yielded ProviderResponse has data.partial set to True and data.content
-        set to the delta for that chunk. A final response with data.partial=False
-        contains the full accumulated content and usage metadata.
-        """
+    def complete_stream(self, request: ReasoningRequest) -> Iterator[ProviderResponse]:
+        """Streaming completion against OpenCode Go."""
         if not self.key_present():
             yield ProviderResponse(
                 success=False,
                 status=ProviderStatus.AUTH_ERROR,
-                provider=self.name,
-                error="OpenCode Go is not configured.",
+                provider=GO_PROVIDER_ID,
+                error="OpenCode Go is not configured (OPENCODE_GO_API_KEY missing).",
             )
             return
-        if not self.armed():
+        if not self.enabled():
             yield ProviderResponse(
                 success=False,
                 status=ProviderStatus.BLOCKED,
-                provider=self.name,
+                provider=GO_PROVIDER_ID,
                 error="OpenCode Go key is present but the provider is not armed.",
             )
             return
 
         body = self._body(request)
-        body["stream"] = True
-        url = self.endpoint
-        headers = self._headers(request.session_id)
-        accumulated: List[str] = []
+        if body is None:
+            yield ProviderResponse(
+                success=False,
+                status=ProviderStatus.BLOCKED,
+                provider=GO_PROVIDER_ID,
+                error="No OpenCode Go model was selected and no model is verified usable.",
+            )
+            return
 
         import httpx
 
+        accumulated: List[str] = []
         with self._sem:
             t0 = time.monotonic()
             try:
                 client = self._get_client(timeout=self.timeout_s)
-                with client.stream("POST", url, headers=headers, json=body) as stream:
+                with client.stream("POST", self.endpoint, headers=self._headers(request.session_id), json=body) as stream:
                     if stream.status_code != 200:
                         try:
-                            stream_body = stream.read().decode("utf-8", "replace")
+                            raw = stream.read().decode("utf-8", "replace")
                         except Exception:
-                            stream_body = ""
-                        classified = self._classify_provider_error(stream.status_code, stream_body)
+                            raw = ""
+                        classified = self._classify_provider_error(stream.status_code, raw)
                         if classified is None:
                             classified = ProviderResponse(
                                 success=False,
                                 status=ProviderStatus.ERROR,
-                                provider=self.name,
+                                provider=GO_PROVIDER_ID,
                                 error=f"OpenCode Go HTTP {stream.status_code}",
                                 http_status=stream.status_code,
                             )
@@ -548,50 +633,44 @@ class OpenCodeGoProvider(ReasoningProvider):
                             chunk = json.loads(line)
                         except json.JSONDecodeError:
                             continue
-                        delta = (
-                            chunk.get("choices", [{}])[0]
-                            .get("delta", {})
-                            .get("content", "")
-                        )
+                        delta = (chunk.get("choices") or [{}])[0].get("delta", {}).get("content", "")
                         if delta:
                             accumulated.append(delta)
                             yield ProviderResponse(
                                 success=True,
                                 status=ProviderStatus.OK,
-                                provider=self.name,
+                                provider=GO_PROVIDER_ID,
                                 data={"content": delta, "partial": True, "model": body["model"]},
                             )
             except httpx.TimeoutException as exc:
                 yield ProviderResponse(
                     success=False,
                     status=ProviderStatus.TIMEOUT,
-                    provider=self.name,
-                    error=str(exc),
+                    provider=GO_PROVIDER_ID,
+                    error=f"OpenCode Go timed out: {type(exc).__name__}",
                 )
                 return
             except Exception as exc:
                 yield ProviderResponse(
                     success=False,
                     status=ProviderStatus.ERROR,
-                    provider=self.name,
-                    error=f"{type(exc).__name__}: {exc}",
+                    provider=GO_PROVIDER_ID,
+                    error=f"OpenCode Go request failed: {type(exc).__name__}",
                 )
                 return
 
-        full_content = "".join(accumulated)
-        elapsed = (time.monotonic() - t0) * 1000
         yield ProviderResponse(
             success=True,
             status=ProviderStatus.OK,
-            provider=self.name,
+            provider=GO_PROVIDER_ID,
             data={
-                "content": full_content,
+                "content": "".join(accumulated),
                 "partial": False,
                 "model": body["model"],
                 "task_type": request.task_type,
                 "session_id": request.session_id,
             },
-            latency_ms=elapsed,
+            latency_ms=(time.monotonic() - t0) * 1000,
         )
 
 
@@ -607,7 +686,10 @@ class MockReasoningProvider(ReasoningProvider):
         self.response_text = response_text
         self.calls: List[ReasoningRequest] = []
 
-    def available(self) -> bool:
+    def key_present(self) -> bool:
+        return True
+
+    def enabled(self) -> bool:
         return True
 
     def armed(self) -> bool:
@@ -615,7 +697,7 @@ class MockReasoningProvider(ReasoningProvider):
 
     def complete(self, request: ReasoningRequest) -> ProviderResponse:
         self.calls.append(request)
-        model = self.resolve_model(request.model)
+        model = self.resolve_model(request.model) or "unverified"
         return ProviderResponse(
             success=True,
             status=ProviderStatus.OK,
@@ -632,11 +714,7 @@ class MockReasoningProvider(ReasoningProvider):
 
 
 def get_reasoning_provider() -> ReasoningProvider:
-    """Factory: returns the configured hosted reasoning provider.
-
-    Currently only OpenCode Go is implemented; future providers can be selected
-    via REASONING_PROVIDER env var.
-    """
+    """Factory. Currently only the OpenCode Go provider is implemented."""
     provider_name = os.environ.get("REASONING_PROVIDER", "opencode_go").lower()
     if provider_name == "mock":
         return MockReasoningProvider()

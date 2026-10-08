@@ -24,12 +24,14 @@ from ui_serving import mount_ui
 
 # Hosted reasoning provider for non-creative tasks (Phase H2 / Go integration)
 from adapters.reasoning_provider import (
-    DEFAULT_MODEL_ID,
+    GO_CHAT_ENDPOINT,
+    GO_PROVIDER_ID,
     HOSTED_MODELS,
     OpenCodeGoProvider,
     ReasoningRequest,
     get_reasoning_provider,
 )
+import adapters.reasoning_provider as reasoning_provider_module
 import reasoning_tasks as _reasoning_tasks
 
 # Golden Goose Finder — multi-pack breakdown arbitrage scanner
@@ -1065,14 +1067,32 @@ def autothink_history(limit: int = 20):
 
 @app.get("/api/v1/reasoning/models")
 def reasoning_models():
-    """Selectable hosted reasoning models with timestamped pricing metadata."""
+    """Selectable OpenCode Go models, with verified-runtime state.
+
+    A model is only reported usable once a real completion has succeeded
+    through the OpenCode Go endpoint. No runtime default is implied when
+    nothing is verified.
+    """
     provider = OpenCodeGoProvider()
+    verified = provider.verified_model()
     return {
+        "provider": "opencode-go",
+        "base_url": reasoning_provider_module.GO_BASE_URL,
+        "chat_endpoint": reasoning_provider_module.GO_CHAT_ENDPOINT,
         "models": HOSTED_MODELS,
         "escalation_models": provider.escalation_models(),
-        "default_model": DEFAULT_MODEL_ID,
+        "policy_preferred_model": reasoning_provider_module.POLICY_PREFERRED_MODEL,
+        "verified_model": verified,
+        "runtime_default_model": verified,
+        "default_model": verified,
+        "verified_usability": verified is not None,
         "available": provider.available(),
         "armed": provider.armed(),
+        "note": (
+            "OpenCode Go configured, but no runtime model verified."
+            if verified is None
+            else "One model has a verified completion through OpenCode Go."
+        ),
     }
 
 

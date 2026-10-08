@@ -37,6 +37,13 @@ class ReasoningRouteTests(unittest.TestCase):
         self.assertIn("models", data)
         self.assertIn("default_model", data)
         self.assertEqual(data["default_model"], "step-5-preview-free")
+        self.assertEqual(data["verified_model"], "step-5-preview-free")
+        self.assertEqual(data["runtime_default_model"], "step-5-preview-free")
+        self.assertTrue(data["verified_usability"])
+        self.assertEqual(data["policy_preferred_model"], "step-5-preview-free")
+        self.assertEqual(data["provider"], "opencode-go")
+        self.assertEqual(data["chat_endpoint"], "https://opencode.ai/zen/go/v1/chat/completions")
+        self.assertIn("One model has a verified completion", data["note"])
         ids = {m["id"] for m in data["models"]}
         self.assertIn("step-5-preview-free", ids)
         self.assertIn("deepseek-v4.1-flash", ids)
