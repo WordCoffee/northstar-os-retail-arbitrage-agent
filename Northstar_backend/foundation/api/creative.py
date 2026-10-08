@@ -108,6 +108,21 @@ def _local_image_gen():
     return lig
 
 
+def _shared_contract():
+    """Shared creative services, when present on the path (post-merge).
+
+    Delegation target: ``creative.foundation_contract`` (defined on the shared
+    creative-services branch). Returns None when unavailable so the legacy
+    ``local_image_gen`` path remains the standalone fallback. This keeps the
+    WT-C worktree self-contained until the branches are merged.
+    """
+    try:
+        from creative import foundation_contract as fc  # type: ignore
+        return fc
+    except Exception:  # noqa: BLE001 - absence is a valid state
+        return None
+
+
 def _parse_local_endpoint() -> Optional[Tuple[str, int]]:
     url = (os.getenv("COMFYUI_URL", "") or "").strip() or _DEFAULT_COMFY_URL
     try:
@@ -224,6 +239,12 @@ def build_readiness(probe: Callable[[], str] = probe_local_engine) -> Dict[str, 
 def readiness(ctx: RequestContext = Depends(get_context)) -> Dict[str, object]:
     """Read-only media-generation readiness (authenticated, no secrets, no
     generation). The ``ctx`` dependency enforces the standard auth posture."""
+    fc = _shared_contract()
+    if fc is not None:
+        try:
+            return fc.build_readiness_shared()
+        except Exception:  # noqa: BLE001 - fall back to the local readiness contract
+            pass
     return build_readiness(probe=probe_local_engine)
 
 
@@ -252,6 +273,18 @@ def generate(
     reachable. Returns the PNG as a data URL plus provenance metadata. Contacts
     no cloud provider; reads and returns no credential.
     """
+    # Prefer the shared creative services (approved-component policy, routing,
+    # queue, provenance) when the package is present; else the legacy local path.
+    fc = _shared_contract()
+    if fc is not None:
+        try:
+            return fc.generate_shared(dict(body))
+        except HTTPException:
+            raise
+        except Exception as exc:  # noqa: BLE001 - surface a stable refusal
+            raise HTTPException(status_code=503, detail={
+                "code": "engine_unavailable", "message": str(exc)}) from exc
+
     gen = _local_image_gen()
 
     prompt = str(body.get("prompt") or "")
