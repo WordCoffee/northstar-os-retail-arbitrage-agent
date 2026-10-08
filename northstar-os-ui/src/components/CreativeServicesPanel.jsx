@@ -93,10 +93,22 @@ export default function CreativeServicesPanel() {
       </div>
 
       <div style={{ fontSize: 12 }} className="text-low">
-        Routing — draft: <strong>{r.draft?.primary?.lane || 'none'}</strong> · standard:{' '}
-        <strong>{r.standard?.primary?.lane || 'none'}</strong> · high:{' '}
-        <strong>{r.high?.primary?.lane || 'none'}</strong>. Fallbacks are explicit; a
-        quarantined model is never the default.
+        <div>
+          Generation routing — draft: <strong>{r.draft?.primary?.lane || 'none'}</strong> ·
+          standard: <strong>{r.standard?.primary?.lane || 'none'}</strong> ·
+          high: <strong>{r.high?.primary?.lane || 'none'}</strong>.
+          Edit lane: <strong>{lanes?.capabilities?.edit?.standard?.primary?.lane || 'qwen-edit'}</strong>.
+        </div>
+        <div style={{ marginTop: 4 }}>
+          <span className="pill pill-muted">SDXL standard</span> ~7.6 GB device VRAM ·
+          <span className="pill pill-muted">Z-Image draft</span> ~11.7 GB ·
+          <span className="pill pill-muted">Qwen</span> ~14 GB, reserved for editing/hard cases.
+        </div>
+        <div style={{ marginTop: 4 }}>
+          FLUX.1 [dev] is quarantined (non-commercial) and is never selected.
+          Fallbacks are explicit and ordered. Quality/resource defaults are
+          <strong> pending owner visual review</strong>.
+        </div>
       </div>
 
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'end', marginTop: 12 }}>

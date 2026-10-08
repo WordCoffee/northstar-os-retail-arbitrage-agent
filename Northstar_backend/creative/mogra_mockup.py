@@ -191,9 +191,12 @@ def build_mockup(*, product: Dict[str, Any] | str,
             lane = f"cloud:{cloud_provider}"
             source_used = cres["output"]
         else:
-            gen = comfy_client.generate_scene(scene_prompt, gen_path, width=width,
-                                              height=height, steps=steps, seed=seed,
-                                              client=client)
+            # Route scene generation through the shared creative services
+            # (approved-component router, mode presets, provenance) instead of
+            # calling comfy_client directly.
+            from . import stages
+            gen = stages.generate(scene_prompt, gen_path, mode="standard",
+                                  width=width, height=height, steps=steps, seed=seed)
             lane = gen["lane"]
             source_used = gen["output"]
         with Image.open(source_used) as im:

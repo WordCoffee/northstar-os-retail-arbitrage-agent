@@ -23,7 +23,7 @@ from typing import Any, Dict, List, Optional
 from . import registry
 
 CAPABILITIES = [
-    "generate", "edit", "condition", "mask", "upscale", "control", "compose_text",
+    "generate", "edit", "inpaint", "condition", "mask", "upscale", "control", "compose_text",
 ]
 
 MODES = ("draft", "standard", "high")
@@ -48,16 +48,19 @@ _FAMILY_PRESETS: Dict[str, Dict[str, Dict[str, Any]]] = {
 }
 
 # Ordered preference per capability+mode. Each entry is (lane_id, component_id, family).
+#
+# Design note (owner review pending): "high" is NOT "use Qwen". SDXL stays the
+# provisional standard-generation candidate; "high" is SDXL at a larger size and
+# step budget. Z-Image-Turbo is a separately selectable fast candidate. Qwen is
+# routed by the *editing* capability (and by explicit opt-in), never as a generic
+# quality label.
 _PREFERENCE: Dict[str, Dict[str, List[tuple]]] = {
     "generate": {
         "draft": [("z-image-draft", "z-image-turbo", "z-image"),
-                  ("sdxl-draft", "sdxl-base-1.0", "sdxl"),
-                  ("qwen-t2i", "qwen-image-2512", "qwen-image")],
+                  ("sdxl-draft", "sdxl-base-1.0", "sdxl")],
         "standard": [("sdxl-standard", "sdxl-base-1.0", "sdxl"),
-                     ("z-image-draft", "z-image-turbo", "z-image"),
-                     ("qwen-t2i", "qwen-image-2512", "qwen-image")],
-        "high": [("qwen-t2i", "qwen-image-2512", "qwen-image"),
-                 ("sdxl-high", "sdxl-base-1.0", "sdxl"),
+                     ("z-image-draft", "z-image-turbo", "z-image")],
+        "high": [("sdxl-high", "sdxl-base-1.0", "sdxl"),
                  ("z-image-draft", "z-image-turbo", "z-image")],
     },
     "edit": {
@@ -65,13 +68,25 @@ _PREFERENCE: Dict[str, Dict[str, List[tuple]]] = {
         "standard": [("qwen-edit", "qwen-image-edit-2511", "qwen-image")],
         "high": [("qwen-edit", "qwen-image-edit-2511", "qwen-image")],
     },
+    "inpaint": {
+        "draft": [("sdxl-inpaint", "sdxl-base-1.0", "sdxl")],
+        "standard": [("sdxl-inpaint", "sdxl-base-1.0", "sdxl")],
+        "high": [("sdxl-inpaint", "sdxl-base-1.0", "sdxl")],
+    },
 }
+
+# Installed, approved lanes that are available only by explicit request (`lane=`)
+# or by their capability, never as an implicit default for a different capability.
+_SELECTABLE: List[tuple] = [
+    ("qwen-t2i", "qwen-image-2512", "qwen-image"),
+]
 
 _LANE_WORKFLOW = {
     "z-image-draft": "z_image_t2i",
     "sdxl-draft": "sdxl_t2i",
     "sdxl-standard": "sdxl_t2i",
     "sdxl-high": "sdxl_t2i",
+    "sdxl-inpaint": "sdxl_inpaint",
     "qwen-t2i": "qwen_t2i",
     "qwen-edit": "qwen_edit",
 }
@@ -150,6 +165,13 @@ def route(capability: str, mode: str = "standard", *,
         for e in available:
             e["reasons"].append("ComfyUI not reachable")
 
+    explicit: List[Dict[str, Any]] = []
+    for lane_id, cid, family in _SELECTABLE:
+        if _runtime_ready(cid):
+            e = _make_lane(lane_id, cid, family, mode)
+            e["reasons"].append("explicit opt-in (lane=) only; not an implicit default")
+            explicit.append(e)
+
     primary = available[0] if (available and comfy_up) else None
     plan = {
         "ok": bool(primary),
@@ -157,6 +179,7 @@ def route(capability: str, mode: str = "standard", *,
         "mode": mode,
         "primary": primary,
         "fallbacks": available[1:] if primary else available,
+        "explicit_lanes": explicit,
         "unavailable": unavailable,
         "quarantined": [
             {"id": c["id"], "license": c.get("license"),

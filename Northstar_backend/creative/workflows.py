@@ -183,6 +183,51 @@ def sdxl_ipadapter_t2i(
     }
 
 
+def sdxl_inpaint(
+    prompt: str,
+    *,
+    image_name: str,
+    mask_name: str,
+    negative: str = "",
+    steps: int = 25,
+    cfg: float = 7.0,
+    denoise: float = 0.8,
+    seed: Optional[int] = None,
+    mask_channel: str = "red",
+    sampler: str = "dpmpp_2m",
+    scheduler: str = "karras",
+    checkpoint: str = "sd_xl_base_1.0.safetensors",
+    filename_prefix: str = "northstar_inpaint",
+) -> Dict[str, Any]:
+    """SDXL masked edit (inpaint): denoise only inside the mask, preserving the
+    rest of the image bit-for-bit. Mask value 1 == region to redraw."""
+    return {
+        "1": {"class_type": "CheckpointLoaderSimple",
+              "inputs": {"ckpt_name": checkpoint}},
+        "2": {"class_type": "LoadImage", "inputs": {"image": image_name}},
+        "3": {"class_type": "LoadImageMask",
+              "inputs": {"image": mask_name, "channel": mask_channel}},
+        "4": {"class_type": "VAEEncode",
+              "inputs": {"pixels": ["2", 0], "vae": ["1", 2]}},
+        "5": {"class_type": "SetLatentNoiseMask",
+              "inputs": {"samples": ["4", 0], "mask": ["3", 0]}},
+        "6": {"class_type": "CLIPTextEncode",
+              "inputs": {"clip": ["1", 1], "text": prompt}},
+        "7": {"class_type": "CLIPTextEncode",
+              "inputs": {"clip": ["1", 1], "text": negative or " "}},
+        "8": {"class_type": "KSampler",
+              "inputs": {"model": ["1", 0], "positive": ["6", 0], "negative": ["7", 0],
+                         "latent_image": ["5", 0], "seed": _seed(seed),
+                         "steps": int(steps), "cfg": float(cfg),
+                         "sampler_name": sampler, "scheduler": scheduler,
+                         "denoise": float(denoise)}},
+        "9": {"class_type": "VAEDecode",
+              "inputs": {"samples": ["8", 0], "vae": ["1", 2]}},
+        "10": {"class_type": "SaveImage",
+               "inputs": {"filename_prefix": filename_prefix, "images": ["9", 0]}},
+    }
+
+
 def upscale_image(
     image_name: str,
     *,
@@ -240,4 +285,8 @@ def build(workflow: str, prompt: str, **kwargs) -> Dict[str, Any]:
     if workflow == "qwen_edit":
         image_name = kwargs.pop("image_name")
         return comfy_client.qwen_edit_workflow(prompt, image_name, **kwargs)
+    if workflow == "sdxl_inpaint":
+        image_name = kwargs.pop("image_name")
+        mask_name = kwargs.pop("mask_name")
+        return sdxl_inpaint(prompt, image_name=image_name, mask_name=mask_name, **kwargs)
     raise ValueError(f"unknown workflow: {workflow}")

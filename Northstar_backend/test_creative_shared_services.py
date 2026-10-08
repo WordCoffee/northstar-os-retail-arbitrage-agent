@@ -58,7 +58,7 @@ def test_router_draft_prefers_z_image(monkeypatch):
     assert plan["primary"]["lane"] == "z-image-draft"
     assert plan["primary"]["component"] == "z-image-turbo"
     # explicit fallbacks, ordered
-    assert [f["lane"] for f in plan["fallbacks"]][:2] == ["sdxl-draft", "qwen-t2i"]
+    assert [f["lane"] for f in plan["fallbacks"]] == ["sdxl-draft"]
 
 
 def test_router_standard_prefers_sdxl(monkeypatch):
@@ -68,10 +68,14 @@ def test_router_standard_prefers_sdxl(monkeypatch):
     assert plan["quarantined"][0]["id"] == "flux1-dev-fp8"
 
 
-def test_router_high_prefers_qwen(monkeypatch):
+def test_router_high_prefers_sdxl_not_qwen(monkeypatch):
     monkeypatch.setattr(router, "_comfy_up", lambda: True)
     plan = router.route("generate", "high")
-    assert plan["primary"]["lane"] == "qwen-t2i"
+    assert plan["primary"]["lane"] == "sdxl-high"
+    assert plan["primary"]["component"] == "sdxl-base-1.0"
+    # Qwen is explicit-opt-in only for generation, never an implicit default
+    assert all(f["lane"] != "qwen-t2i" for f in plan["fallbacks"])
+    assert "qwen-t2i" in [e["lane"] for e in plan["explicit_lanes"]]
 
 
 def test_router_edit_uses_qwen_edit(monkeypatch):
@@ -91,6 +95,14 @@ def test_router_no_silent_fallback_when_comfy_down(monkeypatch):
 def test_router_unknown_capability():
     plan = router.route("teleport")
     assert plan["ok"] is False
+
+
+def test_router_inpaint_lane(monkeypatch):
+    monkeypatch.setattr(router, "_comfy_up", lambda: True)
+    plan = router.route("inpaint", "standard")
+    assert plan["ok"]
+    assert plan["primary"]["lane"] == "sdxl-inpaint"
+    assert plan["primary"]["component"] == "sdxl-base-1.0"
 
 
 # --- workflows (offline builders) ------------------------------------------
@@ -128,6 +140,55 @@ def test_ipadapter_workflow():
     wf = workflows.sdxl_ipadapter_t2i("p", reference_image="r.png")
     types = {n["class_type"] for n in wf.values()}
     assert "IPAdapterUnifiedLoader" in types and "IPAdapter" in types
+
+
+def test_sdxl_inpaint_workflow():
+    wf = workflows.sdxl_inpaint("p", image_name="i.png", mask_name="m.png")
+    types = {n["class_type"] for n in wf.values()}
+    assert "SetLatentNoiseMask" in types and "LoadImageMask" in types
+
+
+# --- finishing stages (offline, no ComfyUI) ---------------------------------
+
+def test_compose_text_accepts_dict_spec(tmp_path):
+    from PIL import Image
+    from creative import stages
+    src = tmp_path / "base.png"
+    Image.new("RGB", (512, 512), (240, 240, 240)).save(src)
+    out = tmp_path / "out.png"
+    res = stages.compose_text(src, out, {"brand": "Mogra Organics",
+                                         "product_name": "Organic Turmeric Powder"},
+                              {"quad_norm": [[0.1, 0.1], [0.9, 0.1], [0.9, 0.4], [0.1, 0.4]],
+                               "curvature": 0.0, "style": "mogra_label_panel"})
+    assert res["ok"] and out.exists()
+    with Image.open(out) as im:
+        assert im.size == (512, 512)
+
+
+def test_ad_layout_offline_export_and_provenance(tmp_path):
+    from PIL import Image
+    from creative import stages
+    out = tmp_path / "ad.png"
+    res = stages.ad_layout(None, None, out, spec={"brand": "Mogra Organics",
+                                                  "product_name": "Organic Turmeric Powder",
+                                                  "descriptor": "Ground"},
+                           export=[512, 512])
+    assert res["ok"] and out.exists()
+    with Image.open(out) as im:
+        assert im.size == (512, 512)
+    side = out.with_suffix(".png.json")
+    assert side.exists()
+    import json as _json
+    rec = _json.loads(side.read_text(encoding="utf-8"))
+    assert rec["task"] == "ad_layout"
+    assert rec["commercial_use"] == "allowed"
+
+
+def test_foundation_contract_readiness():
+    from creative import foundation_contract as fc
+    r = fc.build_readiness_shared()
+    assert "generation" in r and "routing" in r and "quarantined" in r
+    assert "flux1-dev-fp8" in r["quarantined"]
 
 
 # --- jobs -------------------------------------------------------------------

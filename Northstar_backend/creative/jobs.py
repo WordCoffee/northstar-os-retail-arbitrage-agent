@@ -43,6 +43,8 @@ class CreativeJobStore:
         self._heavy = threading.Semaphore(max(1, int(max_concurrency)))
         self._worker: Optional[threading.Thread] = None
         self._stop = threading.Event()
+        # Optional hook (registered by pipeline) to abort a running ComfyUI job.
+        self.cancel_hook: Optional[Callable[[], None]] = None
         _ensure_dir()
         self._load_existing()
 
@@ -122,6 +124,7 @@ class CreativeJobStore:
             self._persist(job)
 
     def cancel(self, jid: str) -> bool:
+        hook = None
         with self._lock:
             if jid not in self._jobs:
                 return False
@@ -131,7 +134,14 @@ class CreativeJobStore:
                 job["status"] = "cancelled"
                 job["progress"] = {"stage": "cancelled"}
                 self._persist(job)
-            return True
+            elif job["status"] == "running" and self.cancel_hook:
+                hook = self.cancel_hook
+        if hook:  # abort a running diffusion job (best effort, outside the lock)
+            try:
+                hook()
+            except Exception:
+                pass
+        return True
 
     def is_cancelled(self, jid: str) -> bool:
         with self._lock:
@@ -178,6 +188,12 @@ class CreativeJobStore:
                 except JobCancelled:
                     self.update(jid, status="cancelled", progress={"stage": "cancelled"})
                 except Exception as exc:  # never leak a raw 500; record it
+                    if self.is_cancelled(jid):
+                        # A cancel interrupt surfaces as a ComfyUI error; the
+                        # operator's intent wins.
+                        self.update(jid, status="cancelled",
+                                    progress={"stage": "cancelled"})
+                        continue
                     self.update(jid, status="error", error=str(exc),
                                 progress={"stage": "failed", "message": str(exc)})
                     try:

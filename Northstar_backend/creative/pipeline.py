@@ -44,10 +44,14 @@ def run_job(jid: str, payload: Dict[str, Any], store) -> Dict[str, Any]:
         return _task_mask(jid, payload, store)
     if task == "compose_text":
         return _task_compose(jid, payload, store)
+    if task == "inpaint":
+        return _task_inpaint(jid, payload, store)
     if task == "condition":
         return _task_condition(jid, payload, store)
     if task == "control":
         return _task_control(jid, payload, store)
+    if task == "ad_layout":
+        return _task_ad_layout(jid, payload, store)
     if task == "product_ad":
         return _task_product_ad(jid, payload, store)
     if task == "packaging_concept":
@@ -125,6 +129,24 @@ def _task_compose(jid, payload, store):
     return res
 
 
+def _task_inpaint(jid, payload, store):
+    src = payload.get("source")
+    mask = payload.get("mask")
+    if not src or not Path(src).exists():
+        raise ValueError("inpaint requires an existing 'source' image")
+    if not mask or not Path(mask).exists():
+        raise ValueError("inpaint requires an existing 'mask' image")
+    store.progress(jid, stage="inpaint", message="masked redraw")
+    out = _out("inpaint")
+    res = stages.inpaint(payload.get("prompt", ""), src, mask, out,
+                         steps=payload.get("steps", 25), cfg=payload.get("cfg", 7.0),
+                         denoise=payload.get("denoise", 0.8), seed=payload.get("seed"),
+                         negative=payload.get("negative", ""))
+    stages.unload_comfy_models()
+    _finish(store, jid, res, lane="sdxl-inpaint")
+    return res
+
+
 def _task_condition(jid, payload, store):
     src = payload.get("source")
     if not src or not Path(src).exists():
@@ -155,6 +177,22 @@ def _task_control(jid, payload, store):
                          seed=payload.get("seed"), negative=payload.get("negative", ""))
     stages.unload_comfy_models()
     _finish(store, jid, res, lane="controlnet-canny-sdxl")
+    return res
+
+
+def _task_ad_layout(jid, payload, store):
+    if not payload.get("spec"):
+        raise ValueError("ad_layout requires a 'spec' (brand/product/descriptor text)")
+    store.progress(jid, stage="ad_layout", message="composing finished ad")
+    out = _out("ad")
+    res = stages.ad_layout(payload.get("product"), payload.get("background"), out,
+                           spec=payload["spec"],
+                           surface_key=payload.get("surface"),
+                           export=payload.get("export", [1080, 1080]),
+                           product_scale=payload.get("product_scale", 0.52),
+                           product_y=payload.get("product_y", 0.70),
+                           cutout=payload.get("cutout", True))
+    _finish(store, jid, res, lane="shared_finishing")
     return res
 
 
@@ -215,8 +253,17 @@ def _task_packaging_concept(jid, payload, store):
     return res
 
 
-# Register the runner with the shared job store.
+def _interrupt_comfy() -> None:
+    """Abort the currently-running ComfyUI prompt (used on job cancellation)."""
+    try:
+        stages.comfy_client.ComfyClient()._json("POST", "/interrupt", {})  # type: ignore[attr-defined]
+    except Exception:
+        pass
+
+
+# Register the runner + cancellation interrupt with the shared job store.
 jobmod.run_from_runner = run_job
+jobmod.store.cancel_hook = _interrupt_comfy
 
 
 def submit(task: str, payload: Dict[str, Any], *, plan: Optional[Dict[str, Any]] = None):

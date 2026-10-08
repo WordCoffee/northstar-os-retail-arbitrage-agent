@@ -539,14 +539,85 @@ class HuggingFaceBackend:
 
 
 # ============================================================
-# BACKEND: LOCAL (ComfyUI or diffusers)
+# BACKEND: LOCAL (shared creative-services pipeline, else ComfyUI)
 # ============================================================
+
+def _shared_pipeline_generate(prompt, output_path, width, height, seed, verbose=True):
+    """Route through the shared creative-services pipeline.
+
+    Order of preference:
+      1. In-process `creative.stages.generate` (approved-component router +
+         provenance) when the Northstar backend package is importable.
+      2. HTTP `POST {NORTHSTAR_API_BASE}/api/creative/pipeline` (job + queue +
+         cancellation + provenance) when the backend is running.
+    Returns (handled: bool, ok: bool, detail: str). `handled=False` means the
+    shared contract was unavailable and the caller may fall back to the
+    shared-runtime ComfyUI implementation.
+    """
+    # 1) in-process shared pipeline
+    try:
+        import sys
+        from pathlib import Path as _Path
+        root = _Path(__file__).resolve().parents[1]
+        nb = root / "Northstar_backend"
+        if str(nb) not in sys.path:
+            sys.path.insert(0, str(nb))
+        from creative import stages  # noqa: WPS433 (deliberate local import)
+        res = stages.generate(prompt, output_path, mode="standard",
+                              width=width, height=height, seed=seed)
+        if verbose:
+            print(f"  [shared] lane={res.get('lane')} provenance={res.get('provenance')}")
+        return True, bool(res.get("ok")), res.get("lane", "shared")
+    except ImportError:
+        pass
+    except Exception as exc:  # shared pipeline present but the lane failed
+        if verbose:
+            print(f"  [shared] pipeline error: {type(exc).__name__}: {exc}")
+
+    # 2) HTTP shared pipeline
+    base = (os.environ.get("NORTHSTAR_API_BASE") or "").rstrip("/")
+    if base:
+        try:
+            import urllib.request as _u
+            body = json.dumps({"task": "generate", "payload": {
+                "prompt": prompt, "mode": "standard",
+                "width": width, "height": height, "seed": seed}}).encode()
+            req = _u.Request(f"{base}/api/creative/pipeline", data=body,
+                             headers={"Content-Type": "application/json"})
+            with _u.urlopen(req, timeout=30) as r:
+                job = json.loads(r.read().decode())
+            jid = job.get("job_id")
+            if not jid:
+                return True, False, "no job id"
+            deadline = time.time() + 1800
+            while time.time() < deadline:
+                time.sleep(2)
+                with _u.urlopen(f"{base}/api/creative/jobs/{jid}", timeout=15) as r:
+                    rec = json.loads(r.read().decode())
+                if rec.get("status") in ("done", "error", "cancelled"):
+                    out = rec.get("output")
+                    if rec.get("status") == "done" and out:
+                        import shutil as _sh
+                        output_path.parent.mkdir(parents=True, exist_ok=True)
+                        _sh.copyfile(out, output_path)
+                    return True, rec.get("status") == "done", rec.get("error") or "ok"
+            return True, False, "timeout"
+        except Exception as exc:
+            if verbose:
+                print(f"  [shared-http] error: {type(exc).__name__}: {exc}")
+            return True, False, str(exc)
+
+    return False, False, "shared pipeline unavailable"
+
 
 @register_backend("local")
 class LocalBackend:
-    """Local generation via ComfyUI server.
-    Best quality — runs on your GPU.
-    Requires ComfyUI running at COMFYUI_URL (default: http://127.0.0.1:8188).
+    """Local generation via the shared creative-services pipeline.
+
+    The shared pipeline applies approved-component routing, the quarantined-model
+    policy, a queue, cancellation, and provenance sidecars. If it is unavailable
+    (e.g. running the CLI standalone), it falls back to the shared-runtime ComfyUI
+    implementation. Requires ComfyUI at COMFYUI_URL (default 127.0.0.1:8188).
     """
 
     @staticmethod
@@ -565,21 +636,27 @@ class LocalBackend:
         comfyui_url = os.environ.get("COMFYUI_URL", "http://127.0.0.1:8188")
         status = "Connected" if LocalBackend.is_available() else "Not running"
         return {
-            "name": "Local (ComfyUI)",
+            "name": "Local (shared creative services)",
             "cost": "Free (runs on your GPU)",
-            "models": ["Whatever is loaded in ComfyUI"],
             "requires_key": False,
-            "requires_running": "ComfyUI server",
+            "requires_running": "ComfyUI server + shared creative pipeline",
             "comfyui_url": comfyui_url,
             "status": status,
-            "quality": "Best — full GPU power, FLUX Dev / HiDream / SDXL",
-            "best_for": "Maximum quality, unlimited generations, privacy",
-            "recommended_models_for_16gb": [
-                "FLUX.1 Dev FP8 (~12GB VRAM) — best balance of quality/speed",
-                "FLUX.2 Klein 4B FP16 (~13GB) — fastest, Apache 2.0 licensed",
-                "HiDream-I1-Fast NF4 (~14GB) — best for photorealistic people",
-                "SDXL — well-established, huge LoRA ecosystem",
+            "quality": ("Approved-component routing (no single 'best' default; "
+                        "quality defaults pending owner visual review)"),
+            "models": ["sd_xl_base_1.0.safetensors (standard)",
+                       "z_image_turbo_nvfp4.safetensors (draft)",
+                       "qwen-image-edit-2511 (editing only)"],
+            "routing": "Approved-component router: draft=Z-Image-Turbo, "
+                       "standard=SDXL Base 1.0, editing=Qwen-Image-Edit-2511. "
+                       "FLUX.1 [dev] is quarantined (non-commercial).",
+            "resource_notes": [
+                "SDXL standard ~7.6 GB device VRAM — provisional standard candidate",
+                "Z-Image-Turbo draft ~11.7 GB device VRAM — fast candidate",
+                "Qwen-Image ~14 GB device VRAM — reserved for editing/hard cases",
+                "quality defaults are pending owner visual review",
             ],
+            "best_for": "Approved, commercially-compatible local generation with provenance",
         }
 
     @staticmethod
@@ -587,14 +664,23 @@ class LocalBackend:
                  model=None, verbose=True):
         comfyui_url = os.environ.get("COMFYUI_URL", "http://127.0.0.1:8188")
 
+        # Prefer the shared creative-services contract (routing + queue +
+        # provenance + approved-component policy).
+        handled, ok, detail = _shared_pipeline_generate(
+            prompt, output_path, width, height,
+            seed=int(time.time()) % 1000000, verbose=verbose)
+        if handled:
+            if verbose:
+                print(f"  [Info] routed via shared creative services ({detail})")
+            return ok
+
         if not LocalBackend.is_available():
             if verbose:
                 print(f"  [Error] ComfyUI not reachable at {comfyui_url}")
                 print("  [Info] Start ComfyUI first, or set COMFYUI_URL")
             return False
 
-        # Build a basic FLUX txt2img workflow
-        # This is a simplified workflow — for production, use custom ComfyUI workflows
+        # Fallback (shared-runtime ComfyUI implementation) for standalone CLI use.
         workflow = {
             "3": {
                 "class_type": "KSampler",
@@ -928,6 +1014,11 @@ def list_backends():
             print(f"    Recommended for 16GB VRAM:")
             for rec in info["recommended_models_for_16gb"]:
                 print(f"      - {rec}")
+
+        if info.get("routing"):
+            print(f"    Routing: {info['routing']}")
+        for note in info.get("resource_notes", []):
+            print(f"      · {note}")
 
         print()
 

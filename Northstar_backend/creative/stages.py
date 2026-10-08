@@ -76,8 +76,8 @@ def generate(prompt: str, out_path: str | os.PathLike, *, mode: str = "standard"
     plan = router.route("generate", mode, has_reference=bool(controlnet))
     entries = ([plan["primary"]] if plan.get("primary") else []) + list(plan.get("fallbacks", []))
     if lane:
-        entries = [e for e in entries if e.get("lane") == lane] or [
-            e for e in plan.get("unavailable", []) if e.get("lane") == lane]
+        pool = entries + list(plan.get("explicit_lanes", [])) + list(plan.get("unavailable", []))
+        entries = [e for e in pool if e.get("lane") == lane]
 
     if not entries:
         # Explicit opt-in to a quarantined lane (local evaluation only).
@@ -125,6 +125,7 @@ def generate(prompt: str, out_path: str | os.PathLike, *, mode: str = "standard"
                 extras={"prompt": prompt, "mode": mode})
             return {"ok": True, "output": str(out), "lane": entry["lane"],
                     "component": entry.get("component"), "mode": mode,
+                    "model_file": entry.get("model_file"), "workflow": wf_name,
                     "preset": p, "provenance": str(side),
                     "fallbacks_available": plan.get("fallbacks", [])}
         except Exception as exc:
@@ -180,11 +181,16 @@ def remove_background(image_path: str | os.PathLike, out_path: str | os.PathLike
     return result
 
 
-def compose_text(source_path: str | os.PathLike, out_path: str | os.PathLike, spec: Dict[str, Any],
+def compose_text(source_path: str | os.PathLike, out_path: str | os.PathLike, spec: Any,
                  surface: Dict[str, Any]) -> Dict[str, Any]:
-    """Deterministic exact-text/brand compositing (existing compositor)."""
+    """Deterministic exact-text/brand compositing (existing compositor).
+
+    ``spec`` may be a ``LabelSpec`` or a plain dict (the UI/API shape).
+    """
     from PIL import Image
-    from .exact_text import compose_exact_text
+    from .exact_text import LabelSpec, compose_exact_text
+    if not isinstance(spec, LabelSpec):
+        spec = LabelSpec.from_dict(spec or {})
     base = Image.open(source_path).convert("RGBA")
     out_img, params = compose_exact_text(base, spec, surface, surface["style"],
                                          supersample=2, enforce_brand=True,
@@ -249,12 +255,121 @@ def control(prompt: str, control_path: str | os.PathLike, out_path: str | os.Pat
             "component": "controlnet-canny-sdxl", "provenance": str(side)}
 
 
+def inpaint(prompt: str, image_path: str | os.PathLike, mask_path: str | os.PathLike,
+            out_path: str | os.PathLike, *, steps: int = 25, cfg: float = 7.0,
+            denoise: float = 0.8, seed: Optional[int] = None,
+            negative: str = "") -> Dict[str, Any]:
+    """Masked edit via SDXL + SetLatentNoiseMask.
+
+    Denoises only inside the mask; outside pixels are preserved. This is a
+    *masked redraw*, not a dedicated inpaint checkpoint. Commercially compatible
+    (SDXL CreativeML Open RAIL++-M), core-node only.
+    """
+    if not registry.installed(registry.component("sdxl-base-1.0")):
+        raise StageError("SDXL base not installed for masked edit")
+    client = comfy_client.ComfyClient()
+    if not client.is_up():
+        raise StageError("ComfyUI not reachable for masked edit")
+    img_name = client.upload_image(image_path, name=f"inp_{Path(image_path).name}")
+    mask_name = client.upload_image(mask_path, name=f"mask_{Path(mask_path).name}")
+    wf = workflows.sdxl_inpaint(prompt, image_name=img_name, mask_name=mask_name,
+                                negative=negative, steps=steps, cfg=cfg, denoise=denoise,
+                                seed=seed)
+    out = Path(out_path)
+    _run(wf, out)
+    side = provenance.write_sidecar(out, task="inpaint", lane="sdxl-inpaint",
+                                    component="sdxl-base-1.0",
+                                    params={"steps": steps, "cfg": cfg, "denoise": denoise},
+                                    inputs=[str(image_path), str(mask_path)],
+                                    stages=[{"stage": "inpaint"}])
+    return {"ok": True, "output": str(out), "lane": "sdxl-inpaint",
+            "component": "sdxl-base-1.0", "provenance": str(side)}
+
+
+_AD_TOP_BANNER = {
+    "label": "Ad top banner",
+    "description": "Top third text band for finished ads (product below).",
+    "quad_norm": [[0.06, 0.05], [0.94, 0.05], [0.94, 0.33], [0.06, 0.33]],
+    "curvature": 0.0,
+    "style": "hero_card",
+}
+
+
+def ad_layout(product_image: Optional[str], background_image: Optional[str],
+              out_path: str | os.PathLike, *, spec: Dict[str, Any],
+              surface_key: Optional[str] = None,
+              export: Optional[List[int]] = None, product_scale: float = 0.52,
+              product_y: float = 0.70, cutout: bool = True) -> Dict[str, Any]:
+    """Finished ad layout/export: background + product cutout + exact text.
+
+    Deterministic finishing stage (no diffusion). Composes an ad at an explicit
+    export size and writes provenance.
+    """
+    from PIL import Image
+    from . import presets
+    from .exact_text import LabelSpec, compose_exact_text
+
+    ew, eh = (export or [1080, 1080])
+    stages_done: List[Dict[str, Any]] = []
+    inputs: List[str] = []
+
+    if background_image and Path(background_image).exists():
+        bg = Image.open(background_image).convert("RGBA").resize((ew, eh), Image.LANCZOS)
+        inputs.append(background_image)
+    else:
+        bg = Image.new("RGBA", (ew, eh), (247, 244, 238, 255))
+
+    cut_path = None
+    if product_image and Path(product_image).exists():
+        inputs.append(product_image)
+        if cutout:
+            m = remove_background(product_image, Path(out_path).with_name(
+                Path(out_path).stem + "__cut.png"))
+            cut_path = m.get("cutout") or m["mask"]
+            prod = Image.open(cut_path).convert("RGBA")
+            stages_done.append({"stage": "mask", "out": cut_path})
+        else:
+            prod = Image.open(product_image).convert("RGBA")
+        target = max(1, int(min(ew, eh) * product_scale))
+        ratio = target / max(prod.size)
+        prod = prod.resize((max(1, int(prod.width * ratio)),
+                            max(1, int(prod.height * ratio))), Image.LANCZOS)
+        x = (ew - prod.width) // 2
+        y = int(eh * product_y) - prod.height // 2
+        bg.alpha_composite(prod, (x, y))
+        stages_done.append({"stage": "compose_product"})
+
+    if surface_key:
+        surface = dict(presets.get_surface(surface_key))
+        surface["style"] = presets.get_surface(surface_key).get("style", "hero_card")
+        used_surface = surface_key
+    else:
+        surface = dict(_AD_TOP_BANNER)
+        used_surface = "ad_top_banner"
+    canvas, params = compose_exact_text(bg, LabelSpec.from_dict(spec), surface,
+                                        surface["style"], supersample=2,
+                                        enforce_brand=True, return_params=True)
+    out = Path(out_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    canvas.convert("RGB").save(out, format="PNG")
+    stages_done.append({"stage": "compose_text", "surface": used_surface})
+    side = provenance.write_sidecar(out, task="ad_layout", lane="shared_finishing",
+                                    component="brand-fonts-libre-baskerville",
+                                    params={"export": [ew, eh], "surface": used_surface,
+                                            "product_scale": product_scale, "text": params},
+                                    inputs=inputs, stages=stages_done)
+    return {"ok": True, "output": str(out), "lane": "shared_finishing",
+            "component": "brand-fonts-libre-baskerville", "export": [ew, eh],
+            "cutout": cut_path, "provenance": str(side)}
+
+
 def capabilities() -> Dict[str, Any]:
     return {
         "comfyui_up": comfy_client.ComfyClient(timeout=1.5).is_up(),
         "runtime_ready": {
             "generate": bool(router.route("generate", "standard").get("primary")),
             "edit": bool(router.route("edit", "standard").get("primary")),
+            "inpaint": bool(router.route("inpaint", "standard").get("primary")),
             "upscale": registry.installed(registry.component("real-esrgan") or {}),
             "mask": registry.installed(registry.component("birefnet") or {}),
             "control": registry.installed(registry.component("controlnet-canny-sdxl") or {}),

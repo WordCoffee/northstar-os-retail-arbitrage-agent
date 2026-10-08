@@ -58,6 +58,36 @@ def gpu_stats() -> dict:
         return {"error": str(e)}
 
 
+def _precision(filename: str) -> str:
+    f = (filename or "").lower()
+    if "nvfp4" in f:
+        return "nvfp4"
+    if "fp8" in f:
+        return "fp8"
+    if "fp16" in f:
+        return "fp16"
+    if "bf16" in f:
+        return "bf16"
+    if "q4_k_m" in f:
+        return "gguf-q4_k_m"
+    if f.endswith(".gguf"):
+        return "gguf"
+    return "unspecified"
+
+
+def _decode_check(path):
+    if not path:
+        return {"ok": False, "reason": "no output"}
+    try:
+        from PIL import Image
+        with Image.open(path) as im:
+            im.verify()
+        with Image.open(path) as im:
+            return {"ok": True, "size": list(im.size), "mode": im.mode}
+    except Exception as e:
+        return {"ok": False, "reason": str(e)}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--task", default="generate")
@@ -66,11 +96,14 @@ def main() -> int:
     ap.add_argument("--prompt", default="studio product photograph of a glass jar on a neutral "
                                         "background, soft light, photorealistic")
     ap.add_argument("--source", default=None)
+    ap.add_argument("--mask", default=None)
     ap.add_argument("--width", type=int, default=1024)
     ap.add_argument("--height", type=int, default=1024)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--label", default="run")
     ap.add_argument("--cold", action="store_true")
+    ap.add_argument("--payload-json", default=None,
+                    help="extra JSON payload merged in (for full jobs: product_ad, packaging_concept, ad_layout, inpaint)")
     args = ap.parse_args()
 
     payload = {"prompt": args.prompt, "mode": args.mode, "width": args.width,
@@ -79,28 +112,64 @@ def main() -> int:
         payload["lane"] = args.lane
     if args.source:
         payload["source"] = args.source
+    if args.mask:
+        payload["mask"] = args.mask
+    if args.payload_json:
+        payload.update(json.loads(args.payload_json))
 
     pre = gpu_stats() if args.cold else None
     t0 = time.time()
     r = _post("/api/creative/pipeline", {"task": args.task, "payload": payload})
     jid = r["job_id"]
     peak = 0.0
+    retries = 0
     while True:
         time.sleep(1.5)
-        j = _get(f"/api/creative/jobs/{jid}")
+        try:
+            j = _get(f"/api/creative/jobs/{jid}")
+        except Exception:
+            retries += 1
+            continue
         peak = max(peak, vram_mb())
         if j["status"] in ("done", "error", "cancelled"):
             break
     total = round(time.time() - t0, 2)
-    lane = (j.get("result") or {}).get("lane") or (j.get("plan") or {}).get("primary", {}).get("lane")
+
+    plan = j.get("plan") or {}
+    primary = plan.get("primary") or {}
+    result = j.get("result") or {}
+    lane = result.get("lane") or primary.get("lane")
+    model_file = result.get("model_file") or primary.get("model_file") or (result.get("component") or "")
+    decode = _decode_check(j.get("output") or result.get("mask") or result.get("composited"))
+
+    # provenance stages (finishing/helpers actually executed)
+    stages = []
+    prov = j.get("provenance")
+    if prov and Path(prov).exists():
+        try:
+            rec = json.loads(Path(prov).read_text(encoding="utf-8"))
+            stages = [s.get("stage") for s in rec.get("stages", []) if isinstance(s, dict)]
+        except Exception:
+            pass
+
     rec = {
         "label": args.label, "task": args.task, "mode": args.mode, "requested_lane": args.lane,
-        "lane": lane, "status": j["status"], "total_s": total,
-        "peak_vram_mb": peak, "cold": bool(args.cold), "pre_gpu": pre,
+        "lane": lane, "component": result.get("component") or primary.get("component"),
+        "family": primary.get("family"),
+        "model_file": model_file, "precision": _precision(str(model_file)),
+        "workflow": primary.get("workflow") or result.get("workflow"),
+        "sampling": primary.get("preset") or result.get("preset"),
         "dimensions": [args.width, args.height],
-        "output": j.get("output"), "provenance": j.get("provenance"),
-        "error": j.get("error"),
+        "full_job_stages": stages or ([result.get("lane")] if result.get("lane") else []),
+        "status": j["status"], "total_s": total,
+        "peak_device_vram_mb": peak, "cold": bool(args.cold), "pre_gpu": pre,
+        "retries": retries,
+        "output": j.get("output"), "output_check": decode,
+        "rejected": not decode.get("ok"),
+        "provenance": j.get("provenance"), "error": j.get("error"),
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        "metric_note": ("peak_device_vram_mb is nvidia-smi memory.used — device-wide "
+                        "(all processes), sampled ~1.5 s; not per-process allocated/reserved."),
     }
     p = OUT / f"{args.label}_{int(time.time())}.json"
     p.write_text(json.dumps(rec, indent=2), encoding="utf-8")

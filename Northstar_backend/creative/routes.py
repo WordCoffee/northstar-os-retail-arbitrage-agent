@@ -183,16 +183,20 @@ def generate_scene(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
         prompt = comfy_client.build_scene_prompt(container=cdict, product=pdict,
                                                  extra=body.get("extra", ""))
     out_path = _out_dir() / f"scene_{mogra_mockup._stamp()}.png"
+    # Route through the shared creative services (approved-component policy, mode
+    # presets, provenance) rather than calling comfy_client directly.
+    from . import stages
     try:
-        res = comfy_client.generate_scene(
-            prompt, out_path, width=int(body.get("width", 1024)),
-            height=int(body.get("height", 1024)), steps=int(body.get("steps", 20)),
-            cfg=float(body.get("cfg", 4.0)), seed=body.get("seed"),
-            negative=body.get("negative", ""))
-    except comfy_client.ComfyUIError as exc:
+        res = stages.generate(
+            prompt, out_path, mode=body.get("mode", "standard"),
+            width=int(body.get("width", 1024)), height=int(body.get("height", 1024)),
+            steps=body.get("steps"), cfg=body.get("cfg"), seed=body.get("seed"),
+            negative=body.get("negative", ""), lane=body.get("lane"))
+    except stages.StageError as exc:
         raise HTTPException(status_code=503, detail=str(exc))
-    return {"ok": True, "lane": res["lane"], "output": str(out_path),
-            "url": f"/api/creative/file/{out_path.name}", "prompt": prompt}
+    return {"ok": True, "lane": res.get("lane"), "component": res.get("component"),
+            "output": str(out_path), "url": f"/api/creative/file/{out_path.name}",
+            "prompt": prompt, "provenance": res.get("provenance")}
 
 
 @router.post("/mockup")
@@ -348,6 +352,14 @@ def jobs_cancel(job_id: str) -> Dict[str, Any]:
 def mount_creative(app: Any) -> None:
     """Register the router, the UI page, and the static assets on ``app``."""
     app.include_router(router)
+    # Foundation creative contract (WT-C consumer) backed by shared services.
+    try:
+        from . import foundation_contract
+        app.include_router(foundation_contract.router_foundation)
+        _log.info("Foundation creative contract mounted "
+                  "(/api/v1/foundation/creative/*) via shared services")
+    except Exception as exc:  # keep the mockup lane alive if the adapter fails
+        _log.warning("Foundation creative adapter unavailable: %s", exc)
     # Creative service lanes (additive, local-first): listing-forge / social / ad-pilot
     try:
         from . import service_routes

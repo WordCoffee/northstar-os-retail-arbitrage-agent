@@ -1,0 +1,47 @@
+{
+  "label": "qwen_standard_explicit",
+  "task": "generate",
+  "mode": "standard",
+  "requested_lane": "qwen-t2i",
+  "lane": "qwen-t2i",
+  "component": "qwen-image-2512",
+  "family": "sdxl",
+  "model_file": "sd_xl_base_1.0.safetensors",
+  "precision": "unspecified",
+  "workflow": "sdxl_t2i",
+  "sampling": {
+    "steps": 25,
+    "cfg": 7.0,
+    "width": 1024,
+    "height": 1024,
+    "sampler": "dpmpp_2m",
+    "scheduler": "karras"
+  },
+  "dimensions": [
+    1024,
+    1024
+  ],
+  "full_job_stages": [
+    "generate"
+  ],
+  "status": "done",
+  "total_s": 110.79,
+  "peak_device_vram_mb": 14123.0,
+  "cold": false,
+  "pre_gpu": null,
+  "retries": 0,
+  "output": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\gen_20261007_234209_29597.png",
+  "output_check": {
+    "ok": true,
+    "size": [
+      1024,
+      1024
+    ],
+    "mode": "RGB"
+  },
+  "rejected": false,
+  "provenance": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\gen_20261007_234209_29597.png.json",
+  "error": null,
+  "timestamp": "2026-10-07T23:44:00",
+  "metric_note": "peak_device_vram_mb is nvidia-smi memory.used \u2014 device-wide (all processes), sampled ~1.5 s; not per-process allocated/reserved."
+}

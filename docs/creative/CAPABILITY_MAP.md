@@ -62,5 +62,30 @@ not fully integrated, `PLANNED` = contract only, `MISSING` = no implementation.
 
 ## 5. Acceptance evidence
 
-See `reports/shared_creative_services_<ts>.md` for the before/after benchmark,
+See `reports/shared_creative_services_20261007.md` and
+`reports/shared_creative_services_continuation_20261007.md` for the benchmark,
 installed component sizes + SHA-256, job logs, and the representative sample set.
+
+## 6. Consumer integration (continuation pass)
+
+| Consumer | Classification | Routed through shared services? |
+|---|---|---|
+| `creative/comfy_client.py`, `workflows.py`, `stages.py` | shared-runtime internal | yes (they *are* the runtime) |
+| `creative/mogra_mockup.py` scene step | consumer | **yes** (`stages.generate`); Edit-2511 panel prep remains direct (edit lane) |
+| `creative/routes.py` `/generate-scene`, `/mockup` | consumer | **yes** |
+| `tools/generate_images.py` local backend | consumer | **yes** (in-process, else HTTP); direct graph only as standalone fallback |
+| `model_router.py` | diagnostic/config | n/a (no generation) |
+| `creative/video.py` | specialised cloud (gated) | n/a (not ComfyUI); gated + provenance-reviewed |
+| WT-C `foundation/api/creative.py` | consumer (other worktree) | **adapter provided** (`creative/foundation_contract.py`, `/api/v1/foundation/creative/*`); delegation documented, not auto-applied |
+| WT-C `local_image_gen.py` / `comfyui_client.py` | retired on this branch | superseded |
+
+## 7. Routing policy (provisional)
+
+| Capability | draft | standard | high |
+|---|---|---|---|
+| generate | Z-Image-Turbo | SDXL Base 1.0 | SDXL Base 1.0 (1280²) |
+| edit | Qwen-Image-Edit-2511 | same | same |
+| inpaint | SDXL + SetLatentNoiseMask | same | same |
+
+Qwen is routed by **editing capability** and explicit opt-in only — never a generic
+"high quality" label. Quality defaults are provisional pending owner visual review.
