@@ -22,6 +22,15 @@ import completeness_score
 from canopy_client import get_canopy_product
 from ui_serving import mount_ui
 
+# Hosted reasoning provider for non-creative tasks (Phase H2 / Go integration)
+from adapters.reasoning_provider import (
+    HOSTED_MODELS,
+    OpenCodeGoProvider,
+    ReasoningRequest,
+    get_reasoning_provider,
+)
+import reasoning_tasks as _reasoning_tasks
+
 # Golden Goose Finder — multi-pack breakdown arbitrage scanner
 try:
     from agents.golden_goose_finder.main import router as golden_goose_router
@@ -967,6 +976,49 @@ class AutothinkRunRequest(BaseModel):
     prev_tier: Optional[str] = None
 
 
+# --- Hosted reasoning API (OpenCode Go) -------------------------------------
+# Provider-neutral adapter for listing proposals, ad-copy proposals, spreadsheet
+# analysis, and generic reasoning. All calls are server-side, gated, and logged.
+
+class ReasoningModelsResponse(BaseModel):
+    models: List[Dict[str, Any]]
+    default_model: str
+    armed: bool
+    available: bool
+
+
+class ListingProposalRequest(BaseModel):
+    sku: str
+    title: str
+    bullets: List[str]
+    description: str
+    attributes: Optional[Dict[str, Any]] = None
+    keywords: Optional[List[str]] = None
+    brand: Optional[str] = None
+    model: Optional[str] = None
+
+
+class AdCopyProposalRequest(BaseModel):
+    product_facts: Dict[str, Any]
+    brand_tone: str = "professional"
+    format_hint: str = "Amazon Sponsored Products"
+    model: Optional[str] = None
+
+
+class SpreadsheetAnalysisRequest(BaseModel):
+    rows: List[Dict[str, Any]]
+    columns: Optional[List[str]] = None
+    file_name: Optional[str] = None
+    max_sample_rows: int = 50
+    model: Optional[str] = None
+
+
+class ReasoningRunRequest(BaseModel):
+    query: str
+    model: Optional[str] = None
+    system_prompt: Optional[str] = None
+
+
 def _autothink_server():
     """Lazily import the AutothinK backend module (adds its dir to sys.path)."""
     import importlib
@@ -1006,6 +1058,74 @@ def autothink_history(limit: int = 20):
     """Session command history for the workspace."""
     srv = _autothink_server()
     return srv.history(limit)
+
+
+# --- Hosted reasoning routes (OpenCode Go) ---------------------------------
+
+@app.get("/api/v1/reasoning/models")
+def reasoning_models():
+    """Selectable hosted reasoning models with timestamped pricing metadata."""
+    provider = OpenCodeGoProvider()
+    return {
+        "models": HOSTED_MODELS,
+        "default_model": "opencode-go/deepseek-v4.1-flash",
+        "available": provider.available(),
+        "armed": provider.armed(),
+    }
+
+
+@app.post("/api/v1/reasoning/listing-proposal")
+def reasoning_listing_proposal(req: ListingProposalRequest):
+    """Generate a structured listing revision proposal. Owner review required."""
+    result = _reasoning_tasks.listing_proposal(
+        sku=req.sku,
+        title=req.title,
+        bullets=req.bullets,
+        description=req.description,
+        attributes=req.attributes,
+        keywords=req.keywords,
+        brand=req.brand,
+        model=req.model,
+    )
+    return {"proposal": result}
+
+
+@app.post("/api/v1/reasoning/ad-copy-proposal")
+def reasoning_ad_copy_proposal(req: AdCopyProposalRequest):
+    """Generate a structured ad-copy proposal. Never publishes anywhere."""
+    result = _reasoning_tasks.ad_copy_proposal(
+        product_facts=req.product_facts,
+        brand_tone=req.brand_tone,
+        format_hint=req.format_hint,
+        model=req.model,
+    )
+    return {"proposal": result}
+
+
+@app.post("/api/v1/reasoning/spreadsheet-analysis")
+def reasoning_spreadsheet_analysis(req: SpreadsheetAnalysisRequest):
+    """Analyze uploaded spreadsheet rows and return a structured report."""
+    result = _reasoning_tasks.spreadsheet_analysis(
+        rows=req.rows,
+        columns=req.columns,
+        file_name=req.file_name,
+        max_sample_rows=req.max_sample_rows,
+        model=req.model,
+    )
+    return {"analysis": result}
+
+
+@app.post("/api/v1/reasoning/run")
+def reasoning_run(req: ReasoningRunRequest):
+    """Generic hosted-reasoning completion (AutothinK-style)."""
+    if not (req.query or "").strip():
+        raise HTTPException(status_code=422, detail="query is empty")
+    result = _reasoning_tasks.reasoning_run(
+        query=req.query,
+        model=req.model,
+        system_prompt=req.system_prompt,
+    )
+    return result
 
 
 @app.get("/health/detailed")
