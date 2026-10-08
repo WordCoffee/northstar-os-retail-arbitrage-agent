@@ -27,21 +27,80 @@ from adapters.reasoning_provider import (
 class CatalogTests(unittest.TestCase):
     def test_expected_model_ids_present(self):
         expected = {
-            "opencode-go/deepseek-v4.1-flash",
-            "opencode-go/glm-5.3-flash",
-            "opencode-go/mimo-v2.6-flash",
+            "step-5-preview-free",
+            "deepseek-v4.1-flash",
+            "glm-5.3-flash",
+            "mimo-v2.6-flash-free",
         }
         self.assertTrue(expected.issubset(HOSTED_MODEL_IDS))
 
-    def test_default_is_deepseek_v41_flash(self):
-        self.assertEqual(DEFAULT_MODEL_ID, "opencode-go/deepseek-v4.1-flash")
+    def test_default_is_step5_preview_free(self):
+        self.assertEqual(DEFAULT_MODEL_ID, "step-5-preview-free")
+
+    def test_legacy_prefixed_id_is_stripped(self):
+        p = OpenCodeGoProvider()
+        self.assertEqual(p.resolve_model("opencode-go/step-5-preview-free"), "step-5-preview-free")
+
+    def test_free_models_are_marked_provider_blocked(self):
+        for m in HOSTED_MODELS:
+            if m["cost_per_1m_input"] == 0.0:
+                self.assertTrue(
+                    m.get("provider_blocked"),
+                    f"{m['id']} is free but not marked provider_blocked",
+                )
+
+    def test_documented_endpoint_default(self):
+        p = OpenCodeGoProvider()
+        self.assertEqual(p.endpoint, "https://opencode.ai/zen/v1/chat/completions")
+
+    def test_free_tier_error_is_classified_as_blocked(self):
+        r = OpenCodeGoProvider._classify_provider_error(
+            403, '{"error":{"type":"FreeTierError","message":"OpenCode\'s free tier can only be used from within OpenCode"}}'
+        )
+        self.assertIsNotNone(r)
+        self.assertFalse(r.success)
+        self.assertEqual(r.status, ProviderStatus.BLOCKED)
+        self.assertIn("free tier", r.error.lower())
+
+    def test_insufficient_funds_is_classified_as_credits_exhausted(self):
+        r = OpenCodeGoProvider._classify_provider_error(
+            402, '{"error":{"type":"server_error","message":"Upstream request failed: Insufficient account funds"}}'
+        )
+        self.assertIsNotNone(r)
+        self.assertFalse(r.success)
+        self.assertEqual(r.status, ProviderStatus.CREDITS_EXHAUSTED)
+
+    def test_unauthorized_is_classified_as_auth_error(self):
+        r = OpenCodeGoProvider._classify_provider_error(401, '{"error":"Unauthorized"}')
+        self.assertIsNotNone(r)
+        self.assertEqual(r.status, ProviderStatus.AUTH_ERROR)
+
+    def test_rate_limit_is_classified(self):
+        r = OpenCodeGoProvider._classify_provider_error(429, '{"error":"rate limit exceeded"}')
+        self.assertIsNotNone(r)
+        self.assertEqual(r.status, ProviderStatus.RATE_LIMITED)
+
+    def test_unknown_error_returns_none(self):
+        r = OpenCodeGoProvider._classify_provider_error(500, '{"error":"boom"}')
+        self.assertIsNone(r)
+
+    def test_escalation_models_present(self):
+        from adapters.reasoning_provider import HOSTED_ESCALATION_MODELS
+        ids = {m["id"] for m in HOSTED_ESCALATION_MODELS}
+        self.assertIn("kimi-k2.7-code", ids)
 
     def test_pricing_metadata_includes_source_and_timestamp(self):
         for m in HOSTED_MODELS:
             self.assertIn("pricing_source", m)
             self.assertIn("pricing_observed_at", m)
-            self.assertGreater(m["cost_per_1m_input"], 0)
-            self.assertGreater(m["cost_per_1m_output"], 0)
+            self.assertGreaterEqual(m["cost_per_1m_input"], 0)
+            self.assertGreaterEqual(m["cost_per_1m_output"], 0)
+
+    def test_step5_is_free_but_others_are_not(self):
+        free = [m for m in HOSTED_MODELS if m["cost_per_1m_input"] == 0.0]
+        paid = [m for m in HOSTED_MODELS if m["cost_per_1m_input"] > 0]
+        self.assertEqual([m["id"] for m in free], ["step-5-preview-free", "mimo-v2.6-flash-free"])
+        self.assertEqual(len(paid), 2)
 
     def test_resolve_model_defaults(self):
         p = OpenCodeGoProvider()
@@ -50,13 +109,19 @@ class CatalogTests(unittest.TestCase):
     def test_resolve_model_accepts_full_id(self):
         p = OpenCodeGoProvider()
         self.assertEqual(
-            p.resolve_model("opencode-go/glm-5.3-flash"),
-            "opencode-go/glm-5.3-flash",
+            p.resolve_model("glm-5.3-flash"),
+            "glm-5.3-flash",
         )
 
-    def test_resolve_model_accepts_short_id(self):
+    def test_resolve_model_rejects_dropped_paid_mimo_id(self):
+        # Zen only publishes mimo-v2.6-flash-free; the paid id is not in the catalog.
         p = OpenCodeGoProvider()
-        self.assertEqual(p.resolve_model("mimo-v2.6-flash"), "opencode-go/mimo-v2.6-flash")
+        with self.assertRaises(ValueError):
+            p.resolve_model("mimo-v2.6-flash")
+
+    def test_resolve_model_accepts_free_mimo_id(self):
+        p = OpenCodeGoProvider()
+        self.assertEqual(p.resolve_model("mimo-v2.6-flash-free"), "mimo-v2.6-flash-free")
 
     def test_resolve_model_rejects_unknown(self):
         p = OpenCodeGoProvider()
@@ -130,7 +195,7 @@ class CompleteTests(unittest.TestCase):
                 provider="opencode_go",
                 data={
                     "choices": [{"message": {"content": "hello"}}],
-                    "model": "opencode-go/deepseek-v4.1-flash",
+                    "model": "deepseek-v4.1-flash",
                     "usage": {"prompt_tokens": 10, "completion_tokens": 5},
                 },
                 latency_ms=123.0,
@@ -141,12 +206,12 @@ class CompleteTests(unittest.TestCase):
             resp = p.complete(req)
             self.assertTrue(resp.success)
             self.assertEqual(resp.data["content"], "hello")
-            self.assertEqual(resp.data["model"], "opencode-go/deepseek-v4.1-flash")
+            self.assertEqual(resp.data["model"], "deepseek-v4.1-flash")
             self.assertEqual(resp.data["usage"]["prompt_tokens"], 10)
             self.assertEqual(resp.data["usage"]["completion_tokens"], 5)
             self.assertAlmostEqual(
                 resp.data["estimated_cost_usd"],
-                10 * 0.15 / 1_000_000 + 5 * 0.60 / 1_000_000,
+                10 * 0.30 / 1_000_000 + 5 * 1.20 / 1_000_000,
                 delta=1e-6,
             )
             self.assertEqual(resp.latency_ms, 123.0)
@@ -214,10 +279,10 @@ class CompleteTests(unittest.TestCase):
 class UsageTests(unittest.TestCase):
     def test_estimated_cost_usd(self):
         u = ReasoningUsage(prompt_tokens=1_000_000, completion_tokens=1_000_000)
-        # DeepSeek V4.1 Flash: $0.15 in, $0.60 out
+        # DeepSeek V4.1 Flash per Zen docs: $0.30 in, $1.20 out
         self.assertAlmostEqual(
-            u.estimated_cost_usd("opencode-go/deepseek-v4.1-flash"),
-            0.75,
+            u.estimated_cost_usd("deepseek-v4.1-flash"),
+            1.50,
             places=4,
         )
 

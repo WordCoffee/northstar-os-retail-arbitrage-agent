@@ -30,7 +30,11 @@ from adapters.base import ProviderResponse, ProviderStatus
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TASK_MODEL = "opencode-go/deepseek-v4.1-flash"
+# Temporary routing policy: Step 5 Preview Free is the default for all
+# non-creative operational work while it remains free on OpenCode Go.
+# DeepSeek V4.1 Flash is the intentional lower-cost fallback. Escalation to
+# Kimi K2.7 Code is an explicit operator decision — never automatic.
+DEFAULT_TASK_MODEL = "step-5-preview-free"
 
 
 def _provider() -> ReasoningProvider:

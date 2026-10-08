@@ -24,6 +24,7 @@ from ui_serving import mount_ui
 
 # Hosted reasoning provider for non-creative tasks (Phase H2 / Go integration)
 from adapters.reasoning_provider import (
+    DEFAULT_MODEL_ID,
     HOSTED_MODELS,
     OpenCodeGoProvider,
     ReasoningRequest,
@@ -1068,7 +1069,8 @@ def reasoning_models():
     provider = OpenCodeGoProvider()
     return {
         "models": HOSTED_MODELS,
-        "default_model": "opencode-go/deepseek-v4.1-flash",
+        "escalation_models": provider.escalation_models(),
+        "default_model": DEFAULT_MODEL_ID,
         "available": provider.available(),
         "armed": provider.armed(),
     }

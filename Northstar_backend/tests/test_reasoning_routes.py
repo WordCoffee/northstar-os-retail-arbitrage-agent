@@ -36,11 +36,12 @@ class ReasoningRouteTests(unittest.TestCase):
         data = r.json()
         self.assertIn("models", data)
         self.assertIn("default_model", data)
-        self.assertEqual(data["default_model"], "opencode-go/deepseek-v4.1-flash")
+        self.assertEqual(data["default_model"], "step-5-preview-free")
         ids = {m["id"] for m in data["models"]}
-        self.assertIn("opencode-go/deepseek-v4.1-flash", ids)
-        self.assertIn("opencode-go/glm-5.3-flash", ids)
-        self.assertIn("opencode-go/mimo-v2.6-flash", ids)
+        self.assertIn("step-5-preview-free", ids)
+        self.assertIn("deepseek-v4.1-flash", ids)
+        self.assertIn("glm-5.3-flash", ids)
+        self.assertIn("mimo-v2.6-flash-free", ids)
 
     def test_listing_proposal_endpoint(self):
         self._patch_provider(json.dumps({
