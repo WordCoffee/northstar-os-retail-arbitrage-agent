@@ -35,6 +35,15 @@ Missing an API key / config / decision? Stub + log to blocker list + keep buildi
 ## Memory bank (Knowledge Plane)
 Per-account knowledge store — facts, preferences, experiences, AI-derived learnings — ingested from text/images/voice, retrieved by intent at generation time; revisions + unlearn supported. All local, all free, no live calls (§8).
 
+## Browser control (Chrome Connect)
+- **Chrome Connect is the controller. Playwright is only its tool.** No script, agent or manual call may drive Playwright directly.
+- The model never gets a browser handle. It calls `chromeconnect_*` tools only: `chromeconnect_run` (state a task), `chromeconnect_preflight`, `chromeconnect_status`, `chromeconnect_journal`, `chromeconnect_lessons`, `chromeconnect_guardrails`.
+- Chrome Connect plans each step, evaluates the live page, decides what to extract, stops at CAPTCHA/login/rate-limit/consent, and journals every decision, tool call, URL, timestamp and result.
+- **Guardrails live in `lib/chromecontrol/policy.js`** (domain allowlist, Amazon blocklist, risk classes). They are enforced only when work goes through Chrome Connect — which is why nothing may bypass it. Every action is re-checked against the current page URL, so a redirect cannot smuggle an action onto a refused host.
+- **Lessons are PROPOSED-only.** They may add hints, selectors or notes. They can never relax a policy, gate, allowlist, spend rule or approval step; attempts are rejected and journaled. Approve/rollback/purge via `chromeconnect_lessons`.
+- Headed, read-only by default, throttled. **Never enter credentials, solve a CAPTCHA, or bypass a login** — stop and ask the operator.
+- `tools/chromeconnect_guard.py` enforces the same rule in Python: `import playwright` raises outside a controller instruction, and port 9222 is locked to one controller.
+
 ## UI Build (northstar-os-ui)
 - **Dev server:** `cd northstar-os-ui && npm run dev` (port 8101)
 - **Production build:** `cd northstar-os-ui && npm run build` → outputs to `dist/`
