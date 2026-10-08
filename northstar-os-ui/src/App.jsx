@@ -22,6 +22,7 @@ import ProfitabilityDashboard from './pages/internal/ProfitabilityDashboard.jsx'
 import CommerceOps from './pages/internal/CommerceOps.jsx'
 import Monitoring from './pages/internal/Monitoring.jsx'
 import AutothinK from './pages/internal/AutothinK.jsx'
+import SpreadsheetLab from './pages/internal/SpreadsheetLab.jsx'
 import MemoryBank from './pages/internal/MemoryBank.jsx'
 import SharedDataLayer from './pages/internal/SharedDataLayer.jsx'
 import ProviderAdapters from './pages/internal/ProviderAdapters.jsx'
@@ -87,6 +88,7 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/socialpulse" element={<SocialPulse />} />
       <Route path="/creative-studio" element={<CreativeStudio />} />
       <Route path="/profitability" element={<ProfitabilityDashboard />} />
+      <Route path="/spreadsheet-lab" element={<SpreadsheetLab />} />
       <Route path="/commerce-ops" element={<CommerceOps />} />
       <Route path="/commerce-ops/:id" element={<CommerceOps />} />
       <Route path="/monitoring" element={<Monitoring />} />

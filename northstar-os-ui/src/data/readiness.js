@@ -28,6 +28,7 @@ export const ROOM_READINESS = {
   'keyword-tracker': 'ready', // fully derived from local keyword store + foundation keyword service
   'competitor-monitor': 'partial', // real local product/source observations + sample competitor rows
   'profitability': 'partial', // backend economics engine + sample portfolio context
+  'spreadsheet-lab': 'provider', // CSV ingest/export works locally; hosted analysis gated on OPENCODE_GO
   'commerce-ops': 'ready', // fully derived from local identity queue + pipeline runs + foundation approvals
   'monitoring': 'ready', // fully derived from live local reads (error tracker, readiness, refresh registry)
   'autothink': 'provider',
@@ -49,6 +50,7 @@ export const ROUTE_ROOM = {
   '/keyword-tracker': 'keyword-tracker',
   '/competitor-monitor': 'competitor-monitor',
   '/profitability': 'profitability',
+  '/spreadsheet-lab': 'spreadsheet-lab',
   '/commerce-ops': 'commerce-ops',
   '/monitoring': 'monitoring',
   '/autothink': 'autothink',

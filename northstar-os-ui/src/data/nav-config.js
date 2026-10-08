@@ -21,6 +21,7 @@ const RAW_GROUPS = [
   ]},
   { id: 'operate', label: 'Operate', icon: 'layers', sections: [
     { id: 'profitability', label: 'Profitability Dashboard', route: '/profitability', roles: ['operator', 'platform_admin'] },
+    { id: 'spreadsheet-lab', label: 'Spreadsheet Lab', route: '/spreadsheet-lab', roles: ['operator', 'platform_admin'], status: 'Concept' },
     { id: 'commerce-ops', label: 'Commerce Ops', route: '/commerce-ops', roles: ['operator', 'platform_admin'], status: 'Concept' },
     { id: 'monitoring', label: 'Monitoring', route: '/monitoring', roles: ['operator', 'platform_admin'] },
   ]},

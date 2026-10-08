@@ -1,8 +1,10 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import ReasoningModelSelector, { useReasoningModel } from '../../components/ReasoningModelSelector.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import signals, { settle } from '../../services/signals.js'
+import foundationApi from '../../foundation/api.js'
 
 const TABS = [
   { id: 'runs', label: 'Runs' },
@@ -96,11 +98,12 @@ function AutothinKHistory() {
   )
 }
 
-// ═══ Real composer: local Ollama or cloud (OpenRouter) — provider-gated ═══
+// ═══ Real composer: local Ollama, cloud OpenRouter, or hosted OpenCode Go ═══
 function AutothinKComposer({ onResult }) {
   const [avail, setAvail] = useState(null)
   const [form, setForm] = useState({ query: '', provider: 'local', tier: 'T2' })
   const [state, setState] = useState({ phase: 'idle' })
+  const { selectedModel, catalog, persist } = useReasoningModel()
 
   useEffect(() => {
     let alive = true
@@ -110,19 +113,38 @@ function AutothinKComposer({ onResult }) {
 
   const localOk = !!(avail && avail.local_available)
   const cloudOk = !!(avail && avail.cloud_available)
-  const providerOk = form.provider === 'local' ? localOk : cloudOk
+  const hostedArmed = !!(catalog && catalog.armed)
+  const providerOk = form.provider === 'local' ? localOk : form.provider === 'cloud' ? cloudOk : hostedArmed
   const canRun = providerOk && form.query.trim().length > 0 && state.phase !== 'submitting'
 
   const run = async () => {
     if (!canRun) return
     setState({ phase: 'submitting' })
-    const r = await settle(signals.autothinkRun({ query: form.query.trim(), provider: form.provider, tier: form.tier }))
+    let r
+    if (form.provider === 'hosted') {
+      r = await settle(foundationApi.reasoningRun({
+        query: form.query.trim(),
+        model: selectedModel?.id,
+        system_prompt: 'You are Northstar AutothinK, a private planning assistant for Amazon FBA private-label and retail-arbitrage operations. Be precise, cite supplied facts, and say UNKNOWN when evidence is missing.',
+      }))
+      if (r.ok) {
+        r.value = { ...r.value, provider: 'hosted', reason: undefined }
+      }
+    } else {
+      r = await settle(signals.autothinkRun({ query: form.query.trim(), provider: form.provider, tier: form.tier }))
+    }
     if (r.ok) {
       setState({ phase: 'done', value: r.value })
       if (onResult) onResult(r.value)
     } else {
       setState({ phase: 'error', message: (r.error && r.error.message) || 'Run failed.' })
     }
+  }
+
+  const providerReason = () => {
+    if (form.provider === 'local') return 'Local Ollama is not reachable.'
+    if (form.provider === 'cloud') return 'No cloud key present (OpenRouter).' + (avail && avail.cloud_live_armed ? '' : ' Cloud not armed.')
+    return 'OpenCode Go hosted reasoning is not armed (OPENCODE_GO_ENABLED=1 + key required).'
   }
 
   return (
@@ -142,20 +164,28 @@ function AutothinKComposer({ onResult }) {
             <select className="select field" value={form.provider} onChange={e => setForm(f => ({ ...f, provider: e.target.value }))}>
               <option value="local">Local (Ollama) {localOk ? '— ready' : '— not reachable'}</option>
               <option value="cloud">Cloud (OpenRouter) {cloudOk ? '— key present' : '— no key'}</option>
+              <option value="hosted">Hosted (OpenCode Go) {hostedArmed ? '— armed' : '— not armed'}</option>
             </select>
           </div>
-          <div className="field-row" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <label style={{ fontSize: 12, color: 'var(--ink-mid)' }}>Tier</label>
-            <select className="select field" value={form.tier} onChange={e => setForm(f => ({ ...f, tier: e.target.value }))}>
-              <option value="T1">T1</option>
-              <option value="T2">T2</option>
-              <option value="T3">T3</option>
-            </select>
-          </div>
+          {form.provider === 'hosted' ? (
+            <div className="field-row" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <label style={{ fontSize: 12, color: 'var(--ink-mid)' }}>Model</label>
+              <ReasoningModelSelector value={selectedModel?.id} onChange={persist} showArmed={false} />
+            </div>
+          ) : (
+            <div className="field-row" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <label style={{ fontSize: 12, color: 'var(--ink-mid)' }}>Tier</label>
+              <select className="select field" value={form.tier} onChange={e => setForm(f => ({ ...f, tier: e.target.value }))}>
+                <option value="T1">T1</option>
+                <option value="T2">T2</option>
+                <option value="T3">T3</option>
+              </select>
+            </div>
+          )}
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <button className="btn btn-sm" onClick={run} disabled={!canRun}>{state.phase === 'submitting' ? 'Running…' : 'Run Research Task'}</button>
-          {!providerOk && <span className="text-low" style={{ fontSize: 11 }}>{form.provider === 'local' ? 'Local Ollama is not reachable.' : 'No cloud key present (OpenRouter).'}</span>}
+          {!providerOk && <span className="text-low" style={{ fontSize: 11 }}>{providerReason()}</span>}
         </div>
         {state.phase === 'error' && <span className="pill pill-warn">{state.message}</span>}
         {state.phase === 'done' && (
@@ -164,7 +194,7 @@ function AutothinKComposer({ onResult }) {
             <div className="alert-text" style={{ whiteSpace: 'pre-wrap' }}>{state.value.content || state.value.reason || 'No content returned.'}</div>
           </div>
         )}
-        <div className="text-low" style={{ fontSize: 11 }}>A research run never fabricates claims — every output cites its source or says UNKNOWN. Cloud (OpenRouter) calls are owner-armed and spend-gated.</div>
+        <div className="text-low" style={{ fontSize: 11 }}>A research run never fabricates claims — every output cites its source or says UNKNOWN. Cloud (OpenRouter) and hosted (OpenCode Go) calls are owner-armed and spend-gated.</div>
       </div>
     </div>
   )
@@ -186,7 +216,7 @@ export default function AutothinK() {
       </>}
     >
       <DataNotice tone="internal" title="Live engine + real runs">
-        “Engine status”, “Session history”, and the composer are live reads/calls. Running a task is provider-gated (local Ollama or an armed OpenRouter cloud key). No fabricated outputs.
+        “Engine status”, “Session history”, and the composer are live reads/calls. Running a task is provider-gated (local Ollama, armed OpenRouter cloud key, or armed OpenCode Go hosted reasoning). No fabricated outputs.
       </DataNotice>
 
       <AutothinKStatus />

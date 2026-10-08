@@ -1,5 +1,9 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import ReasoningModelSelector, { useReasoningModel } from '../../components/ReasoningModelSelector.jsx'
+import foundationApi from '../../foundation/api.js'
+import { useToast } from '../../components/ToastContext.jsx'
+import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 const TABS = [
@@ -20,6 +24,108 @@ const CAMPAIGNS = [
 ]
 
 const STATUS_PILL = { Healthy: 'pill-forest', Review: 'pill-warn', Critical: 'pill-ochre' }
+
+// ═══ Hosted ad-copy proposal (OpenCode Go) — proposal only, never published ═══
+function AdCopyProposalPanel() {
+  const { selectedModel, catalog, persist } = useReasoningModel()
+  const { toast } = useToast()
+  const [form, setForm] = useState({
+    product_name: 'Premium Water Filter',
+    facts: '3-stage filtration; 10-cup capacity; BPA-free; easy-change filters; fits standard cabinets.',
+    brand_tone: 'professional',
+    format_hint: 'Amazon Sponsored Products',
+  })
+  const [state, setState] = useState({ phase: 'idle' })
+
+  const submit = async () => {
+    if (!(catalog && catalog.armed)) {
+      toast('Hosted reasoning is not armed. Set OPENCODE_GO_ENABLED=1 and supply a key.', 'warn')
+      return
+    }
+    setState({ phase: 'submitting' })
+    try {
+      const r = await foundationApi.reasoningAdCopyProposal({
+        product_facts: {
+          name: form.product_name,
+          facts: form.facts.split('\n').map(s => s.trim()).filter(Boolean),
+        },
+        brand_tone: form.brand_tone,
+        format_hint: form.format_hint,
+        model: selectedModel?.id,
+      })
+      setState({ phase: 'done', value: r.proposal })
+    } catch (e) {
+      setState({ phase: 'error', message: e.message || 'Proposal failed.' })
+    }
+  }
+
+  const prop = state.phase === 'done' ? state.value : null
+
+  return (
+    <div className="card" data-testid="ap-proposal" style={{ marginTop: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Hosted ad-copy proposal</h3>
+        <span className="pill pill-ochre">proposal only · not published</span>
+      </div>
+      <p className="text-low" style={{ fontSize: 12, marginBottom: 12 }}>
+        Generates proposed ad copy from supplied facts and brand tone. The output is for owner review — it is never pushed to an advertising platform.
+      </p>
+      <ReasoningModelSelector value={selectedModel?.id} onChange={persist} />
+      <label className="stack" style={{ gap: 4, marginTop: 12 }}>
+        <span className="text-low" style={{ fontSize: 11 }}>Product name</span>
+        <input className="field" value={form.product_name} onChange={e => setForm(f => ({ ...f, product_name: e.target.value }))} />
+      </label>
+      <label className="stack" style={{ gap: 4, marginTop: 10 }}>
+        <span className="text-low" style={{ fontSize: 11 }}>Approved facts (one per line)</span>
+        <textarea className="field" rows={4} value={form.facts} onChange={e => setForm(f => ({ ...f, facts: e.target.value }))} />
+      </label>
+      <div className="grid-2" style={{ gap: 12, marginTop: 10 }}>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Brand tone</span>
+          <input className="field" value={form.brand_tone} onChange={e => setForm(f => ({ ...f, brand_tone: e.target.value }))} />
+        </label>
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Format hint</span>
+          <input className="field" value={form.format_hint} onChange={e => setForm(f => ({ ...f, format_hint: e.target.value }))} />
+        </label>
+      </div>
+      <div style={{ marginTop: 12 }}>
+        <button className="btn btn-sm" onClick={submit} disabled={state.phase === 'submitting' || !(catalog && catalog.armed)}>
+          {state.phase === 'submitting' ? 'Generating…' : 'Generate ad copy'}
+        </button>
+        {!(catalog && catalog.armed) && <span className="text-low" style={{ fontSize: 11, marginLeft: 8 }}>Hosted reasoning not armed.</span>}
+      </div>
+      {state.phase === 'error' && <div className="pill pill-warn" style={{ marginTop: 10 }}>{state.message}</div>}
+      {prop && (
+        <div style={{ marginTop: 16 }}>
+          <div className="inline-flex" style={{ gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
+            <span className={`pill ${prop.ok ? 'pill-ok' : 'pill-warn'}`}>{prop.ok ? 'proposal ok' : 'proposal failed'}</span>
+            {prop.provenance && <span className="pill pill-muted">{prop.provenance.model}</span>}
+          </div>
+          {prop.warnings && prop.warnings.length > 0 && (
+            <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+              {prop.warnings.map((w, i) => <span key={i} className="pill pill-warn" style={{ fontSize: 10 }}>{w}</span>)}
+            </div>
+          )}
+          {prop.unsupported_claims && prop.unsupported_claims.length > 0 && (
+            <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+              <span className="text-low" style={{ fontSize: 11 }}>Unsupported:</span>
+              {prop.unsupported_claims.map((c, i) => <span key={i} className="pill pill-unknown" style={{ fontSize: 10 }}>{c}</span>)}
+            </div>
+          )}
+          <div className="card" style={{ background: 'var(--pine-bleached)' }}>
+            <div className="card-head"><h4 className="card-title" style={{ fontSize: 13 }}>Proposed copy</h4></div>
+            <div style={{ fontSize: 12 }}>
+              <div style={{ fontWeight: 600 }}>{(prop.headlines || []).join(' / ')}</div>
+              <div style={{ marginTop: 6, whiteSpace: 'pre-wrap' }}>{prop.body}</div>
+              <div style={{ marginTop: 6, fontWeight: 600 }}>{prop.cta}</div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 function healthRollup() {
   const c = { Healthy: 0, Review: 0, Critical: 0 }
@@ -182,6 +288,8 @@ export default function AdPilot() {
               { campaign: 'Sponsored Brands', current: '$300', proposed: '$300', delta: '—', basis: 'Observed' },
             ]} />
           </div>
+
+          <AdCopyProposalPanel />
         </div>
       )}
 

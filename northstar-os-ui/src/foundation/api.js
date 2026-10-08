@@ -171,6 +171,13 @@ export const foundationApi = {
   keywordConflicts: () => req('/keywords/conflicts'),
   keywordProvenance: (id) => req(`/keywords/provenance/${id}`),
 
+  // hosted reasoning (OpenCode Go) — non-creative proposals, analysis, generic run
+  reasoningModels: () => req('/reasoning/models'),
+  reasoningListingProposal: (body) => req('/reasoning/listing-proposal', { method: 'POST', body: JSON.stringify(body) }),
+  reasoningAdCopyProposal: (body) => req('/reasoning/ad-copy-proposal', { method: 'POST', body: JSON.stringify(body) }),
+  reasoningSpreadsheetAnalysis: (body) => req('/reasoning/spreadsheet-analysis', { method: 'POST', body: JSON.stringify(body) }),
+  reasoningRun: (body) => req('/reasoning/run', { method: 'POST', body: JSON.stringify(body) }),
+
   // raw authenticated request (internal pages)
   rawReq: (path, opts = {}) => req(path, opts),
 
