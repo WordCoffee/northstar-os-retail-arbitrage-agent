@@ -268,6 +268,80 @@ def recent(limit: int = 12) -> Dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# Shared creative services: registry, lanes, jobs (additive)
+# ---------------------------------------------------------------------------
+
+@router.get("/components")
+def components_endpoint() -> Dict[str, Any]:
+    """Approved-component + license manifest (with on-disk presence)."""
+    from . import registry
+    return registry.license_manifest()
+
+
+@router.get("/components/status")
+def components_status() -> Dict[str, Any]:
+    from . import registry
+    return registry.status()
+
+
+@router.get("/lanes")
+def lanes_endpoint() -> Dict[str, Any]:
+    """Capability-based routing catalog (per mode, with explicit fallbacks)."""
+    from . import router, stages
+    return {"catalog": router.lane_catalog(),
+            "capabilities": {cap: {m: router.route(cap, m)
+                                   for m in router.MODES}
+                             for cap in router.CAPABILITIES},
+            "runtime": stages.capabilities()}
+
+
+@router.get("/workers")
+def workers_endpoint() -> Dict[str, Any]:
+    """Worker/device assignment + health (multi-GPU-ready config)."""
+    from . import workers
+    return workers.health()
+
+
+@router.post("/pipeline")
+def pipeline_submit(body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+    """Submit a shared creative-pipeline job (task + payload)."""
+    from . import pipeline
+    task = body.get("task")
+    if not task:
+        raise HTTPException(status_code=400, detail="task is required")
+    payload = body.get("payload") or {k: v for k, v in body.items() if k != "task"}
+    try:
+        job = pipeline.submit(task, payload)
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return {"ok": True, "job_id": job["id"], "status": job["status"]}
+
+
+@router.get("/jobs")
+def jobs_list(limit: int = 40) -> Dict[str, Any]:
+    from . import jobs as jobmod
+    return {"jobs": jobmod.store.list(limit), "state": jobmod.status()}
+
+
+@router.get("/jobs/{job_id}")
+def jobs_get(job_id: str) -> Dict[str, Any]:
+    from . import jobs as jobmod
+    job = jobmod.store.get(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="job not found")
+    return job
+
+
+@router.post("/jobs/{job_id}/cancel")
+def jobs_cancel(job_id: str) -> Dict[str, Any]:
+    from . import jobs as jobmod
+    ok = jobmod.store.cancel(job_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="job not found")
+    return {"ok": True, "job_id": job_id}
+
+
+# ---------------------------------------------------------------------------
 # App integration
 # ---------------------------------------------------------------------------
 

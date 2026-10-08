@@ -1,0 +1,20 @@
+{
+  "label": "qwen_standard_warm",
+  "task": "generate",
+  "mode": "standard",
+  "requested_lane": "qwen-t2i",
+  "lane": "qwen-t2i",
+  "status": "done",
+  "total_s": 53.08,
+  "peak_vram_mb": 14087.0,
+  "cold": false,
+  "pre_gpu": null,
+  "dimensions": [
+    1024,
+    1024
+  ],
+  "output": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\gen_20261007_221808_88016.png",
+  "provenance": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\gen_20261007_221808_88016.png.json",
+  "error": null,
+  "timestamp": "2026-10-07T22:19:00"
+}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { DataNotice } from './Shared.jsx'
+import CreativeServicesPanel from './CreativeServicesPanel.jsx'
 
 // Exact-Text Mockup Studio — the local, operator-driven lane of Creative Studio.
 //
@@ -330,6 +331,8 @@ export default function MockupStudio() {
               </div>
             )}
           </div>
+
+          <CreativeServicesPanel />
         </div>
       </div>
     </div>

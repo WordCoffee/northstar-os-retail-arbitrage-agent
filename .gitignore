@@ -25,3 +25,5 @@ data/normalized/
 
 # Mogra mockup workflow outputs (generated locally; always regenerable)
 generated_images/mogra_mockups/
+generated_images/creative/
+generated_images/creative_jobs/

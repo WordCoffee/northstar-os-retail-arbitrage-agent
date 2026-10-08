@@ -1,0 +1,47 @@
+{
+  "schema": "northstar-creative-deployment-v1",
+  "note": "Machine-specific settings live here; workflows/model definitions stay in creative-components.json. This is the multi-GPU server template — the local laptop uses a single worker on device 0.",
+  "server": {
+    "name": "local-laptop",
+    "comfyui_url": "http://127.0.0.1:8188",
+    "comfyui_dir": "C:/Users/T2Hol/ComfyUI"
+  },
+  "policy": {
+    "heavy_concurrency": 1,
+    "unload_between_stages": true,
+    "queue_max": 32,
+    "job_timeout_seconds": 1800,
+    "retry_max": 0,
+    "retain_customer_assets_days": 30,
+    "component_allowlist_enforced": true,
+    "quarantined_components_blocked": true,
+    "no_silent_fallback": true
+  },
+  "workers": [
+    {
+      "id": "gpu0",
+      "device": "cuda:0",
+      "comfyui_url": "http://127.0.0.1:8188",
+      "capabilities": ["generate", "edit", "condition", "control", "mask", "upscale", "compose_text"],
+      "max_concurrency": 1,
+      "health_path": "/system_stats",
+      "enabled": true
+    }
+  ],
+  "multi_gpu_notes": [
+    "Assign one worker per GPU. Do not assume automatic VRAM pooling or single-job multi-GPU acceleration.",
+    "Model sharding is a separate backend capability and is not enabled here.",
+    "Route by capability + least-loaded healthy worker with a bounded per-worker queue."
+  ],
+  "customer_usage_hooks": {
+    "max_variants_per_request": 4,
+    "max_upscale_factor": 4,
+    "allowed_tasks": ["generate", "edit", "condition", "control", "mask", "upscale", "compose_text", "product_ad", "packaging_concept"],
+    "blocked_tasks": []
+  },
+  "model_cache": {
+    "policy": "comfyui-managed",
+    "keep_loaded": [],
+    "unload_after_job": true
+  }
+}

@@ -1,0 +1,511 @@
+{
+  "schema": "northstar-creative-components-v1",
+  "updated": "2026-10-07",
+  "policy": {
+    "commercial_use_required": true,
+    "note": "Only components with commercial_use == 'allowed' may be routed for paid/production output. Quarantined components may be used only for local evaluation and must never be the default.",
+    "fallbacks_must_be_explicit": true,
+    "unload_between_stages": true,
+    "heavy_concurrency": 1
+  },
+  "components": [
+    {
+      "id": "qwen-image-2512",
+      "role": "generate",
+      "family": "qwen-image",
+      "label": "Qwen-Image-2512 (GGUF Q4_K_M)",
+      "source": "https://huggingface.co/QuantStack/Qwen-Image-2512-GGUF",
+      "revision": "pinned-at-install",
+      "filename": "qwen-image-2512-Q4_K_M.gguf",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/unet/qwen-image-2512-Q4_K_M.gguf",
+      "license": "Apache-2.0",
+      "license_source": "https://huggingface.co/Qwen/Qwen-Image",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "qwen-clip",
+        "qwen-vae",
+        "ComfyUI",
+        "ComfyUI-GGUF"
+      ],
+      "notices": [
+        "Qwen-Image is licensed under Apache 2.0 (Qwen Team)."
+      ],
+      "restrictions": [],
+      "sha256": "b2a5f6249eb58ee10c9e2ce8cb1114b89897db23de2fdf7dc49140800aa928fc",
+      "status": "approved",
+      "present": true
+    },
+    {
+      "id": "qwen-image-edit-2511",
+      "role": "edit",
+      "family": "qwen-image",
+      "label": "Qwen-Image-Edit-2511 (GGUF Q4_K_M)",
+      "source": "https://huggingface.co/unsloth/Qwen-Image-Edit-2511-GGUF",
+      "revision": "pinned-at-install",
+      "filename": "qwen-image-edit-2511-Q4_K_M.gguf",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/unet/qwen-image-edit-2511-Q4_K_M.gguf",
+      "license": "Apache-2.0",
+      "license_source": "https://huggingface.co/Qwen/Qwen-Image-Edit-2511",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "qwen-clip",
+        "qwen-vae",
+        "ComfyUI",
+        "ComfyUI-GGUF"
+      ],
+      "notices": [
+        "Qwen-Image-Edit is licensed under Apache 2.0 (Qwen Team)."
+      ],
+      "restrictions": [],
+      "sha256": "8677bac90627adbbc11efab87b1870e701c4eb3689ee865a3de8ab81b705a723",
+      "status": "approved",
+      "present": true
+    },
+    {
+      "id": "qwen-clip",
+      "role": "text-encoder",
+      "family": "qwen-image",
+      "label": "Qwen2.5-VL-7B NVFP4 text encoder",
+      "source": "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI",
+      "revision": "pinned-at-install",
+      "filename": "qwen_2.5_vl_7b_nvfp4.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/text_encoders/qwen_2.5_vl_7b_nvfp4.safetensors",
+      "license": "Apache-2.0",
+      "license_source": "https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "ComfyUI"
+      ],
+      "notices": [
+        "Qwen2.5-VL is licensed under Apache 2.0."
+      ],
+      "restrictions": [],
+      "sha256": "c7bb24d331f5df991bab2ce76a15195b12652e86a69a79823183c6a047407463",
+      "status": "approved",
+      "present": true
+    },
+    {
+      "id": "qwen-vae",
+      "role": "vae",
+      "family": "qwen-image",
+      "label": "Qwen-Image VAE",
+      "source": "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI",
+      "revision": "pinned-at-install",
+      "filename": "qwen_image_vae.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/vae/qwen_image_vae.safetensors",
+      "license": "Apache-2.0",
+      "license_source": "https://huggingface.co/Qwen/Qwen-Image",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "ComfyUI"
+      ],
+      "notices": [
+        "Qwen-Image VAE is licensed under Apache 2.0."
+      ],
+      "restrictions": [],
+      "sha256": "a70580f0213e67967ee9c95f05bb400e8fb08307e017a924bf3441223e023d1f",
+      "status": "approved",
+      "present": true
+    },
+    {
+      "id": "flux1-dev-fp8",
+      "role": "generate",
+      "family": "flux",
+      "label": "FLUX.1 [dev] fp8 (LEGACY FALLBACK)",
+      "source": "https://huggingface.co/black-forest-labs/FLUX.1-dev",
+      "revision": "present-on-disk",
+      "filename": "flux1-dev-fp8.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/unet/flux1-dev-fp8.safetensors",
+      "license": "FLUX.1 [dev] Non-Commercial License v1.1.1",
+      "license_source": "https://huggingface.co/black-forest-labs/FLUX.1-dev/blob/main/LICENSE.md",
+      "commercial_use": "prohibited",
+      "hosted_use": "prohibited",
+      "required_dependencies": [
+        "clip_l",
+        "t5xxl",
+        "flux-vae",
+        "ComfyUI"
+      ],
+      "notices": [
+        "FLUX.1 [dev] Model is licensed by Black Forest Labs Inc. under the FLUX.1 [dev] Non-Commercial License.",
+        "Commercial use requires a paid BFL license (https://bfl.ai/pricing/licensing)."
+      ],
+      "restrictions": [
+        "No revenue-generating activity, no end-user-facing use, no distillation for commercial use."
+      ],
+      "sha256": "1be961341be8f5307ef26c787199f80bf4e0de3c1c0b4617095aa6ee5550dfce",
+      "status": "quarantined",
+      "present": true
+    },
+    {
+      "id": "flux-clip-l",
+      "role": "text-encoder",
+      "family": "flux",
+      "label": "CLIP-L (FLUX companion)",
+      "source": "https://huggingface.co/comfyanonymous/flux_text_encoders",
+      "revision": "present-on-disk",
+      "filename": "clip_l.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/clip/clip_l.safetensors",
+      "license": "Apache-2.0",
+      "license_source": "https://huggingface.co/openai/clip-vit-large-patch14",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [],
+      "notices": [
+        "OpenAI CLIP is licensed under MIT/Apache-2.0 terms."
+      ],
+      "restrictions": [],
+      "sha256": "660c6f5b1abae9dc498ac2d21e1347d2abdb0cf6c0c0c8576cd796491d9a6cdd",
+      "status": "approved",
+      "present": true
+    },
+    {
+      "id": "flux-t5xxl",
+      "role": "text-encoder",
+      "family": "flux",
+      "label": "T5-XXL fp8 (FLUX companion)",
+      "source": "https://huggingface.co/comfyanonymous/flux_text_encoders",
+      "revision": "present-on-disk",
+      "filename": "t5xxl_fp8_e4m3fn.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/clip/t5xxl_fp8_e4m3fn.safetensors",
+      "license": "Apache-2.0",
+      "license_source": "https://huggingface.co/google/t5-v1_1-xxl",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [],
+      "notices": [
+        "T5 v1.1 is licensed under Apache 2.0."
+      ],
+      "restrictions": [],
+      "sha256": "7d330da4816157540d6bb7838bf63a0f02f573fc48ca4d8de34bb0cbfd514f09",
+      "status": "approved",
+      "present": true
+    },
+    {
+      "id": "flux-vae",
+      "role": "vae",
+      "family": "flux",
+      "label": "FLUX VAE (bf16)",
+      "source": "https://huggingface.co/black-forest-labs/FLUX.1-schnell",
+      "revision": "present-on-disk",
+      "filename": "flux-vae-bf16.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/vae/flux-vae-bf16.safetensors",
+      "license": "Apache-2.0",
+      "license_source": "https://github.com/black-forest-labs/flux (autoencoder released under apache-2.0)",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [],
+      "notices": [
+        "The FLUX autoencoder weights are released under Apache-2.0."
+      ],
+      "restrictions": [],
+      "sha256": "0c0c8ac49850d6bd174107d4001685f4f6c876768a1c84dde751f2aed69f46ce",
+      "status": "approved",
+      "present": true
+    },
+    {
+      "id": "sdxl-base-1.0",
+      "role": "generate",
+      "family": "sdxl",
+      "label": "SDXL Base 1.0 (fp16)",
+      "source": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0",
+      "revision": "pinned-at-install",
+      "filename": "sd_xl_base_1.0.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/checkpoints/sd_xl_base_1.0.safetensors",
+      "license": "CreativeML Open RAIL++-M",
+      "license_source": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/blob/main/LICENSE.md",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "ComfyUI"
+      ],
+      "notices": [
+        "CreativeML Open RAIL++-M License dated July 26, 2023.",
+        "Use-based restrictions (Attachment A) must be passed to downstream users."
+      ],
+      "restrictions": [
+        "Must include the same use-based restrictions in any downstream redistribution/hosted agreement."
+      ],
+      "sha256": "31e35c80fc4829d14f90153f4c74cd59c90b779f6afe05a74cd6120b893f7e5b",
+      "status": "approved",
+      "present": false
+    },
+    {
+      "id": "z-image-turbo",
+      "role": "generate",
+      "family": "z-image",
+      "label": "Z-Image-Turbo (8 NFEs, nvfp4)",
+      "source": "https://huggingface.co/Comfy-Org/z_image_turbo",
+      "revision": "pinned-at-install",
+      "filename": "z_image_turbo_nvfp4.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/diffusion_models/z_image_turbo_nvfp4.safetensors",
+      "license": "Apache-2.0",
+      "license_source": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "z-image-text-encoder",
+        "z-image-vae",
+        "ComfyUI"
+      ],
+      "notices": [
+        "Z-Image is licensed under Apache 2.0 (Tongyi-MAI)."
+      ],
+      "restrictions": [],
+      "sha256": "a553c889dbcb910de4c98293237573219a37007c1074a3f04576646a088bd5c8",
+      "status": "approved",
+      "present": false
+    },
+    {
+      "id": "z-image-text-encoder",
+      "role": "text-encoder",
+      "family": "z-image",
+      "label": "Qwen3-4B fp8 mixed (Z-Image text encoder)",
+      "source": "https://huggingface.co/Comfy-Org/z_image_turbo",
+      "revision": "pinned-at-install",
+      "filename": "qwen_3_4b_fp8_mixed.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/text_encoders/qwen_3_4b_fp8_mixed.safetensors",
+      "license": "Apache-2.0",
+      "license_source": "https://huggingface.co/Qwen/Qwen3-4B",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "ComfyUI"
+      ],
+      "notices": [
+        "Qwen3-4B is licensed under Apache 2.0."
+      ],
+      "restrictions": [],
+      "sha256": "72450b19758172c5a7273cf7de729d1c17e7f434a104a00167624cba94f68f15",
+      "status": "approved",
+      "present": false
+    },
+    {
+      "id": "z-image-vae",
+      "role": "vae",
+      "family": "z-image",
+      "label": "Z-Image / FLUX autoencoder (ae)",
+      "source": "https://huggingface.co/Comfy-Org/z_image_turbo",
+      "revision": "pinned-at-install",
+      "filename": "ae.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/vae/ae.safetensors",
+      "license": "Apache-2.0",
+      "license_source": "https://github.com/black-forest-labs/flux",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "ComfyUI"
+      ],
+      "notices": [
+        "The shared autoencoder weights are Apache-2.0."
+      ],
+      "restrictions": [],
+      "sha256": "afc8e28272cd15db3919bacdb6918ce9c1ed22e96cb12c4d5ed0fba823529e38",
+      "status": "approved",
+      "present": false
+    },
+    {
+      "id": "ip-adapter-sdxl",
+      "role": "condition",
+      "family": "sdxl",
+      "label": "IP-Adapter Plus SDXL (ViT-H)",
+      "source": "https://huggingface.co/h94/IP-Adapter",
+      "revision": "pinned-at-install",
+      "filename": "ip-adapter-plus_sdxl_vit-h.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/ipadapter/ip-adapter-plus_sdxl_vit-h.safetensors",
+      "workflow_note": "loaded by the ComfyUI_IPAdapter_plus custom node",
+      "license": "Apache-2.0",
+      "license_source": "https://github.com/tencent-ailab/IP-Adapter/blob/main/LICENSE",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "clip-vit-h",
+        "ComfyUI",
+        "ComfyUI_IPAdapter_plus"
+      ],
+      "notices": [
+        "IP-Adapter (Tencent AI Lab) is licensed under Apache-2.0."
+      ],
+      "restrictions": [],
+      "sha256": "3f5062b8400c94b7159665b21ba5c62acdcd7682262743d7f2aefedef00e6581",
+      "status": "approved",
+      "present": false
+    },
+    {
+      "id": "clip-vit-h",
+      "role": "image-encoder",
+      "family": "sdxl",
+      "label": "CLIP-ViT-H-14 image encoder (IP-Adapter)",
+      "source": "https://huggingface.co/h94/IP-Adapter",
+      "revision": "pinned-at-install",
+      "filename": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+      "license": "MIT",
+      "license_source": "https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "ComfyUI"
+      ],
+      "notices": [
+        "LAION CLIP ViT-H-14 released under MIT."
+      ],
+      "restrictions": [],
+      "sha256": "6ca9667da1ca9e0b0f75e46bb030f7e011f44f86cbfb8d5a36590fcd7507b030",
+      "status": "approved",
+      "present": false
+    },
+    {
+      "id": "birefnet",
+      "role": "mask",
+      "family": "birefnet",
+      "label": "BiRefNet (general, high-res)",
+      "source": "https://huggingface.co/ZhengPeng7/BiRefNet",
+      "revision": "pinned-at-install",
+      "filename": "model.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/background_removal/birefnet.safetensors",
+      "license": "MIT",
+      "license_source": "https://github.com/ZhengPeng7/BiRefNet/blob/main/LICENSE",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "transformers",
+        "torch",
+        "timm"
+      ],
+      "notices": [
+        "BiRefNet is MIT licensed (ZhengPeng).",
+        "Do NOT substitute briaai/RMBG-2.0 (non-commercial)."
+      ],
+      "restrictions": [],
+      "sha256": "9ab37426bf4de0567af6b5d21b16151357149139362e6e8992021b8ce356a154",
+      "status": "approved",
+      "present": false
+    },
+    {
+      "id": "real-esrgan",
+      "role": "upscale",
+      "family": "realesrgan",
+      "label": "Real-ESRGAN x4plus (ncnn-vulkan)",
+      "source": "https://github.com/xinntao/Real-ESRGAN/releases",
+      "revision": "pinned-at-install",
+      "filename": "RealESRGAN_x4plus.pth",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/upscale_models/RealESRGAN_x4plus.pth",
+      "license": "BSD-3-Clause",
+      "license_source": "https://github.com/xinntao/Real-ESRGAN/blob/master/LICENSE",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "Vulkan-capable GPU/driver"
+      ],
+      "notices": [
+        "Real-ESRGAN is BSD-3-Clause (Xintao Wang)."
+      ],
+      "restrictions": [],
+      "sha256": "4fa0d38905f75ac06eb49a7951b426670021be3018265fd191d2125df9d682f1",
+      "status": "approved",
+      "present": false
+    },
+    {
+      "id": "controlnet-canny-sdxl",
+      "role": "control",
+      "family": "sdxl",
+      "label": "ControlNet Canny SDXL (xinsir)",
+      "source": "https://huggingface.co/xinsir/controlnet-canny-sdxl-1.0",
+      "revision": "pinned-at-install",
+      "filename": "diffusion_pytorch_model.safetensors",
+      "install_path": "C:/Users/T2Hol/ComfyUI/models/controlnet/xinsir-canny-sdxl.safetensors",
+      "license": "Apache-2.0",
+      "license_source": "https://huggingface.co/xinsir/controlnet-canny-sdxl-1.0",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [
+        "sdxl-base-1.0",
+        "ComfyUI"
+      ],
+      "notices": [
+        "xinsir ControlNet-Canny-SDXL is licensed under Apache-2.0."
+      ],
+      "restrictions": [],
+      "sha256": "bf47cd757ceaf2572c53321329ef819ea38c09a6e3783588387913cd94dff47c",
+      "status": "approved",
+      "present": false
+    },
+    {
+      "id": "brand-fonts-libre-baskerville",
+      "role": "font",
+      "family": "brand",
+      "label": "Libre Baskerville Variable (serif)",
+      "source": "https://github.com/impallari/Libre-Baskerville",
+      "revision": "bundled",
+      "filename": "LibreBaskerville-VF.ttf",
+      "install_path": "Northstar_backend/creative/assets/fonts/LibreBaskerville-VF.ttf",
+      "license": "SIL OFL 1.1",
+      "license_source": "Northstar_backend/creative/assets/fonts/OFL-LibreBaskerville.txt",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [],
+      "notices": [
+        "Libre Baskerville, SIL Open Font License 1.1."
+      ],
+      "restrictions": [
+        "Reserved Font Name 'Libre Baskerville' on modified versions."
+      ],
+      "sha256": "05a95421961341c5b2556285e8415df9db27dab4f4abe22b446b3c6a8b916c5d",
+      "status": "approved",
+      "present": true
+    },
+    {
+      "id": "brand-fonts-dm-sans",
+      "role": "font",
+      "family": "brand",
+      "label": "DM Sans Variable (sans)",
+      "source": "https://github.com/googlefonts/dm-fonts",
+      "revision": "bundled",
+      "filename": "DMSans-VF.ttf",
+      "install_path": "Northstar_backend/creative/assets/fonts/DMSans-VF.ttf",
+      "license": "SIL OFL 1.1",
+      "license_source": "Northstar_backend/creative/assets/fonts/OFL-DMSans.txt",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed",
+      "required_dependencies": [],
+      "notices": [
+        "DM Sans, SIL Open Font License 1.1."
+      ],
+      "restrictions": [
+        "Reserved Font Name 'DM Sans' on modified versions."
+      ],
+      "sha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d",
+      "status": "approved",
+      "present": true
+    },
+    {
+      "id": "comfyui",
+      "role": "runtime",
+      "family": "runtime",
+      "label": "ComfyUI",
+      "source": "https://github.com/comfyanonymous/ComfyUI",
+      "revision": "0.3.x (installed)",
+      "filename": null,
+      "install_path": "C:/Users/T2Hol/ComfyUI",
+      "license": "GPL-3.0",
+      "license_source": "https://github.com/comfyanonymous/ComfyUI/blob/master/LICENSE",
+      "commercial_use": "allowed",
+      "hosted_use": "allowed-with-obligations",
+      "required_dependencies": [],
+      "notices": [
+        "ComfyUI is GPL-3.0; hosted distribution may trigger GPL source obligations."
+      ],
+      "restrictions": [
+        "GPL-3.0 network/hosted-use obligations may apply if distributed as a service."
+      ],
+      "sha256": null,
+      "status": "approved",
+      "present": true
+    }
+  ]
+}

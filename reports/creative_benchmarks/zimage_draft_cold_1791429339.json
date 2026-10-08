@@ -1,0 +1,27 @@
+{
+  "label": "zimage_draft_cold",
+  "task": "generate",
+  "mode": "draft",
+  "requested_lane": "z-image-draft",
+  "lane": "z-image-draft",
+  "status": "done",
+  "total_s": 27.77,
+  "peak_vram_mb": 12133.0,
+  "cold": true,
+  "pre_gpu": {
+    "util_pct": 23.0,
+    "vram_used_mb": 483.0,
+    "temp_c": 37.0,
+    "sm_clock_mhz": 502.0,
+    "power_w": 15.79,
+    "throttle": "0x0000000000000000"
+  },
+  "dimensions": [
+    1024,
+    1024
+  ],
+  "output": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\gen_20261007_221511_11804.png",
+  "provenance": "C:\\Users\\T2Hol\\Desktop\\northstar-wt-mogra\\generated_images\\creative\\gen_20261007_221511_11804.png.json",
+  "error": null,
+  "timestamp": "2026-10-07T22:15:39"
+}
