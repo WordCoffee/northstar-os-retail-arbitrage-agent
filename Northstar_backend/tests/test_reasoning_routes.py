@@ -1,0 +1,120 @@
+"""Route-level tests for the hosted reasoning API.
+
+All provider calls are mocked; no live OpenCode Go traffic is generated.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import unittest
+from unittest import mock
+
+from fastapi.testclient import TestClient
+
+
+class ReasoningRouteTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Import main lazily so environment can be patched first.
+        os.environ.setdefault("OPENCODE_GO_ENABLED", "1")
+        os.environ.setdefault("OPENCODE_GO_API_KEY", "test-key")
+        import main
+        cls.app = main.app
+        cls.client = TestClient(cls.app)
+        cls._import_reasoning_tasks = __import__("reasoning_tasks")
+
+    def _patch_provider(self, response_text):
+        from adapters.reasoning_provider import MockReasoningProvider
+        patcher = mock.patch.object(self._import_reasoning_tasks, "get_reasoning_provider", return_value=MockReasoningProvider(response_text=response_text))
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_reasoning_models_returns_catalog(self):
+        r = self.client.get("/api/v1/reasoning/models")
+        self.assertEqual(r.status_code, 200)
+        data = r.json()
+        self.assertIn("models", data)
+        self.assertIn("default_model", data)
+        self.assertEqual(data["default_model"], "opencode-go/deepseek-v4.1-flash")
+        ids = {m["id"] for m in data["models"]}
+        self.assertIn("opencode-go/deepseek-v4.1-flash", ids)
+        self.assertIn("opencode-go/glm-5.3-flash", ids)
+        self.assertIn("opencode-go/mimo-v2.6-flash", ids)
+
+    def test_listing_proposal_endpoint(self):
+        self._patch_provider(json.dumps({
+            "sku": "SKU-123",
+            "proposed": {
+                "title": "Better title",
+                "bullets": ["b1", "b2", "b3", "b4", "b5"],
+                "description": "Better desc",
+                "attributes": {},
+            },
+            "reasons": ["improved clarity"],
+            "missing_evidence": [],
+            "warnings": [],
+        }))
+        r = self.client.post("/api/v1/reasoning/listing-proposal", json={
+            "sku": "SKU-123",
+            "title": "Old title",
+            "bullets": ["b1", "b2", "b3", "b4", "b5"],
+            "description": "Old desc",
+        })
+        self.assertEqual(r.status_code, 200)
+        data = r.json()
+        self.assertTrue(data["proposal"]["ok"])
+        self.assertEqual(data["proposal"]["proposed"]["title"], "Better title")
+
+    def test_ad_copy_proposal_endpoint(self):
+        self._patch_provider(json.dumps({
+            "headlines": ["H1"],
+            "body": "Body",
+            "cta": "Shop",
+            "brand_tone": "professional",
+            "unsupported_claims": [],
+            "warnings": [],
+        }))
+        r = self.client.post("/api/v1/reasoning/ad-copy-proposal", json={
+            "product_facts": {"name": "Widget"},
+            "brand_tone": "professional",
+        })
+        self.assertEqual(r.status_code, 200)
+        data = r.json()
+        self.assertTrue(data["proposal"]["ok"])
+        self.assertEqual(data["proposal"]["cta"], "Shop")
+
+    def test_spreadsheet_analysis_endpoint(self):
+        self._patch_provider(json.dumps({
+            "row_count": 1,
+            "columns": ["sku"],
+            "summary": "One row",
+            "anomalies": [],
+            "inferred_formulas": [],
+            "suggested_exports": [],
+            "warnings": [],
+        }))
+        r = self.client.post("/api/v1/reasoning/spreadsheet-analysis", json={
+            "rows": [{"sku": "A"}],
+            "columns": ["sku"],
+        })
+        self.assertEqual(r.status_code, 200)
+        data = r.json()
+        self.assertTrue(data["analysis"]["ok"])
+        self.assertEqual(data["analysis"]["row_count"], 1)
+
+    def test_reasoning_run_endpoint(self):
+        self._patch_provider("hello")
+        r = self.client.post("/api/v1/reasoning/run", json={"query": "say hi"})
+        self.assertEqual(r.status_code, 200)
+        data = r.json()
+        self.assertTrue(data["ok"])
+        self.assertEqual(data["content"], "hello")
+
+    def test_reasoning_run_rejects_empty_query(self):
+        r = self.client.post("/api/v1/reasoning/run", json={"query": "   "})
+        self.assertEqual(r.status_code, 422)
+
+
+if __name__ == "__main__":
+    unittest.main()
