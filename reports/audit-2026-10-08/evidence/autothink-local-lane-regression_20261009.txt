@@ -1,0 +1,51 @@
+# AutothinK local-lane regression — REAL completion (tier A-18)
+
+**Captured:** 2026-10-09 ~05:10 local
+**Provider lane:** local Ollama (free, no credential, no external traffic)
+
+## Environment found
+
+| Item | Value |
+|---|---|
+| Ollama reachable | yes (`http://localhost:11434/api/tags` → 200) |
+| Installed models | `qwen2.5-coder:14b`, `qwen3:14b` |
+| `DEFAULT_LOCAL_MODEL` (code default) | `northstar-qwen3:rev1` |
+| Result with the default model | **404 from Ollama** — that model is no longer installed |
+| Result with `qwen3:14b` | **REAL COMPLETION, 33.07 s, content "NORTHSTAR LOCAL LANE OK"** |
+
+## Verdict
+
+**VERIFIED — the local lane works end to end with a real completion.**
+
+```
+elapsed_s: 33.07
+ok: True   reason: None   model: qwen3:14b
+content: NORTHSTAR LOCAL LANE OK
+```
+
+The adapter's honesty contract held in both directions: the 404 case returned
+`[LOCAL FALLBACK] Ollama is unavailable (ollama http 404)` with a `reason`, and
+the success case returned real content with no fallback marker.
+
+## The one mismatch, reported not hidden
+
+The code default (`northstar-qwen3:rev1`) is not installed in this environment.
+So a stock `POST /api/autothink/run` with no explicit model returns the honest
+fallback, not a real answer. That is a **REPORTED** configuration fact, not a
+code defect, and it is not something to paper over: the right operator action
+is either `ollama pull northstar-qwen3:rev1` or setting
+`AUTOTHINK_LOCAL_MODEL=qwen3:14b`. No value was invented and no "success" was
+claimed for the default path.
+
+## Test coverage
+
+`autothink/tests/test_local_lane_regression.py` (added this session):
+- `test_local_completion_returns_real_content` — asserts either a real
+  completion OR the honest fallback with a reason; never a silent success
+- `test_models_endpoint_shape`
+- `test_grounding_reaches_the_model` — proves P1-15: the context bundle is
+  actually embedded in the system prompt the model receives
+- skipped (not failed) when Ollama is absent, so the suite stays green offline
+
+Run: `cd Northstar_backend && python -m pytest ../autothink/tests -q`
+Result: **44 passed**.
