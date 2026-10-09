@@ -93,10 +93,27 @@ def get_invite(code: str) -> Optional[Dict[str, Any]]:
     return _public_view(row) if row else None
 
 
+def _is_expired(invite: Dict[str, Any]) -> bool:
+    """True when the invite's expiry timestamp has passed. Fails closed."""
+    raw = invite.get("expires_at")
+    if not raw:
+        return False
+    try:
+        stamp = datetime.fromisoformat(str(raw))
+    except ValueError:
+        return True  # unparseable expiry fails closed
+    if stamp.tzinfo is None:
+        stamp = stamp.replace(tzinfo=timezone.utc)
+    return stamp <= datetime.now(timezone.utc)
+
+
 def redeem_invite(code: str, account_id: str) -> Dict[str, Any]:
     """Redeem an invite. Single-use; idempotent on the SAME account.
 
     Never accepts cohort/plan from the client — they come from the invites row.
+    An expired invite is refused (Phase 3 fix: expiry was declared in the
+    schema and in ``INVITE_EXPIRE_DAYS`` but never enforced, so a week-old code
+    could still open an account).
     """
     db = _db()
     cur = db.execute("SELECT * FROM invites WHERE code = ?", (code,))
@@ -104,6 +121,8 @@ def redeem_invite(code: str, account_id: str) -> Dict[str, Any]:
     if not row:
         raise KeyError("unknown invite code")
     invite = dict(row)
+    if _is_expired(invite):
+        raise PermissionError("invite expired")
     if invite.get("redeemed_at"):
         if invite.get("used_by") != account_id:
             raise PermissionError("invite already redeemed")

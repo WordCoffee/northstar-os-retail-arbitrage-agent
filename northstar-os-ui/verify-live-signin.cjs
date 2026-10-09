@@ -1,13 +1,56 @@
 // Live sign-in walkthrough against a running local Compose stack (P2-T6 local
 // verification). Uses real HTTP (NOT HTTPS) — this is not a hosted-TLS test.
-// Requires disposable test credentials via NS_TEST_EMAIL / NS_TEST_PASSWORD.
+//
+// Credentials come from the isolated test accounts created by
+// Northstar_backend/create_test_accounts.py. Pass them in as NS_TEST_EMAIL /
+// NS_TEST_PASSWORD, or let this harness read them from the credentials file
+// (NS_TEST_CREDENTIALS_PATH, else %LOCALAPPDATA%\NorthstarOS\test-credentials.json).
+//
 // Base URL via HARNESS_BASE_URL (default http://127.0.0.1/ui/).
+// Passwords are never printed and never written to disk.
 
+const fs = require('fs')
+const os = require('os')
+const path = require('path')
 const { chromium } = require('playwright')
 
 const BASE = process.env.HARNESS_BASE_URL || 'http://127.0.0.1/ui/'
+
+function credentialsPath() {
+  return process.env.NS_TEST_CREDENTIALS_PATH
+    || path.join(process.env.LOCALAPPDATA || os.tmpdir(), 'NorthstarOS', 'test-credentials.json')
+}
+
+function loadAccount(role) {
+  const file = credentialsPath()
+  if (!fs.existsSync(file)) {
+    console.error(`No credentials file at ${file}.`)
+    console.error('Create the isolated test accounts first:')
+    console.error('  cd Northstar_backend && python create_test_accounts.py')
+    process.exit(2)
+  }
+  let record
+  try {
+    record = JSON.parse(fs.readFileSync(file, 'utf-8'))
+  } catch (e) {
+    console.error(`Could not parse ${file}: ${e.message}`)
+    process.exit(2)
+  }
+  const account = (record.accounts || {})[role || 'subscriber']
+  if (!account || !account.email) {
+    console.error(`No '${role || 'subscriber'}' account in ${file}.`)
+    process.exit(2)
+  }
+  if (!account.password) {
+    console.error(`The '${role || 'subscriber'}' account has no password (it is not an activated account).`)
+    process.exit(2)
+  }
+  return { email: account.email, password: account.password, tenantId: account.tenant_id }
+}
+
 const EMAIL = process.env.NS_TEST_EMAIL
 const PW = process.env.NS_TEST_PASSWORD
+let CREDS = null
 
 let pass = 0
 let fail = 0
@@ -19,10 +62,10 @@ const ok = (m) => { pass++; console.log('PASS  ' + m) }
 const no = (m, d) => { fail++; problems.push(m + (d ? ' :: ' + d : '')); console.log('FAIL  ' + m + (d ? ' :: ' + d : '')) }
 
 async function main() {
-  if (!EMAIL || !PW) {
-    console.error('NS_TEST_EMAIL and NS_TEST_PASSWORD are required (disposable test creds).')
-    process.exit(2)
-  }
+  CREDS = (EMAIL && PW)
+    ? { email: EMAIL, password: PW }
+    : loadAccount(process.env.NS_TEST_ROLE || 'subscriber')
+
   const browser = await chromium.launch()
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
   const page = await ctx.newPage()
@@ -32,8 +75,8 @@ async function main() {
 
   // 1. Sign in at /ui/sign-in (hosted behavior: no local-dev flag).
   await page.goto(BASE + 'sign-in')
-  await page.fill('#signin-id', EMAIL)
-  await page.fill('#signin-pw', PW)
+  await page.fill('#signin-id', CREDS.email)
+  await page.fill('#signin-pw', CREDS.password)
   await page.click('form button[type="submit"]')
   try {
     await page.waitForFunction(() => location.pathname === '/ui/home', null, { timeout: 12000 })
@@ -58,13 +101,31 @@ async function main() {
     ? ok('refresh keeps protected route authenticated')
     : no('refresh protected route', await page.evaluate(() => location.pathname))
 
-  // 3. /me identifies the owner.
+  // 3. /me identifies the signed-in account.
   const me = await page.evaluate(async () => {
     const r = await fetch('/api/v1/foundation/me', { credentials: 'include' })
     return { status: r.status, body: await r.json() }
   })
   ;(me.status === 200 && me.body.user_id) ? ok('/me identifies user ' + me.body.user_id) : no('/me', JSON.stringify(me))
-  ;(me.body && me.body.role === 'internal_platform_admin') ? ok('/me role internal_platform_admin') : no('/me role', me.body && me.body.role)
+
+  // 3b. The AutothinK routes are authenticated for this session (P0-04).
+  const autothink = await page.evaluate(async () => {
+    const r = await fetch('/api/autothink/history?limit=1', { credentials: 'include' })
+    return r.status
+  })
+  ;(autothink === 200 || autothink === 403) ? ok('/api/autothink/history answers for a signed-in session (' + autothink + ')') : no('/api/autothink/history', String(autothink))
+
+  // 3c. Tenant isolation: a second tenant must not see this tenant's history.
+  if (process.env.NS_TEST_ROLE !== 'other_tenant' && CREDS.tenantId) {
+    const cross = await page.evaluate(async () => {
+      const r = await fetch('/api/autothink/history?limit=1', {
+        credentials: 'include',
+        headers: { 'X-Tenant-Id': 'tenant-that-is-not-mine' },
+      })
+      return r.status
+    })
+    cross !== 200 ? ok('cross-tenant header cannot widen the session (' + cross + ')') : no('cross-tenant header accepted', String(cross))
+  }
 
   // 4. State-changing request without CSRF -> 403.
   const noCsrf = await page.evaluate(async () => {
