@@ -1,0 +1,122 @@
+# OWNER DECISION SHEET — A1–A9
+
+**Prepared:** 2026-10-09 · **Baseline:** `2482048` (audit) · **HEAD:** `d67e83a`
+**How to use:** one line per decision. Write the answer in the last column. Nothing below is implemented until you sign it — except where you have already given an explicit direction, which is flagged.
+
+---
+
+## The four that unblock everything (decide first)
+
+### A1 — Live-call policy for the scanner
+**Question:** may *any* plain `GET` ever trigger a paid provider search?
+**Options:**
+- **(A1.1 — recommended)** No. Set `SCANNER_LIVE_ALLOWED` to a non-opt-in value in `Northstar_backend/.env` **and** add a startup assertion (mirroring the existing `assert_prod_posture()` for the rate limiter) that refuses to boot if a GET-reachable path can search live. Live search stays available only via the explicit `POST /api/kirkland/refresh` command with an operator-supplied flag.
+- (A1.2) Yes, but only for named operators, gated by an allowlist.
+- (A1.3) Status quo — GET may search live.
+**Recommended answer:** A1.1.
+**Note:** you have already directed the env disarm ("Disarm live gating now"), so the first half of A1.1 is operator-authorised. The second half (the startup guard) is a code change and needs this signature.
+**Blocked by your answer:** P0-01, and every tier-A live-call test case (A-06, A-07, C-03).
+
+### A2 — Canonical hosted API entrypoint
+**Question:** does the deployed stack run `main:app` or `foundation.app:app`?
+**Options:**
+- **(A2.1 — recommended)** `main:app`. It already mounts the foundation router, the noncreative router, and every legacy route, so local and hosted converge with no route moves.
+- (A2.2) `foundation.app:app`, and move the ~200 `main.py` routes into the foundation app first.
+**Recommended answer:** A2.1.
+**Why it is first-class:** until this is decided, every "works locally, 404s in hosted" bug is unresolvable — including P0-02 and P0-03, which interact.
+**Blocked by your answer:** P0-02, P0-03, B-01.
+
+### A3 — Authentication policy for `/api/autothink/*`
+**Question:** who may run a model or read the AutothinK history?
+**Options:**
+- **(A3.1 — recommended)** Requires a session; history scoped by organization; any credit-spending provider additionally requires an armed flag.
+- (A3.2) Requires a session; history global but authenticated.
+- (A3.3) Leave public.
+**Recommended answer:** A3.1.
+**Blocked by your answer:** P0-04, P1-17, A-21, A-23, B-10.
+
+### A9 — Repository freeze
+**Question:** do we freeze the repo before the full-service test?
+**Recommended answer:** yes — pause the parallel session or agree a landing window, tag the audited commit, and re-audit anything that lands after it.
+**Why it is urgent:** five commits landed during the audit window alone. A test run against a moving tree is not reproducible, and a concurrent session may hold the answer to "who is running the Golden Goose scans."
+**Blocked by your answer:** every tier-B and tier-C case.
+
+---
+
+## The five that should follow
+
+### A4 — One bounded hosted OpenCode Go call
+**Only after P0-02 is fixed.** One call, `step-5-preview-free` (free tier), `max_tokens=8`, no retry, no fallback. This is a live call, so it needs your named approval at the time, not now.
+
+### A5 — Cloud (OpenRouter) arming and cost cap
+Arm `CLOUD_MODEL_LIVE` or keep it closed? If armed, name the per-run USD cap and require a `max_price` in the request body. Currently the armed path has **no ceiling at all**.
+
+### A6 — Scope for The Watch / RankLedger / Rival Board
+Retire (delete the unrouted legacy pages and the spec references) or revive (needs SP-API access). "Parked forever" is the worst option — it leaves three promised services invisible.
+
+### A7 — Isolated test accounts
+Six roles: unauthenticated, invited-not-activated, subscriber, operator, platform admin, unauthorized/other-workspace. Needed for 14 of 28 tier-B cases. `verify-live-signin.cjs` is currently **BLOCKED** for want of `NS_TEST_EMAIL`/`NS_TEST_PASSWORD`.
+
+### A8 — Media provider or "stay concept"
+**Easy answer if you want one:** if no image/video provider is approved, mark Creative Studio, SocialPulse, AdPilot and Design Studio as `concept` in `readiness.js` so the nav badge matches reality. That is a two-line change and closes the honesty gap immediately.
+Note: the studio workstream has already moved these rooms forward, so re-assess before setting the badge.
+
+---
+
+## Dependency-ordered remediation sequence
+
+| Order | Items | Why here | Gate |
+|---|---|---|---|
+| 1 | **P0-05** (freeze/tag) | Nothing is reproducible without it | Gate 1 |
+| 2 | **P0-01** (A1) + **P0-04** (A3) | Safety. Both are env/config + one auth dependency | Gate 1 |
+| 3 | **P0-02** + **P0-03** (A2) | Restore the API contract; they interact | Gate 1 |
+| 4 | **P1-01, P1-02, P1-03, P1-08, P2-18** | Close the silent-failure class (unknown must never become zero) | Gate 1 |
+| 5 | **P1-10, P1-11, P1-12** | Make the suite deterministic | Gate 1 |
+| 6 | **P1-06** (SourceScout wiring), **P1-21** (Admin honesty) | Highest-stakes dishonesty | Gate 1 |
+| 7 | **P1-14** (Golden Goose evaluate UI), **P2-01** (Product Designer audit), **Design Studio audit** | Complete the feature surface | Gate 1 |
+| 8 | **P1-15…P1-19** (AutothinK grounding, metering, tenancy, lifecycle, copy) | Deepen the intelligence layer | Gate 2 |
+| 9 | **P1-07, P1-09, P1-13, P2-16, P2-17, P2-19, P2-20, P2-22, P3-*** | Ops, docs, hygiene | Gate 2 |
+| 10 | **P2-04, P2-05, P2-06, P2-08, P2-09** | Creative honesty and accessibility | Gate 2 |
+
+**Do not action P2-02 or P2-03** — the studio commits already fixed them (see the addendum).
+
+---
+
+## Sign-off — defaults applied by the overnight autonomous run
+
+The owner was asleep and pre-authorised defaults for A1–A9. Every row below
+records the default that was APPLIED, the evidence, and what the owner must
+still confirm. Nothing here is treated as approved design work.
+
+| Decision | Answer applied | Initials | Date | Evidence |
+|---|---|---|---|---|
+| A1 | **A1.1 applied by default.** `SCANNER_LIVE_ALLOWED=0` in `Northstar_backend/.env`, plus `live_gate.assert_live_posture()` which refuses to boot a live mode lacking a per-run arm flag and a positive per-run cost cap. Live search stays reachable only through the explicit `POST /api/kirkland/refresh` path. | — | 2026-10-09 | `Northstar_backend/live_gate.py`, `main.py` lifespan, `test_live_posture_guard.py` (12 tests incl. a socket-level proof that 8 UI GET routes open zero non-loopback provider connections) |
+| A2 | **A2.1 applied by default.** One entrypoint: `uvicorn main:app`. The SPA is built inside the image and served at `/ui/`; `/autothink/*` is served too. Caddy remains for TLS termination only. | — | 2026-10-09 | `Dockerfile.api` (built and run locally; container healthy, 19/19 UI routes resolve), `Caddyfile`, `tools/verify-hosted-container.ps1` |
+| A3 | **A3.1 applied by default.** `/api/autothink/*` requires a strict session (`require_session`, Bearer JWT or the HttpOnly cookie — no anonymous fallback). History, usage and cancellation are org-scoped. A credit-spending provider additionally requires the live arm flag. | — | 2026-10-09 | `auth_deps.require_session`, `main.py` (7 routes), `test_autothink_auth_boundary.py` (9 tests: 401 without a session, cross-tenant isolation) |
+| A4 | **NOT RUN LIVE.** No live hosted reasoning call was made: no budget was supplied. Recorded as NOT RUN, never as PASSED. | — | 2026-10-09 | `tools/live_test_runner.py --dry-run` (refuses to arm without cap + acknowledgement) |
+| A5 | **No cloud arming beyond the cap.** `CLOUD_MODEL_LIVE` remains absent from both env files. The armed cloud path has no ceiling yet — this is an open gap, not a closed one. | — | 2026-10-09 | both `.env` files; cloud lane gated in `llm_adapter.py` |
+| A6 | **Labelled, not deleted.** The Watch / RankLedger / Rival Board stay in the inventory as S20–S22, `MISSING / NOT_APPLICABLE` with "requires Amazon SP-API (not integrated)". No route, no page, no promise. | — | 2026-10-09 | `SERVICE_INVENTORY.csv` S20–S22 |
+| A7 | **7 isolated local test accounts created**, one per role plus a read-only member for least-privilege checks. Credentials are outside the git tree with owner-only ACLs. | — | 2026-10-09 | `Northstar_backend/create_test_accounts.py`, `test_invite_flow_e2e.py` (7 tests), `verify-live-signin.cjs` fixed |
+| A8 | **Media stays concept.** `GET /api/v1/foundation/creative/readiness` (added) reports `armed:false` with no provider connected. Product Designer / Creative Studio / SocialPulse are labelled `concept` in `readiness.js`. Video disabled. No generated-image export without a fidelity warning. | — | 2026-10-09 | `main.py` creative readiness route, `readiness.js`, route sweep screenshots |
+| A9 | **One branch.** All work committed to `feature/overnight-remediation-20261009` (9 commits). The concurrent session's 79 untracked files were left untouched and reported as UNATTRIBUTED. | — | 2026-10-09 | `git log`, `evidence/p0-05-unattributed-sessions_20261009.txt` |
+
+## Still needs the owner's answer
+
+1. **The untracked `costco_non_kirkland/tests` files block the test suite from
+   collecting** (they import three symbols that do not exist). They are
+   UNATTRIBUTED work-in-progress from a concurrent session, so they were not
+   deleted. The suite must be run with
+   `--ignore=costco_non_kirkland/tests` until that session lands or is stopped.
+2. **The stock local model is missing.** `DEFAULT_LOCAL_MODEL` is
+   `northstar-qwen3:rev1`, which is not installed; Ollama returns 404 for it.
+   Either `ollama pull northstar-qwen3:rev1` or set
+   `AUTOTHINK_LOCAL_MODEL=qwen3:14b` (a real completion was verified on
+   `qwen3:14b`, 33 s).
+3. **No live provider budget was supplied**, so every metered lane is NOT RUN.
+   Bright Data spend from the 2026-10-08 audit (19 calls) is still UNKNOWN and
+   needs the dashboard.
+4. **A persistent `NORTHSTAR_JWT_SECRET` must be set before any hosted boot** —
+   the app now refuses to start without one, deliberately.
+5. **The API process on :8000 from an earlier session is still running** with
+   the old armed env. It was left alone (P0-05 rule) and must be restarted by
+   its owner for the disarm to take effect for that process.
