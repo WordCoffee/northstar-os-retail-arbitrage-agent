@@ -10,11 +10,17 @@ const TABS = [
   { id: 'coverage', label: 'Coverage' },
 ]
 
+// Phase 6 (2026-10-09): the default view used to render four sample rows that
+// carried real-looking prices ($34.99 / $29.99), BSR ranks and seller counts.
+// Those were interface fixtures, not data, and a skim reads them as live.
+// They now read UNKNOWN across price, rank, offers, buy box and margin, and
+// the view carries a DataNotice. Anything real must come from
+// /api/products/finder (cache-only) and be labelled as such.
 const PRODUCTS = [
-  { asin: 'B08L5VJQ7T', title: 'Premium Water Filter', brand: 'PureFlow', category: 'Home & Kitchen', price: 'UNKNOWN', rank: 14203, offers: 3, buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Researching', img: true },
-  { asin: 'B09M8KJ4X2', title: 'LED Desk Lamp', brand: 'BrightLife', category: 'Office Products', price: '$34.99', rank: 8721, offers: 7, buybox: 'No', margin: '~18%', status: 'Watch', img: true },
-  { asin: 'B07XJ8C9F3', title: 'Car Phone Mount', brand: 'TechGear', category: 'Automotive', price: 'UNKNOWN', rank: 23450, offers: 2, buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Researching', img: true },
-  { asin: 'B08N5WRWNW', title: 'Bluetooth Speaker', brand: 'SoundMax', category: 'Electronics', price: '$29.99', rank: 5632, offers: 5, buybox: 'Yes', margin: '~12%', status: 'Internal review ready', img: true },
+  { asin: 'B08L5VJQ7T', title: 'Premium Water Filter', brand: 'PureFlow', category: 'Home & Kitchen', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Researching', img: true },
+  { asin: 'B09M8KJ4X2', title: 'LED Desk Lamp', brand: 'BrightLife', category: 'Office Products', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Watch', img: true },
+  { asin: 'B07XJ8C9F3', title: 'Car Phone Mount', brand: 'TechGear', category: 'Automotive', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Researching', img: true },
+  { asin: 'B08N5WRWNW', title: 'Bluetooth Speaker', brand: 'SoundMax', category: 'Electronics', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Internal review ready', img: true },
 ]
 
 const SAVED_SETS = [
@@ -63,9 +69,9 @@ function gatePill(v) {
 const marketColumns = [
   { key: 'asin', label: 'ASIN' },
   { key: 'title', label: 'Product' },
-  { key: 'price', label: 'Price', render: (v) => <TruthPill v={v === 'UNKNOWN' ? 'UNKNOWN' : v} /> },
-  { key: 'rank', label: 'Rank', render: (v) => typeof v === 'number' ? v.toLocaleString() : v },
-  { key: 'offers', label: 'Offers' },
+  { key: 'price', label: 'Price', render: (v) => <TruthPill v={v} /> },
+  { key: 'rank', label: 'Rank', render: (v) => <TruthPill v={v} /> },
+  { key: 'offers', label: 'Offers', render: (v) => <TruthPill v={v} /> },
   { key: 'buybox', label: 'Buy Box', render: (v) => v === 'UNVERIFIED' ? <TruthPill v={v} /> : v },
   { key: 'margin', label: 'Margin', render: (v) => <TruthPill v={v} /> },
   { key: 'status', label: 'Status', render: (v) => <StatusPill v={v} /> },
@@ -93,6 +99,16 @@ export default function ProductFinder() {
       }
     >
       <RoomTabs tabs={TABS} base="/product-finder" />
+
+      {view !== 'set' && (
+        <DataNotice tone="sample" title="Interface fixtures — no live market data on this surface">
+          The product rows are structural examples for the workbench layout. They carry{' '}
+          <strong>no</strong> price, rank, seller-count, buy-box or margin value — every one reads{' '}
+          <strong>UNKNOWN</strong>, because none has been measured. Nothing here is a market observation,
+          and no value on this page may be read as a real Amazon figure. Real cached observations come from{' '}
+          <code>/api/products/finder</code> (cache-only; a plain page load never contacts a provider).
+        </DataNotice>
+      )}
 
       {view === 'lookup' && (
         <div className="subview workbench">
