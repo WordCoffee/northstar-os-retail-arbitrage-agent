@@ -1,22 +1,64 @@
+# Northstar OS — single hosted entrypoint (P0-03, fixed 2026-10-09).
+#
+# The hosted stack used to run `foundation.app:app`, which serves only the
+# foundation namespace and silently drops every route the suite shell calls
+# (status, sourcescout, products/finder, autothink, reasoning, noncreative).
+# That is why some pages worked locally and 404'd once deployed.
+#
+# A2 decision (applied by default): ONE entrypoint — `main:app`. It already
+# mounts the foundation router, the noncreative router and every legacy route,
+# so local and hosted converge with no route moves.
+#
+# The UI is built inside this image so `main:app` also serves the SPA at /ui/
+# and the AutothinK workspace at /autothink/. That makes the hosted stack a
+# single service — the shape the Oracle Always Free tier needs. Caddy stays in
+# docker-compose.yml purely for TLS termination when a real domain is used.
+#
+# The whole repository context is copied (not just Northstar_backend/) because
+# main:app resolves sibling paths against the repo root. Both the UI mount and
+# the AutothinK mount degrade silently when absent, so the image still builds
+# from a backend-only checkout.
+
+FROM node:20-alpine AS ui-build
+WORKDIR /ui
+COPY northstar-os-ui/package.json northstar-os-ui/package-lock.json* ./
+RUN npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+COPY northstar-os-ui/ ./
+RUN npm run build
+
 FROM python:3.12-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PORT=8000
 
 WORKDIR /app
+
+# Built SPA — served at /ui/ by main.py's mount_ui helper.
+COPY --from=ui-build /ui/dist /app/northstar-os-ui/dist
 
 # Dependency layer first (cache-friendly).
 COPY Northstar_backend/requirements.txt /app/Northstar_backend/requirements.txt
 RUN pip install --no-cache-dir -r /app/Northstar_backend/requirements.txt
 
-# Application code (includes migrations_foundation/ and foundation/).
+# Application code (includes migrations_foundation/, foundation/, autothink/).
 COPY Northstar_backend /app/Northstar_backend
+COPY autothink /app/autothink
+COPY shared /app/shared
 
+# The API runs from the backend directory: every module in main.py resolves its
+# sibling imports from there, and the .env files stay outside the image.
 WORKDIR /app/Northstar_backend
 EXPOSE 8000
 
-# The Foundation app builds FoundationState at import; FOUNDATION_DB_URL
-# selects Postgres. (Full legacy main:app is mounted in later phases.)
-CMD ["uvicorn", "foundation.app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Fail-closed posture is asserted at startup by main.lifespan:
+#   - assert_prod_posture()       (rate limiter must run in production)
+#   - assert_live_posture()       (no metered provider spend from a plain GET)
+#   - assert_jwt_secret_posture() (no ephemeral signing key when hosted)
+# A container that violates any of these exits instead of serving traffic.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=4).status==200 else 1)"
+
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --proxy-headers"]

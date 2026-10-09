@@ -19,6 +19,13 @@ x-foundation-env: &foundation-env
   NORTHSTAR_JWT_ISSUER: ${NORTHSTAR_JWT_ISSUER:-https://northstar.local}
   NORTHSTAR_JWT_AUDIENCE: ${NORTHSTAR_JWT_AUDIENCE:-northstar-api}
   PYTHONUNBUFFERED: "1"
+  # Fail-safe: a hosted deployment is cache-only. A live provider lane exists
+  # only for one bounded, operator-armed run — never as a boot default.
+  SCANNER_LIVE_ALLOWED: ${SCANNER_LIVE_ALLOWED:-0}
+  # Per-run live bounds: the API refuses to boot with live mode armed unless
+  # BOTH are set (see Northstar_backend/live_gate.assert_live_posture).
+  NS_LIVE_PER_RUN_ARMED: ${NS_LIVE_PER_RUN_ARMED:-0}
+  NS_LIVE_PER_RUN_CAP_CENTS: ${NS_LIVE_PER_RUN_CAP_CENTS:-0}
 
 services:
   postgres:
@@ -72,6 +79,15 @@ services:
         condition: service_healthy
       migrate:
         condition: service_completed_successfully
+    expose:
+      - "8090"
+    healthcheck:
+      # P1-05: a polling loop must be able to say it is actually progressing.
+      test: ["CMD-SHELL", "python -c \"import urllib.request; r=urllib.request.urlopen('http://127.0.0.1:8090/readyz', timeout=4); exit(0 if r.status==200 else 1)\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
     restart: unless-stopped
 
   scheduler:
@@ -85,6 +101,14 @@ services:
         condition: service_healthy
       migrate:
         condition: service_completed_successfully
+    expose:
+      - "8091"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; r=urllib.request.urlopen('http://127.0.0.1:8091/readyz', timeout=4); exit(0 if r.status==200 else 1)\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
     restart: unless-stopped
 
   caddy:

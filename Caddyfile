@@ -1,7 +1,12 @@
 # Hosted stack entrypoint. UI is served under /ui/ (Vite base); everything
-# under /api/ and the health path is reverse-proxied to the FastAPI service.
+# under /api/ and the health paths is reverse-proxied to the FastAPI service.
 # TLS is added automatically by Caddy when DOMAIN resolves to this host; for
 # plain local http://localhost the :80 site below is used as-is.
+#
+# P0-03 (2026-10-09): the FastAPI service now runs `main:app`, the single
+# entrypoint that serves every UI-called route. Caddy proxies the health and
+# AutothinK workspace paths too, so a hosted smoke test exercises the same
+# surface as a local one.
 
 {
 	admin off
@@ -10,8 +15,18 @@
 :80 {
 	encode gzip
 
-	# API + foundation health -> FastAPI.
+	# API + foundation health -> FastAPI (the single hosted entrypoint).
 	handle /api/* {
+		reverse_proxy api:8000
+	}
+
+	# Health and readiness probes used by orchestration and Monitoring.
+	handle /health* {
+		reverse_proxy api:8000
+	}
+
+	# AutothinK workspace shell served by the API.
+	handle /autothink* {
 		reverse_proxy api:8000
 	}
 

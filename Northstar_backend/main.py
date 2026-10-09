@@ -1112,6 +1112,62 @@ def autothink_usage(session: dict = Depends(require_session)):
     )
 
 
+# --- Creative media provider readiness (A8: media stays CONCEPT) ------------
+# The Design Studio asks one question before it offers generation: is a media
+# provider armed? Until an operator approves an image/video provider the honest
+# answer is "no", and the room must show a concept notice instead of a queue.
+# Never reports a credential value — presence flags only.
+
+@app.get("/api/v1/foundation/creative/readiness")
+def creative_media_readiness():
+    image_provider = bool(os.environ.get("IMAGE_GEN_PROVIDER") or os.environ.get("OPENROUTER_API_KEY"))
+    video_armed = str(os.environ.get("VIDEO_GEN_LIVE", "")).strip() == "1"
+    armed = bool(image_provider and video_armed)
+    return {
+        "armed": armed,
+        "status": "armed" if armed else "concept",
+        "image_provider_configured": image_provider,
+        "video_enabled": video_armed,
+        "note": (
+            "No image/video provider is approved for this deployment. "
+            "Generation is disabled; the studio works as a local designer "
+            "and nothing is sent to a provider."
+        ) if not armed else (
+            "A media provider is configured. Every request is metered and "
+            "an operator approval is still required per run."
+        ),
+    }
+
+
+# --- Legacy spelling of the hosted reasoning routes (P0-02) -----------------
+# The UI used to call /api/v1/foundation/reasoning/* and got a 404 because the
+# server only served /api/v1/reasoning/*. Both now resolve to the same handler.
+
+@app.get("/api/v1/foundation/reasoning/models")
+def foundation_reasoning_models():
+    return reasoning_models()
+
+
+@app.post("/api/v1/foundation/reasoning/run")
+def foundation_reasoning_run(req: ReasoningRunRequest):
+    return reasoning_run(req)
+
+
+@app.post("/api/v1/foundation/reasoning/listing-proposal")
+def foundation_reasoning_listing_proposal(req: ListingProposalRequest):
+    return reasoning_listing_proposal(req)
+
+
+@app.post("/api/v1/foundation/reasoning/ad-copy-proposal")
+def foundation_reasoning_ad_copy_proposal(req: AdCopyProposalRequest):
+    return reasoning_ad_copy_proposal(req)
+
+
+@app.post("/api/v1/foundation/reasoning/spreadsheet-analysis")
+def foundation_reasoning_spreadsheet_analysis(req: SpreadsheetAnalysisRequest):
+    return reasoning_spreadsheet_analysis(req)
+
+
 # --- Hosted reasoning routes (OpenCode Go) ---------------------------------
 
 @app.get("/api/v1/reasoning/models")

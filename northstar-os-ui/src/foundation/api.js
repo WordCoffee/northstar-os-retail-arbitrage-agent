@@ -64,7 +64,11 @@ function headers(method, extra = {}) {
 
 async function req(path, opts = {}) {
   const method = opts.method || 'GET'
-  const res = await fetch(`${BASE}${path}`, {
+  // P0-02 (2026-10-09): an explicit `/api/...` path bypasses the foundation
+  // prefix. The hosted-reasoning routes are served at /api/v1/reasoning/* and
+  // were 404'ing under the old /api/v1/foundation/reasoning/* spelling.
+  const url = String(path).startsWith('/api/') ? path : `${BASE}${path}`
+  const res = await fetch(url, {
     credentials: 'include',
     headers: headers(method, opts.headers),
     ...opts,
@@ -171,12 +175,15 @@ export const foundationApi = {
   keywordConflicts: () => req('/keywords/conflicts'),
   keywordProvenance: (id) => req(`/keywords/provenance/${id}`),
 
-  // hosted reasoning (OpenCode Go) — non-creative proposals, analysis, generic run
-  reasoningModels: () => req('/reasoning/models'),
-  reasoningListingProposal: (body) => req('/reasoning/listing-proposal', { method: 'POST', body: JSON.stringify(body) }),
-  reasoningAdCopyProposal: (body) => req('/reasoning/ad-copy-proposal', { method: 'POST', body: JSON.stringify(body) }),
-  reasoningSpreadsheetAnalysis: (body) => req('/reasoning/spreadsheet-analysis', { method: 'POST', body: JSON.stringify(body) }),
-  reasoningRun: (body) => req('/reasoning/run', { method: 'POST', body: JSON.stringify(body) }),
+  // Hosted reasoning — non-creative proposals, analysis, generic run.
+  // P0-02 (2026-10-09): these previously resolved to
+  // /api/v1/foundation/reasoning/* which 404'd. The server routes live at
+  // /api/v1/reasoning/*, so these are now absolute paths (see `req`).
+  reasoningModels: () => req('/api/v1/reasoning/models'),
+  reasoningListingProposal: (body) => req('/api/v1/reasoning/listing-proposal', { method: 'POST', body: JSON.stringify(body) }),
+  reasoningAdCopyProposal: (body) => req('/api/v1/reasoning/ad-copy-proposal', { method: 'POST', body: JSON.stringify(body) }),
+  reasoningSpreadsheetAnalysis: (body) => req('/api/v1/reasoning/spreadsheet-analysis', { method: 'POST', body: JSON.stringify(body) }),
+  reasoningRun: (body) => req('/api/v1/reasoning/run', { method: 'POST', body: JSON.stringify(body) }),
 
   // raw authenticated request (internal pages)
   rawReq: (path, opts = {}) => req(path, opts),

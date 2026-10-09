@@ -15,3 +15,27 @@ venv-phase1c02
 **/.venv
 Northstar_backend_audit_export
 Northstar OS Computer clone
+# Context-size exclusions for the API image: main:app only needs
+# Northstar_backend/, autothink/ and shared/. These trees are unrelated work
+# that made the Docker context take minutes to send.
+data
+learning
+master-brain
+docs
+reports
+research
+legacy
+tmp-probe
+northstar-os-retail-arbitrage-agent
+word-coffee-website
+quick-draw-app
+cfa-calculator
+turmeric_sourcing
+motivation-quotes
+generated_images
+automations
+.env
+.env.example
+*.zip
+*.md
+Northstar_export_report_*.txt
