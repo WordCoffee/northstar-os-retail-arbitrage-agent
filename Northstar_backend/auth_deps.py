@@ -19,11 +19,15 @@ import os
 import sys
 from typing import Optional
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 
 sys.path.insert(0, os.path.dirname(__file__))
 import auth
+
+# Same cookie name the Foundation login sets (foundation/auth_session.py).
+# Duplicated rather than imported to keep this module importable on its own.
+_SESSION_COOKIE_NAME = "ns_session"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login", auto_error=False)
 
@@ -111,6 +115,75 @@ async def require_admin(user: dict = Depends(get_current_user)) -> dict:
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Administrator role required.",
         )
+    return user
+
+
+async def require_session(request: Request) -> dict:
+    """STRICT session dependency: no anonymous fallback, ever.
+
+    Unlike :func:`get_current_user` (which returns a read-only demo identity so
+    the public read surface works before sign-in), this dependency refuses with
+    401 unless a real session is presented:
+
+      * an ``Authorization: Bearer <jwt>`` access token, or
+      * the HttpOnly ``ns_session`` cookie minted by the Foundation login.
+
+    Used by every route that spends a model run, writes state, or exposes a
+    tenant's data — i.e. the whole ``/api/autothink/*`` surface. The returned
+    dict always carries ``id``, ``tenant_id`` and ``role``; a session whose
+    organization cannot be resolved is refused, not silently scoped to a
+    shared bucket.
+    """
+    token = None
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        token = auth_header[len("Bearer "):].strip()
+    if not token:
+        token = request.cookies.get(_SESSION_COOKIE_NAME) or None
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication required.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    try:
+        payload = auth.decode_token(token)
+    except auth.jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Session expired.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    except auth.jwt.InvalidTokenError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid session.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    if payload.get("type") != "access":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token type.",
+        )
+
+    user = auth.get_user(payload["sub"])
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found.",
+        )
+
+    role = payload.get("role")
+    user["role"] = role if auth.is_valid_role(role) else auth.ROLE_MEMBER
+    user["tenant_id"] = payload.get("tenant_id") or user.get("id")
+    if not user.get("tenant_id"):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Session has no resolved organization.",
+        )
+    user["session_jti"] = payload.get("jti")
     return user
 
 

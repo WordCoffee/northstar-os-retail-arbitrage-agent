@@ -17,7 +17,7 @@ answer instead of an unhandled exception.
 import json
 import os
 import requests
-from typing import Dict, List, Optional
+from typing import Callable, Dict, List, Optional
 
 OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_CHAT_ENDPOINT = f"{OLLAMA_BASE_URL}/api/chat"
@@ -112,19 +112,29 @@ class UnifiedLLMAdapter:
     # Generation
     # ------------------------------------------------------------------
 
-    def generate(self, query: str, provider: str = "local", model: Optional[str] = None) -> Dict:
+    def generate(self, query: str, provider: str = "local", model: Optional[str] = None,
+                 system_prompt: Optional[str] = None,
+                 should_cancel: Optional[Callable[[], bool]] = None) -> Dict:
         """Generate a response for `query`.
 
         provider: "local" (default) or "cloud".
         model:    optional override; falls back to adapter default per provider.
+        system_prompt: optional grounded prompt (see
+                  build_system_prompt_with_context). Defaults to the base prompt.
+        should_cancel: optional poll callback. Checked while streaming, so a
+                  long local run can be stopped mid-generation instead of
+                  running to completion.
         """
+        prompt = system_prompt or self.system_prompt
         if provider == "cloud":
-            return self._generate_cloud(query, model or self.cloud_model)
-        return self._generate_local(query, model or self.local_model)
+            return self._generate_cloud(query, model or self.cloud_model, prompt)
+        return self._generate_local(query, model or self.local_model, prompt, should_cancel)
 
-    def _generate_local(self, query: str, model: str) -> Dict:
+    def _generate_local(self, query: str, model: str,
+                        system_prompt: Optional[str] = None,
+                        should_cancel: Optional[Callable[[], bool]] = None) -> Dict:
         messages = [
-            {"role": "system", "content": self.system_prompt},
+            {"role": "system", "content": system_prompt or self.system_prompt},
             {"role": "user", "content": query},
         ]
         # Streamed generation with explicit generation guardrails. Streaming
@@ -157,6 +167,16 @@ class UnifiedLLMAdapter:
             total_duration = None
             done_seen = False
             for line in resp.iter_lines(decode_unicode=True):
+                if should_cancel is not None and should_cancel():
+                    resp.close()
+                    return {
+                        "ok": False,
+                        "provider": "local",
+                        "model": model,
+                        "content": "[CANCELLED] The run was cancelled before it finished. "
+                                   "Nothing was written to your history as an answer.",
+                        "reason": "cancelled_by_user",
+                    }
                 if not line:
                     continue
                 try:
@@ -191,7 +211,8 @@ class UnifiedLLMAdapter:
         except requests.RequestException as exc:
             return self._local_fallback(query, model, reason=str(exc))
 
-    def _generate_cloud(self, query: str, model: str) -> Dict:
+    def _generate_cloud(self, query: str, model: str,
+                        system_prompt: Optional[str] = None) -> Dict:
         provider = self.cloud_provider()
         if provider is None:
             return {
@@ -236,7 +257,7 @@ class UnifiedLLMAdapter:
         body = {
             "model": model,
             "messages": [
-                {"role": "system", "content": self.system_prompt},
+                {"role": "system", "content": system_prompt or self.system_prompt},
                 {"role": "user", "content": query},
             ],
             "max_tokens": NUM_PREDICT,
@@ -256,6 +277,13 @@ class UnifiedLLMAdapter:
         except (ValueError, KeyError, IndexError, TypeError):
             return self._cloud_fallback(model, "malformed openrouter response")
         usage = payload.get("usage") or {}
+        # Only a provider-reported cost is recorded; anything else stays
+        # UNKNOWN in the usage ledger (never estimated).
+        reported_cost = usage.get("cost") if isinstance(usage, dict) else None
+        try:
+            reported_cost = float(reported_cost) if reported_cost is not None else None
+        except (TypeError, ValueError):
+            reported_cost = None
         return {
             "ok": True,
             "provider": "cloud",
@@ -263,6 +291,7 @@ class UnifiedLLMAdapter:
             "content": content,
             "prompt_tokens": usage.get("prompt_tokens"),
             "completion_tokens": usage.get("completion_tokens"),
+            "cost_usd": reported_cost,
         }
 
     def _cloud_fallback(self, model: str, reason: str) -> Dict:

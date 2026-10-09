@@ -19,7 +19,7 @@ import time
 import hashlib
 import secrets
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import bcrypt
 import jwt
@@ -28,10 +28,44 @@ import jwt
 # Config
 # ---------------------------------------------------------------------------
 
+# Hosted environments must present a persistent signing key. An ephemeral one
+# silently invalidates every session on restart, which looks exactly like a
+# mass logout to a customer. Dev/test keep the old behaviour but record it so
+# the posture check can say so.
+_HOSTED_ENVIRONMENTS = ("staging", "production")
+
 JWT_SECRET = os.environ.get("NORTHSTAR_JWT_SECRET") or secrets.token_hex(32)
+JWT_SECRET_IS_EPHEMERAL = not bool(os.environ.get("NORTHSTAR_JWT_SECRET"))
 JWT_ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 REFRESH_TOKEN_EXPIRE_DAYS = 30
+
+
+def jwt_secret_posture_problems() -> List[str]:
+    """Every reason the signing-key configuration must be refused.
+
+    Empty in every case where booting is safe. Never inspects or returns the
+    secret VALUE.
+    """
+    if not JWT_SECRET_IS_EPHEMERAL:
+        return []
+    environment = (os.environ.get("ENVIRONMENT") or "").strip().lower()
+    if environment in _HOSTED_ENVIRONMENTS:
+        return [
+            "NORTHSTAR_JWT_SECRET is not set while ENVIRONMENT=%s: every "
+            "session would be invalidated on restart. Set a persistent secret "
+            "before booting a hosted deployment." % environment
+        ]
+    return []
+
+
+def assert_jwt_secret_posture() -> None:
+    """Refuse to boot hosted mode with an ephemeral signing key."""
+    problems = jwt_secret_posture_problems()
+    if problems:
+        raise RuntimeError(
+            "JWT SECRET POSTURE VIOLATION: " + problems[0]
+        )
 
 # Plan entitlements — thin loader over the canonical catalog.
 # Single source of truth: shared/subscription-plans.json (A2 migration).

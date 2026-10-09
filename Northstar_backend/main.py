@@ -46,7 +46,7 @@ from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
 from rate_limiter import RateLimitMiddleware
 from bff_envelope import BffEnvelopeMiddleware
-from auth_deps import get_current_user, require_plan, require_role, require_admin
+from auth_deps import get_current_user, require_plan, require_role, require_admin, require_session
 
 # Initialize structured logging
 setup_logging()
@@ -111,9 +111,12 @@ async def lifespan(app):
     # plain GET must never be able to spend money, so live mode is refused
     # unless it is armed per-run with an explicit cost cap.
     from live_gate import assert_live_posture
+    # Phase 3 (2026-10-09): refuse an ephemeral JWT secret in hosted mode.
+    from auth import assert_jwt_secret_posture
     try:
         assert_prod_posture()
         assert_live_posture()
+        assert_jwt_secret_posture()
     except RuntimeError as exc:
         logger.critical(str(exc))
         raise
@@ -982,6 +985,7 @@ class AutothinkRunRequest(BaseModel):
     model: Optional[str] = None
     tier: Optional[str] = None
     prev_tier: Optional[str] = None
+    idempotency_key: Optional[str] = None
 
 
 # --- Hosted reasoning API (OpenCode Go) -------------------------------------
@@ -1038,7 +1042,7 @@ def _autothink_server():
 
 
 @app.get("/api/autothink/models")
-def autothink_models():
+def autothink_models(session: dict = Depends(require_session)):
     """Installed local models + provider availability for the workspace UI."""
     try:
         srv = _autothink_server()
@@ -1049,7 +1053,7 @@ def autothink_models():
 
 
 @app.post("/api/autothink/run")
-def autothink_run(req: AutothinkRunRequest):
+def autothink_run(req: AutothinkRunRequest, session: dict = Depends(require_session)):
     """Route + generate an AutothinK response (local Ollama or cloud OpenRouter)."""
     if not (req.query or "").strip():
         raise HTTPException(status_code=422, detail="query is empty")
@@ -1058,14 +1062,54 @@ def autothink_run(req: AutothinkRunRequest):
         payload = srv.RunRequest(**req.model_dump())
     except Exception as exc:  # pydantic validation (e.g. bad provider/tier)
         raise HTTPException(status_code=422, detail=str(exc))
-    return srv.run(payload)
+    return srv.run(
+        payload,
+        org_id=session.get("tenant_id") or session.get("id"),
+        user_id=session.get("id"),
+    )
 
 
 @app.get("/api/autothink/history")
-def autothink_history(limit: int = 20):
-    """Session command history for the workspace."""
+def autothink_history(limit: int = 20, session: dict = Depends(require_session)):
+    """Session command history for the workspace (tenant-scoped)."""
     srv = _autothink_server()
-    return srv.history(limit)
+    return srv.history(
+        limit,
+        org_id=session.get("tenant_id") or session.get("id"),
+    )
+
+
+@app.post("/api/autothink/cancel")
+def autothink_cancel(body: Dict[str, Any] = Body(...),
+                     session: dict = Depends(require_session)):
+    """Cancel a mid-flight AutothinK run (tenant-scoped)."""
+    run_id = str((body or {}).get("run_id") or "").strip()
+    if not run_id:
+        raise HTTPException(status_code=422, detail="run_id is required")
+    srv = _autothink_server()
+    return srv.cancel(
+        srv.CancelRequest(run_id=run_id),
+        org_id=session.get("tenant_id") or session.get("id"),
+    )
+
+
+@app.get("/api/autothink/jobs/{run_id}")
+def autothink_job(run_id: str, session: dict = Depends(require_session)):
+    """Run state for polling / resumability (tenant-scoped)."""
+    srv = _autothink_server()
+    return srv.job_state(
+        run_id,
+        org_id=session.get("tenant_id") or session.get("id"),
+    )
+
+
+@app.get("/api/autothink/usage")
+def autothink_usage(session: dict = Depends(require_session)):
+    """Per-tenant usage / metering summary (tenant-scoped)."""
+    srv = _autothink_server()
+    return srv.usage_summary(
+        org_id=session.get("tenant_id") or session.get("id"),
+    )
 
 
 # --- Hosted reasoning routes (OpenCode Go) ---------------------------------

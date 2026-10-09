@@ -15,7 +15,29 @@ _DEFAULT_PATH = os.path.join(_DEFAULT_MEMORY_DIR, "session-history.json")
 MAX_ENTRIES = 50
 
 
+def _safe_org(org_id: Optional[str]) -> str:
+    """Filesystem-safe tenant key. Never empty: unknown tenant == 'anonymous'."""
+    raw = (org_id or "").strip().lower()
+    if not raw:
+        return "anonymous"
+    return "".join(c if (c.isalnum() or c in "-_.") else "_" for c in raw)[:64]
+
+
+def store_path_for_org(org_id: Optional[str], base_dir: Optional[str] = None) -> str:
+    """Per-tenant history file. Tenants never share a history store."""
+    parent = base_dir or _DEFAULT_MEMORY_DIR
+    return os.path.join(parent, "session-history-%s.json" % _safe_org(org_id))
+
+
 class SessionStore:
+    """Tenant-scoped command history for AutothinK.
+
+    One file per organization, so a tenant can never read another tenant's
+    entries. Auto-loads on construction, persists append-only, and caps
+    history length so the file stays small. Pure file IO — no network, no
+    credentials.
+    """
+
     def __init__(self, path: Optional[str] = None, max_entries: int = MAX_ENTRIES):
         self.path = path or _DEFAULT_PATH
         self.max_entries = max_entries
