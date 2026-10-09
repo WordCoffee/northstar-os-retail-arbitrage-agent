@@ -25,11 +25,11 @@ only navigation chrome to an unauthenticated fetch:
 
 | Official page | Result |
 |---|---|
-| `sellercentral.amazon.com/help/hub/reference/...` (Product image requirements, A+ Content guide, etc.) | `UNKNOWN (fetch failed: SPA — HTML shell only, article body loaded by JS)` (S421) |
-| `advertising.amazon.com/resources/ad-policy/en/sponsored-ads-policies` (Sponsored ads guidelines & acceptance policies) | `UNKNOWN (fetch failed: empty body, client-rendered only)` (S422) |
-| `advertising.amazon.com/resources/ad-policy/en/stores` (Stores guidelines & acceptance policies) | `UNKNOWN (fetch failed: same)` (S423) |
-| `advertising.amazon.com/resources/ad-policy/en/creative-acceptance` (Amazon Ads Guidelines & Acceptance Policies) | `UNKNOWN (fetch failed: same)` (S424) |
-| `advertising.amazon.com/resources/ad-policy/en/sponsored-display-policies` | `UNKNOWN (fetch failed: same)` (S425) |
+| `sellercentral.amazon.com/help/hub/reference/...` (Product image requirements, A+ Content guide, etc.) | `UNKNOWN (fetch failed: SPA — HTML shell only, article body loaded by JS)` (S420) |
+| `advertising.amazon.com/resources/ad-policy/en/sponsored-ads-policies` (Sponsored ads guidelines & acceptance policies) | `UNKNOWN (fetch failed: empty body, client-rendered only)` (S421) |
+| `advertising.amazon.com/resources/ad-policy/en/stores` (Stores guidelines & acceptance policies) | `UNKNOWN (fetch failed: same)` (S422) |
+| `advertising.amazon.com/resources/ad-policy/en/creative-acceptance` (Amazon Ads Guidelines & Acceptance Policies) | `UNKNOWN (fetch failed: same)` (S423) |
+| `advertising.amazon.com/resources/ad-policy/en/sponsored-display-policies` | `UNKNOWN (fetch failed: same)` (S424) |
 
 Where a canonical help page could not be reached, this document substitutes the **closest
 reachable official Amazon property**:
@@ -83,7 +83,7 @@ summarising Amazon's "Product image requirements" help page).
 https://sellercentral.amazon.com/seller-forums/discussions/t/99a0dc92-15dc-492a-b24e-f327f4c28dd5
 **Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED · **`date_sensitive: yes`**
 **Compliance-limit note:** the canonical *Product image requirements* and *main image requirements*
-help pages themselves are JS-gated and could not be retrieved (S421), so these rows come from
+help pages themselves are JS-gated and could not be retrieved (S420), so these rows come from
 Amazon's own summary of that page on an official Amazon property rather than from the page
 itself. Treat wording as authoritative-but-secondhand. The 85% fill figure and the
 "no text/logos/borders" rule are stated by Amazon in those posts. Category-specific main-image
@@ -115,7 +115,7 @@ finding contradictory language across Amazon's own style guides — one requirem
 **URLs:** as above. **Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED ·
 **`date_sensitive: yes`**
 **Compliance-limit note:** the dedicated "requirements for all product images" help page could
-not be retrieved (S421). Whether text/graphics are permitted on secondary images is therefore
+not be retrieved (S420). Whether text/graphics are permitted on secondary images is therefore
 **UNKNOWN as a matter of Amazon's current published rule**, even though infographic-style
 secondary images are ubiquitous in practice.
 
@@ -139,11 +139,11 @@ background image. Add text to the overlay box" (S414).
 own Seller Forums report Premium A+ images being **rejected for containing a brand logo**, with
 the stated reason that "text is no longer allowed on images", and product images rejected because
 of text that is part of the physical product itself — one seller cites the word "Volume" printed
-below a volume knob being flagged (S471). Separate seller reports describe an Amazon-side "Content
+below a volume knob being flagged (S430). Separate seller reports describe an Amazon-side "Content
 Quality Analysis" that **soft-hides A+ content** flagged for "Lack diverse images" and
-"professional usage context" (S473).
+"professional usage context" (S432).
 
-**Sources:** S401, S411, S412, S414, S416, S471, S473.
+**Sources:** S401, S411, S412, S414, S416, S430, S432.
 **Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED (rules) · **`date_sensitive: yes`**
 **Compliance-limit note:** there is no reachable Amazon page that states a precise character
 budget, minimum type size, or allowed/prohibited word list for text inside *listing* images.
@@ -158,9 +158,9 @@ labelled as a heuristic, not an Amazon rule.**
 **Eligibility.** Available to Professional sellers approved as brand owners through Amazon Brand
 Registry, and to emerging brand owners in certain managed programmes (Launchpad, Amazon
 Exclusives). Once approved, A+ Content can only be added to products in the approved brand
-catalogue. A+ Content is free for eligible sellers (S511).
+catalogue. A+ Content is free for eligible sellers (S428).
 
-**Module count.** Up to **five** Basic A+ Content modules per ASIN (S511). A+ Content lets you
+**Module count.** Up to **five** Basic A+ Content modules per ASIN (S428). A+ Content lets you
 add images and text into five to seven different content modules to highlight product-level
 features (S411).
 
@@ -195,22 +195,22 @@ figures for individual modules: Product Description Text up to **6,000 character
 Technical Specifications up to **16 rows** (S414, KDP surface — same module family, different
 Amazon programme). From Amazon's SP-API A+ documentation, `StandardSingleImageHighlightsModule`:
 main image min 300 × 300 px, image alt text max 100 chars, headline max 160, subheadline max 200,
-body max 1,000, bullet max 100, up to 8 bullets (S513).
+body max 1,000, bullet max 100, up to 8 bullets (S425).
 
 **Approval workflow.** Review can take **up to seven business days** (longer in high-volume
 periods); after approval, publication can take up to 24 hours; **resubmission after rejection
 takes another seven business days**. Applying to more than 1,000 ASINs requires the bulk-upload
 workflow (CSV/XLS, up to 500,000 ASINs in the first column) (S411).
 
-**Sources:** S410, S411, S413, S414, S511, S513.
+**Sources:** S410, S411, S413, S414, S428, S425.
 **URLs:** https://m.media-amazon.com/images/G/35/sp-marketing-toolkit/Sellerfacingguides/BO/Standard_A_Module_Templates.pdf ·
 https://m.media-amazon.com/images/G/01/BX_Marketing/2023/AMZ_Guide_A_BPG_04b_US-4-21-2023.pdf ·
 https://m.media-amazon.com/images/G/01/BX_Marketing/2023/AMZ_Guide_Premium_A_Module_05b.pdf ·
 https://kdp.amazon.com/help/topic/GCKLH8V7ULLD5EXY ·
 https://sell.amazon.com/blog/a-plus-content-design-guide ·
 https://developer-docs.amazon/sp-api/lang-US/docs/a-plus-content-examples
-**Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED (S410/S411/S413/S414/S511) and
-REPORTED (S513 — retrieved through a search index; the live developer-docs path returns 404) ·
+**Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED (S410/S411/S413/S414/S428) and
+REPORTED (S425 — retrieved through a search index; the live developer-docs path returns 404) ·
 **`date_sensitive: yes`**
 **Compliance-limit note:** the standard-modules PDF is undated on its face and the per-module
 character limits are not published in any reachable Amazon page. The "Four Image Highlights"
@@ -224,9 +224,9 @@ a value for it.
 **Source of truth:** Amazon's *Premium A+ Module Guide*, Version 1.0, "Last updated May 30, 2023"
 (S410) — an official Amazon PDF on `m.media-amazon.com`.
 
-**Module count.** Up to **seven** modules per ASIN with Premium (S511). Amazon's SP-API
+**Module count.** Up to **seven** modules per ASIN with Premium (S428). Amazon's SP-API
 troubleshooting documentation states a Premium document cannot contain more than seven modules,
-and that "content documents cannot contain both premium and standard module types" (S514,
+and that "content documents cannot contain both premium and standard module types" (S426,
 REPORTED).
 
 **Global image file requirements:** `.jpg`, `.bmp`, `.png` (no animated GIFs); **≤ 2 MB** per
@@ -256,16 +256,16 @@ file; **≥ 72 dpi**; **RGB** (CMYK not supported).
 | Premium Q&A | Question 120 · Answer 250 | 1464 × 600 | none | Q&A 2–5 |
 | Premium Technical Specifications | Headline 80 · Specification 30 · Definition 500 | — | — | Specifications 4–16 |
 
-**Sources:** S410, S511, S514.
+**Sources:** S410, S428, S426.
 **URLs:** https://m.media-amazon.com/images/G/01/BX_Marketing/2023/AMZ_Guide_Premium_A_Module_05b.pdf ·
 https://sell.amazon.com/blog/a-plus-content-design-guide ·
 https://developer-docs.amazon/sp-api/lang-US/docs/a-plus-troubleshooting
-**Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED (S410) / REPORTED (S514) ·
+**Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED (S410) / REPORTED (S426) ·
 **`date_sensitive: yes`**
 **Compliance-limit note:** the guide is stamped "Version 1.0, last updated May 30, 2023" and is
 the only reachable per-module Premium spec. Premium A+ eligibility is granted by Amazon after
 review and is not automatic (sellers report being denied despite meeting the stated criteria —
-S474). Amazon markets Premium A+ as including "integrated 720p videos" (S511) while the module
+S433). Amazon markets Premium A+ as including "integrated 720p videos" (S428) while the module
 guide specifies 960 × 540 minimum for the full-video module; treat the guide's numbers as the
 asset spec and Amazon's marketing copy as aspirational.
 
@@ -302,7 +302,7 @@ limit text embedded in images.
 **URLs:** https://m.media.amazon.com/images/S/aplus-media-library-service-product-documents-media/AplusBrand/Aplus_Brand_Story_Guide_EN_US_20210227.pdf
 **Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED · **`date_sensitive: yes`**
 **Compliance-limit note:** the PDF is dated 2021-02-27 in its filename; Brand Story module
-availability and specs may have moved. Amazon's SP-API A+ docs (S514, REPORTED) state Brand Story
+availability and specs may have moved. Amazon's SP-API A+ docs (S426, REPORTED) state Brand Story
 modules must live in their own document with `contentType` set to BrandStory, and give a Brand
 Story logo minimum of **362 × 453** — which is the *Brand Focus Image* size in the PDF, not the
 Logo card's 315 × 145. That discrepancy is unresolved and flagged in "Requirement uncertainty".
@@ -397,7 +397,7 @@ search engines or screen readers; use the "Image with text" tile instead (S401).
 https://advertising.amazon.com/resources/ad-specs/stores
 **Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED · **`date_sensitive: yes`**
 **Compliance-limit note:** the *Stores guidelines and acceptance policies* page (the policy
-counterpart to these creative specs) is client-rendered and unreachable (S423). Stores content
+counterpart to these creative specs) is client-rendered and unreachable (S422). Stores content
 acceptance rules are therefore **UNKNOWN**. Stores eligibility requires an approved brand in
 Brand Registry.
 
@@ -512,7 +512,7 @@ https://advertising.amazon.com/resources/ad-specs/component-based-creative ·
 https://advertising.amazon.com/resources/ad-specs/how-to-build-brand-creatives-to-engage-amazon-shoppers
 **Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED · **`date_sensitive: yes`**
 **Compliance-limit note:** the canonical *Sponsored ads guidelines and acceptance policies* page
-is unreachable (S422), so the full acceptance-policy text could not be checked. Submit ads at
+is unreachable (S421), so the full acceptance-policy text could not be checked. Submit ads at
 least one week before launch to allow for moderation and resubmission (S403).
 
 ---
@@ -590,7 +590,7 @@ duration 6–45 s; dimensions 1920 × 1080 or higher; min video bit rate 4 mbps;
 **URLs:** https://advertising.amazon.com/resources/ad-specs/en/ecommerce ·
 https://advertising.amazon.com/library/guides/sponsored-brands-sponsored-display-moderation
 **Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED · **`date_sensitive: yes`**
-**Compliance-limit note:** the dedicated *Sponsored Display policies* page is unreachable (S425).
+**Compliance-limit note:** the dedicated *Sponsored Display policies* page is unreachable (S424).
 Amazon notes it "may test variations of REC elements, copy, layout, and design", so live ads may
 differ from the examples on the spec page.
 
@@ -617,7 +617,7 @@ image and associated product information from the detail page are used automatic
 from the listing image (§1 and §2), not from an ad-specific spec. The Design Studio's main-image
 and secondary-image output is therefore the whole of the Sponsored Products compliance surface.
 
-**Sources:** S402, S403, S418, S419.
+**Sources:** S402, S403, S417, S418, S419.
 **URLs:** https://advertising.amazon.com/resources/ad-specs/en/sponsored-brands-video ·
 https://advertising.amazon.com/library/guides/sponsored-brands-sponsored-display-moderation ·
 https://advertising.amazon.com/library/guides/getting-started-with-sponsored-ads ·
@@ -748,7 +748,7 @@ https://advertising.amazon.com/resources/ad-specs/en/ecommerce
 **Accessed:** 2026-10-09 (UTC) · **Label:** VERIFIED · **`date_sensitive: yes`**
 **Compliance-limit note:** the full *Amazon Ads Guidelines and Acceptance Policies* (CAP) and the
 *Sponsored ads guidelines and acceptance policies* are the authoritative documents and both are
-client-rendered and unreachable (S422, S424). Amazon's own moderation guide states its content
+client-rendered and unreachable (S421, S423). Amazon's own moderation guide states its content
 list "does not contain our full ad policies". Health/supplement claim rules specifically were
 **not** retrieved from Amazon — only the generic restricted-category pointer in S405.
 
@@ -760,18 +760,18 @@ Verdicts follow the operator's rule: **VERIFIED only where an Amazon-specific sp
 export preset was directly observed in the competitor's product or docs. Otherwise UNKNOWN.**
 "Does not demonstrably meet the Amazon rules" is the blunt answer for almost every general tool.
 
-| Competitor | Amazon-specific spec / template / preset observed? | Verdict | What was actually observed |
+| Competitor | Amazon-specific spec / template / preset observed? | Verdict | What was actually observed (source) |
 |---|---|---|---|
-| **Canva** | **Yes — partial** | **VERIFIED (template exists; compliance NOT enforced)** | Canva publishes an "Amazon product image templates" page stating its preset layouts "default to the basic Amazon product image size — a 1080 × 1080 square photo". That is a genuine Amazon-named template category with a stated pixel size. It is a *canvas size*, not a compliance preset: nothing observed enforces the pure-white background, the 85% fill, the no-text rule, the 500–10,000 px range, or format constraints. 1080 × 1080 also sits below the practical 1600/2000 px recommendation that most Amazon guidance and Amazon's own zoom preference imply. |
-| **Figma** | **No** | **UNKNOWN** | No Amazon-specific spec, template or export preset on Figma's product surface or in its public community search results. Amazon listing templates exist in the community as user-made files, which is not a product feature. Figma has no notion of Amazon image compliance. |
-| **Adobe Firefly** | **No** | **UNKNOWN** | The product page returned HTTP 403 to every fetch attempt (S507). No Amazon-specific spec observed. Firefly is marketed on commercial safety and creative control, not on marketplace listing specs. |
-| **PiccoPilot** | **No (REPORTED compliance claim)** | **UNKNOWN** | Homepage markets "100% Compliant" as one of three levers ("Optimized Templates + Low Cost + 100% Compliant = More Free Traffic") and lists Amazon among export destinations. No Amazon spec, dimension table or rule enforcement was observed on the templates or tool pages. The compliance claim is vendor marketing (REPORTED), unverified. Note: a **PicCopilot Service Closure Notice** is displayed on the site. |
-| **Packify.ai (Pacdora)** | **No** | **UNKNOWN** | Both packify.ai and pacdora.com homepages contain no Amazon reference. Packify is positioned as an AI packaging-design agent (text → 3D packaging concepts, print-ready dielines, AI photoshoots). Its output is packaging artwork and dielines, not Amazon listing creative. Nothing observed maps to Amazon main-image, secondary-image or A+ specs. |
-| **Creatify** | **No** | **UNKNOWN** | Homepage says "Works with Meta, TikTok, Youtube, Snap, Amazon and more" and "Auto-optimized for each platform's specs". That is a marketing claim about social/ad platforms; no Amazon creative spec, dimension or rule set was observed on the homepage or the ecommerce use-case page. |
-| **Photoroom** | **Partial (REPORTED)** | **UNKNOWN** | Homepage advertises "Instant Resize — one image, every format. Resize for Instagram, **Amazon**, Shopify, and more" plus "Sell on Amazon, eBay & more" as an industry vertical. The dedicated resize/feature pages returned 404 or connection errors, so the actual Amazon preset dimensions were **not observed**. No Amazon compliance rule enforcement observed. |
-| **Pebblely** | **No** | **UNKNOWN — and documented absence** | Pebblely's own "How does it work?" page lists its complete image-size preset set: **Square (1:1) for Instagram and Shopify, Portrait (4:5) for Instagram feed, Story (9:16) for Instagram and TikTok, Landscape (16:9) for website banners, and Facebook Ad (16:9) for social campaigns.** There is **no Amazon preset at all**. Pricing tiers (Lite US$9/30 images, Basic US$19/200, Pro US$39/500) mention background themes and credits, not Amazon specs. This is a documented, blunt gap: the tool's output geometry is social-first. |
-| **Flair** | **No** | **UNKNOWN** | Amazon appears only as a customer logo on the homepage. Feature pages (drag-and-drop canvas, AI Marketing & Ads, on-model photography, human builder) contain no Amazon spec. Flair's own comparison table positions it against Pebblely/Botika/Claid, not against Amazon requirements. |
-| **Helium 10** | **N/A — not a creative tool** | **UNKNOWN (no creative output to assess)** | Helium 10 is an Amazon/Walmart/TikTok Shop *seller-operations* suite: Keyword Tracker, Listing Analyzer, Listing Builder, Profits, Follow-Up, Ads, Influencer Finder, etc. Nothing in its tools list is an image/design generator or an Amazon creative-compliance checker. It is Amazon-native in domain, not in creative output. |
+| **Canva** | **Yes — partial** | **VERIFIED (template exists; compliance NOT enforced)** | Canva publishes an "Amazon product image templates" page stating its preset layouts "default to the basic Amazon product image size — a 1080 × 1080 square photo" (S484, REPORTED: the page returned HTTP 403 and a browser-support interstitial, so the text came from a search index). That is a genuine Amazon-named template category with a stated pixel size. It is a *canvas size*, not a compliance preset: nothing observed enforces the pure-white background, the 85% fill, the no-text rule, the 500–10,000 px range, or format constraints. 1080 × 1080 also sits below the practical 1600/2000 px recommendation that most Amazon guidance and Amazon's own zoom preference imply. |
+| **Figma** | **No** | **UNKNOWN** | No Amazon-specific spec, template or export preset on Figma's product surface or in its public community search results (S497). Amazon listing templates exist in the community as user-made files, which is not a product feature. Figma has no notion of Amazon image compliance. |
+| **Adobe Firefly** | **No** | **UNKNOWN** | The product page returned HTTP 403 to every fetch attempt (S498). No Amazon-specific spec observed. Firefly is marketed on commercial safety and creative control, not on marketplace listing specs. |
+| **PiccoPilot** | **No (REPORTED compliance claim)** | **UNKNOWN** | Homepage markets "100% Compliant" as one of three levers ("Optimized Templates + Low Cost + 100% Compliant = More Free Traffic") and lists Amazon among export destinations (S488). The templates page and the AI Templates tool page contain no Amazon reference or dimension specification (S488). The compliance claim is vendor marketing (REPORTED), unverified. Note: a **PicCopilot Service Closure Notice** is displayed on the site. |
+| **Packify.ai (Pacdora)** | **No** | **UNKNOWN** | Both packify.ai (S493) and pacdora.com (S494) homepages contain no Amazon reference. Packify is positioned as an AI packaging-design agent (text → 3D packaging concepts, print-ready dielines, AI photoshoots). Its output is packaging artwork and dielines, not Amazon listing creative. Nothing observed maps to Amazon main-image, secondary-image or A+ specs. |
+| **Creatify** | **No** | **UNKNOWN** | Homepage says "Works with Meta, TikTok, Youtube, Snap, Amazon and more" and "Auto-optimized for each platform's specs" (S489). That is a marketing claim about social/ad platforms; no Amazon creative spec, dimension or rule set was observed on the homepage or the ecommerce use-case page (S490). |
+| **Photoroom** | **Partial (REPORTED)** | **UNKNOWN** | Homepage advertises "Instant Resize — one image, every format. Resize for Instagram, **Amazon**, Shopify, and more" plus "Sell on Amazon, eBay & more" as an industry vertical (S485). The dedicated resize/feature pages returned 404 or connection errors, so the actual Amazon preset dimensions were **not observed**. No Amazon compliance rule enforcement observed. |
+| **Pebblely** | **No** | **UNKNOWN — and documented absence** | Pebblely's own "How does it work?" page lists its complete image-size preset set: **Square (1:1) for Instagram and Shopify, Portrait (4:5) for Instagram feed, Story (9:16) for Instagram and TikTok, Landscape (16:9) for website banners, and Facebook Ad (16:9) for social campaigns.** There is **no Amazon preset at all** (S486). Pricing tiers (S487: Lite US$9/30 images, Basic US$19/200, Pro US$39/500) mention background themes and credits, not Amazon specs. This is a documented, blunt gap: the tool's output geometry is social-first. |
+| **Flair** | **No** | **UNKNOWN** | Amazon appears only as a customer logo on the homepage (S491). Feature pages (drag-and-drop canvas, AI Marketing & Ads, on-model photography, human builder) contain no Amazon spec (S492). Flair's own comparison table positions it against Pebblely/Botika/Claid, not against Amazon requirements. |
+| **Helium 10** | **N/A — not a creative tool** | **UNKNOWN (no creative output to assess)** | Helium 10 is an Amazon/Walmart/TikTok Shop *seller-operations* suite: Keyword Tracker, Listing Analyzer, Listing Builder, Product Listing Converter, Profits, Follow-Up, Ads, Influencer Finder (S495, S496). Nothing in its tools list is an image/design generator or an Amazon creative-compliance checker. It is Amazon-native in domain, not in creative output. |
 
 ### Blunt summary of compliance gaps
 
@@ -804,7 +804,7 @@ Things that could **not** be confirmed from an official Amazon property during t
 
 1. **The canonical Seller Central "Product image requirements", "main image requirements" and
    "requirements for all product images" help pages** — JS-gated SPA, `UNKNOWN (fetch failed)`
-   (S421). Every listing-image rule in §1–§3 therefore rests on Amazon's own summary of that page
+   (S420). Every listing-image rule in §1–§3 therefore rests on Amazon's own summary of that page
    posted on Amazon Seller Forums (S415, S416).
 2. **Whether text and graphics are permitted on *secondary* listing images.** Amazon's own pages
    conflict (a requirements page saying "No text or pricing details (Swatch only)" vs a Quick
@@ -813,7 +813,7 @@ Things that could **not** be confirmed from an official Amazon property during t
    (S403) as the governing standard for ASIN images in ads, but no reachable Amazon URL found.
 4. **The full Amazon Ads Guidelines and Acceptance Policies (CAP), the Sponsored ads guidelines
    and acceptance policies, the Stores guidelines and acceptance policies, and the Sponsored
-   Display policies** — all client-rendered and unreachable (S422, S423, S424, S425). These are the authoritative claim/policy documents; the prohibited-claims section
+   Display policies** — all client-rendered and unreachable (S421, S422, S423, S424). These are the authoritative claim/policy documents; the prohibited-claims section
    in §11 is built from the reachable moderation guide and quick-reference instead.
 5. **Character limits for Basic A+ Content modules** — not published in Amazon's standard-modules
    asset sheet (S413) or in the reachable guides; only a handful of figures are reachable
@@ -822,10 +822,10 @@ Things that could **not** be confirmed from an official Amazon property during t
 6. **The "Four Image Highlights" second-image dimension** — Amazon's own template sheet lists it
    as an unfilled placeholder (`X00xX00`). Do not invent a value.
 7. **Brand Story Logo card vs Focus Image size discrepancy** — the official PDF gives the Logo
-   card as 315 × 145 px and the Focus Image as 362 × 453 px, while Amazon's SP-API docs (S514,
+   card as 315 × 145 px and the Focus Image as 362 × 453 px, while Amazon's SP-API docs (S426,
    REPORTED) cite a "Brand Story logo" minimum of 362 × 453. Unresolved.
 8. **Premium A+ eligibility criteria** — Amazon states eligibility is granted after review;
-   sellers report denial despite meeting published criteria (S474). The current, exact
+   sellers report denial despite meeting published criteria (S433). The current, exact
    eligibility list is not published on a reachable page.
 9. **Category-specific image rules** (apparel mannequin/flat-lay, grocery, health/beauty, etc.)
    — not retrieved. Amazon's own materials repeatedly note that "Amazon category rules can be
