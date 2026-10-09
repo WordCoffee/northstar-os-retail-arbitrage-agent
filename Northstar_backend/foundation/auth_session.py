@@ -20,7 +20,15 @@ from .authn import jwt_audience, jwt_issuer, jwt_secret, is_production_like, Aut
 
 SESSION_COOKIE = "ns_session"
 CSRF_COOKIE = "ns_csrf"
-SESSION_PATH = "/api/v1/foundation"   # narrowly scoped to the Foundation API
+# P0-04 follow-up (2026-10-09): this used to be "/api/v1/foundation", which is
+# correct only while the Foundation app is the ONLY API. The suite is one
+# entrypoint serving /api/v1/foundation/*, /api/v1/reasoning/*,
+# /api/autothink/*, /api/sourcescout/* and more, so a cookie scoped to one
+# prefix was silently never sent to the others — a signed-in browser got a 401
+# from /api/autothink/history while /api/v1/foundation/me worked fine.
+# Path "/" is correct for a single-origin app and is what the CSRF cookie
+# already uses.
+SESSION_PATH = "/"
 CSRF_PATH = "/"                        # readable by the SPA document
 DEFAULT_TTL_SECONDS = 3600
 _UNSAFE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}

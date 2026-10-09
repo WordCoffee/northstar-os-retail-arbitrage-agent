@@ -128,11 +128,15 @@ async def require_session(request: Request) -> dict:
       * an ``Authorization: Bearer <jwt>`` access token, or
       * the HttpOnly ``ns_session`` cookie minted by the Foundation login.
 
-    Used by every route that spends a model run, writes state, or exposes a
-    tenant's data — i.e. the whole ``/api/autothink/*`` surface. The returned
-    dict always carries ``id``, ``tenant_id`` and ``role``; a session whose
-    organization cannot be resolved is refused, not silently scoped to a
-    shared bucket.
+    The cookie path is resolved against the **Foundation** store (its session
+    registry, for revocation) — NOT against the legacy ``auth.py`` SQLite user
+    table, which is a different database and does not hold Foundation users.
+    Crossing the two was the original defect here: a perfectly valid hosted
+    session was refused 401 because the legacy lookup found no matching row.
+
+    The returned dict always carries ``id``, ``tenant_id`` and ``role``. A
+    session whose organization cannot be resolved is refused, not silently
+    scoped to a shared bucket.
     """
     token = None
     auth_header = request.headers.get("Authorization", "")
@@ -144,6 +148,18 @@ async def require_session(request: Request) -> dict:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication required.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    # The cookie and the bearer may be signed by different issuers, so try the
+    # Foundation store first for a cookie and the legacy path for a bearer.
+    if request.cookies.get(_SESSION_COOKIE_NAME) and not auth_header.startswith("Bearer "):
+        user = _resolve_foundation_cookie(token)
+        if user is not None:
+            return user
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid session.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -185,6 +201,120 @@ async def require_session(request: Request) -> dict:
         )
     user["session_jti"] = payload.get("jti")
     return user
+
+
+def _app_foundation_state():
+    """The FoundationState the app already built at startup, if any.
+
+    Reusing it matters for two reasons: it avoids opening a second database
+    connection on every authenticated request, and — without a shared
+    ``FOUNDATION_DB_URL`` — ``FoundationState.build()`` would silently create a
+    fresh throwaway SQLite DB, so a session revoked by a logout would still
+    validate. That was the defect this helper fixes.
+    """
+    try:
+        import main
+        state = getattr(getattr(main, "app", None), "state", None)
+        return getattr(state, "foundation", None) if state is not None else None
+    except Exception:  # pragma: no cover - main not importable
+        return None
+
+
+def _resolve_foundation_cookie(token: str, state=None) -> Optional[dict]:
+    """Validate an HttpOnly Foundation session cookie.
+
+    Returns a user dict carrying ``id``, ``tenant_id`` and ``role``, or None
+    when the token is invalid, expired, or its session row is revoked. Never
+    reads or returns a secret.
+    """
+    import jwt as _jwt
+    from foundation.authn import jwt_secret, jwt_issuer, jwt_audience
+
+    if state is None:
+        state = _app_foundation_state()
+    if state is None:
+        try:
+            from foundation.api.state import FoundationState
+            state = FoundationState.build()
+        except Exception:  # pragma: no cover - store unavailable
+            return None
+
+    secret = jwt_secret()
+    if not secret:
+        return None
+    # PyJWT's API: issuer/audience are KEYWORD ARGUMENTS, not entries in the
+    # options dict. Passing them in `options` does nothing, and leaving
+    # `verify_aud` at its default True while the token carries an `aud` claim
+    # makes decode raise InvalidAudienceError — which the caller then reports
+    # as a generic invalid session. That was the original defect here: a real
+    # verification failure silently looked like an authentication failure.
+    issuer = jwt_issuer()
+    audience = jwt_audience()
+    kwargs = {"algorithms": ["HS256"]}
+    if issuer:
+        kwargs["issuer"] = issuer
+    if audience:
+        kwargs["audience"] = audience
+    else:
+        kwargs["options"] = {"verify_aud": False}
+    try:
+        payload = _jwt.decode(token, secret, **kwargs)
+    except _jwt.InvalidTokenError:
+        return None
+
+    if payload.get("type") != "access":
+        return None
+
+    user_id = payload.get("sub")
+    org_id = payload.get("tenant_id")
+    role = payload.get("role")
+
+    # Server-side revocation, fail closed: a session row must EXIST and must
+    # not be revoked. Checking only "is it revoked" would let a token that was
+    # never registered sail through — which is exactly how a logout could be
+    # bypassed. The login route registers every real session, so requiring a
+    # row costs nothing and closes that hole.
+    try:
+        jti = payload.get("jti")
+        if not jti:
+            return None
+        row = state.repos.sessions.by_jti(jti)
+        if row is None or row.get("revoked_at"):
+            return None
+    except Exception:  # pragma: no cover - store unavailable
+        return None
+
+    if not user_id or not org_id:
+        # A session with no resolved organization is refused, not scoped to a
+        # shared bucket.
+        return None
+
+    return {
+        "id": user_id,
+        "email": payload.get("email"),
+        "plan": payload.get("plan") or "foundation",
+        # The Foundation role vocabulary (organization_owner / organization_member
+        # / platform_admin) is NOT the legacy tenant vocabulary
+        # (owner/operator/member). Preserve the real role verbatim — silently
+        # rewriting it to the legacy default loses the operator's actual
+        # authority — and expose a legacy-compatible alias separately for the
+        # routes that still use auth.has_role().
+        "role": role or auth.ROLE_MEMBER,
+        "legacy_role": _legacy_role(role),
+        "tenant_id": org_id,
+        "session_jti": payload.get("jti"),
+        "source": "foundation_session_cookie",
+    }
+
+
+def _legacy_role(foundation_role: Optional[str]) -> str:
+    """Map a Foundation role onto the legacy tenant vocabulary, least privilege."""
+    mapping = {
+        "organization_owner": auth.ROLE_OWNER,
+        "organization_member": auth.ROLE_MEMBER,
+        "platform_admin": auth.ROLE_MEMBER,  # a separate axis, never a tenant role
+    }
+    return mapping.get(foundation_role or "", auth.ROLE_MEMBER)
 
 
 def require_plan(minimum_plan: str):
