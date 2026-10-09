@@ -8,6 +8,7 @@ const RAW_GROUPS = [
   ]},
   { id: 'research', label: 'Research', icon: 'flask', sections: [
     { id: 'sourcescout', label: 'SourceScout', route: '/product-finder', roles: ['operator', 'platform_admin'] },
+    { id: 'product-designer', label: 'Product Designer', route: '/product-designer', roles: ['operator', 'platform_admin'], status: 'Concept' },
     { id: 'golden-goose', label: 'Golden Goose Finder', route: '/golden-goose', roles: ['operator', 'platform_admin'] },
     { id: 'listing-guardian', label: 'Listing Guardian', route: '/listings', roles: ['operator', 'platform_admin'] },
     { id: 'keyword-tracker', label: 'Keyword Tracker', route: '/keyword-tracker', roles: ['operator', 'platform_admin'], status: 'Concept' },

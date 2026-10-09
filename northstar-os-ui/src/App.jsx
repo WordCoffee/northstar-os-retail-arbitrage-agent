@@ -10,6 +10,7 @@ import { TOAST_PROVIDER, useToast } from './components/ToastContext.jsx'
 
 import CommandCenter from './pages/internal/CommandCenter.jsx'
 import ProductFinder from './pages/internal/ProductFinder.jsx'
+import ProductDesigner from './pages/internal/ProductDesigner.jsx'
 import GoldenGooseDesk from './pages/internal/GoldenGoose.jsx'
 import ListingGuardian from './pages/internal/ListingGuardian.jsx'
 import KeywordTracker from './pages/internal/KeywordTracker.jsx'
@@ -78,6 +79,7 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/home" element={<CommandCenter />} />
       <Route path="/product-finder" element={<ProductFinder />} />
       <Route path="/product-finder/:id" element={<ProductFinder />} />
+      <Route path="/product-designer" element={<ProductDesigner />} />
       <Route path="/golden-goose" element={<GoldenGooseDesk />} />
       <Route path="/golden-goose/:id" element={<GoldenGooseDesk />} />
       <Route path="/listings" element={<ListingGuardian />} />

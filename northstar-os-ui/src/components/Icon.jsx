@@ -50,6 +50,27 @@ const paths = {
   arrowRight: `<polyline points="9 18 15 12 9 6" ${strokeAttr}/>`,
   arrowLeft: `<polyline points="15 18 9 12 15 6" ${strokeAttr}/>`,
   more: `<circle cx="12" cy="5" r="1.5" ${strokeAttr}/><circle cx="12" cy="12" r="1.5" ${strokeAttr}/><circle cx="12" cy="19" r="1.5" ${strokeAttr}/>`,
+  // ── Studio icons ──
+  cube: `<path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" ${strokeAttr}/><path d="M3 7l9 5 9-5M12 12v10" ${strokeAttr}/>`,
+  type: `<polyline points="4 7 4 4 20 4 20 7" ${strokeAttr}/><line x1="12" y1="4" x2="12" y2="20" ${strokeAttr}/><line x1="8" y1="20" x2="16" y2="20" ${strokeAttr}/>`,
+  image: `<rect x="3" y="3" width="18" height="18" rx="2" ${strokeAttr}/><circle cx="8.5" cy="8.5" r="1.5" ${strokeAttr}/><polyline points="21 15 16 10 5 21" ${strokeAttr}/>`,
+  shapes: `<circle cx="7" cy="7" r="4" ${strokeAttr}/><rect x="13" y="3" width="8" height="8" rx="1" ${strokeAttr}/><polygon points="12 21 20 21 16 13 8 13" ${strokeAttr}/>`,
+  sun: `<circle cx="12" cy="12" r="4" ${strokeAttr}/><line x1="12" y1="2" x2="12" y2="5" ${strokeAttr}/><line x1="12" y1="19" x2="12" y2="22" ${strokeAttr}/><line x1="2" y1="12" x2="5" y2="12" ${strokeAttr}/><line x1="19" y1="12" x2="22" y2="12" ${strokeAttr}/><line x1="5" y1="5" x2="7" y2="7" ${strokeAttr}/><line x1="17" y1="17" x2="19" y2="19" ${strokeAttr}/><line x1="5" y1="19" x2="7" y2="17" ${strokeAttr}/><line x1="17" y1="7" x2="19" y2="5" ${strokeAttr}/>`,
+  film: `<rect x="3" y="3" width="18" height="18" rx="2" ${strokeAttr}/><line x1="7" y1="3" x2="7" y2="21" ${strokeAttr}/><line x1="17" y1="3" x2="17" y2="21" ${strokeAttr}/><line x1="3" y1="12" x2="21" y2="12" ${strokeAttr}/>`,
+  grid: `<rect x="3" y="3" width="7" height="7" rx="1" ${strokeAttr}/><rect x="14" y="3" width="7" height="7" rx="1" ${strokeAttr}/><rect x="3" y="14" width="7" height="7" rx="1" ${strokeAttr}/><rect x="14" y="14" width="7" height="7" rx="1" ${strokeAttr}/>`,
+  sparkle: `<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z" ${strokeAttr}/><path d="M19 15l.9 2.4L22 18.3l-2.1.9L19 21.6l-.9-2.4L16 18.3l2.1-.9L19 15z" ${strokeAttr}/>`,
+  save: `<path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" ${strokeAttr}/><polyline points="17 21 17 13 7 13 7 21" ${strokeAttr}/><polyline points="7 3 7 8 15 8" ${strokeAttr}/>`,
+  camera: `<path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" ${strokeAttr}/><circle cx="12" cy="13" r="4" ${strokeAttr}/>`,
+  brush: `<path d="M9.06 11.9l8.07-8.06a2.85 2.85 0 114.03 4.03l-8.06 8.07" ${strokeAttr}/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 00-3-3.02z" ${strokeAttr}/>`,
+  copy: `<rect x="9" y="9" width="13" height="13" rx="2" ${strokeAttr}/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" ${strokeAttr}/>`,
+  trash: `<polyline points="3 6 5 6 21 6" ${strokeAttr}/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m5 0V4a2 2 0 012-2h0a2 2 0 012 2v2" ${strokeAttr}/>`,
+  rotate: `<polyline points="23 4 23 10 17 10" ${strokeAttr}/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" ${strokeAttr}/>`,
+  zoomIn: `<circle cx="11" cy="11" r="7" ${strokeAttr}/><line x1="21" y1="21" x2="16.65" y2="16.65" ${strokeAttr}/><line x1="11" y1="8" x2="11" y2="14" ${strokeAttr}/><line x1="8" y1="11" x2="14" y2="11" ${strokeAttr}/>`,
+  zoomOut: `<circle cx="11" cy="11" r="7" ${strokeAttr}/><line x1="21" y1="21" x2="16.65" y2="16.65" ${strokeAttr}/><line x1="8" y1="11" x2="14" y2="11" ${strokeAttr}/>`,
+  package: `<path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" ${strokeAttr}/><polyline points="3.27 6.96 12 12.01 20.73 6.96" ${strokeAttr}/><line x1="12" y1="22.08" x2="12" y2="12" ${strokeAttr}/>`,
+  stack: `<path d="M3 7l9-4 9 4-9 4-9-4z" ${strokeAttr}/><path d="M3 12l9 4 9-4" ${strokeAttr}/><path d="M3 17l9 4 9-4" ${strokeAttr}/>`,
+  wand: `<path d="M15 4V2M15 16v-2M8 9h2M20 9h2M17.8 11.8L19 13M17.8 6.2L19 5M3 21l9-9M12.2 6.2L11 5" ${strokeAttr}/>`,
+  send: `<line x1="22" y1="2" x2="11" y2="13" ${strokeAttr}/><polygon points="22 2 15 22 11 13 2 9 22 2" ${strokeAttr}/>`,
 };
 
 export default function Icon({ name, size = 16, className }) {
