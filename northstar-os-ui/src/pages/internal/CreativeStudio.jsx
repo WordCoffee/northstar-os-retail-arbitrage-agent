@@ -1,71 +1,74 @@
-import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components/Shared.jsx'
-import RoomTabs from '../../components/RoomTabs.jsx'
-import { useToast } from '../../components/ToastContext.jsx'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useEffect, useMemo, useState } from 'react'
-
 // ═══════════════════════════════════════════════════════════════════════════
-// CREATIVE STUDIO — service-local creative operations workspace.
+// DESIGN STUDIO — /creative-studio
+//
+// One studio for every creative channel: the master canvas, paid-ad sets,
+// social content sets, A+ listing modules, image generation, and short-clip
+// storyboards — with a Simple / Advanced switch so a fast edit and a full
+// layout job use the same room.
 //
 // HONESTY CONTRACT (this room):
-//   • Briefs, compose requests, reference assets, variants, and export bundles
-//     are REAL LOCAL workspace records (persisted in this browser). They are
-//     the operator's own planning/record data — not provider output.
-//   • NO image or video is ever generated or depicted here. There is no wired
-//     image/video provider in this build. Preview surfaces show an explicit
-//     "local provider required" boundary instead of a fabricated asset.
-//   • A local image CLI exists in-repo (tools/generate_images.py → ComfyUI,
-//     plus pollinations/cloudflare/huggingface) and model_router.resolve_vision
-//     resolves local generation to `comfyui`, gated by MEDIA_GEN_LIVE. Neither
-//     is exposed to this UI yet, so the room states that boundary rather than
-//     pretending a pipeline exists.
-//   • No video pipeline exists anywhere in the repo.
+//   • Briefs, design documents, ad sets, social sets, A+ modules, requests,
+//     variants, assets and bundles are REAL LOCAL records (this browser).
+//     They are the operator's own work — never provider output.
+//   • The canvas renders and exports REAL PNGs from layers the operator built.
+//     Multi-format rendering is real: the document geometry is normalised, so
+//     one master renders correctly at every output size.
+//   • NO image or video is ever generated or depicted here. Generate and Video
+//     are real request recorders whose honest terminal state is
+//     "Blocked — provider required".
+//   • No file is transmitted between rooms. "Send to" moves a local record id
+//     and navigates; it never uploads, publishes, lists, or downloads.
 // ═══════════════════════════════════════════════════════════════════════════
 
-const TABS = [
-  { id: 'briefs', label: 'Briefs' },
-  { id: 'composer', label: 'Image Composer' },
-  { id: 'video', label: 'Video / Shorts' },
-  { id: 'queue', label: 'Production Queue' },
-  { id: 'variants', label: 'Variants & History' },
-  { id: 'assets', label: 'Assets' },
-  { id: 'exports', label: 'Exports' },
-  { id: 'library', label: 'Library' },
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { PageLayout, DataNotice, DataTable } from '../../components/Shared.jsx'
+import RoomTabs from '../../components/RoomTabs.jsx'
+import Icon from '../../components/Icon.jsx'
+import { useToast } from '../../components/ToastContext.jsx'
+import Stage from '../../studio/components/Stage.jsx'
+import {
+  ModeToggle, ToolRail, ProviderBoundary, AssetThumb, ThumbPlaceholder,
+} from '../../studio/components/Chrome.jsx'
+import {
+  Section, Field, TextInput, NumberInput, Slider, Select, ColorInput,
+  SegmentedControl, Toggle, ChipRow, Stat,
+} from '../../studio/components/Fields.jsx'
+import {
+  KIND_LABEL, docFromTemplate, applyKit, addLayer, updateLayer, removeLayer,
+  duplicateLayer, reorderLayer, rescaleDoc, docToDataUrl, downloadDataUrl, safeFileName,
+} from '../../studio/engine/doc.js'
+import {
+  useAssetStore, useDecodedAssets, putAsset, newAssetId, approxBytesOfDataUrl,
+} from '../../studio/engine/assets.js'
+import { useRoom, uid, nowIso, fmtTime, fmtBytes, hashDoc } from '../../studio/engine/store.js'
+import {
+  TEMPLATES, templateById, ALL_FORMATS, formatById, DEFAULT_BRAND_KITS,
+  GEN_PURPOSES, GEN_TIERS,
+} from '../../studio/engine/presets.js'
+
+// ── Tools ────────────────────────────────────────────────────────────────────
+const TOOLS = [
+  { id: 'canvas', label: 'Canvas', icon: 'brush', note: 'The master design editor.' },
+  { id: 'ads', label: 'Ad sets', icon: 'target', note: 'Render the master into every paid placement.' },
+  { id: 'social', label: 'Social', icon: 'users', note: 'Render the master into social placements.' },
+  { id: 'aplus', label: 'A+ content', icon: 'list', note: 'Listing modules at Amazon sizes.' },
+  { id: 'generate', label: 'Generate', icon: 'sparkle', note: 'Image requests — provider-gated.' },
+  { id: 'video', label: 'Video', icon: 'film', note: 'Short-clip storyboards — provider-gated.' },
+  { id: 'briefs', label: 'Briefs', icon: 'file', note: 'Work briefs that scope the studio.' },
+  { id: 'queue', label: 'Queue', icon: 'clock', note: 'Every request this room has recorded.' },
+  { id: 'variants', label: 'Variants', icon: 'layers', note: 'Review states for finished work.' },
+  { id: 'assets', label: 'Assets', icon: 'image', note: 'Uploaded artwork and saved renders.' },
+  { id: 'exports', label: 'Exports', icon: 'download', note: 'Bundle builder and export log.' },
+  { id: 'library', label: 'Library', icon: 'stack', note: 'Saved documents and collections.' },
 ]
 
-// ── Local provider posture. Verified against repo: no creative route is
-//    exposed to the UI; the local engine is not connected in this build. ──
-const IMAGE_PROVIDER = {
-  connected: false,
-  label: 'Local image engine',
-  engine: 'ComfyUI',
-  env: 'COMFYUI_URL',
-  gate: 'MEDIA_GEN_LIVE',
-  models: 'FLUX.2 klein / FLUX.1 dev (weights must be installed)',
-}
-const VIDEO_PROVIDER = {
-  connected: false,
-  label: 'Video / short-clip engine',
-  engine: 'fal (Kling / Wan / Veo)',
-  env: 'fal provider key',
-  gate: 'MEDIA_GEN_LIVE',
-  models: 'No local video pipeline exists in this build',
-}
-
-const READINESS = [
-  { key: 'engine', label: 'Local image engine reachable', detail: `${IMAGE_PROVIDER.engine} at ${IMAGE_PROVIDER.env}`, ok: false },
-  { key: 'models', label: 'Model weights installed', detail: IMAGE_PROVIDER.models, ok: false },
-  { key: 'gate', label: 'Media live gate enabled', detail: `${IMAGE_PROVIDER.gate}=1`, ok: false },
-  { key: 'gpu', label: 'GPU available for local render', detail: 'RTX 5080 16GB (per project setup notes)', ok: false },
+// Output channels the render-master feature supports.
+const CHANNEL_SETS = [
+  { id: 'ads', label: 'Paid ads', channel: 'Meta', note: 'Feed + story placements.' },
+  { id: 'social', label: 'Social content', channel: 'Instagram', note: 'Post, carousel, portrait.' },
+  { id: 'aplus', label: 'A+ content', channel: 'Amazon A+', note: 'Listing modules.' },
 ]
-
-const ASPECTS = ['1:1', '4:5', '9:16', '16:9', '3:2']
-const SIZES = ['1024px (1MP)', '1280×720', '1536px', '2048px (4MP · 4× cost)']
-const STAGES = ['Draft (iterate cheap)', 'Final (top tier)']
-const FORMATS = ['Ad creative', 'Social variant', 'Listing imagery', 'A+ content', 'Email hero']
-const VIDEO_PURPOSE = ['UGC / testimonial', 'Product motion', 'Ad hook', 'Storyboard / moodboard']
-const VIDEO_DURATION = ['5s', '15s (Short / TikTok)', '30s']
-const VIDEO_ASPECT = ['9:16 (vertical)', '1:1 (square)', '16:9 (landscape)']
 
 const BRIEF_STATUS = { Draft: 'pill-muted', Active: 'pill-warn', 'In Review': 'pill-ochre', Archived: 'pill-muted' }
 const REQUEST_STATE = {
@@ -78,40 +81,13 @@ const REQUEST_STATE = {
   Complete: 'pill-forest',
   Error: 'pill-error',
 }
+const pillFor = (s) => REQUEST_STATE[s] || BRIEF_STATUS[s] || 'pill-muted'
 
-function pillFor(state) { return REQUEST_STATE[state] || BRIEF_STATUS[state] || 'pill-muted' }
-
-// ── Local room store (browser-persisted). Isolated per room; no shared shell. ──
-function useLocalRoom(key, seed) {
-  const [value, setValue] = useState(() => {
-    try {
-      const raw = localStorage.getItem(key)
-      if (raw) return JSON.parse(raw)
-    } catch { /* storage unavailable */ }
-    return seed
-  })
-  useEffect(() => {
-    try { localStorage.setItem(key, JSON.stringify(value)) } catch { /* storage unavailable */ }
-  }, [key, value])
-  return [value, setValue]
-}
-
-const uid = (p) => `${p}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
-const nowIso = () => new Date().toISOString()
-
-// ── Seed records (clearly sample; only used until the operator adds their own) ──
+// ── Seed records (clearly sample; superseded by the operator's own) ───────────
 const SEED_BRIEFS = [
   { id: 'BR-01', name: 'Set A Launch — Ad Creatives', objective: 'Drive awareness', audience: 'Homeowners 30–55', brand: 'Word Coffee', formats: ['Ad creative', 'Social variant', 'Listing imagery'], deliverables: 6, status: 'Active', note: 'Hero + feature set, matched brand kit.', createdAt: '2026-09-20T00:00:00Z' },
   { id: 'BR-02', name: 'Q4 Seasonal Bundle', objective: 'Seasonal promo', audience: 'Existing customers', brand: 'Word Coffee', formats: ['Social variant', 'Email hero'], deliverables: 4, status: 'Draft', note: 'Seasonal palette, copy pending.', createdAt: '2026-09-22T00:00:00Z' },
   { id: 'BR-03', name: 'Installation Guide Refresh', objective: 'Support conversion', audience: 'New buyers', brand: 'Mogra Organics', formats: ['Listing imagery', 'A+ content'], deliverables: 3, status: 'In Review', note: 'Step-by-step panel set.', createdAt: '2026-09-24T00:00:00Z' },
-]
-const SEED_ASSETS = [
-  { id: 'AS-01', name: 'brand-kit-logos.svg', type: 'Brand', collection: 'Brand kit', state: 'Approved', attached: ['BR-01'] },
-  { id: 'AS-02', name: 'product-photo-01.jpg', type: 'Photo', collection: 'Product photography', state: 'Approved', attached: [] },
-  { id: 'AS-03', name: 'ad-creative-hero.jpg', type: 'Ad', collection: 'Ad creatives', state: 'In Review', attached: ['BR-01'] },
-  { id: 'AS-04', name: 'variant-bg-q4.jpg', type: 'Ad', collection: 'Ad creatives', state: 'Draft', attached: ['BR-02'] },
-  { id: 'AS-05', name: 'aplus-banner-01.jpg', type: 'A+', collection: 'Listing imagery', state: 'Approved', attached: ['BR-03'] },
-  { id: 'AS-06', name: 'packshot-angle-02.jpg', type: 'Photo', collection: 'Product photography', state: 'UNREVIEWED', attached: [] },
 ]
 const SEED_VARIANTS = [
   { id: 'V-101', brief: 'BR-01', format: 'Ad creative', aspect: '1:1', state: 'Approved', note: 'Hero + feature, matched brand kit', createdAt: '2026-09-21T00:00:00Z' },
@@ -120,204 +96,312 @@ const SEED_VARIANTS = [
   { id: 'V-104', brief: 'BR-02', format: 'Social variant', aspect: '1:1', state: 'Draft', note: 'Seasonal palette, no copy yet', createdAt: '2026-09-23T00:00:00Z' },
   { id: 'V-105', brief: 'BR-03', format: 'Listing imagery', aspect: '16:9', state: 'Approved', note: 'Step-by-step panel 1 of 3', createdAt: '2026-09-24T00:00:00Z' },
 ]
-const SEED_COLLECTIONS = [
-  { name: 'Brand kit', count: 24, note: 'Logos, type, colour, tone' },
-  { name: 'Product photography', count: 38, note: 'Studio + lifestyle shots' },
-  { name: 'Ad creatives', count: 17, note: 'Static + video ad frames' },
-  { name: 'Listing imagery', count: 8, note: 'A+ content + main-image sets' },
-]
-
-function Thumb({ height = 90, label, note = 'no preview · local record' }) {
-  return (
-    <div style={{
-      height, borderRadius: 6, marginBottom: 10,
-      border: '1px dashed var(--divider-mid)',
-      background: 'repeating-linear-gradient(45deg, rgba(138,138,122,0.07) 0 6px, transparent 6px 12px)',
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3,
-      color: 'var(--ink-soft)',
-    }} title="Placeholder — this room stores workflow records, not generated imagery">
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: 0.06, textTransform: 'uppercase' }}>{label}</span>
-      <span style={{ fontSize: 10, textAlign: 'center', padding: '0 8px' }}>{note}</span>
-    </div>
-  )
-}
-
-function ProviderBoundary({ provider }) {
-  return (
-    <div className="alert" style={{ marginBottom: 0 }}>
-      <div className="alert-title">
-        <span className="pill pill-unknown">PROVIDER REQUIRED</span> {provider.label} is not connected
-      </div>
-      <div className="alert-text">
-        Expected engine: <strong>{provider.engine}</strong> · env <span className="text-mono">{provider.env}</span> · gate <span className="text-mono">{provider.gate}</span>.
-        {' '}{provider.models}. Nothing is generated until this boundary is satisfied — no placeholder image is shown in its place.
-      </div>
-    </div>
-  )
-}
-
-function ReadinessChecklist() {
-  const okCount = READINESS.filter(r => r.ok).length
-  return (
-    <div className="card">
-      <div className="card-head">
-        <h3 className="card-title" style={{ fontSize: 15 }}>Provider Readiness</h3>
-        <span className={`pill ${okCount === READINESS.length ? 'pill-forest' : 'pill-unknown'}`}>{okCount} / {READINESS.length} ready</span>
-      </div>
-      <div className="stack" style={{ gap: 8 }}>
-        {READINESS.map(r => (
-          <div key={r.key} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-            <span className={`pill ${r.ok ? 'pill-forest' : 'pill-unknown'}`} style={{ flexShrink: 0 }}>{r.ok ? 'ready' : 'not connected'}</span>
-            <div>
-              <div style={{ fontSize: 12, fontWeight: 500 }}>{r.label}</div>
-              <div className="text-low" style={{ fontSize: 11 }}>{r.detail}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
 
 export default function CreativeStudio() {
   const { toast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [briefs, setBriefs] = useLocalRoom('ns-creative-briefs', SEED_BRIEFS)
-  const [requests, setRequests] = useLocalRoom('ns-creative-requests', [])
-  const [assets, setAssets] = useLocalRoom('ns-creative-assets', SEED_ASSETS)
-  const [variants, setVariants] = useLocalRoom('ns-creative-variants', SEED_VARIANTS)
-  const [bundles, setBundles] = useLocalRoom('ns-creative-bundles', [])
+  const [mode, setMode] = useRoom('ds-mode', 'simple')
+  const [briefs, setBriefs] = useRoom('ns-creative-briefs', SEED_BRIEFS)
+  const [requests, setRequests] = useRoom('ns-creative-requests', [])
+  const [variants, setVariants] = useRoom('ns-creative-variants', SEED_VARIANTS)
+  const [bundles, setBundles] = useRoom('ns-creative-bundles', [])
+  const [docs, setDocs] = useRoom('ds-docs', [])
+  const [exportLog, setExportLog] = useRoom('ds-export-log', [])
+  const [kits, setKits] = useRoom('ds-kits', DEFAULT_BRAND_KITS)
+  const [activeKitId, setActiveKitId] = useRoom('ds-active-kit', 'kit-pine')
+  const [outputs, setOutputs] = useRoom('ds-bundle-outputs', ['Ad creatives', 'Listing imagery'])
+
+  const store = useAssetStore()
+  const { images, ready } = useDecodedAssets(store.assets)
+  const kit = kits.find(k => k.id === activeKitId) || kits[0] || DEFAULT_BRAND_KITS[0]
+
+  const requested = new URLSearchParams(location.search).get('view') || ''
+  const tool = TOOLS.some(x => x.id === requested) ? requested : 'canvas'
 
   const [activeBriefId, setActiveBriefId] = useState(briefs[0]?.id || '')
+  const [zoom, setZoom] = useState(1)
+  const [activeDocId, setActiveDocId] = useState('')
+  const [selectedLayerId, setSelectedLayerId] = useState('')
+  const [templateId, setTemplateId] = useState('tpl-hero-paper')
+  const [formatId, setFormatId] = useState('meta-feed')
+  const [renderChannel, setRenderChannel] = useState('ads')
+  const [showGrid, setShowGrid] = useState(false)
   const [assetFilter, setAssetFilter] = useState('All')
-  const [outputs, setOutputs] = useState(['Ad creatives', 'Listing imagery'])
-
-  // composer fields
-  const [prompt, setPrompt] = useState('')
-  const [brand, setBrand] = useState('Word Coffee')
-  const [aspect, setAspect] = useState('1:1')
-  const [size, setSize] = useState('1024px (1MP)')
-  const [format, setFormat] = useState('Ad creative')
-  const [stage, setStage] = useState('Draft (iterate cheap)')
-  const [refIds, setRefIds] = useState([])
-
-  // video fields
+  const [genPurpose, setGenPurpose] = useState('product-scene')
+  const [genTier, setGenTier] = useState('draft')
+  const [genPrompt, setGenPrompt] = useState('')
   const [vPurpose, setVPurpose] = useState('UGC / testimonial')
   const [vDuration, setVDuration] = useState('15s (Short / TikTok)')
   const [vAspect, setVAspect] = useState('9:16 (vertical)')
-  const [vAssetId, setVAssetId] = useState('')
 
-  const requested = new URLSearchParams(location.search).get('view') || ''
-  const view = TABS.some(t => t.id === requested) ? requested : 'briefs'
+  const t = useCallback((msg, tone = 'info') => toast(msg, tone), [toast])
+  const go = useCallback((id) => navigate(`/creative-studio?view=${id}`), [navigate])
+  const fmt = formatById(formatId) || ALL_FORMATS[0]
 
-  const go = (t) => navigate(`/creative-studio?view=${t}`)
-  const t = (msg, tone = 'info') => toast(msg, tone)
+  const active = useMemo(() => briefs.find(b => b.id === activeBriefId) || briefs[0] || null, [briefs, activeBriefId])
 
-  const active = useMemo(
-    () => briefs.find(b => b.id === activeBriefId) || briefs[0] || null,
-    [briefs, activeBriefId],
-  )
-
-  // Keep the active brief valid after the store changes.
   useEffect(() => {
     if (briefs.length && !briefs.some(b => b.id === activeBriefId)) setActiveBriefId(briefs[0].id)
   }, [briefs, activeBriefId])
 
-  const addBrief = () => {
+  // ── The working document ──
+  // A document is created from a template at a format size; the working copy
+  // lives in state and is persisted to the docs room store on demand.
+  const [doc, setDoc] = useState(() => docFromTemplate(TEMPLATES[0], { w: 1080, h: 1080, kit: DEFAULT_BRAND_KITS[0] }))
+  const [docName, setDocName] = useState(TEMPLATES[0].name)
+  const [savedHash, setSavedHash] = useState('')
+  const dirty = useMemo(() => hashDoc(doc) !== savedHash, [doc, savedHash])
+
+  const openTemplate = useCallback((id, fmtId) => {
+    const tpl = templateById(id) || TEMPLATES[0]
+    const f = formatById(fmtId || formatId) || ALL_FORMATS[0]
+    const next = applyKit(docFromTemplate(tpl, { w: f.w, h: f.h, kit }), kit)
+    setDoc(next)
+    setDocName(`${tpl.name} — ${f.label}`)
+    setTemplateId(tpl.id)
+    setFormatId(f.id)
+    setSelectedLayerId('')
+    setSavedHash(hashDoc(next))
+    t(`Opened the "${tpl.name}" template at ${f.w}×${f.h}. Layer geometry is normalised, so it stays correct at every other size.`, 'info')
+  }, [formatId, kit, t])
+
+  const changeFormat = useCallback((f) => {
+    setFormatId(f.id)
+    setDoc(prev => rescaleDoc(prev, f.w, f.h))
+    setDocName(`${templateById(prev.templateId)?.name || prev.name} — ${f.label}`)
+    t(`Rendered at ${f.w}×${f.h}. Normalised geometry means nothing stretches.`, 'info')
+  }, [t])
+
+  const patchLayer = useCallback((id, patch) => setDoc(prev => updateLayer(prev, id, patch)), [])
+
+  // ── Layer add / edit ──
+  const addText = useCallback(() => {
+    setDoc(prev => addLayer(prev, {
+      kind: 'text', name: 'Text', role: 'headline',
+      x: 0.1, y: 0.42, w: 0.8, h: 0.16, text: 'Your headline', size: 0.06,
+      weight: 700, color: kit.ink, align: 'center',
+    }))
+    t('Text layer added. Edit it in the inspector.', 'info')
+  }, [kit.ink, t])
+
+  const addShape = useCallback((shape) => {
+    setDoc(prev => addLayer(prev, {
+      kind: 'shape', name: shape === 'ellipse' ? 'Ellipse' : shape === 'triangle' ? 'Triangle' : 'Rectangle',
+      shape, x: 0.34, y: 0.34, w: 0.32, h: 0.32, fill: kit.accent, radius: shape === 'rect' ? 0.02 : 0,
+    }))
+    t('Shape layer added.', 'info')
+  }, [kit.accent, t])
+
+  const addProduct = useCallback((assetId) => {
+    setDoc(prev => addLayer(prev, {
+      kind: 'product', name: 'Product', assetId, fit: 'contain',
+      x: 0.3, y: 0.2, w: 0.4, h: 0.5, contactShadow: true,
+    }))
+    t('Product layer added from your uploaded artwork.', 'info')
+  }, [t])
+
+  const addBadge = useCallback(() => {
+    setDoc(prev => addLayer(prev, {
+      kind: 'badge', name: 'Badge', x: 0.38, y: 0.82, w: 0.24, h: 0.08,
+      text: 'Learn more', fill: kit.accent, color: '#f5f0e8', size: 0.026,
+    }))
+    t('Badge layer added.', 'info')
+  }, [kit.accent, t])
+
+  // ── Render the master into other placements (real multi-format render) ──
+  const renderChannelFormats = useCallback(() => {
+    const channel = CHANNEL_SETS.find(c => c.id === renderChannel)?.channel || 'Meta'
+    return ALL_FORMATS.filter(f => f.channel === channel)
+  }, [renderChannel])
+
+  const exportChannelSet = useCallback(async () => {
+    const list = renderChannelFormats()
+    if (!list.length) { t('That channel has no known placements in this build.', 'warn'); return }
+    let ok = 0
+    for (const f of list) {
+      try {
+        const dataUrl = docToDataUrl(rescaleDoc(doc, f.w, f.h), { assets: images, scale: 1 })
+        downloadDataUrl(dataUrl, `${safeFileName(docName)}-${f.w}x${f.h}.png`)
+        ok += 1
+        setExportLog(prev => [{ id: uid('EX'), name: `${docName} · ${f.w}×${f.h}`, kind: 'png', note: `${renderChannel} set`, at: nowIso() }, ...prev].slice(0, 80))
+      } catch (e) {
+        t(`${f.label} failed: ${String(e && e.message || e)}`, 'warn')
+      }
+    }
+    t(`${ok} placement${ok === 1 ? '' : 's'} exported from the master. Each is a real local render at the placement's own pixel size.`, 'info')
+  }, [renderChannelFormats, doc, docName, images, renderChannel, setExportLog, t])
+
+  const saveDoc = useCallback(() => {
+    const next = { ...doc, name: docName, kitId: kit.id, savedAt: nowIso() }
+    setDocs(prev => {
+      const rest = prev.filter(d => d.id !== next.id)
+      return [next, ...rest].slice(0, 40)
+    })
+    setSavedHash(hashDoc(next))
+    setDoc(next)
+    t('Document saved to the local library.', 'info')
+  }, [doc, docName, kit.id, setDocs, t])
+
+  const openDoc = useCallback((d) => {
+    setDoc(d)
+    setDocName(d.name)
+    setFormatId(d.formatId)
+    setTemplateId(d.templateId || '')
+    setSavedHash(hashDoc(d))
+    setSelectedLayerId('')
+    go('canvas')
+    t(`Opened "${d.name}" from the library.`, 'info')
+  }, [go, t])
+
+  const saveRenderToAssets = useCallback(async () => {
+    try {
+      const dataUrl = docToDataUrl(doc, { assets: images, scale: 0.5 })
+      const rec = {
+        id: newAssetId(), name: `${safeFileName(docName)}.png`, mime: 'image/png', dataUrl,
+        w: doc.w, h: doc.h, bytes: approxBytesOfDataUrl(dataUrl), role: 'render',
+        tags: ['studio-doc'], createdAt: nowIso(),
+      }
+      await putAsset(rec)
+      await store.refresh()
+      setExportLog(prev => [{ id: uid('EX'), name: rec.name, kind: 'png', note: 'Saved to assets', at: nowIso() }, ...prev].slice(0, 80))
+      t('Render saved to the asset store (persisted locally in this browser).', 'info')
+    } catch (e) {
+      t(`Save failed: ${String(e && e.message || e)}`, 'warn')
+    }
+  }, [doc, docName, images, store, setExportLog, t])
+
+  // ── Requests ──
+  const submitImageRequest = useCallback(() => {
+    if (!genPrompt.trim()) { t('Write a request brief before queueing.', 'warn'); return }
+    const rec = {
+      id: uid('RQ'), kind: 'image', purpose: genPurpose, prompt: genPrompt.trim(),
+      tier: genTier, formatId, format: fmt.label, refs: [],
+      state: 'Blocked — provider required', providerState: 'not_connected',
+      note: 'Awaiting a connected local image engine.', createdAt: nowIso(),
+    }
+    setRequests(prev => [rec, ...prev])
+    t('Image request recorded locally — blocked until a provider is connected. Nothing was generated.', 'info')
+  }, [genPrompt, genPurpose, genTier, formatId, fmt.label, setRequests, t])
+
+  const submitVideoRequest = useCallback(() => {
+    const rec = {
+      id: uid('RQ'), kind: 'video', purpose: 'ugc-clip',
+      prompt: `${vPurpose} · ${vDuration} · ${vAspect}`, tier: 'draft',
+      formatId: 'reel-frame', format: 'Reel frame 9:16',
+      refs: [], state: 'Blocked — provider required', providerState: 'not_connected',
+      note: 'No local video pipeline exists in this build.', createdAt: nowIso(),
+    }
+    setRequests(prev => [rec, ...prev])
+    t('Video request recorded locally — no video pipeline exists in this build. Nothing was generated.', 'info')
+  }, [vPurpose, vDuration, vAspect, setRequests, t])
+
+  const advanceRequest = useCallback((id, nextState) => {
+    setRequests(prev => prev.map(r => r.id === id ? { ...r, state: nextState } : r))
+    t(`Request ${id} → ${nextState} (local record only).`, 'info')
+  }, [setRequests, t])
+
+  const removeRequest = useCallback((id) => {
+    setRequests(prev => prev.filter(r => r.id !== id))
+    t(`Request ${id} removed from the local queue.`, 'info')
+  }, [setRequests, t])
+
+  // ── Variants ──
+  const addVariant = useCallback(() => {
+    const id = uid('V')
+    setVariants(prev => [{
+      id, brief: active?.id || '', format: fmt.label, aspect: `${fmt.w}:${fmt.h}`,
+      state: 'Draft', note: 'Added locally — not a generated asset.', createdAt: nowIso(),
+    }, ...prev])
+    t('Variant record added locally (sample workflow). Not a generated asset.', 'info')
+  }, [active?.id, fmt, setVariants, t])
+
+  const setVariantState = useCallback((id, state) => {
+    setVariants(prev => prev.map(v => v.id === id ? { ...v, state } : v))
+    t(`Variant ${id} → ${state} (internal review state — not publishing authorization).`, 'info')
+  }, [setVariants, t])
+
+  // ── Briefs ──
+  const addBrief = useCallback(() => {
     const id = uid('BR')
-    const nid = briefs.length + 1
     setBriefs(prev => [{
-      id, name: `New Brief ${nid}`, objective: 'Untitled objective', audience: 'Unspecified',
-      brand, formats: [format], deliverables: 1, status: 'Draft',
-      note: 'Local draft — complete the work brief.', createdAt: nowIso(),
+      id, name: `New Brief ${prev.length + 1}`, objective: 'Untitled objective',
+      audience: 'Unspecified', brand: kit.name, formats: [fmt.label], deliverables: 1,
+      status: 'Draft', note: 'Local draft — complete the work brief.', createdAt: nowIso(),
     }, ...prev])
     setActiveBriefId(id)
     t('New brief draft created — work-brief inputs are local drafts (sample). No image generates until a local provider is connected.', 'info')
-    go('composer')
-  }
+    go('canvas')
+  }, [kit.name, fmt.label, setBriefs, go, t])
 
-  const toggleRef = (id) => setRefIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
+  // ── Bundles ──
+  const toggleOutput = useCallback((o) => setOutputs(prev => prev.includes(o) ? prev.filter(x => x !== o) : [...prev, o]), [setOutputs])
 
-  const submitRequest = (kind) => {
-    if (kind === 'image' && !prompt.trim()) {
-      t('Add a work brief / prompt before queuing a request.', 'warn')
-      return
-    }
-    const id = uid('RQ')
-    const rec = {
-      id, kind, briefId: active?.id || '',
-      prompt: kind === 'image' ? prompt.trim() : `${vPurpose} · ${vDuration} · ${vAspect}`,
-      brand, aspect: kind === 'image' ? aspect : vAspect,
-      size: kind === 'image' ? size : vDuration,
-      format: kind === 'image' ? format : 'Short clip',
-      stage: kind === 'image' ? stage : 'Draft (iterate cheap)',
-      refs: kind === 'image' ? refIds : (vAssetId ? [vAssetId] : []),
-      // No provider is connected: the honest terminal state is "blocked".
-      state: 'Blocked — provider required',
-      providerState: 'not_connected',
-      note: kind === 'image' ? 'Awaiting connected local image provider.' : 'Awaiting connected video provider.',
-      createdAt: nowIso(),
-    }
-    setRequests(prev => [rec, ...prev])
-    t(`${kind === 'image' ? 'Image' : 'Video'} request queued locally — blocked until a provider is connected. Nothing was generated.`, 'info')
-  }
-
-  const advanceRequest = (id, nextState) => {
-    setRequests(prev => prev.map(r => r.id === id ? { ...r, state: nextState } : r))
-    t(`Request ${id} → ${nextState} (local record only).`, 'info')
-  }
-
-  const removeRequest = (id) => {
-    setRequests(prev => prev.filter(r => r.id !== id))
-    t(`Request ${id} removed from the local queue.`, 'info')
-  }
-
-  const addVariant = () => {
-    const id = uid('V')
-    setVariants(prev => [{
-      id, brief: active?.id || '', format, aspect, state: 'Draft',
-      note: 'Added locally — not a generated asset.', createdAt: nowIso(),
-    }, ...prev])
-    t('Variant record added locally (sample workflow). Not a generated asset.', 'info')
-  }
-
-  const setVariantState = (id, state) => {
-    setVariants(prev => prev.map(v => v.id === id ? { ...v, state } : v))
-    t(`Variant ${id} → ${state} (internal review state — not publishing authorization).`, 'info')
-  }
-
-  const toggleOutput = (o) => setOutputs(prev => prev.includes(o) ? prev.filter(x => x !== o) : [...prev, o])
-
-  const prepareBundle = () => {
+  const prepareBundle = useCallback(() => {
     const id = uid('BX')
     setBundles(prev => [{
       id, briefId: active?.id || '', outputs: [...outputs], basis: 'local workspace records',
       status: 'Ready for handoff', createdAt: nowIso(),
     }, ...prev])
     t('Bundle manifest prepared locally — contains references only. Download is unavailable until an asset store is connected.', 'info')
-  }
+  }, [active?.id, outputs, setBundles, t])
 
-  const briefName = (id) => briefs.find(b => b.id === id)?.name || id || '—'
-  const totalCollectionItems = SEED_COLLECTIONS.reduce((n, c) => n + c.count, 0)
   const blockedCount = requests.filter(r => r.state === 'Blocked — provider required').length
-  const queuedCount = requests.filter(r => r.state === 'Queued').length
+  const selectedLayer = doc.layers.find(l => l.id === selectedLayerId) || null
+  const artAssets = useMemo(() => store.assets.filter(a => a.role !== 'render'), [store.assets])
+  const renderAssets = useMemo(() => store.assets.filter(a => a.role === 'render'), [store.assets])
+  const collectionItems = useMemo(() => {
+    const counts = {}
+    store.assets.forEach(a => { const k = a.role || 'reference'; counts[k] = (counts[k] || 0) + 1 })
+    return counts
+  }, [store.assets])
+
+  // ── Shared artwork picker ──
+  const ArtworkPicker = ({ onPick, label = 'Artwork' }) => (
+    <Section title={label} right={<span className="pill pill-muted">{artAssets.length}</span>}>
+      <div className="sp-asset-grid">
+        {artAssets.slice(0, 9).map(a => (
+          <AssetThumb key={a.id} asset={a} height={52}
+            onClick={() => onPick(a.id)}
+            actions={<button className="btn btn-sm btn-ghost" title="Remove"
+              onClick={(e) => { e.stopPropagation(); store.remove(a.id) }}>×</button>} />
+        ))}
+        {!artAssets.length && <ThumbPlaceholder height={52} label="no artwork uploaded yet" />}
+      </div>
+      <label className="sp-dropzone">
+        <Icon name="upload" size={14} /> Upload images
+        <input type="file" accept="image/*" multiple style={{ display: 'none' }}
+          onChange={async (e) => {
+            const added = await store.add(e.target.files, { role: 'reference', tags: ['studio'] })
+            if (added.length) t(`${added.length} image${added.length > 1 ? 's' : ''} added to the local asset store.`, 'info')
+            e.target.value = ''
+          }} />
+      </label>
+      {!store.persistent && (
+        <div className="alert" style={{ margin: 0 }}>
+          <div className="alert-text">Browser storage is unavailable — uploaded images live for this session only.</div>
+        </div>
+      )}
+    </Section>
+  )
 
   return (
     <PageLayout
-      title="Creative Studio"
-      subtitle="Creative operations — work briefs, image and short-clip requests, reference assets, variants, and export bundles."
+      title="Design Studio"
+      subtitle="One studio for paid ads, social content, A+ listing modules, image and clip requests — with a master canvas that renders to every placement."
       actions={<>
-        <button className="btn btn-sm" onClick={addBrief}>New Brief</button>
-        <button className="btn btn-sm btn-ghost" onClick={() => { go('composer'); t('Image Composer opened — provider not connected, so no variants generate yet.', 'info') }}>Compose Image</button>
+        <ModeToggle mode={mode} onChange={setMode} />
+        <button className="btn btn-sm btn-ghost" onClick={() => go('canvas')}>Master canvas</button>
         <button className="btn btn-sm btn-ghost" onClick={() => go('exports')}>Export Bundle</button>
+        <button className="btn btn-sm" onClick={addBrief}>New Brief</button>
       </>}
     >
-      <DataNotice tone="sample" title="This room is a local workflow workspace">
-        Briefs, requests, assets, variants, and bundles are real records you create here and are stored in this browser.
-        No image or video is generated or depicted — there is no wired creative provider in this build. A blocked request
-        means the local engine is not connected, not that an asset failed.
+      <DataNotice tone="sample" title="Local workspace, honest boundaries">
+        Briefs, documents, ad sets, social sets, A+ modules, requests, variants, assets and bundles are real records you create here and are
+        stored in this browser. The canvas renders and exports REAL PNGs from your own layers, and the master renders correctly at every
+        placement size because layer geometry is normalised. No image or video is ever generated or depicted: the Generate and Video tabs are
+        real request recorders whose honest terminal state is &ldquo;Blocked — provider required&rdquo;.
       </DataNotice>
 
       <div className="card" style={{ marginBottom: 16, padding: '10px 14px' }}>
@@ -330,442 +414,678 @@ export default function CreativeStudio() {
         </div>
       </div>
 
-      <RoomTabs tabs={TABS} base="/creative-studio" />
+      <div className="sp-room wide-inspector">
+        <ToolRail tools={TOOLS} active={tool} onSelect={go} />
 
-      {view === 'briefs' && (
-        <div className="subview">
-          <div className="grid-cards-3" style={{ marginBottom: 20 }}>
-            {briefs.map(b => (
-              <div key={b.id} className="card" style={{ padding: 14 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                  <strong style={{ fontSize: 13 }}>{b.name}</strong>
-                  <span className={`pill ${BRIEF_STATUS[b.status] || 'pill-muted'}`}>{b.status}</span>
-                </div>
-                <div style={{ fontSize: 12, color: 'var(--ink-mid)', marginBottom: 6 }}>{b.objective} · {b.audience}</div>
-                <div className="text-low" style={{ fontSize: 11, marginBottom: 8 }}>{b.brand}</div>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
-                  {b.formats.map(f => <span key={f} className="pill pill-muted" style={{ fontSize: 10 }}>{f}</span>)}
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span className="text-low" style={{ fontSize: 11 }}>{b.deliverables} deliverables</span>
-                  <button className="btn btn-sm btn-ghost" onClick={() => { setActiveBriefId(b.id); go('composer') }}>Open</button>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="stack" style={{ gap: 14 }}>
+          <RoomTabs tabs={TOOLS.map(x => ({ id: x.id, label: x.label }))} base="/creative-studio" />
 
-          {active && (
-            <div className="card">
-              <div className="card-head">
-                <h3 className="card-title">Active Brief — {active.name}</h3>
-                <span className={`pill ${BRIEF_STATUS[active.status] || 'pill-muted'}`}>{active.status}</span>
+          {/* ══ CANVAS ══ */}
+          {tool === 'canvas' && (
+            <div className="subview">
+              <Stage
+                doc={doc}
+                assets={images}
+                zoom={zoom}
+                onZoomChange={setZoom}
+                selectedId={selectedLayerId}
+                onSelectLayer={setSelectedLayerId}
+                onChangeLayer={patchLayer}
+                advanced={mode === 'advanced'}
+                grid={showGrid && mode === 'advanced' ? { cols: 3, safe: 0.06 } : null}
+                badge={<>
+                  <span className="pill pill-muted">{fmt.label}</span>
+                  {dirty && <span className="pill pill-warn">unsaved</span>}
+                </>}
+                footer={<>
+                  <span>{docName}</span>
+                  <span>·</span>
+                  <span>{doc.layers.length} layers</span>
+                  <span>·</span>
+                  <span>{kit.name}</span>
+                  {mode === 'advanced' && <><span>·</span><span>drag on the canvas to move a layer</span></>}
+                </>}
+                minHeight={300} maxHeight={560}
+              />
+              <div className="inline-flex" style={{ marginTop: 12 }}>
+                <button className="btn btn-sm btn-primary" onClick={() => { saveDoc(); t('Saved.', 'info') }} disabled={!dirty}>
+                  <Icon name="save" size={13} /> Save document
+                </button>
+                <button className="btn btn-sm btn-ghost" onClick={() => downloadDataUrl(docToDataUrl(doc, { assets: images }), `${safeFileName(docName)}-${doc.w}x${doc.h}.png`)}>
+                  <Icon name="download" size={13} /> Export PNG
+                </button>
+                <button className="btn btn-sm btn-ghost" onClick={saveRenderToAssets}><Icon name="image" size={13} /> Save to assets</button>
+                {mode === 'advanced' && (
+                  <button className="btn btn-sm btn-ghost" onClick={() => setShowGrid(g => !g)}>
+                    <Icon name="grid" size={13} /> {showGrid ? 'Hide' : 'Show'} guides
+                  </button>
+                )}
               </div>
-              <div className="grid-4" style={{ gap: 16 }}>
-                {[
-                  { label: 'Objective', v: active.objective },
-                  { label: 'Audience', v: active.audience },
-                  { label: 'Brand', v: active.brand },
-                  { label: 'Formats', v: active.formats.join(', ') },
-                ].map(d => (
-                  <div key={d.label}>
-                    <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>{d.label}</div>
-                    <div style={{ fontSize: 13, fontWeight: 500 }}>{d.v}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="text-low" style={{ fontSize: 11, marginTop: 12 }}>{active.note}</div>
             </div>
           )}
-        </div>
-      )}
 
-      {view === 'composer' && (
-        <div className="subview">
-          <ProviderBoundary provider={IMAGE_PROVIDER} />
-          <div className="split-aside" style={{ marginTop: 16 }}>
-            <div className="card">
-              <div className="card-head">
-                <h3 className="card-title">Work Brief — Image Request</h3>
-                <span className="pill pill-muted">{active ? active.name : 'no active brief'}</span>
-              </div>
-              <div className="stack" style={{ gap: 12 }}>
-                <div className="field-group" style={{ marginBottom: 0 }}>
-                  <label className="label" htmlFor="cs-prompt">Prompt / work brief</label>
-                  <textarea
-                    id="cs-prompt" className="field" rows={4} value={prompt}
-                    onChange={e => setPrompt(e.target.value)}
-                    placeholder="Describe the intended image: subject, mood, composition, copy to render, and where it will be used…"
-                  />
-                </div>
-                <div className="inline-flex" style={{ gap: 12, alignItems: 'flex-start' }}>
-                  <div className="field-group" style={{ minWidth: 180, marginBottom: 0 }}>
-                    <label className="label" htmlFor="cs-brand">Brand / context</label>
-                    <select id="cs-brand" className="field" value={brand} onChange={e => setBrand(e.target.value)}>
-                      {['Word Coffee', 'Mogra Organics', 'Neck Nirvana', 'Northstar OS'].map(b => <option key={b}>{b}</option>)}
-                    </select>
-                  </div>
-                  <div className="field-group" style={{ minWidth: 150, marginBottom: 0 }}>
-                    <label className="label" htmlFor="cs-format">Output format</label>
-                    <select id="cs-format" className="field" value={format} onChange={e => setFormat(e.target.value)}>
-                      {FORMATS.map(f => <option key={f}>{f}</option>)}
-                    </select>
-                  </div>
-                </div>
-                <div className="inline-flex" style={{ gap: 12, alignItems: 'flex-start' }}>
-                  <div className="field-group" style={{ minWidth: 120, marginBottom: 0 }}>
-                    <label className="label" htmlFor="cs-aspect">Aspect</label>
-                    <select id="cs-aspect" className="field" value={aspect} onChange={e => setAspect(e.target.value)}>
-                      {ASPECTS.map(a => <option key={a}>{a}</option>)}
-                    </select>
-                  </div>
-                  <div className="field-group" style={{ minWidth: 190, marginBottom: 0 }}>
-                    <label className="label" htmlFor="cs-size">Resolution</label>
-                    <select id="cs-size" className="field" value={size} onChange={e => setSize(e.target.value)}>
-                      {SIZES.map(s => <option key={s}>{s}</option>)}
-                    </select>
-                  </div>
-                  <div className="field-group" style={{ minWidth: 200, marginBottom: 0 }}>
-                    <label className="label" htmlFor="cs-stage">Staging tier</label>
-                    <select id="cs-stage" className="field" value={stage} onChange={e => setStage(e.target.value)}>
-                      {STAGES.map(s => <option key={s}>{s}</option>)}
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="label">Reference assets (frame consistency)</div>
-                  {assets.length === 0
-                    ? <div className="text-low" style={{ fontSize: 12 }}>No reference assets yet — add them in the Assets tab.</div>
-                    : <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                        {assets.map(a => (
-                          <button key={a.id} className={`filter-pill ${refIds.includes(a.id) ? 'active' : ''}`} onClick={() => toggleRef(a.id)} title={`${a.collection} · ${a.state}`}>
-                            {a.name}
-                          </button>
-                        ))}
-                      </div>}
-                </div>
-
-                <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
-                  <button className="btn btn-sm" onClick={() => submitRequest('image')}>Queue Image Request</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => submitRequest('image')}>Generate Variants</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => { setPrompt(''); setRefIds([]); t('Composer cleared (local).', 'info') }}>Clear</button>
-                </div>
-                <div className="text-low" style={{ fontSize: 11 }}>
-                  Queueing stores a real local request record. It cannot render until {IMAGE_PROVIDER.env} points at a running
-                  {' '}{IMAGE_PROVIDER.engine} and {IMAGE_PROVIDER.gate}=1.
-                </div>
-              </div>
-            </div>
-
-            <div className="stack" style={{ gap: 16 }}>
-              <ReadinessChecklist />
+          {/* ══ CHANNEL SETS ══ */}
+          {(tool === 'ads' || tool === 'social' || tool === 'aplus') && (
+            <div className="subview stack" style={{ gap: 14 }}>
               <div className="card">
                 <div className="card-head">
-                  <h3 className="card-title" style={{ fontSize: 15 }}>Preview</h3>
-                  <span className="pill pill-unknown" style={{ fontSize: 10 }}>provider required</span>
+                  <h3 className="card-title" style={{ fontSize: 15 }}>
+                    {tool === 'ads' ? 'Paid ad set' : tool === 'social' ? 'Social content set' : 'A+ content modules'}
+                  </h3>
+                  <span className="pill pill-muted">rendered from the master</span>
                 </div>
-                <Thumb height={150} label={`${aspect} · ${format}`} note="No generated asset — provider required" />
-                <div className="text-low" style={{ fontSize: 11 }}>
-                  This preview stays empty until a connected provider returns an asset. A blank frame here is the honest state, not a failed load.
+                <div className="alert-text" style={{ marginBottom: 12 }}>
+                  Each tile below is the SAME document rendered at that placement&rsquo;s own pixel size. Because the layer geometry is
+                  normalised (0–1 of the canvas), nothing stretches or clips — only the raster resolution changes.
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {view === 'video' && (
-        <div className="subview">
-          <ProviderBoundary provider={VIDEO_PROVIDER} />
-          <div className="split-aside" style={{ marginTop: 16 }}>
-            <div className="card">
-              <div className="card-head">
-                <h3 className="card-title">Short-Clip Workflow Shell</h3>
-                <span className="pill pill-muted">{active ? active.name : 'no active brief'}</span>
-              </div>
-              <div className="stack" style={{ gap: 12 }}>
-                <div className="inline-flex" style={{ gap: 12, alignItems: 'flex-start' }}>
-                  <div className="field-group" style={{ minWidth: 190, marginBottom: 0 }}>
-                    <label className="label" htmlFor="v-purpose">Purpose</label>
-                    <select id="v-purpose" className="field" value={vPurpose} onChange={e => setVPurpose(e.target.value)}>
-                      {VIDEO_PURPOSE.map(p => <option key={p}>{p}</option>)}
-                    </select>
-                  </div>
-                  <div className="field-group" style={{ minWidth: 200, marginBottom: 0 }}>
-                    <label className="label" htmlFor="v-duration">Duration</label>
-                    <select id="v-duration" className="field" value={vDuration} onChange={e => setVDuration(e.target.value)}>
-                      {VIDEO_DURATION.map(d => <option key={d}>{d}</option>)}
-                    </select>
-                  </div>
-                  <div className="field-group" style={{ minWidth: 180, marginBottom: 0 }}>
-                    <label className="label" htmlFor="v-aspect">Aspect</label>
-                    <select id="v-aspect" className="field" value={vAspect} onChange={e => setVAspect(e.target.value)}>
-                      {VIDEO_ASPECT.map(a => <option key={a}>{a}</option>)}
-                    </select>
-                  </div>
-                </div>
-                <div className="field-group" style={{ marginBottom: 0 }}>
-                  <label className="label" htmlFor="v-asset">Seed / source asset</label>
-                  <select id="v-asset" className="field" value={vAssetId} onChange={e => setVAssetId(e.target.value)}>
-                    <option value="">None (text-to-video)</option>
-                    {assets.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
-                  </select>
-                </div>
-                <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
-                  <button className="btn btn-sm" onClick={() => submitRequest('video')}>Queue Clip Request</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => t('Video storyboard is a local planning record only — no clip is generated.', 'info')}>Save Storyboard</button>
-                </div>
-                <div className="text-low" style={{ fontSize: 11 }}>
-                  Video tooling is a planning shell. No local video pipeline exists in this build; a connected
-                  {' '}{VIDEO_PROVIDER.engine} provider plus {VIDEO_PROVIDER.gate}=1 is required before any clip can render.
-                </div>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="card-head">
-                <h3 className="card-title" style={{ fontSize: 15 }}>Clip Preview</h3>
-                <span className="pill pill-unknown" style={{ fontSize: 10 }}>provider required</span>
-              </div>
-              <Thumb height={150} label={`${vAspect} · ${vDuration}`} note="No clip — provider required" />
-              <div className="stack" style={{ gap: 6 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}><span className="text-low">Purpose</span><span>{vPurpose}</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}><span className="text-low">Source asset</span><span>{vAssetId ? (assets.find(a => a.id === vAssetId)?.name || vAssetId) : 'text-to-video'}</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {view === 'queue' && (
-        <div className="subview">
-          <MetricTiles columns={3} metrics={[
-            { label: 'Requests', value: String(requests.length), sub: 'Local records' },
-            { label: 'Blocked — provider required', value: String(blockedCount), sub: 'Honest terminal state', tone: blockedCount ? 'warn' : undefined },
-            { label: 'Queued', value: String(queuedCount), sub: 'Awaiting a worker' },
-          ]} />
-          <div className="card">
-            <div className="card-head">
-              <h3 className="card-title">Production Queue</h3>
-              <span className="pill pill-muted">local records · no worker connected</span>
-            </div>
-            {requests.length === 0 ? (
-              <div className="empty">
-                <div className="empty-title">No requests yet</div>
-                <div className="empty-text">Queue an image or video request from the composer to record it here. Until a provider is connected, requests stay blocked — they never fake a completion.</div>
-                <button className="btn btn-sm" style={{ marginTop: 12 }} onClick={() => go('composer')}>Open Image Composer</button>
-              </div>
-            ) : (
-              <DataTable
-                columns={[
-                  { key: 'id', label: 'ID' },
-                  { key: 'kind', label: 'Type', render: (v) => <span className="pill pill-muted">{v === 'video' ? 'Video' : 'Image'}</span> },
-                  { key: 'prompt', label: 'Brief', render: (v) => <span style={{ fontSize: 12 }}>{v.length > 52 ? v.slice(0, 52) + '…' : v}</span> },
-                  { key: 'format', label: 'Format' },
-                  { key: 'state', label: 'State', render: (v) => <span className={`pill ${pillFor(v)}`} title="Local workflow state — a provider still has to render">{v}</span> },
-                  { key: 'actions', label: '', render: (v, row) => (
-                    <div className="inline-flex" style={{ gap: 6 }}>
-                      {row.state === 'Blocked — provider required' && (
-                        <button className="btn btn-sm btn-ghost" onClick={() => advanceRequest(row.id, 'Queued')} title="Queueing does not connect a provider">Queue anyway</button>
-                      )}
-                      {row.state === 'Queued' && (
-                        <button className="btn btn-sm btn-ghost" onClick={() => advanceRequest(row.id, 'Error')} title="Simulate the worker error path (local demo)">Simulate error</button>
-                      )}
-                      <button className="btn btn-sm btn-ghost" onClick={() => removeRequest(row.id)}>Remove</button>
-                    </div>
-                  ) },
-                ]}
-                rows={requests}
-              />
-            )}
-          </div>
-        </div>
-      )}
-
-      {view === 'variants' && (
-        <div className="subview">
-          <div className="room-toolbar">
-            <span className="pill pill-muted" style={{ marginRight: 'auto' }}>{active ? active.name : 'no active brief'} · {variants.length} variants · local records</span>
-            <button className="btn btn-sm" onClick={addVariant}>Add Variant</button>
-          </div>
-          <div className="grid-cards-3">
-            {variants.map(v => (
-              <div key={v.id} className="card" style={{ padding: 12 }}>
-                <Thumb height={110} label={`${v.aspect} · ${v.format}`} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                  <strong style={{ fontSize: 12 }}>{v.id}</strong>
-                  <span className={`pill ${pillFor(v.state)}`} style={{ fontSize: 10 }} title="Internal review state — not publishing authorization">{v.state}</span>
-                </div>
-                <div className="text-low" style={{ fontSize: 11, marginBottom: 2 }}>{briefName(v.brief)}</div>
-                <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginBottom: 8 }}>{v.note}</div>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  <button className="btn btn-sm btn-ghost" onClick={() => setVariantState(v.id, 'Changes Requested')}>Request Changes</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => setVariantState(v.id, 'Approved')}>Approve</button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="card" style={{ marginTop: 20 }}>
-            <div className="card-head">
-              <h3 className="card-title" style={{ fontSize: 15 }}>History</h3>
-              <span className="pill pill-muted">local record log</span>
-            </div>
-            {(requests.length === 0 && variants.length === 0) ? (
-              <div className="text-low" style={{ fontSize: 12 }}>No history yet.</div>
-            ) : (
-              <div className="stack" style={{ gap: 8 }}>
-                {[...requests.map(r => ({ ...r, _kind: 'request' })), ...variants.map(v => ({ ...v, _kind: 'variant' }))]
-                  .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
-                  .slice(0, 12)
-                  .map((h, i) => (
-                    <div key={`${h._kind}-${h.id}-${i}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
-                      <div>
-                        <span className={`pill ${pillFor(h.state)}`} style={{ marginRight: 8 }}>{h.state}</span>
-                        <span style={{ fontSize: 12 }}>{h._kind === 'request' ? `${h.kind === 'video' ? 'Video' : 'Image'} request` : 'Variant'} {h.id}</span>
-                      </div>
-                      <span className="text-low" style={{ fontSize: 11 }}>{h.createdAt ? new Date(h.createdAt).toLocaleString() : '—'}</span>
-                    </div>
+                <div className="sp-format-list">
+                  {renderChannelFormats().map(f => (
+                    <button key={f.id} className={`sp-format ${formatId === f.id ? 'active' : ''}`}
+                      onClick={() => { setFormatId(f.id); setDoc(prev => rescaleDoc(prev, f.w, f.h)); go('canvas') }}
+                      title={`Set the master to ${f.w}×${f.h}`}>
+                      <span className="sp-format-box ar-wide" style={{ aspectRatio: `${f.w} / ${f.h}` }} />
+                      <span className="sp-format-label">{f.label}</span>
+                      <span className="text-mono sp-format-dims">{f.w}×{f.h}</span>
+                    </button>
                   ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {view === 'assets' && (
-        <div className="subview">
-          <div className="room-toolbar">
-            <span className="text-low" style={{ fontSize: 11, marginRight: 4 }}>Filter</span>
-            {['All', 'Brand', 'Photo', 'Ad', 'A+'].map(f => (
-              <button key={f} className={`filter-pill ${assetFilter === f ? 'active' : ''}`} onClick={() => setAssetFilter(f)}>{f}</button>
-            ))}
-            <button className="btn btn-sm" style={{ marginLeft: 'auto' }} onClick={() => t('Asset upload is not connected — this room records asset metadata only. Nothing is uploaded.', 'warn')}>Upload Asset</button>
-          </div>
-          <div className="grid-cards-3">
-            {assets.filter(a => assetFilter === 'All' || a.type === assetFilter).map(a => (
-              <div key={a.id} className="card" style={{ padding: 12 }}>
-                <Thumb label={a.type} note="reference asset · metadata only" />
-                <div style={{ fontSize: 12, fontWeight: 500, marginBottom: 6 }}>{a.name}</div>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  <span className="pill pill-muted" style={{ fontSize: 10 }}>{a.collection}</span>
-                  {a.state === 'Approved'
-                    ? <span className="pill pill-muted" style={{ fontSize: 10 }} title="Internal review state — not an authorization">{a.state}</span>
-                    : a.state === 'UNREVIEWED'
-                      ? <span className="pill pill-unknown" style={{ fontSize: 10 }}>{a.state}</span>
-                      : <span className="pill pill-warn" style={{ fontSize: 10 }}>{a.state}</span>}
                 </div>
-                <div className="text-low" style={{ fontSize: 10, marginTop: 6 }}>
-                  {a.attached.length ? `Attached to ${a.attached.map(briefName).join(', ')}` : 'Not attached'}
+                <div className="inline-flex" style={{ marginTop: 14 }}>
+                  <button className="btn btn-sm btn-primary" onClick={exportChannelSet}>
+                    <Icon name="download" size={13} /> Export this set ({renderChannelFormats().length} placements)
+                  </button>
+                  <span className="pill pill-muted">real local renders · no provider contacted</span>
                 </div>
               </div>
-            ))}
-            {assets.filter(a => assetFilter === 'All' || a.type === assetFilter).length === 0 && (
-              <div className="text-low" style={{ fontSize: 12 }}>No assets match this filter.</div>
-            )}
-          </div>
-        </div>
-      )}
 
-      {view === 'exports' && (
-        <div className="subview">
-          <DataNotice tone="internal" title="Export bundles package references, not media">
-            A bundle lists existing creative references for handoff to SocialPulse or ListingForge. Download is unavailable
-            until an asset store is connected — nothing is published, listed, or transferred from here.
-          </DataNotice>
-          <div className="split-aside">
-            <div className="card">
-              <div className="card-head">
-                <h3 className="card-title">Bundle Builder — {active ? active.name : 'no active brief'}</h3>
+              <div className="card">
+                <div className="card-head"><h3 className="card-title" style={{ fontSize: 15 }}>Channel</h3></div>
+                <div className="inline-flex">
+                  {CHANNEL_SETS.map(c => (
+                    <button key={c.id} className={`filter-pill ${renderChannel === c.id ? 'active' : ''}`}
+                      onClick={() => setRenderChannel(c.id)} title={c.note}>{c.label}</button>
+                  ))}
+                </div>
               </div>
-              <div className="text-low" style={{ fontSize: 11, marginBottom: 8 }}>Select outputs</div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
-                {['Ad creatives', 'Social variants', 'Listing imagery'].map(o => (
-                  <button key={o} className={`filter-pill ${outputs.includes(o) ? 'active' : ''}`} onClick={() => toggleOutput(o)}>{o}</button>
-                ))}
-              </div>
-              <div className="stack" style={{ gap: 8 }}>
-                {[
-                  { item: 'Ad creatives', basis: `${variants.filter(v => v.format === 'Ad creative').length} variant refs` },
-                  { item: 'Listing imagery', basis: `${variants.filter(v => v.format === 'Listing imagery').length} panel refs` },
-                  { item: 'Social variants', basis: `${variants.filter(v => v.format === 'Social variant').length} refs` },
-                ].map(r => (
-                  <div key={r.item} className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
-                    <div style={{ fontSize: 13 }}>{r.item}</div>
-                    <span className="pill pill-muted" style={{ fontSize: 10 }}>{r.basis}</span>
+            </div>
+          )}
+
+          {/* ══ GENERATE ══ */}
+          {tool === 'generate' && (
+            <div className="subview stack" style={{ gap: 14 }}>
+              <ProviderBoundary kind="image" />
+              <div className="card">
+                <div className="card-head"><h3 className="card-title" style={{ fontSize: 15 }}>Image request</h3></div>
+                <div className="field-group">
+                  <span className="label">Purpose</span>
+                  <SegmentedControl value={genPurpose} onChange={setGenPurpose}
+                    options={GEN_PURPOSES.filter(p => p.family === 'Image').map(p => ({ value: p.id, label: p.label, note: p.note }))} />
+                </div>
+                <div className="field-group">
+                  <span className="label">Request brief</span>
+                  <TextInput rows={4} value={genPrompt} onChange={setGenPrompt}
+                    placeholder="Describe the product, the scene, the lighting, the mood, and what must be legible." />
+                </div>
+                <div className="grid-2">
+                  <div className="field-group">
+                    <span className="label">Tier</span>
+                    <Select value={genTier} onChange={setGenTier}
+                      options={GEN_TIERS.map(x => ({ value: x.id, label: `${x.label} — ${x.note}` }))} />
                   </div>
-                ))}
+                  <div className="field-group">
+                    <span className="label">Target placement</span>
+                    <Select value={formatId} onChange={(v) => setFormatId(v)}
+                      options={ALL_FORMATS.map(f => ({ value: f.id, label: `${f.label} (${f.w}×${f.h})` }))} />
+                  </div>
+                </div>
+                <div className="inline-flex">
+                  <button className="btn btn-sm btn-primary" onClick={submitImageRequest}><Icon name="plus" size={13} /> Record request</button>
+                  <span className="pill pill-warn">records a local request · renders nothing</span>
+                </div>
               </div>
-              <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <button className="btn btn-sm" onClick={prepareBundle}>Prepare Export</button>
-                <button className="btn btn-sm btn-ghost" onClick={() => { navigate('/socialpulse'); t('Bundle handed to SocialPulse — reference only, uncertainty preserved.', 'info') }}>Send to SocialPulse</button>
-                <button className="btn btn-sm btn-ghost" onClick={() => { navigate('/listingforge'); t('Bundle handed to ListingForge — reference only, uncertainty preserved.', 'info') }}>Send to ListingForge</button>
+              <div className="card">
+                <div className="card-head"><h3 className="card-title" style={{ fontSize: 15 }}>Request queue</h3></div>
+                <DataTable columns={[
+                  { key: 'id', label: 'Request' },
+                  { key: 'purpose', label: 'Purpose' },
+                  { key: 'brief', label: 'Brief', render: (v, r) => <span title={r.prompt}>{r.prompt.length > 46 ? `${r.prompt.slice(0, 46)}…` : r.prompt}</span> },
+                  { key: 'format', label: 'Placement' },
+                  { key: 'state', label: 'State', render: (v) => <span className="pill pill-unknown">{v}</span> },
+                  { key: 'act', label: '', render: (v, r) => <button className="btn btn-sm btn-ghost" onClick={() => removeRequest(r.id)}>Remove</button> },
+                ]} rows={requests} emptyText="No requests recorded yet." />
               </div>
-              {bundles.length > 0 && (
-                <div style={{ marginTop: 16 }}>
-                  <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Prepared bundles (local)</div>
-                  <div className="stack" style={{ gap: 6 }}>
-                    {bundles.map(b => (
-                      <div key={b.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, fontSize: 12 }}>
-                        <span>{b.id} · {b.outputs.join(', ')}</span>
-                        <span className="pill pill-muted" style={{ fontSize: 10 }}>{b.status}</span>
-                      </div>
-                    ))}
+            </div>
+          )}
+
+          {/* ══ VIDEO ══ */}
+          {tool === 'video' && (
+            <div className="subview stack" style={{ gap: 14 }}>
+              <ProviderBoundary kind="video" />
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Short-clip storyboard</h3>
+                  <span className="pill pill-muted">storyboard composer · no render</span>
+                </div>
+                <div className="field-group">
+                  <span className="label">Purpose</span>
+                  <Select value={vPurpose} onChange={setVPurpose}
+                    options={['UGC / testimonial', 'Product motion', 'Ad hook', 'Storyboard / moodboard']} />
+                </div>
+                <div className="grid-2">
+                  <div className="field-group">
+                    <span className="label">Duration</span>
+                    <Select value={vDuration} onChange={setVDuration} options={['5s', '15s (Short / TikTok)', '30s']} />
+                  </div>
+                  <div className="field-group">
+                    <span className="label">Aspect</span>
+                    <Select value={vAspect} onChange={setVAspect} options={['9:16 (vertical)', '1:1 (square)', '16:9 (landscape)']} />
+                  </div>
+                </div>
+                <div className="inline-flex">
+                  <button className="btn btn-sm btn-primary" onClick={submitVideoRequest}><Icon name="plus" size={13} /> Record clip request</button>
+                  <span className="pill pill-warn">no video pipeline exists in this build</span>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-head"><h3 className="card-title" style={{ fontSize: 15 }}>Beats</h3></div>
+                <DataTable columns={[
+                  { key: 'id', label: 'Beat' },
+                  { key: 'purpose', label: 'Role' },
+                  { key: 'brief', label: 'Brief', render: (v, r) => <span title={r.prompt}>{r.prompt}</span> },
+                  { key: 'state', label: 'State', render: (v) => <span className="pill pill-unknown">{v}</span> },
+                ]} rows={requests.filter(r => r.kind === 'video')} emptyText="No clip requests recorded yet." />
+              </div>
+            </div>
+          )}
+
+          {/* ══ BRIEFS ══ */}
+          {tool === 'briefs' && (
+            <div className="subview stack" style={{ gap: 14 }}>
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Work briefs</h3>
+                  <button className="btn btn-sm" onClick={addBrief}>New Brief</button>
+                </div>
+                <DataTable columns={[
+                  { key: 'name', label: 'Brief' },
+                  { key: 'objective', label: 'Objective' },
+                  { key: 'audience', label: 'Audience' },
+                  { key: 'deliverables', label: 'Deliverables' },
+                  { key: 'status', label: 'State', render: (v) => <span className={`pill ${BRIEF_STATUS[v] || 'pill-muted'}`}>{v}</span> },
+                  { key: 'note', label: 'Note' },
+                  { key: 'at', label: 'Created', render: (v) => <span className="text-low">{fmtTime(v)}</span> },
+                ]} rows={briefs.map(b => ({ ...b, at: b.createdAt }))} emptyText="No briefs yet." />
+              </div>
+              {active && (
+                <div className="card">
+                  <div className="card-head"><h3 className="card-title" style={{ fontSize: 15 }}>Active — {active.name}</h3></div>
+                  <div className="grid-2">
+                    <div className="field-group">
+                      <span className="label">Objective</span>
+                      <TextInput value={active.objective} onChange={(v) => setBriefs(prev => prev.map(b => b.id === active.id ? { ...b, objective: v } : b))} />
+                    </div>
+                    <div className="field-group">
+                      <span className="label">Audience</span>
+                      <TextInput value={active.audience} onChange={(v) => setBriefs(prev => prev.map(b => b.id === active.id ? { ...b, audience: v } : b))} />
+                    </div>
+                    <div className="field-group">
+                      <span className="label">State</span>
+                      <Select value={active.status} onChange={(v) => setBriefs(prev => prev.map(b => b.id === active.id ? { ...b, status: v } : b))}
+                        options={['Draft', 'Active', 'In Review', 'Archived']} />
+                    </div>
+                    <div className="field-group">
+                      <span className="label">Deliverables</span>
+                      <NumberInput value={active.deliverables} min={0} max={99}
+                        onChange={(v) => setBriefs(prev => prev.map(b => b.id === active.id ? { ...b, deliverables: v } : b))} />
+                    </div>
+                  </div>
+                  <div className="field-group" style={{ marginTop: 10 }}>
+                    <span className="label">Note</span>
+                    <TextInput rows={2} value={active.note} onChange={(v) => setBriefs(prev => prev.map(b => b.id === active.id ? { ...b, note: v } : b))} />
                   </div>
                 </div>
               )}
             </div>
+          )}
 
-            <div className="card">
-              <div className="card-head">
-                <h3 className="card-title" style={{ fontSize: 15 }}>Bundle Preview</h3>
-                <span className="pill pill-muted">{outputs.length} outputs</span>
-              </div>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
-                {outputs.length ? outputs.map(o => <span key={o} className="pill pill-muted" style={{ fontSize: 10 }}>{o}</span>) : <span className="text-low" style={{ fontSize: 11 }}>No outputs selected</span>}
-              </div>
-              <Thumb height={120} label="bundle manifest" note="references only — no media packaged" />
-              <div className="inline-flex" style={{ gap: 8, marginTop: 10 }}>
-                <button className="btn btn-sm" disabled title="Download requires a connected asset store; the bundle manifest is local only">Download Bundle</button>
-                <span className="pill pill-unknown" style={{ fontSize: 10 }}>download unavailable — no asset store</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {view === 'library' && (
-        <div className="subview">
-          <MetricTiles columns={4} metrics={[
-            { label: 'Collections', value: String(SEED_COLLECTIONS.length), sub: 'Brand library · sample counts' },
-            { label: 'Assets in library', value: String(totalCollectionItems), sub: 'Sample inventory' },
-            { label: 'Tracked in this room', value: String(assets.length), sub: 'Local asset records' },
-            { label: 'Unreviewed', value: String(assets.filter(a => a.state === 'UNREVIEWED').length), sub: 'Needs review — not an authorization', tone: 'warn' },
-          ]} />
-          <div className="card">
-            <div className="card-head">
-              <h3 className="card-title">Creative Collections</h3>
-              <span className="pill pill-muted">brand library · sample counts</span>
-            </div>
-            <div className="grid-cards-4">
-              {SEED_COLLECTIONS.map(c => (
-                <div key={c.name} className="card" style={{ padding: 14 }}>
-                  <Thumb height={72} label="collection" note={`${c.count} items`} />
-                  <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{c.name}</div>
-                  <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>{c.note}</div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span className="pill pill-muted" style={{ fontSize: 10 }}>{c.count} items</span>
-                    <button className="btn btn-sm btn-ghost" onClick={() => t(`${c.name} collection opened (sample inventory).`, 'info')}>Open</button>
-                  </div>
+          {/* ══ QUEUE ══ */}
+          {tool === 'queue' && (
+            <div className="subview">
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Production queue</h3>
+                  <span className="pill pill-muted">{blockedCount} blocked · {requests.length} total</span>
                 </div>
-              ))}
+                <DataTable columns={[
+                  { key: 'id', label: 'Request' },
+                  { key: 'kind', label: 'Kind' },
+                  { key: 'purpose', label: 'Purpose' },
+                  { key: 'brief', label: 'Brief', render: (v, r) => <span title={r.prompt}>{r.prompt.length > 42 ? `${r.prompt.slice(0, 42)}…` : r.prompt}</span> },
+                  { key: 'tier', label: 'Tier' },
+                  { key: 'state', label: 'State', render: (v) => <span className={`pill ${pillFor(v)}`}>{v}</span> },
+                  { key: 'at', label: 'Recorded', render: (v) => <span className="text-low">{fmtTime(v)}</span> },
+                  {
+                    key: 'act', label: 'Actions', render: (v, r) => (
+                      <div className="inline-flex">
+                        {r.state === 'Blocked — provider required' && (
+                          <button className="btn btn-sm btn-ghost" onClick={() => advanceRequest(r.id, 'Queued')}>Queue</button>
+                        )}
+                        {r.state === 'Queued' && (
+                          <button className="btn btn-sm btn-ghost" onClick={() => advanceRequest(r.id, 'In Review')}>Review</button>
+                        )}
+                        <button className="btn btn-sm btn-ghost" onClick={() => removeRequest(r.id)}>Remove</button>
+                      </div>
+                    ),
+                  },
+                ]} rows={requests.map(r => ({ ...r, at: r.createdAt, purpose: GEN_PURPOSES.find(p => p.id === r.purpose)?.label || r.purpose, tier: GEN_TIERS.find(x => x.id === r.tier)?.label || r.tier }))}
+                  emptyText="No requests recorded yet. A blocked request means the engine is not connected — not that an asset failed." />
+              </div>
             </div>
-            <div className="text-low" style={{ fontSize: 11, marginTop: 14 }} title="Library counts are sample inventory — not publishing or purchase authorization">
-              Collection counts are sample inventory. Opening a collection never publishes or authorizes anything.
+          )}
+
+          {/* ══ VARIANTS ══ */}
+          {tool === 'variants' && (
+            <div className="subview stack" style={{ gap: 14 }}>
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Variants &amp; history</h3>
+                  <button className="btn btn-sm" onClick={addVariant}>Add Variant</button>
+                </div>
+                <DataTable columns={[
+                  { key: 'id', label: 'Variant' },
+                  { key: 'brief', label: 'Brief' },
+                  { key: 'format', label: 'Format' },
+                  { key: 'aspect', label: 'Aspect' },
+                  {
+                    key: 'state', label: 'State', render: (v) => <span className={`pill ${pillFor(v)}`}>{v}</span>,
+                  },
+                  { key: 'note', label: 'Note' },
+                  {
+                    key: 'act', label: 'Actions', render: (v, r) => (
+                      <div className="inline-flex">
+                        {r.state !== 'Approved' && <button className="btn btn-sm btn-ghost" onClick={() => setVariantState(r.id, 'Approved')}>Approve</button>}
+                        {r.state !== 'Changes Requested' && <button className="btn btn-sm btn-ghost" onClick={() => setVariantState(r.id, 'Changes Requested')}>Changes</button>}
+                      </div>
+                    ),
+                  },
+                ]} rows={variants} emptyText="No variants yet." />
+              </div>
+              <div className="card">
+                <div className="card-head"><h3 className="card-title" style={{ fontSize: 15 }}>History</h3></div>
+                <DataTable columns={[
+                  { key: 'id', label: 'Record' },
+                  { key: 'source', label: 'Source' },
+                  { key: 'detail', label: 'Detail' },
+                  { key: 'at', label: 'When', render: (v) => <span className="text-low">{fmtTime(v)}</span> },
+                ]} rows={[
+                  ...requests.map(r => ({ id: r.id, source: `Request (${r.kind})`, detail: r.prompt, at: r.createdAt })),
+                  ...variants.map(v => ({ id: v.id, source: 'Variant', detail: `${v.format} · ${v.state}`, at: v.createdAt })),
+                ].sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 40)}
+                  emptyText="Nothing recorded yet." />
+              </div>
             </div>
+          )}
+
+          {/* ══ ASSETS ══ */}
+          {tool === 'assets' && (
+            <div className="subview stack" style={{ gap: 14 }}>
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Reference artwork</h3>
+                  <span className="pill pill-muted">{fmtBytes(store.totalBytes)}</span>
+                </div>
+                <label className="sp-dropzone" style={{ marginBottom: 12 }}>
+                  <Icon name="upload" size={14} /> Upload images to the local store
+                  <input type="file" accept="image/*" multiple style={{ display: 'none' }}
+                    onChange={async (e) => { await store.add(e.target.files, { role: 'reference', tags: ['studio'] }); e.target.value = '' }} />
+                </label>
+                <div className="sp-asset-grid">
+                  {artAssets.map(a => (
+                    <AssetThumb key={a.id} asset={a} height={64}
+                      actions={<button className="btn btn-sm btn-ghost" title="Remove" onClick={() => store.remove(a.id)}>×</button>} />
+                  ))}
+                  {!artAssets.length && <ThumbPlaceholder height={64} label="no artwork uploaded yet" />}
+                </div>
+                {!store.persistent && (
+                  <div className="alert" style={{ marginTop: 12, marginBottom: 0 }}>
+                    <div className="alert-text">Browser storage is unavailable — uploaded images live for this session only.</div>
+                  </div>
+                )}
+              </div>
+              <div className="card">
+                <div className="card-head"><h3 className="card-title" style={{ fontSize: 15 }}>Saved renders</h3></div>
+                <div className="sp-asset-grid">
+                  {renderAssets.map(a => (
+                    <AssetThumb key={a.id} asset={a} height={64}
+                      actions={<button className="btn btn-sm btn-ghost" title="Remove" onClick={() => store.remove(a.id)}>×</button>} />
+                  ))}
+                  {!renderAssets.length && <ThumbPlaceholder height={64} label="no renders saved yet" />}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ══ EXPORTS ══ */}
+          {tool === 'exports' && (
+            <div className="subview stack" style={{ gap: 14 }}>
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Bundle Builder — {active ? active.name : 'no active brief'}</h3>
+                </div>
+                <div className="field-group">
+                  <span className="label">Outputs to include</span>
+                  <ChipRow value={outputs} onToggle={toggleOutput}
+                    options={['Ad creatives', 'Social variants', 'Listing imagery', 'A+ content', 'Email heroes']} />
+                </div>
+                <div className="inline-flex">
+                  <button className="btn btn-sm btn-primary" onClick={prepareBundle}><Icon name="package" size={13} /> Prepare bundle</button>
+                  <span className="pill pill-muted">references only · download needs an asset store</span>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Export log</h3>
+                  <span className="pill pill-muted">{exportLog.length} entries</span>
+                </div>
+                <DataTable columns={[
+                  { key: 'name', label: 'Export' },
+                  { key: 'kind', label: 'Type' },
+                  { key: 'note', label: 'Source' },
+                  { key: 'at', label: 'When', render: (v) => <span className="text-low">{fmtTime(v)}</span> },
+                ]} rows={exportLog} emptyText="Nothing exported from this browser yet." />
+              </div>
+              {bundles.length > 0 && (
+                <div className="card">
+                  <div className="card-head"><h3 className="card-title" style={{ fontSize: 15 }}>Prepared bundles</h3></div>
+                  <DataTable columns={[
+                    { key: 'id', label: 'Bundle' },
+                    { key: 'briefId', label: 'Brief' },
+                    { key: 'outputs', label: 'Outputs' },
+                    { key: 'status', label: 'State', render: (v) => <span className="pill pill-forest">{v}</span> },
+                    { key: 'at', label: 'Prepared', render: (v) => <span className="text-low">{fmtTime(v)}</span> },
+                  ]} rows={bundles.map(b => ({ ...b, at: b.createdAt }))} emptyText="No bundles yet." />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ══ LIBRARY ══ */}
+          {tool === 'library' && (
+            <div className="subview stack" style={{ gap: 14 }}>
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Saved documents</h3>
+                  <span className="pill pill-muted">{docs.length} in this browser</span>
+                </div>
+                <div className="sp-tpl-grid">
+                  {docs.map(d => (
+                    <button key={d.id} className="sp-tpl" onClick={() => openDoc(d)}>
+                      <div className="sp-scene-swatch" style={{ height: 52, background: 'var(--bone)' }} />
+                      <div className="sp-tpl-body">
+                        <div className="sp-tpl-name">{d.name}</div>
+                        <div className="sp-tpl-note">{d.w}×{d.h} · {d.layers.length} layers · {fmtTime(d.savedAt)}</div>
+                      </div>
+                    </button>
+                  ))}
+                  {!docs.length && <ThumbPlaceholder height={72} label="no documents saved yet" />}
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-head"><h3 className="card-title" style={{ fontSize: 15 }}>Collections</h3></div>
+                <DataTable columns={[
+                  { key: 'name', label: 'Collection' },
+                  { key: 'count', label: 'Items' },
+                  { key: 'note', label: 'Note' },
+                ]} rows={[
+                  { name: 'Brand kit', count: collectionItems.brand || 0, note: 'Logos, type, colour, tone' },
+                  { name: 'Product photography', count: collectionItems.reference || 0, note: 'Studio + lifestyle shots' },
+                  { name: 'Ad creatives', count: collectionItems.render || 0, note: 'Static + video ad frames' },
+                  { name: 'Listing imagery', count: collectionItems['listing'] || 0, note: 'A+ content + main-image sets' },
+                ]} emptyText="Nothing in the library yet." />
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ══ INSPECTOR ══ */}
+        <div className="sp-inspector">
+          <div className="sp-inspector-head">
+            <span className="sp-inspector-title">{TOOLS.find(x => x.id === tool)?.label}</span>
+            <span className="pill pill-muted">{mode === 'simple' ? 'Simple' : 'Advanced'}</span>
+          </div>
+          <div className="sp-inspector-body">
+
+            {tool === 'canvas' && (<>
+              <Section title="Document">
+                <Field label="Name">
+                  <TextInput value={docName} onChange={setDocName} />
+                </Field>
+                <Field label="Placement" hint="Geometry is normalised — resize freely.">
+                  <Select value={formatId} onChange={(v) => { const f = formatById(v); if (f) changeFormat(f) }}
+                    options={ALL_FORMATS.map(f => ({ value: f.id, label: `${f.label} (${f.w}×${f.h})` }))} />
+                </Field>
+              </Section>
+
+              <Section title="Templates" right={<span className="pill pill-muted">{TEMPLATES.length}</span>}>
+                <div className="sp-tpl-grid">
+                  {TEMPLATES.map(tpl => (
+                    <button key={tpl.id} className={`sp-tpl ${templateId === tpl.id ? 'active' : ''}`}
+                      onClick={() => openTemplate(tpl.id)} title={tpl.note}>
+                      <div className="sp-scene-swatch" style={{ height: 46, background: tpl.layers[0].fill || 'var(--bone)' }} />
+                      <div className="sp-tpl-body">
+                        <div className="sp-tpl-name">{tpl.name}</div>
+                        <div className="sp-tpl-note">{tpl.family}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </Section>
+
+              <Section title="Add">
+                <div className="inline-flex">
+                  <button className="btn btn-sm btn-ghost" onClick={addText}><Icon name="type" size={13} /> Text</button>
+                  <button className="btn btn-sm btn-ghost" onClick={() => addShape('rect')}><Icon name="shapes" size={13} /> Rect</button>
+                  <button className="btn btn-sm btn-ghost" onClick={() => addShape('ellipse')}>Ellipse</button>
+                  <button className="btn btn-sm btn-ghost" onClick={addBadge}><Icon name="target" size={13} /> Badge</button>
+                </div>
+                <Field label="Product layer" hint="From your uploaded artwork.">
+                  <div className="sp-asset-grid">
+                    {artAssets.slice(0, 6).map(a => (
+                      <AssetThumb key={a.id} asset={a} height={40} onClick={() => addProduct(a.id)} />
+                    ))}
+                  </div>
+                  {!artAssets.length && <ThumbPlaceholder height={40} label="upload artwork first" />}
+                </Field>
+              </Section>
+
+              <Section title="Brand kit" hint="Applied to text and badge layers.">
+                <div className="inline-flex">
+                  {kits.map(k => (
+                    <button key={k.id} className={`filter-pill ${activeKitId === k.id ? 'active' : ''}`} onClick={() => setActiveKitId(k.id)}>{k.name}</button>
+                  ))}
+                </div>
+                <div className="inline-flex" style={{ marginTop: 8 }}>
+                  {kit.palette.slice(0, 6).map((c, i) => (
+                    <span key={i} title={c} style={{ width: 20, height: 20, borderRadius: 5, background: c, border: '1px solid var(--divider-mid)' }} />
+                  ))}
+                </div>
+                <button className="btn btn-sm btn-ghost" onClick={() => { setDoc(prev => applyKit(prev, kit)); t('Kit applied to the open document.', 'info') }}>
+                  <Icon name="palette" size={13} /> Apply kit to this document
+                </button>
+              </Section>
+
+              {mode === 'advanced' && (
+                <Section title={`Layers (${doc.layers.length})`}>
+                  <div className="sp-layers">
+                    {[...doc.layers].reverse().map(l => (
+                      <div key={l.id} className={`sp-layer ${selectedLayerId === l.id ? 'active' : ''}`} onClick={() => setSelectedLayerId(l.id)}>
+                        <Icon name="layers" size={12} />
+                        <span className="sp-layer-name">{l.name || l.role || l.kind}</span>
+                        <span className="sp-layer-kind">{KIND_LABEL[l.kind]}</span>
+                        <span className="sp-layer-btn" title="Move up" onClick={(e) => { e.stopPropagation(); setDoc(d => reorderLayer(d, l.id, 1)) }}><Icon name="chevronDown" size={12} /></span>
+                        <span className="sp-layer-btn" title="Move down" onClick={(e) => { e.stopPropagation(); setDoc(d => reorderLayer(d, l.id, -1)) }}><Icon name="chevronRight" size={12} /></span>
+                        <span className="sp-layer-btn" title="Duplicate" onClick={(e) => { e.stopPropagation(); setDoc(d => duplicateLayer(d, l.id)) }}><Icon name="copy" size={12} /></span>
+                        <span className="sp-layer-btn" title="Delete" onClick={(e) => { e.stopPropagation(); setDoc(d => removeLayer(d, l.id)) }}><Icon name="trash" size={12} /></span>
+                      </div>
+                    ))}
+                  </div>
+                </Section>
+              )}
+
+              {selectedLayer && (
+                <Section title={`Edit — ${selectedLayer.name || selectedLayer.role || selectedLayer.kind}`}>
+                  {selectedLayer.kind === 'text' && (
+                    <>
+                      <Field label="Text">
+                        <TextInput rows={2} value={selectedLayer.text || ''} onChange={(v) => patchLayer(selectedLayer.id, { text: v })} />
+                      </Field>
+                      <Field label="Size">
+                        <Slider value={selectedLayer.size ?? 0.05} min={0.015} max={0.16} step={0.002} suffix="%" onChange={(v) => patchLayer(selectedLayer.id, { size: v })} />
+                      </Field>
+                      <Field label="Colour">
+                        <ColorInput value={selectedLayer.color || '#1a1a1a'} onChange={(v) => patchLayer(selectedLayer.id, { color: v })} />
+                      </Field>
+                      <Field label="Alignment">
+                        <SegmentedControl value={selectedLayer.align || 'left'} onChange={(v) => patchLayer(selectedLayer.id, { align: v })}
+                          options={[{ value: 'left', label: 'L' }, { value: 'center', label: 'C' }, { value: 'right', label: 'R' }]} />
+                      </Field>
+                      <Field label="Weight">
+                        <SegmentedControl value={String(selectedLayer.weight ?? 400)} onChange={(v) => patchLayer(selectedLayer.id, { weight: Number(v) })}
+                          options={[{ value: '400', label: 'Regular' }, { value: '600', label: 'Semibold' }, { value: '700', label: 'Bold' }]} />
+                      </Field>
+                      <Toggle checked={!!selectedLayer.uppercase} onChange={(v) => patchLayer(selectedLayer.id, { uppercase: v })} label="Uppercase" />
+                      <Toggle checked={!!selectedLayer.shadow} onChange={(v) => patchLayer(selectedLayer.id, { shadow: v })} label="Drop shadow" />
+                    </>
+                  )}
+                  {selectedLayer.kind === 'shape' && (
+                    <>
+                      <Field label="Fill">
+                        <ColorInput value={selectedLayer.fill || '#000000'} onChange={(v) => patchLayer(selectedLayer.id, { fill: v })} />
+                      </Field>
+                      {selectedLayer.shape === 'rect' && (
+                        <Field label="Corner radius">
+                          <Slider value={selectedLayer.radius ?? 0} min={0} max={0.2} step={0.005} suffix="%" onChange={(v) => patchLayer(selectedLayer.id, { radius: v })} />
+                        </Field>
+                      )}
+                      <Field label="Opacity">
+                        <Slider value={selectedLayer.opacity ?? 1} min={0} max={1} onChange={(v) => patchLayer(selectedLayer.id, { opacity: v })} />
+                      </Field>
+                    </>
+                  )}
+                  {selectedLayer.kind === 'badge' && (
+                    <>
+                      <Field label="Label">
+                        <TextInput value={selectedLayer.text || ''} onChange={(v) => patchLayer(selectedLayer.id, { text: v })} />
+                      </Field>
+                      <Field label="Fill">
+                        <ColorInput value={selectedLayer.fill || '#1d4a1d'} onChange={(v) => patchLayer(selectedLayer.id, { fill: v })} />
+                      </Field>
+                      <Field label="Text colour">
+                        <ColorInput value={selectedLayer.color || '#f5f0e8'} onChange={(v) => patchLayer(selectedLayer.id, { color: v })} />
+                      </Field>
+                    </>
+                  )}
+                  {(selectedLayer.kind === 'image' || selectedLayer.kind === 'product') && (
+                    <>
+                      <Field label="Artwork" hint="Replace the image on this layer.">
+                        <div className="sp-asset-grid">
+                          {artAssets.slice(0, 6).map(a => (
+                            <AssetThumb key={a.id} asset={a} height={40} selected={selectedLayer.assetId === a.id}
+                              onClick={() => patchLayer(selectedLayer.id, { assetId: a.id })} />
+                          ))}
+                        </div>
+                      </Field>
+                      <Toggle checked={selectedLayer.contactShadow !== false} onChange={(v) => patchLayer(selectedLayer.id, { contactShadow: v })} label="Contact shadow" />
+                    </>
+                  )}
+                  {mode === 'advanced' && (
+                    <>
+                      <Field label="X">
+                        <Slider value={selectedLayer.x ?? 0} min={-0.2} max={1} step={0.005} suffix="%" onChange={(v) => patchLayer(selectedLayer.id, { x: v })} />
+                      </Field>
+                      <Field label="Y">
+                        <Slider value={selectedLayer.y ?? 0} min={-0.2} max={1} step={0.005} suffix="%" onChange={(v) => patchLayer(selectedLayer.id, { y: v })} />
+                      </Field>
+                      <Field label="Width">
+                        <Slider value={selectedLayer.w ?? 0.2} min={0.02} max={1.2} step={0.005} suffix="%" onChange={(v) => patchLayer(selectedLayer.id, { w: v })} />
+                      </Field>
+                      <Field label="Height">
+                        <Slider value={selectedLayer.h ?? 0.2} min={0.02} max={1.2} step={0.005} suffix="%" onChange={(v) => patchLayer(selectedLayer.id, { h: v })} />
+                      </Field>
+                      <Field label="Rotation">
+                        <Slider value={selectedLayer.rot ?? 0} min={-180} max={180} step={1} suffix="°" onChange={(v) => patchLayer(selectedLayer.id, { rot: v })} />
+                      </Field>
+                      <Field label="Opacity">
+                        <Slider value={selectedLayer.opacity ?? 1} min={0} max={1} onChange={(v) => patchLayer(selectedLayer.id, { opacity: v })} />
+                      </Field>
+                    </>
+                  )}
+                </Section>
+              )}
+
+              <Section title="Handoff" hint="Moves a local record id — never a file.">
+                <div className="sp-handoff">
+                  <button className="btn btn-sm btn-ghost" onClick={() => { t('Sent to AdPilot — the campaign planner opens with the local brief id. No file is transmitted.', 'info'); navigate('/adpilot?view=planner') }}>
+                    <Icon name="target" size={13} /> AdPilot
+                  </button>
+                  <button className="btn btn-sm btn-ghost" onClick={() => { t('Sent to SocialPulse — the composer opens with the local brief id. No file is transmitted.', 'info'); navigate('/socialpulse?view=composer') }}>
+                    <Icon name="users" size={13} /> SocialPulse
+                  </button>
+                  <button className="btn btn-sm btn-ghost" onClick={() => { t('Sent to the Product Designer — the scene designer opens with the local art id.', 'info'); navigate('/product-designer?view=scene') }}>
+                    <Icon name="camera" size={13} /> Product Designer
+                  </button>
+                  <button className="btn btn-sm btn-ghost" onClick={() => { t('Sent to ListingForge — the listing editor opens with the local imagery set id.', 'info'); navigate('/listingforge?view=editor') }}>
+                    <Icon name="list" size={13} /> ListingForge
+                  </button>
+                </div>
+              </Section>
+            </>)}
+
+            {(tool === 'ads' || tool === 'social' || tool === 'aplus') && (
+              <Section title="Placement">
+                <Field label="Set the master to">
+                  <Select value={formatId} onChange={(v) => { const f = formatById(v); if (f) changeFormat(f); go('canvas') }}
+                    options={renderChannelFormats().map(f => ({ value: f.id, label: `${f.label} (${f.w}×${f.h})` }))} />
+                </Field>
+                <button className="btn btn-sm btn-primary" onClick={exportChannelSet}>
+                  <Icon name="download" size={13} /> Export {renderChannelFormats().length} placements
+                </button>
+                <span className="sp-field-hint">Each placement is a real local render at its own pixel size.</span>
+              </Section>
+            )}
+
+            {tool === 'generate' && (
+              <Section title="Tier" hint="A local cost model, not a price quote.">
+                <div className="stack" style={{ gap: 8 }}>
+                  {GEN_TIERS.map(x => (
+                    <div key={x.id} className="sp-stat">
+                      <div className="sp-stat-label">{x.label}</div>
+                      <div className="sp-stat-value">{x.cost}×</div>
+                      <div className="sp-stat-sub">{x.note}</div>
+                    </div>
+                  ))}
+                </div>
+              </Section>
+            )}
+
+            {tool === 'video' && (
+              <Section title="Provider">
+                <ProviderBoundary kind="video" />
+              </Section>
+            )}
+
+            {tool === 'assets' && (
+              <Section title="Store health">
+                <div className="sp-stats">
+                  <Stat label="Assets" value={store.assets.length} />
+                  <Stat label="Size" value={fmtBytes(store.totalBytes)} />
+                  <Stat label="Persistence" value={store.persistent ? 'Local' : 'Session'} tone={store.persistent ? 'forest' : 'ochre'} />
+                </div>
+              </Section>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </PageLayout>
   )
 }
+

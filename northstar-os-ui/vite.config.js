@@ -11,6 +11,16 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
+          // The creative studio engine (document model, 3D renderer, mockups,
+          // asset store, presets) is only needed by the two creative rooms.
+          studio: [
+            './src/studio/engine/doc.js',
+            './src/studio/engine/presets.js',
+            './src/studio/engine/three.js',
+            './src/studio/engine/mockups.js',
+            './src/studio/engine/sceneDoc.js',
+            './src/studio/engine/assets.js',
+          ],
         },
       },
     },
