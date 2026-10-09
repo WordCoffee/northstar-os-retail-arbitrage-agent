@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NorthstarOS Design Studio — concept renders</title>
+<style>
+  :root{
+    --paper:#f5f0e8; --paper-warm:#f0ebe1; --bone:#e8e2d8; --surface:#fff;
+    --pine-deep:#1a2e1a; --pine:#1d4a1d; --forest:#1d5a1d;
+    --ink:#1a1a1a; --ink-mid:#5a5a4a; --ink-soft:#8a8a7a; --ink-faint:#b0afa0;
+    --ochre:#c4941a; --clay:#a04020; --divider:rgba(26,46,26,.08);
+    --divider-mid:rgba(26,46,26,.14);
+    --serif:'Libre Baskerville',Georgia,'Times New Roman',serif;
+    --ui:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --mono:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--ui);background:var(--paper);color:var(--ink);line-height:1.6;
+       -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:48px 28px 80px}
+  h1{font-family:var(--serif);font-size:2.1rem;color:var(--pine-deep);letter-spacing:-.01em}
+  .lede{font-size:1rem;color:var(--ink-mid);max-width:62ch;margin-top:10px}
+  .eyebrow{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+           color:var(--ink-soft);margin-bottom:10px}
+  .rule{height:1px;background:var(--divider-mid);margin:28px 0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:20px;
+        margin-top:8px}
+  a.card{display:block;background:var(--surface);border:1px solid var(--divider);
+         border-radius:12px;overflow:hidden;text-decoration:none;
+         transition:border-color .22s,box-shadow .22s}
+  a.card:hover{border-color:var(--divider-mid);box-shadow:0 4px 16px rgba(26,46,26,.08);
+               text-decoration:none}
+  a.card:focus-visible{outline:2px solid var(--forest);outline-offset:2px}
+  .card img{width:100%;display:block;background:var(--bone);border-bottom:1px solid var(--divider)}
+  .card .body{padding:14px 16px 16px}
+  .card .k{font-family:var(--mono);font-size:.68rem;color:var(--ink-faint);letter-spacing:.05em}
+  .card .t{font-family:var(--serif);font-size:1.02rem;font-weight:600;color:var(--pine-deep);
+           margin:3px 0 5px}
+  .card .d{font-size:.82rem;color:var(--ink-mid)}
+  .note{background:var(--surface);border:1px solid var(--divider);border-radius:12px;
+        padding:18px 20px;margin-top:26px}
+  .note h2{font-family:var(--serif);font-size:1.05rem;color:var(--pine-deep);margin-bottom:8px}
+  .note p{font-size:.86rem;color:var(--ink-mid);max-width:80ch}
+  .note code{font-family:var(--mono);font-size:.78rem;color:var(--pine);
+             background:var(--paper-warm);padding:1px 5px;border-radius:4px}
+  .tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;
+       font-size:.7rem;font-weight:600;letter-spacing:.02em;margin-right:6px}
+  .tag-now{background:rgba(138,138,122,.12);color:var(--ink-soft)}
+  .tag-new{background:rgba(29,90,29,.15);color:var(--forest)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">NorthstarOS · Design Studio</p>
+  <h1>Concept renders</h1>
+  <p class="lede">
+    Nine renders of one unified Design Studio. Render&nbsp;00 is today&rsquo;s shipped
+    <code>/creative-studio</code> room; renders 02&ndash;09 are the proposed studio.
+    All drawn in the repo&rsquo;s real design tokens.
+  </p>
+
+  <div class="rule"></div>
+  <p style="font-size:.85rem;color:var(--ink-mid)">
+    <span class="tag tag-now">CURRENT</span> reconstructed from code
+    <span class="tag tag-new">PROPOSED</span> not yet built
+  </p>
+
+  <div class="grid">
+    <a class="card" href="out/00-current-creative-studio.svg">
+      <img src="out/00-current-creative-studio.svg" alt="Current Creative Studio room">
+      <div class="body">
+        <div class="k">RENDER 00 · CURRENT</div>
+        <div class="t">Today — Creative Studio</div>
+        <div class="d">Eight tabs of real local records, every preview an honest placeholder.
+          A complete workflow shell with a hollow middle.</div>
+      </div>
+    </a>
+
+    <a class="card" href="out/02-listing-station.svg">
+      <img src="out/02-listing-station.svg" alt="Proposed listing station">
+      <div class="body">
+        <div class="k">RENDER 02 · PROPOSED</div>
+        <div class="t">Listing station</div>
+        <div class="d">Main image with the Amazon fill guide, secondary image set, A+ module band,
+          and an inspector carrying the compliance pre-flight and claims guardrail.</div>
+      </div>
+    </a>
+
+    <a class="card" href="out/03-ads-station.svg">
+      <img src="out/03-ads-station.svg" alt="Proposed ads station">
+      <div class="body">
+        <div class="k">RENDER 03 · PROPOSED</div>
+        <div class="t">Ads station</div>
+        <div class="d">Sponsored Brands, Display and Products creative. Each variant is bound to
+          the search term it targets, with a listing-consistency check and an experiment slot.</div>
+      </div>
+    </a>
+
+    <a class="card" href="out/04-video-station.svg">
+      <img src="out/04-video-station.svg" alt="Proposed video station">
+      <div class="body">
+        <div class="k">RENDER 04 · PROPOSED</div>
+        <div class="t">Video station</div>
+        <div class="d">URL-to-video, storyboard, spend ledger. Deliberately shows a cost ledger
+          rather than a clip — video is metered spend and needs approval first.</div>
+      </div>
+    </a>
+
+    <a class="card" href="out/05-social-station.svg">
+      <img src="out/05-social-station.svg" alt="Proposed social station">
+      <div class="body">
+        <div class="k">RENDER 05 · PROPOSED</div>
+        <div class="t">Social station</div>
+        <div class="d">Channel-fit strip, content calendar, five-panel carousel. Publishing stays
+          disconnected and is labelled as such.</div>
+      </div>
+    </a>
+
+    <a class="card" href="out/06-packaging-station.svg">
+      <img src="out/06-packaging-station.svg" alt="Proposed packaging station">
+      <div class="body">
+        <div class="k">RENDER 06 · PROPOSED</div>
+        <div class="t">Product &amp; packaging</div>
+        <div class="d">Three-face box with the operator&rsquo;s own artwork mapped, camera presets,
+          a dieline with bleed and safe, and a print-readiness checklist.</div>
+      </div>
+    </a>
+
+    <a class="card" href="out/07-brand-system.svg">
+      <img src="out/07-brand-system.svg" alt="Proposed brand system station">
+      <div class="body">
+        <div class="k">RENDER 07 · PROPOSED</div>
+        <div class="t">Brand system</div>
+        <div class="d">Palette, type, voice, and the claims library — 12 approved phrases against
+          31 blocked ones, each with the reason recorded.</div>
+      </div>
+    </a>
+
+    <a class="card" href="out/08-learning-loop.svg">
+      <img src="out/08-learning-loop.svg" alt="Proposed learning loop">
+      <div class="body">
+        <div class="k">RENDER 08 · PROPOSED</div>
+        <div class="t">The learning loop</div>
+        <div class="d">Search terms → briefs → variants → pre-flight → publish → performance →
+          learning, with the four repo data contracts each step depends on.</div>
+      </div>
+    </a>
+
+    <a class="card" href="out/09-comparison.svg">
+      <img src="out/09-comparison.svg" alt="Before and after comparison">
+      <div class="body">
+        <div class="k">RENDER 09 · PROPOSED</div>
+        <div class="t">Before / after</div>
+        <div class="d">Today&rsquo;s room against the proposed Design Studio, with the five
+          substantive changes spelled out.</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="note">
+    <h2>Two things to know before you look</h2>
+    <p>
+      <strong>Every render is a standalone SVG</strong> — open it directly, or zoom without losing
+      quality. The product composites are drawn as the <strong>same honest placeholder</strong> the
+      shipped room uses, because no image provider is connected in this build; these renders describe
+      layout and information architecture, not imagery that does not exist yet.
+      Tokens are copied verbatim from <code>northstar-os-ui/src/styles/tokens.css</code> so a
+      render and the shipped room cannot drift apart.
+    </p>
+    <p style="margin-top:12px">
+      <strong>The A+ dimensions in render 02 are the verified Amazon figures, not the repo's.</strong>
+      The research found the repo's own <code>presets.js</code> declares A+ wide banner
+      <code>970×600</code>, standard <code>300×300</code> and comparison <code>970×300</code> —
+      none of which matches Amazon's published module-guide specs
+      (<code>1464×600</code> Premium Full Image, <code>150×300</code> comparison chart,
+      <code>200×200</code> four-images-and-text). The renders deliberately show the
+      <em>correct</em> values; correcting the repo is Phase&nbsp;0 of the master blueprint.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
