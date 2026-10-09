@@ -27,6 +27,8 @@ from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional
 
+from env_flags import env_flag
+
 # ---------------------------------------------------------------------------
 # Database connection
 # ---------------------------------------------------------------------------
@@ -44,16 +46,69 @@ def _get_postgres_url() -> Optional[str]:
     return os.environ.get("DATABASE_URL") or os.environ.get("SUPABASE_DB_URL")
 
 
-class DataLayer:
-    """Database abstraction — Postgres when available, SQLite fallback."""
+def _redact_url(url: Optional[str]) -> str:
+    """A URL with any credential removed. Safe to log; never a secret."""
+    if not url:
+        return "<none>"
+    from urllib.parse import urlsplit, urlunsplit
+    try:
+        parts = urlsplit(url)
+        host = parts.hostname or ""
+        port = f":{parts.port}" if parts.port else ""
+        return urlunsplit((parts.scheme, f"{host}{port}", parts.path, "", ""))
+    except ValueError:
+        return "<unparseable-url>"
 
-    def __init__(self):
+
+class DataLayer:
+    """Database abstraction — Postgres when available, SQLite fallback.
+
+    P1-04 (2026-10-09): the Postgres branch used to be dead code that lied.
+    ``__init__`` set ``_mode = "postgres"`` when a URL was configured and then
+    ran ``_init_sqlite()`` anyway, so a misconfigured deployment silently served
+    SQLite while claiming Postgres. It now fails loudly at initialization: a
+    configured-but-unreachable Postgres raises instead of degrading, and only an
+    explicitly absent URL falls back to SQLite.
+    """
+
+    def __init__(self, allow_sqlite_fallback: Optional[bool] = None):
         self._pg_url = _get_postgres_url()
         self._conn = None
         self._lock = threading.RLock()
         self._mode = "postgres" if self._pg_url else "sqlite"
         if self._mode == "sqlite":
             self._init_sqlite()
+        else:
+            self._init_postgres(allow_sqlite_fallback)
+
+    def _init_postgres(self, allow_sqlite_fallback: Optional[bool] = None) -> None:
+        """Connect to Postgres, or refuse.
+
+        Never silently degrades: if a URL is configured but the connection
+        fails, the caller is told loudly. An operator who genuinely wants the
+        SQLite fallback sets ``NORTHSTAR_ALLOW_SQLITE_FALLBACK=1`` explicitly.
+        """
+        if allow_sqlite_fallback is None:
+            allow_sqlite_fallback = env_flag("NORTHSTAR_ALLOW_SQLITE_FALLBACK")
+        try:
+            import psycopg2  # noqa: F401  (driver presence check)
+        except ImportError:
+            raise RuntimeError(
+                "POSTGRES CONFIGURED BUT DRIVER MISSING: "
+                f"{_redact_url(self._pg_url)} was configured but psycopg2 is "
+                "not installed. Set NORTHSTAR_ALLOW_SQLITE_FALLBACK=1 to run "
+                "on SQLite instead, or install the Postgres driver."
+            )
+        try:
+            conn = psycopg2.connect(self._pg_url, connect_timeout=5)
+        except Exception as exc:
+            raise RuntimeError(
+                "POSTGRES CONFIGURED BUT UNREACHABLE: "
+                f"{_redact_url(self._pg_url)} did not accept a connection "
+                f"({exc.__class__.__name__}). Set "
+                "NORTHSTAR_ALLOW_SQLITE_FALLBACK=1 to run on SQLite instead."
+            ) from exc
+        self._pg_conn = conn
 
     @property
     def mode(self) -> str:

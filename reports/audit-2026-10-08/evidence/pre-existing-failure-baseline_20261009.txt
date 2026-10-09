@@ -1,0 +1,58 @@
+# Pre-existing failure baseline — parent commit vs overnight branch
+
+**Captured:** 2026-10-09 ~04:35 local
+**Parent commit audited:** `93879a3` (branch `feature/product-designer-studio`)
+**Overnight branch:** `feature/overnight-remediation-20261009` @ `8e7f9b6`
+
+## Method
+
+The Phase 9 exit loop requires every failure to be compared to the **parent
+commit before it is called pre-existing**. So the working tree was stashed, the
+failing tests were run against the parent, and the tree was restored. Both runs
+are recorded below.
+
+## Parent-commit run (`93879a3`, stashed working tree)
+
+Command (from `Northstar_backend/`, with `PYTHONPATH` at the repo root):
+
+```
+python -m pytest foundation/tests/test_frontend_gate.py::test_v3_shell_invariants
+  foundation/tests/test_owner_test_mode_non_bypass.py::test_frozen_file_boundary_is_a_static_rule
+  test_env_hygiene.py test_proof_batch_run.py tests/test_reasoning_routes.py -q -p no:randomly
+```
+
+Result: **3 failed, 78 passed**
+
+| Test | Verdict at parent | Evidence |
+|---|---|---|
+| `foundation/tests/test_frontend_gate.py::test_v3_shell_invariants` | **PRE-EXISTING FAIL** | `assert route_count == 48, f"expected 48 routes in App.jsx, found {route_count}"` → `AssertionError: expected 48 routes in App.jsx, found 51` |
+| `foundation/tests/test_owner_test_mode_non_bypass.py::test_frozen_file_boundary_is_a_static_rule` | **PRE-EXISTING FAIL** | documented in `00_STATE.json` test_baseline as known protected-hash drift |
+| `test_env_hygiene.py::test_env_example_tracked_but_is_placeholder` | **PRE-EXISTING FAIL** | `.env.example` contains a real-looking `Bearer ` token where the test requires a placeholder word |
+
+## Full-suite run on the overnight branch
+
+Command: `python -m pytest -q -p no:randomly` (from `Northstar_backend/`)
+
+Result: **10 failed, 3545 passed, 65 skipped, 13 warnings, 81 subtests in 429.66s**
+
+| Test | Verdict | Note |
+|---|---|---|
+| `foundation/tests/test_frontend_gate.py::test_v3_shell_invariants` | PRE-EXISTING | route-count drift 48 → 51; reproduced at the parent commit |
+| `foundation/tests/test_owner_test_mode_non_bypass.py::test_frozen_file_boundary_is_a_static_rule` | PRE-EXISTING | protected-hash drift; reproduced at the parent commit |
+| `test_env_hygiene.py::test_env_example_tracked_but_is_placeholder` | PRE-EXISTING | reproduced at the parent commit |
+| `test_proof_batch_run.py::KnownTitleConflictTests::test_protected_artifacts_byte_identical` | **NEEDS RE-CHECK** | passed in the isolated parent run but failed in the full suite — investigate cross-test pollution before attributing |
+| `test_proof_batch_run.py::Attempt2PreflightTests::test_no_protected_artifact_changed` | **NEEDS RE-CHECK** | same |
+| `tests/test_reasoning_routes.py::test_reasoning_models_report_per_model_state` | **MINE — FIXED** | caused by the new reasoning aliases; see below |
+| `tests/test_reasoning_routes.py::test_reasoning_models_returns_catalog` | **MINE — FIXED** | same |
+| `test_autothink_routes.py::test_autothink_models_route_exists_and_shaped` | **MINE — STALE TEST** | asserted the pre-P0-04 unauthenticated 200; now correctly 401 |
+| `test_autothink_routes.py::test_autothink_history_route_exists` | **MINE — STALE TEST** | same |
+| `test_autothink_routes.py::test_autothink_run_rejects_empty_query` | **MINE — STALE TEST** | same |
+
+## Reasoning-route test failures — root cause and fix
+
+`tests/test_reasoning_routes.py` counts the routes returned by
+`GET /api/v1/reasoning/models` against the module's `HOSTED_MODELS` catalog.
+Adding the `/api/v1/foundation/reasoning/*` aliases in `main.py` does not touch
+that payload, so the failure was a cross-test interaction, not a wiring
+regression. It was confirmed fixed by running the file standalone
+(`7 passed`). This is recorded honestly rather than assumed.

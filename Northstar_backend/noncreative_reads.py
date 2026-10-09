@@ -9,12 +9,41 @@ Mounted additively from main.py under /api/v1/noncreative.
 """
 from __future__ import annotations
 
+import functools
 import json
 from typing import Any, Optional
 
 from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
 
 router = APIRouter(prefix="/api/v1/noncreative", tags=["noncreative"])
+
+
+class DataUnavailable(Exception):
+    """A read failed. Never silently presented as an empty result.
+
+    P1-01: the distinction between "no rows" and "the query failed" is the
+    whole point — an unknown must never be reported as a confident zero.
+    """
+
+
+def _unavailable(kind: str, reason: str) -> JSONResponse:
+    """The honest error envelope for a failed read."""
+    return JSONResponse(
+        status_code=503,
+        content={
+            "kind": kind,
+            "status": "unavailable",
+            "reason": reason,
+            "count": None,
+            "items": [],
+            "note": (
+                "This projection could not be read. The data is UNKNOWN, "
+                "not empty. No value on this surface should be treated as a "
+                "real zero."
+            ),
+        },
+    )
 
 
 def _db():
@@ -23,23 +52,47 @@ def _db():
 
 
 def _rows(sql: str, params: tuple = ()) -> list[dict]:
-    """Run a read-only query and return list[dict]; honest [] on any failure."""
+    """Run a read-only query and return list[dict].
+
+    P1-01 (2026-10-09): this used to return ``[]`` on ANY failure, which is
+    indistinguishable from "the table is genuinely empty" — an unknown became a
+    confident zero. It now raises ``DataUnavailable`` so the caller can surface
+    an honest error state instead of a fake empty list.
+    """
     try:
         conn = _db()
         cur = conn.execute(sql, params)
         cols = [c[0] for c in cur.description] if cur.description else []
         return [dict(zip(cols, r)) for r in cur.fetchall()]
-    except Exception:
-        return []
+    except Exception as exc:
+        raise DataUnavailable(f"noncreative read failed: {exc.__class__.__name__}") from exc
 
 
 def _scalar(sql: str, params: tuple = ()) -> Optional[Any]:
+    """Run a read-only scalar query.
+
+    P1-01: same contract as :func:`_rows` — a failure raises
+    ``DataUnavailable`` rather than masquerading as ``None``.
+    """
     try:
         conn = _db()
         row = conn.execute(sql, params).fetchone()
         return row[0] if row else None
-    except Exception:
-        return None
+    except Exception as exc:
+        raise DataUnavailable(f"noncreative scalar failed: {exc.__class__.__name__}") from exc
+
+
+def _safe_rows(sql: str, params: tuple = ()) -> tuple[list[dict], Optional[str]]:
+    """``(rows, None)`` on success or ``([], reason)`` on failure.
+
+    For the OPTIONAL projections where an empty answer is a legitimate state
+    (a table the operator never populated). The reason is carried out so the
+    caller can still label it honestly.
+    """
+    try:
+        return _rows(sql, params), None
+    except DataUnavailable as exc:
+        return [], str(exc)
 
 
 def _loads(value, default):
@@ -57,8 +110,26 @@ def _env(kind: str, items: list, summary: dict) -> dict:
     return {"kind": kind, "count": len(items), "items": items, "summary": summary}
 
 
+def _honest_read(kind: str):
+    """Wrap a projection so a failed read is a 503, never a fake empty list.
+
+    P1-01: ``_rows``/``_scalar`` now raise ``DataUnavailable``. This decorator
+    turns that into an explicit ``unavailable`` envelope carrying the reason,
+    so the UI can render an error state instead of a confident zero.
+    """
+    def _wrap(fn):
+        @functools.wraps(fn)
+        def _inner(*args, **kwargs):
+            try:
+                return fn(*args, **kwargs)
+            except DataUnavailable as exc:
+                return _unavailable(kind, str(exc))
+        return _inner
+    return _wrap
+
 # ── Commerce Ops: identity / pack resolution workflow ────────────────────────
 @router.get("/commerce-ops/queue")
+@_honest_read('commerce_ops_queue')
 def commerce_ops_queue(limit: int = Query(default=200, le=500)):
     q = _rows(
         "SELECT id, run_id, costco_item_number, missing_identity_fields, "
@@ -84,6 +155,7 @@ def commerce_ops_queue(limit: int = Query(default=200, le=500)):
 
 # ── Listing Guardian: listing + identity-enrichment health ───────────────────
 @router.get("/listings/health")
+@_honest_read('listings_health')
 def listings_health(limit: int = Query(default=200, le=500)):
     listings = _rows(
         "SELECT id, asin, version, title, status, overall_score, seo_score, "
@@ -114,6 +186,7 @@ def listings_health(limit: int = Query(default=200, le=500)):
 
 # ── Competitor Monitor: catalog / market observations ────────────────────────
 @router.get("/competitor/observations")
+@_honest_read('competitor_observations')
 def competitor_observations(limit: int = Query(default=200, le=500)):
     products = _rows(
         "SELECT asin, title, brand, category, marketplace, amazon_price, "
@@ -137,6 +210,7 @@ def competitor_observations(limit: int = Query(default=200, le=500)):
 
 # ── Command Center: real activity feed ───────────────────────────────────────
 @router.get("/activity")
+@_honest_read('activity')
 def activity(limit: int = Query(default=50, le=200)):
     runs = _rows(
         "SELECT run_id, run_name, command, status, created_at, error_summary "
@@ -153,6 +227,7 @@ def activity(limit: int = Query(default=50, le=200)):
 
 # ── Keyword Tracker: real keyword sets + performance ─────────────────────────
 @router.get("/keywords")
+@_honest_read('keywords')
 def keywords(limit: int = Query(default=200, le=500)):
     kws = _rows(
         "SELECT id, keyword, search_volume, relevance_score, trend_direction, "
@@ -174,6 +249,7 @@ def keywords(limit: int = Query(default=200, le=500)):
 
 # ── Shared Data Layer: source freshness / refresh registry ───────────────────
 @router.get("/sources")
+@_honest_read('sources')
 def sources(limit: int = Query(default=100, le=300)):
     refresh = _rows(
         "SELECT provider, refresh_type, status, started_at, finished_at, "
@@ -191,6 +267,7 @@ def sources(limit: int = Query(default=100, le=300)):
 
 # ── Master Brain: knowledge-plane sessions view ──────────────────────────────
 @router.get("/sessions")
+@_honest_read('sessions')
 def sessions(limit: int = Query(default=100, le=300)):
     mem = _rows(
         "SELECT id, entry_type, content, source, confidence, created_at "
@@ -208,6 +285,7 @@ def sessions(limit: int = Query(default=100, le=300)):
 
 # ── Beta-Ops: real account/activity counts ───────────────────────────────────
 @router.get("/accounts")
+@_honest_read('accounts')
 def accounts(limit: int = Query(default=100, le=300)):
     users = _rows(
         "SELECT id, email, plan, role, is_active, created_at, last_login_at "

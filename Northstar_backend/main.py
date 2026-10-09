@@ -1284,6 +1284,24 @@ def health_detailed():
     except Exception:
         pass
 
+    # P0-01: an armed-but-unbounded live mode is a posture violation, not a
+    # feature. Reported here so Monitoring can see it.
+    live_posture_problems = []
+    try:
+        live_posture_problems = live_gate.live_posture_problems()
+    except Exception:  # pragma: no cover - defensive
+        live_posture_problems = ["live posture could not be evaluated"]
+
+    # P1-02: adapters that failed to import. A silently incomplete registry
+    # used to be indistinguishable from a fully configured one.
+    adapter_load_failures = []
+    try:
+        from adapters import registry as _adapter_registry
+        adapter_load_failures = list(_adapter_registry.load_failures)
+    except Exception:  # pragma: no cover - defensive
+        adapter_load_failures = [{"adapter": "<registry>",
+                                  "error": "adapter registry could not be imported"}]
+
     # Test suite status (read from last run if available)
     test_status_file = BASE_DIR / "data" / ".last_test_status"
     test_status = "unknown"
@@ -1314,6 +1332,9 @@ def health_detailed():
         "checks": checks,
         "providers": provider_status,
         "scanner_mode": scanner_status,
+        "live_posture_ok": not live_posture_problems,
+        "live_posture_problems": live_posture_problems,
+        "adapter_load_failures": adapter_load_failures,
         "test_status": test_status,
         "readiness": readiness_summary,
         "timestamp": datetime.now(timezone.utc).isoformat(),
