@@ -42,6 +42,7 @@ import {
   useAssetStore, useDecodedAssets, putAsset, newAssetId, approxBytesOfDataUrl,
 } from '../../studio/engine/assets.js'
 import { useRoom, uid, nowIso, fmtTime, fmtBytes, hashDoc } from '../../studio/engine/store.js'
+import { checkCompliance, rulesInScope } from '../../studio/engine/compliance.js'
 import {
   planToday, loopReadiness, CHANNEL_KIND, DEFAULT_BRAND_PROFILE,
 } from '../../studio/engine/loop.js'
@@ -220,6 +221,20 @@ export default function CreativeStudio() {
   }, [kit.accent, t])
 
   // ── Render the master into other placements (real multi-format render) ──
+  // ── Compliance pre-flight ──
+  // A hard gate, not a document. Blocked prints refuse to export until the
+  // operator fixes the asset or explicitly overrides — and an override is
+  // recorded on the document, never silent.
+  const [overridden, setOverridden] = useState(false)
+  const preflight = useMemo(() => checkCompliance(doc, {
+    kit,
+    prohibited: profile.prohibited,
+    competitors: profile.competitors || '',
+    listingCopy: profile.listingCopy || '',
+  }), [doc, kit, profile.prohibited, profile.competitors, profile.listingCopy])
+  useEffect(() => { setOverridden(false) }, [doc.id, doc.updatedAt])
+  const gate = preflight.verdict === 'block' && !overridden ? 'blocked' : 'open'
+
   const renderChannelFormats = useCallback(() => {
     const channel = CHANNEL_SETS.find(c => c.id === renderChannel)?.channel || 'Meta'
     return ALL_FORMATS.filter(f => f.channel === channel)
@@ -228,19 +243,28 @@ export default function CreativeStudio() {
   const exportChannelSet = useCallback(async () => {
     const list = renderChannelFormats()
     if (!list.length) { t('That channel has no known placements in this build.', 'warn'); return }
+    // Gate the whole set: any blocked placement refuses the set.
+    const bad = list.filter(f => {
+      const sub = checkCompliance(rescaleDoc(doc, f.w, f.h), { kit, prohibited: profile.prohibited, competitors: profile.competitors })
+      return sub.verdict === 'block'
+    })
+    if (bad.length && !overridden) {
+      t(`Export refused: ${bad.length} placement${bad.length > 1 ? 's' : ''} break a blocking Amazon rule (${bad.map(b => b.label).slice(0, 2).join(', ')}${bad.length > 2 ? '…' : ''}). Fix them or record an override on the canvas.`, 'warn')
+      return
+    }
     let ok = 0
     for (const f of list) {
       try {
         const dataUrl = docToDataUrl(rescaleDoc(doc, f.w, f.h), { assets: images, scale: 1 })
         downloadDataUrl(dataUrl, `${safeFileName(docName)}-${f.w}x${f.h}.png`)
         ok += 1
-        setExportLog(prev => [{ id: uid('EX'), name: `${docName} · ${f.w}×${f.h}`, kind: 'png', note: `${renderChannel} set`, at: nowIso() }, ...prev].slice(0, 80))
+        setExportLog(prev => [{ id: uid('EX'), name: `${docName} · ${f.w}×${f.h}`, kind: 'png', note: `${renderChannel} set${overridden ? ' (override recorded)' : ''}`, at: nowIso() }, ...prev].slice(0, 80))
       } catch (e) {
         t(`${f.label} failed: ${String(e && e.message || e)}`, 'warn')
       }
     }
     t(`${ok} placement${ok === 1 ? '' : 's'} exported from the master. Each is a real local render at the placement's own pixel size.`, 'info')
-  }, [renderChannelFormats, doc, docName, images, renderChannel, setExportLog, t])
+  }, [renderChannelFormats, doc, docName, images, renderChannel, kit, profile.prohibited, profile.competitors, overridden, setExportLog, t])
 
   const saveDoc = useCallback(() => {
     const next = { ...doc, name: docName, kitId: kit.id, savedAt: nowIso() }
@@ -467,6 +491,31 @@ export default function CreativeStudio() {
         <div className="stack" style={{ gap: 14 }}>
           <RoomTabs tabs={TOOLS.map(x => ({ id: x.id, label: x.label }))} base="/creative-studio" />
 
+          {/* ══ PRE-FLIGHT — the always-visible gate ══ */}
+          <div className={`alert ${preflight.verdict === 'block' ? 'alert-error' : preflight.verdict === 'flag' ? 'alert-warn' : ''}`} data-testid="preflight">
+            <div className="alert-title">
+              <span className={`pill ${preflight.verdict === 'block' ? 'pill-error' : preflight.verdict === 'flag' ? 'pill-warn' : 'pill-ok'}`}>
+                {preflight.verdict === 'block' ? 'BLOCKED' : preflight.verdict === 'flag' ? 'FLAGGED' : 'PRE-FLIGHT PASS'}
+              </span>
+              {preflight.total - preflight.blocked.length - preflight.flagged.length} of {preflight.total} checks pass
+              {overridden && <span className="pill pill-ochre" style={{ marginLeft: 8 }}>override recorded</span>}
+            </div>
+            <div className="alert-text">
+              {preflight.blocked.length === 0 && preflight.flagged.length === 0 && (
+                <>No Amazon rule in scope for this document is broken. Rules are sourced and dated; Amazon changes them.</>
+              )}
+              {preflight.blocked.length > 0 && (
+                <>
+                  <strong>{preflight.blocked.length} blocking rule{preflight.blocked.length > 1 ? 's' : ''}</strong>
+                  {overridden ? ' — overridden, so export proceeds with the override recorded.' : ' — export is refused until these are fixed or explicitly overridden.'}
+                </>
+              )}
+              {preflight.flagged.length > 0 && (
+                <> {preflight.flagged.length} item{preflight.flagged.length > 1 ? 's' : ''} need a human decision and never auto-block.</>
+              )}
+            </div>
+          </div>
+
           {/* ══ CANVAS ══ */}
           {tool === 'canvas' && (
             <div className="subview">
@@ -498,7 +547,12 @@ export default function CreativeStudio() {
                 <button className="btn btn-sm btn-primary" onClick={() => { saveDoc(); t('Saved.', 'info') }} disabled={!dirty}>
                   <Icon name="save" size={13} /> Save document
                 </button>
-                <button className="btn btn-sm btn-ghost" onClick={() => downloadDataUrl(docToDataUrl(doc, { assets: images }), `${safeFileName(docName)}-${doc.w}x${doc.h}.png`)}>
+                <button className="btn btn-sm btn-ghost" onClick={() => {
+                  if (gate === 'blocked') { t('Export refused by the compliance pre-flight. Fix the blocking rules below or record an override.', 'warn'); return }
+                  downloadDataUrl(docToDataUrl(doc, { assets: images }), `${safeFileName(docName)}-${doc.w}x${doc.h}.png`)
+                  setExportLog(prev => [{ id: uid('EX'), name: `${docName} · ${doc.w}×${doc.h}`, kind: 'png', note: overridden ? 'Canvas export (override recorded)' : 'Canvas export', at: nowIso() }, ...prev].slice(0, 80))
+                  t(overridden ? 'Exported with a recorded compliance override.' : 'Exported the local render. No provider was contacted.', 'info')
+                }}>
                   <Icon name="download" size={13} /> Export PNG
                 </button>
                 <button className="btn btn-sm btn-ghost" onClick={saveRenderToAssets}><Icon name="image" size={13} /> Save to assets</button>
@@ -668,6 +722,17 @@ export default function CreativeStudio() {
                   <span className="label">Prohibited claims</span>
                   <TextInput rows={2} value={profile.prohibited} onChange={(v) => setProfile(p => ({ ...p, prohibited: v, updatedAt: nowIso() }))}
                     placeholder="Claims the brand must not make. The loop shows these beside every proposal it drafts." />
+                </div>
+                <div className="field-group">
+                  <span className="label">Competitors never to name</span>
+                  <TextInput value={profile.competitors || ''} onChange={(v) => setProfile(p => ({ ...p, competitors: v, updatedAt: nowIso() }))}
+                    placeholder="Comma-separated. Amazon rejects ads that call out a competitor by name." />
+                </div>
+                <div className="field-group">
+                  <span className="label">Detail-page copy for parity checks</span>
+                  <TextInput rows={3} value={profile.listingCopy || ''} onChange={(v) => setProfile(p => ({ ...p, listingCopy: v, updatedAt: nowIso() }))}
+                    placeholder="Paste the listing title and bullets. Amazon requires ad claims to be the same as on the detail page, so the pre-flight flags creative claims it cannot find there." />
+                  <span className="sp-field-hint">Local only — nothing is fetched from a marketplace.</span>
                 </div>
                 <div className="field-group">
                   <span className="label">Active channels</span>
@@ -1197,8 +1262,54 @@ export default function CreativeStudio() {
                 </Section>
               )}
 
-              <Section title="Handoff" hint="Moves a local record id — never a file.">
-                <div className="sp-handoff">
+              <Section title="Amazon pre-flight" right={<span className={`pill ${preflight.verdict === 'block' ? 'pill-error' : preflight.verdict === 'flag' ? 'pill-warn' : 'pill-ok'}`}>{preflight.verdict}</span>}>
+                <div className="stack" style={{ gap: 8 }}>
+                  {preflight.blocked.map(r => (
+                    <div key={r.id} className="alert alert-error" style={{ margin: 0, padding: '9px 11px' }}>
+                      <div style={{ fontSize: 11.5, fontWeight: 600 }}>{r.label}</div>
+                      <div className="text-low" style={{ fontSize: 10.5, marginTop: 2, lineHeight: 1.4 }}>{r.detail}</div>
+                      <div className="text-mono" style={{ fontSize: 9, marginTop: 3, color: 'var(--ink-faint)' }}>{r.source} · accessed {r.accessed}{r.dateSensitive ? ' · date-sensitive' : ''}</div>
+                    </div>
+                  ))}
+                  {preflight.flagged.map(r => (
+                    <div key={r.id} className="alert" style={{ margin: 0, padding: '9px 11px' }}>
+                      <div style={{ fontSize: 11.5, fontWeight: 600 }}>{r.label}</div>
+                      <div className="text-low" style={{ fontSize: 10.5, marginTop: 2, lineHeight: 1.4 }}>{r.detail}</div>
+                      <div className="text-mono" style={{ fontSize: 9, marginTop: 3, color: 'var(--ink-faint)' }}>{r.source} · accessed {r.accessed}{r.dateSensitive ? ' · date-sensitive' : ''}</div>
+                    </div>
+                  ))}
+                  {!preflight.blocked.length && !preflight.flagged.length && (
+                    <span className="text-low" style={{ fontSize: 11.5 }}>All {preflight.total} scoped rules pass. {rulesInScope(doc).length} rules are in scope for this format.</span>
+                  )}
+                </div>
+                {preflight.blocked.length > 0 && (
+                  <div className="inline-flex" style={{ marginTop: 8 }}>
+                    {overridden
+                      ? <span className="pill pill-ochre">override recorded on this document</span>
+                      : <button className="btn btn-sm btn-ghost" onClick={() => {
+                        setOverridden(true)
+                        t('Override recorded. The document now carries a compliance override — export it knowingly, not silently.', 'warn')
+                      }}>Override and export</button>}
+                  </div>
+                )}
+              </Section>
+
+              {(tool === 'ads' || tool === 'social' || tool === 'aplus') && (
+                <Section title="Pre-flight for this set">
+                  {renderChannelFormats().map(f => {
+                    const sub = checkCompliance(rescaleDoc(doc, f.w, f.h), { kit, prohibited: profile.prohibited, competitors: profile.competitors })
+                    return (
+                      <div key={f.id} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, padding: '3px 0' }}>
+                        <span className={`pill ${sub.verdict === 'block' ? 'pill-error' : sub.verdict === 'flag' ? 'pill-warn' : 'pill-ok'}`}>{sub.verdict}</span>
+                        <span className="text-mid">{f.label}</span>
+                      </div>
+                    )
+                  })}
+                  <span className="sp-field-hint">Each placement is checked at its own pixel size before the set is exported.</span>
+                </Section>
+              )}
+
+              <Section title="Handoff" hint="Moves a local record id — never a file.">                <div className="sp-handoff">
                   <button className="btn btn-sm btn-ghost" onClick={() => { t('Sent to AdPilot — the campaign planner opens with the local brief id. No file is transmitted.', 'info'); navigate('/adpilot?view=planner') }}>
                     <Icon name="target" size={13} /> AdPilot
                   </button>

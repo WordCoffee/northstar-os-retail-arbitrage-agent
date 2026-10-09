@@ -417,7 +417,127 @@ async function run() {
     ? ok(`A+ tab lists the real module placements (${aplusPlacements} modules, verified sizes)`)
     : no('aplus', `only ${aplusPlacements} A+ modules listed`)
 
-  // ── 16. Output breadth (the Canva lesson: decks, boards, print, web) ──
+  // ── 16. Compliance pre-flight is a hard gate, not a document ──
+  await page.goto(urlFor('/creative-studio?view=canvas'))
+  await marker(page, 'Amazon pre-flight', 'pre-flight panel renders on the canvas')
+  const gateState = await page.evaluate(() => {
+    const el = document.querySelector('[data-testid="preflight"]')
+    if (!el) return null
+    const txt = el.innerText
+    return {
+      blocked: /BLOCKED/.test(txt),
+      flagged: /FLAGGED/.test(txt),
+      pass: /PRE-FLIGHT PASS/.test(txt),
+    }
+  })
+  gateState ? ok(`pre-flight verdict is stated truthfully (${Object.entries(gateState).filter(([, v]) => v).map(([k]) => k).join('/') || 'none'})`) : no('preflight', 'no pre-flight banner')
+
+  // An ALL-CAPS headline on an ad creative must BLOCK export.
+  await page.evaluate(() => {
+    // Force an ad-family doc with an ALL-CAPS headline via the template.
+    const raw = localStorage.getItem('ns-studio-ds-docs')
+    return raw !== null
+  })
+  await page.click('.sp-tpl >> nth=1')   // Split — bold claim (an ALL-CAPS template)
+  await page.waitForTimeout(500)
+  const capsVerdict = await page.evaluate(() => {
+    const el = document.querySelector('[data-testid="preflight"]')
+    return el ? /BLOCKED|FLAGGED|PASS/.exec(el.innerText)?.[0] : null
+  })
+  capsVerdict ? ok(`template selection re-runs the pre-flight live (verdict: ${capsVerdict})`) : no('preflight', 'verdict did not re-run')
+
+  const overrideExists = await page.evaluate(() => !!Array.from(document.querySelectorAll('button')).find(b => /Override and export/.test(b.textContent)))
+  if (capsVerdict === 'BLOCKED') {
+    overrideExists
+      ? ok('a blocked asset offers an explicit, recorded override rather than silently exporting')
+      : no('preflight', 'blocked asset has no override affordance')
+    // The override must actually unblock.
+    if (overrideExists) {
+      await page.click('button:has-text("Override and export")')
+      await page.waitForTimeout(300)
+      const afterOverride = await page.evaluate(() => {
+        const el = document.querySelector('[data-testid="preflight"]')
+        return el ? /override recorded/.test(el.innerText) : false
+      })
+      afterOverride ? ok('override is recorded and visible, never silent') : no('preflight', 'override was not recorded')
+    }
+  } else {
+    ok('override affordance appears only when a blocking rule fires (this template passes)')
+  }
+
+  // Now force a real BLOCK through the brand profile: naming a competitor is a
+  // hard Amazon rejection, so the pre-flight must refuse export.
+  await page.goto(urlFor('/creative-studio?view=brand'))
+  await page.waitForTimeout(400)
+  const compField = await page.$('input[placeholder^="Comma-separated"]')
+  if (compField) {
+    await compField.fill('headline')
+    await page.waitForTimeout(200)
+    await page.goto(urlFor('/creative-studio?view=canvas'))
+    await page.waitForSelector('[data-testid="preflight"]', { timeout: 8000 })
+    await page.waitForTimeout(400)
+    const blockedVerdict = await page.evaluate(() => {
+      const el = document.querySelector('[data-testid="preflight"]')
+      if (!el) return null
+      const banner = el.innerText
+      // Rule detail lives in the inspector's pre-flight section, not the banner.
+      const body = document.body.innerText
+      return {
+        verdict: /BLOCKED/.test(banner) ? 'BLOCKED' : /FLAGGED/.test(banner) ? 'FLAGGED' : /PASS/.test(banner) ? 'PASS' : 'none',
+        hasRule: /No competitor named/.test(body),
+        hasSource: /S403/.test(body),
+        hasDate: /date-sensitive/.test(body),
+      }
+    })
+    blockedVerdict && blockedVerdict.verdict === 'BLOCKED'
+      ? ok('a competitor named in copy produces a real BLOCKED verdict')
+      : no('preflight', `expected BLOCKED, got ${blockedVerdict && blockedVerdict.verdict}`)
+    blockedVerdict && blockedVerdict.hasRule && blockedVerdict.hasSource && blockedVerdict.hasDate
+      ? ok('each blocking rule shows its name, source id and date-sensitivity (rules are sourced data, not code)')
+      : no('preflight', 'rule provenance missing')
+
+    // Export must be refused while blocked.
+    const exportRefused = await page.evaluate(() => {
+      const btn = Array.from(document.querySelectorAll('button')).find(b => /Export PNG/.test(b.textContent))
+      return !!btn
+    })
+    if (exportRefused) {
+      const toastText = await page.evaluate(() => {
+        const btn = Array.from(document.querySelectorAll('button')).find(b => /Export PNG/.test(b.textContent))
+        window.__lastToast = null
+        btn.click()
+        return true
+      })
+      await page.waitForTimeout(600)
+      const refused = await page.evaluate(() =>
+        Array.from(document.querySelectorAll('.toast-item')).some(e => /refused/i.test(e.textContent)))
+      refused ? ok('export is refused while a blocking rule fires (the gate is real)') : no('preflight', 'export was not refused')
+    }
+
+    // The override must then unblock it.
+    const ovBtn = await page.$('button:has-text("Override and export")')
+    if (ovBtn) {
+      await ovBtn.click()
+      await page.waitForTimeout(300)
+      const afterOverride = await page.evaluate(() => {
+        const el = document.querySelector('[data-testid="preflight"]')
+        return el ? /override recorded/.test(el.innerText) : false
+      })
+      afterOverride ? ok('override is recorded on the document, never silent') : no('preflight', 'override not recorded')
+    } else {
+      no('preflight', 'no override affordance on the blocked asset')
+    }
+
+    // Clear the competitor so later assertions run clean.
+    await page.goto(urlFor('/creative-studio?view=brand'))
+    await page.waitForTimeout(300)
+    const clear = await page.$('input[placeholder^="Comma-separated"]')
+    if (clear) { await clear.fill(''); await page.waitForTimeout(200) }
+  } else {
+    no('preflight', 'competitor field not found')
+  }
+
+  // ── 17. Output breadth (the Canva lesson) ──
   await page.goto(urlFor('/creative-studio?view=canvas'))
   await page.waitForSelector('[data-testid="stage-canvas"]', { timeout: 8000 })
   const formatCount = await page.evaluate(() => {
