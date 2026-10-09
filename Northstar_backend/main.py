@@ -107,8 +107,13 @@ async def lifespan(app):
 
     # Phase F/S6: assert the production rate-limiter posture at startup.
     from rate_limiter import assert_prod_posture
+    # Phase 1 (2026-10-09): assert the live-provider posture at startup. A
+    # plain GET must never be able to spend money, so live mode is refused
+    # unless it is armed per-run with an explicit cost cap.
+    from live_gate import assert_live_posture
     try:
         assert_prod_posture()
+        assert_live_posture()
     except RuntimeError as exc:
         logger.critical(str(exc))
         raise

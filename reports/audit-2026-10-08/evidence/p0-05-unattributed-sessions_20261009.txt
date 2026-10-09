@@ -1,0 +1,49 @@
+# P0-05 evidence — unattributed running sessions and concurrent writers
+
+**Captured:** 2026-10-09 03:12 local (before any change this session)
+**Session:** overnight autonomous remediation, branch `feature/overnight-remediation-20261009`, parent `93879a3`
+
+## Method
+
+`Get-CimInstance Win32_Process` filtered to python/node processes, plus
+`git status --porcelain` and the golden-goose report directory listing.
+
+## Unattributed processes at session start
+
+| PID | Image | Command line (truncated) | Verdict |
+|---|---|---|---|
+| 18952 | node.exe | `chromecontrol-mcp-server.js` | UNATTRIBUTED — browser-control MCP server, left running, NOT killed |
+| 13156 | python.exe | `python -m uvicorn main:app --host 127.0.0.1 --port 8000` | **UNATTRIBUTED Northstar API process.** Started by an earlier session. Loaded `Northstar_backend/.env` at import, i.e. it booted while `SCANNER_LIVE_ALLOWED=1` was armed. It was NOT killed and NOT signalled. |
+| 6184, 14392, 7456, 20360 | python.exe | ComfyUI `main.py --lowvram`, `services/vision_service.py` | UNATTRIBUTED — local image stack, unrelated to Northstar OS. Left running. |
+| 13424, 23464 | python.exe | `uvicorn backend.app` on :8077 (`northstar-remodeler`) | UNATTRIBUTED — separate project. Left running. |
+
+No process was killed, signalled, or modified by this session (standing rule:
+report other running scan sessions as UNATTRIBUTED; do not kill them).
+
+### Consequence for the disarm
+
+The disarm (`SCANNER_LIVE_ALLOWED=1` → `0`) is applied to the **file on disk**.
+The already-running process 13156 keeps the value it captured at import, so it
+remains capable of live provider calls until it is restarted by its owner.
+That is a runtime fact about an unowned process, not a permission to touch it.
+**Operator action:** restart the API process (or reboot) so the disarmed file
+takes effect for that process too.
+
+## Concurrent writers to the repository
+
+* Branch `feature/product-designer-studio` at `93879a3` is the parent of this
+  session's branch; 4 commits have landed on it since the 2026-10-08 audit.
+* Untracked `Northstar_backend/data/golden-goose-reports/goose_scan_20261009_*.json`
+  (9 files) plus `scan_manifest_*` show Golden Goose scans that this session
+  did not run. **UNATTRIBUTED.** No live provider call, cost, or spend claim
+  is made about them.
+* Working tree carried 197 dirty/untracked entries at session start. Nothing
+  in that set was reverted, stashed, or committed wholesale; each change is
+  reviewed individually and only intentional remediation is committed.
+
+## Live spend attributable to this session
+
+**Zero.** This session made no live provider call. The disarm happened before
+any network-touching command, and the GET-route probe instrumented sockets to
+prove zero non-loopback connections
+(`test_live_posture_guard.GetRoutesOpenNoProviderConnectionTests`).
