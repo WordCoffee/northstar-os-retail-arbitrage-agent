@@ -347,8 +347,8 @@ export default function ListingForge() {
       subtitle="Listing copy studio — a working editor, real revision history, applicable templates, and a real asset tray."
       actions={<>
         <ModeToggle mode={mode} onChange={setMode} />
+        <button className="btn btn-sm" onClick={() => go('editor')}>Create Listing</button>
         <button className="btn btn-sm btn-ghost" onClick={() => go('templates')}>Templates</button>
-        <button className="btn btn-sm" onClick={() => go('editor')}>Open editor</button>
       </>}
     >
       <DataNotice tone="sample" title="Listing copy and revision state are local records">

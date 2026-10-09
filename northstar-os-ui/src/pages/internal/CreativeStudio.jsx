@@ -43,6 +43,9 @@ import {
 } from '../../studio/engine/assets.js'
 import { useRoom, uid, nowIso, fmtTime, fmtBytes, hashDoc } from '../../studio/engine/store.js'
 import {
+  planToday, loopReadiness, CHANNEL_KIND, DEFAULT_BRAND_PROFILE,
+} from '../../studio/engine/loop.js'
+import {
   TEMPLATES, templateById, ALL_FORMATS, formatById, DEFAULT_BRAND_KITS,
   GEN_PURPOSES, GEN_TIERS,
 } from '../../studio/engine/presets.js'
@@ -56,6 +59,8 @@ const TOOLS = [
   { id: 'generate', label: 'Generate', icon: 'sparkle', note: 'Image requests — provider-gated.' },
   { id: 'video', label: 'Video', icon: 'film', note: 'Short-clip storyboards — provider-gated.' },
   { id: 'briefs', label: 'Briefs', icon: 'file', note: 'Work briefs that scope the studio.' },
+  { id: 'brand', label: 'Brand', icon: 'target', note: 'The one brand profile every channel reads.' },
+  { id: 'loop', label: 'Today', icon: 'sparkle', note: 'The proposed work for today — approve or dismiss.' },
   { id: 'queue', label: 'Queue', icon: 'clock', note: 'Every request this room has recorded.' },
   { id: 'variants', label: 'Variants', icon: 'layers', note: 'Review states for finished work.' },
   { id: 'assets', label: 'Assets', icon: 'image', note: 'Uploaded artwork and saved renders.' },
@@ -111,6 +116,8 @@ export default function CreativeStudio() {
   const [exportLog, setExportLog] = useRoom('ds-export-log', [])
   const [kits, setKits] = useRoom('ds-kits', DEFAULT_BRAND_KITS)
   const [activeKitId, setActiveKitId] = useRoom('ds-active-kit', 'kit-pine')
+  const [profile, setProfile] = useRoom('ds-brand-profile', { ...DEFAULT_BRAND_PROFILE, createdAt: nowIso() })
+  const [loopLog, setLoopLog] = useRoom('ds-loop-log', [])
   const [outputs, setOutputs] = useRoom('ds-bundle-outputs', ['Ad creatives', 'Listing imagery'])
 
   const store = useAssetStore()
@@ -126,7 +133,9 @@ export default function CreativeStudio() {
   const [selectedLayerId, setSelectedLayerId] = useState('')
   const [templateId, setTemplateId] = useState('tpl-hero-paper')
   const [formatId, setFormatId] = useState('meta-feed')
-  const [renderChannel, setRenderChannel] = useState('ads')
+  // The channel-set tabs are 1:1 with a channel set, so derive it from the tab
+  // instead of holding separate state that can disagree with the URL.
+  const renderChannel = tool === 'social' ? 'social' : tool === 'aplus' ? 'aplus' : 'ads'
   const [showGrid, setShowGrid] = useState(false)
   const [assetFilter, setAssetFilter] = useState('All')
   const [genPurpose, setGenPurpose] = useState('product-scene')
@@ -347,6 +356,44 @@ export default function CreativeStudio() {
     t('Bundle manifest prepared locally — contains references only. Download is unavailable until an asset store is connected.', 'info')
   }, [active?.id, outputs, setBundles, t])
 
+  // ── The approve-only loop ──
+  // Approving a proposal opens a REAL editable document from its template at
+  // its placement size, with the proposed headline already in the headline
+  // layer. Dismissing records why. Neither publishes or generates anything.
+  const today = useMemo(() => new Date().toISOString().slice(0, 10), [])
+  const plan = useMemo(() => planToday({ profile, today, docs }), [profile, today, docs])
+  const loopStatus = useMemo(() => loopReadiness(profile, docs), [profile, docs])
+
+  const decided = useCallback((id) => loopLog.find(l => l.id === id), [loopLog])
+
+  const approveProposal = useCallback((p) => {
+    const tpl = templateById(p.templateId) || TEMPLATES[0]
+    const next = applyKit(docFromTemplate(tpl, { w: p.w, h: p.h, kit }), kit)
+    // Put the proposed headline into the headline layer, if the template has one.
+    next.layers = next.layers.map(l => (
+      l.role === 'headline' ? { ...l, text: p.headline } : l
+    ))
+    next.name = `${p.channelLabel} — ${p.formatLabel}`
+    next.loopId = p.id
+    next.briefId = active?.id || ''
+    setDoc(next)
+    setDocName(next.name)
+    setFormatId(p.formatId)
+    setTemplateId(tpl.id)
+    setSavedHash(hashDoc(next))
+    setSelectedLayerId('')
+    setDocs(prev => [next, ...prev].slice(0, 40))
+    setLoopLog(prev => [{ id: p.id, decision: 'approved', at: nowIso(), channel: p.channelLabel, format: p.formatLabel }, ...prev].slice(0, 200))
+    t(`Approved: "${p.channelLabel} — ${p.formatLabel}" opened as an editable document. Approving creates local work only — nothing publishes and nothing generates.`, 'info')
+    go('canvas')
+  }, [kit, active?.id, setDocs, setLoopLog, t, go])
+
+  const dismissProposal = useCallback((p) => {
+    setLoopLog(prev => [{ id: p.id, decision: 'dismissed', at: nowIso(), channel: p.channelLabel, format: p.formatLabel }, ...prev].slice(0, 200))
+    t(`Dismissed "${p.channelLabel} — ${p.formatLabel}". Dismissing is final for today; the plan is rebuilt tomorrow.`, 'info')
+  }, [setLoopLog, t])
+
+
   const blockedCount = requests.filter(r => r.state === 'Blocked — provider required').length
   const selectedLayer = doc.layers.find(l => l.id === selectedLayerId) || null
   const artAssets = useMemo(() => store.assets.filter(a => a.role !== 'render'), [store.assets])
@@ -473,8 +520,7 @@ export default function CreativeStudio() {
                     {tool === 'ads' ? 'Paid ad set' : tool === 'social' ? 'Social content set' : 'A+ content modules'}
                   </h3>
                   <span className="pill pill-muted">rendered from the master</span>
-                </div>
-                <div className="alert-text" style={{ marginBottom: 12 }}>
+                </div>                <div className="alert-text" style={{ marginBottom: 12 }}>
                   Each tile below is the SAME document rendered at that placement&rsquo;s own pixel size. Because the layer geometry is
                   normalised (0–1 of the canvas), nothing stretches or clips — only the raster resolution changes.
                 </div>
@@ -494,16 +540,6 @@ export default function CreativeStudio() {
                     <Icon name="download" size={13} /> Export this set ({renderChannelFormats().length} placements)
                   </button>
                   <span className="pill pill-muted">real local renders · no provider contacted</span>
-                </div>
-              </div>
-
-              <div className="card">
-                <div className="card-head"><h3 className="card-title" style={{ fontSize: 15 }}>Channel</h3></div>
-                <div className="inline-flex">
-                  {CHANNEL_SETS.map(c => (
-                    <button key={c.id} className={`filter-pill ${renderChannel === c.id ? 'active' : ''}`}
-                      onClick={() => setRenderChannel(c.id)} title={c.note}>{c.label}</button>
-                  ))}
                 </div>
               </div>
             </div>
@@ -593,6 +629,145 @@ export default function CreativeStudio() {
                   { key: 'brief', label: 'Brief', render: (v, r) => <span title={r.prompt}>{r.prompt}</span> },
                   { key: 'state', label: 'State', render: (v) => <span className="pill pill-unknown">{v}</span> },
                 ]} rows={requests.filter(r => r.kind === 'video')} emptyText="No clip requests recorded yet." />
+              </div>
+            </div>
+          )}
+
+          {/* ══ BRAND PROFILE ══ */}
+          {tool === 'brand' && (
+            <div className="subview stack" style={{ gap: 14 }}>
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Brand profile</h3>
+                  <span className="pill pill-muted">{profile.origin === 'from-url' ? 'described from URL' : 'described manually'}</span>
+                </div>
+                <div className="alert-text" style={{ marginBottom: 14 }}>
+                  One profile, read by every creative room. This is the &ldquo;describe your brand once&rdquo; step: nothing here
+                  generates, and every field below is yours.
+                </div>
+                <div className="grid-2">
+                  <Field label="Brand name">
+                    <TextInput value={profile.name} onChange={(v) => setProfile(p => ({ ...p, name: v, updatedAt: nowIso() }))} placeholder="e.g. Word Coffee" />
+                  </Field>
+                  <Field label="Brand kit" hint="Palette, type and voice the renders use.">
+                    <Select value={profile.kitId} onChange={(v) => { setProfile(p => ({ ...p, kitId: v, updatedAt: nowIso() })); setActiveKitId(v) }}
+                      options={kits.map(k => ({ value: k.id, label: k.name }))} />
+                  </Field>
+                  <Field label="Audience" hint="Who this is for. Feeds the social and deck copy.">
+                    <TextInput value={profile.audience} onChange={(v) => setProfile(p => ({ ...p, audience: v, updatedAt: nowIso() }))} placeholder="e.g. Homeowners 30–55" />
+                  </Field>
+                  <Field label="One-line promise" hint="The single claim creative may make. Never invented by the loop.">
+                    <TextInput value={profile.promise} onChange={(v) => setProfile(p => ({ ...p, promise: v, updatedAt: nowIso() }))} placeholder="e.g. Water that tastes like it should" />
+                  </Field>
+                </div>
+                <div className="field-group" style={{ marginTop: 12 }}>
+                  <span className="label">Voice</span>
+                  <TextInput value={profile.voice} onChange={(v) => setProfile(p => ({ ...p, voice: v, updatedAt: nowIso() }))} />
+                </div>
+                <div className="field-group">
+                  <span className="label">Prohibited claims</span>
+                  <TextInput rows={2} value={profile.prohibited} onChange={(v) => setProfile(p => ({ ...p, prohibited: v, updatedAt: nowIso() }))}
+                    placeholder="Claims the brand must not make. The loop shows these beside every proposal it drafts." />
+                </div>
+                <div className="field-group">
+                  <span className="label">Active channels</span>
+                  <ChipRow options={CHANNEL_KIND.map(c => ({ value: c.id, label: c.label, note: c.note }))}
+                    value={profile.channels} onToggle={(v) => setProfile(p => ({
+                      ...p,
+                      channels: p.channels.includes(v) ? p.channels.filter(x => x !== v) : [...p.channels, v],
+                      updatedAt: nowIso(),
+                    }))} />
+                  <span className="sp-field-hint">The daily plan makes one proposal per active channel — a three-channel brand gets three, not thirty.</span>
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Loop readiness</h3>
+                  <span className={`pill ${loopStatus.ready === loopStatus.total ? 'pill-forest' : 'pill-warn'}`}>
+                    {loopStatus.ready} / {loopStatus.total}
+                  </span>
+                </div>
+                <div className="stack" style={{ gap: 10 }}>
+                  {loopStatus.checks.map(c => (
+                    <div key={c.key} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                      <span className={`pill ${c.ok ? 'pill-forest' : 'pill-unknown'}`} style={{ flexShrink: 0 }}>{c.ok ? 'ready' : 'missing'}</span>
+                      <div>
+                        <div style={{ fontSize: 12, fontWeight: 500 }}>{c.label}</div>
+                        <div className="text-low" style={{ fontSize: 11 }}>{c.detail}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ══ TODAY'S PLAN — approve or dismiss ══ */}
+          {tool === 'loop' && (
+            <div className="subview stack" style={{ gap: 14 }}>
+              <DataNotice tone="internal" title="Approve-only — nothing runs without your tap">
+                Each row is a proposal: copy, a template and a placement. Approving opens a real editable document in the canvas.
+                Dismissing records the decision. Nothing is generated, published, or transmitted — the plan is rebuilt
+                deterministically each day so you can always reason about what you approved and why.
+              </DataNotice>
+
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Today — {today}</h3>
+                  <span className="pill pill-muted">{plan.proposals.length} proposals · {profile.name}</span>
+                </div>
+                <DataTable columns={[
+                  { key: 'channelLabel', label: 'Channel' },
+                  { key: 'formatLabel', label: 'Placement', render: (v, r) => <span className="text-mono">{v}<br /><span className="text-low" style={{ fontSize: 10 }}>{r.w}×{r.h}</span></span> },
+                  { key: 'headline', label: 'Proposed headline', render: (v, r) => <span title={r.reason}>{v}</span> },
+                  { key: 'reason', label: 'Why this', render: (v) => <span className="text-low" style={{ fontSize: 11 }}>{v}</span> },
+                  {
+                    key: 'state', label: 'Decision', render: (v, r) => {
+                      const d = decided(r.id)
+                      return d
+                        ? <span className={`pill ${d.decision === 'approved' ? 'pill-forest' : 'pill-muted'}`}>{d.decision}</span>
+                        : <span className="pill pill-warn">awaiting</span>
+                    },
+                  },
+                  {
+                    key: 'act', label: '', render: (v, r) => {
+                      const d = decided(r.id)
+                      if (d) return <span className="text-low" style={{ fontSize: 11 }}>{fmtTime(d.at)}</span>
+                      return (
+                        <div className="inline-flex">
+                          <button className="btn btn-sm btn-primary" onClick={() => approveProposal(r)}>Approve</button>
+                          <button className="btn btn-sm btn-ghost" onClick={() => dismissProposal(r)}>Dismiss</button>
+                        </div>
+                      )
+                    },
+                  },
+                ]} rows={plan.proposals} emptyText="No active channels — select at least one in the Brand profile." />
+                <div className="inline-flex" style={{ gap: 8, marginTop: 12 }}>
+                  <button className="btn btn-sm btn-ghost" onClick={() => go('canvas')}>Open the canvas</button>
+                  <span className="pill pill-muted">templates · {TEMPLATES.length}</span>
+                </div>
+              </div>
+
+              {profile.prohibited.trim() && (
+                <div className="alert alert-warn">
+                  <div className="alert-title"><span className="pill pill-ochre">CLAIMS GUARDRAIL</span> Prohibited claims for {profile.name}</div>
+                  <div className="alert-text">{profile.prohibited}</div>
+                </div>
+              )}
+
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Decision log</h3>
+                  <span className="pill pill-muted">{loopLog.length} local records</span>
+                </div>
+                <DataTable columns={[
+                  { key: 'id', label: 'Proposal' },
+                  { key: 'channel', label: 'Channel' },
+                  { key: 'format', label: 'Placement' },
+                  { key: 'decision', label: 'Decision', render: (v) => <span className={`pill ${v === 'approved' ? 'pill-forest' : 'pill-muted'}`}>{v}</span> },
+                  { key: 'at', label: 'When', render: (v) => <span className="text-low">{fmtTime(v)}</span> },
+                ]} rows={loopLog} emptyText="No decisions recorded yet." />
               </div>
             </div>
           )}

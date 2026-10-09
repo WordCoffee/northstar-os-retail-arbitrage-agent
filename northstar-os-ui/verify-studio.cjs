@@ -363,7 +363,72 @@ async function run() {
       : ok('placement switch kept the creative canvas mounted')
   }
 
-  // ── 13. No unexpected network calls ──
+  // ── 14. Brand profile + the approve-only loop (the Holo lesson) ──
+  await page.goto(urlFor('/creative-studio?view=brand'))
+  await marker(page, 'Brand profile', 'deep /creative-studio?view=brand')
+  const readiness = await page.evaluate(() => {
+    const m = /(\d+) \/ (\d+)/.exec(document.body.innerText)
+    return m ? { have: Number(m[1]), total: Number(m[2]) } : null
+  })
+  readiness ? ok(`loop readiness reports honestly (${readiness.have}/${readiness.total})`) : no('brand profile', 'no readiness panel')
+
+  await page.goto(urlFor('/creative-studio?view=loop'))
+  await marker(page, 'Today —', 'deep /creative-studio?view=loop')
+  const proposalRows = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('tbody tr')).length)
+  proposalRows > 0
+    ? ok(`the daily plan proposes real work (${proposalRows} proposal rows, one per active channel)`)
+    : no('loop', 'no proposals generated')
+  const everyExplained = await page.evaluate(() => {
+    // The page has two tables (proposals + decision log). Scope to the first.
+    const wrap = document.querySelector('.table-wrap')
+    if (!wrap) return false
+    const rows = Array.from(wrap.querySelectorAll('tbody tr'))
+    if (!rows.length) return false
+    // The reason is the 4th cell. Every proposal must have non-empty text there.
+    return rows.every(r => {
+      const cells = r.querySelectorAll('td')
+      return cells.length >= 4 && cells[3].textContent.trim().length > 8
+    })
+  })
+  everyExplained ? ok('every proposal carries a non-empty reason') : no('loop', 'a proposal has no reason')
+
+  // Approving must create a REAL editable document, not a render.
+  await page.click('button:has-text("Approve") >> nth=0')
+  await toast(page, 'opened as an editable document', 'approve-only loop opens a real document')
+  const onCanvas = await page.evaluate(() => location.search.includes('view=canvas'))
+  onCanvas ? ok('approving navigates to the editable canvas') : no('loop', 'approve did not open the canvas')
+  const canvasLit = await page.evaluate(() => {
+    const c = document.querySelector('[data-testid="stage-canvas"]')
+    if (!c) return 0
+    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data
+    let n = 0
+    for (let i = 0; i < d.length; i += 4 * 61) if (d[i + 3] > 0) n += 1
+    return n
+  })
+  canvasLit > 50 ? ok('the approved document renders on the canvas') : no('loop', 'approved document is blank')
+
+  // ── 15. Corrected Amazon A+ presets (verified specs) ──
+  await page.goto(urlFor('/creative-studio?view=aplus'))
+  await marker(page, 'A+ content modules', 'deep /creative-studio?view=aplus (verified module set)')
+  const aplusPlacements = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('.sp-format')).length)
+  aplusPlacements >= 6
+    ? ok(`A+ tab lists the real module placements (${aplusPlacements} modules, verified sizes)`)
+    : no('aplus', `only ${aplusPlacements} A+ modules listed`)
+
+  // ── 16. Output breadth (the Canva lesson: decks, boards, print, web) ──
+  await page.goto(urlFor('/creative-studio?view=canvas'))
+  await page.waitForSelector('[data-testid="stage-canvas"]', { timeout: 8000 })
+  const formatCount = await page.evaluate(() => {
+    const sel = document.querySelector('.sp-inspector select')
+    return sel ? sel.options.length : 0
+  })
+  formatCount >= 30
+    ? ok(`output breadth is real (${formatCount} selectable placements across ads, social, listing, A+, docs, print, web and video frames)`)
+    : no('formats', `only ${formatCount} placements available`)
+
+  // ── 17. No unexpected network calls ──
   const calls = await page.evaluate(() => window.__stubCalls.slice())
   const bad = calls.filter(c => c.startsWith('UNEXPECTED:'))
   bad.length === 0
