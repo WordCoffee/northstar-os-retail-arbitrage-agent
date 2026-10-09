@@ -2,7 +2,14 @@ import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import Icon from '../../components/Icon.jsx'
+import { useAssetStore, useDecodedAssets } from '../../studio/engine/assets.js'
+import { renderDoc } from '../../studio/engine/doc.js'
+import { buildSocialDoc, formatForPlatform } from '../../studio/engine/socialDoc.js'
+import { ModeToggle } from '../../studio/components/Chrome.jsx'
+import { useRoom, fmtTime } from '../../studio/engine/store.js'
+import { DEFAULT_BRAND_KITS } from '../../studio/engine/presets.js'
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SOCIALPULSE — social-content operations workspace.
@@ -11,6 +18,11 @@ import { useEffect, useMemo, useState } from 'react'
 //   • Campaigns, content records, assets, and approvals are REAL LOCAL records
 //     persisted in this browser. State transitions (Draft → In Review →
 //     Approved → Publish-ready → Scheduled) are genuine local workflow state.
+//   • The composer preview is a REAL RENDER of the operator's own copy at the
+//     platform's own aspect ratio. It is not a styled text box and never a
+//     fabricated image — when no artwork is attached, the artwork region states
+//     that instead of showing a stand-in.
+//   • Asset upload is real: files are read locally and persisted in IndexedDB.
 //   • NOTHING PUBLISHES. There is no social OAuth, no external post, no
 //     outbound communication. "Scheduled" records a manual reminder only.
 //   • Performance (reach / engagement / followers) requires a connected social
@@ -22,10 +34,43 @@ import { useEffect, useMemo, useState } from 'react'
 //     pretending generated copy came from it.
 // ═══════════════════════════════════════════════════════════════════════════
 
+// ── Real platform preview ────────────────────────────────────────────────────
+// Renders the operator's own hook/caption plus attached artwork at the
+// platform's true pixel aspect ratio using the shared studio renderer.
+function PlatformPreview({ hook, caption, platform, assetId, kit }) {
+  const canvasRef = useRef(null)
+  const doc = useMemo(() => buildSocialDoc({ hook, caption, platform, assetId, kit }), [hook, caption, platform, assetId, kit])
+  const fmt = formatForPlatform(platform)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return undefined
+    const maxW = 420
+    const scale = Math.min(1, maxW / fmt.w)
+    const W = Math.max(1, Math.round(fmt.w * scale))
+    const H = Math.max(1, Math.round(fmt.h * scale))
+    if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H }
+    renderDoc(canvas.getContext('2d'), doc, { W, H })
+    return undefined
+  }, [doc, fmt.w, fmt.h])
+
+  return (
+    <div>
+      <div className="stage-checker" style={{ width: '100%', display: 'flex', justifyContent: 'center', padding: 8, marginBottom: 10 }}>
+        <canvas ref={canvasRef} data-testid="sp-preview-canvas"
+          style={{ width: '100%', maxWidth: 320, height: 'auto', display: 'block' }} />
+      </div>
+      <div className="text-low" style={{ fontSize: 10, marginTop: 2 }}>
+        {fmt.label} · {fmt.w}×{fmt.h} · rendered locally from your copy{assetId ? '' : ' · no artwork attached'}
+      </div>
+    </div>
+  )
+}
+
 const TABS = [
   { id: 'calendar', label: 'Calendar' },
   { id: 'campaigns', label: 'Campaigns' },
-  { id: 'queue', label: 'Workflow', count: 2 },
+  { id: 'queue', label: 'Workflow' },
   { id: 'composer', label: 'Composer' },
   { id: 'channels', label: 'Channel Fit' },
   { id: 'assets', label: 'Asset Library' },
@@ -42,6 +87,14 @@ const STAGES = [
   { key: 'Scheduled', label: 'Scheduled', action: { label: 'Unschedule', next: 'Approved', note: 'Removed the manual schedule reminder.' } },
 ]
 const STAGE_PILL = { Draft: 'pill-muted', 'In Review': 'pill-ochre', Approved: 'pill-forest', 'Publish-ready': 'pill-forest', Scheduled: 'pill-warn' }
+
+// Exact day-token match for manual schedule reminders ("Sep 28 · 08:00 …").
+// Word-boundary regex — a substring match made 'Sep 2' also match 'Sep 28'.
+const SCHEDULED_DAY_RE = /\bSep\s+(\d{1,2})\b/
+function scheduledDay(when) {
+  const m = SCHEDULED_DAY_RE.exec(when || '')
+  return m ? Number(m[1]) : null
+}
 
 const PLATFORMS = ['TikTok', 'Instagram Reels', 'Stories', 'X Thread', 'Pinterest', 'YouTube Shorts', 'Email']
 const VOICES = ['Founder voice', 'Product demo', 'Problem/solution', 'Before/after', 'Deal alert', 'UGC testimonial', 'Trend reaction', 'FAQ answer', 'Top 5 listicle', 'Seasonal promo', 'Lifestyle edit', 'Comparison/alternative']
@@ -139,6 +192,15 @@ export default function SocialPulse() {
   const [caption, setCaption] = useState('Sediment, chlorine, and taste — one countertop filter handles all three.\n\nInstall in under 5 minutes. No tools.')
   const [platform, setPlatform] = useState('Instagram Reels')
 
+  // brand kit (local, operator-editable) + real uploaded artwork
+  const [mode, setMode] = useRoom('sp-mode', 'simple')
+  const [kits] = useRoom('sp-kits', DEFAULT_BRAND_KITS)
+  const [activeKitId, setActiveKitId] = useRoom('sp-active-kit', 'kit-pine')
+  const [attachedAssetId, setAttachedAssetId] = useState('')
+  const store = useAssetStore()
+  const { images } = useDecodedAssets(store.assets)
+  const kit = kits.find(k => k.id === activeKitId) || kits[0] || DEFAULT_BRAND_KITS[0]
+
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : 'calendar'
 
@@ -165,6 +227,20 @@ export default function SocialPulse() {
   const inReview = posts.filter(p => p.state === 'In Review')
   const reviewCount = inReview.length
 
+  // Workflow badge derives from the same live review count the approvals queue
+  // shows — never a hardcoded number.
+  const tabs = TABS.map(tab => tab.id === 'queue' ? { ...tab, count: reviewCount } : tab)
+
+  // Posts carrying a manual schedule reminder, sorted by day — the single data
+  // source for both the desktop grid and the mobile agenda.
+  const scheduledPosts = useMemo(
+    () => postsInCampaign
+      .map(p => ({ post: p, day: scheduledDay(p.when) }))
+      .filter(x => x.day !== null)
+      .sort((a, b) => a.day - b.day),
+    [postsInCampaign],
+  )
+
   const advance = (id, next, note) => {
     setPosts(prev => prev.map(p => p.id === id ? { ...p, state: next } : p))
     t(`${id} → ${next}. ${note}`, 'info')
@@ -184,6 +260,7 @@ export default function SocialPulse() {
       title="SocialPulse"
       subtitle="Social content operations — plan campaigns, draft, review, approve, and mark publish-ready. Nothing publishes from here."
       actions={<>
+        <ModeToggle mode={mode} onChange={setMode} />
         <button className="btn btn-sm" onClick={() => go('composer')}>Draft Post</button>
         <button className="btn btn-sm btn-ghost" onClick={() => t('Variant suggestions are a local planning aid (sample) — nothing publishes.', 'info')}>Generate Variants</button>
         <button className="btn btn-sm btn-ghost" onClick={() => t('Schedule records a manual reminder only — no post publishes autonomously, and no social account is connected.', 'info')}>Schedule</button>
@@ -192,8 +269,9 @@ export default function SocialPulse() {
     >
       <DataNotice tone="sample" title="Local content operations — not a publisher">
         Campaigns, posts, and approvals are real records stored in this browser. There is no social OAuth and no outbound
-        posting. Performance figures require a connected analytics provider and read UNKNOWN until one exists — never a
-        fabricated number.
+        posting. The composer preview is a real local render of your own copy at the platform&rsquo;s true aspect ratio, and
+        uploaded artwork is stored locally. Performance figures require a connected analytics provider and read UNKNOWN until
+        one exists — never a fabricated number.
       </DataNotice>
 
       <div className="card" style={{ marginBottom: 16, padding: '10px 14px' }}>
@@ -214,7 +292,7 @@ export default function SocialPulse() {
         </div>
       </div>
 
-      <RoomTabs tabs={TABS} base="/socialpulse" />
+      <RoomTabs tabs={tabs} base="/socialpulse" />
 
       {view === 'calendar' && (
         <div className="subview">
@@ -224,12 +302,12 @@ export default function SocialPulse() {
                 <h3 className="card-title">September 2026 — {campaign}</h3>
                 <span className="pill pill-muted">{postsInCampaign.length} planned · local records</span>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 6, fontSize: 11 }}>
+              <div className="cal-grid">
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
                   <div key={d} className="text-low" style={{ textAlign: 'center', paddingBottom: 4 }}>{d}</div>
                 ))}
                 {MONTH_CELLS.map((cell, i) => {
-                  const dayPosts = cell.out ? [] : postsInCampaign.filter(p => p.when && p.when.includes(`Sep ${cell.day}`))
+                  const dayPosts = cell.out ? [] : scheduledPosts.filter(x => x.day === cell.day).map(x => x.post)
                   return (
                     <div key={i} style={{
                       minHeight: 74,
@@ -253,8 +331,31 @@ export default function SocialPulse() {
                   )
                 })}
               </div>
+
+              {/* Compact mobile agenda (≤480px) — same local schedule records
+                  as the desktop grid, no 7-column overflow at 390px. */}
+              <div className="cal-agenda" style={{ marginTop: 4 }}>
+                <div className="text-low" style={{ fontSize: 11, marginBottom: 8 }}>
+                  Agenda view (phone) — September 2026, {campaign}. Same local schedule records as the desktop grid.
+                </div>
+                {scheduledPosts.length === 0 ? (
+                  <div className="text-low" style={{ fontSize: 12 }}>
+                    No manual schedule reminders recorded for this campaign.
+                  </div>
+                ) : scheduledPosts.map(({ post, day }) => (
+                  <div key={post.id} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', padding: '8px 0', borderBottom: '1px solid var(--divider)' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, flexShrink: 0, paddingTop: 1 }}>Sep {day}</span>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 12, fontWeight: 500 }}>{post.title}</div>
+                      <div className="text-low" style={{ fontSize: 10 }}>{post.platform} · {post.state} · manual reminder — nothing auto-publishes</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               <div className="text-low" style={{ fontSize: 11, marginTop: 12 }}>
-                Only posts with a manual schedule reminder appear on the grid. The calendar is a planning surface — it never triggers a post.
+                Only posts with a manual schedule reminder appear on the calendar (month grid on desktop, agenda list on
+                phone widths). The calendar is a planning surface — it never triggers a post.
               </div>
             </div>
 
@@ -414,11 +515,11 @@ export default function SocialPulse() {
                     </select>
                   </div>
                 </div>
+                {/* Draft-specific action only — Generate Variants / Schedule /
+                    Send for Approval already live in the room header; repeating
+                    them here duplicated affordances pointing at the same targets. */}
                 <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
                   <button className="btn btn-sm" onClick={addDraft}>Save Draft</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => t('Variant suggestions are a local planning aid — review each before scheduling; nothing publishes.', 'info')}>Generate Variants</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => t('Schedule records a manual reminder only — no account is connected.', 'info')}>Schedule</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => { addDraft(); go('approvals') }}>Send for Approval</button>
                 </div>
               </div>
             </div>
@@ -427,16 +528,51 @@ export default function SocialPulse() {
               <div className="card">
                 <div className="card-head">
                   <h3 className="card-title" style={{ fontSize: 15 }}>Platform Preview</h3>
-                  <span className="pill pill-muted" style={{ fontSize: 10 }}>preview</span>
+                  <span className="pill pill-muted" style={{ fontSize: 10 }}>real render</span>
                 </div>
-                <div style={{ border: '1px solid var(--divider)', borderRadius: 8, padding: 12 }}>
-                  <div style={{ height: 120, borderRadius: 6, background: 'linear-gradient(135deg, rgba(29,90,29,0.10), rgba(196,148,26,0.12))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: 'var(--ink-soft)', marginBottom: 10 }}>
-                    media placeholder
+                <PlatformPreview hook={hook} caption={caption} platform={platform} assetId={attachedAssetId} kit={kit} />
+                <div className="text-low" style={{ fontSize: 10, marginTop: 8 }}>{platform} · {voice} · {kit.name}</div>
+              </div>
+
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title" style={{ fontSize: 15 }}>Attach artwork</h3>
+                  <span className="pill pill-muted" style={{ fontSize: 10 }}>local store</span>
+                </div>
+                <div className="sp-asset-grid" style={{ marginBottom: 10 }}>
+                  {store.assets.filter(a => a.role === 'reference').slice(0, 6).map(a => (
+                    <button key={a.id} className={`sp-format ${attachedAssetId === a.id ? 'active' : ''}`}
+                      onClick={() => setAttachedAssetId(attachedAssetId === a.id ? '' : a.id)} title={a.name}>
+                      <span className="sp-thumb-img" style={{ width: '100%', height: 44, backgroundImage: `url(${a.dataUrl})` }} />
+                      <span className="sp-format-label">{a.name.length > 14 ? `${a.name.slice(0, 14)}…` : a.name}</span>
+                    </button>
+                  ))}
+                  {!store.assets.filter(a => a.role === 'reference').length && (
+                    <span className="text-low" style={{ fontSize: 12 }}>No uploaded images yet. The preview renders your copy with an honest “no artwork” region until you attach one.</span>
+                  )}
+                </div>
+                <label className="sp-dropzone">
+                  <Icon name="upload" size={14} /> Upload an image
+                  <input type="file" accept="image/*" multiple style={{ display: 'none' }}
+                    onChange={async (e) => {
+                      const added = await store.add(e.target.files, { role: 'reference', tags: ['social'] })
+                      if (added.length) { setAttachedAssetId(added[0].id); t(`${added.length} image${added.length > 1 ? 's' : ''} added to the local store.`, 'info') }
+                      e.target.value = ''
+                    }} />
+                </label>
+                {!store.persistent && (
+                  <div className="alert" style={{ marginTop: 10, marginBottom: 0 }}>
+                    <div className="alert-text">Browser storage is unavailable — uploaded images live for this session only.</div>
                   </div>
-                  <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{hook || 'Hook / title'}</div>
-                  <div style={{ fontSize: 11, color: 'var(--ink-mid)', whiteSpace: 'pre-wrap' }}>{caption || 'Caption preview'}</div>
+                )}
+                <div className="inline-flex" style={{ gap: 8, marginTop: 10 }}>
+                  <button className="btn btn-sm btn-ghost" onClick={() => navigate('/creative-studio?view=canvas')}>
+                    <Icon name="brush" size={13} /> Open in Design Studio
+                  </button>
+                  <button className="btn btn-sm btn-ghost" onClick={() => navigate('/product-designer?view=scene')}>
+                    <Icon name="camera" size={13} /> Build in Product Designer
+                  </button>
                 </div>
-                <div className="text-low" style={{ fontSize: 10, marginTop: 8 }}>{platform} · {voice}</div>
               </div>
 
               <div className="card">
@@ -487,32 +623,89 @@ export default function SocialPulse() {
       )}
 
       {view === 'assets' && (
-        <div className="subview">
-          <div className="room-toolbar">
-            {['All', 'Image', 'Video'].map(f => (
-              <button key={f} className={`filter-pill ${assetFilter === f ? 'active' : ''}`} onClick={() => setAssetFilter(f)}>{f}</button>
-            ))}
-            <button className="btn btn-sm" style={{ marginLeft: 'auto' }} onClick={() => t('Asset upload is not connected — this room records asset metadata and attachment state only.', 'warn')}>Upload Asset</button>
-          </div>
-          <div className="grid-cards-3">
-            {assets.filter(a => assetFilter === 'All' || a.type === assetFilter).map(a => (
-              <div key={a.id} className="card" style={{ padding: 12 }}>
-                <div style={{ height: 90, borderRadius: 6, background: 'linear-gradient(135deg, rgba(138,138,122,0.10), rgba(29,90,29,0.08))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: 'var(--ink-soft)', marginBottom: 10 }}>
-                  {a.type} preview
-                </div>
-                <div style={{ fontSize: 12, fontWeight: 500, marginBottom: 6 }}>{a.name}</div>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  <span className="pill pill-muted" style={{ fontSize: 10 }}>{a.tag}</span>
-                  <span className={`pill ${assetStatePill(a.state)}`} style={{ fontSize: 10 }} title="Internal asset state — not an authorization">{a.state}</span>
-                </div>
-                <div className="text-low" style={{ fontSize: 10, marginTop: 6 }}>
-                  {a.attached.length ? `Attached to ${a.attached.join(', ')}` : 'Not attached to a post'}
-                </div>
+        <div className="subview stack" style={{ gap: 14 }}>
+          <div className="card">
+            <div className="card-head">
+              <h3 className="card-title" style={{ fontSize: 15 }}>Uploaded images</h3>
+              <span className="pill pill-muted">{store.assets.filter(a => a.role === 'reference').length} in the local store</span>
+            </div>
+            <label className="sp-dropzone" style={{ marginBottom: 12 }}>
+              <Icon name="upload" size={14} /> Upload images to the local asset store
+              <input type="file" accept="image/*" multiple style={{ display: 'none' }}
+                onChange={async (e) => {
+                  const added = await store.add(e.target.files, { role: 'reference', tags: ['social'] })
+                  if (!added.length) { t(store.error || 'No image files were supplied.', 'warn') }
+                  else {
+                    // Record a real metadata row for each uploaded image so the
+                    // attachment table and the preview share one source.
+                    setAssets(prev => [
+                      ...added.map(a => ({
+                        id: a.id, name: a.name, type: 'Image', tag: 'Uploaded',
+                        state: 'UNREVIEWED', attached: [],
+                      })),
+                      ...prev,
+                    ])
+                    t(`${added.length} image${added.length > 1 ? 's' : ''} uploaded to the local store — nothing was transmitted anywhere.`, 'info')
+                  }
+                  e.target.value = ''
+                }} />
+            </label>
+            <div className="sp-asset-grid">
+              {store.assets.filter(a => a.role === 'reference').map(a => (
+                <AssetThumb key={a.id} asset={a} height={64}
+                  selected={attachedAssetId === a.id}
+                  onClick={() => { setAttachedAssetId(a.id); go('composer') }}
+                  actions={<button className="btn btn-sm btn-ghost" title="Remove" onClick={() => store.remove(a.id)}>×</button>} />
+              ))}
+              {!store.assets.filter(a => a.role === 'reference').length && (
+                <span className="text-low" style={{ fontSize: 12 }}>No uploaded images yet. Seeded records below are sample metadata; uploaded images are real and persist locally.</span>
+              )}
+            </div>
+            {!store.persistent && (
+              <div className="alert" style={{ marginTop: 12, marginBottom: 0 }}>
+                <div className="alert-text">Browser storage is unavailable — uploaded images live for this session only.</div>
               </div>
-            ))}
-            {assets.filter(a => assetFilter === 'All' || a.type === assetFilter).length === 0 && (
-              <div className="text-low" style={{ fontSize: 12 }}>No assets match this filter.</div>
             )}
+          </div>
+
+          <div className="card">
+            <div className="card-head">
+              <h3 className="card-title" style={{ fontSize: 15 }}>Asset records</h3>
+              <div className="room-toolbar" style={{ marginBottom: 0 }}>
+                {['All', 'Image', 'Video'].map(f => (
+                  <button key={f} className={`filter-pill ${assetFilter === f ? 'active' : ''}`} onClick={() => setAssetFilter(f)}>{f}</button>
+                ))}
+              </div>
+            </div>
+            <div className="grid-cards-3">
+              {assets.filter(a => assetFilter === 'All' || a.type === assetFilter).map(a => {
+                const stored = store.assets.find(s => s.id === a.id)
+                return (
+                  <div key={a.id} className="card" style={{ padding: 12 }}>
+                    <div className="sp-thumb-img" style={{ height: 90, borderRadius: 6, marginBottom: 10, backgroundImage: stored ? `url(${stored.dataUrl})` : undefined, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: 'var(--ink-soft)' }}>
+                      {!stored && `${a.type} preview`}
+                    </div>
+                    <div style={{ fontSize: 12, fontWeight: 500, marginBottom: 6 }}>{a.name}</div>
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                      <span className="pill pill-muted" style={{ fontSize: 10 }}>{a.tag}</span>
+                      <span className={`pill ${assetStatePill(a.state)}`} style={{ fontSize: 10 }} title="Internal asset state — not an authorization">{a.state}</span>
+                      {attachedAssetId === a.id && <span className="pill pill-forest" style={{ fontSize: 10 }}>in preview</span>}
+                    </div>
+                    <div className="text-low" style={{ fontSize: 10, marginTop: 6 }}>
+                      {a.attached.length ? `Attached to ${a.attached.join(', ')}` : 'Not attached to a post'}
+                    </div>
+                    {stored && (
+                      <button className="btn btn-sm btn-ghost" style={{ marginTop: 8 }} onClick={() => { setAttachedAssetId(a.id); go('composer') }}>
+                        Use in composer preview
+                      </button>
+                    )}
+                  </div>
+                )
+              })}
+              {assets.filter(a => assetFilter === 'All' || a.type === assetFilter).length === 0 && (
+                <div className="text-low" style={{ fontSize: 12 }}>No assets match this filter.</div>
+              )}
+            </div>
           </div>
         </div>
       )}

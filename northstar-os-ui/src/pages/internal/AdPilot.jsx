@@ -1,16 +1,24 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import Icon from '../../components/Icon.jsx'
 import ReasoningModelSelector, { useReasoningModel } from '../../components/ReasoningModelSelector.jsx'
 import foundationApi from '../../foundation/api.js'
 import { useToast } from '../../components/ToastContext.jsx'
-import { useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { AssetThumb, ThumbPlaceholder, ModeToggle } from '../../studio/components/Chrome.jsx'
+import { renderDoc } from '../../studio/engine/doc.js'
+import { buildAdDoc, adFormat, AD_PLACEMENTS } from '../../studio/engine/adDoc.js'
+import { useAssetStore, useDecodedAssets } from '../../studio/engine/assets.js'
+import { useRoom } from '../../studio/engine/store.js'
+import { DEFAULT_BRAND_KITS } from '../../studio/engine/presets.js'
 
 const TABS = [
   { id: 'campaigns', label: 'Campaigns', count: 8 },
   { id: 'detail', label: 'Campaign Detail' },
   { id: 'terms', label: 'Search Terms' },
   { id: 'planner', label: 'Planner' },
+  { id: 'creatives', label: 'Creatives' },
   { id: 'placements', label: 'Placements' },
   { id: 'rules', label: 'Rules' },
 ]
@@ -127,6 +135,123 @@ function AdCopyProposalPanel() {
   )
 }
 
+// ═══ Real ad-creative renderer ══════════════════════════════════════════════
+// Renders the operator's own ad copy and attached artwork at each paid
+// placement's true pixel size, using the shared studio renderer. Selecting a
+// placement drives the master creative in the Design Studio.
+const AdCreativePreview = ({ doc }) => {
+  const canvasRef = useRef(null)
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return undefined
+    const maxW = 300
+    const scale = Math.min(1, maxW / doc.w)
+    const W = Math.max(1, Math.round(doc.w * scale))
+    const H = Math.max(1, Math.round(doc.h * scale))
+    if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H }
+    renderDoc(canvas.getContext('2d'), doc, { W, H })
+    return undefined
+  }, [doc])
+  return (
+    <canvas ref={canvasRef} data-testid="ad-preview-canvas"
+      style={{ width: '100%', maxWidth: 280, height: 'auto', display: 'block' }} />
+  )
+}
+
+function AdCreatives({ copy, setCopy, attachedAssetId, setAttachedAssetId, store, kit }) {
+  const [placement, setPlacement] = useState('meta-feed')
+  const { images } = useDecodedAssets(store.assets)
+  const doc = useMemo(
+    () => buildAdDoc({ ...copy, placement, assetId: attachedAssetId, kit }),
+    [copy.headline, copy.body, copy.cta, placement, attachedAssetId, kit],
+  )
+  return (
+    <div className="subview stack" style={{ gap: 14 }}>
+      <div className="card">
+        <div className="card-head">
+          <h3 className="card-title" style={{ fontSize: 15 }}>Ad creative</h3>
+          <span className="pill pill-forest">local render</span>
+        </div>
+        <p className="text-low" style={{ fontSize: 12, marginBottom: 12 }}>
+          The copy below and your attached artwork are rendered at each placement&rsquo;s own pixel size. Geometry is
+          normalised, so one creative renders correctly at every placement. No ad is served and no platform is contacted.
+        </p>
+        <div className="grid-2" style={{ gap: 16, alignItems: 'start' }}>
+          <div className="stack" style={{ gap: 12 }}>
+            <label className="stack" style={{ gap: 4 }}>
+              <span className="text-low" style={{ fontSize: 11 }}>Headline</span>
+              <input className="field" value={copy.headline} onChange={e => setCopy(c => ({ ...c, headline: e.target.value }))} />
+            </label>
+            <label className="stack" style={{ gap: 4 }}>
+              <span className="text-low" style={{ fontSize: 11 }}>Body copy</span>
+              <textarea className="field" rows={3} value={copy.body} onChange={e => setCopy(c => ({ ...c, body: e.target.value }))} />
+            </label>
+            <label className="stack" style={{ gap: 4 }}>
+              <span className="text-low" style={{ fontSize: 11 }}>Call to action</span>
+              <input className="field" value={copy.cta} onChange={e => setCopy(c => ({ ...c, cta: e.target.value }))} />
+            </label>
+            <div>
+              <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>Attached artwork</div>
+              <div className="sp-asset-grid">
+                {store.assets.filter(a => a.role === 'reference').slice(0, 6).map(a => (
+                  <AssetThumb key={a.id} asset={a} height={48} selected={attachedAssetId === a.id}
+                    onClick={() => setAttachedAssetId(attachedAssetId === a.id ? '' : a.id)} />
+                ))}
+              </div>
+              {!store.assets.filter(a => a.role === 'reference').length && <ThumbPlaceholder height={48} label="no artwork uploaded" />}
+              <label className="sp-dropzone" style={{ marginTop: 10 }}>
+                <Icon name="upload" size={14} /> Upload creative artwork
+                <input type="file" accept="image/*" multiple style={{ display: 'none' }}
+                  onChange={async (e) => {
+                    const added = await store.add(e.target.files, { role: 'reference', tags: ['ad'] })
+                    if (added.length) { setAttachedAssetId(added[0].id); setCopy(c => ({ ...c })) }
+                    e.target.value = ''
+                  }} />
+              </label>
+            </div>
+          </div>
+
+          <div className="stack" style={{ gap: 12 }}>
+            <div className="stage" style={{ padding: 14, background: 'linear-gradient(180deg,#1b2a1c,#131f14)' }}>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <AdCreativePreview doc={doc} />
+              </div>
+            </div>
+            <div className="text-low" style={{ fontSize: 11 }}>
+              {adFormat(placement).label} · {doc.w}×{doc.h} · {kit.name}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="card-head">
+          <h3 className="card-title" style={{ fontSize: 15 }}>All placements</h3>
+          <span className="pill pill-muted">{AD_PLACEMENTS.length} rendered from one master</span>
+        </div>
+        <div className="sp-formats">
+          <div className="sp-format-list">
+            {AD_PLACEMENTS.map(p => (
+              <button key={p.id} className={`sp-format ${placement === p.id ? 'active' : ''}`}
+                onClick={() => setPlacement(p.id)} title={p.note}>
+                <span className="sp-format-box ar-wide" style={{ aspectRatio: `${adFormat(p.id).w} / ${adFormat(p.id).h}` }} />
+                <span className="sp-format-label">{p.label}</span>
+                <span className="text-mono sp-format-dims">{adFormat(p.id).w}×{adFormat(p.id).h}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="inline-flex" style={{ gap: 8, marginTop: 14 }}>
+          <button className="btn btn-sm btn-primary" onClick={() => window.open('/ui/#/creative-studio?view=ads', '_blank', 'noopener')}>
+            <Icon name="brush" size={13} /> Open full creative set in Design Studio
+          </button>
+          <span className="pill pill-muted">opens the master canvas with this copy</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function healthRollup() {
   const c = { Healthy: 0, Review: 0, Critical: 0 }
   CAMPAIGNS.forEach(x => { c[x.status] = (c[x.status] || 0) + 1 })
@@ -136,6 +261,19 @@ function healthRollup() {
 export default function AdPilot() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { toast } = useToast()
+
+  const [mode, setMode] = useRoom('ap-mode', 'simple')
+  const [kits] = useRoom('ap-kits', DEFAULT_BRAND_KITS)
+  const [activeKitId] = useRoom('ap-active-kit', 'kit-pine')
+  const [adCopy, setAdCopy] = useRoom('ap-creative-copy', {
+    headline: 'Water that tastes like it should.',
+    body: 'Three-stage filtration removes sediment, chlorine and taste — in one countertop unit, with no tools to install.',
+    cta: 'Shop now',
+  })
+  const [attachedAssetId, setAttachedAssetId] = useState('')
+  const store = useAssetStore()
+  const kit = kits.find(k => k.id === activeKitId) || kits[0] || DEFAULT_BRAND_KITS[0]
 
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : 'campaigns'
@@ -143,14 +281,16 @@ export default function AdPilot() {
   return (
     <PageLayout
       title="AdPilot"
-      subtitle="Advertising operations workbench — campaign health, budget, placements, performance."
+      subtitle="Advertising operations workbench — campaign health, budget, placements, performance, and a real creative renderer."
       actions={<>
+        <ModeToggle mode={mode} onChange={setMode} />
         <button className="btn btn-sm" onClick={() => navigate('/adpilot?view=planner')}>Create Campaign</button>
-        <button className="btn btn-sm btn-ghost">Bulk Actions</button>
+        <button className="btn btn-sm btn-ghost" onClick={() => toast('Bulk actions operate on the local campaign records below — nothing is sent to an ad platform.', 'info')}>Bulk Actions</button>
       </>}
     >
       <DataNotice tone="sample" title="All performance data is sample/observed data">
         Do not use for purchase authorization or budget spend decisions. Actual costs and conversions require verified tracking.
+        The Creatives tab renders your own copy and artwork locally — no ad is served.
       </DataNotice>
 
       <RoomTabs tabs={TABS} base="/adpilot" />
@@ -321,11 +461,35 @@ export default function AdPilot() {
         </div>
       )}
 
+      {view === 'creatives' && (
+        <AdCreatives copy={adCopy} setCopy={setAdCopy} attachedAssetId={attachedAssetId}
+          setAttachedAssetId={setAttachedAssetId} store={store} kit={kit} />
+      )}
+
       {view === 'placements' && (
-        <div className="subview">
+        <div className="subview stack" style={{ gap: 14 }}>
           <DataNotice tone="cached" title="Placement insights are cached sample snapshots">
-            Placement data reflects a stored sample window, not live ad-platform reporting.
+            Placement data reflects a stored sample window, not live ad-platform reporting. The creative sizes below are
+            the real pixel dimensions each placement expects.
           </DataNotice>
+          <div className="card">
+            <div className="card-head">
+              <h3 className="card-title">Placement creative sizes</h3>
+              <span className="pill pill-muted">rendered by the studio engine</span>
+            </div>
+            <div className="sp-format-list">
+              {AD_PLACEMENTS.map(p => {
+                const f = adFormat(p.id)
+                return (
+                  <button key={p.id} className="sp-format" onClick={() => navigate('/adpilot?view=creatives')} title={`${p.note} Renders the current creative at ${f.w}×${f.h}.`}>
+                    <span className="sp-format-box ar-wide" style={{ aspectRatio: `${f.w} / ${f.h}` }} />
+                    <span className="sp-format-label">{p.label}</span>
+                    <span className="text-mono sp-format-dims">{f.w}×{f.h}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Placement Insights — Product Launch</h3>
