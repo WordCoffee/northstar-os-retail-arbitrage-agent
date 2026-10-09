@@ -139,7 +139,7 @@ async def lifespan(app):
     except Exception:
         logger.warning("Ollama not reachable — AI features will use fallback")
 
-    logger.info("Northstar OS ready ✨")
+    logger.info("Northstar OS ready")
     yield
     logger.info("Northstar OS shutting down")
 
