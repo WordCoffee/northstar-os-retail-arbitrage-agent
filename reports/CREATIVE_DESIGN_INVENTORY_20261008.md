@@ -286,3 +286,46 @@ character limits; the full tables are in `AMAZON_REQUIREMENTS.md` §5.
 raster size. It is Phase 0 of `MASTER_BLUEPRINT.md`. No file has been changed yet; this is a finding,
 not a fix.
 
+---
+
+## 9. Addendum 2026-10-09 (second) — the repo moved under this research
+
+Written while the research was running, a parallel session committed three implementation commits on
+`feature/product-designer-studio`:
+
+| Commit | What it did |
+|---|---|
+| `f232ef8` | Product Designer service — local scene designer, real 3D packaging view, mockups, provider-gated generation queue |
+| `6bfafcb` | Design Studio — one room for ads, social, A+ content, image and clip requests; rewrote `CreativeStudio.jsx` (+1532 lines); added `northstar-os-ui/audit-imports.cjs` and `verify-studio.cjs` |
+| `d67e83a` | ListingForge, SocialPulse and AdPilot gained real creative capability; added `studio/engine/adDoc.js` and `studio/engine/socialDoc.js` |
+
+**§1's headline finding is now historical.** The studio engine is no longer orphaned: all 12 files
+under `northstar-os-ui/src/studio/` are git-tracked, and `CreativeStudio.jsx` now imports
+`Stage`, `Chrome`, `Fields`, `doc.js`, `assets.js` and `store.js` directly. The engine was committed
+while this inventory was being written — which is why §1 recorded "zero git history" at the time it
+was checked.
+
+**§8's Phase 0 correction has been actioned.** `presets.js` now carries the verified Amazon figures,
+with `VERIFIED from Amazon's asset-creation guide` and `VERIFIED from Amazon's Premium A+ module
+guide` comments on the A+ blocks. Spot-checked against the research: `aplus-premium-full` 1464×600,
+`aplus-comparison` 150×300, `aplus-four-text` 200×200, `aplus-premium-cmp3` 488×700, and the full
+19-module Premium table. `amz-main` moved from 1600×1600 to 2000×2000, which is still inside Amazon's
+500–10,000 px range.
+
+**Two items still open, both from the research:**
+
+1. **`storefront` is still 1920×640.** Amazon's published Stores specs give a hero at 3,000×600 and
+   full-width image tiles at 1,500×750 minimum (3,000 px wide recommended). `1920×640` is not a
+   published Stores spec — it is a generic web-hero size. Still a data fix.
+2. **No compliance rule module exists.** `git ls-files northstar-os-ui/src/studio` returns 12 files,
+   none of which is a rules or pre-flight module. The research (`OPPORTUNITIES.md` O-04/O-07) ranks
+   this as the single highest-value feature: none of the ten competitors inspected enforces Amazon's
+   main-image rules, and the ~60 verified spec rows in `AMAZON_REQUIREMENTS.md` are ready to encode as
+   data. The dimensions were adopted; the gate that checks them was not built.
+
+**Verification status of the implementation is unknown to this report.** `northstar-os-ui` has both
+`verify-studio.cjs` and `audit-imports.cjs`, and `npm run build` must pass with 0 errors per the
+project's standing rule — but neither was run as part of this research, and this addendum makes no
+claim about their result.
+
+
