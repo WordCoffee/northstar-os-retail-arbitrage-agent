@@ -202,9 +202,17 @@ function AutothinKComposer({ onResult }) {
           <div className="alert" style={{ marginBottom: 0 }}>
             <div className="alert-title"><span className={`pill ${state.value.ok ? 'pill-ok' : 'pill-warn'}`}>{state.value.ok ? 'ok' : 'failed'}</span> {state.value.model || 'UNKNOWN'} · {state.value.provider}</div>
             <div className="alert-text" style={{ whiteSpace: 'pre-wrap' }}>{state.value.content || state.value.reason || 'No content returned.'}</div>
+            {/* Honest provenance: name the local files the model was actually
+                given, and say plainly when there were none. Never a per-claim
+                citation link, because none exists. */}
+            <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>
+              {state.value.grounded && (state.value.grounding_sources || []).length > 0
+                ? `Grounded on local data: ${state.value.grounding_sources.join(', ')}`
+                : 'No local data was available for this run — the answer is model knowledge only, with no sources behind it.'}
+            </div>
           </div>
         )}
-        <div className="text-low" style={{ fontSize: 11 }}>A research run never fabricates claims — every output cites its source or says UNKNOWN. Cloud (OpenRouter) and hosted (OpenCode Go) calls are owner-armed and spend-gated. If a hosted model is unavailable the run fails with that reason rather than substituting another model.</div>
+        <div className="text-low" style={{ fontSize: 11 }}>A research run never fabricates claims: when the grounded context bundle is empty the model is told to say UNKNOWN rather than invent a figure. Note honestly — the workspace currently surfaces <strong>no citation list</strong>; a result's provenance is the local data sources listed with the run, not a per-claim source link, and none is claimed. Cloud (OpenRouter) and hosted (OpenCode Go) calls are owner-armed and spend-gated. If a hosted model is unavailable the run fails with that reason rather than substituting another model.</div>
       </div>
     </div>
   )

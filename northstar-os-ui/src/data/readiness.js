@@ -20,6 +20,13 @@ export const READINESS_LEVELS = {
 // Room id (nav section id) -> readiness level. Creative/media rooms
 // (creative-studio, socialpulse, adpilot) are intentionally omitted so their
 // nav status and page surface stay unchanged (owned by the creative session).
+//
+// Phase 6 (2026-10-09): the rooms that were UNLABELLED are now labelled rather
+// than left to imply anything. A room with no badge reads as "nothing to
+// declare", which is exactly the dishonesty the readiness file exists to
+// prevent. 'product-designer' and the two studio rooms are local-only scene
+// designers with a provider-gated generation queue, so they are 'concept'
+// (nothing is generated without an approved provider).
 export const ROOM_READINESS = {
   'command-center': 'ready', // fully live local reads (signals, work queues, activity, launch grid)
   'sourcescout': 'cached',
@@ -38,6 +45,12 @@ export const ROOM_READINESS = {
   'master-brain': 'internal',
   'administration': 'ready',
   'beta-ops': 'ready',
+  // Labelled rather than left silent.
+  'product-designer': 'concept', // local scene designer only; generation is provider-gated and unarmed
+  'creative-studio': 'concept', // local records + requests; no provider is connected
+  'socialpulse': 'concept', // local workspace state; no channel is connected
+  'adpilot': 'partial', // real creative capability + honest "nothing is sent" boundary
+  'listingforge': 'partial', // real revisions + template apply; publish stays disabled
 }
 
 // Route -> room id, so a room page can resolve its own readiness badge without
@@ -60,6 +73,13 @@ export const ROUTE_ROOM = {
   '/master-brain': 'master-brain',
   '/admin': 'administration',
   '/beta-ops': 'beta-ops',
+  // Phase 6: the studio rooms and the customer surfaces get explicit labels so
+  // no route renders without a readiness badge.
+  '/product-designer': 'product-designer',
+  '/creative-studio': 'creative-studio',
+  '/socialpulse': 'socialpulse',
+  '/adpilot': 'adpilot',
+  '/listingforge': 'listingforge',
 }
 
 export function readinessForRoom(id) {
