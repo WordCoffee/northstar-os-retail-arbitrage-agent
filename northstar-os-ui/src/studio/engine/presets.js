@@ -330,7 +330,7 @@ export const TEMPLATES = [
     id: 'tpl-aplus-banner',
     name: 'A+ banner',
     family: 'A+ content',
-    note: '970×600 wide banner with a lifestyle band.',
+    note: '1464x600 wide banner with a lifestyle band (Amazon Premium Full Image minimum).',
     palette: 'kit-pine',
     layers: [
       { kind: 'bg', fill: '#f7f4ee' },
