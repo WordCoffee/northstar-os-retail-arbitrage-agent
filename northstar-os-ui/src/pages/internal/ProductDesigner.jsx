@@ -19,7 +19,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { PageLayout, DataNotice, DataTable } from '../../components/Shared.jsx'
+import { PageLayout, DataNotice, DataTable, MetricTiles } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import Icon from '../../components/Icon.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
@@ -32,7 +32,7 @@ import {
   SegmentedControl, Toggle, ChipRow, Stat,
 } from '../../studio/components/Fields.jsx'
 import {
-  KIND_LABEL, updateLayer, removeLayer, docToDataUrl, downloadDataUrl, safeFileName,
+  KIND_LABEL, createDoc, updateLayer, removeLayer, docToDataUrl, downloadDataUrl, safeFileName,
 } from '../../studio/engine/doc.js'
 import { buildSceneDoc } from '../../studio/engine/sceneDoc.js'
 import { renderMockup, mockupToDataUrl } from '../../studio/engine/mockups.js'

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { NAV_GROUPS, canUseRole } from '../data/nav-config.js'
+import { fromBackendRole } from '../data/roles.js'
 import { useSession } from '../foundation/session.jsx'
 
 export default function SuiteRail({ onNavigate }) {
@@ -8,8 +9,14 @@ export default function SuiteRail({ onNavigate }) {
   const location = useLocation()
   const session = useSession()
   const [collapsed, setCollapsed] = useState({})
+
+  // nav-config lists sections by UI display role, so the backend role the
+  // session carries has to be translated before it gates nav. Comparing the
+  // two vocabularies directly matched nothing and silently emptied the rail for
+  // every signed-in user - see data/roles.js.
   const role = session.authenticated
-    ? (session.role || (session.permissions?.includes('platform_admin') ? 'platform_admin' : 'operator'))
+    ? (fromBackendRole(session.role) ||
+       (session.permissions?.includes('platform_admin') ? 'platform_admin' : 'operator'))
     : 'invitee'
 
   const toggle = (id) => setCollapsed(prev => ({ ...prev, [id]: !prev[id] }))

@@ -7,7 +7,7 @@ import Icon from '../../components/Icon.jsx'
 import { useAssetStore, useDecodedAssets } from '../../studio/engine/assets.js'
 import { renderDoc } from '../../studio/engine/doc.js'
 import { buildSocialDoc, formatForPlatform } from '../../studio/engine/socialDoc.js'
-import { ModeToggle } from '../../studio/components/Chrome.jsx'
+import { ModeToggle, AssetThumb } from '../../studio/components/Chrome.jsx'
 import { useRoom, fmtTime } from '../../studio/engine/store.js'
 import { DEFAULT_BRAND_KITS } from '../../studio/engine/presets.js'
 

@@ -22,7 +22,6 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
         <Icon name="star" size={22} />
         <span className="top-nav-brand-name">NorthstarOS</span>
       </div>
-
       <div className="top-nav-right">
         <div className="top-nav-search">
           <Icon name="search" size={15} />
@@ -83,14 +82,25 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
         </div>
 
         {session.authenticated && (
-          <div className="top-nav-role">
+          <button
+            type="button"
+            className="top-nav-role top-nav-account-btn"
+            aria-label="Account"
+            onClick={() => navigate('/account')}
+          >
             <Icon name="user" size={14} />
             <span>{role === 'platform_admin' ? 'Admin' : role === 'customer' ? 'Customer' : 'Operator'}</span>
-          </div>
+          </button>
         )}
-        <div className="top-nav-avatar" title={session.authenticated ? session.userId : 'Guest'}>
+        <button
+          type="button"
+          className="top-nav-avatar"
+          aria-label="Account"
+          title={session.authenticated ? session.userId : 'Guest'}
+          onClick={() => navigate(session.authenticated ? '/account' : '/sign-in')}
+        >
           {session.authenticated && session.userId ? session.userId[0].toUpperCase() : '?'}
-        </div>
+        </button>
       </div>
     </header>
   )

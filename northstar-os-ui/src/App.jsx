@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useLocation, BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import CommandPalette from './components/CommandPalette.jsx'
 import { NAV_GROUPS, canUseRole } from './data/nav-config.js'
+import { fromBackendRole } from './data/roles.js'
 import SuiteRail from './components/SuiteRail.jsx'
 import TopNav from './components/TopNav.jsx'
 import MobileBottomNav from './components/MobileBottomNav.jsx'
@@ -49,10 +50,17 @@ import AccountDowngraded from './pages/customer/Downgraded.jsx'
 import CustomerReaccept from './pages/customer/Reaccept.jsx'
 import NotFound from './pages/NotFound.jsx'
 
+// The session carries a BACKEND role (organization_owner, operator,
+// internal_platform_admin...). The shell's checks below compare against the UI
+// display vocabulary, so the value has to be translated first. Comparing the raw
+// backend role matched nothing, which silently redirected every platform admin
+// away from /beta-ops and /admin — see data/roles.js.
 function currentRole(session) {
-  return session.authenticated
-    ? (session.role || (session.permissions?.includes('platform_admin') ? 'platform_admin' : 'operator'))
-    : 'invitee'
+  if (!session.authenticated) return 'invitee'
+  return (
+    fromBackendRole(session.role) ||
+    (session.permissions?.includes('platform_admin') ? 'platform_admin' : 'operator')
+  )
 }
 
 // Paths reachable without a session (public entry surfaces).

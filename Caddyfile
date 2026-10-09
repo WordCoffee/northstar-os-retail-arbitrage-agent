@@ -30,11 +30,19 @@
 		reverse_proxy api:8000
 	}
 
-	# Canonical SPA under /ui/ (strip the prefix, SPA fallback to index.html).
-	handle_path /ui/* {
-		root * /srv
-		try_files {path} /index.html
-		file_server
+	# Canonical SPA under /ui/ (SPA fallback to index.html).
+	#
+	# P0-03 follow-up (2026-10-09): this used to serve the SPA from a copy baked
+	# into the caddy image (Dockerfile.ui -> /srv). That copy is a SECOND build of
+	# the same frontend, so it silently went stale whenever only `api` was
+	# rebuilt — the operator saw an old UI (empty suite rail, missing routes)
+	# while the API was serving the new one. The SPA now comes from exactly one
+	# place: the api image's in-image build. Rebuilding `api` is enough.
+	#
+	# NOTE: `handle`, not `handle_path` — the api mounts the SPA at /ui, so the
+	# prefix must be preserved when the request is proxied.
+	handle /ui/* {
+		reverse_proxy api:8000
 	}
 
 	# Bare root -> the UI.
