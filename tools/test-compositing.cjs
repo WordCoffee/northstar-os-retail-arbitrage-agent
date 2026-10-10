@@ -22,6 +22,34 @@ const { chromium } = require('playwright')
 const BASE = process.env.HARNESS_BASE_URL || 'http://127.0.0.1/ui/'
 const EMAIL = process.env.NS_TEST_EMAIL || 't2'
 const PW = process.env.NS_TEST_PASSWORD || 'T2holdings'
+// Dev builds use the local identity shim, not hosted credentials.
+const DEV_IDENT = process.env.NS_DEV_IDENTIFIER || 'T2'
+const DEV_PW = process.env.NS_DEV_PASSWORD || '123abc'
+
+// ── Mode flag ──────────────────────────────────────────────────────────────
+// 'auto' (default) detects the dev-only engine hook and decides for itself.
+// 'dev'  REQUIRES the hook. If it is missing, the pixel paths fail loudly
+//        rather than skipping, so a dev run can never quietly pass without
+//        exercising them.
+// 'prod' REQUIRES the hook to be ABSENT (the production contract) and runs only
+//        the UI-level checks.
+const MODE = (process.env.HARNESS_MODE || 'auto').toLowerCase()
+if (!['auto', 'dev', 'prod'].includes(MODE)) {
+  console.error(`FATAL unknown HARNESS_MODE "${MODE}" (expected auto|dev|prod)`)
+  process.exit(2)
+}
+
+// ── Watchdog ───────────────────────────────────────────────────────────────
+// A hung page.evaluate used to hang this harness with no output at all. Nothing
+// may hang silently: after this many ms the harness reports WHERE it got to and
+// exits non-zero.
+const WATCHDOG_MS = Number(process.env.HARNESS_TIMEOUT_MS || 240000)
+let lastStep = 'start'
+const step = (s) => { lastStep = s; log(`      ... ${s}`) }
+
+// The dev server transforms modules on demand, so its FIRST page load is much
+// slower than a built bundle. Every navigation timeout scales with the mode.
+const NAV_TIMEOUT = MODE === 'prod' ? 15000 : 60000
 
 let pass = 0
 let fail = 0
@@ -40,17 +68,49 @@ async function main() {
   page.on('pageerror', (e) => { if (capturing) errors.push(String(e)) })
   page.on('console', (m) => { if (capturing && m.type() === 'error') errors.push('console: ' + m.text().slice(0, 160)) })
 
-  await page.goto(BASE + 'sign-in')
-  await page.fill('#signin-id', EMAIL)
-  await page.fill('#signin-pw', PW)
-  await page.click('form button[type="submit"]')
-  await page.waitForFunction(() => location.pathname === '/ui/home', null, { timeout: 15000 })
+  step('navigating to sign-in')
+  await page.goto(BASE + 'sign-in', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT })
+  step('waiting for the sign-in form')
+  await page.waitForSelector('#signin-id', { timeout: NAV_TIMEOUT })
+
+  // A dev server serves the module graph on demand, so the form can be in the
+  // DOM BEFORE React attaches its submit handler. Clicking then is swallowed
+  // silently: no request is made and the page just sits there (observed in the
+  // diagnostic - the only API calls were the initial session probes). Settle
+  // first, then retry the submit if no navigation happened.
+  await page.waitForTimeout(MODE === 'prod' ? 400 : 2000)
+  // Dev builds take the shim branch, so use the shim identity there. The shim
+  // never touches the network, which is why the earlier run produced NO login
+  // request at all.
+  const ident = MODE === 'prod' ? EMAIL : DEV_IDENT
+  const pw = MODE === 'prod' ? PW : DEV_PW
+  await page.fill('#signin-id', ident)
+  await page.fill('#signin-pw', pw)
+
+  let signedIn = false
+  for (let attempt = 1; attempt <= 3 && !signedIn; attempt++) {
+    step(`submitting sign-in (attempt ${attempt})`)
+    await page.click('form button[type="submit"]')
+    try {
+      await page.waitForFunction(() => location.pathname === '/ui/home', null, { timeout: Math.round(NAV_TIMEOUT / 3) })
+      signedIn = true
+    } catch {
+      if (attempt < 3) await page.waitForTimeout(1500)
+    }
+  }
+  if (!signedIn) {
+    const url = await page.evaluate(() => location.href).catch(() => 'unknown')
+    ftl(`sign-in did not complete after 3 attempts (still at ${url}). The submit click is not reaching the app handler.`)
+    await browser.close()
+    return report()
+  }
   capturing = true
   ok('signed in')
 
   // ── The compositing surface mounts ──────────────────────────────────────
   await page.goto(BASE + 'design-studio?section=listing-images&engine=1')
-  await page.waitForSelector('[data-testid="listing-images-workspace"]', { timeout: 12000 })
+  await page.waitForSelector('[data-testid="listing-images-workspace"]', { timeout: NAV_TIMEOUT })
+  step('checking the compositing surface')
   const surface = await page.$('[data-testid="compositing-surface"]')
   if (surface) ok('the compositing surface mounted in Listing Images')
   else { no('no compositing surface'); }
@@ -74,49 +134,65 @@ async function main() {
   // so this harness SKIPS the pixel-path tests rather than failing them, and
   // says exactly why. Run it against the Vite dev server to exercise them.
   const hasEngine = await page.evaluate(() => !!window.__northstarStudioEngine)
+
+  // ── Mode enforcement ────────────────────────────────────────────────────
+  if (MODE === 'dev' && !hasEngine) {
+    ftl('HARNESS_MODE=dev but the engine hook is ABSENT. The pixel paths cannot run. Build or serve a dev build (npm run dev on :8101).')
+    await browser.close()
+    return report()
+  }
+  if (MODE === 'prod' && hasEngine) {
+    ftl('HARNESS_MODE=prod but the engine hook is PRESENT. The production bundle must not carry it.')
+    await browser.close()
+    return report()
+  }
+  let skippedPixelPaths = false
   if (!hasEngine) {
+    skippedPixelPaths = true
     log('')
     log('SKIP  engine hook absent (CORRECT for a production bundle)')
     log('      The canvas pixel paths (render, fidelity extraction, marker survival)')
-    log('      require the dev-only ?engine=1 hook. Re-run against the Vite dev server:')
-    log('        HARNESS_BASE_URL=http://127.0.0.1:8101/ui/ node test-compositing.cjs')
+    log('      need the dev-only ?engine=1 hook. Re-run with HARNESS_MODE=dev against')
+    log('      the Vite dev server:')
+    log('        HARNESS_MODE=dev HARNESS_BASE_URL=http://127.0.0.1:8101/ui/ node test-compositing.cjs')
     log('      The UI-level checks below still run against this build.')
-    // Fall through to the UI-only assertions rather than returning.
+    log('')
   } else {
     ok('engine hook present (dev build)')
   }
 
+const fixtures = await page.evaluate(() => {
+    const mk = (fill, stripe) => {
+      const c = document.createElement('canvas')
+      c.width = 1200; c.height = 1200
+      const x = c.getContext('2d')
+      x.fillStyle = fill
+      x.fillRect(0, 0, 1200, 1200)
+      if (stripe) {
+        x.fillStyle = stripe
+        x.fillRect(120, 120, 960, 960)
+        x.fillStyle = '#111111'
+        x.font = '84px sans-serif'
+        x.fillText('LABEL', 450, 630)
+      }
+      return c.toDataURL('image/png')
+    }
+    return {
+      // The product: a striped box with a label. Identical in both fixtures.
+      product: mk('#c94f2a', '#f2e3c9'),
+      // A composite that reproduces the product exactly.
+      sameComposite: mk('#c94f2a', '#f2e3c9'),
+      // A composite where the product has been redrawn in a different colour.
+      differentComposite: mk('#2a6fc9', '#c9dcf2'),
+      // A neutral background.
+      bg: mk('#ffffff', null),
+    }
+  })
+  ok('page generated 4 real PNG fixtures via canvas')
+
   if (hasEngine) {
     // ── Draw two real reference images IN THE PAGE ──────────────────────────
-    const fixtures = await page.evaluate(() => {
-      const mk = (fill, stripe) => {
-        const c = document.createElement('canvas')
-        c.width = 1200; c.height = 1200
-        const x = c.getContext('2d')
-        x.fillStyle = fill
-        x.fillRect(0, 0, 1200, 1200)
-        if (stripe) {
-          x.fillStyle = stripe
-          x.fillRect(120, 120, 960, 960)
-          x.fillStyle = '#111111'
-          x.font = '84px sans-serif'
-          x.fillText('LABEL', 450, 630)
-        }
-        return c.toDataURL('image/png')
-      }
-      return {
-        // The product: a striped box with a label. Identical in both fixtures.
-        product: mk('#c94f2a', '#f2e3c9'),
-        // A composite that reproduces the product exactly.
-        sameComposite: mk('#c94f2a', '#f2e3c9'),
-        // A composite where the product has been redrawn in a different colour.
-        differentComposite: mk('#2a6fc9', '#c9dcf2'),
-        // A neutral background.
-        bg: mk('#ffffff', null),
-      }
-    })
-    ok('page generated 4 real PNG fixtures via canvas')
-
+  
     // ── Fidelity: matching composite PASSES ─────────────────────────────────
     // Uses compose.fidelityVerdict -- the path that actually ships, which diffs
     // the RENDERED CANVAS against the locked reference. (fidelity.verifyFidelity
@@ -127,7 +203,7 @@ async function main() {
       const canvas = document.createElement('canvas')
       canvas.width = 1200; canvas.height = 1200
       const ctx = canvas.getContext('2d')
-      const load = (src) => new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.src = src })
+      const load = (src) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('image failed to load: ' + String(src).slice(0, 32))); i.src = src })
       const img = await load(fx.sameComposite)
       ctx.drawImage(img, 0, 0, 1200, 1200)
 
@@ -148,7 +224,7 @@ async function main() {
       const canvas = document.createElement('canvas')
       canvas.width = 1200; canvas.height = 1200
       const ctx = canvas.getContext('2d')
-      const load = (src) => new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.src = src })
+      const load = (src) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('image failed to load: ' + String(src).slice(0, 32))); i.src = src })
       const img = await load(fx.differentComposite)
       ctx.drawImage(img, 0, 0, 1200, 1200)
       const doc = {
@@ -216,7 +292,8 @@ async function main() {
     else no('renderDoc background wrong at x=150', JSON.stringify(renderCheck.shape))
 
     // ── The export pipeline reports every step, and blocks on compare ───────
-    const pipeline = await page.evaluate(async (fx) => {
+    step('running the export pipeline')
+  const pipeline = await page.evaluate(async (fx) => {
       const { compose, disclosure } = window.__northstarStudioEngine
       const doc = {
         formatId: 'amz-main', w: 1200, h: 1200, channel: 'Amazon listing',
@@ -294,17 +371,19 @@ async function main() {
   // ── ITEM 3: the upload check, driven for real ───────────────────────────
   // Produce a TAGGED png and an UNTAGGED png in the page, then feed both
   // through the real file input.
+  step('generating upload fixtures')
   const uploadFixtures = await page.evaluate(async (fx) => {
-    const { disclosure } = window.__northstarStudioEngine
+    const disclosure = window.__northstarStudioEngine ? window.__northstarStudioEngine.disclosure : null
     const canvas = document.createElement('canvas')
     canvas.width = 1200; canvas.height = 1200
     const ctx = canvas.getContext('2d')
-    const load = (src) => new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.src = src })
+    const load = (src) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('image failed to load: ' + String(src).slice(0, 32))); i.src = src })
     ctx.drawImage(await load(fx.product), 0, 0, 1200, 1200)
     const untagged = await new Promise(r => canvas.toBlob(b => r(b), 'image/png'))
     const rawBytes = new Uint8Array(await untagged.arrayBuffer())
-    const taggedBytes = disclosure.embedDisclosure(rawBytes, 'image/png', [disclosure.DISCLOSURE_KEYWORD])
     const b64 = (u8) => btoa(String.fromCharCode.apply(null, u8))
+    if (!disclosure) return { tagged: null, untagged: b64(rawBytes) }
+    const taggedBytes = disclosure.embedDisclosure(rawBytes, 'image/png', [disclosure.DISCLOSURE_KEYWORD])
     return { tagged: b64(taggedBytes), untagged: b64(rawBytes) }
   }, fixtures)
 
@@ -342,14 +421,19 @@ async function main() {
     if (await page.$('[data-testid="recheck-library"]')) ok('the re-check library panel renders')
     else no('no re-check library panel')
 
-    // Tagged -> marker-present
-    await page.setInputFiles('[data-testid="upload-check-input"]', {
-      name: 'live-listing.png', mimeType: 'image/png', buffer: Buffer.from(uploadFixtures.tagged, 'base64'),
-    })
-    await page.waitForTimeout(700)
-    const taggedRes = await page.$eval('[data-testid="upload-check-result"]', e => e.textContent).catch(() => '')
-    if (/marker-present/.test(taggedRes)) ok('upload check reads a tagged live image as marker-present')
-    else no('tagged live image did not report marker-present', taggedRes.slice(0, 120))
+    // Tagged -> marker-present. Needs the engine to WRITE the tag; skipped
+    // without it, with the reason stated.
+    if (!uploadFixtures.tagged) {
+      log('SKIP  tagged-upload check needs the engine to write the marker (production build)')
+    } else {
+      await page.setInputFiles('[data-testid="upload-check-input"]', {
+        name: 'live-listing.png', mimeType: 'image/png', buffer: Buffer.from(uploadFixtures.tagged, 'base64'),
+      })
+      await page.waitForTimeout(700)
+      const taggedRes = await page.$eval('[data-testid="upload-check-result"]', e => e.textContent).catch(() => '')
+      if (/marker-present/.test(taggedRes)) ok('upload check reads a tagged live image as marker-present')
+      else no('tagged live image did not report marker-present', taggedRes.slice(0, 120))
+    }
 
     // Untagged -> marker-missing with the warning
     await page.setInputFiles('[data-testid="upload-check-input"]', {
@@ -363,34 +447,39 @@ async function main() {
     else no('the warning does not state the fix')
 
     // ── ITEM 4: the log records each check with its date ──────────────────
-    const logged = await page.evaluate(() => {
-      const raw = localStorage.getItem('ns-ds-recheck-log')
-      return raw ? JSON.parse(raw) : []
+    // The log moved to the TENANT-SCOPED BACKEND in Phase 5, so it is no longer
+    // in localStorage. Assert on the real store through the page's own session.
+    const readBackendLog = () => page.evaluate(async () => {
+      const r = await fetch('/api/design-studio/rechecks', { credentials: 'include' })
+      if (!r.ok) return { state: 'error', status: r.status, entries: [] }
+      const j = await r.json()
+      return { state: 'ready', entries: j.rechecks || [], counts: j.counts || null }
     })
-    if (logged.length >= 2) ok(`the re-check log recorded ${logged.length} check(s)`)
-    else no(`expected at least 2 logged checks, got ${logged.length}`)
-    const hasDate = logged.every(e => !!e.checkedAt)
-    if (hasDate && logged.length) ok('every log entry carries the date of the check')
-    else no('a log entry is missing its date')
-    const surfaces = logged.map(e => e.surface)
-    if (surfaces.includes('upload-check')) ok('the log records which surface ran the check')
-    else no('the log does not record the surface')
+    const logged = await readBackendLog()
+    if (logged.state === 'ready') ok(`the backend re-check log is readable (${logged.entries.length} entry/entries)`)
+    else no(`could not read the backend log (http ${logged.status})`)
+
+    if (logged.entries.length >= 1) ok('the upload check wrote to the tenant-scoped log')
+    else no('the upload check did not reach the backend log')
+    const hasDate = logged.entries.every(e => !!e.checked_at)
+    if (hasDate && logged.entries.length) ok('every backend entry carries the date of the check')
+    else no('a backend entry is missing its date')
+    if (logged.entries.some(e => e.surface)) ok('the backend entry records which surface ran the check')
+    else no('the backend entry does not record the surface')
 
     // A failed check must be recorded as a failure, not smoothed to a pass.
-    const failedEntry = logged.find(e => e.verdict === 'marker-missing')
-    if (failedEntry && failedEntry.passed === false) ok('a failed check is logged as a failure')
-    else no('a failed check was not logged as a failure')
+    const failedEntry = logged.entries.find(e => e.verdict === 'marker-missing')
+    if (failedEntry && failedEntry.passed === false) ok('a failed check is stored as a failure in the backend')
+    else no('a failed check was not stored as a failure')
 
     // ── The log survives a reload ─────────────────────────────────────────
     await page.reload()
-    await page.waitForSelector('[data-testid="listing-images-workspace"]', { timeout: 12000 })
-    await page.waitForTimeout(600)
-    const after = await page.evaluate(() => {
-      const raw = localStorage.getItem('ns-ds-recheck-log')
-      return raw ? JSON.parse(raw) : []
-    })
-    if (after.length === logged.length) ok(`the log persisted across a reload (${after.length} entries)`)
-    else no(`log length changed across reload: ${logged.length} -> ${after.length}`)
+    await page.waitForSelector('[data-testid="listing-images-workspace"]', { timeout: NAV_TIMEOUT })
+    await page.waitForTimeout(1200)
+    const after = await readBackendLog()
+    if (after.state === 'ready' && after.entries.length >= logged.entries.length) {
+      ok(`the log persisted across a reload (${after.entries.length} entries, backend-backed)`)
+    } else no(`log did not persist: ${JSON.stringify(after).slice(0, 90)}`)
 
     // ── The cure window ───────────────────────────────────────────────────
     const libTab2 = await page.$('.ss-leftrail-tab:has-text("Library")')
@@ -414,13 +503,32 @@ async function main() {
   else no(`${errors.length} console/page error(s)`, errors.slice(0, 3).join(' | ').slice(0, 200))
 
   await browser.close()
+  if (skippedPixelPaths) {
+    log('')
+    log(`NOTE  ${skippedPixelPaths ? 'pixel paths were SKIPPED (production mode)' : ''}`)
+  }
   return report()
 
   function report() {
     log('')
+    log(`MODE: ${MODE}`)
     log(`COMPOSITING + FIDELITY (browser): ${pass} passed, ${fail} failed, ${fatal} FATAL`)
     process.exitCode = (fail || fatal) ? 1 : 0
   }
 }
 
-main().catch((e) => { console.error('FATAL harness crash', e); process.exitCode = 2 })
+// Run under a watchdog: a hang must produce a report naming the last step, never
+// silence.
+const guard = new Promise((_, rej) =>
+  setTimeout(() => rej(new Error(`WATCHDOG: no completion after ${WATCHDOG_MS}ms. Last step reached: "${lastStep}"`)), WATCHDOG_MS))
+
+Promise.race([main(), guard]).then(
+  () => process.exit(process.exitCode || 0),
+  (e) => {
+    console.error('')
+    console.error(`FATAL ${e.message}`)
+    console.error(`       last step reached: "${lastStep}"`)
+    console.error('       This is an isolated cause, not a pass. Nothing was skipped silently.')
+    process.exit(2)
+  },
+)

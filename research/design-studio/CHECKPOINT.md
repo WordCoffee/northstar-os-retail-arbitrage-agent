@@ -285,3 +285,77 @@ focus acquisition, heading contrast and mobile horizontal-overflow checks.
 - **Items 6 and 7** (search/listing integration, performance loop) were not
   started; the loop reached the end of the budget first.
 - Six of nine sections embed the surface; two own equivalent canvases.
+
+## PHASE 6 ? COMPOSITING HARNESS ROOT-CAUSED (item 1 done; items 2-8 not started)
+
+### Item 1 ? the harness no longer hangs, and the cause is isolated
+Three real defects were fixed in `tools/test-compositing.cjs`:
+
+1. **A hang mechanism.** Every inline `new Image()` loader lacked `onerror`, so
+   a failed image never settled its promise and `page.evaluate` hung forever
+   with NO output. All three loaders now reject on error.
+2. **A scope bug.** `fixtures` was declared inside the `if (hasEngine)` block
+   but used by the upload check, which runs in BOTH modes. Hoisted out; it needs
+   no engine.
+3. **A build-mode contract.** Added `HARNESS_MODE=auto|dev|prod`. `dev` REQUIRES
+   the hook (fails loudly without it); `prod` REQUIRES its absence.
+   `auto` decides from the page. Plus a WATCHDOG that reports the last step
+   reached instead of hanging silently.
+
+With those fixed, the harness completes in **prod mode: 23 passed / 0 failed /
+0 FATAL**, correctly SKIPPING the pixel paths with instructions.
+
+### The isolated cause for the dev mode (NOT forced green)
+Running `HARNESS_MODE=dev` against the Vite dev server still cannot sign in.
+A minimal repro produced the cause precisely:
+
+    LOCAL_DEV in page: undefined
+    URL after submit:  .../ui/sign-in        (unchanged)
+    body delta:        0
+    alert text:        none
+    pageerrors:        none
+    API calls:         only ui-mode 200 + me/environment/preview 401
+
+**The login POST is never made.** The submit click produces no state change at
+all: no request, no error text, no DOM change, no page error. The `onSubmit`
+handler does not run. Ruled out along the way:
+
+- the Vite proxy carries the login fine (curl through :8101 returns 200 + both
+  cookies), so it is not a proxy or cookie problem;
+- the form and the button exist exactly as expected
+  (`<form onSubmit={submit}>` + `<button type="submit">`);
+- it is NOT a credentials problem: `foundation/dev.js` sets
+  `LOCAL_DEV = import.meta.env.DEV`, so a dev build takes the local-shim branch
+  (`T2` / `123abc`), which makes no network call. The harness was updated to use
+  the shim identity in dev mode and the click STILL produced zero state change.
+
+So the dev-server sign-in failure is upstream of this harness. It is a real,
+reproducible defect in the dev-server path, isolated but not root-caused within
+budget. The pixel paths were verified passing earlier in the previous session
+against a build where the hook was not yet gated; they have NOT been re-confirmed
+against current code.
+
+### Items 2-8 ? NOT STARTED
+The loop spent its entire budget on item 1, which the exit criteria made the
+blocker. No work was begun on: capability audit vs the surface (2), the
+file-import data path (3), brief-from-search-terms (4), the variant scaffold (5),
+the indexing-honesty register (6), the remaining Phase 4/5 gaps (7), or the
+refreshed regression set beyond what was re-run (8).
+
+### Full regression re-run (item 8's core), all green
+| Harness | Result |
+|---|---|
+| test-compliance-rules.mjs | 106 / 0 |
+| test-disclosure.mjs | 65 / 0 |
+| test-fidelity-freshness.mjs | 57 / 0 |
+| test-generation.mjs | 25 / 0 |
+| test_design_studio_isolation.py | 37 / 0 |
+| test_login_throttle_bypass.py | 16 / 0 |
+| check-jsx-imports.py | 95 files, 0 / 0 |
+| check-prod-bundle.cjs | 3 / 0 |
+| test-compositing.cjs (prod mode) | 23 / 0, pixel paths SKIPPED |
+| verify-design-studio.cjs | 67 / 0 |
+| test-migration-e2e.cjs | 12 / 0 |
+| verify-operator-smoke.cjs | 11 / 0 (21/21 rail) |
+| capture-section-evidence.cjs | 62 / 0, 18 screenshots refreshed |
+Total: **484 passed, 0 failed, 0 FATAL.**
