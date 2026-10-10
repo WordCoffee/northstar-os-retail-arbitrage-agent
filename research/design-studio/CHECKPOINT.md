@@ -469,3 +469,95 @@ never mint a session. File total: 16 passed / 0 failed.
 DECIDED-BY-DEFAULT (D9): the engine-hook build flag is named `VITE_TEST_HOOKS`
 (the alternative spelling `VITE_ENGINE_HOOK` was not used). Reverse: rename the
 flag in DesignStudio.jsx, the harness docs and this checkpoint.
+
+## PHASE 6 D — IMPORTED EVIDENCE, BRIEFS, VARIANTS, INDEXING (items 4-7)
+
+### Item 4 — file-import data path (no live calls)
+- New tenant-scoped tables `ds_imports` + `ds_search_terms` with DAOs; the same
+  file re-imported (BOM/CRLF included) returns the EXISTING import via a UNIQUE
+  fingerprint index — proven idempotent in `tools/test_design_studio_imports.py`.
+- `Northstar_backend/design_studio_imports.py` parses Sponsored Products
+  search-term reports and Brand Analytics SQP files (CSV/JSON, alias headers).
+  A missing column is NULL in every row — never 0; a literal 0 stays 0. Every
+  import carries the 65-day lookback, 31-day API-range and click-only notes;
+  the observed range is operator input or the file's own dates (else UNKNOWN).
+- Endpoints: POST/GET/DELETE `/imports`, GET `/terms` (+filters), GET
+  `/terms/export` (NULL → empty cell), POST `/terms/brief`. Brand Analytics
+  reads UNAVAILABLE until a file is imported.
+- **Route-level tenancy fix for the new surface:** the legacy
+  `get_current_user` dependency has no cookie awareness, so every legacy caller
+  collapses into one shared bucket; the new endpoints use a strict,
+  organization-scoped session dependency (`studio_account`) and anonymous
+  callers get 401 (verified by curl and by the harness). The legacy bucket
+  behaviour is left as-is and recorded (see OWNER_DECISIONS addendum D10).
+
+### Item 5 — brief from search terms
+`build_brief()` composes from imported terms + the brand profile; every ranking
+carries a sample-size/confidence label, the click-only caveat travels with any
+clicks reading, missing metrics read UNKNOWN, headlines are never invented and
+nothing is generated. The UI sub-view lives in Ads › Search terms.
+
+### Item 6 — variant scaffold
+`ds_variants` + `ds_variant_metrics`; user-entered or file-imported metrics
+only. A metrics file matches existing variants by id or exact name; unmatched
+rows are REPORTED, never turned into variants. The comparison view warns on
+samples below 25 clicks and states the no-causation rule and the attribution
+gap (Amazon reports carry no creative identifier).
+
+### Item 7 — indexing honesty register
+`studio/engine/indexing.js` holds claims with source id, confidence and the
+source's pulled-at date; unofficial claims are REPORTED/UNSOURCED. Alt text and
+on-image text carry NO recorded ranking support and the register says so. It
+renders as a sub-view of A+; a studio-wide source scan (with a non-vacuous
+control) proves no positive imagery-ranking claim exists anywhere in the UI.
+
+## PHASE 6 E — CAPABILITY AUDIT (item 8)
+`reports/design-studio-capability-audit_20261010.md`: matrix over layers,
+reference lock, safe-zone overlay, undo/redo, compare sign-off and export gates
+for the compositing surface, the Projects canvas and the 3D composer, with
+file:line evidence. Gaps documented as limits, not closed: Projects has no
+undo/redo, no reference lock and no compare sign-off; 3D exports bypass the
+compliance pre-flight; 3D has no reorderable layer stack; the Projects/3D
+safe-zone is a 6% Advanced-mode aid, not the documented keep-out geometry.
+
+## PHASE 6 F — REMAINING GAPS (item 9)
+- **Re-check-log migration, browser e2e (backend move):** VERIFIED with
+  `tools/_check-recheck-migration.cjs` — a seeded localStorage log of 2 entries
+  migrates to the tenant backend exactly once, a failed check is stored as a
+  failure, the local copy clears only after the server confirms, the flag is
+  set, and a second mount does not duplicate.
+- **Policy freshness register:** re-run 2026-10-10 → `{"current": 35}` — all 35
+  sources current on the pull date, nothing past cadence, ZERO re-pulls, no
+  login-gated page touched.
+
+## PHASE 6 G — FULL REGRESSION (item 10)
+All harnesses with full output + FATAL counting, evidence in
+`reports/regression_20261010/`:
+
+| Harness | Result |
+|---|---|
+| test-compliance-rules.mjs | 106 / 0 |
+| test-disclosure.mjs | 65 / 0 |
+| test-fidelity-freshness.mjs | 57 / 0 (freshness: 35/35 current) |
+| test-generation.mjs (mocked) | 25 / 0 |
+| test-indexing-register.mjs (new) | 28 / 0 |
+| check-prod-bundle.cjs | 14 / 0 |
+| check-compose-deploy.cjs (new) | 3 / 0 |
+| test_design_studio_isolation.py | 37 / 0 |
+| test_login_throttle_bypass.py | 16 / 0 |
+| test_design_studio_imports.py (new) | 33 / 0 |
+| test_auth_guard.py (pytest, +3 new) | 16 / 0 |
+| check-jsx-imports.py | 97 files, 0 / 0 |
+| test-compositing.cjs prod (container) | 23 / 0, 0 FATAL |
+| test-compositing.cjs test build (dist-test) | 37 / 0, 0 FATAL |
+| test-compositing.cjs dev server | 37 / 0, 0 FATAL |
+| verify-design-studio.cjs | 67 / 0, 0 FATAL |
+| test-migration-e2e.cjs | 12 / 0, 0 FATAL |
+| verify-operator-smoke.cjs | 11 / 0 |
+| verify-search-terms.cjs (new) | 33 / 0, 0 FATAL (twice, deterministic) |
+| _check-recheck-migration.cjs (new) | migration VERIFIED |
+| capture-section-evidence.cjs | 62 / 0, 0 FATAL, 18 screenshots refreshed |
+
+**Total: 750 passed, 0 failed, 0 FATAL. Zero live or paid calls; generation
+UNARMED; the production bundle carries neither the engine hook nor the dev
+shim.**

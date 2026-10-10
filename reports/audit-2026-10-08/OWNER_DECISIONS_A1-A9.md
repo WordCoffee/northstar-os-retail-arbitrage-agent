@@ -136,3 +136,14 @@ reversible. Reverse any of them with one line.
 | D5 | Public Amazon pages | NOT re-pulled | All 35 sources are current on the pull date, so nothing was past cadence; no budget spent on reads with no delta to find | Re-run `freshnessReport()` after 2026-11-09 |
 | D6 | Items 6 and 7 | NOT STARTED | The loop reached the end of the budget first | Assign them as the next work item |
 | D7 | Compositing harness | Documented NOT RUN rather than forced green | It times out and the cause was not isolated within budget; reporting it as passing would be a false claim | Run `HARNESS_BASE_URL=http://127.0.0.1:8101/ui/ node test-compositing.cjs` and diagnose the hang |
+
+### Phase 6 continuation (2026-10-10, Design Studio)
+
+| # | Decision | Chosen | Why | Reverse by |
+|---|---|---|---|---|
+| D8 | Dev sign-in failure path | A dev build VERIFIES the shim result and falls back to the real `/auth/login`; both failures show an explicit alert | The containerized backend ignores the shim (bridge client), and the old branch assumed success — a silent no-op. Verified: demo creds now fail visibly; a real account signs in | Remove the fallback block in `SignIn.jsx` |
+| D9 | Engine-hook build flag | Named `VITE_TEST_HOOKS`; gate is `import.meta.env.DEV \|\| VITE_TEST_HOOKS === '1'` | Separates the test artifact from the dev server; production carries neither | Rename the flag in DesignStudio.jsx + docs |
+| D10 | Route identity for imported evidence | The NEW endpoints (`/imports`, `/terms`, `/variants`) use a strict org-scoped session (`studio_account`); anonymous → 401. Legacy Design Studio routes keep `get_current_user` bucketing | Legacy callers collapse into one bucket because `get_current_user` has no cookie awareness; changing it moves already-stored data, so it is left and recorded | Swap the dependency back / apply the tenant-preferring `_account_id` and migrate buckets |
+| D11 | Local stack during harness runs | `NORTHSTAR_DISABLE_RATE_LIMIT=1` (the documented, production-refused harness opt-out) re-set the local container so the evidence flow can exceed 30 req/min | The compose default is 0 and `assert_prod_posture()` refuses the flag in production; `tools/start-local.ps1` re-ups without it, so the next normal start restores the limiter | Run `tools/start-local.ps1` (or `docker compose up -d api` without the flag) |
+| D12 | Capability gaps in Projects / 3D | DOCUMENTED as limits in `reports/design-studio-capability-audit_20261010.md` instead of closed | Porting the compare/fidelity track into Stage and gating 3D exports are product decisions, not overnight fixes | Close either gap per the report's follow-ups |
+| D13 | Harness fixture hygiene | `verify-search-terms.cjs` deletes its own prior fixtures (labels starting with `harness`/`Harness `) before running | The tenant store persists between runs, which made the BA available→unavailable transition untestable on re-runs | Remove the cleanup block and use a fresh tenant |
