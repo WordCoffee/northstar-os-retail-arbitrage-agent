@@ -20,6 +20,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { ALL_FORMATS, formatById } from './presets.js'
+import { SAFE_ZONES, AMAZON_CAPS, AI_POLICY } from './specRegistry.js'
 
 const ACCESSED = '2026-10-09'
 
@@ -138,6 +139,61 @@ export const RULES = [
     label: 'On-image text is not indexed by search',
     detail: 'Amazon states text inside images is not read by search engines or screen readers, so keyword-bearing image text is not an SEO play.',
     source: 'AMAZON_REQUIREMENTS', accessed: ACCESSED, dateSensitive: true,
+  },
+  // ── Phase 2 rules (2026-10-10), from research/design-studio Tracks B + E ──
+  {
+    id: 'store-safe-zone', level: 'flag', scope: 'Amazon Store', kind: 'layout',
+    label: 'Important content sits inside the Store safe zone',
+    detail: 'Store heroes are cropped 16% each side below 1500px wide and the brand logo covers a further 18% of the left; image tiles with link titles obscure ~19% (rectangle) or ~12% (square) at the bottom.',
+    source: 'stores-hero / stores-content', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'store-no-embedded-text', level: 'flag', scope: 'Amazon Store', kind: 'copy',
+    label: 'Text is a Store text field, not baked into the image',
+    detail: 'Amazon does not encourage embedded image text because it is unreadable by external search engines and screen readers. Use the Image with text tile.',
+    source: 'stores-content', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'sbv-video-spec', level: 'block', scope: 'Amazon Ads', kind: 'video',
+    label: 'Sponsored Brands video meets every published spec',
+    detail: 'Duration 6-45s, 16:9 square pixel (or 9:16 vertical), MP4/MOV, H.264/H.265 Main or Baseline, 23.976-30fps, min 1 Mbps video, audio PCM/AAC/MP3 at min 96 kbps and 44.1 kHz, 500 MB cap.',
+    source: 'sponsored-brands-video / sbv API guide', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'sbv-text-safe-area', level: 'flag', scope: 'Amazon Ads', kind: 'layout',
+    label: 'No text in the bottom-right corner of the video',
+    detail: 'On-screen text must be legible on mobile and must not enter the bottom-right corner or the platform UI strip.',
+    source: 'sponsored-brands-video', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'ai-people-disclosure', level: 'flag', scope: 'all', kind: 'policy',
+    label: 'Photorealistic AI people are disclosed',
+    detail: 'A+ Content requires the IPTC keyword contains-synthetic-performer in dc:subject (XMP), or the AI-generated people checkbox at upload, when an image contains photorealistic AI-generated people.',
+    source: 'A+ content guidelines (GW8U76SSNTRTBX7)', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'brand-registry-not-a-mockup', level: 'flag', scope: 'all', kind: 'policy',
+    label: 'Generated mockups are never used as Brand Registry proof',
+    detail: 'Brand Registry enrollment requires an actual photo; mock-ups and digitally altered product images are not valid proof of IP ownership and may cause removal from the program.',
+    source: 'Brand Registry Application Guide', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'aplus-alt-text', level: 'block', scope: 'Amazon A+', kind: 'copy',
+    label: 'Every A+ image module has descriptive alt text',
+    detail: 'Alt text is a required field; alt text that does not describe the image for screen-reader users can result in content rejection.',
+    source: 'A+ content guidelines (GW8U76SSNTRTBX7)', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'aplus-file-size', level: 'block', scope: 'Amazon A+', kind: 'size',
+    label: 'A+ image is under 2 MB and RGB',
+    detail: 'Individual A+ files must stay under 2 MB, be RGB (CMYK is not supported), and be at least 72 dpi. Animated GIFs are prohibited.',
+    source: 'A+ content guidelines (GW8U76SSNTRTBX7)', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'ad-char-caps', level: 'block', scope: 'ads', kind: 'copy',
+    label: 'Ad copy respects the published character caps',
+    detail: 'Headline 50 chars (30 JP), brand name 25, Amazon DSP body text 100, disclaimer 60, CTA under 30 chars with no punctuation.',
+    source: 'ads overview / brand profile policy', accessed: '2026-10-10', dateSensitive: true,
   },
 ]
 
@@ -315,6 +371,101 @@ export function checkCompliance(doc, ctx = {}) {
   push('image-text-not-indexed', 'flag',
     'Keyword-bearing text inside this image is not indexed by Amazon search — treat it as a legibility feature, not an SEO one.')
 
+  // ── Phase 2 checks (2026-10-10) ─────────────────────────────────────────
+  const isStore = /Store/i.test(doc.channel || '')
+  const isSbv = doc.media === 'video' && /Ads/i.test(doc.channel || '')
+
+  if (isStore) {
+    // Store safe zone: content-bearing layers must sit inside keepIn and clear
+    // of every keepOut box. We test the centre point plus the box overlap.
+    const zones = SAFE_ZONES[fmt?.safe] || null
+    if (zones) {
+      const content = [...textLayers, ...badgeLayers]
+      const hits = []
+      for (const l of content) {
+        const cx = (l.x || 0) + (l.w || 0) / 2
+        const cy = (l.y || 0) + (l.h || 0) / 2
+        for (const z of zones.keepOut || []) {
+          if (cx >= z.x && cx <= z.x + z.w && cy >= z.y && cy <= z.y + z.h) {
+            hits.push(`"${String(l.text || l.kind).slice(0, 20)}" in ${z.label}`)
+          }
+        }
+      }
+      push('store-safe-zone', hits.length ? 'flag' : 'pass',
+        hits.length ? `Content inside an obscured/cropped zone: ${hits.join('; ')}.` : `Content clears the ${zones.note}.`)
+    } else {
+      push('store-safe-zone', 'pass', 'No safe zone defined for this Store format.')
+    }
+    push('store-no-embedded-text', textLayers.length ? 'flag' : 'pass',
+      textLayers.length
+        ? `${textLayers.length} text layer(s) baked into the image. Amazon recommends the Image with text tile instead, because embedded text is unreadable by external search engines and screen readers.`
+        : 'No embedded image text — use the Store text tile for copy.')
+  }
+
+  if (isSbv) {
+    const v = AMAZON_CAPS.video
+    const dur = Number(ctx.durationSeconds || 0)
+    const dimOk = fmt ? (!fmt.allowedDims || fmt.allowedDims.some(([w, h]) => w === doc.w && h === doc.h)) : false
+    const durOk = dur ? (dur >= v.durationMin && dur <= v.durationMax) : null
+    const bits = [
+      `Dimensions ${doc.w}×${doc.h}${dimOk ? ' OK' : ' — not in the published set'}`,
+      dur ? `duration ${dur}s${durOk ? ' OK' : ` — must be ${v.durationMin}-${v.durationMax}s`}` : 'duration not supplied',
+      `formats ${v.formats.join('/')}, codecs ${v.codecs.join('/')}, ${v.videoBitrateMinMbps} Mbps+, audio ${v.audioBitrateMinKbps} kbps / ${(v.audioSampleMinHz / 1000).toFixed(1)} kHz`,
+    ]
+    push('sbv-video-spec', dimOk && durOk !== false ? 'pass' : (durOk === false || !dimOk ? 'block' : 'flag'), bits.join('; ') + '.')
+    const zones = fmt?.safe ? SAFE_ZONES[fmt.safe] : null
+    const corner = (zones?.keepOut || []).find(z => /bottom-right/i.test(z.label))
+    let inCorner = false
+    if (corner) {
+      inCorner = textLayers.some(l => {
+        const cx = (l.x || 0) + (l.w || 0) / 2
+        const cy = (l.y || 0) + (l.h || 0) / 2
+        return cx >= corner.x && cy >= corner.y
+      })
+    }
+    push('sbv-text-safe-area', inCorner ? 'flag' : 'pass',
+      inCorner ? 'Text sits in the bottom-right corner, which Amazon prohibits for SB video.' : 'Text clears the prohibited bottom-right corner.')
+  }
+
+  // AI disclosure: a document that flags synthetic people must carry the tag.
+  const marksSynthetic = !!doc.meta?.syntheticPeople
+  const hasTag = !!doc.meta?.syntheticPerformerTag
+  if (marksSynthetic || hasTag) {
+    push('ai-people-disclosure', hasTag ? 'pass' : 'flag',
+      hasTag
+        ? `Disclosure metadata will be written: ${AI_POLICY.syntheticPersonIptc.keyword} in ${AI_POLICY.syntheticPersonIptc.field}.`
+        : `This document declares photorealistic AI people but the ${AI_POLICY.syntheticPersonIptc.keyword} tag is not set. Amazon may require disclosure.`)
+  } else {
+    push('ai-people-disclosure', 'flag',
+      `If this asset contains photorealistic AI-generated people, Amazon requires the ${AI_POLICY.syntheticPersonIptc.keyword} tag (or the A+ upload checkbox). No people are declared on this document.`)
+  }
+
+  // Brand Registry: every generated mockup is marketing-only.
+  push('brand-registry-not-a-mockup', 'flag',
+    AI_POLICY.brandRegistryEnrollment.rule)
+
+  // A+ specific: alt text and file size.
+  if (isAplus) {
+    const imgs = [...productLayers, ...shapeLayers].filter(l => l.kind === 'product')
+    const missingAlt = (doc.meta?.altText ? false : true) || imgs.some(l => !l.altText && !doc.meta?.altText)
+    push('aplus-alt-text', missingAlt ? 'block' : 'pass',
+      missingAlt ? 'No alt text recorded for this A+ module. Alt text is required and must describe the image for screen readers.' : 'Alt text present.')
+    const bytes = Number(ctx.exportBytes || 0)
+    const tooBig = bytes > AMAZON_CAPS.aplus.maxBytes
+    push('aplus-file-size', tooBig ? 'block' : 'pass',
+      bytes ? (tooBig ? `Export is ${(bytes / 1048576).toFixed(2)} MB — A+ images must stay under 2 MB.` : `Export ${(bytes / 1048576).toFixed(2)} MB is within the 2 MB A+ cap.`) : 'File size not measured yet (measured at export).')
+  }
+
+  // Ad character caps.
+  if (isAd) {
+    const caps = AMAZON_CAPS.ads
+    const over = []
+    if (headline && headline.length > caps.headlineMaxChars) over.push(`headline ${headline.length}/${caps.headlineMaxChars}`)
+    if (cta && cta.length >= caps.ctaMaxChars) over.push(`CTA ${cta.length}/${caps.ctaMaxChars - 1}`)
+    push('ad-char-caps', over.length ? 'block' : 'pass',
+      over.length ? `Over the published caps: ${over.join(', ')}.` : 'Headline and CTA are within the published caps.')
+  }
+
   // ── cross-surface consistency ──
   if (ctx.listingCopy) {
     const listing = String(ctx.listingCopy).toLowerCase()
@@ -348,5 +499,13 @@ export function rulesInScope(doc) {
   if (!doc) return RULES
   const isMain = doc.formatId === 'amz-main'
   const isAd = /ad/i.test(doc.channel || '') || /Ad/i.test(doc.family || '')
-  return RULES.filter(r => r.scope === 'all' || (r.scope === 'amz-main' && isMain) || (r.scope === 'ads' && isAd))
+  const isAplus = /A\+/i.test(doc.channel || '')
+  const isStore = /Store/i.test(doc.channel || '')
+  return RULES.filter(r =>
+    r.scope === 'all' ||
+    (r.scope === 'amz-main' && isMain) ||
+    (r.scope === 'ads' && isAd) ||
+    (r.scope === 'Amazon A+' && isAplus) ||
+    (r.scope === 'Amazon Store' && isStore)
+  )
 }
