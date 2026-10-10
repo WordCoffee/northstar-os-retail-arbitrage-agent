@@ -275,6 +275,124 @@ async function main() {
     ok('an asset that needs no marker reports not-required, never a false pass')
   } else no(`marker steps reported ${st['marker-embed']}/${st['marker-verify']}`)
 
+  // ── ITEM 3: the upload check, driven for real ───────────────────────────
+  // Produce a TAGGED png and an UNTAGGED png in the page, then feed both
+  // through the real file input.
+  const uploadFixtures = await page.evaluate(async (fx) => {
+    const { disclosure } = window.__northstarStudioEngine
+    const canvas = document.createElement('canvas')
+    canvas.width = 1200; canvas.height = 1200
+    const ctx = canvas.getContext('2d')
+    const load = (src) => new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.src = src })
+    ctx.drawImage(await load(fx.product), 0, 0, 1200, 1200)
+    const untagged = await new Promise(r => canvas.toBlob(b => r(b), 'image/png'))
+    const rawBytes = new Uint8Array(await untagged.arrayBuffer())
+    const taggedBytes = disclosure.embedDisclosure(rawBytes, 'image/png', [disclosure.DISCLOSURE_KEYWORD])
+    const b64 = (u8) => btoa(String.fromCharCode.apply(null, u8))
+    return { tagged: b64(taggedBytes), untagged: b64(rawBytes) }
+  }, fixtures)
+
+  const libTab = await page.$('.ss-leftrail-tab:has-text("Library")')
+  if (libTab) ok('the Library tab is present in the compositing surface')
+  else no('no Library tab')
+
+  // Declare the classification FIRST: the requirement is derived from the
+  // asset's own disclosure state, so an unanswered asset legitimately reports
+  // not-required. This is the real workflow order.
+  const classSel = await page.$('[data-testid="surface-people-class"]')
+  if (classSel) {
+    await classSel.selectOption('ai-photoreal')
+    await page.waitForTimeout(400)
+    ok('the surface collects the people classification (asset-level, where the asset is made)')
+  } else no('the surface has no people-classification control')
+
+  // The identifiability gate must be reachable from the surface too, and must
+  // actually BLOCK with its explanation rather than silently toggling.
+  const idCtl = await page.$('[data-testid="surface-identifiable"]')
+  if (idCtl) {
+    await idCtl.check()
+    await page.waitForTimeout(400)
+    const status = await page.$eval('[data-testid="disclosure-status"]', e => e.textContent).catch(() => '')
+    if (/BLOCKED/i.test(status) && /right-of-publicity|consent/i.test(status)) {
+      ok('ticking identifiability shows the block and explains it is a consent matter')
+    } else no('identifiability did not surface its block explanation', status.slice(0, 120))
+    await idCtl.uncheck()
+    await page.waitForTimeout(300)
+  } else no('the surface has no identifiability control')
+
+  if (libTab) {
+    await libTab.click()
+    await page.waitForTimeout(400)
+    if (await page.$('[data-testid="recheck-library"]')) ok('the re-check library panel renders')
+    else no('no re-check library panel')
+
+    // Tagged -> marker-present
+    await page.setInputFiles('[data-testid="upload-check-input"]', {
+      name: 'live-listing.png', mimeType: 'image/png', buffer: Buffer.from(uploadFixtures.tagged, 'base64'),
+    })
+    await page.waitForTimeout(700)
+    const taggedRes = await page.$eval('[data-testid="upload-check-result"]', e => e.textContent).catch(() => '')
+    if (/marker-present/.test(taggedRes)) ok('upload check reads a tagged live image as marker-present')
+    else no('tagged live image did not report marker-present', taggedRes.slice(0, 120))
+
+    // Untagged -> marker-missing with the warning
+    await page.setInputFiles('[data-testid="upload-check-input"]', {
+      name: 'live-listing-lost.png', mimeType: 'image/png', buffer: Buffer.from(uploadFixtures.untagged, 'base64'),
+    })
+    await page.waitForTimeout(700)
+    const missRes = await page.$eval('[data-testid="upload-check-result"]', e => e.textContent).catch(() => '')
+    if (/marker-missing/.test(missRes)) ok('upload check WARNS on a live image that lost the marker')
+    else no('untagged live image did not warn', missRes.slice(0, 120))
+    if (/re-upload/i.test(missRes)) ok('the warning tells the operator what to do')
+    else no('the warning does not state the fix')
+
+    // ── ITEM 4: the log records each check with its date ──────────────────
+    const logged = await page.evaluate(() => {
+      const raw = localStorage.getItem('ns-ds-recheck-log')
+      return raw ? JSON.parse(raw) : []
+    })
+    if (logged.length >= 2) ok(`the re-check log recorded ${logged.length} check(s)`)
+    else no(`expected at least 2 logged checks, got ${logged.length}`)
+    const hasDate = logged.every(e => !!e.checkedAt)
+    if (hasDate && logged.length) ok('every log entry carries the date of the check')
+    else no('a log entry is missing its date')
+    const surfaces = logged.map(e => e.surface)
+    if (surfaces.includes('upload-check')) ok('the log records which surface ran the check')
+    else no('the log does not record the surface')
+
+    // A failed check must be recorded as a failure, not smoothed to a pass.
+    const failedEntry = logged.find(e => e.verdict === 'marker-missing')
+    if (failedEntry && failedEntry.passed === false) ok('a failed check is logged as a failure')
+    else no('a failed check was not logged as a failure')
+
+    // ── The log survives a reload ─────────────────────────────────────────
+    await page.reload()
+    await page.waitForSelector('[data-testid="listing-images-workspace"]', { timeout: 12000 })
+    await page.waitForTimeout(600)
+    const after = await page.evaluate(() => {
+      const raw = localStorage.getItem('ns-ds-recheck-log')
+      return raw ? JSON.parse(raw) : []
+    })
+    if (after.length === logged.length) ok(`the log persisted across a reload (${after.length} entries)`)
+    else no(`log length changed across reload: ${logged.length} -> ${after.length}`)
+
+    // ── The cure window ───────────────────────────────────────────────────
+    const libTab2 = await page.$('.ss-leftrail-tab:has-text("Library")')
+    if (libTab2) {
+      await libTab2.click()
+      await page.waitForTimeout(400)
+      await page.fill('[data-testid="notice-date"]', '2026-10-08')
+      await page.waitForTimeout(400)
+      const cure = await page.$('[data-testid="cure-window"]')
+      const cureText = cure ? await cure.textContent() : ''
+      if (cure && /day/i.test(cureText)) ok(`the notice-and-cure window renders (${cureText.trim().slice(0, 60)})`)
+      else no('no cure window rendered', cureText.slice(0, 80))
+      const recheckBtn = await page.$('[data-testid^="recheck-"]')
+      if (recheckBtn) ok('a per-entry "re-check exported ad" action is present')
+      else no('no per-entry re-check action')
+    }
+  }
+
   // ── The page errors check ──────────────────────────────────────────────
   if (errors.length === 0) ok('no console or page errors during the whole run')
   else no(`${errors.length} console/page error(s)`, errors.slice(0, 3).join(' | ').slice(0, 200))

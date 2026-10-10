@@ -134,3 +134,42 @@ Phase 4 remainder: the other eight sections still render the format and the
 pre-flight but do not embed the compositing surface. Next: embed it in A+,
 Storefront, Ads and the rest, then arm the local ComfyUI pipeline behind an
 explicit Run with a cost preview.
+
+### 3 + 4 UI GAP CLOSED (follow-up pass)
+The first Phase 4 pass shipped items 3 and 4 as ENGINE functions only. A
+verification pass found ZERO page-level references to `verifyUploadedAsset`,
+`cureWindow`, `recheckEntry` or `recheckSummary` - the directive asks for a
+seller-facing step and a Library action, so the gap was real and is now closed.
+
+`CompositingSurface` gained a **Library** tab:
+- **Upload check** - a file input that loads the LIVE image back and runs the
+  real marker reader. Verified in the browser: a tagged file reports
+  marker-present; an untagged file WARNS and names the fix.
+- **Re-check log** - every check is logged with its date, the verdict, the
+  surface that ran it and whether it passed. Persisted to localStorage and
+  verified to survive a reload. A failed check is logged as a failure.
+- **Per-entry "re-check exported ad"** action, plus an optional notice date
+  that renders the 5-day cure window.
+- Successful exports are recorded in the library, so there is a real asset for
+  the re-check action to act on.
+
+The surface also gained an **AI-generated people disclosure** inspector section
+(classification, marker toggle, studio-generated flag, identifiability, export
+filename). Without it the surface could only ever answer "not-required" for the
+upload check - a false pass on an asset that needs the marker. That was the bug
+the new harness caught, and the requirement is now derived from the asset's own
+classification state rather than an assumption.
+
+### Verification - 9 harnesses (final)
+| # | Harness | Result | Exit |
+|---|---|---|---|
+| 1 | `test-compliance-rules.mjs` | 106 passed, 0 failed | 0 |
+| 2 | `test-disclosure.mjs` | 65 passed, 0 failed | 0 |
+| 3 | `test-fidelity-freshness.mjs` | 34 passed, 0 failed | 0 |
+| 4 | `test_design_studio_isolation.py` | 25 passed, 0 failed | 0 |
+| 5 | `test_login_throttle_bypass.py` | 16 passed, 0 failed | 0 |
+| 6 | `check-jsx-imports.py` | 95 files, 0 / 0 | 0 |
+| 7 | `test-compositing.cjs` | **35 passed, 0 failed, 0 FATAL** | 0 |
+| 8 | `verify-design-studio.cjs` | 67 passed, 0 failed, 0 FATAL | 0 |
+| 9a | `test-migration-e2e.cjs` | 12 passed, 0 failed, 0 FATAL | 0 |
+| 9b | `verify-operator-smoke.cjs` | 11 passed, 0 failed, 21/21 rail | 0 |

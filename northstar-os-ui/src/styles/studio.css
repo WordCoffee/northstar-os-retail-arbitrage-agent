@@ -616,3 +616,7 @@
   width: 100%; height: auto; border: 1px solid var(--divider);
   border-radius: var(--radius); background: #fff; display: block;
 }
+
+/* Library re-check action styled as a button wrapping a hidden file input */
+.ss-rule label.btn { cursor: pointer; }
+.cs-embed .ss-shell-mid { grid-template-columns: 236px minmax(0, 1fr) 320px; }

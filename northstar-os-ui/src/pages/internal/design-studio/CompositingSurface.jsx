@@ -24,14 +24,31 @@ import { SAFE_ZONES, specById } from '../../../studio/engine/specRegistry.js'
 import { renderDoc, exportComposite, summariseExport, compareStepStatus } from '../../../studio/engine/compose.js'
 import { DEFAULT_THRESHOLD } from '../../../studio/engine/fidelity.js'
 import { checkCompliance } from '../../../studio/engine/compliance.js'
+import {
+  verifyUploadedAsset, recheckEntry, recheckSummary, cureWindow, NOTICE_AND_CURE_DAYS,
+  DISCLOSURE_KEYWORD, classifyDisclosure,
+} from '../../../studio/engine/disclosure.js'
 
 const LEFT_TABS = [
   { id: 'layers', label: 'Layers', icon: 'layers', note: 'Every layer is a real, editable object.' },
   { id: 'reference', label: 'Reference', icon: 'lock', note: 'Lock the real product photograph. Without a lock there is nothing to diff.' },
   { id: 'add', label: 'Add', icon: 'plus', note: 'Add the product photograph, a shape, or vector text.' },
+  { id: 'library', label: 'Library', icon: 'stack', note: 'Export history, the upload check and the re-check log.' },
 ]
 
 const uid = (p) => `${p}-${Math.random().toString(36).slice(2, 8)}`
+
+// Local persistence for the re-check log. It is the operator's own record of
+// when they verified a live asset, so it survives a reload.
+const LOG_KEY = 'ns-ds-recheck-log'
+const NOTICE_KEY = 'ns-ds-notices'
+
+function readJson(key, fallback) {
+  try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback } catch { return fallback }
+}
+function writeJson(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)) } catch { /* storage unavailable */ }
+}
 
 export default function CompositingSurface({ specId = 'amz-main', initialLayers = [], onExported }) {
   const { toast } = useToast()
@@ -62,6 +79,33 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
 
   const [reference, setReference] = useState(null)   // { dataUrl, name }
   const [confirm, setConfirm] = useState(null)        // { at, by }
+  const [log, setLog] = useState(() => readJson(LOG_KEY, []))
+  const [notices, setNotices] = useState(() => readJson(NOTICE_KEY, {}))
+  const [uploadResult, setUploadResult] = useState(null)
+  const [uploadName, setUploadName] = useState('')
+  // The surface is where the asset is MADE, so it owns the disclosure fields
+  // for that asset. Without them the upload check could only ever answer
+  // "not-required", which is a false pass on an asset that needs the marker.
+  const [dm, setDm] = useState({
+    peopleClass: '', studioGeneratedPerson: false, syntheticPerformerTag: true,
+    identifiableIndividual: false, filename: '',
+  })
+
+  const appendLog = useCallback((entry) => {
+    setLog(prev => {
+      const next = [entry, ...prev].slice(0, 200)
+      writeJson(LOG_KEY, next)
+      return next
+    })
+  }, [])
+
+  const setNotice = useCallback((key, iso) => {
+    setNotices(prev => {
+      const next = { ...prev, [key]: iso || null }
+      writeJson(NOTICE_KEY, next)
+      return next
+    })
+  }, [])
 
   const workingDoc = useMemo(() => ({
     ...doc,
@@ -70,10 +114,10 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
       fidelityMode: reference ? 'locked' : 'placed',
       referenceDataUrl: reference ? reference.dataUrl : undefined,
       compareConfirmed: confirm || undefined,
-      peopleClass: '',
+      ...dm,
       ...(doc.meta || {}),
     },
-  }), [doc, layers, reference, confirm])
+  }), [doc, layers, reference, confirm, dm])
 
   const report = useMemo(() => checkCompliance(workingDoc), [workingDoc])
 
@@ -163,6 +207,19 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
       })
       setLastExport({ ...result, summary: summariseExport(result), at: new Date().toISOString() })
       if (result.ok && result.bytes) {
+        // Record the export in the library so the "re-check exported ad" action
+        // has a real asset to act on, with the marker requirement it shipped under.
+        const assetKey = workingDoc.meta.filename || `export-${Date.now()}`
+        appendLog({
+          assetId: assetKey,
+          checkedAt: new Date().toISOString(),
+          user: 'operator',
+          verdict: 'exported',
+          passed: true,
+          tagRequired: result.steps['marker-embed']?.status === 'pass',
+          surface: 'export',
+          detail: `Exported ${result.mime}, ${result.bytes.length} bytes. ${result.steps['marker-verify']?.detail || ''}`,
+        })
         const url = URL.createObjectURL(new Blob([result.bytes], { type: result.mime }))
         const a = document.createElement('a')
         a.href = url
@@ -179,10 +236,52 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
     } finally {
       setExporting(false)
     }
-  }, [workingDoc, layers, toast, onExported])
+  }, [workingDoc, layers, toast, onExported, appendLog])
 
   const cmp = compareStepStatus(workingDoc)
   const exportBlocked = report.verdict === 'block' || !cmp.satisfied
+
+  // ── Upload check: load the LIVE image back and read the marker ──────────
+  // Amazon reprocesses uploaded media and the tag can be lost, so the only
+  // honest check is to read what is actually serving. The verdict is logged
+  // with its date; a check that did not run is never logged.
+  const runUploadCheck = useCallback(async (file) => {
+    if (!file) return
+    const buf = new Uint8Array(await file.arrayBuffer())
+    const mime = file.type || 'image/png'
+    // Derive the requirement from THIS asset's own disclosure state, not from a
+    // hard-coded assumption. `not-required` is a real answer only when the asset
+    // genuinely does not need the marker.
+    const cls = classifyDisclosure(workingDoc)
+    const requires = cls.tagRequired === true
+    const result = verifyUploadedAsset(buf, { mime, tagRequired: requires, label: file.name })
+    setUploadResult({ ...result, classification: cls.status, tagRequired: requires })
+    setUploadName(file.name)
+    const entryRes = recheckEntry({
+      assetId: workingDoc.meta.filename || file.name,
+      result,
+      user: 'operator',
+      at: new Date().toISOString(),
+    })
+    if (entryRes.ok) {
+      appendLog({ ...entryRes.entry, tagRequired: requires, classification: cls.status, surface: 'upload-check' })
+    }
+    toast(result.ok ? `Upload check passed: ${result.detail}` : `Upload check WARNING: ${result.detail}`, result.ok ? 'info' : 'warn')
+  }, [workingDoc, appendLog, toast])
+
+  // ── Re-check an exported asset, from the library ────────────────────────
+  const runRecheck = useCallback(async (file, assetKey) => {
+    if (!file) return
+    const buf = new Uint8Array(await file.arrayBuffer())
+    const result = verifyUploadedAsset(buf, { mime: file.type || 'image/png', tagRequired: true, label: file.name })
+    setUploadResult(result)
+    setUploadName(file.name)
+    const entryRes = recheckEntry({ assetId: assetKey || file.name, result, user: 'operator', at: new Date().toISOString() })
+    if (entryRes.ok) appendLog({ ...entryRes.entry, tagRequired: true, surface: 'library-recheck' })
+    toast(result.ok ? 'Re-check passed.' : `Re-check WARNING: ${result.detail}`, result.ok ? 'info' : 'warn')
+  }, [appendLog, toast])
+
+  const logSummary = useMemo(() => recheckSummary(log), [log])
 
   return (
     <div className="cs-surface" data-testid="compositing-surface">
@@ -240,6 +339,71 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
               <button className="btn btn-sm" onClick={addShape}><Icon name="shapes" size={12} /> Add shape</button>
             </div>
           )}
+
+          {tab === 'library' && (
+            <div className="stack" style={{ gap: 12 }} data-testid="recheck-library">
+              {/* 3. UPLOAD CHECK */}
+              <div className="ss-rule">
+                <div className="ss-rule-label">Upload check</div>
+                <div className="ss-rule-detail">
+                  Load the image that is actually live on Amazon and read it back. Amazon reprocesses
+                  uploaded media and the marker can be lost, so reading the served file is the only check
+                  that means anything.
+                </div>
+                <label className="ss-field" style={{ marginTop: 6 }}>
+                  <input type="file" accept="image/*" data-testid="upload-check-input"
+                    onChange={e => runUploadCheck(e.target.files?.[0])} />
+                </label>
+                {uploadResult && (
+                  <div className={`ss-rule ss-rule-${uploadResult.ok ? 'pass' : 'flag'}`} data-testid="upload-check-result" style={{ marginTop: 6 }}>
+                    <div className="ss-rule-label">{uploadName || 'file'} - {uploadResult.verdict}</div>
+                    <div className="ss-rule-detail">{uploadResult.detail}</div>
+                  </div>
+                )}
+              </div>
+
+              {/* 4. RE-CHECK LIBRARY + NOTICE-AND-CURE */}
+              <div className="ss-rule">
+                <div className="ss-rule-label">Re-check log</div>
+                <div className="ss-rule-detail">
+                  {logSummary.checks === 0
+                    ? 'No checks recorded yet. Every check is logged with its date.'
+                    : `${logSummary.checks} check(s). Last ${new Date(logSummary.lastCheckedAt).toLocaleString()} - ${logSummary.lastVerdict}${logSummary.everFailed ? ' (has failed at least once)' : ''}.`}
+                </div>
+              </div>
+
+              <label className="ss-field">
+                <span className="ss-field-label">Date a notice was received (optional)</span>
+                <input type="date" data-testid="notice-date"
+                  onChange={e => setNotice(workingDoc.meta.filename || 'current', e.target.value ? new Date(e.target.value).toISOString() : null)} />
+                <span className="ss-field-note">
+                  A publisher or distributor put on notice of an undisclosed synthetic performer has {NOTICE_AND_CURE_DAYS} days to remove the ad or comply.
+                </span>
+              </label>
+              {notices[workingDoc.meta.filename || 'current'] && (
+                <div className="ss-rule ss-rule-flag" data-testid="cure-window">
+                  <div className="ss-rule-detail">{cureWindow(notices[workingDoc.meta.filename || 'current']).detail}</div>
+                </div>
+              )}
+
+              {/* Per-entry actions: re-check an exported ad */}
+              <div className="stack" style={{ gap: 6 }}>
+                {log.length === 0 && <div className="text-low" style={{ fontSize: 11 }}>Nothing to re-check yet.</div>}
+                {log.slice(0, 12).map((e, i) => (
+                  <div key={i} className={`ss-rule ss-rule-${e.passed ? 'pass' : 'flag'}`}>
+                    <div className="ss-rule-label">{e.assetId || 'unnamed'} - {e.verdict}</div>
+                    <div className="ss-rule-source">{new Date(e.checkedAt).toLocaleString()} - {e.surface || 'check'}</div>
+                    <label className="btn btn-sm" style={{ marginTop: 6, display: 'inline-block' }}>
+                      Re-check exported ad
+                      <input type="file" accept="image/*" style={{ display: 'none' }}
+                        data-testid={`recheck-${i}`}
+                        onChange={ev => runRecheck(ev.target.files?.[0], e.assetId)} />
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </StudioLeftRail>
 
         <StudioCanvas
@@ -260,8 +424,46 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
             </div>
           </InspectorSection>
 
-          <InspectorSection title="Compare to reference">
-            <div className={`ss-rule ss-rule-${cmp.satisfied ? 'pass' : 'incomplete'}`}>
+          <InspectorSection title="AI-generated people disclosure">
+            <label className="ss-field">
+              <span className="ss-field-label">People in this asset</span>
+              <select value={dm.peopleClass} data-testid="surface-people-class"
+                onChange={e => setDm(v => ({ ...v, peopleClass: e.target.value }))}>
+                <option value="">- not answered -</option>
+                <option value="no-people">No people in this asset</option>
+                <option value="real-only">Real people only</option>
+                <option value="real-ai-altered">Real people, altered with AI tools</option>
+                <option value="ai-photoreal">Entirely AI-generated photorealistic people</option>
+                <option value="non-photoreal">Non-photorealistic or illustrated people</option>
+                <option value="expressive-work">Character from a film, TV, game or other expressive work</option>
+              </select>
+            </label>
+            <label className="ss-field ss-field-toggle" style={{ marginTop: 8 }}>
+              <input type="checkbox" checked={dm.syntheticPerformerTag}
+                onChange={e => setDm(v => ({ ...v, syntheticPerformerTag: e.target.checked }))} />
+              <span>Write the XMP marker ({DISCLOSURE_KEYWORD})</span>
+            </label>
+            <label className="ss-field ss-field-toggle">
+              <input type="checkbox" checked={dm.studioGeneratedPerson}
+                onChange={e => setDm(v => ({ ...v, studioGeneratedPerson: e.target.checked }))} />
+              <span>The studio generated a person here</span>
+            </label>
+            <label className="ss-field ss-field-toggle">
+              <input type="checkbox" checked={dm.identifiableIndividual} data-testid="surface-identifiable"
+                onChange={e => setDm(v => ({ ...v, identifiableIndividual: e.target.checked }))} />
+              <span>Intended to look like a real, identifiable individual</span>
+            </label>
+            <label className="ss-field" style={{ marginTop: 8 }}>
+              <span className="ss-field-label">Export filename</span>
+              <input type="text" value={dm.filename} placeholder="B01ABCDEFG.main.png"
+                onChange={e => setDm(v => ({ ...v, filename: e.target.value }))} />
+            </label>
+            <div className="ss-field-note" style={{ marginTop: 6 }} data-testid="disclosure-status">
+              {classifyDisclosure(workingDoc).note}
+            </div>
+          </InspectorSection>
+
+          <InspectorSection title="Compare to reference">            <div className={`ss-rule ss-rule-${cmp.satisfied ? 'pass' : 'incomplete'}`}>
               <div className="ss-rule-label">{cmp.required ? (cmp.satisfied ? 'Compared' : 'Required before export') : 'Not required'}</div>
               <div className="ss-rule-detail">{cmp.detail}</div>
             </div>
