@@ -315,6 +315,25 @@ export const RULES = [
     detail: 'Amazon documents the listing image filename pattern ID.VARIANT.ext — an identifier, a dot, a variant, a dot, and an accepted extension.',
     source: 'img-guide', accessed: '2026-10-10', dateSensitive: true,
   },
+  // ── On-image text (directive item 8) ─────────────────────────────────────
+  {
+    id: 'text-outside-frame', level: 'block', scope: 'all', kind: 'layout',
+    label: 'No text runs outside the canvas',
+    detail: 'A text layer that extends past the frame is cut off in the exported file, which is never what the operator approved.',
+    source: 'operator policy', accessed: '2026-10-10', dateSensitive: false,
+  },
+  {
+    id: 'text-overflows-safe-zone', level: 'flag', scope: 'all', kind: 'layout',
+    label: 'Text stays clear of the obscured zones',
+    detail: 'On this format part of the image is cropped or covered: Store heroes lose the outer edges to a crop and the brand logo, tile link titles cover a bottom band, and Sponsored Brands video prohibits text in the bottom-right corner. Text inside a keep-out zone is invisible or truncated after upload.',
+    source: 'stores-hero / stores-content / sbv', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'text-legibility', level: 'flag', scope: 'all', kind: 'layout',
+    label: 'On-image text is legible at export size',
+    detail: 'Amazon requires on-image text to be legible on a phone. Text under a minimum rendered cap height becomes unreadable at thumbnail size, which is where most shoppers see it first.',
+    source: 'sbv spec (mobile legibility) / aplus-guide', accessed: '2026-10-10', dateSensitive: true,
+  },
 ]
 
 export const RULES_BY_ID = Object.fromEntries(RULES.map(r => [r.id, r]))
@@ -373,6 +392,9 @@ const RULE_NEEDS = {
   'dpi-min-72': 'nothing',
   'color-space-rgb': 'nothing',
   'filename-pattern': 'nothing',
+  'text-outside-frame': 'artwork',
+  'text-overflows-safe-zone': 'artwork',
+  'text-legibility': 'artwork',
   'ai-generated-people-disclosure': 'human',
 }
 
@@ -809,6 +831,63 @@ export function checkCompliance(doc, ctx = {}) {
       accessed: '2026-10-10',
       dateSensitive: false,
     })
+  }
+
+  // ── On-image text: geometry and legibility ──────────────────────────────
+  // Text is always a real vector layer here, never model-generated pixels, so
+  // its box and its size are both knowable and both checkable.
+  {
+    const textOnly = doc.layers.filter(l => l.kind === 'text' && l.visible !== false && String(l.text || '').trim())
+
+    const outside = textOnly.filter(l =>
+      (l.x ?? 0) < -0.001 || (l.y ?? 0) < -0.001 ||
+      ((l.x ?? 0) + (l.w ?? 0)) > 1.001 || ((l.y ?? 0) + (l.h ?? 0)) > 1.001)
+    push('text-outside-frame', outside.length ? 'block' : 'pass',
+      outside.length
+        ? `${outside.length} text layer(s) extend past the canvas and will be cut off: ${outside.map(l => `"${String(l.text).slice(0, 18)}"`).join(', ')}.`
+        : (textOnly.length ? 'Every text layer sits inside the canvas.' : 'No text placed.'))
+
+    // Overlap against this format's documented keep-out zones.
+    const zoneId = specRow?.safe || fmt?.safe
+    const zones = zoneId ? SAFE_ZONES[zoneId] : null
+    const hits = []
+    if (zones) {
+      for (const l of textOnly) {
+        const cx = (l.x ?? 0) + (l.w ?? 0) / 2
+        const cy = (l.y ?? 0) + (l.h ?? 0) / 2
+        const corners = [
+          [l.x ?? 0, l.y ?? 0],
+          [(l.x ?? 0) + (l.w ?? 0), l.y ?? 0],
+          [l.x ?? 0, (l.y ?? 0) + (l.h ?? 0)],
+          [(l.x ?? 0) + (l.w ?? 0), (l.y ?? 0) + (l.h ?? 0)],
+          [cx, cy],
+        ]
+        for (const z of zones.keepOut || []) {
+          const inZone = corners.some(([px, py]) =>
+            px >= z.x - 0.001 && px <= z.x + z.w + 0.001 && py >= z.y - 0.001 && py <= z.y + z.h + 0.001)
+          if (inZone) {
+            hits.push(`"${String(l.text).slice(0, 18)}" in ${z.label}`)
+            break
+          }
+        }
+      }
+      push('text-overflows-safe-zone', hits.length ? 'flag' : 'pass',
+        hits.length
+          ? `Text inside an obscured or cropped zone: ${hits.join('; ')}. It will be covered or cut after upload.`
+          : `Every text layer clears the ${zones.note}.`)
+    } else {
+      push('text-overflows-safe-zone', 'pass', 'No safe zone is recorded for this format, so only the frame edge is checked.')
+    }
+
+    // Legibility: normalised `size` against the exported raster height.
+    const MIN_PX = 18
+    const small = textOnly
+      .map(l => ({ l, px: Math.round((l.size ?? 0.03) * (doc.h || 1000)) }))
+      .filter(x => x.px < MIN_PX)
+    push('text-legibility', small.length ? 'flag' : 'pass',
+      small.length
+        ? `${small.length} text layer(s) render below ${MIN_PX}px on this canvas: ${small.map(x => `"${String(x.l.text).slice(0, 14)}" at ${x.px}px`).join(', ')}. At thumbnail size this is unreadable.`
+        : (textOnly.length ? `Every text layer renders at ${MIN_PX}px or above on this canvas.` : 'No text placed.'))
   }
 
   // A format with no captured source can never be exported. This is what stops

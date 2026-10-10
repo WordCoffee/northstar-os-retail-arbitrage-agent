@@ -101,11 +101,12 @@ async function main() {
         const vt = v ? (await v.textContent()).trim() : ''
         if (vt === 'Pre-flight pass') no(`${s.label}: EMPTY CANVAS SHOWED GREEN — coverage states are not working`)
         else ok(`${s.label}: empty canvas does not report green (${vt})`)
-        // Coverage counter must be present
-        const strip = await page.$('.ss-bottomstrip-actions')
-        const stripText = strip ? await strip.textContent() : ''
-        if (/rules decided/.test(stripText)) ok(`${s.label}: coverage counter shows "rules decided"`)
-        else no(`${s.label}: no coverage counter`, stripText.slice(0, 60))
+        // Coverage counter must be present somewhere in the workspace. With the
+        // compositing surface embedded there is more than one bottom strip, so
+        // check them all rather than only the first.
+        const stripTexts = await page.$$eval('.ss-bottomstrip-actions', els => els.map(e => e.textContent))
+        if (stripTexts.some(t => /rules decided/.test(t))) ok(`${s.label}: coverage counter shows "rules decided"`)
+        else no(`${s.label}: no coverage counter`, stripTexts.join(' | ').slice(0, 80))
         // Confidence label present
         const conf = await page.$$eval('.pill', els => els.map(e => e.textContent.trim()))
         if (conf.some(t => ['VERIFIED', 'REPORTED', 'UNSOURCED'].includes(t))) ok(`${s.label}: specs carry a VERIFIED/REPORTED/UNSOURCED label`)

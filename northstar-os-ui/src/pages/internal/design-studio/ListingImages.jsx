@@ -19,14 +19,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useToast } from '../../../components/ToastContext.jsx'
 import Icon from '../../../components/Icon.jsx'
 import {
-  StudioTopBar, StudioLeftRail, StudioCanvas, StudioInspector, InspectorSection,
-  StudioBottomStrip, CompliancePanel, StudioEmpty, VerdictPill,
+  StudioTopBar, StudioLeftRail, StudioBottomStrip, StudioEmpty, VerdictPill,
   useStudioZoom,
 } from '../../../studio/components/StudioShell.jsx'
 import { SPEC_GROUPS, specById, AMAZON_CAPS } from '../../../studio/engine/specRegistry.js'
 import { checkCompliance } from '../../../studio/engine/compliance.js'
 import { createDoc } from '../../../studio/engine/doc.js'
 import { RegistrySpecPicker, ConfidenceTag } from './SectionWorkspace.jsx'
+import CompositingSurface from './CompositingSurface.jsx'
 
 const GALLERY_IMAGE_SPECS = SPEC_GROUPS.filter(g => g.id === 'Gallery')
 
@@ -149,7 +149,7 @@ export default function ListingImages({ product: initialProduct, asin: initialAs
           )}
           {tab === 'product' && (
             <div className="stack" style={{ gap: 8 }}>
-              {live.state === 'loading' && <div className="text-low" style={{ fontSize: 12 }}>Loading live products…</div>}
+              {live.state === 'loading' && <div className="text-low" style={{ fontSize: 12 }}>Loading live products...</div>}
               {live.state === 'error' && (
                 <div className="ss-rule ss-rule-flag">
                   <div className="ss-rule-label">Could not load the catalogue</div>
@@ -159,7 +159,7 @@ export default function ListingImages({ product: initialProduct, asin: initialAs
               {live.state === 'ready' && live.products.length === 0 && (
                 <StudioEmpty
                   title="No live products yet"
-                  what="The catalogue has no data_kind = live rows for this finder. Run a SourceScout pull to populate it — demo rows are never shown here."
+                  what="The catalogue has no data_kind = live rows for this finder. Run a SourceScout pull to populate it - demo rows are never shown here."
                   actionLabel="Go to SourceScout"
                   onAction={() => toast('Open SourceScout from the rail to run a catalogue pull.', 'info')}
                 />
@@ -199,11 +199,6 @@ export default function ListingImages({ product: initialProduct, asin: initialAs
                 <div className="ss-rule-source">style guides · 2026-10-10</div>
               </div>
               <div className="ss-rule ss-rule-flag">
-                <div className="ss-rule-label">Image text is not an SEO play</div>
-                <div className="ss-rule-detail">Amazon documents that text inside images is not readable by external search engines or screen readers. Treat on-image text as a legibility feature.</div>
-                <div className="ss-rule-source">Store image tiles help · 2026-10-10</div>
-              </div>
-              <div className="ss-rule ss-rule-flag">
                 <div className="ss-rule-label">Each child ASIN needs its own main image</div>
                 <div className="ss-rule-detail">A variation family is suppressed per child. Fixing the parent leaves non-compliant children invisible in search.</div>
                 <div className="ss-rule-source">Seller Labs analysis · 2026-10-10</div>
@@ -212,67 +207,12 @@ export default function ListingImages({ product: initialProduct, asin: initialAs
           )}
         </StudioLeftRail>
 
-        <StudioCanvas
-          zoom={zoom} pan={pan} onPan={setPan} canvasAspect={aspect}
-          safeZoneId={spec.safe} showSafeZones={showSafeZones}
-          fitWidth={spec.w >= 2000 ? 520 : 560}
-          onWheelZoom={(d) => setZoom(z => Math.max(0.1, Math.min(4, z + d)))}
-        >
-          {!product ? (
-            <StudioEmpty
-              title="No product attached"
-              what="Attach a live product from the catalogue to start a listing-image set. Only real (data_kind = live) rows can be attached."
-              actionLabel="Open SourceScout to pick a product"
-              onAction={() => toast('Open SourceScout from the rail and pick a live product.', 'info')}
-            />
-          ) : (
-            <div style={{ position: 'absolute', inset: 0, background: spec.id === 'amz-main' ? '#ffffff' : '#f5f0e8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ textAlign: 'center', color: '#8a8a7a', fontSize: 12, padding: 16 }}>
-                <div style={{ fontWeight: 600, color: '#5a5a4a', marginBottom: 4 }}>{product.title || asin}</div>
-                <div>Add an image to this slot to begin. Nothing is generated until the local engine is armed.</div>
-              </div>
-            </div>
-          )}
-        </StudioCanvas>
-
-        <StudioInspector>
-          <InspectorSection title="Compliance pre-flight">
-            <CompliancePanel report={report} />
-          </InspectorSection>
-
-          <InspectorSection title="Format">
-            <div className="ss-rule">
-              <div className="ss-rule-label">{spec.label}</div>
-              <div className="ss-rule-detail">
-                {spec.w}×{spec.h} px{spec.minW ? ` · min ${spec.minW} px` : ''}{spec.maxBytes ? ` · ${Math.round(spec.maxBytes / 1024)} KB cap` : ''}
-                {spec.minDim ? ` · under ${spec.minDim} px is auto-rejected` : ''}
-              </div>
-              {spec.note && <div className="ss-rule-detail">{spec.note}</div>}
-              <div className="ss-rule-source">{spec.source || 'spec registry'} · 2026-10-10</div>
-            </div>
-          </InspectorSection>
-
-          <InspectorSection title="A+ rules (when this image feeds A+)">
-            <div className="ss-rule">
-              <div className="ss-rule-detail">
-                Under {(AMAZON_CAPS.aplus.maxBytes / 1048576).toFixed(0)} MB, RGB only (CMYK unsupported), {AMAZON_CAPS.aplus.minDpi}+ dpi,
-                no animated GIF, one brand logo, alt text required, and the image must be unique to A+.
-              </div>
-              <div className="ss-rule-source">A+ content guidelines · 2026-10-10</div>
-            </div>
-          </InspectorSection>
-
-          <InspectorSection title="Bulk export contract" defaultOpen={false}>
-            <div className="ss-rule">
-              <div className="ss-rule-detail">
-                Images export against the flat-file column schema: <span className="text-mono">main_image_url</span>,
-                <span className="text-mono"> other_image_url1..8</span>, <span className="text-mono">swatch_image_url</span>.
-                A partial-update diff will show exactly which fields a feed would blank.
-              </div>
-              <div className="ss-rule-source">flat-file schema · 2026-10-10</div>
-            </div>
-          </InspectorSection>
-        </StudioInspector>
+        {/* The real compositing surface owns the canvas, the inspector and the
+            export pipeline from here: layers, a locked reference, the
+            safe-zone overlay, undo/redo and the human compare step. */}
+        <div className="cs-embed" style={{ gridColumn: '2 / -1', minWidth: 0 }}>
+          <CompositingSurface specId={specId} />
+        </div>
       </div>
 
       <StudioBottomStrip

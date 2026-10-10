@@ -18,6 +18,9 @@ import {
   embedDisclosure, readDisclosure, verifyDisclosureMarker,
   EXPORT_PATHS, ADS_DISCLOSURE_PATHS, DISCLOSURE_SCOPE, ON_CREATIVE_WARNING,
   checkFilename, buildXmpPacket,
+  IDENTIFIABILITY_QUESTION, EXEMPTIONS, exemptionsFor,
+  verifyUploadedAsset, NOTICE_AND_CURE_DAYS, cureWindow, recheckEntry, recheckSummary,
+  disclosureRow,
 } from '../northstar-os-ui/src/studio/engine/disclosure.js'
 import { SPEC_SOURCES } from '../northstar-os-ui/src/studio/engine/specRegistry.js'
 
@@ -255,6 +258,131 @@ const docWith = (meta = {}, extra = {}) => ({
   ok('every AI disclosure source resolves with a pulled-at date')
   if (SPEC_SOURCES['ai-ads-page'].confidence === 'REPORTED') ok('the gated Ads page is labelled REPORTED')
   else no('the gated Ads page is not labelled REPORTED')
+}
+
+// ── 1 / 2. Identifiability gate + the documented exemptions ───────────────
+{
+  // The seventh question BLOCKS and never writes a tag.
+  const identifiable = classifyDisclosure(docWith({ identifiableIndividual: true, peopleClass: 'ai-photoreal' }))
+  if (identifiable.status === 'blocked-identifiable') ok('an identifiable individual BLOCKS export (right of publicity)')
+  else no(`identifiable individual reported ${identifiable.status}`)
+  if (identifiable.tagRequired === false) ok('the identifiable-individual gate never asks for a tag')
+  else no('the identifiable-individual gate set tagRequired')
+  if (/right-of-publicity/i.test(identifiable.note) && /consent/i.test(identifiable.note)) {
+    ok('the block explains that it is a consent / right-of-publicity matter, not a labelling one')
+  } else no('the identifiable-individual explanation is missing the reason')
+  if (/not recognizable as an identifiable person/i.test(identifiable.note)) {
+    ok('the block quotes the definition showing why the marker does not apply')
+  } else no('the block does not explain why the marker is inapplicable')
+
+  // It outranks a tag-required classification: block, never tag.
+  const identifiableTagged = classifyDisclosure(docWith({ identifiableIndividual: true, peopleClass: 'ai-photoreal', syntheticPerformerTag: true }))
+  if (identifiableTagged.status === 'blocked-identifiable' && !identifiableTagged.tagRequired) {
+    ok('identifiability outranks a tag-required classification (block, never tag)')
+  } else no(`identifiability + tag reported ${identifiableTagged.status}`)
+
+  // The row carries a blocking level in the pre-flight.
+  const row = disclosureRow(docWith({ identifiableIndividual: true }))
+  if (row.level === 'block') ok('the pre-flight row for an identifiable individual is BLOCK')
+  else no(`pre-flight row level is ${row.level}`)
+
+  // ── Exemptions ─────────────────────────────────────────────────────────
+  const expWork = classifyDisclosure(docWith({ peopleClass: 'ai-photoreal', expressiveWorkAd: true }))
+  if (expWork.status === 'exempt' && !expWork.tagRequired) ok('expressive-work ad is EXEMPT and needs no tag')
+  else no(`expressive-work ad reported ${expWork.status}`)
+
+  const audio = classifyDisclosure({ ...docWith({ peopleClass: 'ai-photoreal' }), media: 'audio' })
+  if (audio.status === 'exempt' && !audio.tagRequired) ok('audio-only is EXEMPT: the rule does not fire')
+  else no(`audio-only reported ${audio.status}`)
+
+  const audioFlag = classifyDisclosure(docWith({ peopleClass: 'ai-photoreal', audioOnly: true }))
+  if (audioFlag.status === 'exempt') ok('audio-only via the explicit flag is EXEMPT')
+  else no(`audio-only flag reported ${audioFlag.status}`)
+
+  const audioRow = disclosureRow({ ...docWith({ peopleClass: 'ai-photoreal' }), media: 'audio' })
+  if (audioRow.level === 'pass' && !audioRow.tagRequired) ok('an audio asset produces a PASSING disclosure row, not a block')
+  else no(`audio row level=${audioRow.level} tagRequired=${audioRow.tagRequired}`)
+
+  const trans = classifyDisclosure(docWith({ peopleClass: 'ai-photoreal', translationOnly: true }))
+  if (trans.status === 'exempt') ok('translation-only is EXEMPT')
+  else no(`translation-only reported ${trans.status}`)
+
+  // An exemption must NOT swallow the identifiability block: consent is not
+  // exempted by "it is an expressive work".
+  const both = classifyDisclosure(docWith({ identifiableIndividual: true, expressiveWorkAd: true }))
+  if (both.status === 'blocked-identifiable') ok('an expressive-work exemption does NOT lift the identifiability block')
+  else no(`identifiable + expressive-work reported ${both.status}`)
+
+  // Neither exemption may silently apply to a normal asset.
+  const normal = classifyDisclosure(docWith({ peopleClass: 'ai-photoreal' }))
+  if (normal.status === 'decided' && normal.tagRequired) ok('a normal AI-photoreal asset is unaffected by the exemptions')
+  else no(`normal asset reported ${normal.status}`)
+
+  // Exemption list must resolve its sources.
+  const badEx = EXEMPTIONS.filter(e => String(e.source).split(/[\/]/).map(x => x.trim()).filter(Boolean).some(id => !SPEC_SOURCES[id]))
+  if (badEx.length === 0) ok(`all ${EXEMPTIONS.length} exemptions cite a known source`)
+  else no(`exemptions with unknown sources: ${badEx.map(e => e.id).join(', ')}`)
+}
+
+// ── 3. Upload check: read the LIVE image back ─────────────────────────────
+{
+  const tagged = embedDisclosure(PNG_1x1, 'image/png', [DISCLOSURE_KEYWORD])
+  const good = verifyUploadedAsset(tagged, { mime: 'image/png', tagRequired: true })
+  if (good.ok && good.verdict === 'marker-present') ok('upload check passes when the live copy still carries the marker')
+  else no(`upload check on a tagged file gave ${good.verdict}`)
+
+  const bad = verifyUploadedAsset(PNG_1x1, { mime: 'image/png', tagRequired: true })
+  if (!bad.ok && bad.verdict === 'marker-missing') ok('upload check WARNS when the live copy lost the marker')
+  else no(`upload check on an untagged file gave ${bad.verdict}`)
+  if (/reprocess/i.test(bad.detail) && /re-upload/i.test(bad.detail)) {
+    ok('the warning names the reported reprocessing cause and the fix')
+  } else no('the upload warning does not explain the cause and the fix')
+
+  const notNeeded = verifyUploadedAsset(PNG_1x1, { mime: 'image/png', tagRequired: false })
+  if (notNeeded.ok && notNeeded.verdict === 'not-required') ok('upload check reports not-required rather than a false pass')
+  else no(`not-required case gave ${notNeeded.verdict}`)
+
+  const missing = verifyUploadedAsset(null, { mime: 'image/png', tagRequired: true })
+  if (!missing.ok) ok('upload check fails closed when the bytes are missing')
+  else no('upload check passed with no bytes')
+}
+
+// ── 4. Re-check library: the notice-and-cure window ───────────────────────
+{
+  const w = cureWindow('2026-10-10T00:00:00Z', '2026-10-12T00:00:00Z')
+  if (w.ok && w.elapsedDays === 2 && w.remainingDays === NOTICE_AND_CURE_DAYS - 2 && !w.expired) {
+    ok(`cure window computes elapsed and remaining (${w.remainingDays} of ${NOTICE_AND_CURE_DAYS} left)`)
+  } else no(`cure window gave ${JSON.stringify(w)}`)
+
+  const expired = cureWindow('2026-10-01T00:00:00Z', '2026-10-12T00:00:00Z')
+  if (expired.expired && /elapsed/i.test(expired.detail)) ok('an elapsed cure window is reported as expired')
+  else no(`expired window gave ${JSON.stringify(expired)}`)
+
+  const noDate = cureWindow(null)
+  if (!noDate.ok) ok('a missing notice date is reported, not guessed')
+  else no('a missing notice date produced a window')
+
+  // A re-check must carry a real verdict.
+  const tagged = embedDisclosure(PNG_1x1, 'image/png', [DISCLOSURE_KEYWORD])
+  const verdict = verifyUploadedAsset(tagged, { mime: 'image/png', tagRequired: true })
+  const e1 = recheckEntry({ assetId: 'A1', result: verdict, user: 't2', at: '2026-10-10T09:00:00Z' })
+  if (e1.ok && e1.entry.checkedAt && e1.entry.passed === true) ok('a re-check entry records the date, user and verdict')
+  else no(`recheck entry gave ${JSON.stringify(e1)}`)
+
+  const noVerdict = recheckEntry({ assetId: 'A1', result: null })
+  if (!noVerdict.ok) ok('an unrun check is REFUSED, so the log can never claim a check that did not happen')
+  else no('an unrun check was logged')
+
+  const missingAsset = verifyUploadedAsset(PNG_1x1, { mime: 'image/png', tagRequired: true })
+  const e2 = recheckEntry({ assetId: 'A1', result: missingAsset, at: '2026-10-11T09:00:00Z' })
+  const sum = recheckSummary([e1.entry, e2.entry])
+  if (sum.checks === 2 && sum.everFailed && sum.lastCheckedAt === '2026-10-11T09:00:00Z' && sum.lastPassed === false) {
+    ok('the summary reports the count, the latest check and whether it ever failed')
+  } else no(`summary gave ${JSON.stringify(sum)}`)
+
+  const empty = recheckSummary([])
+  if (empty.checks === 0 && empty.lastCheckedAt === null) ok('an empty history reports zero checks, not a pass')
+  else no(`empty summary gave ${JSON.stringify(empty)}`)
 }
 
 console.log(`\nDISCLOSURE SUITE: ${pass} passed, ${fail} failed`)

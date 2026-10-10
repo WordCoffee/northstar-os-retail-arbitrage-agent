@@ -73,6 +73,62 @@ export const PEOPLE_CLASSES = [
 
 export const CLASS_BY_ID = Object.fromEntries(PEOPLE_CLASSES.map(c => [c.id, c]))
 
+// ── 1. THE SEVENTH QUESTION: identifiability ───────────────────────────────
+// This is NOT a classification and NOT a tag. If an asset is intended to look
+// like a real, identifiable individual, the problem is consent and right of
+// publicity, and it is BLOCKED. Applying a disclosure marker to a digital
+// replica of a real person does not cure it.
+export const IDENTIFIABILITY_QUESTION = {
+  id: 'identifiableIndividual',
+  label: 'Is this intended to look like a real, identifiable individual?',
+  note: 'Not a disclosure question. A likeness of a real person is a consent and right-of-publicity matter: a disclosure marker does not cure it, and Amazon\'s synthetic-performer tag is explicitly for a performer who is NOT identifiable as any real person.',
+  blockDetail: 'BLOCKED: this asset is intended to look like a real, identifiable individual. That is a right-of-publicity and consent problem, not a labelling one — no metadata tag fixes it. Amazon\'s own definition of a synthetic performer covers a person "who is not recognizable as an identifiable person", so the marker does not apply here. New York separately requires written consent before creating or using an AI digital replica of a model (Fashion Workers Act). Remove the likeness, obtain documented consent, or use a non-identifiable performer.',
+  source: 'ny-statute',
+  accessed: '2026-10-10',
+}
+
+// ── 2. THE DOCUMENTED EXEMPTIONS ───────────────────────────────────────────
+// Three carve-outs that must NEVER trigger the tagging rule. Each is checked
+// explicitly, because an exemption applied by accident is a false positive the
+// operator cannot see.
+export const EXEMPTIONS = [
+  {
+    id: 'expressive-work',
+    label: 'Ad for a film, TV programme, streaming content, documentary or video game',
+    applies: (doc) => doc?.meta?.expressiveWorkAd === true,
+    detail: 'The New York statute carves out advertisements for expressive works where the synthetic performer appears in the work itself. Amazon exempts characters from movies, TV, streaming, documentaries, video games and other expressive works.',
+    tagsRequired: false, blockRequired: false,
+    source: 'ny-statute / ai-announce',
+  },
+  {
+    id: 'audio-only',
+    label: 'Audio-only advertisement',
+    applies: (doc) => doc?.media === 'audio' || doc?.meta?.audioOnly === true,
+    detail: 'The New York statute expressly does NOT apply to audio advertisements. An audio-only asset must not be asked for the marker and must not be blocked by this rule set.',
+    tagsRequired: false, blockRequired: false,
+    forceSkip: true,
+    source: 'ny-statute',
+  },
+  {
+    id: 'translation-only',
+    label: 'AI used only for language translation',
+    applies: (doc) => doc?.meta?.translationOnly === true,
+    detail: 'The New York statute does not apply where AI is used solely for language translation. Dubbing or translating an existing advertisement is not creating a synthetic performer.',
+    tagsRequired: false, blockRequired: false,
+    forceSkip: true,
+    source: 'ny-statute',
+  },
+]
+
+export const EXEMPTION_BY_ID = Object.fromEntries(EXEMPTIONS.map(e => [e.id, e]))
+
+/** Which exemptions apply to this document. */
+export function exemptionsFor(doc) {
+  return EXEMPTIONS.filter(e => {
+    try { return !!e.applies(doc) } catch { return false }
+  })
+}
+
 // ── 1b + 1g. Classification state for a document ────────────────────────────
 /**
  * @returns {{
@@ -89,12 +145,45 @@ export function classifyDisclosure(doc) {
   const studioGenerated = !!meta.studioGeneratedPerson
   const conflicts = []
 
+  // ── 1. IDENTIFIABILITY BLOCKS, AND IS NEVER A TAG ───────────────────────
+  // This runs BEFORE the exemptions on purpose. Consent and right of publicity
+  // are not a labelling question, so no carve-out lifts it: an audio-only
+  // advertisement using a synthetic voice that mimics a real performer is still
+  // a consent problem, not an exempt one.
+  if (meta[IDENTIFIABILITY_QUESTION.id] === true) {
+    return {
+      status: 'blocked-identifiable',
+      classification: answer,
+      tagRequired: false,
+      conflicts: [],
+      exemptions: [],
+      note: IDENTIFIABILITY_QUESTION.blockDetail,
+    }
+  }
+
+  // ── 2. THE DOCUMENTED EXEMPTIONS ────────────────────────────────────────
+  // An exemption that is applied by accident is a false positive the operator
+  // cannot see, so each one is an explicit, named gate rather than a special
+  // case buried in the checks below.
+  const applied = exemptionsFor(doc)
+  if (applied.length) {
+    return {
+      status: 'exempt',
+      classification: null,
+      tagRequired: false,
+      conflicts: [],
+      exemptions: [],
+      note: `Exempt: ${applied.map(e => e.label).join('; ')}. ${applied[0].detail}`,
+    }
+  }
+
   if (!answer) {
     return {
       status: 'needs-confirmation',
       classification: null,
       tagRequired: false,
-      conflicts,
+      conflicts: [],
+      exemptions: [],
       note: 'Not answered. The studio cannot detect AI people from pixels, so export stays blocked until the seller classifies this asset.',
     }
   }
@@ -104,6 +193,7 @@ export function classifyDisclosure(doc) {
       classification: answer,
       tagRequired: false,
       conflicts: [`Unknown classification "${answer}".`],
+      exemptions: [],
       note: 'An unrecognised classification cannot be trusted; export is blocked.',
     }
   }
@@ -126,6 +216,7 @@ export function classifyDisclosure(doc) {
       classification: answer,
       tagRequired: cls.tagRequired,
       conflicts,
+      exemptions: [],
       note: 'A seller answer contradicts what the studio knows about this asset. Export is blocked until the answer is corrected.',
     }
   }
@@ -135,6 +226,7 @@ export function classifyDisclosure(doc) {
     classification: answer,
     tagRequired: cls.tagRequired,
     conflicts,
+    exemptions: [],
     note: cls.tagRequired
       ? `The XMP keyword "${DISCLOSURE_KEYWORD}" will be written to ${DISCLOSURE_FIELD}, then re-read from the exported file to prove it survived.`
       : cls.amazonNote,
@@ -424,20 +516,123 @@ export const DISCLOSURE_SCOPE = [
 // ── 1g. The pre-flight row factory ─────────────────────────────────────────
 export function disclosureRow(doc) {
   const c = classifyDisclosure(doc)
+  const LEVEL = {
+    decided: 'pass',
+    exempt: 'pass',
+    conflict: 'block',
+    'blocked-identifiable': 'block',
+    'needs-confirmation': 'incomplete',
+  }
+  const STATUS = {
+    decided: 'checked',
+    exempt: 'checked',
+    conflict: 'checked',
+    'blocked-identifiable': 'checked',
+    'needs-confirmation': 'needs-review',
+  }
   return {
     id: 'ai-generated-people-disclosure',
     label: 'AI-generated people disclosure',
-    level: c.status === 'decided' ? 'pass' : (c.status === 'conflict' ? 'block' : 'incomplete'),
-    status: c.status === 'decided' ? 'checked' : (c.status === 'conflict' ? 'checked' : 'needs-review'),
+    level: LEVEL[c.status] || 'incomplete',
+    status: STATUS[c.status] || 'needs-review',
     need: 'human',
     classification: c.classification,
     tagRequired: c.tagRequired,
+    exemptions: c.exemptions || [],
     detail: c.conflicts.length
       ? c.conflicts.join(' ')
       : `${c.note} The studio cannot detect AI-generated people from pixels; this state rests on the seller's answer and on what the studio generated.`,
     source: c.tagRequired ? 'img-guide / ai-announce' : 'img-guide',
     accessed: '2026-10-10',
     dateSensitive: true,
+  }
+}
+
+// ── 3. Upload check: read the LIVE image back ──────────────────────────────
+// Amazon reprocesses uploaded media, and sellers report that the live copy
+// loses the tag. The only way to know is to fetch what is actually serving and
+// read it. This does not touch the network: the caller supplies the bytes.
+export function verifyUploadedAsset(bytes, { mime, tagRequired = true, label = 'the uploaded asset' } = {}) {
+  const v = verifyDisclosureMarker(bytes, mime, DISCLOSURE_KEYWORD)
+  if (!tagRequired) {
+    return {
+      ok: true, checked: true, verdict: 'not-required',
+      detail: `${label} does not require the marker, so nothing was checked.`,
+    }
+  }
+  if (v.ok) {
+    return {
+      ok: true, checked: true, verdict: 'marker-present',
+      detail: `${label} still carries "${DISCLOSURE_KEYWORD}". No action needed.`,
+    }
+  }
+  return {
+    ok: false, checked: true, verdict: 'marker-missing', reason: v.reason,
+    detail: `WARNING: ${label} does NOT carry "${DISCLOSURE_KEYWORD}" (${v.reason}: ${v.detail}) ` +
+      'Amazon reprocesses uploaded media and sellers report that live copies lose the tag while Seller Central shows no confirmation. ' +
+      'Re-upload the tagged original and check again.',
+  }
+}
+
+// ── 4. Re-check library: the notice-and-cure window ────────────────────────
+// A publisher or distributor put on notice of an undisclosed synthetic
+// performer has five days to remove the ad or bring it into compliance. The
+// library therefore keeps a dated log of every check so the operator can show
+// when they last verified, and how long remains.
+export const NOTICE_AND_CURE_DAYS = 5
+
+export function cureWindow(noticedAtIso, nowIso = new Date().toISOString()) {
+  const noticed = Date.parse(noticedAtIso)
+  if (!Number.isFinite(noticed)) {
+    return { ok: false, detail: 'No notice date recorded, so no cure window can be computed.' }
+  }
+  const now = Date.parse(nowIso)
+  const elapsed = Math.floor((now - noticed) / 86400000)
+  const remaining = NOTICE_AND_CURE_DAYS - elapsed
+  return {
+    ok: true,
+    noticedAt: noticedAtIso,
+    elapsedDays: elapsed,
+    remainingDays: remaining,
+    expired: remaining < 0,
+    detail: remaining < 0
+      ? `The ${NOTICE_AND_CURE_DAYS}-day cure window elapsed ${Math.abs(remaining)} day(s) ago.`
+      : `${remaining} of ${NOTICE_AND_CURE_DAYS} day(s) remain to cure.`,
+  }
+}
+
+/**
+ * A re-check log entry. `result` is the verdict from verifyUploadedAsset, so
+ * the log can never claim a check that did not happen.
+ */
+export function recheckEntry({ assetId, result, user, at }) {
+  if (!result || !result.checked) {
+    return { ok: false, detail: 'A re-check must carry a real verdict; an unrun check is not logged.' }
+  }
+  return {
+    ok: true,
+    entry: {
+      assetId: assetId || null,
+      checkedAt: at || new Date().toISOString(),
+      user: user || 'unknown',
+      verdict: result.verdict,
+      passed: !!result.ok,
+      detail: result.detail,
+    },
+  }
+}
+
+/** Summarise a re-check history: when it was last checked, and what it said. */
+export function recheckSummary(entries = []) {
+  const valid = (entries || []).filter(e => e && e.checkedAt)
+  if (!valid.length) return { checks: 0, lastCheckedAt: null, lastVerdict: null, everFailed: false }
+  const sorted = [...valid].sort((a, b) => Date.parse(b.checkedAt) - Date.parse(a.checkedAt))
+  return {
+    checks: valid.length,
+    lastCheckedAt: sorted[0].checkedAt,
+    lastVerdict: sorted[0].verdict,
+    lastPassed: !!sorted[0].passed,
+    everFailed: valid.some(e => !e.passed),
   }
 }
 

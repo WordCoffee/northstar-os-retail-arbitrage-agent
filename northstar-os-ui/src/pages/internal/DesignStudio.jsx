@@ -31,6 +31,25 @@ import Social from './design-studio/Social.jsx'
 import Packaging from './design-studio/Packaging.jsx'
 import { migrateLocalStorage, migrationDone } from '../../studio/engine/migrate.js'
 
+// Opt-in test surface. Adding ?engine=1 to a Design Studio URL exposes the
+// studio engine on window so a browser harness can exercise the CANVAS paths
+// (render, fidelity pixel extraction, export pipeline) that unit tests cannot
+// reach. It is off unless the query parameter is present, and it exposes
+// functions only: no credentials, no session, no data.
+async function attachEngineHook() {
+  try {
+    if (new URLSearchParams(window.location.search).get('engine') !== '1') return
+    const [compose, fidelity, disclosure, compliance, registry] = await Promise.all([
+      import('../../studio/engine/compose.js'),
+      import('../../studio/engine/fidelity.js'),
+      import('../../studio/engine/disclosure.js'),
+      import('../../studio/engine/compliance.js'),
+      import('../../studio/engine/specRegistry.js'),
+    ])
+    window.__northstarStudioEngine = { compose, fidelity, disclosure, compliance, registry }
+  } catch { /* the hook is a convenience; never let it break the page */ }
+}
+
 const SECTIONS = [
   { id: 'projects', label: 'Projects', icon: 'stack', note: 'Project board and asset library', built: true },
   { id: 'listing-images', label: 'Listing Images', icon: 'image', note: 'Main, lifestyle, infographic modules', built: true },
@@ -96,6 +115,9 @@ export default function DesignStudio() {
       navigate(`/design-studio?section=${sectionId}`, { replace: true })
     }
   }, [requested, sectionId, navigate])
+
+  // Opt-in engine hook for browser harnesses (?engine=1).
+  useEffect(() => { attachEngineHook() }, [])
 
   // One-time import of any pre-backend browser records into the tenant's
   // backend store. Idempotent, and it never deletes the local copy until the

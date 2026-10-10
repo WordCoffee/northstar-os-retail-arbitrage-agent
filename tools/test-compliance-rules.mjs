@@ -269,6 +269,112 @@ const FIXTURES = [
     failLevel: 'flag',
     failNote: 'Product occupies 16% of the frame, below the documented 50% minimum for SP video.',
   },
+  // ── MAIN image prohibition set ───────────────────────────────────────────
+  {
+    id: 'main-entire-product',
+    pass: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), L.product({ x: 0.05, y: 0.05, w: 0.9, h: 0.9 })] }),
+    fail: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), L.product({ x: -0.05, y: 0.05, w: 0.9, h: 0.9 })] }),
+    failNote: 'The product layer starts at x=-0.05, so the product is cropped by the frame edge.',
+  },
+  {
+    id: 'main-shown-once',
+    pass: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), { kind: 'product', assetId: 'A', x: 0.05, y: 0.05, w: 0.9, h: 0.9 }] }),
+    fail: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), { kind: 'product', assetId: 'A', x: 0.02, y: 0.02, w: 0.45, h: 0.45 }, { kind: 'product', assetId: 'A', x: 0.5, y: 0.5, w: 0.45, h: 0.45 }] }),
+    failNote: 'The SAME assetId appears twice — the product is repeated.',
+  },
+  {
+    id: 'main-single-unit',
+    pass: doc({ formatId: 'amz-main', meta: { units: 1 }, layers: [L.bg('#ffffff'), L.product()] }),
+    fail: doc({ formatId: 'amz-main', meta: { units: 3 }, layers: [L.bg('#ffffff'), L.product()] }),
+    failLevel: 'flag',
+  },
+  {
+    id: 'main-no-props',
+    pass: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), L.product()] }),
+    fail: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), L.product(), L.product({ isProp: true, x: 0.8, y: 0.8, w: 0.15, h: 0.15 })] }),
+    failLevel: 'flag',
+  },
+  {
+    id: 'main-no-packaging',
+    pass: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), L.product()] }),
+    fail: doc({ formatId: 'amz-main', meta: { packagingShown: true }, layers: [L.bg('#ffffff'), L.product()] }),
+    failLevel: 'flag',
+  },
+  {
+    id: 'main-no-mannequins',
+    pass: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), L.product()] }),
+    fail: doc({ formatId: 'amz-main', meta: { mannequin: true }, layers: [L.bg('#ffffff'), L.product()] }),
+    failLevel: 'flag',
+  },
+  {
+    id: 'main-no-amazon-marks',
+    pass: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), L.product()] }),
+    fail: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), L.product(), L.text("Amazon's Choice")] }),
+    failNote: 'References an Amazon badge, which must not be placed on the image.',
+  },
+  // ── ALL images: review / pricing / seller info ───────────────────────────
+  {
+    id: 'all-no-review-imagery',
+    pass: doc({ layers: [L.bg('#ffffff'), L.product(), L.text('Great coffee')] }),
+    fail: doc({ layers: [L.bg('#ffffff'), L.product(), L.text('Rated 4.8 out of 5')] }),
+  },
+  {
+    id: 'all-no-pricing',
+    pass: doc({ layers: [L.bg('#ffffff'), L.product(), L.text('Great coffee')] }),
+    fail: doc({ layers: [L.bg('#ffffff'), L.product(), L.text('Save 20% off')] }),
+  },
+  {
+    id: 'all-no-seller-info',
+    pass: doc({ layers: [L.bg('#ffffff'), L.product(), L.text('Great coffee')] }),
+    fail: doc({ layers: [L.bg('#ffffff'), L.product(), L.text('Visit https://example.com')] }),
+  },
+  // ── Technical ────────────────────────────────────────────────────────────
+  {
+    id: 'dpi-min-72',
+    pass: doc({ meta: { dpi: 300 }, layers: [L.bg('#ffffff'), L.product()] }),
+    fail: doc({ meta: { dpi: 36 }, layers: [L.bg('#ffffff'), L.product()] }),
+  },
+  {
+    id: 'color-space-rgb',
+    pass: doc({ meta: { colorSpace: 'sRGB' }, layers: [L.bg('#ffffff'), L.product()] }),
+    fail: doc({ meta: { colorSpace: 'CMYK' }, layers: [L.bg('#ffffff'), L.product()] }),
+  },
+  {
+    id: 'filename-pattern',
+    pass: doc({ meta: { filename: 'B01ABCDEFG.main.jpg' }, layers: [L.bg('#ffffff'), L.product()] }),
+    fail: doc({ meta: { filename: 'my final image (v2).jpg' }, layers: [L.bg('#ffffff'), L.product()] }),
+    failLevel: 'flag',
+  },
+  // ── On-image text: geometry and legibility (directive item 8) ───────────
+  {
+    id: 'text-outside-frame',
+    pass: doc({ layers: [L.bg('#ffffff'), L.product(), L.text('Inside', 'headline', { x: 0.1, y: 0.1, w: 0.5, h: 0.1 })] }),
+    fail: doc({ layers: [L.bg('#ffffff'), L.product(), L.text('Runs off', 'headline', { x: -0.05, y: 0.1, w: 0.5, h: 0.1 })] }),
+    failNote: 'The text layer starts at x=-0.05, so it is cut off by the frame edge.',
+  },
+  {
+    id: 'text-overflows-safe-zone',
+    label: 'text-overflows-safe-zone :: Store hero left crop',
+    pass: doc({ formatId: 'store-hero', channel: 'Amazon Store', w: 3000, h: 600, layers: [L.bg('#f5f0e8'), L.text('Centred', 'headline', { x: 0.45, y: 0.4, w: 0.15, h: 0.1, size: 0.08 })] }),
+    fail: doc({ formatId: 'store-hero', channel: 'Amazon Store', w: 3000, h: 600, layers: [L.bg('#f5f0e8'), L.text('Left crop', 'headline', { x: 0.02, y: 0.4, w: 0.1, h: 0.1, size: 0.08 })] }),
+    failLevel: 'flag',
+    failNote: 'The Store hero loses the left 34% to a crop and the brand logo, so text starting at x=0.02 disappears after upload.',
+  },
+  {
+    id: 'text-overflows-safe-zone',
+    label: 'text-overflows-safe-zone :: SB video bottom-right corner',
+    pass: doc({ formatId: 'sbv-landscape', channel: 'Amazon Ads', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e'), L.text('Centre', 'headline', { x: 0.3, y: 0.4, w: 0.3, h: 0.1, size: 0.06 })] }),
+    fail: doc({ formatId: 'sbv-landscape', channel: 'Amazon Ads', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e'), L.text('Corner', 'headline', { x: 0.85, y: 0.9, w: 0.1, h: 0.05, size: 0.06 })] }),
+    failLevel: 'flag',
+    failNote: 'Text in the bottom-right corner is prohibited for Sponsored Brands video.',
+  },
+  {
+    id: 'text-legibility',
+    pass: doc({ w: 2000, h: 2000, layers: [L.bg('#ffffff'), L.product(), L.text('Readable', 'headline', { size: 0.06 })] }),
+    fail: doc({ w: 2000, h: 2000, layers: [L.bg('#ffffff'), L.product(), L.text('Tiny', 'headline', { size: 0.004 })] }),
+    failLevel: 'flag',
+    failNote: '0.004 x 2000px = 8px, below the 18px legibility floor.',
+  },
   {
     id: 'aplus-alt-text',
     pass: doc({ formatId: 'aplus-single', channel: 'Amazon A+', w: 300, h: 300, meta: { altText: 'A 300x300 module showing the front of the pack on a linen surface.' }, layers: [L.bg('#ffffff'), L.product()] }),

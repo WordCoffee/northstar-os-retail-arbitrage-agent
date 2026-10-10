@@ -578,3 +578,41 @@
 .ss-rule-incomplete { border-left: 3px solid var(--ink-faint); background: linear-gradient(90deg, rgba(0,0,0,0.015), transparent); }
 .ss-rule-incomplete .ss-rule-label { color: var(--ink-soft); }
 .ss-compliance-group-label.ss-muted { color: var(--ink-faint); }
+
+/* ── Phase 4: compositing surface ── */
+.cs-surface { display: flex; flex-direction: column; }
+.cs-layer {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 7px; border: 1px solid var(--divider); border-radius: var(--radius);
+  background: var(--surface); cursor: pointer; font-size: 11px;
+}
+.cs-layer:hover { border-color: var(--forest); }
+.cs-layer.active { border-color: var(--forest); background: var(--forest-glow); }
+.cs-layer-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--pine-deep); }
+.cs-mini {
+  width: 18px; height: 18px; padding: 0; border: 1px solid var(--divider);
+  border-radius: 3px; background: var(--surface); cursor: pointer;
+  font-size: 10px; line-height: 1; color: var(--ink-soft);
+}
+.cs-mini:hover { border-color: var(--forest); color: var(--forest); }
+.cs-boxrow { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
+.cs-boxrow .ss-field input { padding: 3px 5px; font-size: 11px; }
+
+/* compare modal */
+.cs-modal {
+  position: fixed; inset: 0; background: rgba(18, 24, 18, 0.55);
+  display: flex; align-items: center; justify-content: center; z-index: 900; padding: 20px;
+}
+.cs-modal-body {
+  background: var(--surface); border-radius: var(--radius-lg); padding: 16px;
+  max-width: 900px; width: 100%; max-height: 90vh; overflow: auto;
+  box-shadow: var(--shadow-md);
+}
+.cs-modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.cs-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 760px) { .cs-compare { grid-template-columns: 1fr; } }
+.cs-compare-cap { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); margin-bottom: 4px; }
+.cs-compare img, .cs-compare-canvas {
+  width: 100%; height: auto; border: 1px solid var(--divider);
+  border-radius: var(--radius); background: #fff; display: block;
+}
