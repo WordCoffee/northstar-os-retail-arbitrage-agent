@@ -62,6 +62,21 @@ function currentRole(session) {
   )
 }
 
+// The pre-merge rooms carried their sub-view in ?view=. The merged route keeps
+// it, so a deep link like /creative-studio?view=briefs must land on
+// /design-studio?section=projects&view=briefs. A bare <Navigate> drops the
+// query and silently resets the sub-view (found while embedding the merged
+// studio), so the redirect carries it through.
+function LegacyStudioRedirect({ section }) {
+  const location = useLocation()
+  const incoming = new URLSearchParams(location.search)
+  const next = new URLSearchParams()
+  next.set('section', section)
+  const view = incoming.get('view')
+  if (view) next.set('view', view)
+  return <Navigate to={`/design-studio?${next.toString()}`} replace />
+}
+
 // Paths reachable without a session (public entry surfaces).
 const PUBLIC_PATHS = ['/sign-in', '/recovery', '/beta', '/beta/accept', '/legal']
 
@@ -87,8 +102,8 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/product-finder" element={<ProductFinder />} />
       <Route path="/product-finder/:id" element={<ProductFinder />} />
       <Route path="/design-studio/*" element={<DesignStudio />} />
-      <Route path="/product-designer" element={<Navigate to="/design-studio?section=3d-scene" replace />} />
-      <Route path="/creative-studio" element={<Navigate to="/design-studio?section=projects" replace />} />
+      <Route path="/product-designer" element={<LegacyStudioRedirect section="3d-scene" />} />
+      <Route path="/creative-studio" element={<LegacyStudioRedirect section="projects" />} />
       <Route path="/golden-goose" element={<GoldenGooseDesk />} />
       <Route path="/golden-goose/:id" element={<GoldenGooseDesk />} />
       <Route path="/listings" element={<ListingGuardian />} />

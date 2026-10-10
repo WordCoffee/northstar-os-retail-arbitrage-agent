@@ -125,9 +125,13 @@ export default function DesignStudio() {
 
   useEffect(() => {
     if (sectionId !== requested) {
-      navigate(`/design-studio?section=${sectionId}`, { replace: true })
+      // Preserve the rest of the query (the merged pre-view rooms carry their
+      // sub-view in ?view=; dropping it would silently reset the tab).
+      const params = new URLSearchParams(location.search)
+      params.set('section', sectionId)
+      navigate(`/design-studio?${params.toString()}`, { replace: true })
     }
-  }, [requested, sectionId, navigate])
+  }, [requested, sectionId, navigate, location.search])
 
   // Opt-in engine hook for browser harnesses (?engine=1).
   useEffect(() => { attachEngineHook() }, [])
