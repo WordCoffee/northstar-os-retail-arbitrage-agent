@@ -488,6 +488,104 @@ class DataLayer:
             CREATE INDEX IF NOT EXISTS idx_ds_rechecks_asset ON ds_rechecks(asset_id);
             CREATE UNIQUE INDEX IF NOT EXISTS idx_ds_rechecks_legacy
                 ON ds_rechecks(account_id, legacy_key) WHERE legacy_key IS NOT NULL;
+
+            -- Imported marketplace reports (Phase 6 item 4): each import is
+            -- archived per account with its source label and observed date, and
+            -- is NEVER live data. Fingerprint idempotency: re-importing the
+            -- same file is a no-op, not a duplicate.
+            CREATE TABLE IF NOT EXISTS ds_imports (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                kind TEXT NOT NULL,            -- sp_search_terms | brand_analytics_sqp
+                source_label TEXT NOT NULL,    -- operator-supplied, e.g. "SP console export"
+                filename TEXT,
+                format TEXT,                   -- csv | json
+                observed_from TEXT,            -- first day the file covers (nullable)
+                observed_to TEXT,              -- last day the file covers (nullable)
+                observed_source TEXT,          -- operator | row-dates | none
+                row_count INTEGER DEFAULT 0,
+                skipped_rows INTEGER DEFAULT 0,
+                columns_found TEXT,            -- JSON array of canonical columns present
+                missing_columns TEXT,          -- JSON array: their values are NULL, never 0
+                notes TEXT,                    -- JSON array of caveats that travel with the data
+                fingerprint TEXT NOT NULL,     -- sha256 of kind + normalized content
+                imported_at TEXT NOT NULL,
+                imported_by TEXT,
+                live INTEGER DEFAULT 0,        -- always 0: a file import is not a live feed
+                created_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_imports_account ON ds_imports(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_imports_kind ON ds_imports(kind);
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_ds_imports_fingerprint
+                ON ds_imports(account_id, fingerprint);
+
+            -- Normalized rows from imported reports. A missing column is NULL in
+            -- every row, never 0.
+            CREATE TABLE IF NOT EXISTS ds_search_terms (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                import_id TEXT NOT NULL,
+                kind TEXT NOT NULL,
+                term TEXT NOT NULL,
+                campaign TEXT,
+                ad_group TEXT,
+                match_type TEXT,
+                targeting TEXT,
+                currency TEXT,
+                impressions REAL,
+                clicks REAL,
+                orders REAL,
+                units REAL,
+                spend REAL,
+                sales REAL,
+                search_frequency_rank REAL,
+                search_query_score REAL,
+                asin_click_share REAL,
+                row_from TEXT,
+                row_to TEXT,
+                extras TEXT,                   -- JSON: parsed columns without a home
+                created_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_search_terms_account ON ds_search_terms(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_search_terms_import ON ds_search_terms(import_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_search_terms_term ON ds_search_terms(term);
+
+            -- Creative variants + their performance metrics (Phase 6 item 6).
+            -- Metrics are user-entered or file-imported only; nothing is
+            -- inferred from a provider, and a missing metric is NULL.
+            CREATE TABLE IF NOT EXISTS ds_variants (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                project_id TEXT,
+                name TEXT NOT NULL,
+                asset_id TEXT,                 -- uploaded asset id (ds_assets)
+                format TEXT,
+                status TEXT DEFAULT 'draft',   -- draft | in-review | approved | retired
+                notes TEXT,
+                created_at TEXT DEFAULT (datetime('now')),
+                updated_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_variants_account ON ds_variants(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_variants_project ON ds_variants(project_id);
+
+            CREATE TABLE IF NOT EXISTS ds_variant_metrics (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                variant_id TEXT NOT NULL,
+                source TEXT NOT NULL DEFAULT 'user',  -- user | file
+                import_id TEXT,
+                observed_from TEXT,
+                observed_to TEXT,
+                impressions REAL,
+                clicks REAL,
+                orders REAL,
+                spend REAL,
+                sales REAL,
+                note TEXT,
+                created_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_variant_metrics_account ON ds_variant_metrics(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_variant_metrics_variant ON ds_variant_metrics(variant_id);
         """)
         self._conn.commit()
         self._migrate_live_columns()
@@ -1744,6 +1842,283 @@ class DesignStudioRechecksDB:
         return {r["legacy_key"] for r in cur.fetchall()}
 
 
+class DesignStudioImportsDB:
+    """Data access for ds_imports — archived marketplace report imports.
+
+    Tenant-scoped. Fingerprint idempotency: a UNIQUE index on
+    (account_id, fingerprint) makes a re-import of the same file return the
+    EXISTING import instead of creating a duplicate.
+    """
+
+    _COLS = [
+        "id", "account_id", "kind", "source_label", "filename", "format",
+        "observed_from", "observed_to", "observed_source", "row_count",
+        "skipped_rows", "columns_found", "missing_columns", "notes",
+        "fingerprint", "imported_at", "imported_by", "live",
+    ]
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _serialize(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        for k in ("columns_found", "missing_columns", "notes"):
+            if k in d and isinstance(d[k], str):
+                try:
+                    d[k] = json.loads(d[k])
+                except ValueError:
+                    d[k] = []
+        if "live" in d:
+            d["live"] = bool(d["live"])
+        return d
+
+    def create(self, entry: Dict[str, Any]) -> str:
+        import uuid
+        iid = entry.get("id") or str(uuid.uuid4())
+        rec = dict(entry)
+        rec["id"] = iid
+        rec.setdefault("imported_at", datetime.now(timezone.utc).isoformat())
+        rec.setdefault("row_count", 0)
+        rec.setdefault("skipped_rows", 0)
+        rec["live"] = 0
+        for k in ("columns_found", "missing_columns", "notes"):
+            if k in rec and not isinstance(rec[k], str):
+                rec[k] = json.dumps(rec[k])
+        cols = [c for c in self._COLS if c in rec]
+        placeholders = ", ".join(["?"] * len(cols))
+        try:
+            self.db.execute(
+                f"INSERT INTO ds_imports ({', '.join(cols)}) VALUES ({placeholders})",
+                tuple(rec[c] for c in cols),
+            )
+            self.db.commit()
+        except sqlite3.IntegrityError:
+            # Duplicate fingerprint: idempotent import, return the existing row.
+            row = self.db.execute(
+                "SELECT id FROM ds_imports WHERE account_id = ? AND fingerprint = ?",
+                (rec.get("account_id"), rec.get("fingerprint")),
+            ).fetchone()
+            return row["id"] if row else iid
+        return iid
+
+    def get_by_fingerprint(self, account_id: str, fingerprint: str) -> Optional[Dict[str, Any]]:
+        row = self.db.execute(
+            "SELECT * FROM ds_imports WHERE account_id = ? AND fingerprint = ?",
+            (account_id, fingerprint),
+        ).fetchone()
+        return self._serialize(row) if row else None
+
+    def list_for_account(self, account_id: str, kind: Optional[str] = None, limit: int = 200) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM ds_imports WHERE account_id = ?"
+        params: List[Any] = [account_id]
+        if kind:
+            sql += " AND kind = ?"
+            params.append(kind)
+        sql += " ORDER BY imported_at DESC LIMIT ?"
+        params.append(limit)
+        cur = self.db.execute(sql, tuple(params))
+        return [self._serialize(r) for r in cur.fetchall()]
+
+    def get_by_id(self, iid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute("SELECT * FROM ds_imports WHERE id = ? AND account_id = ?", (iid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM ds_imports WHERE id = ?", (iid,))
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def delete(self, iid: str, account_id: Optional[str] = None) -> bool:
+        if account_id:
+            self.db.execute("DELETE FROM ds_search_terms WHERE import_id = ? AND account_id = ?", (iid, account_id))
+            self.db.execute("DELETE FROM ds_imports WHERE id = ? AND account_id = ?", (iid, account_id))
+        else:
+            self.db.execute("DELETE FROM ds_search_terms WHERE import_id = ?", (iid,))
+            self.db.execute("DELETE FROM ds_imports WHERE id = ?", (iid,))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+
+class DesignStudioSearchTermsDB:
+    """Data access for ds_search_terms — normalized rows from imported files."""
+
+    _COLS = [
+        "id", "account_id", "import_id", "kind", "term", "campaign", "ad_group",
+        "match_type", "targeting", "currency", "impressions", "clicks",
+        "orders", "units", "spend", "sales", "search_frequency_rank",
+        "search_query_score", "asin_click_share", "row_from", "row_to",
+        "extras",
+    ]
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _serialize(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        if "extras" in d and isinstance(d["extras"], str):
+            try:
+                d["extras"] = json.loads(d["extras"])
+            except ValueError:
+                d["extras"] = {}
+        return d
+
+    def add_many(self, rows: List[Dict[str, Any]]) -> int:
+        import uuid
+        inserted = 0
+        for row in rows:
+            rec = dict(row)
+            rec.setdefault("id", str(uuid.uuid4()))
+            for k in ("extras",):
+                if k in rec and rec[k] is not None and not isinstance(rec[k], str):
+                    rec[k] = json.dumps(rec[k])
+            cols = [c for c in self._COLS if c in rec]
+            placeholders = ", ".join(["?"] * len(cols))
+            self.db.execute(
+                f"INSERT INTO ds_search_terms ({', '.join(cols)}) VALUES ({placeholders})",
+                tuple(rec[c] for c in cols),
+            )
+            inserted += 1
+        self.db.commit()
+        return inserted
+
+    def list_for_account(
+        self,
+        account_id: str,
+        kind: Optional[str] = None,
+        import_id: Optional[str] = None,
+        q: str = "",
+        limit: int = 500,
+    ) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM ds_search_terms WHERE account_id = ?"
+        params: List[Any] = [account_id]
+        if kind:
+            sql += " AND kind = ?"
+            params.append(kind)
+        if import_id:
+            sql += " AND import_id = ?"
+            params.append(import_id)
+        if q:
+            sql += " AND lower(term) LIKE ?"
+            params.append(f"%{q.lower()}%")
+        sql += " ORDER BY COALESCE(clicks, -1) DESC, term ASC LIMIT ?"
+        params.append(limit)
+        cur = self.db.execute(sql, tuple(params))
+        return [self._serialize(r) for r in cur.fetchall()]
+
+    def count_for_import(self, account_id: str, import_id: str) -> int:
+        cur = self.db.execute(
+            "SELECT COUNT(*) FROM ds_search_terms WHERE account_id = ? AND import_id = ?",
+            (account_id, import_id),
+        )
+        return cur.fetchone()[0]
+
+
+class DesignStudioVariantsDB:
+    """Data access for ds_variants + ds_variant_metrics (Phase 6 item 6)."""
+
+    _COLS = [
+        "id", "account_id", "project_id", "name", "asset_id", "format",
+        "status", "notes", "updated_at",
+    ]
+    _METRIC_COLS = [
+        "id", "account_id", "variant_id", "source", "import_id",
+        "observed_from", "observed_to", "impressions", "clicks", "orders",
+        "spend", "sales", "note",
+    ]
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def create(self, entry: Dict[str, Any]) -> str:
+        import uuid
+        vid = entry.get("id") or str(uuid.uuid4())
+        rec = dict(entry)
+        rec["id"] = vid
+        rec.setdefault("status", "draft")
+        rec.setdefault("updated_at", datetime.now(timezone.utc).isoformat())
+        cols = [c for c in self._COLS if c in rec]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO ds_variants ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(rec[c] for c in cols),
+        )
+        self.db.commit()
+        return vid
+
+    def update(self, vid: str, patch: Dict[str, Any], account_id: Optional[str] = None) -> bool:
+        allowed = {c for c in self._COLS if c not in ("id", "account_id")}
+        fields = {k: v for k, v in patch.items() if k in allowed}
+        if not fields:
+            return True
+        fields["updated_at"] = datetime.now(timezone.utc).isoformat()
+        sets = ", ".join(f"{k} = ?" for k in fields)
+        if account_id:
+            self.db.execute(
+                f"UPDATE ds_variants SET {sets} WHERE id = ? AND account_id = ?",
+                (*fields.values(), vid, account_id),
+            )
+        else:
+            self.db.execute(f"UPDATE ds_variants SET {sets} WHERE id = ?", (*fields.values(), vid))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+    def get_by_id(self, vid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute("SELECT * FROM ds_variants WHERE id = ? AND account_id = ?", (vid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM ds_variants WHERE id = ?", (vid,))
+        row = cur.fetchone()
+        return dict(row) if row else None
+
+    def list_for_account(self, account_id: str, project_id: Optional[str] = None, limit: int = 200) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM ds_variants WHERE account_id = ?"
+        params: List[Any] = [account_id]
+        if project_id:
+            sql += " AND project_id = ?"
+            params.append(project_id)
+        sql += " ORDER BY created_at DESC LIMIT ?"
+        params.append(limit)
+        return [dict(r) for r in self.db.execute(sql, tuple(params)).fetchall()]
+
+    def delete(self, vid: str, account_id: Optional[str] = None) -> bool:
+        if account_id:
+            self.db.execute("DELETE FROM ds_variant_metrics WHERE variant_id = ? AND account_id = ?", (vid, account_id))
+            self.db.execute("DELETE FROM ds_variants WHERE id = ? AND account_id = ?", (vid, account_id))
+        else:
+            self.db.execute("DELETE FROM ds_variant_metrics WHERE variant_id = ?", (vid,))
+            self.db.execute("DELETE FROM ds_variants WHERE id = ?", (vid,))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+    def add_metric(self, entry: Dict[str, Any]) -> str:
+        import uuid
+        mid = entry.get("id") or str(uuid.uuid4())
+        rec = dict(entry)
+        rec["id"] = mid
+        rec.setdefault("source", "user")
+        cols = [c for c in self._METRIC_COLS if c in rec]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO ds_variant_metrics ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(rec[c] for c in cols),
+        )
+        self.db.commit()
+        return mid
+
+    def metrics_for_variant(self, account_id: str, variant_id: str) -> List[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM ds_variant_metrics WHERE account_id = ? AND variant_id = ? ORDER BY created_at DESC",
+            (account_id, variant_id),
+        )
+        return [dict(r) for r in cur.fetchall()]
+
+    def metrics_for_account(self, account_id: str, limit: int = 2000) -> List[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM ds_variant_metrics WHERE account_id = ? ORDER BY created_at DESC LIMIT ?",
+            (account_id, limit),
+        )
+        return [dict(r) for r in cur.fetchall()]
+
+
 class DesignStudioContainer:
     """Namespace for the Design Studio stores."""
 
@@ -1752,6 +2127,9 @@ class DesignStudioContainer:
         self.assets = DesignStudioAssetsDB(db)
         self.jobs = DesignStudioJobsDB(db)
         self.rechecks = DesignStudioRechecksDB(db)
+        self.imports = DesignStudioImportsDB(db)
+        self.search_terms = DesignStudioSearchTermsDB(db)
+        self.variants = DesignStudioVariantsDB(db)
 
 
 class NorthstarDB:

@@ -7,7 +7,9 @@
 // Every spec comes from the registry; every rule comes from the engine.
 // ???????????????????????????????????????????????????????????????????????????
 
+import { useLocation, useNavigate } from 'react-router-dom'
 import SectionWorkspace from './SectionWorkspace.jsx'
+import IndexingRegister from './IndexingRegister.jsx'
 import { SPEC_GROUPS, AMAZON_CAPS } from '../../../studio/engine/specRegistry.js'
 
 const GROUPS = SPEC_GROUPS.filter(g => ['A+ Basic', 'A+ Premium', 'Brand Story'].includes(g.id))
@@ -60,13 +62,28 @@ const SLOTS = [
 ]
 
 export default function APlus() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const view = new URLSearchParams(location.search).get('view') === 'indexing' ? 'indexing' : 'modules'
+  const go = (v) => navigate(`/design-studio?section=aplus${v === 'indexing' ? '&view=indexing' : ''}`, { replace: true })
+
   return (
-    <SectionWorkspace
-      title="A+ / Brand Story"
-      subtitle="Amazon A+ modules, Premium A+ and Brand Story carousels at the published sizes"
-      groups={GROUPS} defaultSpecId="aplus-overlay-dark"
-      fields={FIELDS} ruleNotes={RULES} slots={SLOTS}
-      canvasFitWidth={620} testId="aplus-workspace"
-    />
+    <>
+      <div style={{ display: 'flex', gap: 8, padding: '10px 0 0' }}>
+        <button className={`btn btn-sm ${view === 'modules' ? 'btn-primary' : ''}`} onClick={() => go('modules')}>Modules</button>
+        <button className={`btn btn-sm ${view === 'indexing' ? 'btn-primary' : ''}`} onClick={() => go('indexing')} data-testid="sub-indexing-register">Indexing claims</button>
+      </div>
+      {view === 'indexing' ? (
+        <IndexingRegister />
+      ) : (
+        <SectionWorkspace
+          title="A+ / Brand Story"
+          subtitle="Amazon A+ modules, Premium A+ and Brand Story carousels at the published sizes"
+          groups={GROUPS} defaultSpecId="aplus-overlay-dark"
+          fields={FIELDS} ruleNotes={RULES} slots={SLOTS}
+          canvasFitWidth={620} testId="aplus-workspace"
+        />
+      )}
+    </>
   )
 }

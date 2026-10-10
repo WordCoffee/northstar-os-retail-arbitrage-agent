@@ -7,7 +7,7 @@ potentially paid action is recorded as a queued job and waits for explicit run.
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, Field
 
 from auth_deps import get_current_user
@@ -71,7 +71,32 @@ class JobPatch(BaseModel):
 
 
 def _account_id(user: Dict[str, Any]) -> str:
+    # NOTE (Phase 6 finding, left as-is deliberately): get_current_user has no
+    # cookie awareness, so UI (cookie) callers are the demo fallback here and
+    # every legacy caller lands in one shared bucket. Changing that moves
+    # already-stored data between buckets, so it is recorded for the owner
+    # rather than changed in passing. The imported-evidence endpoints do NOT
+    # use this function; they resolve a strict organization via studio_account.
     return user.get("user_id") or user.get("sub") or "default"
+
+
+async def studio_account(request: Request) -> str:
+    """Strict, ORGANIZATION-scoped identity for the imported-evidence surfaces.
+
+    The legacy `get_current_user` dependency predates hosted auth: with no
+    token it returns a demo identity, and the cookie transport the SPA actually
+    uses never reaches it, so every legacy caller collapses into one shared
+    bucket. That is fine for the public demo read surface but NOT for
+    tenant-scoped imported marketplace data. This dependency resolves a REAL
+    session (the HttpOnly ns_session cookie or a Bearer token) and scopes the
+    store to the session's organization. No anonymous fallback.
+    """
+    from auth_deps import require_session
+    user = await require_session(request)
+    org = user.get("tenant_id") or user.get("id")
+    if not org:
+        raise HTTPException(status_code=401, detail="Session has no resolved organization")
+    return str(org)
 
 
 # ── Projects ───────────────────────────────────────────────────────────────
@@ -579,6 +604,437 @@ def migrate_rechecks(body: RecheckMigrateIn, user: Dict[str, Any] = Depends(get_
         "skipped": skipped,
         "errors": errors,
         "note": "Idempotent per account via the legacy-key index: re-running reports skipped, never duplicates.",
+    }
+
+
+# ── Imported marketplace reports (Phase 6 item 4) ─────────────────────────
+# Files are archived per account with a source label and observed date. Every
+# response says the data is an imported file, NOT live. Missing columns are
+# NULL, never 0; the report caveats (65-day lookback, 31-day API range,
+# click-only bias) travel with the records.
+
+class ImportIn(BaseModel):
+    kind: str = Field(..., min_length=1, max_length=60)
+    source_label: str = Field(..., min_length=1, max_length=120)
+    filename: Optional[str] = None
+    content: str
+    observed_from: Optional[str] = None
+    observed_to: Optional[str] = None
+
+
+def _parse_error(exc: Exception) -> HTTPException:
+    return HTTPException(status_code=422, detail={
+        "code": "import_parse_error",
+        "message": str(exc),
+    })
+
+
+def _banner(imp: Dict[str, Any]) -> Dict[str, Any]:
+    observed = imp.get("observed_from") or imp.get("observed_to")
+    if imp.get("observed_from") and imp.get("observed_to") and imp["observed_from"] != imp["observed_to"]:
+        observed = f"{imp['observed_from']} to {imp['observed_to']}"
+    return {
+        "text": f"imported file, observed {observed or 'UNKNOWN'}, not live",
+        "observed_from": imp.get("observed_from"),
+        "observed_to": imp.get("observed_to"),
+        "live": False,
+    }
+
+
+@router.post("/imports")
+def create_import(body: ImportIn, acct: str = Depends(studio_account)):
+    from design_studio_imports import KINDS, ImportParseError, parse_import
+    db = get_northstar_db()
+    if body.kind not in KINDS:
+        raise HTTPException(status_code=400, detail={
+            "code": "unknown_import_kind",
+            "message": f"kind must be one of: {', '.join(KINDS)}",
+        })
+    try:
+        parsed = parse_import(
+            kind=body.kind,
+            content=body.content,
+            filename=body.filename,
+            observed_from=body.observed_from,
+            observed_to=body.observed_to,
+        )
+    except ImportParseError as exc:
+        raise _parse_error(exc)
+
+    existing = db.design_studio.imports.get_by_fingerprint(acct, parsed["fingerprint"])
+    if existing:
+        return {
+            "state": "duplicate",
+            "import": existing,
+            "rows_added": 0,
+            "banner": _banner(existing),
+            "notes": existing.get("notes") or [],
+            "note": "This exact file was already imported for this account. Nothing was duplicated.",
+        }
+
+    now = datetime.now(timezone.utc).isoformat()
+    import_id = db.design_studio.imports.create({
+        "account_id": acct,
+        "kind": body.kind,
+        "source_label": body.source_label,
+        "filename": body.filename,
+        "format": parsed["format"],
+        "observed_from": parsed["observed_from"],
+        "observed_to": parsed["observed_to"],
+        "observed_source": parsed["observed_source"],
+        "row_count": len(parsed["rows"]),
+        "skipped_rows": parsed["skipped_rows"],
+        "columns_found": parsed["columns_found"],
+        "missing_columns": parsed["missing_columns"],
+        "notes": parsed["notes"],
+        "fingerprint": parsed["fingerprint"],
+        "imported_at": now,
+        "imported_by": acct,
+    })
+    # The create above can win an integrity race and return the row that already
+    # existed; only add rows when this call created the import.
+    stored = db.design_studio.imports.get_by_id(import_id, account_id=acct)
+    added = 0
+    if stored and stored.get("fingerprint") == parsed["fingerprint"] and stored.get("imported_at") == now:
+        rows = [{
+            "account_id": acct,
+            "import_id": import_id,
+            "kind": body.kind,
+            **{k: r.get(k) for k in (
+                "term", "campaign", "ad_group", "match_type", "targeting",
+                "currency", "impressions", "clicks", "orders", "units", "spend",
+                "sales", "search_frequency_rank", "search_query_score",
+                "asin_click_share", "row_from", "row_to")},
+        } for r in parsed["rows"]]
+        added = db.design_studio.search_terms.add_many(rows)
+    else:
+        return {
+            "state": "duplicate",
+            "import": stored,
+            "rows_added": 0,
+            "banner": _banner(stored or {}),
+            "notes": (stored or {}).get("notes") or [],
+            "note": "This exact file was already imported for this account. Nothing was duplicated.",
+        }
+
+    fresh = db.design_studio.imports.get_by_id(import_id, account_id=acct)
+    return {
+        "state": "imported",
+        "import": fresh,
+        "rows_added": added,
+        "banner": _banner(fresh or {}),
+        "notes": (fresh or {}).get("notes") or [],
+        "note": "Archived for this account with its source label and observed date. This is file data, not a live feed.",
+    }
+
+
+@router.get("/imports")
+def list_imports(kind: Optional[str] = None, acct: str = Depends(studio_account)):
+    from design_studio_imports import KIND_BRAND_ANALYTICS_SQP, KIND_SP_SEARCH_TERMS
+    db = get_northstar_db()
+    rows = db.design_studio.imports.list_for_account(acct, kind=kind)
+    kinds: Dict[str, Any] = {}
+    for k in (KIND_SP_SEARCH_TERMS, KIND_BRAND_ANALYTICS_SQP):
+        latest = next((r for r in rows if r["kind"] == k), None)
+        terms = db.design_studio.search_terms.list_for_account(acct, kind=k, limit=1)
+        kinds[k] = {
+            "available": latest is not None,
+            "latest": latest,
+            "banner": _banner(latest) if latest else None,
+            "row_count": latest.get("row_count") if latest else None,
+            "has_term_rows": bool(terms),
+        }
+    return {
+        "imports": rows,
+        "kinds": kinds,
+        "note": "Every row is an archived file for this account. Brand Analytics is UNAVAILABLE until a file is imported.",
+    }
+
+
+@router.get("/imports/{iid}")
+def get_import(iid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    imp = db.design_studio.imports.get_by_id(iid, account_id=acct)
+    if not imp:
+        raise HTTPException(status_code=404, detail="Import not found")
+    return {"import": imp, "banner": _banner(imp)}
+
+
+@router.delete("/imports/{iid}")
+def delete_import(iid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    if not db.design_studio.imports.delete(iid, account_id=acct):
+        raise HTTPException(status_code=404, detail="Import not found")
+    return {"deleted": True}
+
+
+@router.get("/terms")
+def list_terms(
+    q: str = Query(default="", max_length=200),
+    kind: Optional[str] = None,
+    import_id: Optional[str] = None,
+    limit: int = Query(default=200, le=1000),
+    acct: str = Depends(studio_account),
+):
+    db = get_northstar_db()
+    rows = db.design_studio.search_terms.list_for_account(acct, kind=kind, import_id=import_id, q=q, limit=limit)
+    missing_clicks = sum(1 for r in rows if r.get("clicks") is None)
+    return {
+        "terms": rows,
+        "counts": {
+            "total": len(rows),
+            "without_clicks_column": missing_clicks,
+        },
+        "note": "Scoped to the calling account. A term with no clicks value came from a file without that column: it is UNKNOWN, not zero.",
+    }
+
+
+@router.get("/terms/export")
+def export_terms(
+    q: str = Query(default="", max_length=200),
+    kind: Optional[str] = None,
+    acct: str = Depends(studio_account),
+):
+    import csv as _csv
+    import io as _io
+    db = get_northstar_db()
+    rows = db.design_studio.search_terms.list_for_account(acct, kind=kind, q=q, limit=10000)
+    buf = _io.StringIO()
+    writer = _csv.writer(buf)
+    writer.writerow(["term", "campaign", "ad_group", "match_type", "impressions",
+                     "clicks", "orders", "spend", "sales", "observed_from",
+                     "observed_to", "source"])
+    for r in rows:
+        writer.writerow([
+            r.get("term"), r.get("campaign"), r.get("ad_group"), r.get("match_type"),
+            _cell(r.get("impressions")), _cell(r.get("clicks")), _cell(r.get("orders")),
+            _cell(r.get("spend")), _cell(r.get("sales")),
+            r.get("row_from"), r.get("row_to"), "imported file, not live",
+        ])
+    return Response(
+        content=buf.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="design-studio-search-terms.csv"'},
+    )
+
+
+def _cell(v):
+    """A NULL cell is EMPTY in the export - never rendered as 0."""
+    return "" if v is None else v
+
+
+class BriefIn(BaseModel):
+    term_ids: Optional[List[str]] = None
+    q: str = ""
+    limit: int = Field(default=25, ge=1, le=200)
+    brand: Optional[Dict[str, Any]] = None
+    keywords: Optional[List[str]] = None
+
+
+@router.post("/terms/brief")
+def terms_brief(body: BriefIn, acct: str = Depends(studio_account)):
+    """Compose a creative brief from imported terms + the brand profile.
+
+    NO generation and NO provider call: the brief is text composed from the
+    operator's own imported evidence, and every ranking carries its sample size
+    and the click-only caveat.
+    """
+    from design_studio_imports import build_brief
+    db = get_northstar_db()
+    rows = db.design_studio.search_terms.list_for_account(acct, q=body.q, limit=1000)
+    if body.term_ids:
+        wanted = set(body.term_ids)
+        rows = [r for r in rows if r.get("id") in wanted]
+    brief = build_brief(terms=rows[: body.limit], brand=body.brand, keywords=body.keywords)
+    brief["source_rows"] = len(rows)
+    return brief
+
+
+# ── Creative variants (Phase 6 item 6) ────────────────────────────────────
+
+class VariantIn(BaseModel):
+    project_id: Optional[str] = None
+    name: str = Field(..., min_length=1, max_length=200)
+    asset_id: Optional[str] = None
+    format: Optional[str] = None
+    status: Optional[str] = None
+    notes: Optional[str] = None
+
+
+class VariantPatch(BaseModel):
+    name: Optional[str] = Field(None, min_length=1, max_length=200)
+    asset_id: Optional[str] = None
+    format: Optional[str] = None
+    status: Optional[str] = None
+    notes: Optional[str] = None
+
+
+class VariantMetricIn(BaseModel):
+    source: str = "user"
+    import_id: Optional[str] = None
+    observed_from: Optional[str] = None
+    observed_to: Optional[str] = None
+    impressions: Optional[float] = None
+    clicks: Optional[float] = None
+    orders: Optional[float] = None
+    spend: Optional[float] = None
+    sales: Optional[float] = None
+    note: Optional[str] = None
+
+
+class VariantMetricsImportIn(BaseModel):
+    content: str
+    filename: Optional[str] = None
+
+
+@router.post("/variants")
+def create_variant(body: VariantIn, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    vid = db.design_studio.variants.create({**body.model_dump(), "account_id": acct})
+    return {"id": vid, "variant": db.design_studio.variants.get_by_id(vid, account_id=acct)}
+
+
+@router.get("/variants")
+def list_variants(project_id: Optional[str] = None, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    variants = db.design_studio.variants.list_for_account(acct, project_id=project_id)
+    return {"variants": variants, "metrics": db.design_studio.variants.metrics_for_account(acct)}
+
+
+@router.get("/variants/compare")
+def compare_variants(acct: str = Depends(studio_account)):
+    """Side-by-side comparison of this account's variants.
+
+    Aggregates only what was entered or imported. A metric with no rows is
+    UNKNOWN (never 0), sample sizes are stated with a warning below 25 clicks,
+    and the payload states plainly that it makes no causation claim: Amazon's
+    reports carry no creative identifier, so a difference cannot be attributed
+    to the creative by this data alone.
+    """
+    db = get_northstar_db()
+    variants = db.design_studio.variants.list_for_account(acct)
+    metrics = db.design_studio.variants.metrics_for_account(acct)
+    by_variant: Dict[str, List[Dict[str, Any]]] = {}
+    for m in metrics:
+        by_variant.setdefault(m["variant_id"], []).append(m)
+
+    def agg(rows, field):
+        vals = [r[field] for r in rows if r.get(field) is not None]
+        if not vals:
+            return None
+        return float(sum(vals))
+
+    out = []
+    for v in variants:
+        rows = by_variant.get(v["id"], [])
+        clicks = agg(rows, "clicks")
+        warnings = []
+        if not rows:
+            warnings.append("No metrics recorded for this variant yet - every figure is UNKNOWN.")
+        elif clicks is None:
+            warnings.append("No clicks figure is available; sample size is UNKNOWN.")
+        elif clicks < 25:
+            warnings.append(f"Small sample: {int(clicks)} clicks. Treat any difference as noise.")
+        out.append({
+            "variant": v,
+            "metrics_count": len(rows),
+            "totals": {
+                "impressions": agg(rows, "impressions") if agg(rows, "impressions") is not None else "UNKNOWN",
+                "clicks": clicks if clicks is not None else "UNKNOWN",
+                "orders": agg(rows, "orders") if agg(rows, "orders") is not None else "UNKNOWN",
+                "spend": agg(rows, "spend") if agg(rows, "spend") is not None else "UNKNOWN",
+                "sales": agg(rows, "sales") if agg(rows, "sales") is not None else "UNKNOWN",
+            },
+            "warnings": warnings,
+            "sources": sorted({r.get("source") for r in rows}),
+        })
+    return {
+        "comparison": out,
+        "note": "Metrics are user-entered or file-imported only. This view makes NO causation claim: it cannot attribute a performance difference to a creative.",
+        "attribution_gap": "Amazon search-term reports aggregate at campaign/ad-group level and carry no creative identifier, so creative-level attribution cannot be derived from them.",
+    }
+
+
+@router.get("/variants/{vid}")
+def get_variant(vid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    variant = db.design_studio.variants.get_by_id(vid, account_id=acct)
+    if not variant:
+        raise HTTPException(status_code=404, detail="Variant not found")
+    return {"variant": variant, "metrics": db.design_studio.variants.metrics_for_variant(acct, vid)}
+
+
+@router.patch("/variants/{vid}")
+def patch_variant(vid: str, body: VariantPatch, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    if not db.design_studio.variants.update(vid, body.model_dump(exclude_unset=True), account_id=acct):
+        raise HTTPException(status_code=404, detail="Variant not found")
+    return {"variant": db.design_studio.variants.get_by_id(vid, account_id=acct)}
+
+
+@router.delete("/variants/{vid}")
+def delete_variant(vid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    if not db.design_studio.variants.delete(vid, account_id=acct):
+        raise HTTPException(status_code=404, detail="Variant not found")
+    return {"deleted": True}
+
+
+@router.post("/variants/{vid}/metrics")
+def add_variant_metric(vid: str, body: VariantMetricIn, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    if not db.design_studio.variants.get_by_id(vid, account_id=acct):
+        raise HTTPException(status_code=404, detail="Variant not found")
+    if body.source not in ("user", "file"):
+        raise HTTPException(status_code=400, detail={"code": "invalid_source", "message": "source must be user or file"})
+    rec = {**body.model_dump(), "account_id": acct, "variant_id": vid}
+    mid = db.design_studio.variants.add_metric(rec)
+    return {"id": mid, "metrics": db.design_studio.variants.metrics_for_variant(acct, vid)}
+
+
+@router.post("/variants/metrics/import")
+def import_variant_metrics(body: VariantMetricsImportIn, acct: str = Depends(studio_account)):
+    """Attach performance metrics from a CSV/JSON file to EXISTING variants.
+
+    Rows are matched by variant id or exact name. A row that matches nothing is
+    reported back as unmatched - it is never turned into a new variant.
+    """
+    from design_studio_imports import ImportParseError, parse_variant_metrics
+    db = get_northstar_db()
+    try:
+        parsed = parse_variant_metrics(content=body.content, filename=body.filename)
+    except ImportParseError as exc:
+        raise _parse_error(exc)
+
+    variants = db.design_studio.variants.list_for_account(acct, limit=1000)
+    by_id = {v["id"]: v for v in variants}
+    by_name = {v["name"]: v for v in variants}
+    added = 0
+    unmatched: List[Dict[str, Any]] = []
+    for row in parsed["rows"]:
+        target = by_id.get(row["variant"]) or by_name.get(row["variant"])
+        if not target:
+            unmatched.append({"variant": row["variant"], "reason": "no variant with this id or name"})
+            continue
+        db.design_studio.variants.add_metric({
+            "account_id": acct,
+            "variant_id": target["id"],
+            "source": "file",
+            "observed_from": row.get("observed_from"),
+            "observed_to": row.get("observed_to"),
+            "impressions": row.get("impressions"),
+            "clicks": row.get("clicks"),
+            "orders": row.get("orders"),
+            "spend": row.get("spend"),
+            "sales": row.get("sales"),
+            "note": f"Imported from {body.filename or 'file'}",
+        })
+        added += 1
+    return {
+        "rows_added": added,
+        "unmatched": unmatched,
+        "skipped_rows": parsed["skipped_rows"],
+        "note": "Only existing variants receive metrics. An unmatched row is reported, never invented.",
     }
 
 

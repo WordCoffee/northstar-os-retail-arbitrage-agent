@@ -4,9 +4,16 @@
 // variant flagged as date-sensitive, custom images, DSP display and brand
 // assets. One row per ad product so a spec can never be borrowed across them.
 // Every spec comes from the registry; every rule comes from the engine.
+//
+// The section carries TWO sub-views (?view=search-terms switches):
+//   • Creative — the manufacturing surface (specs, fields, compositing).
+//   • Search terms — imported ad evidence: reports in, briefs and variant
+//     comparisons out (Phase 6 items 4-6). File data only; never live.
 // ???????????????????????????????????????????????????????????????????????????
 
+import { useLocation, useNavigate } from 'react-router-dom'
 import SectionWorkspace from './SectionWorkspace.jsx'
+import SearchTerms from './SearchTerms.jsx'
 import { SPEC_GROUPS, AMAZON_CAPS } from '../../../studio/engine/specRegistry.js'
 
 const GROUPS = SPEC_GROUPS.filter(g => ['SB video', 'SP video', 'Display video', 'Amazon video', 'Custom image', 'DSP display', 'Brand asset'].includes(g.id))
@@ -50,13 +57,28 @@ const SLOTS = [
 ]
 
 export default function Ads() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const view = new URLSearchParams(location.search).get('view') === 'search-terms' ? 'search-terms' : 'creative'
+  const go = (v) => navigate(`/design-studio?section=ads${v === 'search-terms' ? '&view=search-terms' : ''}`, { replace: true })
+
   return (
-    <SectionWorkspace
-      title="Ads"
-      subtitle="Sponsored Brands video, the 9:16 variant, custom images, DSP display and brand assets"
-      groups={GROUPS} defaultSpecId="sbv-landscape"
-      fields={FIELDS} ruleNotes={RULES} slots={SLOTS}
-      canvasFitWidth={620} testId="ads-workspace"
-    />
+    <>
+      <div style={{ display: 'flex', gap: 8, padding: '10px 0 0' }}>
+        <button className={`btn btn-sm ${view === 'creative' ? 'btn-primary' : ''}`} onClick={() => go('creative')}>Creative</button>
+        <button className={`btn btn-sm ${view === 'search-terms' ? 'btn-primary' : ''}`} onClick={() => go('search-terms')} data-testid="sub-search-terms">Search terms</button>
+      </div>
+      {view === 'search-terms' ? (
+        <SearchTerms />
+      ) : (
+        <SectionWorkspace
+          title="Ads"
+          subtitle="Sponsored Brands video, the 9:16 variant, custom images, DSP display and brand assets"
+          groups={GROUPS} defaultSpecId="sbv-landscape"
+          fields={FIELDS} ruleNotes={RULES} slots={SLOTS}
+          canvasFitWidth={620} testId="ads-workspace"
+        />
+      )}
+    </>
   )
 }
