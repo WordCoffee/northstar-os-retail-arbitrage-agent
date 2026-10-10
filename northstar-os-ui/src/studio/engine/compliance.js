@@ -20,7 +20,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { ALL_FORMATS, formatById } from './presets.js'
-import { SAFE_ZONES, AMAZON_CAPS, AI_POLICY } from './specRegistry.js'
+import { SAFE_ZONES, AMAZON_CAPS, AI_POLICY, SPEC_BY_ID, SPEC_SOURCES } from './specRegistry.js'
 
 const ACCESSED = '2026-10-09'
 
@@ -195,6 +195,18 @@ export const RULES = [
     detail: 'Headline 50 chars (30 JP), brand name 25, Amazon DSP body text 100, disclaimer 60, CTA under 30 chars with no punctuation.',
     source: 'ads overview / brand profile policy', accessed: '2026-10-10', dateSensitive: true,
   },
+  {
+    id: 'sbv-vertical-date-sensitive', level: 'flag', scope: 'Amazon Ads', kind: 'video',
+    label: '9:16 vertical is not the default SB video aspect',
+    detail: 'The 16:9 square-pixel variant is the documented default. The 9:16 vertical appears in the Ads API guide and depends on campaign goal and surface availability, so it is a warning — never a block.',
+    source: 'sbv ads API guide', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'spec-sourced', level: 'block', scope: 'all', kind: 'policy',
+    label: 'This format has a recorded source',
+    detail: 'A format with no captured Amazon source cannot be exported, so a spec from one ad product can never be silently applied to another.',
+    source: 'spec registry', accessed: '2026-10-10', dateSensitive: false,
+  },
 ]
 
 export const RULES_BY_ID = Object.fromEntries(RULES.map(r => [r.id, r]))
@@ -258,6 +270,10 @@ export function checkCompliance(doc, ctx = {}) {
   }
 
   const fmt = formatById(doc.formatId) || null
+  // The authoritative row for safe zones, allowed dimensions and media type is
+  // the SPEC REGISTRY, not the presets list — a preset only knows its size.
+  const specRow = SPEC_BY_ID[doc.formatId] || null
+  const isVideo = (specRow?.media || doc.media) === 'video'
   const longest = Math.max(doc.w || 0, doc.h || 0)
   const isMain = doc.formatId === 'amz-main'
   const isAd = /ad/i.test(doc.channel || '') || /Ad/i.test(doc.family || '')
@@ -299,9 +315,18 @@ export function checkCompliance(doc, ctx = {}) {
 
   // ── MAIN image ──
   if (isMain) {
-    const bgOk = bgLayer ? (nearWhite(bgLayer.fill) || (bgLayer.gradient || []).every(c => nearWhite(c))) : false
+    // A background counts as white only when the fill is near-white, or when a
+    // NON-EMPTY gradient exists and every stop is near-white. The previous
+    // `(gradient || []).every(...)` evaluated to TRUE on an empty array, so any
+    // background without a gradient passed regardless of its fill — a
+    // suppression-class bug the fixture test caught.
+    const grad = bgLayer && Array.isArray(bgLayer.gradient) ? bgLayer.gradient : []
+    const gradOk = grad.length > 0 && grad.every(c => nearWhite(c))
+    const bgOk = bgLayer ? (nearWhite(bgLayer.fill) || gradOk) : false
     push('main-white-bg', bgOk ? 'pass' : 'block',
-      bgOk ? 'Background layer is white.' : `Background is ${bgLayer?.fill || (bgLayer?.gradradient || bgLayer?.gradient || []).join(' \u2192 ')} — the main image requires white.`)
+      bgOk
+        ? (nearWhite(bgLayer?.fill) ? 'Background layer is white.' : `Background gradient is white (${grad.join(' → ')}).`)
+        : `Background is ${bgLayer?.fill || grad.join(' → ') || 'missing'} — the main image requires pure white RGB 255,255,255.`)
 
     const fill = productLayers.reduce((s, l) => s + ((l.w || 0) * (l.h || 0)), 0)
     const fillOk = fill >= 0.85
@@ -373,12 +398,13 @@ export function checkCompliance(doc, ctx = {}) {
 
   // ── Phase 2 checks (2026-10-10) ─────────────────────────────────────────
   const isStore = /Store/i.test(doc.channel || '')
-  const isSbv = doc.media === 'video' && /Ads/i.test(doc.channel || '')
+  const isSbv = isVideo && /Ads/i.test(doc.channel || '')
 
   if (isStore) {
     // Store safe zone: content-bearing layers must sit inside keepIn and clear
     // of every keepOut box. We test the centre point plus the box overlap.
-    const zones = SAFE_ZONES[fmt?.safe] || null
+    const zoneId = specRow?.safe || fmt?.safe
+    const zones = zoneId ? SAFE_ZONES[zoneId] : null
     if (zones) {
       const content = [...textLayers, ...badgeLayers]
       const hits = []
@@ -405,7 +431,8 @@ export function checkCompliance(doc, ctx = {}) {
   if (isSbv) {
     const v = AMAZON_CAPS.video
     const dur = Number(ctx.durationSeconds || 0)
-    const dimOk = fmt ? (!fmt.allowedDims || fmt.allowedDims.some(([w, h]) => w === doc.w && h === doc.h)) : false
+    const allowedDims = specRow?.allowedDims || fmt?.allowedDims
+    const dimOk = !allowedDims || allowedDims.some(([w, h]) => w === doc.w && h === doc.h)
     const durOk = dur ? (dur >= v.durationMin && dur <= v.durationMax) : null
     const bits = [
       `Dimensions ${doc.w}×${doc.h}${dimOk ? ' OK' : ' — not in the published set'}`,
@@ -413,7 +440,17 @@ export function checkCompliance(doc, ctx = {}) {
       `formats ${v.formats.join('/')}, codecs ${v.codecs.join('/')}, ${v.videoBitrateMinMbps} Mbps+, audio ${v.audioBitrateMinKbps} kbps / ${(v.audioSampleMinHz / 1000).toFixed(1)} kHz`,
     ]
     push('sbv-video-spec', dimOk && durOk !== false ? 'pass' : (durOk === false || !dimOk ? 'block' : 'flag'), bits.join('; ') + '.')
-    const zones = fmt?.safe ? SAFE_ZONES[fmt.safe] : null
+
+    // 16:9 is the documented default. The 9:16 vertical is date-sensitive and
+    // is a WARN, never a block.
+    if (specRow && specRow.aspectDefault === false) {
+      push('sbv-vertical-date-sensitive', 'flag',
+        `${specRow.label} is not the default. The 16:9 square-pixel variant is documented as the standard; 9:16 appears in the Ads API guide and depends on campaign goal and surface availability. Source: ${SPEC_SOURCES[specRow.source]?.label || specRow.source} · ${specRow.source} · ${specRow.dateSensitive ? 'date-sensitive' : 'stable'}.`)
+    } else {
+      push('sbv-vertical-date-sensitive', 'pass', 'This is the documented default 16:9 aspect.')
+    }
+
+    const zones = specRow?.safe ? SAFE_ZONES[specRow.safe] : null
     const corner = (zones?.keepOut || []).find(z => /bottom-right/i.test(z.label))
     let inCorner = false
     if (corner) {
@@ -425,6 +462,17 @@ export function checkCompliance(doc, ctx = {}) {
     }
     push('sbv-text-safe-area', inCorner ? 'flag' : 'pass',
       inCorner ? 'Text sits in the bottom-right corner, which Amazon prohibits for SB video.' : 'Text clears the prohibited bottom-right corner.')
+  }
+
+  // A format with no captured source can never be exported. This is what stops
+  // an SB spec from silently standing in for an SP placement.
+  {
+    const src = specRow ? SPEC_SOURCES[specRow.source] : null
+    const unsourced = !!(specRow && (specRow.unsourced || !src || src.confidence === 'UNSOURCED'))
+    push('spec-sourced', unsourced ? 'block' : 'pass',
+      unsourced
+        ? `${specRow.label}: no Amazon source has been recorded for this format, so export is refused rather than guessing a spec.`
+        : `Specification sourced from ${src ? src.label : 'the registry'} (${specRow ? specRow.source : 'n/a'}) · ${specRow ? (specRow.dateSensitive ? 'date-sensitive' : 'stable') : 'not in the registry'}.`)
   }
 
   // AI disclosure: a document that flags synthetic people must carry the tag.

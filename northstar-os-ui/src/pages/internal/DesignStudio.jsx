@@ -23,16 +23,22 @@ import { useToast } from '../../components/ToastContext.jsx'
 import CreativeStudio from './CreativeStudio.jsx'
 import ProductDesigner from './ProductDesigner.jsx'
 import ListingImages from './design-studio/ListingImages.jsx'
+import APlus from './design-studio/APlus.jsx'
+import Storefront from './design-studio/Storefront.jsx'
+import Ads from './design-studio/Ads.jsx'
+import VideoUgc from './design-studio/VideoUgc.jsx'
+import Social from './design-studio/Social.jsx'
+import Packaging from './design-studio/Packaging.jsx'
 
 const SECTIONS = [
   { id: 'projects', label: 'Projects', icon: 'stack', note: 'Project board and asset library', built: true },
   { id: 'listing-images', label: 'Listing Images', icon: 'image', note: 'Main, lifestyle, infographic modules', built: true },
-  { id: 'aplus', label: 'A+ / Brand Story', icon: 'list', note: 'Amazon A+ modules and Brand Story cards', built: false },
-  { id: 'storefront', label: 'Storefront', icon: 'store', note: 'Amazon Storefront pages and tiles', built: false },
-  { id: 'ads', label: 'Ads', icon: 'target', note: 'Sponsored Brands, Display and social ad creatives', built: false },
-  { id: 'video-ugc', label: 'Video & UGC Clips', icon: 'film', note: 'Product videos, UGC-style clips and hooks', built: false },
-  { id: 'social', label: 'Social', icon: 'users', note: 'Social posts, carousels and stories', built: false },
-  { id: 'packaging', label: 'Packaging & Mockups', icon: 'package', note: 'Packaging dielines and mockup renders', built: false },
+  { id: 'aplus', label: 'A+ / Brand Story', icon: 'list', note: 'Amazon A+ modules and Brand Story cards', built: true },
+  { id: 'storefront', label: 'Storefront', icon: 'store', note: 'Amazon Storefront pages and tiles', built: true },
+  { id: 'ads', label: 'Ads', icon: 'target', note: 'Sponsored Brands video, custom images, DSP display', built: true },
+  { id: 'video-ugc', label: 'Video & UGC Clips', icon: 'film', note: 'Product videos, UGC-style clips and hooks', built: true },
+  { id: 'social', label: 'Social', icon: 'users', note: 'Social posts, carousels and stories', built: true },
+  { id: 'packaging', label: 'Packaging & Mockups', icon: 'package', note: 'Packaging dielines and mockup renders', built: true },
   { id: '3d-scene', label: '3D Product Scene', icon: 'cube', note: 'Real 3D product scene composer', built: true },
 ]
 
@@ -95,8 +101,14 @@ export default function DesignStudio() {
       <SectionPicker active={sectionId} onChange={setSection} />
       {sectionId === 'projects' && <CreativeStudio />}
       {sectionId === 'listing-images' && <ListingImages />}
+      {sectionId === 'aplus' && <APlus />}
+      {sectionId === 'storefront' && <Storefront />}
+      {sectionId === 'ads' && <Ads />}
+      {sectionId === 'video-ugc' && <VideoUgc />}
+      {sectionId === 'social' && <Social />}
+      {sectionId === 'packaging' && <Packaging />}
       {sectionId === '3d-scene' && <ProductDesigner />}
-      {sectionId !== 'projects' && sectionId !== 'listing-images' && sectionId !== '3d-scene' && <NotBuilt section={section} />}
+      {!SECTIONS.some(s => s.id === sectionId) && <NotBuilt section={section} />}
     </PageLayout>
   )
 }

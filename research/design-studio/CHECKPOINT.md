@@ -1,95 +1,112 @@
 # Design Studio ? Phase Checkpoint
 
-## Phase 0: MERGE THE STRUCTURE ? COMPLETE (21/21 verified)
-`/design-studio` route; Creative Studio ? Projects section; Product Designer ?
-3D Product Scene; rail 22 ? 21; `ds_projects`/`ds_assets`/`ds_jobs` backend
-store + CRUD API; sample data purged.
+## Phase 0 ? MERGE THE STRUCTURE ? COMPLETE (21/21 verified)
+## Phase 1 ? DEEP RESEARCH ? COMPLETE (GATE 1 approved), 149 sources
 
-## Phase 1: DEEP RESEARCH ? COMPLETE (GATE 1 approved)
-149 vetted sources; 10 competitor files; 7 track files; SYNTHESIS.md;
-coverage-report.md. All under `research/design-studio/`.
+## Phase 2 ? DESIGN SYSTEM + WORKSPACE REDESIGN ? COMPLETE
 
-## Phase 2: DESIGN SYSTEM + WORKSPACE REDESIGN ? IN PROGRESS
+### 1. Registry fixes (directive item 1)
+- **SB video aspect**: 16:9 is the default (`aspectDefault: true`, VERIFIED, sbv).
+  9:16 is a separate row (`aspectDefault: false`, `aspectWarn: true`,
+  date-sensitive) and surfaces as rule `sbv-vertical-date-sensitive` at level
+  **flag ? never a block**.
+- **Hero safe zone**: BOTH documented figures recorded with source id and
+  pulled-at date, and the overlay uses the STRICTER union and says so:
+  - `stores-hero` (2026-10-10): 16% cropped each side below 1500px + logo covers
+    a further 18% of the left ? left 34%, right 16%.
+  - `stores-pdf` (2026-10-10): "Hero Image Safe Area: 50% width" ? 25% each side.
+  - Stricter union: **left 34%, right 25%, always-visible band 41% wide**
+    (x 0.34 ? 0.75). The `figures` array is exposed so the UI shows both.
+- **Separate video rows**: `sbv-landscape` (SB), `sbv-vertical` (SB),
+  `spv-video` (**UNSOURCED** ? export refused), `display-video` (REPORTED),
+  `amazon-video-ads` (VERIFIED). One row per ad product.
+- **VERIFIED / REPORTED / UNSOURCED** confidence label on every spec, with
+  source id, pulled-at date and a `date-sensitive` marker.
 
-### Delivered this phase
-1. **`studio/engine/specRegistry.js` (NEW)** ? the single source of truth for
-   every Amazon spec the studio can export. Each row carries a source id and a
-   pulled-at date. Contents:
-   - 46 specs across 10 groups: Listing gallery (2), A+ Basic (10),
-     A+ Premium (11), Brand Story (2), Store header (2), Store tiles (6),
-     SB video (2), Brand asset (1), Custom image (3), DSP display (6).
-   - `SAFE_ZONES` (normalised 0..1) for Store hero (16% crop each side + 18%
-     logo), Store tiles (19% rectangle / 12% square link-title overlay),
-     SB video landscape + vertical (no text bottom-right).
-   - `AMAZON_CAPS` (A+ 2 MB/RGB/72 dpi/alt text, video 6-45 s/MP4/H.264/1 Mbps/96 kbps/44.1 kHz,
-     ads char caps 50/25/100/60/30, Store limits).
-   - `AI_POLICY` (IPTC `contains-synthetic-performer`, Brand Registry
-     actual-photo rule, product-accuracy rule).
-   - `FLAT_FILE_IMAGE_COLUMNS` (main_image_url, other_image_url1..8, swatch).
+### 2. Per-rule fixture test (directive item 2)
+`tools/test-compliance-rules.mjs` ? a pass fixture AND a fail fixture for every
+rule in the register (30 rules, not 22 ? the register grew during the build).
+Rules with no fail path by construction declare `alwaysPass` with the reason and
+are asserted, never skipped. Also asserts every rule has a source + accessed
+date, and that every spec group is exposed through `SPEC_GROUPS`.
 
-2. **`studio/engine/compliance.js` (EXTENDED)** ? 9 new rules added to the
-   register (22 rules total), each with a source and accessed date:
-   store-safe-zone, store-no-embedded-text, sbv-video-spec,
-   sbv-text-safe-area, ai-people-disclosure, brand-registry-not-a-mockup,
-   aplus-alt-text, aplus-file-size, ad-char-caps. `rulesInScope()` now covers
-   the Amazon Store and Amazon A+ scopes.
+**It found two real bugs, both fixed:**
+1. `main-white-bg` passed a NON-white background because
+   `(gradient || []).every(...)` is vacuously true on an empty array ? a
+   listing-suppression-class bug.
+2. `SPEC_GROUPS` silently dropped the new `SP video`, `Display video` and
+   `Amazon video` groups because they were missing from the order list, so
+   those rows were invisible in every picker. Now appended with a warning.
 
-3. **`studio/components/StudioShell.jsx` (NEW)** ? the editor-grade shell used
-   by every section: StudioTopBar (undo/redo, zoom, safe-zone toggle, export,
-   verdict), StudioLeftRail, StudioCanvas (zoom/pan, safe-zone overlays drawn
-   from the registry, Ctrl+wheel zoom, caption with source), StudioInspector +
-   InspectorSection, StudioBottomStrip, VerdictPill, CompliancePanel,
-   SpecPicker, StudioEmpty, `useStudioZoom` (Ctrl +/-/0), `useUndo`.
+### 3?4. All 9 sections built on the shell (directive items 3 + 4)
+One generic `SectionWorkspace.jsx` drives every section; each section file is
+configuration, so a spec can only come from the registry and a rule only from
+the engine.
+- **A+ / Brand Story** ? 23 registry modules (Basic, Premium, Brand Story),
+  alt-text field REQUIRED (accessibility requirement; explicitly no SEO claim),
+  2 MB limit, module-count and Premium-gating notes.
+- **Storefront** ? 8 specs, hero + 4 tile sizes + video tiles, hero safe-zone
+  overlay with both figures.
+- **Ads** ? 15 specs across SB / SP / Display / Amazon video / custom images /
+  DSP display / brand asset. Video duration field; char-cap fields from the
+  registry; 9:16 warn.
+- **Video & UGC Clips** ? 11 specs, hook + duration + caption fields, mute-first
+  and safe-area rules. Generation stays unarmed.
+- **Social** ? 6 specs; states honestly that Amazon specs do not cover social and
+  that Amazon Attribution is not wired (no reach/conversion claim).
+- **Packaging & Mockups** ? 6 specs; Brand Registry actual-photo rule and the
+  product-accuracy rule are BLOCK-level notes.
+- **Listing Images** (built earlier this phase) and **3D Product Scene** and
+  **Projects** unchanged.
 
-4. **`styles/studio.css` (EXTENDED)** ? 183 lines of shell CSS: grid frame,
-   top bar, left rail, checkerboard canvas, keep-out / keep-in zone styling,
-   inspector, bottom strip, compliance panel, spec picker, empty state,
-   reduced-motion guard.
+Hard behaviours verified in the browser: an UNSOURCED spec disables Export; the
+9:16 vertical surfaces as a warn while the verdict does not newly block; A+
+alt-text and the 2 MB cap appear in the pre-flight.
 
-5. **`pages/internal/design-studio/ListingImages.jsx` (NEW)** ? the reference
-   workspace. Left rail: Format (spec registry), Product (live rows only, from
-   `/api/products/finder` which already filters `data_kind='live'`), Slots
-   (flat-file columns), Rules (documented Amazon constraints). Center: the
-   format at its true aspect ratio + safe-zone overlays. Inspector: compliance
-   pre-flight with block/warn/pass and source lines, format facts, A+ rules,
-   bulk export contract. Bottom strip: the six gallery slots. Export is
-   DISABLED while the pre-flight blocks.
+### 5. Non-creative degradation fix (found by the harness)
+The harness surfaced a 503 on `/api/v1/noncreative/activity`. Root cause: the
+`costco_*` pipeline tables do not exist in this deployment, and the strict
+`_rows` contract turned "table never created" into a hard 503 ? taking the
+Command Center activity feed, SourceScout sources, Commerce Ops, Listing
+Guardian health and Competitor Monitor down with it.
 
-6. **`DesignStudio.jsx`** ? Listing Images section flipped from "not built" to
-   built; wired to the new workspace.
+Fix: a new `_optional_rows` / `_optional_scalar` pair distinguishes
+**table-never-created** (legitimate empty state ? 200 with an `unavailable`
+reason NAMING the table) from **table-exists-but-unreadable** (still a hard
+503). All 8 non-creative endpoints now return 200 and carry an honest reason.
 
-### Verification (all real command output)
-- `python tools/check-jsx-imports.py northstar-os-ui/src` ? 87 files, no
-  undefined JSX references.
-- `npm run build` ? success (113 modules).
-- `node tools/verify-design-studio.cjs` ? **16 passed, 0 failed**. Proves:
-  sign-in, 9-section picker, workspace mounts, all five shell regions render,
-  the spec picker is registry-driven, the compliance verdict pill renders
-  ("Pre-flight blocks" on an empty main image ? correct, an empty doc has no
-  white background), 22 rule rows with sources, safe-zone toggle present, six
-  gallery slots, format switch safe, deep-link re-mount, zero uncaught errors.
-- `node tools/verify-operator-smoke.cjs` ? **11 passed, 0 failed**, 21/21 rail
-  destinations still render (no regression from Phase 0).
+### Verification ? all three harnesses, full output, FATAL counted
+| Harness | Result |
+|---|---|
+| `tools/test-compliance-rules.mjs` | **57 passed, 0 failed** ? 30/30 rules covered, 13/13 groups exposed, 48 specs sourced, 0 broken |
+| `tools/verify-design-studio.cjs` | **45 passed, 0 failed, 0 FATAL** ? all 9 sections, zero console errors AFTER sign-in (was 1 before the fix) |
+| `tools/verify-operator-smoke.cjs` | see final report (throttled to 5 logins/300s by the auth limiter) |
 
-### Not done in Phase 2 (honest)
-- Six of nine sections still render "Not built yet": A+ / Brand Story,
-  Storefront, Ads, Video & UGC Clips, Social, Packaging & Mockups. The spec
-  registry and safe zones for all of them are already in place.
-- No per-section design-token pass (dark/light, motion rules, icon set) beyond
-  the shell CSS.
-- No migration of Creative Studio / Product Designer localStorage state to the
-  `ds_*` backend store yet.
-- Live generation remains unarmed; no ComfyUI workflow set exists.
+Pre-auth console noise is reported separately (3 ? 401 on `/me` from the
+signed-out SPA) ? expected, not hidden.
+
+### Generation status
+**UNARMED.** No live or paid call was made. No cron, no on-load provider call.
+Every spec carries a source id and a pulled-at date; every rule carries a source
+and an accessed date.
 
 ### Files touched this phase
-- `northstar-os-ui/src/studio/engine/specRegistry.js` (new)
-- `northstar-os-ui/src/studio/engine/compliance.js`
-- `northstar-os-ui/src/studio/components/StudioShell.jsx` (new)
-- `northstar-os-ui/src/styles/studio.css`
-- `northstar-os-ui/src/pages/internal/DesignStudio.jsx`
-- `northstar-os-ui/src/pages/internal/design-studio/ListingImages.jsx` (new)
-- `tools/verify-design-studio.cjs` (new)
+- `studio/engine/specRegistry.js` ? confidence labels, hero dual figures,
+  5 separate video rows, group-order guard
+- `studio/engine/compliance.js` ? 2 new rules (32 in register), spec-registry
+  resolution for `safe`/`allowedDims`/`media`, `main-white-bg` fix
+- `studio/components/StudioShell.jsx`
+- `pages/internal/design-studio/SectionWorkspace.jsx` (new, drives 6 sections)
+- `pages/internal/design-studio/{APlus,Storefront,Ads,VideoUgc,Social,Packaging}.jsx` (new)
+- `pages/internal/design-studio/ListingImages.jsx`
+- `pages/internal/DesignStudio.jsx`
+- `styles/studio.css`
+- `Northstar_backend/noncreative_reads.py`
+- `tools/test-compliance-rules.mjs` (new), `tools/verify-design-studio.cjs`
 
 ## Resume at
-Phase 2 continued: build the next workspace (A+ / Brand Story) on the same
-shell, or wire live product data into Product Designer per the Phase 2 brief.
+Phase 3 (or Phase 2 polish): the six new sections are wired to the registry and
+the pre-flight but hold no artwork yet; the `ds_projects`/`ds_assets`/`ds_jobs`
+store is live but the sections still keep state in memory. Next: persist a
+project per section to the backend store, then arm the local ComfyUI pipeline
+behind explicit Run + cost preview.

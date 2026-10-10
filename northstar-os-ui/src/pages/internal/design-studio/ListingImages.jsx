@@ -20,12 +20,13 @@ import { useToast } from '../../../components/ToastContext.jsx'
 import Icon from '../../../components/Icon.jsx'
 import {
   StudioTopBar, StudioLeftRail, StudioCanvas, StudioInspector, InspectorSection,
-  StudioBottomStrip, CompliancePanel, SpecPicker, StudioEmpty, VerdictPill,
+  StudioBottomStrip, CompliancePanel, StudioEmpty, VerdictPill,
   useStudioZoom,
 } from '../../../studio/components/StudioShell.jsx'
 import { SPEC_GROUPS, specById, AMAZON_CAPS } from '../../../studio/engine/specRegistry.js'
 import { checkCompliance } from '../../../studio/engine/compliance.js'
 import { createDoc } from '../../../studio/engine/doc.js'
+import { RegistrySpecPicker, ConfidenceTag } from './SectionWorkspace.jsx'
 
 const GALLERY_IMAGE_SPECS = SPEC_GROUPS.filter(g => g.id === 'Gallery')
 
@@ -132,7 +133,7 @@ export default function ListingImages({ product: initialProduct, asin: initialAs
         zoom={zoom} onZoom={setZoom} onFit={() => { setZoom(1); setPan({ x: 0, y: 0 }) }}
         showSafeZones={showSafeZones} onToggleSafeZones={setShowSafeZones}
         safeZoneNote={spec.safe ? undefined : 'No safe zone is recorded for this format'}
-        status={<VerdictPill verdict={report.verdict} />}
+        status={<><VerdictPill verdict={report.verdict} /> <ConfidenceTag spec={spec} /></>}
         actions={
           <button className="btn btn-sm btn-primary" disabled={report.verdict === 'block'}
             title={report.verdict === 'block' ? 'The pre-flight blocks export until every blocking rule passes.' : 'Export is available when the pre-flight does not block.'}>
@@ -144,7 +145,7 @@ export default function ListingImages({ product: initialProduct, asin: initialAs
       <div className="ss-shell-mid">
         <StudioLeftRail tabs={LEFT_TABS} active={tab} onSelect={setTab}>
           {tab === 'specs' && (
-            <SpecPicker groups={GALLERY_IMAGE_SPECS} value={specId} onChange={pickSpec} />
+            <RegistrySpecPicker groups={GALLERY_IMAGE_SPECS} value={specId} onChange={pickSpec} />
           )}
           {tab === 'product' && (
             <div className="stack" style={{ gap: 8 }}>
