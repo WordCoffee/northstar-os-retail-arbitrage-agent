@@ -38,6 +38,11 @@ if (-not $secret) { throw "no signing key available" }
 
 $env:NORTHSTAR_JWT_SECRET = $secret
 $env:ENVIRONMENT = "development"
+# Restore the edge rate limiter on every normal start (Phase 7 item 3). The
+# harness opt-out may have been set for a test run; a plain start-local must
+# always come back with the limiter ON. Harness runs that need the opt-out set
+# it explicitly on their own docker compose invocation.
+$env:NORTHSTAR_DISABLE_RATE_LIMIT = "0"
 
 Push-Location $repo
 try {

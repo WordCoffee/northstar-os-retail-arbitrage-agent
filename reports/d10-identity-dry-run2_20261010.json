@@ -1,0 +1,63 @@
+{
+  "generated_at": "2026-10-10T23:40:01.605091+00:00",
+  "org_count": 3,
+  "orgs": [
+    "3514bd77-13af-4231-b83d-ae72a47e42e8",
+    "d8a1447f-3018-48be-9048-ad28e832e06a",
+    "eb7b121b-f625-4bd7-89e9-a33a99c8ec01"
+  ],
+  "target_org": null,
+  "rule": "shared buckets move only when exactly one organization exists; unknown buckets always quarantine",
+  "stores": {
+    "projects": {
+      "table": "ds_projects",
+      "buckets": {}
+    },
+    "assets": {
+      "table": "ds_assets",
+      "buckets": {}
+    },
+    "jobs": {
+      "table": "ds_jobs",
+      "buckets": {}
+    },
+    "rechecks": {
+      "table": "ds_rechecks",
+      "buckets": {
+        "default": 2
+      }
+    },
+    "imports": {
+      "table": "ds_imports",
+      "buckets": {}
+    },
+    "search_terms": {
+      "table": "ds_search_terms",
+      "buckets": {}
+    },
+    "variants": {
+      "table": "ds_variants",
+      "buckets": {}
+    },
+    "variant_metrics": {
+      "table": "ds_variant_metrics",
+      "buckets": {}
+    }
+  },
+  "moves": [],
+  "quarantine": [
+    {
+      "store": "rechecks",
+      "table": "ds_rechecks",
+      "bucket": "default",
+      "count": 2,
+      "sample_ids": [
+        "d10-demo-0",
+        "d10-demo-1"
+      ],
+      "reason": "owner ambiguous: the deployment does not hold exactly one organization"
+    }
+  ],
+  "fully_mapped": false,
+  "mode": "dry-run"
+}

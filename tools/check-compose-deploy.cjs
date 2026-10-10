@@ -84,5 +84,34 @@ const caddyPorts = ((hosted.services.caddy && hosted.services.caddy.ports) || []
 if (caddyPorts.includes('80')) ok(`positive control: Caddy stays published in the deploy composition (${caddyPorts.join(',')})`)
 else no('positive control failed: the deploy composition has no Caddy publish - the parse looks broken', JSON.stringify(caddyPorts))
 
+// 4. The harness rate-limit opt-out must not survive into a deploy build
+//    (Phase 7 item 3). The hosted overlay pins it to "0"; the API also refuses
+//    to boot with it set in staging/production.
+function envDict(svc) {
+  const env = (svc && svc.environment) || {}
+  if (Array.isArray(env)) {
+    const m = {}
+    for (const e of env) {
+      const s = String(e)
+      const i = s.indexOf('=')
+      if (i > 0) m[s.slice(0, i)] = s.slice(i + 1)
+    }
+    return m
+  }
+  return env
+}
+const hostedEnv = envDict(hosted.services.api)
+const localEnv = envDict(local.services.api)
+if (hostedEnv.NORTHSTAR_DISABLE_RATE_LIMIT === '0') {
+  ok('DEPLOY composition pins NORTHSTAR_DISABLE_RATE_LIMIT=0 (the opt-out cannot ship)')
+} else {
+  no('DEPLOY composition does not pin the rate-limit opt-out', `value=${JSON.stringify(hostedEnv.NORTHSTAR_DISABLE_RATE_LIMIT)}`)
+}
+if (localEnv.NORTHSTAR_DISABLE_RATE_LIMIT === '1') {
+  no('LOCAL composition forces the rate-limit opt-out ON - a normal start must keep the limiter enabled')
+} else {
+  ok(`LOCAL composition does not force the opt-out (value=${JSON.stringify(localEnv.NORTHSTAR_DISABLE_RATE_LIMIT ?? 'unset -> compose default 0')})`)
+}
+
 console.log(`\nDEPLOY COMPOSE GUARD: ${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

@@ -12,6 +12,11 @@ x-hosted-env: &hosted-env
   NS_FOUNDATION_ALLOW_REMOTE_DEV: "0"
   NORTHSTAR_OWNER_TEST_MODE: "0"
   NORTHSTAR_OWNER_SELF_APPROVAL: "0"
+  # The harness rate-limit opt-out must never survive into a deploy build.
+  # The API also refuses to boot with it set in staging/production
+  # (rate_limiter.assert_prod_posture), and tools/check-compose-deploy.cjs
+  # asserts this pin is present.
+  NORTHSTAR_DISABLE_RATE_LIMIT: "0"
 
 services:
   migrate:

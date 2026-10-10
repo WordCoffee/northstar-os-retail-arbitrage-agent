@@ -35,39 +35,44 @@ export default function SignIn() {
   // Already signed in (incl. after a page refresh) -> straight to the workspace.
   if (session.authenticated) return <Navigate to="/home" replace />
 
-  // Dev builds try the local identity shim FIRST, but whether it can
-  // authenticate depends on the CONNECTED BACKEND's posture (ENVIRONMENT=
-  // development and a loopback client), not on this frontend build. A
-  // containerized backend never sees a loopback client, so its shim headers are
-  // ignored and /me answers 401. The old code assumed success, navigated, and
-  // the guard silently bounced back here - no request, no error, no state
-  // change. Now the shim result is VERIFIED and a real credential login
-  // follows, so a dev server can always sign in and a failure is never silent.
   const submit = async (e) => {
     e.preventDefault()
     setError('')
     const identifier = (form.identifier || '').trim()
+
+    // The shim identity (LOCAL_DEV only) NEVER touches the credential endpoint.
+    // It either authenticates through the loopback shim or fails closed with an
+    // explanation - no /auth/login request is made and nothing is logged. Only
+    // the EXACT demo pair takes this path; any other typed pair (including the
+    // demo identifier with a real password) is an explicit real login.
+    const isShimPair = LOCAL_DEV
+      && identifier.toLowerCase() === LOCAL_DEMO_IDENTIFIER.toLowerCase()
+      && form.password === LOCAL_DEMO_PASSWORD
+
+    if (isShimPair) {
+      setBusy(true)
+      session.updateDev(LOCAL_DEMO_SESSION)
+      const shim = await session.refresh()
+      setBusy(false)
+      if (shim && shim.authenticated) {
+        navigate('/home')
+        return
+      }
+      setError('The local dev shim could not authenticate against this backend. The shim works only when the connected API runs in development posture on loopback; a containerized API never sees a loopback client. Nothing was sent to the credential endpoint.')
+      return
+    }
+
+    // Real credential login (sets the HttpOnly session cookie). Reachable in a
+    // dev build only when the operator types a real account, and always in a
+    // production build.
     setBusy(true)
     try {
-      if (LOCAL_DEV
-        && identifier.toLowerCase() === LOCAL_DEMO_IDENTIFIER.toLowerCase()
-        && form.password === LOCAL_DEMO_PASSWORD) {
-        session.updateDev(LOCAL_DEMO_SESSION)
-        const shim = await session.refresh()
-        if (shim && shim.authenticated) {
-          navigate('/home')
-          return
-        }
-        // Shim inactive on this backend -> fall through to the credential path.
-      }
-      // Real credential login (sets the HttpOnly session cookie). In a dev
-      // build this doubles as the fallback when the shim cannot authenticate.
       await foundationApi.login(identifier.toLowerCase(), form.password)
       await session.refresh()
       navigate('/home')
     } catch {
       setError(LOCAL_DEV
-        ? 'Invalid credentials. The local dev shim is used only when the connected backend runs in development posture on loopback; against a containerized backend, sign in with a real local account.'
+        ? 'Invalid credentials. Sign in with a real local account, or run the local backend in development posture for the shim.'
         : 'Invalid email or password.')
     } finally {
       setBusy(false)

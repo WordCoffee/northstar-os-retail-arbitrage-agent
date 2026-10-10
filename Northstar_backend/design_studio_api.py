@@ -2,6 +2,14 @@
 
 Phase 0 exposes honest CRUD for the merged studio. No provider calls; every
 potentially paid action is recorded as a queued job and waits for explicit run.
+
+Phase 7 (D10): EVERY route resolves a strict, organization-scoped session
+(`studio_account`) — the cookie/Bearer session the SPA actually carries. Before
+this, the legacy routes used `get_current_user`, which has no cookie awareness,
+so every UI caller collapsed into one shared "default" bucket. Anonymous
+callers are refused with 401. `migrate_ds_identity.py` moves pre-existing
+shared-bucket records to their owning organization when that owner is
+unambiguous and quarantines the rest.
 """
 
 from datetime import datetime, timezone
@@ -10,7 +18,6 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, Field
 
-from auth_deps import get_current_user
 from data_layer import get_northstar_db
 
 router = APIRouter(prefix="/api/design-studio", tags=["design-studio"])
@@ -70,16 +77,6 @@ class JobPatch(BaseModel):
     finished_at: Optional[str] = None
 
 
-def _account_id(user: Dict[str, Any]) -> str:
-    # NOTE (Phase 6 finding, left as-is deliberately): get_current_user has no
-    # cookie awareness, so UI (cookie) callers are the demo fallback here and
-    # every legacy caller lands in one shared bucket. Changing that moves
-    # already-stored data between buckets, so it is recorded for the owner
-    # rather than changed in passing. The imported-evidence endpoints do NOT
-    # use this function; they resolve a strict organization via studio_account.
-    return user.get("user_id") or user.get("sub") or "default"
-
-
 async def studio_account(request: Request) -> str:
     """Strict, ORGANIZATION-scoped identity for the imported-evidence surfaces.
 
@@ -102,32 +99,30 @@ async def studio_account(request: Request) -> str:
 # ── Projects ───────────────────────────────────────────────────────────────
 
 @router.post("/projects")
-def create_project(body: ProjectIn, user: Dict[str, Any] = Depends(get_current_user)):
+def create_project(body: ProjectIn, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    acct = _account_id(user)
     pid = db.design_studio.projects.create({**body.model_dump(), "account_id": acct})
     return {"id": pid, "project": db.design_studio.projects.get_by_id(pid, account_id=acct)}
 
 
 @router.get("/projects")
-def list_projects(section: Optional[str] = None, user: Dict[str, Any] = Depends(get_current_user)):
+def list_projects(section: Optional[str] = None, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    return {"projects": db.design_studio.projects.list_by_section(section=section, account_id=_account_id(user))}
+    return {"projects": db.design_studio.projects.list_by_section(section=section, account_id=acct)}
 
 
 @router.get("/projects/{pid}")
-def get_project(pid: str, user: Dict[str, Any] = Depends(get_current_user)):
+def get_project(pid: str, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    project = db.design_studio.projects.get_by_id(pid, account_id=_account_id(user))
+    project = db.design_studio.projects.get_by_id(pid, account_id=acct)
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
     return {"project": project}
 
 
 @router.patch("/projects/{pid}")
-def patch_project(pid: str, body: ProjectPatch, user: Dict[str, Any] = Depends(get_current_user)):
+def patch_project(pid: str, body: ProjectPatch, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    acct = _account_id(user)
     updated = db.design_studio.projects.update(pid, body.model_dump(exclude_unset=True), account_id=acct)
     if not updated:
         # A project owned by another account is a 404, never a 403: the caller
@@ -137,9 +132,9 @@ def patch_project(pid: str, body: ProjectPatch, user: Dict[str, Any] = Depends(g
 
 
 @router.delete("/projects/{pid}")
-def delete_project(pid: str, user: Dict[str, Any] = Depends(get_current_user)):
+def delete_project(pid: str, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    deleted = db.design_studio.projects.delete(pid, account_id=_account_id(user))
+    deleted = db.design_studio.projects.delete(pid, account_id=acct)
     if not deleted:
         raise HTTPException(status_code=404, detail="Project not found")
     return {"deleted": True}
@@ -148,32 +143,31 @@ def delete_project(pid: str, user: Dict[str, Any] = Depends(get_current_user)):
 # ── Assets ─────────────────────────────────────────────────────────────────
 
 @router.post("/assets")
-def create_asset(body: AssetIn, user: Dict[str, Any] = Depends(get_current_user)):
+def create_asset(body: AssetIn, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    acct = _account_id(user)
     aid = db.design_studio.assets.create({**body.model_dump(), "account_id": acct})
     return {"id": aid, "asset": db.design_studio.assets.get_by_id(aid, account_id=acct)}
 
 
 @router.get("/assets")
-def list_assets(project_id: Optional[str] = None, asset_type: Optional[str] = None, user: Dict[str, Any] = Depends(get_current_user)):
+def list_assets(project_id: Optional[str] = None, asset_type: Optional[str] = None, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    return {"assets": db.design_studio.assets.list_by_project(project_id=project_id, asset_type=asset_type, account_id=_account_id(user))}
+    return {"assets": db.design_studio.assets.list_by_project(project_id=project_id, asset_type=asset_type, account_id=acct)}
 
 
 @router.get("/assets/{aid}")
-def get_asset(aid: str, user: Dict[str, Any] = Depends(get_current_user)):
+def get_asset(aid: str, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    asset = db.design_studio.assets.get_by_id(aid, account_id=_account_id(user))
+    asset = db.design_studio.assets.get_by_id(aid, account_id=acct)
     if not asset:
         raise HTTPException(status_code=404, detail="Asset not found")
     return {"asset": asset}
 
 
 @router.delete("/assets/{aid}")
-def delete_asset(aid: str, user: Dict[str, Any] = Depends(get_current_user)):
+def delete_asset(aid: str, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    deleted = db.design_studio.assets.delete(aid, account_id=_account_id(user))
+    deleted = db.design_studio.assets.delete(aid, account_id=acct)
     if not deleted:
         raise HTTPException(status_code=404, detail="Asset not found")
     return {"deleted": True}
@@ -182,32 +176,30 @@ def delete_asset(aid: str, user: Dict[str, Any] = Depends(get_current_user)):
 # ── Jobs ───────────────────────────────────────────────────────────────────
 
 @router.post("/jobs")
-def create_job(body: JobIn, user: Dict[str, Any] = Depends(get_current_user)):
+def create_job(body: JobIn, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    acct = _account_id(user)
     jid = db.design_studio.jobs.create({**body.model_dump(), "account_id": acct})
     return {"id": jid, "job": db.design_studio.jobs.get_by_id(jid, account_id=acct)}
 
 
 @router.get("/jobs")
-def list_jobs(project_id: Optional[str] = None, status: Optional[str] = None, user: Dict[str, Any] = Depends(get_current_user)):
+def list_jobs(project_id: Optional[str] = None, status: Optional[str] = None, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    return {"jobs": db.design_studio.jobs.list_by_project(project_id=project_id, status=status, account_id=_account_id(user))}
+    return {"jobs": db.design_studio.jobs.list_by_project(project_id=project_id, status=status, account_id=acct)}
 
 
 @router.get("/jobs/{jid}")
-def get_job(jid: str, user: Dict[str, Any] = Depends(get_current_user)):
+def get_job(jid: str, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    job = db.design_studio.jobs.get_by_id(jid, account_id=_account_id(user))
+    job = db.design_studio.jobs.get_by_id(jid, account_id=acct)
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
     return {"job": job}
 
 
 @router.patch("/jobs/{jid}")
-def patch_job(jid: str, body: JobPatch, user: Dict[str, Any] = Depends(get_current_user)):
+def patch_job(jid: str, body: JobPatch, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    acct = _account_id(user)
     updated = db.design_studio.jobs.update(jid, body.model_dump(exclude_unset=True), account_id=acct)
     if not updated:
         raise HTTPException(status_code=404, detail="Job not found")
@@ -215,9 +207,9 @@ def patch_job(jid: str, body: JobPatch, user: Dict[str, Any] = Depends(get_curre
 
 
 @router.delete("/jobs/{jid}")
-def delete_job(jid: str, user: Dict[str, Any] = Depends(get_current_user)):
+def delete_job(jid: str, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    deleted = db.design_studio.jobs.delete(jid, account_id=_account_id(user))
+    deleted = db.design_studio.jobs.delete(jid, account_id=acct)
     if not deleted:
         raise HTTPException(status_code=404, detail="Job not found")
     return {"deleted": True}
@@ -310,7 +302,7 @@ def _existing_legacy_keys(db, acct: str) -> set:
 
 
 @router.post("/migrate")
-def migrate_legacy(body: MigrateIn, user: Dict[str, Any] = Depends(get_current_user)):
+def migrate_legacy(body: MigrateIn, acct: str = Depends(studio_account)):
     """Import browser-local records into the tenant's backend store.
 
     Idempotent per account across projects, assets AND jobs: a record carrying a
@@ -320,7 +312,6 @@ def migrate_legacy(body: MigrateIn, user: Dict[str, Any] = Depends(get_current_u
     ``metadata.legacyFields`` instead of breaking the insert.
     """
     db = get_northstar_db()
-    acct = _account_id(user)
     created = {'projects': 0, 'assets': 0, 'jobs': 0}
     skipped = {'projects': 0, 'assets': 0, 'jobs': 0}
     errors: List[Dict[str, Any]] = []
@@ -424,11 +415,10 @@ def migrate_legacy(body: MigrateIn, user: Dict[str, Any] = Depends(get_current_u
 def search(
     q: str = Query(default="", max_length=200),
     limit: int = Query(default=50, le=200),
-    user: Dict[str, Any] = Depends(get_current_user),
+    acct: str = Depends(studio_account),
 ):
     """Case-insensitive substring search over the caller's own projects,
     assets and jobs. Scoped to the account at the query, not filtered after."""
-    acct = _account_id(user)
     db = get_northstar_db()
     needle = (q or "").strip()
     like = f"%{needle}%"
@@ -451,7 +441,7 @@ def search(
 
 
 @router.get("/projects/{pid}/export-manifest")
-def export_manifest(pid: str, user: Dict[str, Any] = Depends(get_current_user)):
+def export_manifest(pid: str, acct: str = Depends(studio_account)):
     """The flat-file image manifest for one project.
 
     Refuses a project owned by another account with a 404, exactly like a
@@ -459,7 +449,6 @@ def export_manifest(pid: str, user: Dict[str, Any] = Depends(get_current_user)):
     operator can map them straight into a feed, and never invents a URL: a slot
     with no asset is emitted as null rather than as a placeholder path.
     """
-    acct = _account_id(user)
     db = get_northstar_db()
     project = db.design_studio.projects.get_by_id(pid, account_id=acct)
     if not project:
@@ -502,7 +491,7 @@ class RecheckIn(BaseModel):
 
 
 @router.post("/rechecks")
-def create_recheck(body: RecheckIn, user: Dict[str, Any] = Depends(get_current_user)):
+def create_recheck(body: RecheckIn, acct: str = Depends(studio_account)):
     """Record one dated verification of a live asset.
 
     The verdict is supplied by the caller and stores what the reader actually
@@ -510,7 +499,6 @@ def create_recheck(body: RecheckIn, user: Dict[str, Any] = Depends(get_current_u
     upgrades a verdict.
     """
     db = get_northstar_db()
-    acct = _account_id(user)
     rec = body.model_dump()
     rec["account_id"] = acct
     rid = db.design_studio.rechecks.create(rec)
@@ -521,10 +509,9 @@ def create_recheck(body: RecheckIn, user: Dict[str, Any] = Depends(get_current_u
 def list_rechecks(
     asset_id: Optional[str] = None,
     limit: int = Query(default=200, le=1000),
-    user: Dict[str, Any] = Depends(get_current_user),
+    acct: str = Depends(studio_account),
 ):
     db = get_northstar_db()
-    acct = _account_id(user)
     rows = db.design_studio.rechecks.list_for_account(acct, asset_id=asset_id, limit=limit)
     return {
         "rechecks": rows,
@@ -537,18 +524,18 @@ def list_rechecks(
 
 
 @router.get("/rechecks/{rid}")
-def get_recheck(rid: str, user: Dict[str, Any] = Depends(get_current_user)):
+def get_recheck(rid: str, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    rec = db.design_studio.rechecks.get_by_id(rid, account_id=_account_id(user))
+    rec = db.design_studio.rechecks.get_by_id(rid, account_id=acct)
     if not rec:
         raise HTTPException(status_code=404, detail="Re-check not found")
     return {"recheck": rec}
 
 
 @router.delete("/rechecks/{rid}")
-def delete_recheck(rid: str, user: Dict[str, Any] = Depends(get_current_user)):
+def delete_recheck(rid: str, acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    if not db.design_studio.rechecks.delete(rid, account_id=_account_id(user)):
+    if not db.design_studio.rechecks.delete(rid, account_id=acct):
         raise HTTPException(status_code=404, detail="Re-check not found")
     return {"deleted": True}
 
@@ -558,7 +545,7 @@ class RecheckMigrateIn(BaseModel):
 
 
 @router.post("/rechecks/migrate")
-def migrate_rechecks(body: RecheckMigrateIn, user: Dict[str, Any] = Depends(get_current_user)):
+def migrate_rechecks(body: RecheckMigrateIn, acct: str = Depends(studio_account)):
     """Import browser-local re-check entries, idempotently.
 
     Idempotency is enforced by a UNIQUE index on (account_id, legacy_key), so a
@@ -567,7 +554,6 @@ def migrate_rechecks(body: RecheckMigrateIn, user: Dict[str, Any] = Depends(get_
     a genuinely new check.
     """
     db = get_northstar_db()
-    acct = _account_id(user)
     created = 0
     skipped = 0
     errors: List[Dict[str, Any]] = []
@@ -1044,7 +1030,7 @@ def import_variant_metrics(body: VariantMetricsImportIn, acct: str = Depends(stu
 # enqueues work, and never spends anything.
 
 @router.get("/generation-status")
-def generation_status(user: Dict[str, Any] = Depends(get_current_user)):
+def generation_status(acct: str = Depends(studio_account)):
     """Report the media-generation arming state. Read-only, zero provider calls."""
     state: Dict[str, Any] = {"media_live_armed": False, "providers": {}, "source": "unreadable"}
     try:
@@ -1069,13 +1055,12 @@ def generation_status(user: Dict[str, Any] = Depends(get_current_user)):
 # ── Status / health for the merged studio ──────────────────────────────────
 
 @router.get("/status")
-def studio_status(user: Dict[str, Any] = Depends(get_current_user)):
+def studio_status(acct: str = Depends(studio_account)):
     db = get_northstar_db()
-    account = _account_id(user)
     return {
         "mode": "local",
-        "projects": len(db.design_studio.projects.list_by_section(account_id=account, limit=1000)),
-        "assets": len(db.design_studio.assets.list_by_project(account_id=account, limit=1000)),
-        "jobs": len(db.design_studio.jobs.list_by_project(account_id=account, limit=1000)),
+        "projects": len(db.design_studio.projects.list_by_section(account_id=acct, limit=1000)),
+        "assets": len(db.design_studio.assets.list_by_project(account_id=acct, limit=1000)),
+        "jobs": len(db.design_studio.jobs.list_by_project(account_id=acct, limit=1000)),
         "note": "Local design workspace. Provider generation is gated behind explicit Run actions.",
     }

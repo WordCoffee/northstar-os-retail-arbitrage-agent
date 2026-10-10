@@ -20,15 +20,25 @@ def test_ok_when_flag_unset(monkeypatch):
     assert prod_posture_ok() is True
 
 
-def test_ok_when_flag_set_but_not_production(monkeypatch):
+def test_ok_when_flag_set_in_development(monkeypatch):
     monkeypatch.setenv("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
-    monkeypatch.setenv("ENVIRONMENT", "staging")
+    monkeypatch.setenv("ENVIRONMENT", "development")
     assert prod_posture_ok() is True
 
 
 def test_violation_raises_in_production(monkeypatch):
     monkeypatch.setenv("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
     monkeypatch.setenv("ENVIRONMENT", "production")
+    assert prod_posture_ok() is False
+    with pytest.raises(RuntimeError, match="PROD POSTURE"):
+        assert_prod_posture()
+
+
+def test_violation_raises_in_staging_too(monkeypatch):
+    # The hosted overlay runs ENVIRONMENT=staging; the opt-out must be refused
+    # there as well, or a deploy could carry it (Phase 7 item 3).
+    monkeypatch.setenv("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
+    monkeypatch.setenv("ENVIRONMENT", "staging")
     assert prod_posture_ok() is False
     with pytest.raises(RuntimeError, match="PROD POSTURE"):
         assert_prod_posture()
