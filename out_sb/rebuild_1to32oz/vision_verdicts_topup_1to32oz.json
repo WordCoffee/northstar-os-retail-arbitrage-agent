@@ -1,0 +1,69 @@
+{
+  "B01DKZZFCE": {
+    "form": "powder_pouch",
+    "capsules_or_tablets_visible": false,
+    "liquid_or_dropper_visible": false,
+    "label_says_lions_mane": true,
+    "label_says_organic": true,
+    "usda_organic_seal_visible": true,
+    "other_ingredients_on_label": [],
+    "mentions_extract_or_mycelium": true,
+    "net_weight_on_label": "60g",
+    "confidence": 0.95,
+    "evidence": "The product is labeled as 'LION'S MANE Mushroom Extract Powder' and features the USDA Organic seal, indicating it is organic. The net weight is clearly stated as 60g.",
+    "images_checked": 1,
+    "auditor": "qwen2.5vl:7b",
+    "net_weight_oz": 2.12
+  },
+  "B07MVRLJ91": {
+    "form": "powder_pouch",
+    "capsules_or_tablets_visible": false,
+    "liquid_or_dropper_visible": false,
+    "label_says_lions_mane": true,
+    "label_says_organic": true,
+    "usda_organic_seal_visible": true,
+    "other_ingredients_on_label": [
+      "hericenones",
+      "erinacines"
+    ],
+    "mentions_extract_or_mycelium": true,
+    "net_weight_on_label": "100g / 3.53oz",
+    "confidence": 0.95,
+    "evidence": "The image shows a pouch of Lion's Mane Powder with a USDA Organic seal, indicating it is certified organic. The label mentions hericenones and erinacines, which are components of the extract. The net weight is clearly stated as 100g / 3.53oz.",
+    "images_checked": 3,
+    "auditor": "qwen2.5vl:7b",
+    "net_weight_oz": 3.53
+  },
+  "B0FY71CYK8": {
+    "form": "powder_pouch",
+    "capsules_or_tablets_visible": false,
+    "liquid_or_dropper_visible": false,
+    "label_says_lions_mane": true,
+    "label_says_organic": true,
+    "usda_organic_seal_visible": true,
+    "other_ingredients_on_label": [],
+    "mentions_extract_or_mycelium": false,
+    "net_weight_on_label": "2.82 OZ (80 G)",
+    "confidence": 0.95,
+    "evidence": "The product is labeled as 'Organic Lion's Mane Powder' and features a USDA Organic seal. The label indicates it is freeze-dried and 100% fruiting body, with a net weight of 2.82 OZ (80 G).",
+    "images_checked": 1,
+    "auditor": "qwen2.5vl:7b",
+    "net_weight_oz": 2.82
+  },
+  "B07YXFTZGW": {
+    "form": "powder_jar",
+    "capsules_or_tablets_visible": false,
+    "liquid_or_dropper_visible": false,
+    "label_says_lions_mane": true,
+    "label_says_organic": true,
+    "usda_organic_seal_visible": true,
+    "other_ingredients_on_label": [],
+    "mentions_extract_or_mycelium": false,
+    "net_weight_on_label": "2.12oz (60g)",
+    "confidence": 0.95,
+    "evidence": "The product is labeled as 'Lion's Mane Mushroom Powder' and has a USDA Organic seal, indicating it is organic. The net weight is clearly stated as '2.12oz (60g)' on the label.",
+    "images_checked": 1,
+    "auditor": "qwen2.5vl:7b",
+    "net_weight_oz": 2.12
+  }
+}

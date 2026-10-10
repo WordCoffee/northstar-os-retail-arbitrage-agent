@@ -1,0 +1,17 @@
+{
+  "total_asins": 676,
+  "market_lens": 76,
+  "clean_comparable": 17,
+  "review_required": 18,
+  "excluded": 599,
+  "market_qualified_clean": 17,
+  "market_qualified_flagged": 42,
+  "market_review_required": 17,
+  "weight_ambiguous_review_only": 1,
+  "reclassified_by_size_rule": 26,
+  "with_bsr": 61,
+  "categories": {
+    "Grocery & Gourmet Food": 7,
+    "Health & Household": 54
+  }
+}
