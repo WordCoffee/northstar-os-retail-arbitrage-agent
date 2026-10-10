@@ -57,7 +57,7 @@ function FoundationAdminDashboard({ onItems }) {
             { key: 'lifecycle_state', label: 'Lifecycle', render: (v) => <span className={`pill ${v === 'active' ? 'pill-muted' : v === 'suspended' ? 'pill-warn' : 'pill-ochre'}`}>{v || 'UNKNOWN'}</span> },
             { key: 'seats_used', label: 'Seats', render: (v, row) => <span className="pill pill-muted">{v ?? '?'} / {row.seat_limit ?? '?'}</span> },
             { key: 'open_tickets', label: 'Tickets', render: (v) => <span className={`pill ${v ? 'pill-warn' : 'pill-muted'}`}>{v || 0}</span> },
-            { key: 'flags', label: 'Flags', render: (v) => (v && v.length) ? <span className="inline-flex" style={{ gap: 4, flexWrap: 'wrap' }}>{v.map(f => <span key={f} className="pill pill-ochre" style={{ fontSize: 10 }}>{f}</span>)}</span> : <span className="pill pill-muted">none</span> },
+            { key: 'flags', label: 'Flags', render: (v) => (Array.isArray(v) && v.length) ? <span className="inline-flex" style={{ gap: 4, flexWrap: 'wrap' }}>{v.map(f => <span key={String(f)} className="pill pill-ochre" style={{ fontSize: 10 }}>{String(f)}</span>)}</span> : <span className="pill pill-muted">{v ? String(v) : 'none'}</span> },
           ]} rows={items} />
         )}
         {items.length === 0 && <p data-testid="bo-admin-empty" style={{ fontSize: 13 }}>No organizations in the foundation yet. Honest empty state.</p>}

@@ -70,6 +70,30 @@ const FIXTURES = [
     pass: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), L.product()] }),
     fail: doc({ formatId: 'amz-main', layers: [L.bg('#123456'), L.product()] }),
   },
+  // ── main-white-bg regression fixtures (directive item 3) ──────────────────
+  // These three cover the exact cases that the empty-array `.every()` bug hid.
+  {
+    id: 'main-white-bg',
+    label: 'main-white-bg :: non-white solid (#123456)',
+    pass: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), L.product()] }),
+    fail: doc({ formatId: 'amz-main', layers: [L.bg('#123456'), L.product()] }),
+  },
+  {
+    id: 'main-white-bg',
+    label: 'main-white-bg :: NEAR-white (#FEFEFE) must still be accepted',
+    pass: doc({ formatId: 'amz-main', layers: [L.bg('#FEFEFE'), L.product()] }),
+    // A near-white that is NOT near-white enough (#ECECEC) must fail: the rule
+    // is "near white" (each channel >= 240), not "light".
+    fail: doc({ formatId: 'amz-main', layers: [L.bg('#ECECEC'), L.product()] }),
+    failNote: 'Near-white tolerance is per channel >= 240, so #FEFEFE passes and #ECECEC fails.',
+  },
+  {
+    id: 'main-white-bg',
+    label: 'main-white-bg :: GRADIENT backgrounds',
+    pass: doc({ formatId: 'amz-main', layers: [{ kind: 'bg', fill: null, gradient: ['#ffffff', '#fafafa'] }, L.product()] }),
+    fail: doc({ formatId: 'amz-main', layers: [{ kind: 'bg', fill: null, gradient: ['#ffffff', '#3a3a3a'] }, L.product()] }),
+    failNote: 'A gradient passes only when EVERY stop is near-white. One dark stop fails the background.',
+  },
   {
     id: 'main-fill',
     pass: doc({ formatId: 'amz-main', layers: [L.bg('#ffffff'), L.product({ w: 0.95, h: 0.95 })] }),
@@ -193,8 +217,57 @@ const FIXTURES = [
   {
     id: 'brand-registry-not-a-mockup',
     alwaysPass: true,
-    alwaysLevel: 'flag',
-    why: 'An unconditional policy advisory: every generated asset in this studio is marketing-only and never Brand Registry proof. Nothing about a document removes the advisory.',
+    alwaysLevel: 'review',
+    why: 'An unconditional policy advisory: every generated asset in this studio is marketing-only and never Brand Registry proof. Nothing about a document removes the advisory, so it always reports needs-review.',
+  },
+  // ── SP video + Display video (directive items 1 + 2) ─────────────────────
+  {
+    id: 'video-spec',
+    label: 'video-spec :: SP video 7s minimum',
+    pass: doc({ formatId: 'spv-video', channel: 'Amazon Ads', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e'), L.product({ x: 0.2, y: 0.2, w: 0.8, h: 0.8 })] }),
+    fail: doc({ formatId: 'spv-video', channel: 'Amazon Ads', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e'), L.product({ x: 0.2, y: 0.2, w: 0.8, h: 0.8 })] }),
+    ctx: { durationSeconds: 12 },
+    ctxFail: { durationSeconds: 5 },
+    failNote: '5s is below the SP video 7s minimum. Note there is NO published maximum, so 120s must not fail.',
+  },
+  {
+    id: 'video-spec',
+    label: 'video-spec :: SP video has NO published maximum (120s must pass)',
+    pass: doc({ formatId: 'spv-video', channel: 'Amazon Ads', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e'), L.product({ x: 0.2, y: 0.2, w: 0.8, h: 0.8 })] }),
+    fail: doc({ formatId: 'spv-video', channel: 'Amazon Ads', media: 'video', w: 1280, h: 720, layers: [L.bg('#0c150e'), L.product({ x: 0.2, y: 0.2, w: 0.8, h: 0.8 })] }),
+    ctx: { durationSeconds: 120 },
+    ctxFail: { durationSeconds: 120 },
+    failNote: '1280x720 is not in the SP video published set (1920x1080), so dimensions block while the 120s duration does not.',
+  },
+  {
+    id: 'video-spec',
+    label: 'video-spec :: Display video 6-45s window',
+    pass: doc({ formatId: 'display-video', channel: 'Sponsored Display', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e')] }),
+    fail: doc({ formatId: 'display-video', channel: 'Sponsored Display', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e')] }),
+    ctx: { durationSeconds: 30 },
+    ctxFail: { durationSeconds: 50 },
+    failNote: 'Display video has a published maximum of 45s (read from the duplicated "Minimum duration" source-defect row).',
+  },
+  {
+    id: 'video-reconciled',
+    alwaysPass: true,
+    alwaysLevel: 'pass',
+    doc: doc({ formatId: 'display-video', channel: 'Sponsored Display', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e')] }),
+    why: 'Fires on any row carrying two published figures. The test asserts the stricter figure is the one enforced (4 Mbps, 192 kbps) and that both figures are named.',
+  },
+  {
+    id: 'video-audio-removed',
+    alwaysPass: true,
+    alwaysLevel: 'pass',
+    doc: doc({ formatId: 'spv-video', channel: 'Amazon Ads', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e')] }),
+    why: 'SP video documents that audio WILL BE REMOVED, so the rule always states that rather than flagging missing audio as a defect.',
+  },
+  {
+    id: 'video-product-frame',
+    pass: doc({ formatId: 'spv-video', channel: 'Amazon Ads', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e'), L.product({ x: 0.1, y: 0.1, w: 0.8, h: 0.8 })] }),
+    fail: doc({ formatId: 'spv-video', channel: 'Amazon Ads', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e'), L.product({ x: 0.1, y: 0.1, w: 0.4, h: 0.4 })] }),
+    failLevel: 'flag',
+    failNote: 'Product occupies 16% of the frame, below the documented 50% minimum for SP video.',
   },
   {
     id: 'aplus-alt-text',
@@ -221,8 +294,9 @@ const FIXTURES = [
   },
   {
     id: 'spec-sourced',
-    pass: doc({ formatId: 'amz-main' }),
-    fail: doc({ formatId: 'spv-video', channel: 'Amazon Ads', media: 'video', w: 1920, h: 1080, layers: [L.bg('#0c150e')] }),
+    alwaysPass: true,
+    alwaysLevel: 'pass',
+    why: 'Every format in the registry now has a recorded Amazon source, so no spec can be unsourced. The rule remains as the guard that would block export if one were added without a source; the registry-level check below asserts the unsourced count is zero.',
   },
 ]
 
@@ -233,13 +307,14 @@ console.log(`Compliance rule register: ${RULES.length} rules\n`)
 for (const f of FIXTURES) {
   covered.add(f.id)
   const rule = RULES.find(r => r.id === f.id)
+  const tag = f.label || f.id
   if (!rule) { no(`fixture references unknown rule "${f.id}"`); continue }
 
   if (f.alwaysPass) {
     const level = f.alwaysLevel || 'pass'
-    const hit = rowFor(f.doc || doc(), {}, f.id)
-    if (hit && hit.level === level) ok(`${f.id} :: always ${level} as designed`)
-    else no(`${f.id} :: expected an always-${level} row, got ${hit ? hit.level : 'no row'}`)
+    const hit = rowFor(f.doc || doc(), f.passCtx || f.ctx || {}, f.id)
+    if (hit && hit.level === level) ok(`${tag} :: always ${level} as designed`)
+    else no(`${tag} :: expected an always-${level} row, got ${hit ? hit.level : 'no row'}`)
     continue
   }
 
@@ -249,11 +324,11 @@ for (const f of FIXTURES) {
   const q = rowFor(f.fail, fctx, f.id)
   const wantFail = f.failLevel || rule.level
 
-  if (p && p.level === 'pass') ok(`${f.id} :: pass fixture passes`)
-  else no(`${f.id} :: pass fixture expected pass, got ${p ? p.level : 'no row'}`)
+  if (p && p.level === 'pass') ok(`${tag} :: pass fixture passes`)
+  else no(`${tag} :: pass fixture expected pass, got ${p ? p.level : 'no row'}`)
 
-  if (q && q.level === wantFail) ok(`${f.id} :: fail fixture ${wantFail}s`)
-  else no(`${f.id} :: fail fixture expected ${wantFail}, got ${q ? q.level : 'no row'}`)
+  if (q && q.level === wantFail) ok(`${tag} :: fail fixture ${wantFail}s`)
+  else no(`${tag} :: fail fixture expected ${wantFail}, got ${q ? q.level : 'no row'}`)
 }
 
 // Every rule in the register must be covered by a fixture.
@@ -270,13 +345,35 @@ for (const r of RULES) {
 // ── Spec registry discipline ────────────────────────────────────────────────
 let specPass = 0
 let specFail = 0
+let unsourced = 0
+let stricterChecked = 0
 for (const [id, s] of Object.entries(SPEC_BY_ID)) {
   const src = SPEC_SOURCES[s.source]
   if (!src) { specFail++; console.log(`FAIL  spec ${id} references unknown source ${s.source}`); }
-  else if (src.confidence === 'UNSOURCED') specPass++; // deliberate: documented as unsourced
+  else if (src.confidence === 'UNSOURCED') { unsourced++; specPass++ } // counted, asserted zero below
   else if (!src.url) { specFail++; console.log(`FAIL  spec ${id} source ${s.source} has no URL`); }
+  else if (!src.pulled) { specFail++; console.log(`FAIL  spec ${id} source ${s.source} has no pulled-at date`); }
   else specPass++
+  // Where two figures are published, the STRICTER must be the one on the row.
+  if (s.videoBitrateFigures) {
+    const max = Math.max(...s.videoBitrateFigures.map(f => f.value))
+    if (s.videoBitrateMin === max) stricterChecked++
+    else { specFail++; console.log(`FAIL  spec ${id} enforces ${s.videoBitrateMin} Mbps but the stricter figure is ${max}`) }
+  }
+  if (s.audioBitrateFigures) {
+    const max = Math.max(...s.audioBitrateFigures.map(f => f.value))
+    if (s.audioBitrateMin === max) stricterChecked++
+    else { specFail++; console.log(`FAIL  spec ${id} enforces ${s.audioBitrateMin} kbps but the stricter figure is ${max}`) }
+  }
 }
+// Directive item 1: the SP video UNSOURCED block must be gone once recorded.
+if (unsourced !== 0) {
+  specFail++
+  console.log(`FAIL  ${unsourced} spec(s) are still UNSOURCED — every format must carry a recorded source`)
+} else {
+  console.log(`\nUnsourced specs: 0 (the SP video block was removed once its source was recorded)`)
+}
+console.log(`Stricter-figure enforcement checks passed: ${stricterChecked}`)
 
 // Every group used by a spec must be reachable through SPEC_GROUPS, otherwise a
 // format can exist in the registry yet be invisible in every picker.

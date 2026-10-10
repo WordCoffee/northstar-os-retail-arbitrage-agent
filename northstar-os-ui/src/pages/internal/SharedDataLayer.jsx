@@ -100,6 +100,12 @@ function RealSourceRegistry() {
   const refresh = v && Array.isArray(v.items) ? v.items : []
   const s = (v && v.summary) || {}
   const pulls = Array.isArray(s.live_pulls) ? s.live_pulls.slice(0, 8) : []
+  // A count must never be rendered from a value that might be an array: the
+  // sources endpoint returns the live_pulls ARRAY alongside its count, and
+  // rendering the array directly threw React error #31.
+  const countOf = (n, arr) => (typeof n === 'number' ? n : (Array.isArray(arr) ? arr.length : (arr ?? 0)))
+  const livePullCount = (sum) => countOf(sum.live_pull_count, sum.live_pulls)
+  const pipelineRunCount = (sum) => countOf(sum.pipeline_run_count, sum.pipeline_runs)
   return (
     <div className="card" data-testid="sdl-source-registry" style={{ marginBottom: 20 }}>
       <div className="card-head">
@@ -120,8 +126,8 @@ function RealSourceRegistry() {
             ]} rows={refresh} />
           ) : <p style={{ fontSize: 13 }}>No refresh records. Honest empty state.</p>}
           <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap', marginTop: 12 }}>
-            <span className="pill pill-muted">{s.live_pulls ?? 0} live pulls</span>
-            <span className="pill pill-muted">{s.pipeline_runs ?? 0} pipeline runs</span>
+            <span className="pill pill-muted">{livePullCount(s)} live pulls</span>
+            <span className="pill pill-muted">{pipelineRunCount(s)} pipeline runs</span>
           </div>
           {pulls.length > 0 && (
             <div style={{ marginTop: 12 }}>

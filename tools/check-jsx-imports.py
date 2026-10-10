@@ -1,14 +1,20 @@
-"""Find JSX components that are used but never imported.
+"""Find JSX that will crash at runtime: unimported components AND unsafe renders.
 
-The Product Designer page shipped two crashes ('createDoc is not defined',
-'MetricTiles is not defined') because a component was referenced without being
-imported. Vite does not fail the build for an undefined *runtime* identifier,
-so a page renders fine until you open it and then throws a ReferenceError that
-blanks the room.
+Two failure classes, both of which shipped a blank room before being caught:
 
-This walks every page/component under northstar-os-ui/src, collects the
-capitalised JSX tags it renders, and reports any that is neither imported nor
-declared locally. Zero network, read-only.
+1. A JSX component referenced but never imported ('createDoc is not defined').
+   Vite does not fail the build for an undefined *runtime* identifier, so the
+   page renders fine until you open it and then throws a ReferenceError.
+
+2. A value rendered as a React child without an array guard. React error #31
+   ("objects are not valid as a React child") and 'a.map is not a function'
+   both shipped this way: an endpoint that had been returning an error began
+   returning real data, and the page could not render it. The specific
+   antipattern is a truthy `.length` guard — which a STRING also satisfies —
+   followed by `.map(`.
+
+This walks every page/component under northstar-os-ui/src. Zero network,
+read-only, safe to run before every build.
 """
 
 from __future__ import annotations
@@ -27,6 +33,10 @@ IMPORT_DEFAULT = re.compile(r"import\s+([A-Za-z0-9_]+)\s*(?:,\s*\{([^}]*)\})?\s*
 DECLARED = re.compile(r"^\s*(?:export\s+)?(?:function|const|class|let|var)\s+([A-Z][A-Za-z0-9_]*)", re.M)
 
 REACT_BUILTINS = {"Fragment", "Suspense", "StrictMode", "Profiler", "Memo"}
+
+# A truthy `.length` test (a string satisfies it) combined with `.map(` on the
+# same expression, without an Array.isArray guard.
+UNSAFE_LENGTH_MAP = re.compile(r"&&\s*[A-Za-z_$][A-Za-z0-9_$.]*\.length\s*\)")
 
 
 def names_from(source: str) -> set[str]:
@@ -55,8 +65,22 @@ def names_from(source: str) -> set[str]:
     return found
 
 
+def unsafe_render_lines(source: str) -> list[tuple[int, str]]:
+    """Line numbers where a value may be rendered without an array guard."""
+    out: list[tuple[int, str]] = []
+    for i, line in enumerate(source.splitlines(), 1):
+        if ".map(" not in line:
+            continue
+        if "Array.isArray" in line:
+            continue
+        if UNSAFE_LENGTH_MAP.search(line):
+            out.append((i, line.strip()[:120]))
+    return out
+
+
 def main() -> int:
     problems: list[tuple[str, str]] = []
+    unsafe: list[tuple[str, int, str]] = []
     checked = 0
     for path in sorted(SRC.rglob("*.jsx")):
         try:
@@ -64,19 +88,35 @@ def main() -> int:
         except OSError:
             continue
         checked += 1
+        rel = str(path.relative_to(SRC)).replace("\\", "/")
         available = names_from(source)
         used = set(JSX_TAG.findall(source)) - REACT_BUILTINS
         for name in sorted(used - available):
-            problems.append((str(path.relative_to(SRC)).replace("\\", "/"), name))
+            problems.append((rel, name))
+        for line_no, text in unsafe_render_lines(source):
+            unsafe.append((rel, line_no, text))
 
     print(f"checked {checked} .jsx files")
-    if not problems:
+
+    failed = False
+    if problems:
+        failed = True
+        print(f"\n{len(problems)} undefined component reference(s):")
+        for file, name in problems:
+            print(f"  {file}: <{name}>")
+    else:
         print("no undefined JSX component references found")
-        return 0
-    print(f"\n{len(problems)} undefined component reference(s):")
-    for file, name in problems:
-        print(f"  {file}: <{name}>")
-    return 1
+
+    if unsafe:
+        failed = True
+        print(f"\n{len(unsafe)} unguarded render(s) — a truthy .length guard passes for a STRING,")
+        print("so wrap the value in Array.isArray() before mapping:")
+        for file, line_no, text in unsafe:
+            print(f"  {file}:{line_no}: {text}")
+    else:
+        print("no unguarded length-then-map renders found")
+
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":

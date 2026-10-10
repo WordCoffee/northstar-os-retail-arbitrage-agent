@@ -97,6 +97,15 @@ async function main() {
         const v = await page.$('[data-testid="verdict-pill"]')
         if (v) ok(`${s.label}: verdict renders (${(await v.textContent()).trim()})`)
         else no(`${s.label}: no verdict pill`)
+        // An empty canvas must NEVER report a green pass (directive item 4).
+        const vt = v ? (await v.textContent()).trim() : ''
+        if (vt === 'Pre-flight pass') no(`${s.label}: EMPTY CANVAS SHOWED GREEN — coverage states are not working`)
+        else ok(`${s.label}: empty canvas does not report green (${vt})`)
+        // Coverage counter must be present
+        const strip = await page.$('.ss-bottomstrip-actions')
+        const stripText = strip ? await strip.textContent() : ''
+        if (/rules decided/.test(stripText)) ok(`${s.label}: coverage counter shows "rules decided"`)
+        else no(`${s.label}: no coverage counter`, stripText.slice(0, 60))
         // Confidence label present
         const conf = await page.$$eval('.pill', els => els.map(e => e.textContent.trim()))
         if (conf.some(t => ['VERIFIED', 'REPORTED', 'UNSOURCED'].includes(t))) ok(`${s.label}: specs carry a VERIFIED/REPORTED/UNSOURCED label`)
@@ -114,28 +123,31 @@ async function main() {
     if (errs > 0) no(`${s.label}: ${errs} console/page error(s)`, errors.slice(before).join(' | ').slice(0, 200))
   }
 
-  // ── Hard behaviour 1: an UNSOURCED spec blocks export ──
+  // ── Hard behaviour 1: NO spec may be UNSOURCED any more ──────────────────
+  // Directive item 1 removed the SP video UNSOURCED block once its source was
+  // recorded. The block is now a GUARD, so the correct assertion is that no
+  // format is unsourced — and that the guard itself is exercised by the
+  // registry-level test in test-compliance-rules.mjs.
   try {
     await page.goto(BASE + 'design-studio?section=ads')
     await page.waitForSelector('[data-testid="ads-workspace"]', { timeout: 12000 })
-    // Pick the SP video row (unsourced).
-    const spv = await page.$('.ss-spec:has-text("Sponsored Products video")')
-    if (!spv) {
-      no('SP video spec row not found in the Ads picker')
-    } else {
-      await spv.click()
-      await page.waitForTimeout(600)
-      const verdict = await page.$eval('[data-testid="verdict-pill"]', e => e.textContent.trim()).catch(() => '')
-      const exportBtn = await page.$('.ss-topbar .btn-primary')
-      const disabled = exportBtn ? await exportBtn.isDisabled() : null
-      if (disabled === true) ok(`UNSOURCED spec blocks export (verdict: ${verdict})`)
-      else no('UNSOURCED spec did not disable export', `verdict=${verdict} disabled=${disabled}`)
-      const unsourced = await page.$$eval('.pill', els => els.map(e => e.textContent.trim()))
-      if (unsourced.includes('UNSOURCED')) ok('UNSOURCED confidence label shown')
-      else no('no UNSOURCED label rendered')
-    }
+    const pills = await page.$$eval('.pill', els => els.map(e => e.textContent.trim()))
+    if (!pills.includes('UNSOURCED')) ok('no UNSOURCED spec remains (SP video block removed per item 1)')
+    else no('an UNSOURCED spec still renders')
+    // Every visible spec must carry a VERIFIED or REPORTED tag.
+    const confCount = pills.filter(t => t === 'VERIFIED' || t === 'REPORTED').length
+    if (confCount >= 3) ok(`spec picker tags coverage: ${confCount} tagged specs visible`)
+    else no('spec picker shows too few confidence tags', String(confCount))
+    // SP video sourced with its own rules
+    const labels = await page.$$eval('.ss-spec', els => els.map(e => e.textContent))
+    const spv = labels.find(t => /Sponsored Products video/.test(t)) || ''
+    if (spv && /VERIFIED/.test(spv)) ok('SP video is VERIFIED (sourced from the Amazon guide)')
+    else no('SP video row is not VERIFIED', spv.slice(0, 80))
+    const disp = labels.find(t => /Sponsored Display video/.test(t)) || ''
+    if (disp && /VERIFIED/.test(disp)) ok('Display video is VERIFIED (reconciled to Amazon-owned sources)')
+    else no('Display video row is not VERIFIED', disp.slice(0, 80))
   } catch (e) {
-    ftl('unsourced-spec check threw', String(e).slice(0, 140))
+    ftl('source/coverage check threw', String(e).slice(0, 140))
   }
 
   // ── Hard behaviour 2: SB video 9:16 warns but does not block ──
@@ -160,6 +172,9 @@ async function main() {
   } catch (e) {
     ftl('9:16 warn check threw', String(e).slice(0, 140))
   }
+
+  // ── Hard behaviour: SP video is now SOURCED and Display video reconciled ──
+  // (covered above in the source/coverage check)
 
   // ── Hard behaviour 3: A+ alt text blocks when missing ──
   try {

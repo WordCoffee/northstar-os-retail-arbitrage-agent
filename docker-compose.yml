@@ -15,6 +15,14 @@ x-foundation-env: &foundation-env
   NS_FOUNDATION_ALLOW_REMOTE_DEV: ${NS_FOUNDATION_ALLOW_REMOTE_DEV:-1}
   NORTHSTAR_UI_MODE: ${NORTHSTAR_UI_MODE:-full}
   NORTHSTAR_OWNER_TEST_MODE: ${NORTHSTAR_OWNER_TEST_MODE:-0}
+  # Harness login throttle bypass. Refused outright in production-like
+  # environments (see foundation/login_throttle.test_bypass_enabled) and off
+  # unless explicitly set to exactly "1".
+  NORTHSTAR_LOGIN_THROTTLE_TEST_BYPASS: ${NORTHSTAR_LOGIN_THROTTLE_TEST_BYPASS:-0}
+  # Edge rate limiter opt-out for larger local test suites. Already fail-closed:
+  # main.lifespan calls assert_prod_posture(), which REFUSES TO BOOT when this
+  # is set and ENVIRONMENT=production (see rate_limiter.assert_prod_posture).
+  NORTHSTAR_DISABLE_RATE_LIMIT: ${NORTHSTAR_DISABLE_RATE_LIMIT:-0}
   NORTHSTAR_JWT_SECRET: ${NORTHSTAR_JWT_SECRET:-}
   NORTHSTAR_JWT_ISSUER: ${NORTHSTAR_JWT_ISSUER:-https://northstar.local}
   NORTHSTAR_JWT_AUDIENCE: ${NORTHSTAR_JWT_AUDIENCE:-northstar-api}

@@ -280,7 +280,7 @@ export default function ListingImages({ product: initialProduct, asin: initialAs
         active={slotId}
         onSelect={(s) => { setSlotId(s.col); pickSpec(specById(s.specId)) }}
         renderItem={(s) => (<><Icon name={s.role === 'main' ? 'star' : 'image'} size={12} />{s.label}</>)}
-        actions={<span className="text-low" style={{ fontSize: 11 }}>{SLOT_PLAN.length} slots planned · flat-file columns</span>}
+        actions={<span className="text-low" style={{ fontSize: 11 }}>{SLOT_PLAN.length} slots · {report.checked ?? report.ready}/{report.total} rules decided</span>}
       />
     </div>
   )

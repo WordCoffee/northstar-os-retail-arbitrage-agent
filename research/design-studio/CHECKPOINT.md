@@ -1,112 +1,123 @@
 # Design Studio ? Phase Checkpoint
 
-## Phase 0 ? MERGE THE STRUCTURE ? COMPLETE (21/21 verified)
-## Phase 1 ? DEEP RESEARCH ? COMPLETE (GATE 1 approved), 149 sources
+## Phase 0 ? MERGE THE STRUCTURE ? COMPLETE (21/21)
+## Phase 1 ? DEEP RESEARCH ? COMPLETE (GATE 1 approved)
+## Phase 2 ? DESIGN SYSTEM + WORKSPACES ? COMPLETE (9/9 sections)
 
-## Phase 2 ? DESIGN SYSTEM + WORKSPACE REDESIGN ? COMPLETE
+## Phase 2 ? Phase 3 PREP ? COMPLETE
 
-### 1. Registry fixes (directive item 1)
-- **SB video aspect**: 16:9 is the default (`aspectDefault: true`, VERIFIED, sbv).
-  9:16 is a separate row (`aspectDefault: false`, `aspectWarn: true`,
-  date-sensitive) and surfaces as rule `sbv-vertical-date-sensitive` at level
-  **flag ? never a block**.
-- **Hero safe zone**: BOTH documented figures recorded with source id and
-  pulled-at date, and the overlay uses the STRICTER union and says so:
-  - `stores-hero` (2026-10-10): 16% cropped each side below 1500px + logo covers
-    a further 18% of the left ? left 34%, right 16%.
-  - `stores-pdf` (2026-10-10): "Hero Image Safe Area: 50% width" ? 25% each side.
-  - Stricter union: **left 34%, right 25%, always-visible band 41% wide**
-    (x 0.34 ? 0.75). The `figures` array is exposed so the UI shows both.
-- **Separate video rows**: `sbv-landscape` (SB), `sbv-vertical` (SB),
-  `spv-video` (**UNSOURCED** ? export refused), `display-video` (REPORTED),
-  `amazon-video-ads` (VERIFIED). One row per ad product.
-- **VERIFIED / REPORTED / UNSOURCED** confidence label on every spec, with
-  source id, pulled-at date and a `date-sensitive` marker.
+### 1. SP video sourced; UNSOURCED block removed
+`spv-video` now carries a real Amazon source with a pulled-at date:
+- Source `spv-guide` (VERIFIED, advertising.amazon.com/library/guides/
+  sponsored-products-video) + `spv-guidelines` (VERIFIED, help page).
+- 1-5 videos per product per ad group; **7 seconds and longer, no published
+  maximum**; horizontal 16:9; 1920x1080 recommended; MP4/MOV; **<=500 MB**;
+  **audio is removed**; **product must occupy 50% or more of the frame**.
+- Vertical 9:16 recorded as `available: false`, `dateSensitive: true`
+  ("to be available in 2026") ? a WARN, never a block.
+- `durationMax: null` is honoured as "no published maximum" and is NOT read as
+  zero. Fixture: 120s must pass; 5s must block.
+- **Unsourced specs: 0.** The `spec-sourced` rule remains as the guard.
 
-### 2. Per-rule fixture test (directive item 2)
-`tools/test-compliance-rules.mjs` ? a pass fixture AND a fail fixture for every
-rule in the register (30 rules, not 22 ? the register grew during the build).
-Rules with no fail path by construction declare `alwaysPass` with the reason and
-are asserted, never skipped. Also asserts every rule has a source + accessed
-date, and that every spec group is exposed through `SPEC_GROUPS`.
+### 2. Display video reconciled
+Two Amazon pages publish different figures for the same family. Both are
+STORED with their source and the STRICTER is ENFORCED:
+- Video bitrate: **1 Mbps** (`display-video-creative`) vs **4 Mbps**
+  (`ads-overview`, OLV/CTV/STV) -> enforcing **4 Mbps**.
+- Audio bitrate: **92 kbps** (`display-video-creative`) vs **192 kbps**
+  (`streaming-tv`) -> enforcing **192 kbps**.
+- SOURCE DEFECT recorded: the display table repeats the label
+  "Minimum duration" on two rows (6s then 45s). Read as min 6s / max 45s and
+  the defect is stated in the row's `reconciliation` field.
+- Display video is now **VERIFIED** (both figures are Amazon-owned).
+- **Amazon Video Ads stays its own row** (`amazon-video-ads`, VERIFIED,
+  custom-media page: 1920x1080, >=15 FPS, audio 128 kbps/44.1 kHz, 2 Mbps
+  recommended, detail-page 970x250 placement).
 
-**It found two real bugs, both fixed:**
-1. `main-white-bg` passed a NON-white background because
-   `(gradient || []).every(...)` is vacuously true on an empty array ? a
-   listing-suppression-class bug.
-2. `SPEC_GROUPS` silently dropped the new `SP video`, `Display video` and
-   `Amazon video` groups because they were missing from the order list, so
-   those rows were invisible in every picker. Now appended with a warning.
+### 3. main-white-bg regression fixtures
+Three added fixtures, on top of the base pass/fail pair:
+- non-white solid `#123456` -> blocks
+- **near-white `#FEFEFE` -> passes**; `#ECECEC` -> blocks (tolerance is per
+  channel >= 240, not "light")
+- **gradient** `['#ffffff','#fafafa']` -> passes; `['#ffffff','#3a3a3a']` -> blocks
+  (a gradient passes only when EVERY stop is near-white)
 
-### 3?4. All 9 sections built on the shell (directive items 3 + 4)
-One generic `SectionWorkspace.jsx` drives every section; each section file is
-configuration, so a spec can only come from the registry and a rule only from
-the engine.
-- **A+ / Brand Story** ? 23 registry modules (Basic, Premium, Brand Story),
-  alt-text field REQUIRED (accessibility requirement; explicitly no SEO claim),
-  2 MB limit, module-count and Premium-gating notes.
-- **Storefront** ? 8 specs, hero + 4 tile sizes + video tiles, hero safe-zone
-  overlay with both figures.
-- **Ads** ? 15 specs across SB / SP / Display / Amazon video / custom images /
-  DSP display / brand asset. Video duration field; char-cap fields from the
-  registry; 9:16 warn.
-- **Video & UGC Clips** ? 11 specs, hook + duration + caption fields, mute-first
-  and safe-area rules. Generation stays unarmed.
-- **Social** ? 6 specs; states honestly that Amazon specs do not cover social and
-  that Amazon Attribution is not wired (no reach/conversion claim).
-- **Packaging & Mockups** ? 6 specs; Brand Registry actual-photo rule and the
-  product-accuracy rule are BLOCK-level notes.
-- **Listing Images** (built earlier this phase) and **3D Product Scene** and
-  **Projects** unchanged.
+### 4. Rules marked "checked" vs "needs artwork / human review"
+Every rule declares what it NEEDS before its result means anything
+(`RULE_NEEDS`: nothing | artwork | export | human). An empty canvas now
+reports **"Needs artwork"** and never green. The panel separates
+`Blocks export`, `Needs review`, `Not yet decidable`, and `Decided and
+passing`, and the counter reads "N/M rules decided". Verified in-browser for
+all 8 shell sections: **empty canvas does not report green**.
 
-Hard behaviours verified in the browser: an UNSOURCED spec disables Export; the
-9:16 vertical surfaces as a warn while the verdict does not newly block; A+
-alt-text and the 2 MB cap appear in the pre-flight.
+### 5. Projects persisted to ds_*/ with migration + tenant isolation
+- **Tenant isolation FIXED**: every by-id DAO operation is now account-scoped
+  (`get_by_id`/`update`/`delete` take `account_id`), `account_id` is not
+  reassignable through a patch, and a foreign record returns **None / 404** ?
+  never a 403 that would confirm existence.
+- Router: **17 scoped call sites, 0 unscoped by-id calls** (asserted).
+- **Migration**: `POST /api/design-studio/migrate` imports browser-local
+  records idempotently by `legacyKey`, rejects unknown sections rather than
+  guessing, and reports created/skipped/errors. Client module
+  `studio/engine/migrate.js` reads the known localStorage keys, imports once,
+  and **only clears the local copy after the server confirms**. Verified live:
+  run 1 created 1, run 2 skipped 1 (no duplicate).
 
-### 5. Non-creative degradation fix (found by the harness)
-The harness surfaced a 503 on `/api/v1/noncreative/activity`. Root cause: the
-`costco_*` pipeline tables do not exist in this deployment, and the strict
-`_rows` contract turned "table never created" into a hard 503 ? taking the
-Command Center activity feed, SourceScout sources, Commerce Ops, Listing
-Guardian health and Competitor Monitor down with it.
+### 6. Harness login test mode
+`NORTHSTAR_LOGIN_THROTTLE_TEST_BYPASS=1` raises the login ceiling to 200
+requests/window. Fail-closed by design:
+- refused outright in production / production_tenant / staging, whatever the
+  env var says (case-insensitive)
+- requires the exact value "1" (not "0", "", "no", "true ")
+- only ever RAISES the limit ? production still enforces 5/window with the var set
+- logs a warning on first activation
+The edge rate limiter's pre-existing `NORTHSTAR_DISABLE_RATE_LIMIT=1` opt-out is
+prod-guarded by `assert_prod_posture()` (the app refuses to boot in production
+with it set). Both are wired into docker-compose, defaulting to 0.
 
-Fix: a new `_optional_rows` / `_optional_scalar` pair distinguishes
-**table-never-created** (legitimate empty state ? 200 with an `unavailable`
-reason NAMING the table) from **table-exists-but-unreadable** (still a hard
-503). All 8 non-creative endpoints now return 200 and carry an honest reason.
+### 7. Three latent crashes found and fixed
+The non-creative degradation fix (returning 200 with real data where the API
+previously 503'd) EXPOSED pages that could not render real data:
+- `SharedDataLayer`: rendering the `live_pulls` ARRAY where a count was
+  expected -> React error #31. Backend now emits distinct
+  `live_pull_count` / `pipeline_run_count` keys; the page tolerates either shape.
+- `ProviderAdapters`: `(v && v.length) ? v.map(...)` ? a STRING satisfies
+  `.length`, then throws `a.map is not a function`.
+- `admin/Overview`: the same antipattern.
+`tools/check-jsx-imports.py` now also scans for this class statically and gates
+the build.
 
-### Verification ? all three harnesses, full output, FATAL counted
-| Harness | Result |
-|---|---|
-| `tools/test-compliance-rules.mjs` | **57 passed, 0 failed** ? 30/30 rules covered, 13/13 groups exposed, 48 specs sourced, 0 broken |
-| `tools/verify-design-studio.cjs` | **45 passed, 0 failed, 0 FATAL** ? all 9 sections, zero console errors AFTER sign-in (was 1 before the fix) |
-| `tools/verify-operator-smoke.cjs` | see final report (throttled to 5 logins/300s by the auth limiter) |
-
-Pre-auth console noise is reported separately (3 ? 401 on `/me` from the
-signed-out SPA) ? expected, not hidden.
+### Verification ? all harnesses, full output, FATAL counted
+| # | Harness | Result |
+|---|---|---|
+| 1 | `test-compliance-rules.mjs` | **72 passed, 0 failed** ? 34/34 rules, 13/13 groups, 48 specs sourced, 0 unsourced, 2 stricter-figure checks |
+| 2 | `test_design_studio_isolation.py` | **17 passed, 0 failed** |
+| 3 | `test_login_throttle_bypass.py` | **16 passed, 0 failed** |
+| 4 | `check-jsx-imports.py` | 94 files, no undefined refs, no unguarded renders |
+| 5 | `verify-design-studio.cjs` | **61 passed, 0 failed, 0 FATAL** ? zero console errors after sign-in |
+| 6 | `verify-operator-smoke.cjs` | **11 passed, 0 failed**, 21/21 rail destinations |
 
 ### Generation status
-**UNARMED.** No live or paid call was made. No cron, no on-load provider call.
-Every spec carries a source id and a pulled-at date; every rule carries a source
-and an accessed date.
+**UNARMED.** No live or paid call. Every spec carries a source id, a
+pulled-at date and a VERIFIED / REPORTED / UNSOURCED label.
 
-### Files touched this phase
-- `studio/engine/specRegistry.js` ? confidence labels, hero dual figures,
-  5 separate video rows, group-order guard
-- `studio/engine/compliance.js` ? 2 new rules (32 in register), spec-registry
-  resolution for `safe`/`allowedDims`/`media`, `main-white-bg` fix
-- `studio/components/StudioShell.jsx`
-- `pages/internal/design-studio/SectionWorkspace.jsx` (new, drives 6 sections)
-- `pages/internal/design-studio/{APlus,Storefront,Ads,VideoUgc,Social,Packaging}.jsx` (new)
-- `pages/internal/design-studio/ListingImages.jsx`
-- `pages/internal/DesignStudio.jsx`
-- `styles/studio.css`
-- `Northstar_backend/noncreative_reads.py`
-- `tools/test-compliance-rules.mjs` (new), `tools/verify-design-studio.cjs`
+### Files touched
+- `studio/engine/specRegistry.js` ? SP video sourced, Display video reconciled,
+  confidence labels, group-order guard
+- `studio/engine/compliance.js` ? 4 new rules (34 total), RULE_NEEDS coverage
+  states, SP/Display video families, main-white-bg fix
+- `studio/engine/migrate.js` (new)
+- `studio/components/StudioShell.jsx` ? verdict `incomplete`, coverage panel
+- `pages/internal/design-studio/{SectionWorkspace,ListingImages}.jsx`
+- `pages/internal/{SharedDataLayer,ProviderAdapters}.jsx`, `pages/admin/Overview.jsx`
+- `pages/internal/DesignStudio.jsx` ? migration on mount
+- `Northstar_backend/{data_layer,design_studio_api,noncreative_reads}.py`,
+  `foundation/login_throttle.py`, `foundation/api/router.py`
+- `docker-compose.yml` ? the two test-mode flags
+- `tools/{test-compliance-rules.mjs,test_design_studio_isolation.py,test_login_throttle_bypass.py,verify-design-studio.cjs,check-jsx-imports.py}`
 
 ## Resume at
-Phase 3 (or Phase 2 polish): the six new sections are wired to the registry and
-the pre-flight but hold no artwork yet; the `ds_projects`/`ds_assets`/`ds_jobs`
-store is live but the sections still keep state in memory. Next: persist a
-project per section to the backend store, then arm the local ComfyUI pipeline
-behind explicit Run + cost preview.
+Phase 3: arm the local ComfyUI pipeline behind explicit Run + cost preview, and
+give the sections a real canvas (they currently render the format, safe zones
+and pre-flight, but hold no artwork). The backend store, tenant scoping and the
+migration path are all in place.

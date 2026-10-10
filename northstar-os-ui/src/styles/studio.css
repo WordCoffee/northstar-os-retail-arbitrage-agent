@@ -573,3 +573,8 @@
 .ss-field-toggle { flex-direction: row; align-items: center; gap: 7px; flex-wrap: wrap; }
 .ss-field-toggle input { width: auto; }
 .ss-field-toggle .ss-field-note { flex-basis: 100%; }
+
+/* ── Phase 2c: rule coverage states (checked vs needs artwork) ── */
+.ss-rule-incomplete { border-left: 3px solid var(--ink-faint); background: linear-gradient(90deg, rgba(0,0,0,0.015), transparent); }
+.ss-rule-incomplete .ss-rule-label { color: var(--ink-soft); }
+.ss-compliance-group-label.ss-muted { color: var(--ink-faint); }

@@ -48,7 +48,13 @@ export const SPEC_SOURCES = {
   'video-ads': { id: 'video-ads', label: 'Amazon video ads specs (custom media, detail page)', url: 'https://advertising.amazon.com/en-gb/resources/ad-specs/custom-media/amazon-video-ads', pulled: PULLED, quality: 4, confidence: 'VERIFIED' },
   'display-video': { id: 'display-video', label: 'Sponsored Display video specs (GOAT Consulting teardown)', url: 'https://www.goatconsulting.com/merchandising/complete-guide-to-amazon-video-requirements-2024', pulled: PULLED, quality: 2, confidence: 'REPORTED' },
   'sbv-perpetua': { id: 'sbv-perpetua', label: 'SB video text/safe-area rules (Perpetua teardown)', url: 'https://perpetua.io/blog-sponsored-brands-video', pulled: PULLED, quality: 3, confidence: 'REPORTED' },
-  'spv-not-sourced': { id: 'spv-not-sourced', label: 'Sponsored Products video — NO SOURCE CAPTURED YET', url: '', pulled: PULLED, quality: 0, confidence: 'UNSOURCED' },
+  // Sponsored Products video — SOURCED 2026-10-10 from Amazon Ads.
+  'spv-guide': { id: 'spv-guide', label: 'Amazon Ads: setting up Sponsored Products video', url: 'https://advertising.amazon.com/library/guides/sponsored-products-video', pulled: PULLED, quality: 5, confidence: 'VERIFIED' },
+  'spv-guidelines': { id: 'spv-guidelines', label: 'Amazon Ads: Sponsored Products video guidelines', url: 'https://advertising.amazon.com/help/GGXB3X3PWHQBRY2M', pulled: PULLED, quality: 5, confidence: 'VERIFIED' },
+  // Display ads with video — the two Amazon figures that must be reconciled.
+  'display-video-creative': { id: 'display-video-creative', label: 'Amazon Ads: display ads with video creative (1 Mbps / 92 kbps)', url: 'https://advertising.amazon.com/library/guides/display-ads-video-creative', pulled: PULLED, quality: 5, confidence: 'VERIFIED' },
+  'streaming-tv': { id: 'streaming-tv', label: 'Amazon Ads: Streaming TV / Prime Video specs (192 kbps audio)', url: 'https://advertising.amazon.com/resources/ad-specs/dsp/video/streaming-tv-prime-video-ads', pulled: PULLED, quality: 5, confidence: 'VERIFIED' },
+  'spv-walkthrough': { id: 'spv-walkthrough', label: 'SP video walkthrough (YouTube transcript)', url: 'https://www.youtube.com/watch?v=VIKzFWzLHRY', pulled: PULLED, quality: 3, confidence: 'REPORTED' },
 }
 
 /** Human-readable confidence label for a spec row. */
@@ -200,14 +206,43 @@ export const AMAZON_SPECS = [
   },
   {
     id: 'spv-video', label: 'Sponsored Products video', channel: 'Amazon Ads', group: 'SP video',
-    w: 1920, h: 1080, media: 'video', unsourced: true, source: 'spv-not-sourced', dateSensitive: true,
-    note: 'NO SPEC SOURCE CAPTURED. This row exists so the export surface cannot silently borrow an SB spec for an SP placement. Export stays disabled until an Amazon source is recorded.',
+    w: 1920, h: 1080, media: 'video', aspectDefault: true, aspectWarn: false,
+    allowedDims: [[1920, 1080]], aspectRatio: 16 / 9,
+    durationMin: 7, durationMax: null, durationNote: '7 seconds and longer — no published maximum',
+    maxBytes: 500 * 1024 * 1024, videoFormats: ['MP4', 'MOV'],
+    audioRemoved: true, productFrameMin: 0.5, maxVideosPerAsin: 5, minVideosPerAsin: 1,
+    frameRateAny: true,
+    source: 'spv-guide', dateSensitive: true,
+    secondarySource: 'spv-guidelines',
+    note: 'SOURCED 2026-10-10. 1 to 5 videos per product per ad group. Minimum 7 seconds, no published maximum. Horizontal 16:9, 1920x1080 recommended, MP4 or MOV, 500 MB cap. AUDIO IS REMOVED — do not master an audio mix. Product must occupy 50% or more of the frame. Vertical 9:16 is documented as "to be available in 2026" and is therefore date-sensitive.',
+    variants: [
+      { aspect: '16:9', available: true, label: 'Horizontal (current)' },
+      { aspect: '9:16', available: false, dateSensitive: true, label: 'Vertical — documented as "to be available in 2026"' },
+    ],
   },
   {
     id: 'display-video', label: 'Sponsored Display video', channel: 'Sponsored Display', group: 'Display video',
-    w: 1920, h: 1080, media: 'video', minDim: 1920, aspectRatio: 16 / 9,
-    maxBytes: 500 * 1024 * 1024, videoCodecs: ['H.264', 'MPEG-2'], source: 'display-video', dateSensitive: true,
-    note: 'REPORTED by a third-party teardown: 16:9, minimum 1920x1080, 500 MB cap, H.264 or MPEG-2. Not confirmed against an Amazon page — verify before relying on it.',
+    w: 1920, h: 1080, media: 'video', aspectRatio: 16 / 9, minDim: 1920,
+    durationMin: 6, durationMax: 45,
+    maxBytes: 500 * 1024 * 1024,
+    videoCodecs: ['H.264', 'MPEG-2', 'MPEG-4'], audioCodecs: ['PCM', 'AAC'],
+    fpsAllowed: [23.976, 24, 25, 29.97], audioSampleMin: 44100,
+    // TWO published figures for bitrate and for audio, from two Amazon pages
+    // describing different placements. BOTH are stored; the STRICTER is
+    // enforced. See `reconciliation` below.
+    videoBitrateMin: 4, audioBitrateMin: 192,
+    videoBitrateFigures: [
+      { value: 1, source: 'display-video-creative', text: 'Sponsored Display video creative: minimum video bitrate 1 Mbps' },
+      { value: 4, source: 'ads-overview', text: 'Online video (OLV): minimum 4 Mbps, 8 Mbps recommended' },
+    ],
+    audioBitrateFigures: [
+      { value: 92, source: 'display-video-creative', text: 'Sponsored Display video creative: minimum audio bitrate 92 kbps' },
+      { value: 192, source: 'streaming-tv', text: 'Streaming TV / Prime Video: minimum audio bitrate 192 kbps' },
+    ],
+    reconciliation: 'Amazon publishes 1 Mbps AND 4 Mbps for video, and 92 kbps AND 192 kbps for audio, across two pages describing different placements in the same family. Both figures are stored with their source; the STRICTER (4 Mbps, 192 kbps) is enforced. The source table also repeats the label "Minimum duration" on two rows (6s then 45s), which is recorded as a source defect and read as min 6s / max 45s.',
+    source: 'display-video-creative', dateSensitive: true,
+    secondarySources: ['ads-overview', 'streaming-tv'],
+    note: 'VERIFIED from Amazon Ads. 1920x1080 or higher, 16:9, 6-45s, 500 MB cap, H.264 / MPEG-2 / MPEG-4 with PCM or AAC audio, stereo or mono, 23.976 (recommended) / 24 / 25 / 29.97 fps. Stricter bitrate and audio figures enforced across placements — see reconciliation.',
   },
   {
     id: 'amazon-video-ads', label: 'Amazon Video Ads (detail page / custom media)', channel: 'Amazon Ads', group: 'Amazon video',

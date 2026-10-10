@@ -400,6 +400,71 @@ class DataLayer:
             );
             CREATE INDEX IF NOT EXISTS idx_live_pulls_query ON live_pulls(query);
             CREATE INDEX IF NOT EXISTS idx_live_pulls_provider ON live_pulls(provider_id);
+
+            -- Design Studio (Phase 0): shared project, asset and job store.
+            -- This replaces the split localStorage state across Creative Studio
+            -- and Product Designer with one backend-backed store.
+            CREATE TABLE IF NOT EXISTS ds_projects (
+                id TEXT PRIMARY KEY,
+                account_id TEXT DEFAULT 'default',
+                name TEXT NOT NULL,
+                section TEXT NOT NULL,  -- listing-images, aplus, storefront, ads, video-ugc, social, packaging, 3d-scene
+                asin TEXT,
+                brand TEXT,
+                brief TEXT,
+                state TEXT DEFAULT 'draft',
+                metadata TEXT,          -- JSON: tags, target formats, keywords used, search terms
+                source_record_id TEXT,  -- e.g. product id, listing id, search-term cluster id
+                source_record_type TEXT,
+                pulled_at TEXT,
+                created_at TEXT DEFAULT (datetime('now')),
+                updated_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_projects_account ON ds_projects(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_projects_section ON ds_projects(section);
+            CREATE INDEX IF NOT EXISTS idx_ds_projects_asin ON ds_projects(asin);
+
+            CREATE TABLE IF NOT EXISTS ds_assets (
+                id TEXT PRIMARY KEY,
+                account_id TEXT DEFAULT 'default',
+                project_id TEXT,
+                name TEXT,
+                asset_type TEXT NOT NULL,  -- image, video, model, font, color, layer_doc, render
+                mime_type TEXT,
+                storage_key TEXT,          -- blob store / local path reference
+                data_url TEXT,             -- small assets only (< 1 MB); prefer storage_key
+                width INTEGER,
+                height INTEGER,
+                duration_seconds REAL,
+                size_bytes INTEGER,
+                metadata TEXT,             -- JSON: source, provenance, generation params
+                created_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_assets_project ON ds_assets(project_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_assets_account ON ds_assets(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_assets_type ON ds_assets(asset_type);
+
+            CREATE TABLE IF NOT EXISTS ds_jobs (
+                id TEXT PRIMARY KEY,
+                account_id TEXT DEFAULT 'default',
+                project_id TEXT,
+                asset_id TEXT,
+                job_type TEXT NOT NULL,    -- generate, upscale, resize, render, export, compliance_check
+                provider TEXT DEFAULT 'local',  -- local/comfyui/replicate/runway/etc.
+                status TEXT DEFAULT 'queued',   -- queued, running, complete, error, cancelled
+                cost_preview TEXT,         -- JSON: currency, estimated credits, note
+                credits_used REAL DEFAULT 0,
+                params TEXT,               -- JSON: full generation params / workflow
+                logs TEXT,                 -- newline-separated log lines
+                result_ids TEXT,           -- JSON array of output asset ids
+                started_at TEXT,
+                finished_at TEXT,
+                created_at TEXT DEFAULT (datetime('now')),
+                updated_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_jobs_project ON ds_jobs(project_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_jobs_account ON ds_jobs(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_jobs_status ON ds_jobs(status);
         """)
         self._conn.commit()
         self._migrate_live_columns()
@@ -1280,8 +1345,280 @@ def _slugify(value: Any) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Design Studio Data Access (Phase 0)
+# ---------------------------------------------------------------------------
+
+class DesignStudioProjectsDB:
+    """Projects are the top-level creative containers in Design Studio."""
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _serialize(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        for k in ("metadata",):
+            if d.get(k) and isinstance(d[k], str):
+                try:
+                    d[k] = json.loads(d[k])
+                except json.JSONDecodeError:
+                    pass
+        return d
+
+    def create(self, project: Dict[str, Any]) -> str:
+        import uuid
+        pid = project.get("id") or str(uuid.uuid4())
+        project = dict(project)
+        project["id"] = pid
+        project.setdefault("account_id", "default")
+        project.setdefault("state", "draft")
+        now = datetime.now(timezone.utc).isoformat()
+        project.setdefault("created_at", now)
+        project.setdefault("updated_at", now)
+        if "metadata" in project and isinstance(project["metadata"], dict):
+            project["metadata"] = json.dumps(project["metadata"])
+        cols = [c for c in project.keys()]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO ds_projects ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(project.values()),
+        )
+        self.db.commit()
+        return pid
+
+    def get_by_id(self, pid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        """Fetch a project. When ``account_id`` is given the read is
+        TENANT-SCOPED: a project owned by another account returns None rather
+        than leaking across tenants."""
+        if account_id:
+            cur = self.db.execute(
+                "SELECT * FROM ds_projects WHERE id = ? AND account_id = ?", (pid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM ds_projects WHERE id = ?", (pid,))
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def list_by_section(self, section: Optional[str] = None, account_id: Optional[str] = None, limit: int = 200) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM ds_projects WHERE 1=1"
+        params: List[Any] = []
+        if section:
+            sql += " AND section = ?"
+            params.append(section)
+        if account_id:
+            sql += " AND account_id = ?"
+            params.append(account_id)
+        sql += " ORDER BY updated_at DESC LIMIT ?"
+        params.append(limit)
+        cur = self.db.execute(sql, tuple(params))
+        return [self._serialize(r) for r in cur.fetchall()]
+
+    def update(self, pid: str, patch: Dict[str, Any], account_id: Optional[str] = None) -> bool:
+        if not patch:
+            return False
+        patch = dict(patch)
+        patch.pop("id", None)
+        patch.pop("account_id", None)  # ownership is never reassignable by patch
+        patch["updated_at"] = datetime.now(timezone.utc).isoformat()
+        if "metadata" in patch and isinstance(patch["metadata"], dict):
+            patch["metadata"] = json.dumps(patch["metadata"])
+        fields = ", ".join(f"{k} = ?" for k in patch.keys())
+        if account_id:
+            self.db.execute(
+                f"UPDATE ds_projects SET {fields} WHERE id = ? AND account_id = ?",
+                tuple(patch.values()) + (pid, account_id),
+            )
+        else:
+            self.db.execute(
+                f"UPDATE ds_projects SET {fields} WHERE id = ?",
+                tuple(patch.values()) + (pid,),
+            )
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+    def delete(self, pid: str, account_id: Optional[str] = None) -> bool:
+        if account_id:
+            self.db.execute("DELETE FROM ds_projects WHERE id = ? AND account_id = ?", (pid, account_id))
+        else:
+            self.db.execute("DELETE FROM ds_projects WHERE id = ?", (pid,))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+
+class DesignStudioAssetsDB:
+    """Assets: images, videos, layer documents, renders, brand kit entries."""
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _serialize(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        for k in ("metadata",):
+            if d.get(k) and isinstance(d[k], str):
+                try:
+                    d[k] = json.loads(d[k])
+                except json.JSONDecodeError:
+                    pass
+        return d
+
+    def create(self, asset: Dict[str, Any]) -> str:
+        import uuid
+        aid = asset.get("id") or str(uuid.uuid4())
+        asset = dict(asset)
+        asset["id"] = aid
+        asset.setdefault("account_id", "default")
+        asset.setdefault("created_at", datetime.now(timezone.utc).isoformat())
+        if "metadata" in asset and isinstance(asset["metadata"], dict):
+            asset["metadata"] = json.dumps(asset["metadata"])
+        cols = [c for c in asset.keys()]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO ds_assets ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(asset.values()),
+        )
+        self.db.commit()
+        return aid
+
+    def get_by_id(self, aid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute("SELECT * FROM ds_assets WHERE id = ? AND account_id = ?", (aid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM ds_assets WHERE id = ?", (aid,))
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def list_by_project(self, project_id: Optional[str] = None, asset_type: Optional[str] = None, account_id: Optional[str] = None, limit: int = 200) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM ds_assets WHERE 1=1"
+        params: List[Any] = []
+        if project_id:
+            sql += " AND project_id = ?"
+            params.append(project_id)
+        if asset_type:
+            sql += " AND asset_type = ?"
+            params.append(asset_type)
+        if account_id:
+            sql += " AND account_id = ?"
+            params.append(account_id)
+        sql += " ORDER BY created_at DESC LIMIT ?"
+        params.append(limit)
+        cur = self.db.execute(sql, tuple(params))
+        return [self._serialize(r) for r in cur.fetchall()]
+
+    def delete(self, aid: str, account_id: Optional[str] = None) -> bool:
+        if account_id:
+            self.db.execute("DELETE FROM ds_assets WHERE id = ? AND account_id = ?", (aid, account_id))
+        else:
+            self.db.execute("DELETE FROM ds_assets WHERE id = ?", (aid,))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+
+class DesignStudioJobsDB:
+    """Jobs: generation, render, export and compliance-check tasks."""
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _serialize(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        for k in ("cost_preview", "params", "result_ids"):
+            if d.get(k) and isinstance(d[k], str):
+                try:
+                    d[k] = json.loads(d[k])
+                except json.JSONDecodeError:
+                    pass
+        return d
+
+    def create(self, job: Dict[str, Any]) -> str:
+        import uuid
+        jid = job.get("id") or str(uuid.uuid4())
+        job = dict(job)
+        job["id"] = jid
+        job.setdefault("account_id", "default")
+        job.setdefault("status", "queued")
+        now = datetime.now(timezone.utc).isoformat()
+        job.setdefault("created_at", now)
+        job.setdefault("updated_at", now)
+        for k in ("cost_preview", "params", "result_ids"):
+            if k in job and isinstance(job[k], (dict, list)):
+                job[k] = json.dumps(job[k])
+        cols = [c for c in job.keys()]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO ds_jobs ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(job.values()),
+        )
+        self.db.commit()
+        return jid
+
+    def update(self, jid: str, patch: Dict[str, Any], account_id: Optional[str] = None) -> bool:
+        if not patch:
+            return False
+        patch = dict(patch)
+        patch.pop("id", None)
+        patch.pop("account_id", None)  # ownership is never reassignable by patch
+        patch["updated_at"] = datetime.now(timezone.utc).isoformat()
+        for k in ("cost_preview", "params", "result_ids"):
+            if k in patch and isinstance(patch[k], (dict, list)):
+                patch[k] = json.dumps(patch[k])
+        fields = ", ".join(f"{k} = ?" for k in patch.keys())
+        if account_id:
+            self.db.execute(
+                f"UPDATE ds_jobs SET {fields} WHERE id = ? AND account_id = ?",
+                tuple(patch.values()) + (jid, account_id),
+            )
+        else:
+            self.db.execute(
+                f"UPDATE ds_jobs SET {fields} WHERE id = ?",
+                tuple(patch.values()) + (jid,),
+            )
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+    def get_by_id(self, jid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute("SELECT * FROM ds_jobs WHERE id = ? AND account_id = ?", (jid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM ds_jobs WHERE id = ?", (jid,))
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def list_by_project(self, project_id: Optional[str] = None, status: Optional[str] = None, account_id: Optional[str] = None, limit: int = 200) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM ds_jobs WHERE 1=1"
+        params: List[Any] = []
+        if project_id:
+            sql += " AND project_id = ?"
+            params.append(project_id)
+        if status:
+            sql += " AND status = ?"
+            params.append(status)
+        if account_id:
+            sql += " AND account_id = ?"
+            params.append(account_id)
+        sql += " ORDER BY created_at DESC LIMIT ?"
+        params.append(limit)
+        cur = self.db.execute(sql, tuple(params))
+        return [self._serialize(r) for r in cur.fetchall()]
+
+    def delete(self, jid: str, account_id: Optional[str] = None) -> bool:
+        if account_id:
+            self.db.execute("DELETE FROM ds_jobs WHERE id = ? AND account_id = ?", (jid, account_id))
+        else:
+            self.db.execute("DELETE FROM ds_jobs WHERE id = ?", (jid,))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+
+# ---------------------------------------------------------------------------
 # Convenience: all DAOs accessible from one place
 # ---------------------------------------------------------------------------
+
+class DesignStudioContainer:
+    """Namespace for the three Design Studio stores."""
+
+    def __init__(self, db: DataLayer):
+        self.projects = DesignStudioProjectsDB(db)
+        self.assets = DesignStudioAssetsDB(db)
+        self.jobs = DesignStudioJobsDB(db)
+
 
 class NorthstarDB:
     """Unified data access — one object to reach every table."""
@@ -1297,6 +1634,7 @@ class NorthstarDB:
         self.audit = AuditDB(self._layer)
         self.suppliers = SuppliersDB(self._layer)
         self.live_pulls = LivePullsDB(self._layer)
+        self.design_studio = DesignStudioContainer(self._layer)
 
     @property
     def mode(self) -> str:

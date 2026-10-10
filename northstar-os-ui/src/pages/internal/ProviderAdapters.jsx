@@ -34,7 +34,9 @@ function FoundationProviderRegistry() {
           { key: 'provider_key', label: 'Key', render: (v) => <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>{v}</span> },
           { key: 'category', label: 'Category', render: (v) => <span className="pill pill-muted">{v || 'UNKNOWN'}</span> },
           { key: 'read_capable', label: 'Access', render: (v, row) => <span className="pill pill-muted">{v ? 'read' : ''}{row.write_capable ? ' + write' : ''}{!v && !row.write_capable ? '—' : ''}</span> },
-          { key: 'credential_ref_names', label: 'Credential names', render: (v) => (v && v.length) ? <span className="inline-flex" style={{ gap: 4, flexWrap: 'wrap' }}>{v.map(n => <span key={n} className="pill pill-muted" style={{ fontSize: 10 }}>{n}</span>)}</span> : <span className="pill pill-muted">none</span> },
+          // `v.length` is truthy for a STRING too, so a string credential name
+          // passed the guard and then threw on .map. Require a real array.
+          { key: 'credential_ref_names', label: 'Credential names', render: (v) => (Array.isArray(v) && v.length) ? <span className="inline-flex" style={{ gap: 4, flexWrap: 'wrap' }}>{v.map(n => <span key={String(n)} className="pill pill-muted" style={{ fontSize: 10 }}>{String(n)}</span>)}</span> : <span className="pill pill-muted">{v ? String(v) : 'none'}</span> },
           { key: 'sandbox_supported', label: 'Sandbox', render: (v) => <span className="pill pill-muted">{v ? 'yes' : 'no'}</span> },
           { key: 'enabled', label: 'Enabled', render: (v) => <span className={`pill ${v ? 'pill-ok' : 'pill-muted'}`} title="Provider arming is an owner decision; disabled by default">{v ? 'enabled' : 'disabled'}</span> },
           { key: 'health', label: 'Health', render: (v) => <span className="pill pill-muted">{v || 'UNKNOWN'}</span> },

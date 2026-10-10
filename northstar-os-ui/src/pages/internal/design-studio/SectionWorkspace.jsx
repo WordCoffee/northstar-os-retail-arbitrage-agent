@@ -284,7 +284,7 @@ export default function SectionWorkspace({
         active={slot}
         onSelect={(s) => { setSlot(s.id); if (s.specId) setSpecId(s.specId) }}
         renderItem={(s) => (<><Icon name={s.icon || 'image'} size={12} />{s.label}</>)}
-        actions={<span className="text-low" style={{ fontSize: 11 }}>{title} · {report.ready}/{report.total} rules pass</span>}
+        actions={<span className="text-low" style={{ fontSize: 11 }}>{title} - {report.checked ?? report.ready}/{report.total} rules decided</span>}
       />
     </div>
   )

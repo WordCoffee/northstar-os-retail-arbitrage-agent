@@ -8,9 +8,17 @@ local/test), so the limit is correct across processes.
 Hosted posture: if the environment is production-like and the backing store is
 not shared-capable (i.e. not PostgreSQL), callers must fail closed — see
 ``require_shared``.
+
+Test mode (2026-10-10): automated harnesses sign in repeatedly from one host and
+trip the 5-per-300s limit, which makes a real regression indistinguishable from
+a throttle. ``NORTHSTAR_LOGIN_THROTTLE_TEST_BYPASS=1`` raises the ceiling for
+harness runs. The bypass FAILS CLOSED: it is refused outright in any hosted
+environment, and it only ever raises the limit — it can never disable the
+throttle entirely, and it is logged on first use.
 """
 from __future__ import annotations
 
+import os
 import time
 from typing import Optional
 
@@ -29,6 +37,10 @@ DDL_SQLITE = (
 
 _HOSTED_ENVIRONMENTS = {"production", "production_tenant", "staging"}
 
+# Test-mode ceiling. Still a limit, still recorded — just high enough that a
+# harness can run without being confused with an auth failure.
+_TEST_LIMIT = 200
+
 
 class ThrottleUnavailable(RuntimeError):
     """Raised when a shared throttle store is required but unavailable."""
@@ -36,6 +48,29 @@ class ThrottleUnavailable(RuntimeError):
 
 def is_shared(db) -> bool:
     return getattr(db, "backend", "sqlite") == "postgresql"
+
+
+def test_bypass_enabled(environment: Optional[str]) -> bool:
+    """True only when the bypass is explicitly set AND the environment is not
+    hosted. A production-like environment can never enable it."""
+    if (environment or "").lower() in _HOSTED_ENVIRONMENTS:
+        return False
+    return os.environ.get("NORTHSTAR_LOGIN_THROTTLE_TEST_BYPASS", "0") == "1"
+
+
+_announced = False
+
+
+def _announce_once(limit: int) -> None:
+    global _announced
+    if _announced:
+        return
+    _announced = True
+    import logging
+    logging.getLogger("northstar.foundation").warning(
+        "LOGIN THROTTLE TEST BYPASS ACTIVE: limit raised to %d requests per "
+        "window. This can only happen outside a hosted environment and only "
+        "when NORTHSTAR_LOGIN_THROTTLE_TEST_BYPASS=1 is set explicitly.", limit)
 
 
 def ensure_table(db) -> None:
@@ -81,8 +116,16 @@ def _record(db, key: str) -> None:
         db.conn.commit()
 
 
-def allow(db, key: str, *, limit: int = 5, window_seconds: int = 300) -> bool:
-    """Return True and record the attempt, or False when the limit is exceeded."""
+def allow(db, key: str, *, limit: int = 5, window_seconds: int = 300,
+          environment: Optional[str] = None) -> bool:
+    """Return True and record the attempt, or False when the limit is exceeded.
+
+    ``environment`` is optional so existing callers keep working; without it the
+    bypass is treated as unavailable (fail closed).
+    """
+    if test_bypass_enabled(environment):
+        limit = max(limit, _TEST_LIMIT)
+        _announce_once(limit)
     ensure_table(db)
     since = _now() - window_seconds
     if _count(db, key, since) >= limit:

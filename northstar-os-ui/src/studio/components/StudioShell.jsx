@@ -187,6 +187,7 @@ export function VerdictPill({ verdict }) {
     pass: { cls: 'pill-ok', label: 'Pre-flight pass' },
     flag: { cls: 'pill-warn', label: 'Pre-flight warns' },
     block: { cls: 'pill-error', label: 'Pre-flight blocks' },
+    incomplete: { cls: 'pill-muted', label: 'Needs artwork' },
     unknown: { cls: 'pill-muted', label: 'Not checked' },
   }
   const v = map[verdict] || map.unknown
@@ -196,12 +197,21 @@ export function VerdictPill({ verdict }) {
 // ── Compliance panel body (shared) ───────────────────────────────────────────
 export function CompliancePanel({ report, onOverride }) {
   if (!report) return <div className="text-low" style={{ fontSize: 12 }}>Nothing to check yet.</div>
+  const coverage = report.checked != null ? `${report.checked}/${report.total} rules could be decided` : `${report.ready}/${report.total} rules pass`
   return (
     <div className="ss-compliance" data-testid="compliance-panel">
       <div className="ss-compliance-head">
         <VerdictPill verdict={report.verdict} />
-        <span className="text-low" style={{ fontSize: 11 }}>{report.ready}/{report.total} rules pass</span>
+        <span className="text-low" style={{ fontSize: 11 }}>{coverage}</span>
       </div>
+      {!report.hasArtwork && (
+        <div className="ss-rule ss-rule-incomplete">
+          <div className="ss-rule-label">Nothing placed on the canvas yet</div>
+          <div className="ss-rule-detail">
+            Rules that inspect artwork report <strong>needs artwork</strong> rather than passing, so an empty canvas can never look compliant.
+          </div>
+        </div>
+      )}
       {report.blocked.length > 0 && (
         <div className="ss-compliance-group">
           <div className="ss-compliance-group-label ss-block">Blocks export ({report.blocked.length})</div>
@@ -226,9 +236,28 @@ export function CompliancePanel({ report, onOverride }) {
           ))}
         </div>
       )}
+      {(report.needsArtwork?.length > 0 || report.needsReview?.length > 0) && (
+        <div className="ss-compliance-group">
+          <div className="ss-compliance-group-label ss-muted">Not yet decidable ({(report.needsArtwork?.length || 0) + (report.needsReview?.length || 0)})</div>
+          {(report.needsArtwork || []).map((r, i) => (
+            <div key={`a${i}`} className="ss-rule ss-rule-incomplete">
+              <div className="ss-rule-label">{r.label}</div>
+              <div className="ss-rule-detail">{r.detail}</div>
+              <div className="ss-rule-source">{r.need === 'export' ? 'needs an exported file' : 'needs artwork on the canvas'} · {r.source}</div>
+            </div>
+          ))}
+          {(report.needsReview || []).map((r, i) => (
+            <div key={`h${i}`} className="ss-rule ss-rule-incomplete">
+              <div className="ss-rule-label">{r.label}</div>
+              <div className="ss-rule-detail">{r.detail}</div>
+              <div className="ss-rule-source">needs a human decision · {r.source}</div>
+            </div>
+          ))}
+        </div>
+      )}
       {report.passed.length > 0 && (
         <details className="ss-passed">
-          <summary>Passed ({report.passed.length})</summary>
+          <summary>Decided and passing ({report.passed.length})</summary>
           {report.passed.map((r, i) => (
             <div key={i} className="ss-rule ss-rule-pass">
               <div className="ss-rule-label">{r.label}</div>

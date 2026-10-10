@@ -29,6 +29,7 @@ import Ads from './design-studio/Ads.jsx'
 import VideoUgc from './design-studio/VideoUgc.jsx'
 import Social from './design-studio/Social.jsx'
 import Packaging from './design-studio/Packaging.jsx'
+import { migrateLocalStorage, migrationDone } from '../../studio/engine/migrate.js'
 
 const SECTIONS = [
   { id: 'projects', label: 'Projects', icon: 'stack', note: 'Project board and asset library', built: true },
@@ -95,6 +96,22 @@ export default function DesignStudio() {
       navigate(`/design-studio?section=${sectionId}`, { replace: true })
     }
   }, [requested, sectionId, navigate])
+
+  // One-time import of any pre-backend browser records into the tenant's
+  // backend store. Idempotent, and it never deletes the local copy until the
+  // server confirms the import.
+  useEffect(() => {
+    if (migrationDone()) return
+    let cancelled = false
+    migrateLocalStorage().then((r) => {
+      if (cancelled || !r.ran) return
+      const made = r.created ? (r.created.projects + r.created.assets + r.created.jobs) : 0
+      if (made > 0) {
+        toast(`Imported ${made} local record${made === 1 ? '' : 's'} into your workspace.`, 'info')
+      }
+    })
+    return () => { cancelled = true }
+  }, [toast])
 
   return (
     <PageLayout title="Design Studio" subtitle="One studio for every creative asset your Amazon listings need.">

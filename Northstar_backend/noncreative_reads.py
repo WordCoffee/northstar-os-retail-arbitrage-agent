@@ -358,7 +358,12 @@ def sources(limit: int = Query(default=100, le=300)):
         "SELECT run_id, run_name, status, created_at FROM costco_pipeline_runs "
         "ORDER BY created_at DESC LIMIT ?", (limit,))
     summary = {
-        "refresh_records": len(refresh), "live_pulls": len(pulls), "pipeline_runs": len(runs),
+        "refresh_records": len(refresh),
+        # Distinct keys for COUNT vs the arrays below. The arrays previously
+        # overwrote these counts (same key), so a page rendering the count got
+        # an array of objects and React threw error #31.
+        "live_pull_count": len(pulls),
+        "pipeline_run_count": len(runs),
         "unavailable": ({"pipeline_runs": runs_reason} if runs_reason else None),
     }
     return _env("sources", refresh, {**summary, "live_pulls": pulls, "pipeline_runs": runs})

@@ -207,9 +207,81 @@ export const RULES = [
     detail: 'A format with no captured Amazon source cannot be exported, so a spec from one ad product can never be silently applied to another.',
     source: 'spec registry', accessed: '2026-10-10', dateSensitive: false,
   },
+  // ── Non-SB video families (SP video, Display video) ──────────────────────
+  {
+    id: 'video-spec', level: 'block', scope: 'Amazon Ads', kind: 'video',
+    label: 'This video format meets its own published spec',
+    detail: 'Each video family is checked against ITS OWN registry row. Sponsored Products video is 7 seconds and longer with no published maximum; Sponsored Display video is 6-45 seconds. Neither may be checked against the Sponsored Brands range.',
+    source: 'spv guide / display video creative', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'video-reconciled', level: 'flag', scope: 'Amazon Ads', kind: 'policy',
+    label: 'Two Amazon figures recorded; the stricter is enforced',
+    detail: 'Amazon publishes 1 Mbps AND 4 Mbps for video, and 92 kbps AND 192 kbps for audio, on two pages describing different placements. Both are stored with their source and the stricter is enforced. The display table also repeats the "Minimum duration" label on two rows, recorded as a source defect and read as min 6s / max 45s.',
+    source: 'display video creative / ads overview / streaming TV', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'video-audio-removed', level: 'flag', scope: 'Amazon Ads', kind: 'video',
+    label: 'Audio is removed on this placement',
+    detail: 'Amazon documents that audio WILL BE REMOVED for Sponsored Products video, so an audio mix must not be mastered and the absence of audio is not a defect.',
+    source: 'spv guide', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'video-product-frame', level: 'flag', scope: 'Amazon Ads', kind: 'video',
+    label: 'Product occupies enough of the video frame',
+    detail: 'Amazon requires the product to take up 50% or more of the video frame for Sponsored Products video.',
+    source: 'spv guide', accessed: '2026-10-10', dateSensitive: true,
+  },
 ]
 
 export const RULES_BY_ID = Object.fromEntries(RULES.map(r => [r.id, r]))
+
+// ── What each rule needs before its result MEANS anything ───────────────────
+//   'nothing'  — decided by the format alone (a size rule needs no artwork)
+//   'artwork'  — needs real placed artwork; an empty canvas reports
+//                `needs-artwork`, never a green pass
+//   'export'   — only decidable from the exported file
+//   'human'    — inherently a human judgement; reports `needs-review`
+const RULE_NEEDS = {
+  'raster-range': 'nothing',
+  'raster-zoom': 'nothing',
+  'main-white-bg': 'artwork',
+  'main-fill': 'artwork',
+  'main-no-overlay': 'artwork',
+  'aplus-module-size': 'nothing',
+  'no-animated-gif': 'nothing',
+  'caps-headline': 'artwork',
+  'title-case': 'artwork',
+  'pressure-punct': 'artwork',
+  'cta-end-punct': 'artwork',
+  'special-chars': 'artwork',
+  'pressure-language': 'artwork',
+  'personal-language': 'artwork',
+  'superiority': 'artwork',
+  'competitor-named': 'artwork',
+  'brand-prohibited': 'artwork',
+  'text-on-image-legibility': 'artwork',
+  'image-text-not-indexed': 'nothing',
+  'store-safe-zone': 'artwork',
+  'store-no-embedded-text': 'artwork',
+  'sbv-video-spec': 'export',
+  'sbv-text-safe-area': 'artwork',
+  'ai-people-disclosure': 'human',
+  'brand-registry-not-a-mockup': 'human',
+  'aplus-alt-text': 'artwork',
+  'aplus-file-size': 'export',
+  'ad-char-caps': 'artwork',
+  'sbv-vertical-date-sensitive': 'nothing',
+  'spec-sourced': 'nothing',
+  'video-spec': 'export',
+  'video-reconciled': 'nothing',
+  'video-audio-removed': 'nothing',
+  'video-product-frame': 'artwork',
+}
+
+export function needsOf(ruleId) {
+  return RULE_NEEDS[ruleId] || 'human'
+}
 
 // ── Prohibited vocabulary ────────────────────────────────────────────────────
 const SUPERIORITY = [
@@ -291,7 +363,24 @@ export function checkCompliance(doc, ctx = {}) {
   const cta = ctaLayer ? String(ctaLayer.text || '') : ''
 
   const results = []
-  const push = (ruleId, level, detail) => results.push({ ...RULES_BY_ID[ruleId], level, detail })
+  // An empty canvas must never report green. `hasArtwork` is what separates a
+  // real verdict from a vacuous one.
+  const hasArtwork = doc.layers.some(l =>
+    (l.kind === 'product' && l.visible !== false) ||
+    (l.kind === 'image' && l.visible !== false) ||
+    (l.kind === 'text' && String(l.text || '').trim().length > 0))
+  const push = (ruleId, level, detail, statusOverride) => {
+    const need = needsOf(ruleId)
+    let status = statusOverride || 'checked'
+    if (!statusOverride) {
+      if (need === 'artwork' && !hasArtwork) status = 'needs-artwork'
+      else if (need === 'export' && !ctx.exportBytes && !ctx.durationSeconds) status = 'needs-artwork'
+      else if (need === 'human') status = 'needs-review'
+    }
+    // A rule whose input is missing can never report a green pass.
+    const effective = status === 'checked' ? level : (status === 'needs-artwork' ? 'incomplete' : 'review')
+    results.push({ ...RULES_BY_ID[ruleId], level: effective, rawLevel: level, status, need, detail })
+  }
 
   // ── size ──
   push('raster-range',
@@ -398,7 +487,10 @@ export function checkCompliance(doc, ctx = {}) {
 
   // ── Phase 2 checks (2026-10-10) ─────────────────────────────────────────
   const isStore = /Store/i.test(doc.channel || '')
-  const isSbv = isVideo && /Ads/i.test(doc.channel || '')
+  // SB video is identified by its OWN spec row, not by the channel string —
+  // SP video and Display video also live under "Amazon Ads" and must not be
+  // checked against the SB rule set.
+  const isSbv = isVideo && !!specRow && specRow.id.startsWith('sbv')
 
   if (isStore) {
     // Store safe zone: content-bearing layers must sit inside keepIn and clear
@@ -464,6 +556,50 @@ export function checkCompliance(doc, ctx = {}) {
       inCorner ? 'Text sits in the bottom-right corner, which Amazon prohibits for SB video.' : 'Text clears the prohibited bottom-right corner.')
   }
 
+  // ── Non-SB video families: SP video and Display video ────────────────────
+  // Each uses ITS OWN row's published figures. A durationMax of null means
+  // "no published maximum" (SP video), which is not the same as zero.
+  if (isVideo && !isSbv && specRow && (specRow.id === 'spv-video' || specRow.id === 'display-video')) {
+    const row = specRow
+    const dur = Number(ctx.durationSeconds || 0)
+    const lo = row.durationMin ?? null
+    const hi = row.durationMax ?? null
+    const dimOk = !row.allowedDims || row.allowedDims.some(([w, h]) => w === doc.w && h === doc.h)
+    const tooShort = lo != null && dur > 0 && dur < lo
+    const tooLong = hi != null && dur > 0 && dur > hi
+    const durOk = dur > 0 ? (!tooShort && !tooLong) : null
+    const durText = hi == null
+      ? `${lo}s minimum, no published maximum`
+      : `${lo}-${hi}s`
+    push('video-spec', (dimOk && durOk !== false) ? 'pass' : (dimOk ? 'block' : 'block'),
+      `Dimensions ${doc.w}×${doc.h}${dimOk ? ' OK' : ` — published set is ${(row.allowedDims || [[row.w, row.h]]).map(d => d.join('x')).join(', ')}`}; ` +
+      `duration ${dur ? `${dur}s` : 'not supplied'}${durOk === false ? ` — must be ${durText}` : ` (${durText})`}; ` +
+      `formats ${(row.videoFormats || AMAZON_CAPS.video.formats).join('/')}` +
+      `${row.videoBitrateMin ? `, ${row.videoBitrateMin} Mbps+ enforced` : ''}` +
+      `${row.audioRemoved ? ', AUDIO IS REMOVED on this placement' : row.audioBitrateMin ? `, audio ${row.audioBitrateMin} kbps+ enforced` : ''}.`)
+
+    // Reconcile where Amazon publishes two figures.
+    if (row.videoBitrateFigures || row.audioBitrateFigures) {
+      const fmtFig = (f) => `${f.value} (${f.source})`
+      push('video-reconciled', 'pass',
+        `Two Amazon figures recorded and the stricter enforced. ` +
+        `Video bitrate: ${(row.videoBitrateFigures || []).map(fmtFig).join(' vs ')} → enforcing ${row.videoBitrateMin} Mbps. ` +
+        `Audio bitrate: ${(row.audioBitrateFigures || []).map(fmtFig).join(' vs ')} → enforcing ${row.audioBitrateMin} kbps. ` +
+        `${row.reconciliation ? 'Source defect noted: the display table repeats the "Minimum duration" label (6s, then 45s); read as min 6s / max 45s.' : ''}`)
+    }
+
+    if (row.audioRemoved) {
+      push('video-audio-removed', 'pass',
+        'Amazon documents that audio will be removed for this format, so an audio mix must not be mastered. Do not treat the absence of audio as a defect.')
+    }
+    if (row.productFrameMin != null) {
+      const fill = productLayers.reduce((s, l) => s + ((l.w || 0) * (l.h || 0)), 0)
+      const ok = fill >= row.productFrameMin
+      push('video-product-frame', ok ? 'pass' : 'flag',
+        `Product occupies ${Math.round(fill * 100)}% of the frame; Amazon requires ${Math.round(row.productFrameMin * 100)}% or more.`)
+    }
+  }
+
   // A format with no captured source can never be exported. This is what stops
   // an SB spec from silently standing in for an SP placement.
   {
@@ -479,13 +615,16 @@ export function checkCompliance(doc, ctx = {}) {
   const marksSynthetic = !!doc.meta?.syntheticPeople
   const hasTag = !!doc.meta?.syntheticPerformerTag
   if (marksSynthetic || hasTag) {
+    // The document declares synthetic people, so the requirement IS decidable.
     push('ai-people-disclosure', hasTag ? 'pass' : 'flag',
       hasTag
         ? `Disclosure metadata will be written: ${AI_POLICY.syntheticPersonIptc.keyword} in ${AI_POLICY.syntheticPersonIptc.field}.`
-        : `This document declares photorealistic AI people but the ${AI_POLICY.syntheticPersonIptc.keyword} tag is not set. Amazon may require disclosure.`)
+        : `This document declares photorealistic AI people but the ${AI_POLICY.syntheticPersonIptc.keyword} tag is not set. Amazon may require disclosure.`,
+      'checked')
   } else {
     push('ai-people-disclosure', 'flag',
-      `If this asset contains photorealistic AI-generated people, Amazon requires the ${AI_POLICY.syntheticPersonIptc.keyword} tag (or the A+ upload checkbox). No people are declared on this document.`)
+      `If this asset contains photorealistic AI-generated people, Amazon requires the ${AI_POLICY.syntheticPersonIptc.keyword} tag (or the A+ upload checkbox). No people are declared on this document.`,
+      'needs-review')
   }
 
   // Brand Registry: every generated mockup is marketing-only.
@@ -533,11 +672,22 @@ export function checkCompliance(doc, ctx = {}) {
   const blocked = results.filter(r => r.level === 'block')
   const flagged = results.filter(r => r.level === 'flag')
   const passed = results.filter(r => r.level === 'pass')
+  // Coverage: a rule that could not be decided yet is NOT a pass. An empty
+  // canvas therefore can never show green.
+  const needsArtwork = results.filter(r => r.status === 'needs-artwork')
+  const needsReview = results.filter(r => r.status === 'needs-review')
+
+  const verdict = blocked.length ? 'block'
+    : flagged.length ? 'flag'
+      : (needsArtwork.length || needsReview.length) ? 'incomplete'
+        : 'pass'
 
   return {
-    verdict: blocked.length ? 'block' : flagged.length ? 'flag' : 'pass',
-    results, blocked, flagged, passed,
-    ready: passed.length, total: results.length,
+    verdict, results, blocked, flagged, passed, needsArtwork, needsReview,
+    ready: passed.length,
+    checked: results.length - needsArtwork.length - needsReview.length,
+    total: results.length,
+    hasArtwork,
     overrideable: true,
   }
 }

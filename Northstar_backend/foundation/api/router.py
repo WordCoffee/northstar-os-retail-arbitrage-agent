@@ -303,7 +303,7 @@ def login(body: LoginBody, request: Request, response: Response,
     email = (body.email or "").strip().lower()
     client = request.client.host if getattr(request, "client", None) else "unknown"
     rate_key = f"{email}|{client}"
-    if not login_throttle.allow(state.db, rate_key):
+    if not login_throttle.allow(state.db, rate_key, environment=auth_environment()):
         raise _err("rate_limited", "too many login attempts; try again later", 429)
 
     row = get_by_email(state.db, email)
