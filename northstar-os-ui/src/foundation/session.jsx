@@ -40,6 +40,9 @@ export function SessionProvider({ children }) {
   const [dev, setDev] = useState(getDevSession())
   const [tokenPresent, setTokenPresent] = useState(!!getToken())
 
+  // Returns a SNAPSHOT of the resolved identity so callers can decide on the
+  // real result instead of assuming success (SignIn's dev-shim fallback uses
+  // this). The React state below is still the source of truth for the app.
   const refresh = useCallback(async () => {
     // ui_mode is a PUBLIC signal (available pre-auth) so signed-out clients
     // also land in the correct beta entry state (never the legacy shell).
@@ -74,12 +77,13 @@ export function SessionProvider({ children }) {
         ownerTestMode: !!env.owner_test_mode,
         ownerTestModeBanner: env.owner_test_mode_banner || null,
       }))
+      return { authenticated: !!me.user_id, userId: me.user_id || '', suspended: false }
     } catch (e) {
       // 401 → signed out / expired / revoked session.
       if (e.status === 401) {
         setToken('')
         setSession((s) => ({ ...ANON, loaded: true, authenticated: false }))
-        return
+        return { authenticated: false, userId: '', status: e.status }
       }
       // 403 with org_lifecycle_blocked → account suspended/paused/cancelled:
       // show a clear account-status screen instead of a generic error.
@@ -91,9 +95,10 @@ export function SessionProvider({ children }) {
           suspensionMessage: e.detail?.message || 'access is currently disabled for this account',
           error: null,
         }))
-        return
+        return { authenticated: true, userId: '', suspended: true, status: e.status }
       }
       setSession((s) => ({ ...s, loaded: true, error: e }))
+      return { authenticated: false, userId: '', error: e, status: e.status }
     }
   }, [])
 

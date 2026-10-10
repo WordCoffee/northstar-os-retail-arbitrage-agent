@@ -359,3 +359,54 @@ refreshed regression set beyond what was re-run (8).
 | verify-operator-smoke.cjs | 11 / 0 (21/21 rail) |
 | capture-section-evidence.cjs | 62 / 0, 18 screenshots refreshed |
 Total: **484 passed, 0 failed, 0 FATAL.**
+
+## PHASE 6 B — DEV SIGN-IN DEFECT ROOT-CAUSED AND FIXED (session 2)
+
+### The previous diagnosis was wrong in one detail
+"The `onSubmit` handler does not run" is FALSE. Instrumented repro
+(`tools/_repro-signin.cjs`): the click DOES run the handler —
+`localStorage.ns-dev-session` is written with the shim identity and a fresh
+`/me` probe fires. What actually happens after:
+
+1. Vite dev build → `LOCAL_DEV` true → SignIn takes the in-page shim branch
+   (by design, no `/auth/login` call).
+2. `session.updateDev()` writes the shim identity and `refresh()` calls
+   `/api/v1/foundation/me` with `X-User-Id` headers.
+3. **The connected backend answers 401.** Port 8000 (the Vite proxy target) is
+   the DOCKER API container (`northstarosretailarbitrageagent-api-1`), started
+   by the hosted-container work (A2). The dev shim requires the request's
+   effective client to be loopback; through Docker port-forwarding the API sees
+   a bridge-network client, so the shim headers are ignored.
+4. Session stays signed out → `navigate('/home')` → the auth guard bounces
+   back to `/sign-in` → the form re-renders identically.
+5. The old dev branch had NO failure path: no error text, no request, no DOM
+   change, no page error. A silent no-op by construction.
+
+Proof of the isolation (all run this session):
+- shim `GET /me` direct to `:8000` → **401**; via the Vite proxy → **401**.
+- the same shim request issued INSIDE the api container → the shim is
+  ACCEPTED (403 `cross_organization_access_denied` — the demo user is simply
+  not a member of `org-t2` there), `ENVIRONMENT=development` in-container.
+- real credential login `POST /auth/login` against the same stack → **200**.
+- `docker ps`: `:8000` is published by the api container, not a host uvicorn.
+
+### The fix (minimal, honest, no posture loosening)
+- `foundation/session.jsx` — `refresh()` now RETURNS an identity snapshot
+  (`{authenticated, userId, status?, suspended?}`) so callers can act on the
+  real result instead of assuming success.
+- `pages/public/SignIn.jsx` — the dev branch verifies the shim result and, if
+  the shim did not authenticate, falls back to the REAL `/auth/login` with the
+  entered credentials. Both failure modes now show an explicit alert naming the
+  cause (shim inactive on a containerized backend). No silent bounce remains.
+- Button shows `Signing in…` and disables while busy.
+
+### Verified in the running dev server (browser, Playwright)
+- demo shim creds → stays on `/sign-in` WITH the explicit alert (no longer
+  silent);
+- real account `t2` → navigates to `/ui/home`, stays there after settle, and
+  the session survives a reload;
+- 0 page errors, 0 unhandled rejections.
+
+DECIDED-BY-DEFAULT (D8): a dev build may now complete sign-in through the real
+`/auth/login` path when the shim is unavailable. Reverse: remove the fallback
+block in `SignIn.jsx` (the shim-first attempt is preserved above it).

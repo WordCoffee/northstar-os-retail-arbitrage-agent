@@ -28,30 +28,40 @@ export default function SignIn() {
   // Already signed in (incl. after a page refresh) -> straight to the workspace.
   if (session.authenticated) return <Navigate to="/home" replace />
 
+  // Dev builds try the local identity shim FIRST, but whether it can
+  // authenticate depends on the CONNECTED BACKEND's posture (ENVIRONMENT=
+  // development and a loopback client), not on this frontend build. A
+  // containerized backend never sees a loopback client, so its shim headers are
+  // ignored and /me answers 401. The old code assumed success, navigated, and
+  // the guard silently bounced back here - no request, no error, no state
+  // change. Now the shim result is VERIFIED and a real credential login
+  // follows, so a dev server can always sign in and a failure is never silent.
   const submit = async (e) => {
     e.preventDefault()
     setError('')
     const identifier = (form.identifier || '').trim()
-
-    if (LOCAL_DEV) {
-      // Explicit local-development identity shim (never a hosted fallback).
-      if (identifier.toLowerCase() !== LOCAL_DEMO_IDENTIFIER.toLowerCase() || form.password !== LOCAL_DEMO_PASSWORD) {
-        setError('Those credentials did not match the local private-beta account.')
-        return
-      }
-      session.updateDev(LOCAL_DEMO_SESSION)
-      navigate('/home')
-      return
-    }
-
-    // Hosted: real credential login (sets the HttpOnly session cookie).
     setBusy(true)
     try {
+      if (LOCAL_DEV
+        && identifier.toLowerCase() === LOCAL_DEMO_IDENTIFIER.toLowerCase()
+        && form.password === LOCAL_DEMO_PASSWORD) {
+        session.updateDev(LOCAL_DEMO_SESSION)
+        const shim = await session.refresh()
+        if (shim && shim.authenticated) {
+          navigate('/home')
+          return
+        }
+        // Shim inactive on this backend -> fall through to the credential path.
+      }
+      // Real credential login (sets the HttpOnly session cookie). In a dev
+      // build this doubles as the fallback when the shim cannot authenticate.
       await foundationApi.login(identifier.toLowerCase(), form.password)
       await session.refresh()
       navigate('/home')
     } catch {
-      setError('Invalid email or password.')
+      setError(LOCAL_DEV
+        ? 'Invalid credentials. The local dev shim is used only when the connected backend runs in development posture on loopback; against a containerized backend, sign in with a real local account.'
+        : 'Invalid email or password.')
     } finally {
       setBusy(false)
     }
@@ -84,7 +94,7 @@ export default function SignIn() {
               <input id="signin-pw" className="field" type="password" placeholder="Enter password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} />
             </div>
             {error && <div className="text-low" style={{ fontSize: 12, color: 'var(--status-error, #b4432f)' }} role="alert">{error}</div>}
-            <button className="btn btn-primary btn-block" type="submit">Sign In</button>
+            <button className="btn btn-primary btn-block" type="submit" disabled={busy}>{busy ? 'Signing in…' : 'Sign In'}</button>
             <div className="text-low" style={{ fontSize: 11 }}>
               Local private-beta sign-in. In hosted environments, use your organization’s credentials.
             </div>
