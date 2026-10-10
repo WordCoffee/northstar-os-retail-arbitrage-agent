@@ -8,17 +8,18 @@ const RAW_GROUPS = [
   ]},
   { id: 'research', label: 'Research', icon: 'flask', sections: [
     { id: 'sourcescout', label: 'SourceScout', route: '/product-finder', roles: ['operator', 'platform_admin'] },
-    { id: 'product-designer', label: 'Product Designer', route: '/product-designer', roles: ['operator', 'platform_admin'], status: 'Concept' },
     { id: 'golden-goose', label: 'Golden Goose Finder', route: '/golden-goose', roles: ['operator', 'platform_admin'] },
     { id: 'listing-guardian', label: 'Listing Guardian', route: '/listings', roles: ['operator', 'platform_admin'] },
     { id: 'keyword-tracker', label: 'Keyword Tracker', route: '/keyword-tracker', roles: ['operator', 'platform_admin'], status: 'Concept' },
     { id: 'competitor-monitor', label: 'Competitor Monitor', route: '/competitor-monitor', roles: ['operator', 'platform_admin'], status: 'Concept' },
   ]},
+  { id: 'create', label: 'Create', icon: 'brush', sections: [
+    { id: 'design-studio', label: 'Design Studio', route: '/design-studio', roles: ['operator', 'platform_admin'], status: 'Concept' },
+  ]},
   { id: 'grow', label: 'Grow', icon: 'chart', sections: [
     { id: 'listingforge', label: 'ListingForge', route: '/listingforge', roles: ['operator', 'platform_admin'], status: 'Concept' },
     { id: 'adpilot', label: 'AdPilot', route: '/adpilot', roles: ['operator', 'platform_admin'], status: 'Concept' },
     { id: 'socialpulse', label: 'SocialPulse', route: '/socialpulse', roles: ['operator', 'platform_admin'], status: 'Concept' },
-    { id: 'creative-studio', label: 'Creative Studio', route: '/creative-studio', roles: ['operator', 'platform_admin'], status: 'Concept' },
   ]},
   { id: 'operate', label: 'Operate', icon: 'layers', sections: [
     { id: 'profitability', label: 'Profitability Dashboard', route: '/profitability', roles: ['operator', 'platform_admin'] },

@@ -45,9 +45,9 @@ export const ROOM_READINESS = {
   'master-brain': 'internal',
   'administration': 'ready',
   'beta-ops': 'ready',
-  // Labelled rather than left silent.
-  'product-designer': 'concept', // local scene designer only; generation is provider-gated and unarmed
-  'creative-studio': 'concept', // local records + requests; no provider is connected
+  // Phase 0 (2026-10-09): Product Designer + Creative Studio merged into
+  // Design Studio. The old routes still redirect but are not primary nav rooms.
+  'design-studio': 'concept', // merged creative workspace; sections arm progressively
   'socialpulse': 'concept', // local workspace state; no channel is connected
   'adpilot': 'partial', // real creative capability + honest "nothing is sent" boundary
   'listingforge': 'partial', // real revisions + template apply; publish stays disabled
@@ -75,8 +75,8 @@ export const ROUTE_ROOM = {
   '/beta-ops': 'beta-ops',
   // Phase 6: the studio rooms and the customer surfaces get explicit labels so
   // no route renders without a readiness badge.
-  '/product-designer': 'product-designer',
-  '/creative-studio': 'creative-studio',
+  // Phase 0: Product Designer and Creative Studio merged into /design-studio.
+  '/design-studio': 'design-studio',
   '/socialpulse': 'socialpulse',
   '/adpilot': 'adpilot',
   '/listingforge': 'listingforge',

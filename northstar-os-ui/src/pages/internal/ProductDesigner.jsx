@@ -373,7 +373,7 @@ export default function ProductDesigner() {
         </button>
       </>}
     >
-      <DataNotice tone="sample" title="Local rendering, honest boundaries">
+      <DataNotice tone="info" title="Local rendering, honest boundaries">
         Scenes, pack views and mockups are real renders produced in this browser from your uploaded artwork and the built-in
         scene recipes. Nothing here contacts an image or video model — the Generate tab records requests and lands them in
         &ldquo;Blocked — provider required&rdquo; until a local engine is armed. The 3D view is real geometry, not a photograph.

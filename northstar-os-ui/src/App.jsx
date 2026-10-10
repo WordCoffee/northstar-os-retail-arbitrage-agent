@@ -11,7 +11,7 @@ import { TOAST_PROVIDER, useToast } from './components/ToastContext.jsx'
 
 import CommandCenter from './pages/internal/CommandCenter.jsx'
 import ProductFinder from './pages/internal/ProductFinder.jsx'
-import ProductDesigner from './pages/internal/ProductDesigner.jsx'
+import DesignStudio from './pages/internal/DesignStudio.jsx'
 import GoldenGooseDesk from './pages/internal/GoldenGoose.jsx'
 import ListingGuardian from './pages/internal/ListingGuardian.jsx'
 import KeywordTracker from './pages/internal/KeywordTracker.jsx'
@@ -19,7 +19,6 @@ import CompetitorMonitor from './pages/internal/CompetitorMonitor.jsx'
 import ListingForge from './pages/internal/ListingForge.jsx'
 import AdPilot from './pages/internal/AdPilot.jsx'
 import SocialPulse from './pages/internal/SocialPulse.jsx'
-import CreativeStudio from './pages/internal/CreativeStudio.jsx'
 import ProfitabilityDashboard from './pages/internal/ProfitabilityDashboard.jsx'
 import CommerceOps from './pages/internal/CommerceOps.jsx'
 import Monitoring from './pages/internal/Monitoring.jsx'
@@ -87,7 +86,9 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/home" element={<CommandCenter />} />
       <Route path="/product-finder" element={<ProductFinder />} />
       <Route path="/product-finder/:id" element={<ProductFinder />} />
-      <Route path="/product-designer" element={<ProductDesigner />} />
+      <Route path="/design-studio/*" element={<DesignStudio />} />
+      <Route path="/product-designer" element={<Navigate to="/design-studio?section=3d-scene" replace />} />
+      <Route path="/creative-studio" element={<Navigate to="/design-studio?section=projects" replace />} />
       <Route path="/golden-goose" element={<GoldenGooseDesk />} />
       <Route path="/golden-goose/:id" element={<GoldenGooseDesk />} />
       <Route path="/listings" element={<ListingGuardian />} />
@@ -96,7 +97,6 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/listingforge" element={<ListingForge />} />
       <Route path="/adpilot" element={<AdPilot />} />
       <Route path="/socialpulse" element={<SocialPulse />} />
-      <Route path="/creative-studio" element={<CreativeStudio />} />
       <Route path="/profitability" element={<ProfitabilityDashboard />} />
       <Route path="/spreadsheet-lab" element={<SpreadsheetLab />} />
       <Route path="/commerce-ops" element={<CommerceOps />} />

@@ -89,19 +89,11 @@ const REQUEST_STATE = {
 }
 const pillFor = (s) => REQUEST_STATE[s] || BRIEF_STATUS[s] || 'pill-muted'
 
-// ── Seed records (clearly sample; superseded by the operator's own) ───────────
-const SEED_BRIEFS = [
-  { id: 'BR-01', name: 'Set A Launch — Ad Creatives', objective: 'Drive awareness', audience: 'Homeowners 30–55', brand: 'Word Coffee', formats: ['Ad creative', 'Social variant', 'Listing imagery'], deliverables: 6, status: 'Active', note: 'Hero + feature set, matched brand kit.', createdAt: '2026-09-20T00:00:00Z' },
-  { id: 'BR-02', name: 'Q4 Seasonal Bundle', objective: 'Seasonal promo', audience: 'Existing customers', brand: 'Word Coffee', formats: ['Social variant', 'Email hero'], deliverables: 4, status: 'Draft', note: 'Seasonal palette, copy pending.', createdAt: '2026-09-22T00:00:00Z' },
-  { id: 'BR-03', name: 'Installation Guide Refresh', objective: 'Support conversion', audience: 'New buyers', brand: 'Mogra Organics', formats: ['Listing imagery', 'A+ content'], deliverables: 3, status: 'In Review', note: 'Step-by-step panel set.', createdAt: '2026-09-24T00:00:00Z' },
-]
-const SEED_VARIANTS = [
-  { id: 'V-101', brief: 'BR-01', format: 'Ad creative', aspect: '1:1', state: 'Approved', note: 'Hero + feature, matched brand kit', createdAt: '2026-09-21T00:00:00Z' },
-  { id: 'V-102', brief: 'BR-01', format: 'Ad creative', aspect: '4:5', state: 'In Review', note: 'Alt crop — awaiting brand reviewer', createdAt: '2026-09-21T00:00:00Z' },
-  { id: 'V-103', brief: 'BR-01', format: 'Social variant', aspect: '9:16', state: 'Draft', note: 'Reel hook frame — tighten headline', createdAt: '2026-09-22T00:00:00Z' },
-  { id: 'V-104', brief: 'BR-02', format: 'Social variant', aspect: '1:1', state: 'Draft', note: 'Seasonal palette, no copy yet', createdAt: '2026-09-23T00:00:00Z' },
-  { id: 'V-105', brief: 'BR-03', format: 'Listing imagery', aspect: '16:9', state: 'Approved', note: 'Step-by-step panel 1 of 3', createdAt: '2026-09-24T00:00:00Z' },
-]
+// ── Seed records removed (Phase 0). Empty states only. ───────────────────────
+// The operator creates every brief, variant, asset and request. Nothing here
+// is fabricated; generation is gated behind explicit Run actions.
+const SEED_BRIEFS = []
+const SEED_VARIANTS = []
 
 export default function CreativeStudio() {
   const { toast } = useToast()
@@ -364,7 +356,7 @@ export default function CreativeStudio() {
       status: 'Draft', note: 'Local draft — complete the work brief.', createdAt: nowIso(),
     }, ...prev])
     setActiveBriefId(id)
-    t('New brief draft created — work-brief inputs are local drafts (sample). No image generates until a local provider is connected.', 'info')
+    t('New brief draft created — local draft only. No image generates until a local provider is connected and you click Run.', 'info')
     go('canvas')
   }, [kit.name, fmt.label, setBriefs, go, t])
 
@@ -468,7 +460,7 @@ export default function CreativeStudio() {
         <button className="btn btn-sm" onClick={addBrief}>New Brief</button>
       </>}
     >
-      <DataNotice tone="sample" title="Local workspace, honest boundaries">
+      <DataNotice tone="info" title="Workspace boundaries">
         Briefs, documents, ad sets, social sets, A+ modules, requests, variants, assets and bundles are real records you create here and are
         stored in this browser. The canvas renders and exports REAL PNGs from your own layers, and the master renders correctly at every
         placement size because layer geometry is normalised. No image or video is ever generated or depicted: the Generate and Video tabs are

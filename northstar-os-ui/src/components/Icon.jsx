@@ -69,6 +69,7 @@ const paths = {
   zoomOut: `<circle cx="11" cy="11" r="7" ${strokeAttr}/><line x1="21" y1="21" x2="16.65" y2="16.65" ${strokeAttr}/><line x1="8" y1="11" x2="14" y2="11" ${strokeAttr}/>`,
   package: `<path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" ${strokeAttr}/><polyline points="3.27 6.96 12 12.01 20.73 6.96" ${strokeAttr}/><line x1="12" y1="22.08" x2="12" y2="12" ${strokeAttr}/>`,
   stack: `<path d="M3 7l9-4 9 4-9 4-9-4z" ${strokeAttr}/><path d="M3 12l9 4 9-4" ${strokeAttr}/><path d="M3 17l9 4 9-4" ${strokeAttr}/>`,
+  store: `<path d="M3 7h18v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" ${strokeAttr}/><path d="M3 7l3-4h12l3 4M6 11v6M18 11v6" ${strokeAttr}/>`,
   wand: `<path d="M15 4V2M15 16v-2M8 9h2M20 9h2M17.8 11.8L19 13M17.8 6.2L19 5M3 21l9-9M12.2 6.2L11 5" ${strokeAttr}/>`,
   send: `<line x1="22" y1="2" x2="11" y2="13" ${strokeAttr}/><polygon points="22 2 15 22 11 13 2 9 22 2" ${strokeAttr}/>`,
 };

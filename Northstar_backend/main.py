@@ -41,6 +41,13 @@ try:
 except ImportError:
     _HAS_GOLDEN_GOOSE = False
 
+# Design Studio — merged creative workspace (Phase 0)
+try:
+    from design_studio_api import router as design_studio_router
+    _HAS_DESIGN_STUDIO = True
+except ImportError:
+    _HAS_DESIGN_STUDIO = False
+
 # Phase 6: Production infrastructure
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
@@ -225,6 +232,10 @@ app.add_middleware(AlphaGateMiddleware)
 # Golden Goose Finder — multi-pack breakdown arbitrage scanner
 if _HAS_GOLDEN_GOOSE:
     app.include_router(golden_goose_router)
+
+# Design Studio — merged creative workspace (Phase 0)
+if _HAS_DESIGN_STUDIO:
+    app.include_router(design_studio_router)
 
 # Golden Goose Finder UI panel (standalone page; fetches /api/golden-goose/*)
 _GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"

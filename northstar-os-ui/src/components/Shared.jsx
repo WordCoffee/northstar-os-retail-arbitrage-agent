@@ -66,6 +66,30 @@ export function MetricTiles({ metrics, columns = 4 }) {
   )
 }
 
+// ═══ Shared: Empty state with an explicit populate action ═══
+// Rule (owner directive 2026-10-09): no seeded/demo/fixture rows anywhere. A
+// surface with nothing behind it shows this instead of invented records, and
+// the ONLY way to fill it is a deliberate Run action. `action` is the real
+// backend the operator triggers; when it is not wired the connect hint is what
+// shows, never a fabricated row.
+export function EmptyState({ title, what, action, actionLabel, onAction, connect, children }) {
+  return (
+    <div className="card" data-testid="empty-state" style={{ padding: '28px 20px', textAlign: 'center' }}>
+      <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--pine-deep)', marginBottom: 6 }}>{title}</div>
+      <div className="text-low" style={{ fontSize: 12, maxWidth: 520, margin: '0 auto 14px' }}>{what}</div>
+      {action && onAction ? (
+        <button className="btn btn-sm btn-primary" onClick={onAction} style={{ marginRight: 8 }}>{actionLabel || `Run ${action}`}</button>
+      ) : null}
+      {connect ? (
+        <div className="text-low" style={{ fontSize: 11, marginTop: 10 }}>
+          Not connected: add key in <strong>Settings › Integrations</strong>
+          {children ? <div style={{ marginTop: 6 }}>{children}</div> : null}
+        </div>
+      ) : children ? <div style={{ marginTop: 10 }}>{children}</div> : null}
+    </div>
+  )
+}
+
 // ═══ Shared: Truth / Sample-Data Notice ═══
 // Standardized room-level data truth banner. tone ∈ sample|concept|internal|assumption|unknown
 export function DataNotice({ tone = 'sample', title, children }) {
