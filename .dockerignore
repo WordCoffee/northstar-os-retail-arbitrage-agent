@@ -2,6 +2,7 @@
 .gitignore
 **/node_modules
 northstar-os-ui/dist
+northstar-os-ui/dist-test
 **/__pycache__
 **/*.pyc
 *.log

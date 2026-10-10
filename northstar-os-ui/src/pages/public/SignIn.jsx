@@ -10,9 +10,16 @@ import { LOCAL_DEV } from '../../foundation/dev.js'
 // environments ignore those headers, so this grants no production access and
 // cannot bypass a real auth posture. Role is deliberately "operator" so
 // internal-only surfaces (/beta-ops, /admin) remain guarded.
-const LOCAL_DEMO_IDENTIFIER = 'T2'
-const LOCAL_DEMO_PASSWORD = '123abc'
-const LOCAL_DEMO_SESSION = { userId: 'demo-t2', orgId: 'org-t2', role: 'operator', env: 'production' }
+//
+// LOCAL_DEV is a build-time constant (see foundation/dev.js): in a built bundle
+// these fold to empty values and the whole branch is eliminated. The shim
+// identity and its credentials must not survive into ANY served bundle - a
+// served bundle signs in through the real credential path only.
+const LOCAL_DEMO_IDENTIFIER = LOCAL_DEV ? 'T2' : ''
+const LOCAL_DEMO_PASSWORD = LOCAL_DEV ? '123abc' : ''
+const LOCAL_DEMO_SESSION = LOCAL_DEV
+  ? { userId: 'demo-t2', orgId: 'org-t2', role: 'operator', env: 'production' }
+  : null
 
 export default function SignIn() {
   const navigate = useNavigate()

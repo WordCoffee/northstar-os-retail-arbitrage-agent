@@ -31,17 +31,25 @@ import Social from './design-studio/Social.jsx'
 import Packaging from './design-studio/Packaging.jsx'
 import { migrateLocalStorage, migrationDone } from '../../studio/engine/migrate.js'
 
-// Opt-in test surface. In a DEVELOPMENT build only, adding ?engine=1 to a
-// Design Studio URL exposes the studio engine on window so a browser harness
-// can exercise the CANVAS paths (render, fidelity pixel extraction, export
-// pipeline) that unit tests cannot reach.
+// Opt-in test surface. Adding ?engine=1 to a Design Studio URL exposes the
+// studio engine on window so a browser harness can exercise the CANVAS paths
+// (render, fidelity pixel extraction, export pipeline) that unit tests cannot
+// reach.
 //
-// `import.meta.env.DEV` is replaced with a literal at build time, so in a
-// production bundle the condition is `if (false)` and rollup eliminates the
-// dynamic imports entirely: the hook cannot run in production because it is
-// not in the bundle. A test asserts the built dist does not contain it.
+// The gate is a COMPILE-TIME constant:
+//   • Vite dev server          -> import.meta.env.DEV === true
+//   • test build               -> built with VITE_TEST_HOOKS=1
+//   • production build         -> both fold to false, rollup eliminates the
+//                                 function body (dynamic imports included), so
+//                                 the hook is not in the production bundle at
+//                                 all. tools/check-prod-bundle.cjs asserts it.
+// The test build is a separate artifact (dist-test) that is .gitignored,
+// .dockerignored and never copied into the deploy image (Dockerfile.api copies
+// only /ui/dist from its own build stage).
+const ENGINE_HOOK_ENABLED = import.meta.env.DEV || import.meta.env.VITE_TEST_HOOKS === '1'
+
 async function attachEngineHook() {
-  if (!import.meta.env.DEV) return
+  if (!ENGINE_HOOK_ENABLED) return
   try {
     if (new URLSearchParams(window.location.search).get('engine') !== '1') return
     const [compose, fidelity, disclosure, compliance, registry] = await Promise.all([

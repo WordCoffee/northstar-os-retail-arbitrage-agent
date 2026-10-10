@@ -27,17 +27,20 @@ const DEV_IDENT = process.env.NS_DEV_IDENTIFIER || 'T2'
 const DEV_PW = process.env.NS_DEV_PASSWORD || '123abc'
 
 // ── Mode flag ──────────────────────────────────────────────────────────────
-// 'auto' (default) detects the dev-only engine hook and decides for itself.
-// 'dev'  REQUIRES the hook. If it is missing, the pixel paths fail loudly
-//        rather than skipping, so a dev run can never quietly pass without
-//        exercising them.
+// 'auto' (default) detects the engine hook and decides for itself.
+// 'dev'  REQUIRES the hook (the Vite dev server). Tries the local shim identity
+//        first, then the real credential pair.
+// 'test' REQUIRES the hook (the dist-test build, served like production with
+//        VITE_TEST_HOOKS=1). Signs in with REAL credentials only.
 // 'prod' REQUIRES the hook to be ABSENT (the production contract) and runs only
 //        the UI-level checks.
 const MODE = (process.env.HARNESS_MODE || 'auto').toLowerCase()
-if (!['auto', 'dev', 'prod'].includes(MODE)) {
-  console.error(`FATAL unknown HARNESS_MODE "${MODE}" (expected auto|dev|prod)`)
+if (!['auto', 'dev', 'test', 'prod'].includes(MODE)) {
+  console.error(`FATAL unknown HARNESS_MODE "${MODE}" (expected auto|dev|test|prod)`)
   process.exit(2)
 }
+// Modes that require the engine hook to be present in the served build.
+const REQUIRES_HOOK = MODE === 'dev' || MODE === 'test'
 
 // ── Watchdog ───────────────────────────────────────────────────────────────
 // A hung page.evaluate used to hang this harness with no output at all. Nothing
@@ -74,33 +77,41 @@ async function main() {
   await page.waitForSelector('#signin-id', { timeout: NAV_TIMEOUT })
 
   // A dev server serves the module graph on demand, so the form can be in the
-  // DOM BEFORE React attaches its submit handler. Clicking then is swallowed
-  // silently: no request is made and the page just sits there (observed in the
-  // diagnostic - the only API calls were the initial session probes). Settle
-  // first, then retry the submit if no navigation happened.
-  await page.waitForTimeout(MODE === 'prod' ? 400 : 2000)
-  // Dev builds take the shim branch, so use the shim identity there. The shim
-  // never touches the network, which is why the earlier run produced NO login
-  // request at all.
-  const ident = MODE === 'prod' ? EMAIL : DEV_IDENT
-  const pw = MODE === 'prod' ? PW : DEV_PW
-  await page.fill('#signin-id', ident)
-  await page.fill('#signin-pw', pw)
+  // DOM BEFORE React attaches its submit handler. Settle first so the click
+  // always lands on a mounted handler.
+  await page.waitForTimeout(MODE === 'dev' ? 2000 : 800)
+
+  // Credential strategy per mode:
+  //   dev  -> the shim identity first (works against a local dev-posture
+  //           backend), then the real pair (the app itself falls back the same
+  //           way when the shim cannot authenticate).
+  //   test -> real pair only. A served bundle never carries the shim identity
+  //           (asserted by tools/check-prod-bundle.cjs).
+  //   prod -> real pair only.
+  const credPairs = MODE === 'dev'
+    ? [[DEV_IDENT, DEV_PW], [EMAIL, PW]]
+    : [[EMAIL, PW]]
 
   let signedIn = false
-  for (let attempt = 1; attempt <= 3 && !signedIn; attempt++) {
-    step(`submitting sign-in (attempt ${attempt})`)
-    await page.click('form button[type="submit"]')
-    try {
-      await page.waitForFunction(() => location.pathname === '/ui/home', null, { timeout: Math.round(NAV_TIMEOUT / 3) })
-      signedIn = true
-    } catch {
-      if (attempt < 3) await page.waitForTimeout(1500)
+  for (const [ident, pw] of credPairs) {
+    if (signedIn) break
+    await page.fill('#signin-id', ident)
+    await page.fill('#signin-pw', pw)
+    for (let attempt = 1; attempt <= 2 && !signedIn; attempt++) {
+      step(`submitting sign-in as "${ident}" (attempt ${attempt})`)
+      await page.click('form button[type="submit"]')
+      try {
+        await page.waitForFunction(() => location.pathname === '/ui/home', null, { timeout: Math.round(NAV_TIMEOUT / 3) })
+        signedIn = true
+      } catch {
+        if (attempt < 2) await page.waitForTimeout(1500)
+      }
     }
   }
   if (!signedIn) {
     const url = await page.evaluate(() => location.href).catch(() => 'unknown')
-    ftl(`sign-in did not complete after 3 attempts (still at ${url}). The submit click is not reaching the app handler.`)
+    const alert = await page.$eval('[role="alert"]', e => e.textContent).catch(() => 'no alert')
+    ftl(`sign-in did not complete in ${MODE} mode (still at ${url}; form says: ${String(alert).slice(0, 140)})`)
     await browser.close()
     return report()
   }
@@ -136,8 +147,13 @@ async function main() {
   const hasEngine = await page.evaluate(() => !!window.__northstarStudioEngine)
 
   // ── Mode enforcement ────────────────────────────────────────────────────
-  if (MODE === 'dev' && !hasEngine) {
-    ftl('HARNESS_MODE=dev but the engine hook is ABSENT. The pixel paths cannot run. Build or serve a dev build (npm run dev on :8101).')
+  if (REQUIRES_HOOK && !hasEngine) {
+    ftl(`HARNESS_MODE=${MODE} but the engine hook is ABSENT. The pixel paths cannot run.
+       dev  -> run the Vite dev server (:8101)
+       test -> build and serve the test artifact:
+               cd northstar-os-ui
+               set VITE_TEST_HOOKS=1 && npm run build -- --outDir dist-test
+               npx vite preview --outDir dist-test --port 8200`)
     await browser.close()
     return report()
   }
@@ -152,13 +168,13 @@ async function main() {
     log('')
     log('SKIP  engine hook absent (CORRECT for a production bundle)')
     log('      The canvas pixel paths (render, fidelity extraction, marker survival)')
-    log('      need the dev-only ?engine=1 hook. Re-run with HARNESS_MODE=dev against')
-    log('      the Vite dev server:')
-    log('        HARNESS_MODE=dev HARNESS_BASE_URL=http://127.0.0.1:8101/ui/ node test-compositing.cjs')
+    log('      need the ?engine=1 hook. Re-run against a hook-carrying build:')
+    log('        the Vite dev server :  HARNESS_MODE=dev HARNESS_BASE_URL=http://127.0.0.1:8101/ui/ node test-compositing.cjs')
+    log('        the test build      :  HARNESS_MODE=test HARNESS_BASE_URL=http://127.0.0.1:8200/ui/ node test-compositing.cjs')
     log('      The UI-level checks below still run against this build.')
     log('')
   } else {
-    ok('engine hook present (dev build)')
+    ok(`engine hook present (${MODE === 'test' ? 'test build' : 'dev build'})`)
   }
 
 const fixtures = await page.evaluate(() => {
@@ -309,8 +325,14 @@ const fixtures = await page.evaluate(() => {
       }
       // No compare sign-off yet -> must block.
       const blocked = await compose.exportComposite(doc, {})
-      // With the sign-off -> must proceed and verify the marker.
-      const signed = { ...doc, meta: { ...doc.meta, compareConfirmed: { at: new Date().toISOString(), by: 'harness' } } }
+      // A stale sign-off shape (no user, no asset version, no reference hash -
+      // exactly the record that shipped before the Phase 5 hardening) must ALSO
+      // be refused, not treated as a satisfied comparison.
+      const stale = { ...doc, meta: { ...doc.meta, compareConfirmed: { at: new Date().toISOString(), by: 'harness' } } }
+      const staleRun = await compose.exportComposite(stale, {})
+      // The engine's own maker binds the record to the asset version and the
+      // reference hash -> must proceed and verify the marker.
+      const signed = { ...doc, meta: { ...doc.meta, compareConfirmed: compose.makeCompareSignOff(doc, { user: 'harness' }) } }
       const passed = await compose.exportComposite(signed, {})
       const markerOk = passed.bytes ? await (async () => {
         const v = disclosure.verifyDisclosureMarker(passed.bytes, passed.mime, disclosure.DISCLOSURE_KEYWORD)
@@ -320,6 +342,9 @@ const fixtures = await page.evaluate(() => {
         blockedOk: blocked.ok,
         blockedCompare: blocked.steps.compare && blocked.steps.compare.status,
         blockedBytes: blocked.bytes === null,
+        staleOk: staleRun.ok,
+        staleCompare: staleRun.steps.compare && staleRun.steps.compare.status,
+        staleBytes: staleRun.bytes === null,
         passedOk: passed.ok,
         passedSteps: Object.fromEntries(Object.entries(passed.steps).map(([k, v]) => [k, v.status])),
         passedBytes: passed.bytes ? passed.bytes.length : 0,
@@ -335,6 +360,9 @@ const fixtures = await page.evaluate(() => {
     if (!pipeline.blockedOk && pipeline.blockedCompare === 'block' && pipeline.blockedBytes) {
       ok('the export pipeline BLOCKS on the missing compare sign-off and writes no bytes')
     } else no(`compare gate did not block: ${JSON.stringify(pipeline).slice(0, 140)}`)
+    if (!pipeline.staleOk && pipeline.staleCompare === 'block' && pipeline.staleBytes) {
+      ok('a sign-off that is NOT bound to the asset version/reference is refused (Phase 5 hardening holds)')
+    } else no(`an unbound sign-off was accepted: ${pipeline.staleCompare}`)
     if (pipeline.passedOk && pipeline.markerOk) ok(`the full pipeline passes with the sign-off; the marker survives the real export (${pipeline.passedBytes} bytes)`)
     else no(`pipeline did not pass: blocked=${JSON.stringify(pipeline.blockedRules)}`, pipeline.summary)
     if (pipeline.passedSteps && pipeline.passedSteps['marker-verify'] === 'pass') ok(`marker-verify reported pass (${pipeline.summary})`)

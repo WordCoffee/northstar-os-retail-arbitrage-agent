@@ -1,5 +1,6 @@
 # Build artifacts
 dist/
+dist-test/
 node_modules/
 *.log
 

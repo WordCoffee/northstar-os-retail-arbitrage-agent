@@ -114,3 +114,43 @@ def test_dev_headers_ignored_outside_development(client, seeded_state, monkeypat
     monkeypatch.setenv("ENVIRONMENT", "production")
     r = client.get("/api/v1/foundation/me", headers=owner_headers(seeded_state))
     assert r.status_code == 401
+
+
+# --- dev shim vs the HOSTED API ---------------------------------------------
+# Phase 6 item 2. The hosted composition (docker-compose.hosted.yml) sets
+# ENVIRONMENT=staging/production and disables the shim. These tests pin that the
+# shim cannot authenticate against a hosted API and that the SPA's in-page demo
+# identity is not an account anywhere.
+
+def test_dev_shim_cannot_authenticate_against_hosted_posture(client, seeded_state, monkeypatch):
+    monkeypatch.setenv("ENVIRONMENT", "production")
+    # Even a LOOPBACK client (the *only* place the shim is ever honoured) must be
+    # refused when the API runs in the hosted posture.
+    r = client.get("/api/v1/foundation/me", headers=owner_headers(seeded_state))
+    assert r.status_code == 401
+    assert r.json()["detail"]["code"] == "authentication_required"
+
+
+def test_dev_shim_cannot_authenticate_when_client_is_not_loopback(seeded_state, monkeypatch):
+    # The other half of the same contract, from the containerized-local reality:
+    # a dev-posture API refuses the shim for any non-loopback client (Docker
+    # port-forwarding shows a bridge address), which is why the UI falls back to
+    # a real credential login.
+    from Northstar_backend.foundation.app import create_app
+    app = create_app()
+    app.state.foundation = seeded_state
+    bridge = TestClient(app, client=("172.18.0.1", 51000))
+    r = bridge.get("/api/v1/foundation/me", headers=owner_headers(seeded_state))
+    assert r.status_code == 401
+    assert r.json()["detail"]["code"] == "authentication_required"
+
+
+def test_dev_demo_credentials_never_mint_a_session(client):
+    # T2 / 123abc is the in-page dev demo identity (SignIn.jsx). It must never
+    # be a served credential: /auth/login refuses it (no such account).
+    from Northstar_backend.foundation import credentials
+    credentials.ensure_table(client.app.state.foundation.db)
+    r = client.post("/api/v1/foundation/auth/login",
+                    json={"email": "t2", "password": "123abc"})
+    assert r.status_code == 401
+    assert r.json()["detail"]["code"] == "invalid_credentials"

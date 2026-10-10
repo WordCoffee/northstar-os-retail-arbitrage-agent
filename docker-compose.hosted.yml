@@ -18,6 +18,13 @@ services:
     environment: *hosted-env
   api:
     environment: *hosted-env
+    # The base file publishes the API on 127.0.0.1:8000 so the Vite dev server
+    # can proxy to it during local harness runs (added in afc0bc8). THAT PUBLISH
+    # MUST NOT SHIP: `!reset` clears the inherited ports list so the hosted
+    # composition exposes the API only to the compose network (Caddy terminates
+    # TLS and is the only public entry). Verified by
+    # tools/check-compose-deploy.cjs.
+    ports: !reset []
   worker:
     environment: *hosted-env
   scheduler:

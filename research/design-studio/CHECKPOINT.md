@@ -410,3 +410,62 @@ Proof of the isolation (all run this session):
 DECIDED-BY-DEFAULT (D8): a dev build may now complete sign-in through the real
 `/auth/login` path when the shim is unavailable. Reverse: remove the fallback
 block in `SignIn.jsx` (the shim-first attempt is preserved above it).
+
+## PHASE 6 C — TEST BUILD + PIXEL PATHS RE-VERIFIED (items 2 + 3)
+
+### The test build
+- `VITE_TEST_HOOKS=1 npm run build -- --outDir dist-test` produces a build that
+  carries the `?engine=1` engine hook. The gate is compile-time:
+  `import.meta.env.DEV || import.meta.env.VITE_TEST_HOOKS === '1'`.
+- It is never deployed: `northstar-os-ui/dist-test` is gitignored and
+  dockerignored, and Dockerfile.api copies only `/ui/dist` from its own
+  in-image build (which never sets VITE_TEST_HOOKS).
+- Served the same way as production: a built bundle under `/ui/` with `/api`
+  same-origin proxied to the same backend the deploy composition uses
+  (`npx vite preview --outDir dist-test --port 8200`).
+
+### Dev shim removed from served bundles
+- `foundation/dev.js`: `LOCAL_DEV` is now `!!import.meta.env.DEV` — a literal in
+  every build. The runtime `window.__NORTHSTAR_LOCAL_DEV__` switch is gone, so
+  no served bundle can enable the shim by setting a global.
+- The demo identity, the demo password and the X-User-Id emitter fold out of
+  built bundles (SignIn.jsx constants + the api.js branch).
+- `tools/check-prod-bundle.cjs` asserts against the REAL artifacts:
+  production → hook AND shim ABSENT (7/0, positive control);
+  test build → hook PRESENT, shim ABSENT (7/0).
+
+### Pixel paths re-verified (item 3) — VERIFIED against the test build
+`HARNESS_MODE=test` against the served test build: **37 passed / 0 failed /
+0 FATAL**, including:
+- matching composite PASSES (mean 0.00%); redrawn product BLOCKS (23.9% vs 6%)
+- locked-without-reference = UNVERIFIED; generated product region BLOCKS
+- the full pipeline: blocks without a sign-off, blocks on an UNBOUND sign-off,
+  passes with the engine's own `makeCompareSignOff`; the marker survives the
+  real export (34,263 bytes)
+- upload check marker-present / marker-missing, tenant-scoped backend log,
+  cure window, reload persistence.
+
+The one real failure found on the first run was a STALE HARNESS FIXTURE: the
+sign-off record predated the Phase 5 hardening (no user / assetVersion /
+referenceHash). Fixed to use the engine's own `makeCompareSignOff`, and a new
+negative assertion pins the hardening (an unbound sign-off is refused).
+
+Also re-run: prod mode vs the deployed-like build → 23/0 (pixel paths correctly
+SKIPPED); dev mode vs :8101 → 37/0 (proves the dev sign-in fix + the dev hook).
+
+### Deploy composition guard
+- The loopback `127.0.0.1:8000:8000` publish (added in afc0bc8 so the Vite dev
+  server can proxy) stays in the LOCAL composition. docker-compose.hosted.yml
+  now `!reset`s the api ports, so the DEPLOY composition publishes only Caddy
+  (80/443). `tools/check-compose-deploy.cjs` verifies both compositions against
+  `docker compose config --format json`: 3/0.
+
+### Server-side dev-shim tests (item 2)
+`foundation/tests/test_auth_guard.py` +3: the shim cannot authenticate against a
+hosted posture even from loopback; a dev-posture API refuses the shim for a
+non-loopback client (the Docker port-forward case); the in-page demo credentials
+never mint a session. File total: 16 passed / 0 failed.
+
+DECIDED-BY-DEFAULT (D9): the engine-hook build flag is named `VITE_TEST_HOOKS`
+(the alternative spelling `VITE_ENGINE_HOOK` was not used). Reverse: rename the
+flag in DesignStudio.jsx, the harness docs and this checkpoint.
