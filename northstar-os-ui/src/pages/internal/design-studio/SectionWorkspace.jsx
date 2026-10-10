@@ -25,6 +25,46 @@ import {
 import { SPEC_GROUPS, specById, SPEC_SOURCES, confidenceOf, AMAZON_CAPS, AI_POLICY } from '../../../studio/engine/specRegistry.js'
 import { checkCompliance } from '../../../studio/engine/compliance.js'
 import { createDoc } from '../../../studio/engine/doc.js'
+import { PEOPLE_CLASSES, DISCLOSURE_KEYWORD } from '../../../studio/engine/disclosure.js'
+import { FIDELITY_MODES } from '../../../studio/engine/fidelity.js'
+
+// -- Fields EVERY section gets ---------------------------------------------
+// The disclosure classification, the fidelity mode and the technical rules are
+// not optional extras on one page: they apply to every asset the studio can
+// produce, so they are appended to every section's own field list.
+export const SHARED_FIELDS = [
+  {
+    id: 'fidelityMode', kind: 'select', label: 'Product fidelity',
+    options: FIDELITY_MODES.map(m => ({ value: m.id, label: m.label })),
+    note: 'How the product itself was produced. "Product region generated" blocks export: the product is never generated, only the scene around it.',
+  },
+  {
+    id: 'peopleClass', kind: 'select', label: 'People in this asset',
+    options: [{ value: '', label: '- not answered -' }].concat(PEOPLE_CLASSES.map(c => ({ value: c.id, label: c.label }))),
+    note: 'There is NO default. Export stays blocked until this is answered. The studio CANNOT detect AI-generated people from pixels; this is your declaration, and the studio only knows what it generated itself.',
+    source: 'img-guide / ai-announce', pulled: '2026-10-10',
+  },
+  {
+    id: 'studioGeneratedPerson', kind: 'toggle',
+    label: 'The studio generated a person for this asset',
+    note: 'If this is on, an answer of "no people" is a CONFLICT and export is blocked: the studio knows it drew a person.',
+  },
+  { id: 'syntheticPerformerTag', kind: 'toggle', label: 'Write the XMP marker (contains-synthetic-performer)', note: 'Written to dc:subject, then re-read from the exported file to prove it survived the export path.' },
+  { id: 'filename', kind: 'text', label: 'Export filename', placeholder: 'B01ABCDEFG.main.jpg', note: 'Amazon documents the pattern ID.VARIANT.ext.', source: 'img-guide', pulled: '2026-10-10' },
+  { id: 'dpi', kind: 'number', min: 1, max: 1200, label: 'Density (dpi)', note: 'At least 72 dpi.' },
+  { id: 'colorSpace', kind: 'select', label: 'Colour space', options: [{ value: 'sRGB', label: 'sRGB' }, { value: 'CMYK', label: 'CMYK (converted, may shift)' }] },
+  { id: 'units', kind: 'number', min: 1, max: 99, label: 'Units shown', note: 'Main image: one unit plus included accessories.' },
+  { id: 'mannequin', kind: 'toggle', label: 'A mannequin is shown', note: 'Prohibited on the main image.' },
+  { id: 'packagingShown', kind: 'toggle', label: 'Packaging is shown', note: 'Allowed only when the packaging itself is a product feature.' },
+]
+
+// A rule note every section shows, so the disclosure obligation is visible on
+// the surface where the asset is made rather than buried in a policy page.
+export const SHARED_RULES = [
+  { label: 'AI-generated people must be declared', tone: 'block', detail: `Amazon requires the keyword "${DISCLOSURE_KEYWORD}" in the dc:subject (XMP) field for media containing photorealistic AI-generated people, before upload, in all worldwide stores. The string is exact.`, source: 'ai-announce / img-guide - 2026-10-10' },
+  { label: 'The tag is not the New York disclosure', tone: 'flag', detail: 'The XMP marker is invisible to shoppers and does NOT satisfy the New York conspicuous-disclosure duty. Tagging the file is the Amazon workflow; the statutory legend is separate.', source: 'ny-statute - 2026-10-10' },
+  { label: 'A reported export hazard', tone: 'flag', detail: 'Sellers report that live listing copies lose the tag after Amazon reprocesses the image. Keep tagged originals and a record of which files contain AI people.', source: 'ai-live-loss - 2026-10-10' },
+]
 
 const CONFIDENCE_PILL = {
   VERIFIED: { cls: 'pill-ok', label: 'VERIFIED', title: 'Sourced from an Amazon-owned page (Seller Central / Ads help / Amazon PDF).' },
@@ -98,6 +138,18 @@ function Field({ f, value, onChange }) {
       </label>
     )
   }
+  if (f.kind === 'select') {
+    return (
+      <label className="ss-field">
+        <span className="ss-field-label">{f.label}{f.required && <span className="ss-req"> required</span>}</span>
+        <select value={value ?? ''} onChange={e => onChange(e.target.value)}>
+          {(f.options || []).map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+        {f.note && <span className="ss-field-note">{f.note}</span>}
+        {f.source && <span className="ss-field-src">{f.source} - {f.pulled || '2026-10-10'}</span>}
+      </label>
+    )
+  }
   if (f.kind === 'textarea') {
     return (
       <label className="ss-field">
@@ -146,10 +198,16 @@ export default function SectionWorkspace({
     channel: spec.channel,
     family: spec.group,
     media: spec.media,
+    // The WHOLE collected field set flows into the document, so a rule can read
+    // any field a section declares without this component knowing the rule.
+    // Enumerating keys here is how the disclosure and fidelity fields would
+    // silently never reach the pre-flight.
     meta: {
+      ...meta,
       altText: meta['altText'] || '',
       syntheticPeople: !!meta['syntheticPeople'],
       syntheticPerformerTag: !!meta['syntheticPerformerTag'],
+      studioGeneratedPerson: !!meta['studioGeneratedPerson'],
       durationSeconds: meta['durationSeconds'] ?? (spec.media === 'video' ? spec.durationRecommended || 0 : undefined),
     },
   }), [doc, spec, meta])
@@ -164,9 +222,12 @@ export default function SectionWorkspace({
 
   const tabs = [
     { id: 'specs', label: 'Format', icon: 'grid', note: 'Formats from the spec registry, labelled VERIFIED / REPORTED.' },
-    ...(fields.length ? [{ id: 'fields', label: 'Fields', icon: 'edit', note: 'Section fields. Required fields are enforced by the pre-flight.' }] : []),
+    { id: 'fields', label: 'Fields', icon: 'edit', note: 'Section fields plus the shared disclosure, fidelity and technical fields. Required fields are enforced by the pre-flight.' },
     { id: 'rules', label: 'Rules', icon: 'shield', note: 'What Amazon documents for these formats.' },
   ]
+
+  const allFields = [...fields, ...SHARED_FIELDS]
+  const allRules = [...ruleNotes, ...SHARED_RULES]
 
   const exportDisabled = report.verdict === 'block'
 
@@ -194,14 +255,14 @@ export default function SectionWorkspace({
           {tab === 'specs' && <RegistrySpecPicker groups={groups} value={specId} onChange={pickSpec} />}
           {tab === 'fields' && (
             <div className="stack" style={{ gap: 10 }}>
-              {fields.map(f => (
+              {allFields.map(f => (
                 <Field key={f.id} f={f} value={meta[f.id]} onChange={setField(f.id)} />
               ))}
             </div>
           )}
           {tab === 'rules' && (
             <div className="stack" style={{ gap: 8 }}>
-              {ruleNotes.map((r, i) => (
+              {allRules.map((r, i) => (
                 <div key={i} className={`ss-rule ss-rule-${r.tone || 'flag'}`}>
                   <div className="ss-rule-label">{r.label}</div>
                   <div className="ss-rule-detail">{r.detail}</div>

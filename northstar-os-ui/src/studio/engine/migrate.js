@@ -65,10 +65,15 @@ export function collectLocalRecords() {
 /** Build the migrate payload from the collected local records. */
 export function buildMigratePayload(raw) {
   const payload = { projects: [], assets: [], jobs: [] }
+  // A key whose items cannot be represented is NOT importable. Its records are
+  // never sent, so its local copy must never be cleared — losing it silently
+  // would be data loss dressed up as a successful migration.
+  const unimportable = {}
   for (const spec of LOCAL_KEYS) {
     const items = raw[spec.key] || []
+    let skipped = 0
     for (const it of items) {
-      if (!it || typeof it !== 'object') continue
+      if (!it || typeof it !== 'object' || Array.isArray(it)) { skipped++; continue }
       const id = it.id || it.asin || it.name || String(Math.random())
       const legacyKey = `${spec.key}:${id}`
       const meta = {
@@ -81,8 +86,15 @@ export function buildMigratePayload(raw) {
         name: it.name || it.title || it.campaign_name || `${spec.kind} ${String(id).slice(0, 12)}`,
         metadata: meta,
       }
+      // Carry the WHOLE legacy record through, minus its id. The client used to
+      // map only a handful of named fields, so everything else (objective,
+      // formats, deliverables, purpose, tier...) was dropped here and never
+      // reached the server's legacyFields preservation at all.
+      const legacy = { ...it }
+      delete legacy.id
       if (spec.store === 'projects') {
         payload.projects.push({
+          ...legacy,
           ...base,
           section: spec.section || 'projects',
           asin: it.asin || null,
@@ -92,6 +104,7 @@ export function buildMigratePayload(raw) {
         })
       } else if (spec.store === 'assets') {
         payload.assets.push({
+          ...legacy,
           ...base,
           asset_type: spec.kind,
           mime_type: it.mime || it.mimeType || null,
@@ -100,6 +113,7 @@ export function buildMigratePayload(raw) {
         })
       } else {
         payload.jobs.push({
+          ...legacy,
           ...base,
           job_type: spec.kind,
           provider: 'local',
@@ -108,8 +122,9 @@ export function buildMigratePayload(raw) {
         })
       }
     }
+    if (skipped > 0) unimportable[spec.key] = { skipped, total: items.length }
   }
-  return payload
+  return { payload, unimportable }
 }
 
 /**
@@ -122,12 +137,19 @@ export async function migrateLocalStorage(opts = {}) {
     return { ran: false, reason: 'already-migrated' }
   }
   const { raw, found } = collectLocalRecords()
+  const malformed = found.filter(f => f.malformed).map(f => f.key)
   const total = found.reduce((s, f) => s + f.count, 0)
   if (total === 0) {
     markMigrationDone()
     return { ran: true, created: { projects: 0, assets: 0, jobs: 0 }, found, note: 'nothing local to migrate' }
   }
-  const payload = buildMigratePayload(raw)
+  const { payload, unimportable } = buildMigratePayload(raw)
+  const importable = payload.projects.length + payload.assets.length + payload.jobs.length
+  const blockedKeys = Object.keys(unimportable)
+  if (importable === 0) {
+    // Nothing could be represented. Say so and keep every local copy.
+    return { ran: false, reason: 'nothing-importable', found, unimportable }
+  }
   try {
     const res = await fetch('/api/design-studio/migrate', {
       method: 'POST',
@@ -140,15 +162,21 @@ export async function migrateLocalStorage(opts = {}) {
       return { ran: false, reason: `http-${res.status}`, found }
     }
     const data = await res.json()
-    // Only clear the local copies AFTER the server confirms the import, and
-    // only the keys the server reported no errors for.
+    // Clear a local copy ONLY when every record in it was representable, the
+    // server reported no errors, AND the server confirmed the import. A key
+    // holding a record we could not represent, or a malformed JSON blob, is
+    // LEFT IN PLACE and reported rather than silently discarded.
     if (data.ok) {
       for (const spec of LOCAL_KEYS) {
-        if (raw[spec.key]) { try { localStorage.removeItem(spec.key) } catch { /* ignore */ } }
+        if (!raw[spec.key]) continue
+        if (blockedKeys.includes(spec.key) || malformed.includes(spec.key)) continue
+        try { localStorage.removeItem(spec.key) } catch { /* ignore */ }
       }
-      markMigrationDone()
+      const kept = [...blockedKeys, ...malformed]
+      if (kept.length === 0) markMigrationDone()
+      return { ran: true, ...data, found, kept, unimportable }
     }
-    return { ran: true, ...data, found }
+    return { ran: true, ...data, found, kept: [...blockedKeys, ...malformed], unimportable }
   } catch (e) {
     return { ran: false, reason: String(e.message || e), found }
   }

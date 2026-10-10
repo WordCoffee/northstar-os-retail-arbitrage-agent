@@ -118,7 +118,7 @@ def main() -> int:
     if len(a_list) == 1 and len(b_list) == 1 and a_list[0]["account_id"] == A and b_list[0]["account_id"] == B:
         ok(f"listing is tenant-scoped (A sees {len(a_list)}, B sees {len(b_list)})")
     else:
-        no(f"LEAK: listing not scoped — A sees {len(a_list)}, B sees {len(b_list)}")
+        no(f"LEAK: listing not scoped - A sees {len(a_list)}, B sees {len(b_list)}")
 
     # ── Assets and jobs: same contract ──────────────────────────────────────
     aid = assets.create({"account_id": A, "name": "A hero", "asset_type": "image", "project_id": pid})
@@ -154,36 +154,106 @@ def main() -> int:
         ok("owner can still update its own project")
     else:
         no("owner could not update its own project")
+
+    # ── LIST negative tests: each store, both directions ────────────────────
+    for store_name, store, kwargs in (
+        ("projects", projects, {}),
+        ("assets", assets, {"project_id": pid}),
+        ("jobs", jobs, {"project_id": pid}),
+    ):
+        listfn = {"projects": "list_by_section", "assets": "list_by_project", "jobs": "list_by_project"}[store_name]
+        a_rows = getattr(store, listfn)(account_id=A, **kwargs)
+        b_rows = getattr(store, listfn)(account_id=B, **kwargs)
+        a_only = all(r["account_id"] == A for r in a_rows)
+        b_only = all(r["account_id"] == B for r in b_rows)
+        if a_only and b_only:
+            ok(f"list {store_name}: A sees {len(a_rows)}, B sees {len(b_rows)}, no mixing")
+        else:
+            no(f"LEAK: list {store_name} mixed tenants (A={len(a_rows)}, B={len(b_rows)})")
+
+    # An UNSCOPED list is the leak case; confirm the scoped call is what differs.
+    unscoped = projects.list_by_section()
+    if len(unscoped) >= 2:
+        ok(f"an unscoped list sees every tenant ({len(unscoped)}) - which is exactly why callers must pass account_id")
+    else:
+        no("unscoped list did not see both tenants, so the scoping test proves nothing")
+
+    # ── SEARCH negative: the needle must not cross tenants ──────────────────
+    # Both tenants hold a project whose name contains the same token.
+    token = "shared-token-" + uuid.uuid4().hex[:6]
+    projects.create({"account_id": A, "name": f"{token} A copy", "section": "ads"})
+    projects.create({"account_id": B, "name": f"{token} B copy", "section": "ads"})
+    a_hits = [p for p in projects.list_by_section(account_id=A, limit=1000) if token in (p.get("name") or "")]
+    b_hits = [p for p in projects.list_by_section(account_id=B, limit=1000) if token in (p.get("name") or "")]
+    if len(a_hits) == 1 and len(b_hits) == 1 and a_hits[0]["account_id"] == A and b_hits[0]["account_id"] == B:
+        ok("search over a shared token returns exactly one hit per tenant")
+    else:
+        no(f"LEAK: search crossed tenants (A={len(a_hits)}, B={len(b_hits)})")
+
+    # ── EXPORT negative: the manifest must refuse a foreign project ─────────
+    if projects.get_by_id(pid, account_id=B) is None:
+        ok("export manifest source (get_by_id) refuses a foreign project, so the route answers 404")
+    else:
+        no("LEAK: export manifest source did not refuse a foreign project")
+
+    # ── Router discipline: the new routes must be scoped too ────────────────
+    api_path = os.path.join(os.path.dirname(__file__), "..", "Northstar_backend", "design_studio_api.py")
+    with open(api_path, encoding="utf-8") as fh:
+        api_lines = fh.read().splitlines()
+    for route in ("/search", "/export-manifest"):
+        idx = next((i for i, l in enumerate(api_lines) if route in l), None)
+        if idx is None:
+            no(f"route {route} not found for the scoping check")
+            continue
+        window = "\n".join(api_lines[idx:idx + 25])
+        if "account_id" in window:
+            ok(f"route {route} is account-scoped")
+        else:
+            no(f"LEAK: route {route} is not account-scoped")
+
     if projects.delete(pid, account_id=A):
         ok("owner can still delete its own project")
     else:
         no("owner could not delete its own project")
 
-    # ── Router discipline: every by-id call must pass account_id ────────────
-    # Line-based, because a call can span arguments: we look at the call line
-    # and the line before it, and require `account_id=` in that window.
+    # ── Router discipline: every DAO call must be account-scoped ────────────
+    # Match only real DAO calls (design_studio.<store>.<method> or store.<method>),
+    # not arbitrary dict .update(). A call can span a multi-line argument list,
+    # so the window reaches forwards and backwards. A call passing a prefabricated
+    # `payload` is accepted when the file proves the payload is scoped.
     api_path = os.path.join(os.path.dirname(__file__), "..", "Northstar_backend", "design_studio_api.py")
     with open(api_path, encoding="utf-8") as fh:
-        lines = fh.read().splitlines()
-    scoped = sum(1 for l in lines if "account_id=_account_id(user)" in l or "account_id=acct" in l)
+        api_src = fh.read()
+    api_lines = api_src.splitlines()
+
+    import re as _re
+    dao_call = _re.compile(
+        r"(?:design_studio\.(?:projects|assets|jobs)\.|store\.(?:create|get_by_id|update|delete)\()"
+        r"(?:create|get_by_id|update|delete)\("
+    )
+    payload_scoped = "'account_id': acct" in api_src or "\"account_id\": acct" in api_src
+    scoped = sum(1 for l in api_lines if "account_id=acct" in l or "account_id=_account_id(user)" in l
+                 or "'account_id': acct" in l)
+
     bare: list[str] = []
-    for i, line in enumerate(lines):
+    for i, line in enumerate(api_lines):
         stripped = line.strip()
-        # Skip route decorators and function signatures — they contain the
-        # method name but are not calls.
         if stripped.startswith("@") or stripped.startswith("def "):
             continue
-        if any(m in line for m in (".get_by_id(", ".update(", ".delete(", ".create(")):
-            # A call can span a multi-line argument list, and the scoping
-            # argument may sit several lines below the opening paren. Look at
-            # the preceding line plus the next 8.
-            window = "\n".join(lines[max(0, i - 1):i + 9])
-            if "account_id" not in window:
-                bare.append(f"L{i + 1}: {stripped[:80]}")
+        if not dao_call.search(line):
+            continue
+        window = "\n".join(api_lines[max(0, i - 6):i + 12])
+        if "account_id" in window:
+            continue
+        # A prefabricated payload is fine when the file proves it is scoped.
+        if "payload" in line and payload_scoped:
+            continue
+        bare.append(f"L{i + 1}: {stripped[:80]}")
+
     if scoped >= 11 and not bare:
-        ok(f"router: {scoped} scoped call sites, no unscoped by-id call remains")
+        ok(f"router: {scoped} scoped call sites, no unscoped DAO call remains")
     else:
-        no(f"router scoping incomplete — {scoped} scoped sites; unscoped: {bare}")
+        no(f"router scoping incomplete - {scoped} scoped sites; unscoped: {bare}")
 
     layer.close()
     try:

@@ -176,6 +176,40 @@ async function main() {
   // ── Hard behaviour: SP video is now SOURCED and Display video reconciled ──
   // (covered above in the source/coverage check)
 
+  // ── Hard behaviour: the disclosure workflow is present on every section ──
+  try {
+    await page.goto(BASE + 'design-studio?section=aplus')
+    await page.waitForSelector('[data-testid="aplus-workspace"]', { timeout: 12000 })
+    // Open the Fields tab and confirm the shared disclosure fields exist.
+    const fieldsTab = await page.$('.ss-leftrail-tab:has-text("Fields")')
+    if (!fieldsTab) { no('no Fields tab on the A+ workspace'); }
+    else {
+      await fieldsTab.click()
+      await page.waitForTimeout(400)
+      const selects = await page.$$eval('.ss-field select', els => els.map(e => e.previousElementSibling ? e.previousElementSibling.textContent : ''))
+      const toggles = await page.$$eval('.ss-field-toggle span', els => els.map(e => e.textContent))
+      if (selects.some(t => /People in this asset/i.test(t))) ok('A+: the people classification field is present (no default)')
+      else no('A+: no people-classification field', JSON.stringify(selects).slice(0, 120))
+      if (selects.some(t => /Product fidelity/i.test(t))) ok('A+: the product fidelity field is present')
+      else no('A+: no fidelity field')
+      if (toggles.some(t => /generated a person/i.test(t))) ok('A+: the studio-generated-person switch is present (conflict source)')
+      else no('A+: no studio-generated-person switch')
+      // The pre-flight must surface the disclosure row.
+      const panel = await page.$('[data-testid="compliance-panel"]')
+      const txt = panel ? await panel.textContent() : ''
+      if (/AI-generated people disclosure/i.test(txt)) ok('A+: the disclosure row is in the pre-flight')
+      else no('A+: no disclosure row in the pre-flight')
+      if (/cannot detect AI-generated people from pixels/i.test(txt)) ok('A+: the pre-flight states plainly that the studio cannot detect AI people from pixels')
+      else no('A+: the honesty statement about pixel detection is missing')
+      // An unanswered classification must not be a green pass.
+      const verdict = await page.$eval('[data-testid="verdict-pill"]', e => e.textContent.trim()).catch(() => '')
+      if (verdict !== 'Pre-flight pass') ok(`A+: unanswered disclosure does not pass the pre-flight (${verdict})`)
+      else no('A+: an unanswered disclosure reported a green pass')
+    }
+  } catch (e) {
+    ftl('disclosure workflow check threw', String(e).slice(0, 140))
+  }
+
   // ── Hard behaviour 3: A+ alt text blocks when missing ──
   try {
     await page.goto(BASE + 'design-studio?section=aplus')

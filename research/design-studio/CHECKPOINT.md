@@ -1,123 +1,131 @@
 # Design Studio ? Phase Checkpoint
 
-## Phase 0 ? MERGE THE STRUCTURE ? COMPLETE (21/21)
-## Phase 1 ? DEEP RESEARCH ? COMPLETE (GATE 1 approved)
-## Phase 2 ? DESIGN SYSTEM + WORKSPACES ? COMPLETE (9/9 sections)
+## Phase 0 ? MERGE ? COMPLETE (21/21)
+## Phase 1 ? DEEP RESEARCH ? COMPLETE (GATE 1 approved), 169 sources
+## Phase 2 ? DESIGN SYSTEM + 9 WORKSPACES ? COMPLETE
+## Phase 3 ? AI DISCLOSURE, FIDELITY, FRESHNESS, PERSISTENCE ? COMPLETE
 
-## Phase 2 ? Phase 3 PREP ? COMPLETE
+### 1. AI-GENERATED PEOPLE DISCLOSURE (directive item 1, a-h)
+New module `studio/engine/disclosure.js`.
 
-### 1. SP video sourced; UNSOURCED block removed
-`spv-video` now carries a real Amazon source with a pulled-at date:
-- Source `spv-guide` (VERIFIED, advertising.amazon.com/library/guides/
-  sponsored-products-video) + `spv-guidelines` (VERIFIED, help page).
-- 1-5 videos per product per ad group; **7 seconds and longer, no published
-  maximum**; horizontal 16:9; 1920x1080 recommended; MP4/MOV; **<=500 MB**;
-  **audio is removed**; **product must occupy 50% or more of the frame**.
-- Vertical 9:16 recorded as `available: false`, `dateSensitive: true`
-  ("to be available in 2026") ? a WARN, never a block.
-- `durationMax: null` is honoured as "no published maximum" and is NOT read as
-  zero. Fixture: 120s must pass; 5s must block.
-- **Unsourced specs: 0.** The `spec-sourced` rule remains as the guard.
+(a) **Six classifications, NO DEFAULT.** no-people / real-only /
+    real-ai-altered / ai-photoreal (TAG REQUIRED) / non-photoreal /
+    expressive-work. An unanswered asset reports `needs-confirmation` and
+    export is blocked.
+(b) **CONFLICT detection.** If the studio generated the person, an answer of
+    "no people" or "expressive-work" is a CONFLICT and export is blocked.
+    A tag-required class with the marker switched off is also a conflict.
+(c) **Attestation.** user, timestamp, asset version (fingerprint over format,
+    size, classification, generation flag, last edit, bytes) and the exact
+    statement. ANY edit changes the version and RE-REQUIRES the attestation.
+(d) **Real XMP write + read-back.** `buildXmpPacket`, `embedXmpInPng` (iTXt
+    chunk with a real CRC32), `embedXmpInJpeg` (APP1 segment), `readXmpFromPng`,
+    `readXmpFromJpeg`, and `verifyDisclosureMarker` which reads the EXPORTED
+    bytes back and proves the exact keyword survived. 7 export paths declared
+    (native, resize, re-encode, format change both ways) and all 7 tested.
+    Source: G1881 + the GFXHCHYZRGJRBZA5 announcement.
+(e) **Scope labelled honestly.** Listing images / listing videos / A+ basic are
+    VERIFIED. Premium A+, Brand Story, Store images and videos, shoppable or
+    product video, and ad creative are REPORTED because the GFXHCHYZRGJRBZA5
+    page and the Ads page GP6Y2AE2BUM5XWFX are login-gated.
+(f) **Ads checklist.** All three documented paths recorded: Amazon displays
+    automatically when it created the creative; the advertiser selects
+    "Contains synthetic performers" at upload for externally-made creative; the
+    advertiser places the disclosure directly in the creative for
+    third-party-served formats. The conspicuousness warning states the XMP
+    marker is NOT the New York disclosure. Jurisdiction scope is date-sensitive.
+(g) **Pre-flight row** "AI-generated people disclosure" reports
+    Decided / Needs seller confirmation / Conflict and is never green until
+    answered. The UI states plainly that the studio cannot detect AI people
+    from pixels.
+(h) **Fixtures:** every classification x 7 surfaces, the conflict path, the
+    marker surviving all 7 export paths, the negative case (untagged file
+    fails), the near-miss keyword failing, and edit re-requirement.
 
-### 2. Display video reconciled
-Two Amazon pages publish different figures for the same family. Both are
-STORED with their source and the STRICTER is ENFORCED:
-- Video bitrate: **1 Mbps** (`display-video-creative`) vs **4 Mbps**
-  (`ads-overview`, OLV/CTV/STV) -> enforcing **4 Mbps**.
-- Audio bitrate: **92 kbps** (`display-video-creative`) vs **192 kbps**
-  (`streaming-tv`) -> enforcing **192 kbps**.
-- SOURCE DEFECT recorded: the display table repeats the label
-  "Minimum duration" on two rows (6s then 45s). Read as min 6s / max 45s and
-  the defect is stated in the row's `reconciliation` field.
-- Display video is now **VERIFIED** (both figures are Amazon-owned).
-- **Amazon Video Ads stays its own row** (`amazon-video-ads`, VERIFIED,
-  custom-media page: 1920x1080, >=15 FPS, audio 128 kbps/44.1 kHz, 2 Mbps
-  recommended, detail-page 970x250 placement).
+### 2. MAIN IMAGE + ALL IMAGE RULES (directive item 2) ? all "needs artwork"
+Added 10 rules: main-entire-product (cropped), main-shown-once (same asset
+twice), main-single-unit, main-no-props, main-no-packaging, main-no-mannequins,
+main-no-amazon-marks (Amazon's Choice / Best Seller), all-no-review-imagery,
+all-no-pricing, all-no-seller-info (URL / email / phone / handle).
+The pre-existing main-white-bg and main-fill plus 85% and the overlay set remain.
 
-### 3. main-white-bg regression fixtures
-Three added fixtures, on top of the base pass/fail pair:
-- non-white solid `#123456` -> blocks
-- **near-white `#FEFEFE` -> passes**; `#ECECEC` -> blocks (tolerance is per
-  channel >= 240, not "light")
-- **gradient** `['#ffffff','#fafafa']` -> passes; `['#ffffff','#3a3a3a']` -> blocks
-  (a gradient passes only when EVERY stop is near-white)
+### 3. IMAGE TECHNICAL RULES (directive item 3)
+Added dpi-min-72, color-space-rgb, and filename-pattern (ID.VARIANT.ext).
+raster-range (500-10,000) and raster-zoom (1,000+) already existed; the accepted
+formats (JPEG/TIFF/PNG/non-animated GIF) are enforced by format-accepted.
 
-### 4. Rules marked "checked" vs "needs artwork / human review"
-Every rule declares what it NEEDS before its result means anything
-(`RULE_NEEDS`: nothing | artwork | export | human). An empty canvas now
-reports **"Needs artwork"** and never green. The panel separates
-`Blocks export`, `Needs review`, `Not yet decidable`, and `Decided and
-passing`, and the counter reads "N/M rules decided". Verified in-browser for
-all 8 shell sections: **empty canvas does not report green**.
+### 4. ISOLATION NEGATIVE TESTS (directive item 4)
+New `GET /api/design-studio/search` and `GET /api/design-studio/projects/{id}/
+export-manifest`, both account-scoped. Tests added for list (all three stores,
+both directions), search (a shared token returns exactly one hit per tenant),
+and export (a foreign project is refused), plus a router-discipline check that
+now resolves 26 scoped call sites with zero unscoped DAO calls.
 
-### 5. Projects persisted to ds_*/ with migration + tenant isolation
-- **Tenant isolation FIXED**: every by-id DAO operation is now account-scoped
-  (`get_by_id`/`update`/`delete` take `account_id`), `account_id` is not
-  reassignable through a patch, and a foreign record returns **None / 404** ?
-  never a 403 that would confirm existence.
-- Router: **17 scoped call sites, 0 unscoped by-id calls** (asserted).
-- **Migration**: `POST /api/design-studio/migrate` imports browser-local
-  records idempotently by `legacyKey`, rejects unknown sections rather than
-  guessing, and reports created/skipped/errors. Client module
-  `studio/engine/migrate.js` reads the known localStorage keys, imports once,
-  and **only clears the local copy after the server confirms**. Verified live:
-  run 1 created 1, run 2 skipped 1 (no duplicate).
+### 5. MIGRATION END-TO-END (directive item 5)
+`tools/test-migration-e2e.cjs` seeds 7 realistic legacy keys into a real
+browser, runs the real migration, and asserts the import, idempotency, the
+lossless preservation of unmapped fields, and that the store returns to 0/0/0.
+**It found four real bugs, all fixed:**
+ 1. `_existing_legacy_keys` only scanned PROJECTS, so assets and jobs were
+    re-created on every run ? the advertised idempotency did not hold.
+ 2. `ds_jobs` had no `metadata` column, so a migrated job had nowhere to record
+    its legacy key. Added via an idempotent ALTER.
+ 3. The CLIENT mapped only a handful of named fields, so unmapped legacy data
+    (objective, deliverables, purpose, tier) never reached the server at all.
+ 4. The client cleared a key whose content it could NOT represent. A malformed
+    or unrepresentable key is now KEPT and reported, and the done flag is
+    withheld so the operator can retry it.
 
-### 6. Harness login test mode
-`NORTHSTAR_LOGIN_THROTTLE_TEST_BYPASS=1` raises the login ceiling to 200
-requests/window. Fail-closed by design:
-- refused outright in production / production_tenant / staging, whatever the
-  env var says (case-insensitive)
-- requires the exact value "1" (not "0", "", "no", "true ")
-- only ever RAISES the limit ? production still enforces 5/window with the var set
-- logs a warning on first activation
-The edge rate limiter's pre-existing `NORTHSTAR_DISABLE_RATE_LIMIT=1` opt-out is
-prod-guarded by `assert_prod_posture()` (the app refuses to boot in production
-with it set). Both are wired into docker-compose, defaulting to 0.
+### 6. FIDELITY TRACK (directive item 6)
+New module `studio/engine/fidelity.js`. Reference lock + real-photo
+compositing with a pure `regionDiff()` (mean per-channel difference against a
+6% threshold, plus a 45% worst-pixel tripwire, transparent pixels skipped) and
+a browser `verifyFidelity()` that reads the exported region and blocks beyond
+the threshold. Three fidelity modes: locked (enforceable), placed (UNVERIFIED,
+reported as such), generated (BLOCKING ? the product is never generated).
+A compositing contract documents the required order.
 
-### 7. Three latent crashes found and fixed
-The non-creative degradation fix (returning 200 with real data where the API
-previously 503'd) EXPOSED pages that could not render real data:
-- `SharedDataLayer`: rendering the `live_pulls` ARRAY where a count was
-  expected -> React error #31. Backend now emits distinct
-  `live_pull_count` / `pipeline_run_count` keys; the page tolerates either shape.
-- `ProviderAdapters`: `(v && v.length) ? v.map(...)` ? a STRING satisfies
-  `.length`, then throws `a.map is not a function`.
-- `admin/Overview`: the same antipattern.
-`tools/check-jsx-imports.py` now also scans for this class statically and gates
-the build.
+### 7. SAMPLE SIZE BESIDE EVERY WORKFLOW CLAIM (directive item 7)
+`claim()` refuses to make a claim with no sample size rather than softening the
+wording; `sampleLabel()` labels a zero sample as "no sample". The 60-transcript
+target is NOT claimed anywhere ? the corpus holds one transcript.
 
-### Verification ? all harnesses, full output, FATAL counted
-| # | Harness | Result |
-|---|---|---|
-| 1 | `test-compliance-rules.mjs` | **72 passed, 0 failed** ? 34/34 rules, 13/13 groups, 48 specs sourced, 0 unsourced, 2 stricter-figure checks |
-| 2 | `test_design_studio_isolation.py` | **17 passed, 0 failed** |
-| 3 | `test_login_throttle_bypass.py` | **16 passed, 0 failed** |
-| 4 | `check-jsx-imports.py` | 94 files, no undefined refs, no unguarded renders |
-| 5 | `verify-design-studio.cjs` | **61 passed, 0 failed, 0 FATAL** ? zero console errors after sign-in |
-| 6 | `verify-operator-smoke.cjs` | **11 passed, 0 failed**, 21/21 rail destinations |
+### 8. POLICY FRESHNESS REGISTER (directive item 8)
+Every source carries a re-check cadence by tier (critical 30d / high 60d /
+normal 180d / slow 365d) with a stated reason. `freshnessOf`, `freshnessReport`
+and `ruleFreshness` return current / due-soon / stale / unregistered. Every rule
+result carries a freshness verdict, and an UNREGISTERED source is never "current".
+Two bugs found by the test: an empty reason, and `ruleFreshness` reporting
+`current` for an unknown source.
+
+### Verification ? 7 harnesses, full output, FATAL counted
+| # | Harness | Result | Exit |
+|---|---|---|---|
+| 1 | `test-compliance-rules.mjs` | **98 passed, 0 failed**; 47/47 rules, 13/13 groups, 48 specs sourced, 0 unsourced | 0 |
+| 2 | `test-disclosure.mjs` | **39 passed, 0 failed** | 0 |
+| 3 | `test-fidelity-freshness.mjs` | **34 passed, 0 failed** | 0 |
+| 4 | `test_design_studio_isolation.py` | **25 passed, 0 failed** | 0 |
+| 5 | `test_login_throttle_bypass.py` | **16 passed, 0 failed** | 0 |
+| 6 | `check-jsx-imports.py` | 94 files, 0 undefined, 0 unguarded | 0 |
+| 7a | `verify-design-studio.cjs` | **67 passed, 0 failed, 0 FATAL** | 0 |
+| 7b | `test-migration-e2e.cjs` | **12 passed, 0 failed, 0 FATAL** | 0 |
+| 7c | `verify-operator-smoke.cjs` | **11 passed, 0 failed**, 21/21 rail | 0 |
 
 ### Generation status
-**UNARMED.** No live or paid call. Every spec carries a source id, a
-pulled-at date and a VERIFIED / REPORTED / UNSOURCED label.
+**UNARMED.** No live or paid call. No cron. No on-load provider request.
 
 ### Files touched
-- `studio/engine/specRegistry.js` ? SP video sourced, Display video reconciled,
-  confidence labels, group-order guard
-- `studio/engine/compliance.js` ? 4 new rules (34 total), RULE_NEEDS coverage
-  states, SP/Display video families, main-white-bg fix
-- `studio/engine/migrate.js` (new)
-- `studio/components/StudioShell.jsx` ? verdict `incomplete`, coverage panel
-- `pages/internal/design-studio/{SectionWorkspace,ListingImages}.jsx`
-- `pages/internal/{SharedDataLayer,ProviderAdapters}.jsx`, `pages/admin/Overview.jsx`
-- `pages/internal/DesignStudio.jsx` ? migration on mount
-- `Northstar_backend/{data_layer,design_studio_api,noncreative_reads}.py`,
-  `foundation/login_throttle.py`, `foundation/api/router.py`
-- `docker-compose.yml` ? the two test-mode flags
-- `tools/{test-compliance-rules.mjs,test_design_studio_isolation.py,test_login_throttle_bypass.py,verify-design-studio.cjs,check-jsx-imports.py}`
+- `studio/engine/disclosure.js` (new), `fidelity.js` (new)
+- `studio/engine/specRegistry.js` (9 new sources, freshness register)
+- `studio/engine/compliance.js` (13 new rules, freshness on every result)
+- `studio/engine/migrate.js` (lossless client, keep-unimportable)
+- `pages/internal/design-studio/SectionWorkspace.jsx` (shared fields + rules)
+- `Northstar_backend/design_studio_api.py` (search, export-manifest, migrate fix)
+- `Northstar_backend/data_layer.py` (ds_jobs.metadata + migration)
+- `tools/{test-disclosure,test-fidelity-freshness,test-migration-e2e}.*` (new)
 
 ## Resume at
-Phase 3: arm the local ComfyUI pipeline behind explicit Run + cost preview, and
-give the sections a real canvas (they currently render the format, safe zones
-and pre-flight, but hold no artwork). The backend store, tenant scoping and the
-migration path are all in place.
+Phase 3 remainder: the sections still hold no artwork (they render the format,
+safe zones, shared fields and the pre-flight). Next: arm the local ComfyUI
+pipeline behind explicit Run + cost preview, and give the canvas a real
+compositing surface so the fidelity check has an export to measure.

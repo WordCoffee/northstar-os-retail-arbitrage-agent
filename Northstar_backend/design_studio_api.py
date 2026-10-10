@@ -7,7 +7,7 @@ potentially paid action is recorded as a queued job and waits for explicit run.
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 
 from auth_deps import get_current_user
@@ -198,6 +198,7 @@ def delete_job(jid: str, user: Dict[str, Any] = Depends(get_current_user)):
     return {"deleted": True}
 
 
+
 # ── Migration from the pre-backend localStorage state ──────────────────────
 # The Design Studio and the two merged rooms used to keep their records in the
 # browser (localStorage). This endpoint imports them once, idempotently: a
@@ -215,20 +216,90 @@ _MIGRATABLE_SECTIONS = {
     'video-ugc', 'social', 'packaging', '3d-scene',
 }
 
+# The columns each store actually has. A legacy record carries keys the schema
+# has never heard of (formatId, layers, purpose, tier...), and INSERTing those
+# raises. Unknown keys are preserved under metadata.legacyFields instead of
+# being dropped or allowed to break the import.
+_PROJECT_COLS = {
+    'id', 'account_id', 'name', 'section', 'asin', 'brand', 'brief', 'state',
+    'metadata', 'source_record_id', 'source_record_type', 'pulled_at',
+}
+_ASSET_COLS = {
+    'id', 'account_id', 'project_id', 'name', 'asset_type', 'mime_type',
+    'storage_key', 'data_url', 'width', 'height', 'duration_seconds',
+    'size_bytes', 'metadata',
+}
+_JOB_COLS = {
+    'id', 'account_id', 'project_id', 'asset_id', 'job_type', 'provider',
+    'status', 'cost_preview', 'credits_used', 'params', 'logs', 'result_ids',
+    'started_at', 'finished_at', 'metadata',
+}
+
+
+def _fit(payload: Dict[str, Any], allowed: set) -> Dict[str, Any]:
+    """Reduce a legacy record to the columns the store has.
+
+    Anything the schema does not model is preserved under
+    ``metadata.legacyFields`` so the import is lossless even though the shape
+    changed.
+    """
+    out = {k: v for k, v in payload.items() if k in allowed}
+    extra = {k: v for k, v in payload.items() if k not in allowed and k != 'metadata'}
+    if extra:
+        meta = dict(out.get('metadata') or {})
+        current = dict(meta.get('legacyFields') or {})
+        current.update(extra)
+        meta['legacyFields'] = current
+        out['metadata'] = meta
+    return out
+
+
+def _existing_legacy_keys(db, acct: str) -> set:
+    """Every legacyKey this account already holds, across ALL THREE stores.
+
+    The first version of this only scanned projects, so an asset or a job was
+    re-created on every run — the idempotency it advertised did not hold for
+    two of the three stores. The end-to-end migration test caught it.
+    """
+    def key_of(rec):
+        meta = rec.get('metadata')
+        if isinstance(meta, dict):
+            k = meta.get('legacyKey')
+            return str(k) if k else None
+        return None
+
+    keys = set()
+    for p in db.design_studio.projects.list_by_section(account_id=acct, limit=5000):
+        k = key_of(p)
+        if k:
+            keys.add('project:' + k)
+    for a in db.design_studio.assets.list_by_project(account_id=acct, limit=5000):
+        k = key_of(a)
+        if k:
+            keys.add('asset:' + k)
+    for j in db.design_studio.jobs.list_by_project(account_id=acct, limit=5000):
+        k = key_of(j)
+        if k:
+            keys.add('job:' + k)
+    return keys
+
 
 @router.post("/migrate")
 def migrate_legacy(body: MigrateIn, user: Dict[str, Any] = Depends(get_current_user)):
     """Import browser-local records into the tenant's backend store.
 
-    Idempotent per account: a record carrying a `legacyKey` that is already
-    stored is reported as skipped, never re-created. Unknown sections are
-    rejected rather than silently filed under a guess.
+    Idempotent per account across projects, assets AND jobs: a record carrying a
+    `legacyKey` that is already stored is reported as skipped, never
+    re-created. Unknown sections are rejected rather than silently filed under a
+    guess, and legacy keys the schema does not model are preserved under
+    ``metadata.legacyFields`` instead of breaking the insert.
     """
     db = get_northstar_db()
     acct = _account_id(user)
     created = {'projects': 0, 'assets': 0, 'jobs': 0}
     skipped = {'projects': 0, 'assets': 0, 'jobs': 0}
     errors: List[Dict[str, Any]] = []
+    now = datetime.now(timezone.utc).isoformat()
 
     def legacy_key_of(meta: Any) -> Optional[str]:
         if isinstance(meta, dict):
@@ -236,12 +307,8 @@ def migrate_legacy(body: MigrateIn, user: Dict[str, Any] = Depends(get_current_u
             return str(v) if v else None
         return None
 
-    # Existing legacy keys for this account, so the import is idempotent.
-    existing = set()
-    for p in db.design_studio.projects.list_by_section(account_id=acct, limit=5000):
-        k = legacy_key_of(p.get('metadata'))
-        if k:
-            existing.add('project:' + k)
+    existing = _existing_legacy_keys(db, acct)
+    project_map: Dict[str, str] = {}  # legacy project key -> new project id
 
     for raw in body.projects:
         try:
@@ -254,48 +321,62 @@ def migrate_legacy(body: MigrateIn, user: Dict[str, Any] = Depends(get_current_u
             if section not in _MIGRATABLE_SECTIONS:
                 errors.append({'kind': 'project', 'name': raw.get('name'), 'error': f'unknown section {section!r}'})
                 continue
-            pid = db.design_studio.projects.create({
+            payload = _fit({
+                **raw,
                 'account_id': acct,
                 'name': raw.get('name') or 'Imported draft',
                 'section': section,
-                'asin': raw.get('asin'),
-                'brand': raw.get('brand'),
-                'brief': raw.get('brief'),
-                'state': raw.get('state') or 'draft',
-                'metadata': {**meta, 'importedFrom': 'localStorage', 'importedAt': datetime.now(timezone.utc).isoformat()},
-            })
+                # metadata must be part of the dict _fit sees, otherwise _fit's
+                # legacyFields merge is thrown away by a later overwrite.
+                'metadata': {**meta, 'importedFrom': 'localStorage', 'importedAt': now},
+            }, _PROJECT_COLS)
+            pid = db.design_studio.projects.create(payload)
             if key:
                 existing.add('project:' + key)
+                project_map[key] = pid
             created['projects'] += 1
-            # Remember the new id so assets/jobs can be re-pointed by legacy key.
-            if key:
-                _LEGACY_PROJECT_MAP[(acct, key)] = pid
         except Exception as exc:  # noqa: BLE001 - reported, never swallowed
             errors.append({'kind': 'project', 'name': raw.get('name'), 'error': f'{exc.__class__.__name__}: {exc}'})
 
-    # Assets and jobs resolve their project by legacy key where one was given.
-    for kind, items in (('assets', body.assets), ('jobs', body.jobs)):
+    for kind, items, cols in (
+        ('assets', body.assets, _ASSET_COLS),
+        ('jobs', body.jobs, _JOB_COLS),
+    ):
         store = getattr(db.design_studio, kind)
+        singular = 'asset' if kind == 'assets' else 'job'
         for raw in items:
             try:
                 meta = dict(raw.get('metadata') or {})
                 key = legacy_key_of(meta)
-                if key and (kind + ':' + key) in existing:
+                if key and (singular + ':' + key) in existing:
                     skipped[kind] += 1
                     continue
-                payload = {k: v for k, v in raw.items() if k not in ('id', 'account_id')}
-                payload['account_id'] = acct
+                project_id = raw.get('project_id')
                 legacy_project = raw.get('legacyProjectKey')
-                if legacy_project:
-                    payload['project_id'] = _LEGACY_PROJECT_MAP.get((acct, str(legacy_project))) or raw.get('project_id')
-                payload['metadata'] = {**meta, 'importedFrom': 'localStorage', 'importedAt': datetime.now(timezone.utc).isoformat()}
-                if kind == 'assets':
-                    store.create({**payload, 'account_id': acct})
-                else:
+                if legacy_project and str(legacy_project) in project_map:
+                    project_id = project_map[str(legacy_project)]
+                payload = _fit({
+                    **raw,
+                    'account_id': acct,
+                    'project_id': project_id,
+                    'metadata': {**meta, 'importedFrom': 'localStorage', 'importedAt': now},
+                }, cols)
+                if kind == 'jobs':
                     payload.setdefault('job_type', 'generate')
-                    store.create({**payload, 'account_id': acct})
+                if kind == 'assets':
+                    payload.setdefault('asset_type', 'legacy')
+                # ds_jobs has no `name` column: fold a legacy name into metadata
+                # rather than setting a key the table cannot take.
+                if kind == 'assets' and not payload.get('name'):
+                    payload['name'] = f"Imported {singular} {str(raw.get('id') or '')[:12]}".strip()
+                if kind == 'jobs':
+                    legacy_name = raw.get('name') or f"Imported {singular} {str(raw.get('id') or '')[:12]}".strip()
+                    meta_out = dict(payload.get('metadata') or {})
+                    meta_out.setdefault('legacyName', legacy_name)
+                    payload['metadata'] = meta_out
+                store.create(payload)
                 if key:
-                    existing.add(kind + ':' + key)
+                    existing.add(singular + ':' + key)
                 created[kind] += 1
             except Exception as exc:  # noqa: BLE001
                 errors.append({'kind': kind, 'name': raw.get('name'), 'error': f'{exc.__class__.__name__}: {exc}'})
@@ -305,13 +386,77 @@ def migrate_legacy(body: MigrateIn, user: Dict[str, Any] = Depends(get_current_u
         'created': created,
         'skipped': skipped,
         'errors': errors,
-        'note': 'Idempotent per account: re-running reports skipped, never duplicates.',
+        'note': 'Idempotent per account across projects, assets and jobs: re-running reports skipped, never duplicates.',
     }
 
 
-# Maps (account, legacy project key) -> new project id for the current process.
-# Only used to re-point assets/jobs inside a single migrate call.
-_LEGACY_PROJECT_MAP: Dict[tuple, str] = {}
+
+# ── Search and export (tenant-scoped) ─────────────────────────────────────
+# Both exist so the isolation contract can be tested on the surfaces a seller
+# actually uses to find and ship work, not only on CRUD-by-id.
+
+@router.get("/search")
+def search(
+    q: str = Query(default="", max_length=200),
+    limit: int = Query(default=50, le=200),
+    user: Dict[str, Any] = Depends(get_current_user),
+):
+    """Case-insensitive substring search over the caller's own projects,
+    assets and jobs. Scoped to the account at the query, not filtered after."""
+    acct = _account_id(user)
+    db = get_northstar_db()
+    needle = (q or "").strip()
+    like = f"%{needle}%"
+    projects = [p for p in db.design_studio.projects.list_by_section(account_id=acct, limit=1000)
+                if not needle or needle.lower() in (p.get("name") or "").lower()]
+    assets = [a for a in db.design_studio.assets.list_by_project(account_id=acct, limit=1000)
+              if not needle or needle.lower() in (a.get("name") or "").lower()]
+    jobs = [j for j in db.design_studio.jobs.list_by_project(account_id=acct, limit=1000)
+            if not needle or needle.lower() in (j.get("job_type") or "").lower()]
+    return {
+        "q": needle,
+        "projects": projects[:limit],
+        "assets": assets[:limit],
+        "jobs": jobs[:limit],
+        "counts": {"projects": len(projects), "assets": len(assets), "jobs": len(jobs)},
+    }
+
+
+@router.get("/projects/{pid}/export-manifest")
+def export_manifest(pid: str, user: Dict[str, Any] = Depends(get_current_user)):
+    """The flat-file image manifest for one project.
+
+    Refuses a project owned by another account with a 404, exactly like a
+    missing one. Deliberately returns the documented column names so the
+    operator can map them straight into a feed, and never invents a URL: a slot
+    with no asset is emitted as null rather than as a placeholder path.
+    """
+    acct = _account_id(user)
+    db = get_northstar_db()
+    project = db.design_studio.projects.get_by_id(pid, account_id=acct)
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    assets = db.design_studio.assets.list_by_project(project_id=pid, account_id=acct, limit=1000)
+    by_slot = {a.get("metadata", {}).get("slot"): a for a in assets if isinstance(a.get("metadata"), dict)}
+
+    def slot(col: str, role: str):
+        a = by_slot.get(col)
+        return {"column": col, "role": role, "assetId": a.get("id") if a else None,
+                "url": (a.get("storage_key") or None) if a else None,
+                "present": bool(a)}
+
+    manifest = [
+        slot("main_image_url", "main"),
+        slot("swatch_image_url", "swatch"),
+    ] + [slot(f"other_image_url{i}", "secondary") for i in range(1, 9)]
+    return {
+        "projectId": pid,
+        "asin": project.get("asin"),
+        "section": project.get("section"),
+        "filename": project.get("metadata", {}).get("filename") if isinstance(project.get("metadata"), dict) else None,
+        "manifest": manifest,
+        "note": "Only assets owned by the calling account appear. An empty slot is null, never a placeholder URL.",
+    }
 
 
 # ── Status / health for the merged studio ──────────────────────────────────

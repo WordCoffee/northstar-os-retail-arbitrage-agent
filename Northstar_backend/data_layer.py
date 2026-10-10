@@ -455,6 +455,7 @@ class DataLayer:
                 cost_preview TEXT,         -- JSON: currency, estimated credits, note
                 credits_used REAL DEFAULT 0,
                 params TEXT,               -- JSON: full generation params / workflow
+                metadata TEXT,             -- JSON: provenance, legacy import keys, slot
                 logs TEXT,                 -- newline-separated log lines
                 result_ids TEXT,           -- JSON array of output asset ids
                 started_at TEXT,
@@ -488,6 +489,29 @@ class DataLayer:
                     self._conn.execute(f"ALTER TABLE products ADD COLUMN {col} {decl}")
                 except sqlite3.Error:
                     pass
+        self._conn.commit()
+        self._migrate_ds_columns()
+
+    def _migrate_ds_columns(self):
+        """Idempotently bring an EXISTING ds_* table up to the current shape.
+
+        ds_jobs shipped without a metadata column, so a migrated job had nowhere
+        to record its legacy key and the import failed on every job. CREATE
+        TABLE IF NOT EXISTS does not alter a table that already exists, so the
+        column has to be added explicitly here.
+        """
+        try:
+            cur = self._conn.execute("PRAGMA table_info(ds_jobs)")
+            existing = {row[1] for row in cur.fetchall()}
+        except sqlite3.Error:
+            return
+        if not existing:
+            return  # table not present at all; CREATE above already made it right
+        if "metadata" not in existing:
+            try:
+                self._conn.execute("ALTER TABLE ds_jobs ADD COLUMN metadata TEXT")
+            except sqlite3.Error:
+                pass
         self._conn.commit()
 
     def execute(self, sql: str, params: tuple = ()) -> sqlite3.Cursor:
@@ -1519,7 +1543,7 @@ class DesignStudioJobsDB:
 
     def _serialize(self, row: sqlite3.Row) -> Dict[str, Any]:
         d = dict(row)
-        for k in ("cost_preview", "params", "result_ids"):
+        for k in ("cost_preview", "params", "result_ids", "metadata"):
             if d.get(k) and isinstance(d[k], str):
                 try:
                     d[k] = json.loads(d[k])
@@ -1537,7 +1561,7 @@ class DesignStudioJobsDB:
         now = datetime.now(timezone.utc).isoformat()
         job.setdefault("created_at", now)
         job.setdefault("updated_at", now)
-        for k in ("cost_preview", "params", "result_ids"):
+        for k in ("cost_preview", "params", "result_ids", "metadata"):
             if k in job and isinstance(job[k], (dict, list)):
                 job[k] = json.dumps(job[k])
         cols = [c for c in job.keys()]
@@ -1556,7 +1580,7 @@ class DesignStudioJobsDB:
         patch.pop("id", None)
         patch.pop("account_id", None)  # ownership is never reassignable by patch
         patch["updated_at"] = datetime.now(timezone.utc).isoformat()
-        for k in ("cost_preview", "params", "result_ids"):
+        for k in ("cost_preview", "params", "result_ids", "metadata"):
             if k in patch and isinstance(patch[k], (dict, list)):
                 patch[k] = json.dumps(patch[k])
         fields = ", ".join(f"{k} = ?" for k in patch.keys())

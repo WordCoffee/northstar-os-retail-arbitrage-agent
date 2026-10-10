@@ -55,6 +55,17 @@ export const SPEC_SOURCES = {
   'display-video-creative': { id: 'display-video-creative', label: 'Amazon Ads: display ads with video creative (1 Mbps / 92 kbps)', url: 'https://advertising.amazon.com/library/guides/display-ads-video-creative', pulled: PULLED, quality: 5, confidence: 'VERIFIED' },
   'streaming-tv': { id: 'streaming-tv', label: 'Amazon Ads: Streaming TV / Prime Video specs (192 kbps audio)', url: 'https://advertising.amazon.com/resources/ad-specs/dsp/video/streaming-tv-prime-video-ads', pulled: PULLED, quality: 5, confidence: 'VERIFIED' },
   'spv-walkthrough': { id: 'spv-walkthrough', label: 'SP video walkthrough (YouTube transcript)', url: 'https://www.youtube.com/watch?v=VIKzFWzLHRY', pulled: PULLED, quality: 3, confidence: 'REPORTED' },
+  // ── AI-generated people disclosure ───────────────────────────────────────
+  'ai-tag-page': { id: 'ai-tag-page', label: 'How to tag media that contains an AI-generated person (GFXHCHYZRGJRBZA5)', url: 'https://sellercentral.amazon.com/help/hub/reference/external/GFXHCHYZRGJRBZA5', pulled: PULLED, quality: 5, confidence: 'VERIFIED', note: 'Login-gated: URL confirmed, body not reproduced.' },
+  'ai-announce': { id: 'ai-announce', label: 'Amazon announcement: you must now tag AI-generated people (2026-07-27)', url: 'https://sellercentral.amazon.com/seller-forums/discussions/t/aa0aee06-aff4-497a-a4b6-9b2ebe06f715', pulled: PULLED, quality: 5, confidence: 'VERIFIED' },
+  'ai-ads-page': { id: 'ai-ads-page', label: 'Amazon Ads: AI-generated people in ads - New York State disclosure (GP6Y2AE2BUM5XWFX)', url: 'https://advertising.amazon.com/help/GP6Y2AE2BUM5XWFX', pulled: PULLED, quality: 4, confidence: 'REPORTED', note: 'Sign-in gated: the three-path behaviour is reported, not reproduced.' },
+  'ny-statute': { id: 'ny-statute', label: 'New York GBL 396-b synthetic performer disclosure (coverage)', url: 'https://amazonsellersappeal.com/amazon-ai-generated-people-image-policy/', pulled: PULLED, quality: 3, confidence: 'REPORTED' },
+  'ai-tag-ops': { id: 'ai-tag-ops', label: 'Tagging operations detail (Goat Consulting, 2026-07-24)', url: 'https://www.goatconsulting.com/amazon-policy/amazon-ai-generated-images', pulled: PULLED, quality: 3, confidence: 'REPORTED' },
+  'ai-tag-precision': { id: 'ai-tag-precision', label: 'Exact string, exact field, tag dies with export (Ecommsphere, 2026-07-27)', url: 'https://ecommsphere.com/amazon-makes-sellers-tag-ai-generated-people-in-listing-images/', pulled: PULLED, quality: 3, confidence: 'REPORTED' },
+  'ai-live-loss': { id: 'ai-live-loss', label: 'Reported: live listing copies lose the tag after reprocessing (Overs, 2026-09-24)', url: 'https://www.overs.studio/guides/can-you-use-ai-images-on-amazon', pulled: PULLED, quality: 3, confidence: 'REPORTED' },
+  // ── Main-image and all-image content rules ───────────────────────────────
+  'main-image-detail': { id: 'main-image-detail', label: 'Amazon main-image prohibitions restated (Seller Central forums)', url: 'https://sellercentral.amazon.com/seller-forums/discussions/t/7366420bc9ccfb8656594e6edcf4ece6', pulled: PULLED, quality: 4, confidence: 'VERIFIED' },
+  'style-guides-main': { id: 'style-guides-main', label: 'Amazon product page style guides (lifestyle main-image exceptions)', url: 'https://sellercentral.amazon.com/help/hub/reference/external/G200270100', pulled: PULLED, quality: 5, confidence: 'VERIFIED' },
 }
 
 /** Human-readable confidence label for a spec row. */
@@ -62,6 +73,130 @@ export function confidenceOf(spec) {
   const s = SPEC_SOURCES[spec?.source]
   if (spec?.unsourced || s?.confidence === 'UNSOURCED') return 'UNSOURCED'
   return spec?.confidence || s?.confidence || 'REPORTED'
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// POLICY FRESHNESS REGISTER  (directive item 8)
+//
+// Amazon updates these pages. A rule that cites a page nobody has re-read is a
+// stale rule, and a stale rule is a rule that might be wrong.
+//
+// Every entry declares:
+//   pulled     the date the source was last read
+//   recheckDays how long that reading is considered usable for this subject
+//   tier       how much it hurts to be wrong ('critical' | 'high' | 'normal')
+//
+// `freshnessOf()` returns a verdict, and a STALE rule is reported as
+// needs-re-verification — it is never presented as current.
+// ═══════════════════════════════════════════════════════════════════════════
+
+export const TODAY = '2026-10-10'
+
+// Re-check cadence by how fast Amazon actually moves on each subject:
+//   the AI-disclosure regime is months old and still moving         -> 30 days
+//   ad specs change often and are dated on the page                 -> 60 days
+//   image/A+/Store rules are stable for years                       -> 180 days
+//   legal terms move slowly                                         -> 365 days
+export const RECHECK_DAYS = {
+  critical: 30,
+  high: 60,
+  normal: 180,
+  slow: 365,
+}
+
+export const POLICY_FRESHNESS = [
+  { source: 'ai-announce', recheck: 'critical', why: 'New requirement, announced 2026-07-27, enforcement behaviour still developing.' },
+  { source: 'ai-tag-page', recheck: 'critical', why: 'The procedure page itself; login-gated so it can change unnoticed.' },
+  { source: 'ai-ads-page', recheck: 'critical', why: 'New York scope is date-sensitive and the page is login-gated.' },
+  { source: 'ny-statute', recheck: 'critical', why: 'Statute in force 2026-06-09; penalties and scope still being interpreted.' },
+  { source: 'ai-tag-ops', recheck: 'critical', why: 'Third-party operational detail on a fast-moving requirement.' },
+  { source: 'ai-tag-precision', recheck: 'critical', why: 'Third-party detail on exact string and field.' },
+  { source: 'ai-live-loss', recheck: 'high', why: 'Reported tag loss on live copies; behaviour may change.' },
+  { source: 'suppression', recheck: 'high', why: 'Suppression policy drives the highest-impact rule in the register.' },
+  { source: 'img-guide', recheck: 'normal', why: 'Core image rules; stable but the tagging clause is new.' },
+  { source: 'sbv', recheck: 'high', why: 'Ad specs page is dated and revised frequently.' },
+  { source: 'sbv-api', recheck: 'high', why: 'Ads API guide tracks surface availability.' },
+  { source: 'dsp-types', recheck: 'high', why: 'Size inventory changes as new formats ship.' },
+  { source: 'ads-overview', recheck: 'high', why: 'Dated page carrying the 4 Mbps figure.' },
+  { source: 'spv-guide', recheck: 'critical', why: 'Format is new and the vertical variant is explicitly "to be available in 2026".' },
+  { source: 'spv-guidelines', recheck: 'critical', why: 'Companion guidance for a brand-new format.' },
+  { source: 'display-video-creative', recheck: 'high', why: 'One half of the reconciled bitrate/audio figures.' },
+  { source: 'streaming-tv', recheck: 'high', why: 'The other half of the reconciled audio figure.' },
+  { source: 'aplus-guide', recheck: 'normal', why: 'Stable A+ rules.' },
+  { source: 'aplus-modules', recheck: 'normal', why: 'Module PDF; sizes have not moved in years.' },
+  { source: 'aplus-size', recheck: 'normal', why: 'A+ size table; module sizes are stable but the table is revised with new modules.' },
+  { source: 'premium-a', recheck: 'normal', why: 'Premium module guide.' },
+  { source: 'stores-pdf', recheck: 'normal', why: 'Store asset requirements.' },
+  { source: 'stores-hero', recheck: 'normal', why: 'One of the two hero safe-area figures.' },
+  { source: 'stores-content', recheck: 'normal', why: 'Dated 2026-07-22; overlay percentages live here.' },
+  { source: 'stores-tiles', recheck: 'normal', why: 'Tile matrix.' },
+  { source: 'style-guides', recheck: 'normal', why: 'Category overrides; the lifestyle exception list can change.' },
+  { source: 'listing-quality', recheck: 'normal', why: 'Quality guidance.' },
+  { source: 'main-image-detail', recheck: 'high', why: 'Forum restatement; drives several blocking rules.' },
+  { source: 'style-guides-main', recheck: 'normal', why: 'Lifestyle main-image exceptions.' },
+  { source: 'video-ads', recheck: 'high', why: 'Dated ad spec page.' },
+  { source: 'flat-file', recheck: 'high', why: 'Third-party; templates change quarterly.' },
+  { source: 'premium-elig', recheck: 'high', why: 'Forum thread; eligibility rules moved recently.' },
+  { source: 'sbv-perpetua', recheck: 'high', why: 'Third-party restatement.' },
+  { source: 'display-video', recheck: 'critical', why: 'SUPERSEDED by display-video-creative; retained only as history.' },
+  { source: 'spv-walkthrough', recheck: 'high', why: 'Single YouTube transcript; corroborating only.' },
+]
+
+const DAY = 24 * 60 * 60 * 1000
+
+function daysBetween(a, b) {
+  return Math.round((Date.parse(b) - Date.parse(a)) / DAY)
+}
+
+/**
+ * Freshness verdict for one source.
+ * @returns {{source,status,age,limit,dueIn,why,tier}}
+ *   status: 'current' | 'due-soon' | 'stale' | 'unregistered'
+ */
+export function freshnessOf(sourceId, today = TODAY) {
+  const src = SPEC_SOURCES[sourceId]
+  if (!src) return { source: sourceId, status: 'unregistered', age: null, limit: null, dueIn: null, tier: null, why: 'This source is not in SPEC_SOURCES.' }
+  const row = POLICY_FRESHNESS.find(r => r.source === sourceId)
+  if (!row) {
+    return { source: sourceId, status: 'unregistered', age: null, limit: null, dueIn: null, tier: null, why: 'No re-check cadence is registered for this source.' }
+  }
+  const limit = RECHECK_DAYS[row.recheck] || RECHECK_DAYS.normal
+  const age = daysBetween(src.pulled, today)
+  const dueIn = limit - age
+  const status = dueIn < 0 ? 'stale' : (dueIn <= Math.max(7, Math.round(limit * 0.2)) ? 'due-soon' : 'current')
+  return { source: sourceId, status, age, limit, dueIn, tier: row.recheck, why: row.why, label: src.label }
+}
+
+/** Every source judged against its cadence, worst first. */
+export function freshnessReport(today = TODAY) {
+  const rows = Object.keys(SPEC_SOURCES).map(id => freshnessOf(id, today))
+  const order = { stale: 0, 'due-soon': 1, unregistered: 2, current: 3 }
+  rows.sort((a, b) => (order[a.status] - order[b.status]) || ((a.dueIn ?? 0) - (b.dueIn ?? 0)))
+  const counts = rows.reduce((m, r) => ({ ...m, [r.status]: (m[r.status] || 0) + 1 }), {})
+  return { rows, counts, today }
+}
+
+/**
+ * Does ANY source behind a rule need re-verification? A rule whose source is
+ * stale is reported as needs-re-verification rather than presented as current.
+ */
+export function ruleFreshness(rule, today = TODAY) {
+  const ids = String(rule?.source || '').split(/[\/,]/).map(s => s.trim()).filter(Boolean)
+  const verdicts = ids.map(id => freshnessOf(id, today))
+  const stale = verdicts.filter(v => v.status === 'stale')
+  const dueSoon = verdicts.filter(v => v.status === 'due-soon')
+  // An UNKNOWN or UNREGISTERED source is not "current": an unverifiable
+  // citation must never read as fresh, or a typo silently looks maintained.
+  const unregistered = verdicts.filter(v => v.status === 'unregistered')
+  const worst = stale.length ? 'stale'
+    : dueSoon.length ? 'due-soon'
+      : unregistered.length ? 'unregistered'
+        : 'current'
+  return {
+    stale, dueSoon, unregistered,
+    ok: worst === 'current',
+    worst,
+  }
 }
 
 

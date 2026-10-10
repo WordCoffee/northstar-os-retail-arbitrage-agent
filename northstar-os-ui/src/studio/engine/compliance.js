@@ -20,7 +20,9 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { ALL_FORMATS, formatById } from './presets.js'
-import { SAFE_ZONES, AMAZON_CAPS, AI_POLICY, SPEC_BY_ID, SPEC_SOURCES } from './specRegistry.js'
+import { SAFE_ZONES, AMAZON_CAPS, AI_POLICY, SPEC_BY_ID, SPEC_SOURCES, freshnessOf } from './specRegistry.js'
+import { disclosureRow, checkFilename } from './disclosure.js'
+import { FIDELITY_MODE_BY_ID } from './fidelity.js'
 
 const ACCESSED = '2026-10-09'
 
@@ -232,6 +234,87 @@ export const RULES = [
     detail: 'Amazon requires the product to take up 50% or more of the video frame for Sponsored Products video.',
     source: 'spv guide', accessed: '2026-10-10', dateSensitive: true,
   },
+  // ── MAIN IMAGE: the full documented prohibition set (directive item 2) ───
+  {
+    id: 'main-entire-product', level: 'block', scope: 'amz-main', kind: 'main',
+    label: 'The entire product is inside the frame',
+    detail: 'The product and all its features must be clearly visible. A product cropped by the frame edge fails.',
+    source: 'main-image-detail', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'main-shown-once', level: 'block', scope: 'amz-main', kind: 'main',
+    label: 'The product is shown once',
+    detail: 'The main image must not include multiple images of the same single product.',
+    source: 'main-image-detail', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'main-single-unit', level: 'flag', scope: 'amz-main', kind: 'main',
+    label: 'One unit plus included accessories only',
+    detail: 'Show only one unit of the product, plus any accessories that come with it. Extra units imply a pack the buyer will not receive.',
+    source: 'img-guide / main-image-detail', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'main-no-props', level: 'flag', scope: 'amz-main', kind: 'main',
+    label: 'No props that are not included',
+    detail: 'Props that are not part of what the buyer receives must not appear on the main image.',
+    source: 'img-guide', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'main-no-packaging', level: 'flag', scope: 'amz-main', kind: 'main',
+    label: 'No packaging unless the packaging is a product feature',
+    detail: 'Show the product out of its packaging unless the packaging itself is a feature the buyer receives (a consumable or a collectible).',
+    source: 'img-guide', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'main-no-mannequins', level: 'flag', scope: 'amz-main', kind: 'main',
+    label: 'No mannequins in the main image',
+    detail: 'Mannequins are prohibited on the main image for apparel categories.',
+    source: 'style-guides-main', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'main-no-amazon-marks', level: 'block', scope: 'amz-main', kind: 'main',
+    label: 'No Amazon marks or badges',
+    detail: 'Amazon\'s Choice, Best Seller, Prime and similar Amazon badges or marks must not be placed on the image.',
+    source: 'img-guide', accessed: '2026-10-10', dateSensitive: true,
+  },
+  // ── ALL IMAGES (directive item 2, second half) ───────────────────────────
+  {
+    id: 'all-no-review-imagery', level: 'block', scope: 'all', kind: 'claims',
+    label: 'No review imagery or claims',
+    detail: 'Star ratings, review counts, review quotes and review screenshots must not be placed on an image. Amazon supplies the real review data on the page.',
+    source: 'ads-overview / general policies', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'all-no-pricing', level: 'block', scope: 'all', kind: 'claims',
+    label: 'No pricing or savings claims on the image',
+    detail: 'Pricing, discount and savings claims on an image go stale the moment the price changes and are treated as a claim. Keep price out of the creative.',
+    source: 'ads-overview / general policies', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'all-no-seller-info', level: 'block', scope: 'all', kind: 'claims',
+    label: 'No seller or contact information',
+    detail: 'URLs, email addresses, phone numbers, social handles and off-Amazon seller information must not appear on an image.',
+    source: 'img-guide', accessed: '2026-10-10', dateSensitive: true,
+  },
+  // ── TECHNICAL RULES (directive item 3) ──────────────────────────────────
+  {
+    id: 'dpi-min-72', level: 'block', scope: 'all', kind: 'size',
+    label: 'Resolution is at least 72 dpi',
+    detail: 'Amazon requires at least 72 dpi. A file that records a lower density is rejected by the upstream check even when the pixel dimensions are correct.',
+    source: 'img-guide', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'color-space-rgb', level: 'block', scope: 'all', kind: 'format',
+    label: 'Colour space is RGB',
+    detail: 'Amazon converts CMYK to RGB, which can shift colour. Supply RGB (sRGB) so what you approve is what ships.',
+    source: 'aplus-guide / img-guide', accessed: '2026-10-10', dateSensitive: true,
+  },
+  {
+    id: 'filename-pattern', level: 'flag', scope: 'all', kind: 'policy',
+    label: 'Filename follows ID.VARIANT.ext',
+    detail: 'Amazon documents the listing image filename pattern ID.VARIANT.ext — an identifier, a dot, a variant, a dot, and an accepted extension.',
+    source: 'img-guide', accessed: '2026-10-10', dateSensitive: true,
+  },
 ]
 
 export const RULES_BY_ID = Object.fromEntries(RULES.map(r => [r.id, r]))
@@ -277,6 +360,20 @@ const RULE_NEEDS = {
   'video-reconciled': 'nothing',
   'video-audio-removed': 'nothing',
   'video-product-frame': 'artwork',
+  'main-entire-product': 'artwork',
+  'main-shown-once': 'artwork',
+  'main-single-unit': 'artwork',
+  'main-no-props': 'artwork',
+  'main-no-packaging': 'artwork',
+  'main-no-mannequins': 'artwork',
+  'main-no-amazon-marks': 'artwork',
+  'all-no-review-imagery': 'artwork',
+  'all-no-pricing': 'artwork',
+  'all-no-seller-info': 'artwork',
+  'dpi-min-72': 'nothing',
+  'color-space-rgb': 'nothing',
+  'filename-pattern': 'nothing',
+  'ai-generated-people-disclosure': 'human',
 }
 
 export function needsOf(ruleId) {
@@ -363,6 +460,7 @@ export function checkCompliance(doc, ctx = {}) {
   const cta = ctaLayer ? String(ctaLayer.text || '') : ''
 
   const results = []
+  const staleRules = []
   // An empty canvas must never report green. `hasArtwork` is what separates a
   // real verdict from a vacuous one.
   const hasArtwork = doc.layers.some(l =>
@@ -379,7 +477,12 @@ export function checkCompliance(doc, ctx = {}) {
     }
     // A rule whose input is missing can never report a green pass.
     const effective = status === 'checked' ? level : (status === 'needs-artwork' ? 'incomplete' : 'review')
-    results.push({ ...RULES_BY_ID[ruleId], level: effective, rawLevel: level, status, need, detail })
+    const rule = RULES_BY_ID[ruleId]
+    // Policy freshness: a rule citing a source past its re-check date is
+    // reported as needing re-verification, never presented as current.
+    const fresh = rule?.source ? freshnessOf(rule.source) : null
+    results.push({ ...rule, level: effective, rawLevel: level, status, need, detail, freshness: fresh })
+    if (fresh && fresh.status === 'stale') staleRules.push({ id: ruleId, source: rule.source, age: fresh.age, limit: fresh.limit })
   }
 
   // ── size ──
@@ -600,6 +703,114 @@ export function checkCompliance(doc, ctx = {}) {
     }
   }
 
+  // ── MAIN image: the full documented prohibition set ─────────────────────
+  if (isMain) {
+    // Entire product inside the frame.
+    const outside = productLayers.filter(l =>
+      (l.x ?? 0) < 0 || (l.y ?? 0) < 0 || ((l.x ?? 0) + (l.w ?? 0)) > 1.001 || ((l.y ?? 0) + (l.h ?? 0)) > 1.001)
+    push('main-entire-product', outside.length ? 'block' : 'pass',
+      outside.length
+        ? `${outside.length} product layer(s) extend past the frame edge, so the product is cropped.`
+        : 'Every product layer sits inside the frame.')
+
+    // Shown once: the SAME product asset appearing twice.
+    const ids = productLayers.map(l => l.assetId || l.artId || l.label || '').filter(Boolean)
+    const dupes = ids.filter((v, i) => ids.indexOf(v) !== i)
+    push('main-shown-once', dupes.length ? 'block' : 'pass',
+      dupes.length
+        ? `The same product appears ${dupes.length + 1} times ("${dupes[0]}"). The main image must show the product once.`
+        : 'The product is not repeated.')
+
+    const units = Number(doc.meta?.units || 1)
+    push('main-single-unit', units > 1 ? 'flag' : 'pass',
+      units > 1 ? `${units} units are shown. Only one unit plus included accessories is permitted.` : 'One unit.')
+
+    const props = productLayers.filter(l => l.isProp)
+    push('main-no-props', props.length ? 'flag' : 'pass',
+      props.length ? `${props.length} layer(s) are marked as props that are not included with the product.` : 'No non-included props.')
+
+    const packaging = productLayers.filter(l => l.isPackaging && !l.packagingIsFeature)
+    if (packaging.length || doc.meta?.packagingShown) {
+      push('main-no-packaging', 'flag',
+        'Packaging is shown. That is only allowed when the packaging itself is a product feature (a consumable or collectible).')
+    } else {
+      push('main-no-packaging', 'pass', 'No packaging shown.')
+    }
+
+    push('main-no-mannequins', doc.meta?.mannequin ? 'flag' : 'pass',
+      doc.meta?.mannequin ? 'A mannequin is recorded on this asset; mannequins are prohibited on the main image.' : 'No mannequin.')
+
+    const amazonMark = /amazon'?s choice|best ?seller|#1 best seller|prime\b|amazon prime|top rated/i.test(allText)
+    push('main-no-amazon-marks', amazonMark ? 'block' : 'pass',
+      amazonMark ? 'Text references an Amazon badge or mark, which must not be placed on the image.' : 'No Amazon badges or marks.')
+  }
+
+  // ── ALL images: review, pricing and seller information ──────────────────
+  {
+    const reviewHit = /\b\d(\.\d)?\s*(out of 5|stars?|★)|★{2,}|\brated\s+\d|\b\d[\d,]*\s+reviews?\b/i.test(allText)
+    push('all-no-review-imagery', reviewHit ? 'block' : 'pass',
+      reviewHit ? 'Text references a star rating or review count, which must not be placed on an image.' : 'No review imagery or claims.')
+
+    const priceHit = /[$£€]\s?\d|\b\d+% ?off\b|\bsave\s+\d|\bmsrp\b|\bwas\s+[$£€]|\bnow\s+[$£€]|\blimited[- ]time price\b/i.test(allText)
+    push('all-no-pricing', priceHit ? 'block' : 'pass',
+      priceHit ? 'Text contains a price or a savings claim. Price on an image goes stale and is treated as a claim.' : 'No pricing or savings claims.')
+
+    const sellerHit = /https?:\/\/|www\.|\b[\w.+-]+@[\w-]+\.[\w.]+\b|\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b|(^|\s)@[A-Za-z0-9_]{2,}/i.test(allText)
+    push('all-no-seller-info', sellerHit ? 'block' : 'pass',
+      sellerHit ? 'Text contains a URL, email address, phone number or social handle.' : 'No seller or contact information.')
+  }
+
+  // ── Technical rules ─────────────────────────────────────────────────────
+  {
+    const dpi = Number(doc.meta?.dpi || (fmt && fmt.dpi) || 0)
+    push('dpi-min-72', dpi ? (dpi >= 72 ? 'pass' : 'block') : 'pass',
+      dpi ? `${dpi} dpi.` : 'Density defaults to at least 72 dpi on export.')
+
+    const cs = String(doc.meta?.colorSpace || 'sRGB').toLowerCase()
+    const rgbOk = cs === 'srgb' || cs === 'rgb'
+    push('color-space-rgb', rgbOk ? 'pass' : 'block',
+      rgbOk ? `Colour space ${cs}.` : `Colour space is ${cs}. Supply RGB; a CMYK file is converted and can shift colour.`)
+
+    const fn = checkFilename(doc.meta?.filename || doc.filename)
+    push('filename-pattern', fn.ok ? 'pass' : 'flag', fn.detail)
+  }
+
+  // ── AI-generated people disclosure ──────────────────────────────────────
+  {
+    const row = disclosureRow(doc)
+    results.push(row)
+  }
+
+  // ── Product fidelity (reference lock + compositing) ─────────────────────
+  {
+    const mode = doc.meta?.fidelityMode || 'placed'
+    const m = FIDELITY_MODE_BY_ID[mode]
+    const hasRef = !!doc.meta?.referenceDataUrl
+    const blocking = !m || m.blocking || (mode === 'locked' && !hasRef)
+    const status = (!m || m.blocking) ? 'checked' : (mode === 'locked' ? (hasRef ? 'checked' : 'needs-artwork') : 'needs-review')
+    const level = (!m || m.blocking) ? 'block' : (mode === 'locked' ? (hasRef ? 'flag' : 'incomplete') : 'review')
+    results.push({
+      id: 'product-fidelity',
+      level,
+      rawLevel: level,
+      status: status === 'needs-artwork' ? 'needs-artwork' : status,
+      need: 'artwork',
+      label: 'Product region matches the locked reference',
+      detail: !m
+        ? `Unknown fidelity mode "${mode}". Export is blocked rather than assumed safe.`
+        : m.blocking
+          ? m.note
+          : mode === 'locked'
+            ? (hasRef
+              ? 'Reference locked. The exported product region is diffed against the reference and export is blocked beyond the threshold.'
+              : 'Fidelity is locked but no reference image is attached, so nothing can be diffed.')
+            : m.note,
+      source: 'operator policy / product image guide (accuracy)',
+      accessed: '2026-10-10',
+      dateSensitive: false,
+    })
+  }
+
   // A format with no captured source can never be exported. This is what stops
   // an SB spec from silently standing in for an SP placement.
   {
@@ -684,6 +895,7 @@ export function checkCompliance(doc, ctx = {}) {
 
   return {
     verdict, results, blocked, flagged, passed, needsArtwork, needsReview,
+    stale: staleRules,
     ready: passed.length,
     checked: results.length - needsArtwork.length - needsReview.length,
     total: results.length,
