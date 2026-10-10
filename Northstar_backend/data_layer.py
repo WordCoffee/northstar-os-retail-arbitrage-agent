@@ -466,6 +466,28 @@ class DataLayer:
             CREATE INDEX IF NOT EXISTS idx_ds_jobs_project ON ds_jobs(project_id);
             CREATE INDEX IF NOT EXISTS idx_ds_jobs_account ON ds_jobs(account_id);
             CREATE INDEX IF NOT EXISTS idx_ds_jobs_status ON ds_jobs(status);
+
+            -- Re-check log (Phase 5 item 2): the operator's dated record of
+            -- verifying that a LIVE asset still carries the disclosure marker.
+            -- Tenant-scoped like every other ds_* store.
+            CREATE TABLE IF NOT EXISTS ds_rechecks (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                asset_id TEXT,
+                checked_at TEXT NOT NULL,
+                checked_by TEXT,
+                verdict TEXT NOT NULL,     -- marker-present | marker-missing | not-required | exported
+                passed INTEGER DEFAULT 0,  -- 0/1: a failed check is recorded as a failure
+                detail TEXT,
+                surface TEXT,              -- upload-check | library-recheck | export
+                tag_required INTEGER,
+                legacy_key TEXT,           -- idempotency key for the localStorage import
+                created_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_rechecks_account ON ds_rechecks(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_rechecks_asset ON ds_rechecks(asset_id);
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_ds_rechecks_legacy
+                ON ds_rechecks(account_id, legacy_key) WHERE legacy_key IS NOT NULL;
         """)
         self._conn.commit()
         self._migrate_live_columns()
@@ -1635,13 +1657,101 @@ class DesignStudioJobsDB:
 # Convenience: all DAOs accessible from one place
 # ---------------------------------------------------------------------------
 
+class DesignStudioRechecksDB:
+    """Data access for the ds_rechecks table.
+
+    The dated record of verifying a LIVE asset. Tenant-scoped like every other
+    ds_* store, and a check that FAILED is stored as a failure.
+    """
+
+    _COLS = [
+        "id", "account_id", "asset_id", "checked_at", "checked_by", "verdict",
+        "passed", "detail", "surface", "tag_required", "legacy_key",
+    ]
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _serialize(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        if "passed" in d and d["passed"] is not None:
+            d["passed"] = bool(d["passed"])
+        if "tag_required" in d and d["tag_required"] is not None:
+            d["tag_required"] = bool(d["tag_required"])
+        return d
+
+    def create(self, entry: Dict[str, Any]) -> str:
+        import uuid
+        rid = entry.get("id") or str(uuid.uuid4())
+        rec = dict(entry)
+        rec["id"] = rid
+        rec.setdefault("checked_at", datetime.now(timezone.utc).isoformat())
+        rec.setdefault("verdict", "unknown")
+        # A boolean becomes 0/1 so SQLite stores it consistently.
+        for k in ("passed", "tag_required"):
+            if k in rec and isinstance(rec[k], bool):
+                rec[k] = 1 if rec[k] else 0
+        cols = [c for c in self._COLS if c in rec]
+        placeholders = ", ".join(["?"] * len(cols))
+        try:
+            self.db.execute(
+                f"INSERT INTO ds_rechecks ({', '.join(cols)}) VALUES ({placeholders})",
+                tuple(rec[c] for c in cols),
+            )
+            self.db.commit()
+        except sqlite3.IntegrityError:
+            # The unique legacy_key index makes the import idempotent. Return the
+            # EXISTING id rather than raising, so a re-run is a no-op.
+            row = self.db.execute(
+                "SELECT id FROM ds_rechecks WHERE account_id = ? AND legacy_key = ?",
+                (rec.get("account_id"), rec.get("legacy_key")),
+            ).fetchone()
+            return row["id"] if row else rid
+        return rid
+
+    def list_for_account(self, account_id: str, asset_id: Optional[str] = None, limit: int = 500) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM ds_rechecks WHERE account_id = ?"
+        params: List[Any] = [account_id]
+        if asset_id:
+            sql += " AND asset_id = ?"
+            params.append(asset_id)
+        sql += " ORDER BY checked_at DESC LIMIT ?"
+        params.append(limit)
+        cur = self.db.execute(sql, tuple(params))
+        return [self._serialize(r) for r in cur.fetchall()]
+
+    def get_by_id(self, rid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute("SELECT * FROM ds_rechecks WHERE id = ? AND account_id = ?", (rid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM ds_rechecks WHERE id = ?", (rid,))
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def delete(self, rid: str, account_id: Optional[str] = None) -> bool:
+        if account_id:
+            self.db.execute("DELETE FROM ds_rechecks WHERE id = ? AND account_id = ?", (rid, account_id))
+        else:
+            self.db.execute("DELETE FROM ds_rechecks WHERE id = ?", (rid,))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+    def existing_legacy_keys(self, account_id: str) -> set:
+        cur = self.db.execute(
+            "SELECT legacy_key FROM ds_rechecks WHERE account_id = ? AND legacy_key IS NOT NULL",
+            (account_id,),
+        )
+        return {r["legacy_key"] for r in cur.fetchall()}
+
+
 class DesignStudioContainer:
-    """Namespace for the three Design Studio stores."""
+    """Namespace for the Design Studio stores."""
 
     def __init__(self, db: DataLayer):
         self.projects = DesignStudioProjectsDB(db)
         self.assets = DesignStudioAssetsDB(db)
         self.jobs = DesignStudioJobsDB(db)
+        self.rechecks = DesignStudioRechecksDB(db)
 
 
 class NorthstarDB:

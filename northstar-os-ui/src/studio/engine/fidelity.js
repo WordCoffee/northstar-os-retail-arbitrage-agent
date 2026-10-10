@@ -118,9 +118,46 @@ export function regionDiff(a, b, opts = {}) {
   }
 }
 
+// ── A SECOND, TIGHTER CHECK: the label region ─────────────────────────────
+// Calibration (tools/test-fidelity-freshness.mjs) shows the 6% AVERAGE test is
+// blind to small in-product edits: a label text change moved the mean by 0.67%
+// and a logo swap by 0.58%, both far under the limit. The worst-pixel tripwire
+// caught all four in-product classes, and THAT is the second check.
+//
+// This function gives the operator a sharper lever on top of it: name the label
+// region and diff it at a much tighter tolerance, because that is the part of
+// the product Amazon cares most about and the part a generative step damages
+// first.
+export const DEFAULT_LABEL_THRESHOLD = 0.02
+
+export function labelRegionDiff(refBytes, outBytes, opts = {}) {
+  const threshold = opts.threshold ?? DEFAULT_LABEL_THRESHOLD
+  // Inside the label the tripwire is near-zero: any real change to printed text
+  // or a logo should register, because there is no legitimate reason for the
+  // label pixels to move.
+  const r = regionDiff(refBytes, outBytes, { threshold, maxPixelDelta: opts.maxPixelDelta ?? 0.10 })
+  if (r.reason === 'nothing-to-compare') {
+    return { ...r, ok: false, reason: 'label-region-empty', detail: 'The label region has no opaque pixels in one of the images, so nothing could be compared. Name the label region correctly.' }
+  }
+  return {
+    ...r,
+    check: 'label-region',
+    detail: r.ok
+      ? `Label region matches (${(r.mean * 100).toFixed(2)}% mean, worst ${(r.worst * 100).toFixed(1)}%).`
+      : `LABEL REGION CHANGED: ${(r.mean * 100).toFixed(2)}% mean, worst ${(r.worst * 100).toFixed(1)}% (limits ${(threshold * 100).toFixed(1)}% / ${((opts.maxPixelDelta ?? 0.10) * 100).toFixed(0)}%). Printed text and logos must not be regenerated.`,
+  }
+}
+
+// WHAT REMAINS UNDETECTABLE (documented, not implied)
+export const FIDELITY_BLIND_SPOTS = [
+  'An edit that keeps every pixel within the worst-pixel tolerance across the whole product region. A subtle recolour of a small area can stay under it.',
+  'A change to the product that is itself plausible: a slightly different label position, a different but similar product of the same shape and colour.',
+  'Anything the operator photographs afresh and locks as the new reference. A new reference resets the comparison, so the reference itself is the trust anchor.',
+  'Semantic errors. The diff cannot tell whether the pack now says the wrong size; it can only tell that the pixels moved.',
+]
+
 /** Scale a normalised rect (0..1) to pixel coordinates inside a WxH image. */
-export function regionToPixels(region, width, height) {
-  const r = region || { x: 0, y: 0, w: 1, h: 1 }
+export function regionToPixels(region, width, height) {  const r = region || { x: 0, y: 0, w: 1, h: 1 }
   const x = Math.max(0, Math.min(width - 1, Math.round((r.x ?? 0) * width)))
   const y = Math.max(0, Math.min(height - 1, Math.round((r.y ?? 0) * height)))
   const w = Math.max(1, Math.min(width - x, Math.round((r.w ?? 1) * width)))

@@ -31,12 +31,17 @@ import Social from './design-studio/Social.jsx'
 import Packaging from './design-studio/Packaging.jsx'
 import { migrateLocalStorage, migrationDone } from '../../studio/engine/migrate.js'
 
-// Opt-in test surface. Adding ?engine=1 to a Design Studio URL exposes the
-// studio engine on window so a browser harness can exercise the CANVAS paths
-// (render, fidelity pixel extraction, export pipeline) that unit tests cannot
-// reach. It is off unless the query parameter is present, and it exposes
-// functions only: no credentials, no session, no data.
+// Opt-in test surface. In a DEVELOPMENT build only, adding ?engine=1 to a
+// Design Studio URL exposes the studio engine on window so a browser harness
+// can exercise the CANVAS paths (render, fidelity pixel extraction, export
+// pipeline) that unit tests cannot reach.
+//
+// `import.meta.env.DEV` is replaced with a literal at build time, so in a
+// production bundle the condition is `if (false)` and rollup eliminates the
+// dynamic imports entirely: the hook cannot run in production because it is
+// not in the bundle. A test asserts the built dist does not contain it.
 async function attachEngineHook() {
+  if (!import.meta.env.DEV) return
   try {
     if (new URLSearchParams(window.location.search).get('engine') !== '1') return
     const [compose, fidelity, disclosure, compliance, registry] = await Promise.all([

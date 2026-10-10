@@ -15,7 +15,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { regionDiff, regionToPixels, productRegion, FIDELITY_MODE_BY_ID } from './fidelity.js'
-import { classifyDisclosure, embedDisclosure, verifyDisclosureMarker, DISCLOSURE_KEYWORD } from './disclosure.js'
+import { classifyDisclosure, embedDisclosure, verifyDisclosureMarker, DISCLOSURE_KEYWORD, assetVersion } from './disclosure.js'
 import { checkCompliance } from './compliance.js'
 
 // ── 1. Render ──────────────────────────────────────────────────────────────
@@ -186,19 +186,76 @@ export async function fidelityVerdict(doc, renderedCanvas, resolveAsset, opts = 
 // ── 7. The human compare step ──────────────────────────────────────────────
 // For ANY asset containing the product, a person compares the render to the
 // reference before export. The pixel diff is a tripwire; this is the sign-off.
+//
+// HARDENING (Phase 5 item 3): the record carries the user, the time, the ASSET
+// VERSION and a hash of the REFERENCE. Any edit or any reference change makes
+// the stored record fail to match, so it re-requires a fresh sign-off. The UI
+// states plainly that it is a self-declaration and never presents it as proof
+// of review.
+export function referenceHash(dataUrl) {
+  const s = String(dataUrl || '')
+  if (!s) return ''
+  // FNV-1a over the string. Deterministic, cheap, and good enough to detect a
+  // DIFFERENT reference. It is a change detector, not a security hash.
+  let h = 0x811c9dc5
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i)
+    h = Math.imul(h, 0x01000193) >>> 0
+  }
+  return `${h.toString(16)}-${s.length.toString(16)}`
+}
+
+/** Build a sign-off record bound to this exact asset version and reference. */
+export function makeCompareSignOff(doc, { user, referenceDataUrl, at } = {}) {
+  const version = assetVersion(doc, null)
+  const ref = doc?.meta?.referenceDataUrl || referenceDataUrl
+  return {
+    user: user || 'unknown',
+    at: at || new Date().toISOString(),
+    assetVersion: version,
+    referenceHash: referenceHash(ref),
+    // Stated in the record itself so no consumer can mistake what it is.
+    declaration: 'SELF-DECLARATION: the signer states they compared the render to the reference. This is not proof of review.',
+  }
+}
+
 export function compareStepStatus(doc) {
   const hasProduct = (doc?.layers || []).some(l => (l.kind === 'product' || l.kind === 'image') && l.visible !== false)
   if (!hasProduct) return { required: false, satisfied: true, detail: 'No product is placed, so there is nothing to compare.' }
+
+  const ref = doc?.meta?.referenceDataUrl
   const conf = doc?.meta?.compareConfirmed
+  const wantVersion = assetVersion(doc, null)
+  const wantRefHash = referenceHash(ref)
+
   if (!conf || !conf.at) {
     return {
       required: true, satisfied: false,
-      detail: 'A human must compare the rendered product against the locked reference before export. Place the two side by side, look at the label and the edges, then confirm.',
+      detail: 'A human must compare the rendered product against the locked reference before export. Place the two side by side, look at the label and the edges, then confirm. This is a self-declaration, not proof of review.',
+    }
+  }
+  if (!conf.user) {
+    return { required: true, satisfied: false, detail: 'The sign-off has no user recorded, so it cannot be attributed. Compare again.' }
+  }
+  if (!conf.assetVersion) {
+    return { required: true, satisfied: false, detail: 'The sign-off predates version-binding, so it cannot be tied to this asset. Compare again.' }
+  }
+  if (conf.assetVersion !== wantVersion) {
+    return {
+      required: true, satisfied: false, reason: 'asset-changed',
+      detail: 'The asset changed since it was signed off, so the comparison no longer applies. Compare again.',
+    }
+  }
+  if (conf.referenceHash !== wantRefHash) {
+    return {
+      required: true, satisfied: false, reason: 'reference-changed',
+      detail: 'The locked reference changed since it was signed off, so the comparison no longer applies. Compare again.',
     }
   }
   return {
-    required: true, satisfied: true, at: conf.at, by: conf.by,
-    detail: `Compared to the reference by ${conf.by || 'the operator'} at ${conf.at}.`,
+    required: true, satisfied: true, at: conf.at, by: conf.user,
+    referenceHash: conf.referenceHash,
+    detail: `Compared by ${conf.user} at ${conf.at}. Self-declaration: it records who and when, not evidence that anyone looked.`,
   }
 }
 

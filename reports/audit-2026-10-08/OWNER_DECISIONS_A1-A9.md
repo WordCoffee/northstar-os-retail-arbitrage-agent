@@ -120,3 +120,19 @@ still confirm. Nothing here is treated as approved design work.
 5. **The API process on :8000 from an earlier session is still running** with
    the old armed env. It was left alone (P0-05 rule) and must be restarted by
    its owner for the disarm to take effect for that process.
+
+---
+
+## ADDENDUM ? decisions applied by default during the overnight Phase 5 loop
+(2016-10-10, Design Studio). Each of these was decided WITHOUT the owner and is
+reversible. Reverse any of them with one line.
+
+| # | Decision | Chosen | Why | Reverse by |
+|---|---|---|---|---|
+| D1 | Sections without the compositing surface | Projects and 3D Product Scene keep their OWN canvases and are documented, not duplicated | Both already own a purpose-built canvas; a second one would duplicate an equivalent surface | Embed `CompositingSurface` in those two components |
+| D2 | Dev-only engine hook | Gated on `import.meta.env.DEV`, eliminated from production | The directive requires it not to run in production; the harness now SKIPs instead of failing | Remove the `if (!import.meta.env.DEV) return` line |
+| D3 | Fidelity thresholds | 6% mean / 45% worst-pixel / 2% label | Calibration shows the average test alone is blind to small in-product edits; the tripwire catches them | `DEFAULT_THRESHOLD`, `DEFAULT_MAX_PIXEL_DELTA`, `DEFAULT_LABEL_THRESHOLD` in `fidelity.js` |
+| D4 | Re-check log storage | Tenant-scoped `ds_rechecks`, local mirror only as an offline fallback | The directive requires tenant scoping; a mirror prevents silent loss when the API is down | `studio/engine/rechecks.js` |
+| D5 | Public Amazon pages | NOT re-pulled | All 35 sources are current on the pull date, so nothing was past cadence; no budget spent on reads with no delta to find | Re-run `freshnessReport()` after 2026-11-09 |
+| D6 | Items 6 and 7 | NOT STARTED | The loop reached the end of the budget first | Assign them as the next work item |
+| D7 | Compositing harness | Documented NOT RUN rather than forced green | It times out and the cause was not isolated within budget; reporting it as passing would be a false claim | Run `HARNESS_BASE_URL=http://127.0.0.1:8101/ui/ node test-compositing.cjs` and diagnose the hang |

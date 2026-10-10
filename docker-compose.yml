@@ -74,6 +74,10 @@ services:
         condition: service_completed_successfully
     expose:
       - "8000"
+    # Loopback-only publish so the Vite dev server (port 8101) can proxy to the
+    # API during harness runs. It is not reachable off-host.
+    ports:
+      - "127.0.0.1:8000:8000"
     restart: unless-stopped
 
   worker:

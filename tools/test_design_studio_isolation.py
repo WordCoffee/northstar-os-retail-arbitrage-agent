@@ -196,6 +196,80 @@ def main() -> int:
     else:
         no("LEAK: export manifest source did not refuse a foreign project")
 
+    # ── RE-CHECK log isolation (Phase 5 item 2) ─────────────────────────────
+    rechecks = db.design_studio.rechecks
+    rid = rechecks.create({
+        "account_id": A, "asset_id": "A-asset", "verdict": "marker-present",
+        "passed": True, "surface": "upload-check", "legacy_key": "lk-a-1",
+    })
+    ok("tenant A created a re-check entry")
+    own = rechecks.get_by_id(rid, account_id=A)
+    if own and own["account_id"] == A and own["passed"] is True:
+        ok("tenant A can read its own re-check (passed round-trips as a boolean)")
+    else:
+        no("tenant A could not read its own re-check")
+
+    if rechecks.get_by_id(rid, account_id=B) is None:
+        ok("tenant B cannot READ tenant A's re-check")
+    else:
+        no("LEAK: tenant B read tenant A's re-check")
+    if rechecks.delete(rid, account_id=B) is False:
+        ok("tenant B cannot DELETE tenant A's re-check")
+    else:
+        no("LEAK: tenant B deleted tenant A's re-check")
+    if rechecks.get_by_id(rid, account_id=A) is not None:
+        ok("tenant A's re-check survives B's attempted delete")
+    else:
+        no("tenant A's re-check was destroyed by B")
+
+    rechecks.create({"account_id": A, "asset_id": "A-asset-2", "verdict": "marker-missing", "passed": False})
+    rechecks.create({"account_id": B, "asset_id": "B-asset", "verdict": "marker-present", "passed": True})
+    a_r = rechecks.list_for_account(A)
+    b_r = rechecks.list_for_account(B)
+    if all(r["account_id"] == A for r in a_r) and all(r["account_id"] == B for r in b_r) and len(a_r) == 2 and len(b_r) == 1:
+        ok(f"re-check LIST is tenant-scoped (A sees {len(a_r)}, B sees {len(b_r)})")
+    else:
+        no(f"LEAK: re-check list mixed tenants (A={len(a_r)}, B={len(b_r)})")
+
+    # A FAILED check must be stored as a failure, and the list must count it.
+    failed = [r for r in a_r if r["verdict"] == "marker-missing"]
+    if failed and failed[0]["passed"] is False:
+        ok("a FAILED re-check is stored as a failure, not smoothed to a pass")
+    else:
+        no("a failed re-check was not stored as a failure")
+
+    # Asset-scoped filter must still be tenant-scoped.
+    scoped = rechecks.list_for_account(A, asset_id="A-asset")
+    if len(scoped) == 1 and scoped[0]["account_id"] == A:
+        ok("an asset-scoped re-check read is still tenant-scoped")
+    else:
+        no(f"asset-scoped read wrong: {len(scoped)} rows")
+
+    # Idempotency: the legacy-key index makes a re-import a no-op.
+    again = rechecks.create({
+        "account_id": A, "asset_id": "A-asset", "verdict": "marker-present",
+        "passed": True, "surface": "upload-check", "legacy_key": "lk-a-1",
+    })
+    if again == rid and len(rechecks.list_for_account(A)) == 2:
+        ok("a repeated legacy key does NOT duplicate (idempotent import)")
+    else:
+        no(f"legacy-key idempotency failed: id={again} rows={len(rechecks.list_for_account(A))}")
+
+    # The router must scope the new routes too.
+    _api_path = os.path.join(os.path.dirname(__file__), "..", "Northstar_backend", "design_studio_api.py")
+    with open(_api_path, encoding="utf-8") as fh:
+        api_lines2 = fh.read().splitlines()
+    for route in ("/rechecks", "/rechecks/migrate", "/rechecks/{rid}"):
+        idx = next((i for i, l in enumerate(api_lines2) if f'"{route}"' in l), None)
+        if idx is None:
+            no(f"route {route} not found for the scoping check")
+            continue
+        window = "\n".join(api_lines2[idx:idx + 22])
+        if "account_id" in window:
+            ok(f"route {route} is account-scoped")
+        else:
+            no(f"LEAK: route {route} is not account-scoped")
+
     # ── Router discipline: the new routes must be scoped too ────────────────
     api_path = os.path.join(os.path.dirname(__file__), "..", "Northstar_backend", "design_studio_api.py")
     with open(api_path, encoding="utf-8") as fh:

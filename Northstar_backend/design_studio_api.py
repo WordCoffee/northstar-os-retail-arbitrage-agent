@@ -413,12 +413,15 @@ def search(
               if not needle or needle.lower() in (a.get("name") or "").lower()]
     jobs = [j for j in db.design_studio.jobs.list_by_project(account_id=acct, limit=1000)
             if not needle or needle.lower() in (j.get("job_type") or "").lower()]
+    rechecks = [r for r in db.design_studio.rechecks.list_for_account(acct, limit=1000)
+                if not needle or needle.lower() in ((r.get("asset_id") or "") + " " + (r.get("verdict") or "")).lower()]
     return {
         "q": needle,
         "projects": projects[:limit],
         "assets": assets[:limit],
         "jobs": jobs[:limit],
-        "counts": {"projects": len(projects), "assets": len(assets), "jobs": len(jobs)},
+        "rechecks": rechecks[:limit],
+        "counts": {"projects": len(projects), "assets": len(assets), "jobs": len(jobs), "rechecks": len(rechecks)},
     }
 
 
@@ -457,6 +460,154 @@ def export_manifest(pid: str, user: Dict[str, Any] = Depends(get_current_user)):
         "manifest": manifest,
         "note": "Only assets owned by the calling account appear. An empty slot is null, never a placeholder URL.",
     }
+
+
+# ── Re-check log (Phase 5 item 2): tenant-scoped ──────────────────────────
+
+class RecheckIn(BaseModel):
+    asset_id: Optional[str] = None
+    verdict: str = Field(..., min_length=1, max_length=40)
+    passed: bool = False
+    detail: Optional[str] = None
+    surface: Optional[str] = None
+    tag_required: Optional[bool] = None
+    checked_by: Optional[str] = None
+    checked_at: Optional[str] = None
+    legacy_key: Optional[str] = None
+
+
+@router.post("/rechecks")
+def create_recheck(body: RecheckIn, user: Dict[str, Any] = Depends(get_current_user)):
+    """Record one dated verification of a live asset.
+
+    The verdict is supplied by the caller and stores what the reader actually
+    returned. A failed check is stored as a failure; this endpoint never
+    upgrades a verdict.
+    """
+    db = get_northstar_db()
+    acct = _account_id(user)
+    rec = body.model_dump()
+    rec["account_id"] = acct
+    rid = db.design_studio.rechecks.create(rec)
+    return {"id": rid, "recheck": db.design_studio.rechecks.get_by_id(rid, account_id=acct)}
+
+
+@router.get("/rechecks")
+def list_rechecks(
+    asset_id: Optional[str] = None,
+    limit: int = Query(default=200, le=1000),
+    user: Dict[str, Any] = Depends(get_current_user),
+):
+    db = get_northstar_db()
+    acct = _account_id(user)
+    rows = db.design_studio.rechecks.list_for_account(acct, asset_id=asset_id, limit=limit)
+    return {
+        "rechecks": rows,
+        "counts": {
+            "total": len(rows),
+            "failed": sum(1 for r in rows if not r.get("passed")),
+        },
+        "note": "Scoped to the calling account. A failed check is recorded as a failure.",
+    }
+
+
+@router.get("/rechecks/{rid}")
+def get_recheck(rid: str, user: Dict[str, Any] = Depends(get_current_user)):
+    db = get_northstar_db()
+    rec = db.design_studio.rechecks.get_by_id(rid, account_id=_account_id(user))
+    if not rec:
+        raise HTTPException(status_code=404, detail="Re-check not found")
+    return {"recheck": rec}
+
+
+@router.delete("/rechecks/{rid}")
+def delete_recheck(rid: str, user: Dict[str, Any] = Depends(get_current_user)):
+    db = get_northstar_db()
+    if not db.design_studio.rechecks.delete(rid, account_id=_account_id(user)):
+        raise HTTPException(status_code=404, detail="Re-check not found")
+    return {"deleted": True}
+
+
+class RecheckMigrateIn(BaseModel):
+    entries: List[Dict[str, Any]] = Field(default_factory=list)
+
+
+@router.post("/rechecks/migrate")
+def migrate_rechecks(body: RecheckMigrateIn, user: Dict[str, Any] = Depends(get_current_user)):
+    """Import browser-local re-check entries, idempotently.
+
+    Idempotency is enforced by a UNIQUE index on (account_id, legacy_key), so a
+    second run reports `skipped` rather than duplicating. An entry with no
+    legacy key is always created, because there is no way to tell it apart from
+    a genuinely new check.
+    """
+    db = get_northstar_db()
+    acct = _account_id(user)
+    created = 0
+    skipped = 0
+    errors: List[Dict[str, Any]] = []
+    seen = db.design_studio.rechecks.existing_legacy_keys(acct)
+
+    for raw in body.entries:
+        try:
+            key = raw.get("legacyKey") or raw.get("legacy_key")
+            if key and str(key) in seen:
+                skipped += 1
+                continue
+            rec = {
+                "account_id": acct,
+                "asset_id": raw.get("assetId") or raw.get("asset_id"),
+                "checked_at": raw.get("checkedAt") or raw.get("checked_at"),
+                "checked_by": raw.get("user") or raw.get("checked_by"),
+                "verdict": raw.get("verdict") or "unknown",
+                "passed": bool(raw.get("passed")),
+                "detail": raw.get("detail"),
+                "surface": raw.get("surface"),
+                "tag_required": raw.get("tagRequired") if raw.get("tagRequired") is not None else None,
+                "legacy_key": str(key) if key else None,
+            }
+            db.design_studio.rechecks.create(rec)
+            if key:
+                seen.add(str(key))
+            created += 1
+        except Exception as exc:  # noqa: BLE001 - reported, never swallowed
+            errors.append({"verdict": raw.get("verdict"), "error": f"{exc.__class__.__name__}: {exc}"})
+
+    return {
+        "ok": not errors,
+        "created": created,
+        "skipped": skipped,
+        "errors": errors,
+        "note": "Idempotent per account via the legacy-key index: re-running reports skipped, never duplicates.",
+    }
+
+
+# ── Generation arming status (read-only, NO provider call) ────────────────
+# Phase 5 item 9. The Studio must be able to say truthfully whether generation
+# is armed. This reads local flags only: it never contacts a provider, never
+# enqueues work, and never spends anything.
+
+@router.get("/generation-status")
+def generation_status(user: Dict[str, Any] = Depends(get_current_user)):
+    """Report the media-generation arming state. Read-only, zero provider calls."""
+    state: Dict[str, Any] = {"media_live_armed": False, "providers": {}, "source": "unreadable"}
+    try:
+        import model_router  # local module; no network
+        state["media_live_armed"] = bool(model_router.media_live_armed())
+        state["cloud_live_armed"] = bool(model_router.cloud_live_armed())
+        for p in ("local", "cloud"):
+            try:
+                state["providers"][p] = bool(model_router.provider_armed(p))
+            except Exception:
+                state["providers"][p] = False
+        state["source"] = "model_router"
+    except Exception as exc:  # noqa: BLE001 - the answer is UNARMED, never a guess
+        state["error"] = f"{exc.__class__.__name__}: {exc}"
+    state["note"] = (
+        "Read-only arming state. An unreadable state is reported as UNARMED. "
+        "No provider is contacted and nothing is generated by this endpoint."
+    )
+    return state
 
 
 # ── Status / health for the merged studio ──────────────────────────────────

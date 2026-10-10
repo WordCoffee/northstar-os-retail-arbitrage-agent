@@ -25,6 +25,7 @@ import {
 import { SPEC_GROUPS, specById, SPEC_SOURCES, confidenceOf, AMAZON_CAPS, AI_POLICY } from '../../../studio/engine/specRegistry.js'
 import { checkCompliance } from '../../../studio/engine/compliance.js'
 import { createDoc } from '../../../studio/engine/doc.js'
+import CompositingSurface from './CompositingSurface.jsx'
 import { PEOPLE_CLASSES, DISCLOSURE_KEYWORD } from '../../../studio/engine/disclosure.js'
 import { FIDELITY_MODES } from '../../../studio/engine/fidelity.js'
 
@@ -200,7 +201,7 @@ function Field({ f, value, onChange }) {
 
 export default function SectionWorkspace({
   title, subtitle, groups, defaultSpecId, fields = [], ruleNotes = [], slots = null,
-  canvasFitWidth = 560, children, testId,
+  canvasFitWidth = 560, children, testId, storyboardOnly = false,
 }) {
   const [specId, setSpecId] = useState(defaultSpecId)
   const [showSafeZones, setShowSafeZones] = useState(true)
@@ -241,6 +242,7 @@ export default function SectionWorkspace({
   }), [docForCheck, spec])
 
   const pickSpec = useCallback((s) => { setSpecId(s.id) }, [])
+  void canvasFitWidth
 
   const setField = (id) => (v) => setMeta(m => ({ ...m, [id]: v }))
 
@@ -297,71 +299,14 @@ export default function SectionWorkspace({
           )}
         </StudioLeftRail>
 
-        <StudioCanvas
-          zoom={zoom} pan={pan} onPan={setPan} canvasAspect={spec.w / spec.h}
-          safeZoneId={spec.safe} showSafeZones={showSafeZones} fitWidth={canvasFitWidth}
-          onWheelZoom={(d) => setZoom(z => Math.max(0.1, Math.min(4, z + d)))}
-        >
-          {children || (
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
-              <StudioEmpty
-                title={`${spec.label} — nothing placed yet`}
-                what={`${spec.w}×${spec.h} px. Add artwork to this module to begin. Nothing is generated until the local engine is armed; this workspace arranges your own assets only.`}
-                actionLabel={conf === 'UNSOURCED' ? undefined : 'Add artwork from the asset library'}
-                onAction={conf === 'UNSOURCED' ? undefined : undefined}
-                connect={conf === 'UNSOURCED'}
-              />
-            </div>
-          )}
-        </StudioCanvas>
+        {/* The real compositing surface owns the canvas, the inspector and the
+            export pipeline for every section it drives: layers, a locked
+            reference, the safe-zone overlay, undo/redo, the compare step and
+            the six-step export. It reads THIS section's registry spec. */}
+        <div className="cs-embed" style={{ gridColumn: '2 / -1', minWidth: 0 }}>
+          {children || <CompositingSurface specId={specId} storyboardOnly={storyboardOnly} />}
+        </div>
 
-        <StudioInspector>
-          <InspectorSection title="Compliance pre-flight">
-            <CompliancePanel report={report} />
-          </InspectorSection>
-
-          <InspectorSection title="Format">
-            <div className="ss-rule">
-              <div className="ss-rule-label">{spec.label} <ConfidenceTag spec={spec} /></div>
-              <div className="ss-rule-detail">
-                {spec.w}×{spec.h} px
-                {spec.minW ? ` · min ${spec.minW} px` : ''}
-                {spec.maxBytes ? ` · ${Math.round(spec.maxBytes / 1024)} KB cap` : ''}
-                {spec.media === 'video' ? ` · ${spec.durationMin}-${spec.durationMax}s (${spec.durationRecommended}s recommended)` : ''}
-                {spec.aspectDefault === false ? ' · NOT the default aspect' : ''}
-              </div>
-              {spec.note && <div className="ss-rule-detail">{spec.note}</div>}
-              <SourceLine spec={spec} />
-            </div>
-          </InspectorSection>
-
-          {spec.media === 'video' && (
-            <InspectorSection title="Video spec (from the registry)">
-              <div className="ss-rule">
-                <div className="ss-rule-detail">
-                  {AMAZON_CAPS.video.formats.join(' / ')} · {AMAZON_CAPS.video.codecs.join(' / ')} · Main or Baseline ·
-                  {' '}{AMAZON_CAPS.video.videoBitrateMinMbps} Mbps+ video · audio {AMAZON_CAPS.video.audioBitrateMinKbps} kbps
-                  {' '}at {(AMAZON_CAPS.video.audioSampleMinHz / 1000).toFixed(1)} kHz · fps {AMAZON_CAPS.video.fpsAllowed.join(', ')} ·
-                  {' '}{Math.round(AMAZON_CAPS.video.maxBytes / 1048576)} MB cap.
-                </div>
-                <div className="ss-rule-source">sbv spec · 2026-10-10</div>
-              </div>
-            </InspectorSection>
-          )}
-
-          <InspectorSection title="Policy" defaultOpen={false}>
-            <div className="ss-rule ss-rule-flag">
-              <div className="ss-rule-label">AI people disclosure</div>
-              <div className="ss-rule-detail">{AI_POLICY.syntheticPersonIptc.keyword} in {AI_POLICY.syntheticPersonIptc.field} when the image contains photorealistic AI-generated people.</div>
-              <div className="ss-rule-source">A+ guidelines · 2026-10-10</div>
-            </div>
-            <div className="ss-rule ss-rule-flag" style={{ marginTop: 8 }}>
-              <div className="ss-rule-label">Never Brand Registry proof</div>
-              <div className="ss-rule-detail">{AI_POLICY.brandRegistryEnrollment.rule}</div>
-              <div className="ss-rule-source">Brand Registry Application Guide · 2026-10-10</div>
-            </div>
-          </InspectorSection>
-        </StudioInspector>
       </div>
 
       <StudioBottomStrip

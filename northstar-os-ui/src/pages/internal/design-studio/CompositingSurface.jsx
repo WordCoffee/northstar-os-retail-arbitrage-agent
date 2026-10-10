@@ -18,16 +18,18 @@ import Icon from '../../../components/Icon.jsx'
 import { useToast } from '../../../components/ToastContext.jsx'
 import {
   StudioCanvas, StudioLeftRail, StudioInspector, InspectorSection,
-  StudioBottomStrip, VerdictPill, useUndo,
+  StudioBottomStrip, VerdictPill, CompliancePanel, useUndo,
 } from '../../../studio/components/StudioShell.jsx'
 import { SAFE_ZONES, specById } from '../../../studio/engine/specRegistry.js'
-import { renderDoc, exportComposite, summariseExport, compareStepStatus } from '../../../studio/engine/compose.js'
+import { renderDoc, exportComposite, summariseExport, compareStepStatus, makeCompareSignOff, referenceHash } from '../../../studio/engine/compose.js'
 import { DEFAULT_THRESHOLD } from '../../../studio/engine/fidelity.js'
 import { checkCompliance } from '../../../studio/engine/compliance.js'
 import {
   verifyUploadedAsset, recheckEntry, recheckSummary, cureWindow, NOTICE_AND_CURE_DAYS,
   DISCLOSURE_KEYWORD, classifyDisclosure,
 } from '../../../studio/engine/disclosure.js'
+import { migrateLocalRechecks, appendRecheck, fetchRechecks } from '../../../studio/engine/rechecks.js'
+import { armingState, UNARMED_NOTICE } from '../../../studio/engine/generation.js'
 
 const LEFT_TABS = [
   { id: 'layers', label: 'Layers', icon: 'layers', note: 'Every layer is a real, editable object.' },
@@ -81,6 +83,9 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
   const [confirm, setConfirm] = useState(null)        // { at, by }
   const [log, setLog] = useState(() => readJson(LOG_KEY, []))
   const [notices, setNotices] = useState(() => readJson(NOTICE_KEY, {}))
+  const [arming, setArming] = useState(null)
+  const [logState, setLogState] = useState('loading')
+  const [logNote, setLogNote] = useState('')
   const [uploadResult, setUploadResult] = useState(null)
   const [uploadName, setUploadName] = useState('')
   // The surface is where the asset is MADE, so it owns the disclosure fields
@@ -91,13 +96,41 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
     identifiableIndividual: false, filename: '',
   })
 
+  // The log is tenant-scoped on the backend. A local mirror is kept only as an
+  // offline fallback, so an unreachable API never silently loses a record.
   const appendLog = useCallback((entry) => {
-    setLog(prev => {
-      const next = [entry, ...prev].slice(0, 200)
-      writeJson(LOG_KEY, next)
-      return next
+    setLog(prev => [entry, ...prev].slice(0, 200))
+    appendRecheck(entry).then((stored) => {
+      if (!stored) toast('The re-check backend was unreachable, so this entry is held locally only. It is not a complete record.', 'warn')
     })
+  }, [toast])
+
+  // Read-only arming state. An unreadable state is treated as UNARMED.
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/design-studio/generation-status', { credentials: 'include' })
+      .then(r => (r.ok ? r.json() : null))
+      .then((d) => { if (!cancelled) setArming(armingState(d)) })
+      .catch(() => { if (!cancelled) setArming(armingState(null)) })
+    return () => { cancelled = true }
   }, [])
+
+  // Import any pre-backend local entries once, then read the backend log.
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      const mig = await migrateLocalRechecks()
+      if (cancelled) return
+      if (mig.ran && mig.created) toast(`Imported ${mig.created} local re-check(s) into your workspace.`, 'info')
+      const res = await fetchRechecks()
+      if (cancelled) return
+      setLog(res.entries)
+      setLogState(res.state)
+      if (res.state === 'error') setLogNote(res.note || 'Backend unreachable; the log is UNKNOWN.')
+      else setLogNote('')
+    })()
+    return () => { cancelled = true }
+  }, [toast])
 
   const setNotice = useCallback((key, iso) => {
     setNotices(prev => {
@@ -285,6 +318,12 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
 
   return (
     <div className="cs-surface" data-testid="compositing-surface">
+      {arming && !arming.armed && (
+        <div className="alert alert-warn" data-testid="generation-unarmed-banner" style={{ marginBottom: 10 }}>
+          <div className="alert-title">{UNARMED_NOTICE.title}</div>
+          <div className="alert-text">{arming.detail} {UNARMED_NOTICE.detail}</div>
+        </div>
+      )}
       <div className="ss-shell-mid" style={{ minHeight: 520 }}>
         <StudioLeftRail tabs={LEFT_TABS} active={tab} onSelect={setTab}>
           {tab === 'layers' && (
@@ -366,9 +405,13 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
               <div className="ss-rule">
                 <div className="ss-rule-label">Re-check log</div>
                 <div className="ss-rule-detail">
-                  {logSummary.checks === 0
-                    ? 'No checks recorded yet. Every check is logged with its date.'
-                    : `${logSummary.checks} check(s). Last ${new Date(logSummary.lastCheckedAt).toLocaleString()} - ${logSummary.lastVerdict}${logSummary.everFailed ? ' (has failed at least once)' : ''}.`}
+                  {logState === 'error'
+                    ? `UNKNOWN: ${logNote}`
+                    : logState === 'loading'
+                      ? 'Loading the log...'
+                      : logSummary.checks === 0
+                        ? 'No checks recorded yet. Every check is logged with its date.'
+                        : `${logSummary.checks} check(s). Last ${new Date(logSummary.lastCheckedAt).toLocaleString()} - ${logSummary.lastVerdict}${logSummary.everFailed ? ' (has failed at least once)' : ''}.`}
                 </div>
               </div>
 
@@ -416,12 +459,7 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
 
         <StudioInspector>
           <InspectorSection title="Pre-flight">
-            <div className="ss-compliance" data-testid="compliance-panel">
-              <div className="ss-compliance-head">
-                <VerdictPill verdict={report.verdict} />
-                <span className="text-low" style={{ fontSize: 11 }}>{report.checked}/{report.total} decided</span>
-              </div>
-            </div>
+            <CompliancePanel report={report} />
           </InspectorSection>
 
           <InspectorSection title="AI-generated people disclosure">
@@ -553,11 +591,13 @@ export default function CompositingSurface({ specId = 'amz-main', initialLayers 
               </div>
             </div>
             <div className="ss-field-note" style={{ margin: '10px 0' }}>
-              Look at the label, the edges and the proportions. The pixel diff is a tripwire; this is the sign-off. Confirming records who
-              compared and when, and a new reference invalidates it.
+              Look at the label, the edges and the proportions. The pixel diff is a tripwire; this is the sign-off.
+              Confirming records you, the time, the asset version and a hash of the reference. Any edit or a new reference
+              invalidates it. This is a SELF-DECLARATION - it is not proof that anyone reviewed the asset, and it is never
+              presented as such.
             </div>
             <button className="btn btn-sm btn-primary" onClick={() => {
-              setConfirm({ at: new Date().toISOString(), by: 'operator' })
+              setConfirm(makeCompareSignOff(workingDoc, { user: 'operator' }))
               setCompareOpen(false)
               toast('Compared and signed off.', 'info')
             }}>I compared these and the product matches</button>

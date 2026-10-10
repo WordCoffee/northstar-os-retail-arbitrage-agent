@@ -173,3 +173,115 @@ classification state rather than an assumption.
 | 8 | `verify-design-studio.cjs` | 67 passed, 0 failed, 0 FATAL | 0 |
 | 9a | `test-migration-e2e.cjs` | 12 passed, 0 failed, 0 FATAL | 0 |
 | 9b | `verify-operator-smoke.cjs` | 11 passed, 0 failed, 21/21 rail | 0 |
+
+## PHASE 5 ? OVERNIGHT CONTINUOUS COMPLETION
+
+### 1. COMPOSITING SURFACE ON ALL SECTIONS ? PARTIAL (6 of 9)
+`SectionWorkspace` now embeds `CompositingSurface`, which covers A+ / Brand
+Story, Storefront, Ads, Video & UGC, Social and Packaging. Listing Images was
+already wired. Projects and 3D Product Scene each OWN an equivalent canvas and
+are documented as such in `tools/capture-section-evidence.cjs`:
+- Projects: the board owns the Creative Studio master canvas (Stage.jsx) and the
+  creative engine (doc model, templates, compliance, render/export).
+- 3D Product Scene: owns a real 3D composer (engine/three.js).
+The SectionWorkspace's duplicate inspector was removed and the FULL
+CompliancePanel now lives in the surface's inspector, so every section keeps the
+complete pre-flight rather than only a verdict.
+Video & UGC is a storyboard/frame canvas only; no video rendering.
+
+### 2. RE-CHECK LOG TO BACKEND ? DONE
+New `ds_rechecks` table (tenant-scoped) + `DesignStudioRechecksDB` + endpoints
+POST/GET/GET-by-id/DELETE `/api/design-studio/rechecks` and POST
+`/rechecks/migrate`. Idempotency is enforced by a UNIQUE index on
+(account_id, legacy_key), so a re-import reports `skipped` rather than
+duplicating. New client module `studio/engine/rechecks.js` imports the local log
+once and clears it ONLY after the server confirms, keeps a local mirror as an
+offline fallback, and reports UNKNOWN (not zero) when the backend is unreachable.
+`/search` now covers re-checks too. Negative tests added for read, delete, list,
+asset-scoped list, the failed-check record and the idempotent legacy key.
+
+### 3. COMPARE SIGN-OFF HARDENING ? DONE
+The sign-off now records the user, the time, the ASSET VERSION and a hash of the
+REFERENCE. Any edit or reference change makes it fail to match and re-requires a
+fresh sign-off. The record carries its own caveat string, and the satisfied state
+still says it "is not evidence that anyone looked".
+
+### 4. FIDELITY THRESHOLD CALIBRATION ? DONE
+Six synthetic edit classes measured against the 6% / 45% thresholds. FINDING:
+the 6% AVERAGE test is blind to small in-product edits (label text change 0.67%
+mean, logo swap 0.58% mean); the worst-pixel tripwire caught ALL FOUR in-product
+classes. Relight at +24 luminance blocks on the mean (8.89%). A second,
+tighter `labelRegionDiff()` was added with its own 2% / 10% limits, plus an
+explicit `FIDELITY_BLIND_SPOTS` list. Thresholds are labelled engineering
+choices, not Amazon figures.
+
+### 5. TEST HOOK REMOVED FROM PRODUCTION ? DONE
+The `?engine=1` hook is now gated on `import.meta.env.DEV`, so rollup eliminates
+its body from a production bundle. Verified against the REAL dist:
+`tools/check-prod-bundle.cjs` asserts the global and the query-parameter read are
+both ABSENT, with a positive control so the scan cannot pass vacuously. The
+compositing harness degrades to a documented SKIP in a production build instead
+of failing.
+
+### 6. SEARCH/LISTING INTEGRATION ? NOT DONE (see limits)
+### 7. PERFORMANCE LOOP SCAFFOLD ? NOT DONE (see limits)
+
+### 8. POLICY FRESHNESS ? DONE (nothing to re-verify)
+The register was re-run: all 35 sources are CURRENT on 2026-10-10, which is the
+date the corpus was pulled. Nothing is past its cadence, so there is nothing to
+mark needs-re-verification and no public page needed a re-read. `ruleFreshness`
+already marks an unregistered source as not-current, and every rule result
+carries a freshness verdict. No login-gated page was re-pulled.
+
+### 9. LOCAL GENERATION PATH (UNARMED) ? DONE
+New `studio/engine/generation.js` maps a router response into document metadata
+so generated output enters the SAME gates as imported art. A generated PRODUCT
+REGION is blocked (fidelityMode 'generated' + a pre-flight block). A generated
+person AUTO-FLAGS, AUTO-APPLIES the marker, and STILL requires a seller
+attestation; switching the marker off is a CONFLICT. An unknown generation kind
+is UNKNOWN and refused. `gateGenerate` refuses even when armed without a cost
+preview. The module contains NO network call (asserted by scanning its own
+source). 25 fixture tests, all mocked responses.
+Added: `GET /api/design-studio/generation-status` (read-only, zero provider
+calls), a "generation UNARMED" banner in every surface, and
+`docs/GENERATION_ARMING_CHECKLIST.md` (spend/time caps, audit log, kill switch).
+
+### 10. SERVICE INVENTORY AND DOCS ? DONE
+S26 Design Studio and S27 Product Designer / 3D Product Scene added to
+`reports/audit-2026-10-08/SERVICE_INVENTORY.csv` with honest statuses and the
+explicit not-done list. `OWNER_CAPTURE_TASKS.md` remains the capture task.
+
+### 11. FINAL HARDENING ? DONE
+Static antipattern check (`check-jsx-imports.py`) extended earlier and clean.
+NEW `tools/capture-section-evidence.cjs`: 18 screenshots (9 sections x desktop
+1440x900 + mobile 390x844) into `reports/screenshots_20261010/`, plus per-section
+canvas presence, "generation unarmed" banner presence, keyboard reachability,
+focus acquisition, heading contrast and mobile horizontal-overflow checks.
+62 passed / 0 failed.
+
+### VERIFICATION (this session, running code)
+| Harness | Result |
+|---|---|
+| test-compliance-rules.mjs | 106 / 0 |
+| test-disclosure.mjs | 65 / 0 |
+| test-fidelity-freshness.mjs | 57 / 0 |
+| test-generation.mjs (NEW) | 25 / 0 |
+| test_design_studio_isolation.py | 37 / 0 |
+| test_login_throttle_bypass.py | 16 / 0 |
+| check-jsx-imports.py | 95 files, 0 / 0 |
+| check-prod-bundle.cjs (NEW) | 3 / 0 |
+| capture-section-evidence.cjs (NEW) | 62 / 0, 18 screenshots |
+| verify-design-studio.cjs | 67 / 0 |
+| test-migration-e2e.cjs | 12 / 0 |
+| verify-operator-smoke.cjs | 11 / 0, 21/21 rail |
+| **test-compositing.cjs** | **NOT RUN ? times out** |
+
+### NOT DONE, WITH REASONS
+- **Compositing browser harness**: times out against both the production build
+  (hook correctly absent) and the Vite dev server. Its UI-level assertions
+  (surface mount, library, upload check) passed earlier this session at 35/0;
+  the pixel paths passed earlier this session at 35/0 BEFORE the hook was gated.
+  Neither has been re-confirmed against the current code.
+- **Items 6 and 7** (search/listing integration, performance loop) were not
+  started; the loop reached the end of the budget first.
+- Six of nine sections embed the surface; two own equivalent canvases.
