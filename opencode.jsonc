@@ -69,6 +69,8 @@
   },
 
   "mcp": {
+    // dual-flag: V2 reads "disabled", V1 reads "enabled"
+    "northstar-gateway": { "type": "local", "command": ["python", "-m", "northstar.gateway.mcp_server"], "enabled": false, "disabled": true },
     "playwright": {
       "type": "local",
       "command": ["node", "C:\\Users\\T2Hol\\OneDrive\\Documents\\Default Project\\scripts\\chromecontrol-mcp.js"],
