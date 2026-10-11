@@ -102,3 +102,17 @@ Actions enabled):
 
 Local equivalent: `powershell -NoProfile -File scripts/security_checks.ps1`
 (scanner + tests; exit 0 = no NEW findings and all tests pass).
+
+Action pins (full SHAs, resolved via the GitHub API on 2026-10-11):
+
+| Action | SHA | Tag at resolution |
+|---|---|---|
+| `actions/checkout` | `11d5960a326750d5838078e36cf38b85af677262` | v4 |
+| `actions/setup-python` | `a26af69be951a213d495a4c3e4e4022e16d87065` | v5 |
+| `actions/setup-node` | `49933ea5288caeca8642d1e84afbd3f7d6820020` | v4 |
+| `gitleaks/gitleaks-action` | `ff98106e4c7b2bc287b24eaf42907196329070c7` | v2 |
+| `anchore/sbom-action` | `e22c389904149dbc22b58101806040fa8d37a610` | v0 |
+
+Workflow hardening: top-level `permissions: {}` with per-job least privilege;
+`persist-credentials: false` on every checkout; per-job `timeout-minutes`;
+run concurrency with cancel-in-progress; `uv==0.13.0` pinned in the audit job.
