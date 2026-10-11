@@ -101,3 +101,13 @@ The scanner was tuned with tests for each skip class — verified false positive
 ### 7. Remaining Phase 1 items
 Allowlist maintenance process (owner sign-off per new entry), config loader, SBOM + `pip-audit`/`npm audit` wiring, CI activation, dependency-license review (AGPL: Lightpanda, run unmodified; HotClip if adopted), and the still-open review items above.
 
+---
+
+## ROTATION RECORD — 2026-10-11 (owner-confirmed)
+
+- **Providers rotated + old keys revoked (owner):** **GitHub PAT** (`ghp_…`), **SCAVIO_API_KEY**, **BRIGHTDATA_API_KEY**.
+- **Status:** the related findings are **REMEDIATED (rotation)**. The working-tree scrub also landed (commit `546a236`, branch `feature/secure-control-layer`): the 4 key values + the token were removed from the archives; one reviewed README-placeholder occurrence was left untouched by design.
+- **History:** git history still contains the old, now-dead values — the **history-rewrite decision remains OPEN** (owner, per the F2 precedent).
+- **Verification note:** the agent cannot independently verify account-side rotation (no account access, by design) — this record is owner-confirmed.
+- **Scanner state after remediation:** the four remediated baseline fingerprints were pruned the same day; remaining known-active was the `rate_limiter.py` review item (closed separately — see the Phase 3 gateway delivery report).
+
