@@ -1,0 +1,137 @@
+{
+  "sources": [
+    {
+      "host": "example.com",
+      "robots": {
+        "status": "skipped: robots",
+        "reason": "fetch_failed"
+      },
+      "pages": []
+    },
+    {
+      "host": "docs.python.org",
+      "robots": {
+        "status": "fetched",
+        "chars": 524
+      },
+      "pages": [
+        {
+          "url": "https://docs.python.org/3/",
+          "ok": false,
+          "reason": "fetch_failed",
+          "detail": "",
+          "escalate_chrome_connect": false
+        },
+        {
+          "url": "https://docs.python.org/3/tutorial/index.html",
+          "ok": false,
+          "reason": "fetch_failed",
+          "detail": "",
+          "escalate_chrome_connect": false
+        },
+        {
+          "url": "https://docs.python.org/3/library/index.html",
+          "ok": false,
+          "reason": "fetch_failed",
+          "detail": "",
+          "escalate_chrome_connect": false
+        },
+        {
+          "url": "https://docs.python.org/3/reference/index.html",
+          "ok": false,
+          "reason": "fetch_failed",
+          "detail": "",
+          "escalate_chrome_connect": false
+        },
+        {
+          "url": "https://docs.python.org/3/howto/index.html",
+          "ok": false,
+          "reason": "fetch_failed",
+          "detail": "",
+          "escalate_chrome_connect": false
+        }
+      ]
+    },
+    {
+      "host": "books.toscrape.com",
+      "robots": {
+        "status": "fetched",
+        "chars": 32
+      },
+      "pages": [
+        {
+          "url": "https://books.toscrape.com/",
+          "ok": true,
+          "content_chars": 13277,
+          "marker": "Books to Scrape",
+          "marker_found": true,
+          "js_evidence": null,
+          "escalate_chrome_connect": false
+        },
+        {
+          "url": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+          "ok": true,
+          "content_chars": 1956,
+          "marker": "\u00a3",
+          "marker_found": true,
+          "js_evidence": null,
+          "escalate_chrome_connect": false
+        },
+        {
+          "url": "https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html",
+          "ok": true,
+          "content_chars": 2365,
+          "marker": "\u00a3",
+          "marker_found": true,
+          "js_evidence": null,
+          "escalate_chrome_connect": false
+        }
+      ]
+    },
+    {
+      "host": "quotes.toscrape.com",
+      "robots": {
+        "status": "fetched",
+        "chars": 133
+      },
+      "pages": [
+        {
+          "url": "https://quotes.toscrape.com/js/",
+          "ok": false,
+          "reason": "fetch_failed",
+          "detail": "",
+          "escalate_chrome_connect": false
+        }
+      ]
+    }
+  ],
+  "controls": {
+    "redirect_to_private_denied": {
+      "allowed": false,
+      "reason": "robots_unknown"
+    },
+    "direct_private_fetch_denied": {
+      "allowed": false,
+      "reason": "domain_not_allowed"
+    },
+    "injection_fixture": {
+      "ok": true,
+      "enveloped": true,
+      "hostile_text_present_as_data": true,
+      "scripts_stripped": true
+    }
+  },
+  "caps": {
+    "max_requests": 40,
+    "min_spacing_seconds": 2.1,
+    "global_budget_seconds": 600,
+    "per_source_counts": {
+      "example.com": 1,
+      "docs.python.org": 6,
+      "books.toscrape.com": 4,
+      "quotes.toscrape.com": 2
+    }
+  },
+  "audit_chain_ok": true,
+  "elapsed_seconds": 25.8
+}
