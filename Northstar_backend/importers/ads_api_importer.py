@@ -117,16 +117,29 @@ class AdsAPIImporter:
 
     def __init__(self, db=None):
         from data_layer import get_db, NorthstarDB
+        from amazon_linkage_gate import linkage_enabled, linkage_refusal_reason
 
         if db is None:
             db = get_db()
         self.db = db
         self.nsdb = NorthstarDB()
         self.auth = AdsAPIAuth()
-        self._enabled = self.auth.is_configured
+        # Architecture (2026-10-11): file-only. Refused unless the linkage gate
+        # is explicitly enabled, regardless of credentials.
+        self._enabled = self.auth.is_configured and linkage_enabled()
         self._profile_id = None
-        if not self._enabled:
+        if not linkage_enabled():
+            self._refusal = linkage_refusal_reason()
+            logger.warning("Ads API importer refused: %s", self._refusal)
+        elif not self.auth.is_configured:
+            self._refusal = "Ads API credentials are not configured"
             logger.warning("Ads API not configured — import will return empty results")
+        else:
+            self._refusal = None
+
+    @property
+    def refusal_reason(self):
+        return self._refusal
 
     @property
     def is_configured(self) -> bool:

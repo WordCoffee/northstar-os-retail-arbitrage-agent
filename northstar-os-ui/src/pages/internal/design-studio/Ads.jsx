@@ -14,6 +14,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import SectionWorkspace from './SectionWorkspace.jsx'
 import SearchTerms from './SearchTerms.jsx'
+import AmazonFiles from './AmazonFiles.jsx'
 import { SPEC_GROUPS, AMAZON_CAPS } from '../../../studio/engine/specRegistry.js'
 
 const GROUPS = SPEC_GROUPS.filter(g => ['SB video', 'SP video', 'Display video', 'Amazon video', 'Custom image', 'DSP display', 'Brand asset'].includes(g.id))
@@ -59,17 +60,21 @@ const SLOTS = [
 export default function Ads() {
   const location = useLocation()
   const navigate = useNavigate()
-  const view = new URLSearchParams(location.search).get('view') === 'search-terms' ? 'search-terms' : 'creative'
-  const go = (v) => navigate(`/design-studio?section=ads${v === 'search-terms' ? '&view=search-terms' : ''}`, { replace: true })
+  const requested = new URLSearchParams(location.search).get('view')
+  const view = ['search-terms', 'amazon-files'].includes(requested) ? requested : 'creative'
+  const go = (v) => navigate(`/design-studio?section=ads${v !== 'creative' ? `&view=${v}` : ''}`, { replace: true })
 
   return (
     <>
       <div style={{ display: 'flex', gap: 8, padding: '10px 0 0' }}>
         <button className={`btn btn-sm ${view === 'creative' ? 'btn-primary' : ''}`} onClick={() => go('creative')}>Creative</button>
         <button className={`btn btn-sm ${view === 'search-terms' ? 'btn-primary' : ''}`} onClick={() => go('search-terms')} data-testid="sub-search-terms">Search terms</button>
+        <button className={`btn btn-sm ${view === 'amazon-files' ? 'btn-primary' : ''}`} onClick={() => go('amazon-files')} data-testid="sub-amazon-files">Amazon files</button>
       </div>
       {view === 'search-terms' ? (
         <SearchTerms />
+      ) : view === 'amazon-files' ? (
+        <AmazonFiles />
       ) : (
         <SectionWorkspace
           title="Ads"

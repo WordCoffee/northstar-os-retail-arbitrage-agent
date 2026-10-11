@@ -95,15 +95,28 @@ class SPAPIImporter:
 
     def __init__(self, db=None):
         from data_layer import get_db, NorthstarDB
+        from amazon_linkage_gate import linkage_enabled, linkage_refusal_reason
 
         if db is None:
             db = get_db()
         self.db = db
         self.nsdb = NorthstarDB()
         self.auth = SPAPIAuth()
-        self._enabled = self.auth.is_configured
-        if not self._enabled:
+        # Architecture (2026-10-11): file-only. The importer refuses unless the
+        # Amazon-linkage gate is explicitly enabled, regardless of credentials.
+        self._enabled = self.auth.is_configured and linkage_enabled()
+        if not linkage_enabled():
+            self._refusal = linkage_refusal_reason()
+            logger.warning("SP-API importer refused: %s", self._refusal)
+        elif not self.auth.is_configured:
+            self._refusal = "SP-API credentials are not configured"
             logger.warning("SP-API not configured — import will return empty results")
+        else:
+            self._refusal = None
+
+    @property
+    def refusal_reason(self):
+        return self._refusal
 
     @property
     def is_configured(self) -> bool:

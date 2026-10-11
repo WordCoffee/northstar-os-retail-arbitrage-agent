@@ -120,10 +120,14 @@ async def lifespan(app):
     from live_gate import assert_live_posture
     # Phase 3 (2026-10-09): refuse an ephemeral JWT secret in hosted mode.
     from auth import assert_jwt_secret_posture
+    # 2026-10-11: file-only architecture. Refuse to boot a production-like
+    # deploy with Amazon account linkage enabled (no SP-API / Ads API / OAuth).
+    from amazon_linkage_gate import assert_linkage_posture
     try:
         assert_prod_posture()
         assert_live_posture()
         assert_jwt_secret_posture()
+        assert_linkage_posture()
     except RuntimeError as exc:
         logger.critical(str(exc))
         raise

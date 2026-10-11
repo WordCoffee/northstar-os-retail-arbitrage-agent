@@ -15,6 +15,8 @@ unambiguous and quarantines the rest.
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
+import hashlib
+
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, Field
 
@@ -1278,6 +1280,295 @@ def master_brain_context(acct: str = Depends(studio_account)):
         "listing_records": listing_records,
         "note": "Read-only Studio evidence for this organization. Pure local-store reads: no provider is contacted and nothing here is live marketplace data. Missing sections are UNKNOWN, never zero.",
     }
+
+
+# ── Amazon files: file-only workflow (2026-10-11) ─────────────────────────
+# The seller downloads files from Amazon, uploads them here, approves proposed
+# changes row by row, and receives a NEW change file to upload manually.
+# Nothing in this section talks to Amazon: the parsers/writers are pure and the
+# linkage guard test proves no API path exists.
+
+class AmazonFileIn(BaseModel):
+    filename: str = Field(..., min_length=1, max_length=200)
+    content_b64: str
+    downloaded_at: Optional[str] = None
+
+
+class ProposalRequestIn(BaseModel):
+    changes: List[Dict[str, Any]] = Field(default_factory=list)
+    spend_limit_cents: Optional[int] = None
+
+
+class ProposalDecisionIn(BaseModel):
+    second_confirmation: bool = False
+
+
+class WriteRequestIn(BaseModel):
+    format: Optional[str] = None  # xlsx | tsv; defaults by file kind
+
+
+class APlusPackIn(BaseModel):
+    assets: List[Dict[str, Any]] = Field(default_factory=list)
+
+
+def _decode_b64(content_b64: str) -> bytes:
+    import base64 as _b64
+    try:
+        return _b64.b64decode(content_b64, validate=True)
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=422, detail={"code": "invalid_base64", "message": f"the file content could not be decoded: {exc}"})
+
+
+def _upload_detail(u: Dict[str, Any], *, include_rows: int = 0) -> Dict[str, Any]:
+    parsed = u.get("parsed") or {}
+    sheets = []
+    for s in parsed.get("sheets", []):
+        sheets.append({
+            "name": s.get("name"),
+            "kind": s.get("kind"),
+            "headers": s.get("headers"),
+            "row_count": len(s.get("rows") or []),
+            "mapped": s.get("mapped"),
+            "sample_rows": (s.get("normalized") or [])[:include_rows] if include_rows else [],
+        })
+    return {
+        "id": u["id"],
+        "filename": u["filename"],
+        "kind": u["kind"],
+        "checksum": u["checksum"],
+        "size_bytes": u.get("size_bytes"),
+        "row_count": u.get("row_count"),
+        "observed_from": u.get("observed_from"),
+        "observed_to": u.get("observed_to"),
+        "downloaded_at": u.get("downloaded_at"),
+        "uploaded_at": u.get("uploaded_at"),
+        "columns_found": u.get("columns_found") or [],
+        "missing_columns": u.get("missing_columns") or [],
+        "notes": u.get("notes") or [],
+        "detection": u.get("detection"),
+        "sheets": sheets,
+        "note": "Archived read-only with its checksum. The original is never modified; change files are new files.",
+    }
+
+
+@router.post("/amazon-files/upload")
+def amazon_file_upload(body: AmazonFileIn, acct: str = Depends(studio_account)):
+    from amazon_file_parsers import ParseError, parse_upload
+    db = get_northstar_db()
+    content = _decode_b64(body.content_b64)
+    try:
+        parsed = parse_upload(body.filename, content)
+    except ParseError as exc:
+        raise _parse_error(exc)
+    import base64 as _b64
+    uid = db.design_studio.amazon_files.create_upload({
+        "account_id": acct,
+        "filename": body.filename,
+        "kind": parsed["kind"],
+        "checksum": parsed["checksum"],
+        "content_b64": _b64.b64encode(content).decode("ascii"),
+        "size_bytes": len(content),
+        "row_count": parsed["row_count"],
+        "observed_from": parsed["observed_from"],
+        "observed_to": parsed["observed_to"],
+        "downloaded_at": body.downloaded_at,
+        "columns_found": parsed["columns_found"],
+        "missing_columns": parsed["missing_columns"],
+        "notes": parsed["notes"],
+        "detection": parsed["detection"],
+        "parsed": parsed,
+    })
+    stored = db.design_studio.amazon_files.get_upload(uid, account_id=acct)
+    return {"upload": _upload_detail(stored or {}), "state": "imported",
+            "note": "Read-only archive: the uploaded file is stored with its checksum and never modified."}
+
+
+@router.get("/amazon-files")
+def amazon_file_list(acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    rows = db.design_studio.amazon_files.list_uploads(acct)
+    return {"uploads": [_upload_detail(u) for u in rows],
+            "note": "Scoped to the calling account. Files are read-only archives."}
+
+
+@router.get("/amazon-files/{uid}")
+def amazon_file_detail(uid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    u = db.design_studio.amazon_files.get_upload(uid, account_id=acct)
+    if not u:
+        raise HTTPException(status_code=404, detail="Upload not found")
+    return {"upload": _upload_detail(u, include_rows=5)}
+
+
+@router.get("/amazon-files/{uid}/rows")
+def amazon_file_rows(uid: str, sheet: Optional[str] = None, limit: int = Query(default=200, le=1000),
+                     offset: int = Query(default=0, ge=0), acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    u = db.design_studio.amazon_files.get_upload(uid, account_id=acct)
+    if not u:
+        raise HTTPException(status_code=404, detail="Upload not found")
+    parsed = u.get("parsed") or {}
+    out: List[Dict[str, Any]] = []
+    for s in parsed.get("sheets", []):
+        if sheet and s.get("name") != sheet:
+            continue
+        rows = s.get("normalized") or []
+        out.extend(rows[offset: offset + limit])
+    return {"rows": out, "count": len(out),
+            "note": "Normalized rows as read. A value the file did not carry is None (UNKNOWN), never zero."}
+
+
+@router.delete("/amazon-files/{uid}")
+def amazon_file_delete(uid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    if not db.design_studio.amazon_files.delete_upload(uid, account_id=acct):
+        raise HTTPException(status_code=404, detail="Upload not found")
+    return {"deleted": True}
+
+
+@router.post("/amazon-files/{uid}/proposals")
+def amazon_file_proposals(uid: str, body: ProposalRequestIn, acct: str = Depends(studio_account)):
+    from amazon_change_files import build_proposals
+    db = get_northstar_db()
+    u = db.design_studio.amazon_files.get_upload(uid, account_id=acct)
+    if not u:
+        raise HTTPException(status_code=404, detail="Upload not found")
+    parsed = u.get("parsed") or {}
+    if not parsed.get("sheets"):
+        raise HTTPException(status_code=422, detail={"code": "unparseable_upload",
+            "message": "this upload has no parsed rows (unreadable, unknown or legacy .xls); nothing to propose against"})
+    meta = {
+        "upload_id": uid, "filename": u["filename"], "checksum": u["checksum"],
+        "downloaded_at": u.get("downloaded_at"),
+        "spend_limit_cents": body.spend_limit_cents,
+        "now": datetime.now(timezone.utc).isoformat(),
+    }
+    proposals = build_proposals(parsed, body.changes, meta)
+    stored = []
+    for p in proposals:
+        pid = db.design_studio.amazon_files.add_proposal({"account_id": acct, "upload_id": uid, "payload": p})
+        p["id"] = pid
+        stored.append(p)
+    return {"proposals": stored, "count": len(stored),
+            "note": "Blocked rows can never be approved. A spend-limit row needs a second confirmation. Title changes carry date-sensitive FLAGS only - nothing is edited for you."}
+
+
+@router.get("/amazon-files/{uid}/proposals")
+def amazon_file_proposals_list(uid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    rows = db.design_studio.amazon_files.list_proposals(acct, upload_id=uid)
+    return {"proposals": rows, "count": len(rows)}
+
+
+@router.post("/amazon-files/proposals/{pid}/approve")
+def amazon_file_approve(pid: str, body: ProposalDecisionIn, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    rec = db.design_studio.amazon_files.get_proposal(pid, account_id=acct)
+    if not rec:
+        raise HTTPException(status_code=404, detail="Proposal not found")
+    if rec.get("blocks"):
+        raise HTTPException(status_code=409, detail={"code": "proposal_blocked",
+            "message": "this row is blocked: " + "; ".join(rec["blocks"])})
+    if rec.get("requires_second_confirmation") and not body.second_confirmation:
+        raise HTTPException(status_code=409, detail={"code": "second_confirmation_required",
+            "message": "approving this row exceeds your spend limit; confirm again to approve it"})
+    db.design_studio.amazon_files.decide_proposal(pid, acct, "approved")
+    return {"proposal": db.design_studio.amazon_files.get_proposal(pid, account_id=acct)}
+
+
+@router.post("/amazon-files/proposals/{pid}/reject")
+def amazon_file_reject(pid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    rec = db.design_studio.amazon_files.get_proposal(pid, account_id=acct)
+    if not rec:
+        raise HTTPException(status_code=404, detail="Proposal not found")
+    db.design_studio.amazon_files.decide_proposal(pid, acct, "rejected")
+    return {"proposal": db.design_studio.amazon_files.get_proposal(pid, account_id=acct)}
+
+
+@router.post("/amazon-files/{uid}/write")
+def amazon_file_write(uid: str, body: WriteRequestIn, acct: str = Depends(studio_account)):
+    from amazon_change_files import validate_roundtrip
+    from amazon_file_parsers import parse_upload
+    from amazon_file_writers import write_delta
+    import base64 as _b64
+    db = get_northstar_db()
+    u = db.design_studio.amazon_files.get_upload(uid, account_id=acct)
+    if not u:
+        raise HTTPException(status_code=404, detail="Upload not found")
+    parsed = u.get("parsed") or {}
+    if u["kind"] == "aplus_asin_list":
+        raise HTTPException(status_code=422, detail={"code": "aplus_has_no_module_file",
+            "message": "A+ output is an asset pack, not an uploadable module file. Use the A+ pack endpoint."})
+    approved = [r for r in db.design_studio.amazon_files.list_proposals(acct, upload_id=uid) if r.get("status") == "approved"]
+    if not approved:
+        raise HTTPException(status_code=422, detail={"code": "nothing_approved",
+            "message": "no approved proposals: nothing will be written (a no-op change file is available for the round-trip test only)"})
+    approved_payloads = approved  # the serializer returns the flat proposal shape
+    fmt = body.format or ("tsv" if u["kind"] == "listing_template" else "xlsx")
+    try:
+        delta = write_delta(parsed.get("sheets", []), approved_payloads, format=fmt)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail={"code": "write_refused", "message": str(exc)})
+    written_parsed = parse_upload(f"change.{fmt}", delta["content"])
+    rt = validate_roundtrip(parsed, written_parsed, approved_payloads,
+                            source_content=_b64.b64decode(u["content_b64"]), written_content=delta["content"])
+    version = db.design_studio.amazon_files.next_version(acct, uid)
+    base = u["filename"].rsplit(".", 1)[0]
+    filename = f"{base}-change-v{version}.{fmt}"
+    cid = db.design_studio.amazon_files.add_change_file({
+        "account_id": acct, "upload_id": uid, "filename": filename, "version": version,
+        "format": fmt, "checksum": hashlib.sha256(delta["content"]).hexdigest(),
+        "content_b64": _b64.b64encode(delta["content"]).decode("ascii"),
+        "row_count": delta["row_count"],
+        "approved": [r["id"] for r in approved],
+        "roundtrip": rt,
+    })
+    change = db.design_studio.amazon_files.get_change_file(cid, account_id=acct)
+    return {
+        "change_file": {k: change[k] for k in ("id", "filename", "version", "format", "checksum", "row_count", "written_at")},
+        "roundtrip": rt,
+        "note": "A NEW file was written; the original upload is untouched. Upload this file to Amazon yourself.",
+    }
+
+
+@router.get("/amazon-files/change/{cid}")
+def amazon_change_file_detail(cid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    c = db.design_studio.amazon_files.get_change_file(cid, account_id=acct)
+    if not c:
+        raise HTTPException(status_code=404, detail="Change file not found")
+    return {"change_file": {k: c[k] for k in ("id", "filename", "version", "format", "checksum", "row_count", "written_at", "approved")},
+            "roundtrip": c.get("roundtrip")}
+
+
+@router.get("/amazon-files/change/{cid}/download")
+def amazon_change_file_download(cid: str, acct: str = Depends(studio_account)):
+    import base64 as _b64
+    db = get_northstar_db()
+    c = db.design_studio.amazon_files.get_change_file(cid, account_id=acct)
+    if not c:
+        raise HTTPException(status_code=404, detail="Change file not found")
+    mime = ("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            if c["format"] == "xlsx" else "text/tab-separated-values")
+    return Response(content=_b64.b64decode(c["content_b64"]), media_type=mime,
+                    headers={"Content-Disposition": f'attachment; filename="{c["filename"]}"'})
+
+
+@router.post("/amazon-files/{uid}/aplus-pack")
+def amazon_file_aplus_pack(uid: str, body: APlusPackIn, acct: str = Depends(studio_account)):
+    from amazon_change_files import build_aplus_pack
+    db = get_northstar_db()
+    u = db.design_studio.amazon_files.get_upload(uid, account_id=acct)
+    if not u:
+        raise HTTPException(status_code=404, detail="Upload not found")
+    if u["kind"] != "aplus_asin_list":
+        raise HTTPException(status_code=422, detail={"code": "not_an_aplus_list",
+            "message": "the A+ asset pack is built from an A+ ASIN-list upload"})
+    pack = build_aplus_pack(u.get("parsed") or {}, body.assets,
+                            {"upload_id": uid, "filename": u["filename"],
+                             "checksum": u["checksum"], "downloaded_at": u.get("downloaded_at")})
+    return {"pack": pack}
 
 
 # ── Generation arming status (read-only, NO provider call) ────────────────

@@ -666,6 +666,66 @@ class DataLayer:
             CREATE INDEX IF NOT EXISTS idx_ds_listing_records_asin ON ds_listing_records(asin);
             CREATE UNIQUE INDEX IF NOT EXISTS idx_ds_listing_records_legacy
                 ON ds_listing_records(account_id, legacy_key) WHERE legacy_key IS NOT NULL;
+
+            -- Amazon FILE uploads (file-only architecture, 2026-10-11): the
+            -- seller's downloaded files, archived per tenant with checksum,
+            -- detection, parsed rows and observed range. Read-only: nothing
+            -- here ever talks to Amazon.
+            CREATE TABLE IF NOT EXISTS ds_amazon_uploads (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                filename TEXT NOT NULL,
+                kind TEXT NOT NULL,
+                checksum TEXT NOT NULL,
+                content_b64 TEXT NOT NULL,   -- the original bytes (base64); never modified
+                size_bytes INTEGER,
+                row_count INTEGER DEFAULT 0,
+                observed_from TEXT,
+                observed_to TEXT,
+                downloaded_at TEXT,
+                uploaded_at TEXT NOT NULL,
+                columns_found TEXT,          -- JSON
+                missing_columns TEXT,        -- JSON
+                notes TEXT,                  -- JSON
+                detection TEXT,              -- JSON
+                parsed TEXT,                 -- JSON: sheets with raw rows + mapped indices
+                created_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_amazon_uploads_account ON ds_amazon_uploads(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_amazon_uploads_kind ON ds_amazon_uploads(kind);
+
+            -- Row-level change proposals against an uploaded file.
+            CREATE TABLE IF NOT EXISTS ds_change_proposals (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                upload_id TEXT NOT NULL,
+                payload TEXT NOT NULL,       -- JSON: before/after/reason/evidence/blocks/flags
+                status TEXT DEFAULT 'proposed',  -- proposed | blocked | approved | rejected
+                requires_second_confirmation INTEGER DEFAULT 0,
+                created_at TEXT NOT NULL,
+                decided_at TEXT,
+                decided_by TEXT
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_change_proposals_account ON ds_change_proposals(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_change_proposals_upload ON ds_change_proposals(upload_id);
+
+            -- Written change files (new files; the originals are never modified).
+            CREATE TABLE IF NOT EXISTS ds_change_files (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                upload_id TEXT NOT NULL,
+                filename TEXT NOT NULL,
+                version INTEGER DEFAULT 1,
+                format TEXT NOT NULL,
+                checksum TEXT NOT NULL,
+                content_b64 TEXT NOT NULL,
+                row_count INTEGER DEFAULT 0,
+                approved TEXT,               -- JSON: the approved proposal ids
+                roundtrip TEXT,              -- JSON: the validator report
+                written_at TEXT NOT NULL
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_change_files_account ON ds_change_files(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_change_files_upload ON ds_change_files(upload_id);
         """)
 
     def _create_sqlite_tables(self):
@@ -2412,6 +2472,201 @@ class DesignStudioListingRecordsDB:
         return {r["legacy_key"] for r in cur.fetchall()}
 
 
+class DesignStudioAmazonFilesDB:
+    """Data access for ds_amazon_uploads + ds_change_proposals + ds_change_files.
+
+    File-only architecture: uploads are archived read-only (checksum + the
+    original bytes), proposals carry their before/after evidence, and written
+    change files are new files stored alongside their round-trip report.
+    """
+
+    _UPLOAD_COLS = [
+        "id", "account_id", "filename", "kind", "checksum", "content_b64",
+        "size_bytes", "row_count", "observed_from", "observed_to",
+        "downloaded_at", "uploaded_at", "columns_found", "missing_columns",
+        "notes", "detection", "parsed",
+    ]
+    _JSON_UPLOAD = ("columns_found", "missing_columns", "notes", "detection", "parsed")
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    # ── uploads ────────────────────────────────────────────────────────────
+    def _serialize_upload(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        for k in self._JSON_UPLOAD:
+            if k in d and isinstance(d[k], str):
+                try:
+                    d[k] = json.loads(d[k])
+                except ValueError:
+                    d[k] = None
+        return d
+
+    def create_upload(self, entry: Dict[str, Any]) -> str:
+        import uuid
+        uid = entry.get("id") or str(uuid.uuid4())
+        rec = dict(entry)
+        rec["id"] = uid
+        rec.setdefault("uploaded_at", datetime.now(timezone.utc).isoformat())
+        for k in self._JSON_UPLOAD:
+            if k in rec and rec[k] is not None and not isinstance(rec[k], str):
+                rec[k] = json.dumps(rec[k])
+        cols = [c for c in self._UPLOAD_COLS if c in rec]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO ds_amazon_uploads ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(rec[c] for c in cols),
+        )
+        self.db.commit()
+        return uid
+
+    def get_upload(self, uid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute("SELECT * FROM ds_amazon_uploads WHERE id = ? AND account_id = ?", (uid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM ds_amazon_uploads WHERE id = ?", (uid,))
+        row = cur.fetchone()
+        return self._serialize_upload(row) if row else None
+
+    def list_uploads(self, account_id: str, limit: int = 100) -> List[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM ds_amazon_uploads WHERE account_id = ? ORDER BY uploaded_at DESC LIMIT ?",
+            (account_id, limit),
+        )
+        return [self._serialize_upload(r) for r in cur.fetchall()]
+
+    def delete_upload(self, uid: str, account_id: Optional[str] = None) -> bool:
+        if account_id:
+            self.db.execute("DELETE FROM ds_change_proposals WHERE upload_id = ? AND account_id = ?", (uid, account_id))
+            self.db.execute("DELETE FROM ds_change_files WHERE upload_id = ? AND account_id = ?", (uid, account_id))
+            self.db.execute("DELETE FROM ds_amazon_uploads WHERE id = ? AND account_id = ?", (uid, account_id))
+        else:
+            self.db.execute("DELETE FROM ds_change_proposals WHERE upload_id = ?", (uid,))
+            self.db.execute("DELETE FROM ds_change_files WHERE upload_id = ?", (uid,))
+            self.db.execute("DELETE FROM ds_amazon_uploads WHERE id = ?", (uid,))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+    # ── proposals ──────────────────────────────────────────────────────────
+    def _serialize_proposal(self, row: sqlite3.Row) -> Dict[str, Any]:
+        """Return the FLAT proposal shape the UI works with: the payload fields
+        (before/after/evidence/blocks/flags...) at the top level, plus the
+        database's decision fields. Returning the raw row (payload nested)
+        crashed the surface once; the flat shape is the contract."""
+        d = dict(row)
+        try:
+            payload = json.loads(d["payload"]) if isinstance(d["payload"], str) else (d["payload"] or {})
+        except ValueError:
+            payload = {}
+        out = dict(payload)
+        out.update({
+            "id": d.get("id"),
+            "upload_id": d.get("upload_id"),
+            "status": d.get("status"),
+            "requires_second_confirmation": bool(d.get("requires_second_confirmation")),
+            "created_at": d.get("created_at"),
+            "decided_at": d.get("decided_at"),
+            "decided_by": d.get("decided_by"),
+        })
+        return out
+
+    def add_proposal(self, entry: Dict[str, Any]) -> str:
+        import uuid
+        pid = str(uuid.uuid4())
+        payload = entry.get("payload") or {}
+        payload["id"] = pid
+        self.db.execute(
+            "INSERT INTO ds_change_proposals (id, account_id, upload_id, payload, status, requires_second_confirmation, created_at) "
+            "VALUES (?,?,?,?,?,?,?)",
+            (pid, entry.get("account_id"), entry.get("upload_id"), json.dumps(payload),
+             payload.get("status") or "proposed",
+             1 if payload.get("requires_second_confirmation") else 0,
+             payload.get("created_at") or datetime.now(timezone.utc).isoformat()),
+        )
+        self.db.commit()
+        return pid
+
+    def get_proposal(self, pid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute("SELECT * FROM ds_change_proposals WHERE id = ? AND account_id = ?", (pid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM ds_change_proposals WHERE id = ?", (pid,))
+        row = cur.fetchone()
+        return self._serialize_proposal(row) if row else None
+
+    def list_proposals(self, account_id: str, upload_id: Optional[str] = None) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM ds_change_proposals WHERE account_id = ?"
+        params: List[Any] = [account_id]
+        if upload_id:
+            sql += " AND upload_id = ?"
+            params.append(upload_id)
+        sql += " ORDER BY created_at ASC"
+        return [self._serialize_proposal(r) for r in self.db.execute(sql, tuple(params)).fetchall()]
+
+    def decide_proposal(self, pid: str, account_id: str, status: str, by: str = "operator") -> bool:
+        self.db.execute(
+            "UPDATE ds_change_proposals SET status = ?, decided_at = ?, decided_by = ? WHERE id = ? AND account_id = ?",
+            (status, datetime.now(timezone.utc).isoformat(), by, pid, account_id),
+        )
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+    # ── change files ───────────────────────────────────────────────────────
+    def _serialize_change(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        for k in ("approved", "roundtrip"):
+            if k in d and isinstance(d[k], str):
+                try:
+                    d[k] = json.loads(d[k])
+                except ValueError:
+                    d[k] = None
+        return d
+
+    def add_change_file(self, entry: Dict[str, Any]) -> str:
+        import uuid
+        cid = entry.get("id") or str(uuid.uuid4())
+        rec = dict(entry)
+        rec["id"] = cid
+        rec.setdefault("written_at", datetime.now(timezone.utc).isoformat())
+        for k in ("approved", "roundtrip"):
+            if k in rec and rec[k] is not None and not isinstance(rec[k], str):
+                rec[k] = json.dumps(rec[k])
+        cols = ["id", "account_id", "upload_id", "filename", "version", "format",
+                "checksum", "content_b64", "row_count", "approved", "roundtrip", "written_at"]
+        cols = [c for c in cols if c in rec]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO ds_change_files ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(rec[c] for c in cols),
+        )
+        self.db.commit()
+        return cid
+
+    def next_version(self, account_id: str, upload_id: str) -> int:
+        cur = self.db.execute(
+            "SELECT COUNT(*) AS cnt FROM ds_change_files WHERE account_id = ? AND upload_id = ?",
+            (account_id, upload_id),
+        )
+        return int(cur.fetchone()["cnt"]) + 1
+
+    def get_change_file(self, cid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute("SELECT * FROM ds_change_files WHERE id = ? AND account_id = ?", (cid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM ds_change_files WHERE id = ?", (cid,))
+        row = cur.fetchone()
+        return self._serialize_change(row) if row else None
+
+    def list_change_files(self, account_id: str, upload_id: Optional[str] = None) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM ds_change_files WHERE account_id = ?"
+        params: List[Any] = [account_id]
+        if upload_id:
+            sql += " AND upload_id = ?"
+            params.append(upload_id)
+        sql += " ORDER BY written_at DESC"
+        return [self._serialize_change(r) for r in self.db.execute(sql, tuple(params)).fetchall()]
+
+
 class DesignStudioContainer:
     """Namespace for the Design Studio stores."""
 
@@ -2424,6 +2679,7 @@ class DesignStudioContainer:
         self.search_terms = DesignStudioSearchTermsDB(db)
         self.variants = DesignStudioVariantsDB(db)
         self.listing_records = DesignStudioListingRecordsDB(db)
+        self.amazon_files = DesignStudioAmazonFilesDB(db)
 
 
 class NorthstarDB:

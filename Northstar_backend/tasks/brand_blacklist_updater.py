@@ -181,8 +181,14 @@ class BrandBlacklistUpdater:
     # -- public API ---------------------------------------------------------
 
     def live_armed(self) -> bool:
-        """True only when the operator approval gate is exactly '1'."""
-        return os.environ.get(RECHECK_GATE, "").strip() == "1"
+        """True only when the operator approval gate is exactly '1'.
+
+        The file-only architecture (2026-10-11) adds a second, independent
+        condition: the Amazon-linkage gate must also be explicitly enabled.
+        Both are required before any live transport may run.
+        """
+        from amazon_linkage_gate import linkage_enabled
+        return os.environ.get(RECHECK_GATE, "").strip() == "1" and linkage_enabled()
 
     def run(self, live: Optional[bool] = None) -> BrandRecheckReport:
         """Execute a recheck run.

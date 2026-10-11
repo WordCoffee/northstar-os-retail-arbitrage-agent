@@ -1,0 +1,2 @@
+item_sku	item_name	external_product_id	update_delete	standard_price	quantity
+SKU-1	Stainless Steel Tumbler 20oz	B01TEST0001	PartialUpdate	24.99	10

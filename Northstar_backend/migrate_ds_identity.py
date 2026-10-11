@@ -46,6 +46,9 @@ STORES = (
     ("variants", "ds_variants"),
     ("variant_metrics", "ds_variant_metrics"),
     ("listing_records", "ds_listing_records"),
+    ("amazon_uploads", "ds_amazon_uploads"),
+    ("change_proposals", "ds_change_proposals"),
+    ("change_files", "ds_change_files"),
 )
 
 # Buckets that were shared by construction (the pre-Phase-7 collapse).

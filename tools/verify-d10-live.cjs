@@ -128,6 +128,39 @@ async function main() {
   if (typeof bCtx.brand_voice === 'object' && typeof bCtx.search_terms === 'object' && bCtx.read_only === true) {
     ok('the master-brain context carries the full section shape for tenant B too (scoped)')
   } else no('master-brain context shape wrong for B')
+
+  // ── Amazon files (file-only workflow): cross-tenant negatives ───────────
+  const bulkCsv = [
+    'Product,Entity,Operation,Campaign ID,Keyword ID,Bid',
+    'Sponsored Products,Keyword,Update,C900,K900,0.80',
+  ].join('\n')
+  const upRes = await A.post(`${API}/api/design-studio/amazon-files/upload`, {
+    data: { filename: `d10-${stamp}.csv`, content_b64: Buffer.from(bulkCsv).toString('base64') },
+  })
+  const upBody = await upRes.json().catch(() => ({}))
+  const uid = upBody.upload && upBody.upload.id
+  if (upRes.status() === 200 && uid) ok('tenant A uploaded a bulksheet (file-only workflow)')
+  else no('amazon-files upload failed', `http ${upRes.status()} ${JSON.stringify(upBody).slice(0, 120)}`)
+  if (uid) {
+    const bListA = await (await B.get(`${API}/api/design-studio/amazon-files`)).json()
+    if (!(bListA.uploads || []).some(u => u.id === uid)) ok('tenant B LIST does not contain A\'s upload')
+    else no('LEAK: tenant B listed A\'s upload')
+    const bRead = await B.get(`${API}/api/design-studio/amazon-files/${uid}`)
+    if (bRead.status() === 404) ok('tenant B READ by id -> 404')
+    else no(`tenant B upload read returned ${bRead.status()}`)
+    const bRows = await B.get(`${API}/api/design-studio/amazon-files/${uid}/rows`)
+    if (bRows.status() === 404) ok('tenant B ROWS -> 404')
+    else no(`tenant B rows returned ${bRows.status()}`)
+    const bProp = await B.post(`${API}/api/design-studio/amazon-files/${uid}/proposals`, { data: { changes: [] } })
+    if (bProp.status() === 404) ok('tenant B cannot propose against A\'s upload -> 404')
+    else no(`tenant B proposal returned ${bProp.status()}`)
+    const bDel = await B.delete(`${API}/api/design-studio/amazon-files/${uid}`)
+    if (bDel.status() === 404) ok('tenant B DELETE -> 404')
+    else no(`tenant B upload delete returned ${bDel.status()}`)
+    const aStill = await A.get(`${API}/api/design-studio/amazon-files/${uid}`)
+    if (aStill.status() === 200) ok('tenant A\'s upload survives B\'s attempts')
+    else no('tenant A\'s upload disappeared', `http ${aStill.status()}`)
+  }
   const aLr = await (await A.get(`${API}/api/design-studio/listing-records`)).json()
   const aRec = (aLr.records || []).find(r => r.legacy_key === `lr:${stamp}`)
   if (aRec) ok('tenant A lists its own listing record')
@@ -159,6 +192,7 @@ async function main() {
     ['GET', '/api/design-studio/variants'],
     ['GET', '/api/design-studio/listing-records'],
     ['GET', '/api/design-studio/master-brain-context'],
+    ['GET', '/api/design-studio/amazon-files'],
   ]
   let anonFailures = []
   for (const [method, url] of anonRoutes) {
@@ -177,6 +211,10 @@ async function main() {
   const aLrClean = await (await A.get(`${API}/api/design-studio/listing-records`)).json()
   for (const r of (aLrClean.records || []).filter(x => x.legacy_key === `lr:${stamp}`)) {
     await A.delete(`${API}/api/design-studio/listing-records/${r.id}`)
+  }
+  const aUp = await (await A.get(`${API}/api/design-studio/amazon-files`)).json()
+  for (const u of (aUp.uploads || []).filter(x => String(x.filename || '').startsWith('d10-'))) {
+    await A.delete(`${API}/api/design-studio/amazon-files/${u.id}`)
   }
   ok('probe records cleaned up by their owner')
 
