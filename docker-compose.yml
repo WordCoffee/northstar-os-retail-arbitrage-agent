@@ -9,6 +9,12 @@
 x-foundation-env: &foundation-env
   DB_URL: postgresql://${POSTGRES_USER:-northstar}:${POSTGRES_PASSWORD:-northstar_dev_only}@postgres:5432/${POSTGRES_DB:-northstar}
   FOUNDATION_DB_URL: postgresql://${POSTGRES_USER:-northstar}:${POSTGRES_PASSWORD:-northstar_dev_only}@postgres:5432/${POSTGRES_DB:-northstar}
+  # Design Studio / data_layer store (Phase 8 item 2): the same Postgres
+  # instance as the foundation store. With this set the ds_* tables live in
+  # Postgres and survive container recreation; with it absent, data_layer falls
+  # back to the container-local SQLite file. Schema creation is idempotent and
+  # runs on every boot (data_layer._create_postgres_tables).
+  DATABASE_URL: postgresql://${POSTGRES_USER:-northstar}:${POSTGRES_PASSWORD:-northstar_dev_only}@postgres:5432/${POSTGRES_DB:-northstar}
   ENVIRONMENT: ${ENVIRONMENT:-development}
   # Dev posture: allow remote bind while the dev shim is active (P2-T5 replaces
   # this with real JWT auth on hosted environments).

@@ -60,6 +60,29 @@ def _redact_url(url: Optional[str]) -> str:
         return "<unparseable-url>"
 
 
+class _PgChangesResult:
+    """Minimal stand-in for SQLite's `SELECT changes()` result on Postgres."""
+
+    def __init__(self, n: int):
+        self._n = int(n)
+
+    def fetchone(self):
+        return (self._n,)
+
+    def fetchall(self):
+        return [(self._n,)]
+
+
+def _is_pg_integrity_error(exc: Exception) -> bool:
+    """True for any psycopg integrity-family error (v3 or v2)."""
+    name = exc.__class__.__name__
+    if name in ("IntegrityError", "UniqueViolation", "ForeignKeyViolation",
+                "NotNullViolation", "CheckViolation", "ExclusionViolation",
+                "RestrictViolation"):
+        return True
+    return exc.__class__.__module__.split(".")[0] in ("psycopg", "psycopg2") and "Integrity" in name
+
+
 class DataLayer:
     """Database abstraction — Postgres when available, SQLite fallback.
 
@@ -82,25 +105,42 @@ class DataLayer:
             self._init_postgres(allow_sqlite_fallback)
 
     def _init_postgres(self, allow_sqlite_fallback: Optional[bool] = None) -> None:
-        """Connect to Postgres, or refuse.
+        """Connect to Postgres, create/refresh the schema, or refuse.
 
         Never silently degrades: if a URL is configured but the connection
         fails, the caller is told loudly. An operator who genuinely wants the
         SQLite fallback sets ``NORTHSTAR_ALLOW_SQLITE_FALLBACK=1`` explicitly.
+
+        Driver: psycopg v3 (the driver the foundation store already uses); a
+        psycopg2 install is accepted as a fallback.
         """
         if allow_sqlite_fallback is None:
             allow_sqlite_fallback = env_flag("NORTHSTAR_ALLOW_SQLITE_FALLBACK")
         try:
-            import psycopg2  # noqa: F401  (driver presence check)
+            import psycopg  # noqa: F401  (driver presence check)
+            from psycopg.rows import dict_row  # noqa: F401
+            self._pg_driver = "psycopg3"
         except ImportError:
-            raise RuntimeError(
-                "POSTGRES CONFIGURED BUT DRIVER MISSING: "
-                f"{_redact_url(self._pg_url)} was configured but psycopg2 is "
-                "not installed. Set NORTHSTAR_ALLOW_SQLITE_FALLBACK=1 to run "
-                "on SQLite instead, or install the Postgres driver."
-            )
+            try:
+                import psycopg2  # noqa: F401
+                self._pg_driver = "psycopg2"
+            except ImportError:
+                raise RuntimeError(
+                    "POSTGRES CONFIGURED BUT DRIVER MISSING: "
+                    f"{_redact_url(self._pg_url)} was configured but neither "
+                    "psycopg (v3) nor psycopg2 is installed. Set "
+                    "NORTHSTAR_ALLOW_SQLITE_FALLBACK=1 to run on SQLite instead, "
+                    "or install the Postgres driver."
+                )
         try:
-            conn = psycopg2.connect(self._pg_url, connect_timeout=5)
+            if self._pg_driver == "psycopg3":
+                import psycopg
+                from psycopg.rows import dict_row
+                conn = psycopg.connect(self._pg_url, connect_timeout=5, row_factory=dict_row)
+            else:
+                import psycopg2
+                import psycopg2.extras
+                conn = psycopg2.connect(self._pg_url, connect_timeout=5, cursor_factory=psycopg2.extras.RealDictCursor)
         except Exception as exc:
             raise RuntimeError(
                 "POSTGRES CONFIGURED BUT UNREACHABLE: "
@@ -109,6 +149,18 @@ class DataLayer:
                 "NORTHSTAR_ALLOW_SQLITE_FALLBACK=1 to run on SQLite instead."
             ) from exc
         self._pg_conn = conn
+        self._pg_last_rowcount = 0
+        # The data_layer owns a dedicated schema. The shared `public` schema
+        # already holds foundation tables (keywords, listings, audit_events...)
+        # with different shapes; without this, CREATE TABLE IF NOT EXISTS would
+        # silently collide with them and later indexes would fail.
+        with self._lock:
+            cur = conn.cursor()
+            cur.execute("CREATE SCHEMA IF NOT EXISTS northstar_data")
+            cur.execute("SET search_path TO northstar_data")
+            conn.commit()
+        # Idempotent schema creation/refresh, same DDL source as SQLite.
+        self._create_postgres_tables()
 
     @property
     def mode(self) -> str:
@@ -126,10 +178,14 @@ class DataLayer:
         self._conn.execute("PRAGMA foreign_keys=ON")
         self._create_sqlite_tables()
 
-    def _create_sqlite_tables(self):
-        """Create all tables for SQLite mode."""
-        cur = self._conn.cursor()
-        cur.executescript("""
+    def _schema_ddl(self) -> str:
+        """The full schema DDL, shared by BOTH backends.
+
+        The Postgres creator translates the handful of SQLite-isms (the
+        `datetime('now')` defaults) before running it; everything else is
+        portable DDL (CREATE TABLE/INDEX IF NOT EXISTS, partial unique indexes).
+        """
+        return ("""
             CREATE TABLE IF NOT EXISTS products (
                 id TEXT PRIMARY KEY,
                 asin TEXT UNIQUE NOT NULL,
@@ -587,8 +643,56 @@ class DataLayer:
             CREATE INDEX IF NOT EXISTS idx_ds_variant_metrics_account ON ds_variant_metrics(account_id);
             CREATE INDEX IF NOT EXISTS idx_ds_variant_metrics_variant ON ds_variant_metrics(variant_id);
         """)
+
+    def _create_sqlite_tables(self):
+        """Create all tables for SQLite mode (idempotent)."""
+        cur = self._conn.cursor()
+        cur.executescript(self._schema_ddl())
         self._conn.commit()
         self._migrate_live_columns()
+
+    def _create_postgres_tables(self):
+        """Create all tables for Postgres mode (idempotent).
+
+        The DDL is the same source as SQLite; only the timestamp default
+        syntax differs (`datetime('now')` -> `CURRENT_TIMESTAMP`).
+        """
+        ddl = self._schema_ddl()
+        # The SQLite-isms in the shared DDL, translated for Postgres.
+        ddl = ddl.replace("datetime('now')", "CURRENT_TIMESTAMP")
+        ddl = ddl.replace("id INTEGER PRIMARY KEY AUTOINCREMENT", "id BIGSERIAL PRIMARY KEY")
+        # The supplier flag is declared BOOLEAN with an integer default and the
+        # DAO compares it with 0/1 parameters on both backends; Postgres would
+        # reject both the default and the comparisons, so it stays INTEGER here
+        # (same semantics, consistent across backends).
+        ddl = ddl.replace("requires_liftgate BOOLEAN DEFAULT 1", "requires_liftgate INTEGER DEFAULT 1")
+        with self._lock:
+            cur = self._pg_conn.cursor()
+            try:
+                cur.execute(ddl)
+                self._pg_conn.commit()
+            except Exception:
+                self._pg_conn.rollback()
+                raise
+        self._migrate_live_columns_postgres()
+
+    def _migrate_live_columns_postgres(self):
+        """Idempotently add the live-data columns on Postgres (IF NOT EXISTS)."""
+        additions = {
+            "data_kind": "TEXT DEFAULT 'demo'",
+            "provider_id": "TEXT",
+            "fetched_at": "TEXT",
+            "fresh_until": "TEXT",
+        }
+        with self._lock:
+            cur = self._pg_conn.cursor()
+            for column, decl in additions.items():
+                try:
+                    cur.execute(f"ALTER TABLE products ADD COLUMN IF NOT EXISTS {column} {decl}")
+                except Exception:
+                    self._pg_conn.rollback()
+                    raise
+            self._pg_conn.commit()
 
     def _migrate_live_columns(self):
         """Idempotently add live-data columns to an existing products table."""
@@ -634,26 +738,80 @@ class DataLayer:
                 pass
         self._conn.commit()
 
-    def execute(self, sql: str, params: tuple = ()) -> sqlite3.Cursor:
-        """Execute SQL (SQLite mode only for now)."""
-        with self._lock:
-            return self._conn.execute(sql, params)
+    def execute(self, sql: str, params: tuple = ()):
+        """Execute SQL on the active backend.
 
-    def executemany(self, sql: str, params_list: list) -> sqlite3.Cursor:
-        """Execute many SQL statements."""
+        SQLite: exactly as before. Postgres: `?` placeholders are translated to
+        `%s`; `SELECT changes()` is answered from the last statement's rowcount
+        (the SQLite idiom the DAOs use to report affected rows); a driver
+        IntegrityError is re-raised as sqlite3.IntegrityError so the existing
+        idempotency handlers (duplicate fingerprints / legacy keys) work
+        unchanged on both backends.
+        """
+        if self._mode == "sqlite":
+            with self._lock:
+                return self._conn.execute(sql, params)
+        return self._execute_pg(sql, params)
+
+    def _execute_pg(self, sql: str, params: tuple = ()):
         with self._lock:
-            return self._conn.executemany(sql, params_list)
+            if sql.strip().lower().startswith("select changes()"):
+                # SQLite reports affected rows via changes(); answer it here.
+                return _PgChangesResult(self._pg_last_rowcount)
+            # Literal percent signs (LIKE patterns) must be escaped for psycopg,
+            # THEN the SQLite `?` placeholders become `%s`. Parameter VALUES are
+            # never interpolated, so this cannot touch data.
+            translated = sql.replace("%", "%%").replace("?", "%s")
+            cur = self._pg_conn.cursor()
+            try:
+                cur.execute(translated, tuple(params))
+                self._pg_last_rowcount = max(0, cur.rowcount if cur.rowcount is not None else 0)
+                return cur
+            except Exception as exc:
+                try:
+                    self._pg_conn.rollback()
+                except Exception:
+                    pass
+                if _is_pg_integrity_error(exc):
+                    raise sqlite3.IntegrityError(str(exc)) from exc
+                raise
+
+    def executemany(self, sql: str, params_list: list):
+        """Execute many SQL statements."""
+        if self._mode == "sqlite":
+            with self._lock:
+                return self._conn.executemany(sql, params_list)
+        with self._lock:
+            cur = self._pg_conn.cursor()
+            try:
+                cur.executemany(sql.replace("?", "%s"), [tuple(p) for p in params_list])
+                self._pg_last_rowcount = max(0, cur.rowcount if cur.rowcount is not None else 0)
+                return cur
+            except Exception as exc:
+                try:
+                    self._pg_conn.rollback()
+                except Exception:
+                    pass
+                if _is_pg_integrity_error(exc):
+                    raise sqlite3.IntegrityError(str(exc)) from exc
+                raise
 
     def commit(self):
         """Commit the current transaction."""
         with self._lock:
-            self._conn.commit()
+            if self._mode == "sqlite":
+                self._conn.commit()
+            else:
+                self._pg_conn.commit()
 
     def close(self):
         """Close the database connection."""
         with self._lock:
-            if self._conn:
-                self._conn.close()
+            if self._mode == "sqlite":
+                if self._conn:
+                    self._conn.close()
+            elif getattr(self, "_pg_conn", None):
+                self._pg_conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -2006,10 +2164,10 @@ class DesignStudioSearchTermsDB:
 
     def count_for_import(self, account_id: str, import_id: str) -> int:
         cur = self.db.execute(
-            "SELECT COUNT(*) FROM ds_search_terms WHERE account_id = ? AND import_id = ?",
+            "SELECT COUNT(*) AS cnt FROM ds_search_terms WHERE account_id = ? AND import_id = ?",
             (account_id, import_id),
         )
-        return cur.fetchone()[0]
+        return cur.fetchone()["cnt"]
 
 
 class DesignStudioVariantsDB:

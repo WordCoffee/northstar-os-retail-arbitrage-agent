@@ -1,0 +1,54 @@
+{
+  "generated_at": "2026-10-11T05:34:39.960249+00:00",
+  "org_count": 3,
+  "orgs": [
+    "3514bd77-13af-4231-b83d-ae72a47e42e8",
+    "d8a1447f-3018-48be-9048-ad28e832e06a",
+    "eb7b121b-f625-4bd7-89e9-a33a99c8ec01"
+  ],
+  "target_org": null,
+  "rule": "shared buckets move only when exactly one organization exists; unknown buckets always quarantine",
+  "stores": {
+    "projects": {
+      "table": "ds_projects",
+      "buckets": {}
+    },
+    "assets": {
+      "table": "ds_assets",
+      "buckets": {}
+    },
+    "jobs": {
+      "table": "ds_jobs",
+      "buckets": {}
+    },
+    "rechecks": {
+      "table": "ds_rechecks",
+      "buckets": {}
+    },
+    "imports": {
+      "table": "ds_imports",
+      "buckets": {}
+    },
+    "search_terms": {
+      "table": "ds_search_terms",
+      "buckets": {}
+    },
+    "variants": {
+      "table": "ds_variants",
+      "buckets": {}
+    },
+    "variant_metrics": {
+      "table": "ds_variant_metrics",
+      "buckets": {}
+    }
+  },
+  "moves": [],
+  "quarantine": [],
+  "fully_mapped": true,
+  "mode": "apply",
+  "applied": [],
+  "after_apply": {
+    "moves": 0,
+    "quarantine": 0
+  }
+}
