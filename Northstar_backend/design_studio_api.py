@@ -1309,6 +1309,27 @@ class WriteRequestIn(BaseModel):
 
 class APlusPackIn(BaseModel):
     assets: List[Dict[str, Any]] = Field(default_factory=list)
+    copy: Dict[str, Any] = Field(default_factory=dict)
+
+
+class ReportMatchIn(BaseModel):
+    filename: str = Field(..., min_length=1, max_length=200)
+    content_b64: str
+    change_file_id: str = Field(..., min_length=1)
+    downloaded_at: Optional[str] = None
+
+
+class CorrectedChangeIn(BaseModel):
+    corrections: List[Dict[str, Any]] = Field(default_factory=list)
+    format: Optional[str] = None
+
+
+class CompareIn(BaseModel):
+    after_upload_id: str = Field(..., min_length=1)
+    before_from: Optional[str] = None
+    before_to: Optional[str] = None
+    after_from: Optional[str] = None
+    after_to: Optional[str] = None
 
 
 def _decode_b64(content_b64: str) -> bytes:
@@ -1434,6 +1455,10 @@ def amazon_file_proposals(uid: str, body: ProposalRequestIn, acct: str = Depends
     if not u:
         raise HTTPException(status_code=404, detail="Upload not found")
     parsed = u.get("parsed") or {}
+    if u["kind"] in ("ads_error_report", "listing_processing_report"):
+        raise HTTPException(status_code=422, detail={"code": "report_has_no_proposals",
+            "message": "this upload is a processing/error report; use the report-match endpoint to map its rows "
+                       "back to a change file. Reports never produce new proposals."})
     if not parsed.get("sheets"):
         raise HTTPException(status_code=422, detail={"code": "unparseable_upload",
             "message": "this upload has no parsed rows (unreadable, unknown or legacy .xls); nothing to propose against"})
@@ -1500,6 +1525,10 @@ def amazon_file_write(uid: str, body: WriteRequestIn, acct: str = Depends(studio
     if u["kind"] == "aplus_asin_list":
         raise HTTPException(status_code=422, detail={"code": "aplus_has_no_module_file",
             "message": "A+ output is an asset pack, not an uploadable module file. Use the A+ pack endpoint."})
+    if u["kind"] in ("ads_error_report", "listing_processing_report"):
+        raise HTTPException(status_code=422, detail={"code": "report_has_no_change_file",
+            "message": "this upload is a processing/error report; a corrected file is written from a change file "
+                       "via the correct endpoint, not from the report itself."})
     approved = [r for r in db.design_studio.amazon_files.list_proposals(acct, upload_id=uid) if r.get("status") == "approved"]
     if not approved:
         raise HTTPException(status_code=422, detail={"code": "nothing_approved",
@@ -1567,8 +1596,163 @@ def amazon_file_aplus_pack(uid: str, body: APlusPackIn, acct: str = Depends(stud
             "message": "the A+ asset pack is built from an A+ ASIN-list upload"})
     pack = build_aplus_pack(u.get("parsed") or {}, body.assets,
                             {"upload_id": uid, "filename": u["filename"],
-                             "checksum": u["checksum"], "downloaded_at": u.get("downloaded_at")})
+                             "checksum": u["checksum"], "downloaded_at": u.get("downloaded_at")},
+                            copy=body.copy)
     return {"pack": pack}
+
+
+# ── Processing reports: match errors back to a change file (item 2) ───────
+# The seller uploads the error/processing report Amazon gave them; the studio
+# matches each error row to the change row and proposal that produced it, and
+# can write a CORRECTED resubmittable file (a new version; originals untouched).
+
+@router.get("/amazon-files/{uid}/changes")
+def amazon_file_changes(uid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    u = db.design_studio.amazon_files.get_upload(uid, account_id=acct)
+    if not u:
+        raise HTTPException(status_code=404, detail="Upload not found")
+    rows = db.design_studio.amazon_files.list_change_files(acct, upload_id=uid)
+    keys = ("id", "filename", "version", "format", "checksum", "row_count", "written_at", "approved")
+    return {"change_files": [{k: r[k] for k in keys if k in r} for r in rows],
+            "count": len(rows),
+            "note": "New files written from this upload, newest last. The original upload is never modified."}
+
+
+@router.post("/amazon-files/reports/match")
+def amazon_report_match(body: ReportMatchIn, acct: str = Depends(studio_account)):
+    """Archive a processing/error report and match its rows to a change file."""
+    from amazon_change_files import match_processing_report
+    from amazon_file_parsers import ParseError, parse_upload
+    import base64 as _b64
+    db = get_northstar_db()
+    content = _decode_b64(body.content_b64)
+    try:
+        parsed = parse_upload(body.filename, content)
+    except ParseError as exc:
+        raise _parse_error(exc)
+    if parsed["kind"] not in ("ads_error_report", "listing_processing_report"):
+        raise HTTPException(status_code=422, detail={"code": "not_a_processing_report",
+            "message": "this file does not look like an Amazon processing/error report (no error column next to "
+                       "entity IDs or SKUs). A report with missing columns stays UNKNOWN; nothing is guessed."})
+    c = db.design_studio.amazon_files.get_change_file(body.change_file_id, account_id=acct)
+    if not c:
+        raise HTTPException(status_code=404, detail="Change file not found")
+    try:
+        change_parsed = parse_upload(c["filename"], _b64.b64decode(c["content_b64"]))
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=422, detail={"code": "change_file_unreadable",
+            "message": f"the change file could not be re-read for matching: {exc}"})
+    proposals = db.design_studio.amazon_files.list_proposals(acct, upload_id=c["upload_id"])
+    match = match_processing_report(parsed, change_parsed, proposals)
+    uid = db.design_studio.amazon_files.create_upload({
+        "account_id": acct,
+        "filename": body.filename,
+        "kind": parsed["kind"],
+        "checksum": parsed["checksum"],
+        "content_b64": _b64.b64encode(content).decode("ascii"),
+        "size_bytes": len(content),
+        "row_count": parsed["row_count"],
+        "observed_from": parsed["observed_from"],
+        "observed_to": parsed["observed_to"],
+        "downloaded_at": body.downloaded_at,
+        "columns_found": parsed["columns_found"],
+        "missing_columns": parsed["missing_columns"],
+        "notes": parsed["notes"],
+        "detection": parsed["detection"],
+        "parsed": parsed,
+    })
+    stored = db.design_studio.amazon_files.get_upload(uid, account_id=acct)
+    return {
+        "report_upload": _upload_detail(stored or {}),
+        "change_file": {"id": c["id"], "filename": c["filename"], "version": c["version"]},
+        "match": match,
+        "note": "Error rows are matched to the change file by ID, and to the proposal that produced them. "
+                "Unmatched rows are reported, never guessed at.",
+    }
+
+
+@router.post("/amazon-files/change/{cid}/correct")
+def amazon_change_correct(cid: str, body: CorrectedChangeIn, acct: str = Depends(studio_account)):
+    """Write a CORRECTED resubmittable file from a change file (new version)."""
+    from amazon_change_files import build_corrected_change, validate_roundtrip
+    from amazon_file_parsers import ParseError, parse_upload
+    from amazon_file_writers import write_delta
+    import base64 as _b64
+    db = get_northstar_db()
+    c = db.design_studio.amazon_files.get_change_file(cid, account_id=acct)
+    if not c:
+        raise HTTPException(status_code=404, detail="Change file not found")
+    u = db.design_studio.amazon_files.get_upload(c["upload_id"], account_id=acct)
+    try:
+        change_parsed = parse_upload(c["filename"], _b64.b64decode(c["content_b64"]))
+    except ParseError as exc:
+        raise _parse_error(exc)
+    prep = build_corrected_change(change_parsed, body.corrections)
+    if prep["errors"]:
+        raise HTTPException(status_code=422, detail={"code": "correction_refused",
+            "message": "; ".join(prep["errors"])})
+    if not prep["payloads"]:
+        raise HTTPException(status_code=422, detail={"code": "nothing_to_write",
+            "message": "every row was dropped; there is nothing to resubmit"})
+    fmt = body.format or c["format"]
+    try:
+        delta = write_delta(change_parsed.get("sheets", []), prep["payloads"], format=fmt)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail={"code": "write_refused", "message": str(exc)})
+    written_parsed = parse_upload(f"corrected.{fmt}", delta["content"])
+    rt = validate_roundtrip(change_parsed, written_parsed, prep["payloads"],
+                            source_content=_b64.b64decode(c["content_b64"]), written_content=delta["content"])
+    version = db.design_studio.amazon_files.next_version(acct, c["upload_id"])
+    base = (u["filename"] if u else c["filename"]).rsplit(".", 1)[0]
+    filename = f"{base}-corrected-v{version}.{fmt}"
+    cid2 = db.design_studio.amazon_files.add_change_file({
+        "account_id": acct, "upload_id": c["upload_id"], "filename": filename, "version": version,
+        "format": fmt, "checksum": hashlib.sha256(delta["content"]).hexdigest(),
+        "content_b64": _b64.b64encode(delta["content"]).decode("ascii"),
+        "row_count": delta["row_count"],
+        "approved": [p.get("id_value") for p in prep["payloads"]],
+        "roundtrip": rt,
+    })
+    change = db.design_studio.amazon_files.get_change_file(cid2, account_id=acct)
+    return {
+        "change_file": {k: change[k] for k in ("id", "filename", "version", "format", "checksum", "row_count", "written_at")},
+        "roundtrip": rt,
+        "dropped": prep["dropped"],
+        "note": "A NEW corrected file was written from the change file; both the original upload and the "
+                "previous change file are untouched. Upload this file to Amazon yourself.",
+    }
+
+
+# ── Before/after performance comparison (item 5) ──────────────────────────
+
+@router.post("/amazon-files/{uid}/compare")
+def amazon_file_compare(uid: str, body: CompareIn, acct: str = Depends(studio_account)):
+    """Compare per-entity metrics between this upload and a LATER one."""
+    from amazon_change_files import compare_performance
+    db = get_northstar_db()
+    u = db.design_studio.amazon_files.get_upload(uid, account_id=acct)
+    if not u:
+        raise HTTPException(status_code=404, detail="Upload not found")
+    a = db.design_studio.amazon_files.get_upload(body.after_upload_id, account_id=acct)
+    if not a:
+        raise HTTPException(status_code=404, detail="After upload not found")
+    for label, rec in (("before", u), ("after", a)):
+        if not (rec.get("parsed") or {}).get("sheets"):
+            raise HTTPException(status_code=422, detail={"code": "unparseable_upload",
+                "message": f"the {label} upload has no parsed rows; there is nothing to compare"})
+    meta = {"before_from": body.before_from or u.get("observed_from"),
+            "before_to": body.before_to or u.get("observed_to"),
+            "after_from": body.after_from or a.get("observed_from"),
+            "after_to": body.after_to or a.get("observed_to")}
+    cmp = compare_performance(u.get("parsed") or {}, a.get("parsed") or {}, meta)
+    return {
+        "before": {"id": u["id"], "filename": u["filename"], "observed_from": u.get("observed_from"), "observed_to": u.get("observed_to")},
+        "after": {"id": a["id"], "filename": a["filename"], "observed_from": a.get("observed_from"), "observed_to": a.get("observed_to")},
+        "comparison": cmp,
+        "note": "Metrics are read from the two files as-is; a missing metric is UNKNOWN, never 0. "
+                "This comparison cannot prove causation - see the notice in the payload.",
+    }
 
 
 # ── Generation arming status (read-only, NO provider call) ────────────────

@@ -206,6 +206,10 @@ ADS_FIELDS: Dict[str, Tuple[str, ...]] = {
     "product_ads_id": ("productadsid",),
     "target_id": ("targetid",),
     "portfolio_id": ("portfolioid",),
+    # Sponsored Brands / Sponsored Display entity ids (file-only deltas).
+    "creative_id": ("creativeid", "sbcreativeid"),
+    "product_collection_id": ("productcollectionid",),
+    "bidding_id": ("biddingid", "biddingadjustmentid"),
     "campaign_name": ("campaignname", "campaign"),
     "ad_group_name": ("adgroupname", "adgroup"),
     "keyword_text": ("keywordtext", "keyword"),
@@ -219,6 +223,10 @@ ADS_FIELDS: Dict[str, Tuple[str, ...]] = {
     "spend": ("spend", "cost"),
     "sales": ("sales",),
     "orders": ("orders", "purchases", "7daytotalorders"),
+    # Processing / error reports carry their cause in these columns.
+    "error": ("error", "errors", "errortype", "errorcode", "errormessage"),
+    "error_type": ("errortype", "errortypeid"),
+    "error_message": ("errormessage", "error"),
 }
 
 LISTING_FIELDS: Dict[str, Tuple[str, ...]] = {
@@ -226,12 +234,27 @@ LISTING_FIELDS: Dict[str, Tuple[str, ...]] = {
     "product_id": ("externalproductid", "productid", "asin1", "asin"),
     "title": ("itemname", "title", "productname"),
     "bullet1": ("bulletpoint1", "bullet1"),
+    "bullet2": ("bulletpoint2", "bullet2"),
+    "bullet3": ("bulletpoint3", "bullet3"),
+    "bullet4": ("bulletpoint4", "bullet4"),
+    "bullet5": ("bulletpoint5", "bullet5"),
     "description": ("productdescription", "description"),
+    "generic_keywords": ("generickeywords", "searchterms"),
     "update_delete": ("updatedelete", "operation"),
-    "price": ("standardprice", "price"),
+    "price": ("standardprice", "price", "listprice"),
     "quantity": ("quantity",),
     "brand": ("brandname", "brand"),
+    "item_type": ("itemtypekeyword", "itemtype"),
+    # Processing / error reports (Seller Central) carry their cause here.
+    "error": ("error", "errors", "errortype", "errorcode", "errormessage"),
+    "error_type": ("errortype", "errortypeid"),
+    "error_message": ("errormessage", "error"),
 }
+
+# The core attributes a CURRENT Seller Central listing template carries. A
+# template missing the operation column (or most of these) is flagged as an
+# old template rather than parsed as if it were current.
+LISTING_CORE_ATTRS = ("sku", "update_delete", "title", "product_id", "quantity")
 
 APLUS_FIELDS: Dict[str, Tuple[str, ...]] = {
     "asin": ("asin",),
@@ -280,11 +303,17 @@ def detect_amazon_file(filename: str, content: bytes) -> Dict[str, Any]:
 
     per_sheet = []
     kind_votes: Dict[str, int] = {}
+    ERROR_HEADERS = {"error", "errors", "errortype", "errorcode", "errormessage", "errortypeid"}
     for s in sheets:
         headers = [norm_header(h) for h in s["headers"]]
         hset = set(headers)
+        has_error = bool(hset & ERROR_HEADERS)
         vote = None
-        if {"product", "entity", "operation"} <= hset:
+        if has_error and ({"product", "entity", "operation"} <= hset or hset & {"campaignid", "adgroupid", "keywordid"}):
+            vote = "ads_error_report"
+        elif has_error and (hset & {"sku", "sellersku", "itemsku"}):
+            vote = "listing_processing_report"
+        elif {"product", "entity", "operation"} <= hset:
             vote = "ads_bulksheet"
         elif hset & {"customersearchterm", "searchterm"} and ("clicks" in hset or "impressions" in hset):
             vote = "ads_search_terms"
@@ -347,11 +376,18 @@ def parse_upload(filename: str, content: bytes) -> Dict[str, Any]:
     missing_columns: List[str] = []
     row_count = 0
     observed_dates: List[str] = []
+    extra_notes: List[str] = []
+    ERROR_HEADERS = {"error", "errors", "errortype", "errorcode", "errormessage", "errortypeid"}
 
     for s in sheets:
         hset = {norm_header(h) for h in s["headers"]}
+        has_error = bool(hset & ERROR_HEADERS)
         sheet_kind = None
-        if {"product", "entity", "operation"} <= hset:
+        if has_error and ({"product", "entity", "operation"} <= hset or hset & {"campaignid", "adgroupid", "keywordid"}):
+            sheet_kind = "ads_error_report"
+        elif has_error and hset & {"sku", "sellersku", "itemsku"}:
+            sheet_kind = "listing_processing_report"
+        elif {"product", "entity", "operation"} <= hset:
             sheet_kind = "ads_bulksheet"
         elif hset & {"customersearchterm", "searchterm"}:
             sheet_kind = "ads_search_terms"
@@ -365,15 +401,18 @@ def parse_upload(filename: str, content: bytes) -> Dict[str, Any]:
             out_sheets.append({**s, "kind": None, "mapped": {}, "normalized": []})
             continue
 
-        fields = ADS_FIELDS if sheet_kind in ("ads_bulksheet", "ads_search_terms") else (
-            LISTING_FIELDS if sheet_kind == "listing_template" else (
-                APLUS_FIELDS if sheet_kind == "aplus_asin_list" else {
-                    "search_query": ("searchquery",),
-                    "search_frequency_rank": ("searchfrequencyrank", "sfr"),
-                    "search_query_score": ("searchqueryscore",),
-                }
-            )
-        )
+        if sheet_kind in ("ads_bulksheet", "ads_search_terms", "ads_error_report"):
+            fields = ADS_FIELDS
+        elif sheet_kind in ("listing_template", "listing_processing_report"):
+            fields = LISTING_FIELDS
+        elif sheet_kind == "aplus_asin_list":
+            fields = APLUS_FIELDS
+        else:
+            fields = {
+                "search_query": ("searchquery",),
+                "search_frequency_rank": ("searchfrequencyrank", "sfr"),
+                "search_query_score": ("searchqueryscore",),
+            }
         mapped = _map_headers(s["headers"], fields)
         required = ADS_REQUIRED if sheet_kind == "ads_bulksheet" else (
             BA_REQUIRED if sheet_kind == "brand_analytics" else (
@@ -382,6 +421,28 @@ def parse_upload(filename: str, content: bytes) -> Dict[str, Any]:
         )
         for req in _missing(required, mapped):
             missing_columns.append(f"{s['name']}:{req}")
+        # Listing updates: sku + the operation column are the hard requirements;
+        # the rest of the core attributes are reported so the operator knows what
+        # this template does and does not cover (a partial template is valid).
+        if sheet_kind == "listing_template":
+            for req in ("sku", "update_delete"):
+                if mapped.get(req) is None:
+                    missing_columns.append(f"{s['name']}:{req}")
+            core_present = [c for c in LISTING_CORE_ATTRS if mapped.get(c) is not None]
+            if mapped.get("update_delete") is None or len(core_present) <= 2:
+                extra_notes.append(
+                    f"{s['name']}: this looks like an OLD or partial template (operation column: "
+                    f"{'present' if mapped.get('update_delete') is not None else 'absent'}; core attributes found: "
+                    f"{', '.join(core_present) or 'none'}). Re-download the current template from Seller Central "
+                    "before relying on it; nothing is assumed about columns it does not carry."
+                )
+            else:
+                absent_core = [c for c in LISTING_CORE_ATTRS if mapped.get(c) is None]
+                if absent_core:
+                    extra_notes.append(
+                        f"{s['name']}: this template covers only part of the listing record "
+                        f"(absent core attributes: {', '.join(absent_core)}). Those fields stay UNKNOWN for this file."
+                    )
         columns_found.extend(sorted(mapped.keys()))
 
         normalized = []
@@ -403,10 +464,18 @@ def parse_upload(filename: str, content: bytes) -> Dict[str, Any]:
     notes = {
         "ads_bulksheet": [NOTE_ADS_BULKSHEET],
         "ads_search_terms": [NOTE_ADS_BULKSHEET],
+        "ads_error_report": [
+            "Ads processing report: the error columns are read exactly as the file states them. A row whose "
+            "entity cannot be matched back to your change file is REPORTED, never guessed at.",
+        ],
         "listing_template": [NOTE_LISTING_TEMPLATE],
+        "listing_processing_report": [
+            "Seller Central processing report: the error type/message columns are read exactly as stated. Rows "
+            "whose SKU cannot be matched back to your change file are REPORTED, never guessed at.",
+        ],
         "brand_analytics": [NOTE_BRAND_ANALYTICS],
         "aplus_asin_list": [NOTE_APLUS],
-    }.get(kind, [])
+    }.get(kind, []) + extra_notes
     obs_from = min(observed_dates) if observed_dates else None
     obs_to = max(observed_dates) if observed_dates else None
 

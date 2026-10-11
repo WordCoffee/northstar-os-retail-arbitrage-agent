@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+﻿/* Fonts are SELF-HOSTED at /ui/fonts/fonts.css (loaded in index.html). No third-party request. */
 
 :root {
   --paper: #f5f0e8;
@@ -50,11 +50,11 @@ body {
   min-height: 100vh;
 }
 
-/* ── APP LAYOUT ── */
+/* â”€â”€ APP LAYOUT â”€â”€ */
 #root, .app { min-height: 100vh; }
 .app { display: flex; flex-direction: column; }
 
-/* ── TOP NAV ── */
+/* â”€â”€ TOP NAV â”€â”€ */
 .top-nav {
   height: var(--nav-h);
   background: var(--surface);
@@ -100,10 +100,10 @@ body {
 .top-nav-role { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--ink-mid); font-weight: 500; }
 .top-nav-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--forest); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; cursor: pointer; }
 
-/* ── BODY LAYOUT ── */
+/* â”€â”€ BODY LAYOUT â”€â”€ */
 .body-layout { display: flex; flex: 1; min-height: 0; }
 
-/* ── SUITE RAIL ── */
+/* â”€â”€ SUITE RAIL â”€â”€ */
 .suite-rail {
   width: var(--rail-w);
   background: var(--surface);
@@ -150,7 +150,7 @@ body {
 .suite-rail-footer { margin-top: auto; padding: 12px 14px 4px; border-top: 1px solid var(--divider); }
 .suite-rail-system { font-size: 10px; color: var(--ink-faint); }
 
-/* ── MAIN CONTENT ── */
+/* â”€â”€ MAIN CONTENT â”€â”€ */
 .main-content {
   flex: 1;
   min-width: 0;
@@ -171,7 +171,7 @@ body {
 .page-subtitle { font-size: 14px; color: var(--ink-mid); line-height: 1.5; }
 .page-meta { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 
-/* ── TOOLS SHEET ── */
+/* â”€â”€ TOOLS SHEET â”€â”€ */
 .tools-sheet-overlay {
   position: fixed; inset: 0; background: rgba(26, 46, 26, 0.35);
   z-index: 200; display: flex; align-items: flex-end;
@@ -206,7 +206,7 @@ body {
 .tools-sheet-item:hover { background: var(--forest-glow); }
 .tools-sheet-item .pill { margin-left: 8px; }
 
-/* ── MOBILE NAV ── */
+/* â”€â”€ MOBILE NAV â”€â”€ */
 .mobile-bottom-nav {
   display: none;
   position: fixed; bottom: 0; left: 0; right: 0;
@@ -228,12 +228,12 @@ body {
   .top-nav-role { display: none; }
 }
 
-/* ── MOBILE TOOLS SHEET (always visible on mobile when active) ── */
+/* â”€â”€ MOBILE TOOLS SHEET (always visible on mobile when active) â”€â”€ */
 @media (max-width: 900px) {
   .tools-sheet-overlay { align-items: flex-end; }
 }
 
-/* ── RESPONSIVE ── */
+/* â”€â”€ RESPONSIVE â”€â”€ */
 @media (max-width: 640px) {
   .top-nav { padding: 0 12px; gap: 8px; }
   .top-nav-search input { width: 100px; }
@@ -241,7 +241,7 @@ body {
   .top-nav-avatar { width: 26px; height: 26px; font-size: 10px; }
 }
 
-/* ── SHARED COMPONENTS ── */
+/* â”€â”€ SHARED COMPONENTS â”€â”€ */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   padding: 8px 16px; border-radius: var(--radius-sm);
@@ -337,7 +337,7 @@ tbody tr:last-child td { border-bottom: none; }
 .divider { height: 1px; background: var(--divider); border: none; margin: 20px 0; }
 .divider-mid { background: var(--divider-mid); }
 
-/* ── COMMAND PALETTE ── */
+/* â”€â”€ COMMAND PALETTE â”€â”€ */
 .cmd-overlay {
   position: fixed; inset: 0; background: rgba(26, 46, 26, 0.35); z-index: 150;
   display: flex; align-items: flex-start; justify-content: center; padding-top: 15vh;
@@ -358,10 +358,10 @@ tbody tr:last-child td { border-bottom: none; }
 .cmd-item:hover, .cmd-item.focused { background: var(--forest-glow); color: var(--forest); outline: none; }
 .cmd-item .cmd-group { font-size: 11px; color: var(--ink-soft); font-family: var(--font-ui); }
 
-/* ── PRINT ── */
+/* â”€â”€ PRINT â”€â”€ */
 @media print { .top-nav, .suite-rail, .mobile-bottom-nav { display: none; } }
 
-/* ── SERVICE-LOCAL ROOM TABS ── */
+/* â”€â”€ SERVICE-LOCAL ROOM TABS â”€â”€ */
 .room-tabs {
   display: flex; align-items: center; gap: 4px;
   border-bottom: 1px solid var(--divider); padding-bottom: 2px; margin-bottom: 20px;
@@ -383,16 +383,16 @@ tbody tr:last-child td { border-bottom: none; }
 }
 .room-tab-count.active { background: var(--forest); color: #fff; }
 
-/* ── METRIC TILES (no nested grid wrappers) ── */
+/* â”€â”€ METRIC TILES (no nested grid wrappers) â”€â”€ */
 .metric-tiles { display: grid; gap: 16px; margin-bottom: 20px; }
 .metric-tiles-4 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
 .metric-tiles-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 .metric-tiles-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 
-/* ── DATA NOTICE PILL ── */
+/* â”€â”€ DATA NOTICE PILL â”€â”€ */
 .alert-title .pill { margin-right: 8px; vertical-align: middle; }
 
-/* ── ROOM-SPECIFIC WORKSPACE HELPERS ── */
+/* â”€â”€ ROOM-SPECIFIC WORKSPACE HELPERS â”€â”€ */
 .room-toolbar {
   display: flex; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
 }
@@ -406,7 +406,7 @@ tbody tr:last-child td { border-bottom: none; }
 .workbench .card { margin-bottom: 14px; padding: 16px 18px; }
 .workbench .card-head { margin-bottom: 12px; }
 
-/* ── RESPONSIVE ROOM GRIDS (phone-width hardening) ──
+/* â”€â”€ RESPONSIVE ROOM GRIDS (phone-width hardening) â”€â”€
    Desktop keeps the fixed compositions; at phone widths card grids become
    horizontally scrollable with an affordance and two-pane layouts stack. */
 .grid-cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
