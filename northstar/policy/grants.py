@@ -34,6 +34,12 @@ class GrantSet:
     def release(self, task_id: str) -> None:
         self._grants.pop(task_id, None)
 
+    def release_all(self) -> int:
+        """Revoke every grant (kill-switch support). Returns count revoked."""
+        count = len(self._grants)
+        self._grants.clear()
+        return count
+
     def capabilities(self, task_id: str) -> tuple[str, ...]:
         entry = self._grants.get(task_id)
         return entry[0] if entry else ()
