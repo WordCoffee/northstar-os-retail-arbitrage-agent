@@ -1,0 +1,21 @@
+# Phase 1 — local pre-commit hooks (Secure Control-Layer build).
+#
+# The offline scanner runs with zero extra dependencies:
+#   python -m northstar.security.secret_scan --staged
+#
+# The gitleaks binary is planned; its download is pending owner approval
+# (reports/audit.md D3). Once installed, pin the exact version and add:
+#
+#   - repo: https://github.com/gitleaks/gitleaks
+#     rev: <PIN EXACT VERSION AT INSTALL TIME>
+#     hooks:
+#       - id: gitleaks
+repos:
+  - repo: local
+    hooks:
+      - id: northstar-secret-scan
+        name: Northstar secret scan (offline, staged files)
+        entry: python -m northstar.security.secret_scan --staged
+        language: system
+        pass_filenames: false
+        always_run: true

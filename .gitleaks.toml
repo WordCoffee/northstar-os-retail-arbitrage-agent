@@ -1,0 +1,21 @@
+# NorthstarOS — gitleaks configuration (Phase 1, Secure Control-Layer).
+#
+# STATUS: the gitleaks binary is NOT installed yet — its download is pending
+# owner approval (see reports/audit.md D3). This file is the intended pinned
+# configuration. At install time: pin the exact gitleaks version and verify
+# the allowlist syntax against that version (gitleaks >= v8.19 uses
+# [[allowlists]]; older v8.x used [allowlist]).
+title = "NorthstarOS gitleaks config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Phase 1 harness + known placeholder fixtures (fake values by design)"
+paths = [
+  '''tests/security/.*''',
+  '''Northstar_backend/foundation/tests/.*''',
+]
+regexes = [
+  '''test-foundation-jwt-secret-not-real''',
+]

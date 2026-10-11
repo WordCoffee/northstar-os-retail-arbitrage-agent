@@ -1,0 +1,40 @@
+# Phase 1 — security CI (Secure Control-Layer build).
+#
+# NOTE: this repository has no CI today; this workflow activates when the repo
+# is hosted with Actions enabled. Everything below runs offline except the
+# standard actions themselves. The gitleaks job uses the standard gitleaks
+# action; pin the action to a SHA at enable time if policy requires it.
+name: security
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test deps
+        run: python -m pip install --upgrade pip pytest
+      - name: Offline secret scan (tracked files)
+        run: python -m northstar.security.secret_scan --tracked
+      - name: Phase 1 security tests
+        run: python -m pytest tests/security -q
+
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

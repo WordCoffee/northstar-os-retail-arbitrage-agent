@@ -22,3 +22,13 @@ Northstar_backend_audit_export/
 # output dirs are now ignored going forward. History rewrite = operator decision.
 data/scored/
 data/normalized/
+
+# --- Phase 1 secret hygiene (Secure Control-Layer) ---
+# No credential material may ever be committed. Local runtime artifacts that
+# can embed session/profile state are ignored going forward.
+*.pem
+*.p12
+*.pfx
+.chromeconnect/
+.playwright-mcp/
+.wrangler/tmp/
