@@ -105,6 +105,17 @@ class TestPrecisionSkips:
         assert scan_text("fake.py", '"SOME_API_KEY": "cleared",\n') == []
         assert scan_text("api_docs.py", '"password": "string",\n') == []
 
+    def test_unquoted_index_syntax_is_skipped(self):
+        # Regression: `token = auth_header[7:]` (index/slice code) was flagged
+        # once; brackets must be treated as code markers when UNQUOTED.
+        assert scan_text("fake.py", "token = auth_header[7:]\n") == []
+        assert scan_text("fake.py", "secret = rows[0]\n") == []
+
+    def test_bracketed_quoted_value_is_still_flagged(self):
+        # A quoted literal that merely CONTAINS brackets is still a value.
+        findings = scan_text("fake.py", 'password = "Pa[s]sword1"\n')
+        assert any(f.rule == "credential-assignment" for f in findings)
+
     def test_amazon_dib_url_blobs_are_skipped(self):
         line = f"url=https://www.amazon.com/dp/X?dib={FAKE_JWT}&qid=1\n"
         assert scan_text("fake.md", line) == []
@@ -139,6 +150,14 @@ class TestScanPaths:
         skip = tmp_path / "node_modules"
         skip.mkdir()
         (skip / "leak.txt").write_text(FAKE_OPENAI, encoding="utf-8")
+        (tmp_path / "ok.txt").write_text("nothing here", encoding="utf-8")
+        assert scan_paths([tmp_path]) == []
+
+    def test_dotenv_files_are_never_scanned_in_walks(self, tmp_path):
+        # Owner directive: the scanner must never READ local .env material.
+        (tmp_path / ".env").write_text(FAKE_AWS, encoding="utf-8")
+        (tmp_path / ".env.local").write_text(FAKE_OPENAI, encoding="utf-8")
+        (tmp_path / "prod.env").write_text(FAKE_AWS, encoding="utf-8")
         (tmp_path / "ok.txt").write_text("nothing here", encoding="utf-8")
         assert scan_paths([tmp_path]) == []
 

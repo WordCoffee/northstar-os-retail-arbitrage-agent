@@ -56,8 +56,22 @@ SKIP_DIR_NAMES = {
     ".mypy_cache",
     ".ruff_cache",
 }
-SKIP_FILE_SUFFIXES = {".example"}
-SKIP_FILE_NAMES = {".env.example"}
+SKIP_FILE_SUFFIXES = {".example", ".env"}
+# Local-only secret material must NEVER be read by filesystem WALKS:
+#   .env, .env.*, *.env (gitignored everywhere; deny-ruled for agents).
+# Tracked/staged scanning keeps full coverage — those lists can only contain
+# committed files, where a forced-committed .env would be exactly what a leak
+# scan must catch.
+SKIP_FILE_NAMES = {".env", ".env.example"}
+
+
+def _skip_filename(name: str) -> bool:
+    low = name.lower()
+    return (
+        low in SKIP_FILE_NAMES
+        or low.startswith(".env.")
+        or any(low.endswith(suffix) for suffix in SKIP_FILE_SUFFIXES)
+    )
 
 # Paths that contain intentionally fake fixture values (documented in the files
 # themselves); the same paths are allowlisted in .gitleaks.toml.
@@ -255,6 +269,10 @@ def scan_text(path: str, text: str) -> List[Finding]:
             continue
         if value.lower() in _STATUS_WORDS:
             continue
+        # Unquoted index/slice syntax (e.g. auth_header[7:]) is code, not a
+        # literal — but bracketed QUOTED values ("Pa[s]w0rd") stay flagged.
+        if not quoted and ("[" in value or "]" in value):
+            continue
         # Lowercase-only single words (status strings, doc placeholders, enum
         # values like "string"/"unconfigured") are never high-entropy secrets.
         if re.fullmatch(r"[a-z_]{4,24}", value):
@@ -296,10 +314,7 @@ def _iter_files(roots: Sequence[Path]) -> Iterable[Path]:
             dirnames[:] = sorted(d for d in dirnames if d not in SKIP_DIR_NAMES)
             for name in sorted(filenames):
                 path = Path(dirpath) / name
-                if (
-                    path.name.lower() in SKIP_FILE_NAMES
-                    or path.suffix.lower() in SKIP_FILE_SUFFIXES
-                ):
+                if _skip_filename(path.name):
                     continue
                 yield path
 
