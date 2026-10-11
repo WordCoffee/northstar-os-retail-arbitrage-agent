@@ -642,6 +642,30 @@ class DataLayer:
             );
             CREATE INDEX IF NOT EXISTS idx_ds_variant_metrics_account ON ds_variant_metrics(account_id);
             CREATE INDEX IF NOT EXISTS idx_ds_variant_metrics_variant ON ds_variant_metrics(variant_id);
+
+            -- Listing records (Phase 8 item 3): the tenant-store home for the
+            -- listing context. Migrated one-shot from the browser-local
+            -- ListingForge records, idempotent via a per-account legacy key.
+            CREATE TABLE IF NOT EXISTS ds_listing_records (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                asin TEXT,
+                title TEXT,
+                bullets TEXT,            -- JSON array
+                backend_terms TEXT,
+                description TEXT,
+                images TEXT,             -- JSON array of local asset metadata
+                aplus_modules TEXT,      -- JSON array of module names
+                source TEXT NOT NULL DEFAULT 'listingforge-local',
+                observed_at TEXT,
+                legacy_key TEXT,
+                created_at TEXT DEFAULT (datetime('now')),
+                updated_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_ds_listing_records_account ON ds_listing_records(account_id);
+            CREATE INDEX IF NOT EXISTS idx_ds_listing_records_asin ON ds_listing_records(asin);
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_ds_listing_records_legacy
+                ON ds_listing_records(account_id, legacy_key) WHERE legacy_key IS NOT NULL;
         """)
 
     def _create_sqlite_tables(self):
@@ -2277,6 +2301,98 @@ class DesignStudioVariantsDB:
         return [dict(r) for r in cur.fetchall()]
 
 
+class DesignStudioListingRecordsDB:
+    """Data access for ds_listing_records (Phase 8 item 3).
+
+    Tenant-scoped; the one-shot migration from the browser-local ListingForge
+    records is idempotent via a per-account legacy key (UNIQUE partial index).
+    """
+
+    _COLS = [
+        "id", "account_id", "asin", "title", "bullets", "backend_terms",
+        "description", "images", "aplus_modules", "source", "observed_at",
+        "legacy_key", "updated_at",
+    ]
+    _JSON_COLS = ("bullets", "images", "aplus_modules")
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _serialize(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        for k in self._JSON_COLS:
+            if k in d and isinstance(d[k], str):
+                try:
+                    d[k] = json.loads(d[k])
+                except ValueError:
+                    d[k] = None
+        return d
+
+    def create(self, entry: Dict[str, Any]) -> str:
+        import uuid
+        rid = entry.get("id") or str(uuid.uuid4())
+        rec = dict(entry)
+        rec["id"] = rid
+        rec.setdefault("source", "listingforge-local")
+        rec.setdefault("updated_at", datetime.now(timezone.utc).isoformat())
+        for k in self._JSON_COLS:
+            if k in rec and rec[k] is not None and not isinstance(rec[k], str):
+                rec[k] = json.dumps(rec[k])
+        cols = [c for c in self._COLS if c in rec]
+        placeholders = ", ".join(["?"] * len(cols))
+        try:
+            self.db.execute(
+                f"INSERT INTO ds_listing_records ({', '.join(cols)}) VALUES ({placeholders})",
+                tuple(rec[c] for c in cols),
+            )
+            self.db.commit()
+        except sqlite3.IntegrityError:
+            row = self.db.execute(
+                "SELECT id FROM ds_listing_records WHERE account_id = ? AND legacy_key = ?",
+                (rec.get("account_id"), rec.get("legacy_key")),
+            ).fetchone()
+            return row["id"] if row else rid
+        return rid
+
+    def list_for_account(self, account_id: str, limit: int = 200) -> List[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM ds_listing_records WHERE account_id = ? ORDER BY updated_at DESC LIMIT ?",
+            (account_id, limit),
+        )
+        return [self._serialize(r) for r in cur.fetchall()]
+
+    def get_by_id(self, rid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute("SELECT * FROM ds_listing_records WHERE id = ? AND account_id = ?", (rid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM ds_listing_records WHERE id = ?", (rid,))
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def get_by_asin(self, account_id: str, asin: str) -> Optional[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM ds_listing_records WHERE account_id = ? AND asin = ? ORDER BY updated_at DESC LIMIT 1",
+            (account_id, asin),
+        )
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def delete(self, rid: str, account_id: Optional[str] = None) -> bool:
+        if account_id:
+            self.db.execute("DELETE FROM ds_listing_records WHERE id = ? AND account_id = ?", (rid, account_id))
+        else:
+            self.db.execute("DELETE FROM ds_listing_records WHERE id = ?", (rid,))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+    def existing_legacy_keys(self, account_id: str) -> set:
+        cur = self.db.execute(
+            "SELECT legacy_key FROM ds_listing_records WHERE account_id = ? AND legacy_key IS NOT NULL",
+            (account_id,),
+        )
+        return {r["legacy_key"] for r in cur.fetchall()}
+
+
 class DesignStudioContainer:
     """Namespace for the Design Studio stores."""
 
@@ -2288,6 +2404,7 @@ class DesignStudioContainer:
         self.imports = DesignStudioImportsDB(db)
         self.search_terms = DesignStudioSearchTermsDB(db)
         self.variants = DesignStudioVariantsDB(db)
+        self.listing_records = DesignStudioListingRecordsDB(db)
 
 
 class NorthstarDB:

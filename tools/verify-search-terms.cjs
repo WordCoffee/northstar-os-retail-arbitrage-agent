@@ -89,9 +89,14 @@ async function main() {
     for (const v of vmine) {
       await fetch('/api/design-studio/variants/' + encodeURIComponent(v.id), { method: 'DELETE', credentials: 'include' })
     }
-    return { imports: mine.length, variants: vmine.length }
+    const lj = await (await fetch('/api/design-studio/listing-records', { credentials: 'include' })).json()
+    const lmine = (lj.records || []).filter(r => String(r.asin || '').startsWith('B00HARNESS'))
+    for (const r of lmine) {
+      await fetch('/api/design-studio/listing-records/' + encodeURIComponent(r.id), { method: 'DELETE', credentials: 'include' })
+    }
+    return { imports: mine.length, variants: vmine.length, listings: lmine.length }
   })
-  ok(`fixture cleanup: ${cleaned.imports} import(s) and ${cleaned.variants} variant(s) removed (the store persists between runs)`)
+  ok(`fixture cleanup: ${cleaned.imports} import(s), ${cleaned.variants} variant(s) and ${cleaned.listings} listing record(s) removed (the tenant store persists between runs)`)
 
   // ── Seed the local listing stores (item 5 reads them; no marketplace call) ─
   step('seeding the local ListingForge record + brand profile')
@@ -253,14 +258,25 @@ async function main() {
     ok(`the brief names the imported voice file as its provenance ("${prov.slice(0, 90)}…")`)
   } else no('voice provenance does not name the imported file', prov.slice(0, 160))
 
-  // ── Listing context (item 5): local fields with provenance + mismatches ─
+  // ── Listing context (item 5): tenant-store fields with provenance + mismatches ─
+  const migText = await page.$eval('[data-testid="listing-migration"]', e => e.textContent).catch(() => '')
+  if (/migrated 1 listing record/i.test(migText) && /1 record\(s\)/.test(migText)) {
+    ok(`the one-shot migration ran and is reported ("${migText.slice(0, 100)}…")`)
+  } else no('migration status missing or wrong', migText.slice(0, 160))
+  const serverRec = await page.evaluate(async () => {
+    const j = await (await fetch('/api/design-studio/listing-records', { credentials: 'include' })).json()
+    return (j.records || []).find(r => String(r.asin || '').startsWith('B00HARNESS')) || null
+  })
+  if (serverRec && serverRec.legacy_key && serverRec.title && serverRec.observed_at === '2026-10-05T00:00:00Z') {
+    ok('the tenant store holds the migrated record with its legacy key and observed date')
+  } else no('the tenant store does not hold the migrated record', JSON.stringify(serverRec).slice(0, 140))
   const ctxText = await page.$eval('[data-testid="listing-context"]', e => e.textContent).catch(() => '')
-  if (/Stainless steel tumbler/.test(ctxText) && /ListingForge local record/.test(ctxText)) {
-    ok('the listing context shows the local title with its source named')
-  } else no('listing context missing the title or its source', ctxText.slice(0, 160))
+  if (/Stainless steel tumbler/.test(ctxText) && /tenant listing record \(server\)/.test(ctxText)) {
+    ok('the listing context reads the TENANT record and names the server as the source')
+  } else no('listing context missing the tenant-store title or its source', ctxText.slice(0, 200))
   if (/2026-10-05/.test(ctxText) && /current/.test(ctxText)) ok('the observed date and freshness are shown for the record')
   else no('observed date / freshness missing', ctxText.slice(0, 160))
-  if (/UNKNOWN/.test(ctxText)) ok('a field no local store provides reads UNKNOWN (not blank, not invented)')
+  if (/UNKNOWN/.test(ctxText)) ok('a field no store provides reads UNKNOWN (not blank, not invented)')
   else no('no UNKNOWN field rendered - suspicious')
   const mismatch = await page.$eval('[data-testid="listing-mismatch"]', e => e.textContent).catch(() => '')
   if (/NEEDS HUMAN REVIEW/.test(mismatch) && /does not carry/.test(mismatch)) {

@@ -166,3 +166,35 @@ export async function fetchCompare() {
 export function variantsExportHref() {
   return `${BASE}/variants/export`
 }
+
+// ── Listing records in the tenant store (Phase 8 item 3) ───────────────────
+
+export async function fetchListingRecords() {
+  try {
+    const data = await api('/listing-records')
+    return { state: 'ready', records: data.records || [] }
+  } catch (e) {
+    return { state: 'error', records: [], reason: String(e.message || e) }
+  }
+}
+
+export async function migrateListingRecords(records) {
+  try {
+    const data = await api('/listing-records/migrate', {
+      method: 'POST',
+      body: JSON.stringify({ records }),
+    })
+    return { state: 'ready', ...data }
+  } catch (e) {
+    return { state: 'error', reason: String(e.message || e) }
+  }
+}
+
+export async function deleteListingRecord(id) {
+  try {
+    await api(`/listing-records/${encodeURIComponent(id)}`, { method: 'DELETE' })
+    return { state: 'ready' }
+  } catch (e) {
+    return { state: 'error', reason: String(e.message || e) }
+  }
+}

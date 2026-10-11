@@ -1114,6 +1114,84 @@ def import_variant_metrics(body: VariantMetricsImportIn, acct: str = Depends(stu
     }
 
 
+# ── Listing records (Phase 8 item 3) ──────────────────────────────────────
+# The tenant-store home for the listing context. The one-shot migration from
+# the browser-local ListingForge records is idempotent via a per-account legacy
+# key: a second run reports `skipped`, never a duplicate.
+
+class ListingRecordIn(BaseModel):
+    asin: Optional[str] = None
+    title: Optional[str] = None
+    bullets: Optional[List[str]] = None
+    backend_terms: Optional[str] = None
+    description: Optional[str] = None
+    images: Optional[List[Any]] = None
+    aplus_modules: Optional[List[str]] = None
+    observed_at: Optional[str] = None
+    legacy_key: Optional[str] = None
+
+
+class ListingMigrateIn(BaseModel):
+    records: List[ListingRecordIn] = Field(default_factory=list)
+
+
+@router.post("/listing-records/migrate")
+def migrate_listing_records(body: ListingMigrateIn, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    created = 0
+    skipped = 0
+    errors: List[Dict[str, Any]] = []
+    seen = db.design_studio.listing_records.existing_legacy_keys(acct)
+    for raw in body.records:
+        rec = raw.model_dump()
+        key = rec.get("legacy_key")
+        if key and key in seen:
+            skipped += 1
+            continue
+        try:
+            db.design_studio.listing_records.create({**rec, "account_id": acct})
+            if key:
+                seen.add(key)
+            created += 1
+        except Exception as exc:  # noqa: BLE001 - reported, never swallowed
+            errors.append({"asin": rec.get("asin"), "error": f"{exc.__class__.__name__}: {exc}"})
+    return {
+        "ok": not errors,
+        "created": created,
+        "skipped": skipped,
+        "errors": errors,
+        "note": "Idempotent per account via the legacy key: re-running reports skipped, never duplicates.",
+    }
+
+
+@router.get("/listing-records")
+def list_listing_records(acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    rows = db.design_studio.listing_records.list_for_account(acct)
+    return {
+        "records": rows,
+        "counts": {"total": len(rows)},
+        "note": "Scoped to the calling account. Migrated from the browser-local ListingForge records; the server copy is the primary source.",
+    }
+
+
+@router.get("/listing-records/{rid}")
+def get_listing_record(rid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    rec = db.design_studio.listing_records.get_by_id(rid, account_id=acct)
+    if not rec:
+        raise HTTPException(status_code=404, detail="Listing record not found")
+    return {"record": rec}
+
+
+@router.delete("/listing-records/{rid}")
+def delete_listing_record(rid: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    if not db.design_studio.listing_records.delete(rid, account_id=acct):
+        raise HTTPException(status_code=404, detail="Listing record not found")
+    return {"deleted": True}
+
+
 # ── Generation arming status (read-only, NO provider call) ────────────────
 # Phase 5 item 9. The Studio must be able to say truthfully whether generation
 # is armed. This reads local flags only: it never contacts a provider, never

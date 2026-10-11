@@ -15,14 +15,14 @@
 //     no causation claim.
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Icon from '../../../components/Icon.jsx'
 import { useToast } from '../../../components/ToastContext.jsx'
 import { useRoom } from '../../../studio/engine/store.js'
 import {
   importReport, fetchImports, fetchTerms, termsExportHref, makeBrief,
   fetchVariants, createVariant, addVariantMetric, importVariantMetrics, fetchCompare,
-  fetchBrandVoice, variantsExportHref,
+  fetchBrandVoice, variantsExportHref, fetchListingRecords, migrateListingRecords,
 } from '../../../studio/engine/imports.js'
 import { buildListingContext, mismatchFlags } from '../../../studio/engine/listingContext.js'
 
@@ -95,13 +95,18 @@ export default function SearchTerms() {
   const [brandVoice, setBrandVoice] = useState({ state: 'loading', available: false, fields: {}, missing_fields: [] })
   const [aplusProjects, setAplusProjects] = useState([])
   const [listingAsin, setListingAsin] = useState('')
+  const [listingRecords, setListingRecords] = useState([])
+  const [migrationState, setMigrationState] = useState({ state: 'idle', note: '' })
   const [forgeListings] = useRoom('lf-listings', [])
+  const [lfAssets] = useRoom('lf-assets', [])
   const [brandProfile] = useRoom('ds-brand-profile', null)
   const listingContext = useMemo(
-    () => buildListingContext({ forgeListings, brandProfile, aplusProjects, asin: listingAsin }),
-    [forgeListings, brandProfile, aplusProjects, listingAsin],
+    () => buildListingContext({ serverRecords: listingRecords, forgeListings, brandProfile, aplusProjects, asin: listingAsin }),
+    [listingRecords, forgeListings, brandProfile, aplusProjects, listingAsin],
   )
-  const listingOptions = (forgeListings || []).filter(l => l && l.asin)
+  const listingOptions = listingRecords.length
+    ? listingRecords.filter(r => r.asin).map(r => ({ asin: r.asin, label: r.title || '(untitled)' }))
+    : (forgeListings || []).filter(l => l && l.asin).map(l => ({ asin: l.asin, label: (l.copy && l.copy.title) || l.title || '(untitled)' }))
 
   const reloadBrandVoice = useCallback(async () => {
     const r = await fetchBrandVoice()
@@ -124,6 +129,67 @@ export default function SearchTerms() {
       setAplusProjects(j.projects || [])
     } catch { /* projects stay empty; the field reads UNKNOWN */ }
   }, [])
+
+  // ── Listing records: tenant store + one-shot migration (Phase 8 item 3) ──
+  const LC_MARKER = 'ns-lc-listing-migrated-v1'
+  const reloadListingRecords = useCallback(async () => {
+    const r = await fetchListingRecords()
+    if (r.state === 'ready') setListingRecords(r.records)
+    return r
+  }, [])
+
+  const buildLocalListingRecords = useCallback(() => (
+    (forgeListings || []).filter(l => l && l.asin).map(l => {
+      const copy = l.copy || {}
+      const bullets = Array.isArray(copy.bullets)
+        ? copy.bullets
+        : (typeof copy.bullets === 'string' && copy.bullets.trim() ? copy.bullets.split('\n').filter(Boolean) : null)
+      return {
+        asin: l.asin,
+        title: copy.title || l.title || null,
+        bullets,
+        backend_terms: copy.keywords || null,
+        description: copy.description || null,
+        images: (lfAssets || []).map(a => ({ name: a.name })).slice(0, 20),
+        aplus_modules: (aplusProjects || []).filter(p => p.section === 'aplus' && (!p.asin || p.asin === l.asin)).map(p => p.name),
+        observed_at: l.updated || l.createdAt || null,
+        legacy_key: `lf:${l.asin}:${l.updated || 'nodate'}`,
+      }
+    })
+  ), [forgeListings, lfAssets, aplusProjects])
+
+  const migrationCheckedRef = useRef(false)
+  useEffect(() => {
+    if (migrationCheckedRef.current) return
+    let already = false
+    try { already = localStorage.getItem(LC_MARKER) === '1' } catch { /* storage unavailable */ }
+    if (already) { migrationCheckedRef.current = true; setMigrationState({ state: 'done', note: 'this browser already migrated its listing records' }); return }
+    migrationCheckedRef.current = true
+    ;(async () => {
+      const records = buildLocalListingRecords()
+      if (!records.length) {
+        // Nothing to migrate; mark so the check does not rerun every mount.
+        try { localStorage.setItem(LC_MARKER, '1') } catch { /* ignore */ }
+        setMigrationState({ state: 'done', note: 'no browser-local listing records to migrate' })
+        return
+      }
+      const res = await migrateListingRecords(records)
+      if (res.state === 'ready' && res.ok) {
+        // The server confirmed: only now is the local mirror cleared and the
+        // marker set. The ListingForge store itself is another room's working
+        // data and is never deleted by this migration.
+        try { localStorage.removeItem('ns-lc-listing-mirror') } catch { /* ignore */ }
+        try { localStorage.setItem(LC_MARKER, '1') } catch { /* ignore */ }
+        setMigrationState({ state: 'done', note: `migrated ${res.created} listing record(s)${res.skipped ? `, ${res.skipped} already present` : ''}` })
+        await reloadListingRecords()
+      } else {
+        setMigrationState({
+          state: 'error',
+          note: `migration NOT confirmed (${res.reason || 'server reported errors'}) - the browser-local records are untouched and the panel falls back to them`,
+        })
+      }
+    })()
+  }, [buildLocalListingRecords, reloadListingRecords])
 
   const reloadImports = useCallback(async () => {
     const r = await fetchImports()
@@ -150,7 +216,8 @@ export default function SearchTerms() {
     reloadBrandVoice()
     reloadAplus()
     reloadKeywordRows()
-  }, [reloadImports, reloadTerms, reloadVariants, reloadBrandVoice, reloadAplus, reloadKeywordRows])
+    reloadListingRecords()
+  }, [reloadImports, reloadTerms, reloadVariants, reloadBrandVoice, reloadAplus, reloadKeywordRows, reloadListingRecords])
 
   const onFile = async (e) => {
     const f = e.target.files && e.target.files[0]
@@ -569,14 +636,19 @@ export default function SearchTerms() {
             <label className="label">Listing (local ListingForge records)</label>
             <select className="field" value={listingAsin} data-testid="listing-picker"
               onChange={e => setListingAsin(e.target.value)}>
-              <option value="">First local record</option>
+              <option value="">First listing record</option>
               {listingOptions.map(l => (
-                <option key={l.asin} value={l.asin}>{l.asin} — {(l.copy && l.copy.title) || l.title || '(untitled)'}</option>
+                <option key={l.asin} value={l.asin}>{l.asin} — {l.label}</option>
               ))}
             </select>
           </div>
         </div>
         <div className="text-low" style={{ fontSize: 11, marginTop: 6 }}>{listingContext.note}</div>
+        <div className="text-low" style={{ fontSize: 11, marginTop: 2 }} data-testid="listing-migration">
+          Tenant store: {listingRecords.length} record(s).
+          {migrationState.note ? ` Migration: ${migrationState.note}.` : ''}
+          {' '}The server copy is the primary source; the browser-local record is an explicit fallback only.
+        </div>
 
         <table className="table" style={{ marginTop: 10, fontSize: 12 }}>
           <thead><tr><th>Field</th><th>Value</th><th>Source</th><th>Observed</th><th>Freshness</th><th>Limits</th></tr></thead>

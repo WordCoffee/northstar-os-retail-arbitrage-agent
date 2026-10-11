@@ -49,36 +49,53 @@ function field(value, source, observedAt, limits) {
 }
 
 /**
- * Build the listing context from local stores.
+ * Build the listing context from the tenant store first, with the browser-local
+ * ListingForge records as an explicit OFFLINE FALLBACK (Phase 8 item 3).
  *
  * @param {object} o
- * @param {Array} o.forgeListings  ListingForge records (browser store)
+ * @param {Array} o.serverRecords  ds_listing_records rows (tenant store, primary)
+ * @param {Array} o.forgeListings  ListingForge records (fallback only)
  * @param {object} o.brandProfile  the studio brand profile (or null)
  * @param {Array} o.aplusProjects  studio projects with section 'aplus' (or [])
- * @param {string} o.asin          the listing to read ('' = none selected)
- * @returns {{asin, fields, missing, listing_present, corpus}}
+ * @param {string} o.asin          the listing to read ('' = first)
+ * @returns {{asin, fields, missing, listing_present, corpus, source_kind}}
  */
-export function buildListingContext({ forgeListings = [], brandProfile = null, aplusProjects = [], asin = '' } = {}) {
-  const listing = (forgeListings || []).find(l => l && (asin ? l.asin === asin : true)) || null
-  const copy = (listing && listing.copy) || {}
-  const assets = (listing && Array.isArray(listing.assets)) ? listing.assets : []
+export function buildListingContext({ serverRecords = [], forgeListings = [], brandProfile = null, aplusProjects = [], asin = '' } = {}) {
+  const server = (serverRecords || []).find(r => r && (asin ? r.asin === asin : true)) || null
+  const local = !server ? ((forgeListings || []).find(l => l && (asin ? l.asin === asin : true)) || null) : null
+  const listing = server || local
+  const fromServer = !!server
+  const copy = (local && local.copy) || {}
+  const assets = (local && Array.isArray(local.assets)) ? local.assets : []
   const modules = (aplusProjects || []).filter(p => (p.section || '') === 'aplus' && (!asin || !p.asin || p.asin === asin))
 
-  const observed = listing ? (listing.updated || listing.createdAt || null) : null
-  const listingLimits = [
-    'A local ListingForge record (browser storage), not a marketplace read.',
-    'Starter example rows ship with the studio until you edit or replace them.',
-  ]
+  const observed = fromServer
+    ? (server.observed_at || null)
+    : (local ? (local.updated || local.createdAt || null) : null)
+  const listingLimits = fromServer
+    ? [
+      'A tenant-store listing record (server), migrated from your browser-local ListingForge records.',
+      'A local record, not a marketplace read.',
+    ]
+    : [
+      'FALLBACK: a browser-local ListingForge record (the tenant store was unreachable or has no record yet).',
+      'Starter example rows ship with the studio until you edit or replace them.',
+    ]
+  const sourceLabel = fromServer ? 'tenant listing record (server)' : 'ListingForge local record (fallback)'
+
+  const serverBullets = fromServer && Array.isArray(server.bullets) ? server.bullets : null
+  const serverModules = fromServer && Array.isArray(server.aplus_modules) && server.aplus_modules.length ? server.aplus_modules : null
+  const serverImages = fromServer && Array.isArray(server.images) && server.images.length ? server.images : null
 
   const fields = {
-    asin: field(listing ? listing.asin : null, 'ListingForge local record', observed, listingLimits),
-    title: field(copy.title || (listing && listing.title) || null, 'ListingForge local record', observed, listingLimits),
+    asin: field(listing ? listing.asin : null, sourceLabel, observed, listingLimits),
+    title: field(fromServer ? server.title : (copy.title || (local && local.title) || null), sourceLabel, observed, listingLimits),
     bullets: field(
-      Array.isArray(copy.bullets) ? copy.bullets : (typeof copy.bullets === 'string' && copy.bullets.trim() ? copy.bullets.split('\n').filter(Boolean) : null),
-      'ListingForge local record', observed, listingLimits,
+      fromServer ? serverBullets : (Array.isArray(copy.bullets) ? copy.bullets : (typeof copy.bullets === 'string' && copy.bullets.trim() ? copy.bullets.split('\n').filter(Boolean) : null)),
+      sourceLabel, observed, listingLimits,
     ),
-    backend_terms: field(copy.keywords || null, 'ListingForge local record (keywords field)', observed, listingLimits),
-    description: field(copy.description || null, 'ListingForge local record', observed, listingLimits),
+    backend_terms: field(fromServer ? server.backend_terms : (copy.keywords || null), sourceLabel, observed, listingLimits),
+    description: field(fromServer ? server.description : (copy.description || null), sourceLabel, observed, listingLimits),
     detail_page_copy: field(
       brandProfile && brandProfile.listingCopy ? brandProfile.listingCopy : null,
       'studio brand profile (detail-page copy for parity)',
@@ -86,14 +103,14 @@ export function buildListingContext({ forgeListings = [], brandProfile = null, a
       ['A local brand-profile field; the operator maintains it by hand.'],
     ),
     images: field(
-      assets.length ? `${assets.length} local asset record(s)` : null,
-      'ListingForge local asset metadata',
+      fromServer ? serverImages : (assets.length ? `${assets.length} local asset record(s)` : null),
+      fromServer ? sourceLabel : 'ListingForge local asset metadata',
       observed,
       ['Local metadata only; the image bytes live in this browser.'],
     ),
     aplus_modules: field(
-      modules.length ? modules.map(m => m.name) : null,
-      'studio A+ projects (your own records)',
+      fromServer ? serverModules : (modules.length ? modules.map(m => m.name) : null),
+      fromServer ? sourceLabel : 'studio A+ projects (your own records)',
       modules.length ? (modules[0].pulled_at || null) : null,
       ['This lists the studio projects you created for A+; it is not Amazon\'s published module list.'],
     ),
@@ -112,12 +129,15 @@ export function buildListingContext({ forgeListings = [], brandProfile = null, a
   return {
     asin: asin || (listing ? listing.asin : ''),
     listing_present: !!listing,
+    source_kind: fromServer ? 'server' : (local ? 'local-fallback' : 'none'),
     fields,
     missing,
     corpus: parts.join(' ').toLowerCase(),
     note: listing
-      ? 'Read from your local ListingForge record. It is a local record, not a live marketplace read.'
-      : 'No local ListingForge record matches this ASIN; every listing field is UNKNOWN.',
+      ? (fromServer
+        ? 'Read from the tenant-store listing record (migrated from your browser-local ListingForge records). A local record, not a live marketplace read.'
+        : 'FALLBACK: read from the browser-local ListingForge record; the tenant store had no record. A local record, not a live marketplace read.')
+      : 'No listing record exists in the tenant store or locally; every listing field is UNKNOWN.',
   }
 }
 

@@ -114,7 +114,18 @@ _ABSENT_TABLES: set = set()
 
 
 def _table_missing(exc: Exception) -> bool:
-    return 'no such table' in str(exc).lower()
+    """True when the failure is a missing TABLE (both dialects).
+
+    SQLite: 'no such table: X'. Postgres: relation "X" does not exist
+    (psycopg raises UndefinedTable). A missing table is a legitimate empty
+    state; any other failure still propagates.
+    """
+    if exc.__class__.__name__ in ("UndefinedTable",):
+        return True
+    msg = str(exc).lower()
+    if 'no such table' in msg:
+        return True
+    return 'relation' in msg and 'does not exist' in msg
 
 
 def _optional_rows(sql: str, params: tuple = ()) -> tuple[list[dict], Optional[str]]:

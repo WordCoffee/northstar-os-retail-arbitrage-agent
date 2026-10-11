@@ -100,6 +100,36 @@ async function main() {
   if (!(bRechecks.rechecks || []).some(r => r.asset_id === `asset-${stamp}`)) ok('tenant B re-check LIST excludes A\'s entry')
   else no('LEAK: tenant B saw A\'s re-check entry')
 
+  // ── Listing records (Phase 8 item 3): tenant store + idempotent migration ─
+  const lrPayload = { records: [{
+    asin: `B00LR${stamp.slice(0, 5).toUpperCase()}`, title: 'Tenant A listing record',
+    bullets: ['bullet one'], backend_terms: 'terms a', description: 'desc a',
+    observed_at: '2026-10-05T00:00:00Z', legacy_key: `lr:${stamp}`,
+  }] }
+  const lrMig = await A.post(`${API}/api/design-studio/listing-records/migrate`, { data: lrPayload })
+  const lrMigBody = await lrMig.json().catch(() => ({}))
+  if (lrMig.status() === 200 && lrMigBody.created === 1) ok('tenant A migrated a listing record into the tenant store')
+  else no('listing-record migrate failed', `http ${lrMig.status()} ${JSON.stringify(lrMigBody).slice(0, 120)}`)
+  const lrDup = await A.post(`${API}/api/design-studio/listing-records/migrate`, { data: lrPayload })
+  const lrDupBody = await lrDup.json().catch(() => ({}))
+  if (lrDupBody.created === 0 && lrDupBody.skipped === 1) ok('re-running the migration reports skipped, never a duplicate')
+  else no('listing-record migration is not idempotent', JSON.stringify(lrDupBody).slice(0, 120))
+  const aLr = await (await A.get(`${API}/api/design-studio/listing-records`)).json()
+  const aRec = (aLr.records || []).find(r => r.legacy_key === `lr:${stamp}`)
+  if (aRec) ok('tenant A lists its own listing record')
+  else no('tenant A cannot see its migrated record')
+  const bLr = await (await B.get(`${API}/api/design-studio/listing-records`)).json()
+  if (!(bLr.records || []).some(r => r.legacy_key === `lr:${stamp}`)) ok('tenant B LIST does not contain A\'s listing record')
+  else no('LEAK: tenant B listed A\'s listing record')
+  if (aRec) {
+    const bRead = await B.get(`${API}/api/design-studio/listing-records/${aRec.id}`)
+    const bDel = await B.delete(`${API}/api/design-studio/listing-records/${aRec.id}`)
+    if (bRead.status() === 404) ok('tenant B READ by id -> 404')
+    else no(`tenant B listing-record read returned ${bRead.status()}`)
+    if (bDel.status() === 404) ok('tenant B DELETE -> 404')
+    else no(`tenant B listing-record delete returned ${bDel.status()}`)
+  }
+
   // Anonymous: every legacy route refuses with 401.
   const anonRoutes = [
     ['GET', '/api/design-studio/projects'],
@@ -127,6 +157,10 @@ async function main() {
   const aRechecks = await (await A.get(`${API}/api/design-studio/rechecks`)).json()
   for (const r of (aRechecks.rechecks || []).filter(x => x.asset_id === `asset-${stamp}`)) {
     await A.delete(`${API}/api/design-studio/rechecks/${r.id}`)
+  }
+  const aLrClean = await (await A.get(`${API}/api/design-studio/listing-records`)).json()
+  for (const r of (aLrClean.records || []).filter(x => x.legacy_key === `lr:${stamp}`)) {
+    await A.delete(`${API}/api/design-studio/listing-records/${r.id}`)
   }
   ok('probe records cleaned up by their owner')
 

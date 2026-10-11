@@ -45,6 +45,7 @@ STORES = (
     ("search_terms", "ds_search_terms"),
     ("variants", "ds_variants"),
     ("variant_metrics", "ds_variant_metrics"),
+    ("listing_records", "ds_listing_records"),
 )
 
 # Buckets that were shared by construction (the pre-Phase-7 collapse).
