@@ -135,7 +135,7 @@
    {
     "rule": "api_key",
     "line": 72,
-    "ctx": "his ships to every browser. \"use client\"; const openai = new OpenAI({ apiKey: \"sk-proj-REALKEYVALUE\" }); // burned the moment it committed  // SEC"
+    "ctx": "his ships to every browser. \"use client\"; const openai = new OpenAI({ apiKey: \"sk-<EXAMPLE-NOT-A-KEY>\" }); // burned the moment it committed  // SEC"
    },
    {
     "rule": "api_key",

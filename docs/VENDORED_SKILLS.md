@@ -44,5 +44,5 @@
 3. **No other packs** were fetched; only the 15 listed files (14 installed + 1 rejected) were downloaded from the two official repos at the pinned commits.
 
 ## Evidence
-- Raw review scan: `reports/vendoring_scan_20261011.json`
+- Raw review scan: `reports/vendoring_scan_20261011.json` — **sanitized post-capture**: token-shaped vendor samples in the excerpts were replaced with the same `sk-<EXAMPLE-NOT-A-KEY>` placeholder used at install (the secret gate caught the captured excerpt; fixed, not allowlisted).
 - Install gate: every written file re-scanned with the repo scanner (0 findings); `tests/security/test_vendored_skills.py` (5 tests) enforces the invariants.
