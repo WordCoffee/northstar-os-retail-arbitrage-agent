@@ -575,7 +575,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-09-30T02:42:18Z",
+  "last_updated": "2026-10-11T21:47:57Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1146,6 +1146,12 @@
       "batch": "P5-T4",
       "summary": "Wired Golden Goose item Review + Decisions views to persisted org-scoped routes. GoldenGoose.jsx: PersistedReview (loading/not-found/denied/error/loaded; stored item + UNKNOWN decision) for non-demo ids; PersistedDecisions panel (latest per item; UNKNOWN/DENIED; never fabricated) added to the Decisions view; static SAMPLE (GG-001/GG-002) preserved as an explicit demo fallback. verify-golden-goose.cjs expanded 5/0 -> 16/0 (org-scoped review, not-found, denied, decision round-trip after reload, cross-tenant denied, demo fallback). Regressions: smoke 42/0, guards 11/0, acceptance 27/0, invite 11/0; backend GG subset 29/0. No browser/provider/Amazon/credential action. P5-T4 remains PARTIAL (inline-SAMPLE-behind-Demo-toggle and P4-T3b rights filtering remain).",
       "next_action": "Move inline SAMPLE behind a Demo toggle; apply P4-T3b filters; extend acceptance with the persisted round-trip."
+    },
+    {
+      "ts": "2026-10-11T21:47:57Z",
+      "activity": "SCL_FINAL_DIRECTIVE_3B_VENDORING_DOCKER",
+      "batch": "SCL-P3b..P7",
+      "summary": "Secure control layer final directive executed. Phase 3b first live run: 13/40 requests, books 3/3 PASS, audit chain verified; driver decode defect found+fixed (1ead7bb); completion slice (+5 requests, within caps) proposed. Vendoring installed: 14 skills at pinned SHAs (marketingskills 1efedbc5, agency-agents f99f6aa9), rules-blocked + Amazon-adapted, 1 rejected (multi-platform-publisher), self-gated. Docker build VERIFIED: 95.4 MB, user northstar (uid 10001), digest sha256:ba7a4b7e6a0c8847f080e32597419904537bcfa307e8210068aa1246af8b83cb. Fixture hygiene done. Gates: tests 214/214; scan 0 new / 0 known-active / 231 allowlisted. Awaiting owner: D1 completion slice; D2 history-rewrite plan; D3 store-read wiring after 3b review; D4 MFA waits for UI screens."
     }
   ],
   "owner_action_queue": [
@@ -1223,6 +1229,17 @@
       "blocks": "P5-T4 labels",
       "safe_default": "Resale Score / resale_score",
       "status": "OPEN"
+    },
+    {
+      "id": "OA-SCL-1",
+      "card": "SECURE-CONTROL-LAYER",
+      "need": "Approve the Phase 3b completion slice (docs.python.org: 4 pages; quotes.toscrape.com: /js/ = +5 requests, within the original caps; example.com stays 'skipped: robots'). Review: 3b pass/fail report, vendoring results, Docker build numbers, history-rewrite plan (plan-only).",
+      "when": "next owner review",
+      "blocks": "Phase 3b final compatibility report; legacy store-read wiring (approved; begins after the 3b report is reviewed)",
+      "safe_default": "no further requests to any source until approved",
+      "status": "OPEN",
+      "owner_response": "",
+      "verification": "First run executed 2026-10-11: 13/40 requests, books.toscrape.com 3/3 PASS, audit chain verified; docs/quotes pages lost to own driver defect (fixed, commit 1ead7bb); controls PASS/DENIED as documented. Reports: reports/phase3b_compat_20261011.md, reports/master_completion_20261011.md, reports/history_rewrite_plan_20261011.md, docs/VENDORED_SKILLS.md."
     }
   ],
   "activity": [
