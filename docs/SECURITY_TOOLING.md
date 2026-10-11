@@ -70,15 +70,24 @@ uv lock        # uv.exe at C:\Python314\Scripts\uv.exe on this machine
   (Dockerfile.api); switching the Docker build onto `uv.lock` is a follow-up
   item (needs the owner-visible Docker change, tracked in the Phase 1 list).
 
-## 4. Config loader — env-only (Phase 1)
+## 4. Config loader — env-first, optional operator env-file (Phase 1)
 
-`northstar/security/env_config.py` — the control layer reads secrets ONLY from
-the process environment: `get_secret(name)` / `require_secret(name)` /
-`secret_presence(names)` / `redacted_summary(names)`. It never reads `.env`
-files, never calls `load_dotenv`, and its summaries carry `NAME=SET|MISSING`
-only — never values. A Keychain backend is an explicit future plug-in slot
-(`BACKENDS`); env is the only backend today. (A test guards the module source
-against ever gaining a dotenv import.)
+`northstar/security/env_config.py` — the control layer reads secrets from the
+process environment; additionally, and ONLY when the operator sets the
+`NORTHSTAR_ENV_FILE` environment variable to a path, values may be read from
+that file. The path is never hardcoded in code, tests, docs, or reports, and
+file contents are never logged or printed. API: `get_secret(name)` /
+`require_secret(name)` / `require_env_file()` / `secret_presence(names)` /
+`redacted_summary(names)`. `require_env_file()` **fails closed** with a clear
+error when the variable is unset or the file is missing — messages contain the
+variable NAME only, never a path or a value. Presence checks are boolean
+(`NAME=SET|MISSING`) and consider both sources; the module never calls
+`load_dotenv` (guarded by an AST test). Process environment wins over the file.
+
+Cloud-sync note (owner to review): the current env file lives under a user
+Desktop folder that **may be synced to a cloud backup service**. The owner will
+check this and move the file if needed — the loader only ever needs the
+`NORTHSTAR_ENV_FILE` variable updated; nothing else changes.
 
 ## 5. Log redaction (Phase 1)
 

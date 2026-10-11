@@ -11,9 +11,14 @@ import pytest
 
 from northstar.security.env_config import (
     BACKENDS,
+    ENV_FILE_VAR,
+    EnvFileMissingError,
+    EnvFileNotConfiguredError,
     MissingSecretError,
+    env_file_path,
     get_secret,
     redacted_summary,
+    require_env_file,
     require_secret,
     secret_presence,
 )
@@ -91,3 +96,77 @@ class TestPresenceReporting:
         assert "NS_TEST_SECRET=SET" in summary
         assert "NS_TEST_MISSING=MISSING" in summary
         assert FAKE_VALUE not in summary
+
+
+class TestEnvFileSource:
+    """NORTHSTAR_ENV_FILE: path-var-driven, fail-closed, names-only checks."""
+
+    def test_env_file_var_drives_the_path(self, tmp_path, monkeypatch):
+        env_file = tmp_path / "secrets.env"
+        env_file.write_text("", encoding="utf-8")
+        monkeypatch.setenv(ENV_FILE_VAR, str(env_file))
+        assert env_file_path() == env_file
+
+    def test_require_env_file_raises_clearly_when_unset(self, monkeypatch):
+        monkeypatch.delenv(ENV_FILE_VAR, raising=False)
+        with pytest.raises(EnvFileNotConfiguredError) as excinfo:
+            require_env_file()
+        message = str(excinfo.value)
+        assert ENV_FILE_VAR in message
+        assert FAKE_VALUE not in message
+
+    def test_require_env_file_raises_clearly_when_missing(self, tmp_path, monkeypatch):
+        missing = tmp_path / "not-here.env"
+        monkeypatch.setenv(ENV_FILE_VAR, str(missing))
+        with pytest.raises(EnvFileMissingError) as excinfo:
+            require_env_file()
+        message = str(excinfo.value)
+        assert ENV_FILE_VAR in message
+        assert str(missing) not in message  # the path is never echoed
+        assert FAKE_VALUE not in message
+
+    def test_file_backed_lookup_and_env_precedence(self, tmp_path, monkeypatch):
+        env_file = tmp_path / "secrets.env"
+        env_file.write_text(
+            "# comment\n"
+            "\n"
+            f"NS_FILE_SECRET={FAKE_VALUE}\n"
+            "QUOTED='quotedfake123'\n"
+            "export NS_EXPORTED=exportedfake99\n",
+            encoding="utf-8",
+        )
+        monkeypatch.setenv(ENV_FILE_VAR, str(env_file))
+        monkeypatch.delenv("NS_FILE_SECRET", raising=False)
+        assert get_secret("NS_FILE_SECRET") == FAKE_VALUE
+        assert get_secret("QUOTED") == "quotedfake123"
+        assert get_secret("NS_EXPORTED") == "exportedfake99"
+        monkeypatch.setenv("NS_FILE_SECRET", "envwins999")
+        assert get_secret("NS_FILE_SECRET") == "envwins999"
+
+    def test_presence_boolean_considers_file_and_never_values(
+        self, tmp_path, monkeypatch
+    ):
+        env_file = tmp_path / "secrets.env"
+        env_file.write_text(f"NS_FILE_ONLY={FAKE_VALUE}\n", encoding="utf-8")
+        monkeypatch.setenv(ENV_FILE_VAR, str(env_file))
+        monkeypatch.delenv("NS_FILE_ONLY", raising=False)
+        presence = secret_presence(["NS_FILE_ONLY", "NS_ABSENT_ONE"])
+        assert presence == {"NS_FILE_ONLY": True, "NS_ABSENT_ONE": False}
+        summary = redacted_summary(["NS_FILE_ONLY"])
+        assert FAKE_VALUE not in summary
+
+    def test_missing_file_does_not_break_lookups_and_required_still_fails_closed(
+        self, tmp_path, monkeypatch
+    ):
+        monkeypatch.setenv(ENV_FILE_VAR, str(tmp_path / "gone.env"))
+        monkeypatch.delenv("NS_OPTIONAL", raising=False)
+        assert get_secret("NS_OPTIONAL") is None
+        with pytest.raises(MissingSecretError):
+            require_secret("NS_OPTIONAL")
+
+    def test_require_env_file_returns_parsed_values(self, tmp_path, monkeypatch):
+        env_file = tmp_path / "secrets.env"
+        env_file.write_text(f"NS_PARSE_ONE={FAKE_VALUE}\n", encoding="utf-8")
+        monkeypatch.setenv(ENV_FILE_VAR, str(env_file))
+        parsed = require_env_file()
+        assert parsed.get("NS_PARSE_ONE") == FAKE_VALUE
