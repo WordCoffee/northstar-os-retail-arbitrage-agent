@@ -41,3 +41,11 @@ Minimal stdio **MCP server exposing exactly the three gateway tools** (`fetch_pa
 
 ## Commits (this directive)
 `0f2845c` (store) · `5ac250f` (brain) · `3da955e` (mcp/skills/config) · plus Phase 7: Dockerfile + commercial-readiness + this report.
+
+## Post-report note (same day) — the gate works
+The fingerprint gate **caught a real miss in this workstream**: a new test
+fixture used `"Bearer abc123def"` (not placeholder-marked) and the scanner
+flagged it (`1 new`, exit 1) immediately after the Phase 7 commit. Fixed by
+using a placeholder-marked value (`fakebearer321`); scan restored to
+`0 new / 0 known-active / 231 allowlisted` (exit 0). No allowlist entry was
+needed — the gate behaved exactly as designed.

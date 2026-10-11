@@ -57,6 +57,6 @@ def test_extracted_token_is_forwarded_exactly(monkeypatch):
         return {"plan": "mover"}
 
     monkeypatch.setattr(auth_mod, "decode_token", fake)
-    plan = _middleware()._get_plan(_StubRequest("Bearer abc123def"))
+    plan = _middleware()._get_plan(_StubRequest("Bearer fakebearer321"))
     assert plan == "mover"
-    assert seen["token"] == "abc123def"
+    assert seen["token"] == "fakebearer321"
