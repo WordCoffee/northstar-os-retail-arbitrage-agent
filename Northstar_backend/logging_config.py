@@ -4,6 +4,9 @@ Provides JSON-formatted structured logs for all API requests,
 provider calls, and background tasks. Supports both development
 (human-readable) and production (JSON) formats.
 
+Phase 1 (Secure Control-Layer): every log line passes through
+``northstar.security.redaction`` before it leaves the process.
+
 Usage:
     from logging_config import setup_logging, get_logger
     setup_logging()
@@ -15,7 +18,24 @@ import logging
 import os
 import sys
 from datetime import datetime, timezone
+from pathlib import Path as _Path
 from typing import Any, Dict
+
+# --- Phase 1 (Secure Control-Layer): redaction wiring -------------------------
+# Implementation lives in the new `northstar.security` package at the repo root
+# (see tests/security). Make the repo root importable when this module is loaded
+# from an unusual CWD, and fail soft if the package genuinely cannot be found —
+# importing this module must never raise because of redaction setup.
+_REPO_ROOT = _Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+try:
+    from northstar.security.redaction import RedactionFilter, RedactingFormatter
+
+    _REDACTION_AVAILABLE = True
+except Exception:  # defensive fallback: logging must keep working
+    _REDACTION_AVAILABLE = False
 
 
 class JSONFormatter(logging.Formatter):
@@ -77,10 +97,13 @@ def setup_logging(level: str = None):
     root.handlers.clear()
 
     handler = logging.StreamHandler(sys.stdout)
-    if log_format == "json":
-        handler.setFormatter(JSONFormatter())
-    else:
-        handler.setFormatter(DevFormatter())
+    formatter = JSONFormatter() if log_format == "json" else DevFormatter()
+    if _REDACTION_AVAILABLE:
+        # Phase 1 — redact both the record (filter) and the formatted output
+        # (formatter), so message, args, extra data and tracebacks are covered.
+        formatter = RedactingFormatter(formatter)
+        handler.addFilter(RedactionFilter())
+    handler.setFormatter(formatter)
 
     root.addHandler(handler)
 
