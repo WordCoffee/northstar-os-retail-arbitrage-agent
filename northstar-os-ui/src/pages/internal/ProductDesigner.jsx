@@ -32,7 +32,7 @@ import {
   SegmentedControl, Toggle, ChipRow, Stat,
 } from '../../studio/components/Fields.jsx'
 import {
-  KIND_LABEL, createDoc, updateLayer, removeLayer, docToDataUrl, downloadDataUrl, safeFileName,
+  KIND_LABEL, createDoc, updateLayer, removeLayer, reorderLayer, docToDataUrl, downloadDataUrl, safeFileName,
 } from '../../studio/engine/doc.js'
 import { buildSceneDoc } from '../../studio/engine/sceneDoc.js'
 import { renderMockup, mockupToDataUrl } from '../../studio/engine/mockups.js'
@@ -138,6 +138,59 @@ export default function ProductDesigner() {
   const patchSceneLayer = useCallback((id, patch) => {
     setSceneDoc(prev => updateLayer(prev, id, patch))
   }, [])
+
+  // ── Undo / redo for the scene document (Phase 8 item 6) ──────────────────
+  const sceneHistoryRef = useRef({ past: [], future: [] })
+  const sceneApplyingRef = useRef(false)
+  const sceneLastRef = useRef(null)
+  const [sceneHistoryTick, setSceneHistoryTick] = useState(0)
+  useEffect(() => {
+    if (sceneLastRef.current === null) { sceneLastRef.current = sceneDoc; return }
+    if (sceneApplyingRef.current) { sceneApplyingRef.current = false; sceneLastRef.current = sceneDoc; return }
+    if (sceneDoc === sceneLastRef.current) return
+    const h = sceneHistoryRef.current
+    h.past = [...h.past.slice(-49), sceneLastRef.current]
+    h.future = []
+    sceneLastRef.current = sceneDoc
+    setSceneHistoryTick(v => v + 1)
+  }, [sceneDoc])
+  const undoScene = useCallback(() => {
+    const h = sceneHistoryRef.current
+    if (!h.past.length) return
+    const prev = h.past[h.past.length - 1]
+    h.past = h.past.slice(0, -1)
+    h.future = [sceneDoc, ...h.future].slice(0, 50)
+    sceneApplyingRef.current = true
+    sceneLastRef.current = prev
+    setSceneDoc(prev)
+    setSceneHistoryTick(v => v + 1)
+  }, [sceneDoc])
+  const redoScene = useCallback(() => {
+    const h = sceneHistoryRef.current
+    if (!h.future.length) return
+    const next = h.future[0]
+    h.future = h.future.slice(1)
+    h.past = [...h.past, sceneDoc].slice(-50)
+    sceneApplyingRef.current = true
+    sceneLastRef.current = next
+    setSceneDoc(next)
+    setSceneHistoryTick(v => v + 1)
+  }, [sceneDoc])
+  useEffect(() => {
+    const onKey = (e) => {
+      if (!(e.ctrlKey || e.metaKey)) return
+      const tag = (e.target && e.target.tagName) || ''
+      if (/INPUT|TEXTAREA|SELECT/.test(tag)) return
+      const k = String(e.key || '').toLowerCase()
+      if (k === 'z') { e.preventDefault(); if (e.shiftKey) redoScene(); else undoScene() }
+      else if (k === 'y') { e.preventDefault(); redoScene() }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [undoScene, redoScene])
+  const canUndoScene = sceneHistoryRef.current.past.length > 0
+  const canRedoScene = sceneHistoryRef.current.future.length > 0
+  void sceneHistoryTick
 
   // ── 3D pack state ──
   const [packPresetId, setPackPresetId] = useState('carton')
@@ -521,6 +574,17 @@ export default function ProductDesigner() {
 
           {tool === 'scene' && (
             <div className="subview">
+              <div className="inline-flex" style={{ marginBottom: 8, flexWrap: 'wrap' }}>
+                <button className="btn btn-sm btn-ghost" data-testid="pd-undo" disabled={!canUndoScene} title="Undo (Ctrl+Z)" onClick={undoScene}>
+                  <Icon name="chevronRight" size={13} /> Undo
+                </button>
+                <button className="btn btn-sm btn-ghost" data-testid="pd-redo" disabled={!canRedoScene} title="Redo (Ctrl+Shift+Z)" onClick={redoScene}>
+                  <Icon name="chevronRight" size={13} /> Redo
+                </button>
+                <span className="text-low" style={{ fontSize: 11, alignSelf: 'center' }}>
+                  Scene edits are undoable; reordering happens in the Layers list.
+                </span>
+              </div>
               <Stage
                 doc={sceneDoc}
                 assets={images}
@@ -901,11 +965,19 @@ export default function ProductDesigner() {
                 <Section title={`Layers (${sceneDoc.layers.length})`}>
                   <div className="sp-layers">
                     {[...sceneDoc.layers].reverse().map(l => (
-                      <button key={l.id} className={`sp-layer ${selectedLayerId === l.id ? 'active' : ''}`} onClick={() => setSelectedLayerId(l.id)}>
+                      <button key={l.id} className={`sp-layer ${selectedLayerId === l.id ? 'active' : ''}`} onClick={() => setSelectedLayerId(l.id)} data-testid="pd-layer-row">
                         <Icon name="layers" size={12} />
                         <span className="sp-layer-name">{l.name || l.role || l.kind}</span>
                         <span className="sp-layer-kind">{KIND_LABEL[l.kind]}</span>
-                        <span className="sp-layer-btn" title="Remove layer"
+                        <span className="sp-layer-btn" title="Move up" data-testid="pd-layer-up"
+                          onClick={(e) => { e.stopPropagation(); setSceneDoc(d => reorderLayer(d, l.id, 1)) }}>
+                          <Icon name="chevronDown" size={12} />
+                        </span>
+                        <span className="sp-layer-btn" title="Move down" data-testid="pd-layer-down"
+                          onClick={(e) => { e.stopPropagation(); setSceneDoc(d => reorderLayer(d, l.id, -1)) }}>
+                          <Icon name="chevronRight" size={12} />
+                        </span>
+                        <span className="sp-layer-btn" title="Remove layer" data-testid="pd-layer-remove"
                           onClick={(e) => { e.stopPropagation(); setSceneDoc(d => removeLayer(d, l.id)) }}>
                           <Icon name="trash" size={12} />
                         </span>

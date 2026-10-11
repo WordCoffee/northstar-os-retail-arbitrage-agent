@@ -302,6 +302,10 @@ async function main() {
   else no('the sample-size warning is missing', cmp.slice(0, 140))
   if (/small/i.test(cmp) && /Under 25 clicks/i.test(cmp)) ok('the comparison carries the shared confidence band and note')
   else no('confidence band missing from the comparison', cmp.slice(0, 160))
+  const panelText = await page.$eval('[data-testid="variants-panel"]', e => e.textContent).catch(() => '')
+  if (/imported results only/i.test(panelText) && /sample size/i.test(panelText) && /no causation claim/i.test(panelText)) {
+    ok('the performance loop is labelled "imported results only" with sample size and the no-causation notice')
+  } else no('the imported-results / sample-size / no-causation labels are missing', panelText.slice(0, 160))
   if (/makes NO causation claim/i.test(cmp) && /no creative identifier/i.test(cmp)) ok('the comparison carries the no-causation and attribution-gap statements')
   else no('the no-causation statement is missing')
 

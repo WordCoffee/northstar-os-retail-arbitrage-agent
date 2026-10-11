@@ -694,12 +694,13 @@ export default function SearchTerms() {
       <div className="card" style={{ padding: 16 }} data-testid="variants-panel">
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <strong style={{ fontSize: 13 }}>Creative variants & performance</strong>
-          <span className="pill pill-muted">user- or file-entered metrics only</span>
+          <span className="pill pill-muted">imported results only</span>
+          <span className="pill pill-muted">user- or file-entered metrics</span>
         </div>
         <div className="text-low" style={{ fontSize: 11, marginTop: 4 }}>
-          Metrics here are entered by you or imported from a file you supply. This view never infers a
-          number, and it makes no causation claim: Amazon's reports carry no creative identifier, so a
-          difference cannot be attributed to a creative from this data.
+          Metrics here are entered by you or imported from a file you supply — never fetched from a provider.
+          Every comparison shows its sample size and makes no causation claim: Amazon's reports carry no creative
+          identifier, so a difference cannot be attributed to a creative from this data.
         </div>
 
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end', marginTop: 10 }}>
@@ -790,7 +791,7 @@ export default function SearchTerms() {
               </tbody>
             </table>
             <div className="text-low" style={{ fontSize: 11, marginTop: 6 }}>
-              {compareState.note}
+              <strong>Imported results only.</strong> {compareState.note}
               {compareState.attributionGap && <div style={{ marginTop: 4 }}>{compareState.attributionGap}</div>}
             </div>
           </div>
