@@ -536,6 +536,21 @@ def main() -> int:
     else:
         no(f"comparison notices wrong: {json.dumps({k: cmp[k] for k in ('causation', 'stale_window_note')})[:240]}")
 
+    # ── Item Highlights: the column stays UNKNOWN (item 8) ─────────────────
+    ih = C.item_highlights_column()
+    if ih["column"] is None and ih["status"] == "UNKNOWN":
+        ok("Item Highlights: no column is mapped or emitted; the status stays UNKNOWN")
+    else:
+        no(f"Item Highlights posture wrong: {json.dumps(ih)[:160]}")
+    ih_fixture = ("item_sku\tupdate_delete\titem_name\titem_highlights\n"
+                  "SKU-1\tPartialUpdate\tTumbler\tkeeps cold, fits cup holders\n").encode()
+    ih_parsed = P.parse_upload("listing_ih.txt", ih_fixture)
+    ih_mapped = ih_parsed["sheets"][0]["mapped"]
+    if "item_highlights" not in ih_mapped and "itemhighlights" not in ih_mapped and "item highlights" not in ih_mapped:
+        ok("Item Highlights: a source column with that header is preserved but NEVER mapped/interpreted")
+    else:
+        no(f"an Item Highlights column was mapped: {ih_mapped}")
+
     print(f"\nAMAZON FILE INTEGRATION: {PASS} passed, {FAIL} failed")
     if FAILURES:
         print("\nFailures:\n  " + "\n  ".join(FAILURES))

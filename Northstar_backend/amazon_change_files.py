@@ -79,6 +79,24 @@ ADS_OPS = ("Create", "Update", "Archive")
 LISTING_OP_MAP = {"Create": "Update", "Update": "PartialUpdate", "Archive": "Delete"}
 LISTING_OP_COLUMN = "update_delete"
 
+
+def item_highlights_column() -> Dict[str, Any]:
+    """Item Highlights: the flat-file/API column is UNKNOWN, and stays that way.
+
+    Item Highlights is a separate field (up to 125 characters of comma-separated
+    phrases). Amazon has not published the flat-file/API column for it, so no
+    writer maps or emits one. A source column that happens to carry that header
+    is preserved byte-for-byte like any other uninterpreted column - never
+    parsed as an Item Highlights value and never invented.
+    """
+    return {
+        "column": None,
+        "status": "UNKNOWN",
+        "note": ("Item Highlights is a separate field of up to 125 characters; its flat-file/API column is "
+                 "not published, so no writer maps or emits one. A source header by that name is copied "
+                 "through byte-for-byte and never interpreted."),
+    }
+
 ENTITY_ID_COLUMN = {
     "campaign": "campaign_id",
     "ad group": "ad_group_id",

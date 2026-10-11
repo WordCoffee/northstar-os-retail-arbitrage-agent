@@ -113,5 +113,39 @@ if (localEnv.NORTHSTAR_DISABLE_RATE_LIMIT === '1') {
   ok(`LOCAL composition does not force the opt-out (value=${JSON.stringify(localEnv.NORTHSTAR_DISABLE_RATE_LIMIT ?? 'unset -> compose default 0')})`)
 }
 
+// 5. No service in the deploy composition may publish ANY port besides the
+//    proxy's 80/443 (hosted-readiness package, item 12). A single stray
+//    `ports:` entry would expose Postgres, the API or a worker directly.
+const ALLOWED_HOSTED_PUBLISH = new Set(['80', '443'])
+const stray = []
+for (const [name, svc] of Object.entries(hosted.services || {})) {
+  for (const p of (svc.ports || [])) {
+    const published = String(p.published || p.published_port || '').trim()
+    if (!ALLOWED_HOSTED_PUBLISH.has(published)) stray.push(`${name}:${published}`)
+  }
+}
+if (stray.length === 0) {
+  ok('DEPLOY composition publishes NO port besides the proxy (80/443) across all services')
+} else {
+  no('DEPLOY composition publishes a non-proxy port', stray.join(', '))
+}
+
+// 6. Harness opt-outs must not survive into a deploy build. Any environment
+//    switch whose name marks it as a test bypass must be 0/unset in the
+//    hosted API environment; a "1" fails the guard.
+const OPT_OUT_PATTERN = /(BYPASS|TEST_MODE|DISABLE_RATE_LIMIT|OWNER_SELF_APPROVAL)/
+const optOuts = Object.entries(hostedEnv).filter(([k, v]) => OPT_OUT_PATTERN.test(k) && String(v) === '1')
+if (optOuts.length === 0) {
+  ok('DEPLOY composition carries no harness opt-out set to 1 (bypass / test-mode / rate-limit / self-approval)')
+} else {
+  no('DEPLOY composition sets a harness opt-out to 1', optOuts.map(([k]) => k).join(', '))
+}
+const localOptOuts = Object.entries(localEnv).filter(([k, v]) => OPT_OUT_PATTERN.test(k) && String(v) === '1')
+if (localOptOuts.length === 0) {
+  ok('LOCAL composition also carries no opt-out set to 1 (the limiter and throttles stay on by default)')
+} else {
+  no('LOCAL composition sets an opt-out to 1 - normal starts must keep them off', localOptOuts.map(([k]) => k).join(', '))
+}
+
 console.log(`\nDEPLOY COMPOSE GUARD: ${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

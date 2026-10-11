@@ -36,6 +36,30 @@ armed.
 
 Every cap must be enforced **server-side**. A client-side cap is a suggestion.
 
+### 2b. Per-tenant job limits (multi-tenant safety)
+
+The caps above are per project. A hosted deployment also needs limits that make
+one tenant unable to spend or queue everyone else's budget:
+
+| Limit | Suggested starting value | Enforced where |
+|---|---|---|
+| Concurrent generation jobs per tenant | 2 | job queue admission |
+| Queued (not started) jobs per tenant | 10 | queue admission; the 11th is refused with a stated reason |
+| Generation credits per tenant per day | 100 | the same ledger that records spend |
+| Wall-clock GPU minutes per tenant per day | 60 | the worker's accounting |
+| Jobs per tenant per hour | 20 | admission, so a loop is throttled, not banned |
+
+Rules that make the limits honest:
+
+- A refusal is **reported** to the tenant with the limit's name and its reset
+  time; it is never a silent drop and never a "retry later" with no reason.
+- The limit check happens **before** the job is enqueued, so a refused job
+  costs nothing and leaves no half-written record.
+- An unreadable counter is treated as **at the limit** (fail closed), the same
+  way an unreadable arming state is treated as UNARMED.
+- Limits are configuration, not code: changing a number does not require a
+  release, and every change is recorded in the audit log.
+
 ## 3. Audit log (required before arming)
 
 Every generate call must record, append-only:
@@ -99,7 +123,38 @@ Ordered by what a seller actually needs first:
   in-product edit.
 - No sample of real re-shoots has been measured against the thresholds.
 
-## 8. Sign-off
+## 8. Config sketch (documentation only — none of this is set today)
+
+If arming is ever approved, these are the NAMES the deployment would use. All
+are absent/empty in the beta, and the hosted overlay must keep them that way
+(the compose guard fails a deploy that sets an arming flag to 1):
+
+```
+# Provider arming (both required for any cloud spend):
+CLOUD_MODEL_LIVE=            # empty/0 = cloud tiers refused
+MEDIA_GEN_LIVE=              # empty/0 = image/video generation refused
+
+# Caps (server-side; the values are examples, not recommendations):
+GEN_MAX_CREDITS_PER_RUN=20
+GEN_MAX_CREDITS_PER_DAY=100
+GEN_MAX_GPU_MINUTES_PER_DAY=60
+GEN_JOB_TIMEOUT_SECONDS=600
+GEN_MAX_JOBS_PER_PROJECT=50
+
+# Per-tenant limits:
+GEN_MAX_CONCURRENT_PER_TENANT=2
+GEN_MAX_QUEUED_PER_TENANT=10
+GEN_MAX_CREDITS_PER_TENANT_DAY=100
+GEN_MAX_GPU_MINUTES_PER_TENANT_DAY=60
+GEN_MAX_JOBS_PER_TENANT_HOUR=20
+```
+
+The read-only status endpoint `/api/design-studio/generation-status` reports the
+live state; a missing flag reads UNARMED with its reason. This document changes
+nothing by itself: generation **remains UNARMED** until every sign-off box
+below is ticked and the owner says so explicitly.
+
+## 9. Sign-off
 
 | Step | Done | Date | Notes |
 |---|---|---|---|
