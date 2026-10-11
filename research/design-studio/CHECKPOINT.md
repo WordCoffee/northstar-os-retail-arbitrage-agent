@@ -129,21 +129,23 @@ Three rules added:
 - `research/design-studio/{OWNER_CAPTURE_TASKS.md,SOURCES.csv}` (new)
 - `tools/{test-compositing.cjs}`, extended `test-{disclosure,compliance-rules}.mjs`
 
-## Resume at (updated 2026-10-11, after Phase 9, HEAD 7d3398a)
-Everything in Phases 0-9 is done and verified (the 860-check regression plus a
-focused re-verification against the later additive policy-kernel commits, both
-in `reports/regression_20261011_phase9/`). The only open items are
-OWNER-blocked, and nothing else in this workstream is pending:
-1. The two login-gated capture tasks (`ai-tag-page`, `ai-ads-page`) in
+## Resume at (updated 2026-10-11, after Phase 10, HEAD a45a7e5)
+Everything in Phases 0-10 is done and verified (the Phase 10 full regression:
+**3061 passed / 0 failed / 0 FATAL** across 33 scored harnesses, in
+`reports/regression_20261011_phase10/`). The only open items are OWNER-blocked,
+and nothing else in this workstream is pending:
+1. A real Amazon upload of a written change file (by design, the owner performs
+   it; the harnesses prove everything up to the file).
+2. The two login-gated capture tasks (`ai-tag-page`, `ai-ads-page`) in
    `research/design-studio/OWNER_CAPTURE_TASKS.md`.
-2. The live fidelity trial: needs >=5 real photos dropped into
+3. The live fidelity trial: needs >=5 real photos dropped into
    `research/design-studio/reference-photos/` AND a running local image
    runtime; the harness (incl. the mask-protected paths) is ready.
-3. Owner decisions A4/A5/A7 (bounded hosted call, cloud arming cost cap, the
+4. Owner decisions A4/A5/A7 (bounded hosted call, cloud arming cost cap, the
    six isolated test roles) and the rest of the audit remediation sequence.
-4. The Item Highlights flat-file/API column stays UNKNOWN until Amazon
+5. The Item Highlights flat-file/API column stays UNKNOWN until Amazon
    publishes it; the export notice already says so.
-5. Housekeeping at any time: `cleanup_test_tenants.py` (dry run first) removes
+6. Housekeeping at any time: `cleanup_test_tenants.py` (dry run first) removes
    only the two labelled synthetic tenants.
 
 ### 3 + 4 UI GAP CLOSED (follow-up pass)
@@ -928,3 +930,72 @@ Evidence in `reports/regression_20261011_phase9/` (33 files):
 **Total: 860 passed, 0 failed, 0 FATAL. Zero live or paid calls; no cloud
 generation; generation UNARMED for every external provider; no failure needed a
 parent-commit comparison.**
+
+## PHASE 10 — FILE-ONLY AMAZON INTEGRATION (2026-10-11)
+
+### Architecture decision (overrides earlier plans)
+NorthstarOS **never signs in to Amazon and never links a seller's Amazon
+accounts**: no SP-API, no Ads API, no OAuth/LWA, no Amazon credentials. The
+seller downloads files from Amazon, uploads them here, Northstar writes a NEW
+change file, and the seller uploads it to Amazon manually.
+
+### 1. Linkage inventory + guard
+`reports/amazon-linkage-inventory_20261011.md` lists every path that referenced
+Amazon sign-in/APIs/live pulls: the SP-API importer (LWA + SP-API GETs), the
+Ads API importer (OAuth + advertising-api calls), the unified `amazon_api`
+adapter, the blacklist re-check's live branch, the `data_refresh` provider
+registry (names only), the already-gated live-pull family (A1), and the benign
+help-URL citations in the UI.
+`amazon_linkage_gate.py`: `NS_AMAZON_LINKAGE_ENABLED` default OFF;
+`assert_linkage_posture()` REFUSES to boot staging/production with it on (wired
+into `main.lifespan`); all four linkage points refuse even WITH credentials
+while the gate is off, stating the file-only reason.
+`tools/test_no_amazon_linkage.py`: **2127 checks / 0 failed** — static scan of
+the backend (outside the gated set) and the UI for Amazon API hosts, OAuth
+paths and credential env names; the file-only modules import no network library
+and contain no http(s) URL except inert OOXML namespace identifiers; posture +
+refusal-with-credentials tests.
+
+### 2-7. The file-only workflow
+- **Parsers (read-only, stdlib only)**: Ads bulksheets (.xlsx via zip+XML,
+  .csv), search-term sheets, listing/inventory templates (.txt TSV / xlsx),
+  Brand Analytics, A+ ASIN lists; type detection with stated reasons; required
+  columns validated and missing ones reported as UNKNOWN; observed ranges from
+  ISO date cells; checksums; a legacy .xls (BIFF) is honestly refused with the
+  fix stated.
+- **Change-file writers**: minimal xlsx writer (openpyxl-openable, proven),
+  TSV writer; the delta writer keeps the SOURCE column order, writes changed
+  rows only, copies IDs exactly, and refuses a blank Operation.
+- **Proposals + approval**: before/after, reason, evidence (file, checksum,
+  download date); missing/unmatched IDs BLOCK a row; a spend increase above the
+  seller's own limit requires a SECOND confirmation; a stale source (past the
+  stated 14-day window) warns; title changes carry the four rule FLAGS
+  (length 75 / banned characters / repeated word / promotional) — never blocks,
+  never edits.
+- **Round-trip validator**: re-reads the written file, matches rows by ID
+  value, proves the only differences are the approved ones, and records source
+  + written checksums and a diff digest. Tampering is caught; the no-op case
+  writes zero rows.
+- **A+ output**: an asset pack with placement instructions and required alt
+  text — NOT an uploadable module file; the ASIN bulk-upload limit is recorded
+  UNKNOWN (sources conflict).
+- **UI**: `Ads › Amazon files` sub-view (upload, archive, row edits, proposals
+  with flags/blocks/guardrail, approve/reject, write + round-trip display,
+  download, A+ pack). Tenant-scoped tables + endpoints; the D10 migration
+  covers the new tables.
+- One real bug found by the UI harness and fixed: the proposals GET returned
+  raw DB rows (fields nested under `payload`) while the surface reads the flat
+  proposal shape — the serializer now flattens.
+
+### Verification
+| Harness | Result |
+|---|---|
+| test_no_amazon_linkage.py (new) | 2127 / 0 |
+| test_amazon_files.py (new) | 34 / 0 |
+| verify-amazon-files.cjs (new) | 22 / 0 |
+| verify-amazon-files-ui.cjs (new) | 11 / 0 |
+| verify-d10-live.cjs (extended) | 28 / 0 |
+| Full regression (33 scored harnesses) | **3061 passed / 0 failed / 0 FATAL** |
+
+**NOT RUN with cause**: a real Amazon upload (the owner performs it manually by
+design). Zero live or paid calls; no cloud generation; generation unarmed.

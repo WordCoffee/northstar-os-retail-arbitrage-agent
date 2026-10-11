@@ -180,3 +180,12 @@ reversible. Reverse any of them with one line.
 | D29 | Item Highlights flat-file column | Recorded UNKNOWN until Amazon publishes it; the new ListingForge CSV export states it and leaves the column empty | An unpublished column name must never be invented | Publish the column name when Amazon does |
 | D30 | Mask-protected fidelity semantics | The masked reference is rendered with the same engine geometry (transparent outside the product), so edits outside the mask pass and edits inside block. Live trial still NOT RUN (no photos/runtime) | The transparency-skip IS the mask contract; fixtures prove both directions | Change the reference construction in `fidelity-trial.cjs` |
 | D31 | Harness fixture hygiene on PG | `_check-recheck-migration.cjs` now deletes its own previously-migrated entries before seeding (the PG store persists between runs) | The harness assumed a clean store; persistence made the count assertion fail | Remove the cleanup block and use a fresh tenant |
+
+### Phase 10 (2026-10-11, file-only Amazon integration)
+
+| # | Decision | Chosen | Why | Reverse by |
+|---|---|---|---|---|
+| D32 | Amazon linkage | OFF by architecture: `NS_AMAZON_LINKAGE_ENABLED` default off; staging/production REFUSE to boot with it on; the SP-API/Ads-API importers, the unified adapter and the blacklist re-check refuse even with credentials while off | The owner's architecture decision: no sign-in, no account linking, no APIs; files in, files out | Set the flag and (for a hosted posture) remove the boot refusal |
+| D33 | Legacy .xls (BIFF) | Honestly REFUSED with the stated fix (re-save as .xlsx/.csv); not parsed | A binary BIFF parser would be guesswork; the honest path is stated | Implement a BIFF reader |
+| D34 | Proposal list contract | The API returns the FLAT proposal shape (payload fields at the top level + decision fields) | The nested shape crashed the surface; the flat shape is now the contract | Return raw rows and adapt the UI |
+| D35 | Committed fixtures | `tools/fixtures/amazon_files/` holds the six upload fixtures, built with openpyxl by `_make_amazon_fixtures.py` | Real interop proof (a different writer than the parser) and stable harness inputs | Regenerate/remove the fixture set |
