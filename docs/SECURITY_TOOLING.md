@@ -116,3 +116,20 @@ Action pins (full SHAs, resolved via the GitHub API on 2026-10-11):
 Workflow hardening: top-level `permissions: {}` with per-job least privilege;
 `persist-credentials: false` on every checkout; per-job `timeout-minutes`;
 run concurrency with cancel-in-progress; `uv==0.13.0` pinned in the audit job.
+
+## 7. Lightpanda (Phase 3 browser dependency) — pinned install
+
+Owner-approved 2026-10-11 with hard pinning conditions; installed the same day.
+
+| Item | Value |
+|---|---|
+| Version | **1.0.0** (numbered release, published 2026-10-02; newest numbered release) — nightly/latest rejected as moving targets |
+| Install path | Docker on Windows dev (official binaries are macOS/Linux). Mac/ARM64 prod resolves the same multi-platform digest |
+| Image | `lightpanda/browser`, pinned by **multi-platform digest** (never a tag): `sha256:5b84708cb3d9bef841aba4a4cd299f4de0609ac1bd7d4c6fbfcbf168d56b685e` |
+| Checksum verification | Two independent sources, both agreeing: Docker Hub API (tag `1.0.0`) and `docker buildx imagetools inspect` |
+| Platform manifests | linux/amd64 `sha256:16b668ba75fdf3f9b215a0550f2840a0e76b905c645d99a23751dcd40a65688a` · linux/arm64 `sha256:dddeeccaea193724896a8c7b18a6630c66de18821518179a33060b0aa189090c` |
+| Release asset digests (GitHub API) | x86_64-linux `aa5a4b8e…31c3` · aarch64-linux `69791924…44f5` · macOS both · `.deb` both — recorded in `reports/lightpanda_install_20261011.md` |
+| Hardening | `LIGHTPANDA_DISABLE_TELEMETRY=true`, `LIGHTPANDA_DISABLE_CORE_DUMP=true` (+ `ulimit core 0`), `--obey-robots`, `no-new-privileges`, `mem_limit 1g`, `cpus 2.0`, non-root (`User=lightpanda` from the image) |
+| Network | Loopback-only publish `127.0.0.1:9222:9222`; proof: `scripts/lightpanda_loopback_test.ps1` (PASS 2026-10-11) |
+| Config | `docker-compose.lightpanda.yml` (config only — the binary is never committed) |
+| License posture | AGPL-3.0 — runs **unmodified** as a separate process; never forked or patched |

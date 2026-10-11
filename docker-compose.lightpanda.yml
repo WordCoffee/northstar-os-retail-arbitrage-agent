@@ -1,0 +1,49 @@
+# Lightpanda Connect — Phase 3 browser dependency (owner-approved install 2026-10-11).
+#
+# PINNING:
+#   - Lightpanda 1.0.0 — numbered release, published 2026-10-02 (the newest
+#     numbered release). NEVER nightly/latest (verified moving daily, which
+#     defeats pinning and checksum verification).
+#   - Image pinned by MULTI-PLATFORM DIGEST (OCI image index), not by tag:
+#       sha256:5b84708cb3d9bef841aba4a4cd299f4de0609ac1bd7d4c6fbfcbf168d56b685e
+#     Verified 2026-10-11 from TWO sources, both agreeing:
+#       1) Docker Hub API      (tag 1.0.0 digest)
+#       2) docker buildx imagetools inspect lightpanda/browser:1.0.0
+#     Platform manifests: linux/amd64 = sha256:16b668ba75fdf3f9b215a0550f2840a0e76b905c645d99a23751dcd40a65688a
+#                         linux/arm64 = sha256:dddeeccaea193724896a8c7b18a6630c66de18821518179a33060b0aa189090c
+#   - AGPL-3.0: the image runs UNMODIFIED as a separate process. Never forked
+#     or patched. (Windows dev uses Docker; Mac/ARM64 prod resolves the same
+#     multi-platform digest.)
+#
+# NETWORK: loopback-only on the host side. The in-container bind is
+# 0.0.0.0:9222 (container-internal, standard) — that is safe ONLY because the
+# host publish is bound to 127.0.0.1. CDP has NO authentication, so nothing on
+# the LAN may reach it. Proof: scripts/lightpanda_loopback_test.ps1
+#
+# HARDENING: telemetry disabled, core dumps disabled, robots obeyed,
+# no new privileges, resource limits, no secrets mounted (none needed).
+services:
+  lightpanda:
+    image: lightpanda/browser@sha256:5b84708cb3d9bef841aba4a4cd299f4de0609ac1bd7d4c6fbfcbf168d56b685e
+    container_name: northstar-lightpanda
+    command:
+      - /bin/lightpanda
+      - serve
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "9222"
+      - --obey-robots
+      - --user-agent
+      - "NorthstarBot/0.1"
+    environment:
+      LIGHTPANDA_DISABLE_TELEMETRY: "true"
+      LIGHTPANDA_DISABLE_CORE_DUMP: "true"
+    ports:
+      - "127.0.0.1:9222:9222"
+    security_opt:
+      - no-new-privileges:true
+    ulimits:
+      core: 0
+    mem_limit: 1g
+    cpus: 2.0
