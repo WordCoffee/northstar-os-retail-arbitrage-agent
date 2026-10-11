@@ -25,28 +25,15 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BASELINE = REPO_ROOT / ".secret_scan_baseline.json"
 
-# Frozen approval set — owner-reviewed escalations as of 2026-10-11.
+# Frozen approval set — owner-reviewed escalations. Pruned 2026-10-11 after the
+# owner-approved Option A archive scrub remediated four fingerprints
+# (SCAVIO/BRIGHTDATA keys + ghp_ token); the remaining entry is the
+# rate_limiter.py review item.
 # GROWTH IS BLOCKED: changing this set is a deliberate, reviewed act.
 FROZEN_APPROVED = {
     (
         "credential-assignment",
-        "65a9bec280c685b1c7e3080491f438c5a9e5f26ba8099a88fa5d10ebd75bbb5a",
-    ),
-    (
-        "openai-style-key",
-        "ca2d8a22d6f0d25200c7f318141c8a37ed69412d891def707184c937e760b30c",
-    ),
-    (
-        "credential-assignment",
-        "42ce3e16410e4e5bd41af840881d4d0bf3c1e3f18c56280abeda475884ed5892",
-    ),
-    (
-        "credential-assignment",
         "8e73174e0cef4b7173b580f96aac14692d8ec3dd1df19c819d7cc2ff8981b64e",
-    ),
-    (
-        "github-token",
-        "ef33331652fdc1f8e491f18485cdec192e2c973ab1530621188e01703f06a9d6",
     ),
 }
 
