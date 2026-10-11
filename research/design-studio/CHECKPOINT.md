@@ -129,11 +129,22 @@ Three rules added:
 - `research/design-studio/{OWNER_CAPTURE_TASKS.md,SOURCES.csv}` (new)
 - `tools/{test-compositing.cjs}`, extended `test-{disclosure,compliance-rules}.mjs`
 
-## Resume at
-Phase 4 remainder: the other eight sections still render the format and the
-pre-flight but do not embed the compositing surface. Next: embed it in A+,
-Storefront, Ads and the rest, then arm the local ComfyUI pipeline behind an
-explicit Run with a cost preview.
+## Resume at (updated 2026-10-11, after Phase 9, HEAD 7d3398a)
+Everything in Phases 0-9 is done and verified (the 860-check regression plus a
+focused re-verification against the later additive policy-kernel commits, both
+in `reports/regression_20261011_phase9/`). The only open items are
+OWNER-blocked, and nothing else in this workstream is pending:
+1. The two login-gated capture tasks (`ai-tag-page`, `ai-ads-page`) in
+   `research/design-studio/OWNER_CAPTURE_TASKS.md`.
+2. The live fidelity trial: needs >=5 real photos dropped into
+   `research/design-studio/reference-photos/` AND a running local image
+   runtime; the harness (incl. the mask-protected paths) is ready.
+3. Owner decisions A4/A5/A7 (bounded hosted call, cloud arming cost cap, the
+   six isolated test roles) and the rest of the audit remediation sequence.
+4. The Item Highlights flat-file/API column stays UNKNOWN until Amazon
+   publishes it; the export notice already says so.
+5. Housekeeping at any time: `cleanup_test_tenants.py` (dry run first) removes
+   only the two labelled synthetic tenants.
 
 ### 3 + 4 UI GAP CLOSED (follow-up pass)
 The first Phase 4 pass shipped items 3 and 4 as ENGINE functions only. A
