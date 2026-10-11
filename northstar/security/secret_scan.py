@@ -25,6 +25,7 @@ Exit codes: 0 = clean, 1 = findings, 2 = usage error.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -70,12 +71,15 @@ _TOKEN_RULES: Tuple[Tuple[str, "re.Pattern[str]", str], ...] = (
     ),
     (
         "github-token",
-        re.compile(r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36,}\b"),
+        re.compile(
+            r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36,}\b"
+            r"|\bgithub_pat_[A-Za-z0-9_]{30,}\b"
+        ),
         "GitHub token",
     ),
     (
         "openai-style-key",
-        re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b"),
+        re.compile(r"\bsk[_-][A-Za-z0-9_-]{16,}\b"),
         "OpenAI-style secret key",
     ),
     ("slack-token", re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b"), "Slack token"),
@@ -109,20 +113,42 @@ _TOKEN_RULES: Tuple[Tuple[str, "re.Pattern[str]", str], ...] = (
 )
 
 _KV_PATTERN = re.compile(
-    r"(?i)\b(password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|"
-    r"secret[_-]?key|client[_-]?secret|credential)\b([ \t]*[:=][ \t]*)"
+    r"(?i)(?<![A-Za-z0-9])(password|passwd|pwd|secret|tokens?|api[_-]?key|"
+    r"access[_-]?key|secret[_-]?key|client[_-]?secret|credentials?)\b"
+    r"([\"']?[ \t]*[:=][ \t]*)"
     r"('[^']*'|\"[^\"]*\"|[^\s,;\"']{4,})"
 )
 
 # Values that are code references, not literals — never flag these.
 _CODE_VALUE_PATTERN = re.compile(
     r"[+`(){}$&|<>]|process\.env|os\.environ|os\.getenv|import\.meta|"
-    r"getElementById|[A-Za-z_][\w]*\.[A-Za-z_]|\b(?:await|async)\b"
+    r"getElementById|[A-Za-z_][\w]*\.[A-Za-z_]|\b(?:await|async|include|omit)\b"
 )
 
 # Bare identifier references (constants / kebab slugs) are not literals.
 _UPPER_SNAKE_PATTERN = re.compile(r"[A-Z0-9_]{4,}")
 _KEBAB_PATTERN = re.compile(r"[a-z]+(?:-[a-z]+)+")
+
+# Status/enum words are never secret values (provider presence maps, UI states).
+_STATUS_WORDS = {
+    "configured",
+    "unconfigured",
+    "missing",
+    "present",
+    "unset",
+    "set",
+    "disabled",
+    "enabled",
+    "armed",
+    "disarmed",
+    "available",
+    "unavailable",
+    "connected",
+    "disconnected",
+}
+
+# Semver-ish values (lockfiles) are never secrets.
+_SEMVER_PATTERN = re.compile(r"\^?\d+(?:\.\d+)*(?:[-+][\w.]+)?")
 
 # Header-style rules: skip placeholder examples AND code expressions
 # (docs/tests write ``Bearer <token>``; code writes ``Bearer {apiKey}``).
@@ -146,10 +172,16 @@ class Finding:
     line: int
     column: int
     proof: str  # truncated fragment — never the full value
+    fingerprint: str  # sha256 of the exact matched text — the allowlist key
 
 
 def _proof(match: str) -> str:
     return f"{match[:4]}…(len={len(match)})"
+
+
+def _fingerprint(match: str) -> str:
+    """sha256 of the exact matched text — fingerprint-exact allowlist key."""
+    return hashlib.sha256(match.encode("utf-8")).hexdigest()
 
 
 def _line_col(text: str, offset: int) -> Tuple[int, int]:
@@ -199,7 +231,15 @@ def scan_text(path: str, text: str) -> List[Finding]:
                 continue
             line, col = _line_col(text, m.start())
             findings.append(
-                Finding(rule_id, description, path, line, col, _proof(m.group(0)))
+                Finding(
+                    rule_id,
+                    description,
+                    path,
+                    line,
+                    col,
+                    _proof(m.group(0)),
+                    _fingerprint(m.group(0)),
+                )
             )
     for m in _KV_PATTERN.finditer(text):
         raw_value = m.group(3)
@@ -210,6 +250,17 @@ def scan_text(path: str, text: str) -> List[Finding]:
         # Unquoted values must at least look literal-ish (>=6 chars, one digit);
         # unquoted bare identifiers/expressions are almost always code.
         if not quoted and not (len(value) >= 6 and re.search(r"\d", value)):
+            continue
+        if _SEMVER_PATTERN.fullmatch(value):
+            continue
+        if value.lower() in _STATUS_WORDS:
+            continue
+        # Lowercase-only single words (status strings, doc placeholders, enum
+        # values like "string"/"unconfigured") are never high-entropy secrets.
+        if re.fullmatch(r"[a-z_]{4,24}", value):
+            continue
+        # Quoted prose (3+ words) is display text, never a credential value.
+        if quoted and len(value.split()) >= 3:
             continue
         if (
             _PLACEHOLDER_PATTERN.search(value)
@@ -228,6 +279,7 @@ def scan_text(path: str, text: str) -> List[Finding]:
                 line,
                 col,
                 _proof(m.group(0)),
+                _fingerprint(m.group(0)),
             )
         )
     findings.sort(key=lambda f: (f.line, f.rule))
@@ -266,6 +318,39 @@ def _read_text(path: Path) -> str:
 
 def _is_excluded(posix_path: str, exclude: Sequence[str]) -> bool:
     return any(item in posix_path for item in exclude)
+
+
+_ALLOWLIST_FILENAME = ".secret_scan_allowlist.json"
+_ALLOWLIST_ROOT = Path(__file__).resolve().parents[2]
+
+
+def load_allowlist(path: Optional[Path] = None) -> dict:
+    """Load the fingerprint-exact allowlist.
+
+    Returns ``{(rule, sha256_hex): reason}``. Entries match findings by the
+    EXACT sha256 of the matched text plus the rule id — never by path or
+    substring, so a different value at the same location is still flagged.
+    A malformed allowlist is ignored with a warning (never suppresses findings).
+    """
+    allow_path = Path(path) if path else (_ALLOWLIST_ROOT / _ALLOWLIST_FILENAME)
+    if not allow_path.is_file():
+        return {}
+    try:
+        data = json.loads(allow_path.read_text(encoding="utf-8"))
+        out = {}
+        for entry in data.get("entries", []):
+            rule = str(entry.get("rule", "")).strip()
+            fp = str(entry.get("fingerprint", "")).strip().lower()
+            reason = str(entry.get("reason", "")).strip()
+            if rule and re.fullmatch(r"[0-9a-f]{64}", fp):
+                out[(rule, fp)] = reason
+        return out
+    except Exception as exc:  # malformed → ignore, keep every finding
+        print(
+            f"secret_scan: WARNING allowlist unreadable ({exc}); ignoring it",
+            file=sys.stderr,
+        )
+        return {}
 
 
 def scan_paths(
@@ -343,6 +428,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "--staged", action="store_true", help="scan git-staged files only (pre-commit)"
     )
     parser.add_argument("--json", action="store_true", help="machine-readable output")
+    parser.add_argument(
+        "--allowlist",
+        default=None,
+        help=(
+            "path to the fingerprint-exact allowlist JSON "
+            "(default: repo-root .secret_scan_allowlist.json)"
+        ),
+    )
+    parser.add_argument(
+        "--no-allowlist",
+        action="store_true",
+        help="ignore the allowlist entirely (every finding is active)",
+    )
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     if args.tracked and args.staged:
@@ -359,16 +457,46 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     else:
         findings = scan_paths([Path(r) for r in (args.roots or ["."])])
 
+    allowlist = (
+        {}
+        if args.no_allowlist
+        else load_allowlist(Path(args.allowlist) if args.allowlist else None)
+    )
+    active = []
+    allowed = []
+    for finding in findings:
+        reason = allowlist.get((finding.rule, finding.fingerprint))
+        if reason:
+            allowed.append((finding, reason))
+        else:
+            active.append(finding)
+
     if args.json:
-        print(json.dumps([asdict(f) for f in findings], indent=2))
+        print(
+            json.dumps(
+                {
+                    "findings": [asdict(f) for f in active],
+                    "allowlisted": [
+                        {"finding": asdict(f), "reason": reason}
+                        for f, reason in allowed
+                    ],
+                },
+                indent=2,
+            )
+        )
     else:
-        for f in findings:
+        for f in active:
             print(
                 f"FINDING [{f.rule}] {f.path}:{f.line}:{f.column} "
                 f"proof={f.proof} — {f.description}"
             )
-        print(f"secret_scan: {len(findings)} finding(s)")
-    return 1 if findings else 0
+        for f, reason in allowed:
+            print(
+                f"ALLOWED [{f.rule}] {f.path}:{f.line} "
+                f"fp={f.fingerprint[:16]}… — {reason}"
+            )
+        print(f"secret_scan: {len(active)} finding(s), {len(allowed)} allowlisted")
+    return 1 if active else 0
 
 
 if __name__ == "__main__":  # pragma: no cover

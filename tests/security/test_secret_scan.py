@@ -4,6 +4,8 @@ All values here are OBVIOUSLY FAKE. No real credential appears in this file.
 """
 from __future__ import annotations
 
+import json
+
 from northstar.security.secret_scan import main, scan_paths, scan_text
 
 FAKE_OPENAI = "sk-FAKEFAKEFAKEFAKE123456"
@@ -86,6 +88,23 @@ class TestPrecisionSkips:
     def test_invalid_bearer_placeholder_is_skipped(self):
         assert scan_text("fake.py", "Authorization: Bearer invalid-bearer-value\n") == []
 
+    def test_lockfile_semver_values_are_skipped(self):
+        assert scan_text("package-lock.json", '"js-tokens": "^4.0.0"\n') == []
+
+    def test_status_words_are_skipped(self):
+        assert scan_text("fake.py", '"SOME_API_KEY": "configured",\n') == []
+
+    def test_quoted_prose_values_are_skipped(self):
+        line = '"ERR_OTP_EXPIRED_TOKEN": "Your code has expired. Please try again."\n'
+        assert scan_text("fake.html", line) == []
+
+    def test_fetch_credentials_option_is_skipped(self):
+        assert scan_text("fake.js", "fetch(url, { credentials: 'include' })\n") == []
+
+    def test_lowercase_word_values_are_skipped(self):
+        assert scan_text("fake.py", '"SOME_API_KEY": "cleared",\n') == []
+        assert scan_text("api_docs.py", '"password": "string",\n') == []
+
     def test_amazon_dib_url_blobs_are_skipped(self):
         line = f"url=https://www.amazon.com/dp/X?dib={FAKE_JWT}&qid=1\n"
         assert scan_text("fake.md", line) == []
@@ -137,10 +156,95 @@ class TestScanPaths:
 class TestCli:
     def test_exit_codes_and_redacted_output(self, tmp_path, capsys):
         (tmp_path / "clean.txt").write_text("nothing to see", encoding="utf-8")
-        assert main(["--root", str(tmp_path)]) == 0
+        assert main(["--root", str(tmp_path), "--no-allowlist"]) == 0
 
         (tmp_path / "bad.txt").write_text(FAKE_AWS, encoding="utf-8")
-        assert main(["--root", str(tmp_path)]) == 1
+        assert main(["--root", str(tmp_path), "--no-allowlist"]) == 1
         out = capsys.readouterr().out
         assert FAKE_AWS not in out  # proofs are truncated
         assert "aws-access-key-id" in out
+
+
+class TestMultiPrefixAndCompoundRules:
+    def test_all_github_prefixes_are_found(self):
+        # Multi-prefix regression: the 2026-09 leak audit missed `ghp_` (its
+        # pattern matched `ghp-`); cover every classic prefix plus fine-grained
+        # PATs so the miss cannot recur.
+        for prefix in ("ghp", "gho", "ghu", "ghs", "ghr"):
+            fake = prefix + "_" + "F" * 40
+            findings = scan_text("fake.py", f"x {fake}\n")
+            assert any(f.rule == "github-token" for f in findings), prefix
+        pat = "github_pat_" + "F" * 40
+        assert any(
+            f.rule == "github-token" for f in scan_text("fake.py", f"x {pat}\n")
+        )
+
+    def test_sk_underscore_style_key_is_found(self):
+        fake = "sk_" + "F" * 40
+        findings = scan_text("fake.py", f"x {fake} y\n")
+        assert any(f.rule == "openai-style-key" for f in findings)
+
+    def test_compound_env_assignment_is_found(self):
+        findings = scan_text("fake.env", "SCAVIO_API_KEY=K7q2Wm9Zb4Tt6Yp1\n")
+        assert any(f.rule == "credential-assignment" for f in findings)
+
+    def test_guid_value_under_key_name_is_found(self):
+        findings = scan_text(
+            "fake.env", "SOME_API_KEY=a1b2c3d4-b5c6-d7e8-f9a0-bc1d2e3f4a5b\n"
+        )
+        assert any(f.rule == "credential-assignment" for f in findings)
+
+
+class TestAllowlist:
+    def test_fingerprint_exact_allowlisting(self, tmp_path, capsys):
+        (tmp_path / "leak.txt").write_text(FAKE_AWS, encoding="utf-8")
+        findings = scan_paths([tmp_path])
+        assert len(findings) == 1
+        allow = tmp_path / "allow.json"
+        allow.write_text(
+            json.dumps(
+                {
+                    "version": 1,
+                    "entries": [
+                        {
+                            "rule": "aws-access-key-id",
+                            "fingerprint": findings[0].fingerprint,
+                            "reason": "unit test ok",
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        assert main(["--root", str(tmp_path), "--allowlist", str(allow)]) == 0
+        out = capsys.readouterr().out
+        assert "ALLOWED" in out
+        assert "unit test ok" in out
+
+    def test_fingerprint_mismatch_still_fails(self, tmp_path, capsys):
+        (tmp_path / "leak.txt").write_text(FAKE_AWS, encoding="utf-8")
+        allow = tmp_path / "allow.json"
+        allow.write_text(
+            json.dumps(
+                {
+                    "version": 1,
+                    "entries": [
+                        {
+                            "rule": "aws-access-key-id",
+                            "fingerprint": "0" * 64,
+                            "reason": "nope",
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        assert main(["--root", str(tmp_path), "--allowlist", str(allow)]) == 1
+
+    def test_malformed_allowlist_is_ignored(self, tmp_path, capsys):
+        (tmp_path / "leak.txt").write_text(FAKE_AWS, encoding="utf-8")
+        allow = tmp_path / "allow.json"
+        allow.write_text("{not json", encoding="utf-8")
+        assert main(["--root", str(tmp_path), "--allowlist", str(allow)]) == 1
+        err = capsys.readouterr().err
+        assert "allowlist" in err.lower()

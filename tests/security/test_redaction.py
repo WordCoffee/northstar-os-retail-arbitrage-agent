@@ -79,6 +79,29 @@ class TestRedactText:
         assert FAKE_PASSWORD not in out
         assert REDACTED in out
 
+    def test_compound_env_names_are_redacted(self):
+        # Regression: `SCAVIO_API_KEY=...` style names (underscore-joined,
+        # no word boundary before the keyword) must still redact.
+        out = redact_text("SCAVIO_API_KEY=K7q2Wm9Zb4Tt6Yp1")
+        assert "K7q2Wm9Zb4Tt6Yp1" not in out
+        out2 = redact_text("BRIGHTDATA_API_KEY=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+        assert "aaaaaaaa-bbbb" not in out2
+
+    def test_sk_underscore_key_is_redacted(self):
+        fake = "sk_" + "F" * 40
+        out = redact_text(f"key {fake} ok")
+        assert fake not in out
+        assert REDACTED in out
+
+    def test_all_github_prefixes_are_redacted(self):
+        # Multi-prefix regression (the 2026-09 leak audit missed `ghp_`).
+        for prefix in ("ghp", "gho", "ghu", "ghs", "ghr"):
+            fake = prefix + "_" + "F" * 40
+            out = redact_text(f"token {fake} end")
+            assert fake not in out, prefix
+        pat = "github_pat_" + "F" * 40
+        assert pat not in redact_text(f"pat {pat} end")
+
     def test_email_is_redacted(self):
         out = redact_text(f"owner login: {FAKE_EMAIL}")
         assert FAKE_EMAIL not in out

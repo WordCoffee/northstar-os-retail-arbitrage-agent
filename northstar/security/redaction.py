@@ -34,8 +34,11 @@ REDACTED = "[REDACTED]"
 # ---------------------------------------------------------------------------
 _TOKEN_PATTERNS: Tuple[Tuple[str, "re.Pattern[str]"], ...] = (
     ("aws_access_key_id", re.compile(r"\b(?:AKIA|ASIA)[0-9A-Z]{16}\b")),
-    ("github_token", re.compile(r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36,}\b")),
-    ("openai_style_key", re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")),
+    ("github_token", re.compile(
+        r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36,}\b"
+        r"|\bgithub_pat_[A-Za-z0-9_]{30,}\b"
+    )),
+    ("openai_style_key", re.compile(r"\bsk[_-][A-Za-z0-9_-]{16,}\b")),
     ("slack_token", re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b")),
     ("jwt", re.compile(r"\beyJ[A-Za-z0-9_-]{8,}(?:\.[A-Za-z0-9_-]{8,}){1,2}\b")),
     (
@@ -55,9 +58,10 @@ _TOKEN_PATTERNS: Tuple[Tuple[str, "re.Pattern[str]"], ...] = (
 
 # key=value / "key": "value" pairs for sensitive names (value >= 4 chars).
 _KV_PATTERN = re.compile(
-    r"(?i)\b(password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|"
-    r"secret[_-]?key|private[_-]?key|client[_-]?secret|credential|auth[_-]?token|"
-    r"session[_-]?id)\b(\s*[:=]\s*)('[^']*'|\"[^\"]*\"|[^\s,;\"']{4,})"
+    r"(?i)(?<![A-Za-z0-9])(password|passwd|pwd|secret|tokens?|api[_-]?key|"
+    r"access[_-]?key|secret[_-]?key|private[_-]?key|client[_-]?secret|credentials?|"
+    r"auth[_-]?token|session[_-]?id)\b([\"']?[ \t]*[:=][ \t]*)"
+    r"('[^']*'|\"[^\"]*\"|[^\s,;\"']{4,})"
 )
 
 _EMAIL_PATTERN = re.compile(
