@@ -561,3 +561,125 @@ All harnesses with full output + FATAL counting, evidence in
 **Total: 750 passed, 0 failed, 0 FATAL. Zero live or paid calls; generation
 UNARMED; the production bundle carries neither the engine hook nor the dev
 shim.**
+
+## PHASE 7 — OVERNIGHT CONTINUOUS COMPLETION (items 1-9)
+
+### 1. D10 identity migration (item 1)
+- Every Design Studio route (legacy AND imported-evidence) now resolves a
+  strict, organization-scoped session (`studio_account`); anonymous callers are
+  refused with 401 on all 11 legacy routes and all new ones (live-verified).
+- `Northstar_backend/migrate_ds_identity.py`: dry-run-first migration. Rule:
+  records already owned by a real organization stay; shared buckets
+  ("default"/"anonymous"/empty) move ONLY when the deployment holds exactly one
+  organization; unknown buckets ALWAYS quarantine (they may belong to another
+  tenant). Nothing is deleted; apply is idempotent (re-plan shows 0 moves).
+- Live reports: `reports/d10-identity-dry-run_20261010.json` (real store: no
+  shared-bucket records at run time — the local store was reset by the image
+  rebuild, so the honest dry-run shows zero records), `...dry-run2...` (labeled
+  demo seeds quarantined with the reason, `fully_mapped: False` — the 3-org
+  deployment cannot attribute them), `...apply-real...` (apply moved nothing),
+  `...apply-demo...` (test-only `--orgs` override demonstrated the move path
+  live; the demo rows were then deleted).
+- `create_foundation_test_accounts.py` created two isolated foundation tenants
+  (the A7 accounts live in the legacy store, which the foundation login does not
+  use). Credentials live outside the repo and were never printed.
+- Fixtures: `tools/test_d10_identity_migration.py` 12/0 (single/multi/zero-org,
+  unknown bucket, idempotency, nothing deleted). Live negatives:
+  `tools/verify-d10-live.cjs` 12/0 — tenant B cannot list, search, read, export
+  or delete tenant A's records; anonymous → 401 everywhere.
+
+### 2. Dev sign-in fails closed (item 2)
+`SignIn.jsx`: only the EXACT demo pair takes the shim path; that path NEVER
+reaches `/auth/login` whatever the backend posture, and the failure is explicit.
+Real credentials are attempted only when the operator types them.
+`tools/verify-shim-fail-closed.cjs` 8/0: zero login requests from the shim path,
+explicit alert, no console line carries the demo password, a typed real account
+still signs in.
+
+### 3. Rate-limit opt-out cannot ship (item 3)
+`prod_posture_ok()` now refuses `NORTHSTAR_DISABLE_RATE_LIMIT=1` in staging AND
+production (the hosted overlay runs staging); the hosted compose pins it to
+"0"; `tools/start-local.ps1` sets it to 0 on every normal start. Tests:
+`test_rate_limit_posture.py` 5/0; the compose guard now asserts the deploy pin
+(5/0).
+
+### 4. Capability gaps closed (item 4)
+- **Projects:** undo/redo (bounded history + Ctrl+Z / Ctrl+Shift+Z), a
+  reference lock, and a version-bound compare sign-off (every edit stamps
+  `meta.lastEditAt` via `commitDoc`, so any edit invalidates it). Export gate =
+  compliance pre-flight + sign-off when locked. The objective pixel diff is
+  ON DEMAND ("Run fidelity diff") with its verdict and limits stated — a
+  composed canvas legitimately differs from the raw photograph, so the diff is
+  a readout, not an automatic gate (DECIDED-BY-DEFAULT, see D17).
+- **3D Product Scene:** `studio/engine/render3d.js` runs the actual-photo rule
+  (BLOCK for listing purpose; rule `render-actual-photo`, source `img-guide`),
+  the Amazon pre-flight, disclosure (same rules everywhere; unanswered blocks),
+  fidelity (when a reference is locked), and product-accuracy compare sign-off.
+  One kind-agnostic sign-off covers every view of the same scene state.
+- Harnesses: `tools/verify-projects-gates.cjs` 16/0/0 FATAL;
+  `tools/verify-render3d-gate.cjs` 14/0/0 FATAL — both twice.
+
+### 5. Listing integration (item 5)
+`studio/engine/listingContext.js` reads the seller's OWN local records only
+(ListingForge browser records, brand-profile detail-page copy, asset metadata,
+studio A+ projects). Every field carries source, observed date, freshness (a
+stated 90-day engineering window) and limits; a missing field reads UNKNOWN.
+The mismatch check flags a ranked creative term absent from the local listing
+copy as NEEDS HUMAN REVIEW — never auto-fixed, never called an error; with no
+listing copy the state is UNKNOWN. No marketplace or provider call exists in
+this path.
+
+### 6. Brand voice + keyword ingestion (item 6)
+New import kinds `brand_voice` and `keywords` (JSON/CSV, idempotent, archived
+with source label + date). `GET /brand-voice` returns the latest imported voice
+with provenance. Briefs name their voice AND keyword provenance (an imported
+file wins over the brand profile and is named with its label/date); imported
+keywords feed the brief's matching. Absent voice fields and empty keyword
+volumes stay UNKNOWN.
+
+### 7. Performance loop (item 7)
+Variant comparison carries the shared confidence band (very small/small/
+moderate/large/UNKNOWN); `GET /variants/export` produces a results CSV with
+per-variant aggregates, sample, confidence note, observed range, sources and
+the NO-CAUSATION caveat; a NULL metric exports as an EMPTY cell.
+
+### 8. Re-verification (item 8)
+Pixel paths on the test build: **37/0/0 FATAL**; prod mode 23/0 with the pixel
+paths correctly skipped; bundle contract 14/0 (prod carries neither hook nor
+shim; test carries the hook, not the shim). Freshness register re-run
+2026-10-10: `{"current": 35}` — nothing past cadence, zero re-pulls, no
+login-gated page touched.
+
+### 9. Full regression (item 9)
+Evidence in `reports/regression_20261010_phase7/` (27 files):
+
+| Harness | Result |
+|---|---|
+| test-compliance-rules.mjs | 106 / 0 |
+| test-disclosure.mjs | 65 / 0 |
+| test-fidelity-freshness.mjs | 57 / 0 |
+| test-generation.mjs (mocked) | 25 / 0 |
+| test-indexing-register.mjs | 28 / 0 |
+| test_design_studio_isolation.py | 37 / 0 |
+| test_login_throttle_bypass.py | 16 / 0 |
+| test_design_studio_imports.py | 40 / 0 |
+| test_d10_identity_migration.py (new) | 12 / 0 |
+| test_rate_limit_posture.py | 5 / 0 |
+| test_auth_guard.py | 16 / 0 |
+| check-jsx-imports.py | 97 files, 0 / 0 |
+| check-prod-bundle.cjs | 14 / 0 |
+| check-compose-deploy.cjs | 5 / 0 |
+| test-compositing.cjs prod / test / dev | 23 / 37 / 37, 0 FATAL each |
+| verify-design-studio.cjs | 67 / 0 |
+| test-migration-e2e.cjs | 12 / 0 |
+| verify-operator-smoke.cjs | 11 / 0 |
+| verify-search-terms.cjs (extended) | 46 / 0 |
+| verify-d10-live.cjs (new) | 12 / 0 |
+| verify-projects-gates.cjs (new) | 16 / 0 |
+| verify-render3d-gate.cjs (new) | 14 / 0 |
+| _check-recheck-migration.cjs | migration VERIFIED |
+| verify-shim-fail-closed.cjs (new) | 8 / 0 |
+| capture-section-evidence.cjs | 62 / 0, 18 screenshots refreshed |
+
+**Total: 772 passed, 0 failed, 0 FATAL. Zero live or paid calls; generation
+UNARMED; no failure needed a parent-commit comparison.**
