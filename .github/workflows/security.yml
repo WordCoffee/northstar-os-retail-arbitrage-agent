@@ -1,9 +1,17 @@
-# Phase 1 — security CI (Secure Control-Layer build).
+# Security CI — Secure Control-Layer build.
 #
-# NOTE: this repository has no CI today; this workflow activates when the repo
-# is hosted with Actions enabled. Everything below runs offline except the
-# standard actions themselves. The gitleaks job uses the standard gitleaks
-# action; pin the action to a SHA at enable time if policy requires it.
+# Jobs:
+#   secret-scan  (BLOCKING)  offline scanner (fingerprint-exact allowlist +
+#                known-active baseline) + the tests/security harness.
+#                The scan prints the KNOWN-ACTIVE count on every run: known
+#                escalations stay visible; only NEW findings fail the build.
+#   gitleaks     (advisory)  broad-spectrum scan. gitleaks has no hash-based
+#                allowlist, so it stays non-blocking until the fingerprint-
+#                filter wrapper lands (see docs/SECURITY_TOOLING.md).
+#                Personal repos need no license; orgs set GITLEAKS_LICENSE.
+#   audit        (advisory)  pip-audit against the frozen uv.lock export,
+#                npm audit (root + UI), SBOM (SPDX) artifact upload.
+#                Flip to blocking after the first triage cycle.
 name: security
 
 on:
@@ -14,7 +22,7 @@ permissions:
   contents: read
 
 jobs:
-  offline-security:
+  secret-scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,13 +31,14 @@ jobs:
           python-version: "3.12"
       - name: Install test deps
         run: python -m pip install --upgrade pip pytest
-      - name: Offline secret scan (tracked files)
+      - name: Offline secret scan (tracked; allowlist + baseline aware)
         run: python -m northstar.security.secret_scan --tracked
-      - name: Phase 1 security tests
+      - name: Security tests (Phase 1+2 harness)
         run: python -m pytest tests/security -q
 
   gitleaks:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,3 +47,34 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  audit:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install audit tooling (pip-audit + uv)
+        run: python -m pip install --upgrade pip pip-audit uv
+      - name: pip-audit (frozen uv.lock export)
+        working-directory: Northstar_backend
+        run: |
+          uv export --frozen --no-hashes --output-file /tmp/northstar-requirements.txt
+          pip-audit -r /tmp/northstar-requirements.txt || true
+      - name: npm audit (root)
+        run: npm audit --audit-level=high || true
+      - name: npm audit (UI)
+        working-directory: northstar-os-ui
+        run: npm audit --audit-level=high || true
+      - name: SBOM (SPDX JSON artifact)
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          artifact-name: northstar-sbom.spdx.json
+          upload-artifact: true

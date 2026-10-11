@@ -165,6 +165,65 @@ class TestCli:
         assert "aws-access-key-id" in out
 
 
+class TestBaseline:
+    """Known-active findings stay visible and never fail; NEW findings do."""
+
+    def test_known_active_does_not_fail_and_stays_visible(self, tmp_path, capsys):
+        (tmp_path / "leak.txt").write_text(FAKE_AWS, encoding="utf-8")
+        findings = scan_paths([tmp_path])
+        assert len(findings) == 1
+        base = tmp_path / "base.json"
+        base.write_text(
+            json.dumps(
+                {
+                    "version": 1,
+                    "entries": [
+                        {
+                            "rule": "aws-access-key-id",
+                            "fingerprint": findings[0].fingerprint,
+                            "reason": "pending rotation",
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        assert main(["--root", str(tmp_path), "--no-allowlist", "--baseline", str(base)]) == 0
+        out = capsys.readouterr().out
+        assert "KNOWN-ACTIVE" in out
+        assert "pending rotation" in out
+        assert "0 new finding(s)" in out
+
+    def test_new_finding_beyond_baseline_fails(self, tmp_path, capsys):
+        (tmp_path / "leak.txt").write_text(FAKE_AWS, encoding="utf-8")
+        base = tmp_path / "base.json"
+        base.write_text(json.dumps({"entries": []}), encoding="utf-8")
+        assert main(["--root", str(tmp_path), "--no-allowlist", "--baseline", str(base)]) == 1
+        out = capsys.readouterr().out
+        assert "FINDING" in out
+
+    def test_stale_baseline_entry_is_reported_not_fatal(self, tmp_path, capsys):
+        (tmp_path / "clean.txt").write_text("nothing to see", encoding="utf-8")
+        base = tmp_path / "base.json"
+        base.write_text(
+            json.dumps(
+                {
+                    "entries": [
+                        {
+                            "rule": "aws-access-key-id",
+                            "fingerprint": "a" * 64,
+                            "reason": "already fixed",
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        assert main(["--root", str(tmp_path), "--no-allowlist", "--baseline", str(base)]) == 0
+        err = capsys.readouterr().err
+        assert "STALE-BASELINE" in err
+
+
 class TestMultiPrefixAndCompoundRules:
     def test_all_github_prefixes_are_found(self):
         # Multi-prefix regression: the 2026-09 leak audit missed `ghp_` (its

@@ -42,13 +42,17 @@ Notes:
 `python -m northstar.security.secret_scan` (stdlib-only; pre-commit + CI use it).
 
 - `--tracked` (CI/local gate) · `--staged` (pre-commit) · `--root X` · `--json`
-- `--allowlist PATH` / `--no-allowlist`
-- Allowlist: **`.secret_scan_allowlist.json`** — entries match by
-  `sha256(exact matched text) + rule id` (never path/substring). A changed
-  value at the same location re-flags. Malformed allowlist ⇒ ignored with a
-  warning (never suppresses findings).
-- Exit code 0 = no active findings; 1 = active findings (allowlisted items are
-  reported separately as `ALLOWED …`).
+- `--allowlist PATH` / `--no-allowlist`; `--baseline PATH` / `--no-baseline`
+- **Allowlist** (`.secret_scan_allowlist.json`) — reviewed-BENIGN findings;
+  printed as `ALLOWED`; never fail the run.
+- **Baseline** (`.secret_scan_baseline.json`) — known-ACTIVE escalations
+  awaiting owner remediation; printed as `KNOWN-ACTIVE` **with reasons on
+  every run** so the count stays visible; entries that stop matching are
+  reported as `STALE-BASELINE` (cleanup prompt); only **NEW** findings fail.
+- Both registries match by `sha256(exact matched text) + rule id` — never by
+  path/substring; a changed value at the same location re-flags. A malformed
+  registry is ignored with a warning (it can never suppress a finding).
+- Summary line: `N new finding(s), M known-active (baseline), K allowlisted`.
 
 ## 3. uv — dependency pins (owner-approved 2026-10-11)
 
@@ -84,3 +88,17 @@ against ever gaining a dotenv import.)
 Coverage includes compound env names (`SCAVIO_API_KEY=…`), `sk-`/`sk_` styles,
 all GitHub token prefixes (`ghp_/gho_/ghu_/ghs_/ghr_`, `github_pat_`), JWTs,
 PEM blocks, auth/cookie headers, GUIDs under key names, and emails.
+
+## 6. CI wiring
+
+`.github/workflows/security.yml` (activates when the repo is hosted with
+Actions enabled):
+
+| Job | Blocking? | What it runs |
+|---|---|---|
+| `secret-scan` | **Yes** | offline scanner (`--tracked`, allowlist+baseline aware, count line printed) + `pytest tests/security -q` |
+| `gitleaks` | No (advisory) | standard gitleaks-action (full history); no hash allowlist → advisory until the fingerprint-filter wrapper lands |
+| `audit` | No (initial) | `pip-audit` against a frozen `uv export` of `uv.lock`; `npm audit` (root + UI); SBOM (SPDX) uploaded as an artifact |
+
+Local equivalent: `powershell -NoProfile -File scripts/security_checks.ps1`
+(scanner + tests; exit 0 = no NEW findings and all tests pass).

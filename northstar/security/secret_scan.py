@@ -321,22 +321,23 @@ def _is_excluded(posix_path: str, exclude: Sequence[str]) -> bool:
 
 
 _ALLOWLIST_FILENAME = ".secret_scan_allowlist.json"
-_ALLOWLIST_ROOT = Path(__file__).resolve().parents[2]
+_BASELINE_FILENAME = ".secret_scan_baseline.json"
+_REGISTRY_ROOT = Path(__file__).resolve().parents[2]
 
 
-def load_allowlist(path: Optional[Path] = None) -> dict:
-    """Load the fingerprint-exact allowlist.
+def _load_registry(path: Optional[Path], default_path: Path, label: str) -> dict:
+    """Load a fingerprint-exact JSON registry: ``{(rule, sha256): reason}``.
 
-    Returns ``{(rule, sha256_hex): reason}``. Entries match findings by the
-    EXACT sha256 of the matched text plus the rule id — never by path or
-    substring, so a different value at the same location is still flagged.
-    A malformed allowlist is ignored with a warning (never suppresses findings).
+    Entries match findings by the EXACT sha256 of the matched text plus the
+    rule id — never by path or substring, so a different value at the same
+    location is still flagged. A malformed registry is ignored with a warning
+    (it can never suppress a finding, only annotate it).
     """
-    allow_path = Path(path) if path else (_ALLOWLIST_ROOT / _ALLOWLIST_FILENAME)
-    if not allow_path.is_file():
+    reg_path = Path(path) if path else default_path
+    if not reg_path.is_file():
         return {}
     try:
-        data = json.loads(allow_path.read_text(encoding="utf-8"))
+        data = json.loads(reg_path.read_text(encoding="utf-8"))
         out = {}
         for entry in data.get("entries", []):
             rule = str(entry.get("rule", "")).strip()
@@ -345,12 +346,29 @@ def load_allowlist(path: Optional[Path] = None) -> dict:
             if rule and re.fullmatch(r"[0-9a-f]{64}", fp):
                 out[(rule, fp)] = reason
         return out
-    except Exception as exc:  # malformed → ignore, keep every finding
+    except Exception as exc:  # malformed → ignore; findings stay visible
         print(
-            f"secret_scan: WARNING allowlist unreadable ({exc}); ignoring it",
+            f"secret_scan: WARNING {label} unreadable ({exc}); ignoring it",
             file=sys.stderr,
         )
         return {}
+
+
+def load_allowlist(path: Optional[Path] = None) -> dict:
+    """Reviewed-benign findings: never fail the run, printed as ALLOWED."""
+    return _load_registry(path, _REGISTRY_ROOT / _ALLOWLIST_FILENAME, "allowlist")
+
+
+def load_baseline(path: Optional[Path] = None) -> dict:
+    """Known ACTIVE findings (escalations awaiting remediation).
+
+    They never fail the run but stay VISIBLE as ``KNOWN-ACTIVE`` with their
+    reasons; a baseline entry that no longer matches is reported as
+    ``STALE-BASELINE`` (cleanup prompt). NEW findings beyond the baseline
+    always fail — the gate is only ever quiet about findings the owner has
+    already seen.
+    """
+    return _load_registry(path, _REGISTRY_ROOT / _BASELINE_FILENAME, "baseline")
 
 
 def scan_paths(
@@ -441,6 +459,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         action="store_true",
         help="ignore the allowlist entirely (every finding is active)",
     )
+    parser.add_argument(
+        "--baseline",
+        default=None,
+        help=(
+            "path to the known-active findings baseline JSON "
+            "(default: repo-root .secret_scan_baseline.json)"
+        ),
+    )
+    parser.add_argument(
+        "--no-baseline",
+        action="store_true",
+        help="ignore the baseline entirely (every non-allowlisted finding fails)",
+    )
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     if args.tracked and args.staged:
@@ -462,41 +493,78 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if args.no_allowlist
         else load_allowlist(Path(args.allowlist) if args.allowlist else None)
     )
-    active = []
+    baseline = (
+        {}
+        if args.no_baseline
+        else load_baseline(Path(args.baseline) if args.baseline else None)
+    )
+    new_findings = []
+    known_active = []
     allowed = []
     for finding in findings:
         reason = allowlist.get((finding.rule, finding.fingerprint))
         if reason:
             allowed.append((finding, reason))
+            continue
+        base_reason = baseline.get((finding.rule, finding.fingerprint))
+        if base_reason:
+            known_active.append((finding, base_reason))
         else:
-            active.append(finding)
+            new_findings.append(finding)
+
+    matched_keys = {(f.rule, f.fingerprint) for f, _reason in known_active}
+    stale = [
+        (key, reason) for key, reason in baseline.items() if key not in matched_keys
+    ]
+    for (rule, fp), reason in sorted(stale):
+        print(
+            f"STALE-BASELINE [{rule}] fp={fp[:16]}… — {reason} "
+            "(no longer present; remove the entry)",
+            file=sys.stderr,
+        )
 
     if args.json:
         print(
             json.dumps(
                 {
-                    "findings": [asdict(f) for f in active],
+                    "findings": [asdict(f) for f in new_findings],
+                    "known_active": [
+                        {"finding": asdict(f), "reason": reason}
+                        for f, reason in known_active
+                    ],
                     "allowlisted": [
                         {"finding": asdict(f), "reason": reason}
                         for f, reason in allowed
+                    ],
+                    "stale_baseline": [
+                        {"rule": rule, "fingerprint": fp, "reason": reason}
+                        for (rule, fp), reason in sorted(stale)
                     ],
                 },
                 indent=2,
             )
         )
     else:
-        for f in active:
+        for f in new_findings:
             print(
                 f"FINDING [{f.rule}] {f.path}:{f.line}:{f.column} "
                 f"proof={f.proof} — {f.description}"
+            )
+        for f, reason in known_active:
+            print(
+                f"KNOWN-ACTIVE [{f.rule}] {f.path}:{f.line} "
+                f"fp={f.fingerprint[:16]}… — {reason}"
             )
         for f, reason in allowed:
             print(
                 f"ALLOWED [{f.rule}] {f.path}:{f.line} "
                 f"fp={f.fingerprint[:16]}… — {reason}"
             )
-        print(f"secret_scan: {len(active)} finding(s), {len(allowed)} allowlisted")
-    return 1 if active else 0
+        print(
+            f"secret_scan: {len(new_findings)} new finding(s), "
+            f"{len(known_active)} known-active (baseline), {len(allowed)} allowlisted"
+        )
+    return 1 if new_findings else 0
 
 
 if __name__ == "__main__":  # pragma: no cover
