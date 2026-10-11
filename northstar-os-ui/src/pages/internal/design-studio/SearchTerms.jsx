@@ -596,9 +596,11 @@ export default function SearchTerms() {
 
         <div style={{ marginTop: 10 }} data-testid="listing-mismatch">
           {(() => {
-            const m = briefState && briefState.state === 'ready'
-              ? mismatchFlags({ brief: briefState.brief, context: listingContext })
-              : { state: 'UNKNOWN', flags: [], note: 'Compose a brief to check the creative text against the listing copy.' }
+            // The title-length flag runs without a brief; term flags need one.
+            const m = mismatchFlags({
+              brief: briefState && briefState.state === 'ready' ? briefState.brief : null,
+              context: listingContext,
+            })
             return (
               <>
                 <div className="text-low" style={{ fontSize: 11 }}>

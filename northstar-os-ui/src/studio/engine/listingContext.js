@@ -17,6 +17,9 @@
 
 const FRESH_DAYS = 90 // an engineering choice, stated in the UI, not an Amazon figure
 
+// Phase 8 item 1: the reported 75-character title limit, applied as a FLAG.
+import { titleLengthFlag } from './registryClaims.js'
+
 function ageDays(iso) {
   if (!iso) return null
   const t = Date.parse(iso)
@@ -121,16 +124,37 @@ export function buildListingContext({ forgeListings = [], brandProfile = null, a
 const STOPWORDS = new Set(['with', 'from', 'that', 'this', 'your', 'you', 'and', 'the', 'for', 'into', 'over', 'under', 'each', 'than', 'then', 'when', 'what', 'will', 'have', 'has', 'are', 'our'])
 
 /**
- * Conservative mismatch check: a ranked creative term whose distinctive words
- * do not appear anywhere in the listing copy is flagged for human review.
- * With no listing corpus, nothing is flagged - the state is UNKNOWN instead.
+ * Conservative mismatch check.
+ *
+ * Always runs the title-length check (Phase 8 item 1: the reported 75-character
+ * limit is applied as a FLAG, never a block). Term checks need a brief AND a
+ * listing corpus; with no corpus the term state is UNKNOWN instead.
  */
 export function mismatchFlags({ brief, context, max = 8 } = {}) {
-  if (!context || !context.corpus || context.corpus.trim() === '') {
-    return { state: 'UNKNOWN', flags: [], note: 'No listing copy is available locally, so no mismatch can be checked.' }
-  }
   const flags = []
-  for (const row of (brief && brief.ranked_terms) || []) {
+
+  // Title length: independent of any brief, from the local listing record.
+  const title = context && context.fields && context.fields.title ? context.fields.title.value : null
+  const tf = titleLengthFlag(title)
+  if (tf.flagged) {
+    flags.push({
+      term: '(listing title)', kind: 'title-length', review: tf.review, detail: tf.detail,
+    })
+  }
+
+  const hasCorpus = !!(context && context.corpus && context.corpus.trim() !== '')
+  if (!hasCorpus || !brief) {
+    const why = !hasCorpus
+      ? 'No listing copy is available locally, so no term mismatch can be checked.'
+      : 'Compose a brief to check its terms against the listing copy.'
+    return {
+      state: 'UNKNOWN',
+      flags,
+      note: why + (flags.length ? ' The title-length flag above did not need a brief.' : ''),
+    }
+  }
+
+  for (const row of brief.ranked_terms || []) {
     const term = String(row.evidence.term || '').toLowerCase()
     if (!term) continue
     const words = term.split(/[^a-z0-9']+/).filter(w => w.length >= 4 && !STOPWORDS.has(w))
@@ -146,11 +170,12 @@ export function mismatchFlags({ brief, context, max = 8 } = {}) {
     }
     if (flags.length >= max) break
   }
+  const termFlags = flags.filter(f => f.kind !== 'title-length').length
   return {
     state: 'checked',
     flags,
-    note: flags.length
-      ? `${flags.length} ranked term(s) need a human look before the creative and the listing agree.`
-      : 'Every ranked term appears in the local listing copy.',
+    note: termFlags
+      ? `${termFlags} ranked term(s) need a human look before the creative and the listing agree.`
+      : (flags.length ? 'Every ranked term appears in the local listing copy; the title-length flag above still applies.' : 'Every ranked term appears in the local listing copy.'),
   }
 }

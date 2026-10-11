@@ -22,6 +22,8 @@
 import { ALL_FORMATS, formatById } from './presets.js'
 import { SAFE_ZONES, AMAZON_CAPS, AI_POLICY, SPEC_BY_ID, SPEC_SOURCES, freshnessOf } from './specRegistry.js'
 import { disclosureRow, checkFilename } from './disclosure.js'
+// Phase 8 item 1: the accepted image-format set lives in the claims register.
+import { formatAccepted } from './registryClaims.js'
 import { FIDELITY_MODE_BY_ID } from './fidelity.js'
 
 const ACCESSED = '2026-10-09'
@@ -67,8 +69,8 @@ export const RULES = [
   {
     id: 'no-animated-gif', level: 'block', scope: 'all', kind: 'format',
     label: 'Export format is accepted',
-    detail: 'JPEG/TIFF/PNG accepted; animated GIFs are not supported by Amazon\u2019s servers.',
-    source: 'S415', accessed: ACCESSED, dateSensitive: true,
+    detail: 'JPEG, TIFF, PNG and non-animated GIF are accepted per the Product image guide; animated GIFs are not. The pipeline exports PNG, and an explicit unsupported format is refused.',
+    source: 'img-guide', accessed: ACCESSED, dateSensitive: true,
   },
   {
     id: 'caps-headline', level: 'block', scope: 'ads', kind: 'copy',
@@ -525,7 +527,8 @@ export function checkCompliance(doc, ctx = {}) {
         : `${doc.w}×${doc.h} is below the ${fmt.module} minimum of ${fmt.w}×${fmt.h}.`)
   }
 
-  push('no-animated-gif', 'pass', 'This studio exports PNG; animated GIF is never produced.')
+  // The export-format acceptance check lives in the Technical rules block below
+  // (Phase 8 item 1): it reads doc.meta.exportFormat instead of assuming PNG.
 
   // ── MAIN image ──
   if (isMain) {
@@ -795,6 +798,12 @@ export function checkCompliance(doc, ctx = {}) {
 
     const fn = checkFilename(doc.meta?.filename || doc.filename)
     push('filename-pattern', fn.ok ? 'pass' : 'flag', fn.detail)
+
+    // Export format acceptance (Phase 8 item 1): the accepted set is JPEG,
+    // TIFF, PNG and NON-ANIMATED GIF, per the Product image guide. The studio
+    // exports PNG; the check guards any future path and an explicit format.
+    const fmtCheck = formatAccepted(doc.meta?.exportFormat)
+    push('no-animated-gif', fmtCheck.ok ? 'pass' : 'block', fmtCheck.detail)
   }
 
   // ── AI-generated people disclosure ──────────────────────────────────────

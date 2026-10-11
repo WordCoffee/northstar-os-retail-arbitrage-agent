@@ -46,7 +46,7 @@ const RULES = [
   { label: 'Alt text is required', tone: 'block', detail: 'Every module containing an image requires alt text that describes it for screen-reader users, or the content can be rejected.', source: 'A+ content guidelines ? 2026-10-10' },
   { label: 'Unique to A+', tone: 'flag', detail: 'Images and text must be unique to A+ ? reusing images already published in the listing gallery is rejected. One brand logo maximum.', source: 'A+ content guidelines ? 2026-10-10' },
   { label: 'Module counts', tone: 'flag', detail: `Basic A+ allows ${AMAZON_CAPS.aplus.modulesBasicMax} modules; Premium A+ allows ${AMAZON_CAPS.aplus.modulesPremiumMax}. Bulk upload is required above ${AMAZON_CAPS.aplus.bulkUploadAsinThreshold} ASINs.`, source: 'A+ size table ? 2026-10-10' },
-  { label: 'Premium A+ gating', tone: 'flag', detail: 'Premium A+ eligibility requires a Brand Story module published on all brand-owned listings plus additional approved content.', source: 'Seller Central forum ? 2026-10-10' },
+  { label: 'Premium A+ gating', tone: 'flag', detail: 'Premium A+ eligibility requires a Brand Story module published on all brand-owned listings plus additional approved content. Confirm eligibility in A+ Content Manager before planning the module set; the studio does not assert eligibility.', source: 'Seller Central forum ? 2026-10-10' },
   { label: 'Upscaling does not happen', tone: 'flag', detail: 'An image smaller than the module minimum is not scaled up by Amazon, so an undersized asset stays undersized.', source: 'Premium A+ module guide ? 2026-10-10' },
 ]
 

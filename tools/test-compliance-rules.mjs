@@ -111,8 +111,8 @@ const FIXTURES = [
   },
   {
     id: 'no-animated-gif',
-    alwaysPass: true,
-    why: 'The engine only ever exports PNG, so an animated GIF cannot be produced by this pipeline. The rule exists to document the constraint and to guard a future export path.',
+    pass: doc({ layers: [L.bg('#ffffff'), L.product()] }),
+    fail: doc({ meta: { exportFormat: 'gif-animated' }, layers: [L.bg('#ffffff'), L.product()] }),
   },
   {
     id: 'caps-headline',
