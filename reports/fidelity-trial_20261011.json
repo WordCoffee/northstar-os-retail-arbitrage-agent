@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-11T19:57:42.622Z",
+  "at": "2026-10-11T21:55:54.277Z",
   "live_trial": "NOT RUN",
   "live_trial_cause": "no reference photos in C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\research\\design-studio\\reference-photos",
   "runtime_generation": "NOT RUN - no local media runtime running",
@@ -26,7 +26,7 @@
       "export_gate_ok": true,
       "tamper": "block",
       "tamper_ok": true,
-      "ms": 141
+      "ms": 150
     },
     {
       "name": "fixture-2",
@@ -47,7 +47,7 @@
       "export_gate_ok": true,
       "tamper": "block",
       "tamper_ok": true,
-      "ms": 109
+      "ms": 162
     },
     {
       "name": "fixture-3",
@@ -68,7 +68,7 @@
       "export_gate_ok": true,
       "tamper": "block",
       "tamper_ok": true,
-      "ms": 109
+      "ms": 141
     },
     {
       "name": "fixture-4",
@@ -89,7 +89,7 @@
       "export_gate_ok": true,
       "tamper": "block",
       "tamper_ok": true,
-      "ms": 118
+      "ms": 108
     },
     {
       "name": "fixture-5",
@@ -110,7 +110,7 @@
       "export_gate_ok": true,
       "tamper": "block",
       "tamper_ok": true,
-      "ms": 101
+      "ms": 111
     }
   ]
 }
