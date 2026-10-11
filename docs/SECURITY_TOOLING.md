@@ -66,7 +66,17 @@ uv lock        # uv.exe at C:\Python314\Scripts\uv.exe on this machine
   (Dockerfile.api); switching the Docker build onto `uv.lock` is a follow-up
   item (needs the owner-visible Docker change, tracked in the Phase 1 list).
 
-## 4. Log redaction (Phase 1)
+## 4. Config loader — env-only (Phase 1)
+
+`northstar/security/env_config.py` — the control layer reads secrets ONLY from
+the process environment: `get_secret(name)` / `require_secret(name)` /
+`secret_presence(names)` / `redacted_summary(names)`. It never reads `.env`
+files, never calls `load_dotenv`, and its summaries carry `NAME=SET|MISSING`
+only — never values. A Keychain backend is an explicit future plug-in slot
+(`BACKENDS`); env is the only backend today. (A test guards the module source
+against ever gaining a dotenv import.)
+
+## 5. Log redaction (Phase 1)
 
 `Northstar_backend/logging_config.py` wraps its formatter and adds
 `RedactionFilter` from `northstar.security.redaction` — messages, args,

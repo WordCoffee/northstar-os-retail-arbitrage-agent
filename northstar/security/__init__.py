@@ -11,6 +11,13 @@ from .redaction import (
     redact_object,
     redact_text,
 )
+from .env_config import (
+    MissingSecretError,
+    get_secret,
+    redacted_summary,
+    require_secret,
+    secret_presence,
+)
 
 __all__ = [
     "REDACTED",
@@ -19,4 +26,9 @@ __all__ = [
     "has_sensitive_key",
     "redact_object",
     "redact_text",
+    "MissingSecretError",
+    "get_secret",
+    "redacted_summary",
+    "require_secret",
+    "secret_presence",
 ]
