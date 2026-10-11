@@ -66,3 +66,38 @@ The scanner was tuned with tests for each skip class — verified false positive
 - Zero live network calls; zero paid calls; no Amazon; no UI/old-shell edits; no policy files touched; production caches/benchmarks untouched.
 - No secret value was read out, printed, logged, or committed at any point — triage was done with masked/classifying tooling (temporary helpers kept outside the repo).
 - The scanner deliberately leaves the escalation and REVIEW items *flagged* — a clean exit code today would be dishonest; the findings above are the truthful state.
+
+---
+
+## Addendum — 2026-10-11b (owner directives executed)
+
+**Owner approvals executed:** gitleaks pinned+checksummed install; uv + committed lockfile; Windows-dev / Mac-or-ARM-Linux-prod platform split confirmed; fingerprint-exact allowlists (mandatory); continue to threat model. Lightpanda install remains a separate approval.
+
+### 1. gitleaks 8.30.1 — installed, verified, first scans run
+- Pin/checksums + install path: `docs/SECURITY_TOOLING.md` (zip `d29144de…`, checksums file `061476c2…`; triple-verified).
+- **History scan** (`gitleaks git`, 594 commits / 176 MB / 10.3 s): **72 findings** — `generic-api-key` ×69, `github-pat` ×1, `stripe-access-token` ×1, `curl-auth-header` ×1. Top: `budget-ledger.jsonl` ×30 (all `idempotency_key` field values — deterministic run ids, benign), `faire_amazon_*.json` ×24 (catalog product tokens `p_…`/`b_…`, benign), chat exports ×5, fixtures ×5, `creative_pipeline.py` ×2 (history-only, file no longer exists), docs ×2, tests ×2.
+- **Working-tree scan** noise clarified: `Northstar_backend/.env` (16 hits) and untracked run artifacts are **local-only** (never committed); CI/`git` scope is the correct gate.
+
+### 2. 🔴 SECOND ESCALATION — rotate **SCAVIO_API_KEY** and **BRIGHTDATA_API_KEY** (if live)
+- `FirstNorthstarautomationchat.md` (tracked; operator chat archive) contains real-format assignments in two duplicated blocks (lines 1142–1148 and 1290–1296): `SCAVIO_API_KEY=sk_…` (sha256_16 `ca2d8a22d6f0d252`) and `BRIGHTDATA_API_KEY=…` (sha256_16 `f7f62b13a37f5afd`).
+- These are exactly the class the September NO_LEAK audit missed (its pattern used `ghp-`, and earlier redaction/tooling had gaps for underscore-joined names + `sk_` keys — both fixed, see §3).
+- **NOT allowlisted** — the scanner reports them as ACTIVE until the owner rotates the keys and a scrub/archive decision is made (same policy as the `ghp_` item; owner confirmed revocation in progress for the GitHub PAT).
+- Recommendation: treat this archive family (`FirstNorthstarautomationchat.md`, `autothink-ui-chat-export.md`) as a single review batch: rotate possibly-live keys → decide file scrub and/or history handling.
+
+### 3. Scanner v4 — coverage & precision upgrades
+- **Multi-prefix regression tests** added (owner-requested): `ghp_/gho_/ghu_/ghs_/ghr_` + fine-grained `github_pat_…`, in **both** the scanner and the redaction module (`tests/security`, 64 tests total, all green).
+- New coverage: `sk_`-style keys; underscore-joined env names (`SCAVIO_API_KEY=…`); JSON-quoted keys (`"token": "…"`); GUIDs under key names; lockfile semver; fetch options (`credentials: 'include'`); status words; lowercase-word values; quoted prose. Raw tracked findings after review-grade precision: **239**, of which **8 ACTIVE** (2 chat-export key values + `ghp_` + one review item in `rate_limiter.py`).
+
+### 4. Fingerprint-exact allowlist — shipped
+- `.secret_scan_allowlist.json`: **169 unique fingerprints / 231 occurrences**, each entry rule + sha256(exact match) + reason + reference path. Buckets: Faire catalog tokens (research data), unit-test fixtures, legacy client-side demo gate (`northstar.html` ×2), API-doc examples, captured third-party fixtures.
+- Matching is by **hash + rule only** — a changed value at the same location re-flags; malformed allowlist is ignored with a warning; `--no-allowlist` available for audits.
+
+### 5. uv adopted — lockfile committed
+- uv 0.13.0; `Northstar_backend/pyproject.toml` + **`Northstar_backend/uv.lock`** (34 packages, hashes) committed. `requirements.txt` retained for the legacy Docker path until that is switched in a follow-up.
+
+### 6. Threat model
+- `reports/threat_model.md` — STRIDE across gateway/browser pool, policy kernel, snapshot store, brain kernel, MCP surface, future tenants; OWASP LLM Top 10 mapping; residual risks; review asks. **Owner review requested.**
+
+### 7. Remaining Phase 1 items
+Allowlist maintenance process (owner sign-off per new entry), config loader, SBOM + `pip-audit`/`npm audit` wiring, CI activation, dependency-license review (AGPL: Lightpanda, run unmodified; HotClip if adopted), and the still-open review items above.
+
