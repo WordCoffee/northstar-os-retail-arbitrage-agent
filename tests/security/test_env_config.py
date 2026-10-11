@@ -23,7 +23,7 @@ from northstar.security.env_config import (
     secret_presence,
 )
 
-FAKE_VALUE = "FAKEtopsecret12345"
+FAKE_VALUE = "FAKE-TEST-secret-12345"
 
 
 class TestContract:
@@ -140,8 +140,8 @@ class TestEnvFileSource:
         assert get_secret("NS_FILE_SECRET") == FAKE_VALUE
         assert get_secret("QUOTED") == "quotedfake123"
         assert get_secret("NS_EXPORTED") == "exportedfake99"
-        monkeypatch.setenv("NS_FILE_SECRET", "envwins999")
-        assert get_secret("NS_FILE_SECRET") == "envwins999"
+        monkeypatch.setenv("NS_FILE_SECRET", "FAKE-TEST-env-wins")
+        assert get_secret("NS_FILE_SECRET") == "FAKE-TEST-env-wins"
 
     def test_presence_boolean_considers_file_and_never_values(
         self, tmp_path, monkeypatch

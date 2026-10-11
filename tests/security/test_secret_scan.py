@@ -8,8 +8,8 @@ import json
 
 from northstar.security.secret_scan import main, scan_paths, scan_text
 
-FAKE_OPENAI = "sk-FAKEFAKEFAKEFAKE123456"
-FAKE_GITHUB = "ghp_" + "F" * 40
+FAKE_OPENAI = "sk-FAKETESTFAKETESTFAKE123456"
+FAKE_GITHUB = "ghp_" + "FAKETEST" * 6
 FAKE_AWS = "AKIA" + "FAKEFAKEFAKE0000"
 FAKE_JWT = "eyJFAKEFAKEFAKE.eyJFAKEFAKEFAKE.signatureFAKE"
 
@@ -39,7 +39,7 @@ class TestScanText:
         assert scan_text("fake.py", text) == []
 
     def test_credential_assignment_is_found(self):
-        findings = scan_text("fake.py", "password=CorrectHorseBatteryStaple99\n")
+        findings = scan_text("fake.py", "password=xyzzyBlob9000\n")
         assert any(f.rule == "credential-assignment" for f in findings)
 
 
@@ -69,7 +69,7 @@ class TestPrecisionSkips:
         assert scan_text("fake.js", "token = await page.evaluate(x)\n") == []
 
     def test_quoted_literal_still_flagged(self):
-        findings = scan_text("fake.py", 'api_key = "Zx9Kq2Lm4Vt7"\n')
+        findings = scan_text("fake.py", 'api_key = "xyzzy-quoted-9000"\n')
         assert any(f.rule == "credential-assignment" for f in findings)
 
     def test_prose_authorization_is_skipped(self):
@@ -113,7 +113,7 @@ class TestPrecisionSkips:
 
     def test_bracketed_quoted_value_is_still_flagged(self):
         # A quoted literal that merely CONTAINS brackets is still a value.
-        findings = scan_text("fake.py", 'password = "Pa[s]sword1"\n')
+        findings = scan_text("fake.py", 'password = "xyzzy[blob]9000"\n')
         assert any(f.rule == "credential-assignment" for f in findings)
 
     def test_amazon_dib_url_blobs_are_skipped(self):
@@ -132,7 +132,7 @@ class TestPrecisionSkips:
 
     def test_opaque_authorization_value_is_kept(self):
         findings = scan_text(
-            "fake.py", "Authorization: Bearer QzR3TgG7wXpL2mNv8sK1aB4dE6fH0jU\n"
+            "fake.py", "Authorization: Bearer xyzzy-xyzzy-xyzzy-01\n"
         )
         assert any(f.rule == "authorization-header" for f in findings)
 
@@ -258,17 +258,17 @@ class TestMultiPrefixAndCompoundRules:
         )
 
     def test_sk_underscore_style_key_is_found(self):
-        fake = "sk_" + "F" * 40
+        fake = "sk_" + "FAKETEST" * 5
         findings = scan_text("fake.py", f"x {fake} y\n")
         assert any(f.rule == "openai-style-key" for f in findings)
 
     def test_compound_env_assignment_is_found(self):
-        findings = scan_text("fake.env", "SCAVIO_API_KEY=K7q2Wm9Zb4Tt6Yp1\n")
+        findings = scan_text("fake.env", "SCAVIO_API_KEY=xyzzy-compound-9000\n")
         assert any(f.rule == "credential-assignment" for f in findings)
 
     def test_guid_value_under_key_name_is_found(self):
         findings = scan_text(
-            "fake.env", "SOME_API_KEY=a1b2c3d4-b5c6-d7e8-f9a0-bc1d2e3f4a5b\n"
+            "fake.env", "SOME_API_KEY=xyzzy-0000-1111-2222-333333333333\n"
         )
         assert any(f.rule == "credential-assignment" for f in findings)
 

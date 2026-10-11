@@ -17,13 +17,13 @@ from northstar.security.redaction import (
 )
 
 # --- fake fixtures (never real) ----------------------------------------------
-FAKE_OPENAI = "sk-FAKEFAKEFAKEFAKE123456"
-FAKE_GITHUB = "ghp_" + "F" * 40
+FAKE_OPENAI = "sk-FAKETESTFAKETESTFAKE123456"
+FAKE_GITHUB = "ghp_" + "FAKETEST" * 6
 FAKE_AWS = "AKIA" + "FAKEFAKEFAKE0000"
 FAKE_SLACK = "xoxb-FAKE-123456789012"
 FAKE_JWT = "eyJFAKEFAKEFAKE.eyJFAKEFAKEFAKE.signatureFAKE"
 FAKE_EMAIL = "fake.person@example.com"
-FAKE_PASSWORD = "CorrectHorseBatteryStaple99"
+FAKE_PASSWORD = "xyzzy-password-9000"
 FAKE_KEYVALUE = "FAKEKEY1234567890"
 FAKE_PEM = (
     "-----BEGIN RSA PRIVATE KEY-----\n"
@@ -82,13 +82,13 @@ class TestRedactText:
     def test_compound_env_names_are_redacted(self):
         # Regression: `SCAVIO_API_KEY=...` style names (underscore-joined,
         # no word boundary before the keyword) must still redact.
-        out = redact_text("SCAVIO_API_KEY=K7q2Wm9Zb4Tt6Yp1")
-        assert "K7q2Wm9Zb4Tt6Yp1" not in out
-        out2 = redact_text("BRIGHTDATA_API_KEY=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+        out = redact_text("SCAVIO_API_KEY=xyzzy-compound-9000")
+        assert "xyzzy-compound-9000" not in out
+        out2 = redact_text("BRIGHTDATA_API_KEY=FAKE-TEST-0000-1111-2222-333333333333")
         assert "aaaaaaaa-bbbb" not in out2
 
     def test_sk_underscore_key_is_redacted(self):
-        fake = "sk_" + "F" * 40
+        fake = "sk_" + "FAKETEST" * 5
         out = redact_text(f"key {fake} ok")
         assert fake not in out
         assert REDACTED in out
