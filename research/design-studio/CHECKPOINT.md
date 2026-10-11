@@ -129,13 +129,15 @@ Three rules added:
 - `research/design-studio/{OWNER_CAPTURE_TASKS.md,SOURCES.csv}` (new)
 - `tools/{test-compositing.cjs}`, extended `test-{disclosure,compliance-rules}.mjs`
 
-## Resume at (updated 2026-10-11, after Phase 10, HEAD a45a7e5)
-Everything in Phases 0-10 is done and verified (the Phase 10 full regression:
-**3061 passed / 0 failed / 0 FATAL** across 33 scored harnesses, in
-`reports/regression_20261011_phase10/`). The only open items are OWNER-blocked,
-and nothing else in this workstream is pending:
+## Resume at (updated 2026-10-11, after Phase 11, HEAD 7193303 + this checkpoint)
+Everything in Phases 0-11 is done; Phase 11's full regression evidence lives in
+`reports/regression_20261011_final/` (SUMMARY.txt + one raw file per harness).
+The only open items are OWNER-blocked, and nothing else in this workstream is
+pending:
 1. A real Amazon upload of a written change file (by design, the owner performs
-   it; the harnesses prove everything up to the file).
+   it; the harnesses prove everything up to the file). The corrected-file flow
+   (upload a processing report → row-level cause → corrected resubmittable
+   file) is the same by-design manual step.
 2. The two login-gated capture tasks (`ai-tag-page`, `ai-ads-page`) in
    `research/design-studio/OWNER_CAPTURE_TASKS.md`.
 3. The live fidelity trial: needs >=5 real photos dropped into
@@ -144,7 +146,7 @@ and nothing else in this workstream is pending:
 4. Owner decisions A4/A5/A7 (bounded hosted call, cloud arming cost cap, the
    six isolated test roles) and the rest of the audit remediation sequence.
 5. The Item Highlights flat-file/API column stays UNKNOWN until Amazon
-   publishes it; the export notice already says so.
+   publishes it; the export notice and the Python writer posture both say so.
 6. Housekeeping at any time: `cleanup_test_tenants.py` (dry run first) removes
    only the two labelled synthetic tenants.
 
@@ -999,3 +1001,117 @@ refusal-with-credentials tests.
 
 **NOT RUN with cause**: a real Amazon upload (the owner performs it manually by
 design). Zero live or paid calls; no cloud generation; generation unarmed.
+
+## PHASE 11 — DESIGN STUDIO + FILE-ONLY REMAINING BUILD (2026-10-11, overnight)
+
+Directive: 15 items, plan-first then one continuous build loop; full test pass
+only at the END. Branch `feature/overnight-remediation-20261009`; commits
+`41f54c8` → `b93f45d` → `d19d6cf` → `7193303` (+ this checkpoint).
+
+### 1. Self-hosted fonts; zero third-party requests (item 1)
+DM Sans + Libre Baskerville (8 woff2 files) vendored under
+`northstar-os-ui/public/fonts/` with a rewritten `fonts.css`; the Google Fonts
+`<link>` and the two CSS `@import`s removed. `tools/check-no-third-party.cjs`
+(new) scans the BUILT dist: index.html has zero http(s) URLs (XML namespace
+identifiers excluded), CSS has no external `url()`/`@import`, JS has no
+request-shaped external reference, `dist/fonts/fonts.css` is 20 local refs / 0
+external. **5/0.** The API harness now asserts ZERO external requests at
+runtime (was: font CDN allowed).
+
+### 2. Processing-report import (item 2)
+New detected kinds `ads_error_report` (bulksheet shape + error column) and
+`listing_processing_report` (sku + error columns). `match_processing_report()`
+matches each error row to the change row and the proposal that produced it —
+entity-aware ID preference (a keyword row never matches via its parent campaign
+ID), unmatched rows REPORTED, never guessed; cause quoted exactly; fix hints
+only for recognised phrases. `build_corrected_change()` + endpoint write a NEW
+corrected version (original untouched), round-trip validated. A correction for
+a column the file does not carry is refused with a stated reason. Reports can
+never produce proposals or be written as change files (422 with reasons).
+
+### 3. Seller Central upload formats (item 3)
+`.xlsx` + tab-delimited `.txt`/`.tsv` accepted; an old/partial template is
+flagged ("OLD or partial template… re-download from Seller Central") and the
+missing operation column is listed in `missing_columns`; legacy `.xls` stays
+refused with the fix stated (unchanged from Phase 10).
+
+### 4. More change-file types (item 4)
+SB/SD entities added (creative, product collection, bidding adjustment,
+negative keyword/targeting); product-detail listing fields added
+(bullet1-5, description, generic keywords, brand, item type) with required-
+column checks (sku + operation are the hard requirements; absent core
+attributes are listed so the operator knows what the file does not cover).
+
+### 5. Before/after performance comparison (item 5)
+`compare_performance()` + endpoint + UI: per-entity before/after with sample
+size + confidence band, observed ranges, present_in labels, explicit NO
+CAUSATION notice, and the 14-day stale window labelled an engineering choice.
+A metric missing from one file is UNKNOWN, never 0.
+
+### 6. A+ asset pack copy slots (item 6)
+Pack gains copy slots (headline/body/cta): operator text carried with its
+source, empty slots stay UNKNOWN with a write-it-yourself note. Still NOT an
+uploadable module file; ASIN bulk-upload limit stays UNKNOWN.
+
+### 7. Brief-to-asset loop (item 7)
+`brief_to_assets()` + `POST /terms/brief/assets`: templates ONLY (no
+generation), copy + on-image text layers from the brand promise/voice/audience
+and the imported term, each variant created in the variants table (name +
+notes with the brief reference) so a later results import can match it by id or
+exact name.
+
+### 8. Title and listing rules in all writers (item 8)
+The Python port applies the four title rules as FLAGS in every writer path that
+touches a title; Item Highlights is now explicitly UNKNOWN on the Python side
+(`item_highlights_column()`), a source column with that header is preserved but
+never mapped or interpreted.
+
+### 9. Video & UGC, Social, Packaging output packs (item 9)
+`studio/engine/outputPacks.js`: storyboard pack, social asset pack, packaging
+spec — built from the operator's own fields + the section pre-flight; each pack
+carries its pre-flight summary, UNKNOWN for missing fields, and states that
+nothing is rendered or generated. SectionWorkspace gained the Pack control
+(disabled exactly when the pre-flight blocks). Browser harness **17/0**
+(downloads captured and content-verified for all three sections).
+
+### 10. Master-brain panels in remaining rooms (item 10)
+Panel added to KeywordTracker, CompetitorMonitor, ListingGuardian,
+ProfitabilityDashboard, CommerceOps, Monitoring (9 rooms total);
+`verify-master-brain-panels.cjs` extended to cover all of them.
+
+### 11. Seller onboarding + sample pack (item 11)
+First-run guide in the AmazonFiles surface: which files to download and where,
+what Northstar returns, and 11 downloadable synthetic samples
+(`northstar-os-ui/public/samples/amazon-files/`, generated by
+`tools/_make_amazon_fixtures.py`, committed).
+
+### 12. Hosted-readiness package (item 12)
+`docs/hosted-readiness/` (README, POSTGRES, DEPLOY_CHECKLIST, BACKUP_RESTORE,
+INCIDENT_RUNBOOK, SECRET_HANDLING). Compose guard extended: the deploy
+composition publishes NO port besides 80/443 across ALL services and carries no
+harness opt-out set to 1 (local too). **8/0.**
+
+### 13. Generation arming package (item 13)
+`docs/GENERATION_ARMING_CHECKLIST.md` gained per-tenant job limits (concurrent,
+queued, credits/day, GPU-minutes/day, jobs/hour — all server-side, fail-closed,
+reported not silent) and a config sketch (names only). Remains UNARMED.
+
+### 14. Research deliverables (item 14)
+`research/design-studio/20261011/` assembles SOURCES.csv, COMPETITOR_MATRIX.csv,
+WORKFLOWS.md, AMAZON_REQUIREMENTS.md, SELLER_PAIN_POINTS.md, SEO_AD_LOOP.md,
+FEASIBILITY.md, OPPORTUNITIES.md, RULES.md + a new RESEARCH_SUMMARY.md and
+README.md stating the label system (VERIFIED/REPORTED/UNKNOWN), what changed
+since 2026-10-08, coverage limits and items NOT inspected. No fabricated
+pricing or statistics.
+
+### 15. Full regression (last)
+`tools/run-regression.ps1` (new) runs every harness with one raw output per
+harness into `reports/regression_20261011_final/` (SUMMARY.txt carries exit
+codes). Focused results during the build: section packs 17/0, AmazonFiles UI
+22/0, AmazonFiles API 44/0, amazon files unit 66/0 (later 68/0 with the Item
+Highlights checks), compose 8/0, no-third-party 5/0. The full-run numbers are
+recorded in the final report and SUMMARY.txt.
+
+**NOT RUN with cause**: a real Amazon upload (owner-performed by design); the
+live fidelity trial (no photos/runtime). Zero live or paid calls; generation
+unarmed; no Amazon linkage; no third-party UI requests.

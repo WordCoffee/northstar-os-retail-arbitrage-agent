@@ -36,4 +36,6 @@
 
 ## 4. What replaced the linkage
 
-`Ads › Amazon files` (new sub-view): upload → detect/validate → propose (before/after, evidence, blocks, spend guardrail, stale warning, title FLAGS) → row-level approve/reject → write the delta file → round-trip proof → download for manual upload. A+ uploads produce an asset pack (not an uploadable module file). No provider call exists anywhere in the path (the API harness asserts zero non-local requests outside the app's own font CDN, and zero Amazon hosts).
+`Ads › Amazon files` (new sub-view): upload → detect/validate → propose (before/after, evidence, blocks, spend guardrail, stale warning, title FLAGS) → row-level approve/reject → write the delta file → round-trip proof → download for manual upload. A+ uploads produce an asset pack (not an uploadable module file).
+
+**Phase 11 additions (2026-10-11, all still file-only):** processing/error report matching (upload the report Amazon gave you → rows matched to your change file and proposal, cause quoted, unmatched rows reported), corrected resubmittable files (a NEW version; originals untouched), before/after performance comparison (per-entity, UNKNOWN never 0, explicit no-causation notice), the seller onboarding guide + synthetic sample pack, and section output packs (storyboard / asset pack / spec sheet — plans, never rendered). None of these paths contacts Amazon or any other host: the API harness asserts **ZERO external requests** during the entire run (fonts are now self-hosted, so even the previous font-CDN allowance is gone) and zero Amazon hosts.
