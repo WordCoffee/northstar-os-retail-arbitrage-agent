@@ -1,0 +1,349 @@
+{
+ "agency-api-platform-engineer.md": {
+  "bytes": 14416,
+  "flag_count": 3,
+  "flags": [
+   {
+    "rule": "api_key",
+    "line": 174,
+    "ctx": "teway & Platform Engineering - Authentication patterns for platforms: API keys, OAuth 2.0 client credentials, scoped tokens, and per-consumer crede"
+   },
+   {
+    "rule": "credential",
+    "line": 174,
+    "ctx": "g - Authentication patterns for platforms: API keys, OAuth 2.0 client credentials, scoped tokens, and per-consumer credential management (delegating t"
+   },
+   {
+    "rule": "credential",
+    "line": 174,
+    "ctx": "I keys, OAuth 2.0 client credentials, scoped tokens, and per-consumer credential management (delegating the deep identity work to identity specialists"
+   }
+  ],
+  "urls": [
+   "https://spec.openapis.org/oas/v3.1.1.html"
+  ]
+ },
+ "agency-content-creator.md": {
+  "bytes": 3136,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "agency-fpa-analyst.md": {
+  "bytes": 16519,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "agency-multi-platform-publisher.md": {
+  "bytes": 12722,
+  "flag_count": 10,
+  "flags": [
+   {
+    "rule": "curl",
+    "line": 107,
+    "ctx": "xhs-mcp)**: ```bash xiaohongshu-mcp -headless=false &  # start daemon curl -X POST http://localhost:18060/api/v1/publish \\   -H 'Content-Type: ap"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 98,
+    "ctx": "st)` |  ### Tool Invocation Templates  **Main channel (Wechatsync)**: ```bash wechatsync auth                                                # chec"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 105,
+    "ctx": "          # from current browser tab ```  **小红书 fallback (xhs-mcp)**: ```bash xiaohongshu-mcp -headless=false &  # start daemon curl -X POST http:/"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 113,
+    "ctx": "pg\"],\"tags\":[\"...\"],\"is_original\":true}' ```  **B 站 video (biliup)**: ```bash biliup login                                                    # one"
+   },
+   {
+    "rule": "credential",
+    "line": 121,
+    "ctx": "i-api-python)**: ```python from bilibili_api import article, dynamic, Credential credential = Credential(sessdata=\"...\", bili_jct=\"...\", buvid3=\"...\")"
+   },
+   {
+    "rule": "credential",
+    "line": 122,
+    "ctx": "n)**: ```python from bilibili_api import article, dynamic, Credential credential = Credential(sessdata=\"...\", bili_jct=\"...\", buvid3=\"...\") # Cookies "
+   },
+   {
+    "rule": "credential",
+    "line": 122,
+    "ctx": "on from bilibili_api import article, dynamic, Credential credential = Credential(sessdata=\"...\", bili_jct=\"...\", buvid3=\"...\") # Cookies from F12 → Ap"
+   },
+   {
+    "rule": "token",
+    "line": 25,
+    "ctx": "ts each platform enforces, and the subtle reasons a draft might fail (token mismatch, port collision, expired cookie, length overflow). You learn"
+   },
+   {
+    "rule": "token",
+    "line": 35,
+    "ctx": "ts. - **Failure Reporting**: When a sync fails, diagnose and report — token issue? port conflict? cookie expired? content too long? — so the user"
+   },
+   {
+    "rule": "token",
+    "line": 217,
+    "ctx": " retry**: When sync fails, choose retry strategy based on diagnosis — token issue = restart bridge; cookie expired = prompt re-login; content too"
+   }
+  ],
+  "urls": [
+   "http://localhost:18060/api/v1/publish",
+   "https://creator.xiaohongshu.com/...",
+   "https://github.com/biliup/biliup",
+   "https://github.com/wechatsync/Wechatsync",
+   "https://github.com/xpzouying/xiaohongshu-mcp",
+   "https://mp.csdn.net/...",
+   "https://zhuanlan.zhihu.com/..."
+  ]
+ },
+ "agency-ppc-strategist.md": {
+  "bytes": 4982,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "agency-product-manager.md": {
+  "bytes": 22465,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "agency-search-query-analyst.md": {
+  "bytes": 4930,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "agency-security-ai-code-auditor.md": {
+  "bytes": 17006,
+  "flag_count": 21,
+  "flags": [
+   {
+    "rule": "api_key",
+    "line": 11,
+    "ctx": "rned that AI-written code fails in *predictable* ways. It inlines the API key because that made the example run. It ships the Supabase project with"
+   },
+   {
+    "rule": "api_key",
+    "line": 23,
+    "ctx": " Flag hardcoded credentials in any code path that reaches the client: API keys, tokens, database URLs, private keys pasted inline \"just to test\" - "
+   },
+   {
+    "rule": "api_key",
+    "line": 72,
+    "ctx": "his ships to every browser. \"use client\"; const openai = new OpenAI({ apiKey: \"sk-proj-REALKEYVALUE\" }); // burned the moment it committed  // SEC"
+   },
+   {
+    "rule": "api_key",
+    "line": 77,
+    "ctx": " the client) import OpenAI from \"openai\"; const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); // server-only env, no NEXT_PUBLIC_ e"
+   },
+   {
+    "rule": "api_key",
+    "line": 77,
+    "ctx": "from \"openai\"; const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); // server-only env, no NEXT_PUBLIC_ export async function POST(re"
+   },
+   {
+    "rule": "credential",
+    "line": 23,
+    "ctx": "atch secrets before they reach a browser or a bundle - Flag hardcoded credentials in any code path that reaches the client: API keys, tokens, database"
+   },
+   {
+    "rule": "secret",
+    "line": 24,
+    "ctx": "ine \"just to test\" - Catch the subtler leaks the author cannot see: a secret behind a client-exposed env prefix (`NEXT_PUBLIC_`, `VITE_`, `PUBLIC_"
+   },
+   {
+    "rule": "secret",
+    "line": 25,
+    "ctx": "ere the frontend can reach - Separate the genuinely dangerous (a live secret in client code) from the harmless (a publishable/anon key that is *de"
+   },
+   {
+    "rule": "secret",
+    "line": 26,
+    "ctx": "precision is what earns trust - **Default requirement**: every leaked-secret finding names the concrete rotation step at the provider, because del"
+   },
+   {
+    "rule": "secret",
+    "line": 45,
+    "ctx": "er flag a line without the exploit and the fix beside it — \"this is a secret in client code; anyone who opens DevTools reads it; move it to a serv"
+   },
+   {
+    "rule": "secret",
+    "line": 45,
+    "ctx": "ads it; move it to a server route and rotate the key\" beats \"possible secret detected\" every time - Never claim something is fixed without a resca"
+   },
+   {
+    "rule": "secret",
+    "line": 50,
+    "ctx": " gets silence, not a guess  ### Secrets Are Already Burned - A leaked secret finding is incomplete until it tells the developer to rotate the valu"
+   },
+   {
+    "rule": "secret",
+    "line": 51,
+    "ctx": "val from source is necessary but never sufficient - Never print a raw secret value back in any output — report the type, the location, and a redac"
+   },
+   {
+    "rule": "secret",
+    "line": 52,
+    "ctx": "acted preview; the value itself never travels in a result - Treat any secret reachable by client code as compromised from the moment it was commit"
+   },
+   {
+    "rule": "secret",
+    "line": 68,
+    "ctx": "rated-Code Failure Modes (with fixes)  ```typescript // === Hardcoded secret reaching the client (CWE-798) === // VULNERABLE: assistant inlined th"
+   },
+   {
+    "rule": "secret",
+    "line": 74,
+    "ctx": "j-REALKEYVALUE\" }); // burned the moment it committed  // SECURE: the secret lives only in a server route; the client calls your API. // app/api/c"
+   },
+   {
+    "rule": "secret",
+    "line": 82,
+    "ctx": "oj-REALKEYVALUE at the provider — it is already compromised.   // === Secret behind a client-exposed env prefix (CWE-798) === // VULNERABLE: NEXT_"
+   },
+   {
+    "rule": "secret",
+    "line": 160,
+    "ctx": "n by fingerprint: resolved, still-present, newly-introduced - For any secret that was found, confirm the rotation step happened — code removal alo"
+   },
+   {
+    "rule": "secret",
+    "line": 173,
+    "ctx": " into system prompts — the tell varies by tool - **The publishable-vs-secret line**: which keys are meant to be public (Supabase anon, Stripe publ"
+   },
+   {
+    "rule": "secret",
+    "line": 180,
+    "ctx": "ted-safe pattern, and how to tune it out permanently - How one leaked secret implies others — an assistant that inlined one key usually inlined mo"
+   },
+   {
+    "rule": "secret",
+    "line": 203,
+    "ctx": "d claims - Emit stable fingerprints for rescan continuity, redact all secret values, and keep the compliance framing code-level and disclaimed — c"
+   }
+  ],
+  "urls": []
+ },
+ "agency-test-automation-engineer.md": {
+  "bytes": 12630,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "npm_install",
+    "line": 127,
+    "ctx": ", 3/4, 4/4]     steps:       - uses: actions/checkout@v4       - run: npm ci && npx playwright install --with-deps chromium       - run: npx playw"
+   }
+  ],
+  "urls": []
+ },
+ "agency-ui-designer.md": {
+  "bytes": 13283,
+  "flag_count": 3,
+  "flags": [
+   {
+    "rule": "bash_fence",
+    "line": 231,
+    "ctx": "```  ## 🔄 Your Workflow Process  ### Step 1: Design System Foundation ```bash # Review brand guidelines and requirements # Analyze user interface p"
+   },
+   {
+    "rule": "token",
+    "line": 23,
+    "ctx": "ent visual language and interaction patterns - Design scalable design token systems for cross-platform consistency - Establish visual hierarchy t"
+   },
+   {
+    "rule": "token",
+    "line": 58,
+    "ctx": "tem Deliverables  ### Component Library Architecture ```css /* Design Token System */ :root {   /* Color Tokens */   --color-primary-100: #f0f9ff"
+   }
+  ],
+  "urls": []
+ },
+ "mk-ad-creative.md": {
+  "bytes": 25058,
+  "flag_count": 3,
+  "flags": [
+   {
+    "rule": "bash_fence",
+    "line": 426,
+    "ctx": "rations/tiktok-ads.md) |  ### Workflow: Pull Data, Analyze, Generate  ```bash # 1. Pull recent ad performance node tools/clis/google-ads.js reports"
+   },
+   {
+    "rule": "secret",
+    "line": 196,
+    "ctx": "| | Social proof | \"Join 10,000+ teams who...\" | | Curiosity | \"The X secret top companies use\" | | Comparison | \"Unlike X, we do Y\" | | Urgency |"
+   },
+   {
+    "rule": "token",
+    "line": 162,
+    "ctx": "percraft diorama, pop-art comic, claymation) plus four brand-flexible token-driven styles (monoline editorial, Swiss typographic, wireglow, duoto"
+   }
+  ],
+  "urls": [
+   "https://github.com/coreyhaines31/marketingskills/blob/main/tools/REGISTRY.md",
+   "https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/google-ads.md",
+   "https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/linkedin-ads.md",
+   "https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/meta-ads.md",
+   "https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/tiktok-ads.md"
+  ]
+ },
+ "mk-analytics.md": {
+  "bytes": 9194,
+  "flag_count": 0,
+  "flags": [],
+  "urls": [
+   "https://github.com/coreyhaines31/marketingskills/blob/main/tools/REGISTRY.md",
+   "https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/amplitude.md",
+   "https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/ga4.md",
+   "https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/mixpanel.md",
+   "https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/posthog.md",
+   "https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/segment.md"
+  ]
+ },
+ "mk-competitor-profiling.md": {
+  "bytes": 17293,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mk-copywriting.md": {
+  "bytes": 10924,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mk-seo-audit.md": {
+  "bytes": 17633,
+  "flag_count": 4,
+  "flags": [
+   {
+    "rule": "script_tag",
+    "line": 44,
+    "ctx": "— it won't appear in static HTML or `web_fetch` output (which strips `<script>` tags during conversion).  **To accurately check for schema markup, "
+   },
+   {
+    "rule": "script_tag",
+    "line": 469,
+    "ctx": "Schema Validator  > **Note on schema detection:** `web_fetch` strips `<script>` tags (including JSON-LD) and cannot detect JS-injected schema. Use "
+   },
+   {
+    "rule": "credential",
+    "line": 341,
+    "ctx": "nsights/data - Real examples and case studies  **Expertise** - Author credentials visible - Accurate, detailed information - Properly sourced claims  "
+   },
+   {
+    "rule": "credential",
+    "line": 348,
+    "ctx": "ritativeness** - Recognized in the space - Cited by others - Industry credentials  **Trustworthiness** - Accurate information - Transparent about busi"
+   }
+  ],
+  "urls": [
+   "https://search.google.com/test/rich-results"
+  ]
+ }
+}
