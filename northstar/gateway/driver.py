@@ -62,7 +62,8 @@ class DockerLightpandaDriver:
             proc = self._runner(
                 cmd,
                 capture_output=True,
-                text=True,
+                encoding="utf-8",
+                errors="replace",
                 timeout=self.timeout_seconds,
             )
         except Exception as exc:  # timeout, docker missing, container down…

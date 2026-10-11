@@ -123,3 +123,29 @@ def test_truncation_is_reported_not_silent():
     result = gateway.fetch_page(task_id="t1", url=long_url)
     assert result.ok
     assert result.truncated is True
+
+
+def test_driver_decodes_utf8_with_replacement():
+    """Regression: text=True decoded subprocess output as cp1252 on Windows and
+    lost every non-ASCII page (0x9d reader crash). The driver must decode
+    UTF-8 with errors='replace' and never pass text=True."""
+    from northstar.gateway.driver import DockerLightpandaDriver
+
+    captured = {}
+
+    class _Proc:
+        returncode = 0
+        stdout = "chars: \u00a3 \u201c \u2019 \u2014 \u2713"
+        stderr = ""
+
+    def fake_runner(cmd, **kwargs):
+        captured.update(kwargs)
+        return _Proc()
+
+    driver = DockerLightpandaDriver(runner=fake_runner)
+    result = driver.fetch("http://allowed.example/page")
+    assert result.ok is True
+    assert "\u00a3" in result.markdown
+    assert captured.get("encoding") == "utf-8"
+    assert captured.get("errors") == "replace"
+    assert "text" not in captured  # text=True and encoding= are mutually exclusive
