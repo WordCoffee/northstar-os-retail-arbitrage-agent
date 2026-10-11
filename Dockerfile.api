@@ -19,14 +19,15 @@
 # the AutothinK mount degrade silently when absent, so the image still builds
 # from a backend-only checkout.
 
-FROM node:20-alpine AS ui-build
+# Base images pinned by multi-platform digest (resolved via buildx 2026-10-11).
+FROM node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 AS ui-build
 WORKDIR /ui
 COPY northstar-os-ui/package.json northstar-os-ui/package-lock.json* ./
 RUN npm ci --no-audit --no-fund || npm install --no-audit --no-fund
 COPY northstar-os-ui/ ./
 RUN npm run build
 
-FROM python:3.12-slim
+FROM python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -39,19 +40,25 @@ WORKDIR /app
 # Built SPA — served at /ui/ by main.py's mount_ui helper.
 COPY --from=ui-build /ui/dist /app/northstar-os-ui/dist
 
-# Dependency layer first (cache-friendly). Pins come from uv.lock (uv export →
-# pip install); requirements.txt is retained as the human-readable source list.
-# NOTE: this path is NOT build-verified yet (a docker build needs network +
-# operator approval); the `uv export` step itself is verified locally.
+# Dependency layer first (cache-friendly). Pins + hashes come from uv.lock via
+# `uv export` (--no-emit-project keeps the project itself out of the file so
+# --require-hashes accepts it); requirements.txt remains the human-readable
+# source list. Owner-approved uv.lock build, 2026-10-11.
 COPY Northstar_backend/requirements.txt Northstar_backend/pyproject.toml Northstar_backend/uv.lock /app/Northstar_backend/
 RUN pip install --no-cache-dir "uv==0.13.0" \
- && uv export --frozen --no-hashes --directory /app/Northstar_backend --output-file /tmp/northstar-requirements.txt \
- && pip install --no-cache-dir -r /tmp/northstar-requirements.txt
+ && uv export --frozen --no-emit-project --directory /app/Northstar_backend --output-file /tmp/northstar-requirements.txt \
+ && pip install --no-cache-dir --require-hashes -r /tmp/northstar-requirements.txt
 
 # Application code (includes migrations_foundation/, foundation/, autothink/).
 COPY Northstar_backend /app/Northstar_backend
 COPY autothink /app/autothink
 COPY shared /app/shared
+
+# Non-root runtime (owner directive 2026-10-11): dedicated user owns /app;
+# no secrets are baked (the .env files are excluded via .dockerignore).
+RUN useradd --create-home --shell /usr/sbin/nologin --uid 10001 northstar \
+ && chown -R northstar:northstar /app
+USER northstar
 
 # The API runs from the backend directory: every module in main.py resolves its
 # sibling imports from there, and the .env files stay outside the image.
