@@ -44,8 +44,10 @@ Minimal stdio **MCP server exposing exactly the three gateway tools** (`fetch_pa
 
 ## Post-report note (same day) — the gate works
 The fingerprint gate **caught a real miss in this workstream**: a new test
-fixture used `"Bearer abc123def"` (not placeholder-marked) and the scanner
-flagged it (`1 new`, exit 1) immediately after the Phase 7 commit. Fixed by
-using a placeholder-marked value (`fakebearer321`); scan restored to
+fixture used a bearer-shaped value that was not placeholder-marked, and the
+scanner flagged it (`1 new`, exit 1) right after the Phase 7 commit. Fixed by
+marking the fixture as an obvious placeholder; scan restored to
 `0 new / 0 known-active / 231 allowlisted` (exit 0). No allowlist entry was
-needed — the gate behaved exactly as designed.
+needed — the gate behaved exactly as designed. (This note originally restated
+the flagged line; the gate caught that too, so the literal is omitted here —
+reports never re-emit flagged values.)
