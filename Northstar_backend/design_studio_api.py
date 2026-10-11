@@ -690,7 +690,7 @@ def create_import(body: ImportIn, acct: str = Depends(studio_account)):
                 "term", "campaign", "ad_group", "match_type", "targeting",
                 "currency", "impressions", "clicks", "orders", "units", "spend",
                 "sales", "search_frequency_rank", "search_query_score",
-                "asin_click_share", "row_from", "row_to")},
+                "asin_click_share", "row_from", "row_to", "extras")},
         } for r in parsed["rows"]]
         added = db.design_studio.search_terms.add_many(rows)
     else:
@@ -716,11 +716,11 @@ def create_import(body: ImportIn, acct: str = Depends(studio_account)):
 
 @router.get("/imports")
 def list_imports(kind: Optional[str] = None, acct: str = Depends(studio_account)):
-    from design_studio_imports import KIND_BRAND_ANALYTICS_SQP, KIND_SP_SEARCH_TERMS
+    from design_studio_imports import KINDS
     db = get_northstar_db()
     rows = db.design_studio.imports.list_for_account(acct, kind=kind)
     kinds: Dict[str, Any] = {}
-    for k in (KIND_SP_SEARCH_TERMS, KIND_BRAND_ANALYTICS_SQP):
+    for k in KINDS:
         latest = next((r for r in rows if r["kind"] == k), None)
         terms = db.design_studio.search_terms.list_for_account(acct, kind=k, limit=1)
         kinds[k] = {
@@ -734,6 +734,43 @@ def list_imports(kind: Optional[str] = None, acct: str = Depends(studio_account)
         "imports": rows,
         "kinds": kinds,
         "note": "Every row is an archived file for this account. Brand Analytics is UNAVAILABLE until a file is imported.",
+    }
+
+
+@router.get("/brand-voice")
+def brand_voice(acct: str = Depends(studio_account)):
+    """The latest imported brand-voice file, as fields with provenance.
+
+    UNKNOWN is a real answer: with no import, `available` is false and no field
+    is invented. The values are the operator's own wording from their file.
+    """
+    from design_studio_imports import BRAND_VOICE_FIELDS, KIND_BRAND_VOICE
+    db = get_northstar_db()
+    latest = next((r for r in db.design_studio.imports.list_for_account(acct, kind=KIND_BRAND_VOICE) if r["kind"] == KIND_BRAND_VOICE), None)
+    if not latest:
+        return {
+            "available": False,
+            "fields": {},
+            "missing_fields": list(BRAND_VOICE_FIELDS),
+            "note": "No brand-voice file has been imported for this account.",
+        }
+    rows = db.design_studio.search_terms.list_for_account(acct, kind=KIND_BRAND_VOICE, import_id=latest["id"], limit=100)
+    fields: Dict[str, Any] = {}
+    extras: Dict[str, Any] = {}
+    for r in rows:
+        val = (r.get("extras") or {}).get("value")
+        if r.get("term") == "_extra":
+            extras = r.get("extras") or {}
+        elif val is not None:
+            fields[r["term"]] = val
+    return {
+        "available": True,
+        "fields": fields,
+        "extras": extras,
+        "missing_fields": [f for f in BRAND_VOICE_FIELDS if f not in fields],
+        "import": latest,
+        "banner": _banner(latest),
+        "note": "Imported brand voice: the operator's own wording, archived with its source label and observed date.",
     }
 
 
@@ -764,6 +801,10 @@ def list_terms(
 ):
     db = get_northstar_db()
     rows = db.design_studio.search_terms.list_for_account(acct, kind=kind, import_id=import_id, q=q, limit=limit)
+    # The default view is the metric reports; brand-voice and keyword rows are
+    # not search terms and only appear when their kind is asked for explicitly.
+    if not kind:
+        rows = [r for r in rows if r.get("kind") in ("sp_search_terms", "brand_analytics_sqp")]
     missing_clicks = sum(1 for r in rows if r.get("clicks") is None)
     return {
         "terms": rows,
@@ -815,6 +856,8 @@ class BriefIn(BaseModel):
     limit: int = Field(default=25, ge=1, le=200)
     brand: Optional[Dict[str, Any]] = None
     keywords: Optional[List[str]] = None
+    voice_source: Optional[Dict[str, Any]] = None
+    keywords_source: Optional[Dict[str, Any]] = None
 
 
 @router.post("/terms/brief")
@@ -831,7 +874,8 @@ def terms_brief(body: BriefIn, acct: str = Depends(studio_account)):
     if body.term_ids:
         wanted = set(body.term_ids)
         rows = [r for r in rows if r.get("id") in wanted]
-    brief = build_brief(terms=rows[: body.limit], brand=body.brand, keywords=body.keywords)
+    brief = build_brief(terms=rows[: body.limit], brand=body.brand, keywords=body.keywords,
+                        voice_source=body.voice_source, keywords_source=body.keywords_source)
     brief["source_rows"] = len(rows)
     return brief
 
@@ -910,6 +954,7 @@ def compare_variants(acct: str = Depends(studio_account)):
             return None
         return float(sum(vals))
 
+    from design_studio_imports import confidence_label
     out = []
     for v in variants:
         rows = by_variant.get(v["id"], [])
@@ -924,6 +969,7 @@ def compare_variants(acct: str = Depends(studio_account)):
         out.append({
             "variant": v,
             "metrics_count": len(rows),
+            "confidence": confidence_label(clicks),
             "totals": {
                 "impressions": agg(rows, "impressions") if agg(rows, "impressions") is not None else "UNKNOWN",
                 "clicks": clicks if clicks is not None else "UNKNOWN",
@@ -939,6 +985,50 @@ def compare_variants(acct: str = Depends(studio_account)):
         "note": "Metrics are user-entered or file-imported only. This view makes NO causation claim: it cannot attribute a performance difference to a creative.",
         "attribution_gap": "Amazon search-term reports aggregate at campaign/ad-group level and carry no creative identifier, so creative-level attribution cannot be derived from them.",
     }
+
+
+@router.get("/variants/export")
+def export_variants(acct: str = Depends(studio_account)):
+    """Results CSV for the performance loop (Phase 7 item 7).
+
+    One row per variant with its aggregated metrics, sample size, confidence
+    band, sources and the no-causation caveat. A NULL metric is an EMPTY cell,
+    never 0.
+    """
+    import csv as _csv
+    import io as _io
+    db = get_northstar_db()
+    payload = compare_variants(acct=acct)
+    buf = _io.StringIO()
+    writer = _csv.writer(buf)
+    writer.writerow([
+        "variant", "status", "format", "asset_id", "metrics_rows",
+        "impressions", "clicks", "orders", "spend", "sales",
+        "sample", "confidence_note", "observed_from", "observed_to", "sources", "caveat",
+    ])
+    for row in payload["comparison"]:
+        v = row["variant"]
+        metrics = db.design_studio.variants.metrics_for_variant(acct, v["id"])
+        obs_from = min([m["observed_from"] for m in metrics if m.get("observed_from")] or [None]) if metrics else None
+        obs_to = max([m["observed_to"] for m in metrics if m.get("observed_to")] or [None]) if metrics else None
+        conf = row.get("confidence") or {}
+        # A metric with no rows is UNKNOWN in the payload and an EMPTY cell here.
+        cell = lambda x: "" if x in (None, "UNKNOWN") else x  # noqa: E731
+        writer.writerow([
+            v.get("name"), v.get("status"), v.get("format"), v.get("asset_id") or "",
+            row["metrics_count"],
+            cell(row["totals"]["impressions"]), cell(row["totals"]["clicks"]),
+            cell(row["totals"]["orders"]), cell(row["totals"]["spend"]), cell(row["totals"]["sales"]),
+            conf.get("sample") or "UNKNOWN", conf.get("note") or "",
+            obs_from or "", obs_to or "",
+            ",".join(row.get("sources") or []) or "none",
+            "NO CAUSATION CLAIM: imported metrics cannot be attributed to a creative (Amazon reports carry no creative identifier).",
+        ])
+    return Response(
+        content=buf.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="design-studio-variant-results.csv"'},
+    )
 
 
 @router.get("/variants/{vid}")

@@ -226,6 +226,43 @@ def main() -> int:
     else:
         no("export source cannot distinguish NULL from 0")
 
+    # ── Brand voice + keyword list (Phase 7 item 6) ─────────────────────────
+    voice = imp.parse_import(kind=imp.KIND_BRAND_VOICE,
+                             content='{"name": "Word Coffee", "promise": "A better morning", "voice": "Warm, plain"}')
+    if voice["columns_found"] == ["name", "promise", "voice"] and set(voice["missing_columns"]) == {"audience", "prohibited"}:
+        ok("brand voice parses to fields; absent fields are reported missing (UNKNOWN, never invented)")
+    else:
+        no(f"brand voice parse wrong: {voice['columns_found']} / {voice['missing_columns']}")
+    if all(r["extras"].get("value") for r in voice["rows"]):
+        ok("brand-voice values are kept in extras with their field names")
+    else:
+        no("brand-voice rows lost their values")
+
+    kw = imp.parse_import(kind=imp.KIND_KEYWORDS, content='keyword,volume\ncold brew filter,900\ninsulated cup,\n')
+    if [r["term"] for r in kw["rows"]] == ["cold brew filter", "insulated cup"] and kw["rows"][0]["extras"].get("volume") == 900.0:
+        ok("a keyword list parses with volumes as numbers")
+    else:
+        no(f"keyword parse wrong: {kw['rows']}")
+    if "volume" not in kw["rows"][1]["extras"]:
+        ok("a keyword with an empty volume keeps it ABSENT (UNKNOWN, never 0)")
+    else:
+        no("an empty keyword volume became a value")
+    kw2 = imp.parse_import(kind=imp.KIND_KEYWORDS, content='["alpha", "beta"]')
+    if [r["term"] for r in kw2["rows"]] == ["alpha", "beta"]:
+        ok("a JSON string array parses as a keyword list")
+    else:
+        no(f"JSON keyword array parse wrong: {kw2['rows']}")
+
+    for desc, fn in (
+        ("a brand-voice file with no recognised fields", lambda: imp.parse_import(kind=imp.KIND_BRAND_VOICE, content='{"foo": "bar"}')),
+        ("a keyword file with no keywords", lambda: imp.parse_import(kind=imp.KIND_KEYWORDS, content='volume\n900\n')),
+    ):
+        try:
+            fn()
+            no(f"parser accepted a bad file: {desc}")
+        except imp.ImportParseError:
+            ok(f"parser refuses {desc} with a stated reason")
+
     # ── Fail fixtures: the parser refuses rather than guesses ───────────────
     for desc, fn in (
         ("unknown kind", lambda: imp.parse_import(kind="not_a_kind", content=SP_FULL)),

@@ -15,18 +15,22 @@
 //     no causation claim.
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Icon from '../../../components/Icon.jsx'
 import { useToast } from '../../../components/ToastContext.jsx'
-import { readRoom } from '../../../studio/engine/store.js'
+import { useRoom } from '../../../studio/engine/store.js'
 import {
   importReport, fetchImports, fetchTerms, termsExportHref, makeBrief,
   fetchVariants, createVariant, addVariantMetric, importVariantMetrics, fetchCompare,
+  fetchBrandVoice, variantsExportHref,
 } from '../../../studio/engine/imports.js'
+import { buildListingContext, mismatchFlags } from '../../../studio/engine/listingContext.js'
 
 const KINDS = [
   { id: 'sp_search_terms', label: 'Sponsored Products search terms (CSV/JSON)' },
   { id: 'brand_analytics_sqp', label: 'Brand Analytics Search Query Performance (CSV/JSON)' },
+  { id: 'brand_voice', label: 'Brand voice (JSON object or key,value CSV)' },
+  { id: 'keywords', label: 'Keyword list (CSV/JSON)' },
 ]
 
 // Shown BEFORE an import so the limits are known up front, and attached to
@@ -41,18 +45,19 @@ const KNOWN_NOTES = {
     '65-day lookback ceiling in the console export.',
     'No clicks or spend columns: those figures stay UNKNOWN with this file.',
   ],
+  brand_voice: [
+    'Your own wording from a file; it is archived with a source label and a date, and it never becomes a marketplace claim.',
+    'A field the file does not carry stays UNKNOWN.',
+  ],
+  keywords: [
+    'A snapshot list, not a live search-volume feed. A missing volume is UNKNOWN, never 0.',
+  ],
 }
 
 // A NULL from the server is UNKNOWN on screen. Never 0.
 function fmt(v) {
   if (v === null || v === undefined || v === '') return 'UNKNOWN'
   return typeof v === 'number' ? String(v) : String(v)
-}
-
-function readBrandProfile() {
-  // The one brand profile every creative room reads (Projects › Brand).
-  const p = readRoom('ds-brand-profile', null)
-  return p || null
 }
 
 function kindLabel(id) {
@@ -86,6 +91,40 @@ export default function SearchTerms() {
   const [metricsFileMsg, setMetricsFileMsg] = useState(null)
   const [compareState, setCompareState] = useState(null)
 
+  // ── Listing integration + imported brand voice (Phase 7 items 5-6) ──
+  const [brandVoice, setBrandVoice] = useState({ state: 'loading', available: false, fields: {}, missing_fields: [] })
+  const [aplusProjects, setAplusProjects] = useState([])
+  const [listingAsin, setListingAsin] = useState('')
+  const [forgeListings] = useRoom('lf-listings', [])
+  const [brandProfile] = useRoom('ds-brand-profile', null)
+  const listingContext = useMemo(
+    () => buildListingContext({ forgeListings, brandProfile, aplusProjects, asin: listingAsin }),
+    [forgeListings, brandProfile, aplusProjects, listingAsin],
+  )
+  const listingOptions = (forgeListings || []).filter(l => l && l.asin)
+
+  const reloadBrandVoice = useCallback(async () => {
+    const r = await fetchBrandVoice()
+    setBrandVoice(r)
+    return r
+  }, [])
+
+  const [keywordRows, setKeywordRows] = useState([])
+  const reloadKeywordRows = useCallback(async () => {
+    const r = await fetchTerms({ kind: 'keywords', limit: 200 })
+    setKeywordRows(r.state === 'ready' ? (r.terms || []) : [])
+    return r
+  }, [])
+
+  const reloadAplus = useCallback(async () => {
+    try {
+      const res = await fetch('/api/design-studio/projects?section=aplus', { credentials: 'include' })
+      if (!res.ok) return
+      const j = await res.json()
+      setAplusProjects(j.projects || [])
+    } catch { /* projects stay empty; the field reads UNKNOWN */ }
+  }, [])
+
   const reloadImports = useCallback(async () => {
     const r = await fetchImports()
     setImportsState(r)
@@ -108,7 +147,10 @@ export default function SearchTerms() {
     reloadImports()
     reloadTerms('', '')
     reloadVariants()
-  }, [reloadImports, reloadTerms, reloadVariants])
+    reloadBrandVoice()
+    reloadAplus()
+    reloadKeywordRows()
+  }, [reloadImports, reloadTerms, reloadVariants, reloadBrandVoice, reloadAplus, reloadKeywordRows])
 
   const onFile = async (e) => {
     const f = e.target.files && e.target.files[0]
@@ -140,6 +182,8 @@ export default function SearchTerms() {
       await reloadImports()
       await reloadTerms(termQuery, kindFilter)
       await reloadVariants()
+      await reloadBrandVoice()
+      await reloadKeywordRows()
     } else if (res.state === 'duplicate') {
       toast('That exact file was already imported for this account. Nothing was duplicated.', 'info')
       await reloadImports()
@@ -150,19 +194,46 @@ export default function SearchTerms() {
 
   const runBrief = async () => {
     setBriefBusy(true)
-    const profile = readBrandProfile()
-    // Keywords come from the brand profile's promise + audience words; when the
-    // profile is empty they stay empty and the brief says UNKNOWN instead.
-    const words = `${(profile && profile.promise) || ''} ${(profile && profile.audience) || ''}`
+    // Voice provenance (item 6): an imported brand-voice file wins over the
+    // brand profile, and the brief records which one it used.
+    const voiceFields = (brandVoice && brandVoice.available) ? (brandVoice.fields || {}) : null
+    const profile = brandProfile || null
+    const useImport = !!(voiceFields && (voiceFields.voice || voiceFields.promise || voiceFields.audience || voiceFields.name))
+    const name = (voiceFields && voiceFields.name) || (profile && profile.name) || 'the brand'
+    const audience = (voiceFields && voiceFields.audience) || (profile && profile.audience) || null
+    const voice = (voiceFields && voiceFields.voice) || (profile && profile.voice) || null
+    const promise = (voiceFields && voiceFields.promise) || (profile && profile.promise) || null
+    // Keywords come from the imported keyword list (item 6) plus the brand
+    // profile's promise + audience words; each source is named in the brief.
+    const importedKeywords = keywordRows.map(r => String(r.term || '').toLowerCase()).filter(Boolean)
+    const profileWords = `${promise || ''} ${audience || ''}`
       .toLowerCase().split(/[^a-z0-9']+/).filter(w => w.length >= 4)
-    const brand = profile ? {
-      objective: `Move "${profile.name || 'the brand'}" search terms into the creative.`,
-      audience: profile.audience || null,
-      voice: profile.voice || null,
-      promise: profile.promise || null,
+    const words = [...new Set([...importedKeywords, ...profileWords])]
+    const kwImport = (importsState.kinds && importsState.kinds.keywords && importsState.kinds.keywords.latest) || null
+    const keywordsSource = importedKeywords.length
+      ? {
+        source: 'imported keyword list',
+        import_id: kwImport ? kwImport.id : null,
+        observed_at: kwImport ? (kwImport.observed_from || kwImport.imported_at || null) : null,
+        source_label: kwImport ? kwImport.source_label : null,
+        note: `${importedKeywords.length} imported keyword(s) are matched against the terms; missing volumes stay UNKNOWN.`,
+      }
+      : null
+    const brand = (voice || promise || audience || (profile && profile.name)) ? {
+      objective: `Move "${name}" search terms into the creative.`,
+      audience, voice, promise,
     } : null
+    const voiceSource = useImport
+      ? {
+        source: 'imported brand-voice file',
+        import_id: brandVoice.import ? brandVoice.import.id : null,
+        observed_at: brandVoice.import ? (brandVoice.import.observed_from || brandVoice.import.imported_at || null) : null,
+        source_label: brandVoice.import ? brandVoice.import.source_label : null,
+        note: 'Voice text from the operator\'s own imported file, archived with its source label and date.',
+      }
+      : null
     const res = await makeBrief({
-      q: termQuery, limit: 25, brand, keywords: words.slice(0, 12),
+      q: termQuery, limit: 25, brand, keywords: words.slice(0, 20), voiceSource, keywordsSource,
     })
     setBriefBusy(false)
     setBriefState(res)
@@ -461,8 +532,23 @@ export default function SearchTerms() {
                   ))}
                 </tbody>
               </table>
+              <div className="text-low" style={{ fontSize: 11, marginTop: 8 }} data-testid="brief-voice-provenance">
+                Voice provenance: {briefState.brief.voice_provenance && briefState.brief.voice_provenance.source}
+                {briefState.brief.voice_provenance && briefState.brief.voice_provenance.observed_at ? ` — observed ${briefState.brief.voice_provenance.observed_at}` : ''}
+                {briefState.brief.voice_provenance && briefState.brief.voice_provenance.source_label ? ` (${briefState.brief.voice_provenance.source_label})` : ''}.
+                {' '}{briefState.brief.voice_provenance && briefState.brief.voice_provenance.note}
+              </div>
+              <div className="text-low" style={{ fontSize: 11, marginTop: 4 }} data-testid="brief-keywords-provenance">
+                Keyword provenance: {briefState.brief.keywords_provenance && briefState.brief.keywords_provenance.source}
+                {briefState.brief.keywords_provenance && briefState.brief.keywords_provenance.observed_at ? ` — observed ${briefState.brief.keywords_provenance.observed_at}` : ''}
+                {briefState.brief.keywords_provenance && briefState.brief.keywords_provenance.source_label ? ` (${briefState.brief.keywords_provenance.source_label})` : ''}.
+                {' '}{briefState.brief.keywords_provenance && briefState.brief.keywords_provenance.note}
+              </div>
               <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>
                 {briefState.brief.notes.map((n, i) => <div key={i}>• {n}</div>)}
+              </div>
+              <div className="text-low" style={{ fontSize: 11, marginTop: 8 }} data-testid="brief-performance">
+                Performance evidence: see the variant comparison below — per-variant sample size, confidence band and the no-causation notice. Imported metrics only; no attribution is possible from Amazon's reports.
               </div>
             </>
           ) : (
@@ -473,6 +559,62 @@ export default function SearchTerms() {
           )}
         </div>
       )}
+
+      {/* ── Listing context (Phase 7 item 5) ───────────────────────────── */}
+      <div className="card" style={{ padding: 16 }} data-testid="listing-context">
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+          <strong style={{ fontSize: 13 }}>Listing context</strong>
+          <span className="pill pill-muted">read from your local records — no marketplace call</span>
+          <div className="field-group" style={{ minWidth: 240 }}>
+            <label className="label">Listing (local ListingForge records)</label>
+            <select className="field" value={listingAsin} data-testid="listing-picker"
+              onChange={e => setListingAsin(e.target.value)}>
+              <option value="">First local record</option>
+              {listingOptions.map(l => (
+                <option key={l.asin} value={l.asin}>{l.asin} — {(l.copy && l.copy.title) || l.title || '(untitled)'}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="text-low" style={{ fontSize: 11, marginTop: 6 }}>{listingContext.note}</div>
+
+        <table className="table" style={{ marginTop: 10, fontSize: 12 }}>
+          <thead><tr><th>Field</th><th>Value</th><th>Source</th><th>Observed</th><th>Freshness</th><th>Limits</th></tr></thead>
+          <tbody>
+            {Object.entries(listingContext.fields).map(([key, f]) => (
+              <tr key={key}>
+                <td>{key}</td>
+                <td>{f.missing ? <span className="pill pill-muted">UNKNOWN</span> : (Array.isArray(f.value) ? f.value.join(' · ') : String(f.value))}</td>
+                <td>{f.missing ? '—' : f.source}</td>
+                <td>{f.observed_at ? String(f.observed_at).slice(0, 10) : 'UNKNOWN'}</td>
+                <td>{f.missing ? 'UNKNOWN' : f.freshness}</td>
+                <td className="text-low" style={{ fontSize: 11 }}>{f.limits.join(' ') || '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div style={{ marginTop: 10 }} data-testid="listing-mismatch">
+          {(() => {
+            const m = briefState && briefState.state === 'ready'
+              ? mismatchFlags({ brief: briefState.brief, context: listingContext })
+              : { state: 'UNKNOWN', flags: [], note: 'Compose a brief to check the creative text against the listing copy.' }
+            return (
+              <>
+                <div className="text-low" style={{ fontSize: 11 }}>
+                  Mismatch check ({m.state}): {m.note}
+                </div>
+                {m.flags.map((f, i) => (
+                  <div key={i} className="alert alert-warn" style={{ marginTop: 8 }}>
+                    <div className="alert-title">{f.review}: “{f.term}”</div>
+                    <div className="alert-text" style={{ fontSize: 12 }}>{f.detail}</div>
+                  </div>
+                ))}
+              </>
+            )
+          })()}
+        </div>
+      </div>
 
       {/* ── Variants + performance comparison (item 6) ─────────────────── */}
       <div className="card" style={{ padding: 16 }} data-testid="variants-panel">
@@ -501,6 +643,7 @@ export default function SearchTerms() {
             <input className="field" type="file" accept=".csv,.tsv,.json" onChange={onMetricsFile} data-testid="variant-metrics-file" />
           </div>
           <button className="btn btn-sm" onClick={runCompare} data-testid="compare-run">Refresh comparison</button>
+          <a className="btn btn-sm" href={variantsExportHref()} data-testid="variants-export">Export results CSV</a>
         </div>
         {metricsFileMsg && (
           <div className="text-low" style={{ fontSize: 11, marginTop: 6 }} data-testid="metrics-import-result">
@@ -554,7 +697,7 @@ export default function SearchTerms() {
         {compareState && compareState.state === 'ready' && (
           <div style={{ marginTop: 12 }} data-testid="variant-compare">
             <table className="table" style={{ fontSize: 12 }}>
-              <thead><tr><th>Variant</th><th>Impressions</th><th>Clicks</th><th>Orders</th><th>Spend</th><th>Sales</th><th>Sources</th><th>Warnings</th></tr></thead>
+              <thead><tr><th>Variant</th><th>Impressions</th><th>Clicks</th><th>Orders</th><th>Spend</th><th>Sales</th><th>Sample</th><th>Confidence note</th><th>Sources</th><th>Warnings</th></tr></thead>
               <tbody>
                 {compareState.comparison.map(row => (
                   <tr key={row.variant.id}>
@@ -564,6 +707,8 @@ export default function SearchTerms() {
                     <td>{fmt(row.totals.orders)}</td>
                     <td>{fmt(row.totals.spend)}</td>
                     <td>{fmt(row.totals.sales)}</td>
+                    <td><span className={`pill ${(row.confidence && row.confidence.sample) === 'large' ? 'pill-ok' : 'pill-muted'}`}>{(row.confidence && row.confidence.sample) || 'UNKNOWN'}</span></td>
+                    <td className="text-low" style={{ fontSize: 11 }}>{(row.confidence && row.confidence.note) || ''}</td>
                     <td>{row.sources.length ? row.sources.join(', ') : 'none'}</td>
                     <td className="text-low" style={{ fontSize: 11 }}>{row.warnings.map((w, i) => <div key={i}>• {w}</div>)}</td>
                   </tr>

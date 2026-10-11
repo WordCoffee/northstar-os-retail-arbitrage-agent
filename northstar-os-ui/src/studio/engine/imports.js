@@ -87,15 +87,25 @@ export function termsExportHref({ q = '', kind = '' } = {}) {
 }
 
 /** Compose a brief from imported terms + the brand profile. No generation. */
-export async function makeBrief({ termIds = null, q = '', limit = 25, brand = null, keywords = null }) {
+export async function makeBrief({ termIds = null, q = '', limit = 25, brand = null, keywords = null, voiceSource = null, keywordsSource = null }) {
   try {
     const data = await api('/terms/brief', {
       method: 'POST',
-      body: JSON.stringify({ term_ids: termIds, q, limit, brand, keywords }),
+      body: JSON.stringify({ term_ids: termIds, q, limit, brand, keywords, voice_source: voiceSource, keywords_source: keywordsSource }),
     })
     return { state: 'ready', brief: data }
   } catch (e) {
     return { state: 'error', reason: String(e.message || e) }
+  }
+}
+
+/** The latest imported brand-voice file, as fields with provenance (item 6). */
+export async function fetchBrandVoice() {
+  try {
+    const data = await api('/brand-voice')
+    return { state: 'ready', ...data }
+  } catch (e) {
+    return { state: 'error', available: false, fields: {}, missing_fields: [], reason: String(e.message || e) }
   }
 }
 
@@ -150,4 +160,9 @@ export async function fetchCompare() {
   } catch (e) {
     return { state: 'error', comparison: [], reason: String(e.message || e) }
   }
+}
+
+/** Results CSV for the performance loop (item 7). Direct browser download. */
+export function variantsExportHref() {
+  return `${BASE}/variants/export`
 }

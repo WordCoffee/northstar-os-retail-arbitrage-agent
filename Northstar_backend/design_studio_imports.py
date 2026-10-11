@@ -54,7 +54,9 @@ NOTE_FILE_NOT_LIVE = (
 
 KIND_SP_SEARCH_TERMS = "sp_search_terms"
 KIND_BRAND_ANALYTICS_SQP = "brand_analytics_sqp"
-KINDS = (KIND_SP_SEARCH_TERMS, KIND_BRAND_ANALYTICS_SQP)
+KIND_BRAND_VOICE = "brand_voice"
+KIND_KEYWORDS = "keywords"
+KINDS = (KIND_SP_SEARCH_TERMS, KIND_BRAND_ANALYTICS_SQP, KIND_BRAND_VOICE, KIND_KEYWORDS)
 
 MAX_CONTENT_BYTES = 5 * 1024 * 1024  # a report file, not a data dump
 
@@ -117,6 +119,18 @@ EXPECTED_TERM_COLUMNS = (
     "orders", "spend", "sales",
 )
 EXPECTED_BA_COLUMNS = ("term", "search_frequency_rank", "search_query_score")
+EXPECTED_KEYWORD_COLUMNS = ("term", "volume")
+BRAND_VOICE_FIELDS = ("name", "promise", "voice", "audience", "prohibited")
+
+# Brand-voice aliases: normalized header/key -> canonical field.
+_VOICE_ALIASES = {
+    "brandname": "name", "name": "name", "brand": "name",
+    "promise": "promise", "onelinepromise": "promise", "positioning": "promise",
+    "voice": "voice", "brandvoice": "voice", "tone": "voice", "toneofvoice": "voice",
+    "audience": "audience", "targetaudience": "audience", "who": "audience",
+    "prohibited": "prohibited", "prohibitedclaims": "prohibited", "neverclaim": "prohibited",
+    "keywords": "keywords",
+}
 
 
 def _parse_number(raw: Any) -> Optional[float]:
@@ -229,6 +243,13 @@ def parse_import(
     if len(content.encode("utf-8", errors="ignore")) > MAX_CONTENT_BYTES:
         raise ImportParseError(f"file larger than {MAX_CONTENT_BYTES // (1024 * 1024)} MB")
 
+    # Brand voice and keyword lists are not metric reports; they have their own
+    # honest shapes (a field set / a term list), each carrying provenance.
+    if kind == KIND_BRAND_VOICE:
+        return _parse_brand_voice(content=content, filename=filename)
+    if kind == KIND_KEYWORDS:
+        return _parse_keywords(content=content, filename=filename)
+
     fmt = _detect_format(filename, content)
     raw_rows = _rows_from_content(content, fmt, filename)
     if not raw_rows:
@@ -318,6 +339,142 @@ def parse_import(
     }
 
 
+def _parse_brand_voice(*, content: str, filename: Optional[str] = None) -> Dict[str, Any]:
+    """Parse a brand-voice file (JSON object / CSV key,value rows).
+
+    Recognised fields: name, promise, voice, audience, prohibited, keywords.
+    An unrecognised key is kept in `extras` rather than dropped. A field the
+    file does not carry is ABSENT here (the UI shows UNKNOWN, never a guess).
+    """
+    fmt = _detect_format(filename, content)
+    raw_rows = _rows_from_content(content, fmt, filename)
+    if not raw_rows:
+        raise ImportParseError("the file carries no brand-voice fields")
+    fields: Dict[str, str] = {}
+    extras: Dict[str, Any] = {}
+    for raw in raw_rows:
+        for key, val in raw.items():
+            if val is None or str(val).strip() == "":
+                continue
+            canon = _VOICE_ALIASES.get(_norm_key(key))
+            if canon:
+                fields[canon] = str(val).strip()
+            else:
+                extras[str(key)] = str(val).strip()
+    if not fields:
+        raise ImportParseError(
+            "no recognised brand-voice fields were found. Expected keys like "
+            "name / promise / voice / audience / prohibited (or a CSV of key,value rows)."
+        )
+    rows = [{
+        "term": key,
+        "extras": {"value": value},
+        "row_from": None, "row_to": None,
+    } for key, value in fields.items()]
+    if extras:
+        rows.append({"term": "_extra", "extras": extras, "row_from": None, "row_to": None})
+    return {
+        "format": fmt,
+        "rows": rows,
+        "columns_found": sorted(fields.keys()),
+        "missing_columns": [f for f in BRAND_VOICE_FIELDS if f not in fields],
+        "skipped_rows": 0,
+        "observed_from": None,
+        "observed_to": None,
+        "observed_source": "none",
+        "notes": [
+            NOTE_FILE_NOT_LIVE,
+            "Brand voice imported from a file: it is the operator's own wording, not a marketplace read.",
+        ],
+        "fingerprint": content_fingerprint(KIND_BRAND_VOICE, content),
+    }
+
+
+def _parse_keywords(*, content: str, filename: Optional[str] = None) -> Dict[str, Any]:
+    """Parse a keyword list (JSON array of strings/objects, or CSV with a
+    keyword/term column). A keyword with no volume column keeps volume NULL -
+    UNKNOWN, never 0."""
+    fmt = _detect_format(filename, content)
+    out: List[Dict[str, Any]] = []
+    skipped = 0
+    term_keys = ("keyword", "term", "searchterm", "phrase", "query")
+
+    def take(item: Dict[str, Any]) -> None:
+        nonlocal skipped
+        term = None
+        extra: Dict[str, Any] = {}
+        for k, v in item.items():
+            nk = _norm_key(k)
+            if nk in term_keys and v is not None and str(v).strip():
+                term = str(v).strip()
+            elif v is not None and str(v).strip() != "":
+                extra[str(k)] = _parse_number(v) if nk in ("volume", "searchvolume", "monthlysearches", "rank") else str(v).strip()
+        if term:
+            out.append({"term": term, "extras": extra, "row_from": None, "row_to": None})
+        else:
+            skipped += 1
+
+    if fmt == "json":
+        try:
+            data = json.loads(content)
+        except json.JSONDecodeError as exc:
+            raise ImportParseError(f"JSON could not be parsed: {exc.msg}") from exc
+        if isinstance(data, dict):
+            data = data.get("keywords") or data.get("rows") or data.get("data") or []
+        if not isinstance(data, list):
+            raise ImportParseError("JSON must be an array of keywords or an object with a keywords array")
+        for item in data:
+            if isinstance(item, str):
+                term = item.strip()
+                if term:
+                    out.append({"term": term, "extras": {}, "row_from": None, "row_to": None})
+                else:
+                    skipped += 1
+            elif isinstance(item, dict):
+                take(item)
+    else:
+        raw_rows = _rows_from_content(content, fmt, filename)
+        for raw in raw_rows:
+            take(raw)
+
+    if not out:
+        raise ImportParseError("no keywords were found (expected a keyword/term column or a list of strings)")
+    return {
+        "format": fmt,
+        "rows": out,
+        "columns_found": ["term"],
+        "missing_columns": ["volume"] if not any(r["extras"].get("volume") is not None for r in out) else [],
+        "skipped_rows": skipped,
+        "observed_from": None,
+        "observed_to": None,
+        "observed_source": "none",
+        "notes": [
+            NOTE_FILE_NOT_LIVE,
+            "Keyword list imported from a file: a snapshot, not a live search-volume feed. A missing volume is UNKNOWN, never 0.",
+        ],
+        "fingerprint": content_fingerprint(KIND_KEYWORDS, content),
+    }
+
+
+def confidence_label(clicks: Optional[float]) -> Dict[str, Any]:
+    """The one sample-size labelling used by briefs AND variant comparisons."""
+    if clicks is None:
+        return {"sample": "UNKNOWN", "clicks": None,
+                "note": "No clicks figure is available, so no sample-size claim can be made."}
+    c = float(clicks)
+    if c < 5:
+        return {"sample": "very small", "clicks": c,
+                "note": "Fewer than 5 clicks: treat every rate from this term as noise."}
+    if c < 25:
+        return {"sample": "small", "clicks": c,
+                "note": "Under 25 clicks: directionally useful only."}
+    if c < 100:
+        return {"sample": "moderate", "clicks": c,
+                "note": "25-100 clicks: reviewable, still shadable by one campaign change."}
+    return {"sample": "large", "clicks": c,
+            "note": "100+ clicks: the strongest evidence this file can carry."}
+
+
 def parse_variant_metrics(*, content: str, filename: Optional[str] = None) -> Dict[str, Any]:
     """Parse a small variant-metrics file (CSV/JSON) — Phase 6 item 6.
 
@@ -385,33 +542,20 @@ def build_brief(
     terms: List[Dict[str, Any]],
     brand: Optional[Dict[str, Any]] = None,
     keywords: Optional[List[str]] = None,
+    voice_source: Optional[Dict[str, Any]] = None,
+    keywords_source: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Compose a creative brief from imported search terms + the brand profile.
 
     No generation. Every ranking is labelled with its sample size and a
     confidence band, and a term is NEVER called a winner without the click-only
     bias being stated next to it. A metric that is absent is reported as UNKNOWN,
-    never as zero.
+    never as zero. `voice_source` records where the voice text came from (the
+    brand profile, or an imported file with its date) so the brief carries its
+    own provenance.
     """
     brand = brand or {}
     keywords = [str(k).strip().lower() for k in (keywords or []) if str(k).strip()]
-
-    def sample_label(clicks: Optional[float]) -> Dict[str, Any]:
-        if clicks is None:
-            return {"sample": "UNKNOWN", "clicks": None,
-                    "note": "The file did not carry a clicks column, so no sample-size claim can be made."}
-        c = float(clicks)
-        if c < 5:
-            return {"sample": "very small", "clicks": c,
-                    "note": "Fewer than 5 clicks: treat every rate from this term as noise."}
-        if c < 25:
-            return {"sample": "small", "clicks": c,
-                    "note": "Under 25 clicks: directionally useful only."}
-        if c < 100:
-            return {"sample": "moderate", "clicks": c,
-                    "note": "25-100 clicks: reviewable, still shadable by one campaign change."}
-        return {"sample": "large", "clicks": c,
-                "note": "100+ clicks: the strongest evidence this file can carry."}
 
     ranked = []
     for t in terms:
@@ -426,7 +570,7 @@ def build_brief(
             "observed_from": t.get("row_from") or t.get("observed_from") or "UNKNOWN",
             "observed_to": t.get("row_to") or t.get("observed_to") or "UNKNOWN",
         }
-        labels = sample_label(clicks)
+        labels = confidence_label(clicks)
         matched_keyword = None
         term_l = str(t.get("term") or "").lower()
         for k in keywords:
@@ -449,6 +593,16 @@ def build_brief(
         "objective": brand.get("objective") or "Move the listing's strongest search terms into the creative.",
         "audience": brand.get("audience") or "UNKNOWN - set the audience in the brand profile.",
         "voice": brand.get("voice") or "UNKNOWN - set the brand voice in the brand profile.",
+        "voice_provenance": voice_source or {
+            "source": "brand profile",
+            "observed_at": None,
+            "note": "Voice text from the studio brand profile (a local record).",
+        },
+        "keywords_provenance": keywords_source or {
+            "source": "brand profile (promise + audience words)",
+            "observed_at": None,
+            "note": "No keyword list was imported, so matching uses the brand profile's own words.",
+        },
         "promise": brand.get("promise") or "UNKNOWN - set the one-line promise in the brand profile.",
         # Headlines are NEVER invented: absent brand copy stays an instruction.
         "headline_slots": [
