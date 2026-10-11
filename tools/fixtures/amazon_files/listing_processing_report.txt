@@ -1,0 +1,3 @@
+sku	error-type	error-message
+SKU-1	Error	The value provided for standard_price is invalid
+SKU-9	Error	The SKU does not exist in this marketplace

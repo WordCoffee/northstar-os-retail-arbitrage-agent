@@ -168,16 +168,158 @@ async function main() {
   if (pack && pack.asins.length === 2 && pack.assets[0].alt_text_required === true && /UNKNOWN/.test(pack.assets[0].alt_text_note || '')) {
     ok('A+ pack: ASINs read from the file; required alt text flagged when missing')
   } else no('A+ pack assets wrong', JSON.stringify(pack && pack.assets).slice(0, 200))
+  // A+ copy slots (item 6): operator text carried; empty slots UNKNOWN.
+  r = await call('POST', `/api/design-studio/amazon-files/${aplus.id}/aplus-pack`, {
+    assets: [{ name: 'hero.png' }],
+    copy: { headline: 'Built for the job' },
+  })
+  const pack2 = r.json && r.json.pack
+  const slotOf = (p, s) => (p && p.copy_slots || []).find(x => x.slot === s) || {}
+  if (slotOf(pack2, 'headline').text === 'Built for the job' && slotOf(pack2, 'headline').source === 'operator') {
+    ok('A+ copy: the operator headline is carried with its source')
+  } else no('A+ copy headline wrong', JSON.stringify(slotOf(pack2, 'headline')))
+  if (slotOf(pack2, 'body').text === null && /UNKNOWN/.test(slotOf(pack2, 'body').note || '')) {
+    ok('A+ copy: an empty slot stays UNKNOWN with a write-it-yourself note')
+  } else no('A+ copy empty slot wrong', JSON.stringify(slotOf(pack2, 'body')))
+
+  // ── Change files list (item 2 surface) ─────────────────────────────────
+  r = await call('GET', `/api/design-studio/amazon-files/${up.id}/changes`)
+  const cfList = r.json && r.json.change_files
+  if (r.status === 200 && cfList && cfList.length === 1 && cfList[0].filename === cf.filename) {
+    ok('change files list returns the written change file for its upload')
+  } else no('change files list wrong', `http ${r.status} ${JSON.stringify(cfList).slice(0, 160)}`)
+
+  // ── Processing report: proposals refused, rows matched (item 2) ────────
+  r = await call('POST', '/api/design-studio/amazon-files/upload', { filename: 'ads_error_report.xlsx', content_b64: b64('ads_error_report.xlsx') })
+  const reportUp = r.json && r.json.upload
+  if (reportUp) created.push(reportUp.id)
+  if (reportUp && reportUp.kind === 'ads_error_report') ok('ads error report detected as a processing report')
+  else no('error report detection wrong', JSON.stringify(reportUp && reportUp.kind))
+  r = await call('POST', `/api/design-studio/amazon-files/${reportUp.id}/proposals`, { changes: [] })
+  if (r.status === 422 && r.json.detail.code === 'report_has_no_proposals') ok('a report upload cannot produce proposals (422, stated reason)')
+  else no('report proposals not refused', `http ${r.status}`)
+  r = await call('POST', `/api/design-studio/amazon-files/${reportUp.id}/write`, {})
+  if (r.status === 422 && r.json.detail.code === 'report_has_no_change_file') ok('a report upload cannot be written as a change file (422)')
+  else no('report write not refused', `http ${r.status}`)
+  r = await call('POST', '/api/design-studio/amazon-files/reports/match', {
+    filename: 'ads_error_report.xlsx', content_b64: b64('ads_error_report.xlsx'), change_file_id: cf.id,
+  })
+  const match = r.json && r.json.match
+  if (r.status === 200 && match && match.matched_count === 1 && match.unmatched_count === 1) {
+    ok('report match: 1 row matched to the change file, 1 unmatched (never guessed)')
+  } else no('report match counts wrong', `http ${r.status} ${JSON.stringify(match).slice(0, 200)}`)
+  const hit = match && match.matches && match.matches[0]
+  const k300ProposalIds = [p0, p2, p3].filter(Boolean).map(x => x.id)
+  if (hit && k300ProposalIds.includes(hit.proposal_id) && /Bid is invalid/.test(hit.cause || '') && /bid/i.test(hit.fix_hint || '')) {
+    ok('report match: row linked to a K300 proposal; cause quoted; bid-specific fix hint')
+  } else no('report match linkage wrong', JSON.stringify(hit).slice(0, 220))
+  if (match && match.unmatched[0] && /not matched/.test(match.unmatched[0].cause || '')) ok('report match: the K999 row is reported unmatched')
+  else no('unmatched row not reported', JSON.stringify(match && match.unmatched).slice(0, 160))
+  r = await call('POST', '/api/design-studio/amazon-files/reports/match', {
+    filename: 'sp_bulksheet.xlsx', content_b64: b64('sp_bulksheet.xlsx'), change_file_id: cf.id,
+  })
+  if (r.status === 422 && r.json.detail.code === 'not_a_processing_report') ok('a non-report file is refused as a report (422, stated reason)')
+  else no('non-report accepted as report', `http ${r.status}`)
+
+  // ── Corrected resubmittable file (item 2) ──────────────────────────────
+  r = await call('POST', `/api/design-studio/amazon-files/change/${cf.id}/correct`, {
+    corrections: [{ row_index: 0, fields: { bid: '0.85' } }],
+  })
+  const corr = r.json && r.json.change_file
+  const crt = r.json && r.json.roundtrip
+  if (r.status === 200 && corr && /-corrected-v2/.test(corr.filename)) ok(`corrected file written as a NEW version: ${corr.filename}`)
+  else no('corrected write failed', `http ${r.status} ${JSON.stringify(r.json).slice(0, 200)}`)
+  if (crt && crt.ok && crt.written_count === 1) ok('corrected round-trip: only the corrections differ from the change file')
+  else no('corrected round-trip failed', JSON.stringify(crt).slice(0, 200))
+  const cdl = await page.evaluate(async (url) => {
+    const res = await fetch(url, { credentials: 'include' })
+    const buf = await res.arrayBuffer()
+    let binary = ''
+    const bytes = new Uint8Array(buf)
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i])
+    return { status: res.status, b64: btoa(binary) }
+  }, `${API}/api/design-studio/amazon-files/change/${corr.id}/download`)
+  r = await call('POST', '/api/design-studio/amazon-files/upload', { filename: 'corrected_reupload.xlsx', content_b64: cdl.b64 })
+  const creup = r.json && r.json.upload
+  if (creup) created.push(creup.id)
+  if (creup && creup.row_count === 1) {
+    const rowsRes = await call('GET', `/api/design-studio/amazon-files/${creup.id}/rows`)
+    const row = (rowsRes.json.rows || [])[0] || {}
+    if (row.bid === '0.85' && row.keyword_id === 'K300') ok('the corrected file re-parses with the corrected bid (0.85) and the same exact ID')
+    else no('corrected row wrong', JSON.stringify(row).slice(0, 160))
+  } else no('corrected re-upload wrong', JSON.stringify(creup && { kind: creup.kind, rows: creup.row_count }))
+  r = await call('POST', `/api/design-studio/amazon-files/change/${cf.id}/correct`, { corrections: [{ row_index: 0, fields: { bullet1: 'nope' } }] })
+  if (r.status === 422 && r.json.detail.code === 'correction_refused') ok('a correction naming a column the file does not carry is refused (422, stated reason)')
+  else no('unknown-column correction not refused', `http ${r.status}`)
+
+  // ── Before/after comparison (item 5) ───────────────────────────────────
+  r = await call('POST', '/api/design-studio/amazon-files/upload', { filename: 'metrics_before.xlsx', content_b64: b64('metrics_before.xlsx') })
+  const beforeUp = r.json && r.json.upload
+  if (beforeUp) created.push(beforeUp.id)
+  r = await call('POST', '/api/design-studio/amazon-files/upload', { filename: 'metrics_after.xlsx', content_b64: b64('metrics_after.xlsx') })
+  const afterUp = r.json && r.json.upload
+  if (afterUp) created.push(afterUp.id)
+  r = await call('POST', `/api/design-studio/amazon-files/${beforeUp.id}/compare`, {
+    after_upload_id: afterUp.id,
+    before_from: '2026-09-01', before_to: '2026-09-14', after_from: '2026-09-15', after_to: '2026-09-28',
+  })
+  const cmp = r.json && r.json.comparison
+  const byKey = {}
+  for (const row of (cmp && cmp.rows) || []) byKey[row.key] = row
+  if (r.status === 200 && byKey.K300 && byKey.K300.delta_clicks === 6) ok('comparison: K300 before/after computed (12 → 18 clicks, delta 6)')
+  else no('comparison delta wrong', `http ${r.status} ${JSON.stringify(byKey.K300).slice(0, 200)}`)
+  if (byKey.K301 && byKey.K301.metrics.clicks.after === 'UNKNOWN' && byKey.K302 && byKey.K302.metrics.clicks.before === 'UNKNOWN') {
+    ok('comparison: a metric missing from one file is UNKNOWN, never 0')
+  } else no('comparison UNKNOWN handling wrong', JSON.stringify([byKey.K301, byKey.K302]).slice(0, 200))
+  if (cmp && /NO CAUSATION/.test(cmp.causation || '') && /engineering choice/.test(cmp.stale_window_note || '') && cmp.stale_window_days === 14) {
+    ok('comparison: explicit no-causation notice; 14-day window labelled an engineering choice')
+  } else no('comparison notices wrong', JSON.stringify(cmp && { c: cmp.causation, s: cmp.stale_window_note }).slice(0, 200))
+
+  // ── Brief → assets: templates only, tied to variant ids (item 7) ───────
+  const termsCsv = [
+    'Customer Search Term,Impressions,Clicks,Spend,Sales,Orders',
+    'cold brew filter,340,12,4.20,20.00,1',
+    'tumbler steel,210,8,3.10,12.00,1',
+    'insulated cup,120,4,1.10,5.00,0',
+  ].join('\n')
+  r = await call('POST', '/api/design-studio/imports', {
+    kind: 'sp_search_terms', source_label: 'harness terms', filename: 'terms.csv', content: termsCsv,
+  })
+  if (r.status === 200 || r.json && r.json.state === 'duplicate') ok(`search terms imported (state=${r.json && r.json.state})`)
+  else console.log(`NOTE  search-term import returned http ${r.status}: ${JSON.stringify(r.json).slice(0, 140)}`)
+  r = await call('POST', '/api/design-studio/terms/brief/assets', {
+    limit: 10, variants_limit: 2,
+    brand: { promise: 'Keeps drinks cold', voice: 'Plain and practical', audience: 'commuters' },
+    project_id: null,
+  })
+  const assets = r.json && r.json.variants
+  if (r.status === 200 && r.json.template_only === true && Array.isArray(assets)) {
+    if (assets.length === 0) {
+      console.log('NOTE  no imported terms were available, so the brief produced 0 variants (honest empty)')
+      ok('brief→assets: endpoint answered with template_only=true and an honest empty result')
+    } else {
+      const v = assets[0]
+      if (v.id && v.name.startsWith('Brief variant:') && v.copy.headline === 'Keeps drinks cold - ' + v.brief_ref.term) {
+        ok(`brief→assets: variant created with id ${String(v.id).slice(0, 8)}…, template headline from the brand promise + term`)
+      } else no('brief variant wrong', JSON.stringify(v).slice(0, 220))
+      if (Array.isArray(v.on_image_text) && v.on_image_text.some(l => l.layer === 'term')) ok('brief→assets: on-image text layers carry the imported term')
+      else no('on-image text wrong', JSON.stringify(v.on_image_text).slice(0, 160))
+      const vv = await call('GET', `/api/design-studio/variants/${v.id}`)
+      if (vv.status === 200 && vv.json.variant) ok('brief→assets: the variant exists in the variants store (matchable by a later results import)')
+      else no('variant not found in store', `http ${vv.status}`)
+      // Clean the created variants up (harness hygiene).
+      for (const a of assets) { if (a.id) await call('DELETE', `/api/design-studio/variants/${a.id}`) }
+      ok(`brief→assets: ${assets.length} harness variant(s) cleaned up`)
+    }
+  } else no('brief→assets failed', `http ${r.status} ${JSON.stringify(r.json).slice(0, 200)}`)
 
   // ── No external network during the entire run ──────────────────────────
-  // Allowed: the app shell's own web-font CDN (pre-existing, unrelated to the
-  // file path). Everything else - and every Amazon host in particular - must
-  // be absent.
-  const FONT_CDNS = ['fonts.googleapis.com', 'fonts.gstatic.com']
-  const unexpected = external.filter(u => !FONT_CDNS.some(h => u.includes(h)))
+  // Fonts are self-hosted (2026-10-11): the served UI must make ZERO external
+  // requests. Every external host - and every Amazon host in particular - fails.
+  const unexpected = external.slice()
   const amazonHits = external.filter(u => /amazon\./i.test(u))
   if (unexpected.length === 0 && amazonHits.length === 0) {
-    ok(`no non-local request outside the app's own font CDN; ZERO Amazon hosts contacted (${external.length} font request(s) noted)`)
+    ok('ZERO external requests during the entire run (fonts self-hosted; no Amazon host contacted)')
   } else {
     no(`${unexpected.length + amazonHits.length} unexpected external request(s)`, [...amazonHits, ...unexpected].slice(0, 3).join(' | '))
   }

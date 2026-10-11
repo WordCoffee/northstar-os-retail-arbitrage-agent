@@ -176,6 +176,8 @@ export default function AmazonFiles() {
       const j = await api(`/amazon-files/${selectedUpload.id}/write`, { method: 'POST', body: JSON.stringify({}) })
       setLastWrite(j)
       toast(`Change file written: ${j.change_file.filename}. Round-trip: ${j.roundtrip.ok ? 'only the approved changes differ' : 'FAILED - do not upload'}.`, j.roundtrip.ok ? 'info' : 'error')
+      const cj = await api(`/amazon-files/${selectedUpload.id}/changes`)
+      setChangeFiles(cj.change_files || [])
     } catch (e) {
       toast(`Write refused: ${e.message}`, 'error')
     } finally { setBusy(false) }

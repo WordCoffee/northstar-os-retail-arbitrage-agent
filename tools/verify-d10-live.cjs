@@ -157,6 +157,22 @@ async function main() {
     const bDel = await B.delete(`${API}/api/design-studio/amazon-files/${uid}`)
     if (bDel.status() === 404) ok('tenant B DELETE -> 404')
     else no(`tenant B upload delete returned ${bDel.status()}`)
+    // The 2026-10-11 additions (report match / corrected file / comparison /
+    // change list) must be tenant-scoped the same way.
+    const bChanges = await B.get(`${API}/api/design-studio/amazon-files/${uid}/changes`)
+    if (bChanges.status() === 404) ok('tenant B CHANGE LIST -> 404')
+    else no(`tenant B change list returned ${bChanges.status()}`)
+    const bMatch = await B.post(`${API}/api/design-studio/amazon-files/reports/match`, {
+      data: { filename: `d10-${stamp}.csv`, content_b64: Buffer.from(bulkCsv).toString('base64'), change_file_id: 'nope' },
+    })
+    if ([404, 422].includes(bMatch.status())) ok(`tenant B cannot match a report against A's data -> ${bMatch.status()}`)
+    else no(`tenant B report match returned ${bMatch.status()}`)
+    const bCorrect = await B.post(`${API}/api/design-studio/amazon-files/change/nope/correct`, { data: { corrections: [] } })
+    if (bCorrect.status() === 404) ok('tenant B cannot correct a change file it does not own -> 404')
+    else no(`tenant B correct returned ${bCorrect.status()}`)
+    const bCompare = await B.post(`${API}/api/design-studio/amazon-files/${uid}/compare`, { data: { after_upload_id: uid } })
+    if (bCompare.status() === 404) ok('tenant B cannot compare against A\'s upload -> 404')
+    else no(`tenant B compare returned ${bCompare.status()}`)
     const aStill = await A.get(`${API}/api/design-studio/amazon-files/${uid}`)
     if (aStill.status() === 200) ok('tenant A\'s upload survives B\'s attempts')
     else no('tenant A\'s upload disappeared', `http ${aStill.status()}`)
@@ -193,10 +209,22 @@ async function main() {
     ['GET', '/api/design-studio/listing-records'],
     ['GET', '/api/design-studio/master-brain-context'],
     ['GET', '/api/design-studio/amazon-files'],
+    ['GET', '/api/design-studio/amazon-files/some-id/changes'],
+    ['POST', '/api/design-studio/amazon-files/reports/match'],
+    ['POST', '/api/design-studio/amazon-files/change/some-id/correct'],
+    ['POST', '/api/design-studio/amazon-files/some-id/compare'],
+    ['POST', '/api/design-studio/terms/brief/assets'],
   ]
   let anonFailures = []
+  // One body that satisfies every POST model in the list (extra fields are
+  // ignored), so a 422 cannot mask a missing auth dependency.
+  const anonPostBody = {
+    name: 'anon', section: 'ads',
+    filename: 'anon.csv', content_b64: 'AA==', change_file_id: 'x',
+    after_upload_id: 'x', corrections: [], changes: [],
+  }
   for (const [method, url] of anonRoutes) {
-    const r = method === 'GET' ? await anon.get(API + url) : await anon.post(API + url, { data: { name: 'anon', section: 'ads' } })
+    const r = method === 'GET' ? await anon.get(API + url) : await anon.post(API + url, { data: anonPostBody })
     if (r.status() !== 401) anonFailures.push(`${method} ${url} -> ${r.status()}`)
   }
   if (anonFailures.length === 0) ok(`anonymous -> 401 on all ${anonRoutes.length} design-studio routes`)

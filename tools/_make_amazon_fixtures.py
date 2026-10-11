@@ -65,6 +65,28 @@ def main() -> int:
     (OUT / "aplus_list.csv").write_text("\n".join(",".join(str(c) for c in r) for r in aplus) + "\n", encoding="utf-8")
     (OUT / "legacy.xls").write_bytes(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1" + b"\x00" * 64)
     (OUT / "junk.csv").write_text("hello,world\n1,2\n", encoding="utf-8")
+    # Reports + comparison fixtures used by the API/UI harnesses.
+    (OUT / "ads_error_report.xlsx").write_bytes(xlsx_bytes([("Sponsored Products Campaigns", [
+        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID", "Error"],
+        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K300", "Bid is invalid: must be a number"],
+        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K999", "Keyword does not exist"],
+    ])]))
+    (OUT / "listing_processing_report.txt").write_text(
+        "sku\terror-type\terror-message\n"
+        "SKU-1\tError\tThe value provided for standard_price is invalid\n"
+        "SKU-9\tError\tThe SKU does not exist in this marketplace\n", encoding="utf-8")
+    (OUT / "metrics_before.xlsx").write_bytes(xlsx_bytes([("Sponsored Products Campaigns", [
+        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
+         "Impressions", "Clicks", "Spend", "Sales", "Orders"],
+        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K300", 340, 12, 4.20, 20.00, 1],
+        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K301", 90, 3, 1.10, 5.00, 0],
+    ])]))
+    (OUT / "metrics_after.xlsx").write_bytes(xlsx_bytes([("Sponsored Products Campaigns", [
+        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
+         "Impressions", "Clicks", "Spend", "Sales", "Orders"],
+        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K300", 400, 18, 6.00, 25.00, 2],
+        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K302", 30, 1, 0.40, 0.00, 0],
+    ])]))
 
     # ── The seller-facing SAMPLE PACK (item 11) ─────────────────────────────
     # Synthetic, redacted fixtures the seller can download and try the whole
