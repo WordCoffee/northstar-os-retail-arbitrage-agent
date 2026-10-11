@@ -683,3 +683,131 @@ Evidence in `reports/regression_20261010_phase7/` (27 files):
 
 **Total: 772 passed, 0 failed, 0 FATAL. Zero live or paid calls; generation
 UNARMED; no failure needed a parent-commit comparison.**
+
+## PHASE 8 — OVERNIGHT CONTINUOUS COMPLETION (items 1-9)
+
+### 1. Registry updates (item 1)
+New claims register `studio/engine/registryClaims.js` with source id, pulled-at
+date, tier, cadence and date-sensitivity; pass+fail fixtures in
+`tools/test-registry-claims.mjs` (42/0).
+- **Title length 75 chars** incl. spaces, non-media categories, effective
+  2026-07-27, tier FLAG, cadence 90d, REPORTED until an Amazon-owned page
+  records it; applied to the listing mismatch check as a FLAG (75 passes, 76
+  flags; nothing truncated; no compliance rule blocks it).
+- **AI-people metadata window 2026-07-22 → 2026-07-27** recorded with the
+  Product image guide as the authoritative method; stays REPORTED (assembled
+  from dated, partly non-Amazon sources).
+- **Image formats** JPEG/TIFF/PNG/non-animated GIF per the guide; the
+  `no-animated-gif` rule now READS `doc.meta.exportFormat` (previously always
+  passed) — PNG passes, animated GIF/unknown blocks (107/0 compliance
+  fixtures).
+- **10 MB size limit**: recorded UNCONFIRMED and NOT enforced; a 12 MB fixture
+  proves no block and no rule references it.
+- **A+ eligibility**: displays "confirm in A+ Content Manager" in the register
+  and the A+ workspace note.
+
+### 2. Postgres path (item 2)
+- `DataLayer` gained a REAL Postgres branch (psycopg v3): working
+  execute/executemany/commit/close, `?`→`%s` translation with literal-percent
+  escaping, `SELECT changes()` answered from the statement rowcount, driver
+  IntegrityError translated to `sqlite3.IntegrityError` (fingerprint and
+  legacy-key idempotency work on both backends). The schema DDL is shared; the
+  PG creator translates the SQLite-isms and runs idempotently on every boot.
+- The data layer owns a dedicated `northstar_data` PG schema (the shared public
+  schema already held foundation tables with different shapes).
+- **Reads commit immediately** (live finding: an idle-in-transaction SELECT on
+  ds_rechecks held locks that blocked `ALTER TABLE products` — two harness
+  processes hung on the lock). The live-columns migration now checks
+  information_schema first so a steady-state boot takes no ACCESS EXCLUSIVE
+  lock.
+- `docker-compose.yml` sets `DATABASE_URL` (local + hosted): the ds_* tables
+  survive container recreation.
+- Harness `tools/test_design_studio_pg.py` (in-container) 12/0: schema +
+  idempotent re-init, isolation on every store, duplicate fingerprint returns
+  the existing id, legacy key idempotency, changes() shim, D10 plan.
+- **D10 against PG** (item 2 addition): `reports/d10-identity-pg-dry-run_
+  20261011.json` — 3 orgs, counts per organization, no shared-bucket rows,
+  fully mapped, **0 moves applied**; the quarantine path was demonstrated with
+  probe buckets; HTTP-level cross-tenant negatives on the PG stack 18/0.
+
+### 3. Listing context → tenant store (item 3)
+`ds_listing_records` + DAO + four strict endpoints; the SearchTerms surface
+runs a one-shot idempotent migration from the browser-local ListingForge
+records and clears the local marker/mirror ONLY after the server confirms (the
+ListingForge working store itself is never deleted). The panel reads the tenant
+record first ("tenant listing record (server)") with the local record as an
+explicit fallback. Live: migration created 1 record, re-run skipped, tenant B
+cannot list/read/delete A's record (`verify-d10-live` 18/0; full surface
+`verify-search-terms` 49/0).
+
+### 4. Synthetic tenants (item 4)
+Kept but clearly labelled (slug `ns-test-tenant-` + name `Northstar Test
+Tenant`) because the live cross-tenant negatives use them;
+`cleanup_test_tenants.py` removes ONLY tenants carrying both markers, dry-run
+by default, and lists every untouched organization (live dry run: 2 marked
+tenants identified, T2 Holdings untouched). DECIDED-BY-DEFAULT (D22).
+
+### 5. Local fidelity trial (item 5)
+`tools/fidelity-trial.cjs` + `research/design-studio/reference-photos/`
+(owner drop-in). No reference photos supplied and no local media runtime
+running → **LIVE TRIAL: NOT RUN** (no photos) and **runtime-generation path:
+NOT RUN** (no runtime), each with its cause. The labeled 5-image fixture run
+passes every executed check — fidelity pass, label-region pass,
+background-replacement pass, disclosure pass, **export blocked pending human
+compare sign-off**, tamper probe blocked — 77-141 ms per image. Sample size 5
+(< 20): NO pass rate claimed, per the rule.
+
+### 6. 3D Product Scene editing (item 6)
+Undo/redo (bounded history + Ctrl+Z / Ctrl+Shift+Z) and Move up/down reorder on
+every layer row. `tools/verify-3d-editing.cjs` 9/0: reorder actually swaps the
+list, undo restores, redo re-applies, a removed layer comes back.
+
+### 7. Performance-loop labelling (item 7)
+The variants panel says "imported results only" + "user- or file-entered
+metrics"; every comparison states its sample size and the no-causation rule
+explicitly (`verify-search-terms` asserts the labels).
+
+### 8. Re-verification (item 8)
+Pixel paths on the test build 37/0/0 FATAL; prod 23/0 with the pixel paths
+correctly skipped; bundle contract 14/0; freshness register re-run
+`{"current": 35}` — zero re-pulls, no login-gated page touched.
+
+### 9. Full regression (item 9)
+Evidence in `reports/regression_20261011/` (31 files):
+
+| Harness | Result |
+|---|---|
+| test-compliance-rules.mjs | 107 / 0 |
+| test-disclosure.mjs | 65 / 0 |
+| test-fidelity-freshness.mjs | 57 / 0 |
+| test-generation.mjs (mocked) | 25 / 0 |
+| test-indexing-register.mjs | 28 / 0 |
+| test-registry-claims.mjs (new) | 42 / 0 |
+| test_design_studio_isolation.py | 37 / 0 |
+| test_login_throttle_bypass.py | 16 / 0 |
+| test_design_studio_imports.py | 40 / 0 |
+| test_d10_identity_migration.py | 12 / 0 |
+| test_rate_limit_posture.py | 5 / 0 |
+| test_auth_guard.py | 16 / 0 |
+| check-jsx-imports.py | 97 files, 0 / 0 |
+| check-prod-bundle.cjs | 14 / 0 |
+| check-compose-deploy.cjs | 5 / 0 |
+| test_design_studio_pg.py (new) | 12 / 0 |
+| cleanup_test_tenants.py (dry run, evidence) | 2 marked tenants, T2 untouched |
+| test-compositing.cjs prod / test | 23 / 37, 0 FATAL each |
+| verify-design-studio.cjs | 67 / 0 |
+| test-migration-e2e.cjs | 12 / 0 |
+| verify-operator-smoke.cjs | 11 / 0 |
+| verify-search-terms.cjs | 49 / 0 |
+| verify-d10-live.cjs | 18 / 0 |
+| verify-projects-gates.cjs | 16 / 0 |
+| verify-render3d-gate.cjs | 14 / 0 |
+| verify-3d-editing.cjs (new) | 9 / 0 |
+| verify-shim-fail-closed.cjs | 8 / 0 |
+| _check-recheck-migration.cjs | migration VERIFIED |
+| fidelity-trial.cjs (new) | 5 / 0 fixtures; live trial NOT RUN (cause) |
+| capture-section-evidence.cjs | 62 / 0, 18 screenshots refreshed |
+
+**Total: 813 passed, 0 failed, 0 FATAL. Zero live or paid calls; generation
+UNARMED for every external provider; no failure needed a parent-commit
+comparison.**

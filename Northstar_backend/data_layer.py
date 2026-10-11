@@ -701,7 +701,12 @@ class DataLayer:
         self._migrate_live_columns_postgres()
 
     def _migrate_live_columns_postgres(self):
-        """Idempotently add the live-data columns on Postgres (IF NOT EXISTS)."""
+        """Idempotently add the live-data columns on Postgres.
+
+        The existing columns are checked FIRST so a steady-state boot takes no
+        ACCESS EXCLUSIVE lock on products (an ALTER waiting on another
+        connection's lock is how the harness hung once; never again).
+        """
         additions = {
             "data_kind": "TEXT DEFAULT 'demo'",
             "provider_id": "TEXT",
@@ -710,7 +715,15 @@ class DataLayer:
         }
         with self._lock:
             cur = self._pg_conn.cursor()
+            cur.execute(
+                "SELECT column_name FROM information_schema.columns "
+                "WHERE table_schema='northstar_data' AND table_name='products'"
+            )
+            existing = {r["column_name"] for r in cur.fetchall()}
+            self._pg_conn.commit()
             for column, decl in additions.items():
+                if column in existing:
+                    continue
                 try:
                     cur.execute(f"ALTER TABLE products ADD COLUMN IF NOT EXISTS {column} {decl}")
                 except Exception:
@@ -789,6 +802,12 @@ class DataLayer:
             cur = self._pg_conn.cursor()
             try:
                 cur.execute(translated, tuple(params))
+                # A statement with a result set opens a transaction in psycopg.
+                # Close it immediately: a connection left idle-in-transaction
+                # holds locks that block schema creation elsewhere (found live:
+                # an idle SELECT on ds_rechecks blocked ALTER TABLE products).
+                if cur.description is not None:
+                    self._pg_conn.commit()
                 self._pg_last_rowcount = max(0, cur.rowcount if cur.rowcount is not None else 0)
                 return cur
             except Exception as exc:
