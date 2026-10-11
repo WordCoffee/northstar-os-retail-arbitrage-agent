@@ -17,7 +17,7 @@
 // Exit: 0 = all green, 1 = a failure.
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { REGISTRY_CLAIMS, claimStatus, claimPulledAt, titleLengthFlag, formatAccepted, ACCEPTED_IMAGE_FORMATS, IMAGE_SIZE_BLOCK, TITLE_LIMIT_CHARS } from '../northstar-os-ui/src/studio/engine/registryClaims.js'
+import { REGISTRY_CLAIMS, claimStatus, claimPulledAt, titleLengthFlag, titleRuleFlags, TITLE_RULES, ITEM_HIGHLIGHTS, titleExportNotice, formatAccepted, ACCEPTED_IMAGE_FORMATS, IMAGE_SIZE_BLOCK, TITLE_LIMIT_CHARS } from '../northstar-os-ui/src/studio/engine/registryClaims.js'
 import { SPEC_SOURCES } from '../northstar-os-ui/src/studio/engine/specRegistry.js'
 import { RULES, checkCompliance } from '../northstar-os-ui/src/studio/engine/compliance.js'
 import { mismatchFlags, buildListingContext } from '../northstar-os-ui/src/studio/engine/listingContext.js'
@@ -80,7 +80,7 @@ for (const c of REGISTRY_CLAIMS) {
     forgeListings: [{ asin: 'B0TEST', updated: '2026-10-05T00:00:00Z', copy: { title: 'z'.repeat(90), bullets: [], description: '', keywords: '' } }],
   })
   const mm = mismatchFlags({ brief: null, context })
-  if (mm.flags.some(f => f.kind === 'title-length' && /FLAG/.test(f.review))) {
+  if (mm.flags.some(f => f.kind === 'title-rule' && f.rule === 'title-length-75' && /FLAG/.test(f.review))) {
     ok('the listing mismatch check renders the title-length FLAG without needing a brief')
   } else no('the listing mismatch check did not flag the long title')
 
@@ -88,8 +88,63 @@ for (const c of REGISTRY_CLAIMS) {
     forgeListings: [{ asin: 'B0TEST', updated: '2026-10-05T00:00:00Z', copy: { title: 'Short title', bullets: [], description: '', keywords: '' } }],
   })
   const mm2 = mismatchFlags({ brief: null, context: shortCtx })
-  if (!mm2.flags.some(f => f.kind === 'title-length')) ok('a short title produces no title flag')
-  else no('a short title was flagged')
+  if (!mm2.flags.some(f => f.kind === 'title-rule')) ok('a clean short title produces no title flag')
+  else no('a clean short title was flagged')
+
+  // ── Phase 9 item 1: one pass and one fail fixture PER title rule ─────────
+  const titleRules = {
+    length: {
+      pass: 'Stainless Steel Tumbler 20oz Cold Brew',
+      fail: 'Stainless Steel Tumbler 20oz Cold Brew with a very long tail of descriptive words for the listing',
+    },
+    promotional: { pass: 'Stainless Steel Tumbler 20oz', fail: 'Stainless Steel Tumbler - Free Shipping' },
+    specialChars: { pass: 'Stainless Steel Tumbler 20oz', fail: 'Stainless Steel Tumbler 20oz! Buy?' },
+    sameWord: { pass: 'Stainless Steel Tumbler 20oz', fail: 'Tumbler Tumbler Tumbler Steel' },
+  }
+  for (const [name, fx] of Object.entries(titleRules)) {
+    const p = titleRuleFlags(fx.pass)
+    const f = titleRuleFlags(fx.fail)
+    if (p.length === 0 && f.length >= 1) ok(`title rule "${name}": pass fixture clean, fail fixture flags (${f.map(x => x.rule).join(',')})`)
+    else no(`title rule "${name}" fixtures wrong: pass=${JSON.stringify(p)} fail=${JSON.stringify(f)}`)
+  }
+  // Every flagged rule must be one of the recorded rule ids.
+  const ruleIds = new Set(TITLE_RULES.map(r => r.id))
+  const allFlags = titleRuleFlags('Tumbler Tumbler Tumbler !!! Free Shipping').map(f => f.rule)
+  if (allFlags.every(id => ruleIds.has(id)) && allFlags.length >= 3) {
+    ok(`every emitted title flag names a recorded rule id (${allFlags.join(',')})`)
+  } else no(`a title flag named an unrecorded rule: ${allFlags.join(',')}`)
+
+  // The register claims: title rules VERIFIED via the captured page; the
+  // rollout stays REPORTED and date-sensitive.
+  const lenClaim = REGISTRY_CLAIMS.find(c => c.id === 'title-length-75')
+  const rollout = REGISTRY_CLAIMS.find(c => c.id === 'title-rollout-2026-07-27')
+  const contentClaim = REGISTRY_CLAIMS.find(c => c.id === 'title-content-rules')
+  if (lenClaim && lenClaim.status === 'VERIFIED' && lenClaim.source_id === 'title-guide'
+      && Array.isArray(lenClaim.applies_except) && lenClaim.applies_except.length === 2) {
+    ok('the title-length claim is VERIFIED via the captured title-guide source, with its jurisdiction exceptions')
+  } else no(`title-length claim wrong: ${lenClaim && lenClaim.status}/${lenClaim && lenClaim.source_id}`)
+  if (contentClaim && contentClaim.status === 'VERIFIED' && /promotional/.test(contentClaim.claim)) {
+    ok('the title content rules (promotional / characters / repeated word) are recorded VERIFIED')
+  } else no('title content rules missing')
+  if (rollout && rollout.status === 'REPORTED' && rollout.date_sensitive === true) {
+    ok('the rollout (2026-07-27 kick-off, gradual, 14-day review) stays REPORTED and date-sensitive')
+  } else no('rollout claim wrong')
+
+  // ── Item Highlights: 125 chars, comma-separated, flat-file column UNKNOWN ─
+  {
+    const ih = REGISTRY_CLAIMS.find(c => c.id === 'item-highlights-field')
+    if (ITEM_HIGHLIGHTS.maxChars === 125 && ITEM_HIGHLIGHTS.flat_file_column === null
+        && /comma-separated/.test(ITEM_HIGHLIGHTS.format)) {
+      ok('Item Highlights records 125 chars + comma-separated phrases with the flat-file column UNKNOWN')
+    } else no('Item Highlights record wrong')
+    if (ih && ih.status === 'VERIFIED' && (ih.unknown_fields || []).includes('flat_file_column')) {
+      ok('the Item Highlights claim is VERIFIED and names its UNKNOWN field')
+    } else no('Item Highlights claim wrong')
+    const notice = titleExportNotice()
+    if (/UNKNOWN/.test(notice) && /Item Highlights/.test(notice) && /do not invent/i.test(notice)) {
+      ok('the title-export notice states the UNKNOWN column and forbids inventing one')
+    } else no('title-export notice wrong')
+  }
 }
 
 // ── 3. AI-people metadata window + authoritative method ────────────────────

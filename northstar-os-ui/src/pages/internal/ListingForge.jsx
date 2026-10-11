@@ -30,6 +30,10 @@ import { ModeToggle, AssetThumb } from '../../studio/components/Chrome.jsx'
 import { Field, TextInput, NumberInput, Slider, Select, SegmentedControl, Toggle, Section, Stat } from '../../studio/components/Fields.jsx'
 import { useAssetStore, useDecodedAssets } from '../../studio/engine/assets.js'
 import { useRoom, uid, nowIso, fmtTime, fmtBytes } from '../../studio/engine/store.js'
+// Phase 9 item 3: the flat-file / Item Highlights contract. The column is
+// UNKNOWN until Amazon publishes it, and every export that includes titles
+// carries the notice.
+import { titleExportNotice, ITEM_HIGHLIGHTS } from '../../studio/engine/registryClaims.js'
 
 // ── Seed listings (clearly sample; superseded once the operator edits one) ────
 const SEED_LISTINGS = [
@@ -313,6 +317,28 @@ export default function ListingForge() {
     t(`Revision saved locally for ${active.asin}. Internal review state only — nothing was published to any marketplace.`, 'info')
   }, [active, draft, listings, revisions, setListings, setRevisions, t])
 
+  // ── Export the copy as CSV, WITH the flat-file contract notice ──
+  // The first line states that the Item Highlights column is UNKNOWN; the
+  // header carries an item_highlights column whose value is empty (UNKNOWN),
+  // never a guessed column name.
+  const exportCopyCsv = useCallback(() => {
+    if (!active) return
+    const esc = (v) => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`
+    const lines = [
+      `# ${titleExportNotice()}`,
+      ['asin', 'title', 'bullets', 'description', 'keywords', 'brand', 'item_highlights'].join(','),
+      [active.asin, draft.title, draft.bullets, draft.description, draft.keywords, draft.brand, '']
+        .map(esc).join(','),
+      `# item_highlights format: ${ITEM_HIGHLIGHTS.format}, max ${ITEM_HIGHLIGHTS.maxChars} characters; flat-file column UNKNOWN`,
+    ]
+    const csv = lines.join('\n')
+    const a = document.createElement('a')
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
+    a.download = `${String(active.asin || 'listing').replace(/[^A-Za-z0-9._-]/g, '_')}-copy.csv`
+    a.click()
+    t('Copy exported as CSV. The Item Highlights column is UNKNOWN and stated in the file; nothing was published.', 'info')
+  }, [active, draft, t])
+
   const applyTemplate = useCallback((tpl) => {
     setDraft(prev => tpl.apply(prev))
     setDirty(true)
@@ -453,12 +479,18 @@ export default function ListingForge() {
                     </Field>
                   </>
                 )}
-                <div className="inline-flex" style={{ gap: 8 }}>
+                <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap' }}>
                   <button className="btn btn-sm" onClick={saveRevision} disabled={!dirty}><Icon name="save" size={13} /> Save Revision</button>
                   <button className="btn btn-sm btn-ghost" onClick={() => t('Health check runs locally on your own copy — the score and coverage below update as you type. No external service is contacted.', 'info')}>
                     <Icon name="refresh" size={13} /> Recompute health
                   </button>
+                  <button className="btn btn-sm btn-ghost" data-testid="lf-export" onClick={exportCopyCsv}>
+                    <Icon name="download" size={13} /> Export copy (CSV)
+                  </button>
                   {dirty && <button className="btn btn-sm btn-ghost" onClick={() => { setDraft(active.copy); setDirty(false); setAppliedTemplate('') }}>Discard changes</button>}
+                </div>
+                <div className="text-low" style={{ fontSize: 11, marginTop: 6 }} data-testid="lf-title-notice">
+                  {titleExportNotice()}
                 </div>
                 {dirty && <span className="pill pill-warn">unsaved changes · local only</span>}
               </div>

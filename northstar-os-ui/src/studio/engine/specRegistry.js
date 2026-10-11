@@ -42,6 +42,7 @@ export const SPEC_SOURCES = {
   'style-guides': { id: 'style-guides', label: 'Amazon product page style guides (G200270100)', url: 'https://sellercentral.amazon.com/help/hub/reference/external/G200270100', pulled: PULLED, quality: 5, confidence: 'VERIFIED' },
   'listing-quality': { id: 'listing-quality', label: 'Amazon listing quality (G200786710)', url: 'https://sellercentral.amazon.com/gp/help/external/G200786710', pulled: PULLED, quality: 5, confidence: 'VERIFIED' },
   'premium-elig': { id: 'premium-elig', label: 'Premium A+ eligibility update (Seller Central forum)', url: 'https://sellercentral.amazon.com/seller-forums/discussions/t/301e6741-8ef5-485f-8829-a14c55647f9c', pulled: PULLED, quality: 3, confidence: 'REPORTED' },
+'title-guide': { id: 'title-guide', label: 'Product title requirements and guidelines (Seller Central help)', url: 'https://sellercentral.amazon.com/help/hub/reference/external', pulled: '2026-10-11', quality: 5, confidence: 'VERIFIED', note: 'Login-gated: captured by the owner 2026-10-11 (one-or-two-sentence observation); the page body is not reproduced. A public read returned the sign-in gate only.' },
   'flat-file': { id: 'flat-file', label: 'Amazon flat-file column schema (AMALYZE vendor guide)', url: 'https://amalyze.com/resources/guides/listing/amazon-listing-flatfile-creation', pulled: PULLED, quality: 3, confidence: 'REPORTED' },
   // Video ad families, sourced separately so a spec can never be attributed to
   // the wrong ad product.

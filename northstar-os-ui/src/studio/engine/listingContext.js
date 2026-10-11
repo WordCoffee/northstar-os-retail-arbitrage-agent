@@ -17,8 +17,8 @@
 
 const FRESH_DAYS = 90 // an engineering choice, stated in the UI, not an Amazon figure
 
-// Phase 8 item 1: the reported 75-character title limit, applied as a FLAG.
-import { titleLengthFlag } from './registryClaims.js'
+// Phase 8 item 1 / Phase 9 item 1: the title rules, applied as FLAGS.
+import { titleRuleFlags } from './registryClaims.js'
 
 function ageDays(iso) {
   if (!iso) return null
@@ -153,12 +153,12 @@ const STOPWORDS = new Set(['with', 'from', 'that', 'this', 'your', 'you', 'and',
 export function mismatchFlags({ brief, context, max = 8 } = {}) {
   const flags = []
 
-  // Title length: independent of any brief, from the local listing record.
+  // Title rules (Phase 9 item 1): every rule is a FLAG, independent of any
+  // brief. The title is never edited; each flag names the rule it came from.
   const title = context && context.fields && context.fields.title ? context.fields.title.value : null
-  const tf = titleLengthFlag(title)
-  if (tf.flagged) {
+  for (const f of titleRuleFlags(title)) {
     flags.push({
-      term: '(listing title)', kind: 'title-length', review: tf.review, detail: tf.detail,
+      term: '(listing title)', kind: 'title-rule', rule: f.rule, review: f.review, detail: f.detail,
     })
   }
 
@@ -190,7 +190,7 @@ export function mismatchFlags({ brief, context, max = 8 } = {}) {
     }
     if (flags.length >= max) break
   }
-  const termFlags = flags.filter(f => f.kind !== 'title-length').length
+  const termFlags = flags.filter(f => f.kind !== 'title-rule').length
   return {
     state: 'checked',
     flags,
