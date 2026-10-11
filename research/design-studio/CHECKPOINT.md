@@ -811,3 +811,109 @@ Evidence in `reports/regression_20261011/` (31 files):
 **Total: 813 passed, 0 failed, 0 FATAL. Zero live or paid calls; generation
 UNARMED for every external provider; no failure needed a parent-commit
 comparison.**
+
+## PHASE 9 — OVERNIGHT CONTINUOUS COMPLETION (items 1-7)
+
+### 1. Title rules — VERIFIED via the owner capture (item 1)
+- New registry source `title-guide` (Amazon "Product title requirements and
+  guidelines", Seller Central help). Login-gated: captured by the owner
+  2026-10-11; a public read returned the sign-in gate only (stated in the
+  source note). `TITLE_RULES` (all FLAGS in the listing mismatch check, never a
+  block, never an edit): 75 chars incl. spaces (brand name counts, bundles not
+  exempt); no promotional phrases (illustrative example list, stated as not
+  Amazon's full list); the characters ! $ ? _ { } ^ ¬ ¦ disallowed; the same
+  word not more than twice; applies to all except media and except stores in
+  Saudi Arabia, Egypt, Türkiye and the UAE; rollout kicked off 2026-07-27,
+  gradual, 14-day brand-owner review of AI-suggested rewrites (REPORTED,
+  date-sensitive).
+- `titleRuleFlags()` emits one flag per rule with its rule id; pass+fail
+  fixtures per rule in `tools/test-registry-claims.mjs` (65/0).
+
+### 2. Master-brain read-only panels (item 2)
+- `GET /api/design-studio/master-brain-context`: one tenant-scoped, read-only
+  bundle (brand voice, imported keywords, search-term evidence with the
+  click-only bias, listing records) with source/observed/limits per section;
+  pure local-store reads, no provider call in the path.
+- `MasterBrainPanel` renders it in ListingForge, AdPilot and SocialPulse with
+  read-only + no-provider boundaries, freshness (the stated 90-day window) and
+  an explicit UNKNOWN state per empty section.
+- `tools/verify-master-brain-panels.cjs` 13/0 (all three rooms, seeded record
+  shown, UNKNOWN shown, cleaned up); `verify-d10-live.cjs` 21/0 (tenant B never
+  sees A's record; anonymous → 401 on the new route).
+
+### 3. Flat-file column contract (item 3)
+Item Highlights recorded as a separate 125-char, comma-separated field with the
+flat-file/API column UNKNOWN until Amazon publishes it. ListingForge gains
+"Export copy (CSV)": first line = the UNKNOWN notice, header carries an
+`item_highlights` column whose value is EMPTY, trailing comment restates the
+contract; the editor shows the same notice.
+`tools/verify-title-contract.cjs` 8/0 (real download inspected).
+
+### 4. Fidelity trial, mask-protected paths (item 4)
+The trial now runs a mask-protected path per image: the reference is rendered
+with the same engine geometry as a transparent-background product, so the
+product pixels are byte-identical and the diff SKIPS transparent areas — an
+edit outside the product mask PASSES, an edit inside it BLOCKS. 5/5 fixtures
+pass every executed check (fidelity, label, background replacement,
+mask-protected pass, mask violation blocked, disclosure, export blocked
+pending sign-off, tamper blocked). **LIVE TRIAL: NOT RUN** (no reference photos
+in the drop-in folder) and **runtime-generation path: NOT RUN** (no local media
+runtime) — each with its cause; sample size 5 (< 20): no pass rate claimed.
+
+### 5. Housekeeping (item 5)
+- `cleanup_test_tenants.py` dry run only: 2 marked tenants identified (1
+  membership / 1 user each), T2 Holdings untouched, nothing deleted
+  (`reports/phase9-evidence/cleanup-dry-run.txt`).
+- The harness rate-limit opt-out is absent from every deploy artifact: the
+  hosted overlay pins "0", the base compose defaults to 0, the merged deploy
+  composition shows `NORTHSTAR_DISABLE_RATE_LIMIT: "0"` for all six services,
+  Dockerfile.api has no ENV for it, and `deploy/` carries none
+  (`reports/phase9-evidence/deploy-ratelimit.txt`; the compose guard asserts it
+  every run).
+
+### 6. Re-verification (item 6)
+Pixel paths on the test build 37/0/0 FATAL; prod mode 23/0; bundle contract
+14/0; PG isolation negatives (in-container 12/0 + HTTP 21/0); freshness
+register re-run (57/0 suite; zero re-pulls, no login-gated page touched).
+
+### 7. Full regression (item 7)
+Evidence in `reports/regression_20261011_phase9/` (33 files):
+
+| Harness | Result |
+|---|---|
+| test-compliance-rules.mjs | 107 / 0 |
+| test-disclosure.mjs | 65 / 0 |
+| test-fidelity-freshness.mjs | 57 / 0 |
+| test-generation.mjs (mocked) | 25 / 0 |
+| test-indexing-register.mjs | 28 / 0 |
+| test-registry-claims.mjs | 65 / 0 |
+| test_design_studio_isolation.py | 37 / 0 |
+| test_login_throttle_bypass.py | 16 / 0 |
+| test_design_studio_imports.py | 40 / 0 |
+| test_d10_identity_migration.py | 12 / 0 |
+| test_rate_limit_posture.py | 5 / 0 |
+| test_auth_guard.py | 16 / 0 |
+| check-jsx-imports.py | 97 files, 0 / 0 |
+| check-prod-bundle.cjs | 14 / 0 |
+| check-compose-deploy.cjs | 5 / 0 |
+| test_design_studio_pg.py | 12 / 0 |
+| cleanup_test_tenants.py (dry run) | 2 marked tenants, T2 untouched |
+| test-compositing.cjs prod / test | 23 / 37, 0 FATAL each |
+| verify-design-studio.cjs | 67 / 0 |
+| test-migration-e2e.cjs | 12 / 0 |
+| verify-operator-smoke.cjs | 11 / 0 |
+| verify-search-terms.cjs | 49 / 0 |
+| verify-d10-live.cjs | 21 / 0 |
+| verify-projects-gates.cjs | 16 / 0 |
+| verify-render3d-gate.cjs | 14 / 0 |
+| verify-3d-editing.cjs | 9 / 0 |
+| verify-title-contract.cjs (new) | 8 / 0 |
+| verify-master-brain-panels.cjs (new) | 13 / 0 |
+| verify-shim-fail-closed.cjs | 8 / 0 |
+| _check-recheck-migration.cjs | migration VERIFIED (harness now cleans its PG-persisted fixtures) |
+| fidelity-trial.cjs | 5 / 0 fixtures incl. mask paths; live trial NOT RUN (cause) |
+| capture-section-evidence.cjs | 62 / 0, 18 screenshots refreshed |
+
+**Total: 860 passed, 0 failed, 0 FATAL. Zero live or paid calls; no cloud
+generation; generation UNARMED for every external provider; no failure needed a
+parent-commit comparison.**

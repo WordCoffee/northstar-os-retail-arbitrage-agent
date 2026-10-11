@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-11T06:22:43.553Z",
+  "at": "2026-10-11T08:11:34.430Z",
   "live_trial": "NOT RUN",
   "live_trial_cause": "no reference photos in C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\research\\design-studio\\reference-photos",
   "runtime_generation": "NOT RUN - no local media runtime running",
@@ -16,13 +16,17 @@
       "label_ok": true,
       "background_replacement": "pass",
       "background_ok": true,
+      "mask_protected": "pass",
+      "mask_protected_ok": true,
+      "mask_violation": "block",
+      "mask_violation_ok": true,
       "disclosure": "pass",
       "disclosure_ok": true,
       "export_gate": "blocked-pending-signoff",
       "export_gate_ok": true,
       "tamper": "block",
       "tamper_ok": true,
-      "ms": 107
+      "ms": 151
     },
     {
       "name": "fixture-2",
@@ -33,13 +37,17 @@
       "label_ok": true,
       "background_replacement": "pass",
       "background_ok": true,
+      "mask_protected": "pass",
+      "mask_protected_ok": true,
+      "mask_violation": "block",
+      "mask_violation_ok": true,
       "disclosure": "pass",
       "disclosure_ok": true,
       "export_gate": "blocked-pending-signoff",
       "export_gate_ok": true,
       "tamper": "block",
       "tamper_ok": true,
-      "ms": 100
+      "ms": 115
     },
     {
       "name": "fixture-3",
@@ -50,13 +58,17 @@
       "label_ok": true,
       "background_replacement": "pass",
       "background_ok": true,
+      "mask_protected": "pass",
+      "mask_protected_ok": true,
+      "mask_violation": "block",
+      "mask_violation_ok": true,
       "disclosure": "pass",
       "disclosure_ok": true,
       "export_gate": "blocked-pending-signoff",
       "export_gate_ok": true,
       "tamper": "block",
       "tamper_ok": true,
-      "ms": 79
+      "ms": 107
     },
     {
       "name": "fixture-4",
@@ -67,13 +79,17 @@
       "label_ok": true,
       "background_replacement": "pass",
       "background_ok": true,
+      "mask_protected": "pass",
+      "mask_protected_ok": true,
+      "mask_violation": "block",
+      "mask_violation_ok": true,
       "disclosure": "pass",
       "disclosure_ok": true,
       "export_gate": "blocked-pending-signoff",
       "export_gate_ok": true,
       "tamper": "block",
       "tamper_ok": true,
-      "ms": 67
+      "ms": 110
     },
     {
       "name": "fixture-5",
@@ -84,13 +100,17 @@
       "label_ok": true,
       "background_replacement": "pass",
       "background_ok": true,
+      "mask_protected": "pass",
+      "mask_protected_ok": true,
+      "mask_violation": "block",
+      "mask_violation_ok": true,
       "disclosure": "pass",
       "disclosure_ok": true,
       "export_gate": "blocked-pending-signoff",
       "export_gate_ok": true,
       "tamper": "block",
       "tamper_ok": true,
-      "ms": 65
+      "ms": 110
     }
   ]
 }

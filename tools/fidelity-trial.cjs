@@ -170,11 +170,38 @@ async function main() {
       const tamperCanvas = await compose.renderDoc(tamperDoc, () => null)
       const tamperFid = await compose.fidelityVerdict(tamperDoc, tamperCanvas, () => null)
 
+      // Mask-protected path (Phase 9 item 4): the product region keeps the
+      // reference pixels; the background around it is replaced. The reference
+      // is rendered with the SAME engine geometry as a transparent-background
+      // product, so the product pixels are byte-identical and the diff SKIPS
+      // the transparent (non-product) areas - an edit outside the mask passes.
+      const mw = 1200, mh = 800
+      const refCanvasDoc = { formatId: 'amz-main', w: mw, h: mh, layers: [
+        { kind: 'product', x: 0, y: 0, w: 1, h: 1, dataUrl: item.dataUrl, fit: 'contain' },
+      ], meta: {} }
+      const maskedRefCanvas = await compose.renderDoc(refCanvasDoc, () => null)
+      const maskedRef = maskedRefCanvas.toDataURL('image/png')
+      const maskedDoc = { formatId: 'amz-main', w: mw, h: mh, layers: [
+        { kind: 'bg', gradient: ['#f5f0e8', '#cfe3d4'] },
+        { kind: 'product', x: 0, y: 0, w: 1, h: 1, dataUrl: item.dataUrl, fit: 'contain' },
+      ], meta: { fidelityMode: 'locked', referenceDataUrl: maskedRef, peopleClass: 'no-people' } }
+      const maskedCanvas = await compose.renderDoc(maskedDoc, () => null)
+      const maskedFid = await compose.fidelityVerdict(maskedDoc, maskedCanvas, () => null)
+      // Mask violation: an edit INSIDE the product pixels must BLOCK.
+      const violatedDoc = { ...maskedDoc, layers: [
+        ...maskedDoc.layers,
+        { kind: 'shape', shape: 'rect', x: 0.35, y: 0.35, w: 0.3, h: 0.3, fill: '#ff0000' },
+      ] }
+      const violatedCanvas = await compose.renderDoc(violatedDoc, () => null)
+      const violatedFid = await compose.fidelityVerdict(violatedDoc, violatedCanvas, () => null)
+
       out.push({
         name: item.name, kind: item.kind,
         fidelity: fid.status, fidelity_ok: fid.ok,
         label: label.ok ? 'pass' : (label.reason || 'fail'), label_ok: !!label.ok,
         background_replacement: sceneFid.status, background_ok: !!sceneFid.ok,
+        mask_protected: maskedFid.status, mask_protected_ok: !!maskedFid.ok,
+        mask_violation: violatedFid.status, mask_violation_ok: !violatedFid.ok && violatedFid.status === 'block',
         disclosure: discOk ? 'pass' : (cls.status || 'fail'), disclosure_ok: discOk,
         export_gate: blockedOnCompare ? 'blocked-pending-signoff' : 'UNEXPECTEDLY-OPEN', export_gate_ok: blockedOnCompare,
         tamper: tamperFid.status, tamper_ok: !tamperFid.ok && tamperFid.status === 'block',
@@ -190,10 +217,12 @@ async function main() {
     if (!r.fidelity_ok) bad.push('fidelity:' + r.fidelity)
     if (!r.label_ok) bad.push('label:' + r.label)
     if (!r.background_ok) bad.push('background:' + r.background_replacement)
+    if (!r.mask_protected_ok) bad.push('mask-protected:' + r.mask_protected)
+    if (!r.mask_violation_ok) bad.push('mask-violation:' + r.mask_violation)
     if (!r.disclosure_ok) bad.push('disclosure:' + r.disclosure)
     if (!r.export_gate_ok) bad.push('export-gate:' + r.export_gate)
     if (!r.tamper_ok) bad.push('tamper:' + r.tamper)
-    if (bad.length === 0) ok(`${r.name}: fidelity pass, label pass, background pass, disclosure pass, export blocked pending sign-off, tamper blocked (${r.ms} ms)`)
+    if (bad.length === 0) ok(`${r.name}: fidelity pass, label pass, background pass, mask-protected pass (edit outside the mask), mask violation blocked, disclosure pass, export blocked pending sign-off, tamper blocked (${r.ms} ms)`)
     else { failures++; no(`${r.name}: ${bad.join('; ')}`) }
   }
 

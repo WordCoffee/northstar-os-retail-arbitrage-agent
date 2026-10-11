@@ -25,6 +25,18 @@ async function main() {
   await page.waitForFunction(() => location.pathname === '/ui/home', null, { timeout: 15000 })
   console.log('signed in')
 
+  // The backend store persists across runs now (Postgres). Remove THIS
+  // harness's own prior migrated entries so the count assertions are exact.
+  const cleaned = await page.evaluate(async () => {
+    const j = await (await fetch('/api/design-studio/rechecks', { credentials: 'include' })).json()
+    const mine = (j.rechecks || []).filter(r => ['legacy-asset-A', 'legacy-asset-B'].includes(String(r.asset_id || '')))
+    for (const r of mine) {
+      await fetch('/api/design-studio/rechecks/' + encodeURIComponent(r.id), { method: 'DELETE', credentials: 'include' })
+    }
+    return mine.length
+  })
+  console.log(`cleaned ${cleaned} prior harness entr(ies)`)
+
   // Seed a pre-backend local log and remove the once-only flag.
   await page.evaluate((entries) => {
     localStorage.setItem('ns-ds-recheck-log', JSON.stringify(entries))
