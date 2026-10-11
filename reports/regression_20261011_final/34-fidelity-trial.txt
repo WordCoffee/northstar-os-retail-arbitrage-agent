@@ -1,0 +1,17 @@
+reference photos: 0 found in C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\research\design-studio\reference-photos
+local media runtime (http://127.0.0.1:8188): NOT RUNNING (fetch failed)
+LIVE TRIAL: NOT RUN - no reference photos supplied in the folder (drop >=5 real photos in to run it).
+RUNTIME-GENERATION PATH: NOT RUN - no local media runtime is running; the trial uses composite-only paths (real product pixels preserved).
+PASS  fixture-1: fidelity pass, label pass, background pass, mask-protected pass (edit outside the mask), mask violation blocked, disclosure pass, export blocked pending sign-off, tamper blocked (150 ms)
+PASS  fixture-2: fidelity pass, label pass, background pass, mask-protected pass (edit outside the mask), mask violation blocked, disclosure pass, export blocked pending sign-off, tamper blocked (162 ms)
+PASS  fixture-3: fidelity pass, label pass, background pass, mask-protected pass (edit outside the mask), mask violation blocked, disclosure pass, export blocked pending sign-off, tamper blocked (141 ms)
+PASS  fixture-4: fidelity pass, label pass, background pass, mask-protected pass (edit outside the mask), mask violation blocked, disclosure pass, export blocked pending sign-off, tamper blocked (108 ms)
+PASS  fixture-5: fidelity pass, label pass, background pass, mask-protected pass (edit outside the mask), mask violation blocked, disclosure pass, export blocked pending sign-off, tamper blocked (111 ms)
+
+sample size: 5 image(s)
+NO PASS RATE CLAIMED: 5 < 20 samples. Per-image results above are the evidence.
+live trial: NOT RUN (no reference photos supplied)
+runtime generation path: NOT RUN (no local media runtime running)
+report: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\reports\fidelity-trial_20261011.json
+
+FIDELITY TRIAL: 5 passed, 0 failed, 0 FATAL

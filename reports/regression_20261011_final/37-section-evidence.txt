@@ -1,0 +1,66 @@
+PASS  signed in
+PASS  Projects: canvas present (1)
+PASS  Projects: 114 keyboard-reachable controls
+PASS  Projects: a control takes keyboard focus
+PASS  Projects: heading is dark on light (relative luminance 0.16)
+PASS  Listing Images: canvas present (1)
+PASS  Listing Images: embeds the compositing surface
+PASS  Listing Images: "generation unarmed" banner shown
+PASS  Listing Images: 82 keyboard-reachable controls
+PASS  Listing Images: a control takes keyboard focus
+PASS  Listing Images: heading is dark on light (relative luminance 0.16)
+PASS  A+ / Brand Story: canvas present (1)
+PASS  A+ / Brand Story: embeds the compositing surface
+PASS  A+ / Brand Story: "generation unarmed" banner shown
+PASS  A+ / Brand Story: 106 keyboard-reachable controls
+PASS  A+ / Brand Story: a control takes keyboard focus
+PASS  A+ / Brand Story: heading is dark on light (relative luminance 0.16)
+PASS  Storefront: canvas present (1)
+PASS  Storefront: embeds the compositing surface
+PASS  Storefront: "generation unarmed" banner shown
+PASS  Storefront: 88 keyboard-reachable controls
+PASS  Storefront: a control takes keyboard focus
+PASS  Storefront: heading is dark on light (relative luminance 0.16)
+PASS  Ads: canvas present (1)
+PASS  Ads: embeds the compositing surface
+PASS  Ads: "generation unarmed" banner shown
+PASS  Ads: 101 keyboard-reachable controls
+PASS  Ads: a control takes keyboard focus
+PASS  Ads: heading is dark on light (relative luminance 0.16)
+PASS  Video & UGC Clips: canvas present (1)
+PASS  Video & UGC Clips: embeds the compositing surface
+PASS  Video & UGC Clips: "generation unarmed" banner shown
+       (Video & UGC Clips: storyboard / frame canvas only - no video rendering)
+PASS  Video & UGC Clips: 90 keyboard-reachable controls
+PASS  Video & UGC Clips: a control takes keyboard focus
+PASS  Video & UGC Clips: heading is dark on light (relative luminance 0.16)
+PASS  Social: canvas present (1)
+PASS  Social: embeds the compositing surface
+PASS  Social: "generation unarmed" banner shown
+PASS  Social: 83 keyboard-reachable controls
+PASS  Social: a control takes keyboard focus
+PASS  Social: heading is dark on light (relative luminance 0.16)
+PASS  Packaging & Mockups: canvas present (1)
+PASS  Packaging & Mockups: embeds the compositing surface
+PASS  Packaging & Mockups: "generation unarmed" banner shown
+PASS  Packaging & Mockups: 83 keyboard-reachable controls
+PASS  Packaging & Mockups: a control takes keyboard focus
+PASS  Packaging & Mockups: heading is dark on light (relative luminance 0.16)
+PASS  3D Product Scene: canvas present (1)
+PASS  3D Product Scene: 132 keyboard-reachable controls
+PASS  3D Product Scene: a control takes keyboard focus
+PASS  3D Product Scene: heading is dark on light (relative luminance 0.16)
+PASS  Projects: no horizontal overflow at 390px (390/390)
+PASS  Listing Images: no horizontal overflow at 390px (390/390)
+PASS  A+ / Brand Story: no horizontal overflow at 390px (390/390)
+PASS  Storefront: no horizontal overflow at 390px (390/390)
+PASS  Ads: no horizontal overflow at 390px (390/390)
+PASS  Video & UGC Clips: no horizontal overflow at 390px (390/390)
+PASS  Social: no horizontal overflow at 390px (390/390)
+PASS  Packaging & Mockups: no horizontal overflow at 390px (390/390)
+PASS  3D Product Scene: no horizontal overflow at 390px (390/390)
+PASS  18 screenshots written to reports/screenshots_20261011/ (expected 18)
+PASS  zero console/page errors across every section
+
+SECTION EVIDENCE: 62 passed, 0 failed, 0 FATAL
+output: reports/screenshots_20261011/

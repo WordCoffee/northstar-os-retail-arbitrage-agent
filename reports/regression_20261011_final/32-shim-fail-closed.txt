@@ -1,0 +1,10 @@
+PASS  dev server prefills the shim identity (T2)
+PASS  the shim path made ZERO /auth/login requests (no real credential attempt)
+PASS  the shim attempt DID probe the identity endpoint (a real attempt, just refused)
+PASS  the failure is explicit and states that nothing was sent to the credential endpoint
+PASS  the URL stayed on /sign-in (no bounce, no silent navigation)
+PASS  nothing logged carries the demo password (17 console line(s) checked)
+PASS  an explicitly typed real account signs in (the supported path)
+PASS  exactly one /auth/login request, from the explicit real-account submit
+
+SHIM FAIL-CLOSED: 8 passed, 0 failed, 0 FATAL

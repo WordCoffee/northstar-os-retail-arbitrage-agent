@@ -44,8 +44,12 @@ async function main() {
   const ctx = await browser.newContext({ viewport: { width: 1600, height: 1000 } })
   const page = await ctx.newPage()
   const errors = []
+  const bad503Urls = []
   page.on('pageerror', (e) => errors.push(String(e).slice(0, 200)))
   page.on('console', (m) => { if (m.type() === 'error') errors.push('console: ' + m.text().slice(0, 200)) })
+  page.on('response', (r) => {
+    if (r.status() === 503) bad503Urls.push(r.url().slice(0, 120))
+  })
 
   await page.goto(BASE + 'sign-in', { waitUntil: 'domcontentloaded', timeout: 30000 })
   await page.waitForSelector('#signin-id', { timeout: 30000 })
@@ -101,9 +105,21 @@ async function main() {
   })
   ok('seeded record cleaned up')
 
-  const realErrors = errors.filter(e => !/401|403|429/.test(e))
-  if (realErrors.length === 0) ok(`no console/page errors (${errors.length} boundary notices filtered)`)
-  else no(`${realErrors.length} real console/page error(s)`, realErrors.slice(0, 2).join(' | '))
+  // Boundary notices filtered with their cause stated: pre-auth 401s (the shell
+  // probes /me before sign-in) and the documented honest 503 from
+  // /api/v1/noncreative/sources (a failed read is reported as "unavailable",
+  // never as an empty zero - noncreative_reads.py). A 503 anywhere else fails.
+  const UNEXPECTED_503 = bad503Urls.filter(u => !/noncreative\/sources/.test(u))
+  const realErrors = errors.filter(e => {
+    if (/401|403|429/.test(e)) return false
+    if (/status of 503/.test(e) && UNEXPECTED_503.length === 0) return false
+    return true
+  })
+  if (realErrors.length === 0 && UNEXPECTED_503.length === 0) {
+    ok(`no console/page errors (${errors.length} boundary notices filtered: pre-auth 401s + the documented noncreative 503 on ${bad503Urls.length} request(s))`)
+  } else {
+    no(`${realErrors.length} real console/page error(s), ${UNEXPECTED_503.length} unexpected 503(s)`, [...UNEXPECTED_503, ...realErrors].slice(0, 2).join(' | '))
+  }
 
   await browser.close()
   return report()

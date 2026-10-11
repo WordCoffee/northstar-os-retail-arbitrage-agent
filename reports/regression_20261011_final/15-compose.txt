@@ -1,0 +1,10 @@
+PASS  LOCAL composition publishes the API on 127.0.0.1:8000 (loopback only)
+PASS  DEPLOY composition does NOT publish the API port (only Caddy is public)
+PASS  positive control: Caddy stays published in the deploy composition (80,443)
+PASS  DEPLOY composition pins NORTHSTAR_DISABLE_RATE_LIMIT=0 (the opt-out cannot ship)
+PASS  LOCAL composition does not force the opt-out (value="0")
+PASS  DEPLOY composition publishes NO port besides the proxy (80/443) across all services
+PASS  DEPLOY composition carries no harness opt-out set to 1 (bypass / test-mode / rate-limit / self-approval)
+PASS  LOCAL composition also carries no opt-out set to 1 (the limiter and throttles stay on by default)
+
+DEPLOY COMPOSE GUARD: 8 passed, 0 failed

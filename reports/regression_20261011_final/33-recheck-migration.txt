@@ -1,0 +1,9 @@
+signed in
+cleaned 2 prior harness entr(ies)
+backend legacy-key entries before: 0
+backend legacy-key entries after : 2
+failed check stored as failure    : true
+local copy after migration        : []
+migrated flag                     : 1
+entries after a second section     : 2
+PASS  migration is one-shot, lossless and idempotent

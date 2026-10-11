@@ -1,0 +1,31 @@
+data_layer mode: postgres
+PASS  the ds_* schema exists on Postgres (12 tables)
+PASS  a second DataLayer() init is idempotent (same table count)
+PASS  tenant B cannot READ tenant A's project
+PASS  tenant B cannot UPDATE tenant A's project
+PASS  tenant B cannot DELETE tenant A's project
+PASS  the owner can delete its own project; SELECT changes() answered correctly (rowcount shim)
+PASS  a second delete reports False (rowcount shim distinguishes)
+PASS  tenant B cannot READ any of tenant A's asset/job/recheck/variant
+PASS  tenant B's lists contain only its own rows (0 seen)
+PASS  a duplicate import fingerprint returns the EXISTING id on Postgres (IntegrityError translated)
+PASS  a repeated legacy key does not duplicate on Postgres
+D10 PG plan (counts per bucket):
+  projects         {}
+  assets           {'pgtest-a-a45df7df': 1}
+  jobs             {'pgtest-a-a45df7df': 1}
+  rechecks         {'pgtest-a-a45df7df': 1, '3514bd77-13af-4231-b83d-ae72a47e42e8': 22}
+  imports          {'3514bd77-13af-4231-b83d-ae72a47e42e8': 5, 'pgtest-a-a45df7df': 1}
+  search_terms     {'3514bd77-13af-4231-b83d-ae72a47e42e8': 14}
+  variants         {'pgtest-a-a45df7df': 1}
+  variant_metrics  {}
+  listing_records  {'3514bd77-13af-4231-b83d-ae72a47e42e8': 1}
+  amazon_uploads   {}
+  change_proposals {}
+  change_files     {}
+  orgs=3 target=None moves=0 quarantine=5 fully_mapped=False
+D10_PG_PLAN_JSON={"org_count": 3, "orgs": ["3514bd77-13af-4231-b83d-ae72a47e42e8", "d8a1447f-3018-48be-9048-ad28e832e06a", "eb7b121b-f625-4bd7-89e9-a33a99c8ec01"], "target_org": null, "moves": [], "quarantine": [{"store": "assets", "table": "ds_assets", "bucket": "pgtest-a-a45df7df", "count": 1, "sample_ids": ["a3882085-ef84-4589-9256-79a8336a7236"], "reason": "unknown bucket: not a known organization and not a shared bucket - may belong to another tenant"}, {"store": "jobs", "table": "ds_jobs", "bucket": "pgtest-a-a45df7df", "count": 1, "sample_ids": ["782287d8-7ea8-4356-9a2b-4d92ff79ad5b"], "reason": "unknown bucket: not a known organization and not a shared bucket - may belong to another tenant"}, {"store": "rechecks", "table": "ds_rechecks", "bucket": "pgtest-a-a45df7df", "count": 1, "sample_ids": ["742ec082-c8dc-4aeb-ab90-6c92d1cf11b6"], "reason": "unknown bucket: not a known organization and not a shared bucket - may belong to another tenant"}, {"store": "imports", "table": "ds_imports", "bucket": "pgtest-a-a45df7df", "count": 1, "sample_ids": ["9fcdcdb0-a3a9-4a9f-baca-c700cce6589f"], "reason": "unknown bucket: not a known organization and not a shared bucket - may belong to another tenant"}, {"store": "variants", "table": "ds_variants", "bucket": "pgtest-a-a45df7df", "count": 1, "sample_ids": ["03c35daa-6408-434c-92ee-5e35c3e19aa9"], "reason": "unknown bucket: not a known organization and not a shared bucket - may belong to another tenant"}], "fully_mapped": false}
+PASS  the D10 migration plan runs against Postgres and reports per-organization counts
+probe rows cleaned up
+
+POSTGRES STORE HARNESS: 12 passed, 0 failed

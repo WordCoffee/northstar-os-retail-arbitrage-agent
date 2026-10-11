@@ -1,0 +1,34 @@
+PASS  signed in -> /ui/home
+PASS  suite rail no longer shows the sign-in stub
+PASS  suite rail is populated (21 services visible)
+PASS  rail lists Command Center
+PASS  rail lists SourceScout
+PASS  rail lists ListingForge
+PASS  rail lists AdPilot
+PASS  rail lists AutothinK
+PASS  account button opens /ui/account
+PASS  account page rendered without an error state
+PASS  21/21 rail destinations navigated and rendered
+  Command Center -> /ui/home
+  SourceScout -> /ui/product-finder
+  Golden Goose Finder -> /ui/golden-goose
+  Listing Guardian -> /ui/listings
+  Keyword Tracker -> /ui/keyword-tracker
+  Competitor Monitor -> /ui/competitor-monitor
+  Design Studio -> /ui/design-studio
+  ListingForge -> /ui/listingforge
+  AdPilot -> /ui/adpilot
+  SocialPulse -> /ui/socialpulse
+  Profitability Dashboard -> /ui/profitability
+  Spreadsheet Lab -> /ui/spreadsheet-lab
+  Commerce Ops -> /ui/commerce-ops
+  Monitoring -> /ui/monitoring
+  AutothinK -> /ui/autothink
+  Memory Bank -> /ui/memory-bank
+  Shared Data Layer -> /ui/shared-data
+  Provider Adapters -> /ui/provider-adapters
+  Master Brain -> /ui/master-brain
+  Beta Operations -> /ui/beta-ops
+  Administration -> /ui/admin
+
+OPERATOR SMOKE: 11 passed, 0 failed

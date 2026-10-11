@@ -1,0 +1,4 @@
+containers: PNG 70 B, JPEG 160 B
+
+
+DISCLOSURE SUITE: 65 passed, 0 failed

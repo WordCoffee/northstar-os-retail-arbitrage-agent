@@ -1,0 +1,77 @@
+PASS  signed in
+PASS  section picker lists all 9 sections
+PASS  Projects: renders (Design Studio)
+PASS  Listing Images: workspace mounted
+PASS  Listing Images: all five shell regions render
+PASS  Listing Images: 2 registry formats offered
+PASS  Listing Images: verdict renders (Pre-flight warns)
+PASS  Listing Images: empty canvas does not report green (Pre-flight warns)
+PASS  Listing Images: coverage counter shows "rules decided"
+PASS  Listing Images: specs carry a VERIFIED/REPORTED/UNSOURCED label
+PASS  A+ / Brand Story: workspace mounted
+PASS  A+ / Brand Story: all five shell regions render
+PASS  A+ / Brand Story: 23 registry formats offered
+PASS  A+ / Brand Story: verdict renders (Pre-flight warns)
+PASS  A+ / Brand Story: empty canvas does not report green (Pre-flight warns)
+PASS  A+ / Brand Story: coverage counter shows "rules decided"
+PASS  A+ / Brand Story: specs carry a VERIFIED/REPORTED/UNSOURCED label
+PASS  Storefront: workspace mounted
+PASS  Storefront: all five shell regions render
+PASS  Storefront: 8 registry formats offered
+PASS  Storefront: verdict renders (Pre-flight warns)
+PASS  Storefront: empty canvas does not report green (Pre-flight warns)
+PASS  Storefront: coverage counter shows "rules decided"
+PASS  Storefront: specs carry a VERIFIED/REPORTED/UNSOURCED label
+PASS  Ads: workspace mounted
+PASS  Ads: all five shell regions render
+PASS  Ads: 15 registry formats offered
+PASS  Ads: verdict renders (Pre-flight warns)
+PASS  Ads: empty canvas does not report green (Pre-flight warns)
+PASS  Ads: coverage counter shows "rules decided"
+PASS  Ads: specs carry a VERIFIED/REPORTED/UNSOURCED label
+PASS  Video & UGC Clips: workspace mounted
+PASS  Video & UGC Clips: all five shell regions render
+PASS  Video & UGC Clips: 11 registry formats offered
+PASS  Video & UGC Clips: verdict renders (Pre-flight warns)
+PASS  Video & UGC Clips: empty canvas does not report green (Pre-flight warns)
+PASS  Video & UGC Clips: coverage counter shows "rules decided"
+PASS  Video & UGC Clips: specs carry a VERIFIED/REPORTED/UNSOURCED label
+PASS  Social: workspace mounted
+PASS  Social: all five shell regions render
+PASS  Social: 6 registry formats offered
+PASS  Social: verdict renders (Pre-flight warns)
+PASS  Social: empty canvas does not report green (Pre-flight warns)
+PASS  Social: coverage counter shows "rules decided"
+PASS  Social: specs carry a VERIFIED/REPORTED/UNSOURCED label
+PASS  Packaging & Mockups: workspace mounted
+PASS  Packaging & Mockups: all five shell regions render
+PASS  Packaging & Mockups: 6 registry formats offered
+PASS  Packaging & Mockups: verdict renders (Pre-flight warns)
+PASS  Packaging & Mockups: empty canvas does not report green (Pre-flight warns)
+PASS  Packaging & Mockups: coverage counter shows "rules decided"
+PASS  Packaging & Mockups: specs carry a VERIFIED/REPORTED/UNSOURCED label
+PASS  3D Product Scene: renders (Design Studio)
+PASS  no UNSOURCED spec remains (SP video block removed per item 1)
+PASS  spec picker tags coverage: 16 tagged specs visible
+PASS  SP video is VERIFIED (sourced from the Amazon guide)
+PASS  Display video is VERIFIED (reconciled to Amazon-owned sources)
+PASS  9:16 vertical is surfaced as a WARN (date-sensitive)
+PASS  SB video bottom-right safe-area rule present
+       (vertical verdict blocks=false — a warn must not be the only reason to block)
+PASS  A+: the people classification field is present (no default)
+PASS  A+: the product fidelity field is present
+PASS  A+: the studio-generated-person switch is present (conflict source)
+PASS  A+: the disclosure row is in the pre-flight
+PASS  A+: the pre-flight states plainly that the studio cannot detect AI people from pixels
+PASS  A+: unanswered disclosure does not pass the pre-flight (Pre-flight warns)
+PASS  A+ alt-text requirement appears in the pre-flight
+PASS  A+ 2 MB limit surfaced
+
+Pre-auth console noise (expected: a signed-out SPA gets 401 on /me): 3
+   console: Failed to load resource: the server responded with a status of 401 (Unauthorized)
+   console: Failed to load resource: the server responded with a status of 401 (Unauthorized)
+   console: Failed to load resource: the server responded with a status of 401 (Unauthorized)
+
+TOTAL uncaught/console errors AFTER sign-in: 0
+
+DESIGN STUDIO PHASE 2 — 67 passed, 0 failed, 0 FATAL

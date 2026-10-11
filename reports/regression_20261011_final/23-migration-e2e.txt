@@ -1,0 +1,19 @@
+baseline: {"mode":"local","projects":0,"assets":0,"jobs":0,"note":"Local design workspace. Provider generation is gated behind explicit Run actions."}
+PASS  signed in
+PASS  seeded 7 legacy keys: ns-creative-briefs, ns-creative-variants, ds-docs, pd-requests, pd-exports, pd-renders, ds-kits
+after migrate: {"mode":"local","projects":3,"assets":2,"jobs":2,"note":"Local design workspace. Provider generation is gated behind explicit Run actions."}
+PASS  briefs + variants landed as projects (+3)
+PASS  docs + renders landed as assets (+2)
+PASS  requests + exports landed as jobs (+2)
+PASS  unmapped legacy fields are preserved under metadata.legacyFields (lossless import)
+PASS  the malformed ds-kits value is still present locally (nothing was destroyed)
+PASS  exactly the unimportable key survived; every imported key was cleared
+PASS  the done flag is withheld while an unimportable key remains (so it can be retried)
+after second run: {"mode":"local","projects":3,"assets":2,"jobs":2,"note":"Local design workspace. Provider generation is gated behind explicit Run actions."}
+PASS  re-running the SAME records created nothing new (idempotent)
+PASS  a second, unauthenticated principal cannot read the tenant store (login refused)
+PASS  cleanup removed 7 record(s) and the store is empty (0/0/0)
+
+uncaught page errors: 0
+
+MIGRATION E2E: 12 passed, 0 failed, 0 FATAL

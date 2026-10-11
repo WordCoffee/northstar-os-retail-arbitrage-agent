@@ -1,0 +1,18 @@
+PASS  signed in
+PASS  the Projects canvas mounted with the new controls
+PASS  adding a layer works (6 -> 7)
+PASS  undo restores the previous document (7 -> 6)
+PASS  redo re-applies the change (6 -> 7)
+PASS  artwork uploaded (Assets tab) and a product layer added from it
+PASS  the reference locked (pill visible)
+PASS  the gate states the compare requirement before export
+PASS  the on-demand fidelity diff renders a real verdict ("fidelity diff (on demand): block — A single point on the product moved by 89.4% …")
+PASS  export refused with a stated reason ("Export refused — A human must compare the rendered product against the locked reference be…")
+PASS  no file was downloaded while the comparison is unsigned
+PASS  the comparison signed off (status states it)
+PASS  export downloads once the gate is open (real download event)
+PASS  the export toast confirms a local render, no provider
+PASS  an edit after signing invalidates the sign-off (compare required again)
+PASS  no console/page errors (3 auth-boundary notices filtered)
+
+PROJECTS CANVAS GATES: 16 passed, 0 failed, 0 FATAL

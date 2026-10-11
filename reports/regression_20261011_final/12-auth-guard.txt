@@ -1,0 +1,8 @@
+..........................                                               [100%]
+============================== warnings summary ===============================
+Northstar_backend\design_studio_api.py:1364
+  C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\Northstar_backend\design_studio_api.py:1364: UserWarning: Field name "copy" in "APlusPackIn" shadows an attribute in parent "BaseModel"
+    class APlusPackIn(BaseModel):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+26 passed, 1 warning in 1.08s

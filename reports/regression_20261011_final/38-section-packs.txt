@@ -1,0 +1,19 @@
+PASS  signed in
+PASS  Video & UGC Clips: pack control renders
+PASS  Video & UGC Clips: pack downloaded and names its kind (storyboard_pack)
+PASS  Video & UGC Clips: pack carries the pre-flight summary
+PASS  Video & UGC Clips: pack states that nothing is rendered/generated
+PASS  Video & UGC Clips: pack carries an UNKNOWN for a field the operator did not supply
+PASS  Social: pack control renders
+PASS  Social: pack downloaded and names its kind (social_asset_pack)
+PASS  Social: pack carries the pre-flight summary
+PASS  Social: pack states that nothing is rendered/generated
+PASS  Social: pack carries an UNKNOWN for a field the operator did not supply
+PASS  Packaging & Mockups: pack control renders
+PASS  Packaging & Mockups: pack downloaded and names its kind (packaging_spec)
+PASS  Packaging & Mockups: pack carries the pre-flight summary
+PASS  Packaging & Mockups: pack states that nothing is rendered/generated
+PASS  Packaging & Mockups: pack carries an UNKNOWN for a field the operator did not supply
+PASS  no uncaught page errors
+
+SECTION PACKS: 17 passed, 0 failed, 0 FATAL

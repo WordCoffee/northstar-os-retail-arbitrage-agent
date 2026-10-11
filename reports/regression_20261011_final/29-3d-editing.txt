@@ -1,0 +1,11 @@
+PASS  signed in
+PASS  the 3D scene mounted with the layer list and the new controls
+PASS  the scene has 3 layers to reorder
+PASS  Move down swapped the first two layers ("Product" <-> "Surface")
+PASS  undo restored the previous layer order
+PASS  redo re-applied the reorder
+PASS  removing a layer dropped the count (3 -> 2)
+PASS  undo restored the removed layer (and the order)
+PASS  no console/page errors (3 boundary notices filtered)
+
+3D EDITING: 9 passed, 0 failed, 0 FATAL

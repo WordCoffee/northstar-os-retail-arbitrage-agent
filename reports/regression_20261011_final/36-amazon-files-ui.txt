@@ -1,0 +1,24 @@
+PASS  signed in
+PASS  the Amazon files surface mounted inside Ads
+PASS  onboarding guide lists what to download and states the file-only posture
+PASS  sample pack offers 11 synthetic files (local links)
+PASS  the bulksheet uploaded and appears in the archive with its kind
+PASS  the row table rendered
+PASS  the proposal shows the before/after (0.75 → 0.95) with its evidence
+PASS  the proposal flips to [approved] after the click
+PASS  the write reports Round-trip PASS (only the approved change differs)
+PASS  the change file is a NEW versioned filename (original untouched)
+PASS  the download link for the change file is present
+PASS  the change files list shows the written change file
+PASS  report match: 1 row matched to the change, 1 unmatched reported (never guessed)
+PASS  report match: the cause is quoted and the proposal linkage is shown
+PASS  report match: the unmatched K999 row is reported
+PASS  corrected file: new version (corrected-v2), round-trip PASS, only the corrections differ
+PASS  corrected file download link present
+PASS  comparison: explicit no-causation notice + the stale window labelled an engineering choice
+PASS  comparison: the per-entity before/after row renders (K300 12 → 18 clicks)
+PASS  comparison: a metric missing from one file renders UNKNOWN (never 0)
+PASS  fixture uploads cleaned up
+PASS  no console/page errors (3 boundary notices filtered)
+
+AMAZON FILES UI: 22 passed, 0 failed, 0 FATAL

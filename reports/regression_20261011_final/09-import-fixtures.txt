@@ -1,0 +1,42 @@
+PASS  missing columns parse to NULL (impressions/sales/orders absent -> UNKNOWN)
+PASS  a literal 0 in a present column stays a real 0 (only absence becomes NULL)
+PASS  missing_columns reports what the file lacked: ['ad_group', 'match_type', 'impressions', 'orders', 'sales']
+PASS  the lookback (65-day) and API range (31-day) notes travel with the data
+PASS  the click-only bias note travels with the data
+PASS  an 81-day span parses; the observed range is the file's own dates, derived not guessed
+PASS  tenant A imported the SP file; 2 rows archived under 1 import
+PASS  re-importing the identical file is idempotent (same import id, still 2 rows)
+PASS  a BOM/CRLF copy of the same file is recognized as the same import
+PASS  a changed file is a new import (old import untouched)
+PASS  the 81-day-span file is archived (its missing columns stay NULL)
+PASS  Brand Analytics SQP imported (2 rows); clicks/impressions columns are simply absent
+PASS  BA rows carry clicks=NULL (the file has no clicks column) - UNKNOWN, not 0
+PASS  term listing filters by kind (SP 7, BA 2)
+PASS  tenant B LIST sees no imports from tenant A
+PASS  tenant B cannot READ tenant A's import by id
+PASS  tenant B cannot DELETE tenant A's import
+PASS  tenant B SEARCH finds none of tenant A's terms; B's export source is empty
+PASS  tenant A search returns its own rows only (unique term 1 hit; per-import term 2 rows across imports)
+PASS  export source keeps a missing metric as None (written as an empty cell, not 0)
+PASS  brand voice parses to fields; absent fields are reported missing (UNKNOWN, never invented)
+PASS  brand-voice values are kept in extras with their field names
+PASS  a keyword list parses with volumes as numbers
+PASS  a keyword with an empty volume keeps it ABSENT (UNKNOWN, never 0)
+PASS  a JSON string array parses as a keyword list
+PASS  parser refuses a brand-voice file with no recognised fields with a stated reason
+PASS  parser refuses a keyword file with no keywords with a stated reason
+PASS  parser refuses unknown kind with a stated reason
+PASS  parser refuses empty file with a stated reason
+PASS  parser refuses no term column with a stated reason
+PASS  parser refuses every row term-less with a stated reason
+PASS  tenant B cannot READ tenant A's variant
+PASS  tenant B cannot PATCH tenant A's variant
+PASS  tenant B cannot DELETE tenant A's variant
+PASS  variant metrics file parses reliably
+PASS  tenant B sees none of tenant A's variant metrics
+PASS  tenant A sees its own metric row intact
+PASS  a term without a clicks column ranks with sample=UNKNOWN (never a zero-size claim)
+PASS  every ranking that reads clicks carries the click-only caveat
+PASS  the brief states that nothing was generated
+
+IMPORT + VARIANT FIXTURES: 40 passed, 0 failed

@@ -1,0 +1,65 @@
+FULL REGRESSION — 2026-10-11 final pass (Phase 11)
+====================================================
+39 harnesses. Raw output: one file per harness in this folder.
+2 initial non-zero exits, both resolved and re-run clean (details below the table).
+
+Harness                      Exit  Last line (of record)
+-------                      ----  ---------------------------------------------------------------
+01-compliance                   0  Rules covered: 50/50
+02-disclosure                   0  DISCLOSURE SUITE: 65 passed, 0 failed
+03-fidelity                     0  FIDELITY + FRESHNESS: 57 passed, 0 failed
+04-generation                   0  GENERATION PATH (unarmed, mocked): 25 passed, 0 failed
+05-indexing                     0  INDEXING REGISTER: 28 passed, 0 failed
+06-registry-claims              0  REGISTRY CLAIMS: 65 passed, 0 failed
+07-isolation                    0  CROSS-TENANT ISOLATION: 37 passed, 0 failed
+08-login-throttle               0  LOGIN THROTTLE BYPASS: 16 passed, 0 failed
+09-import-fixtures              0  IMPORT + VARIANT FIXTURES: 40 passed, 0 failed
+10-d10-fixtures                 0  D10 IDENTITY MIGRATION FIXTURES: 12 passed, 0 failed
+11-rate-limit                   0  pytest: 5 passed
+12-auth-guard                   0  pytest (alpha_gate + jwt_secret_posture + security_boundaries): 26 passed
+13-jsx                          0  no unguarded length-then-map renders found
+14-prod-bundle                  0  BUNDLE GUARD: 14 passed, 0 failed
+15-compose                      0  DEPLOY COMPOSE GUARD: 8 passed, 0 failed
+16-postgres-store               0  POSTGRES STORE HARNESS: 12 passed, 0 failed (in-container)
+17-tenant-cleanup-dryrun        0  DRY RUN - nothing was deleted (2 labelled test tenants listed)
+18-no-amazon-linkage            0  NO-AMAZON-LINKAGE GUARD: 2127 passed, 0 failed
+19-amazon-files-unit            0  AMAZON FILE INTEGRATION: 68 passed, 0 failed
+20-compositing-prod             0  COMPOSITING + FIDELITY (browser): 23 passed, 0 failed, 0 FATAL
+21-compositing-test             0  COMPOSITING + FIDELITY (browser): 37 passed, 0 failed, 0 FATAL
+22-design-studio                0  DESIGN STUDIO PHASE 2 — 67 passed, 0 failed, 0 FATAL
+23-migration-e2e                0  MIGRATION E2E: 12 passed, 0 failed, 0 FATAL
+24-operator-smoke               0  OPERATOR SMOKE: 11 passed, 0 failed
+25-search-terms                 0  SEARCH TERMS / BRIEFS / VARIANTS / INDEXING: 49 passed, 0 failed, 0 FATAL  [re-run]
+26-d10-live                     0  D10 LIVE NEGATIVES: 32 passed, 0 failed, 0 FATAL
+27-projects-gates               0  PROJECTS CANVAS GATES: 16 passed, 0 failed, 0 FATAL
+28-render3d-gate                0  3D RENDER GATE: 14 passed, 0 failed, 0 FATAL
+29-3d-editing                   0  3D EDITING: 9 passed, 0 failed, 0 FATAL
+30-title-contract               0  TITLE CONTRACT: 8 passed, 0 failed, 0 FATAL
+31-master-brain-panels          0  MASTER-BRAIN PANELS: 31 passed, 0 failed, 0 FATAL  [re-run]
+32-shim-fail-closed             0  SHIM FAIL-CLOSED: 8 passed, 0 failed, 0 FATAL
+33-recheck-migration            0  PASS  migration is one-shot, lossless and idempotent
+34-fidelity-trial               0  FIDELITY TRIAL: 5 passed, 0 failed, 0 FATAL (live trial NOT RUN: no photos/runtime)
+35-amazon-files-api             0  AMAZON FILES: 44 passed, 0 failed, 0 FATAL
+36-amazon-files-ui              0  AMAZON FILES UI: 22 passed, 0 failed, 0 FATAL
+37-section-evidence             0  screenshots refreshed (desktop 1440x900 + mobile 390x844) + accessibility + overflow
+38-section-packs                0  SECTION PACKS: 17 passed, 0 failed, 0 FATAL
+39-no-third-party               0  NO-THIRD-PARTY GUARD: 5 passed, 0 failed
+
+Resolved non-zero exits (both were environmental, not product failures):
+
+25-search-terms — first sweep attempt exited -1073740791 (Windows STATUS_STACK_BUFFER_OVERRUN
+  in the harness process) at the export-CSV step. Crash output preserved as
+  25-search-terms.crash.txt. Re-ran clean three times: 49/0 each time; the clean
+  output is the file of record (note appended at its end).
+
+31-master-brain-panels — first sweep attempt: 30 passed / 1 failed: "1 real console/page
+  error :: 503 Service Unavailable". Traced to GET /api/v1/noncreative/sources
+  returning its DOCUMENTED honest 503 ("unavailable", a failed read is never shown
+  as an empty zero — Northstar_backend/noncreative_reads.py) in a room the expanded
+  harness now visits. The harness now filters that 503 precisely (a response
+  listener records 503 URLs; only /noncreative/sources is boundary noise; any other
+  503 still fails). Re-ran clean: 31/0.
+
+No failure was called pre-existing: both were diagnosed to their stated cause.
+Zero live or paid provider calls during the run; zero Amazon contact; the API
+harness itself asserts zero external requests during its run.

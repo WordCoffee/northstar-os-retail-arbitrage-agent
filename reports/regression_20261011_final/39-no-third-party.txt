@@ -1,0 +1,7 @@
+PASS  dist/index.html contains no http(s) URL (all references are local; XML namespaces excluded)
+PASS  dist CSS (1 file(s)) has no external url() or @import
+PASS  dist JS (3 file(s)) has no request-shaped external reference
+PASS  dist/fonts/fonts.css: 20 local font reference(s), zero external
+PASS  source CSS (4 file(s)) is local-only
+
+NO-THIRD-PARTY GUARD: 5 passed, 0 failed

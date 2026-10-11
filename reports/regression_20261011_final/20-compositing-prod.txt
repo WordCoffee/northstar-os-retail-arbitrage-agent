@@ -1,0 +1,42 @@
+      ... navigating to sign-in
+      ... waiting for the sign-in form
+      ... submitting sign-in as "t2" (attempt 1)
+PASS  signed in
+      ... checking the compositing surface
+PASS  the compositing surface mounted in Listing Images
+PASS  the surface renders a real <canvas> element
+PASS  compositing surface renders left rail
+PASS  compositing surface renders inspector
+PASS  compositing surface renders bottom strip
+PASS  undo and redo controls are present
+
+SKIP  engine hook absent (CORRECT for a production bundle)
+      The canvas pixel paths (render, fidelity extraction, marker survival)
+      need the ?engine=1 hook. Re-run against a hook-carrying build:
+        the Vite dev server :  HARNESS_MODE=dev HARNESS_BASE_URL=http://127.0.0.1:8101/ui/ node test-compositing.cjs
+        the test build      :  HARNESS_MODE=test HARNESS_BASE_URL=http://127.0.0.1:8200/ui/ node test-compositing.cjs
+      The UI-level checks below still run against this build.
+
+PASS  page generated 4 real PNG fixtures via canvas
+      ... generating upload fixtures
+PASS  the Library tab is present in the compositing surface
+PASS  the surface collects the people classification (asset-level, where the asset is made)
+PASS  ticking identifiability shows the block and explains it is a consent matter
+PASS  the re-check library panel renders
+SKIP  tagged-upload check needs the engine to write the marker (production build)
+PASS  upload check WARNS on a live image that lost the marker
+PASS  the warning tells the operator what to do
+PASS  the backend re-check log is readable (20 entry/entries)
+PASS  the upload check wrote to the tenant-scoped log
+PASS  every backend entry carries the date of the check
+PASS  the backend entry records which surface ran the check
+PASS  a failed check is stored as a failure in the backend
+PASS  the log persisted across a reload (20 entries, backend-backed)
+PASS  the notice-and-cure window renders (2 of 5 day(s) remain to cure.)
+PASS  a per-entry "re-check exported ad" action is present
+PASS  no console or page errors during the whole run
+
+NOTE  pixel paths were SKIPPED (production mode)
+
+MODE: auto
+COMPOSITING + FIDELITY (browser): 23 passed, 0 failed, 0 FATAL

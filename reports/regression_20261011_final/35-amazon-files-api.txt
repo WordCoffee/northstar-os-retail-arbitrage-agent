@@ -1,0 +1,46 @@
+PASS  signed in
+PASS  bulksheet uploaded: kind=ads_bulksheet, 4 rows, checksum recorded
+PASS  checksum recorded; no required columns missing
+PASS  four proposals built with before/after and evidence
+PASS  proposal 0: before/after + exact keyword ID
+PASS  proposal 1: Archive operation + campaign ID copied
+PASS  proposal 2: empty Keyword ID is BLOCKED
+PASS  proposal 3: above the spend limit -> second confirmation required
+PASS  approve: the bid change is approved
+PASS  approve: a BLOCKED row is refused (409)
+PASS  approve: the spend-limit row needs the second confirmation (409)
+PASS  reject: the Archive proposal is rejected
+PASS  change file written: sp_bulksheet-change-v1.xlsx (1 row)
+PASS  round-trip: only the approved change differs; checksums recorded
+PASS  the change file downloads as real bytes
+PASS  the downloaded file re-parses as a bulksheet with exactly the one approved row
+PASS  the written row carries the approved bid (0.95) with the source ID and Operation intact
+PASS  A+ ASIN list uploaded and detected
+PASS  A+ pack: NOT an uploadable module file; the ASIN bulk-upload limit is UNKNOWN
+PASS  A+ pack: ASINs read from the file; required alt text flagged when missing
+PASS  A+ copy: the operator headline is carried with its source
+PASS  A+ copy: an empty slot stays UNKNOWN with a write-it-yourself note
+PASS  change files list returns the written change file for its upload
+PASS  ads error report detected as a processing report
+PASS  a report upload cannot produce proposals (422, stated reason)
+PASS  a report upload cannot be written as a change file (422)
+PASS  report match: 1 row matched to the change file, 1 unmatched (never guessed)
+PASS  report match: row linked to a K300 proposal; cause quoted; bid-specific fix hint
+PASS  report match: the K999 row is reported unmatched
+PASS  a non-report file is refused as a report (422, stated reason)
+PASS  corrected file written as a NEW version: sp_bulksheet-corrected-v2.xlsx
+PASS  corrected round-trip: only the corrections differ from the change file
+PASS  the corrected file re-parses with the corrected bid (0.85) and the same exact ID
+PASS  a correction naming a column the file does not carry is refused (422, stated reason)
+PASS  comparison: K300 before/after computed (12 → 18 clicks, delta 6)
+PASS  comparison: a metric missing from one file is UNKNOWN, never 0
+PASS  comparison: explicit no-causation notice; 14-day window labelled an engineering choice
+PASS  search terms imported (state=imported)
+PASS  brief→assets: variant created with id 0f18104b…, template headline from the brand promise + term
+PASS  brief→assets: on-image text layers carry the imported term
+PASS  brief→assets: the variant exists in the variants store (matchable by a later results import)
+PASS  brief→assets: 2 harness variant(s) cleaned up
+PASS  ZERO external requests during the entire run (fonts self-hosted; no Amazon host contacted)
+PASS  cleaned up 7 upload(s) (cascading their proposals and change files)
+
+AMAZON FILES: 44 passed, 0 failed, 0 FATAL

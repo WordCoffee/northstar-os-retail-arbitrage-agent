@@ -1,0 +1,70 @@
+PASS  detection: sp_bulksheet.xlsx -> ads_bulksheet
+PASS  detection: sp_search_terms.xlsx -> ads_search_terms
+PASS  detection: listing_template.txt -> listing_template
+PASS  detection: brand_analytics.csv -> brand_analytics
+PASS  detection: aplus_list.csv -> aplus_asin_list
+PASS  detection: sb_bulksheet.xlsx -> ads_bulksheet
+PASS  detection: sp_error_report.xlsx -> ads_error_report
+PASS  detection: listing_processing_report.txt -> listing_processing_report
+PASS  detection: listing_detail_template.txt -> listing_template
+PASS  detection: listing_old_template.txt -> listing_template
+PASS  detection: metrics_before.xlsx -> ads_bulksheet
+PASS  detection: metrics_after.xlsx -> ads_bulksheet
+PASS  detection: legacy.xls -> unsupported_xls
+PASS  detection: junk.csv -> unknown
+PASS  bulksheet: keyword row parsed with exact IDs and values
+PASS  bulksheet: required columns present, none missing
+PASS  search-term sheet: observed range derived from its own ISO dates (2026-10-01..03)
+PASS  listing template: TSV parsed with its own SKU/update_delete vocabulary
+PASS  Brand Analytics: CSV detected and parsed
+PASS  legacy .xls: honestly refused with the stated fix (no guessing)
+PASS  proposal: before/after and the exact ID recorded for the bid change
+PASS  proposal: Archive carries its operation value and the campaign ID
+PASS  proposal: a row with an empty Keyword ID is BLOCKED (never written)
+PASS  spend guardrail: a bid above the seller limit requires a second confirmation
+PASS  stale source: a 30-day-old download carries the warning (not a silent pass)
+PASS  proposal: evidence carries the file name, checksum and download date
+PASS  listing writer: title change carries all four rule FLAGS (and is not blocked)
+PASS  approval: blocked rows can never be approved
+PASS  approval: a spend-limit row is refused without the second confirmation
+PASS  approval: the same row approves WITH the explicit second confirmation
+PASS  delta xlsx: 2 approved row(s) written, nothing else
+PASS  delta xlsx: the source column order is preserved exactly
+PASS  Excel-openability: openpyxl opens the written xlsx with the expected shape
+PASS  round-trip: only the 2 approved change(s) differ; checksums recorded
+PASS  round-trip: an unapproved cell change in the written file is CAUGHT
+PASS  round-trip no-op: with no approvals the written file has zero rows and zero differences
+PASS  listing delta TSV: update_delete mapped from Update -> PartialUpdate; the title change is the only edit
+PASS  listing delta round-trip: only the approved title change differs
+PASS  writer refuses an intended change with a blank Operation
+PASS  A+ pack: not an uploadable module file; the ASIN bulk-upload limit is recorded UNKNOWN
+PASS  A+ pack: assets carry the required-alt-text instruction; ASINs read from the file
+PASS  A+ copy: an operator-supplied headline is carried with its source
+PASS  A+ copy: empty slots stay UNKNOWN with a write-it-yourself note (nothing generated)
+PASS  SB delta: a Creative row resolves to creative_id (ID copied exactly)
+PASS  SB delta: a Product Collection row resolves to product_collection_id
+PASS  SB delta: two changed rows written (only changed rows), round-trip clean
+PASS  product-detail template: bullet/description/keyword columns are mapped
+PASS  product-detail delta: bullet update written as PartialUpdate; round-trip clean
+PASS  product-detail template: required columns (sku + operation) present, no missing-column entry
+PASS  old-template warning: a template without an operation column is flagged for re-download
+PASS  old-template warning: the missing operation column is listed in missing_columns
+PASS  ads error report: 1 row matched to the change file, 1 unmatched row reported (never guessed)
+PASS  ads error match: the row is linked to its proposal; the cause is quoted and the bid hint is specific
+PASS  ads error report: an id that is not in the change file is reported unmatched
+PASS  Seller Central processing report: SKU row matched to the listing change and its proposal
+PASS  listing processing report: cause quoted + fix hint given; unknown SKU reported
+PASS  corrected file prep: the dropped row is removed, the corrected row kept, zero errors
+PASS  corrected file: the bid correction is written and only the kept rows appear
+PASS  corrected file round-trip: only the corrections differ from the change file
+PASS  corrected file: the change file it was built from is untouched (same row count)
+PASS  corrected file: Excel-openable (openpyxl)
+PASS  corrected file: a correction for a column the file does not carry is refused with a stated reason
+PASS  comparison: per-entity before/after values and the click delta are computed
+PASS  comparison: sample-size label + observed date ranges are attached per entity
+PASS  comparison: a metric missing from one file is UNKNOWN (never 0)
+PASS  comparison: explicit no-causation notice; the 14-day window is labelled an engineering choice
+PASS  Item Highlights: no column is mapped or emitted; the status stays UNKNOWN
+PASS  Item Highlights: a source column with that header is preserved but NEVER mapped/interpreted
+
+AMAZON FILE INTEGRATION: 68 passed, 0 failed
