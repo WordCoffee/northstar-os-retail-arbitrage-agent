@@ -39,9 +39,14 @@ WORKDIR /app
 # Built SPA — served at /ui/ by main.py's mount_ui helper.
 COPY --from=ui-build /ui/dist /app/northstar-os-ui/dist
 
-# Dependency layer first (cache-friendly).
-COPY Northstar_backend/requirements.txt /app/Northstar_backend/requirements.txt
-RUN pip install --no-cache-dir -r /app/Northstar_backend/requirements.txt
+# Dependency layer first (cache-friendly). Pins come from uv.lock (uv export →
+# pip install); requirements.txt is retained as the human-readable source list.
+# NOTE: this path is NOT build-verified yet (a docker build needs network +
+# operator approval); the `uv export` step itself is verified locally.
+COPY Northstar_backend/requirements.txt Northstar_backend/pyproject.toml Northstar_backend/uv.lock /app/Northstar_backend/
+RUN pip install --no-cache-dir "uv==0.13.0" \
+ && uv export --frozen --no-hashes --directory /app/Northstar_backend --output-file /tmp/northstar-requirements.txt \
+ && pip install --no-cache-dir -r /tmp/northstar-requirements.txt
 
 # Application code (includes migrations_foundation/, foundation/, autothink/).
 COPY Northstar_backend /app/Northstar_backend
