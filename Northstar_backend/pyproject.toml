@@ -1,0 +1,21 @@
+[project]
+name = "northstar-backend"
+version = "0.0.0"
+description = "Northstar OS backend — legacy app + foundation control layer. Dependency pins live in uv.lock."
+requires-python = ">=3.11"
+# Dependency source mirrors Northstar_backend/requirements.txt (kept for the
+# legacy pip/Docker path until that is switched over in a follow-up).
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "python-dotenv",
+    "requests",
+    "pydantic",
+    "bcrypt",
+    "PyJWT",
+    "httpx",
+    "aiofiles",
+    "croniter",
+    "cryptography",
+    "psycopg[binary]",
+]
