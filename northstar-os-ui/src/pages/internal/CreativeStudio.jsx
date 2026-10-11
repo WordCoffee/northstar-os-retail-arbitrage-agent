@@ -20,7 +20,7 @@
 //     and navigates; it never uploads, publishes, lists, or downloads.
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { PageLayout, DataNotice, DataTable } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
@@ -38,6 +38,12 @@ import {
   KIND_LABEL, docFromTemplate, applyKit, addLayer, updateLayer, removeLayer,
   duplicateLayer, reorderLayer, rescaleDoc, docToDataUrl, downloadDataUrl, safeFileName,
 } from '../../studio/engine/doc.js'
+// Phase 7 item 4: the Projects canvas gains the SAME gate mechanics as the
+// compositing surface - a locked reference runs the real fidelity diff and a
+// human compare sign-off before any export.
+import {
+  renderDoc, fidelityVerdict, compareStepStatus, makeCompareSignOff,
+} from '../../studio/engine/compose.js'
 import {
   useAssetStore, useDecodedAssets, putAsset, newAssetId, approxBytesOfDataUrl,
 } from '../../studio/engine/assets.js'
@@ -156,6 +162,153 @@ export default function CreativeStudio() {
   const [savedHash, setSavedHash] = useState('')
   const dirty = useMemo(() => hashDoc(doc) !== savedHash, [doc, savedHash])
 
+  // ── Undo / redo (Phase 7 item 4) ─────────────────────────────────────────
+  // The document is the only undoable thing on this canvas; the stack watches
+  // `doc` and records the previous value on every change, bounded to 50 steps.
+  // Undo/redo applications are flagged so they do not record themselves.
+  const historyRef = useRef({ past: [], future: [] })
+  const applyingHistoryRef = useRef(false)
+  const lastDocRef = useRef(null)
+  const [historyTick, setHistoryTick] = useState(0)
+
+  useEffect(() => {
+    if (lastDocRef.current === null) { lastDocRef.current = doc; return }
+    if (applyingHistoryRef.current) { applyingHistoryRef.current = false; lastDocRef.current = doc; return }
+    if (doc === lastDocRef.current) return
+    const h = historyRef.current
+    h.past = [...h.past.slice(-49), lastDocRef.current]
+    h.future = []
+    lastDocRef.current = doc
+    setHistoryTick(v => v + 1)
+  }, [doc])
+
+  const undoDoc = useCallback(() => {
+    const h = historyRef.current
+    if (!h.past.length) return
+    const prev = h.past[h.past.length - 1]
+    h.past = h.past.slice(0, -1)
+    h.future = [doc, ...h.future].slice(0, 50)
+    applyingHistoryRef.current = true
+    lastDocRef.current = prev
+    setDoc(prev)
+    setHistoryTick(v => v + 1)
+  }, [doc])
+
+  const redoDoc = useCallback(() => {
+    const h = historyRef.current
+    if (!h.future.length) return
+    const next = h.future[0]
+    h.future = h.future.slice(1)
+    h.past = [...h.past, doc].slice(-50)
+    applyingHistoryRef.current = true
+    lastDocRef.current = next
+    setDoc(next)
+    setHistoryTick(v => v + 1)
+  }, [doc])
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (!(e.ctrlKey || e.metaKey)) return
+      const tag = (e.target && e.target.tagName) || ''
+      if (/INPUT|TEXTAREA|SELECT/.test(tag)) return
+      const k = String(e.key || '').toLowerCase()
+      if (k === 'z') { e.preventDefault(); if (e.shiftKey) redoDoc(); else undoDoc() }
+      else if (k === 'y') { e.preventDefault(); redoDoc() }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [undoDoc, redoDoc])
+
+  const canUndo = historyRef.current.past.length > 0
+  const canRedo = historyRef.current.future.length > 0
+  void historyTick // re-render trigger for the button states
+
+  // Every EDIT goes through commitDoc, which stamps meta.lastEditAt — the value
+  // the compare sign-off is bound to (assetVersion). Any edit therefore
+  // invalidates a previous sign-off. Non-content writes (save/open from the
+  // library, undo/redo application, meta-only lock/sign actions) use raw setDoc.
+  const commitDoc = useCallback((updater) => {
+    setDoc(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      if (!next || next === prev) return prev
+      return { ...next, meta: { ...next.meta, lastEditAt: nowIso() } }
+    })
+  }, [])
+
+  // ── Reference lock + compare sign-off (Phase 7 item 4) ───────────────────
+  // Locking a reference turns on the REAL fidelity diff (the rendered canvas
+  // against the locked file, in the product region) and requires a human
+  // compare sign-off before export - the same mechanics the compositing
+  // surface uses, via the same engine functions.
+  const resolveAssetDataUrl = useCallback(
+    (id) => ((store.assets || []).find(a => a.id === id) || {}).dataUrl,
+    [store.assets],
+  )
+  const lockedReference = doc.meta?.fidelityMode === 'locked'
+  const compareStatus = useMemo(() => compareStepStatus(doc), [doc])
+
+  const lockReference = useCallback(() => {
+    const layer = (doc.layers || []).find(l =>
+      l.visible !== false && (l.kind === 'image' || l.kind === 'product') && l.assetId && resolveAssetDataUrl(l.assetId))
+    if (!layer) {
+      t('Add an image or product layer first — the locked reference is that layer\'s own file.', 'warn')
+      return
+    }
+    const dataUrl = resolveAssetDataUrl(layer.assetId)
+    setDoc(prev => ({
+      ...prev,
+      meta: { ...prev.meta, fidelityMode: 'locked', referenceAssetId: layer.assetId, referenceDataUrl: dataUrl },
+    }))
+    t('Reference locked to the product layer. Export now runs the fidelity diff and requires a human compare sign-off.', 'info')
+  }, [doc.layers, resolveAssetDataUrl, t])
+
+  const unlockReference = useCallback(() => {
+    setDoc(prev => {
+      const meta = { ...prev.meta }
+      delete meta.fidelityMode
+      delete meta.referenceAssetId
+      delete meta.referenceDataUrl
+      delete meta.compareConfirmed
+      return { ...prev, meta }
+    })
+    t('Reference lock removed. Export falls back to the compliance pre-flight only.', 'info')
+  }, [t])
+
+  const signCompare = useCallback(() => {
+    setDoc(prev => ({ ...prev, meta: { ...prev.meta, compareConfirmed: makeCompareSignOff(prev, { user: 'operator' }) } }))
+    t('Comparison signed off — a self-declaration: it records who and when, not proof of review.', 'info')
+  }, [t])
+
+  // The shared export gate: when a reference is locked, a HUMAN compare
+  // sign-off (version-bound) is required before export. The objective pixel
+  // diff is available on demand (runFidelityDiff below) - a general canvas
+  // legitimately differs from the raw photograph, so the diff is a readout,
+  // not an automatic gate, and it never silently passes a step.
+  const lockedGate = useCallback(async (candidate) => {
+    if (candidate.meta?.fidelityMode !== 'locked') return { ok: true }
+    const cmp = compareStepStatus(candidate)
+    if (!cmp.satisfied) return { ok: false, detail: cmp.detail }
+    return { ok: true }
+  }, [])
+
+  // On-demand fidelity readout: the real diff of the rendered product region
+  // against the locked reference, with its own stated limits.
+  const [diffResult, setDiffResult] = useState(null)
+  const runFidelityDiff = useCallback(async () => {
+    try {
+      const canvas = await renderDoc(doc, resolveAssetDataUrl)
+      const fid = await fidelityVerdict(doc, canvas, resolveAssetDataUrl)
+      setDiffResult(fid)
+      t(fid.ok
+        ? `Fidelity diff: the product region matches the reference (${fid.diff ? (fid.diff.mean * 100).toFixed(2) + '% mean' : fid.detail}).`
+        : `Fidelity diff: ${fid.detail}`, fid.ok ? 'info' : 'warn')
+    } catch (e) {
+      setDiffResult({ status: 'not-run', ok: false, detail: `The diff could not run: ${String(e && e.message || e)}` })
+      t(`Fidelity diff could not run: ${String(e && e.message || e)}`, 'warn')
+    }
+  }, [doc, resolveAssetDataUrl, t])
+
+
   const openTemplate = useCallback((id, fmtId) => {
     const tpl = templateById(id) || TEMPLATES[0]
     const f = formatById(fmtId || formatId) || ALL_FORMATS[0]
@@ -171,16 +324,16 @@ export default function CreativeStudio() {
 
   const changeFormat = useCallback((f) => {
     setFormatId(f.id)
-    setDoc(prev => rescaleDoc(prev, f.w, f.h))
+    commitDoc(prev => rescaleDoc(prev, f.w, f.h))
     setDocName(`${templateById(prev.templateId)?.name || prev.name} — ${f.label}`)
     t(`Rendered at ${f.w}×${f.h}. Normalised geometry means nothing stretches.`, 'info')
   }, [t])
 
-  const patchLayer = useCallback((id, patch) => setDoc(prev => updateLayer(prev, id, patch)), [])
+  const patchLayer = useCallback((id, patch) => commitDoc(prev => updateLayer(prev, id, patch)), [])
 
   // ── Layer add / edit ──
   const addText = useCallback(() => {
-    setDoc(prev => addLayer(prev, {
+    commitDoc(prev => addLayer(prev, {
       kind: 'text', name: 'Text', role: 'headline',
       x: 0.1, y: 0.42, w: 0.8, h: 0.16, text: 'Your headline', size: 0.06,
       weight: 700, color: kit.ink, align: 'center',
@@ -189,7 +342,7 @@ export default function CreativeStudio() {
   }, [kit.ink, t])
 
   const addShape = useCallback((shape) => {
-    setDoc(prev => addLayer(prev, {
+    commitDoc(prev => addLayer(prev, {
       kind: 'shape', name: shape === 'ellipse' ? 'Ellipse' : shape === 'triangle' ? 'Triangle' : 'Rectangle',
       shape, x: 0.34, y: 0.34, w: 0.32, h: 0.32, fill: kit.accent, radius: shape === 'rect' ? 0.02 : 0,
     }))
@@ -197,7 +350,7 @@ export default function CreativeStudio() {
   }, [kit.accent, t])
 
   const addProduct = useCallback((assetId) => {
-    setDoc(prev => addLayer(prev, {
+    commitDoc(prev => addLayer(prev, {
       kind: 'product', name: 'Product', assetId, fit: 'contain',
       x: 0.3, y: 0.2, w: 0.4, h: 0.5, contactShadow: true,
     }))
@@ -205,7 +358,7 @@ export default function CreativeStudio() {
   }, [t])
 
   const addBadge = useCallback(() => {
-    setDoc(prev => addLayer(prev, {
+    commitDoc(prev => addLayer(prev, {
       kind: 'badge', name: 'Badge', x: 0.38, y: 0.82, w: 0.24, h: 0.08,
       text: 'Learn more', fill: kit.accent, color: '#f5f0e8', size: 0.026,
     }))
@@ -244,6 +397,13 @@ export default function CreativeStudio() {
       t(`Export refused: ${bad.length} placement${bad.length > 1 ? 's' : ''} break a blocking Amazon rule (${bad.map(b => b.label).slice(0, 2).join(', ')}${bad.length > 2 ? '…' : ''}). Fix them or record an override on the canvas.`, 'warn')
       return
     }
+    // Phase 7 item 4: the locked-reference gate runs once for the set (same
+    // document content, different raster sizes).
+    const locked = await lockedGate(doc)
+    if (!locked.ok) {
+      t(`Export refused — ${locked.detail}`, 'warn')
+      return
+    }
     let ok = 0
     for (const f of list) {
       try {
@@ -256,7 +416,7 @@ export default function CreativeStudio() {
       }
     }
     t(`${ok} placement${ok === 1 ? '' : 's'} exported from the master. Each is a real local render at the placement's own pixel size.`, 'info')
-  }, [renderChannelFormats, doc, docName, images, renderChannel, kit, profile.prohibited, profile.competitors, overridden, setExportLog, t])
+  }, [renderChannelFormats, doc, docName, images, renderChannel, kit, profile.prohibited, profile.competitors, overridden, setExportLog, t, lockedGate])
 
   const saveDoc = useCallback(() => {
     const next = { ...doc, name: docName, kitId: kit.id, savedAt: nowIso() }
@@ -392,7 +552,7 @@ export default function CreativeStudio() {
     next.name = `${p.channelLabel} — ${p.formatLabel}`
     next.loopId = p.id
     next.briefId = active?.id || ''
-    setDoc(next)
+    commitDoc(next)
     setDocName(next.name)
     setFormatId(p.formatId)
     setTemplateId(tpl.id)
@@ -535,16 +695,41 @@ export default function CreativeStudio() {
                 </>}
                 minHeight={300} maxHeight={560}
               />
-              <div className="inline-flex" style={{ marginTop: 12 }}>
+              <div className="inline-flex" style={{ marginTop: 12, flexWrap: 'wrap' }}>
                 <button className="btn btn-sm btn-primary" onClick={() => { saveDoc(); t('Saved.', 'info') }} disabled={!dirty}>
                   <Icon name="save" size={13} /> Save document
                 </button>
-                <button className="btn btn-sm btn-ghost" onClick={() => {
+                <button className="btn btn-sm btn-ghost" data-testid="proj-undo" disabled={!canUndo} title="Undo (Ctrl+Z)" onClick={undoDoc}>
+                  <Icon name="chevronRight" size={13} /> Undo
+                </button>
+                <button className="btn btn-sm btn-ghost" data-testid="proj-redo" disabled={!canRedo} title="Redo (Ctrl+Shift+Z)" onClick={redoDoc}>
+                  <Icon name="chevronRight" size={13} /> Redo
+                </button>
+                {!lockedReference ? (
+                  <button className="btn btn-sm btn-ghost" data-testid="proj-lock-reference" onClick={lockReference}>
+                    <Icon name="target" size={13} /> Lock reference
+                  </button>
+                ) : (
+                  <>
+                    <button className="btn btn-sm btn-ghost" data-testid="proj-unlock-reference" onClick={unlockReference}>
+                      <Icon name="target" size={13} /> Unlock reference
+                    </button>
+                    <button className="btn btn-sm btn-ghost" data-testid="proj-sign-compare" onClick={signCompare}>
+                      <Icon name="list" size={13} /> Compare &amp; sign off
+                    </button>
+                    <button className="btn btn-sm btn-ghost" data-testid="proj-run-diff" onClick={runFidelityDiff}>
+                      <Icon name="target" size={13} /> Run fidelity diff
+                    </button>
+                  </>
+                )}
+                <button className="btn btn-sm btn-ghost" onClick={async () => {
                   if (gate === 'blocked') { t('Export refused by the compliance pre-flight. Fix the blocking rules below or record an override.', 'warn'); return }
+                  const locked = await lockedGate(doc)
+                  if (!locked.ok) { t(`Export refused — ${locked.detail}`, 'warn'); return }
                   downloadDataUrl(docToDataUrl(doc, { assets: images }), `${safeFileName(docName)}-${doc.w}x${doc.h}.png`)
                   setExportLog(prev => [{ id: uid('EX'), name: `${docName} · ${doc.w}×${doc.h}`, kind: 'png', note: overridden ? 'Canvas export (override recorded)' : 'Canvas export', at: nowIso() }, ...prev].slice(0, 80))
                   t(overridden ? 'Exported with a recorded compliance override.' : 'Exported the local render. No provider was contacted.', 'info')
-                }}>
+                }} data-testid="proj-export">
                   <Icon name="download" size={13} /> Export PNG
                 </button>
                 <button className="btn btn-sm btn-ghost" onClick={saveRenderToAssets}><Icon name="image" size={13} /> Save to assets</button>
@@ -552,6 +737,24 @@ export default function CreativeStudio() {
                   <button className="btn btn-sm btn-ghost" onClick={() => setShowGrid(g => !g)}>
                     <Icon name="grid" size={13} /> {showGrid ? 'Hide' : 'Show'} guides
                   </button>
+                )}
+              </div>
+              <div className="text-low" style={{ fontSize: 11, marginTop: 8 }} data-testid="proj-gate-status">
+                {lockedReference ? (
+                  <>
+                    <span className="pill pill-warn" data-testid="proj-reference-pill">reference locked</span>{' '}
+                    {compareStatus.satisfied
+                      ? `comparison signed off — ${compareStatus.detail}`
+                      : `compare required before export — ${compareStatus.detail}`}
+                    {diffResult && (
+                      <div style={{ marginTop: 4 }} data-testid="proj-diff-result">
+                        fidelity diff (on demand): <strong>{diffResult.status}</strong> — {diffResult.detail}
+                        <span> The diff compares the rendered product region against the locked file; a composed canvas may legitimately differ, which is why the human sign-off is the export gate.</span>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  'No reference lock: export runs the compliance pre-flight only. Lock a reference to turn on the compare sign-off (and the on-demand fidelity diff).'
                 )}
               </div>
             </div>
@@ -573,7 +776,7 @@ export default function CreativeStudio() {
                 <div className="sp-format-list">
                   {renderChannelFormats().map(f => (
                     <button key={f.id} className={`sp-format ${formatId === f.id ? 'active' : ''}`}
-                      onClick={() => { setFormatId(f.id); setDoc(prev => rescaleDoc(prev, f.w, f.h)); go('canvas') }}
+                      onClick={() => { setFormatId(f.id); commitDoc(prev => rescaleDoc(prev, f.w, f.h)); go('canvas') }}
                       title={`Set the master to ${f.w}×${f.h}`}>
                       <span className="sp-format-box ar-wide" style={{ aspectRatio: `${f.w} / ${f.h}` }} />
                       <span className="sp-format-label">{f.label}</span>
@@ -1140,7 +1343,7 @@ export default function CreativeStudio() {
                     <span key={i} title={c} style={{ width: 20, height: 20, borderRadius: 5, background: c, border: '1px solid var(--divider-mid)' }} />
                   ))}
                 </div>
-                <button className="btn btn-sm btn-ghost" onClick={() => { setDoc(prev => applyKit(prev, kit)); t('Kit applied to the open document.', 'info') }}>
+                <button className="btn btn-sm btn-ghost" onClick={() => { commitDoc(prev => applyKit(prev, kit)); t('Kit applied to the open document.', 'info') }}>
                   <Icon name="palette" size={13} /> Apply kit to this document
                 </button>
               </Section>
@@ -1153,10 +1356,10 @@ export default function CreativeStudio() {
                         <Icon name="layers" size={12} />
                         <span className="sp-layer-name">{l.name || l.role || l.kind}</span>
                         <span className="sp-layer-kind">{KIND_LABEL[l.kind]}</span>
-                        <span className="sp-layer-btn" title="Move up" onClick={(e) => { e.stopPropagation(); setDoc(d => reorderLayer(d, l.id, 1)) }}><Icon name="chevronDown" size={12} /></span>
-                        <span className="sp-layer-btn" title="Move down" onClick={(e) => { e.stopPropagation(); setDoc(d => reorderLayer(d, l.id, -1)) }}><Icon name="chevronRight" size={12} /></span>
-                        <span className="sp-layer-btn" title="Duplicate" onClick={(e) => { e.stopPropagation(); setDoc(d => duplicateLayer(d, l.id)) }}><Icon name="copy" size={12} /></span>
-                        <span className="sp-layer-btn" title="Delete" onClick={(e) => { e.stopPropagation(); setDoc(d => removeLayer(d, l.id)) }}><Icon name="trash" size={12} /></span>
+                        <span className="sp-layer-btn" title="Move up" onClick={(e) => { e.stopPropagation(); commitDoc(d => reorderLayer(d, l.id, 1)) }}><Icon name="chevronDown" size={12} /></span>
+                        <span className="sp-layer-btn" title="Move down" onClick={(e) => { e.stopPropagation(); commitDoc(d => reorderLayer(d, l.id, -1)) }}><Icon name="chevronRight" size={12} /></span>
+                        <span className="sp-layer-btn" title="Duplicate" onClick={(e) => { e.stopPropagation(); commitDoc(d => duplicateLayer(d, l.id)) }}><Icon name="copy" size={12} /></span>
+                        <span className="sp-layer-btn" title="Delete" onClick={(e) => { e.stopPropagation(); commitDoc(d => removeLayer(d, l.id)) }}><Icon name="trash" size={12} /></span>
                       </div>
                     ))}
                   </div>

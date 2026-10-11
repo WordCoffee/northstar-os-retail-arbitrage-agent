@@ -40,7 +40,11 @@ import { renderBox, cameraToRadians, describeAngle, FACE_KEYS } from '../../stud
 import {
   useAssetStore, useDecodedAssets, putAsset, newAssetId, loadImage, approxBytesOfDataUrl,
 } from '../../studio/engine/assets.js'
-import { useRoom, uid, nowIso, fmtTime, fmtBytes } from '../../studio/engine/store.js'
+import { useRoom, uid, nowIso, fmtTime, fmtBytes, hashDoc } from '../../studio/engine/store.js'
+// Phase 7 item 4: the 3D render export gate (actual-photo BLOCK, pre-flight,
+// disclosure, fidelity, product-accuracy sign-off).
+import { gateRender3d, RENDER_PURPOSES, makeRenderDoc } from '../../studio/engine/render3d.js'
+import { makeCompareSignOff, compareStepStatus } from '../../studio/engine/compose.js'
 import {
   FORMAT_GROUPS, ALL_FORMATS, formatById, SCENES, sceneById, LIGHTING, lightingById,
   BOX_PRESETS, boxPresetById, MOCKUP_SURFACES, CAMERA_PRESETS,
@@ -93,6 +97,29 @@ export default function ProductDesigner() {
   const [sceneExtra, setSceneExtra] = useState({ cta: '', legal: '' })
   const [sceneDoc, setSceneDoc] = useState(() => createDoc({ w: 1600, h: 1600, name: 'Untitled scene' }))
   const [selectedLayerId, setSelectedLayerId] = useState('')
+
+  // ── Render export gate state (Phase 7 item 4) ──
+  // One sign-off covers every view of the same scene state: the gate adapter is
+  // kind-agnostic and bound to the scene's canonical dims + a scene hash.
+  const [renderMeta, setRenderMeta] = useState({
+    purpose: 'internal',
+    peopleClass: '',            // '' = unanswered -> the gate blocks
+    syntheticPerformerTag: false,
+    fidelityMode: '',           // '' | 'locked'
+    referenceDataUrl: '',
+    compareConfirmed: null,
+  })
+  const [gateResult, setGateResult] = useState(null)
+  const sceneStamp = useMemo(() => hashDoc(sceneDoc), [sceneDoc])
+  const gateMeta = useMemo(() => ({
+    peopleClass: renderMeta.peopleClass || undefined,
+    syntheticPerformerTag: renderMeta.syntheticPerformerTag,
+    fidelityMode: renderMeta.fidelityMode || 'placed',
+    referenceDataUrl: renderMeta.referenceDataUrl || undefined,
+    compareConfirmed: renderMeta.compareConfirmed || undefined,
+    lastEditAt: sceneStamp,
+    purpose: renderMeta.purpose,
+  }), [renderMeta, sceneStamp])
 
   const sceneFormat = formatById(sceneFormatId) || ALL_FORMATS[0]
   const scene = sceneById(sceneId)
@@ -264,17 +291,55 @@ export default function ProductDesigner() {
     }, ...prev].slice(0, 80))
   }, [setExports])
 
-  const exportScene = useCallback(() => {
+  // ── Render gate helpers (Phase 7 item 4) ──
+  const runRenderGate = useCallback(async (renderKind, actualW, actualH, dataUrl) => {
+    const res = await gateRender3d({
+      purpose: renderMeta.purpose,
+      renderKind,
+      w: sceneFormat.w, h: sceneFormat.h,   // canonical dims: the version binding
+      dataUrl,
+      meta: { ...gateMeta, renderW: actualW, renderH: actualH },
+    })
+    setGateResult(res)
+    return res
+  }, [renderMeta.purpose, sceneFormat, gateMeta])
+
+  const lockRenderReference = useCallback(() => {
+    const dataUrl = artId ? (store.assets.find(a => a.id === artId) || {}).dataUrl : null
+    if (!dataUrl) { t('Attach the product photograph to the scene first — that file becomes the locked reference.', 'warn'); return }
+    setRenderMeta(m => ({ ...m, fidelityMode: 'locked', referenceDataUrl: dataUrl }))
+    t('Reference locked. Exports now run the fidelity diff against this photograph and require a compare sign-off.', 'info')
+  }, [artId, store.assets, t])
+
+  const unlockRenderReference = useCallback(() => {
+    setRenderMeta(m => ({ ...m, fidelityMode: '', referenceDataUrl: '', compareConfirmed: null }))
+    t('Reference lock removed. The fidelity diff and the sign-off requirement are off for internal exports.', 'info')
+  }, [t])
+
+  const signRenderCompare = useCallback(() => {
+    const adapter = makeRenderDoc({ w: sceneFormat.w, h: sceneFormat.h, dataUrl: 'about:blank', meta: { ...gateMeta } })
+    setRenderMeta(m => ({ ...m, compareConfirmed: makeCompareSignOff(adapter, { user: 'operator' }) }))
+    t('Comparison signed off — a self-declaration bound to the current scene state.', 'info')
+  }, [sceneFormat, gateMeta, t])
+
+  const compareState = useMemo(() => {
+    const adapter = makeRenderDoc({ w: sceneFormat.w, h: sceneFormat.h, dataUrl: 'about:blank', meta: { ...gateMeta } })
+    return compareStepStatus(adapter)
+  }, [sceneFormat, gateMeta])
+
+  const exportScene = useCallback(async () => {
     if (!artId) { t('Attach a product image to the scene before exporting.', 'warn'); return }
     try {
       const dataUrl = docToDataUrl(sceneDoc, { assets: images, scale: 1 })
+      const gate = await runRenderGate('scene', sceneFormat.w, sceneFormat.h, dataUrl)
+      if (!gate.ok) { t(`Export refused — ${gate.blocked.join('; ')}. See the render gate panel.`, 'warn'); return }
       downloadDataUrl(dataUrl, `${safeFileName(sceneDoc.name)}-${sceneFormat.w}x${sceneFormat.h}.png`)
       recordExport('png', `${sceneDoc.name} · ${sceneFormat.w}×${sceneFormat.h}`, 'Scene composite')
       t('Scene exported as PNG from the local render. No provider was contacted.', 'info')
     } catch (e) {
       t(`Export failed: ${String(e && e.message || e)}`, 'warn')
     }
-  }, [artId, sceneDoc, images, sceneFormat, recordExport, t])
+  }, [artId, sceneDoc, images, sceneFormat, recordExport, t, runRenderGate])
 
   const saveSceneToLibrary = useCallback(async () => {
     if (!artId) { t('Attach a product image before saving to the library.', 'warn'); return }
@@ -297,24 +362,28 @@ export default function ProductDesigner() {
     }
   }, [artId, sceneDoc, images, sceneFormat, sceneId, store, setSavedRenders, t])
 
-  const exportPackFrame = useCallback(() => {
+  const exportPackFrame = useCallback(async () => {
     const canvas = packCanvasRef.current
     if (!canvas) return
     try {
       const dataUrl = canvas.toDataURL('image/png')
+      const gate = await runRenderGate('pack', canvas.width, canvas.height, dataUrl)
+      if (!gate.ok) { t(`Export refused — ${gate.blocked.join('; ')}. See the render gate panel.`, 'warn'); return }
       downloadDataUrl(dataUrl, `${safeFileName(packPreset.name)}-pack-${Math.round(freeCam.yaw)}deg.png`)
       recordExport('png', `${packPreset.name} pack · yaw ${Math.round(freeCam.yaw)}°`, '3D pack view')
       t('3D pack frame exported from the local canvas. It is a rendered 3D view, not a photograph.', 'info')
     } catch (e) {
       t(`Export failed: ${String(e && e.message || e)}`, 'warn')
     }
-  }, [packPreset.name, freeCam.yaw, recordExport, t])
+  }, [packPreset.name, freeCam.yaw, recordExport, t, runRenderGate])
 
-  const exportMockup = useCallback((surfaceId) => {
+  const exportMockup = useCallback(async (surfaceId) => {
     const art = mockArtId ? images.get(mockArtId) : null
     if (!art) { t('Attach artwork to the mockup before exporting.', 'warn'); return }
     try {
       const dataUrl = mockupToDataUrl(surfaceId, art, 1024, mockBlend)
+      const gate = await runRenderGate('mockup', 1024, 1024, dataUrl)
+      if (!gate.ok) { t(`Export refused — ${gate.blocked.join('; ')}. See the render gate panel.`, 'warn'); return }
       const s = MOCKUP_SURFACES.find(x => x.id === surfaceId)
       downloadDataUrl(dataUrl, `${safeFileName(s?.name || surfaceId)}-mockup.png`)
       recordExport('png', `${s?.name || surfaceId} mockup · 1024²`, 'Mockup placement')
@@ -322,7 +391,7 @@ export default function ProductDesigner() {
     } catch (e) {
       t(`Export failed: ${String(e && e.message || e)}`, 'warn')
     }
-  }, [mockArtId, images, mockBlend, recordExport, t])
+  }, [mockArtId, images, mockBlend, recordExport, t, runRenderGate])
 
   // ── Derived ──
   const blockedCount = requests.filter(r => r.state === 'Blocked — provider required').length
@@ -378,6 +447,64 @@ export default function ProductDesigner() {
         scene recipes. Nothing here contacts an image or video model — the Generate tab records requests and lands them in
         &ldquo;Blocked — provider required&rdquo; until a local engine is armed. The 3D view is real geometry, not a photograph.
       </DataNotice>
+
+      {/* ── Render export gate (Phase 7 item 4) ─────────────────────────── */}
+      <div className="card" style={{ padding: 14 }} data-testid="render3d-gate">
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+          <strong style={{ fontSize: 13 }}>Render export gate</strong>
+          <span className="pill pill-muted">a render is not a photograph</span>
+          <div className="field-group" style={{ minWidth: 230 }}>
+            <label className="label">Export purpose</label>
+            <select className="field" value={renderMeta.purpose} data-testid="render-purpose"
+              onChange={e => setRenderMeta(m => ({ ...m, purpose: e.target.value }))}>
+              {RENDER_PURPOSES.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+            </select>
+          </div>
+          <div className="field-group" style={{ minWidth: 230 }}>
+            <label className="label">People in this render</label>
+            <select className="field" value={renderMeta.peopleClass} data-testid="render-people-class"
+              onChange={e => setRenderMeta(m => ({ ...m, peopleClass: e.target.value }))}>
+              <option value="">Unanswered (export is refused)</option>
+              <option value="no-people">No people</option>
+              <option value="ai-photoreal">Photorealistic AI-generated person</option>
+              <option value="ai-nonphotoreal">Non-photorealistic AI person</option>
+              <option value="real-people">Real people</option>
+            </select>
+          </div>
+          {renderMeta.peopleClass === 'ai-photoreal' && (
+            <label className="inline-flex" style={{ gap: 6, fontSize: 12, alignItems: 'center' }}>
+              <input type="checkbox" checked={renderMeta.syntheticPerformerTag} data-testid="render-marker"
+                onChange={e => setRenderMeta(m => ({ ...m, syntheticPerformerTag: e.target.checked }))} />
+              Disclosure marker applied (contains-synthetic-performer)
+            </label>
+          )}
+          {renderMeta.fidelityMode !== 'locked' ? (
+            <button className="btn btn-sm btn-ghost" data-testid="render-lock-reference" onClick={lockRenderReference}>
+              <Icon name="target" size={13} /> Lock reference photo
+            </button>
+          ) : (
+            <>
+              <button className="btn btn-sm btn-ghost" data-testid="render-unlock-reference" onClick={unlockRenderReference}>Unlock reference</button>
+              <button className="btn btn-sm btn-ghost" data-testid="render-sign-compare" onClick={signRenderCompare}>Compare &amp; sign off</button>
+            </>
+          )}
+        </div>
+        <div className="text-low" style={{ fontSize: 11, marginTop: 6 }}>
+          {(RENDER_PURPOSES.find(p => p.id === renderMeta.purpose) || {}).note}
+          {renderMeta.fidelityMode === 'locked' && (
+            <span> · Reference locked: exports diff the render against the photograph{compareState.satisfied ? ' and the comparison is signed off.' : ' and require a compare sign-off.'}</span>
+          )}
+        </div>
+        {gateResult && (
+          <div style={{ marginTop: 8, fontSize: 12 }} data-testid="render-gate-result">
+            <span className={`pill ${gateResult.ok ? 'pill-ok' : 'pill-error'}`}>{gateResult.ok ? 'GATE OPEN' : 'GATE BLOCKED'}</span>
+            <span className="text-low" style={{ marginLeft: 8 }}>{gateResult.summary}</span>
+            {!gateResult.ok && (
+              <div className="text-low" style={{ fontSize: 11, marginTop: 4 }}>Blocked by: {gateResult.blocked.join('; ')}.</div>
+            )}
+          </div>
+        )}
+      </div>
 
       <MetricTiles columns={4} metrics={[
         { label: 'Artwork in store', value: artAssets.length, sub: `${fmtBytes(store.totalBytes)} local` },
