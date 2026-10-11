@@ -2,6 +2,11 @@
 negatives (the A7 accounts were created against the legacy auth store, which the
 foundation login does not use).
 
+LABELLING (Phase 8 item 4): every tenant this script creates carries BOTH the
+slug prefix `ns-test-tenant-` and the name prefix `Northstar Test Tenant`.
+`cleanup_test_tenants.py` removes ONLY tenants carrying both markers (dry run
+by default) and never touches anything else.
+
 Two organizations, one owner each. Credentials are written to a file OUTSIDE the
 git tree and are never printed. Idempotent: an account that already exists in the
 file is not recreated.
