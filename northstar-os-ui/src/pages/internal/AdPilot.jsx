@@ -1,4 +1,5 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
+import MasterBrainPanel from '../../studio/components/MasterBrainPanel.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import Icon from '../../components/Icon.jsx'
 import ReasoningModelSelector, { useReasoningModel } from '../../components/ReasoningModelSelector.jsx'
@@ -294,6 +295,8 @@ export default function AdPilot() {
       </DataNotice>
 
       <RoomTabs tabs={TABS} base="/adpilot" />
+
+      <MasterBrainPanel title="Studio evidence for ads (read-only)" />
 
       {view === 'campaigns' && (
         <div className="subview">

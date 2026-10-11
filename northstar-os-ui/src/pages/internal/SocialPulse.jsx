@@ -1,5 +1,6 @@
 import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import MasterBrainPanel from '../../studio/components/MasterBrainPanel.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -293,6 +294,8 @@ export default function SocialPulse() {
       </div>
 
       <RoomTabs tabs={tabs} base="/socialpulse" />
+
+      <MasterBrainPanel title="Studio evidence for social (read-only)" />
 
       {view === 'calendar' && (
         <div className="subview">

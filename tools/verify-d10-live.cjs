@@ -114,6 +114,20 @@ async function main() {
   const lrDupBody = await lrDup.json().catch(() => ({}))
   if (lrDupBody.created === 0 && lrDupBody.skipped === 1) ok('re-running the migration reports skipped, never a duplicate')
   else no('listing-record migration is not idempotent', JSON.stringify(lrDupBody).slice(0, 120))
+
+  // ── Master-brain read-only context (Phase 9 item 2) ─────────────────────
+  const lrAsin = lrPayload.records[0].asin
+  const aCtx = await (await A.get(`${API}/api/design-studio/master-brain-context`)).json()
+  const bCtx = await (await B.get(`${API}/api/design-studio/master-brain-context`)).json()
+  if (aCtx.read_only === true && (aCtx.listing_records.items || []).some(r => r.asin === lrAsin)) {
+    ok('tenant A\'s master-brain context contains its own listing record (read_only: true)')
+  } else no('tenant A\'s master-brain context is missing its record', JSON.stringify(aCtx.listing_records).slice(0, 120))
+  if (!(bCtx.listing_records.items || []).some(r => r.asin === lrAsin)) {
+    ok('tenant B\'s master-brain context does NOT contain A\'s record')
+  } else no('LEAK: tenant B\'s master-brain context saw A\'s record')
+  if (typeof bCtx.brand_voice === 'object' && typeof bCtx.search_terms === 'object' && bCtx.read_only === true) {
+    ok('the master-brain context carries the full section shape for tenant B too (scoped)')
+  } else no('master-brain context shape wrong for B')
   const aLr = await (await A.get(`${API}/api/design-studio/listing-records`)).json()
   const aRec = (aLr.records || []).find(r => r.legacy_key === `lr:${stamp}`)
   if (aRec) ok('tenant A lists its own listing record')
@@ -143,6 +157,8 @@ async function main() {
     ['GET', '/api/design-studio/imports'],
     ['GET', '/api/design-studio/terms'],
     ['GET', '/api/design-studio/variants'],
+    ['GET', '/api/design-studio/listing-records'],
+    ['GET', '/api/design-studio/master-brain-context'],
   ]
   let anonFailures = []
   for (const [method, url] of anonRoutes) {

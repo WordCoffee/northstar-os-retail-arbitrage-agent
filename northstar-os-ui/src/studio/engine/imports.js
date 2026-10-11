@@ -167,6 +167,16 @@ export function variantsExportHref() {
   return `${BASE}/variants/export`
 }
 
+/** Read-only Studio evidence bundle for the other rooms (Phase 9 item 2). */
+export async function fetchMasterBrainContext() {
+  try {
+    const data = await api('/master-brain-context')
+    return { state: 'ready', ...data }
+  } catch (e) {
+    return { state: 'error', reason: String(e.message || e) }
+  }
+}
+
 // ── Listing records in the tenant store (Phase 8 item 3) ───────────────────
 
 export async function fetchListingRecords() {

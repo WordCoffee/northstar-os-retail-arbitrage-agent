@@ -1192,6 +1192,94 @@ def delete_listing_record(rid: str, acct: str = Depends(studio_account)):
     return {"deleted": True}
 
 
+# ── Master-brain read-only context (Phase 9 item 2) ───────────────────────
+# One tenant-scoped, read-only bundle of the Studio's imported evidence, for
+# the other rooms (ListingForge, AdPilot, SocialPulse) to render as panels.
+# Pure local-store reads: NO provider call exists in this path.
+
+@router.get("/master-brain-context")
+def master_brain_context(acct: str = Depends(studio_account)):
+    from design_studio_imports import (KIND_BRAND_VOICE, KIND_KEYWORDS,
+                                       KIND_SP_SEARCH_TERMS, KIND_BRAND_ANALYTICS_SQP)
+    db = get_northstar_db()
+
+    def latest_import(kind):
+        rows = [r for r in db.design_studio.imports.list_for_account(acct, kind=kind)]
+        return rows[0] if rows else None
+
+    # Brand voice.
+    bv_import = latest_import(KIND_BRAND_VOICE)
+    brand_voice = {"available": False, "fields": {}, "source": "imported brand-voice file", "observed_at": None}
+    if bv_import:
+        rows = db.design_studio.search_terms.list_for_account(acct, kind=KIND_BRAND_VOICE, import_id=bv_import["id"], limit=50)
+        fields = {}
+        for r in rows:
+            val = (r.get("extras") or {}).get("value")
+            if r.get("term") != "_extra" and val is not None:
+                fields[r["term"]] = val
+        brand_voice = {
+            "available": bool(fields),
+            "fields": fields,
+            "source": "imported brand-voice file",
+            "source_label": bv_import.get("source_label"),
+            "observed_at": bv_import.get("observed_from") or bv_import.get("imported_at"),
+            "limits": ["A file the operator supplied; a snapshot, not a live read."],
+        }
+
+    # Keyword list.
+    kw_import = latest_import(KIND_KEYWORDS)
+    keywords = {"available": False, "items": [], "source": "imported keyword list", "observed_at": None}
+    if kw_import:
+        rows = db.design_studio.search_terms.list_for_account(acct, kind=KIND_KEYWORDS, import_id=kw_import["id"], limit=200)
+        keywords = {
+            "available": bool(rows),
+            "items": [{"term": r.get("term"), "volume": (r.get("extras") or {}).get("volume")} for r in rows],
+            "source": "imported keyword list",
+            "source_label": kw_import.get("source_label"),
+            "observed_at": kw_import.get("imported_at"),
+            "limits": ["A snapshot list; a missing volume is UNKNOWN, never 0."],
+        }
+
+    # Search-term evidence (metric reports only; top by clicks).
+    sp = db.design_studio.search_terms.list_for_account(acct, kind=KIND_SP_SEARCH_TERMS, limit=25)
+    ba = db.design_studio.search_terms.list_for_account(acct, kind=KIND_BRAND_ANALYTICS_SQP, limit=25)
+    terms = sp + ba
+    search_terms = {
+        "available": bool(terms),
+        "items": [{
+            "term": t.get("term"), "kind": t.get("kind"),
+            "clicks": t.get("clicks") if t.get("clicks") is not None else "UNKNOWN",
+            "impressions": t.get("impressions") if t.get("impressions") is not None else "UNKNOWN",
+            "observed_from": t.get("row_from"), "observed_to": t.get("row_to"),
+        } for t in terms],
+        "source": "imported search-term reports",
+        "limits": [
+            "Click-only bias: a term appears only after at least one click.",
+            "65-day lookback ceiling; at most 31 days per reporting-API request.",
+        ],
+        "bias": "Click-only report: impressions without a click are absent.",
+    }
+
+    # Listing records.
+    lr = db.design_studio.listing_records.list_for_account(acct, limit=50)
+    listing_records = {
+        "available": bool(lr),
+        "items": [{"id": r["id"], "asin": r.get("asin"), "title": r.get("title"),
+                   "observed_at": r.get("observed_at")} for r in lr],
+        "source": "tenant listing records",
+        "limits": ["Migrated from browser-local records; a local record, not a marketplace read."],
+    }
+
+    return {
+        "read_only": True,
+        "brand_voice": brand_voice,
+        "keywords": keywords,
+        "search_terms": search_terms,
+        "listing_records": listing_records,
+        "note": "Read-only Studio evidence for this organization. Pure local-store reads: no provider is contacted and nothing here is live marketplace data. Missing sections are UNKNOWN, never zero.",
+    }
+
+
 # ── Generation arming status (read-only, NO provider call) ────────────────
 # Phase 5 item 9. The Studio must be able to say truthfully whether generation
 # is armed. This reads local flags only: it never contacts a provider, never

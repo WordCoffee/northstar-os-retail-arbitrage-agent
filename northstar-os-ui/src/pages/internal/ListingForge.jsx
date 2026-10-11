@@ -22,6 +22,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
+import MasterBrainPanel from '../../studio/components/MasterBrainPanel.jsx'
 import Icon from '../../components/Icon.jsx'
 import ReasoningModelSelector, { useReasoningModel } from '../../components/ReasoningModelSelector.jsx'
 import foundationApi from '../../foundation/api.js'
@@ -390,6 +391,8 @@ export default function ListingForge() {
         { id: 'assets', label: 'Assets', count: assetMeta.length },
         { id: 'revisions', label: 'Revision Log', count: revisions.length },
       ]} base="/listingforge" />
+
+      <MasterBrainPanel title="Studio evidence for listings (read-only)" />
 
       {/* ══ LISTINGS ══ */}
       {view === 'listings' && (
