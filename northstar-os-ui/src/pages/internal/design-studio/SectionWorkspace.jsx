@@ -28,6 +28,7 @@ import { createDoc } from '../../../studio/engine/doc.js'
 import CompositingSurface from './CompositingSurface.jsx'
 import { PEOPLE_CLASSES, DISCLOSURE_KEYWORD } from '../../../studio/engine/disclosure.js'
 import { FIDELITY_MODES } from '../../../studio/engine/fidelity.js'
+import { packToMarkdown } from '../../../studio/engine/outputPacks.js'
 
 // -- Fields EVERY section gets ---------------------------------------------
 // The disclosure classification, the fidelity mode and the technical rules are
@@ -201,7 +202,7 @@ function Field({ f, value, onChange }) {
 
 export default function SectionWorkspace({
   title, subtitle, groups, defaultSpecId, fields = [], ruleNotes = [], slots = null,
-  canvasFitWidth = 560, children, testId, storyboardOnly = false,
+  canvasFitWidth = 560, children, testId, storyboardOnly = false, packBuilder = null, packLabel = 'Pack',
 }) {
   const [specId, setSpecId] = useState(defaultSpecId)
   const [showSafeZones, setShowSafeZones] = useState(true)
@@ -257,6 +258,28 @@ export default function SectionWorkspace({
 
   const exportDisabled = report.verdict === 'block'
 
+  // A section may attach an output-pack builder (storyboard / asset pack /
+  // spec sheet). The pack is a document built from the operator's own fields
+  // and this pre-flight report; nothing is rendered or generated.
+  const downloadPack = useCallback(() => {
+    if (!packBuilder) return
+    try {
+      const pack = packBuilder({ spec, meta, report })
+      const md = packToMarkdown(pack)
+      const blob = new Blob([md], { type: 'text/markdown' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${pack.kind || 'pack'}-${spec.id}.md`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch (e) {
+      console.error('pack build failed', e)
+    }
+  }, [packBuilder, spec, meta, report])
+
   return (
     <div className="ss-shell" data-testid={testId || 'section-workspace'}>
       <StudioTopBar
@@ -267,12 +290,23 @@ export default function SectionWorkspace({
         safeZoneNote={spec.safe ? undefined : 'No safe zone is recorded for this format'}
         status={<><VerdictPill verdict={report.verdict} /> <ConfidenceTag spec={spec} /></>}
         actions={
-          <button className="btn btn-sm btn-primary" disabled={exportDisabled}
-            title={exportDisabled
-              ? (conf === 'UNSOURCED' ? 'This format has no recorded Amazon source, so export is refused.' : 'The pre-flight blocks export until every blocking rule passes.')
-              : 'Export becomes available when the pre-flight does not block.'}>
-            <Icon name="download" size={13} /> Export
-          </button>
+          <>
+            {packBuilder && (
+              <button className="btn btn-sm" disabled={exportDisabled} onClick={downloadPack}
+                data-testid="pack-download"
+                title={exportDisabled
+                  ? 'The pre-flight blocks: the pack would be a checklist, not an upload-ready document.'
+                  : 'Download the section output pack (a plan; nothing is rendered).'}>
+                <Icon name="file" size={13} /> {packLabel}
+              </button>
+            )}
+            <button className="btn btn-sm btn-primary" disabled={exportDisabled}
+              title={exportDisabled
+                ? (conf === 'UNSOURCED' ? 'This format has no recorded Amazon source, so export is refused.' : 'The pre-flight blocks export until every blocking rule passes.')
+                : 'Export becomes available when the pre-flight does not block.'}>
+              <Icon name="download" size={13} /> Export
+            </button>
+          </>
         }
       />
 

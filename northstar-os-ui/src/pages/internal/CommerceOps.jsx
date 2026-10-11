@@ -5,6 +5,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import foundationApi from '../../foundation/api.js'
 import signals, { settle } from '../../services/signals.js'
+import MasterBrainPanel from '../../studio/components/MasterBrainPanel.jsx'
 
 const TABS = [
   { id: 'workflow', label: 'Workflow' },
@@ -261,6 +262,7 @@ export default function CommerceOps() {
           </div>
         </div>
       )}
+    <MasterBrainPanel title="Studio evidence for operations (read-only)" />
     </PageLayout>
   )
 }

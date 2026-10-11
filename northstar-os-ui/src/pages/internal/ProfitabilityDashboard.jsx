@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import foundationApi from '../../foundation/api.js'
 import { settle } from '../../services/signals.js'
+import MasterBrainPanel from '../../studio/components/MasterBrainPanel.jsx'
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -251,6 +252,7 @@ export default function ProfitabilityDashboard() {
           </div>
         </div>
       )}
+    <MasterBrainPanel title="Studio evidence for margin work (read-only)" />
     </PageLayout>
   )
 }

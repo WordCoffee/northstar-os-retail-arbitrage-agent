@@ -31,6 +31,12 @@ const ROOMS = [
   ['adpilot', 'AdPilot'],
   ['listingforge', 'ListingForge'],
   ['socialpulse', 'SocialPulse'],
+  ['keyword-tracker', 'KeywordTracker'],
+  ['competitor-monitor', 'CompetitorMonitor'],
+  ['listings', 'ListingGuardian'],
+  ['profitability', 'ProfitabilityDashboard'],
+  ['commerce-ops', 'CommerceOps'],
+  ['monitoring', 'Monitoring'],
 ]
 
 async function main() {

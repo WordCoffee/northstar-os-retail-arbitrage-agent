@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 import hashlib
+import json
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, Field
@@ -880,6 +881,59 @@ def terms_brief(body: BriefIn, acct: str = Depends(studio_account)):
                         voice_source=body.voice_source, keywords_source=body.keywords_source)
     brief["source_rows"] = len(rows)
     return brief
+
+
+class BriefAssetsIn(BriefIn):
+    project_id: Optional[str] = None
+    variants_limit: int = Field(default=3, ge=1, le=10)
+    create: bool = True
+
+
+@router.post("/terms/brief/assets")
+def terms_brief_assets(body: BriefAssetsIn, acct: str = Depends(studio_account)):
+    """Turn a brief into copy variants + on-image text (TEMPLATES ONLY).
+
+    No generation, no provider call. With create=true (the default) each
+    template becomes a variant row tied to the brief reference, so a later
+    results import can match it by id or exact name.
+    """
+    from design_studio_imports import brief_to_assets, build_brief
+    db = get_northstar_db()
+    rows = db.design_studio.search_terms.list_for_account(acct, q=body.q, limit=1000)
+    if body.term_ids:
+        wanted = set(body.term_ids)
+        rows = [r for r in rows if r.get("id") in wanted]
+    brief = build_brief(terms=rows[: body.limit], brand=body.brand, keywords=body.keywords,
+                        voice_source=body.voice_source, keywords_source=body.keywords_source)
+    brief["source_rows"] = len(rows)
+    assets = brief_to_assets(brief=brief, brand=body.brand, limit=body.variants_limit)
+    created: List[Dict[str, Any]] = []
+    for v in assets["variants"]:
+        if not body.create:
+            created.append(v)
+            continue
+        vid = db.design_studio.variants.create({
+            "account_id": acct,
+            "project_id": body.project_id,
+            "name": v["name"],
+            "format": v["format"],
+            "status": v["status"],
+            "notes": json.dumps({
+                "template_only": True,
+                "brief_ref": v["brief_ref"],
+                "copy": v["copy"],
+                "on_image_text": v["on_image_text"],
+            }, ensure_ascii=False),
+        })
+        created.append({**v, "id": vid})
+    return {
+        "brief": brief,
+        "variants": created,
+        "count": len(created),
+        "created": bool(body.create),
+        "template_only": True,
+        "note": assets["note"],
+    }
 
 
 # ── Creative variants (Phase 6 item 6) ────────────────────────────────────

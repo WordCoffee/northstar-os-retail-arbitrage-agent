@@ -7,6 +7,7 @@
 
 import SectionWorkspace from './SectionWorkspace.jsx'
 import { SPEC_GROUPS, AMAZON_CAPS } from '../../../studio/engine/specRegistry.js'
+import { buildStoryboardPack } from '../../../studio/engine/outputPacks.js'
 
 const GROUPS = SPEC_GROUPS.filter(g => ['SB video', 'SP video', 'Display video', 'Amazon video', 'Store tiles'].includes(g.id))
 
@@ -45,6 +46,7 @@ export default function VideoUgc() {
       groups={GROUPS} defaultSpecId="sbv-landscape"
       fields={FIELDS} ruleNotes={RULES} slots={SLOTS}
       canvasFitWidth={620} testId="video-ugc-workspace"
+      packBuilder={buildStoryboardPack} packLabel="Storyboard"
     />
   )
 }

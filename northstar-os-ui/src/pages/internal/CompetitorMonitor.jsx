@@ -2,6 +2,7 @@ import { PageLayout, DataTable, DataNotice, MetricTiles } from '../../components
 import { useToast } from '../../components/ToastContext.jsx'
 import { useState, useEffect } from 'react'
 import signals, { settle } from '../../services/signals.js'
+import MasterBrainPanel from '../../studio/components/MasterBrainPanel.jsx'
 
 const short = (t, n = 58) => (t && t.length > n ? t.slice(0, n - 1) + '…' : t)
 
@@ -139,6 +140,7 @@ export default function CompetitorMonitor() {
       </DataNotice>
       <CachedMarketObservations />
       <RealMarketObservations />
+    <MasterBrainPanel title="Studio evidence for market observations (read-only)" />
     </PageLayout>
   )
 }

@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import foundationApi from '../../foundation/api.js'
 import signals, { settle } from '../../services/signals.js'
+import MasterBrainPanel from '../../studio/components/MasterBrainPanel.jsx'
 
 const TABS = [
   { id: 'sets', label: 'Sets' },
@@ -162,6 +163,7 @@ export default function KeywordTracker() {
           </div>
         </div>
       )}
+    <MasterBrainPanel title="Studio evidence for keyword work (read-only)" />
     </PageLayout>
   )
 }

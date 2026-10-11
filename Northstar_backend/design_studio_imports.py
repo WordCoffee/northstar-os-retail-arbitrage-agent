@@ -623,3 +623,68 @@ def build_brief(
             "Performance is import-file evidence at the observed date, not live data.",
         ],
     }
+
+
+# ── Brief -> assets: copy variants + on-image text (templates only) ────────
+# Item 7 of the 2026-10-11 directive. The studio turns a brief into copy
+# variants and on-image text using TEMPLATES over the operator's own words
+# (brand promise / voice / audience + the imported search term). Nothing is
+# generated; a slot whose source words are absent stays an instruction. Each
+# variant is meant to be stored in the variants table so a later results
+# import can match it by id or exact name.
+
+BRIEF_ASSET_LIMIT = 3
+CTA_TEMPLATE = "Choose a call to action from the platform's own options; the studio does not invent one."
+
+
+def brief_to_assets(
+    *,
+    brief: Dict[str, Any],
+    brand: Optional[Dict[str, Any]] = None,
+    limit: int = BRIEF_ASSET_LIMIT,
+) -> Dict[str, Any]:
+    """Turn a brief into copy-variant payloads (TEMPLATES ONLY, no generation).
+
+    Each variant carries: a name (stable, matchable by a later results import),
+    copy slots (headline / subhead / cta), on-image text layers with their
+    sources, and the brief reference with its evidence + confidence + bias so
+    the tie back to the imported term survives into the variant record.
+    """
+    brand = brand or {}
+    promise = str(brand.get("promise") or "").strip()
+    voice = str(brand.get("voice") or "").strip()
+    audience = str(brand.get("audience") or "").strip()
+    variants: List[Dict[str, Any]] = []
+    for r in (brief.get("ranked_terms") or [])[: max(1, int(limit))]:
+        term = r["evidence"]["term"]
+        headline = (f"{promise} - {term}" if promise else
+                    "Draft the headline from your brand promise; the studio does not invent copy.")
+        subhead = (f"{voice} - {term}" if voice else
+                   "Draft the subhead from your brand voice; the studio does not invent copy.")
+        on_image = [
+            {"layer": "headline", "text": headline,
+             "source": "brand promise template" if promise else "instruction"},
+            {"layer": "term", "text": term, "source": "imported search term"},
+        ]
+        if audience:
+            on_image.append({"layer": "audience-note", "text": audience, "source": "brand profile"})
+        variants.append({
+            "name": f"Brief variant: {term}",
+            "format": "image",
+            "status": "draft",
+            "copy": {"headline": headline, "subhead": subhead, "cta": CTA_TEMPLATE},
+            "on_image_text": on_image,
+            "brief_ref": {
+                "term": term,
+                "evidence": r["evidence"],
+                "confidence": r["confidence"],
+                "bias": r["bias"],
+            },
+        })
+    return {
+        "variants": variants,
+        "count": len(variants),
+        "template_only": True,
+        "note": ("Templates only: no image, video or copy is generated. Each variant is created in the "
+                 "variants table so a later results import can match it by id or exact name."),
+    }

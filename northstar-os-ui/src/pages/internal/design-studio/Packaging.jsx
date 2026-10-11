@@ -8,6 +8,7 @@
 
 import SectionWorkspace from './SectionWorkspace.jsx'
 import { SPEC_GROUPS, AMAZON_CAPS } from '../../../studio/engine/specRegistry.js'
+import { buildPackagingSpec } from '../../../studio/engine/outputPacks.js'
 
 const GROUPS = SPEC_GROUPS.filter(g => ['Listing gallery', 'Store tiles'].includes(g.id))
 
@@ -42,6 +43,7 @@ export default function Packaging() {
       groups={GROUPS} defaultSpecId="amz-main"
       fields={FIELDS} ruleNotes={RULES} slots={SLOTS}
       canvasFitWidth={560} testId="packaging-workspace"
+      packBuilder={buildPackagingSpec} packLabel="Spec sheet"
     />
   )
 }

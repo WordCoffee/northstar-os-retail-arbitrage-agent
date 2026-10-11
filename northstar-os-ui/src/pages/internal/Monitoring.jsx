@@ -4,6 +4,7 @@ import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import signals, { settle } from '../../services/signals.js'
+import MasterBrainPanel from '../../studio/components/MasterBrainPanel.jsx'
 
 const TABS = [
   { id: 'alerts', label: 'Alerts' },
@@ -379,6 +380,7 @@ export default function Monitoring() {
           </div>
         </div>
       )}
+    <MasterBrainPanel title="Studio evidence for monitoring (read-only)" />
     </PageLayout>
   )
 }

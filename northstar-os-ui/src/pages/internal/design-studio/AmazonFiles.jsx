@@ -50,6 +50,14 @@ export default function AmazonFiles() {
   const [busy, setBusy] = useState(false)
   const [lastWrite, setLastWrite] = useState(null)
   const [aplusPack, setAplusPack] = useState(null)
+  const [changeFiles, setChangeFiles] = useState([])
+  const [reportChangeId, setReportChangeId] = useState('')
+  const [reportMatch, setReportMatch] = useState(null)
+  const [corrections, setCorrections] = useState({}) // report row index -> {drop, fields:{...}}
+  const [correctResult, setCorrectResult] = useState(null)
+  const [compareTarget, setCompareTarget] = useState('')
+  const [compareResult, setCompareResult] = useState(null)
+  const [showOnboarding, setShowOnboarding] = useState(false)
 
   const reloadUploads = useCallback(async () => {
     try {
@@ -64,6 +72,11 @@ export default function AmazonFiles() {
     setLastWrite(null)
     setAplusPack(null)
     setRowEdits({})
+    setReportMatch(null)
+    setCorrectResult(null)
+    setCompareResult(null)
+    setReportChangeId('')
+    setCompareTarget('')
     try {
       const j = await api(`/amazon-files/${uid}`)
       setSelectedUpload(j.upload)
@@ -71,6 +84,8 @@ export default function AmazonFiles() {
       setRows(rj.rows || [])
       const pj = await api(`/amazon-files/${uid}/proposals`)
       setProposals(pj.proposals || [])
+      const cj = await api(`/amazon-files/${uid}/changes`)
+      setChangeFiles(cj.change_files || [])
     } catch (e) {
       toast(`Could not open the upload: ${e.message}`, 'error')
     }
@@ -179,10 +194,128 @@ export default function AmazonFiles() {
     }
   }
 
+  const fileToB64 = async (f) => {
+    const buf = await f.arrayBuffer()
+    let binary = ''
+    const bytes = new Uint8Array(buf)
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i])
+    return btoa(binary)
+  }
+
+  const matchReport = async (e) => {
+    const f = e.target.files && e.target.files[0]
+    if (!f) return
+    if (!reportChangeId) { toast('Choose which change file the report belongs to first.', 'error'); e.target.value = ''; return }
+    setBusy(true)
+    try {
+      const content_b64 = await fileToB64(f)
+      const j = await api('/amazon-files/reports/match', {
+        method: 'POST',
+        body: JSON.stringify({ filename: f.name, content_b64, change_file_id: reportChangeId, downloaded_at: downloadedAt || null }),
+      })
+      setReportMatch(j)
+      setCorrections({})
+      setCorrectResult(null)
+      toast(`Report matched: ${j.match.matched_count} row(s) linked, ${j.match.unmatched_count} unmatched (reported, never guessed).`, 'info')
+      await reloadUploads()
+    } catch (err) {
+      toast(`Report refused: ${err.message}`, 'error')
+    } finally {
+      setBusy(false)
+      e.target.value = ''
+    }
+  }
+
+  const patchCorrection = (rowIndex, patch) => setCorrections(prev => {
+    const cur = prev[rowIndex] || { drop: false, fields: {} }
+    return { ...prev, [rowIndex]: { ...cur, ...patch, fields: { ...cur.fields, ...(patch.fields || {}) } } }
+  })
+
+  const writeCorrected = async () => {
+    if (!reportMatch) return
+    setBusy(true)
+    try {
+      const payload = Object.entries(corrections).map(([idx, c]) => ({
+        row_index: (reportMatch.match.matches[Number(idx)] || {}).change ? reportMatch.match.matches[Number(idx)].change.row : Number(idx),
+        drop: !!c.drop,
+        fields: Object.fromEntries(Object.entries(c.fields || {}).filter(([, v]) => v !== '')),
+      })).filter(c => c.drop || Object.keys(c.fields).length > 0)
+      const j = await api(`/amazon-files/change/${reportMatch.change_file.id}/correct`, {
+        method: 'POST',
+        body: JSON.stringify({ corrections: payload }),
+      })
+      setCorrectResult(j)
+      toast(`Corrected file written: ${j.change_file.filename}. Round-trip: ${j.roundtrip.ok ? 'only the corrections differ' : 'FAILED - do not upload'}.`, j.roundtrip.ok ? 'info' : 'error')
+      if (selectedUpload) {
+        const cj = await api(`/amazon-files/${selectedUpload.id}/changes`)
+        setChangeFiles(cj.change_files || [])
+      }
+    } catch (e) {
+      toast(`Corrected file refused: ${e.message}`, 'error')
+    } finally { setBusy(false) }
+  }
+
+  const runCompare = async () => {
+    if (!compareTarget) { toast('Choose the later file to compare against.', 'error'); return }
+    setBusy(true)
+    try {
+      const j = await api(`/amazon-files/${selectedUpload.id}/compare`, {
+        method: 'POST',
+        body: JSON.stringify({ after_upload_id: compareTarget }),
+      })
+      setCompareResult(j)
+      toast(`Compared ${j.comparison.count} entit(y/ies). A missing metric is UNKNOWN, never 0.`, 'info')
+    } catch (e) {
+      toast(`Comparison refused: ${e.message}`, 'error')
+    } finally { setBusy(false) }
+  }
+
   const downloadHref = (cid) => `${API}/amazon-files/change/${cid}/download`
+  const SAMPLE_BASE = `${import.meta.env.BASE_URL}samples/amazon-files/`
 
   return (
     <div className="stack" style={{ gap: 14 }} data-testid="amazon-files-workspace">
+      {/* ── Seller onboarding: first-run guide + sample pack (item 11) ──── */}
+      <div className="card" style={{ padding: 16 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Icon name="compass" size={16} />
+          <strong style={{ fontSize: 14 }}>New here? Start with the guide and the sample files</strong>
+          <button className="btn btn-sm" onClick={() => setShowOnboarding(v => !v)} data-testid="af-onboarding-toggle">
+            {showOnboarding ? 'Hide' : 'Show'} guide
+          </button>
+        </div>
+        {showOnboarding && (
+          <div style={{ marginTop: 10, fontSize: 12 }} data-testid="af-onboarding">
+            <div style={{ fontWeight: 600 }}>Which files to download, and where</div>
+            <ol style={{ margin: '6px 0 0 16px', padding: 0, lineHeight: 1.6 }}>
+              <li><strong>Ads bulksheets</strong> — Amazon Ads console → Bulk operations → download the Sponsored Products / Brands / Display bulksheet for the entities you want to change.</li>
+              <li><strong>Listing / inventory templates</strong> — Seller Central → Catalog → Add products via upload (or the category template) → download the CURRENT template; the tab-delimited .txt and .xlsx both work. An old template is flagged, and a legacy .xls is refused with its fix.</li>
+              <li><strong>Search-term and Brand Analytics reports</strong> — Ads → Reports, and Brand Analytics → Search Query Performance.</li>
+              <li><strong>A+ ASIN list</strong> — a simple two-column file (asin, contentReferenceKey) of the ASINs you want modules for.</li>
+              <li><strong>Processing / error reports</strong> — after you upload a change file to Amazon yourself, download the report Amazon gives you and upload it here: rows are matched back to your change and its proposal, with the cause shown and a corrected resubmittable file offered.</li>
+            </ol>
+            <div style={{ fontWeight: 600, marginTop: 10 }}>What Northstar returns</div>
+            <ul style={{ margin: '6px 0 0 16px', padding: 0, lineHeight: 1.6 }}>
+              <li>A <strong>change file</strong> (a NEW version; changed rows only; the original is untouched) that you upload to Amazon yourself. Northstar never submits anything.</li>
+              <li>An <strong>A+ asset pack</strong> — assets, copy slots, alt text and placement instructions. Never an uploadable module file.</li>
+              <li>A <strong>corrected resubmittable file</strong> when a processing report shows errors.</li>
+            </ul>
+            <div style={{ fontWeight: 600, marginTop: 10 }}>Sample pack (synthetic, redacted)</div>
+            <div className="text-low" style={{ marginTop: 4 }}>Try the whole round-trip with fake IDs before touching a real account file:</div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 6 }} data-testid="af-samples">
+              {['sp_bulksheet.xlsx', 'sb_bulksheet.xlsx', 'sp_search_terms.xlsx', 'listing_template.txt',
+                'listing_detail_template.txt', 'aplus_list.csv', 'ads_error_report.xlsx',
+                'listing_processing_report.txt', 'metrics_before.xlsx', 'metrics_after.xlsx', 'README.txt'].map(n => (
+                <a key={n} className="btn btn-sm" href={`${SAMPLE_BASE}${n}`} download>{n}</a>
+              ))}
+            </div>
+            <div className="text-low" style={{ marginTop: 8 }}>
+              No Amazon sign-in, no API, no credentials: every file here travels by your own download/upload. Nothing on this page contacts Amazon.
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* ── Upload ──────────────────────────────────────────────────────── */}
       <div className="card" style={{ padding: 16 }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -357,6 +490,137 @@ export default function AmazonFiles() {
                 <div>The original upload was not modified. Upload this file to Amazon yourself.</div>
                 <a className="btn btn-sm" style={{ marginTop: 6 }} href={downloadHref(lastWrite.change_file.id)} data-testid="af-download">Download change file</a>
               </div>
+            </div>
+          )}
+
+          {/* ── Change files + processing report + corrected file (item 2) ── */}
+          {changeFiles.length > 0 && (
+            <div style={{ marginTop: 14 }} data-testid="af-changes">
+              <strong style={{ fontSize: 12 }}>Change files written from this upload</strong>
+              <table className="table" style={{ fontSize: 12, marginTop: 6 }}>
+                <thead><tr><th>File</th><th>v</th><th>Rows</th><th>Written</th><th /></tr></thead>
+                <tbody>
+                  {changeFiles.map(c => (
+                    <tr key={c.id}>
+                      <td>{c.filename}</td>
+                      <td>{c.version}</td>
+                      <td>{c.row_count}</td>
+                      <td>{(c.written_at || '').slice(0, 16).replace('T', ' ')}</td>
+                      <td><a className="btn btn-sm" href={downloadHref(c.id)}>Download</a></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div style={{ marginTop: 10, display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+                <div className="field-group" style={{ minWidth: 240 }}>
+                  <label className="label">Processing report belongs to</label>
+                  <select className="field" value={reportChangeId} onChange={e => setReportChangeId(e.target.value)} data-testid="af-report-change">
+                    <option value="">— choose a change file —</option>
+                    {changeFiles.map(c => <option key={c.id} value={c.id}>{c.filename}</option>)}
+                  </select>
+                </div>
+                <div className="field-group">
+                  <label className="label">Amazon processing / error report</label>
+                  <input className="field" type="file" accept=".xlsx,.csv,.tsv,.txt" onChange={matchReport} disabled={busy} data-testid="af-report-file" />
+                </div>
+              </div>
+              <div className="text-low" style={{ fontSize: 11, marginTop: 4 }}>
+                Upload the report Amazon gave you after submitting a change file. Error rows are matched to your change rows and the proposals
+                that produced them; a row whose ID is not in the change file is reported as unmatched, never guessed at.
+              </div>
+              {reportMatch && (
+                <div className="alert" style={{ marginTop: 8 }} data-testid="af-report-match">
+                  <div className="alert-title">
+                    Matched {reportMatch.match.matched_count} row(s) · unmatched {reportMatch.match.unmatched_count}
+                  </div>
+                  <div className="alert-text" style={{ fontSize: 12 }}>
+                    {reportMatch.match.matches.map((m2, i) => (
+                      <div key={i} style={{ marginTop: 4 }}>
+                        <div>Row {i}: {m2.id_field}={fmt(m2.id_value)} → change row {m2.change ? m2.change.row : '?'} · proposal {m2.proposal_id || 'UNKNOWN'}</div>
+                        <div>Cause (quoted): {fmt(m2.cause)}</div>
+                        {m2.fix_hint && <div>Hint: {m2.fix_hint}</div>}
+                        <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 4 }}>
+                          <label style={{ fontSize: 11 }}>
+                            <input type="checkbox" checked={!!(corrections[i] || {}).drop}
+                              onChange={e => patchCorrection(i, { drop: e.target.checked })} /> drop this row
+                          </label>
+                          <input className="field" style={{ width: 200 }} placeholder="fix value (field=value? use the field name)"
+                            data-testid={`af-correct-${i}`}
+                            onChange={e => {
+                              const v = e.target.value
+                              const eq = v.indexOf('=')
+                              if (eq > 0) patchCorrection(i, { fields: { [v.slice(0, eq).trim()]: v.slice(eq + 1).trim() } })
+                            }} />
+                        </div>
+                      </div>
+                    ))}
+                    {reportMatch.match.unmatched.map((u2, i) => (
+                      <div key={`u${i}`} style={{ marginTop: 4, color: 'var(--status-warn, #a05a00)' }}>
+                        Unmatched: {u2.id_field}={fmt(u2.id_value)} — {u2.cause}
+                      </div>
+                    ))}
+                    <div style={{ marginTop: 6 }}>{reportMatch.match.note}</div>
+                    <button className="btn btn-sm btn-primary" style={{ marginTop: 6 }} onClick={writeCorrected} disabled={busy} data-testid="af-write-corrected">
+                      Write corrected resubmittable file
+                    </button>
+                  </div>
+                </div>
+              )}
+              {correctResult && (
+                <div className="alert" style={{ marginTop: 8 }} data-testid="af-correct-result">
+                  <div className="alert-title">Corrected file: {correctResult.change_file.filename}</div>
+                  <div className="alert-text" style={{ fontSize: 12 }}>
+                    <div>Round-trip: {correctResult.roundtrip.ok ? 'PASS — only the corrections differ' : `FAILED — ${correctResult.roundtrip.violations.join('; ')}`}</div>
+                    <div>Dropped rows: {correctResult.dropped} · rows kept: {correctResult.roundtrip.written_count}</div>
+                    <div>The original upload and the previous change file are untouched. Upload the corrected file to Amazon yourself.</div>
+                    <a className="btn btn-sm" style={{ marginTop: 6 }} href={downloadHref(correctResult.change_file.id)} data-testid="af-download-corrected">Download corrected file</a>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── Before/after performance comparison (item 5) ─────────────── */}
+          {(selectedUpload.kind === 'ads_bulksheet' || selectedUpload.kind === 'ads_search_terms') && uploads.length > 1 && (
+            <div style={{ marginTop: 14 }} data-testid="af-compare">
+              <strong style={{ fontSize: 12 }}>Before / after comparison</strong>
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end', marginTop: 6 }}>
+                <div className="field-group" style={{ minWidth: 260 }}>
+                  <label className="label">Compare against (the LATER file)</label>
+                  <select className="field" value={compareTarget} onChange={e => setCompareTarget(e.target.value)} data-testid="af-compare-target">
+                    <option value="">— choose a later upload —</option>
+                    {uploads.filter(u => u.id !== selectedUpload.id).map(u => (
+                      <option key={u.id} value={u.id}>{u.filename} ({u.kind})</option>
+                    ))}
+                  </select>
+                </div>
+                <button className="btn btn-sm" onClick={runCompare} disabled={busy} data-testid="af-compare-run">Compare</button>
+              </div>
+              {compareResult && (
+                <div style={{ marginTop: 8 }} data-testid="af-compare-result">
+                  <div className="alert-text" style={{ fontSize: 12 }}>
+                    <div><strong>No causation:</strong> {compareResult.comparison.causation}</div>
+                    <div>{compareResult.comparison.stale_window_note}</div>
+                  </div>
+                  <table className="table" style={{ fontSize: 12, marginTop: 6 }}>
+                    <thead><tr><th>Entity</th><th>In</th><th>Impr (b→a)</th><th>Clicks (b→a)</th><th>Spend (b→a)</th><th>Δ clicks</th><th>Sample</th></tr></thead>
+                    <tbody>
+                      {compareResult.comparison.rows.slice(0, 40).map(r => (
+                        <tr key={r.key}>
+                          <td className="text-mono" style={{ fontSize: 11 }}>{r.key}</td>
+                          <td>{r.present_in}</td>
+                          <td>{fmt(r.metrics.impressions.before)} → {fmt(r.metrics.impressions.after)}</td>
+                          <td>{fmt(r.metrics.clicks.before)} → {fmt(r.metrics.clicks.after)}</td>
+                          <td>{fmt(r.metrics.spend.before)} → {fmt(r.metrics.spend.after)}</td>
+                          <td>{fmt(r.delta_clicks)}</td>
+                          <td>{r.sample && r.sample.sample ? `${r.sample.sample} (${fmt(r.sample.clicks)} clicks)` : 'UNKNOWN'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="text-low" style={{ fontSize: 11, marginTop: 4 }}>{compareResult.comparison.note}</div>
+                </div>
+              )}
             </div>
           )}
         </div>

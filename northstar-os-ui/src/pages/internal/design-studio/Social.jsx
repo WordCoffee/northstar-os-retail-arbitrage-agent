@@ -9,6 +9,7 @@
 
 import SectionWorkspace from './SectionWorkspace.jsx'
 import { SPEC_GROUPS, AMAZON_CAPS } from '../../../studio/engine/specRegistry.js'
+import { buildSocialAssetPack } from '../../../studio/engine/outputPacks.js'
 
 const GROUPS = SPEC_GROUPS.filter(g => ['Listing gallery', 'Store tiles'].includes(g.id))
 
@@ -39,6 +40,7 @@ export default function Social() {
       groups={GROUPS} defaultSpecId="amz-secondary"
       fields={FIELDS} ruleNotes={RULES} slots={SLOTS}
       canvasFitWidth={560} testId="social-workspace"
+      packBuilder={buildSocialAssetPack} packLabel="Asset pack"
     />
   )
 }

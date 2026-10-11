@@ -1,0 +1,2 @@
+item_sku	update_delete	bullet_point1	bullet_point2	product_description	generic_keywords	standard_price	quantity
+SKU-1	PartialUpdate	Keeps drinks cold 24h	Fits every cup holder	A 20oz stainless steel tumbler.	tumbler steel insulated	24.99	10
