@@ -94,6 +94,9 @@ auto-pull removed — prevents a legacy model re-entering).
 
 ## 8. Known limits / open items
 
+0. Startup entry added: `HKCU\...\Run\Ollama` → `ollama app.exe`, so the brain
+   auto-starts at login (no startup entry existed before — post-reboot the
+   local lane would otherwise have required a manual start).
 1. **Ubuntu WSL `ollama` systemd unit is still enabled** (root-owned; needs
    your sudo, one command — WSL is currently shut down so :11434 is free):
    `wsl -d Ubuntu -e sudo systemctl disable --now ollama`
