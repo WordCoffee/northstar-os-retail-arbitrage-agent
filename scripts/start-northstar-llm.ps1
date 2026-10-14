@@ -6,6 +6,9 @@
 # NOTES
 # - MTP speculative decoding is bound via: --spec-type draft-mtp --spec-draft-n-max 4 --spec-draft-p-min 0.65
 #   (the -mtp GGUF carries the multi-token-prediction head; no separate draft model needed).
+# - HIGH MODE (max reasoning) is pinned on this lane: --reasoning on --reasoning-effort xhigh
+#   --reasoning-budget -1 (unrestricted). Verified 2026-10-14: bat-and-ball trap answered
+#   correctly, 837 chars of reasoning extracted, ~40 tok/s, MTP draft acceptance 88%.
 # - Vision: --mmproj loads the BF16 projector (this is the only lane that gives the model eyes;
 #   Ollama's local-create has no mmproj support).
 # - VRAM: Ollama (the app lane) and llama-server both want the 16GB card. Unload Ollama first:
@@ -27,5 +30,6 @@ $mmproj = Join-Path $modelDir "mmproj-Qwen3.8-27B-BF16.gguf"
   -c 64576 -fa on `
   -ctk q8_0 -ctv q8_0 `
   -np 1 --jinja `
+  --reasoning on --reasoning-effort xhigh --reasoning-budget -1 `
   --host 127.0.0.1 --port 8080 `
   --temp 0.35
