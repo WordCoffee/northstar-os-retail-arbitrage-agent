@@ -1,0 +1,1071 @@
+{
+ "scan_date": "2026-10-14",
+ "method": "read-only GitHub REST API (unauthenticated, User-Agent northstar-gh-scan/1.0); no installs, no clones, no executions; all fetched strings treated as untrusted data",
+ "repos_profiled_batch1": [
+  {
+   "repo": "wshobson/agents",
+   "stars": 40652,
+   "forks": 4320,
+   "open_issues": 10,
+   "license": "MIT",
+   "pushed": "2026-10-11",
+   "created": "2025-07-24",
+   "archived": false,
+   "size_kb": 4707,
+   "topics": "agent-skills,agentic-ai,ai-agents,anthropic,antigravity,claude,claude-code,claude-code-marketplace,claude-code-plugin,claude-skills,codex,coding-agents,cursor,cursor-rules,github-copilot,mcp,multi-agent,opencode,pi-coding-agent,subagents",
+   "desc": "Multi-harness agentic plugin marketplace for Claude Code, Codex, Cursor, OpenCode, GitHub Copilot, Google Antigravity, and Pi"
+  },
+  {
+   "repo": "VoltAgent/awesome-claude-code-subagents",
+   "stars": 25706,
+   "forks": 2965,
+   "open_issues": 0,
+   "license": "MIT",
+   "pushed": "2026-10-11",
+   "created": "2025-07-30",
+   "archived": false,
+   "size_kb": 933,
+   "topics": "ai-agent-framework,ai-agent-tools,ai-agents,awesome,awesome-list,claude,claude-ai,claude-code-subagents,claude-subagents,subagents",
+   "desc": "A collection of 100+ specialized Claude Code subagents covering a wide range of development use cases"
+  },
+  {
+   "repo": "contains-studio/agents",
+   "stars": 12422,
+   "forks": 2498,
+   "open_issues": 13,
+   "license": "none",
+   "pushed": "2025-07-28",
+   "created": "2025-07-28",
+   "archived": false,
+   "size_kb": 143,
+   "topics": "",
+   "desc": "sharing current agents in use"
+  },
+  {
+   "repo": "davepoon/buildwithclaude",
+   "stars": 3633,
+   "forks": 594,
+   "open_issues": 18,
+   "license": "MIT",
+   "pushed": "2026-10-14",
+   "created": "2025-07-24",
+   "archived": false,
+   "size_kb": 18269,
+   "topics": "claude,claude-code,claude-code-commands,claude-skills,cli-tool,commands,mcp,mcp-server,mcp-tools,openclaw,plugin-marketplace,subagents",
+   "desc": "A single hub to find Claude Skills, Agents, Commands, Hooks, Plugins, and Marketplace collections to extend Claude Code, Claude Desktop, Agent SDK and OpenClaw"
+  },
+  {
+   "repo": "iannuttall/claude-agents",
+   "stars": 2043,
+   "forks": 269,
+   "open_issues": 16,
+   "license": "MIT",
+   "pushed": "2025-07-25",
+   "created": "2025-07-25",
+   "archived": true,
+   "size_kb": 17,
+   "topics": "",
+   "desc": "Custom subagents to use with Claude Code."
+  },
+  {
+   "repo": "lst97/claude-code-sub-agents",
+   "stars": 1697,
+   "forks": 257,
+   "open_issues": 4,
+   "license": "MIT",
+   "pushed": "2025-08-15",
+   "created": "2025-07-28",
+   "archived": false,
+   "size_kb": 7316,
+   "topics": "ai-agents,claude-code,claudecode-config,claudecode-subagents,sub-agents,subagents",
+   "desc": "Collection of specialized AI subagents for Claude Code for personal use (full-stack development)."
+  },
+  {
+   "repo": "anthropics/skills",
+   "stars": 180992,
+   "forks": 21449,
+   "open_issues": 1407,
+   "license": "none",
+   "pushed": "2026-10-09",
+   "created": "2025-09-22",
+   "archived": false,
+   "size_kb": 5731,
+   "topics": "agent-skills",
+   "desc": "Public repository for Agent Skills"
+  },
+  {
+   "repo": "obra/superpowers",
+   "stars": 298805,
+   "forks": 26714,
+   "open_issues": 341,
+   "license": "MIT",
+   "pushed": "2026-10-09",
+   "created": "2025-10-09",
+   "archived": false,
+   "size_kb": 7658,
+   "topics": "ai,brainstorming,coding,obra,sdlc,skills,subagent-driven-development,superpowers",
+   "desc": "An agentic skills framework & software development methodology that works."
+  },
+  {
+   "repo": "anthropics/claude-code-action",
+   "stars": 9501,
+   "forks": 2207,
+   "open_issues": 828,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "created": "2025-05-19",
+   "archived": false,
+   "size_kb": 3134,
+   "topics": "",
+   "desc": null
+  },
+  {
+   "repo": "The-PR-Agent/pr-agent",
+   "stars": 13379,
+   "forks": 1959,
+   "open_issues": 70,
+   "license": "MIT",
+   "pushed": "2026-10-11",
+   "created": "2023-07-05",
+   "archived": false,
+   "size_kb": 133842,
+   "topics": "ai,anthropic,code-review,coding-assistant,devtools,ollama,openai,pull-request,pull-requests",
+   "desc": "🚀 PR Agent: The Original Open-Source PR Reviewer. This project is not the Qodo free tier."
+  },
+  {
+   "repo": "ruvnet/ruflo",
+   "stars": 74601,
+   "forks": 8872,
+   "open_issues": 1070,
+   "license": "MIT",
+   "pushed": "2026-10-14",
+   "created": "2025-06-02",
+   "archived": false,
+   "size_kb": 654345,
+   "topics": "agentic-ai,agentic-framework,agentic-workflow,agents,ai-agents,ai-assistant,ai-skills,autonomous-agents,claude,codex,dsh-plugin,harness,mcp-server,multi-agent,multi-agent-systems,npm,skills,swarm,swarm-intelligence,typescript",
+   "desc": "🌊 The original agent harness. Deploy intelligent multi-player swarms, coordinate autonomous workflows, and build conversational AI systems. Features adaptive memory, self-learning intelligence, federation, vector RAG integration, and native Claude Code / Codex / Hermes and many more Integrated"
+  },
+  {
+   "repo": "SuperClaude-Org/SuperClaude_Framework",
+   "stars": 23908,
+   "forks": 1995,
+   "open_issues": 71,
+   "license": "MIT",
+   "pushed": "2026-09-27",
+   "created": "2025-06-22",
+   "archived": false,
+   "size_kb": 4156,
+   "topics": "",
+   "desc": "A configuration framework that enhances Claude Code with specialized commands, cognitive personas, and development methodologies."
+  },
+  {
+   "repo": "disler/claude-code-hooks-mastery",
+   "stars": 3940,
+   "forks": 632,
+   "open_issues": 36,
+   "license": "none",
+   "pushed": "2026-03-04",
+   "created": "2025-07-05",
+   "archived": false,
+   "size_kb": 4478,
+   "topics": "",
+   "desc": "Master Claude Code Hooks"
+  },
+  {
+   "repo": "github/spec-kit",
+   "stars": 141181,
+   "forks": 12632,
+   "open_issues": 164,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "created": "2025-08-21",
+   "archived": false,
+   "size_kb": 20794,
+   "topics": "ai,copilot,development,engineering,prd,spec,spec-driven",
+   "desc": "💫 Toolkit to help you get started with SDD or any other process!"
+  },
+  {
+   "repo": "bmad-code-org/BMAD-METHOD",
+   "stars": 54112,
+   "forks": 6086,
+   "open_issues": 52,
+   "license": "NOASSERTION",
+   "pushed": "2026-10-13",
+   "created": "2025-04-13",
+   "archived": false,
+   "size_kb": 54810,
+   "topics": "agile,ai,context-engineering,sdlc,spec-driven-development",
+   "desc": "Breakthrough Method for Agile Ai Driven Development"
+  },
+  {
+   "repo": "upstash/context7",
+   "stars": 63007,
+   "forks": 3083,
+   "open_issues": 36,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "created": "2025-03-26",
+   "archived": false,
+   "size_kb": 38681,
+   "topics": "llm,mcp,mcp-server,vibe-coding",
+   "desc": "Context7 Platform -- Up-to-date code documentation for LLMs and AI code editors"
+  },
+  {
+   "repo": "github/github-mcp-server",
+   "stars": 33598,
+   "forks": 5153,
+   "open_issues": 361,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "created": "2025-03-04",
+   "archived": false,
+   "size_kb": 57741,
+   "topics": "github,mcp,mcp-server",
+   "desc": "GitHub's official MCP Server"
+  },
+  {
+   "repo": "anomalyco/opencode",
+   "stars": 213326,
+   "forks": 28618,
+   "open_issues": 4190,
+   "license": "MIT",
+   "pushed": "2026-10-14",
+   "created": "2025-04-30",
+   "archived": false,
+   "size_kb": 572067,
+   "topics": "",
+   "desc": "The open source coding agent."
+  },
+  {
+   "repo": "schemathesis/schemathesis",
+   "stars": 3664,
+   "forks": 225,
+   "open_issues": 28,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "created": "2019-08-19",
+   "archived": false,
+   "size_kb": 129623,
+   "topics": "api,api-testing,cli,fuzzing,graphql,hypothesis,openapi,property-based-testing,pytest,swagger,testing",
+   "desc": "Catch API bugs before your users do"
+  },
+  {
+   "repo": "semgrep/semgrep",
+   "stars": 17041,
+   "forks": 1099,
+   "open_issues": 951,
+   "license": "LGPL-2.1",
+   "pushed": "2026-10-13",
+   "created": "2019-12-13",
+   "archived": false,
+   "size_kb": 137438,
+   "topics": "c,go,java,javascript,python,r2c,ruby,sast,semgrep,static-analysis,static-code-analysis,typescript",
+   "desc": "Lightweight static analysis for many languages. Find bug variants with patterns that look like source code."
+  },
+  {
+   "repo": "aquasecurity/trivy",
+   "stars": 38404,
+   "forks": 762,
+   "open_issues": 264,
+   "license": "Apache-2.0",
+   "pushed": "2026-10-13",
+   "created": "2019-04-10",
+   "archived": false,
+   "size_kb": 944082,
+   "topics": "containers,devsecops,docker,go,golang,hacktoberfest,iac,infrastructure-as-code,kubernetes,misconfiguration,security,security-tools,vulnerability,vulnerability-detection,vulnerability-scanners",
+   "desc": "Find vulnerabilities, misconfigurations, secrets, SBOM in containers, Kubernetes, code repositories, clouds and more"
+  },
+  {
+   "repo": "google/osv-scanner",
+   "stars": 11178,
+   "forks": 812,
+   "open_issues": 97,
+   "license": "Apache-2.0",
+   "pushed": "2026-10-13",
+   "created": "2022-11-13",
+   "archived": false,
+   "size_kb": 45734,
+   "topics": "scanner,security-audit,security-tools,vulnerability-scanner",
+   "desc": "Vulnerability scanner written in Go which uses the data provided by https://osv.dev"
+  },
+  {
+   "repo": "pypa/pip-audit",
+   "stars": 1381,
+   "forks": 144,
+   "open_issues": 61,
+   "license": "Apache-2.0",
+   "pushed": "2026-10-01",
+   "created": "2021-09-02",
+   "archived": false,
+   "size_kb": 1310,
+   "topics": "pip,python,security,security-audit,supply-chain",
+   "desc": "Audits Python environments, requirements files and dependency trees for known security vulnerabilities, and can automatically fix them"
+  },
+  {
+   "repo": "promptfoo/promptfoo",
+   "stars": 25987,
+   "forks": 2475,
+   "open_issues": 711,
+   "license": "MIT",
+   "pushed": "2026-10-14",
+   "created": "2023-04-28",
+   "archived": false,
+   "size_kb": 790987,
+   "topics": "ci,ci-cd,cicd,evaluation,evaluation-framework,llm,llm-eval,llm-evaluation,llm-evaluation-framework,llmops,pentesting,prompt-engineering,prompt-testing,prompts,rag,red-teaming,testing,vulnerability-scanners",
+   "desc": "Test your prompts, agents, and RAGs. Red teaming/pentesting/vulnerability scanning for AI. Compare performance of GPT, Claude, Gemini, DeepSeek, and more. Simple declarative configs with command line and CI/CD integration.  Used by OpenAI and Anthropic."
+  },
+  {
+   "repo": "pydantic/pydantic-ai",
+   "stars": 20604,
+   "forks": 2913,
+   "open_issues": 1371,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "created": "2024-06-21",
+   "archived": false,
+   "size_kb": 305947,
+   "topics": "agent-framework,genai,harness,harness-engineering,llm,pydantic,python",
+   "desc": "How Python does AI. Agents, realtime voice, image generation, embeddings. Every model, every interface, typed end to end."
+  },
+  {
+   "repo": "openai/openai-agents-python",
+   "stars": 30023,
+   "forks": 4885,
+   "open_issues": 6,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "created": "2025-03-10",
+   "archived": false,
+   "size_kb": 76716,
+   "topics": "agents,ai,framework,harness,llm,openai,python",
+   "desc": "A lightweight, powerful framework for multi-agent workflows"
+  },
+  {
+   "repo": "crewAIInc/crewAI",
+   "stars": 59674,
+   "forks": 8719,
+   "open_issues": 685,
+   "license": "MIT",
+   "pushed": "2026-10-14",
+   "created": "2023-10-26",
+   "archived": false,
+   "size_kb": 300576,
+   "topics": "agents,ai,ai-agents,aiagentframework,llms",
+   "desc": "Framework for orchestrating role-playing, autonomous AI agents. By fostering collaborative intelligence, CrewAI empowers agents to work together seamlessly, tackling complex tasks."
+  },
+  {
+   "repo": "OpenHands/OpenHands",
+   "stars": 90844,
+   "forks": 12042,
+   "open_issues": 974,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "created": "2024-03-12",
+   "archived": false,
+   "size_kb": 492444,
+   "topics": "agent,artificial-intelligence,chatgpt,claude-ai,cli,developer-tools,gpt,llm,openai",
+   "desc": "🙌 OpenHands: AI-Driven Development"
+  },
+  {
+   "repo": "Aider-AI/aider",
+   "stars": 49539,
+   "forks": 5054,
+   "open_issues": 1917,
+   "license": "Apache-2.0",
+   "pushed": "2026-05-22",
+   "created": "2023-05-09",
+   "archived": false,
+   "size_kb": 140356,
+   "topics": "anthropic,chatgpt,claude-3,cli,command-line,gemini,gpt-3,gpt-35-turbo,gpt-4,gpt-4o,llama,openai,sonnet",
+   "desc": "aider is AI pair programming in your terminal"
+  },
+  {
+   "repo": "anthropics/claude-code-security-review",
+   "stars": 6373,
+   "forks": 711,
+   "open_issues": 102,
+   "license": "MIT",
+   "pushed": "2026-02-11",
+   "created": "2025-08-04",
+   "archived": false,
+   "size_kb": 61,
+   "topics": "",
+   "desc": "An AI-powered security review GitHub Action using Claude to analyze code changes for security vulnerabilities."
+  },
+  {
+   "repo": "modelcontextprotocol/servers",
+   "stars": 91237,
+   "forks": 11790,
+   "open_issues": 481,
+   "license": "NOASSERTION",
+   "pushed": "2026-10-13",
+   "created": "2024-11-18",
+   "archived": false,
+   "size_kb": 31972,
+   "topics": "",
+   "desc": "Model Context Protocol Servers"
+  },
+  {
+   "repo": "eyaltoledano/claude-task-master",
+   "stars": 28221,
+   "forks": 2618,
+   "open_issues": 214,
+   "license": "NOASSERTION",
+   "pushed": "2026-04-28",
+   "created": "2025-03-04",
+   "archived": false,
+   "size_kb": 29288,
+   "topics": "ai,cursor,cursor-ai,cursorai,lovable,lovable-dev,roocode,task-manager,tasks,tasks-list,windsurf,windsurf-ai",
+   "desc": "An AI-powered task-management system you can drop into Cursor, Lovable, Windsurf, Roo, and others."
+  }
+ ],
+ "repos_profiled_batch2": [
+  {
+   "repo": "affaan-m/ECC",
+   "stars": 278773,
+   "forks": 41518,
+   "license": "MIT",
+   "pushed": "2026-10-12",
+   "archived": false,
+   "size_kb": 59647,
+   "topics": "ai-agents,anthropic,claude,claude-code,developer-tools,llm,mcp,productivity",
+   "desc": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
+  },
+  {
+   "repo": "mattpocock/skills",
+   "stars": 290142,
+   "forks": 24351,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "archived": false,
+   "size_kb": 2016,
+   "topics": "",
+   "desc": "Skills for Real Engineers. Straight from my .agents directory."
+  },
+  {
+   "repo": "DietrichGebert/ponytail",
+   "stars": 162982,
+   "forks": 8813,
+   "license": "MIT",
+   "pushed": "2026-10-12",
+   "archived": false,
+   "size_kb": 11401,
+   "topics": "agent-skills,ai-agents,claude,claude-code,claude-code-plugin,cursor-rules,developer-tools,llm,prompt-engineering,yagni",
+   "desc": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote."
+  },
+  {
+   "repo": "thedotmack/claude-mem",
+   "stars": 100535,
+   "forks": 8811,
+   "license": "Apache-2.0",
+   "pushed": "2026-10-13",
+   "archived": false,
+   "size_kb": 564079,
+   "topics": "ai,ai-agents,ai-memory,anthropic,artificial-intelligence,chromadb,claude,claude-agent-sdk,claude-agents,claude-code,claude-code-plugin,claude-skills,embeddings,long-term-memory,mem0,memory-engine,openmemory,rag,sqlite,supermemory",
+   "desc": "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More"
+  },
+  {
+   "repo": "stablyai/orca",
+   "stars": 91869,
+   "forks": 5872,
+   "license": "MIT",
+   "pushed": "2026-10-14",
+   "archived": false,
+   "size_kb": 1372552,
+   "topics": "ade,agent-ide,ai-agents,claude-code,cli,codex,cursor-agent,devtools,ghostty,ide,mobile-app,opencode,orchestration,parallel-agents,pi,terminal,worktrees,yc-backed",
+   "desc": "Orca is the ADE for working with a fleet of parallel agents. Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime."
+  },
+  {
+   "repo": "colbymchenry/codegraph",
+   "stars": 74016,
+   "forks": 4777,
+   "license": "MIT",
+   "pushed": "2026-10-14",
+   "archived": false,
+   "size_kb": 38229,
+   "topics": "",
+   "desc": "Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, CoPilot, and Hermes Agent — fewer tokens, fewer tool calls, 100% local"
+  },
+  {
+   "repo": "Fission-AI/OpenSpec",
+   "stars": 71878,
+   "forks": 4909,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "archived": false,
+   "size_kb": 10757,
+   "topics": "ai,context-engineering,engineering,planning,prd,sdd,sdlc,spec,spec-driven-development,specification",
+   "desc": "Spec-driven development (SDD) for AI coding assistants."
+  },
+  {
+   "repo": "buildermethods/agent-os",
+   "stars": 5502,
+   "forks": 829,
+   "license": "MIT",
+   "pushed": "2026-10-06",
+   "archived": false,
+   "size_kb": 411,
+   "topics": "",
+   "desc": "Agent OS is a system for injecting your codebase standards and writing better specs for spec-driven development."
+  },
+  {
+   "repo": "gotalab/cc-sdd",
+   "stars": 3711,
+   "forks": 288,
+   "license": "MIT",
+   "pushed": "2026-10-12",
+   "archived": false,
+   "size_kb": 7869,
+   "topics": "agent-skills,claude-code,codex,cursor,gemini-cli,github-copilot,kiro,opencode,sdd,spec-driven-development,steering,subagents",
+   "desc": "Turn approved specs into long-running autonomous implementation. A minimal, adaptable SDD harness with Agent Skills for Claude Code, Codex, Cursor, Copilot, Windsurf, OpenCode, Gemini CLI, and Antigravity."
+  },
+  {
+   "repo": "matt1398/claude-devtools",
+   "stars": 3972,
+   "forks": 305,
+   "license": "MIT",
+   "pushed": "2026-09-26",
+   "archived": false,
+   "size_kb": 108280,
+   "topics": "ai,ai-agent,ai-debugging,ai-tools,anthropic,claude,claude-code,claude-code-tools,debugging,desktop-app,developer-tools,devtools,electron,llm,macos-app,observability,open-source,session-viewer,token-usage,typescript",
+   "desc": "The missing DevTools for Claude Code — inspect session logs, tool calls, token usage, subagents, and context window in a visual UI. Free, open source."
+  },
+  {
+   "repo": "zubair-trabzada/ai-marketing-claude",
+   "stars": 2754,
+   "forks": 718,
+   "license": "MIT",
+   "pushed": "2026-03-01",
+   "archived": false,
+   "size_kb": 132,
+   "topics": "ai-marketing,claude,claude-code,competitive-analysis,content-strategy,copywriting,email-marketing,marketing,marketing-automation,seo",
+   "desc": "AI Marketing Suite for Claude Code. 15 marketing skills with parallel subagents — audit any website, generate copy, email sequences, ad campaigns, content calendars, competitive intelligence, and client-ready PDF reports."
+  },
+  {
+   "repo": "gsd-build/get-shit-done",
+   "stars": 64301,
+   "forks": 5432,
+   "license": "MIT",
+   "pushed": "2026-05-31",
+   "archived": true,
+   "size_kb": 20286,
+   "topics": "claude-code,context-engineering,meta-prompting,spec-driven-development",
+   "desc": "A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code by TÂCHES."
+  },
+  {
+   "repo": "farion1231/cc-switch",
+   "stars": 144003,
+   "forks": 9568,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "archived": false,
+   "size_kb": 93962,
+   "topics": "ai-tools,claude-code,codex,desktop-app,grok,grokbuild,hermes,hermes-agent,mcp,open-source,openclaw,openclaw-ui,opencode,pi,provider-management,rust,skills,skills-management,tauri,wsl-support",
+   "desc": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Grok Build & Hermes Agent. Only official website: ccswitch.io"
+  },
+  {
+   "repo": "JuliusBrussee/caveman",
+   "stars": 111578,
+   "forks": 6472,
+   "license": "Apache-2.0",
+   "pushed": "2026-10-13",
+   "archived": false,
+   "size_kb": 21437,
+   "topics": "ai,anthropic,caveman,claude,claude-code,llm,meme,prompt-engineering,skill,tokens",
+   "desc": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman."
+  },
+  {
+   "repo": "tt-a1i/archify",
+   "stars": 83228,
+   "forks": 5618,
+   "license": "MIT",
+   "pushed": "2026-10-13",
+   "archived": false,
+   "size_kb": 710794,
+   "topics": "agent-skills,ai-agents,architecture-diagram,claude-code,claude-skills,codex,coding-agents,deepseek-harness,developer-tools,diagrams,diagrams-as-code,dsh-plugin,flowchart,llm,mermaid,opencode,sequence-diagram,software-architecture,system-design,visualization",
+   "desc": "Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more."
+  }
+ ],
+ "search_results": {
+  "claude subagents": [
+   {
+    "repo": "wshobson/agents",
+    "stars": 40652,
+    "pushed": "2026-10-11",
+    "archived": false,
+    "desc": "Multi-harness agentic plugin marketplace for Claude Code, Codex, Cursor, OpenCode, GitHub Copilot, Google Antigravity, and Pi"
+   },
+   {
+    "repo": "VoltAgent/awesome-claude-code-subagents",
+    "stars": 25706,
+    "pushed": "2026-10-11",
+    "archived": false,
+    "desc": "A collection of 100+ specialized Claude Code subagents covering a wide range of development use cases"
+   },
+   {
+    "repo": "Doriandarko/maestro",
+    "stars": 4356,
+    "pushed": "2024-07-01",
+    "archived": false,
+    "desc": "A framework for Claude Opus to intelligently orchestrate subagents."
+   },
+   {
+    "repo": "matt1398/claude-devtools",
+    "stars": 3972,
+    "pushed": "2026-09-26",
+    "archived": false,
+    "desc": "The missing DevTools for Claude Code — inspect session logs, tool calls, token usage, subagents, and context window in a visual UI. Free, open source."
+   },
+   {
+    "repo": "gotalab/cc-sdd",
+    "stars": 3711,
+    "pushed": "2026-10-12",
+    "archived": false,
+    "desc": "Turn approved specs into long-running autonomous implementation. A minimal, adaptable SDD harness with Agent Skills for Claude Code, Codex, Cursor, Copilot, Windsurf, OpenCode, Gemini CLI, and Antigravity."
+   },
+   {
+    "repo": "davepoon/buildwithclaude",
+    "stars": 3633,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "A single hub to find Claude Skills, Agents, Commands, Hooks, Plugins, and Marketplace collections to extend Claude Code, Claude Desktop, Agent SDK and OpenClaw"
+   },
+   {
+    "repo": "wesammustafa/Claude-Code-Everything-You-Need-to-Know",
+    "stars": 3373,
+    "pushed": "2026-10-11",
+    "archived": false,
+    "desc": "Claude Code guide in three levels, with hands-on lessons, checked exercises and cited facts. Independent community guide."
+   },
+   {
+    "repo": "zubair-trabzada/ai-marketing-claude",
+    "stars": 2754,
+    "pushed": "2026-03-01",
+    "archived": false,
+    "desc": "AI Marketing Suite for Claude Code. 15 marketing skills with parallel subagents — audit any website, generate copy, email sequences, ad campaigns, content calendars, competitive intelligence, and client-ready PDF reports."
+   },
+   {
+    "repo": "centminmod/my-claude-code-setup",
+    "stars": 2662,
+    "pushed": "2026-10-07",
+    "archived": false,
+    "desc": "Shared starter template configuration and CLAUDE.md memory bank system for Claude Code"
+   },
+   {
+    "repo": "0xSteph/pentest-ai-agents",
+    "stars": 2325,
+    "pushed": "2026-10-06",
+    "archived": false,
+    "desc": "Turn Claude Code into your offensive security research assistant. Specialized AI subagents for authorized penetration testing plan engagements, analyze recon, research exploits, build detections, audit STIGs, and write reports."
+   },
+   {
+    "repo": "deusyu/translate-book",
+    "stars": 2116,
+    "pushed": "2026-10-12",
+    "archived": false,
+    "desc": "Agent skill for Codex, Claude Code, and OpenClaw that translates entire books (PDF/DOCX/EPUB) into any language using parallel subagents."
+   },
+   {
+    "repo": "iannuttall/claude-agents",
+    "stars": 2043,
+    "pushed": "2025-07-25",
+    "archived": true,
+    "desc": "Custom subagents to use with Claude Code."
+   }
+  ],
+  "claude code agents": [
+   {
+    "repo": "affaan-m/ECC",
+    "stars": 278773,
+    "pushed": "2026-10-12",
+    "archived": false,
+    "desc": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
+   },
+   {
+    "repo": "DietrichGebert/ponytail",
+    "stars": 162982,
+    "pushed": "2026-10-12",
+    "archived": false,
+    "desc": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote."
+   },
+   {
+    "repo": "anthropics/claude-code",
+    "stars": 150707,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
+   },
+   {
+    "repo": "x1xhlol/system-prompts-and-models-of-ai-tools",
+    "stars": 144013,
+    "pushed": "2026-10-12",
+    "archived": false,
+    "desc": "FULL Augment Code, Claude Code, Cluely, CodeBuddy, Comet, Cursor, Devin AI, Junie, Kiro, Leap.new, Lovable, Manus, NotionAI, Orchids.app, Perplexity, Poke, Qoder, Replit, Same.dev, Trae, Traycer AI, VSCode Agent, Warp.dev, Windsurf, Xcode, Z.ai Code, Dia & v0. (And other Open Sourced) System Prompts, Internal Tools & AI Models"
+   },
+   {
+    "repo": "farion1231/cc-switch",
+    "stars": 144001,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Grok Build & Hermes Agent. Only official website: ccswitch.io"
+   },
+   {
+    "repo": "JuliusBrussee/caveman",
+    "stars": 111578,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman."
+   },
+   {
+    "repo": "thedotmack/claude-mem",
+    "stars": 100535,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More"
+   },
+   {
+    "repo": "tt-a1i/archify",
+    "stars": 83228,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more."
+   },
+   {
+    "repo": "shareAI-lab/learn-claude-code",
+    "stars": 78541,
+    "pushed": "2026-09-28",
+    "archived": false,
+    "desc": "Bash is all you need -  A nano claude code–like 「agent harness」, built from 0 to 1"
+   },
+   {
+    "repo": "ruvnet/ruflo",
+    "stars": 74601,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "🌊 The original agent harness. Deploy intelligent multi-player swarms, coordinate autonomous workflows, and build conversational AI systems. Features adaptive memory, self-learning intelligence, federation, vector RAG integration, and native Claude Code / Codex / Hermes and many more Integrated"
+   },
+   {
+    "repo": "career-ops-hq/career-ops",
+    "stars": 74432,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "Open-source AI job search agent and job finder: scan job boards, score each job 1-5 against your CV before you apply, tailor an ATS-friendly resume and cover letter, get interview prep and a job application tracker. It helps you fill in each application; you press Submit. Runs locally in your AI coding CLI (Claude Code, Codex, OpenCode and more)."
+   },
+   {
+    "repo": "colbymchenry/codegraph",
+    "stars": 74016,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, CoPilot, and Hermes Agent — fewer tokens, fewer tool calls, 100% local"
+   }
+  ],
+  "opencode agents": [
+   {
+    "repo": "affaan-m/ECC",
+    "stars": 278773,
+    "pushed": "2026-10-12",
+    "archived": false,
+    "desc": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
+   },
+   {
+    "repo": "anomalyco/opencode",
+    "stars": 213326,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "The open source coding agent."
+   },
+   {
+    "repo": "farion1231/cc-switch",
+    "stars": 144001,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Grok Build & Hermes Agent. Only official website: ccswitch.io"
+   },
+   {
+    "repo": "thedotmack/claude-mem",
+    "stars": 100535,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More"
+   },
+   {
+    "repo": "stablyai/orca",
+    "stars": 91869,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "Orca is the ADE for working with a fleet of parallel agents. Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime."
+   },
+   {
+    "repo": "tt-a1i/archify",
+    "stars": 83228,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more."
+   },
+   {
+    "repo": "career-ops-hq/career-ops",
+    "stars": 74432,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "Open-source AI job search agent and job finder: scan job boards, score each job 1-5 against your CV before you apply, tailor an ATS-friendly resume and cover letter, get interview prep and a job application tracker. It helps you fill in each application; you press Submit. Runs locally in your AI coding CLI (Claude Code, Codex, OpenCode and more)."
+   },
+   {
+    "repo": "colbymchenry/codegraph",
+    "stars": 74016,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, CoPilot, and Hermes Agent — fewer tokens, fewer tool calls, 100% local"
+   },
+   {
+    "repo": "kepano/obsidian-skills",
+    "stars": 49524,
+    "pushed": "2026-09-15",
+    "archived": false,
+    "desc": "Agent skills for Obsidian. Teach your agent to use Obsidian CLI and open formats including Markdown, Bases, JSON Canvas."
+   },
+   {
+    "repo": "wshobson/agents",
+    "stars": 40652,
+    "pushed": "2026-10-11",
+    "archived": false,
+    "desc": "Multi-harness agentic plugin marketplace for Claude Code, Codex, Cursor, OpenCode, GitHub Copilot, Google Antigravity, and Pi"
+   },
+   {
+    "repo": "Yeachan-Heo/oh-my-claudecode",
+    "stars": 39884,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "Teams-first Multi-agent orchestration for Claude Code"
+   },
+   {
+    "repo": "iOfficeAI/AionUi",
+    "stars": 33504,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "Open-source 24/7 Cowork app for OpenClaw, Hermes, Claude Code, Codex, OpenCode and 20+ more CLI Agent | Customize your assistants | Team them up｜Star if you like it!"
+   }
+  ],
+  "spec-driven development": [
+   {
+    "repo": "github/spec-kit",
+    "stars": 141181,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "💫 Toolkit to help you get started with SDD or any other process!"
+   },
+   {
+    "repo": "Fission-AI/OpenSpec",
+    "stars": 71878,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "Spec-driven development (SDD) for AI coding assistants."
+   },
+   {
+    "repo": "gsd-build/get-shit-done",
+    "stars": 64301,
+    "pushed": "2026-05-31",
+    "archived": true,
+    "desc": "A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code by TÂCHES."
+   },
+   {
+    "repo": "gsd-build/gsd-2",
+    "stars": 7769,
+    "pushed": "2026-05-22",
+    "archived": true,
+    "desc": "A powerful meta-prompting, context engineering and spec-driven development system that enables agents to work for long periods of time autonomously without losing track of the big picture"
+   },
+   {
+    "repo": "buildermethods/agent-os",
+    "stars": 5502,
+    "pushed": "2026-10-06",
+    "archived": false,
+    "desc": "Agent OS is a system for injecting your codebase standards and writing better specs for spec-driven development."
+   },
+   {
+    "repo": "Pimzino/spec-workflow-mcp",
+    "stars": 4303,
+    "pushed": "2026-07-03",
+    "archived": false,
+    "desc": "A Model Context Protocol (MCP) server that provides structured spec-driven development workflow tools for AI-assisted software development, featuring a real-time web dashboard and VSCode extension for monitoring and managing your project's progress directly in your development environment."
+   },
+   {
+    "repo": "Pimzino/claude-code-spec-workflow",
+    "stars": 3859,
+    "pushed": "2025-09-07",
+    "archived": false,
+    "desc": "Automated workflows for Claude Code. Features spec-driven development for new features (Requirements → Design → Tasks → Implementation) and streamlined bug fix workflow for quick issue resolution (Report → Analyze → Fix → Verify)."
+   },
+   {
+    "repo": "gemini-cli-extensions/conductor",
+    "stars": 3766,
+    "pushed": "2026-09-01",
+    "archived": false,
+    "desc": "A plugin for AI coding agents (Antigravity, Claude Code) enabling Spec-Driven Development to specify, plan, and implement software features."
+   },
+   {
+    "repo": "maxritter/pilot-shell",
+    "stars": 2088,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "Professional context and harness engineering for Claude Code and OpenAI Codex. Build production-grade software with spec-driven development, TDD, persistent memory, quality gates, code intelligence, human oversight, and end-to-end verification."
+   },
+   {
+    "repo": "spec-kitty/spec-kitty",
+    "stars": 1682,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "Spec-Driven Development with organizational governance. Specs tell AI agents what to build; Charter governs how they build it. Git-native missions, enforceable workflows, and consistent engineering standards across AI coding agents and harnesses."
+   },
+   {
+    "repo": "open-gsd/gsd-pi",
+    "stars": 1316,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "A powerful meta-prompting, context engineering and spec-driven development system that enables agents to work for long periods of time autonomously without losing track of the big picture"
+   },
+   {
+    "repo": "ChristopherKahler/paul",
+    "stars": 1253,
+    "pushed": "2026-08-21",
+    "archived": false,
+    "desc": "Plan-Apply-Unify Loop — Structured AI-assisted development for Claude Code. Quality over speed-for-speed's-sake."
+   }
+  ],
+  "agent skills": [
+   {
+    "repo": "obra/superpowers",
+    "stars": 298806,
+    "pushed": "2026-10-09",
+    "archived": false,
+    "desc": "An agentic skills framework & software development methodology that works."
+   },
+   {
+    "repo": "mattpocock/skills",
+    "stars": 290141,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "Skills for Real Engineers. Straight from my .agents directory."
+   },
+   {
+    "repo": "affaan-m/ECC",
+    "stars": 278773,
+    "pushed": "2026-10-12",
+    "archived": false,
+    "desc": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
+   },
+   {
+    "repo": "anthropics/skills",
+    "stars": 180992,
+    "pushed": "2026-10-09",
+    "archived": false,
+    "desc": "Public repository for Agent Skills"
+   },
+   {
+    "repo": "Snailclimb/JavaGuide",
+    "stars": 159003,
+    "pushed": "2026-10-11",
+    "archived": false,
+    "desc": "Java 面试 & 后端通用面试指南，覆盖计算机基础、数据库、分布式、高并发、系统设计与 AI 应用开发"
+   },
+   {
+    "repo": "langgenius/dify",
+    "stars": 158410,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack."
+   },
+   {
+    "repo": "farion1231/cc-switch",
+    "stars": 144002,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Grok Build & Hermes Agent. Only official website: ccswitch.io"
+   },
+   {
+    "repo": "Shubhamsaboo/awesome-llm-apps",
+    "stars": 141647,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source."
+   },
+   {
+    "repo": "JuliusBrussee/caveman",
+    "stars": 111578,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman."
+   },
+   {
+    "repo": "addyosmani/agent-skills",
+    "stars": 106359,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "Production-grade engineering skills for AI coding agents."
+   },
+   {
+    "repo": "Leonxlnx/taste-skill",
+    "stars": 95760,
+    "pushed": "2026-10-13",
+    "archived": false,
+    "desc": "Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages"
+   },
+   {
+    "repo": "bytedance/deer-flow",
+    "stars": 83839,
+    "pushed": "2026-10-14",
+    "archived": false,
+    "desc": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours."
+   }
+  ]
+ },
+ "search_extra_awesome_opencode": [
+  {
+   "repo": "awesome-opencode/awesome-opencode",
+   "stars": 10576,
+   "pushed": "2026-07-03",
+   "desc": "A curated list of awesome plugins, themes, agents, projects, and resources for opencode"
+  },
+  {
+   "repo": "andyrewlee/awesome-agent-orchestrators",
+   "stars": 2186,
+   "pushed": "2026-10-13",
+   "desc": "List of agent orchestrators"
+  },
+  {
+   "repo": "Prat011/awesome-llm-skills",
+   "stars": 1798,
+   "pushed": "2026-07-14",
+   "desc": "A curated list of awesome LLM and AI Agent Skills, resources and tools"
+  },
+  {
+   "repo": "bradAGI/awesome-cli-coding-agents",
+   "stars": 1349,
+   "pushed": "2026-10-12",
+   "desc": "Curated directory of terminal-native AI coding agents and the harnesses that run them"
+  },
+  {
+   "repo": "loulanyue/awesome-claude-notes",
+   "stars": 272,
+   "pushed": "2026-10-04",
+   "desc": "Community-maintained distribution of reusable AI coding agents, commands, skills"
+  },
+  {
+   "repo": "makoMakoGo/fish-claude",
+   "stars": 172,
+   "pushed": "2026-07-17",
+   "desc": "Fish's custom settings and tools about claude code, codex, oh-my-pi etc"
+  },
+  {
+   "repo": "kael-odin/awesome-academic-research-skills",
+   "stars": 150,
+   "pushed": "2026-10-13",
+   "desc": "(non-ASCII description omitted)"
+  },
+  {
+   "repo": "GulajavaMinistudio/awesome-copilot-id",
+   "stars": 81,
+   "pushed": "2026-10-11",
+   "desc": "A curated collection of custom agents, skills, rules, and prompts for GitHub Copilot"
+  }
+ ]
+}
