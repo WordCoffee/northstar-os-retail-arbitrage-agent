@@ -167,7 +167,7 @@ no re-pointing).
 | `GET /health` | 200 `{status: ok}` (public, never gated) |
 | `GET /api/v1/models` (no token) | **403 `private_alpha_locked`** (in-app lock) |
 | `GET /northstar-os/` | the suite shell loads |
-| Brain selector in ribbon | `local · T2 · northstar-qwen3:rev1` |
+| Brain selector in ribbon | `local · T2 · northstaros-qwen3.8:27b` |
 | AutothinK view | iframe mounts (same-origin) |
 | `GET /api/v1/plans` | Whetstone/Mainstay/Keystone/AutothinK at 39/79/129/179 |
 

@@ -1073,13 +1073,14 @@ manifest), and #10 (atomic `save_report`) above remain NEW B/C work.
 
 | Slot | Model | Why it stays |
 |---|---|---|
-| Master Brain (primary, local) | `northstar-qwen3:rev1` (from `qwen3:14b`, 9.3 GB) | Offline/private fallback; capsule SYSTEM + params baked; rebuild from Modelfile |
-| Base / rebuild source | `qwen3:14b` | Rollback + rebuild base (blobs shared with rev1) |
-| Quick / small | `qwen3:4b` | `small_model`, voice-command input parsing, fast tasks |
-| Vision | `qwen2.5vl:7b` | Images, brand assets, OCR, Memory Bank ingestion |
+| Master Brain (primary, local, sole local model) | `northstaros-qwen3.8:27b` (ISTA-DASLab GSQ-RCO IQ3_XXS + MTP head; base Qwen/Qwen3.8-27B; 10.4 GB) | Single-survivor policy (2026-10-13): every legacy local model purged across all stores. Offline/private fallback; capsule SYSTEM + params baked; rebuild from Modelfile.northstaros-qwen3.8 |
 
-- Params (Modelfile.northstar-qwen3): temp 0.35 / top_p 0.9 / min_p 0.05 /
-  repeat_penalty 1.1 / num_ctx 32768 / num_predict 6000.
+- Params (Modelfile.northstaros-qwen3.8): temp 0.35 / top_p 0.9 / min_p 0.05 /
+  repeat_penalty 1.1 / num_ctx 64576 / num_predict 6000.
+- 2026-10-13 install: all prior local models deleted (Windows Ollama store,
+  Ubuntu WSL ollama store, OpenHands docker containers/images); ollama 0.32.14
+  native lane on :11434. Vision projector (mmproj BF16) kept beside the GGUF
+  for the llama.cpp performance lane; Ollama-lane vision pending.
 - The 2026-09-14 trim deleted 14 local tags (incl. `gpt-oss` ×3 — failed the
   banned-call probe — and local `deepseek-r1`/`deepseek-v4-flash:cloud`).
   Do not re-add a removed local tag without a fresh bench pass (adherence 4/4,
@@ -1095,6 +1096,10 @@ manifest), and #10 (atomic `save_report`) above remain NEW B/C work.
 - Adherence probes 2026-09-14 (local rev1): 4/4 PASS; golden set 2026-09-15:
   8/8 PASS. The DeepSeek V4 Flash / V4.1 engine candidates repeat the same
   probes (banned-call refusal mandatory) before any model is load-bearing.
+- 2026-10-13 engine swap: `northstaros-qwen3.8:27b` (GSQ-RCO IQ3_XXS + MTP)
+  re-ran both sets via `tools/brain_gate.py` → **12/12 PASS** (8 golden + 4
+  adherence, both safety refusals clean). Warm generation 43.2 tok/s at ctx
+  64576 on the RTX 5080 Laptop 16GB, 100% GPU.
 
 ---
 

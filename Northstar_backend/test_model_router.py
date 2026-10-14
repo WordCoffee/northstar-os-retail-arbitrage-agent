@@ -22,10 +22,10 @@ def _clean_env(monkeypatch):
 # --- local resolution ---
 
 def test_local_defaults_by_tier():
-    assert mr.resolve("local", "T1").model == "qwen3:4b"
-    assert mr.resolve("local", "T2").model == "northstar-qwen3:rev1"
-    assert mr.resolve("local", "T3").model == "northstar-qwen3:rev1"
-    assert mr.resolve("local", "V1").model == "qwen2.5vl:7b"
+    assert mr.resolve("local", "T1").model == "northstaros-qwen3.8:27b"
+    assert mr.resolve("local", "T2").model == "northstaros-qwen3.8:27b"
+    assert mr.resolve("local", "T3").model == "northstaros-qwen3.8:27b"
+    assert mr.resolve("local", "V1").model == "northstaros-qwen3.8:27b"
     assert mr.resolve("local", "T2").available is True
 
 
@@ -98,11 +98,11 @@ def test_credit_weights_are_ordered():
 
 
 def test_catalog_shape():
-    c = mr.catalog(["qwen3:4b", "northstar-qwen3:rev1"])
+    c = mr.catalog(["northstaros-qwen3.8:27b"])
     assert c["providers"] == ["local", "cloud"]
     assert "T2" in c["tiers"] and "V3" in c["tiers"]
-    assert c["local"]["defaults"]["T2"] == "northstar-qwen3:rev1"
-    assert c["local"]["installed"] == ["qwen3:4b", "northstar-qwen3:rev1"]
+    assert c["local"]["defaults"]["T2"] == "northstaros-qwen3.8:27b"
+    assert c["local"]["installed"] == ["northstaros-qwen3.8:27b"]
     assert c["cloud"]["live_armed"] is False
 
 
@@ -140,7 +140,7 @@ def test_resolve_for_service_t1_services():
 
 def test_resolve_for_service_operator_local():
     d = mr.resolve_for_service("autothink", provider="local")
-    assert d["resolution"].model == "northstar-qwen3:rev1"
+    assert d["resolution"].model == "northstaros-qwen3.8:27b"
     assert d["escalation_tier"] == "T3"
 
 
@@ -158,7 +158,7 @@ def test_resolve_vision_understand_cloud():
 
 def test_resolve_vision_understand_local():
     r = mr.resolve_vision("V2", "local", "understand")
-    assert r.model == "qwen2.5vl:7b" and r.available is True
+    assert r.model == "northstaros-qwen3.8:27b" and r.available is True
 
 
 def test_resolve_vision_generate_local_comfyui():

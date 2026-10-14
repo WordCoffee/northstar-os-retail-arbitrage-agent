@@ -46,8 +46,9 @@ services:
         condition: service_healthy
     restart: unless-stopped
     command: >
-      sh -c "ollama pull llama3.2:3b || true &&
-             python -m uvicorn backend.server:app --host 0.0.0.0 --port 8100 --log-level info"
+      sh -c "python -m uvicorn backend.server:app --host 0.0.0.0 --port 8100 --log-level info"
+      # 2026-10-13: removed the legacy `ollama pull llama3.2:3b` auto-pull — single-survivor model policy
+      # (northstaros-qwen3.8:27b only; the dockerized ollama service is not the production local lane).
 
   # ──────────────────────────────────────────────────────────────
   # Northstar Backend — FastAPI API + static SPA (port 8000)

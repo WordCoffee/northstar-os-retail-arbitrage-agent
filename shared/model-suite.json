@@ -11,23 +11,23 @@
     "tiers": {
       "T1": {
         "label": "T1 Fast — routing, extraction, summaries, drafts",
-        "local": "qwen3:4b",
+        "local": "northstaros-qwen3.8:27b",
         "cloud": "deepseek/deepseek-v4-flash-0731:free",
         "cloud_provider": "openrouter",
         "cloud_pin": null
       },
       "T2": {
         "label": "T2 Core — main reasoning / copy / analysis",
-        "local": "northstar-qwen3:rev1",
-        "local_alternates": ["qwen3:14b"],
+        "local": "northstaros-qwen3.8:27b",
+        "local_alternates": [],
         "cloud": "deepseek/deepseek-v4-flash-0731",
         "cloud_provider": "openrouter",
         "cloud_pin": "relace/fp4"
       },
       "T3": {
         "label": "T3 Seam — audit-grade, high-stakes escalation",
-        "local": "northstar-qwen3:rev1",
-        "local_alternates": ["qwen3:14b"],
+        "local": "northstaros-qwen3.8:27b",
+        "local_alternates": [],
         "cloud": "deepseek/deepseek-v4.1-flash",
         "cloud_provider": "openrouter",
         "cloud_pin": "deepinfra/fp8"
@@ -38,7 +38,7 @@
     "tiers": {
       "V1": {
         "label": "V1 Lite — screenshots, OCR, browser-control, volume drafts",
-        "understand": { "local": "qwen2.5vl:7b", "cloud": "qwen/qwen3.7-flash", "cloud_provider": "openrouter", "cost_per_1m_in": 0.03, "cost_per_1m_out": 0.13 },
+        "understand": { "local": "northstaros-qwen3.8:27b", "cloud": "qwen/qwen3.7-flash", "cloud_provider": "openrouter", "cost_per_1m_in": 0.03, "cost_per_1m_out": 0.13 },
         "generate": {
           "local": "comfyui:flux2-klein-4b",
           "draft": { "model": "flux.2-klein-9b", "provider": "fal", "cost_per_img": 0.015 },
@@ -47,7 +47,7 @@
       },
       "V2": {
         "label": "V2 Standard — presentations, brand decks, product stills",
-        "understand": { "local": "qwen2.5vl:7b", "cloud": "qwen/qwen3-vl-235b-a22b-instruct", "cloud_provider": "openrouter", "cost_per_1m_in": 0.21, "cost_per_1m_out": 1.90 },
+        "understand": { "local": "northstaros-qwen3.8:27b", "cloud": "qwen/qwen3-vl-235b-a22b-instruct", "cloud_provider": "openrouter", "cost_per_1m_in": 0.21, "cost_per_1m_out": 1.90 },
         "generate": {
           "local": "comfyui:flux2-klein-4b",
           "draft": { "model": "flux.2-klein-9b", "provider": "fal", "cost_per_img": 0.015 },
@@ -57,7 +57,7 @@
       },
       "V3": {
         "label": "V3 Premium — ad visuals, A+ content, UGC, text-heavy graphics",
-        "understand": { "local": "qwen2.5vl:7b", "cloud": "xiaomi/mimo-v2.6-pro", "cloud_provider": "openrouter", "cost_per_1m_in": 0.435, "cost_per_1m_out": 0.87 },
+        "understand": { "local": "northstaros-qwen3.8:27b", "cloud": "xiaomi/mimo-v2.6-pro", "cloud_provider": "openrouter", "cost_per_1m_in": 0.435, "cost_per_1m_out": 0.87 },
         "generate": {
           "local": "comfyui:flux2-klein-4b",
           "draft": { "model": "gpt-image-2-low", "provider": "openrouter", "cost_per_img": 0.03 },

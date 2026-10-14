@@ -226,8 +226,19 @@ return **401 (fail-closed)** — correct posture, not a break.
 | Watch / RankLedger / RivalBoard live rank | Parked post-launch; needs SP-API. Skeletons only. |
 | Stripe billing + Postgres | Parked post-launch; before first PAID cohort. |
 | n8n / webhook / email | Requires Docker services; not part of local SQLite stack. |
-| AutothinK chat | Needs Ollama + model; local LLM otherwise shows "offline" lamp. ListingForge expects `northstar-qwen3:rev1`; AutothinK expects `llama3.2:3b`. |
+| AutothinK chat | Needs Ollama + model; local LLM otherwise shows "offline" lamp. ListingForge + AutothinK expect `northstaros-qwen3.8:27b` (sole local model; single-survivor policy 2026-10-13). |
 | `run-agent.bat` | **Broken** — it calls `npm run pipeline`, which does **not** exist in root `package.json` (only dev/build/preview/test/start/lint/format). Do not rely on it. |
+
+### Local LLM lanes (2026-10-13)
+
+- **App lane (default):** native Ollama on `127.0.0.1:11434`, sole model
+  `northstaros-qwen3.8:27b` (GSQ-RCO IQ3_XXS + MTP head; capsule SYSTEM baked;
+  temp 0.35 / num_ctx 64576). ~43 tok/s warm on the RTX 5080 Laptop 16GB.
+- **Performance/vision lane:** llama.cpp — `scripts\start-northstar-llm.ps1`
+  serves an OpenAI-compatible API on `127.0.0.1:8080` with MTP speculative
+  decoding (`--spec-type draft-mtp`) and the BF16 `mmproj` (vision). Warm
+  ~40 tok/s; MTP draft acceptance ~85%. Unload Ollama before starting it
+  (both want the 16GB card) — see the script header.
 
 ---
 

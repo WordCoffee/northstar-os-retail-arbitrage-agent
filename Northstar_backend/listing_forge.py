@@ -48,7 +48,7 @@ def generate_title(
     brand_voice: Optional[Dict] = None,
     top_keywords: Optional[List[str]] = None,
     competitor_titles: Optional[List[str]] = None,
-    model: str = "northstar-qwen3:rev1",
+    model: str = "northstaros-qwen3.8:27b",
 ) -> Dict[str, Any]:
     """Generate optimized product title.
 
@@ -101,7 +101,7 @@ def generate_bullets(
     product: Dict[str, Any],
     brand_voice: Optional[Dict] = None,
     top_keywords: Optional[List[str]] = None,
-    model: str = "northstar-qwen3:rev1",
+    model: str = "northstaros-qwen3.8:27b",
 ) -> Dict[str, Any]:
     """Generate optimized bullet points (5 feature bullets ≤500 chars each).
 
@@ -149,7 +149,7 @@ def generate_bullets(
 def generate_description(
     product: Dict[str, Any],
     brand_voice: Optional[Dict] = None,
-    model: str = "northstar-qwen3:rev1",
+    model: str = "northstaros-qwen3.8:27b",
 ) -> Dict[str, Any]:
     """Generate product description (≤2000 chars)."""
     prompt = _build_description_prompt(product, brand_voice)
@@ -416,7 +416,7 @@ def _build_description_prompt(product: Dict, brand_voice: Optional[Dict]) -> str
 # LLM integration
 # ---------------------------------------------------------------------------
 
-def _call_llm(prompt: str, model: str = "northstar-qwen3:rev1",
+def _call_llm(prompt: str, model: str = "northstaros-qwen3.8:27b",
               num_options: int = 1) -> List[str]:
     """Call local Ollama LLM for generation."""
     import httpx

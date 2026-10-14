@@ -59,7 +59,7 @@ export default function Autothink({ toast }) {
         <Card title="Engine Status" icon="brain">
           <div className="metric">
             <Metric k="Engine" v="local" d="Ollama" tone="glow" />
-            <Metric k="T2 Model" v={local.defaults?.T2 || 'northstar-qwen3:rev1'} d="default reasoning" tone="lime" />
+            <Metric k="T2 Model" v={local.defaults?.T2 || 'northstaros-qwen3.8:27b'} d="default reasoning" tone="lime" />
             <Metric k="Installed Models" v={installed.length} d={installed.join(' · ') || 'none detected'} />
           </div>
           <div className="divider" />

@@ -61,7 +61,7 @@ def generate_caption(
     brand: str = "Kirkland Signature",
     angle: str = "quality",
     voice: Optional[Dict] = None,
-    model: str = "northstar-qwen3:rev1",
+    model: str = "northstaros-qwen3.8:27b",
 ) -> Dict[str, Any]:
     """Generate a social media caption for a product.
 

@@ -51,7 +51,7 @@ export default function Hub({ toast, navigate }) {
       <div className="stack" style={{ marginTop: 18 }}>
         <Card title="Alpha Command Deck" icon="gauge">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-            <span className="badge badge-live">engine: local · {models?.local?.defaults?.T2 || 'northstar-qwen3:rev1'}</span>
+            <span className="badge badge-live">engine: local · {models?.local?.defaults?.T2 || 'northstaros-qwen3.8:27b'}</span>
             <span className="badge badge-ok">installed: {(models?.local?.installed || []).length} models</span>
             <span className="badge badge-ok">cloud key: {models?.cloud?.key_present ? 'present' : 'none'}</span>
             <span className="badge badge-demo">live refresh: {live ? 'armed' : 'gated'}</span>

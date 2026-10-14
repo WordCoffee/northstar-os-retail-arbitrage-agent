@@ -48,7 +48,7 @@ export default function Ledger({ toast }) {
           {status ? (
             <div className="metric">
               <Metric k="Provider" v="local" d="Ollama default" tone="lime" />
-              <Metric k="T2 Model" v={status.local?.defaults?.T2 || 'northstar-qwen3:rev1'} d="reasoning" />
+              <Metric k="T2 Model" v={status.local?.defaults?.T2 || 'northstaros-qwen3.8:27b'} d="reasoning" />
               <Metric k="Cloud Key" v={status.cloud?.key_present ? 'present' : 'none'} d={status.cloud?.live_armed ? 'armed' : 'not armed'} />
             </div>
           ) : (

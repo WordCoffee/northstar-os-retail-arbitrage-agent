@@ -23,7 +23,7 @@ OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_CHAT_ENDPOINT = f"{OLLAMA_BASE_URL}/api/chat"
 OLLAMA_TAGS_ENDPOINT = f"{OLLAMA_BASE_URL}/api/tags"
 
-DEFAULT_LOCAL_MODEL = "northstar-qwen3:rev1"  # H2: Master Brain primary (vanilla qwen3:14b selectable)
+DEFAULT_LOCAL_MODEL = "northstaros-qwen3.8:27b"  # Master Brain (NorthstarOS Qwen 3.8 27B, GSQ-RCO IQ3_XXS)
 DEFAULT_CLOUD_MODEL = "deepseek/deepseek-v4-flash-0731"  # H2: locked DeepSeek lane (§17)
 LEGACY_CLOUD_MODEL = "gpt-4o"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
@@ -31,11 +31,11 @@ CLOUD_FALLBACK_MARK = "[CLOUD FALLBACK]"
 
 # Generation guardrails for long automation prompts. These override the
 # Modelfile defaults at request time so the AutothinK surface is never
-# capped by a small num_predict or a 16k context window once the model is
-# rebuilt with matching values. num_ctx must not exceed the rebuilt
-# model's context (qwen3:14b supports 32768).
+# capped by a small num_predict or a small context window once the model
+# is rebuilt with matching values. num_ctx must not exceed the rebuilt
+# model's context (northstaros-qwen3.8:27b is served at 64K-class 64576).
 NUM_PREDICT = int(os.environ.get("AUTOTHINK_NUM_PREDICT", "8192"))
-NUM_CTX = int(os.environ.get("AUTOTHINK_NUM_CTX", "32768"))
+NUM_CTX = int(os.environ.get("AUTOTHINK_NUM_CTX", "64576"))
 
 SYSTEM_PROMPT = (
     "You are Northstar AutothinK, the premium build-anything layer of Northstar OS "
