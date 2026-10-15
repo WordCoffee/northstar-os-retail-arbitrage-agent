@@ -1,0 +1,60 @@
+{
+ "anth-mcp-builder.txt": {
+  "bytes": 9059,
+  "flag_count": 0,
+  "flags": [],
+  "urls": [
+   "https://modelcontextprotocol.io/sitemap.xml",
+   "https://modelcontextprotocol.io/specification/draft.md",
+   "https://raw.githubusercontent.com/modelcontextprotocol/python-sdk/main/README.md",
+   "https://raw.githubusercontent.com/modelcontextprotocol/typescript-sdk/main/README.md"
+  ]
+ },
+ "anth-skill-creator.txt": {
+  "bytes": 32987,
+  "flag_count": 8,
+  "flags": [
+   {
+    "rule": "subprocess",
+    "line": 454,
+    "ctx": "ould work in Cowork just fine since it uses `claude -p` via subprocess, not a browser, but please save it until you've fully finis"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 228,
+    "ctx": "the aggregation script from the skill-creator directory:    ```bash    python -m scripts.aggregate_benchmark <workspace>/iterat"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 237,
+    "ctx": "r** with both qualitative outputs and quantitative data:    ```bash    nohup python <skill-creator-path>/eval-viewer/generate_r"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 286,
+    "ctx": "plaints.  Kill the viewer server when you're done with it:  ```bash kill $VIEWER_PID 2>/dev/null ```  ---  ## Improving the ski"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 381,
+    "ctx": "the eval set to the workspace, then run in the background:  ```bash python -m scripts.run_loop \\   --eval-set <path-to-trigger-"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 412,
+    "ctx": "package the skill and present the .skill file to the user:  ```bash python -m scripts.package_skill <path/to/skill-folder> ``` "
+   },
+   {
+    "rule": "token",
+    "line": 234,
+    "ctx": "riminating), high-variance evals (possibly flaky), and time/token tradeoffs.  4. **Launch the viewer** with both qualitative "
+   },
+   {
+    "rule": "token",
+    "line": 263,
+    "ctx": "hmark\" tab shows the stats summary: pass rates, timing, and token usage for each configuration, with per-eval breakdowns and "
+   }
+  ],
+  "urls": []
+ }
+}
