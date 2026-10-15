@@ -1,0 +1,324 @@
+{
+ "wsh-api-documenter.md": {
+  "bytes": 7470,
+  "flag_count": 2,
+  "flags": [
+   {
+    "rule": "curl",
+    "line": 78,
+    "ctx": "ontract validation - Automated testing of code examples and curl commands - Response validation against schema definitions - "
+   },
+   {
+    "rule": "token",
+    "line": 69,
+    "ctx": "tion - API key management and security best practices - JWT token handling and refresh mechanisms - Rate limiting and throttl"
+   }
+  ],
+  "urls": []
+ },
+ "wsh-architect-review.md": {
+  "bytes": 7781,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "token",
+    "line": 58,
+    "ctx": "rity model implementation - OAuth2, OpenID Connect, and JWT token management - API security patterns including rate limiting "
+   }
+  ],
+  "urls": []
+ },
+ "wsh-async-python.md": {
+  "bytes": 7522,
+  "flag_count": 0,
+  "flags": [],
+  "urls": [
+   "https://api.example.com"
+  ]
+ },
+ "wsh-auth-patterns.md": {
+  "bytes": 2677,
+  "flag_count": 4,
+  "flags": [
+   {
+    "rule": "credential",
+    "line": 28,
+    "ctx": "g identity (username/password, OAuth, biometrics) - Issuing credentials (sessions, tokens) - Managing login/logout  **Authorizatio"
+   },
+   {
+    "rule": "password",
+    "line": 27,
+    "ctx": "ion (AuthN)**: Who are you?  - Verifying identity (username/password, OAuth, biometrics) - Issuing credentials (sessions, tokens"
+   },
+   {
+    "rule": "password",
+    "line": 68,
+    "ctx": "re, sameSite flags 5. **Validate All Input**: Email format, password strength 6. **Rate Limit Auth Endpoints**: Prevent brute fo"
+   },
+   {
+    "rule": "password",
+    "line": 77,
+    "ctx": "r  ## Common Pitfalls  - **Weak Passwords**: Enforce strong password policies - **JWT in localStorage**: Vulnerable to XSS, use "
+   }
+  ],
+  "urls": []
+ },
+ "wsh-backend-architect.md": {
+  "bytes": 18356,
+  "flag_count": 3,
+  "flags": [
+   {
+    "rule": "credential",
+    "line": 85,
+    "ctx": "ting - **CORS**: Cross-origin policies, preflight requests, credential handling - **CSRF protection**: Token-based, SameSite cooki"
+   },
+   {
+    "rule": "secret",
+    "line": 209,
+    "ctx": "guration management**: Environment variables, config files, secret management - **Feature flags**: Feature toggles, gradual ro"
+   },
+   {
+    "rule": "token",
+    "line": 70,
+    "ctx": "ization  - **OAuth 2.0**: Authorization flows, grant types, token management - **OpenID Connect**: Authentication layer, ID t"
+   }
+  ],
+  "urls": []
+ },
+ "wsh-backend-security-coder.md": {
+  "bytes": 9453,
+  "flag_count": 8,
+  "flags": [
+   {
+    "rule": "credential",
+    "line": 27,
+    "ctx": "tion at rest and in transit - **Secret management**: Secure credential storage, environment variable best practices, secret rotati"
+   },
+   {
+    "rule": "credential",
+    "line": 35,
+    "ctx": "ration**: Strict CORS policies, preflight request handling, credential-aware CORS - **Session management**: Secure session handlin"
+   },
+   {
+    "rule": "credential",
+    "line": 57,
+    "ctx": "ization - **Database authentication**: Connection security, credential management, connection pooling security - **Data encryption"
+   },
+   {
+    "rule": "password",
+    "line": 84,
+    "ctx": "ty**: Hashing algorithms (bcrypt, Argon2), salt generation, password policies - **Session security**: Secure session tokens, ses"
+   },
+   {
+    "rule": "secret",
+    "line": 27,
+    "ctx": "re credential storage, environment variable best practices, secret rotation strategies - **Output encoding**: Context-aware en"
+   },
+   {
+    "rule": "token",
+    "line": 42,
+    "ctx": "tion for non-GET requests - **Double-submit cookies**: CSRF token implementation in cookies and headers - **SameSite cookie e"
+   },
+   {
+    "rule": "token",
+    "line": 86,
+    "ctx": "lementation**: Secure JWT handling, signature verification, token expiration - **OAuth security**: Secure OAuth flows, PKCE i"
+   },
+   {
+    "rule": "token",
+    "line": 145,
+    "ctx": " \"Implement secure user authentication with JWT and refresh token rotation\" - \"Review this API endpoint for injection vulnera"
+   }
+  ],
+  "urls": []
+ },
+ "wsh-code-reviewer.md": {
+  "bytes": 8436,
+  "flag_count": 2,
+  "flags": [
+   {
+    "rule": "credential",
+    "line": 42,
+    "ctx": "ection, XSS, and CSRF prevention verification - Secrets and credential management assessment - API security patterns and rate limi"
+   },
+   {
+    "rule": "credential",
+    "line": 65,
+    "ctx": "-specific configuration validation - Secrets management and credential security review - Monitoring and observability configuratio"
+   }
+  ],
+  "urls": []
+ },
+ "wsh-database-architect.md": {
+  "bytes": 16779,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "amazon",
+    "line": 25,
+    "ctx": "B, Google Spanner, YugabyteDB - **Graph databases**: Neo4j, Amazon Neptune, ArangoDB - **Search engines**: Elasticsearch, Open"
+   }
+  ],
+  "urls": []
+ },
+ "wsh-error-detective.md": {
+  "bytes": 1220,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "wsh-fastapi-pro.md": {
+  "bytes": 5978,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "wsh-fastapi-templates.md": {
+  "bytes": 3602,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "password",
+    "line": 128,
+    "ctx": "son={             \"email\": \"test@example.com\",             \"password\": \"testpass123\",             \"name\": \"Test User\"         } "
+   }
+  ],
+  "urls": [
+   "http://test"
+  ]
+ },
+ "wsh-openapi-specs.md": {
+  "bytes": 2043,
+  "flag_count": 0,
+  "flags": [],
+  "urls": [
+   "https://api.example.com/v1"
+  ]
+ },
+ "wsh-performance-engineer.md": {
+  "bytes": 10384,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "playwright",
+    "line": 37,
+    "ctx": "esting, WebSocket testing - **Browser testing**: Puppeteer, Playwright, Selenium WebDriver performance testing - **Chaos engineeri"
+   }
+  ],
+  "urls": []
+ },
+ "wsh-pg-table-design.md": {
+  "bytes": 7906,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "wsh-python-errors.md": {
+  "bytes": 6164,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "wsh-python-patterns.md": {
+  "bytes": 4721,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "wsh-python-pro.md": {
+  "bytes": 6744,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "wsh-python-structure.md": {
+  "bytes": 6371,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "wsh-security-auditor.md": {
+  "bytes": 9612,
+  "flag_count": 4,
+  "flags": [
+   {
+    "rule": "secret",
+    "line": 22,
+    "ctx": "management - **Secrets management**: HashiCorp Vault, cloud secret managers, secret rotation automation  ### Modern Authentica"
+   },
+   {
+    "rule": "secret",
+    "line": 22,
+    "ctx": "crets management**: HashiCorp Vault, cloud secret managers, secret rotation automation  ### Modern Authentication & Authorizat"
+   },
+   {
+    "rule": "secret",
+    "line": 153,
+    "ctx": "I tenancy with Cloud Guard, Security Zones, and centralized secret management\" - \"Implement secure API gateway with OAuth 2.0,"
+   },
+   {
+    "rule": "token",
+    "line": 27,
+    "ctx": " - **JWT security**: Proper implementation, key management, token validation, security best practices - **Zero-trust architec"
+   }
+  ],
+  "urls": []
+ },
+ "wsh-sql-optimization.md": {
+  "bytes": 5961,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "wsh-stride-patterns.md": {
+  "bytes": 2440,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "wsh-tdd-orchestrator.md": {
+  "bytes": 9856,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "credential",
+    "line": 103,
+    "ctx": "ment configuration and infrastructure as code - Secrets and credential management for testing environments  ### Legacy Code & Refa"
+   }
+  ],
+  "urls": []
+ },
+ "wsh-test-automator.md": {
+  "bytes": 10653,
+  "flag_count": 4,
+  "flags": [
+   {
+    "rule": "credential",
+    "line": 90,
+    "ctx": "visioning - API mocking and service virtualization - Secure credential management and rotation - GDPR and compliance consideration"
+   },
+   {
+    "rule": "playwright",
+    "line": 45,
+    "ctx": "Test Automation Frameworks  - Cross-browser automation with Playwright and Selenium WebDriver - Mobile test automation with Appium"
+   },
+   {
+    "rule": "playwright",
+    "line": 61,
+    "ctx": "orex and TestComplete for enterprise automation - Microsoft Playwright Code Generation and recording  ### CI/CD Testing Integratio"
+   },
+   {
+    "rule": "browser_auto",
+    "line": 45,
+    "ctx": "c selectors  ### Modern Test Automation Frameworks  - Cross-browser automation with Playwright and Selenium WebDriver - Mobile test automa"
+   }
+  ],
+  "urls": []
+ },
+ "wsh-threat-modeling-expert.md": {
+  "bytes": 1722,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ }
+}
