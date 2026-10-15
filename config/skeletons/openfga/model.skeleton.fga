@@ -1,0 +1,28 @@
+# NorthstarOS - OpenFGA authorization model SKELETON (Phase-3 unit 7).
+# NOT ENABLED. No store, no tokens, no server started, no ports.
+# Enablement requires a separate owner approval; run loopback-only by digest.
+#
+# Mapping notes (hosted product):
+# - kernel capability grants remain the runtime enforcement for agent tasks;
+# - OpenFGA models CUSTOMER-facing authorization (default-deny by construction:
+#   with no relation tuple, every check fails).
+model
+  schema 1.1
+
+type user
+
+type tenant
+  relations
+    define member: [user]
+    define admin: [user]
+
+type api_key
+  relations
+    define tenant: [tenant]
+    define owner: [user]
+
+type task
+  relations
+    define tenant: [tenant]
+    define can_view: member from tenant
+    define can_run: admin from tenant

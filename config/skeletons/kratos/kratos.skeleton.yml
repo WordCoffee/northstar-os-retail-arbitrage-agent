@@ -1,0 +1,45 @@
+# NorthstarOS - Ory Kratos config SKELETON (Phase-3 unit 7). NOT ENABLED.
+# Image pinned: oryd/kratos@sha256:2a13bb8d362c7a7ae33bd7c0f5168aee46921f15c916a06346db91c06dc76643
+# (installed; no container, no ports). Enablement requires separate owner
+# approval; run loopback-only.
+#
+# Credentials: this file NEVER carries values. At enable-time, supply the DSN
+# and cookie secrets via Kratos env overrides / a generated (uncommitted)
+# config - environment NAMES only, per standing rules.
+dsn: ""  # REPLACE at enable-time (env override); never commit a real DSN
+
+serve:
+  public:
+    base_url: http://127.0.0.1:4433/
+    host: 127.0.0.1
+    port: 4433
+  admin:
+    base_url: http://127.0.0.1:4434/
+    host: 127.0.0.1
+    port: 4434
+
+selfservice:
+  default_browser_return_url: http://127.0.0.1:8101/  # local UI origin
+  methods:
+    password:
+      enabled: true
+    totp:
+      enabled: true      # MFA (approved design)
+    webauthn:
+      enabled: true      # passkeys (approved design)
+      config:
+        rp:
+          id: 127.0.0.1            # set to the real UI origin at enable-time
+          origin: http://127.0.0.1:8101/
+  flows:
+    registration:
+      enabled: false               # invite-only wiring lands at enable-time (owner-gated)
+    recovery:
+      enabled: true
+
+secrets:
+  cookie: []  # values provided at enable-time via env, never committed
+
+log:
+  level: info
+  format: text
