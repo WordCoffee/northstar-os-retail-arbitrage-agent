@@ -142,3 +142,19 @@ Owner-approved 2026-10-11 with hard pinning conditions; installed the same day.
 | Network | Loopback-only publish `127.0.0.1:9222:9222`; proof: `scripts/lightpanda_loopback_test.ps1` (PASS 2026-10-11) |
 | Config | `docker-compose.lightpanda.yml` (config only — the binary is never committed) |
 | License posture | AGPL-3.0 — runs **unmodified** as a separate process; never forked or patched |
+
+## Adopted dev/quality tooling - D-S2 (2026-10-14)
+
+All pinned; installed at operator-machine scope (no repo changes beyond this record).
+
+| Tool | Pinned version | Install location | Notes |
+|---|---|---|---|
+| trivy | 0.76.0 | `C:\Users\T2Hol\AppData\Local\trivy\0.76.0\trivy.exe` (sha256 VERIFIED vs release `checksums.txt`: `7b4762a5a5326cb4b83dfd2bb5d9aaf15a1ed867c75cad7dd8b38840a28e7be6`) | Container/IaC/secret/SBOM scanning. First vuln scan downloads the vulnerability DB (network). Secret scan run 2026-10-14 on `northstar/`: no findings (exit 0). Note: trivy uses entropy heuristics - low-entropy fake-shaped samples are intentionally not flagged. |
+| pip-audit | 2.10.1 | uv tool (`%USERPROFILE%\.local\bin\pip-audit.exe`) | Python dependency vuln audit; audits against PyPI advisory data. |
+| semgrep | 1.181.0 | uv tool (`%USERPROFILE%\.local\bin\semgrep.exe`) | Static analysis. Hygiene: run with `SEMGREP_SEND_METRICS=off` (metrics otherwise sent to Semgrep by default). |
+| schemathesis | 4.31.1 | uv tool (`%USERPROFILE%\.local\bin\schemathesis.exe`) | Property-based API testing from OpenAPI (FastAPI surface). |
+| promptfoo | 0.124.1 | npm global (`npm i -g promptfoo@0.124.1`) | Prompt/agent eval + red-teaming. |
+| context7 (MCP) | endpoint `https://mcp.context7.com/mcp` | OpenCode global config (added 2026-10-14; backup `opencode.json.bak.20261014b`) | Remote docs MCP; verified connected (tools `resolve-library-id`, `query-docs` live). Queries go to the Context7 API - never include secrets/customer data; optional API key (context7.com/dashboard) for higher rate limits. |
+
+- PATH note: `%USERPROFILE%\.local\bin` is not on PATH; run `uv tool update-shell` once (or use full paths). Not applied automatically.
+- Wiring into `scripts/security_checks.ps1` / CI is a follow-up decision (D-S2 scope was install + verify + record).

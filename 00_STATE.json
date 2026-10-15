@@ -575,7 +575,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-10-15T01:33:26Z",
+  "last_updated": "2026-10-15T02:11:55Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1164,6 +1164,12 @@
       "activity": "SCL_SKILL_INTAKE_COMPLETE_5_PACKS",
       "batch": "SCL-P6+",
       "summary": "All 5 approved skill-intake packs executed end-to-end: wshobson/agents (24), VoltAgent (12), obra/superpowers (13), mattpocock/skills (14), anthropics/skills (1: mcp-builder + LICENSE). 77 vendored skills total (79 dirs incl. 2 northstar-authored). Rejections/exclusions listed: mp-wizard (credential plumbing), mp-git-guardrails (wrong harness), skill-creator (script-coupled), docx/pdf/pptx/xlsx (source-available), webapp-testing (browser policy). Each pack: full-content scan + secret scanner + self-gated install + pinned provenance + evidence JSON. Gates: 219/219 tests; scan 0 new / 0 known-active / 231 allowlisted. Commits: 1ffc7f4, a5d4b62, d91a803, e7a93ec, 3f63b5b. Next (owner): D-S2 tooling, D-S3 SDD pilot, D-S4 deep reviews; D1 standing."
+    },
+    {
+      "ts": "2026-10-15T02:11:55Z",
+      "activity": "SCL_DS2_TOOLING_ADOPTED",
+      "batch": "SCL-D-S2",
+      "summary": "D-S2 tooling adopted and verified: trivy 0.76.0 (SHA256 verified vs release checksums; secret scan on northstar/ clean), pip-audit 2.10.1 + semgrep 1.181.0 + schemathesis 4.31.1 (uv tools), promptfoo 0.124.1 (npm global), context7 MCP added to global OpenCode config and CONNECTED (resolve-library-id/query-docs live; backup opencode.json.bak.20261014b). Machine-scope installs only; PATH untouched; CI wiring deferred (follow-up). Report: reports/tooling_adoptions_20261014.md; docs: SECURITY_TOOLING.md. Gates: 219/219; scan 0/0/231."
     }
   ],
   "owner_action_queue": [
@@ -1256,13 +1262,13 @@
     {
       "id": "OA-SCL-2",
       "card": "SECURE-CONTROL-LAYER",
-      "need": "Remaining after the completed skill intake: D-S2 tooling adds (trivy, pip-audit, semgrep, schemathesis, promptfoo, context7); D-S3 SDD pilot pick (spec-kit vs OpenSpec); D-S4 deep-review queue (ECC, codegraph, OpenCode-native packs). Review the intake results.",
+      "need": "Remaining after the completed skill intake (D-S1) and tooling adoptions (D-S2): D-S3 SDD pilot pick (spec-kit vs OpenSpec); D-S4 deep-review queue (ECC, codegraph, OpenCode-native packs). Standing: D1 Phase 3b completion slice.",
       "when": "next owner review",
       "blocks": "vendoring intake of new packs; tooling adoption",
       "safe_default": "no installs/clones until approved",
       "status": "OPEN",
       "owner_response": "",
-      "verification": "Skill intake EXECUTED 2026-10-14: 5/5 approved packs, 77 vendored skills installed (wshobson 24, VoltAgent 12, superpowers 13, mattpocock 14, anthropics 1); rejections/exclusions listed (mp-wizard, mp-git-guardrails, skill-creator, docx/pdf/pptx/xlsx, webapp-testing). Commits 1ffc7f4, a5d4b62, d91a803, e7a93ec, 3f63b5b. Gates: 219/219 tests; scan 0 new / 0 known-active / 231 allowlisted. Summary: reports/intake_summary_20261014.md."
+      "verification": "D-S1 intake EXECUTED 2026-10-14: 77 vendored skills across 5 packs (rejections listed; reports/intake_summary_20261014.md). D-S2 tooling EXECUTED 2026-10-14: trivy 0.76.0 (checksum-verified), pip-audit 2.10.1, semgrep 1.181.0, schemathesis 4.31.1 (uv tools), promptfoo 0.124.1 (npm), context7 MCP added + connected (reports/tooling_adoptions_20261014.md; docs/SECURITY_TOOLING.md). Gates: 219/219 tests; scan 0 new / 0 known-active / 231 allowlisted."
     }
   ],
   "activity": [
