@@ -1,0 +1,250 @@
+{
+ "volt-ai-writing-auditor.md": {
+  "bytes": 4235,
+  "flag_count": 0,
+  "flags": [],
+  "urls": [
+   "https://github.com/conorbronsdon/avoid-ai-writing"
+  ]
+ },
+ "volt-api-designer.md": {
+  "bytes": 6115,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "volt-auth-integration-engineer.md": {
+  "bytes": 9737,
+  "flag_count": 28,
+  "flags": [
+   {
+    "rule": "credential",
+    "line": 29,
+    "ctx": "de flow with PKCE for web, mobile, and SPA clients - Client credentials flow for machine-to-machine calls - Device authorization f"
+   },
+   {
+    "rule": "credential",
+    "line": 213,
+    "ctx": "e - Support mobile-developer on native app flows and secure credential storage - Engage microservices-architect on service-to-serv"
+   },
+   {
+    "rule": "password",
+    "line": 3,
+    "ctx": "oken management, multi-tenant permission models, or MFA and passwordless login.\" tools: Read, Write, Edit, Bash, Glob, Grep mode"
+   },
+   {
+    "rule": "password",
+    "line": 32,
+    "ctx": "en exchange for delegation and impersonation - Implicit and password grants avoided as deprecated and unsafe - Discovery via `.w"
+   },
+   {
+    "rule": "password",
+    "line": 77,
+    "ctx": " - Authorization checks colocated with data access  MFA and passwordless: - TOTP enrollment, verification, and drift handling - "
+   },
+   {
+    "rule": "password",
+    "line": 90,
+    "ctx": "constraints - Migration paths off a provider without forced password resets - Custom claims and token enrichment - Webhook handl"
+   },
+   {
+    "rule": "secret",
+    "line": 212,
+    "ctx": "emented flows for weaknesses - Consult security-engineer on secret management and key rotation infrastructure - Support mobile"
+   },
+   {
+    "rule": "token",
+    "line": 3,
+    "ctx": "on — OAuth 2.1/OIDC flows, SAML enterprise SSO, session and token management, multi-tenant permission models, or MFA and pass"
+   },
+   {
+    "rule": "token",
+    "line": 8,
+    "ctx": "spans OAuth 2.1 and OIDC flows, enterprise SSO, session and token lifecycle, and multi-tenant authorization models, with emph"
+   },
+   {
+    "rule": "token",
+    "line": 13,
+    "ctx": " implementation context 2. Review existing auth code paths, token handling, and session storage 3. Analyze trust boundaries, "
+   },
+   {
+    "rule": "token",
+    "line": 14,
+    "ctx": " handling, and session storage 3. Analyze trust boundaries, token validation gaps, and authorization enforcement points 4. Im"
+   },
+   {
+    "rule": "token",
+    "line": 22,
+    "ctx": "edirect URIs matched exactly against an allowlist - Refresh token rotation with reuse detection enabled - Session cookies set"
+   },
+   {
+    "rule": "token",
+    "line": 40,
+    "ctx": "cess tokens paired with long-lived refresh tokens - Refresh token rotation with reuse detection and family revocation - Signa"
+   },
+   {
+    "rule": "token",
+    "line": 43,
+    "ctx": "ated on every request - Revocation strategy given stateless token verification - Token storage per client type, avoiding `loc"
+   },
+   {
+    "rule": "token",
+    "line": 69,
+    "ctx": " data modeling - Tenant resolution from subdomain, path, or token claim - Tenant isolation enforced at the query layer, not t"
+   },
+   {
+    "rule": "token",
+    "line": 91,
+    "ctx": "provider without forced password resets - Custom claims and token enrichment - Webhook handling for identity lifecycle events"
+   },
+   {
+    "rule": "token",
+    "line": 99,
+    "ctx": ", enabling CSRF on the callback - `nonce` omitted, allowing token replay in OIDC - JWT signature unverified or verified again"
+   },
+   {
+    "rule": "token",
+    "line": 104,
+    "ctx": "entifier taken from a request body rather than the verified token - Password reset tokens that are long-lived, reusable, or g"
+   },
+   {
+    "rule": "token",
+    "line": 111,
+    "ctx": "2M), identity providers, tenancy model, existing session or token approach, compliance requirements, and enterprise SSO needs"
+   },
+   {
+    "rule": "token",
+    "line": 122,
+    "ctx": "ng any flow.  Analysis priorities: - Client types and their token storage constraints - Identity provider capabilities and li"
+   },
+   {
+    "rule": "token",
+    "line": 134,
+    "ctx": "ap trust boundaries - Select flows per client type - Define token lifetimes - Model roles and permissions - Plan provider int"
+   },
+   {
+    "rule": "token",
+    "line": 158,
+    "ctx": " claim - Fail closed on any verification error - Centralize token verification in one place - Keep authorization next to data"
+   },
+   {
+    "rule": "token",
+    "line": 189,
+    "ctx": "es: - Negative tests for every validation branch - Tampered token and signature tests - Expired and not-yet-valid token handl"
+   },
+   {
+    "rule": "token",
+    "line": 190,
+    "ctx": "pered token and signature tests - Expired and not-yet-valid token handling - Replayed authorization code and assertion tests "
+   },
+   {
+    "rule": "token",
+    "line": 198,
+    "ctx": "e behavior  Migration and rollout: - Dual-validation during token format changes - Gradual cutover per client type - Backward"
+   },
+   {
+    "rule": "token",
+    "line": 208,
+    "ctx": "gration with other agents: - Work with backend-developer on token validation middleware and route protection - Collaborate wi"
+   },
+   {
+    "rule": "token",
+    "line": 209,
+    "ctx": "llaborate with frontend-developer on login flows and secure token storage - Coordinate with api-designer on scope design and "
+   },
+   {
+    "rule": "token",
+    "line": 217,
+    "ctx": "rization on the server, and fail closed while treating each token, redirect, and callback as untrusted input until proven oth"
+   }
+  ],
+  "urls": []
+ },
+ "volt-database-optimizer.md": {
+  "bytes": 6553,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "volt-docker-expert.md": {
+  "bytes": 8150,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "secret",
+    "line": 226,
+    "ctx": "ng - Sidecar containers - Init container setup - Build-time secret injection  Development workflow: - Docker Compose setup - V"
+   }
+  ],
+  "urls": []
+ },
+ "volt-mcp-developer.md": {
+  "bytes": 6940,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "volt-penetration-tester.md": {
+  "bytes": 6737,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "volt-powershell-51.md": {
+  "bytes": 2459,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "volt-powershell-7.md": {
+  "bytes": 2303,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "volt-powershell-security.md": {
+  "bytes": 2474,
+  "flag_count": 3,
+  "flags": [
+   {
+    "rule": "credential",
+    "line": 10,
+    "ctx": " affect PowerShell usage, endpoint configuration, remoting, credentials, logs, and automation infrastructure.  ## Core Capabilitie"
+   },
+   {
+    "rule": "credential",
+    "line": 19,
+    "ctx": "s, WinRM endpoints, and service accounts - Implement secure credential patterns (SecretManagement, Key Vault, DPAPI, Credential Lo"
+   },
+   {
+    "rule": "password",
+    "line": 29,
+    "ctx": "for least privilege design - Detect anti-patterns (embedded passwords, plain-text creds, insecure logs) - Validate secure parame"
+   }
+  ],
+  "urls": []
+ },
+ "volt-prompt-engineer.md": {
+  "bytes": 6417,
+  "flag_count": 2,
+  "flags": [
+   {
+    "rule": "token",
+    "line": 8,
+    "ctx": " on achieving consistent, reliable outputs while minimizing token usage and costs.   When invoked: 1. Query context manager f"
+   },
+   {
+    "rule": "token",
+    "line": 225,
+    "ctx": "ted. Tested 47 variations achieving 93.2% accuracy with 38% token reduction. Implemented dynamic few-shot selection and chain"
+   }
+  ],
+  "urls": []
+ },
+ "volt-refactoring-specialist.md": {
+  "bytes": 6939,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ }
+}

@@ -2,6 +2,7 @@
 
 - Core pack: marketingskills (5) + agency-agents (9).
 - Engineering pack: wshobson/agents (24, pinned 46891e7e60da0e52baf1050b7b6391b64e84c6d9).
+- VoltAgent pack: awesome-claude-code-subagents (12, pinned 408d3c9eee2d0c75c12a3abb5de29e53c2ca6b9e).
 
 Every skill must carry the Northstar rules block, a service tag, adapted
 sections, and pinned provenance. Rejected candidates stay absent, banned
@@ -59,6 +60,21 @@ INSTALLED_WSH = [
     "wsh-sql-optimization",
 ]
 
+INSTALLED_VOLT = [
+    "volt-powershell-7",
+    "volt-powershell-51",
+    "volt-api-designer",
+    "volt-auth-integration-engineer",
+    "volt-docker-expert",
+    "volt-penetration-tester",
+    "volt-powershell-security",
+    "volt-ai-writing-auditor",
+    "volt-prompt-engineer",
+    "volt-database-optimizer",
+    "volt-mcp-developer",
+    "volt-refactoring-specialist",
+]
+
 BANNED_PHRASES = (
     "curl -",
     "wget ",
@@ -76,7 +92,7 @@ def _read(skill: str) -> str:
 
 
 def test_installed_skills_carry_rules_block_and_provenance():
-    for skill in INSTALLED_CORE + INSTALLED_WSH:
+    for skill in INSTALLED_CORE + INSTALLED_WSH + INSTALLED_VOLT:
         text = _read(skill)
         assert text.startswith("---\n"), skill
         assert "NORTHSTAR RULES" in text, skill
@@ -84,7 +100,7 @@ def test_installed_skills_carry_rules_block_and_provenance():
         assert re.search(r"commit `[0-9a-f]{40}`", text), skill
     for skill in INSTALLED_CORE:
         assert "Amazon adaptations" in _read(skill), skill
-    for skill in INSTALLED_WSH:
+    for skill in INSTALLED_WSH + INSTALLED_VOLT:
         assert "Northstar adaptations" in _read(skill), skill
 
 
@@ -95,12 +111,19 @@ def test_wshobson_provenance_is_pinned():
         assert "46891e7e60da0e52baf1050b7b6391b64e84c6d9" in text, skill
 
 
+def test_volt_provenance_is_pinned():
+    for skill in INSTALLED_VOLT:
+        text = _read(skill)
+        assert "github.com/VoltAgent/awesome-claude-code-subagents" in text, skill
+        assert "408d3c9eee2d0c75c12a3abb5de29e53c2ca6b9e" in text, skill
+
+
 def test_rejected_candidate_is_absent():
     assert not (SKILLS / "agency-multi-platform-publisher").exists()
 
 
 def test_banned_tooling_phrases_absent():
-    for skill in INSTALLED_CORE + INSTALLED_WSH:
+    for skill in INSTALLED_CORE + INSTALLED_WSH + INSTALLED_VOLT:
         lower = _read(skill).lower()
         for phrase in BANNED_PHRASES:
             assert phrase not in lower, f"{skill}: contains {phrase!r}"
@@ -114,6 +137,6 @@ def test_security_auditor_samples_are_sanitized():
 
 def test_skill_dir_count_matches_manifest():
     dirs = sorted(p.name for p in SKILLS.iterdir() if p.is_dir())
-    assert len(dirs) == 2 + len(INSTALLED_CORE) + len(INSTALLED_WSH)
+    assert len(dirs) == 2 + len(INSTALLED_CORE) + len(INSTALLED_WSH) + len(INSTALLED_VOLT)
     for skill in ("northstar-data-rules", "northstar-collector"):
         assert skill in dirs
