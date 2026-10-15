@@ -1,0 +1,236 @@
+{
+ "source": {
+  "repo": "google/robotstxt",
+  "sha": "22b355ff855419e6a3ff8ff09c0ad7fdb17116f9",
+  "file": "robots_test.cc",
+  "license": "Apache-2.0",
+  "note": "test cases derived and transformed to JSON from the pinned upstream test file; not a verbatim file copy"
+ },
+ "cases": [
+  {
+   "robots": "user-agent: FooBot\ndisallow: /\n",
+   "agent": "FooBot",
+   "url": "http://example.com/",
+   "expected_allowed": false,
+   "protego_allows": false,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/x/b",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "BarBot",
+   "url": "http://foo.bar/w/a",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/foo/bar/",
+   "expected_allowed": false,
+   "protego_allows": true,
+   "protego_matches_google_cpp": false
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "BarBot",
+   "url": "http://example.com/",
+   "expected_allowed": false,
+   "protego_allows": true,
+   "protego_matches_google_cpp": false
+  },
+  {
+   "robots": "User-Agent: FoO bAr\nAllow: /x/\nDisallow: /\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/x/y",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: FOO BAR\nAllow: /x/\nDisallow: /\n",
+   "agent": "Foo",
+   "url": "http://foo.bar/x/y",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: FOO BAR\nAllow: /x/\nDisallow: /\n",
+   "agent": "Foo",
+   "url": "http://foo.bar/a/b",
+   "expected_allowed": false,
+   "protego_allows": true,
+   "protego_matches_google_cpp": false
+  },
+  {
+   "robots": "User-Agent: foo bar\nAllow: /x/\nDisallow: /\n",
+   "agent": "foo",
+   "url": "http://foo.bar/x/y",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo bar\nAllow: /x/\nDisallow: /\n",
+   "agent": "foo",
+   "url": "http://foo.bar/a/b",
+   "expected_allowed": false,
+   "protego_allows": true,
+   "protego_matches_google_cpp": false
+  },
+  {
+   "robots": "",
+   "agent": "FooBot",
+   "url": "http://example.com/",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "user-agent: FooBot\nallow: /\nuser-agent: BarBot\ndisallow: /\nuser-agent: BazBot\ndisallow: /\n",
+   "agent": "QuxBot",
+   "url": "http://example.com/",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/x",
+   "expected_allowed": false,
+   "protego_allows": true,
+   "protego_matches_google_cpp": false
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/x/y.html",
+   "expected_allowed": false,
+   "protego_allows": true,
+   "protego_matches_google_cpp": false
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/foo/bar/%E3%83%84",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/foo/bar/quz",
+   "expected_allowed": false,
+   "protego_allows": true,
+   "protego_matches_google_cpp": false
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/foo/bax/quz",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "foobot",
+   "url": "http://foo.com/allowed-slash/index.htm",
+   "expected_allowed": false,
+   "protego_allows": true,
+   "protego_matches_google_cpp": false
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/fux",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/fish.html",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/fishheads/yummy.html",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/?id=fish",
+   "expected_allowed": false,
+   "protego_allows": true,
+   "protego_matches_google_cpp": false
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/fish/salmon",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/filename.php",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar//folder/any.php.file.html",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/index?php",
+   "expected_allowed": false,
+   "protego_allows": true,
+   "protego_matches_google_cpp": false
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/filename.php5",
+   "expected_allowed": false,
+   "protego_allows": true,
+   "protego_matches_google_cpp": false
+  },
+  {
+   "robots": "User-Agent: foo\nAllow: /some/path\nUser-Agent: bar\n\n\n",
+   "agent": "FooBot",
+   "url": "http://foo.bar/fish.php",
+   "expected_allowed": true,
+   "protego_allows": true,
+   "protego_matches_google_cpp": true
+  }
+ ],
+ "divergence_note": "Google's C++ matcher (robots_test.cc) implements implementation-specific semantics for some user-agent group constructions (e.g. a prefix group 'foo' matching bot 'FooBot' whose only rule is 'Allow: /some/path' yields DENY for other paths in the C++ reference). Both protego (RFC 9309-style) and urllib.robotparser return ALLOW there. Divergent cases are kept for documentation but not asserted."
+}
