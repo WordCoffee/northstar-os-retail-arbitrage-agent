@@ -1,0 +1,30 @@
+# Advisory: dedupe Linux re-eval (Phase-3 open item 1; manual trigger only).
+# dedupe 3.0.3 needs its own venv: BTrees<6 fixes the IFBucket.byValue crash,
+# and numpy<2 conflicts with splink/pyarrow (requires numpy>=2), so this job
+# stays SEPARATE from the splink spike. Synthetic probe only; no real data.
+name: advisory-dedupe-eval
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  dedupe-eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Dedicated venv (dedupe needs numpy<2 + BTrees<6; do not mix with splink)
+        run: |
+          python -m venv /tmp/dv
+          /tmp/dv/bin/pip install --disable-pip-version-check "dedupe==3.0.3" "BTrees<6" "numpy<2"
+      - name: Probe (synthetic; no network at runtime)
+        run: /tmp/dv/bin/python scripts/spikes/dedupe_linux_probe.py
