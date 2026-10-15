@@ -3,6 +3,7 @@
 - Core pack: marketingskills (5) + agency-agents (9).
 - Engineering pack: wshobson/agents (24, pinned 46891e7e60da0e52baf1050b7b6391b64e84c6d9).
 - VoltAgent pack: awesome-claude-code-subagents (12, pinned 408d3c9eee2d0c75c12a3abb5de29e53c2ca6b9e).
+- Superpowers pack: obra/superpowers (13, pinned bb92a77741419a4ab5f06e711a283343f1ada0c3).
 
 Every skill must carry the Northstar rules block, a service tag, adapted
 sections, and pinned provenance. Rejected candidates stay absent, banned
@@ -75,6 +76,24 @@ INSTALLED_VOLT = [
     "volt-refactoring-specialist",
 ]
 
+INSTALLED_SP = [
+    "sp-brainstorming",
+    "sp-dispatching-parallel-agents",
+    "sp-executing-plans",
+    "sp-finishing-a-development-branch",
+    "sp-receiving-code-review",
+    "sp-requesting-code-review",
+    "sp-subagent-driven-development",
+    "sp-systematic-debugging",
+    "sp-test-driven-development",
+    "sp-using-git-worktrees",
+    "sp-verification-before-completion",
+    "sp-writing-plans",
+    "sp-writing-skills",
+]
+
+ALL_VENDORED = INSTALLED_CORE + INSTALLED_WSH + INSTALLED_VOLT + INSTALLED_SP
+
 BANNED_PHRASES = (
     "curl -",
     "wget ",
@@ -92,7 +111,7 @@ def _read(skill: str) -> str:
 
 
 def test_installed_skills_carry_rules_block_and_provenance():
-    for skill in INSTALLED_CORE + INSTALLED_WSH + INSTALLED_VOLT:
+    for skill in ALL_VENDORED:
         text = _read(skill)
         assert text.startswith("---\n"), skill
         assert "NORTHSTAR RULES" in text, skill
@@ -100,7 +119,7 @@ def test_installed_skills_carry_rules_block_and_provenance():
         assert re.search(r"commit `[0-9a-f]{40}`", text), skill
     for skill in INSTALLED_CORE:
         assert "Amazon adaptations" in _read(skill), skill
-    for skill in INSTALLED_WSH + INSTALLED_VOLT:
+    for skill in INSTALLED_WSH + INSTALLED_VOLT + INSTALLED_SP:
         assert "Northstar adaptations" in _read(skill), skill
 
 
@@ -118,12 +137,19 @@ def test_volt_provenance_is_pinned():
         assert "408d3c9eee2d0c75c12a3abb5de29e53c2ca6b9e" in text, skill
 
 
+def test_superpowers_provenance_is_pinned():
+    for skill in INSTALLED_SP:
+        text = _read(skill)
+        assert "github.com/obra/superpowers" in text, skill
+        assert "bb92a77741419a4ab5f06e711a283343f1ada0c3" in text, skill
+
+
 def test_rejected_candidate_is_absent():
     assert not (SKILLS / "agency-multi-platform-publisher").exists()
 
 
 def test_banned_tooling_phrases_absent():
-    for skill in INSTALLED_CORE + INSTALLED_WSH + INSTALLED_VOLT:
+    for skill in ALL_VENDORED:
         lower = _read(skill).lower()
         for phrase in BANNED_PHRASES:
             assert phrase not in lower, f"{skill}: contains {phrase!r}"
@@ -137,6 +163,6 @@ def test_security_auditor_samples_are_sanitized():
 
 def test_skill_dir_count_matches_manifest():
     dirs = sorted(p.name for p in SKILLS.iterdir() if p.is_dir())
-    assert len(dirs) == 2 + len(INSTALLED_CORE) + len(INSTALLED_WSH) + len(INSTALLED_VOLT)
+    assert len(dirs) == 2 + len(ALL_VENDORED)
     for skill in ("northstar-data-rules", "northstar-collector"):
         assert skill in dirs

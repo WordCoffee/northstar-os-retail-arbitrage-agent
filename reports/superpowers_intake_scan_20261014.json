@@ -1,0 +1,251 @@
+{
+ "brainstorming.md": {
+  "bytes": 10073,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "dispatching-parallel-agents.md": {
+  "bytes": 6052,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "executing-plans.md": {
+  "bytes": 20249,
+  "flag_count": 2,
+  "flags": [
+   {
+    "rule": "secret",
+    "line": 37,
+    "ctx": "om the plan without a ledgered ruling is a decision made in secret.  Four things stop you, and only these: an irreversible or "
+   },
+   {
+    "rule": "secret",
+    "line": 313,
+    "ctx": "dger the ruling. Unledgered deviation is a decision made in secret. | | \"I'll write the ledger lines after a few tasks\" | Comp"
+   }
+  ],
+  "urls": []
+ },
+ "finishing-a-development-branch.md": {
+  "bytes": 7729,
+  "flag_count": 8,
+  "flags": [
+   {
+    "rule": "bash_fence",
+    "line": 30,
+    "ctx": "pass:** continue to Step 2.  ## Step 2: Detect Environment  ```bash GIT_DIR=$(cd \"$(git rev-parse --git-dir)\" 2>/dev/null && pw"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 88,
+    "ctx": "s.  ## Step 5: Execute Choice  ### Option 1: Merge Locally  ```bash # Get main repo root for CWD safety MAIN_ROOT=$(git -C \"$(g"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 109,
+    "ctx": "n: clean up the worktree (Step 6), then delete the branch:  ```bash git branch -d <feature-branch> ```  ### Option 2: Push and "
+   },
+   {
+    "rule": "bash_fence",
+    "line": 115,
+    "ctx": " -d <feature-branch> ```  ### Option 2: Push and Create PR  ```bash git push -u origin <feature-branch> # From a detached HEAD,"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 148,
+    "ctx": "m. ```  Wait for that exact confirmation. When it arrives:  ```bash MAIN_ROOT=$(git -C \"$(git rev-parse --git-common-dir)/..\" r"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 155,
+    "ctx": "lean up the worktree (Step 6) and force-delete the branch:  ```bash git branch -D <feature-branch> ```  ## Step 6: Cleanup Work"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 172,
+    "ctx": "s/`:** Superpowers created this worktree — we own cleanup:  ```bash git worktree remove \"$WORKTREE_PATH\" git worktree prune  # "
+   },
+   {
+    "rule": "bash_fence",
+    "line": 182,
+    "ctx": "tiative. Show your human partner what is at stake and ask:  ```bash git -C \"$WORKTREE_PATH\" status --porcelain -uall ```  ``` W"
+   }
+  ],
+  "urls": []
+ },
+ "receiving-code-review.md": {
+  "bytes": 6165,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "requesting-code-review.md": {
+  "bytes": 2970,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "bash_fence",
+    "line": 27,
+    "ctx": "fixing complex bug  ## How to Request  **1. Get git SHAs:** ```bash BASE_SHA=$(git rev-parse HEAD~1)  # or: git merge-base orig"
+   }
+  ],
+  "urls": []
+ },
+ "subagent-driven-development.md": {
+  "bytes": 32358,
+  "flag_count": 2,
+  "flags": [
+   {
+    "rule": "secret",
+    "line": 480,
+    "ctx": " ruling that dies with the workspace was a decision made in secret.  When the final whole-branch review is clean and its fixes"
+   },
+   {
+    "rule": "token",
+    "line": 208,
+    "ctx": " — which silently defeats this section.  **Turn count beats token price.** Wall-clock and context cost scale with how many tu"
+   }
+  ],
+  "urls": []
+ },
+ "systematic-debugging.md": {
+  "bytes": 9506,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "bash_fence",
+    "line": 88,
+    "ctx": "c component    ```     **Example (multi-layer system):**    ```bash    # Layer 1: Workflow    echo \"=== Secrets available in wo"
+   }
+  ],
+  "urls": []
+ },
+ "test-driven-development.md": {
+  "bytes": 9556,
+  "flag_count": 4,
+  "flags": [
+   {
+    "rule": "bash_fence",
+    "line": 117,
+    "ctx": "### Verify RED - Watch It Fail  **MANDATORY. Never skip.**  ```bash npm test path/to/test.test.ts ```  Confirm: - Test fails (n"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 172,
+    "ctx": "he test.  ### Verify GREEN - Watch It Pass  **MANDATORY.**  ```bash npm test path/to/test.test.ts ```  Confirm: - Test passes -"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 269,
+    "ctx": "sult.error).toBe('Email required'); }); ```  **Verify RED** ```bash $ npm test FAIL: expected 'Email required', got undefined `"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 285,
+    "ctx": "r: 'Email required' };   }   // ... } ```  **Verify GREEN** ```bash $ npm test PASS ```  **REFACTOR** Extract validation for mu"
+   }
+  ],
+  "urls": []
+ },
+ "using-git-worktrees.md": {
+  "bytes": 6803,
+  "flag_count": 9,
+  "flags": [
+   {
+    "rule": "npm_install",
+    "line": 108,
+    "ctx": "iate setup:  ```bash # Node.js if [ -f package.json ]; then npm install; fi  # Rust if [ -f Cargo.toml ]; then cargo build; fi  # P"
+   },
+   {
+    "rule": "pip_install",
+    "line": 114,
+    "ctx": " cargo build; fi  # Python if [ -f requirements.txt ]; then pip install -r requirements.txt; fi if [ -f pyproject.toml ]; then poet"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 20,
+    "ctx": "hing, check if you are already in an isolated workspace.**  ```bash GIT_DIR=$(cd \"$(git rev-parse --git-dir)\" 2>/dev/null && pw"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 28,
+    "ctx": "already in a worktree,\" verify you are not in a submodule:  ```bash # If this returns a path, you're in a submodule, not a work"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 70,
+    "ctx": "heck for an existing project-local worktree directory:**    ```bash    ls -d .worktrees 2>/dev/null     # Preferred (hidden)   "
+   },
+   {
+    "rule": "bash_fence",
+    "line": 82,
+    "ctx": "ST verify directory is ignored before creating worktree:**  ```bash git check-ignore -q .worktrees 2>/dev/null || git check-ign"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 92,
+    "ctx": "worktree contents to repository.  #### Create the Worktree  ```bash # Determine path based on chosen location path=\"$LOCATION/$"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 106,
+    "ctx": "p 2: Project Setup  Auto-detect and run appropriate setup:  ```bash # Node.js if [ -f package.json ]; then npm install; fi  # R"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 125,
+    "ctx": "lean Baseline  Run tests to ensure workspace starts clean:  ```bash # Use project-appropriate command npm test / cargo test / p"
+   }
+  ],
+  "urls": []
+ },
+ "verification-before-completion.md": {
+  "bytes": 3598,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "writing-plans.md": {
+  "bytes": 10317,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "bash_fence",
+    "line": 134,
+    "ctx": "py::test_name -v` Expected: PASS  - [ ] **Step 5: Commit**  ```bash git add tests/path/test.py src/path/file.py git commit -m \""
+   }
+  ],
+  "urls": []
+ },
+ "writing-skills.md": {
+  "bytes": 26523,
+  "flag_count": 4,
+  "flags": [
+   {
+    "rule": "bash_fence",
+    "line": 225,
+    "ctx": "e concise)  **Techniques:**  **Move details to tool help:** ```bash # ❌ BAD: Document all flags in SKILL.md search-conversation"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 262,
+    "ctx": "nclude multiple examples of same pattern  **Verification:** ```bash wc -w skills/path/SKILL.md # getting-started workflows: aim"
+   },
+   {
+    "rule": "bash_fence",
+    "line": 319,
+    "ctx": "s` in this directory to render a skill's flowcharts to SVG: ```bash node ./render-graphs.js ../some-skill           # Each diag"
+   },
+   {
+    "rule": "token",
+    "line": 215,
+    "ctx": "ently-referenced skills load into EVERY conversation. Every token counts.  **Target word counts:** - getting-started workflow"
+   }
+  ],
+  "urls": [
+   "https://agentskills.io/specification"
+  ]
+ }
+}
