@@ -130,3 +130,48 @@ jobs:
           ls /tmp/northstar-migrations | wc -l
       - name: RLS lint (advisory; baseline before Phase-7 RLS)
         run: pgrls lint --migrations /tmp/northstar-migrations || true
+
+  osv-scan:
+    # Advisory (Phase-3 unit 2): OSV dependency/SBOM scanning; complements the
+    # `audit` job (pip-audit). Advisory until the first triage cycle completes.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install osv-scanner (pinned v2.7.0; checksums-file digest pinned)
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/osv_SHA256SUMS https://github.com/google/osv-scanner/releases/download/v2.7.0/osv-scanner_SHA256SUMS
+          echo "95d69019bcfe0586eb8f07aad4c56e2f734ee969e8e3e209591f259a1bfde88c  /tmp/osv_SHA256SUMS" | sha256sum -c -
+          curl -fsSL -o /tmp/osv-scanner https://github.com/google/osv-scanner/releases/download/v2.7.0/osv-scanner_linux_amd64
+          cd /tmp && grep " osv-scanner_linux_amd64$" osv_SHA256SUMS | sed 's/ osv-scanner_linux_amd64$/ osv-scanner/' | sha256sum -c -
+          chmod +x /tmp/osv-scanner
+      - name: OSV scan (advisory)
+        run: /tmp/osv-scanner scan source -r . || true
+
+  grype-scan:
+    # Advisory (Phase-3 unit 2): grype image/FS vulnerability scan (its own DB).
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install grype (pinned v0.120.1; checksums-file digest pinned)
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/grype_checksums.txt https://github.com/anchore/grype/releases/download/v0.120.1/grype_0.120.1_checksums.txt
+          echo "c25b6095265b44fd9bbb9dbe76aca8daa394c5f0490793d2b52b16be4f5b71b1  /tmp/grype_checksums.txt" | sha256sum -c -
+          curl -fsSL -o /tmp/grype.tar.gz https://github.com/anchore/grype/releases/download/v0.120.1/grype_0.120.1_linux_amd64.tar.gz
+          cd /tmp && grep " grype_0.120.1_linux_amd64.tar.gz$" grype_checksums.txt | sha256sum -c -
+          tar -xzf /tmp/grype.tar.gz -C /tmp
+      - name: Grype scan (advisory)
+        run: /tmp/grype dir:. --output table || true
