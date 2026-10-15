@@ -579,8 +579,16 @@
       "latency": "14B Q4_K_M on RTX 5080 16GB; probe prompts 2.6-26.3s incl. cold load"
     }
   },
-  "last_updated": "2026-10-14T03:46:59Z",
+  "last_updated": "2026-10-15T04:12:16Z",
   "history": [
+    {
+      "ts": "2026-10-15T04:12:16Z",
+      "activity": "local_llm_perf_optimization_20261014",
+      "batch": "Operator-directed: 'complete this and install everything needed' - the Qwen3.8-27B RTX-5080 optimization checklist (FlashAttention / KV cache q8 / MTP / full offload / power+driver). Local only, zero paid/live calls.",
+      "summary": "MEASURED VERDICTS (not taken on faith): (1) OLLAMA_FLASH_ATTENTION=1 REJECTED - ~6x gen regression on this model (FA forced on 3.28-3.40 tok/s vs engine-default auto 38.95-39.41 tok/s warm, same box/hour/prompt); persisted var removed. (2) OLLAMA_KV_CACHE_TYPE=q8_0 REJECTED on the Ollama lane (requires FA-on which is broken here; f16 KV = 4048 MiB at 64k ctx fits VRAM); q8_0 KV remains fine on the standalone llama.cpp CUDA lane. (3) MTP VERIFIED+TUNED: new llama.cpp b11632 CUDA 13.4 (official release at %USERPROFILE%\\tools\\llama-b11632\\cuda; winget b11580 Vulkan kept as measured 2-3x-slower fallback) with --spec-type draft-mtp --spec-draft-n-max 6 --spec-draft-p-min 0.65 = 70.1 tok/s gen @ 92.7% draft acceptance vs 41.8 tok/s spec-off (+68%); n-max 4 = 54.6; n-max 8 unstable (1.26). (4) 100% GPU verified (66/66 layers, ~13.5 GiB resident, no spill). (5) Power plan set High performance (GUID 4465a621-3aa7-4e76-9427-05e4cb6878b1); NVIDIA driver 610.88 checked, 617.42 (Oct 6 2026) left to operator via NVIDIA App. scripts/start-northstar-llm.ps1 updated (CUDA path, draft-max 6, auto-unloads Ollama before starting - they share the 16GB card). INCIDENT+REPAIR (transparency): during disk housekeeping deleted a 153-byte manifest config blob (blob audit had checked only the layers array) -> model 'not found'; rebuilt via the documented Modelfile rollback path and ALL digests reproduced bit-identically (config 7730b255, model c9250e14, system d5f3f0de, params e19ebc08, id 77879776424f); verified by load+generation. DISK: freed 9.73GB orphan + 9.73GB staging blobs (staging deleted only after full-manifest verification), recreate -9.73GB, pagefile swings explained (committed peaked 50.9/54.5GB; pagefile 24-40GB until a reboot applies the 4-24GB registry cap) -> 69GB free at close. ENV: leftover ComfyUI server (C:\\Users\\T2Hol\\ComfyUI pid 7148, 9GB commit, 2MB resident) measured ~2x LLM slowdown (19.4 vs 39.4 tok/s) - stopped; keep media servers off during LLM-heavy sessions. End-to-end lane validation: script -> health ok -> chat 'LANE OK' -> clean stop -> Ollama reloaded warm. Full report: reports/local_llm_perf_optimization_20261014.md",
+      "test_counts": "Ollama lane: warm gen 39.4/39.41 tok/s, prefill 6596 tok/s (1075-tok prompt); FA-on regression reproduced 4x (3.28-3.40). llama.cpp CUDA: MTP n6 70.12 tok/s @92.7% (153/165), n4 54.63 @82.7%, no-spec 41.77, n8 1.26 unstable; Vulkan n4 20.7. /v1/chat/completions smoke 'LANE OK'; manifest restore digest-identical.",
+      "next_action": "Operator: (a) update NVIDIA driver 610.88 -> 617.42 via NVIDIA App; (b) reboot when convenient to apply the 4-24GB pagefile cap; (c) keep ComfyUI/media servers stopped during LLM-heavy sessions; (d) optional: apply Ollama 0.40.4 (already downloaded) then re-run tools/brain_gate.py; (e) still pending from 10-13: WSL ollama systemd disable (sudo)."
+    },
     {
       "ts": "2026-10-14T22:30:00Z",
       "activity": "media_stack_install_comfyui_image_video_audio",
