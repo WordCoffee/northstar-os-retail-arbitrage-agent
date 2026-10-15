@@ -158,3 +158,11 @@ All pinned; installed at operator-machine scope (no repo changes beyond this rec
 
 - PATH note: `%USERPROFILE%\.local\bin` is not on PATH; run `uv tool update-shell` once (or use full paths). Not applied automatically.
 - Wiring into `scripts/security_checks.ps1` / CI is a follow-up decision (D-S2 scope was install + verify + record).
+
+## Docker Desktop resource caps (operator note, 2026-10-15)
+
+Docker Desktop on this box shares resources with the local model lanes (Ollama + llama.cpp), and the engine has now been wedged twice by heavy operations (a stalled image pull on 2026-10-14 left it unresponsive to every command until an operator restart; the post-restart state came up with the engine fully stopped until Docker Desktop was launched). Recommended caps while local-model work runs:
+- **Settings -> Resources -> Memory**: cap the VM (e.g. 6-8 GB). Our containers (lightpanda, postgres) are small; llama.cpp/Ollama need the headroom on this 16 GB system.
+- Keep **"Start Docker Desktop when you sign in" OFF** if you want the engine stopped during GPU-heavy sessions; launch it when containers are needed.
+- **Avoid pulling large images while a model is loaded** — a wedged pull can take the whole engine down (observed 2026-10-14: two probe runs stalled; engine unresponsive until restart).
+- After any engine restart: `docker start northstar-lightpanda` is the only expected container action. The app stack is recreatable via its compose file; its data lives in named volumes (verified `northstarosretailarbitrageagent_postgres-data` survives container removal).
