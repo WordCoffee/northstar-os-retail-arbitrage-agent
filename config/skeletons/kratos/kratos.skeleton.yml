@@ -38,7 +38,7 @@ selfservice:
       enabled: true
 
 secrets:
-  cookie: []  # values provided at enable-time via env, never committed
+  cookie: ["<SET-AT-ENABLE-TIME>"]  # env-provided values only; never committed
 
 log:
   level: info
