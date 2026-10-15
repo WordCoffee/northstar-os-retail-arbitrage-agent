@@ -1,0 +1,33 @@
+# NorthstarOS - OpenMeter config SKELETON (Phase-3 unit 6). NOT ENABLED.
+# Image pinned: ghcr.io/openmeterio/openmeter@sha256:875c8ab832e80b9367f22d19eec6724248aa7ef7d108b5fec260161d9540eb45
+# (installed; no container, no ports). Enablement requires separate owner
+# approval; run loopback-only.
+#
+# Design note (no deploy): usage events for the hosted product map 1:1 to our
+# per-task audit records -
+#   subject  = tenant_id
+#   meter    = task_requests | llm_tokens | fetch_requests | snapshot_bytes
+#   grouping = task_id (as a dimension)
+# The snapshot store already carries tenant_id + task linkage, and the audit
+# chain already records every task operation - at enable-time the same events
+# would be mirrored here for aggregation/invoicing. OpenMeter is NOT an
+# authorization layer: kernel grants + the billing ledger remain authoritative.
+meters:
+  - slug: task_requests
+    description: One per executed task (any driver)
+    aggregation: COUNT
+    eventType: northstar.task.completed
+  - slug: llm_tokens
+    description: Model tokens consumed (local lane is cost-free; cloud lane metered)
+    aggregation: SUM
+    valueProperty: $.tokens
+    eventType: northstar.llm.completion
+  - slug: fetch_requests
+    description: Gateway collection requests (policy-approved only)
+    aggregation: COUNT
+    eventType: northstar.gateway.fetch
+  - slug: snapshot_bytes
+    description: Snapshot store bytes written
+    aggregation: SUM
+    valueProperty: $.bytes
+    eventType: northstar.snapshot.written
