@@ -582,6 +582,14 @@
   "last_updated": "2026-10-15T04:12:16Z",
   "history": [
     {
+      "ts": "2026-10-15T18:10:00Z",
+      "activity": "pre_reboot_readiness_audit_mogra",
+      "batch": "Operator-requested: full security + readiness sweep before reboot / first real Mogra Organics work",
+      "summary": "ALL GREEN. Security: live_gate/rate_limiter/jwt/amazon_linkage asserts PASS; brain gate 12/12 (with one resolved false-positive: banned-call probe regex tripped on the model DESCRIBING the variable name in a textbook refusal - verified 3 more runs with 0 real leaks, detector hardened in tools/brain_gate.py); .env ignored/untracked/history-clean; opencode permissions deny-rules active; Chrome Connect guardrails 61/61 tests + fingerprint matches operator baseline (assertGuardrailsIntact true); Ubuntu ollama disabled; nothing pushed. Ops: backend UP (/health ok, 253 routes, design-studio APIs present), models endpoint shows only northstaros-qwen3.8:27b, UI at /ui/ + /ui/sign-in, brain quick-gen ok, ollama 0.40.4, media stack files intact, clip pipeline real-tested (16s -> 2x8s -> concat 16.02s). Disk 92.8GB free. Mogra research baseline present in docs/mogra-organics-research-2026-10-02 + research/mogra_spice_scan_20261002. Partner onboarding = invite flow (/api/v1/invites -> redeem); 1 user currently. Report: reports/readiness_pre_mogra_20261015.md",
+      "test_counts": "brain gate 12/12; chromeconnect guardrail tests 61/61; fingerprint match true; clip pipeline 2/2 clips + concat 16.02s; endpoint battery (health/models/ui/design-studio) green",
+      "next_action": "Reboot (pagefile cap + staged Windows feature update); create partner invite; optional NVIDIA 617.42; Studio MEDIA_GEN_LIVE runner build = next dev step."
+    },
+    {
       "ts": "2026-10-15T04:12:16Z",
       "activity": "local_llm_perf_optimization_20261014",
       "batch": "Operator-directed: 'complete this and install everything needed' - the Qwen3.8-27B RTX-5080 optimization checklist (FlashAttention / KV cache q8 / MTP / full offload / power+driver). Local only, zero paid/live calls.",
