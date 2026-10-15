@@ -582,6 +582,14 @@
   "last_updated": "2026-10-14T03:46:59Z",
   "history": [
     {
+      "ts": "2026-10-14T22:30:00Z",
+      "activity": "media_stack_install_comfyui_image_video_audio",
+      "batch": "Operator-directed: install + verify the full local media stack (same logic as the master-brain hunt)",
+      "summary": "COMPLETED. (1) ComfyUI updated 0.38->0.40; all 5 smoke tests PASS: Z-Image Turbo 1024 render ~11s warm; FLUX.2 klein 4B Q8 24s; SeedVR2 3B 2x upscale 27s; Wan 2.2 TI2V-5B 832x480/2s clip 106s (real MP4 on 15.4GB RAM); Qwen3-TTS CustomVoice narration 27s (FLAC). (2) Installed + SHA-verified: flux-2-klein-4b-Q8_0.gguf (4.30GB), seedvr2_3b_fp8 + vae, Wan2.2-TI2V-5B-Q5_K_M + wan2.2_vae, umt5-xxl-encoder-Q5_K_M, flux2-vae (re-fetched after truncation; sha d64f3a68), Qwen3-TTS Base+CustomVoice+Tokenizer weights. (3) Tools: ffmpeg 9.0.2 on PATH (tools\\ffmpeg\\bin), tools/clip_split.py (5-15s split + concat), tools/comfy_smoke.py (repeatable 4-lane harness). (4) Fixes: streaming .NET part-merge (cmd copy unreliable); ComfyUI-QwenTTS deps (sox, onnxruntime) + transformers pinned 4.57.0 + one vendored-code patch (check_model_inputs); pagefile capped 4-24GB via registry (reboot applies); pip/hf/temp caches purged (~18GB). (5) Network outages mid-install handled by resumable chunked downloads. LTX-2.3 I2AV deferred until 64GB RAM upgrade (RAM-gated for >=720p/longer clips).",
+      "test_counts": "smoke 5/5 PASS (z-image 11s, klein 24.4s, seedvr2 27.1s, wan 105.8s real mp4, tts 27.3s flac); all artifact SHA-256 verified except flux2-vae (size+SHA re-verified after fix)",
+      "next_action": "Reboot to apply pagefile cap (reclaims ~12GB). Optional: pull LTX-2.3 (25-43GB) after RAM upgrade; build the Design Studio MEDIA_GEN_LIVE runner on top of tools/comfy_smoke.py graphs."
+    },
+    {
       "ts": "2026-10-14T03:46:59Z",
       "activity": "northstaros_qwen3.8_27b_single_survivor_install",
       "batch": "Operator-directed full fleet replacement (ZERO legacy models -> single survivor)",

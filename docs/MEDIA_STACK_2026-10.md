@@ -68,3 +68,39 @@ together 5–15 s segments; long video → clips is this tool, per operator spec
   accurate; extend when the Studio integration (MEDIA_GEN_LIVE runner) is
   built. This doc is the source of truth for runner model IDs.
 - ComfyUI's own outputs land in `C:\Users\T2Hol\ComfyUI\output`.
+
+---
+
+## 2026-10-14 install results (smoke-verified)
+
+| Test | Result | Time | Output |
+|---|---|---|---|
+| Z-Image Turbo · 1024² product render | PASS | **~11 s warm** | `ns-smoke-zimage_00001_.png` (catalog-grade mug) |
+| FLUX.2 klein 4B Q8 · 1024² product render | PASS | **24–31 s** | `ns-smoke-klein_00002_.png` (studio kettle) |
+| SeedVR2 3B · 2× upscale (1024→2048) | PASS | **27.1 s** | `ns-smoke-seedvr2_00001_.png` |
+| Wan 2.2 TI2V-5B · 832×480 · 2 s clip · 20 steps | PASS | **105.8 s** | `ns-smoke-wan_00001_.mp4` |
+| Qwen3-TTS narration (CustomVoice) | see `_tts_weights.log` + smoke json | — | pending final run |
+
+Notable: Wan 2.2 produces a real clip on 15.4 GB RAM at 480p/2s in under two
+minutes (the RAM wall applies to ≥720p / longer clips). Sequential policy
+enforced (brain unloaded) for every test.
+
+## Fixes applied during install (keep this list)
+
+1. **flux2-vae was truncated** by an early guess at its size — re-downloaded
+   with the true size/SHA (`d64f3a68…`, 336,213,556 B). All other files were
+   SHA-256-verified at staging time.
+2. **Chunk merges** use a streaming .NET concat (`_part0..5` → file), not
+   `cmd copy /b` (unreliable with this file mix).
+3. **ComfyUI-QwenTTS node** (user-installed copies may overwrite these):
+   - vendored `qwen_tts` needed `sox` + `onnxruntime` + `transformers==4.57.0`
+     (5.18 broke vendored config classes with `pad_token_id` AttributeError);
+   - patched `@check_model_inputs()` → `@check_model_inputs` in
+     `qwen_tts/core/tokenizer_12hz/modeling_qwen3_tts_tokenizer_v2.py`;
+   - TTS model weights pulled to `models/TTS/Qwen3-TTS/<repo>/`.
+4. **Pagefile** was ballooning (36 GB+) under video renders and ate disk space
+   mid-download. Capped via registry to 4 GB initial / 24 GB max
+   (`HKLM\...\Memory Management\PagingFiles = "C:\pagefile.sys 4096 24576"`) —
+   **applies at next reboot** and reclaims ~12 GB then.
+5. Disk hygiene: pip cache purge (10.2 GB), HF cache cleared (3.6 GB), TEMP
+   cleanup (4.1 GB).

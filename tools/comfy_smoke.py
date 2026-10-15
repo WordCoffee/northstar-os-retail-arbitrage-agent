@@ -56,6 +56,8 @@ def run_graph(name, graph, timeout_s=3600):
                     outs.append(v.get("filename"))
                 for v in node_out.get("videos", []) or []:
                     outs.append(v.get("filename"))
+                for v in node_out.get("audio", []) or []:
+                    outs.append(v.get("filename"))
             return {"test": name, "ok": status.get("status_str") == "success",
                     "status": status.get("status_str"), "seconds": round(time.time() - t0, 1),
                     "outputs": outs}
@@ -80,7 +82,7 @@ def t_klein():
         "7": {"class_type": "CFGGuider", "inputs": {"model": ["1", 0], "positive": ["4", 0], "negative": ["5", 0], "cfg": 1}},
         "8": {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "euler"}},
         "9": {"class_type": "Flux2Scheduler", "inputs": {"steps": 4, "width": 1024, "height": 1024}},
-        "10": {"class_type": "RandomNoise", "inputs": {"noise_seed": 42, "control_after_generate": "fixed"}},
+        "10": {"class_type": "RandomNoise", "inputs": {"noise_seed": 42}},
         "11": {"class_type": "SamplerCustomAdvanced", "inputs": {"noise": ["10", 0], "guider": ["7", 0], "sampler": ["8", 0], "sigmas": ["9", 0], "latent_image": ["6", 0]}},
         "12": {"class_type": "VAEDecode", "inputs": {"samples": ["11", 0], "vae": ["3", 0]}},
         "13": {"class_type": "SaveImage", "inputs": {"images": ["12", 0], "filename_prefix": "ns-smoke-klein"}},
@@ -93,7 +95,7 @@ def t_seedvr2():
         return {"test": "seedvr2", "ok": None, "skipped": "files not staged yet"}
     g = {
         "1": {"class_type": "LoadImage", "inputs": {"image": "ns_input_mug.png"}},
-        "2": {"class_type": "ResizeImageMaskNode", "inputs": {"input": ["1", 0], "resize_type": "scale by multiplier", "resize_type.multiplier": 2, "resize_type.method": "lanczos"}},
+        "2": {"class_type": "ResizeImageMaskNode", "inputs": {"input": ["1", 0], "resize_type": "scale by multiplier", "multiplier": 2.0, "scale_method": "lanczos"}},
         "3": {"class_type": "SeedVR2Preprocess", "inputs": {"resized_images": ["2", 0]}},
         "4": {"class_type": "UNETLoader", "inputs": {"unet_name": "seedvr2_3b_fp8_e4m3fn.safetensors", "weight_dtype": "default"}},
         "5": {"class_type": "VAELoader", "inputs": {"vae_name": "seedvr2_ema_vae_fp16.safetensors"}},
@@ -147,13 +149,27 @@ def inventory():
     }
 
 
+def t_tts():
+    node_req = COMFY / "custom_nodes" / "ComfyUI-QwenTTS" / "requirements.txt"
+    if not node_req.exists():
+        return {"test": "tts", "ok": None, "skipped": "QwenTTS node not installed"}
+    g = {
+        "1": {"class_type": "AILab_Qwen3TTSCustomVoice", "inputs": {"text": "Northstar OS local narration test. This voiceover was generated fully offline on the operator's machine.", "speaker": "Ryan", "model_size": "1.7B", "language": "English", "unload_models": False, "seed": 42}},
+        "2": {"class_type": "SaveAudio", "inputs": {"audio": ["1", 0], "filename_prefix": "ns-smoke-tts"}},
+    }
+    return run_graph("tts", g, timeout_s=3600)
+
+
 def main():
+    want = set(sys.argv[1:]) if len(sys.argv) > 1 else None
     results = [inventory()]
-    for fn in (t_klein, t_seedvr2, t_wan):
+    for name, fn in (("klein", t_klein), ("seedvr2", t_seedvr2), ("wan", t_wan), ("tts", t_tts)):
+        if want and name not in want:
+            continue
         try:
             results.append(fn())
         except Exception as e:
-            results.append({"test": fn.__name__, "ok": False, "error": str(e)})
+            results.append({"test": name, "ok": False, "error": str(e)})
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     out = REPORT_DIR / f"comfy_media_smoke_{ts}.json"
     REPORT_DIR.mkdir(exist_ok=True)
