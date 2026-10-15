@@ -575,7 +575,7 @@
       "before_after_ab": "NOT POSSIBLE - old-stack models deleted by operator trim 2026-09-14; forward token/session KPI measurement pending on rev1"
     }
   },
-  "last_updated": "2026-10-14T07:41:45Z",
+  "last_updated": "2026-10-15T01:33:26Z",
   "history": [
     {
       "ts": "2026-09-15T22:00:00Z",
@@ -1158,6 +1158,12 @@
       "activity": "SCL_GITHUB_SCAN_AND_OPENCODE_FIX",
       "batch": "SCL-P7+",
       "summary": "Read-only GitHub scan (47 repos + 6 searches; no installs): dev-accelerator shortlist incl. wshobson/agents (202 agents, OpenCode-supported), VoltAgent subagents, obra/superpowers workflow skills, mattpocock/skills, anthropics/skills spec; tooling trivy/pip-audit/semgrep/schemathesis/promptfoo/context7; SDD pilot spec-kit|OpenSpec; ECC/codegraph deep review. Also fixed OpenCode x northstaros-qwen3.8 reasoning-effort failure: config moved to native providers block; Ollama passes low/medium, rejects high/xhigh (xhigh->max quirk), so high/xhigh now omit the field (template default xhigh). Verified end-to-end (#high ok). Reports: github_agent_scan_20261014.md, opencode_qwen3.8_variant_fix_20261014.md."
+    },
+    {
+      "ts": "2026-10-15T01:33:26Z",
+      "activity": "SCL_SKILL_INTAKE_COMPLETE_5_PACKS",
+      "batch": "SCL-P6+",
+      "summary": "All 5 approved skill-intake packs executed end-to-end: wshobson/agents (24), VoltAgent (12), obra/superpowers (13), mattpocock/skills (14), anthropics/skills (1: mcp-builder + LICENSE). 77 vendored skills total (79 dirs incl. 2 northstar-authored). Rejections/exclusions listed: mp-wizard (credential plumbing), mp-git-guardrails (wrong harness), skill-creator (script-coupled), docx/pdf/pptx/xlsx (source-available), webapp-testing (browser policy). Each pack: full-content scan + secret scanner + self-gated install + pinned provenance + evidence JSON. Gates: 219/219 tests; scan 0 new / 0 known-active / 231 allowlisted. Commits: 1ffc7f4, a5d4b62, d91a803, e7a93ec, 3f63b5b. Next (owner): D-S2 tooling, D-S3 SDD pilot, D-S4 deep reviews; D1 standing."
     }
   ],
   "owner_action_queue": [
@@ -1250,13 +1256,13 @@
     {
       "id": "OA-SCL-2",
       "card": "SECURE-CONTROL-LAYER",
-      "need": "Review the GitHub dev-accelerator scan (reports/github_agent_scan_20261014.md): D-S1 intake shortlist (wshobson/agents, VoltAgent/awesome-claude-code-subagents, obra/superpowers, mattpocock/skills, anthropics/skills), D-S2 tooling adds (trivy, pip-audit, semgrep, schemathesis, promptfoo, context7), D-S3 SDD pilot (spec-kit or OpenSpec), D-S4 deep-review queue (ECC, codegraph, OpenCode-native packs).",
+      "need": "Remaining after the completed skill intake: D-S2 tooling adds (trivy, pip-audit, semgrep, schemathesis, promptfoo, context7); D-S3 SDD pilot pick (spec-kit vs OpenSpec); D-S4 deep-review queue (ECC, codegraph, OpenCode-native packs). Review the intake results.",
       "when": "next owner review",
       "blocks": "vendoring intake of new packs; tooling adoption",
       "safe_default": "no installs/clones until approved",
       "status": "OPEN",
       "owner_response": "",
-      "verification": "Read-only scan completed 2026-10-14: 47 repos + 6 searches, zero installs/clones/executions; raw evidence committed (reports/github_agent_scan_20261014_raw.json). Separately 2026-10-14: OpenCode x qwen3.8 reasoning-effort error fixed + verified on the operator machine (backup opencode.json.bak.20261014; note reports/opencode_qwen3.8_variant_fix_20261014.md)."
+      "verification": "Skill intake EXECUTED 2026-10-14: 5/5 approved packs, 77 vendored skills installed (wshobson 24, VoltAgent 12, superpowers 13, mattpocock 14, anthropics 1); rejections/exclusions listed (mp-wizard, mp-git-guardrails, skill-creator, docx/pdf/pptx/xlsx, webapp-testing). Commits 1ffc7f4, a5d4b62, d91a803, e7a93ec, 3f63b5b. Gates: 219/219 tests; scan 0 new / 0 known-active / 231 allowlisted. Summary: reports/intake_summary_20261014.md."
     }
   ],
   "activity": [
