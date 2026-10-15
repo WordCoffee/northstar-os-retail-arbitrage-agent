@@ -68,3 +68,13 @@
 - **Installed (13):** `sp-brainstorming`, `sp-dispatching-parallel-agents`, `sp-executing-plans`, `sp-finishing-a-development-branch`, `sp-receiving-code-review`, `sp-requesting-code-review`, `sp-subagent-driven-development`, `sp-systematic-debugging`, `sp-test-driven-development`, `sp-using-git-worktrees`, `sp-verification-before-completion`, `sp-writing-plans`, `sp-writing-skills`.
 - **Why:** these codify the exact workflows this workstream runs by hand - subagent dispatch, worktree isolation, plan execution with ledgers, verification-before-completion, review handoff.
 - **Edits applied at install:** rules block prepended; service tag `research`; capabilities none; per-skill Northstar adaptations (worktree-per-session under ns-worktrees/; local-commit discipline; gates = scanner + tests; authority order binds subagents).
+## Intake 5 - mattpocock/skills engineering + productivity (2026-10-14)
+
+- **Pinned:** https://github.com/mattpocock/skills @ commit `49dd158d1076134a641b33efb035946536778336` (MIT). **14 of the fetched 15 installed**; picks focus on the spec/tickets/implement loop, design vocabulary, research/retro/triage/wayfinder process, handoff and agent-writing craft.
+- **Review method:** full-content automated scan + secret scanner - **0 findings**.
+- **Rejected (1, listed):** `mp-wizard` - generates secret-entry plumbing (hidden secret prompts, `.env` upserts, `gh secret` writes) - contradicts Northstar credential rules (.env never written; values never handled). NOT installed.
+- **Skipped (1, listed):** `mp-git-guardrails` - Claude Code-specific hook setup (wrong harness; our git guardrails are stronger and already enforced). NOT installed.
+- **Installed (14):** `mp-to-spec`, `mp-to-tickets`, `mp-implement-spec`, `mp-codebase-design`, `mp-domain-modeling`, `mp-grill-with-docs`, `mp-grilling`, `mp-improve-architecture`, `mp-research`, `mp-retro`, `mp-triage`, `mp-wayfinder`, `mp-handoff`, `mp-writing-for-agents`.
+- **Note:** `mp-grill-with-docs` composes `mp-grilling` + `mp-domain-modeling` (both now installed). Vendor `disable-model-invocation` hints are inert metadata (stripped with the vendor frontmatter).
+- **Edits applied at install:** rules block prepended; service tag `research`; capabilities none; per-skill Northstar adaptations (no external issue tracker - specs/tickets are local files; research via approved sources only; retros feed state/lessons).
+- **Remaining in the pack:** other engineering/productivity/misc skills (code-review, diagnosing-bugs, pr, prototype, teach, etc.) - available for future picks on request.

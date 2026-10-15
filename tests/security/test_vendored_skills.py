@@ -4,6 +4,7 @@
 - Engineering pack: wshobson/agents (24, pinned 46891e7e60da0e52baf1050b7b6391b64e84c6d9).
 - VoltAgent pack: awesome-claude-code-subagents (12, pinned 408d3c9eee2d0c75c12a3abb5de29e53c2ca6b9e).
 - Superpowers pack: obra/superpowers (13, pinned bb92a77741419a4ab5f06e711a283343f1ada0c3).
+- Matt Pocock pack: mattpocock/skills (14, pinned 49dd158d1076134a641b33efb035946536778336).
 
 Every skill must carry the Northstar rules block, a service tag, adapted
 sections, and pinned provenance. Rejected candidates stay absent, banned
@@ -92,7 +93,24 @@ INSTALLED_SP = [
     "sp-writing-skills",
 ]
 
-ALL_VENDORED = INSTALLED_CORE + INSTALLED_WSH + INSTALLED_VOLT + INSTALLED_SP
+INSTALLED_MP = [
+    "mp-to-spec",
+    "mp-to-tickets",
+    "mp-implement-spec",
+    "mp-codebase-design",
+    "mp-domain-modeling",
+    "mp-grill-with-docs",
+    "mp-grilling",
+    "mp-improve-architecture",
+    "mp-research",
+    "mp-retro",
+    "mp-triage",
+    "mp-wayfinder",
+    "mp-handoff",
+    "mp-writing-for-agents",
+]
+
+ALL_VENDORED = INSTALLED_CORE + INSTALLED_WSH + INSTALLED_VOLT + INSTALLED_SP + INSTALLED_MP
 
 BANNED_PHRASES = (
     "curl -",
@@ -119,7 +137,7 @@ def test_installed_skills_carry_rules_block_and_provenance():
         assert re.search(r"commit `[0-9a-f]{40}`", text), skill
     for skill in INSTALLED_CORE:
         assert "Amazon adaptations" in _read(skill), skill
-    for skill in INSTALLED_WSH + INSTALLED_VOLT + INSTALLED_SP:
+    for skill in INSTALLED_WSH + INSTALLED_VOLT + INSTALLED_SP + INSTALLED_MP:
         assert "Northstar adaptations" in _read(skill), skill
 
 
@@ -144,8 +162,17 @@ def test_superpowers_provenance_is_pinned():
         assert "bb92a77741419a4ab5f06e711a283343f1ada0c3" in text, skill
 
 
-def test_rejected_candidate_is_absent():
+def test_mattpocock_provenance_is_pinned():
+    for skill in INSTALLED_MP:
+        text = _read(skill)
+        assert "github.com/mattpocock/skills" in text, skill
+        assert "49dd158d1076134a641b33efb035946536778336" in text, skill
+
+
+def test_rejected_candidates_are_absent():
     assert not (SKILLS / "agency-multi-platform-publisher").exists()
+    assert not (SKILLS / "mp-wizard").exists()
+    assert not (SKILLS / "mp-git-guardrails").exists()
 
 
 def test_banned_tooling_phrases_absent():

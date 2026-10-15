@@ -1,0 +1,189 @@
+{
+ "mp-codebase-design.md": {
+  "bytes": 6066,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mp-domain-modeling.md": {
+  "bytes": 3222,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mp-git-guardrails.md": {
+  "bytes": 2313,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "bash_fence",
+    "line": 91,
+    "ctx": "pied script accordingly.  ### 5. Verify  Run a quick test:  ```bash echo '{\"tool_input\":{\"command\":\"git push origin main\"}}' | "
+   }
+  ],
+  "urls": []
+ },
+ "mp-grill-with-docs.md": {
+  "bytes": 247,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mp-grilling.md": {
+  "bytes": 2037,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mp-handoff.md": {
+  "bytes": 940,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "password",
+    "line": 14,
+    "ctx": "stead.  Redact any sensitive information, such as API keys, passwords, or personally identifiable information.  If the user pass"
+   }
+  ],
+  "urls": []
+ },
+ "mp-implement-spec.md": {
+  "bytes": 2780,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mp-improve-architecture.md": {
+  "bytes": 5998,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mp-research.md": {
+  "bytes": 794,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mp-retro.md": {
+  "bytes": 4369,
+  "flag_count": 1,
+  "flags": [
+   {
+    "rule": "token",
+    "line": 21,
+    "ctx": "here any custom tooling (CLI's, MCP's) that is particularly token-inefficient? _Use when_ the agent made an expensive tool ca"
+   }
+  ],
+  "urls": []
+ },
+ "mp-to-spec.md": {
+  "bytes": 3043,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mp-to-tickets.md": {
+  "bytes": 5804,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mp-triage.md": {
+  "bytes": 6558,
+  "flag_count": 0,
+  "flags": [],
+  "urls": []
+ },
+ "mp-wayfinder.md": {
+  "bytes": 12380,
+  "flag_count": 2,
+  "flags": [
+   {
+    "rule": "credential",
+    "line": 80,
+    "ctx": "; the answer records what was done and any resulting facts (credentials location, new URLs, row counts) later tickets depend on.  "
+   },
+   {
+    "rule": "token",
+    "line": 57,
+    "ctx": "s its identity. Its body is the question, sized to one 100K token agent session:  ```markdown ## Question  <the decision or i"
+   }
+  ],
+  "urls": []
+ },
+ "mp-wizard.md": {
+  "bytes": 4115,
+  "flag_count": 8,
+  "flags": [
+   {
+    "rule": "script_tag",
+    "line": 41,
+    "ctx": "y above the marker.  ### 4. Verify and hand off  - `bash -n <script>`; run `shellcheck` if available. - `chmod +x <script>`. - "
+   },
+   {
+    "rule": "script_tag",
+    "line": 42,
+    "ctx": "sh -n <script>`; run `shellcheck` if available. - `chmod +x <script>`. - Don't run it end-to-end yourself: it opens browsers an"
+   },
+   {
+    "rule": "credential",
+    "line": 3,
+    "ctx": "n perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard"
+   },
+   {
+    "rule": "secret",
+    "line": 10,
+    "ctx": "n gates, cross-platform URL opening (including WSL), hidden secret entry, idempotent `.env` upserts, `gh secret`/`gh variable`"
+   },
+   {
+    "rule": "secret",
+    "line": 10,
+    "ctx": "g WSL), hidden secret entry, idempotent `.env` upserts, `gh secret`/`gh variable` writes, and a closing summary. **Your job is"
+   },
+   {
+    "rule": "secret",
+    "line": 25,
+    "ctx": "the human gets it, (b) where it's written (`.env`, a GitHub secret, both, or nowhere; some stages are pure actions), and (c) w"
+   },
+   {
+    "rule": "secret",
+    "line": 25,
+    "ctx": "owhere; some stages are pure actions), and (c) whether it's secret (hidden entry) or public.  ### 2. Map each stage's journey "
+   },
+   {
+    "rule": "secret",
+    "line": 37,
+    "ctx": " before asking for its value, use `ask_secret` for anything secret, `write_env` every persisted value, `set_secret` only the v"
+   }
+  ],
+  "urls": []
+ },
+ "mp-writing-for-agents.md": {
+  "bytes": 10882,
+  "flag_count": 4,
+  "flags": [
+   {
+    "rule": "token",
+    "line": 39,
+    "ctx": "behind a pointer) so the top stays legible. Not primarily a token optimisation: it is how the hierarchy is protected. Branchi"
+   },
+   {
+    "rule": "token",
+    "line": 63,
+    "ctx": "t (_lesson_, _fog of war_, _tracer bullets_). Repeated as a token, never as a sentence, it accumulates a distributed definiti"
+   },
+   {
+    "rule": "token",
+    "line": 67,
+    "ctx": "e idea. Each is a passage begging to collapse into a single token:  - \"fast, deterministic, low-overhead\" → _tight_ (a _tight"
+   },
+   {
+    "rule": "token",
+    "line": 78,
+    "ctx": " (The accidental inverse of a leading word, which repeats a token on purpose, never the meaning.) - The **environment** is a "
+   }
+  ],
+  "urls": []
+ }
+}
