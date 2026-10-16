@@ -78,6 +78,18 @@ export default function ProductFinder() {
   const [products, setProducts] = useState(PRODUCTS)
   const [newAsin, setNewAsin] = useState('')
 
+  // 2026-10-16 (REA adoption #1): a home "Start from an ASIN" seed deep-links
+  // here with ?asin=; add it once so the lookup is ready on arrival.
+  useEffect(() => {
+    const seed = (new URLSearchParams(location.search).get('asin') || '').trim().toUpperCase()
+    if (/^B0[A-Z0-9]{8}$/.test(seed)) {
+      setProducts(prev => prev.some(p => p.asin === seed) ? prev : ([
+        { asin: seed, title: 'Researching…', brand: 'UNKNOWN', category: 'UNKNOWN', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Researching', img: false },
+        ...prev,
+      ]))
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   const addProduct = () => {
     const asin = newAsin.trim().toUpperCase()
     if (!asin) return

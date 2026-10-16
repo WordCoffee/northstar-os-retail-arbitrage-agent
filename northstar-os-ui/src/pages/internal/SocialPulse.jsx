@@ -253,6 +253,7 @@ export default function SocialPulse() {
       </>}
     >
       <DataNotice tone="internal" title="Local content operations — not a publisher">
+        Your flow is: plan → approve → export the assets and captions; Northstar never posts for you.
         Campaigns, posts, and approvals are real records stored in this browser. There is no social OAuth and no outbound
         posting. The composer preview is a real local render of your own copy at the platform&rsquo;s true aspect ratio, and
         uploaded artwork is stored locally. Performance figures require a connected analytics provider and read UNKNOWN until

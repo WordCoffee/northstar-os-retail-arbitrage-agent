@@ -237,11 +237,29 @@ const START = [
 ]
 
 function StartSomething({ navigate }) {
+  const [seedAsin, setSeedAsin] = useState('')
+  const startFromAsin = () => {
+    const a = seedAsin.trim().toUpperCase()
+    if (!/^B0[A-Z0-9]{8}$/.test(a)) return
+    navigate(`/product-finder?view=lookup&asin=${encodeURIComponent(a)}`)
+  }
   return (
     <div className="card" data-testid="cc-start" style={{ marginBottom: 20 }}>
       <div className="card-head">
         <h3 className="card-title">Start something</h3>
         <span className="pill pill-muted">your daily work</span>
+      </div>
+      <div className="inline-flex" style={{ gap: 8, alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: 12 }} data-testid="cc-seed-asin">
+        <label className="stack" style={{ gap: 4 }}>
+          <span className="text-low" style={{ fontSize: 11 }}>Start from an ASIN</span>
+          <input className="field" style={{ width: 200 }} placeholder="B0XXXXXXXX"
+            value={seedAsin} onChange={e => setSeedAsin(e.target.value.toUpperCase())}
+            onKeyDown={e => { if (e.key === 'Enter') startFromAsin() }} />
+        </label>
+        <button className="btn btn-sm btn-primary" disabled={!/^B0[A-Z0-9]{8}$/.test(seedAsin)} onClick={startFromAsin}>
+          Research it
+        </button>
+        <span className="text-low" style={{ fontSize: 11 }}>opens SourceScout with the ASIN ready — every metric UNKNOWN until observed</span>
       </div>
       <div className="grid-3" style={{ gap: 12 }}>
         {START.map(s => (
