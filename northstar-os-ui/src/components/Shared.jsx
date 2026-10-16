@@ -92,7 +92,7 @@ export function EmptyState({ title, what, action, actionLabel, onAction, connect
 
 // ═══ Shared: Truth / Sample-Data Notice ═══
 // Standardized room-level data truth banner. tone ∈ sample|concept|internal|assumption|unknown
-export function DataNotice({ tone = 'sample', title, children }) {
+export function DataNotice({ tone = 'sample', title, children, compact = false }) {
   const meta = {
     sample: { label: 'SAMPLE DATA', className: 'alert-warn', pill: 'pill-warn' },
     cached: { label: 'CACHED SNAPSHOT', className: 'alert', pill: 'pill-forest' },
@@ -100,9 +100,10 @@ export function DataNotice({ tone = 'sample', title, children }) {
     internal: { label: 'INTERNAL USE ONLY', className: 'alert', pill: 'pill-muted' },
     assumption: { label: 'ASSUMPTION', className: 'alert-warn', pill: 'pill-ochre' },
     unknown: { label: 'UNKNOWN', className: 'alert', pill: 'pill-unknown' },
+    info: { label: 'WORKSPACE', className: 'alert', pill: 'pill-forest' },
   }[tone] || { label: 'SAMPLE DATA', className: 'alert-warn', pill: 'pill-warn' }
   return (
-    <div className={meta.className} style={{ marginBottom: 16 }}>
+    <div className={`${meta.className}${compact ? ' notice-compact' : ''}`} style={{ marginBottom: compact ? 12 : 16 }}>
       <div className="alert-title"><span className={`pill ${meta.pill}`}>{meta.label}</span> {title}</div>
       <div className="alert-text">{children}</div>
     </div>

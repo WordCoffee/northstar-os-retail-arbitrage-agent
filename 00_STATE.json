@@ -606,6 +606,14 @@
   "last_updated": "2026-10-16T02:55:00Z",
   "history": [
     {
+      "ts": "2026-10-16T06:10:00Z",
+      "activity": "ui_design_pass_v2_and_review",
+      "batch": "Operator: 'go through and make substantial visual updates... take screenshots... hyper focus on all content/data generating services... design the UI to be smart'",
+      "summary": "ROOT-FIX FIRST: the cookie-session rate bucket was still anonymous 30/min, so normal SPA browsing tripped 429s - panels stuck on UNKNOWN, the engine banner showed 'not connected' while the API said armed, and deep links flashed sign-in (the review screenshots caught it). rate_limiter now resolves the cookie session (owner/platform_admin 300/min, member 120/min; anon stays 30); burst proof 60/60 200s, zero 429s. Built tools/_design_shots.mjs - local-only raw-CDP screenshot tool (no Playwright, localhost only, cookie injected via CDP, NS_ONLY subset support, verify-and-retry for the session race). Captured + reviewed 15 pages into reports/ui_review_20261016/shots. DESIGN PASS v2 shipped: suite rail now one 'WORKSPACE / Platform Admin' header + status DOTS (full readiness sentence on hover) instead of pills on every row; MasterBrainPanel v2 - a compact four-cell evidence strip (dot + one-line state + honest summary) with a Details expander, on 10 pages, saving ~200px above the fold per service page; Design Studio de-duplicated header (single page header + slim toolbar row) with the workspace notice updated to the armed-engine truth; data-first tables (micro uppercase headers, tabular numerics, row hover); softer cards/notices/chips; video tab right panel now mirrors the live engine state. REPORT.md lists the honest design backlog (ListingForge editor two-pane + brain actions, Command Center KPI hero, AdPilot metric tones, SocialPulse calendar grid, AutothinK room chat embed, topbar help cleanup).",
+      "test_counts": "burst 60/60 200s 0x429; 15-page screenshot set rendered with real content (3 re-shot after limiter race); npm build 0 errors x4; design changes verified visually from fresh screenshots.",
+      "next_action": "Operator: hard-refresh to pick up the new bundle. Design backlog items are in reports/ui_review_20261016/REPORT.md. Partner email still pending (OA-10)."
+    },
+    {
       "ts": "2026-10-16T04:50:00Z",
       "activity": "local_engine_and_chat_units",
       "batch": "Operator: 'local engine not connected' / 'video piece not mapped' / 'chatboxes need saving+scrolling like Perplexity' / 'partial areas should be fully done'",

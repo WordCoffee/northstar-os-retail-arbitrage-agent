@@ -22,7 +22,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { PageLayout, DataNotice, DataTable } from '../../components/Shared.jsx'
+import { DataNotice, DataTable } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import Icon from '../../components/Icon.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
@@ -675,21 +675,20 @@ export default function CreativeStudio() {
   )
 
   return (
-    <PageLayout
-      title="Design Studio"
-      subtitle="One studio for paid ads, social content, A+ listing modules, image and clip requests — with a master canvas that renders to every placement."
-      actions={<>
+    <>
+      <div className="studio-toolbar card">
         <ModeToggle mode={mode} onChange={setMode} />
+        <span className="studio-toolbar-meta">Master renders to every placement · layers stay normalised</span>
+        <span className="studio-toolbar-spacer" />
         <button className="btn btn-sm btn-ghost" onClick={() => go('canvas')}>Master canvas</button>
         <button className="btn btn-sm btn-ghost" onClick={() => go('exports')}>Export Bundle</button>
         <button className="btn btn-sm" onClick={addBrief}>New Brief</button>
-      </>}
-    >
-      <DataNotice tone="info" title="Workspace boundaries">
-        Briefs, documents, ad sets, social sets, A+ modules, requests, variants, assets and bundles are real records you create here and are
-        stored in this browser. The canvas renders and exports REAL PNGs from your own layers, and the master renders correctly at every
-        placement size because layer geometry is normalised. No image or video is ever generated or depicted: the Generate and Video tabs are
-        real request recorders whose honest terminal state is &ldquo;Blocked — provider required&rdquo;.
+      </div>
+      <DataNotice tone="info" compact title="Workspace boundaries">
+        Briefs, documents, ad sets, social sets, A+ modules, requests, variants, assets and bundles are real records you create here. The
+        canvas renders and exports REAL PNGs from your own layers, and the master renders correctly at every placement size because layer
+        geometry is normalised. When the local engine is armed (green banner on the Generate tab), image and video requests render on this
+        machine&rsquo;s GPU through the operator&rsquo;s own ComfyUI &mdash; nothing is sent to any provider.
       </DataNotice>
 
       <div className="card" style={{ marginBottom: 16, padding: '10px 14px' }}>
@@ -1653,7 +1652,7 @@ export default function CreativeStudio() {
 
             {tool === 'video' && (
               <Section title="Provider">
-                <ProviderBoundary kind="video" />
+                {engine && engine.armed ? <EngineArmed engine={engine} kind="video" /> : <ProviderBoundary kind="video" />}
               </Section>
             )}
 
@@ -1669,7 +1668,7 @@ export default function CreativeStudio() {
           </div>
         </div>
       </div>
-    </PageLayout>
+    </>
   )
 }
 

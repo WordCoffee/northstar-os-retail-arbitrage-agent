@@ -29,15 +29,13 @@ export default function SuiteRail({ onNavigate }) {
   return (
     <aside className="suite-rail" aria-label="Suite navigation">
       <div className="suite-rail-header">
-        <div className="suite-rail-mark">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2L3 7 12 12 21 7 21 17 12 22 3 17Z" fill="none"/>
-            <circle cx="12" cy="12" r="2" fill="currentColor"/>
-          </svg>
-          <span className="suite-rail-name">NorthstarOS</span>
+        <div className="suite-rail-context" style={{ marginTop: 0, textTransform: 'uppercase', letterSpacing: '0.14em', fontSize: 10.5, opacity: 0.7 }}>
+          Workspace
         </div>
-        <div className="suite-rail-context">
-          {session.authenticated ? (session.role || 'Operator') : 'Invitee'}
+        <div className="suite-rail-context" style={{ fontWeight: 600, marginTop: 2 }}>
+          {session.authenticated
+            ? (session.role === 'internal_platform_admin' ? 'Platform Admin' : (session.role || 'Operator'))
+            : 'Invitee'}
         </div>
       </div>
 
@@ -73,9 +71,10 @@ export default function SuiteRail({ onNavigate }) {
                       <span className="suite-rail-item-label">{s.label}</span>
                       {s.status && (
                         <span
-                          className={`pill pill-${s.statusTone || 'muted'} suite-rail-status`}
-                          title={s.readinessTitle || ''}
-                        >{s.status}</span>
+                          className={`nav-dot nav-dot-${s.statusTone || 'muted'}`}
+                          title={`${s.status} — ${s.readinessTitle || ''}`}
+                          aria-label={s.status}
+                        />
                       )}
                     </button>
                   )

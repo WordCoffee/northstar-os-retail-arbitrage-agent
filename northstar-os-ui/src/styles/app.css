@@ -1,4 +1,4 @@
-﻿/* Fonts are SELF-HOSTED at /ui/fonts/fonts.css (loaded in index.html). No third-party request. */
+/* Fonts are SELF-HOSTED at /ui/fonts/fonts.css (loaded in index.html). No third-party request. */
 
 :root {
   --paper: #f5f0e8;
@@ -419,3 +419,86 @@ tbody tr:last-child td { border-bottom: none; }
   .grid-cards-4 { grid-template-columns: repeat(4, minmax(200px, 1fr)); overflow-x: auto; padding-bottom: 6px; }
   .split-aside, .split-aside-l, .split-aside-r { grid-template-columns: 1fr; }
 }
+
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   DESIGN PASS v2 (2026-10-16) â€” smart-workbench refinements.
+   Additive overrides only: cards, headers, tables, pills, suite-rail status
+   dots, the compact Studio-evidence strip and the studio toolbar. Nothing
+   here changes behavior; every class keeps its previous contract.
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* â€” Cards: calmer chrome, more air â€” */
+.card {
+  border: 1px solid rgba(29, 90, 29, 0.10);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(20, 40, 20, 0.04), 0 10px 26px -18px rgba(20, 40, 20, 0.25);
+}
+.card-head { border-bottom: 1px solid rgba(29, 90, 29, 0.08); padding-bottom: 10px; margin-bottom: 12px; }
+
+/* â€” Page headers: stronger identity â€” */
+.page-title { font-size: clamp(1.65rem, 1.2rem + 1vw, 2rem); letter-spacing: -0.015em; }
+.page-subtitle { font-size: 13.5px; max-width: 74ch; }
+
+/* â€” Tables: data-first â€” */
+table { border-collapse: separate; border-spacing: 0; width: 100%; }
+th {
+  font-size: 10.5px !important;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-low, #6b7565) !important;
+  padding: 9px 12px !important;
+  border-bottom: 1px solid rgba(29, 90, 29, 0.14) !important;
+  text-align: left;
+}
+td { padding: 11px 12px !important; border-bottom: 1px solid rgba(29, 90, 29, 0.07) !important; }
+tbody tr { transition: background 0.12s ease; }
+tbody tr:hover { background: rgba(29, 90, 29, 0.035); }
+td .pill { vertical-align: middle; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* â€” Pills: quieter confidence â€” */
+.pill { border-radius: 999px; font-weight: 600; letter-spacing: 0.02em; }
+
+/* â€” Suite rail: status dots instead of label pills â€” */
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; margin-left: auto; opacity: 0.9; }
+.nav-dot-ok { background: #2e7d32; opacity: 0.6; }
+.nav-dot-ochre { background: #c07a1f; }
+.nav-dot-muted { background: #9aa39a; }
+.nav-dot-warn { background: #c05621; }
+.nav-dot-unavailable { background: #b24a4a; }
+
+/* â€” Filter chips: softer, more readable active state â€” */
+.filter-pill.active {
+  background: rgba(29, 90, 29, 0.12);
+  border-color: rgba(29, 90, 29, 0.45);
+  color: var(--pine-deep, #14401a);
+  font-weight: 600;
+}
+
+/* â€” Compact Studio-evidence strip (MasterBrainPanel v2) â€” */
+.mbp-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
+@media (max-width: 1100px) { .mbp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.mbp-cell { border: 1px solid rgba(29, 90, 29, 0.10); border-radius: 10px; padding: 9px 11px; background: rgba(255, 255, 255, 0.55); }
+.mbp-cell .mbp-label {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-low, #6b7565);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.mbp-cell .mbp-label .nav-dot { margin-left: 0; }
+.mbp-cell .mbp-value { font-size: 12.5px; margin-top: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mbp-cell.is-unknown { background: rgba(192, 122, 31, 0.05); border-color: rgba(192, 122, 31, 0.25); }
+.mbp-cell.is-unknown .mbp-value { color: var(--text-low, #6b7565); }
+
+/* â€” Studio toolbar (replaces the duplicated page header) â€” */
+.studio-toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 14px; margin-bottom: 14px; }
+.studio-toolbar .studio-toolbar-spacer { flex: 1 1 auto; }
+.studio-toolbar-meta { font-size: 11.5px; color: var(--text-low, #6b7565); }
+
+/* â€” Compact notices â€” */
+.notice-compact { padding: 10px 14px; }
+.notice-compact .alert-text { font-size: 12px; }
