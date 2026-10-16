@@ -619,7 +619,7 @@
       "latency": "14B Q4_K_M on RTX 5080 16GB; probe prompts 2.6-26.3s incl. cold load"
     }
   },
-  "last_updated": "2026-10-16T19:31:16Z",
+  "last_updated": "2026-10-16T20:25:24Z",
   "history": [
     {
       "ts": "2026-10-16T06:10:00Z",
@@ -1613,6 +1613,13 @@
       "batch": "MOGRA-MOCKUP",
       "summary": "Delivered renders/mogra-forest-dusk-mockup.png via the design studio's own text-safe lane (text_fidelity.render_with_text_guard -> studio_generation.generate_image, ComfyUI FLUX.2 klein 4B on :8199, MEDIA_GEN_LIVE=1 mirror of the launcher): two matte doypacks side-by-side on warm oak against blurred greenhouse bokeh, deep forest green + warm charcoal, gold engraved mushroom line art, cream badge emblems, rows of tiny cream dots, zero lettering. OCR verdict text_free (rapidocr, 0 boxes, 1 attempt, no retry). FOUND+FIXED a pipeline bug on the way: render_with_text_guard raised UnboundLocalError on every CLEAN FIRST render (used_brief only bound on the retry path) - fixed, regression test added, test_text_fidelity 12/12 green (commit f16e2b0). Also committed a production-tooling research scan: none of OpenDesign / Open Builder / CopilotKit OpenIntelligentUI / Awesome-GenUI lists will production-harden Northstar OS; resolution stack = OpenAPI->TS contract sync, Schemathesis route fuzzing, OpenHands repo agent, Onlook visual edits, CI gates (research/ui_production_tooling_scan_20261016/REPORT.md, commit cf80b36). Repro: python scripts/render_mogra_forest_dusk.py (seed 20261016, 1216x832, ~20s warm). Next: vector text layer compositor for full print fidelity.",
       "test_counts": "text_fidelity 12/12 passed; render OCR text_free 0 boxes"
+    },
+    {
+      "ts": "2026-10-16T20:25:24Z",
+      "activity": "mogra_complete_package_compositor",
+      "batch": "MOGRA-MOCKUP",
+      "summary": "Operator feedback: the text-safe plate 'looks nothing like a complete package' - the old packaging (supplied on their Desktop) set the bar. Built scripts/compose_mogra_complete.py: deterministic compositor that dresses the studio render with brand-exact assets - real Mogra roundel from the operator logo file (mark/wordmark/tagline bands, original colours + cream recolour with gated alpha), Playfair Display 700 product names, Inter tracked caps, 4 cert roundels seated exactly on the model's dot row, weight footers + gold rules; the model's own engraved art kept 100% untouched; only the model's old badge healed (median prefill -> 420-iter diffusion -> grain re-injection lesson); 4-point homography warp + lighting integration. Output renders/mogra-forest-dusk-mockup-complete.png + sidecar. Brand assets committed: Northstar_backend/assets/brand/mogra_logo.png + fonts (Playfair Display, Inter). Next: back panel doc, amz-main 2000x2000 bare-pouch export, vector prepress layer (reports/mogra_forest_dusk_complete_20261016.md).",
+      "test_counts": "compose harness runs end-to-end; visual verification per iteration (zoomed crops); no paid calls"
     }
   ]
 }
