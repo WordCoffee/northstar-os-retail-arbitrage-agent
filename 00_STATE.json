@@ -606,6 +606,14 @@
   "last_updated": "2026-10-16T02:55:00Z",
   "history": [
     {
+      "ts": "2026-10-16T04:50:00Z",
+      "activity": "local_engine_and_chat_units",
+      "batch": "Operator: 'local engine not connected' / 'video piece not mapped' / 'chatboxes need saving+scrolling like Perplexity' / 'partial areas should be fully done'",
+      "summary": "BUILT + VERIFIED. (1) Local media engine end-to-end: Northstar_backend/studio_generation.py (ComfyUI runner: FLUX.2 klein 4B image, Wan 2.2 TI2V-5B video; armed only when MEDIA_GEN_LIVE=1 AND ComfyUI answers), design-studio routes GET /engine, POST /generate (job at 0 credits, file saved, asset returned), GET /assets/{id}/file; readiness endpoint now carries media_live_armed + engine state; launcher sets the env and STARTS ComfyUI on :8199 (-NoComfy to skip); studio UI (CreativeStudio/Chrome/engineApi/presets) shows the armed banner and renders real images/clips with result cards; stale 'no local video pipeline' copy replaced. (2) GPU handshake: the runner evicts the local brain before a render and frees ComfyUI models after it - one heavy model resident at a time on the 16 GB card, fully automatic; brain auto-reloads on next chat. (3) AutothinK chat: bubble transcript UI (user right / assistant left + meta), typing indicator, smooth autoscroll, Enter-to-send; answers are now PERSISTED (server.py stores reply capped 8 KB) so reopening replays the conversation from /api/autothink/history - previously only commands were stored. (4) Readiness: design-studio concept->Local and autothink LLM-gated->Local (true as of today); all other PARTIAL rooms left honest WITH a concrete completion map in reports/local_engine_and_chat_20261016.md (each real-data half works; missing half is either an external-account decision or a local-brain wiring job - Spreadsheet Lab analysis via local brain recommended next).",
+      "test_counts": "image render 33.3s -> 766KB PNG served 200 (PNG magic); video render 91.1s -> 512x736 2.0s MP4 served 200 (ftyp magic); full coexistence cycle chat ok=True 8.3s -> render OK 33.3s -> chat ok=True 17.3s; autothink suite 44/44; UI build 0 errors; earlier foundation suites 15/15 + 25/25.",
+      "next_action": "Operator: hard-refresh the browser for the new bundle. Optional next build: Spreadsheet Lab analysis onto the local brain; partner email still pending (OA-10). Report: reports/local_engine_and_chat_20261016.md"
+    },
+    {
       "ts": "2026-10-16T03:30:00Z",
       "activity": "alpha_signin_repair_foundation_auth",
       "batch": "Operator: 'its not working, invalid email or password' - make the product UI sign-in actually work on the tunnel",

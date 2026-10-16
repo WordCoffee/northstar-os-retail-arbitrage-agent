@@ -38,7 +38,7 @@ export const ROOM_READINESS = {
   'spreadsheet-lab': 'provider', // CSV ingest/export works locally; hosted analysis gated on OPENCODE_GO
   'commerce-ops': 'ready', // fully derived from local identity queue + pipeline runs + foundation approvals
   'monitoring': 'ready', // fully derived from live local reads (error tracker, readiness, refresh registry)
-  'autothink': 'provider',
+  'autothink': 'ready', // 2026-10-16: chat runs on the local brain (Ollama) with saved, scrollable history
   'memory-bank': 'internal',
   'shared-data': 'internal',
   'provider-adapters': 'internal',
@@ -47,7 +47,7 @@ export const ROOM_READINESS = {
   'beta-ops': 'ready',
   // Phase 0 (2026-10-09): Product Designer + Creative Studio merged into
   // Design Studio. The old routes still redirect but are not primary nav rooms.
-  'design-studio': 'concept', // merged creative workspace; sections arm progressively
+  'design-studio': 'ready', // 2026-10-16: local ComfyUI engine armed - real image (klein) + video (Wan 2.2) renders on this machine
   'socialpulse': 'concept', // local workspace state; no channel is connected
   'adpilot': 'partial', // real creative capability + honest "nothing is sent" boundary
   'listingforge': 'partial', // real revisions + template apply; publish stays disabled
