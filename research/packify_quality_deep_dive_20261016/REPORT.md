@@ -69,7 +69,12 @@ pass. This is what makes print read "on" the material. Our compositor (clean
 4-corner homography, one 55% luminance multiply, no displacement/grain/specular)
 is at step 0 of that recipe — which is precisely why it reads "AI-like".
 
-### 2.3 Generation lane: the stack that matters (all commercial-safe, verified)
+### 2.3 Generation lane: the stack that matters (all verified)
+
+> **Updated same day — the operator's private-use decision relaxed the
+> commercial constraint; see `MODEL_LANE_PRIVATE_20261016.md` for the revised
+> picks (klein 9B, FLUX.1-dev ecosystem, Qwen-Image-2.1 candidate). The table
+> below remains the commercial-safe baseline.
 
 | Need | Pick | License | Note |
 |---|---|---|---|

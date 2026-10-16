@@ -24,7 +24,7 @@ import uuid
 
 DEFAULT_COMFYUI_URL = "http://127.0.0.1:8199"  # this box's ComfyUI (8188 is upstream default)
 
-IMAGE_MODEL_FILE = "flux-2-klein-4b-Q8_0.gguf"
+IMAGE_MODEL_FILE = os.environ.get("STUDIO_IMAGE_MODEL") or "flux-2-klein-4b-Q8_0.gguf"
 VIDEO_MODEL_FILE = "Wan2.2-TI2V-5B-Q5_K_M.gguf"
 
 _STYLE_SUFFIX = ", professional commercial product photography, clean composition, no text, no watermark, no logos"

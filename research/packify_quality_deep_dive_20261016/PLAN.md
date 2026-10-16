@@ -29,6 +29,14 @@ Fix for the operator's own complaint on `renders/mogra-forest-dusk-mockup-comple
 
 ## P1 — Generation lane upgrades (1–2 weeks)
 
+> **Private-lane revision in effect (see `MODEL_LANE_PRIVATE_20261016.md`):**
+> NC models are allowed for private-brand work. klein **9B** Q8 + refcontrol
+> LoRAs are being pulled now; **Qwen-Image-Edit-2511 is already on disk**
+> (Q4_K_M + encoder + VAE) and just needs a smoke test; `flux1-dev-fp8` is on
+> disk but blocked on the missing `t5xxl` encoder (~5 GB pull) which unlocks
+> the FLUX.1 control ecosystem. The engine now honors `STUDIO_IMAGE_MODEL`
+> so the studio can switch base models without code changes.
+
 1. **Install + wire Qwen-Image-Edit-2511** (int8/Nunchaku 4-bit; native
    ComfyUI template) as the edit/refine lane; keep klein 4B for fresh art.
 2. **LayerStyle nodes** for any text touched inside ComfyUI; otherwise our
