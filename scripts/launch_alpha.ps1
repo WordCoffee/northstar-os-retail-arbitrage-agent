@@ -123,7 +123,7 @@ function Stop-Listeners($ports) {
 
 function Shell-Assets-Ok() {
     try {
-        $a = Invoke-WebRequest -Uri "http://127.0.0.1:8000/northstar-os/css/tokens.css" -TimeoutSec 3 -UseBasicParsing
+        $a = Invoke-WebRequest -Uri "http://127.0.0.1:8000/ui/" -TimeoutSec 3 -UseBasicParsing
         return ($a.StatusCode -eq 200)
     } catch { return $false }
 }
@@ -269,7 +269,7 @@ if (-not $NoTunnel) {
 Write-Host ""
 Banner "== READY =="
 $healthTxt = if ($ready) { '(health OK)' } else { '(health not responding yet)' }
-Write-Host ("Local suite : http://127.0.0.1:8000/northstar-os/   {0}" -f $healthTxt) -ForegroundColor Green
+Write-Host ("Local suite : http://127.0.0.1:8000/ui/   {0}" -f $healthTxt) -ForegroundColor Green
 $assetsOk = $ready -and (Shell-Assets-Ok)
 if (-not $assetsOk) {
     Write-Host "  WARNING: the shell's CSS/JS are NOT served -> the UI will look unstyled." -ForegroundColor Red
@@ -297,7 +297,7 @@ if ($tunnelUrl) {
     Write-Host "Tunnel URL not captured yet - check the cloudflared window / $TunnelLog." -ForegroundColor Yellow
 }
 Write-Host ""
-Write-Host "Local URL   : http://127.0.0.1:8000/northstar-os/   (no tunnel needed for same-machine testing)"
+Write-Host "Local URL   : http://127.0.0.1:8000/ui/   (no tunnel needed for same-machine testing)"
 Write-Host "Gate on/off : launch with -Gate to enable the in-app allowlist"
 Write-Host "After code changes : powershell -File scripts\launch_alpha.ps1 -Restart"
 Write-Host "Stop everything : powershell -File scripts\launch_alpha.ps1 -Stop"

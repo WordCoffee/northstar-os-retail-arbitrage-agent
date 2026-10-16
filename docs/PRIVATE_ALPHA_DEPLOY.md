@@ -13,7 +13,7 @@ Cloudflare **quick tunnel** already serves the entire suite from your machine:
 ```
 you  ->  https://<random>.trycloudflare.com   (Cloudflare Access: your email)
               ->  local backend :8000
-                    /northstar-os/   the full suite (every service, real UI)
+                    /ui/             the full suite (every service, real UI)
                     /autothink/      the AutothinK workspace (same-origin)
                     /api/*           real APIs + the Brain model switch
                     Ollama :11434    LOCAL engine (free, private)
@@ -79,7 +79,7 @@ Operator browser
 Cloudflare Tunnel  (loops-subsequently-california-invest.trycloudflare.com)
       ▼
 Local FastAPI backend  (127.0.0.1:8000)
-      ├── /northstar-os/          the services suite shell  ← THE WEBSITE
+      ├── /ui/                    the services suite shell  ← THE WEBSITE
       ├── /autothink/             the AutothinK workspace (same-origin iframe)
       ├── /api/...                services + /api/v1/models (Brain catalog)
       └── Ollama 127.0.0.1:11434  LOCAL engine
@@ -166,7 +166,7 @@ no re-pointing).
 |---|---|
 | `GET /health` | 200 `{status: ok}` (public, never gated) |
 | `GET /api/v1/models` (no token) | **403 `private_alpha_locked`** (in-app lock) |
-| `GET /northstar-os/` | the suite shell loads |
+| `GET /ui/` | the suite shell loads |
 | Brain selector in ribbon | `local · T2 · northstaros-qwen3.8:27b` |
 | AutothinK view | iframe mounts (same-origin) |
 | `GET /api/v1/plans` | Whetstone/Mainstay/Keystone/AutothinK at 39/79/129/179 |
