@@ -115,6 +115,25 @@ def _fetch_output(item: dict) -> bytes:
         return r.read()
 
 
+def release_models() -> None:
+    """Best-effort: unload ComfyUI's models and free VRAM after a render.
+
+    This box has one 16 GB GPU and the local brain (10.4 GB) is the primary
+    resident. ComfyUI reloads models on the next render (slower first render,
+    no VRAM war in between). Failures here are ignored by design.
+    """
+    try:
+        req = urllib.request.Request(
+            comfyui_url() + "/free",
+            data=json.dumps({"unload_models": True, "free_memory": True}).encode(),
+            headers={"Content-Type": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=15):
+            pass
+    except Exception:
+        pass
+
+
 def _clamp(v, lo: int, hi: int, mult: int = 16) -> int:
     v = int(v)
     v = max(lo, min(hi, v))
@@ -170,8 +189,10 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
     img = next((f for f in files if str(f.get("filename", "")).lower().endswith((".png", ".jpg", ".webp"))), None)
     if not img:
         raise RuntimeError("the render finished but produced no image output")
+    data = _fetch_output(img)
+    release_models()
     return {
-        "bytes": _fetch_output(img), "ext": "png", "mime": "image/png",
+        "bytes": data, "ext": "png", "mime": "image/png",
         "model": "flux-2-klein-4b-q8", "provider": "comfyui",
         "seed": seed, "width": w, "height": h, "duration_seconds": None,
     }
@@ -189,8 +210,10 @@ def generate_video(prompt: str, width=None, height=None, tier: str = "draft", se
     vid = next((f for f in files if str(f.get("filename", "")).lower().endswith((".mp4", ".webm"))), None)
     if not vid:
         raise RuntimeError("the render finished but produced no video output")
+    data = _fetch_output(vid)
+    release_models()
     return {
-        "bytes": _fetch_output(vid), "ext": "mp4", "mime": "video/mp4",
+        "bytes": data, "ext": "mp4", "mime": "video/mp4",
         "model": "wan2.2-ti2v-5b-q5", "provider": "comfyui",
         "seed": seed, "width": w, "height": h, "duration_seconds": round(frames / 24.0, 1),
     }
