@@ -49,14 +49,20 @@ wiring** (sample data where real data should flow).
 screenshot: "Partial" pill + "SAMPLE DATA" banner).
 
 ### 1.4 Runtime findings
-- **Stale image**: `/api/design-studio/engine` existed in the tree but 404'd
-  in the running container — the image predated the code. Rebuild started this
-  session (`docker compose up -d --build api`). **Rule adopted: never audit or
-  demo without a rebuild; the stack must always run the tree.**
+- **Stale image (found + FIXED this session)**: `/api/design-studio/engine`
+  existed in the tree but 404'd in the running container — the image predated
+  the code. Rebuilt `api` this session; **verified 200 OK afterwards**. The
+  Caddy image (which serves `localhost/ui/`) was rebuilt too, so the operator
+  now sees the current tree. **Rule adopted: never audit or demo without a
+  rebuild; the stack must always run the tree.**
 - **Rate limit too low for humans**: visiting rooms fired 4+ API calls each;
   the 30 req/min foundation limit tripped after ~7 rooms (429s in the API log).
   A human clicking around at normal speed hits this. Needs a per-user budget
-  raise or a local-mode override.
+  raise or a local-mode override. **Current posture:** the local stack is left
+  with the harness opt-out ON (`NORTHSTAR_DISABLE_RATE_LIMIT=1`) so the
+  operator can use the suite without 429s today; Phase 0 replaces this with a
+  proper raised authenticated budget (the opt-out stays refused in
+  staging/production by the boot guard).
 - **Broken call**: `GET /v1/models` 404s (a legacy probe; the brain lives at
   Ollama :11434, and the correct route is `/api/v1/models`). Find the caller
   and fix or delete.
