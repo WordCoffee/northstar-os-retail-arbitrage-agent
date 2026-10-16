@@ -619,7 +619,7 @@
       "latency": "14B Q4_K_M on RTX 5080 16GB; probe prompts 2.6-26.3s incl. cold load"
     }
   },
-  "last_updated": "2026-10-16T20:25:24Z",
+  "last_updated": "2026-10-16T21:04:42Z",
   "history": [
     {
       "ts": "2026-10-16T06:10:00Z",
@@ -1620,6 +1620,13 @@
       "batch": "MOGRA-MOCKUP",
       "summary": "Operator feedback: the text-safe plate 'looks nothing like a complete package' - the old packaging (supplied on their Desktop) set the bar. Built scripts/compose_mogra_complete.py: deterministic compositor that dresses the studio render with brand-exact assets - real Mogra roundel from the operator logo file (mark/wordmark/tagline bands, original colours + cream recolour with gated alpha), Playfair Display 700 product names, Inter tracked caps, 4 cert roundels seated exactly on the model's dot row, weight footers + gold rules; the model's own engraved art kept 100% untouched; only the model's old badge healed (median prefill -> 420-iter diffusion -> grain re-injection lesson); 4-point homography warp + lighting integration. Output renders/mogra-forest-dusk-mockup-complete.png + sidecar. Brand assets committed: Northstar_backend/assets/brand/mogra_logo.png + fonts (Playfair Display, Inter). Next: back panel doc, amz-main 2000x2000 bare-pouch export, vector prepress layer (reports/mogra_forest_dusk_complete_20261016.md).",
       "test_counts": "compose harness runs end-to-end; visual verification per iteration (zoomed crops); no paid calls"
+    },
+    {
+      "ts": "2026-10-16T21:04:42Z",
+      "activity": "packify_quality_deep_dive_1000_sources",
+      "batch": "MOGRA-MOCKUP",
+      "summary": "Operator brief: scan GitHub/web for tools that bring generation quality to Packify.ai level; extreme deep dive 1000+ sources; plan; REA for the pieces that need reverse-engineering. DELIVERED research/packify_quality_deep_dive_20261016/: REPORT.md (master), PLAN.md (P0-P4 program), TOOLCHAIN_GENERATION.md (approx 200 itemized sources: keep klein 4B Apache; headline upgrade Qwen-Image-Edit-2511 Apache via Nunchaku; LayerStyle for type; BiRefNet matting; IC-Light owned; ai-toolkit LoRA on klein-base-4B; OCR-QC via PaddleOCR/RapidOCR; vtracer+ImageCms+Ghostscript print; license traps verified: Qwen-Image-2.1/FLUX.2-dev/klein-9B/RMBG-2.0/MatAnyone = non-commercial), COMPOSITOR_REALISM_AND_PACKIFY.md (126 sources; Packify photoshoot PROVEN as 2D crop/scale/rotate/place rectangle; mockup lumin/depth/UV vocabulary inferred; 9-step deterministic realism upgrade path), REA_RUNBOOK.md (passive capture program, exact PowerShell commands, operator protocol), SOURCES_GITHUB.csv (5,984 unique repos from a 90-query API sweep; 159 at 1k+ stars; 5 rate-limit gaps logged). Also: mockup logo upgraded to a direct-print lockup (real mark + Playfair wordmark; commit 7e0fab1). REA targets confirmed: photoshoot extracted_coordinates payload, mockup lumin/depth/UV formats, deep-agents event grammar - everything else = OSS build. Phases P0 (compositor v2: displacement/grain/soft-light/specular/AO) through P4 (print+LoRA) in PLAN.md.",
+      "test_counts": "5,984 repos enumerated (metadata-verified); approx 460 deep-tier sources across 4 docs; all model picks license-verified this session"
     }
   ]
 }

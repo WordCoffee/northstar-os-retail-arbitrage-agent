@@ -1,0 +1,31 @@
+{
+  "ran_at": "2026-10-16T21:04:25.534126+00:00",
+  "queries": 90,
+  "unique_repos": 6060,
+  "by_stars": {
+    "1k+": 159,
+    "100+": 931
+  },
+  "errors": [
+    {
+      "query": "comfyui relight",
+      "new": 0,
+      "error": "HTTP Error 403: rate limit exceeded"
+    },
+    {
+      "query": "mockup generator",
+      "new": 0,
+      "error": "HTTP Error 403: rate limit exceeded"
+    },
+    {
+      "query": "box mockup",
+      "new": 0,
+      "error": "HTTP Error 403: rate limit exceeded"
+    },
+    {
+      "query": "super resolution",
+      "new": 0,
+      "error": "HTTP Error 403: rate limit exceeded"
+    }
+  ]
+}
