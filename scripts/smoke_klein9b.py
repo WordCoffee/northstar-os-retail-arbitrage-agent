@@ -18,6 +18,8 @@ sys.path.insert(0, str(ROOT / "Northstar_backend"))
 os.environ.setdefault("MEDIA_GEN_LIVE", "1")
 os.environ.setdefault("COMFYUI_URL", "http://127.0.0.1:8199")
 os.environ.setdefault("STUDIO_IMAGE_MODEL", "flux-2-klein-9b-Q8_0.gguf")
+if "9b" in os.environ["STUDIO_IMAGE_MODEL"].lower():
+    os.environ.setdefault("STUDIO_TEXT_ENCODER", "qwen_3_8b_fp8mixed.safetensors")
 
 
 def main() -> int:
@@ -37,6 +39,7 @@ def main() -> int:
     png.write_bytes(out["bytes"])
     print(json.dumps({
         "ok": True, "file": str(png), "model_requested": os.environ["STUDIO_IMAGE_MODEL"],
+        "encoder_requested": os.environ.get("STUDIO_TEXT_ENCODER"),
         "model_reported": out.get("model"), "bytes": len(out["bytes"]),
         "seconds": round(time.time() - t0, 1),
     }))

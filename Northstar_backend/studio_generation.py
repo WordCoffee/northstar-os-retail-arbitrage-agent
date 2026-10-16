@@ -25,6 +25,7 @@ import uuid
 DEFAULT_COMFYUI_URL = "http://127.0.0.1:8199"  # this box's ComfyUI (8188 is upstream default)
 
 IMAGE_MODEL_FILE = os.environ.get("STUDIO_IMAGE_MODEL") or "flux-2-klein-4b-Q8_0.gguf"
+TEXT_ENCODER_FILE = os.environ.get("STUDIO_TEXT_ENCODER") or "qwen_3_4b_fp8_mixed.safetensors"
 VIDEO_MODEL_FILE = "Wan2.2-TI2V-5B-Q5_K_M.gguf"
 
 _STYLE_SUFFIX = ", professional commercial product photography, clean composition, no text, no watermark, no logos"
@@ -203,7 +204,7 @@ def _clamp(v, lo: int, hi: int, mult: int = 16) -> int:
 def _klein_graph(prompt: str, width: int, height: int, steps: int, seed: int) -> dict:
     return {
         "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": IMAGE_MODEL_FILE}},
-        "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": "qwen_3_4b_fp8_mixed.safetensors", "type": "flux2", "device": "default"}},
+        "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": TEXT_ENCODER_FILE, "type": "flux2", "device": "default"}},
         "3": {"class_type": "VAELoader", "inputs": {"vae_name": "flux2-vae.safetensors"}},
         "4": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": prompt + _STYLE_SUFFIX}},
         "5": {"class_type": "ConditioningZeroOut", "inputs": {"conditioning": ["4", 0]}},
