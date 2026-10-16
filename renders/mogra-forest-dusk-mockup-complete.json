@@ -1,6 +1,6 @@
 {
   "file": "mogra-forest-dusk-mockup-complete.png",
-  "generated_at": "2026-10-16T15:50:41",
+  "generated_at": "2026-10-16T17:01:01",
   "base": "mogra-forest-dusk-mockup.png",
   "logo": "Northstar_backend\\assets\\brand\\mogra_logo.png",
   "fonts": [
@@ -8,6 +8,13 @@
     "Inter.ttf"
   ],
   "panel_scale": 2.5,
+  "realism_passes": {
+    "displacement_k_render_px": 3.0,
+    "soft_light_strength": 0.9,
+    "specular_cap": 0.32,
+    "grain": "high-pass of the pouch's own surface, keyed to ink alpha",
+    "ao_rim": "deferred (scattered print, see script note)"
+  },
   "layout": "roundel badge (real mark) > real wordmark + tagline > product name (Playfair 700) > MUSHROOM POWDER (Inter, tracked) > model's native engraved art (untouched) > 4 cert roundels on the model's dot row > weight footer + gold rules",
   "palette": {
     "cream": "#F3EAD6",
@@ -15,5 +22,5 @@
     "gold_lm": "#C4A04A",
     "gold_shi": "#D69E3E"
   },
-  "seconds": 25.96
+  "seconds": 25.62
 }

@@ -67,6 +67,15 @@ SKUS = {
 PANEL_SCALE = 2.5      # panel px per render px
 DOT_R = 34             # erase radius around the model's dot row (unused: covered)
 
+# P0 realism passes (compositor v2) — conservative defaults, recorded in the sidecar
+DISP_K = 3.0           # max displacement in render px (ink follows the surface's folds)
+SOFTLIGHT_STR = 0.9    # print takes the surface shading (soft-light blend strength)
+SPEC_MAX = 0.32        # specular sheen cap screened over the print
+# NOTE (deferred honestly): a printed-patch AO rim / seam (compositor report step 4)
+# was NOT applied — our design is scattered elements (type + art), and an edge
+# rim would outline every glyph instead of grounding a label patch. The
+# displacement + shading passes are the grounding here.
+
 
 # ── helpers ─────────────────────────────────────────────────────────────────
 
@@ -364,8 +373,15 @@ def homography(src, dst):
     return H / H[2, 2]
 
 
-def warp_panel(photo: np.ndarray, panel: Image.Image, quad) -> None:
-    """Homography warp of the panel onto the photo quad, in place."""
+def warp_panel(photo: np.ndarray, panel: Image.Image, quad,
+               lum8: np.ndarray, lum2: np.ndarray) -> None:
+    """Homography warp + P0 realism passes, in place.
+
+    - displacement: the sample point shifts with the surface's blurred
+      luminance deviation, so ink rides the folds instead of floating over them
+    - soft-light: the print takes the face's own luminance falloff
+    - specular: the film's sheen screens OVER the ink on bright surface zones
+    """
     PW, PH = panel.size
     H = homography([(0, 0), (PW, 0), (PW, PH), (0, PH)], list(quad))
     Hinv = np.linalg.inv(H)
@@ -377,6 +393,14 @@ def warp_panel(photo: np.ndarray, panel: Image.Image, quad) -> None:
     ones = np.ones_like(gx, dtype=float)
     uv = np.stack([gx.astype(float), gy.astype(float), ones], axis=-1) @ Hinv.T
     u, v = uv[..., 0] / uv[..., 2], uv[..., 1] / uv[..., 2]
+
+    L8 = lum8[y0:y1, x0:x1]
+    med8 = float(np.median(L8)) or 1.0
+    D = np.clip((L8 - med8) / (med8 * 0.55), -1.0, 1.0)
+    shift = D * (DISP_K * PANEL_SCALE)
+    u = u + shift
+    v = v + shift * 0.35
+
     pa = np.asarray(panel, dtype=np.float32)
     valid = (u >= 0) & (u <= PW - 1) & (v >= 0) & (v <= PH - 1)
     uc, vc = np.clip(u, 0, PW - 1), np.clip(v, 0, PH - 1)
@@ -387,9 +411,22 @@ def warp_panel(photo: np.ndarray, panel: Image.Image, quad) -> None:
             + pa[v1, u0] * (1 - wu) * wv + pa[v1, u1] * wu * wv)
     samp[~valid] = 0
     alpha = samp[..., 3:4] / 255.0
+
+    # soft-light shading on the print only
+    s01 = np.clip(0.5 + (L8 - med8) / (med8 * 1.1), 0.28, 1.0)[..., None]
+    x = samp[..., :3] / 255.0
+    sl = x + (2.0 * s01 - 1.0) * x * (1.0 - x)
+    print_rgb = (x * (1.0 - SOFTLIGHT_STR) + sl * SOFTLIGHT_STR) * 255.0
+
+    # specular screen (bright surface zones only)
+    L2 = lum2[y0:y1, x0:x1]
+    med2 = float(np.median(L2)) or 1.0
+    hi = np.clip((L2 - med2 * 1.35) / (med2 * 0.9), 0.0, SPEC_MAX)[..., None]
+    print_rgb = print_rgb + (255.0 - print_rgb) * hi
+
     region = photo[y0:y1, x0:x1].astype(np.float32)
     photo[y0:y1, x0:x1] = np.clip(
-        samp[..., :3] * alpha + region * (1 - alpha), 0, 255).astype(np.uint8)
+        print_rgb * alpha + region * (1 - alpha), 0, 255).astype(np.uint8)
 
 
 # ── main ────────────────────────────────────────────────────────────────────
@@ -397,19 +434,16 @@ def warp_panel(photo: np.ndarray, panel: Image.Image, quad) -> None:
 def main(debug: bool = False) -> int:
     t0 = time.time()
     pieces = logo_bands()
-    base = np.array(Image.open(BASE).convert("RGB")).astype(np.uint8)
+    base_img = Image.open(BASE).convert("RGB")
+    base = np.array(base_img).astype(np.uint8)
     photo = base.copy()
 
-    # lighting reference from the pristine plate (per face bbox)
-    lum_ratio = {}
-    for sku, spec in FACES.items():
-        xs = [p[0] for p in spec["quad"]]; ys = [p[1] for p in spec["quad"]]
-        bbox = (max(0, int(min(xs))), max(0, int(min(ys))), int(max(xs)), int(max(ys)))
-        bl = np.array(Image.fromarray(base[bbox[1]:bbox[3], bbox[0]:bbox[2]])
-                      .filter(ImageFilter.GaussianBlur(8))).astype(np.float32)
-        lum = 0.3 * bl[..., 0] + 0.59 * bl[..., 1] + 0.11 * bl[..., 2]
-        med = np.median(lum) or 1.0
-        lum_ratio[sku] = (bbox, np.clip(lum / med, 0.90, 1.08))
+    # P0 realism maps from the pristine plate (whole-image, computed once)
+    def _lum(im: Image.Image) -> np.ndarray:
+        a = np.asarray(im, dtype=np.float32)
+        return 0.3 * a[..., 0] + 0.59 * a[..., 1] + 0.11 * a[..., 2]
+    lum8 = _lum(base_img.filter(ImageFilter.GaussianBlur(6)))
+    lum2 = _lum(base_img.filter(ImageFilter.GaussianBlur(2.5)))
 
     for sku, spec in FACES.items():
         fw = (spec["quad"][1][0] - spec["quad"][0][0] + spec["quad"][2][0] - spec["quad"][3][0]) / 2
@@ -435,18 +469,23 @@ def main(debug: bool = False) -> int:
                              (dy - q[0][1]) * PANEL_SCALE))
         panel = build_panel(sku, pieces, (fw, fh), icon_pts)
         panel = panel.filter(ImageFilter.GaussianBlur(0.6))
+        # P0.2 print-grain sync: high-pass grain measured from this pouch's own
+        # surface (the same field heal_regions uses), laid under the ink alpha
+        py0, py1, px0, px1 = spec["grain_patch"]
+        patch = base[py0:py1, px0:px1].astype(np.float32)
+        g = patch - np.asarray(Image.fromarray(patch.astype(np.uint8))
+                               .filter(ImageFilter.GaussianBlur(1.5)), dtype=np.float32)
+        pa = np.array(panel, dtype=np.float32)
+        Hp, Wp = pa.shape[:2]
+        tile = np.tile(g, (Hp // g.shape[0] + 1, Wp // g.shape[1] + 1, 1))[:Hp, :Wp]
+        pa[..., :3] = np.clip(pa[..., :3] + tile * (pa[..., 3:4] / 255.0), 0, 255)
+        panel = Image.fromarray(pa.astype(np.uint8), "RGBA")
         if debug:
             Image.fromarray(photo, "RGB").save(ROOT / "renders" / f"_stage_heal_{sku}.png")
             panel.save(ROOT / "renders" / f"_stage_panel_{sku}.png")
-        warp_panel(photo, panel, spec["quad"])
+        warp_panel(photo, panel, spec["quad"], lum8, lum2)
         if debug:
             Image.fromarray(photo, "RGB").save(ROOT / "renders" / f"_stage_warp_{sku}.png")
-
-    # -- lighting integration: print takes the face's own luminance falloff
-    for sku, (bbox, ratio) in lum_ratio.items():
-        reg = photo[bbox[1]:bbox[3], bbox[0]:bbox[2]].astype(np.float32)
-        reg *= (1.0 + (ratio[..., None] - 1.0) * 0.55)
-        photo[bbox[1]:bbox[3], bbox[0]:bbox[2]] = np.clip(reg, 0, 255).astype(np.uint8)
 
     out = Image.fromarray(photo, "RGB")
     out.save(OUT)
@@ -462,6 +501,13 @@ def main(debug: bool = False) -> int:
         "base": BASE.name, "logo": str(LOGO.relative_to(ROOT)),
         "fonts": ["PlayfairDisplay.ttf", "Inter.ttf"],
         "panel_scale": PANEL_SCALE,
+        "realism_passes": {
+            "displacement_k_render_px": DISP_K,
+            "soft_light_strength": SOFTLIGHT_STR,
+            "specular_cap": SPEC_MAX,
+            "grain": "high-pass of the pouch's own surface, keyed to ink alpha",
+            "ao_rim": "deferred (scattered print, see script note)",
+        },
         "layout": "roundel badge (real mark) > real wordmark + tagline > product name "
                   "(Playfair 700) > MUSHROOM POWDER (Inter, tracked) > model's native "
                   "engraved art (untouched) > 4 cert roundels on the model's dot row "

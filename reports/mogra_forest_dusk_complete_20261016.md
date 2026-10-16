@@ -54,6 +54,27 @@ python scripts/compose_mogra_complete.py            # writes the complete PNG
 python scripts/render_mogra_forest_dusk.py          # re-renders the base plate
 ```
 
+## P0 realism update — compositor v2 (2026-10-16, post deep-dive)
+
+The compositor now runs the industry-standard realism passes
+(`warp_panel` v2, constants recorded in the sidecar):
+
+1. **Luminance displacement** — the print's sample point shifts with the
+   surface's blurred luminance so ink rides the material (max 3 render px).
+2. **Print-grain sync** — the pouch's own high-pass grain, keyed to ink alpha.
+3. **Soft-light shading + specular** — the print takes the face's luminance
+   falloff; the film's sheen screens over the ink on bright zones.
+
+Deferred honestly: the printed-**patch** AO rim / seam (report step 4) — our
+design is scattered type + art, and an edge rim would outline glyphs instead of
+grounding a label patch. Displacement + shading are the grounding here.
+
+**Evidence (in `renders/`):** `_ab_full.png` (before/after, full frame),
+`_ab_crop.png` (100% print zone — the lion's mane art visibly sits in the light
+now), baseline preserved as `mogra-forest-dusk-mockup-complete-v1.png`.
+Parameters: DISP_K 3.0 px · soft-light 0.9 (floor 0.28) · specular cap 0.32 ·
+grain ±measured.
+
 ## Next steps (to make this print-real)
 
 - Back panel document (description, Supplement Facts reserved zone, QR/UPC

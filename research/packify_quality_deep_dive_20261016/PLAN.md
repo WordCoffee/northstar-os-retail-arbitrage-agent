@@ -13,7 +13,11 @@ pretends to be a camera. Harmonization passes glue them.
 
 ## P0 — Compositor realism v2 (hours, immediate; kills the "AI-like" look)
 
-Fix for the operator's own complaint on `renders/mogra-forest-dusk-mockup-complete.png`.
+**STATUS: SHIPPED 2026-10-16** (steps 1–3; step 4 deferred — see note).
+Evidence: `renders/_ab_full.png`, `renders/_ab_crop.png`, params in the
+sidecar; baseline `renders/mogra-forest-dusk-mockup-complete-v1.png`.
+Step 4 (patch AO rim/seam) deferred: our print is scattered elements, an edge
+rim would outline glyphs — documented in `compose_mogra_complete.py`.
 
 1. **Luminance displacement inside `warp_panel()`** — sample the panel at
    `(u + k·D, v + k·D)` where `D` = blurred face luminance minus local mean;

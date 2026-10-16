@@ -627,7 +627,7 @@
       "latency": "14B Q4_K_M on RTX 5080 16GB; probe prompts 2.6-26.3s incl. cold load"
     }
   },
-  "last_updated": "2026-10-16T21:57:24Z",
+  "last_updated": "2026-10-16T22:01:57Z",
   "history": [
     {
       "ts": "2026-10-16T06:10:00Z",
@@ -1649,6 +1649,13 @@
       "batch": "MOGRA-MOCKUP",
       "summary": "Operator directive: klein 9B is the studio DEFAULT. Done + root-caused the unload crash: OUR release_models() posted /free -> ComfyUI queued unload_all_models -> ComfyUI-GGUF unpatch_model -> Windows access violation. Fix: release_models is now opt-in (STUDIO_RELEASE_MODELS=1, default OFF; dynamic VRAM covers eviction). Engine defaults now klein-9b-Q8 + qwen_3_8b_fp8mixed; 4B stays as env fallback. VERIFIED: fresh 9B render 27.7s then server UP (vram free 5.2GB resident); second consecutive render 3.1s (cache) server UP. generate_image reports the true model name.",
       "test_counts": "2 consecutive 9B studio-lane renders, server survived both; crash previously reproduced deterministically"
+    },
+    {
+      "ts": "2026-10-16T22:01:57Z",
+      "activity": "compositor_v2_realism_shipped",
+      "batch": "MOGRA-MOCKUP",
+      "summary": "P0 of the Packify-quality plan SHIPPED: compose_mogra_complete.py v2 - (1) luminance displacement so the print rides the material's folds (max 3 render px), (2) print-grain sync from the pouch's own high-pass surface grain keyed to ink alpha, (3) soft-light shading (0.9, floor 0.28) + capped specular screen (0.32) replacing the old global 0.55 multiply. Step 4 (patch AO rim/seam) deferred honestly: scattered print would get glyph outlines - rationale documented in the script. A/B evidence: renders/_ab_full.png, _ab_crop.png (art/type now sit in the lighting on both SKUs; charcoal print integrates), baseline kept as mogra-forest-dusk-mockup-complete-v1.png; params in the sidecar. PLAN.md P0 marked shipped.",
+      "test_counts": "compose run 25.6s; A/B visual verification full-frame + 100% crop; no paid calls"
     }
   ]
 }
