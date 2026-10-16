@@ -26,6 +26,14 @@
   ],
   "known_issues": [
     {
+      "id": "re_build_design_studio_print_async_agent_20261016",
+      "discovered_in": "Packify.ai / DYP.ai reverse-engineering build (REA; evidence commit 297f90a)",
+      "discovered_at": "2026-10-16T00:00:00Z",
+      "description": "RE build shipped three design-studio services: (a) print lane — layered dieline/label SVG + native PDF renderers, 8-template catalog, project ZIP export (design_studio_print.py, /api/design-studio/print/*); (b) async generation lane with real credit reserve->commit/release metering — meter-only by default, fail-closed when DESIGN_CREDITS_ENFORCE=1 (design_studio_async.py, /generate-async); (c) chat->structured-brief design agent with optional enqueue into the async lane (design_studio_agent.py, /agent/brief). Tests: 24 passed (20 unit + 4 endpoint smoke) plus a live E2E smoke against the dev DB/file store.",
+      "resolution": "Shipped in Northstar_backend (design_studio_print/async/agent modules + 4 test files + main.py wiring). Operator test runbook: reports/re_build_design_studio_20261016.md. Not yet shipped from the RE plan: public API keys + webhooks, mockup scene/product gallery, canvas-editor frontend wiring.",
+      "status": "resolved"
+    },
+    {
       "id": "unwrangle_costco_platform_string_bug",
       "discovered_in": "Batch 10 gating review (root-cause diagnosis of item 424976 HTTP 403?prepared), confirmed code-read-only in 2026-09-03 session",
       "discovered_at": "2026-09-03T00:00:00Z",

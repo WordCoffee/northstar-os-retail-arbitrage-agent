@@ -48,6 +48,15 @@ try:
 except ImportError:
     _HAS_DESIGN_STUDIO = False
 
+# Design Studio — RE build 2026-10-16: print lane, async lane, design agent
+try:
+    from design_studio_print import router as design_studio_print_router
+    from design_studio_async import router as design_studio_async_router
+    from design_studio_agent import router as design_studio_agent_router
+    _HAS_DESIGN_STUDIO_EXT = True
+except ImportError:
+    _HAS_DESIGN_STUDIO_EXT = False
+
 # Phase 6: Production infrastructure
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
@@ -240,6 +249,12 @@ if _HAS_GOLDEN_GOOSE:
 # Design Studio — merged creative workspace (Phase 0)
 if _HAS_DESIGN_STUDIO:
     app.include_router(design_studio_router)
+
+# Design Studio extensions — print lane / async lane / design agent (RE 2026-10-16)
+if _HAS_DESIGN_STUDIO_EXT:
+    app.include_router(design_studio_print_router)
+    app.include_router(design_studio_async_router)
+    app.include_router(design_studio_agent_router)
 
 # Golden Goose Finder UI panel (standalone page; fetches /api/golden-goose/*)
 _GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"
