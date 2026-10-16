@@ -20,6 +20,10 @@
 # from a backend-only checkout.
 
 FROM node:20-alpine AS ui-build
+ARG GIT_COMMIT=unknown
+ARG GIT_TIME=
+ENV GIT_COMMIT=$GIT_COMMIT
+ENV GIT_TIME=$GIT_TIME
 WORKDIR /ui
 COPY northstar-os-ui/package.json northstar-os-ui/package-lock.json* ./
 RUN npm ci --no-audit --no-fund || npm install --no-audit --no-fund

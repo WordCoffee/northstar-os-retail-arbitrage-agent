@@ -44,6 +44,13 @@ $env:ENVIRONMENT = "development"
 # it explicitly on their own docker compose invocation.
 $env:NORTHSTAR_DISABLE_RATE_LIMIT = "0"
 
+# Build banner (2026-10-16): pass the commit + time into the image so the
+# sidebar footer shows which build is running (git is not in the build context).
+try {
+    $env:GIT_COMMIT = (git rev-parse --short HEAD 2>$null)
+    $env:GIT_TIME = (git log -1 --format=%cI 2>$null)
+} catch { $env:GIT_COMMIT = "unknown"; $env:GIT_TIME = "" }
+
 Push-Location $repo
 try {
     if ($Rebuild) {

@@ -3,14 +3,18 @@ import react from '@vitejs/plugin-react'
 import { execSync } from 'node:child_process'
 
 // Build banner (2026-10-16): the shell shows the commit + build time so a
-// stale image can never be mistaken for the current tree again.
+// stale image can never be mistaken for the current tree again. Docker builds
+// receive GIT_COMMIT/GIT_TIME as build args (the .git directory is not in the
+// build context); a local build reads git directly.
 function buildInfo() {
-  let commit = 'unknown'
-  let time = new Date().toISOString()
-  try {
-    commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim()
-    time = execSync('git log -1 --format=%cI', { encoding: 'utf8' }).trim() || time
-  } catch { /* not a git checkout at build time */ }
+  let commit = (process.env.GIT_COMMIT || '').trim() || 'unknown'
+  let time = (process.env.GIT_TIME || '').trim() || new Date().toISOString()
+  if (commit === 'unknown') {
+    try {
+      commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim()
+      time = execSync('git log -1 --format=%cI', { encoding: 'utf8' }).trim() || time
+    } catch { /* neither build arg nor a git checkout at build time */ }
+  }
   return { commit, time }
 }
 

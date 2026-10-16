@@ -157,6 +157,27 @@ export default function DesignStudio() {
   return (
     <PageLayout title="Design Studio" subtitle="One studio for every creative asset your Amazon listings need.">
       <SectionPicker active={sectionId} onChange={setSection} />
+      {sectionId === 'projects' && (
+        <div className="card" style={{ marginBottom: 16, padding: 16 }} data-testid="ds-quickstart">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+            <strong style={{ fontSize: 14 }}>Quick start</strong>
+            <span className="pill pill-muted">guided first steps</span>
+          </div>
+          <div className="grid-3" style={{ gap: 10 }}>
+            {[
+              { label: 'Main image from a photo', note: 'Upload your photo; white-background check + export', to: 'listing-images' },
+              { label: 'A+ set from a brief', note: 'Modules, alt text and placement instructions', to: 'aplus' },
+              { label: 'Dieline & print pack', note: 'Layered SVG / PDF / project ZIP', to: 'dielines' },
+            ].map(q => (
+              <button key={q.to} className="card" onClick={() => setSection(q.to)}
+                style={{ padding: 14, textAlign: 'left', cursor: 'pointer', fontFamily: 'var(--font-ui)', border: '1px solid var(--divider)' }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--pine-deep)' }}>{q.label}</div>
+                <div className="text-low" style={{ fontSize: 11, marginTop: 2 }}>{q.note}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       {sectionId === 'projects' && <CreativeStudio />}
       {sectionId === 'listing-images' && <ListingImages />}
       {sectionId === 'aplus' && <APlus />}

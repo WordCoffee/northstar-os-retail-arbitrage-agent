@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import signals, { settle } from '../../services/signals.js'
 import foundationApi from '../../foundation/api.js'
+import FirstRunGuide from '../../components/FirstRunGuide.jsx'
 
 // ═══ Live work queues (real foundation reads) ═══
 function WorkQueues({ navigate }) {
@@ -272,6 +273,7 @@ export default function CommandCenter() {
         <button className="btn btn-sm" onClick={() => navigate('/design-studio?section=ads&view=amazon-files')}>Import an Amazon file</button>
       </>}
     >
+      <FirstRunGuide />
       <StartSomething navigate={navigate} />
       <WorkQueues navigate={navigate} />
       <details style={{ marginBottom: 20 }}>
