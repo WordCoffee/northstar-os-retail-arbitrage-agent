@@ -457,13 +457,13 @@ export const PROVIDER_BOUNDARY = {
     engine: 'ComfyUI',
     env: 'COMFYUI_URL',
     gate: 'MEDIA_GEN_LIVE',
-    models: 'FLUX.2 klein / FLUX.1 dev (weights must be installed)',
+    models: 'FLUX.2 klein 4B Q8 (installed, commercial-ok) — draft and final render on this machine',
   },
   video: {
-    label: 'Video / short-clip engine',
-    engine: 'fal (Kling / Wan / Veo)',
-    env: 'fal provider key',
+    label: 'Local video engine',
+    engine: 'ComfyUI (Wan 2.2 TI2V-5B)',
+    env: 'COMFYUI_URL',
     gate: 'MEDIA_GEN_LIVE',
-    models: 'No local video pipeline exists in this build',
+    models: 'Local short clips up to ~1280×736 on 16 GB VRAM (5 s needs the 64 GB RAM upgrade)',
   },
 }

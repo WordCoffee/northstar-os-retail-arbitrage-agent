@@ -1138,11 +1138,19 @@ def creative_media_readiness():
     image_provider = bool(os.environ.get("IMAGE_GEN_PROVIDER") or os.environ.get("OPENROUTER_API_KEY"))
     video_armed = str(os.environ.get("VIDEO_GEN_LIVE", "")).strip() == "1"
     armed = bool(image_provider and video_armed)
+    # Local engine (ComfyUI) — additive. The studio reads `media_live_armed`.
+    try:
+        import studio_generation as _sg_local
+        local = _sg_local.engine_status()
+    except Exception as _exc:  # pragma: no cover - defensive
+        local = {"armed": False, "note": f"engine module unavailable: {_exc.__class__.__name__}"}
     return {
         "armed": armed,
         "status": "armed" if armed else "concept",
         "image_provider_configured": image_provider,
         "video_enabled": video_armed,
+        "media_live_armed": bool(local.get("armed")),
+        "engine": local,
         "note": (
             "No image/video provider is approved for this deployment. "
             "Generation is disabled; the studio works as a local designer "
@@ -1150,6 +1158,11 @@ def creative_media_readiness():
         ) if not armed else (
             "A media provider is configured. Every request is metered and "
             "an operator approval is still required per run."
+        ),
+        "local_note": (
+            "The LOCAL engine (ComfyUI) is armed: renders run on this machine's GPU."
+            if local.get("armed") else
+            "The LOCAL engine (ComfyUI) is not armed; set MEDIA_GEN_LIVE=1 and start ComfyUI."
         ),
     }
 

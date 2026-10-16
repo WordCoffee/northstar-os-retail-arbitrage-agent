@@ -28,7 +28,7 @@ import Icon from '../../components/Icon.jsx'
 import { useToast } from '../../components/ToastContext.jsx'
 import Stage from '../../studio/components/Stage.jsx'
 import {
-  ModeToggle, ToolRail, ProviderBoundary, AssetThumb, ThumbPlaceholder,
+  ModeToggle, ToolRail, ProviderBoundary, EngineArmed, AssetThumb, ThumbPlaceholder,
 } from '../../studio/components/Chrome.jsx'
 import {
   Section, Field, TextInput, NumberInput, Slider, Select, ColorInput,
@@ -56,6 +56,7 @@ import {
   TEMPLATES, templateById, ALL_FORMATS, formatById, DEFAULT_BRAND_KITS,
   GEN_PURPOSES, GEN_TIERS,
 } from '../../studio/engine/presets.js'
+import { engineApi } from '../../studio/engine/engineApi.js'
 
 // ── Tools ────────────────────────────────────────────────────────────────────
 const TOOLS = [
@@ -143,6 +144,11 @@ export default function CreativeStudio() {
   const [vPurpose, setVPurpose] = useState('UGC / testimonial')
   const [vDuration, setVDuration] = useState('15s (Short / TikTok)')
   const [vAspect, setVAspect] = useState('9:16 (vertical)')
+  const [engine, setEngine] = useState(null)          // local ComfyUI engine state
+  const [genBusy, setGenBusy] = useState(false)
+  const [videoBusy, setVideoBusy] = useState(false)
+  const [lastRender, setLastRender] = useState(null)  // latest generated image asset
+  const [lastClip, setLastClip] = useState(null)      // latest generated video asset
 
   const t = useCallback((msg, tone = 'info') => toast(msg, tone), [toast])
   const go = useCallback((id) => navigate(`/creative-studio?view=${id}`), [navigate])
@@ -457,30 +463,89 @@ export default function CreativeStudio() {
     }
   }, [doc, docName, images, store, setExportLog, t])
 
+  // ── Local engine status (ComfyUI) ──
+  // Honest state: armed only when the backend gate is on AND ComfyUI answers.
+  useEffect(() => {
+    let alive = true
+    const tick = () => {
+      engineApi.status()
+        .then(s => { if (alive) setEngine(s) })
+        .catch(() => { if (alive) setEngine({ armed: false, reachable: false, note: 'Engine status unavailable.' }) })
+    }
+    tick()
+    const timer = setInterval(tick, 60000)
+    return () => { alive = false; clearInterval(timer) }
+  }, [])
+
   // ── Requests ──
-  const submitImageRequest = useCallback(() => {
-    if (!genPrompt.trim()) { t('Write a request brief before queueing.', 'warn'); return }
+  const submitImageRequest = useCallback(async () => {
+    if (!genPrompt.trim()) { t('Write a request brief before rendering.', 'warn'); return }
     const rec = {
       id: uid('RQ'), kind: 'image', purpose: genPurpose, prompt: genPrompt.trim(),
-      tier: genTier, formatId, format: fmt.label, refs: [],
-      state: 'Blocked — provider required', providerState: 'not_connected',
-      note: 'Awaiting a connected local image engine.', createdAt: nowIso(),
+      tier: genTier, formatId, format: fmt.label, refs: [], createdAt: nowIso(),
     }
-    setRequests(prev => [rec, ...prev])
-    t('Image request recorded locally — blocked until a provider is connected. Nothing was generated.', 'info')
-  }, [genPrompt, genPurpose, genTier, formatId, fmt.label, setRequests, t])
+    if (engine && engine.armed) {
+      setRequests(prev => [{ ...rec, state: 'Rendering… (local ComfyUI)', providerState: 'connected' }, ...prev])
+      setGenBusy(true)
+      try {
+        const out = await engineApi.generate({
+          kind: 'image', purpose: genPurpose, brief: genPrompt.trim(), tier: genTier,
+          width: fmt.w, height: fmt.h,
+        })
+        setRequests(prev => prev.map(r => r.id === rec.id
+          ? { ...r, state: `Done — ${(out.asset.metadata && out.asset.metadata.generation && out.asset.metadata.generation.model) || 'local model'}`, fileUrl: out.asset.file_url, assetId: out.asset.id }
+          : r))
+        setLastRender(out.asset)
+        t('Rendered locally on this machine (ComfyUI). Nothing left the box.', 'info')
+      } catch (e) {
+        const msg = String((e && e.message) || e)
+        setRequests(prev => prev.map(r => r.id === rec.id ? { ...r, state: `Failed — ${msg}` } : r))
+        t(`Render failed: ${msg}`, 'warn')
+      } finally { setGenBusy(false) }
+      return
+    }
+    setRequests(prev => [{
+      ...rec, state: 'Blocked — provider required', providerState: 'not_connected',
+      note: 'Awaiting a connected local image engine.',
+    }, ...prev])
+    t('Image request recorded locally — blocked until the engine is armed. Nothing was generated.', 'info')
+  }, [engine, genPrompt, genPurpose, genTier, formatId, fmt.label, fmt.w, fmt.h, setRequests, t])
 
-  const submitVideoRequest = useCallback(() => {
+  const submitVideoRequest = useCallback(async () => {
+    const dims = vAspect.startsWith('9:16') ? { width: 512, height: 736 }
+      : vAspect.startsWith('1:1') ? { width: 640, height: 640 }
+      : { width: 832, height: 480 }
+    const brief = `Short product clip - ${vPurpose}. Aspect ${vAspect}, intended length ${vDuration}. Product hero shot with a slow camera move.`
     const rec = {
-      id: uid('RQ'), kind: 'video', purpose: 'ugc-clip',
-      prompt: `${vPurpose} · ${vDuration} · ${vAspect}`, tier: 'draft',
-      formatId: 'reel-frame', format: 'Reel frame 9:16',
-      refs: [], state: 'Blocked — provider required', providerState: 'not_connected',
-      note: 'No local video pipeline exists in this build.', createdAt: nowIso(),
+      id: uid('RQ'), kind: 'video', purpose: 'ugc-clip', prompt: brief, tier: 'draft',
+      formatId: 'reel-frame', format: String(vAspect), refs: [], createdAt: nowIso(),
     }
-    setRequests(prev => [rec, ...prev])
-    t('Video request recorded locally — no video pipeline exists in this build. Nothing was generated.', 'info')
-  }, [vPurpose, vDuration, vAspect, setRequests, t])
+    if (engine && engine.armed) {
+      setRequests(prev => [{ ...rec, state: 'Rendering clip… (local Wan 2.2)', providerState: 'connected' }, ...prev])
+      setVideoBusy(true)
+      try {
+        const out = await engineApi.generate({
+          kind: 'video', purpose: 'ugc-clip', brief, tier: 'draft',
+          width: dims.width, height: dims.height,
+        })
+        setRequests(prev => prev.map(r => r.id === rec.id
+          ? { ...r, state: `Done — ${(out.asset.metadata && out.asset.metadata.generation && out.asset.metadata.generation.model) || 'local model'}`, fileUrl: out.asset.file_url, assetId: out.asset.id }
+          : r))
+        setLastClip(out.asset)
+        t('Clip rendered locally on this machine (Wan 2.2). Nothing left the box.', 'info')
+      } catch (e) {
+        const msg = String((e && e.message) || e)
+        setRequests(prev => prev.map(r => r.id === rec.id ? { ...r, state: `Failed — ${msg}` } : r))
+        t(`Clip render failed: ${msg}`, 'warn')
+      } finally { setVideoBusy(false) }
+      return
+    }
+    setRequests(prev => [{
+      ...rec, state: 'Blocked — provider required', providerState: 'not_connected',
+      note: 'Awaiting a connected local video engine.',
+    }, ...prev])
+    t('Clip request recorded locally — blocked until the engine is armed. Nothing was generated.', 'info')
+  }, [engine, vPurpose, vDuration, vAspect, setRequests, t])
 
   const advanceRequest = useCallback((id, nextState) => {
     setRequests(prev => prev.map(r => r.id === id ? { ...r, state: nextState } : r))
@@ -797,7 +862,7 @@ export default function CreativeStudio() {
           {/* ══ GENERATE ══ */}
           {tool === 'generate' && (
             <div className="subview stack" style={{ gap: 14 }}>
-              <ProviderBoundary kind="image" />
+              {engine && engine.armed ? <EngineArmed engine={engine} kind="image" /> : <ProviderBoundary kind="image" />}
               <div className="card">
                 <div className="card-head"><h3 className="card-title" style={{ fontSize: 15 }}>Image request</h3></div>
                 <div className="field-group">
@@ -823,8 +888,13 @@ export default function CreativeStudio() {
                   </div>
                 </div>
                 <div className="inline-flex">
-                  <button className="btn btn-sm btn-primary" onClick={submitImageRequest}><Icon name="plus" size={13} /> Record request</button>
-                  <span className="pill pill-warn">records a local request · renders nothing</span>
+                  <button className="btn btn-sm btn-primary" onClick={submitImageRequest} disabled={genBusy}>
+                    <Icon name={engine && engine.armed ? 'sparkle' : 'plus'} size={13} />
+                    {genBusy ? 'Rendering on this GPU…' : (engine && engine.armed ? 'Generate image (local)' : 'Record request')}
+                  </button>
+                  {engine && engine.armed
+                    ? <span className="pill pill-forest">renders locally on this machine (ComfyUI) · nothing leaves the box</span>
+                    : <span className="pill pill-warn">records a local request · renders nothing until the engine is armed</span>}
                 </div>
               </div>
               <div className="card">
@@ -834,21 +904,36 @@ export default function CreativeStudio() {
                   { key: 'purpose', label: 'Purpose' },
                   { key: 'brief', label: 'Brief', render: (v, r) => <span title={r.prompt}>{r.prompt.length > 46 ? `${r.prompt.slice(0, 46)}…` : r.prompt}</span> },
                   { key: 'format', label: 'Placement' },
-                  { key: 'state', label: 'State', render: (v) => <span className="pill pill-unknown">{v}</span> },
+                  { key: 'state', label: 'State', render: (v, r) => (<span className="pill pill-unknown">{v}{r.fileUrl ? <>{' · '}<a href={r.fileUrl} target="_blank" rel="noreferrer">open</a></> : null}</span>) },
                   { key: 'act', label: '', render: (v, r) => <button className="btn btn-sm btn-ghost" onClick={() => removeRequest(r.id)}>Remove</button> },
-                ]} rows={requests} emptyText="No requests recorded yet." />
+                ]} rows={requests.filter(r => r.kind !== 'video')} emptyText="No requests recorded yet." />
               </div>
+              {lastRender && (
+                <div className="card" data-testid="latest-render">
+                  <div className="card-head">
+                    <h3 className="card-title" style={{ fontSize: 15 }}>Latest render</h3>
+                    <span className="pill pill-forest">local · {(lastRender.metadata && lastRender.metadata.generation && lastRender.metadata.generation.model) || 'comfyui'}</span>
+                  </div>
+                  <img src={lastRender.file_url} alt={lastRender.name} style={{ maxWidth: '100%', borderRadius: 10, border: '1px solid var(--border)' }} />
+                  <div className="inline-flex" style={{ marginTop: 10, alignItems: 'center' }}>
+                    <a className="btn btn-sm" href={lastRender.file_url} target="_blank" rel="noreferrer"><Icon name="download" size={13} /> Open full size</a>
+                    <span className="text-low" style={{ fontSize: 11 }}>{lastRender.name} · {lastRender.width}×{lastRender.height} · {fmtBytes(lastRender.size_bytes || 0)}</span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
           {/* ══ VIDEO ══ */}
           {tool === 'video' && (
             <div className="subview stack" style={{ gap: 14 }}>
-              <ProviderBoundary kind="video" />
+              {engine && engine.armed ? <EngineArmed engine={engine} kind="video" /> : <ProviderBoundary kind="video" />}
               <div className="card">
                 <div className="card-head">
                   <h3 className="card-title" style={{ fontSize: 15 }}>Short-clip storyboard</h3>
-                  <span className="pill pill-muted">storyboard composer · no render</span>
+                  {engine && engine.armed
+                    ? <span className="pill pill-forest">storyboard composer · local clip renders armed</span>
+                    : <span className="pill pill-muted">storyboard composer · no render</span>}
                 </div>
                 <div className="field-group">
                   <span className="label">Purpose</span>
@@ -866,8 +951,13 @@ export default function CreativeStudio() {
                   </div>
                 </div>
                 <div className="inline-flex">
-                  <button className="btn btn-sm btn-primary" onClick={submitVideoRequest}><Icon name="plus" size={13} /> Record clip request</button>
-                  <span className="pill pill-warn">no video pipeline exists in this build</span>
+                  <button className="btn btn-sm btn-primary" onClick={submitVideoRequest} disabled={videoBusy}>
+                    <Icon name={engine && engine.armed ? 'film' : 'plus'} size={13} />
+                    {videoBusy ? 'Rendering clip on this GPU… (a few minutes)' : (engine && engine.armed ? 'Render clip (local Wan 2.2)' : 'Record clip request')}
+                  </button>
+                  {engine && engine.armed
+                    ? <span className="pill pill-forest">renders locally · Wan 2.2 TI2V-5B · nothing leaves the box</span>
+                    : <span className="pill pill-warn">no video render until the engine is armed</span>}
                 </div>
               </div>
               <div className="card">
@@ -876,9 +966,22 @@ export default function CreativeStudio() {
                   { key: 'id', label: 'Beat' },
                   { key: 'purpose', label: 'Role' },
                   { key: 'brief', label: 'Brief', render: (v, r) => <span title={r.prompt}>{r.prompt}</span> },
-                  { key: 'state', label: 'State', render: (v) => <span className="pill pill-unknown">{v}</span> },
+                  { key: 'state', label: 'State', render: (v, r) => (<span className="pill pill-unknown">{v}{r.fileUrl ? <>{' · '}<a href={r.fileUrl} target="_blank" rel="noreferrer">open</a></> : null}</span>) },
                 ]} rows={requests.filter(r => r.kind === 'video')} emptyText="No clip requests recorded yet." />
               </div>
+              {lastClip && (
+                <div className="card" data-testid="latest-clip">
+                  <div className="card-head">
+                    <h3 className="card-title" style={{ fontSize: 15 }}>Latest clip</h3>
+                    <span className="pill pill-forest">local · {(lastClip.metadata && lastClip.metadata.generation && lastClip.metadata.generation.model) || 'wan2.2'}</span>
+                  </div>
+                  <video controls src={lastClip.file_url} style={{ maxWidth: '100%', borderRadius: 10, border: '1px solid var(--border)' }} />
+                  <div className="inline-flex" style={{ marginTop: 10, alignItems: 'center' }}>
+                    <a className="btn btn-sm" href={lastClip.file_url} target="_blank" rel="noreferrer"><Icon name="download" size={13} /> Open file</a>
+                    <span className="text-low" style={{ fontSize: 11 }}>{lastClip.name} · {lastClip.width}×{lastClip.height} · {lastClip.duration_seconds || '?'}s · {fmtBytes(lastClip.size_bytes || 0)}</span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

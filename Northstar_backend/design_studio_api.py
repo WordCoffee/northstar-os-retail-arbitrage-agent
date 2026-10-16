@@ -1849,3 +1849,124 @@ def studio_status(acct: str = Depends(studio_account)):
         "jobs": len(db.design_studio.jobs.list_by_project(account_id=acct, limit=1000)),
         "note": "Local design workspace. Provider generation is gated behind explicit Run actions.",
     }
+
+
+# ── Local media generation (ComfyUI runner) ────────────────────────────────
+# Free and private: every render happens on the operator's machine through the
+# local ComfyUI (studio_generation.py). Armed only when MEDIA_GEN_LIVE=1 AND
+# ComfyUI answers at COMFYUI_URL. Jobs are recorded like every other studio
+# action; credits_used stays 0 because nothing paid is ever called here.
+
+class GenerateIn(BaseModel):
+    kind: str = Field(default="image")            # image | video
+    purpose: Optional[str] = None
+    brief: str = Field(..., min_length=3, max_length=2000)
+    tier: str = Field(default="draft")            # draft | final
+    width: Optional[int] = None
+    height: Optional[int] = None
+    project_id: Optional[str] = None
+    seed: Optional[int] = None
+
+
+@router.get("/engine")
+def engine_status(acct: str = Depends(studio_account)):
+    import studio_generation as sg
+    return sg.engine_status()
+
+
+@router.post("/generate")
+def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
+    import studio_generation as sg
+    st = sg.engine_status()
+    if not st["armed"]:
+        raise HTTPException(status_code=409, detail={
+            "code": "engine_not_armed",
+            "message": ("The local media engine is not armed. Set MEDIA_GEN_LIVE=1 and keep "
+                        "ComfyUI reachable at COMFYUI_URL (see the Engine card)."),
+            "engine": st,
+        })
+    if body.kind not in ("image", "video"):
+        raise HTTPException(status_code=422, detail="kind must be image or video")
+
+    db = get_northstar_db()
+    now = datetime.now(timezone.utc).isoformat()
+    job_id = db.design_studio.jobs.create({
+        "account_id": acct,
+        "project_id": body.project_id,
+        "job_type": f"generate-{body.kind}",
+        "provider": "local:comfyui",
+        "status": "running",
+        "cost_preview": {"provider": "local", "cost": 0,
+                         "note": "Local compute on the operator's GPU; nothing paid."},
+        "params": {"purpose": body.purpose, "tier": body.tier, "brief": body.brief,
+                   "width": body.width, "height": body.height, "seed": body.seed},
+        "started_at": now,
+        "credits_used": 0,
+    })
+    try:
+        if body.kind == "video":
+            out = sg.generate_video(prompt=body.brief, width=body.width, height=body.height,
+                                    tier=body.tier, seed=body.seed)
+        else:
+            out = sg.generate_image(prompt=body.brief, width=body.width, height=body.height,
+                                    tier=body.tier, seed=body.seed)
+    except Exception as exc:  # noqa: BLE001 - recorded on the job, surfaced to the caller
+        db.design_studio.jobs.update(job_id, {
+            "status": "failed", "logs": str(exc)[:2000],
+            "finished_at": datetime.now(timezone.utc).isoformat(),
+        }, account_id=acct)
+        raise HTTPException(status_code=502, detail={"code": "generation_failed", "message": str(exc)[:400]})
+
+    from pathlib import Path
+    import uuid as _uuid
+    out_dir = Path(__file__).resolve().parent / "data" / "studio_generated"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    fname = f"{_uuid.uuid4().hex}.{out['ext']}"
+    (out_dir / fname).write_bytes(out["bytes"])
+
+    aid = db.design_studio.assets.create({
+        "account_id": acct,
+        "project_id": body.project_id,
+        "name": f"{body.purpose or body.kind} - {out['model']} - {now[:16]}",
+        "asset_type": f"generated-{body.kind}",
+        "mime_type": out["mime"],
+        "storage_key": fname,
+        "width": out.get("width"), "height": out.get("height"),
+        "duration_seconds": out.get("duration_seconds"),
+        "size_bytes": len(out["bytes"]),
+        "metadata": {
+            "generation": {
+                "provider": "comfyui", "model": out["model"], "tier": body.tier,
+                "purpose": body.purpose, "prompt": body.brief, "seed": out.get("seed"),
+                "generated_at": now,
+            },
+            "note": "Rendered locally on the operator's machine via ComfyUI. Nothing was sent to any provider.",
+        },
+    })
+    db.design_studio.jobs.update(job_id, {
+        "status": "done", "result_ids": [aid],
+        "finished_at": datetime.now(timezone.utc).isoformat(),
+    }, account_id=acct)
+    asset = db.design_studio.assets.get_by_id(aid, account_id=acct)
+    return {
+        "job": db.design_studio.jobs.get_by_id(job_id, account_id=acct),
+        "asset": {**(asset or {}), "file_url": f"/api/design-studio/assets/{aid}/file"},
+        "engine": st,
+    }
+
+
+@router.get("/assets/{aid}/file")
+def get_asset_file(aid: str, acct: str = Depends(studio_account)):
+    """Stream a generated asset file. Account-scoped; the served path is always
+    the basename inside the studio output directory."""
+    from pathlib import Path
+    from fastapi.responses import FileResponse as _FileResponse
+    db = get_northstar_db()
+    asset = db.design_studio.assets.get_by_id(aid, account_id=acct)
+    if not asset or not asset.get("storage_key"):
+        raise HTTPException(status_code=404, detail="Asset file not found")
+    name = Path(str(asset["storage_key"])).name  # basename only - no traversal
+    path = Path(__file__).resolve().parent / "data" / "studio_generated" / name
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Asset file not found")
+    return _FileResponse(str(path), media_type=asset.get("mime_type") or "application/octet-stream")

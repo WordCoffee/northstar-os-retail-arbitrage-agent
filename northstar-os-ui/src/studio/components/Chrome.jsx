@@ -63,6 +63,27 @@ export function ProviderBoundary({ kind = 'image', children }) {
   )
 }
 
+// ── Local engine armed (ComfyUI) ─────────────────────────────────────────────
+export function EngineArmed({ engine, kind = 'image', children }) {
+  const e = engine || {}
+  return (
+    <div className="alert" data-testid="engine-armed" style={{ borderColor: 'var(--pine, #1d5a1d)' }}>
+      <div className="alert-title">
+        <span className="pill pill-ok">LOCAL ENGINE ARMED</span>{' '}
+        {kind === 'video' ? 'Local video engine' : 'Local image engine'} connected — {e.engine || 'ComfyUI'} at{' '}
+        <span className="text-mono">{e.url}</span>
+      </div>
+      <div className="alert-text">
+        Renders run on this machine's GPU; nothing is sent to any provider and no credits are spent.
+        {kind === 'video'
+          ? ' Local clips: Wan 2.2 TI2V-5B, up to ~1280×736, a few minutes per clip on this GPU.'
+          : ' Draft renders take ~25–45 s; higher tiers take longer.'}
+        {children}
+      </div>
+    </div>
+  )
+}
+
 // ── Asset thumbnail ───────────────────────────────────────────────────────────
 export function AssetThumb({ asset, height = 64, onClick, selected, actions }) {
   if (!asset) return null

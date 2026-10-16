@@ -196,6 +196,14 @@ $env:NORTHSTAR_DISABLE_RATE_LIMIT = "0"
 $env:NORTHSTAR_ROOT_TO_APP = "1"   # tunnel/local root lands in the workspace
 $env:FOUNDATION_DB_PATH = Join-Path $BackendDir "data\foundation.db"   # persistent foundation store (owner sign-in, invites, sessions)
 
+# Local media engine (Design Studio generation). Renders run on this machine's
+# GPU through ComfyUI; nothing leaves the box and nothing paid is called. The
+# engine is only "armed" when ComfyUI actually answers (see docs/MEDIA_STACK_2026-10.md
+# for the start command) - if it is down the studio says so honestly.
+$env:MEDIA_GEN_LIVE = "1"
+$env:COMFYUI_URL = "http://127.0.0.1:8199"
+$env:VIDEO_GEN_LIVE = "1"   # legacy readiness flag; local video renders via Wan 2.2
+
 # Signing key for the hosted/cookie login (the foundation auth fails closed 503
 # without it). Reuses the SAME out-of-repo store as tools/start-local.ps1:
 # generated once, owner-only ACL, survives restarts, never printed/committed.
