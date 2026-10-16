@@ -83,7 +83,11 @@ async function main() {
   for (const [route, label] of ROOMS) {
     await page.goto(BASE + route, { waitUntil: 'domcontentloaded', timeout: 30000 })
     await page.waitForSelector('[data-testid="master-brain-panel"]', { timeout: 30000 })
-    await page.waitForTimeout(1500)
+    await page.waitForTimeout(1200)
+    // 2026-10-16: the redesigned panel renders the record lists behind a
+    // "Details" toggle; open it so the seeded record is actually rendered.
+    const details = await page.$('[data-testid="master-brain-panel"] button:has-text("Details")')
+    if (details) { await details.click(); await page.waitForTimeout(600) }
     const text = await page.$eval('[data-testid="master-brain-panel"]', e => e.textContent).catch(() => '')
     if (/read-only/.test(text) && /no provider calls/.test(text)) {
       ok(`${label}: the panel renders and states read-only + no provider calls`)

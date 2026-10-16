@@ -32,6 +32,7 @@ const SECTIONS = [
   { id: 'video-ugc', label: 'Video & UGC Clips', testid: 'video-ugc-workspace' },
   { id: 'social', label: 'Social', testid: 'social-workspace' },
   { id: 'packaging', label: 'Packaging & Mockups', testid: 'packaging-workspace' },
+  { id: 'dielines', label: 'Dielines & Print', testid: 'dielines-workspace', kind: 'print' },
   { id: '3d-scene', label: '3D Product Scene', testid: null },
 ]
 
@@ -80,7 +81,18 @@ async function main() {
       await btn.click()
       await page.waitForTimeout(800)
 
-      if (s.testid) {
+      if (s.testid && s.kind === 'print') {
+        // Dielines & Print (2026-10-16): its own print-workbench layout, not a
+        // SectionWorkspace. It gets its own check profile.
+        await page.waitForSelector(`[data-testid="${s.testid}"]`, { timeout: 12000 })
+        ok(`${s.label}: workspace mounted`)
+        const bodyText = await page.$eval(`[data-testid="${s.testid}"]`, e => e.textContent).catch(() => '')
+        if (/dieline/i.test(bodyText)) ok(`${s.label}: dieline workbench renders its content`)
+        else no(`${s.label}: no dieline content rendered`, bodyText.slice(0, 100))
+        const hasExport = /(SVG|PDF|ZIP)/.test(bodyText)
+        if (hasExport) ok(`${s.label}: export controls present (SVG/PDF/ZIP)`)
+        else no(`${s.label}: no export controls found`)
+      } else if (s.testid) {
         await page.waitForSelector(`[data-testid="${s.testid}"]`, { timeout: 12000 })
         ok(`${s.label}: workspace mounted`)
         // Shell regions

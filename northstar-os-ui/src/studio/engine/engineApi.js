@@ -9,17 +9,24 @@
 
 const BASE = '/api/design-studio'
 
+// 2026-10-16: the dev identity shim is gated on the COMPILE-TIME LOCAL_DEV
+// constant (same rule as foundation/api.js), so a built bundle cannot carry the
+// X-User-Id emitter — check-prod-bundle.cjs enforces the contract.
+import { LOCAL_DEV } from '../../foundation/dev.js'
+
 function headers(method) {
   const h = { 'Content-Type': 'application/json' }
-  try {
-    // Local dev shim only (a built bundle has no ns-dev-session).
-    const s = JSON.parse(localStorage.getItem('ns-dev-session') || 'null')
-    if (s && s.userId) {
-      h['X-User-Id'] = s.userId
-      if (s.orgId) h['X-Org-Id'] = s.orgId
-      if (s.role) h['X-Role'] = s.role
-    }
-  } catch { /* storage unavailable - hosted cookie auth is used */ }
+  if (LOCAL_DEV) {
+    try {
+      // Local dev shim only (a built bundle has no ns-dev-session).
+      const s = JSON.parse(localStorage.getItem('ns-dev-session') || 'null')
+      if (s && s.userId) {
+        h['X-User-Id'] = s.userId
+        if (s.orgId) h['X-Org-Id'] = s.orgId
+        if (s.role) h['X-Role'] = s.role
+      }
+    } catch { /* storage unavailable - hosted cookie auth is used */ }
+  }
   const unsafe = ['POST', 'PUT', 'PATCH', 'DELETE'].includes((method || 'GET').toUpperCase())
   if (unsafe) {
     const m = document.cookie.match(/(^|;)\s*ns_csrf\s*=\s*([^;]+)/)
