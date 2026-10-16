@@ -84,6 +84,36 @@ def test_sanitize_empty_values_keep_defaults():
     assert clean["length_mm"] == defaults["length_mm"]
 
 
+def test_doypack_dieline_geometry():
+    b = dp.build_doypack(130, 210, gusset_mm=40, weld_mm=6, top_weld_mm=8,
+                         zip_offset_mm=25, bleed_mm=3)
+    m = b["meta"]
+    assert m["template"] == "doypack"
+    # sheet 130+12+6 = 148 wide; 210*2 + 40 + 8 + 6 + 6 = 480 tall
+    assert abs(b["width_mm"] - (130 + 12 + 6)) < 0.5
+    assert abs(b["height_mm"] - (210 * 2 + 40 + 8 + 6 + 6)) < 0.5
+    folds = [it for it in b["layers"] if it["layer"] == "fold"]
+    assert len(folds) >= 6, "side welds + 3 structure folds + zipper line expected"
+    texts = [it["text"] for it in b["layers"] if it["kind"] == "text"]
+    assert any("zipper" in t for t in texts)
+    svg = dp.render_svg(b)
+    assert 'xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"' in svg, \
+        "standalone SVG must declare the inkscape namespace or browsers refuse to render it"
+    assert 'id="layer-fold"' in svg and 'width="148mm"' in svg
+    pdf = dp.render_pdf(b)
+    assert pdf[:4] == b"%PDF"
+
+
+def test_doypack_in_catalog_and_buildable_from_template():
+    ids = {t["id"] for t in dp.TEMPLATES}
+    assert "doypack" in ids
+    b = dp.build_from_template("doypack", {"width_mm": 150, "height_mm": 210,
+                                           "gusset_mm": 40, "zip_offset_mm": 25})
+    assert b["meta"]["width_mm"] == 150
+    with pytest.raises(ValueError):
+        dp.sanitize_params("doypack", {"gusset_mm": 500})
+
+
 def test_sanitize_rejects_unknown_keys_and_ranges():
     with pytest.raises(ValueError):
         dp.sanitize_params("rsc_box", {"heigth_mm": 100})  # typo key

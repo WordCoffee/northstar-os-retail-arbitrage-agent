@@ -209,6 +209,45 @@ def test_guard_cleans_when_model_keeps_painting():
     assert g["text_fidelity"]["verdict"] in ("text_cleared", "text_reduced")
 
 
+def test_clean_reconstructs_gradient_without_patch_seams():
+    """v2: reconstruction (median + smooth resample) must track the true
+    gradient closely - the old flat fill left visible rectangles."""
+    import numpy as _np
+    W, H = 480, 320
+    ref = _np.zeros((H, W, 3), dtype=_np.uint8)
+    for y in range(H):
+        ref[y, :] = (60 + int(120 * y / H), 90 + int(100 * y / H), 70 + int(80 * y / H))
+    img = Image.fromarray(ref.copy())
+    d = ImageDraw.Draw(img)
+    f = ImageFont.load_default(size=48)
+    d.text((60, 130), "GARBLED TEXT", fill=(240, 240, 240), font=f)
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    res = tf.clean_text_regions(buf.getvalue())
+    if res["status"] != "ok":
+        pytest.skip("OCR unavailable")
+    assert res["cleared"] >= 1
+    after = _np.array(Image.open(io.BytesIO(res["image"])))
+    rx0, ry0, rx1, ry1 = res["regions"][0]
+    cy, cx = (ry0 + ry1) // 2, (rx0 + rx1) // 2
+    diff = _np.abs(after[cy - 6:cy + 6, max(0, cx - 60):cx + 60].astype(int)
+                   - ref[cy - 6:cy + 6, max(0, cx - 60):cx + 60].astype(int)).mean()
+    assert diff < 30, f"reconstruction deviates from the true gradient (mean {diff:.1f})"
+    assert tf.check_text_in_image(res["image"])["contains_text"] is False
+
+
+def test_guard_preserves_raw_render_before_cleanup():
+    def always_text(prompt, **_):
+        return {"bytes": _img_with_text("GARBLED GLYPHS"), "ext": "png",
+                "mime": "image/png", "model": "fake", "seed": 1}
+
+    g = tf.render_with_text_guard(render_fn=always_text, brief=MOGRA_LIKE, text_safe=True)
+    if g["text_fidelity"]["check"]["status"] != "ok":
+        pytest.skip("OCR unavailable")
+    assert g["raw_bytes"] and g["raw_bytes"] != g["out"]["bytes"], "raw render must be kept"
+    assert g["text_fidelity"].get("text_cleanup", {}).get("passes"), "cleanup passes recorded"
+
+
 # ── endpoint ────────────────────────────────────────────────────────────────
 
 def test_text_check_endpoint_auth_and_404():

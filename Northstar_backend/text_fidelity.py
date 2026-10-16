@@ -204,8 +204,10 @@ def _get_ocr():
         return None, _OCR_STATE["error"]
 
 
-def _ocr_boxes(image_bytes: bytes):
-    """(PIL image, [(x0,y0,x1,y1,text)]) or (None, error)."""
+def _ocr_boxes(image_bytes: bytes, min_score: float = 0.5, min_len: int = 2):
+    """(PIL image, [(x0,y0,x1,y1,text)]) or (None, error). Thresholds are
+    caller-tunable: the CHECK pass stays strict (0.5/2), the CLEAN pass is more
+    aggressive (0.35/1) so tiny residual lettering cannot slip through."""
     engine, err = _get_ocr()
     if engine is None:
         return None, err
@@ -223,7 +225,7 @@ def _ocr_boxes(image_bytes: bytes):
             quad, text, score = item[0], str(item[1]), float(item[2])
         except Exception:  # noqa: BLE001
             continue
-        if score < 0.5 or len(text.strip()) < 2:
+        if score < min_score or len(text.strip()) < min_len:
             continue
         xs = [float(p[0]) for p in quad]
         ys = [float(p[1]) for p in quad]
@@ -244,15 +246,18 @@ def check_text_in_image(image_bytes: bytes) -> Dict[str, Any]:
             "boxes": len(boxes), "words": words, "error": None}
 
 
-def clean_text_regions(image_bytes: bytes, *, max_coverage: float = 0.5) -> Dict[str, Any]:
-    """Clear OCR-detected glyph zones into a clean plate for the vector text layer.
+def clean_text_regions(image_bytes: bytes, *, max_coverage: float = 0.6,
+                       min_score: float = 0.35, min_len: int = 1) -> Dict[str, Any]:
+    """Clear OCR-detected glyph zones by RECONSTRUCTING the panel, not painting it.
 
-    Fills each detected text rectangle with the median colour sampled from a
-    thin band around it (matte surfaces shade smoothly, so a local median reads
-    as blank material), then softens the patch edge. Deterministic geometry —
-    nothing re-generated. Verdict after cleanup is re-checked by the caller.
+    v2 (2026-10-16 evening): the old median-colour fill left visible flat
+    rectangles on dieline sheets. Now each detected zone is replaced with a
+    heavily downscaled-then-upscaled sample of its own surroundings - a smooth
+    continuation of the panel's gradient/flat colour that erases the strokes
+    without leaving patch seams. Aggressive thresholds (0.35/1) so tiny
+    residual lettering cannot survive; detection filters are recorded for audit.
     """
-    parsed, err = _ocr_boxes(image_bytes)
+    parsed, err = _ocr_boxes(image_bytes, min_score=min_score, min_len=min_len)
     if parsed is None:
         return {"status": "unavailable", "error": err, "cleared": 0, "image": None,
                 "boxes_before": 0, "regions": []}
@@ -261,31 +266,37 @@ def clean_text_regions(image_bytes: bytes, *, max_coverage: float = 0.5) -> Dict
         return {"status": "ok", "cleared": 0, "image": image_bytes,
                 "boxes_before": 0, "regions": []}
     from PIL import Image, ImageDraw, ImageFilter  # noqa: PLC0415
-    import numpy as np  # noqa: PLC0415
 
     work = img.copy()
     W, H = work.size
-    arr = np.array(work)
     regions: List[List[int]] = []
     cleared = 0
-    pad, band = 8, 12
+    pad = 10
     for (x0, y0, x1, y1, _t) in boxes:
         bw, bh = (x1 - x0), (y1 - y0)
         if bw <= 1 or bh <= 1 or (bw * bh) > max_coverage * W * H:
             continue
         rx0, ry0 = max(0, int(x0) - pad), max(0, int(y0) - pad)
         rx1, ry1 = min(W, int(x1) + pad), min(H, int(y1) + pad)
-        bx0, by0 = max(0, rx0 - band), max(0, ry0 - band)
-        bx1, by1 = min(W, rx1 + band), min(H, ry1 + band)
-        outer = arr[by0:by1, bx0:bx1].reshape(-1, 3)
-        mask = np.ones((by1 - by0, bx1 - bx0), dtype=bool)
-        mask[(ry0 - by0):(ry1 - by0), (rx0 - bx0):(rx1 - bx0)] = False
-        ring = outer[mask.reshape(-1)]
-        color = tuple(int(c) for c in np.median(ring, axis=0)) if len(ring) else (255, 255, 255)
-        patch = Image.new("RGB", (rx1 - rx0, ry1 - ry0), color)
-        patch = patch.filter(ImageFilter.GaussianBlur(2.5))
-        work.paste(patch, (rx0, ry0))
-        ImageDraw.Draw(work).rectangle([rx0, ry0, rx1, ry1], outline=color)
+        rw, rh = rx1 - rx0, ry1 - ry0
+        if rw < 4 or rh < 4:
+            continue
+        # Reconstruction: keep 30px of real context around the zone, wipe the
+        # letterforms with a median pass, then smooth (box-downscaled, ~1/14)
+        # so the fill carries the panel's gradient/flat colour with no seams.
+        ctx = 30
+        cx0, cy0 = max(0, rx0 - ctx), max(0, ry0 - ctx)
+        cx1, cy1 = min(W, rx1 + ctx), min(H, ry1 + ctx)
+        crop = work.crop((cx0, cy0, cx1, cy1))
+        med_size = 31 if min(crop.size) > 35 else 9
+        crop = crop.filter(ImageFilter.MedianFilter(size=med_size))
+        small = crop.resize((max(2, crop.width // 14), max(2, crop.height // 14)), Image.BOX)
+        smooth = small.resize(crop.size, Image.BILINEAR)
+        patch = smooth.crop((rx0 - cx0, ry0 - cy0, rx1 - cx0, ry1 - cy0))
+        mask = Image.new("L", (rw, rh), 0)
+        ImageDraw.Draw(mask).rounded_rectangle([0, 0, rw - 1, rh - 1], radius=max(4, min(rw, rh) // 3), fill=255)
+        mask = mask.filter(ImageFilter.GaussianBlur(4))
+        work.paste(patch, (rx0, ry0), mask)
         regions.append([rx0, ry0, rx1, ry1])
         cleared += 1
     if cleared == 0:
@@ -359,28 +370,43 @@ def render_with_text_guard(*, render_fn, brief: str, text_safe: bool,
     else:
         tf["retried"] = False
 
-    # FINAL FALLBACK: a 4B model keeps hallucinating decorative glyphs no matter
-    # the prompt. Instead of shipping gibberish, clear the DETECTED glyph zones
-    # deterministically - a clean plate for the real vector text layer.
+    # FINAL FALLBACK: a small model keeps hallucinating decorative glyphs no
+    # matter the prompt. Instead of shipping gibberish, RECONSTRUCT the detected
+    # glyph zones (gradient-aware inpaint, two bounded passes) - and keep the
+    # raw render so the pass is never destructive.
+    raw_bytes = None
     if tf["check"]["status"] == "ok" and tf["check"]["contains_text"] is True:
-        cleaned = clean_text_regions(out["bytes"])
-        if cleaned["status"] == "ok" and cleaned["cleared"] > 0:
+        raw_bytes = out["bytes"]
+        passes = []
+        cur = out["bytes"]
+        for attempt in range(2):
+            cleaned = clean_text_regions(cur)
+            if cleaned["status"] != "ok" or cleaned["cleared"] == 0:
+                break
             recheck = verify_asset_text(cleaned["image"], brief=brief, text_safe=True)
-            tf["text_cleanup"] = {
-                "cleared": cleaned["cleared"],
-                "boxes_before": cleaned["boxes_before"],
-                "boxes_after": recheck["check"]["boxes"],
-                "regions": cleaned["regions"][:20],
-                "note": ("Detected glyph zones cleared into a clean plate for the "
-                         "vector text layer."),
-            }
-            out = {**out, "bytes": cleaned["image"]}
+            passes.append({"pass": attempt + 1, "cleared": cleaned["cleared"],
+                           "boxes_before": cleaned["boxes_before"],
+                           "boxes_after": recheck["check"]["boxes"],
+                           "regions": cleaned["regions"][:20]})
+            cur = cleaned["image"]
             tf["check"] = recheck["check"]
             if recheck["check"]["contains_text"] is False:
+                break
+        if passes:
+            tf["text_cleanup"] = {
+                "cleared": sum(p["cleared"] for p in passes),
+                "boxes_before": passes[0]["boxes_before"],
+                "boxes_after": tf["check"]["boxes"],
+                "passes": passes,
+                "note": ("Detected glyph zones reconstructed (gradient-aware inpaint) "
+                         "into a clean plate for the vector text layer."),
+            }
+            out = {**out, "bytes": cur}
+            if tf["check"]["contains_text"] is False:
                 tf["verdict"] = "text_cleared"
-            elif (recheck["check"]["boxes"] or 99) < cleaned["boxes_before"]:
+            elif (tf["check"]["boxes"] or 99) < passes[0]["boxes_before"]:
                 tf["verdict"] = "text_reduced"
-    return {"out": out, "text_fidelity": tf, "used_brief": used}
+    return {"out": out, "text_fidelity": tf, "used_brief": used, "raw_bytes": raw_bytes}
 
 
 # ── API: check an existing asset on demand ──────────────────────────────────

@@ -1975,6 +1975,10 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
     out_dir.mkdir(parents=True, exist_ok=True)
     fname = f"{_uuid.uuid4().hex}.{out['ext']}"
     (out_dir / fname).write_bytes(out["bytes"])
+    if guarded.get("raw_bytes") and tf_result is not None:
+        raw_key = f"{_uuid.uuid4().hex}_raw.{out['ext']}"
+        (out_dir / raw_key).write_bytes(guarded["raw_bytes"])
+        tf_result = {**tf_result, "raw_storage_key": raw_key}
 
     aid = db.design_studio.assets.create({
         "account_id": acct,

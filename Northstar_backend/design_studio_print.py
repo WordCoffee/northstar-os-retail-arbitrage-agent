@@ -255,7 +255,60 @@ def _panel_blank(panels: List[float], body_h: float, top_depths: List[float],
     return build
 
 
-CARTON_TEMPLATES = ("rsc_box", "tuck_end", "sleeve")
+CARTON_TEMPLATES = ("rsc_box", "tuck_end", "sleeve", "doypack")
+
+
+def build_doypack(width_mm: float, height_mm: float, gusset_mm: float = 40.0, *,
+                  weld_mm: float = 6.0, top_weld_mm: float = 8.0,
+                  zip_offset_mm: float = 25.0, bleed_mm: float = 3.0) -> dict:
+    """Stand-up pouch (doypack) flat dieline: front panel + bottom gusset +
+    back panel stacked, side welds, zipper line marked near the front top.
+
+    Draft geometry for quoting/layout. Confirm weld widths, gusset folds and
+    zipper placement with the co-packer/printer before plate production.
+    Sheet order (top -> bottom): top weld (zip strip) / FRONT / gusset / BACK.
+    """
+    W, H, G = float(width_mm), float(height_mm), float(gusset_mm)
+    w, t = float(weld_mm), float(top_weld_mm)
+    z = float(zip_offset_mm)
+    b = float(bleed_mm)
+    if min(W, H, G, w, t, z) <= 0:
+        raise ValueError("doypack params must be positive")
+
+    sheet_w = W + 2 * w + 2 * b
+    sheet_h = H + G + H + t + w + 2 * b
+    layers: List[dict] = []
+    layers.append(_rect(0, 0, sheet_w, sheet_h, "bleed"))
+    layers.append(_rect(b, b, sheet_w - 2 * b, sheet_h - 2 * b, "trim"))
+
+    x_l, x_r = b + w, b + w + W
+    y_front_top = b + t
+    y_gusset = y_front_top + H
+    y_back = y_gusset + G
+    y_bottom = y_back + H
+
+    layers.append(_line(x_l, b, x_l, sheet_h - b, "fold"))  # side welds
+    layers.append(_line(x_r, b, x_r, sheet_h - b, "fold"))
+    layers.append(_line(x_l, y_front_top, x_r, y_front_top, "fold"))  # front top fold
+    layers.append(_line(x_l, y_gusset, x_r, y_gusset, "fold"))        # gusset fold F/B
+    layers.append(_line(x_l, y_back, x_r, y_back, "fold"))            # back top fold
+    # zipper line on the front panel (dashed via fold style) + note
+    y_zip = y_front_top + z
+    layers.append(_line(x_l, y_zip, x_r, y_zip, "fold"))
+    layers.append(_text(x_l + 2, y_zip - 4, "zipper line", layer="info", size=3))
+
+    layers += _info_block(x_l, sheet_h - b - 1.0, [
+        f"Doypack dieline {_round(W)}x{_round(H)}mm + {_round(G)}mm gusset "
+        f"(sheet {_round(sheet_w)}x{_round(sheet_h)}mm, bleed {_round(b)}mm)",
+        f"welds: sides {_round(w)}mm / top {_round(t)}mm - confirm with co-packer",
+    ], size=2.4)
+
+    build = {"width_mm": _round(sheet_w), "height_mm": _round(sheet_h),
+             "layers": layers,
+             "meta": {"template": "doypack", "width_mm": _round(W), "height_mm": _round(H),
+                      "gusset_mm": _round(G), "weld_mm": _round(w), "top_weld_mm": _round(t),
+                      "zip_offset_mm": _round(z), "bleed_mm": _round(b)}}
+    return _stamp(build, f"Doypack {_round(W)}x{_round(H)}mm + {_round(G)}mm gusset")
 
 
 def build_carton(template: str, length_mm: float, width_mm: float, height_mm: float, *,
@@ -312,7 +365,9 @@ def render_svg(build: dict) -> str:
     """Project a build to layered, editable SVG groups (mm units)."""
     w, h = _fmt(build["width_mm"]), _fmt(build["height_mm"])
     parts = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}mm" height="{h}mm" '
+        f'<svg xmlns="http://www.w3.org/2000/svg" '
+        f'xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" '
+        f'width="{w}mm" height="{h}mm" '
         f'viewBox="0 0 {w} {h}" data-generator="northstar-design-studio">',
         f"<title>{html.escape(build.get('title', 'dieline'))}</title>",
         f"<desc>{html.escape(build.get('note', ''))}</desc>",
@@ -431,6 +486,11 @@ TEMPLATES: List[dict] = [
     {"id": "sleeve", "name": "Open sleeve", "kind": "carton",
      "params": {"length_mm": 150, "width_mm": 100, "height_mm": 80, "glue_mm": 15, "bleed_mm": 3},
      "editable": ["length_mm", "width_mm", "height_mm", "glue_mm", "bleed_mm"]},
+    {"id": "doypack", "name": "Stand-up pouch (doypack)", "kind": "carton",
+     "params": {"width_mm": 130, "height_mm": 210, "gusset_mm": 40, "weld_mm": 6,
+                "top_weld_mm": 8, "zip_offset_mm": 25, "bleed_mm": 3},
+     "editable": ["width_mm", "height_mm", "gusset_mm", "weld_mm", "top_weld_mm",
+                  "zip_offset_mm", "bleed_mm"]},
 ]
 
 _TEMPLATE_BY_ID = {t["id"]: t for t in TEMPLATES}
@@ -440,6 +500,8 @@ _BOUNDS = {
     "width_mm": (5, 2000), "height_mm": (5, 2000), "length_mm": (5, 2000),
     "radius_mm": (0, 500), "bleed_mm": (0, 20), "safe_mm": (0, 40),
     "flap_mm": (5, 1000), "glue_mm": (5, 40), "tuck_mm": (5, 1000), "dust_mm": (5, 1000),
+    "gusset_mm": (10, 150), "weld_mm": (3, 20), "top_weld_mm": (4, 30),
+    "zip_offset_mm": (5, 80),
 }
 
 
@@ -473,6 +535,12 @@ def build_from_template(template_id: str, params: Optional[Dict[str, Any]]) -> d
             template_id.replace("label_", ""), clean["width_mm"], clean["height_mm"],
             bleed_mm=clean.get("bleed_mm", 3.0), safe_mm=clean.get("safe_mm", 3.0),
             radius_mm=clean.get("radius_mm"))
+    if template_id == "doypack":
+        return build_doypack(
+            clean["width_mm"], clean["height_mm"], clean.get("gusset_mm", 40.0),
+            weld_mm=clean.get("weld_mm", 6.0), top_weld_mm=clean.get("top_weld_mm", 8.0),
+            zip_offset_mm=clean.get("zip_offset_mm", 25.0),
+            bleed_mm=clean.get("bleed_mm", 3.0))
     return build_carton(
         template_id, clean["length_mm"], clean["width_mm"], clean["height_mm"],
         flap_mm=clean.get("flap_mm"), glue_mm=clean.get("glue_mm", 15.0),
