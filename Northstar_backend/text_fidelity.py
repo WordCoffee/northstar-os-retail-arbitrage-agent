@@ -335,8 +335,9 @@ def render_with_text_guard(*, render_fn, brief: str, text_safe: bool,
     """
     prep = prepare_render_brief(brief, text_safe)
     out = render_fn(prep["brief"])
+    used = prep["brief"]  # overwritten by the hardened brief if the retry branch runs
     if not text_safe:
-        return {"out": out, "text_fidelity": None, "used_brief": prep["brief"]}
+        return {"out": out, "text_fidelity": None, "used_brief": used}
 
     tf = verify_asset_text(out["bytes"], brief=brief, text_safe=True)
     tf.update({k: prep["text_fidelity"][k] for k in

@@ -156,6 +156,27 @@ def test_render_with_text_guard_auto_reruns_once_when_text_found():
     assert len(calls) == 1 and g2["text_fidelity"] is None
 
 
+def test_render_with_text_guard_no_retry_path_returns_used_brief():
+    """Regression (2026-10-16): a clean FIRST render crashed with
+    UnboundLocalError because used_brief was only assigned on the retry path."""
+    calls = []
+
+    def clean_render(prompt, **_):
+        calls.append(prompt)
+        return {"bytes": _img_plain(), "ext": "png", "mime": "image/png",
+                "model": "fake", "seed": 1}
+
+    g = tf.render_with_text_guard(render_fn=clean_render, brief=MOGRA_LIKE, text_safe=True)
+    if g["text_fidelity"]["check"]["status"] != "ok":
+        import pytest
+        pytest.skip("OCR engine unavailable")
+    assert len(calls) == 1, "a clean first render must not retry"
+    assert g["text_fidelity"]["retried"] is False
+    assert g["text_fidelity"]["verdict"] == "text_free"
+    assert "text_cleanup" not in g["text_fidelity"]
+    assert g["used_brief"] == tf.prepare_render_brief(MOGRA_LIKE, True)["brief"]
+
+
 def test_clean_text_regions_clears_and_rechecks():
     res = tf.clean_text_regions(_img_with_text("MOGRA ORGANICS"))
     if res["status"] != "ok":
