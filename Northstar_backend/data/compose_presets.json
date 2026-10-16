@@ -1,0 +1,98 @@
+{
+  "mogra-forest-dusk": {
+    "template": "mogra-forest-dusk",
+    "logo_path": "C:\\Users\\T2Hol\\Downloads\\png",
+    "quads": [
+      [
+        [
+          124,
+          455
+        ],
+        [
+          558,
+          452
+        ],
+        [
+          568,
+          1002
+        ],
+        [
+          112,
+          1006
+        ]
+      ],
+      [
+        [
+          642,
+          452
+        ],
+        [
+          1124,
+          455
+        ],
+        [
+          1116,
+          1008
+        ],
+        [
+          650,
+          1004
+        ]
+      ]
+    ],
+    "erases": [
+      {
+        "center": [
+          352,
+          672
+        ],
+        "r": 132
+      },
+      {
+        "rect": [
+          248,
+          878,
+          482,
+          962
+        ],
+        "feather": 30
+      },
+      {
+        "rect": [
+          756,
+          878,
+          990,
+          962
+        ],
+        "feather": 30
+      }
+    ],
+    "glyph_box": [
+      292,
+      590,
+      452,
+      740
+    ],
+    "skus": [
+      {
+        "title": "ORGANIC LION'S MANE",
+        "weight": "6 oz (170 g)",
+        "gold": [
+          196,
+          160,
+          74
+        ]
+      },
+      {
+        "title": "ORGANIC SHIITAKE",
+        "weight": "8 oz (227 g)",
+        "gold": [
+          214,
+          158,
+          62
+        ]
+      }
+    ],
+    "plate_file": "44318b36606f4c859487c250d5a0a671.png"
+  }
+}

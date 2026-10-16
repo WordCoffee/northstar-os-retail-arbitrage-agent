@@ -77,6 +77,12 @@ def _restore_env(snapshot: dict) -> None:
 
 def pytest_configure(config):  # noqa: ANN001
     """Scrub once at startup — before any test module collection result runs."""
+    # Match the official runner (scripts/run_all_tests.ps1): one pytest session
+    # shares a single client identity across hundreds of TestClient requests,
+    # so the anonymous token bucket (30 req/min) would 429 later tests and make
+    # the suite order-dependent. Limiter tests exercise the middleware directly,
+    # so no coverage is lost. Never honored in prod-like environments.
+    os.environ.setdefault("NORTHSTAR_DISABLE_RATE_LIMIT", "1")
     _snapshot.update(_scrub_credential_env())
 
 

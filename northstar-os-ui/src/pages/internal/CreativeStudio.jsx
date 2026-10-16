@@ -142,6 +142,7 @@ export default function CreativeStudio() {
   const [genTier, setGenTier] = useState('draft')
   const [genPrompt, setGenPrompt] = useState('')
   const [textSafe, setTextSafe] = useState(true) // blueprint #5: never let the model draw letters
+  const [composePresets, setComposePresets] = useState([]) // installed typography-pass presets
   const [vPurpose, setVPurpose] = useState('UGC / testimonial')
   const [vDuration, setVDuration] = useState('15s (Short / TikTok)')
   const [vAspect, setVAspect] = useState('9:16 (vertical)')
@@ -474,6 +475,9 @@ export default function CreativeStudio() {
         .catch(() => { if (alive) setEngine(prev => prev || { armed: false, reachable: false, note: 'Engine status unavailable.' }) })
     }
     tick()
+    engineApi.composePresets()
+      .then(d => { if (alive) setComposePresets(d.presets || []) })
+      .catch(() => { /* presets are optional */ })
     const timer = setInterval(tick, 60000)
     return () => { alive = false; clearInterval(timer) }
   }, [])
@@ -537,6 +541,26 @@ export default function CreativeStudio() {
     }, ...prev])
     t('Image request recorded locally — blocked until the engine is armed. Nothing was generated.', 'info')
   }, [engine, genPrompt, genPurpose, genTier, formatId, fmt.label, fmt.w, fmt.h, setRequests, t])
+
+  // ── Typography pass: real logo + real fonts composited onto a finished render ──
+  const composeRow = useCallback(async (r) => {
+    try {
+      const asset = await engineApi.asset(r.assetId)
+      const key = asset && asset.storage_key
+      const preset = composePresets.find(p => p.plate_file === key)
+      if (!preset) { t('No typography preset for this plate yet - it needs a quad pass first.', 'warn'); return }
+      const out = await engineApi.compose({ template_id: preset.template_id, plate_asset_id: r.assetId })
+      t(`Typography pass done (${preset.template_id}).`, 'info')
+      setRequests(prev => [{
+        id: uid('RQ'), kind: 'image', purpose: 'type-pass',
+        prompt: `Type pass — ${preset.template_id}`, tier: 'n/a',
+        formatId, format: fmt.label, refs: [], createdAt: nowIso(),
+        state: `Composed — ${preset.template_id}`, fileUrl: out.file_url, assetId: out.asset_id,
+      }, ...prev])
+    } catch (e) {
+      t(`Type pass failed: ${String(e && e.message || e)}`, 'warn')
+    }
+  }, [composePresets, formatId, fmt.label, setRequests, t])
 
   const submitVideoRequest = useCallback(async () => {
     const dims = vAspect.startsWith('9:16') ? { width: 512, height: 736 }
@@ -941,7 +965,15 @@ export default function CreativeStudio() {
                   { key: 'brief', label: 'Brief', render: (v, r) => <span title={r.prompt}>{r.prompt.length > 46 ? `${r.prompt.slice(0, 46)}…` : r.prompt}</span> },
                   { key: 'format', label: 'Placement' },
                   { key: 'state', label: 'State', render: (v, r) => (<span className="pill pill-unknown">{v}{r.fileUrl ? <>{' · '}<a href={r.fileUrl} target="_blank" rel="noreferrer">open</a></> : null}</span>) },
-                  { key: 'act', label: '', render: (v, r) => <button className="btn btn-sm btn-ghost" onClick={() => removeRequest(r.id)}>Remove</button> },
+                  { key: 'act', label: '', render: (v, r) => (
+                    <span style={{ display: 'inline-flex', gap: 6 }}>
+                      {r.assetId && composePresets.length > 0 && (
+                        <button className="btn btn-sm" title="Composite the real logo and typography onto this render"
+                          onClick={() => composeRow(r)}>✦ Type pass</button>
+                      )}
+                      <button className="btn btn-sm btn-ghost" onClick={() => removeRequest(r.id)}>Remove</button>
+                    </span>
+                  ) },
                 ]} rows={requests.filter(r => r.kind !== 'video')} emptyText="No requests recorded yet." />
               </div>
               {lastRender && (

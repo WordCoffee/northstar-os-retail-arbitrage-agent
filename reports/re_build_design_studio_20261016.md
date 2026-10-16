@@ -118,5 +118,22 @@ All endpoints resolve the strict org-scoped session (`studio_account`) — call 
 
 **Test evidence:** 52/52 across the RE suite (`test_text_fidelity.py` 15 incl. OCR + cleanup + guard tests; `test_studio_render_guard.py` 4; existing 33).
 
+## Mockup compositor — the typography pass (service, UI, tests)
+
+**The gap this closes:** clean-plate renders had no lettering (by design) and the operator's real logo / real words never made it onto the pouch. The compositor is the deterministic finishing lane.
+
+**Shipped:**
+- `Northstar_backend/mockup_compositor.py` — reusable core: exact 4-point homography warp (numpy, bilinear, shading-blended into the plate's luminance), feathered circular + rectangular erases (ring-median colour, no halos), logo preparation (frame-crop + field-colour detection), extracted line-art glyph recolouring, vector-drawn certification icons (organic sprout, Non-GMO butterfly, gluten-free wheat+slash, fruiting-body mushroom), Playfair/Inter typography with tracking, panel templates (`mogra-forest-dusk` first).
+- `Northstar_backend/design_studio_compose.py` — session API: `GET /api/design-studio/compose/templates`, `/presets`, `POST /compose/mockup` (plate asset + template + optional SKU/quads/erase overrides + `logo_data_url`; writes the composed PNG + registers it as a studio asset).
+- `data/compose_presets.json` — per-plate geometry preset (quads, erase circles/rects, glyph box, SKU texts, operator logo path). Honest limitation: a NEW plate needs its own quad pass (grid overlay) before composing.
+- **UI:** CreativeStudio queue rows now offer **“✦ Type pass”** on finished renders that have a preset — one click composites the real logo + fonts + icons and adds a `Composed — …` row with the link.
+- Fonts committed with OFL notice under `Northstar_backend/assets/fonts/` (Playfair Display, Inter).
+- Tests: `test_mockup_compositor.py` (homography corner-exactness, circular + rect erase, panel content, icons, compose e2e on synthetic plate, service endpoint incl. auth/404/happy path). Suite total: **61 passed**.
+
+**Live results (real plate 44318b, real operator logo, via the service):**
+- v2 asset `e1fbc729-…-e1fbc729` → then icon-row fix → v3 asset **`db9cc274-fcc3-48a5-8db5-513537f54628`** (single drawn icon row, real logo roundel, real typography, gold engraving, weight footers).
+
+**Also fixed this pass:** pytest sessions now default `NORTHSTAR_DISABLE_RATE_LIMIT=1` in `conftest.py` (matching `scripts/run_all_tests.ps1`) — the anonymous 30 req/min token bucket made larger ad-hoc suites order-dependent.
+
 ## Status vs the RE plan
 All four items closed: (1) public API + webhooks ✅, (2) scene/product gallery ✅, (3) frontend dieline section ✅, (4) credit admin endpoints ✅. Remaining optional follow-ups: fabric.js-style freeform canvas editing on top of the layered SVG (the current editor is param-driven by design), and wiring the enforced-credit mode to a real PSP (pricing rails stay test-mode per repo posture).

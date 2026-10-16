@@ -73,6 +73,10 @@ export const engineApi = {
   job: (id) => req(`/generate-async/${id}`),
   /** Fetch one asset row (metadata carries text_fidelity for guarded renders). */
   asset: (id) => req(`/assets/${id}`),
+  /** Typography pass: compose mockup templates + presets, then compose. */
+  composeTemplates: () => req('/compose/templates'),
+  composePresets: () => req('/compose/presets'),
+  compose: (body) => req('/compose/mockup', { method: 'POST', body: JSON.stringify(body) }),
 }
 
 export function assetFileUrl(asset) {

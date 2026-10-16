@@ -56,6 +56,7 @@ try:
     from design_studio_scenes import router as design_studio_scenes_router
     from design_studio_openapi import router as design_studio_openapi_router
     from text_fidelity import router as design_studio_text_router
+    from design_studio_compose import router as design_studio_compose_router
     _HAS_DESIGN_STUDIO_EXT = True
 except ImportError:
     _HAS_DESIGN_STUDIO_EXT = False
@@ -261,6 +262,7 @@ if _HAS_DESIGN_STUDIO_EXT:
     app.include_router(design_studio_scenes_router)
     app.include_router(design_studio_openapi_router)
     app.include_router(design_studio_text_router)
+    app.include_router(design_studio_compose_router)
 
 # Golden Goose Finder UI panel (standalone page; fetches /api/golden-goose/*)
 _GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"
