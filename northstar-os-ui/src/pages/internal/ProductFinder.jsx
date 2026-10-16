@@ -106,12 +106,11 @@ export default function ProductFinder() {
       <RoomTabs tabs={TABS} base="/product-finder" />
 
       {view !== 'set' && (
-        <DataNotice tone="sample" title="Interface fixtures — no live market data on this surface">
-          The product rows are structural examples for the workbench layout. They carry{' '}
-          <strong>no</strong> price, rank, seller-count, buy-box or margin value — every one reads{' '}
-          <strong>UNKNOWN</strong>, because none has been measured. Nothing here is a market observation,
-          and no value on this page may be read as a real Amazon figure. Real cached observations come from{' '}
-          <code>/api/products/finder</code> (cache-only; a plain page load never contacts a provider).
+        <DataNotice tone="internal" title="Your research workbench — no live market data on this surface">
+          Every product row is one YOU add; every metric starts <strong>UNKNOWN</strong> until a cached observation
+          exists. Nothing here is a market observation, and no value may be read as a real Amazon figure.
+          Real cached observations come from <code>/api/products/finder</code> (cache-only; a plain page load
+          never contacts a provider).
         </DataNotice>
       )}
 
@@ -249,8 +248,8 @@ export default function ProductFinder() {
 
       {view === 'set' && (
         <div className="subview workbench">
-          <DataNotice tone="sample" title="Market evidence is provider-observed and cached">
-            Prices marked UNKNOWN reflect unavailable data, not zero. Set contents below are sample records for interface demonstration.
+          <DataNotice tone="cached" title="Market evidence is provider-observed and cached">
+            Prices marked UNKNOWN reflect unavailable data, not zero. Set contents are your own local records.
           </DataNotice>
           <div className="card">
             <div className="card-head">

@@ -247,12 +247,12 @@ export default function SocialPulse() {
       actions={<>
         <ModeToggle mode={mode} onChange={setMode} />
         <button className="btn btn-sm" onClick={() => go('composer')}>Draft Post</button>
-        <button className="btn btn-sm btn-ghost" onClick={() => t('Variant suggestions are a local planning aid (sample) — nothing publishes.', 'info')}>Generate Variants</button>
+        <button className="btn btn-sm btn-ghost" onClick={() => t('Variant suggestions are a local planning aid — nothing publishes.', 'info')}>Generate Variants</button>
         <button className="btn btn-sm btn-ghost" onClick={() => t('Schedule records a manual reminder only — no post publishes autonomously, and no social account is connected.', 'info')}>Schedule</button>
         <button className="btn btn-sm btn-ghost" onClick={() => go('approvals')}>Send for Approval</button>
       </>}
     >
-      <DataNotice tone="sample" title="Local content operations — not a publisher">
+      <DataNotice tone="internal" title="Local content operations — not a publisher">
         Campaigns, posts, and approvals are real records stored in this browser. There is no social OAuth and no outbound
         posting. The composer preview is a real local render of your own copy at the platform&rsquo;s true aspect ratio, and
         uploaded artwork is stored locally. Performance figures require a connected analytics provider and read UNKNOWN until
@@ -387,7 +387,7 @@ export default function SocialPulse() {
         <div className="subview">
           <div className="room-toolbar">
             <span className="pill pill-muted" style={{ marginRight: 'auto' }}>{campaigns.length} campaigns · local records</span>
-            <button className="btn btn-sm" onClick={() => t('New campaign is a local planning record (sample) — no channel is connected.', 'info')}>New Campaign</button>
+            <button className="btn btn-sm" onClick={() => t('New campaign is a local planning record — no channel is connected.', 'info')}>New Campaign</button>
           </div>
           <div className="grid-cards-3">
             {campaigns.map(c => {

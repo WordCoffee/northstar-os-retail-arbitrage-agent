@@ -151,7 +151,7 @@ const HISTORY = [
   { id: 'GG-003', event: 'Dismissed — sourcing path absent', detail: 'No supplier path established', date: '2026-09-22', state: 'HISTORICAL' },
 ]
 
-const statePill = (s) => <span className="pill pill-muted" title={s === 'CACHED' ? 'Derived from cached sample data — may be stale' : s === 'HISTORICAL' ? 'Historical record — not current state' : 'Directly observed event (sample data)'}>{s}</span>
+const statePill = (s) => <span className="pill pill-muted" title={s === 'CACHED' ? 'Derived from cached observation data — may be stale' : s === 'HISTORICAL' ? 'Historical record — not current state' : 'Directly observed event (sample data)'}>{s}</span>
 
 function oppCard(opp, navigate, toast) {
   return (

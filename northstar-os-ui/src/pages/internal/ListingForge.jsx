@@ -315,11 +315,11 @@ export default function ListingForge() {
       setDirty(false)
       setNewAsin('')
       setNewTitle('')
-      t(`Listing ${newAsin} created in the tenant store.`, 'info')
+      toast(`Listing ${newAsin} created in the tenant store.`, 'info')
     } catch (e) {
-      t(`Could not create the listing: ${e.message}`, 'error')
+      toast(`Could not create the listing: ${e.message}`, 'error')
     }
-  }, [newAsin, newTitle, setListings, t])
+  }, [newAsin, newTitle, setListings, toast])
 
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = ['listings', 'editor', 'templates', 'assets', 'revisions'].includes(requested) ? requested : 'listings'

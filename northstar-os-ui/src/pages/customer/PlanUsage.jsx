@@ -74,30 +74,24 @@ export default function PlanUsage() {
 
       <FoundationPlanUsage />
 
-      <div className="card" data-testid="pu-sample">
+      <div className="card" data-testid="pu-usage-note">
         <div className="card-head">
           <h3 className="card-title">Usage Meter</h3>
-          <span className="pill pill-muted">sample</span>
+          <span className="pill pill-muted">no metering backend</span>
         </div>
-        <div className="meter" style={{ marginTop: 12, marginBottom: 8 }}>
-          <div className="meter-fill meter-fill-forest" style={{ width: '68%' }}></div>
+        <div className="text-low" style={{ fontSize: 12, marginTop: 8 }}>
+          No usage-metering backend is connected, so no usage figure is shown. The card above reads your plan from the
+          foundation service; an unavailable read there says so rather than substituting a number.
         </div>
-        <div className="text-low" style={{ fontSize: 12 }}>Sample: 68% of 5,000 scan credits used. Live usage is shown in the card above.</div>
       </div>
       <div className="card" style={{ marginTop: 16 }}>
         <div className="card-head">
           <h3 className="card-title">Billing History</h3>
-          <span className="pill pill-muted">sample · no billing backend</span>
+          <span className="pill pill-muted">no billing backend</span>
         </div>
-        <DataTable columns={[
-          { key: 'period', label: 'Period' },
-          { key: 'amount', label: 'Amount' },
-          { key: 'status', label: 'Status' },
-        ]} rows={[
-          { period: 'Sep 2026', amount: '$299.00', status: 'Paid' },
-          { period: 'Aug 2026', amount: '$299.00', status: 'Paid' },
-          { period: 'Jul 2026', amount: '$299.00', status: 'Paid' },
-        ]} />
+        <p className="text-low" style={{ fontSize: 12 }}>
+          No billing backend is connected, so there is no invoice history to show. Honest empty state — no invented rows.
+        </p>
       </div>
     </PageLayout>
   )
