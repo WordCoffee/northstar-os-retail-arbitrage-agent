@@ -100,6 +100,19 @@ def _hard_scrub(text: str) -> str:
     return re.sub(r"\s{2,}", " ", text).strip(" -·:;,")
 
 
+def _clean_segment(text: str, expected: List[str]) -> str:
+    """Shared inline cleaner for kept clauses."""
+    cleaned = _QUOTED.sub(" ", text)
+    cleaned = _ALL_CAPS_RUN.sub(" ", cleaned)
+    cleaned = _BRAND_SUFFIX_RUN.sub(" ", cleaned)
+    cleaned = _WEIGHT_TOKEN.sub(" ", cleaned)
+    cleaned = _EST_YEAR.sub(" ", cleaned)
+    cleaned = _DIMENSIONS.sub(" ", cleaned)
+    for term in expected:
+        cleaned = re.sub(re.escape(term), " ", cleaned, flags=re.IGNORECASE)
+    return re.sub(r"\s{2,}", " ", cleaned).strip(" -·:;,")
+
+
 def sanitize_brief_for_render(brief: str, hard: bool = False) -> Dict[str, Any]:
     """Strip typographic demands out of a design brief for the image model.
 
@@ -117,24 +130,22 @@ def sanitize_brief_for_render(brief: str, hard: bool = False) -> Dict[str, Any]:
         line = raw_line.strip()
         if not line:
             continue
-        if _DEMAND_LINE.search(line):
-            suppressed.append(line[:160])
-            continue
-        # inside kept lines: strip quoted strings, ALL-CAPS runs, brand runs,
-        # weights, EST years, then any previously extracted expected term
-        cleaned = _QUOTED.sub(" ", line)
-        cleaned = _ALL_CAPS_RUN.sub(" ", cleaned)
-        cleaned = _BRAND_SUFFIX_RUN.sub(" ", cleaned)
-        cleaned = _WEIGHT_TOKEN.sub(" ", cleaned)
-        cleaned = _EST_YEAR.sub(" ", cleaned)
-        cleaned = _DIMENSIONS.sub(" ", cleaned)
-        for term in expected:
-            cleaned = re.sub(re.escape(term), " ", cleaned, flags=re.IGNORECASE)
-        cleaned = re.sub(r"\s{2,}", " ", cleaned).strip(" -·:;,")
-        if len(cleaned) >= 12:
-            kept.append(cleaned)
-        elif line:
-            suppressed.append(line[:160])
+        # Demand lines are handled at CLAUSE level: a sentence that also carries
+        # art direction ("...warm charcoal-black matte instead of green. Text
+        # reads ...") keeps the art clause and drops only the typographic one.
+        segments = re.split(r"(?<=\.)\s+", line) if _DEMAND_LINE.search(line) else [line]
+        for seg in segments:
+            seg = seg.strip()
+            if not seg:
+                continue
+            if _DEMAND_LINE.search(seg):
+                suppressed.append(seg[:160])
+                continue
+            cleaned = _clean_segment(seg, expected)
+            if len(cleaned) >= 12:
+                kept.append(cleaned)
+            else:
+                suppressed.append(seg[:160])
 
     body = " \n".join(kept).strip()
     for term in expected:  # belt-and-braces: expected terms never reach the model
