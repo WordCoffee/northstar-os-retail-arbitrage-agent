@@ -29,6 +29,7 @@ import Ads from './design-studio/Ads.jsx'
 import VideoUgc from './design-studio/VideoUgc.jsx'
 import Social from './design-studio/Social.jsx'
 import Packaging from './design-studio/Packaging.jsx'
+import Dielines from './design-studio/Dielines.jsx'
 import { migrateLocalStorage, migrationDone } from '../../studio/engine/migrate.js'
 
 // Opt-in test surface. Adding ?engine=1 to a Design Studio URL exposes the
@@ -72,6 +73,7 @@ const SECTIONS = [
   { id: 'video-ugc', label: 'Video & UGC Clips', icon: 'film', note: 'Product videos, UGC-style clips and hooks', built: true },
   { id: 'social', label: 'Social', icon: 'users', note: 'Social posts, carousels and stories', built: true },
   { id: 'packaging', label: 'Packaging & Mockups', icon: 'package', note: 'Packaging dielines and mockup renders', built: true },
+  { id: 'dielines', label: 'Dielines & Print', icon: 'grid', note: 'Parametric dielines: layered SVG, PDF and project ZIP export', built: true },
   { id: '3d-scene', label: '3D Product Scene', icon: 'cube', note: 'Real 3D product scene composer', built: true },
 ]
 
@@ -163,6 +165,7 @@ export default function DesignStudio() {
       {sectionId === 'video-ugc' && <VideoUgc />}
       {sectionId === 'social' && <Social />}
       {sectionId === 'packaging' && <Packaging />}
+      {sectionId === 'dielines' && <Dielines />}
       {sectionId === '3d-scene' && <ProductDesigner />}
       {!SECTIONS.some(s => s.id === sectionId) && <NotBuilt section={section} />}
     </PageLayout>

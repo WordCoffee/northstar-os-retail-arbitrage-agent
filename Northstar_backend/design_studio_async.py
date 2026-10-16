@@ -10,6 +10,9 @@ WITHOUT touching the sync endpoint:
   credits (real ledger: reserve -> commit on success / release on failure),
   and executes on a bounded worker pool.
 - `GET /generate-async/{job_id}` -> job status (+ live balance when enforced).
+- Optional `callback_url` on submissions: completion/failure delivers a JSON
+  webhook with bounded retries (Packify-style async contract). Delivery never
+  fails the job; its result is recorded on the job's params.
 
 Credit policy (honest, alpha-safe):
 - Default is METER-ONLY (`DESIGN_CREDITS_ENFORCE=0`): the job records the
@@ -26,7 +29,10 @@ no provider is called, no money is spent.
 
 from __future__ import annotations
 
+import json
 import os
+import time
+import urllib.request
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
@@ -93,6 +99,61 @@ def _engine_status() -> dict:
     return sg.engine_status()
 
 
+# ── Webhooks ────────────────────────────────────────────────────────────────
+
+def deliver_webhook(url: str, payload: Dict[str, Any], *, attempts: int = 3,
+                    timeout: float = 10.0, opener=None) -> Dict[str, Any]:
+    """POST JSON to a callback URL with bounded retries. Success = HTTP 2xx.
+
+    Retry policy (Packify-style, bounded): immediate -> 1s -> 4s backoff.
+    Never raises; returns the delivery record that is stored on the job.
+    """
+    delays = [0.0, 1.0, 4.0]
+    data = json.dumps(payload).encode("utf-8")
+    last: Dict[str, Any] = {"ok": False, "status": None, "error": None, "attempts": 0}
+    for i in range(max(1, int(attempts))):
+        delay = delays[min(i, len(delays) - 1)]
+        if delay:
+            time.sleep(delay)
+        req = urllib.request.Request(
+            url, data=data, method="POST",
+            headers={"Content-Type": "application/json", "User-Agent": "northstar-openapi/1"},
+        )
+        try:
+            call = opener or urllib.request.urlopen
+            with call(req, timeout=timeout) as resp:
+                status = getattr(resp, "status", None) or resp.getcode()
+            last = {"ok": 200 <= int(status) < 300, "status": int(status),
+                    "error": None, "attempts": i + 1}
+        except urllib.error.HTTPError as exc:  # a server-side non-2xx is a known status
+            last = {"ok": False, "status": int(exc.code), "error": f"HTTP {exc.code}",
+                    "attempts": i + 1}
+        except Exception as exc:  # noqa: BLE001 - delivery is best-effort by design
+            last = {"ok": False, "status": None, "error": str(exc)[:200], "attempts": i + 1}
+        if last["ok"]:
+            break
+    return last
+
+
+def _notify_callback(db, acct: str, job_id: str, body: Dict[str, Any],
+                     payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Deliver the job webhook (if a callback was registered) and record it."""
+    url = (body or {}).get("callback_url")
+    if not url:
+        return None
+    result = deliver_webhook(url, payload)
+    try:
+        db.design_studio.jobs.update(
+            job_id, {"params": {**{k: v for k, v in body.items() if k != "callback_url"},
+                                "callback_url": url, "webhook": result}},
+            account_id=acct)
+    except Exception:  # noqa: BLE001 - the webhook record must never break the job
+        pass
+    return result
+
+
+# ── Job execution ───────────────────────────────────────────────────────────
+
 def run_generation_job(*, job_id: str, acct: str, body: Dict[str, Any],
                        reservation_id: Optional[str] = None,
                        enforce: bool = False,
@@ -125,6 +186,11 @@ def run_generation_job(*, job_id: str, acct: str, body: Dict[str, Any],
             "credits_used": 0,  # released (or never charged) on failure
             "finished_at": _now(),
         }, account_id=acct)
+        _notify_callback(db, acct, job_id, body, {
+            "job_id": job_id, "status": "failed", "error": str(exc)[:400],
+            "provenance": {"lane": "async", "provider": "local:comfyui",
+                           "note": "Failure before any artifact was produced."},
+        })
         return {"status": "failed", "error": str(exc)[:400]}
 
     fname = f"{uuid.uuid4().hex}.{out['ext']}"
@@ -156,13 +222,20 @@ def run_generation_job(*, job_id: str, acct: str, body: Dict[str, Any],
     db.design_studio.jobs.update(job_id, {
         "status": "done", "result_ids": [aid], "finished_at": _now(),
     }, account_id=acct)
+    _notify_callback(db, acct, job_id, body, {
+        "job_id": job_id, "status": "done", "asset_ids": [aid],
+        "asset_urls": [f"/api/design-studio/assets/{aid}/file"],
+        "provenance": {"lane": "async", "provider": "local:comfyui",
+                       "note": "Rendered locally on the operator's machine; no provider received the data."},
+    })
     return {"status": "done", "asset_id": aid}
 
 
 def submit_generation(acct: str, *, brief: str, kind: str = "image", tier: str = "draft",
                       purpose: Optional[str] = None, width: Optional[int] = None,
                       height: Optional[int] = None, seed: Optional[int] = None,
-                      project_id: Optional[str] = None) -> Dict[str, Any]:
+                      project_id: Optional[str] = None,
+                      callback_url: Optional[str] = None) -> Dict[str, Any]:
     """Create the queued job (+reservation) and schedule it. Raises HTTPException on gates."""
     if kind not in ("image", "video"):
         raise ValueError("kind must be image or video")
@@ -205,13 +278,14 @@ def submit_generation(acct: str, *, brief: str, kind: str = "image", tier: str =
                      f"Credit enforcement {'ON' if enforce else 'OFF (meter-only alpha)'}."),
         },
         "params": {"purpose": purpose, "tier": tier, "brief": brief,
-                   "width": width, "height": height, "seed": seed},
+                   "width": width, "height": height, "seed": seed,
+                   "callback_url": callback_url},
         "credits_used": cost if enforce else 0,
     })
     _EXECUTOR.submit(run_generation_job, job_id=job_id, acct=acct,
                      body={"kind": kind, "brief": brief, "tier": tier, "width": width,
                            "height": height, "seed": seed, "project_id": project_id,
-                           "purpose": purpose},
+                           "purpose": purpose, "callback_url": callback_url},
                      reservation_id=(reservation or {}).get("reservation_id"),
                      enforce=enforce)
     return {

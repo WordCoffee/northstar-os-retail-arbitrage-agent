@@ -56,15 +56,49 @@ $env:DESIGN_CREDITS_ENFORCE = "1"    # real reserve/commit/release; unset for me
 ```
 All endpoints resolve the strict org-scoped session (`studio_account`) — call them with the UI session cookie/Bearer, or a `studio_account` dependency override in tests (see `test_design_studio_re_ext.py`).
 
-## Not shipped yet (from the RE plan, in order)
-1. Public API keys + webhook callbacks with retry policy (Packify-style `/api/open/<version>/...`) carrying compliance evidence.
-2. Mockup scene/product gallery on the existing compositor.
-3. Canvas-editor frontend wiring (fabric.js-style) consuming the layered SVG + canvas_data persistence.
-4. Optional: expose plan-grant + balance admin endpoints for the enforced-credit mode.
+## Second pass (2026-10-16, same day) — remaining RE-plan items shipped
 
-## Files
-- New: `Northstar_backend/design_studio_print.py`, `design_studio_async.py`, `design_studio_agent.py`
-- New tests: `test_design_studio_print.py`, `test_design_studio_async.py`, `test_design_studio_agent.py`, `test_design_studio_re_ext.py`
-- New (manual runbook script): `Northstar_backend/_re_ext_e2e_smoke.py`
-- Edited: `Northstar_backend/main.py` (router wiring), `00_STATE.json` (known_issues entry, resolved)
-- RE evidence/teardown: commit `297f90a` + `research/packify_dyp_re_20261016/`
+### 4. Public API + webhooks — `Northstar_backend/design_studio_openapi.py`
+- **API keys**: session endpoints `POST/GET /api/design-studio/api-keys`, `DELETE .../api-keys/{id}`. Format `nsk_<48 hex>`; the store (`data/api_keys.jsonl`) keeps **sha256 digests only** plus a display prefix; revocation is a persisted tombstone. No plaintext is ever recoverable.
+- **Open endpoints** (`X-Api-Key` or Bearer): `POST /api/open/2026-10/packaging-design` (202, async submission through the async lane — identical engine gate (409) and credit policy (402)), `POST /api/open/2026-10/dielines` (synchronous layered SVG+PDF assets — our differentiator vs Packify's photoshoot-only API), `GET /api/open/2026-10/jobs/{job_id}`.
+- **Webhooks**: any submission may carry `callback_url` (http(s), validated). Completion/failure delivers a JSON payload (`job_id, status, asset_ids, asset_urls, provenance`) with the bounded retry policy — immediate → 1s → 4s, success = HTTP 2xx — and the delivery record is stored on the job's params. Webhook failure never fails the job.
+
+### 4b. Credit meter endpoints — same module
+- `GET /api/design-studio/credits` (balance, costs, last 20 entries, enforce flag) and `POST /api/design-studio/credits/grant` (idempotent first-use plan allotment; unknown plans → 400).
+
+### 2. Mockup scene/product gallery — `Northstar_backend/design_studio_scenes.py`
+- `GET /api/design-studio/scenes` — 8 curated scenes × 8 product types (templates cross-checked against the print catalog in tests).
+- `POST /api/design-studio/mockup/plan` — deterministic `[PRODUCT]/[SCENE]/[CUSTOM PROMPT]/[NEGATIVE]` assembly (DYP's recipe, explicit); `enqueue=true` submits to the async lane.
+
+### 3. Dieline/print frontend — `northstar-os-ui`
+- New Design Studio section **"Dielines & Print"** (`src/pages/internal/design-studio/Dielines.jsx`, registered in `DesignStudio.jsx`): live layered-SVG preview, param editor driven by the template catalog, Download SVG/PDF, Save-to-library (SVG+PDF assets), project ZIP export link, and the Mockup planner card (scene/product selects + custom prompt → assembled prompt + optional queue).
+- `Packaging.jsx` rule text updated: "Dielines are drafted in Dielines & Print" (the old "out of scope" claim is no longer true).
+
+## Test evidence (second pass, real runs)
+- `python -m pytest test_design_studio_scenes.py test_design_studio_openapi.py` → **11 passed**
+- Regression: `test_design_studio_print/async/agent/re_ext` → **24 passed** (35 total for the RE build)
+- Webhook delivery is exercised against a **local HTTP receiver**: success = 1 attempt/200; failure = exactly 2 bounded attempts on a 500 responder.
+- Key store proves digest-only storage on disk; verify/revoke/reload lifecycle covered.
+- `npm run build` (northstar-os-ui) → **built successfully** (pre-existing chunk-size warning only).
+- Live E2E smoke (`python _re_ext_e2e_smoke.py`) now also covers: key create → 401 without key → open dielines with key (2 assets) → open design accepted-or-gated (202/409) → revoke → revoked key rejected.
+
+## Operator runbook (additions)
+
+```powershell
+# UI: open /design-studio?section=dielines (Dielines & Print)
+# Open API quick probe (session cookie needed for key minting; key call needs no session):
+#   POST /api/design-studio/api-keys {"label":"desk"}       -> { key: { key: "nsk_...", id } }
+#   POST /api/open/2026-10/dielines {"template_id":"rsc_box"}      X-Api-Key: nsk_...
+#   POST /api/open/2026-10/packaging-design {"prompt":"...","callback_url":"https://..."}
+#   GET  /api/design-studio/credits   /  POST /api/design-studio/credits/grant
+```
+
+## Files (second pass)
+- New: `Northstar_backend/design_studio_scenes.py`, `design_studio_openapi.py`
+- New tests: `test_design_studio_scenes.py`, `test_design_studio_openapi.py`
+- Rewritten: `Northstar_backend/design_studio_async.py` (callback_url + `deliver_webhook` + job webhook records)
+- Edited: `Northstar_backend/main.py` (router wiring ×2), `Northstar_backend/_re_ext_e2e_smoke.py` (open-API section), `00_STATE.json`
+- New UI: `northstar-os-ui/src/pages/internal/design-studio/Dielines.jsx`; edited `DesignStudio.jsx`, `Packaging.jsx`
+
+## Status vs the RE plan
+All four items closed: (1) public API + webhooks ✅, (2) scene/product gallery ✅, (3) frontend dieline section ✅, (4) credit admin endpoints ✅. Remaining optional follow-ups: fabric.js-style freeform canvas editing on top of the layered SVG (the current editor is param-driven by design), and wiring the enforced-credit mode to a real PSP (pricing rails stay test-mode per repo posture).

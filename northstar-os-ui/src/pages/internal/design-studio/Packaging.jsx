@@ -26,7 +26,7 @@ const RULES = [
   { label: 'Never Brand Registry proof', tone: 'block', detail: 'A product image submitted for Brand Registry enrollment must be an ACTUAL PHOTO. Mock-ups and digitally altered images are not valid proof of IP ownership and can cause additional scrutiny or removal from the program.', source: 'Brand Registry Application Guide ? 2026-10-10' },
   { label: 'A mockup is not a main image', tone: 'block', detail: 'A packaging mockup used as a listing main image must satisfy the main-image rules: pure white RGB 255,255,255, 85% frame fill, and no text, logo, badge, border or watermark.', source: 'Product image guide ? 2026-10-10' },
   { label: 'Product accuracy', tone: 'flag', detail: 'Images must accurately represent the product and show only the product for sale. Packaging creative must not depict a pack the buyer will not receive.', source: 'Listing quality ? 2026-10-10' },
-  { label: 'Dielines are out of scope here', tone: 'flag', detail: 'This build does not generate dielines or 3D folds. The 3D Product Scene section handles real geometry locally.', source: 'spec registry ? 2026-10-10' },
+  { label: 'Dielines are drafted in Dielines & Print', tone: 'flag', detail: 'Parametric dieline/label drafts (layered SVG + PDF) render in the Dielines & Print section from the local print engine. They are draft geometry: confirm dimensions, flap depths and bleeds with the manufacturer before production.', source: 'spec registry ? 2026-10-10' },
 ]
 
 const SLOTS = [

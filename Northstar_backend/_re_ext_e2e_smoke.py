@@ -85,5 +85,38 @@ check("agent brief", r.status_code == 200
 r = c.delete(f"/api/design-studio/projects/{pid}")
 check("cleanup project", r.status_code in (200, 204), str(r.status_code))
 
+# 7) open API: key lifecycle + key-authenticated endpoints
+r = c.post("/api/design-studio/api-keys", json={"label": "e2e"})
+kb = r.json() if r.status_code == 201 else {}
+secret = (kb.get("key") or {}).get("key")
+key_id = (kb.get("key") or {}).get("id")
+check("create api key", r.status_code == 201 and bool(secret), f"{r.status_code}")
+
+r2 = c.post("/api/open/2026-10/dielines", json={"template_id": "label_circle"})
+check("open api rejects missing key", r2.status_code == 401)
+
+r2 = c.post("/api/open/2026-10/dielines",
+            json={"template_id": "label_oval", "params": {"width_mm": 80, "height_mm": 50}},
+            headers={"X-Api-Key": secret})
+ob = r2.json() if r2.status_code == 200 else {}
+check("open dielines with key", r2.status_code == 200 and len(ob.get("assets", [])) == 2,
+      f"{r2.status_code} assets={[a['format'] for a in ob.get('assets', [])]}")
+
+r2 = c.post("/api/open/2026-10/packaging-design",
+            json={"prompt": "e2e open api design", "callback_url": "https://example.com/hook"},
+            headers={"X-Api-Key": secret})
+check("open design accepted-or-gated", r2.status_code in (202, 409), f"{r2.status_code}")
+if r2.status_code == 202:
+    jid = r2.json().get("job_id")
+    r3 = c.get(f"/api/open/2026-10/jobs/{jid}", headers={"X-Api-Key": secret})
+    check("open job poll", r3.status_code == 200)
+
+r2 = c.delete(f"/api/design-studio/api-keys/{key_id}")
+check("revoke api key", r2.status_code == 200)
+
+r2 = c.post("/api/open/2026-10/dielines", json={"template_id": "label_circle"},
+            headers={"X-Api-Key": secret})
+check("revoked key rejected", r2.status_code == 401)
+
 print("----")
 print("RESULT:", "ALL PASS" if not fails else f"{len(fails)} FAIL -> {fails}")
