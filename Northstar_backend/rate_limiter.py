@@ -74,18 +74,40 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return ip
 
     def _get_plan(self, request: Request) -> str:
-        """Extract plan from auth token if available."""
+        """Resolve the caller's rate bucket.
+
+        The product UI authenticates with an HttpOnly cookie session and never
+        sends a Bearer token, so a cookie caller used to fall into the
+        anonymous (30/min) bucket while loading 10-30 calls per page — normal
+        browsing tripped 429s and the UI looked broken. Cookie sessions now
+        resolve to their real bucket, exactly like the alpha gate resolves
+        their identity.
+        """
         auth_header = request.headers.get("Authorization", "")
-        if not auth_header.startswith("Bearer "):
-            return "foundation"
+        if auth_header.startswith("Bearer "):
+            try:
+                import auth
+                payload = auth.decode_token(auth_header[7:])
+                role = payload.get("role")
+                if auth.is_valid_role(role) and auth.role_rank(role) >= auth.role_rank(auth.ROLE_OWNER):
+                    return "autothink"
+                return payload.get("plan", "foundation")
+            except Exception:
+                return "foundation"
 
         try:
-            import auth
-            token = auth_header[7:]
-            payload = auth.decode_token(token)
-            return payload.get("plan", "foundation")
+            from auth_deps import _SESSION_COOKIE_NAME, _resolve_foundation_cookie
+            token = request.cookies.get(_SESSION_COOKIE_NAME)
+            if token:
+                user = _resolve_foundation_cookie(token)
+                if user:
+                    role = str(user.get("role") or "")
+                    if role in ("internal_platform_admin", "platform_admin", "organization_owner"):
+                        return "autothink"
+                    return "mover"
         except Exception:
-            return "foundation"
+            pass
+        return "foundation"
 
     def _is_rate_limited(self, client_id: str, plan: str) -> Tuple[bool, Dict]:
         """Check if client is rate limited. Returns (limited, info)."""

@@ -470,7 +470,7 @@ export default function CreativeStudio() {
     const tick = () => {
       engineApi.status()
         .then(s => { if (alive) setEngine(s) })
-        .catch(() => { if (alive) setEngine({ armed: false, reachable: false, note: 'Engine status unavailable.' }) })
+        .catch(() => { if (alive) setEngine(prev => prev || { armed: false, reachable: false, note: 'Engine status unavailable.' }) })
     }
     tick()
     const timer = setInterval(tick, 60000)
