@@ -275,6 +275,11 @@ def run(req: RunRequest, org_id: Optional[str] = None, user_id: Optional[str] = 
         "run_id": run_id,
     }
     entry["org_id"] = org_id
+    # Persist the exchange (query + answer) so the workspace chat can be
+    # reopened: the transcript IS the history. The answer is capped to keep the
+    # file small; it is the model's own words, nothing else is added.
+    entry["content"] = (result.get("content") or "")[:8000]
+    entry["elapsed_ms"] = result.get("elapsed_ms")
     _store_for(org_id).add({"query": query, **entry})
     audit(dict(entry), log_path=AUDIT_LOG)
 

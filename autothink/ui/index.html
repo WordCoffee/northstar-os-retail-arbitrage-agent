@@ -75,19 +75,21 @@
   }
   #output {
     width: 100%;
-    max-width: 760px;
+    max-width: 860px;
     flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 16px;
-    padding: 20px;
+    padding: 18px 20px;
     min-height: 160px;
-    max-height: 52vh;
+    max-height: 62vh;
     overflow-y: auto;
+    scroll-behavior: smooth;
     font-size: 0.95rem;
     line-height: 1.7;
-    white-space: pre-wrap;
-    word-break: break-word;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 4px 20px rgba(0,0,0,0.5);
@@ -98,6 +100,45 @@
     backdrop-filter: none !important;
     border-color: rgba(255, 255, 255, 0.04) !important;
     box-shadow: none !important;
+  }
+
+  /* ---------- Chat transcript: bubbles, saved + scrollable ---------- */
+  .chat-row { display: flex; flex-direction: column; max-width: 84%; }
+  .chat-row.user { align-self: flex-end; align-items: flex-end; }
+  .chat-row.assistant { align-self: flex-start; align-items: flex-start; }
+  .chat-bubble {
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .chat-row.user .chat-bubble {
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.20), rgba(0, 255, 204, 0.10));
+    border: 1px solid rgba(0, 240, 255, 0.38);
+    border-bottom-right-radius: 6px;
+  }
+  .chat-row.assistant .chat-bubble {
+    background: rgba(3, 7, 18, 0.65);
+    border: 1px solid var(--panel-border);
+    border-bottom-left-radius: 6px;
+  }
+  .chat-meta { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #64748b; margin: 2px 8px; }
+  .chat-typing span {
+    display: inline-block;
+    width: 7px; height: 7px;
+    margin-right: 5px;
+    border-radius: 50%;
+    background: #00f0ff;
+    opacity: 0.3;
+    animation: chatPulse 1.2s infinite;
+  }
+  .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .chat-typing span:nth-child(3) { animation-delay: 0.4s; margin-right: 0; }
+  @keyframes chatPulse {
+    0%, 100% { opacity: 0.25; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-3px); }
   }
   .composer {
     width: 100%;
@@ -555,6 +596,47 @@
     model.title = isCloud ? "Cloud provider uses its configured default model" : "Local Ollama model";
   }
 
+  /* ---------- Chat transcript (bubbles, saved + scrollable) ---------- */
+  function scrollBottom() { output.scrollTop = output.scrollHeight; }
+  function fmtTime(iso) {
+    try { return new Date(iso || Date.now()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+    catch (e) { return ""; }
+  }
+  function addMessage(role, text, meta) {
+    var row = document.createElement("div");
+    row.className = "chat-row " + role;
+    if (meta) {
+      var m = document.createElement("div");
+      m.className = "chat-meta";
+      m.textContent = meta;
+      row.appendChild(m);
+    }
+    var b = document.createElement("div");
+    b.className = "chat-bubble";
+    b.textContent = text;
+    row.appendChild(b);
+    output.appendChild(row);
+    scrollBottom();
+    return row;
+  }
+  function loadHistory() {
+    fetch("/api/autothink/history?limit=50")
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var entries = (d && d.entries) || [];
+        if (!entries.length) {
+          addMessage("assistant", "Ready. Type a command below — the local brain answers on this machine, and every exchange is saved to your workspace history.", "Northstar AutothinK");
+          return;
+        }
+        for (var i = 0; i < entries.length; i++) {
+          var e = entries[i] || {};
+          if (e.query) addMessage("user", e.query, "You · " + fmtTime(e.timestamp));
+          if (e.content) addMessage("assistant", e.content, (e.model || e.provider || "local") + " · " + fmtTime(e.timestamp));
+        }
+      })
+      .catch(function () { addMessage("assistant", "History could not be loaded (backend unreachable).", "system"); });
+  }
+
   fetch("/api/autothink/models")
     .then(function (r) { return r.json(); })
     .then(function (d) {
@@ -564,12 +646,11 @@
         lampState = "detected";
         renderLamp();
       } else if (d && !d.local_available) {
-        output.textContent = "NOTE: Ollama is not reachable at localhost:11434 — local commands will return a fallback message. Start Ollama, then refresh.";
-        output.scrollTop = output.scrollHeight;
+        addMessage("assistant", "NOTE: Ollama is not reachable at localhost:11434 — local commands will return a fallback message. Start Ollama, then refresh.", "system");
       }
     })
     .catch(function () {
-      output.textContent = "AutothinK backend not reachable. Is the server running on port 8100?";
+      addMessage("assistant", "AutothinK backend not reachable. Is the server running on port 8100?", "system");
     });
 
   /* ---------- Northstar OS surface: local-brain lamp + quick asks ---------- */
@@ -616,19 +697,28 @@
 
   provider.addEventListener("change", function () { playBlip(); track("expand"); refreshProviderState(); });
   refreshProviderState();
+  loadHistory();
 
   async function run() {
     if (active) return;
     var q = query.value.trim();
     if (!q) return;
     active = true;
-    var previousEmpty = !output.textContent.trim();
     output.classList.add("loading-active");
     query.classList.add("loading-active");
     runBtn.classList.add("loading-active");
     startLoading();
     playBlip();
-    var prefix = "> " + q + "\n\n";
+    addMessage("user", q, "You · " + fmtTime());
+    query.value = "";
+    var typing = document.createElement("div");
+    typing.className = "chat-row assistant";
+    var tb = document.createElement("div");
+    tb.className = "chat-bubble chat-typing";
+    tb.innerHTML = "<span></span><span></span><span></span>";
+    typing.appendChild(tb);
+    output.appendChild(typing);
+    scrollBottom();
     try {
       var resp = await fetch("/api/autothink/run", {
         method: "POST",
@@ -639,17 +729,16 @@
       if (!resp.ok) {
         throw new Error((data && data.detail) || ("HTTP " + resp.status));
       }
-      var block = prefix + (data.content || "(empty response)");
-      if (!data.ok) {
-        block += "\n\n[provider: " + (data.provider || "?") + " — " + (data.reason || "error") + "]";
-      } else if (data.provider || data.task_class) {
-        block += "\n\n— " + (data.task_class || "task") + " | " + (data.provider || "?") + " | " + (data.model || "?");
+      typing.remove();
+      var meta = (data.task_class || "task") + " · " + (data.provider || "?") + (data.model ? " · " + data.model : "") + " · " + fmtTime();
+      addMessage("assistant", data.content || "(empty response)", data.ok ? meta : "error · " + meta);
+      if (!data.ok && data.reason) {
+        addMessage("assistant", "[provider: " + (data.provider || "?") + " — " + data.reason + "]", "system");
       }
-      output.textContent += (previousEmpty ? "" : "\n\n") + block;
     } catch (err) {
-      output.textContent += (previousEmpty ? "" : "\n\n") + prefix + "[ERROR] " + err.message + "\nIs the AutothinK backend running on port 8100?";
+      typing.remove();
+      addMessage("assistant", "[ERROR] " + err.message + "\nIs the AutothinK backend running on port 8100?", "system · " + fmtTime());
     }
-    output.scrollTop = output.scrollHeight;
     stopLoading();
     output.classList.remove("loading-active");
     query.classList.remove("loading-active");
