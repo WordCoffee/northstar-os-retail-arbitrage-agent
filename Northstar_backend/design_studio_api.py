@@ -1862,6 +1862,7 @@ class GenerateIn(BaseModel):
     purpose: Optional[str] = None
     brief: str = Field(..., min_length=3, max_length=20000)
     tier: str = Field(default="draft")            # draft | final
+    text_safe: bool = False                       # strip lettering demands; OCR-check the render
     width: Optional[int] = None
     height: Optional[int] = None
     project_id: Optional[str] = None
@@ -1888,6 +1889,10 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
     if body.kind not in ("image", "video"):
         raise HTTPException(status_code=422, detail="kind must be image or video")
 
+    from text_fidelity import prepare_render_brief, verify_asset_text
+    prep = prepare_render_brief(body.brief, bool(getattr(body, "text_safe", False)))
+    render_brief = prep["brief"]
+
     db = get_northstar_db()
     now = datetime.now(timezone.utc).isoformat()
     job_id = db.design_studio.jobs.create({
@@ -1905,10 +1910,10 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
     })
     try:
         if body.kind == "video":
-            out = sg.generate_video(prompt=body.brief, width=body.width, height=body.height,
+            out = sg.generate_video(prompt=render_brief, width=body.width, height=body.height,
                                     tier=body.tier, seed=body.seed)
         else:
-            out = sg.generate_image(prompt=body.brief, width=body.width, height=body.height,
+            out = sg.generate_image(prompt=render_brief, width=body.width, height=body.height,
                                     tier=body.tier, seed=body.seed)
     except Exception as exc:  # noqa: BLE001 - recorded on the job, surfaced to the caller
         db.design_studio.jobs.update(job_id, {
@@ -1919,6 +1924,8 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
 
     from pathlib import Path
     import uuid as _uuid
+    tf_result = (verify_asset_text(out["bytes"], brief=body.brief, text_safe=True)
+                 if prep["text_fidelity"] else None)
     out_dir = Path(__file__).resolve().parent / "data" / "studio_generated"
     out_dir.mkdir(parents=True, exist_ok=True)
     fname = f"{_uuid.uuid4().hex}.{out['ext']}"
@@ -1941,6 +1948,7 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
                 "generated_at": now,
             },
             "note": "Rendered locally on the operator's machine via ComfyUI. Nothing was sent to any provider.",
+            **({"text_fidelity": tf_result} if tf_result else {}),
         },
     })
     db.design_studio.jobs.update(job_id, {
@@ -1952,6 +1960,7 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         "job": db.design_studio.jobs.get_by_id(job_id, account_id=acct),
         "asset": {**(asset or {}), "file_url": f"/api/design-studio/assets/{aid}/file"},
         "engine": st,
+        "text_fidelity": tf_result,
     }
 
 

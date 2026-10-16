@@ -141,6 +141,7 @@ export default function CreativeStudio() {
   const [genPurpose, setGenPurpose] = useState('product-scene')
   const [genTier, setGenTier] = useState('draft')
   const [genPrompt, setGenPrompt] = useState('')
+  const [textSafe, setTextSafe] = useState(true) // blueprint #5: never let the model draw letters
   const [vPurpose, setVPurpose] = useState('UGC / testimonial')
   const [vDuration, setVDuration] = useState('15s (Short / TikTok)')
   const [vAspect, setVAspect] = useState('9:16 (vertical)')
@@ -490,13 +491,18 @@ export default function CreativeStudio() {
       try {
         const out = await engineApi.generate({
           kind: 'image', purpose: genPurpose, brief: genPrompt.trim(), tier: genTier,
-          width: fmt.w, height: fmt.h,
+          width: fmt.w, height: fmt.h, text_safe: textSafe,
         })
         setRequests(prev => prev.map(r => r.id === rec.id
           ? { ...r, state: `Done — ${(out.asset.metadata && out.asset.metadata.generation && out.asset.metadata.generation.model) || 'local model'}`, fileUrl: out.asset.file_url, assetId: out.asset.id }
           : r))
         setLastRender(out.asset)
         t('Rendered locally on this machine (ComfyUI). Nothing left the box.', 'info')
+        const tf = out.text_fidelity
+        if (tf && tf.check && tf.check.status === 'ok') {
+          if (tf.verdict === 'text_free') t('Text check passed: OCR found no lettering in the render.', 'info')
+          else t(`Text check: lettering detected${tf.check.words && tf.check.words.length ? ` ("${String(tf.check.words[0]).slice(0, 24)}…")` : ''} — rerun or move that copy to the vector text layer.`, 'warn')
+        }
       } catch (e) {
         const msg = String((e && e.message) || e)
         setRequests(prev => prev.map(r => r.id === rec.id ? { ...r, state: `Failed — ${msg}` } : r))
@@ -873,6 +879,16 @@ export default function CreativeStudio() {
                   <span className="label">Request brief</span>
                   <TextInput rows={4} value={genPrompt} onChange={setGenPrompt}
                     placeholder="Describe the product, the scene, the lighting, the mood, and what must be legible." />
+                </div>
+                <div className="field-group">
+                  <label className="inline-flex" style={{ gap: 8, alignItems: 'flex-start', cursor: 'pointer' }}>
+                    <input type="checkbox" checked={textSafe} onChange={(e) => setTextSafe(e.target.checked)} style={{ marginTop: 2 }} />
+                    <span className="text-low" style={{ fontSize: 12 }}>
+                      <strong>Text-safe render:</strong> typographic demands are stripped from the brief and the model is asked for
+                      materials + illustration only — the render is then OCR-checked for stray lettering. Real letters belong on the
+                      vector text layer (never the model).
+                    </span>
+                  </label>
                 </div>
                 <div className="grid-2">
                   <div className="field-group">

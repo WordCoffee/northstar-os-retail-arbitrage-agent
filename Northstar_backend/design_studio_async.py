@@ -166,13 +166,16 @@ def run_generation_job(*, job_id: str, acct: str, body: Dict[str, Any],
     ledger = ledger if ledger is not None else (get_ledger() if enforce else None)
     out_dir = out_dir or _out_dir()
     kind = body.get("kind", "image")
+    from text_fidelity import prepare_render_brief, verify_asset_text
+    prep = prepare_render_brief(body.get("brief") or "", bool(body.get("text_safe")))
+    render_brief = prep["brief"]
     try:
         if kind == "video":
-            out = sg.generate_video(prompt=body["brief"], width=body.get("width"),
+            out = sg.generate_video(prompt=render_brief, width=body.get("width"),
                                     height=body.get("height"), tier=body.get("tier", "draft"),
                                     seed=body.get("seed"))
         else:
-            out = sg.generate_image(prompt=body["brief"], width=body.get("width"),
+            out = sg.generate_image(prompt=render_brief, width=body.get("width"),
                                     height=body.get("height"), tier=body.get("tier", "draft"),
                                     seed=body.get("seed"))
     except Exception as exc:  # noqa: BLE001 - recorded on the job, surfaced to the caller
@@ -195,6 +198,8 @@ def run_generation_job(*, job_id: str, acct: str, body: Dict[str, Any],
 
     fname = f"{uuid.uuid4().hex}.{out['ext']}"
     (out_dir / fname).write_bytes(out["bytes"])
+    tf_result = (verify_asset_text(out["bytes"], brief=body.get("brief"), text_safe=True)
+                 if prep["text_fidelity"] else None)
     aid = db.design_studio.assets.create({
         "account_id": acct,
         "project_id": body.get("project_id"),
@@ -212,6 +217,7 @@ def run_generation_job(*, job_id: str, acct: str, body: Dict[str, Any],
                 "seed": out.get("seed"), "generated_at": _now(), "lane": "async",
             },
             "note": "Rendered locally on the operator's machine via ComfyUI. Nothing was sent to any provider.",
+            **({"text_fidelity": tf_result} if tf_result else {}),
         },
     })
     if enforce and reservation_id and ledger is not None:
@@ -225,17 +231,19 @@ def run_generation_job(*, job_id: str, acct: str, body: Dict[str, Any],
     _notify_callback(db, acct, job_id, body, {
         "job_id": job_id, "status": "done", "asset_ids": [aid],
         "asset_urls": [f"/api/design-studio/assets/{aid}/file"],
+        "text_fidelity": tf_result,
         "provenance": {"lane": "async", "provider": "local:comfyui",
                        "note": "Rendered locally on the operator's machine; no provider received the data."},
     })
-    return {"status": "done", "asset_id": aid}
+    return {"status": "done", "asset_id": aid, "text_fidelity": tf_result}
 
 
 def submit_generation(acct: str, *, brief: str, kind: str = "image", tier: str = "draft",
                       purpose: Optional[str] = None, width: Optional[int] = None,
                       height: Optional[int] = None, seed: Optional[int] = None,
                       project_id: Optional[str] = None,
-                      callback_url: Optional[str] = None) -> Dict[str, Any]:
+                      callback_url: Optional[str] = None,
+                      text_safe: bool = False) -> Dict[str, Any]:
     """Create the queued job (+reservation) and schedule it. Raises HTTPException on gates."""
     if kind not in ("image", "video"):
         raise ValueError("kind must be image or video")
@@ -279,13 +287,14 @@ def submit_generation(acct: str, *, brief: str, kind: str = "image", tier: str =
         },
         "params": {"purpose": purpose, "tier": tier, "brief": brief,
                    "width": width, "height": height, "seed": seed,
-                   "callback_url": callback_url},
+                   "callback_url": callback_url, "text_safe": text_safe},
         "credits_used": cost if enforce else 0,
     })
     _EXECUTOR.submit(run_generation_job, job_id=job_id, acct=acct,
                      body={"kind": kind, "brief": brief, "tier": tier, "width": width,
                            "height": height, "seed": seed, "project_id": project_id,
-                           "purpose": purpose, "callback_url": callback_url},
+                           "purpose": purpose, "callback_url": callback_url,
+                           "text_safe": text_safe},
                      reservation_id=(reservation or {}).get("reservation_id"),
                      enforce=enforce)
     return {
@@ -302,7 +311,8 @@ def generate_async(body: GenerateIn, acct: str = Depends(studio_account)):
     try:
         return submit_generation(acct, brief=body.brief, kind=body.kind, tier=body.tier,
                                  purpose=body.purpose, width=body.width, height=body.height,
-                                 seed=body.seed, project_id=body.project_id)
+                                 seed=body.seed, project_id=body.project_id,
+                                 text_safe=body.text_safe)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
 
