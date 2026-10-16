@@ -50,10 +50,15 @@ exists is open-source lookalikes and building blocks (verified this session):
 | `frontsail-ai/aspicio` | MIT · pushed 2026-10-12 | DXF / vector-PDF **viewer** (TypeScript) — could render supplier DXFs in the web UI. |
 | `minrogi/PLMPackLib` | no license shown · 2015 | Packaging-standard resizing libs; stale. Declined. |
 
-**Recommendation:** adopt **Boxes.py as an external generator** for the
-Dielines lane (new "Box library" picker: choose a structure, generate locally,
-import the SVG into the existing dieline editor). Optionally add the Blender
-carton addon for 3D previews. Everything else stays reference material.
+**ADOPTED (2026-10-16, same day):** Boxes.py is now wired as the **Box
+library** in Design Studio → Dielines & Print — 12 curated structures
+(ClosedBox, OpenBox, UniversalBox, TwoPiece, SlidingLidBox, SlidingDrawer,
+RoundedBox, RegularBox, Crate, DisplayCase, NotesHolder, HeartBox), generated
+locally by the external tool (pinned commit, separate process), previewed and
+downloadable as SVG. Endpoints: `GET/POST /api/design-studio/print/box-library
+· box-generate`; harness `tools/verify-box-library.cjs` (13/0, runner #40).
+Optional next: the Blender carton addon for 3D previews; everything else stays
+reference material.
 
 **Gates honored:** no leaked code consulted; no logins; nothing adopted
 embedded — external tools only, with licenses recorded.
