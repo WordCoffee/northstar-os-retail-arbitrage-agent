@@ -80,6 +80,7 @@ Run-Harness "36-amazon-files-ui"       "node tools/verify-amazon-files-ui.cjs"
 Run-Harness "37-section-evidence"      "node tools/capture-section-evidence.cjs"
 Run-Harness "38-section-packs"         "node tools/verify-section-packs.cjs" "test"
 Run-Harness "39-no-third-party"        "node tools/check-no-third-party.cjs"
+Run-Harness "40-box-library"           "node tools/verify-box-library.cjs"
 
 # 16 — the Postgres store harness runs INSIDE the API container (it needs the
 # compose network for the postgres service).

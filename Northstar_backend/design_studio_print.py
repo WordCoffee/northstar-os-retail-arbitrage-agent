@@ -691,3 +691,40 @@ def export_project_zip(pid: str, acct: str = Depends(studio_account)):
 def print_health(acct: str = Depends(studio_account)):
     return {"ok": True, "templates": len(TEMPLATES),
             "units": "mm", "renderers": ["svg", "pdf"]}
+
+
+# ── Box library — external Boxes.py bridge (2026-10-16) ──────────────────
+# The structures come from Boxes.py (GPL-3.0), run as a SEPARATE PROCESS on
+# this machine; we consume its SVG output and never embed its code.
+
+class BoxGenerateIn(BaseModel):
+    generator: str = Field(..., min_length=1, max_length=60)
+    x: Optional[float] = None
+    y: Optional[float] = None
+    h: Optional[float] = None
+    thickness: Optional[float] = None
+
+
+@router.get("/box-library")
+def box_library(acct: str = Depends(studio_account)):
+    from design_studio_boxes import BOX_LIBRARY, BOXES_LICENSE_NOTE, PARAM_SPEC, boxes_binary
+    return {
+        "generators": BOX_LIBRARY,
+        "params": PARAM_SPEC,
+        "available": boxes_binary() is not None,
+        "license_note": BOXES_LICENSE_NOTE,
+        "note": ("Structures are generated locally by Boxes.py. If it is not installed the "
+                 "library reads unavailable and generation is refused — never faked."),
+    }
+
+
+@router.post("/box-generate")
+def box_generate(body: BoxGenerateIn, acct: str = Depends(studio_account)):
+    from design_studio_boxes import BoxesUnavailable, generate_box
+    params = {k: v for k, v in {"x": body.x, "y": body.y, "h": body.h, "thickness": body.thickness}.items() if v is not None}
+    try:
+        return generate_box(body.generator, params)
+    except BoxesUnavailable as exc:
+        raise HTTPException(status_code=503, detail={"code": "boxes_unavailable", "message": str(exc)})
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail={"code": "box_generation_refused", "message": str(exc)})

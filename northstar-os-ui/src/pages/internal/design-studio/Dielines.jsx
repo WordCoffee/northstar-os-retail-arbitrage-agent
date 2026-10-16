@@ -52,6 +52,43 @@ export default function Dielines() {
   const [productId, setProductId] = useState('')
   const [customPrompt, setCustomPrompt] = useState('')
   const [plan, setPlan] = useState(null)
+  // Box library (2026-10-16): Boxes.py external generator.
+  const [boxLib, setBoxLib] = useState(null)
+  const [boxGen, setBoxGen] = useState('ClosedBox')
+  const [boxParams, setBoxParams] = useState({ x: 100, y: 80, h: 60, thickness: 3 })
+  const [boxSvg, setBoxSvg] = useState('')
+  const [boxBusy, setBoxBusy] = useState(false)
+
+  useEffect(() => {
+    let gone = false
+    ;(async () => {
+      try {
+        const r = await fetch(`${API}/print/box-library`, { credentials: 'include' })
+        if (!r.ok) return
+        const d = await r.json()
+        if (!gone) setBoxLib(d)
+      } catch { /* library is optional; the card says unavailable */ }
+    })()
+    return () => { gone = true }
+  }, [])
+
+  const generateBox = async () => {
+    setBoxBusy(true)
+    try {
+      const r = await fetch(`${API}/print/box-generate`, {
+        method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ generator: boxGen, ...boxParams }),
+      })
+      const d = await r.json()
+      if (!r.ok) throw new Error(errText(d, r))
+      setBoxSvg(d.svg || '')
+      toast(`Generated ${boxGen} locally (${Math.round((d.size_bytes || 0) / 1024)} KB SVG).`, 'success')
+    } catch (e) {
+      toast(`Box generation failed: ${e.message}`, 'error')
+    } finally {
+      setBoxBusy(false)
+    }
+  }
 
   const template = useMemo(() => templates.find(t => t.id === templateId), [templates, templateId])
   const hasPlanInput = !!(sceneId || productId || customPrompt.trim())
@@ -219,6 +256,49 @@ export default function Dielines() {
             style={{ marginTop: 12, border: '1px solid var(--border)', borderRadius: 8, padding: 12, overflow: 'auto', background: '#fff' }}
             dangerouslySetInnerHTML={{ __html: svg }}
           />
+        )}
+      </div>
+
+      <div className="card" style={{ padding: 16 }} data-testid="box-library">
+        <div style={{ fontWeight: 600, color: 'var(--pine-deep)', marginBottom: 4 }}>Box library</div>
+        <div className="text-low" style={{ fontSize: 12, marginBottom: 12 }}>
+          Real box structures generated locally by <strong>Boxes.py</strong> (GPL-3.0, an external
+          tool run as a separate process — its output is yours; nothing is sent anywhere).
+          {boxLib && boxLib.available === false && (
+            <span> The tool is not installed on this machine, so generation is refused.</span>
+          )}
+        </div>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+          <label style={{ fontSize: 12 }}>Structure
+            <select value={boxGen} onChange={e => setBoxGen(e.target.value)}
+              style={{ display: 'block', marginTop: 4, minWidth: 220 }} data-testid="box-gen-select">
+              {((boxLib && boxLib.generators) || [{ id: 'ClosedBox', label: 'Closed box' }]).map(g => (
+                <option key={g.id} value={g.id}>{g.label}</option>
+              ))}
+            </select>
+          </label>
+          {['x', 'y', 'h', 'thickness'].map(k => (
+            <label key={k} style={{ fontSize: 12 }}>{(boxLib && boxLib.params && boxLib.params[k] && boxLib.params[k].label) || k}
+              <input type="number" step="0.5" value={boxParams[k]}
+                onChange={e => setBoxParams(p => ({ ...p, [k]: e.target.value === '' ? '' : Number(e.target.value) }))}
+                style={{ display: 'block', marginTop: 4, width: 118 }} />
+            </label>
+          ))}
+        </div>
+        <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
+          <button className="btn btn-sm btn-primary" disabled={boxBusy} onClick={generateBox} data-testid="box-generate">
+            Generate structure
+          </button>
+          <button className="btn btn-sm" disabled={!boxSvg}
+            onClick={() => downloadBlob(new Blob([boxSvg], { type: 'image/svg+xml' }), `${boxGen}-${boxParams.x}x${boxParams.y}x${boxParams.h}.svg`)}>
+            Download SVG
+          </button>
+        </div>
+        {boxSvg && (
+          <div style={{ marginTop: 12, border: '1px solid var(--border)', borderRadius: 8, padding: 12, overflow: 'auto', background: '#fff' }}
+            data-testid="box-preview">
+            <img src={`data:image/svg+xml;utf8,${encodeURIComponent(boxSvg)}`} alt={`${boxGen} dieline`} style={{ maxWidth: '100%' }} />
+          </div>
         )}
       </div>
 
