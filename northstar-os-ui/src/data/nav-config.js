@@ -2,39 +2,41 @@ import { readinessForRoom } from './readiness.js'
 
 // Raw nav definition. `status`/`statusTone` are derived below from the shared
 // readiness source so nav badges and room badges can never drift apart.
+// 2026-10-16: groups are ordered by daily work — Home, Create, Grow, Research,
+// then the operations and admin surfaces.
 const RAW_GROUPS = [
-  { id: 'command', label: 'Command', icon: 'command', sections: [
+  { id: 'command', label: 'Home', icon: 'command', sections: [
     { id: 'command-center', label: 'Command Center', route: '/home', roles: ['operator', 'platform_admin'] },
   ]},
-  { id: 'research', label: 'Research', icon: 'flask', sections: [
+  { id: 'create', label: 'Create', icon: 'brush', sections: [
+    { id: 'design-studio', label: 'Design Studio', route: '/design-studio', roles: ['operator', 'platform_admin'] },
+  ]},
+  { id: 'grow', label: 'Grow', icon: 'chart', sections: [
+    { id: 'listingforge', label: 'ListingForge', route: '/listingforge', roles: ['operator', 'platform_admin'] },
+    { id: 'adpilot', label: 'AdPilot', route: '/adpilot', roles: ['operator', 'platform_admin'] },
+    { id: 'socialpulse', label: 'SocialPulse', route: '/socialpulse', roles: ['operator', 'platform_admin'] },
+  ]},
+  { id: 'research', label: 'Research & Watch', icon: 'flask', sections: [
     { id: 'sourcescout', label: 'SourceScout', route: '/product-finder', roles: ['operator', 'platform_admin'] },
     { id: 'golden-goose', label: 'Golden Goose Finder', route: '/golden-goose', roles: ['operator', 'platform_admin'] },
     { id: 'listing-guardian', label: 'Listing Guardian', route: '/listings', roles: ['operator', 'platform_admin'] },
-    { id: 'keyword-tracker', label: 'Keyword Tracker', route: '/keyword-tracker', roles: ['operator', 'platform_admin'], status: 'Concept' },
-    { id: 'competitor-monitor', label: 'Competitor Monitor', route: '/competitor-monitor', roles: ['operator', 'platform_admin'], status: 'Concept' },
-  ]},
-  { id: 'create', label: 'Create', icon: 'brush', sections: [
-    { id: 'design-studio', label: 'Design Studio', route: '/design-studio', roles: ['operator', 'platform_admin'], status: 'Concept' },
-  ]},
-  { id: 'grow', label: 'Grow', icon: 'chart', sections: [
-    { id: 'listingforge', label: 'ListingForge', route: '/listingforge', roles: ['operator', 'platform_admin'], status: 'Concept' },
-    { id: 'adpilot', label: 'AdPilot', route: '/adpilot', roles: ['operator', 'platform_admin'], status: 'Concept' },
-    { id: 'socialpulse', label: 'SocialPulse', route: '/socialpulse', roles: ['operator', 'platform_admin'], status: 'Concept' },
+    { id: 'keyword-tracker', label: 'Keyword Tracker', route: '/keyword-tracker', roles: ['operator', 'platform_admin'] },
+    { id: 'competitor-monitor', label: 'Competitor Monitor', route: '/competitor-monitor', roles: ['operator', 'platform_admin'] },
   ]},
   { id: 'operate', label: 'Operate', icon: 'layers', sections: [
     { id: 'profitability', label: 'Profitability Dashboard', route: '/profitability', roles: ['operator', 'platform_admin'] },
-    { id: 'spreadsheet-lab', label: 'Spreadsheet Lab', route: '/spreadsheet-lab', roles: ['operator', 'platform_admin'], status: 'Concept' },
-    { id: 'commerce-ops', label: 'Commerce Ops', route: '/commerce-ops', roles: ['operator', 'platform_admin'], status: 'Concept' },
+    { id: 'spreadsheet-lab', label: 'Spreadsheet Lab', route: '/spreadsheet-lab', roles: ['operator', 'platform_admin'] },
+    { id: 'commerce-ops', label: 'Commerce Ops', route: '/commerce-ops', roles: ['operator', 'platform_admin'] },
     { id: 'monitoring', label: 'Monitoring', route: '/monitoring', roles: ['operator', 'platform_admin'] },
   ]},
-  { id: 'systems', label: 'Systems', icon: 'cpu', sections: [
+  { id: 'systems', label: 'Admin & Systems', icon: 'cpu', sections: [
     { id: 'autothink', label: 'AutothinK', route: '/autothink', roles: ['operator', 'platform_admin'] },
     { id: 'memory-bank', label: 'Memory Bank', route: '/memory-bank', roles: ['operator', 'platform_admin'], status: 'Internal' },
     { id: 'shared-data', label: 'Shared Data Layer', route: '/shared-data', roles: ['operator', 'platform_admin'], status: 'Internal' },
     { id: 'provider-adapters', label: 'Provider Adapters', route: '/provider-adapters', roles: ['operator', 'platform_admin'], status: 'Internal' },
     { id: 'master-brain', label: 'Master Brain', route: '/master-brain', roles: ['operator', 'platform_admin'], status: 'Internal' },
   ]},
-  { id: 'role-specific', label: 'Workspace', icon: 'users', sections: [
+  { id: 'role-specific', label: 'Account & Admin', icon: 'users', sections: [
     { id: 'customer-workspace', label: 'Customer Workspace', route: '/customer-workspace', roles: ['customer'] },
     { id: 'beta-ops', label: 'Beta Operations', route: '/beta-ops', roles: ['platform_admin'] },
     { id: 'administration', label: 'Administration', route: '/admin', roles: ['platform_admin'] },

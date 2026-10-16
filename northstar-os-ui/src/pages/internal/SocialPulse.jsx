@@ -136,27 +136,11 @@ function useLocalRoom(key, seed) {
 const uid = (p) => `${p}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
 const nowIso = () => new Date().toISOString()
 
-const SEED_CAMPAIGNS = [
-  { id: 'C-01', key: 'set-a-launch', name: 'Set A Launch', theme: 'Product awareness', objective: 'Introduce Set A to new audiences', audience: 'Homeowners 30–55', state: 'Active', channels: ['Instagram Reels', 'TikTok'], start: '2026-09-20' },
-  { id: 'C-02', key: 'q4-seasonal', name: 'Q4 Seasonal', theme: 'Seasonal promo', objective: 'Seasonal demand capture', audience: 'Existing customers', state: 'Planned', channels: ['Stories', 'Email'], start: '2026-10-01' },
-  { id: 'C-03', key: 'testimonial', name: 'Testimonial Series', theme: 'Social proof', objective: 'Social proof at scale', audience: 'Warm audience', state: 'Active', channels: ['Instagram Reels', 'Pinterest'], start: '2026-09-24' },
-]
-const SEED_POSTS = [
-  { id: 'SP-01', campaign: 'set-a-launch', title: 'Installation guide', platform: 'Instagram Reels', format: 'Reel', voice: 'Product demo', state: 'Scheduled', when: 'Sep 28 · 08:00 (manual reminder)', note: 'Slot is a manual reminder — nothing auto-publishes.' },
-  { id: 'SP-02', campaign: 'set-a-launch', title: 'Behind the scenes — filtering', platform: 'X Thread', format: 'Thread', voice: 'Founder voice', state: 'Draft', when: '', note: 'Not yet submitted for review.' },
-  { id: 'SP-03', campaign: 'testimonial', title: 'Customer testimonial', platform: 'Instagram Reels', format: 'Reel', voice: 'UGC testimonial', state: 'Approved', when: '', note: 'Approved — still requires publish-ready + manual schedule.' },
-  { id: 'SP-04', campaign: 'q4-seasonal', title: 'Q4 promo teaser', platform: 'TikTok', format: 'Short', voice: 'Seasonal promo', state: 'In Review', when: '', note: 'Awaiting brand review.' },
-  { id: 'SP-05', campaign: 'set-a-launch', title: 'Product highlight — Water Filter', platform: 'Instagram Reels', format: 'Reel', voice: 'Lifestyle edit', state: 'Publish-ready', when: '', note: 'Ready to schedule manually.' },
-  { id: 'SP-06', campaign: 'testimonial', title: 'Before/after hook test', platform: 'TikTok', format: 'Short', voice: 'Before/after', state: 'Draft', when: '', note: 'Hook options pending.' },
-]
-const SEED_ASSETS = [
-  { id: 'SA-01', name: 'water-filter-hero.jpg', type: 'Image', tag: 'Product', state: 'Approved', attached: ['SP-01'] },
-  { id: 'SA-02', name: 'install-clip-15s.mp4', type: 'Video', tag: 'Utility', state: 'UNREVIEWED', attached: [] },
-  { id: 'SA-03', name: 'before-after-01.jpg', type: 'Image', tag: 'Format', state: 'Approved', attached: ['SP-06'] },
-  { id: 'SA-04', name: 'lifestyle-kitchen.jpg', type: 'Image', tag: 'Lifestyle', state: 'Draft', attached: ['SP-05'] },
-  { id: 'SA-05', name: 'ugc-testimonial.mp4', type: 'Video', tag: 'UGC', state: 'UNREVIEWED', attached: ['SP-03'] },
-  { id: 'SA-06', name: 'q4-promo-bg.jpg', type: 'Image', tag: 'Seasonal', state: 'Missing alt text', attached: ['SP-04'] },
-]
+// 2026-10-16: seeds REMOVED. SocialPulse starts empty and every record is the
+// operator's own; the empty states carry the actions.
+const SEED_CAMPAIGNS = []
+const SEED_POSTS = []
+const SEED_ASSETS = []
 
 const MONTH_START_OFFSET = 1
 const MONTH_CELLS = (() => {
@@ -183,7 +167,7 @@ export default function SocialPulse() {
   const [posts, setPosts] = useLocalRoom('ns-social-posts', SEED_POSTS)
   const [assets, setAssets] = useLocalRoom('ns-social-assets', SEED_ASSETS)
 
-  const [campaign, setCampaign] = useState('Set A Launch')
+  const [campaign, setCampaign] = useState('')
   const [voice, setVoice] = useState('Founder voice')
   const [assetFilter, setAssetFilter] = useState('All')
   const [queueMode, setQueueMode] = useState('Board')
@@ -661,7 +645,7 @@ export default function SocialPulse() {
                   actions={<button className="btn btn-sm btn-ghost" title="Remove" onClick={() => store.remove(a.id)}>×</button>} />
               ))}
               {!store.assets.filter(a => a.role === 'reference').length && (
-                <span className="text-low" style={{ fontSize: 12 }}>No uploaded images yet. Seeded records below are sample metadata; uploaded images are real and persist locally.</span>
+                <span className="text-low" style={{ fontSize: 12 }}>No uploaded images yet — upload artwork above to plan with it. Uploaded images are real and persist locally; nothing here is sample data.</span>
               )}
             </div>
             {!store.persistent && (

@@ -16,18 +16,12 @@ const TABS = [
 // They now read UNKNOWN across price, rank, offers, buy box and margin, and
 // the view carries a DataNotice. Anything real must come from
 // /api/products/finder (cache-only) and be labelled as such.
-const PRODUCTS = [
-  { asin: 'B08L5VJQ7T', title: 'Premium Water Filter', brand: 'PureFlow', category: 'Home & Kitchen', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Researching', img: true },
-  { asin: 'B09M8KJ4X2', title: 'LED Desk Lamp', brand: 'BrightLife', category: 'Office Products', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Watch', img: true },
-  { asin: 'B07XJ8C9F3', title: 'Car Phone Mount', brand: 'TechGear', category: 'Automotive', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Researching', img: true },
-  { asin: 'B08N5WRWNW', title: 'Bluetooth Speaker', brand: 'SoundMax', category: 'Electronics', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Internal review ready', img: true },
-]
+// 2026-10-16: invented rows REMOVED. The workbench starts empty; every row is
+// an ASIN the operator adds. Real cached observations still come from
+// /api/products/finder (cache-only) and are labelled as such when present.
+const PRODUCTS = []
 
-const SAVED_SETS = [
-  { id: 'Set A', asins: 12, focus: 'Home & Kitchen', status: 'Active', updated: '2h ago' },
-  { id: 'Set B', asins: 8, focus: 'Mixed research', status: 'Research', updated: '5h ago' },
-  { id: 'Set C', asins: 15, focus: 'Internal review ready', status: 'Internal review ready', updated: '1d ago' },
-]
+const SAVED_SETS = []
 
 const MISSING = new Set(['UNKNOWN', 'UNAVAILABLE', 'REQUIRED', 'INCOMPLETE', 'UNMEASURED', 'NOT CALCULATED'])
 
@@ -47,11 +41,11 @@ function StatusPill({ v }) {
 
 const GATES = [
   { label: 'Resale Eligibility', v: 'UNVERIFIED' },
-  { label: 'Category / Gating', v: 'Restricted' },
-  { label: 'Hazmat', v: 'Clear' },
-  { label: 'IP / Brand Risk', v: 'Moderate' },
+  { label: 'Category / Gating', v: 'UNVERIFIED' },
+  { label: 'Hazmat', v: 'UNVERIFIED' },
+  { label: 'IP / Brand Risk', v: 'UNVERIFIED' },
   { label: 'Amazon Presence', v: 'UNVERIFIED' },
-  { label: 'Pack/Case Match', v: 'REQUIRED' },
+  { label: 'Pack/Case Match', v: 'UNVERIFIED' },
   { label: 'Physical Data', v: 'UNMEASURED' },
   { label: 'Fee Basis', v: 'UNAVAILABLE' },
   { label: 'Sourcing Readiness', v: 'INCOMPLETE' },
@@ -81,11 +75,22 @@ export default function ProductFinder() {
   const navigate = useNavigate()
   const { id } = useParams()
   const location = useLocation()
-  const [products] = useState(PRODUCTS)
+  const [products, setProducts] = useState(PRODUCTS)
+  const [newAsin, setNewAsin] = useState('')
+
+  const addProduct = () => {
+    const asin = newAsin.trim().toUpperCase()
+    if (!asin) return
+    setProducts(prev => ([
+      { asin, title: 'Researching…', brand: 'UNKNOWN', category: 'UNKNOWN', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Researching', img: false },
+      ...prev,
+    ]))
+    setNewAsin('')
+  }
 
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : (id ? 'set' : 'lookup')
-  const primary = products[0]
+  const primary = products[0] || { asin: '—', title: 'No product added yet', brand: '—', category: '—', status: 'Researching' }
   const unverifiedGates = GATES.filter(g => ['UNVERIFIED', 'UNKNOWN', 'UNMEASURED', 'REQUIRED', 'INCOMPLETE', 'UNAVAILABLE'].includes(g.v)).length
 
   return (
@@ -112,6 +117,27 @@ export default function ProductFinder() {
 
       {view === 'lookup' && (
         <div className="subview workbench">
+          {products.length === 0 && (
+            <div className="card" style={{ marginBottom: 14 }} data-testid="pf-add-first">
+              <div className="card-head">
+                <h3 className="card-title">Add your first product</h3>
+                <span className="pill pill-muted">starts as all-UNKNOWN</span>
+              </div>
+              <div className="inline-flex" style={{ gap: 8, alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                <label className="stack" style={{ gap: 4 }}>
+                  <span className="text-low" style={{ fontSize: 11 }}>ASIN</span>
+                  <input className="field" style={{ width: 170 }} placeholder="B0XXXXXXXX"
+                    value={newAsin} onChange={e => setNewAsin(e.target.value.toUpperCase())} />
+                </label>
+                <button className="btn btn-sm btn-primary" disabled={!/^B0[A-Z0-9]{8}$/.test(newAsin)} onClick={addProduct}>
+                  Start researching
+                </button>
+              </div>
+              <div className="text-low" style={{ fontSize: 11, marginTop: 6 }}>
+                Every metric starts UNKNOWN until a cached observation exists — nothing is invented.
+              </div>
+            </div>
+          )}
           <div className="card" style={{ marginBottom: 14 }}>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               <div style={{ width: 72, height: 72, background: 'var(--bone)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 28 }}>
@@ -249,14 +275,15 @@ export default function ProductFinder() {
 
       {view === 'saved' && (
         <div className="subview workbench">
-          <DataNotice tone="sample" title="Saved sets are sample workspace state">
-            Set membership and statuses are demonstration data. Verified membership requires a connected portfolio.
+          <DataNotice tone="internal" title="Saved sets are your own local sets">
+            A set is a named group of ASINs you add here. With no sets yet this page is an honest empty state.
           </DataNotice>
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Saved Sets</h3>
-              <span className="pill pill-forest">3 sets</span>
+              <span className="pill pill-muted">{SAVED_SETS.length} sets</span>
             </div>
+            {SAVED_SETS.length === 0 && <p style={{ fontSize: 13 }} data-testid="pf-sets-empty">No sets yet — create one from the workbench once you add products. Honest empty state.</p>}
             <DataTable columns={[
               { key: 'id', label: 'Set' },
               { key: 'asins', label: 'ASINs' },
@@ -283,11 +310,11 @@ export default function ProductFinder() {
               { key: 'basis', label: 'Basis' },
               { key: 'status', label: 'Status', render: (v) => <span className={`pill ${v === 'ASSUMPTION' ? 'pill-ochre' : v === 'NOT VERIFIED' ? 'pill-unverified' : 'pill-unknown'}`}>{v}</span> },
             ]} rows={[
-              { area: 'Price / Offers', state: 'UNKNOWN', basis: 'Provider cache 2h ago', status: 'NOT VERIFIED' },
-              { area: 'Buy Box', state: 'UNVERIFIED', basis: 'No live observation', status: 'NOT VERIFIED' },
-              { area: 'Gating / Category', state: 'Restricted', basis: 'Category rules (sample)', status: 'ASSUMPTION' },
-              { area: 'Pack / Case Identity', state: 'REQUIRED', basis: 'No source doc', status: 'UNKNOWN' },
-              { area: 'Sourcing Legitimacy', state: 'INCOMPLETE', basis: 'No invoice on file', status: 'UNVERIFIED' },
+              { area: 'Price / Offers', state: 'UNKNOWN', basis: 'not observed yet', status: 'NOT VERIFIED' },
+              { area: 'Buy Box', state: 'UNKNOWN', basis: 'not observed yet', status: 'NOT VERIFIED' },
+              { area: 'Gating / Category', state: 'UNKNOWN', basis: 'verify in Seller Central', status: 'NOT VERIFIED' },
+              { area: 'Pack / Case Identity', state: 'UNKNOWN', basis: 'no source doc yet', status: 'NOT VERIFIED' },
+              { area: 'Sourcing Legitimacy', state: 'UNKNOWN', basis: 'no invoice on file yet', status: 'NOT VERIFIED' },
             ]} />
           </div>
         </div>

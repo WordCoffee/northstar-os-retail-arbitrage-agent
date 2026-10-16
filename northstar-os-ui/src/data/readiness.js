@@ -31,11 +31,11 @@ export const ROOM_READINESS = {
   'command-center': 'ready', // fully live local reads (signals, work queues, activity, launch grid)
   'sourcescout': 'cached',
   'golden-goose': 'ready',
-  'listing-guardian': 'partial', // real local listing/identity records + sample triage
+  'listing-guardian': 'ready', // 2026-10-16: triage derived from the real local listing/identity records
   'keyword-tracker': 'ready', // fully derived from local keyword store + foundation keyword service
-  'competitor-monitor': 'partial', // real local product/source observations + sample competitor rows
-  'profitability': 'partial', // backend economics engine + sample portfolio context
-  'spreadsheet-lab': 'provider', // CSV ingest/export works locally; hosted analysis gated on OPENCODE_GO
+  'competitor-monitor': 'ready', // 2026-10-16: real local product/source observations only
+  'profitability': 'ready', // 2026-10-16: local economics engine over real records
+  'spreadsheet-lab': 'ready', // 2026-10-16: local CSV ingest/analysis/export; hosted LLM analysis optional and gated
   'commerce-ops': 'ready', // fully derived from local identity queue + pipeline runs + foundation approvals
   'monitoring': 'ready', // fully derived from live local reads (error tracker, readiness, refresh registry)
   'autothink': 'ready', // 2026-10-16: chat runs on the local brain (Ollama) with saved, scrollable history
@@ -49,8 +49,8 @@ export const ROOM_READINESS = {
   // Design Studio. The old routes still redirect but are not primary nav rooms.
   'design-studio': 'ready', // 2026-10-16: local ComfyUI engine armed - real image (klein) + video (Wan 2.2) renders on this machine
   'socialpulse': 'concept', // local workspace state; no channel is connected
-  'adpilot': 'partial', // real creative capability + honest "nothing is sent" boundary
-  'listingforge': 'partial', // real revisions + template apply; publish stays disabled
+  'adpilot': 'ready', // 2026-10-16: reads your imported ad files; honest empty states until you import
+  'listingforge': 'ready', // 2026-10-16: tenant-store listings with editor, health checks and revisions
 }
 
 // Route -> room id, so a room page can resolve its own readiness badge without

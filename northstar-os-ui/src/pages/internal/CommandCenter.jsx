@@ -1,5 +1,4 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
-import { useToast } from '../../components/ToastContext.jsx'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import signals, { settle } from '../../services/signals.js'
@@ -37,8 +36,8 @@ function WorkQueues({ navigate }) {
   return (
     <div className="card" data-testid="cc-work-queues" style={{ marginBottom: 20 }}>
       <div className="card-head">
-        <h3 className="card-title">Work queues</h3>
-        <span className="pill pill-muted">live · foundation</span>
+        <h3 className="card-title">Needs your review</h3>
+        <span className="pill pill-muted">live · from your local data</span>
       </div>
       {!st.loaded && <p style={{ fontSize: 13 }}>Reading work queues…</p>}
       {st.loaded && (
@@ -104,7 +103,7 @@ function SystemSignals() {
       </div>
       <SignalRow
         label="Data mode &amp; warehouse"
-        source="GET /api/v1/status"
+        source="local backend"
         result={st.status}
         render={(v) => {
           const d = data({ ok: true, value: v }) || {}
@@ -120,7 +119,7 @@ function SystemSignals() {
       />
       <SignalRow
         label="Catalog coverage (quantity match)"
-        source="GET /api/sourcescout/summary"
+        source="catalog cache"
         result={st.catalog}
         render={(v) => (
           <span className="inline-flex" style={{ gap: 6 }}>
@@ -133,7 +132,7 @@ function SystemSignals() {
       />
       <SignalRow
         label="API error rate"
-        source="GET /api/monitoring/error-alerts"
+        source="local error tracker"
         result={st.monitoring}
         render={(v) => {
           const s = (v && ((v.data && v.data.summary) || v.summary)) || {}
@@ -148,7 +147,7 @@ function SystemSignals() {
       />
       <SignalRow
         label="Golden Goose service"
-        source="GET /api/golden-goose/health"
+        source="Golden Goose service"
         result={st.gg}
         render={(v) => {
           const s = (v && ((v.data && v.data.status) || v.status)) || 'UNKNOWN'
@@ -226,32 +225,35 @@ function RealActivity() {
   )
 }
 
-const LAUNCH = [
-  { label: 'SourceScout', route: '/product-finder', note: 'Cached product sourcing' },
-  { label: 'Golden Goose', route: '/golden-goose', note: 'Opportunity review desk' },
-  { label: 'Profitability', route: '/profitability', note: 'Economics & scenarios' },
-  { label: 'Commerce Ops', route: '/commerce-ops', note: 'Workflow & approvals' },
-  { label: 'Listing Guardian', route: '/listings', note: 'Listing watchtower' },
-  { label: 'Monitoring', route: '/monitoring', note: 'System observability' },
+// ═══ Task-first entry (2026-10-16): what do you want to do today? ═══
+const START = [
+  { label: 'Design', note: 'Images, A+, print & mockups', route: '/design-studio', icon: 'brush' },
+  { label: 'Listings', note: 'Write, review & version copy', route: '/listingforge', icon: 'list' },
+  { label: 'Ads', note: 'Plan changes from your ad files', route: '/adpilot', icon: 'target' },
+  { label: 'Social', note: 'Plan posts & export assets', route: '/socialpulse', icon: 'globe' },
+  { label: 'Keywords', note: 'Track terms & movement', route: '/keyword-tracker', icon: 'search' },
+  { label: 'Competitors', note: 'Watch local market evidence', route: '/competitor-monitor', icon: 'eye' },
 ]
 
-function LaunchGrid({ navigate }) {
+function StartSomething({ navigate }) {
   return (
-    <div className="card" data-testid="cc-launch-grid" style={{ marginBottom: 20 }}>
+    <div className="card" data-testid="cc-start" style={{ marginBottom: 20 }}>
       <div className="card-head">
-        <h3 className="card-title">Launch a service</h3>
-        <span className="pill pill-muted">6 rooms</span>
+        <h3 className="card-title">Start something</h3>
+        <span className="pill pill-muted">your daily work</span>
       </div>
       <div className="grid-3" style={{ gap: 12 }}>
-        {LAUNCH.map(l => (
+        {START.map(s => (
           <button
-            key={l.route}
+            key={s.route}
             className="card"
-            onClick={() => navigate(l.route)}
-            style={{ padding: 14, textAlign: 'left', cursor: 'pointer', fontFamily: 'var(--font-ui)', border: '1px solid var(--divider)' }}
+            onClick={() => navigate(s.route)}
+            style={{ padding: 16, textAlign: 'left', cursor: 'pointer', fontFamily: 'var(--font-ui)', border: '1px solid var(--divider)' }}
           >
-            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--pine-deep)' }}>{l.label}</div>
-            <div className="text-low" style={{ fontSize: 11, marginTop: 2 }}>{l.note}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--pine-deep)' }}>{s.label}</span>
+            </div>
+            <div className="text-low" style={{ fontSize: 12, marginTop: 4 }}>{s.note}</div>
           </button>
         ))}
       </div>
@@ -260,25 +262,25 @@ function LaunchGrid({ navigate }) {
 }
 
 export default function CommandCenter() {
-  const { toast } = useToast()
   const navigate = useNavigate()
   return (
     <PageLayout
       title="Command Center"
-      subtitle="Suite briefing — live system signals, work queues, and local activity."
+      subtitle="Your workspace — start something, then see what needs you."
       actions={<>
-        <button className="btn btn-sm" onClick={() => { navigate('/commerce-ops'); toast('Opening the priority workflow queue in Commerce Ops.', 'info') }}>Open Priority Queue</button>
-        <button className="btn btn-sm btn-ghost" onClick={() => toast('New scan requires a connected provider — gated.', 'info')}>New Scan</button>
-        <button className="btn btn-sm btn-ghost" onClick={() => toast('Briefing settings are not connected yet.', 'info')}>Briefing Settings</button>
+        <button className="btn btn-sm btn-primary" onClick={() => navigate('/design-studio')}>Open Design Studio</button>
+        <button className="btn btn-sm" onClick={() => navigate('/design-studio?section=ads&view=amazon-files')}>Import an Amazon file</button>
       </>}
     >
-      <DataNotice tone="internal" title="Live operational briefing">
-        Every panel below is a live local read (system signals, work queues, activity). When a read is unavailable it says so — nothing is fabricated. No summary implies purchase authorization.
-      </DataNotice>
-      <SystemSignals />
+      <StartSomething navigate={navigate} />
       <WorkQueues navigate={navigate} />
-      <RealActivity />
-      <LaunchGrid navigate={navigate} />
+      <details style={{ marginBottom: 20 }}>
+        <summary style={{ cursor: 'pointer', fontSize: 12, color: 'var(--text-low)', marginBottom: 10 }}>
+          System status &amp; local activity (advanced — read-only)
+        </summary>
+        <SystemSignals />
+        <RealActivity />
+      </details>
     </PageLayout>
   )
 }
