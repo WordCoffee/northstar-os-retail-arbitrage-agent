@@ -307,7 +307,13 @@ def build_doypack(width_mm: float, height_mm: float, gusset_mm: float = 40.0, *,
              "layers": layers,
              "meta": {"template": "doypack", "width_mm": _round(W), "height_mm": _round(H),
                       "gusset_mm": _round(G), "weld_mm": _round(w), "top_weld_mm": _round(t),
-                      "zip_offset_mm": _round(z), "bleed_mm": _round(b)}}
+                      "zip_offset_mm": _round(z), "bleed_mm": _round(b),
+                      "panels": {
+                          "front": [_round(x_l), _round(y_front_top), _round(W), _round(H)],
+                          "gusset": [_round(x_l), _round(y_gusset), _round(W), _round(G)],
+                          "back": [_round(x_l), _round(y_back), _round(W), _round(H)],
+                          "zip_y": _round(y_zip),
+                      }}}
     return _stamp(build, f"Doypack {_round(W)}x{_round(H)}mm + {_round(G)}mm gusset")
 
 
