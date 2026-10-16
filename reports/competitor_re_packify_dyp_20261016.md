@@ -217,6 +217,7 @@ Principle: **reimplement behavior, don't copy code; adopt OSS for wheels; build 
 - **No secrets:** no credentials, cookies, or tokens were captured/printed; OAuth redirects were observed but not interfered with (no login attempted by the agent; the operator signed in themselves; no CAPTCHA/jailbreak activity occurred).
 - **Copyright:** findings are behavioral/interface-level. No competitor source was copied into our code. All OSS wheels above carry permissive licenses (verify GPL items before use).
 - **ToS risk note:** this was research on publicly served content + the operator's own account, for interoperability/product analysis. Keep derived artifacts internal; don't republish their docs text verbatim.
+- **Follow-up capture windows (recorded failure):** two opportunistic 10-minute observation windows armed after the main investigation ended with `provider_unavailable / disconnected` — the dedicated Chrome profile was closed post-investigation. Failure envelopes are persisted in the working set (`*_live3.json`); per the circuit-breaker rule, no retry was attempted. All deliverable evidence predates these windows and is unaffected (commit `297f90a`).
 
 ---
 
