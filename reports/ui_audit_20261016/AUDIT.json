@@ -1,0 +1,283 @@
+{
+ "stamp": "20261016",
+ "base": "http://127.0.0.1:8101/ui/",
+ "rooms": [
+  {
+   "room": "command-center",
+   "route": "/home",
+   "status": "ok",
+   "ms": 1858,
+   "buttons": 48,
+   "sampleWords": 1,
+   "partialLabels": 1,
+   "errors": [],
+   "screenshot": "command-center.png"
+  },
+  {
+   "room": "product-finder",
+   "route": "/product-finder",
+   "status": "ok",
+   "ms": 1858,
+   "buttons": 46,
+   "sampleWords": 1,
+   "partialLabels": 1,
+   "errors": [],
+   "screenshot": "product-finder.png"
+  },
+  {
+   "room": "design-studio",
+   "route": "/design-studio",
+   "status": "ok",
+   "ms": 1852,
+   "buttons": 115,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+   ],
+   "screenshot": "design-studio.png"
+  },
+  {
+   "room": "golden-goose",
+   "route": "/golden-goose",
+   "status": "ok",
+   "ms": 1853,
+   "buttons": 46,
+   "sampleWords": 4,
+   "partialLabels": 1,
+   "errors": [],
+   "screenshot": "golden-goose.png"
+  },
+  {
+   "room": "listing-guardian",
+   "route": "/listings",
+   "status": "ok",
+   "ms": 1855,
+   "buttons": 44,
+   "sampleWords": 0,
+   "partialLabels": 1,
+   "errors": [],
+   "screenshot": "listing-guardian.png"
+  },
+  {
+   "room": "keyword-tracker",
+   "route": "/keyword-tracker",
+   "status": "ok",
+   "ms": 1852,
+   "buttons": 44,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "keyword-tracker.png"
+  },
+  {
+   "room": "competitor-monitor",
+   "route": "/competitor-monitor",
+   "status": "ok",
+   "ms": 1872,
+   "buttons": 40,
+   "sampleWords": 0,
+   "partialLabels": 2,
+   "errors": [],
+   "screenshot": "competitor-monitor.png"
+  },
+  {
+   "room": "listingforge",
+   "route": "/listingforge",
+   "status": "ok",
+   "ms": 1855,
+   "buttons": 51,
+   "sampleWords": 1,
+   "partialLabels": 1,
+   "errors": [],
+   "screenshot": "listingforge.png"
+  },
+  {
+   "room": "adpilot",
+   "route": "/adpilot",
+   "status": "ok",
+   "ms": 1861,
+   "buttons": 54,
+   "sampleWords": 3,
+   "partialLabels": 1,
+   "errors": [],
+   "screenshot": "adpilot.png"
+  },
+  {
+   "room": "socialpulse",
+   "route": "/socialpulse",
+   "status": "ok",
+   "ms": 1863,
+   "buttons": 60,
+   "sampleWords": 1,
+   "partialLabels": 1,
+   "errors": [],
+   "screenshot": "socialpulse.png"
+  },
+  {
+   "room": "profitability",
+   "route": "/profitability",
+   "status": "ok",
+   "ms": 1862,
+   "buttons": 48,
+   "sampleWords": 0,
+   "partialLabels": 1,
+   "errors": [],
+   "screenshot": "profitability.png"
+  },
+  {
+   "room": "spreadsheet-lab",
+   "route": "/spreadsheet-lab",
+   "status": "ok",
+   "ms": 1864,
+   "buttons": 37,
+   "sampleWords": 0,
+   "partialLabels": 1,
+   "errors": [],
+   "screenshot": "spreadsheet-lab.png"
+  },
+  {
+   "room": "commerce-ops",
+   "route": "/commerce-ops",
+   "status": "ok",
+   "ms": 1868,
+   "buttons": 45,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "commerce-ops.png"
+  },
+  {
+   "room": "monitoring",
+   "route": "/monitoring",
+   "status": "ok",
+   "ms": 1871,
+   "buttons": 46,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "monitoring.png"
+  },
+  {
+   "room": "autothink",
+   "route": "/autothink",
+   "status": "ok",
+   "ms": 1869,
+   "buttons": 41,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "autothink.png"
+  },
+  {
+   "room": "memory-bank",
+   "route": "/memory-bank",
+   "status": "ok",
+   "ms": 1867,
+   "buttons": 38,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "memory-bank.png"
+  },
+  {
+   "room": "shared-data",
+   "route": "/shared-data",
+   "status": "ok",
+   "ms": 1862,
+   "buttons": 37,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "shared-data.png"
+  },
+  {
+   "room": "provider-adapters",
+   "route": "/provider-adapters",
+   "status": "ok",
+   "ms": 1860,
+   "buttons": 37,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "provider-adapters.png"
+  },
+  {
+   "room": "master-brain",
+   "route": "/master-brain",
+   "status": "ok",
+   "ms": 1864,
+   "buttons": 37,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "master-brain.png"
+  },
+  {
+   "room": "customer-workspace",
+   "route": "/customer-workspace",
+   "status": "ok",
+   "ms": 1862,
+   "buttons": 43,
+   "sampleWords": 1,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "customer-workspace.png"
+  },
+  {
+   "room": "setup",
+   "route": "/setup",
+   "status": "ok",
+   "ms": 1865,
+   "buttons": 38,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "setup.png"
+  },
+  {
+   "room": "documents",
+   "route": "/documents",
+   "status": "ok",
+   "ms": 1858,
+   "buttons": 37,
+   "sampleWords": 2,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "documents.png"
+  },
+  {
+   "room": "plan",
+   "route": "/plan",
+   "status": "ok",
+   "ms": 1860,
+   "buttons": 37,
+   "sampleWords": 4,
+   "partialLabels": 1,
+   "errors": [],
+   "screenshot": "plan.png"
+  },
+  {
+   "room": "support",
+   "route": "/support",
+   "status": "ok",
+   "ms": 1863,
+   "buttons": 39,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "support.png"
+  },
+  {
+   "room": "account",
+   "route": "/account",
+   "status": "ok",
+   "ms": 1862,
+   "buttons": 37,
+   "sampleWords": 0,
+   "partialLabels": 0,
+   "errors": [],
+   "screenshot": "account.png"
+  }
+ ]
+}
