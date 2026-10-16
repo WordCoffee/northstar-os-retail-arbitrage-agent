@@ -1,6 +1,6 @@
 {
   "file": "mogra-forest-dusk-mockup-complete.png",
-  "generated_at": "2026-10-16T15:24:21",
+  "generated_at": "2026-10-16T15:50:41",
   "base": "mogra-forest-dusk-mockup.png",
   "logo": "Northstar_backend\\assets\\brand\\mogra_logo.png",
   "fonts": [
@@ -15,5 +15,5 @@
     "gold_lm": "#C4A04A",
     "gold_shi": "#D69E3E"
   },
-  "seconds": 25.3
+  "seconds": 25.96
 }

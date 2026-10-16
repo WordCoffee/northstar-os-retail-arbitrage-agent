@@ -55,7 +55,7 @@ FACES = {
            "badge_old": (494, 345, 84), "grain_patch": (695, 730, 240, 430),
            "dots": [(307, 655), (346, 655), (386, 655), (425, 655)]},
     "shi": {"quad": [(646, 226), (1066, 221), (1078, 738), (630, 744)],
-            "badge_old": (985, 344, 84), "grain_patch": (695, 730, 700, 890),
+            "badge_old": (985, 344, 102), "grain_patch": (695, 730, 700, 890),
             "dots": [(790, 655), (830, 655), (870, 655), (910, 655)]},
 }
 
@@ -108,10 +108,11 @@ def fit_font(name: str, start: int, axes, text: str, max_w: float, d) -> ImageFo
 
 
 def ink_alpha(rgb: np.ndarray, field_min: float) -> np.ndarray:
-    """Alpha from darkness against a light field; speckle-gated for crisp ink."""
+    """Alpha from darkness against a light field; thin-stroke-preserving."""
     mn = rgb.min(axis=2).astype(float)
     a = np.clip((field_min - mn) / (field_min - 70.0), 0, 1)
-    return np.clip((a - 0.30) / 0.70, 0, 1)
+    a = np.clip((a - 0.10) / 0.90, 0, 1)   # gentle gate: keeps hairlines
+    return np.clip(a ** 0.75 * 1.12, 0, 1)  # solidify strokes
 
 
 def cream_version(piece: np.ndarray, field_min: float) -> Image.Image:
@@ -294,41 +295,36 @@ def build_panel(sku: str, pieces: dict, face_px: tuple, icon_pts) -> Image.Image
     cx = PW / 2
     gold = GOLD[sku]
 
-    # 1) cream roundel badge with the real mark + gold ring, grounded with a
-    #    soft shadow so it reads printed ON the matte surface
-    br = 42 * r
-    bcy = y(46)
-    sh0 = Image.new("RGBA", panel.size, (0, 0, 0, 0))
-    ImageDraw.Draw(sh0).ellipse([cx - br * 1.12, bcy - br * 0.98,
-                                 cx + br * 1.12, bcy + br * 1.40],
-                                fill=(6, 14, 9, 46))
-    sh0 = sh0.filter(ImageFilter.GaussianBlur(7))
-    panel = Image.alpha_composite(panel, sh0)
-    d = ImageDraw.Draw(panel)
-    d.ellipse([cx - br, bcy - br, cx + br, bcy + br], fill=BADGE_FILL + (255,))
-    mark = pieces["mark"]
-    mw = int(br * 2 * 0.64)
-    mh = int(mw * mark.shape[0] / mark.shape[1])
-    mk = mark_version(mark, field_min).resize((mw, mh), Image.LANCZOS)
-    panel.paste(mk, (int(cx - mw / 2), int(bcy - mh / 2)), mk)
-    d.ellipse([cx - br, bcy - br, cx + br, bcy + br], outline=gold + (255,), width=6)
+    # 1) the full logo lockup printed DIRECTLY on the matte surface - mark
+    #    (mortar & pestle + leaves + EST 2023), wordmark, tagline - all in one
+    #    cream print, like a screen-printed kraft-goods brand. No disc, no
+    #    sticker shadow. The mark is the REAL raster (alpha slightly fattened);
+    #    the wordmark is set in Playfair Display (matches the Didone wordmark)
+    #    so the small-size raster never goes holey.
+    mark = cream_version(pieces["mark"], field_min)
+    mk_alpha = mark.split()[3].filter(ImageFilter.MaxFilter(3))
+    mark.putalpha(mk_alpha)
+    mk_w = int(170 * r)
+    mk = mark.resize((mk_w, int(mk_w * mark.height / mark.width)), Image.LANCZOS)
+    panel.paste(mk, (int(cx - mk.width / 2), int(y(48) - mk.height / 2)), mk)
 
-    # 2) real wordmark + tagline, recoloured cream
-    word_w = int(270 * r)
-    wd = cream_version(pieces["word"], field_min)
-    wd = wd.resize((word_w, int(word_w * wd.height / wd.width)), Image.LANCZOS)
-    panel.paste(wd, (int(cx - wd.width / 2), int(y(100) - wd.height / 2)), wd)
-    tag_w = int(150 * r)
+    # 2) wordmark (typed) + tagline (real raster, recoloured cream)
+    f_word = fit_font("PlayfairDisplay.ttf", int(72 * r), [700], "MOGRA ORGANICS",
+                      int(300 * r), d)
+    draw_centered(d, cx, y(102), "MOGRA ORGANICS", f_word, CREAM + (255,), tracking=3.2 * r)
+    tag_w = int(140 * r)
     tg = cream_version(pieces["tag"], field_min)
     tg = tg.resize((tag_w, int(tag_w * tg.height / tg.width)), Image.LANCZOS)
-    panel.paste(tg, (int(cx - tg.width / 2), int(y(126) - tg.height / 2)), tg)
+    panel.paste(tg, (int(cx - tg.width / 2), int(y(128) - tg.height / 2)), tg)
 
-    # 3) product name block (sits above the model's own engraved art)
-    f_name = fit_font("PlayfairDisplay.ttf", int(56 * r), [700], SKUS[sku]["name"],
-                      int(400 * r), d)
+    # 3) product name block (sits above the model's own engraved art);
+    #    both SKUs share ONE size (fitted to the longest name) so the two
+    #    pouches read as a matched pair
+    ref = "ORGANIC LION'S MANE"
+    f_name = fit_font("PlayfairDisplay.ttf", int(56 * r), [700], ref, int(380 * r), d)
     draw_centered(d, cx, y(158), SKUS[sku]["name"], f_name, CREAM + (255,))
     f_sub = font("Inter.ttf", int(15 * r), [14, 600])
-    draw_centered(d, cx, y(186), "MUSHROOM POWDER", f_sub, CREAM + (230,), tracking=6 * r)
+    draw_centered(d, cx, y(180), "MUSHROOM POWDER", f_sub, CREAM + (230,), tracking=6 * r)
 
     # 5) certification icon row - discs sit exactly on the model's dot row,
     #    each with its own soft shadow so they read as printed roundels

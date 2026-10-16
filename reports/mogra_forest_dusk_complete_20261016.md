@@ -19,8 +19,7 @@ real logo, the real type, the full front panel. This build closes that gap.
 
 | Element | Source |
 |---|---|
-| Roundel badge — mortar & pestle, two leaves, EST 2023, gold ring, grounding shadow | **the real logo file**, mark band, original colours (`Northstar_backend/assets/brand/mogra_logo.png`) |
-| `MOGRA ORGANICS` wordmark, `Healthy & Organic` tagline | real logo bands, recoloured print-cream with gated alpha keying |
+| Logo lockup printed directly — mortar & pestle, two leaves, EST 2023, wordmark, tagline (no disc, no sticker shadow) | **the real logo file** — mark band as raster (alpha fattened), wordmark set in Playfair Display 700 (matches the Didone), tagline from the real raster; all in one cream print (`Northstar_backend/assets/brand/mogra_logo.png`) |
 | `ORGANIC LION'S MANE` / `ORGANIC SHIITAKE` | Playfair Display 700 (closest to the canister wordmark among available faces) |
 | `MUSHROOM POWDER` | Inter, tracked caps |
 | Engraved mushroom art (lion's mane / shiitake cluster) | **the model's own art, untouched** — kept at native resolution |
