@@ -120,6 +120,74 @@ def test_verify_asset_verdicts():
     assert "MOGRA ORGANICS" in v2["expected_terms"]
 
 
+def test_hard_sanitize_strips_capitals_and_digits_but_keeps_hex_and_lowercase_art():
+    r = tf.sanitize_brief_for_render(MOGRA_LIKE, hard=True)
+    body = r["render_prompt"].replace(tf.SUPPRESSION_PHRASE, "")
+    import re as _re
+    stripped = _re.sub(r"#[0-9A-Fa-f]{3,8}", "", body)  # palette hex may keep digits/caps
+    assert not _re.search(r"[A-Z]", stripped), stripped[:200]
+    assert not _re.search(r"\d", stripped), stripped[:200]
+    assert "#D5A77A" in body
+    assert "matte stand-up pouch" in body
+    assert r["hard"] is True
+
+
+def test_render_with_text_guard_auto_reruns_once_when_text_found():
+    calls = []
+
+    def fake_render(prompt, **_):
+        calls.append(prompt)
+        img = _img_with_text("GARBLED TEXT") if len(calls) == 1 else _img_plain()
+        return {"bytes": img, "ext": "png", "mime": "image/png", "model": "fake", "seed": 1}
+
+    g = tf.render_with_text_guard(render_fn=fake_render, brief=MOGRA_LIKE, text_safe=True)
+    if g["text_fidelity"]["check"]["status"] == "unavailable":
+        import pytest
+        pytest.skip("OCR engine unavailable")
+    assert len(calls) == 2, "exactly one bounded auto-rerun"
+    assert g["text_fidelity"]["retried"] is True
+    assert g["text_fidelity"]["verdict"] == "text_free"
+    assert len(g["text_fidelity"]["attempts"]) == 2
+    assert g["text_fidelity"]["attempts"][0]["contains_text"] is True
+    assert "render_prompt" in g["text_fidelity"]
+
+    calls.clear()
+    g2 = tf.render_with_text_guard(render_fn=fake_render, brief=MOGRA_LIKE, text_safe=False)
+    assert len(calls) == 1 and g2["text_fidelity"] is None
+
+
+def test_clean_text_regions_clears_and_rechecks():
+    res = tf.clean_text_regions(_img_with_text("MOGRA ORGANICS"))
+    if res["status"] != "ok":
+        pytest.skip("OCR unavailable")
+    assert res["cleared"] >= 1
+    after = tf.check_text_in_image(res["image"])
+    assert after["contains_text"] is False
+
+
+def test_clean_text_regions_noop_on_clean_image():
+    img = _img_plain()
+    res = tf.clean_text_regions(img)
+    assert res["status"] == "ok" and res["cleared"] == 0
+    assert res["image"] == img
+
+
+def test_guard_cleans_when_model_keeps_painting():
+    calls = []
+
+    def always_text(prompt, **_):
+        calls.append(prompt)
+        return {"bytes": _img_with_text("GARBLED GLYPHS"), "ext": "png",
+                "mime": "image/png", "model": "fake", "seed": 1}
+
+    g = tf.render_with_text_guard(render_fn=always_text, brief=MOGRA_LIKE, text_safe=True)
+    if g["text_fidelity"]["check"]["status"] != "ok":
+        pytest.skip("OCR unavailable")
+    assert len(calls) == 2  # retry ran
+    assert g["text_fidelity"].get("text_cleanup", {}).get("cleared", 0) >= 1
+    assert g["text_fidelity"]["verdict"] in ("text_cleared", "text_reduced")
+
+
 # ── endpoint ────────────────────────────────────────────────────────────────
 
 def test_text_check_endpoint_auth_and_404():

@@ -58,8 +58,14 @@ async function req(path, opts = {}) {
 export const engineApi = {
   /** Honest engine state: armed only when MEDIA_GEN_LIVE=1 AND ComfyUI answers. */
   status: () => req('/engine'),
-  /** Render locally. body: {kind, purpose, brief, tier, width, height, seed} */
+  /** Render locally (sync). body: {kind, purpose, brief, tier, width, height, seed, text_safe} */
   generate: (body) => req('/generate', { method: 'POST', body: JSON.stringify(body) }),
+  /** Queue a render on the async lane (tunnel-safe: 202 + poll job status). */
+  generateAsync: (body) => req('/generate-async', { method: 'POST', body: JSON.stringify(body) }),
+  /** Poll an async generation job. */
+  job: (id) => req(`/generate-async/${id}`),
+  /** Fetch one asset row (metadata carries text_fidelity for guarded renders). */
+  asset: (id) => req(`/assets/${id}`),
 }
 
 export function assetFileUrl(asset) {

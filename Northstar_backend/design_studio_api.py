@@ -1889,9 +1889,8 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
     if body.kind not in ("image", "video"):
         raise HTTPException(status_code=422, detail="kind must be image or video")
 
-    from text_fidelity import prepare_render_brief, verify_asset_text
-    prep = prepare_render_brief(body.brief, bool(getattr(body, "text_safe", False)))
-    render_brief = prep["brief"]
+    from text_fidelity import render_with_text_guard
+    text_safe = bool(getattr(body, "text_safe", False))
 
     db = get_northstar_db()
     now = datetime.now(timezone.utc).isoformat()
@@ -1908,13 +1907,15 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         "started_at": now,
         "credits_used": 0,
     })
-    try:
+    def _render(prompt: str):
         if body.kind == "video":
-            out = sg.generate_video(prompt=render_brief, width=body.width, height=body.height,
-                                    tier=body.tier, seed=body.seed)
-        else:
-            out = sg.generate_image(prompt=render_brief, width=body.width, height=body.height,
-                                    tier=body.tier, seed=body.seed)
+            return sg.generate_video(prompt=prompt, width=body.width, height=body.height,
+                                     tier=body.tier, seed=body.seed)
+        return sg.generate_image(prompt=prompt, width=body.width, height=body.height,
+                                 tier=body.tier, seed=body.seed)
+    try:
+        guarded = render_with_text_guard(render_fn=_render, brief=body.brief,
+                                         text_safe=text_safe)
     except Exception as exc:  # noqa: BLE001 - recorded on the job, surfaced to the caller
         db.design_studio.jobs.update(job_id, {
             "status": "failed", "logs": str(exc)[:2000],
@@ -1922,10 +1923,11 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         }, account_id=acct)
         raise HTTPException(status_code=502, detail={"code": "generation_failed", "message": str(exc)[:400]})
 
+    out = guarded["out"]
+    tf_result = guarded["text_fidelity"]
+
     from pathlib import Path
     import uuid as _uuid
-    tf_result = (verify_asset_text(out["bytes"], brief=body.brief, text_safe=True)
-                 if prep["text_fidelity"] else None)
     out_dir = Path(__file__).resolve().parent / "data" / "studio_generated"
     out_dir.mkdir(parents=True, exist_ok=True)
     fname = f"{_uuid.uuid4().hex}.{out['ext']}"

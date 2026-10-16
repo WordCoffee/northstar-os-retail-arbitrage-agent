@@ -115,6 +115,27 @@ def _fetch_output(item: dict) -> bytes:
         return r.read()
 
 
+def _run_graph_guarded(graph: dict, timeout_s: float) -> list:
+    """Run a graph; on a CUDA OOM, re-evict the brain once and retry (bounded).
+
+    Transient co-residency is real on this box: any other local caller (chat,
+    summaries) can reload the 27B brain mid-render and OOM the sampler. Circuit
+    rules: ONE retry, only for out-of-memory failures, then the error surfaces.
+    """
+    try:
+        return _run_graph(graph, timeout_s=timeout_s)
+    except Exception as exc:  # noqa: BLE001
+        if "out of memory" not in str(exc).lower():
+            raise
+        # Free BOTH sides before the retry: ComfyUI's crammed cache (the failed
+        # render never released it) AND any brain that reloaded mid-run. Without
+        # this, retries insta-OOM on leftover cache (the 2026-10-16 death spiral).
+        release_models()
+        unload_brain(wait_s=60.0)
+        time.sleep(5)
+        return _run_graph(graph, timeout_s=timeout_s)
+
+
 def release_models() -> None:
     """Best-effort: unload ComfyUI's models and free VRAM after a render.
 
@@ -134,26 +155,41 @@ def release_models() -> None:
         pass
 
 
-def unload_brain() -> None:
-    """Best-effort: evict the local brain from VRAM before a render.
+def unload_brain(wait_s: float = 45.0) -> bool:
+    """Evict the local brain from VRAM before a render, then VERIFY it.
 
-    One 16 GB GPU: the brain (~10 GB) and a klein render (~9.7 GB) cannot be
-    resident together. The brain auto-reloads on the next chat (~10-60 s).
-    Failures here are ignored by design.
+    One 16 GB GPU: the brain (~14 GB, keep_alive=forever) and a klein render
+    cannot coexist. Fire-and-forget eviction used to race the render, and
+    ComfyUI OOM'd inside CLIPTextEncode. This now polls Ollama /api/ps until
+    the brain is gone (or wait_s elapses) and returns whether VRAM should be free.
+    Returns True when eviction succeeded OR verification is unavailable (best
+    effort preserved); False only when the brain is provably still resident.
     """
+    model = os.environ.get("NORTHSTAR_BRAIN_MODEL", "northstaros-qwen3.8:27b")
     try:
         req = urllib.request.Request(
             "http://127.0.0.1:11434/api/generate",
-            data=json.dumps({
-                "model": os.environ.get("NORTHSTAR_BRAIN_MODEL", "northstaros-qwen3.8:27b"),
-                "keep_alive": 0,
-            }).encode(),
+            data=json.dumps({"model": model, "keep_alive": 0}).encode(),
             headers={"Content-Type": "application/json"},
         )
         with urllib.request.urlopen(req, timeout=30):
             pass
     except Exception:
-        pass
+        return True  # nothing resident that we can evict; proceed best-effort
+    deadline = time.time() + max(0.0, float(wait_s))
+    base = model.split(":")[0]
+    while True:
+        try:
+            with urllib.request.urlopen("http://127.0.0.1:11434/api/ps", timeout=5) as resp:
+                ps = json.loads(resp.read().decode("utf-8", "replace") or "{}")
+            resident = [str(m.get("name", "")) for m in ps.get("models", [])]
+        except Exception:
+            return True  # verification unavailable: never block renders on a failed check
+        if not any(base in r for r in resident):
+            return True
+        if time.time() >= deadline:
+            return False
+        time.sleep(2)
 
 
 def _clamp(v, lo: int, hi: int, mult: int = 16) -> int:
@@ -203,12 +239,19 @@ def _wan_graph(prompt: str, width: int, height: int, frames: int, steps: int, se
 def generate_image(prompt: str, width=None, height=None, tier: str = "draft", seed=None) -> dict:
     if not media_live_armed():
         raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
-    unload_brain()  # one 16 GB GPU: make room for the render (brain auto-reloads on next chat)
+    if not unload_brain():  # one 16 GB GPU: make room, then VERIFY it actually freed
+        raise RuntimeError(
+            "vram_busy: the local brain is still resident on the GPU (Ollama /api/ps) "
+            "after waiting; refusing a render that would run out of memory. Retry shortly.")
     w = _clamp(width or 1024, 512, 1216)
     h = _clamp(height or 1024, 512, 1216)
     steps = 8 if str(tier).lower() == "final" else 4
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
-    files = _run_graph(_klein_graph(prompt, w, h, steps, seed), timeout_s=1800)
+    try:
+        files = _run_graph_guarded(_klein_graph(prompt, w, h, steps, seed), timeout_s=1800)
+    except Exception:
+        release_models()  # never leave a crammed cache behind a failed render
+        raise
     img = next((f for f in files if str(f.get("filename", "")).lower().endswith((".png", ".jpg", ".webp"))), None)
     if not img:
         raise RuntimeError("the render finished but produced no image output")
@@ -224,13 +267,20 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
 def generate_video(prompt: str, width=None, height=None, tier: str = "draft", seed=None) -> dict:
     if not media_live_armed():
         raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
-    unload_brain()  # one 16 GB GPU: make room for the render (brain auto-reloads on next chat)
+    if not unload_brain():  # one 16 GB GPU: make room, then VERIFY it actually freed
+        raise RuntimeError(
+            "vram_busy: the local brain is still resident on the GPU (Ollama /api/ps) "
+            "after waiting; refusing a render that would run out of memory. Retry shortly.")
     w = _clamp(width or 832, 512, 1280)
     h = _clamp(height or 480, 480, 736)
     frames = 97 if str(tier).lower() == "final" else 49   # 4n+1 for the Wan latent; ~2s / ~4s at 24fps
     steps = 20
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
-    files = _run_graph(_wan_graph(prompt, w, h, frames, steps, seed), timeout_s=5400)
+    try:
+        files = _run_graph_guarded(_wan_graph(prompt, w, h, frames, steps, seed), timeout_s=5400)
+    except Exception:
+        release_models()  # never leave a crammed cache behind a failed render
+        raise
     vid = next((f for f in files if str(f.get("filename", "")).lower().endswith((".mp4", ".webm"))), None)
     if not vid:
         raise RuntimeError("the render finished but produced no video output")

@@ -489,19 +489,40 @@ export default function CreativeStudio() {
       setRequests(prev => [{ ...rec, state: 'Rendering… (local ComfyUI)', providerState: 'connected' }, ...prev])
       setGenBusy(true)
       try {
-        const out = await engineApi.generate({
+        const { job } = await engineApi.generateAsync({
           kind: 'image', purpose: genPurpose, brief: genPrompt.trim(), tier: genTier,
           width: fmt.w, height: fmt.h, text_safe: textSafe,
         })
+        let j = job
+        let tries = 0
+        while (j && (j.status === 'queued' || j.status === 'running') && tries < 140) {
+          await new Promise(res => setTimeout(res, 3000))
+          const st = await engineApi.job(j.id)
+          j = st.job
+          tries += 1
+        }
+        if (!j || j.status !== 'done') throw new Error((j && j.logs) || `render ${j ? j.status : 'status unknown'}`)
+        const firstId = (j.result_ids && j.result_ids[0]) || ''
+        const asset = await engineApi.asset(firstId)
+        let md = asset ? asset.metadata : null
+        if (typeof md === 'string') { try { md = JSON.parse(md) } catch { md = {} } }
+        const out = {
+          asset: { ...asset, file_url: (asset && asset.file_url) || (firstId ? `/api/design-studio/assets/${firstId}/file` : '') },
+          text_fidelity: (md && md.text_fidelity) || null,
+        }
+        const tf = out.text_fidelity
+        const tfSuffix = tf && tf.check && tf.check.status === 'ok'
+          ? (tf.check.contains_text ? ' · ⚠ text seen' : ` · text-free ✓${tf.retried ? ' (auto-rerun)' : ''}`)
+          : ''
         setRequests(prev => prev.map(r => r.id === rec.id
-          ? { ...r, state: `Done — ${(out.asset.metadata && out.asset.metadata.generation && out.asset.metadata.generation.model) || 'local model'}`, fileUrl: out.asset.file_url, assetId: out.asset.id }
+          ? { ...r, state: `Done — ${(out.asset.metadata && out.asset.metadata.generation && out.asset.metadata.generation.model) || 'local model'}${tfSuffix}`, fileUrl: out.asset.file_url, assetId: out.asset.id }
           : r))
         setLastRender(out.asset)
         t('Rendered locally on this machine (ComfyUI). Nothing left the box.', 'info')
-        const tf = out.text_fidelity
         if (tf && tf.check && tf.check.status === 'ok') {
-          if (tf.verdict === 'text_free') t('Text check passed: OCR found no lettering in the render.', 'info')
-          else t(`Text check: lettering detected${tf.check.words && tf.check.words.length ? ` ("${String(tf.check.words[0]).slice(0, 24)}…")` : ''} — rerun or move that copy to the vector text layer.`, 'warn')
+          if (tf.verdict === 'text_free') t(`Text check passed: OCR found no lettering${tf.retried ? ' (auto-rerun used the hardened prompt)' : ''}.`, 'info')
+          else if (tf.verdict === 'text_cleared' || tf.verdict === 'text_reduced') t(`Detected glyph zones cleared for the vector text layer (${(tf.text_cleanup && tf.text_cleanup.cleared) || 0} zone(s)) — clean plate ready.`, 'info')
+          else t(`Text check: lettering detected${tf.check.words && tf.check.words.length ? ` ("${String(tf.check.words[0]).slice(0, 24)}…")` : ''} — use the vector text layer for this copy.`, 'warn')
         }
       } catch (e) {
         const msg = String((e && e.message) || e)

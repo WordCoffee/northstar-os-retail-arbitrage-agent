@@ -26,6 +26,14 @@
   ],
   "known_issues": [
     {
+      "id": "text_fidelity_pipeline_20261016",
+      "discovered_in": "Operator report: generated pouch artwork carried garbled lettering; blueprint rule (#5, never let the model draw text) was documented but unenforced",
+      "discovered_at": "2026-10-16T10:30:00Z",
+      "description": "Shipped the text-fidelity pipeline: pre-render brief sanitizer (strips typographic demands, hard escalation available), offline OCR check (rapidocr) with per-render verdicts + POST /api/design-studio/text-check/{asset_id}, bounded one-shot auto-rerun with the hardened prompt, and deterministic glyph-zone cleanup (clean plate for the vector text layer, re-checked to zero boxes). Plus render hardening: unload_brain now verifies Ollama VRAM eviction before rendering, CUDA-OOM retries once after re-evicting, and failed renders always release ComfyUI's cache (previous behavior caused an instant-OOM death spiral). UI: Text-safe render toggle (default ON) + async-lane generation with polling (tunnel-timeout proof).",
+      "resolution": "Live E2E through the Cloudflare URL with the real 4.5k-char MOGRA brief: 40s render, attempt-1 lettering detected, hardened rerun, 14 glyph zones cleared to 0 boxes, verdict text_cleared, stored asset re-verified text-free. 52/52 RE-suite tests pass. Reports: reports/re_build_design_studio_20261016.md.",
+      "status": "resolved"
+    },
+    {
       "id": "re_build_design_studio_print_async_agent_20261016",
       "discovered_in": "Packify.ai / DYP.ai reverse-engineering build (REA; evidence commit 297f90a)",
       "discovered_at": "2026-10-16T00:00:00Z",

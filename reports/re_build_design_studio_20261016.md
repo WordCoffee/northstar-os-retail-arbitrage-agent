@@ -100,5 +100,23 @@ All endpoints resolve the strict org-scoped session (`studio_account`) — call 
 - Edited: `Northstar_backend/main.py` (router wiring ×2), `Northstar_backend/_re_ext_e2e_smoke.py` (open-API section), `00_STATE.json`
 - New UI: `northstar-os-ui/src/pages/internal/design-studio/Dielines.jsx`; edited `DesignStudio.jsx`, `Packaging.jsx`
 
+## Text-Fidelity pipeline (2026-10-16, later same day)
+
+**Problem reported:** renders carried garbled lettering ("MUSHROOMPOWEER"); the documented blueprint rule ("never let the model draw letters") was not being enforced in the generation lane, and under VRAM contention ComfyUI OOM'd mid-render.
+
+**Shipped (`text_fidelity.py` + lane wiring + `studio_generation.py` hardening):**
+1. **Pre-render guard** — `sanitize_brief_for_render`: strips typographic demands (brand names incl. TitleCase, quoted strings, ALL-CAPS runs, weights, barcode/QR/Supplement-Facts lines, dimension callouts) while keeping art direction (materials, palette hexes, illustration style, format). A `hard` escalation removes every remaining capitalized word and digit.
+2. **Post-render check** — real offline OCR (rapidocr, CPU): `POST /api/design-studio/text-check/{asset_id}` + automatic per-render verdicts (`text_free` / `text_present` / `text_cleared` / `text_reduced`).
+3. **Bounded auto-rerun** — on detected lettering, ONE retry with the hardened prompt (new composition), both attempts recorded.
+4. **Deterministic cleanup (the "fix")** — 4B models keep hallucinating decorative glyphs; `clean_text_regions` detects glyph zones and clears them with locally-sampled median fills (feathered), then re-checks. Stored asset ships as a **clean plate** for the real vector text layer.
+5. **VRAM hardening** — `unload_brain` now *verifies* Ollama eviction (`/api/ps` poll) before rendering; OOM failures trigger exactly one re-eviction + ComfyUI cache release + retry; failed renders always release ComfyUI's cache (the old code left it crammed → instant-OOM death spiral). All covered by `test_studio_render_guard.py`.
+
+**Live E2E (real MOGRA 4.5k-char brief, through the Cloudflare URL, async lane):**
+`running → done (40s)` · attempt 1 lettering detected ("Organic Shitake", "Mussham Prowver"…) · hardened rerun → pseudo-glyphs only · **cleanup: 14 zones cleared, 14 → 0 boxes** · final verdict **`text_cleared`** · stored asset re-checked **contains_text: False**. Asset `def590e2-0ad0-4ed8-b6a7-47affb24c22a`.
+
+**UI:** "Text-safe render" checkbox (ON by default) in the studio Generate card; rows show `· text-free ✓ / · ⚠ text seen / · text cleared (auto-rerun)`; generation now goes through the async lane with polling, so long renders can't be cut by tunnel timeouts.
+
+**Test evidence:** 52/52 across the RE suite (`test_text_fidelity.py` 15 incl. OCR + cleanup + guard tests; `test_studio_render_guard.py` 4; existing 33).
+
 ## Status vs the RE plan
 All four items closed: (1) public API + webhooks ✅, (2) scene/product gallery ✅, (3) frontend dieline section ✅, (4) credit admin endpoints ✅. Remaining optional follow-ups: fabric.js-style freeform canvas editing on top of the layered SVG (the current editor is param-driven by design), and wiring the enforced-credit mode to a real PSP (pricing rails stay test-mode per repo posture).

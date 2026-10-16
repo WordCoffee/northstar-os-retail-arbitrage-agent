@@ -166,18 +166,21 @@ def run_generation_job(*, job_id: str, acct: str, body: Dict[str, Any],
     ledger = ledger if ledger is not None else (get_ledger() if enforce else None)
     out_dir = out_dir or _out_dir()
     kind = body.get("kind", "image")
-    from text_fidelity import prepare_render_brief, verify_asset_text
-    prep = prepare_render_brief(body.get("brief") or "", bool(body.get("text_safe")))
-    render_brief = prep["brief"]
-    try:
+    db.design_studio.jobs.update(job_id, {"status": "running", "started_at": _now()},
+                                 account_id=acct)
+    from text_fidelity import render_with_text_guard
+
+    def _render(prompt: str):
         if kind == "video":
-            out = sg.generate_video(prompt=render_brief, width=body.get("width"),
-                                    height=body.get("height"), tier=body.get("tier", "draft"),
-                                    seed=body.get("seed"))
-        else:
-            out = sg.generate_image(prompt=render_brief, width=body.get("width"),
-                                    height=body.get("height"), tier=body.get("tier", "draft"),
-                                    seed=body.get("seed"))
+            return sg.generate_video(prompt=prompt, width=body.get("width"),
+                                     height=body.get("height"), tier=body.get("tier", "draft"),
+                                     seed=body.get("seed"))
+        return sg.generate_image(prompt=prompt, width=body.get("width"),
+                                 height=body.get("height"), tier=body.get("tier", "draft"),
+                                 seed=body.get("seed"))
+    try:
+        guarded = render_with_text_guard(render_fn=_render, brief=body.get("brief") or "",
+                                         text_safe=bool(body.get("text_safe")))
     except Exception as exc:  # noqa: BLE001 - recorded on the job, surfaced to the caller
         if enforce and reservation_id and ledger is not None:
             try:
@@ -196,10 +199,10 @@ def run_generation_job(*, job_id: str, acct: str, body: Dict[str, Any],
         })
         return {"status": "failed", "error": str(exc)[:400]}
 
+    out = guarded["out"]
+    tf_result = guarded["text_fidelity"]
     fname = f"{uuid.uuid4().hex}.{out['ext']}"
     (out_dir / fname).write_bytes(out["bytes"])
-    tf_result = (verify_asset_text(out["bytes"], brief=body.get("brief"), text_safe=True)
-                 if prep["text_fidelity"] else None)
     aid = db.design_studio.assets.create({
         "account_id": acct,
         "project_id": body.get("project_id"),
