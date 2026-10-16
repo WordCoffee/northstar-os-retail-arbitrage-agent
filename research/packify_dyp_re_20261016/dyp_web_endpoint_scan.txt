@@ -1,0 +1,67 @@
+=== dyp : URLs (49 unique) ===
+http://example.com/   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+http://localhost:9999   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\3684-713b6df9fbdf28bb.js]
+http://n   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+http://www.example.com   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+http://www.w3.org/1998/Math/MathML   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\679be769-7f4c0d070122d9f1.js]
+http://www.w3.org/1999/xlink   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\5854-8c820f5e4cb0de38.js, origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\679be769-7f4c0d070122d9f1.js]
+http://www.w3.org/2000/svg   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\548-7031b96dcaab4801.js, origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\5854-8c820f5e4cb0de38.js, origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\6673-3470384457bd63ae.js +4]
+http://www.w3.org/2000/svg'   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\2079-c257c0e22417c237.js]
+http://www.w3.org/XML/1998/namespace   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\679be769-7f4c0d070122d9f1.js]
+https://analytics.google.com/analytics/web/   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\4360-93c97e6861f7468e.js]
+https://app.tolgee.io   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\4639-c101f39d91b13d09.js]
+https://ba16acbb6c711c369e88c0f3002cb190@o512518.ingest.us.sentry.io/4509630542970880   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\main-app-9e6c11a9a559aec2.js]
+https://cdn.jsdelivr.net/gh/paulirish/lite-youtube-embed@master/src/lite-yt-embed.css   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\4360-93c97e6861f7468e.js]
+https://cdn.jsdelivr.net/gh/paulirish/lite-youtube-embed@master/src/lite-yt-embed.js   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\4360-93c97e6861f7468e.js]
+https://cdn.jsdelivr.net/npm   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\4639-c101f39d91b13d09.js]
+https://developer.mozilla.org/en-US/docs/Web/API/LockManager/request   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\3684-713b6df9fbdf28bb.js]
+https://developers.google.com/maps/documentation/embed/get-started   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\4360-93c97e6861f7468e.js]
+https://docs.sentry.io/platforms/javascript/best-practices/browser-extensions/   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://dyp.ai   [isolated\source-24-e94191141bb8c834420579ef3fc17cfb408eafd84273ead7686f8d76ad4405a9.js]
+https://dyp.ai/dyp_og.png   [isolated\source-24-e94191141bb8c834420579ef3fc17cfb408eafd84273ead7686f8d76ad4405a9.js]
+https://dzhaylihkmbwdsaradiy.supabase.co   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1107-8bc23c29bf20b92b.js, origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\app\layout-a9b0841ba0c7735d.js]
+https://github.com/orgs/supabase/discussions/37217   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\3684-713b6df9fbdf28bb.js]
+https://github.com/paulirish/lite-youtube-embed   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\4360-93c97e6861f7468e.js]
+https://nextjs.org/docs/app/api-reference/functions/use-search-params#updating-searchparams   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://nextjs.org/docs/messages/   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://nextjs.org/docs/messages/404-get-initial-props   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://nextjs.org/docs/messages/failed-to-find-server-action'),   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://nextjs.org/docs/messages/gssp-component-member   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://nextjs.org/docs/messages/gssp-export   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://nextjs.org/docs/messages/invalid-images-config   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\2079-c257c0e22417c237.js]
+https://nextjs.org/docs/messages/invalid-multi-match   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://nextjs.org/docs/messages/next-image-missing-loader'),   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\2079-c257c0e22417c237.js]
+https://nextjs.org/docs/messages/next-router-not-mounted   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://nextjs.org/docs/messages/non-standard-node-env',Z=   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://nextjs.org/docs/messages/public-next-folder-conflict   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://nextjs.org/docs/messages/ssg-fallback-true-export   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js]
+https://radix-ui.com/primitives/docs/components/   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\7875-624928de6cda3de6.js]
+https://react.dev/errors/   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1339-06b71d7698c1f934.js, origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\679be769-7f4c0d070122d9f1.js]
+https://supabase.com/dashboard/project/_/settings/api   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\3684-713b6df9fbdf28bb.js]
+https://tally.so/r/wzvMjk   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1107-8bc23c29bf20b92b.js]
+https://www.google.com/maps/embed/v1/place   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\4360-93c97e6861f7468e.js]
+https://www.googleapis.com/webfonts/v1/webfonts   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\app\layout-a9b0841ba0c7735d.js]
+https://www.googletagmanager.com/gtag/js   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\4360-93c97e6861f7468e.js]
+https://www.googletagmanager.com/gtag/js?id=   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\4360-93c97e6861f7468e.js]
+https://www.googletagmanager.com/gtm.js   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\4360-93c97e6861f7468e.js]
+https://www.instagram.com/dyp.ai/   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1107-8bc23c29bf20b92b.js]
+https://www.linkedin.com/showcase/dyp-ai/   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1107-8bc23c29bf20b92b.js]
+https://www.youtube.com/@DYP-AI   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1107-8bc23c29bf20b92b.js]
+https://www.youtube.com/embed/   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\1251-9b5c57482cc339e5.js]
+
+=== dyp : WebSocket URLs (0) ===
+
+=== dyp : API-ish paths (6) ===
+/api/broadcast   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\3684-713b6df9fbdf28bb.js]
+/api/generate   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\main-app-9e6c11a9a559aec2.js]
+/api/print/save-designs   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\5854-8c820f5e4cb0de38.js]
+/api/print/upload-images   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\5854-8c820f5e4cb0de38.js]
+/api/print/work-history   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\5854-8c820f5e4cb0de38.js]
+/api/upload   [origins\2141fbffbc7d0db42f7fd2c1aac80f0a53ab676963f454acb20b67d533a6b022\_next\static\chunks\main-app-9e6c11a9a559aec2.js]
+
+=== dyp : provider/infra tokens (5) ===
+sentry  x49
+supabase  x3
+vercel  x1
+segment.  x1
+googleapis  x1

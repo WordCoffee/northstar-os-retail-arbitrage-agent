@@ -1,0 +1,67 @@
+section-title__icon section-title__icon--active
+Code copied to clipboard
+The Packify API provides a powerful yet simple interface for you to integrate AI-powered design capabilities into any application. It is a RESTful API that uses predictable resource-oriented URLs and standard HTTP verbs, and returns JSON-encoded responses.
+With our API, you can:
+Create unique packaging designs from text prompts, with options for both direct generation and interactive refinement.
+Generate Photoshoots:
+Place existing product images into realistic, AI-generated scenes.
+This guide will walk you through the essential steps to make your first successful API call. By the end, you will have authenticated, successfully submitted your first generation task, and understood how to receive the final results via a Webhook.
+API access is an exclusive benefit for our Business Plan subscribers. Before you can generate an API key, please ensure you are subscribed to our Business Plan.
+auth-paragraph top-paragraph
+>You can generate, name, and revoke your API keys from your <a class=
+>Home/Pricing/API key page. <p class=
+>To authenticate your requests, you must provide your API key in the Authorization header of every request. The authentication scheme is Bearer Token. `,additionalText:
+For security, treat your API keys like passwords.
+Do not expose them in client-side code (e.g., in a browser).
+Do not commit them to version control (e.g., GitHub).
+API usage is metered in credits from your Business plan's balance. Only successful generation requests will consume credits. Our Create a design API offers two modes: a standard Direct Generation and an advanced Conversational mode for interactive refinement. The Create a photoshoot API only supports Direct Generation.
+auth-paragraph bottom-paragraph
+The current consumption rates are as follows:
+Create a design (Direct Generation):
+Image generation can take some time. Instead of forcing your application to continuously poll for results, we use webhooks to notify you as soon as your images are ready. When the image generation process is completed, the API will send a POST request to the callback URL that was provided in the original request. This allows your system to receive the generated image results asynchronously. The callback request is delivered as a JSON POST request to the callback URL specified in the initial request.
+>When the image generation process is completed, the API will send a POST request to the callback URL that was provided in the original request. This allows your system to receive the generated image results asynchronously. <p class=
+>The callback request is delivered as a JSON POST request to the callback URL specified in the initial request.. `,additionalText:
+JSON payload (as described in the Callback Request Body section)
+Callback Body Example:
+Callback Payload Example:
+If a callback fails, the delivery will be retried according to the following policy:
+Callback returns non-200
+The callback will be retried periodically.
+Callback URL unreachable
+The callback will be retried for a limited period.
+Client responds 200 OK
+Callback considered successfully delivered.
+Delay Before Retry
+Immediate (original attempt)
+,description:`This is the core endpoint for generating a new AI-powered package design. It can be used in two distinct modes: Direct Generation: Provide a prompt and receive a finished design in a single API call. This is ideal for straightforward, high-volume tasks. Conversational Mode [Coming Soon]: This will allow you to initiate a design session to send follow-up prompts to refine and iterate on the initial result, just like chatting with an AI. This is perfect for creative exploration and achieving highly specific outcomes. To create a design, you need to tell us how many images you want, where to send the results, and what the design should look like.`,richDescription:`<p class=
+>This is the core endpoint for generating a new AI-powered package design. It can be used in two distinct modes: <p class=
+>Direct Generation: Provide a prompt and receive a finished design in a single API call. This is ideal for straightforward, high-volume tasks. <p class=
+>Conversational Mode [Coming Soon]: This will allow you to initiate a design session to send follow-up prompts to refine and iterate on the initial result, just like chatting with an AI. This is perfect for creative exploration and achieving highly specific outcomes. <p class=
+Number of images to be generated
+A callback URL where the processed result will be sent.
+A description of packaging design
+A logo URL of packaging design
+Output image aspect ratio. Defaults to 1:1. Supported values: 1:1, 3:2, 2:3, 4:3, 3:4, 16:9, and 9:16.
+Output image resolution. Defaults to 1K. Supported values: 1K and 2K. The 2K resolution is available only for 1:1, 16:9, and 9:16 aspect ratios.
+This endpoint generates a photorealistic scene around your existing product image, based on a text prompt or style you provide.
+URL to the packaging image or design file.
+A list of coordinate objects describing how the packaging should be placed.
+Background image URL.
+Text prompt to generate a background.
+Packaging Coordinates Object
+Each coordinate object defines how the packaging should be cropped, scaled, and placed:
+X-position of the packaging on the final output canvas.
+Y-position of the packaging on the final output canvas.
+Display width of the packaging on the final canvas.
+Display height of the packaging on the final canvas.
+X-coordinate for cropping from the original packaging source image.
+Y-coordinate for cropping from the original packaging source image.
+Width of the crop area.
+Height of the crop area.
+Rotation angle in degrees.
+Width of the source image.
+Height of the source image.
+),setTimeout(()=>{ae.value++},300)})},Ue=e=>{he(e)},je=e=>{he(e)},Ke=()=>{const e=g.findIndex(l=>l.subsections.some(c=>c.id===f.value));if(e l.id===f.value);if(n>0){N(k.value,t.subsections[n-1].id);return}if(e>0){const l=g[e-1],c=l.subsections[l.subsections.length-1];c&&N(l.id,c.id)}},Ge=()=>{const e=g.findIndex(c=>c.subsections.some(w=>w.id===f.value));if(e c.id===f.value)+1;if(l {const t=e.target;Ee.value=t.scrollTop},Fe=()=>{B.value=!1},ke=async e=>{try{await navigator.clipboard.writeText(e),we()}catch(t){console.error(
+authorization-highlight point-content-code
+nav-btn nav-btn--prev
+nav-btn nav-btn--next

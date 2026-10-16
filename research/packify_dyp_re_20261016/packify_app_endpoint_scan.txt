@@ -1,0 +1,423 @@
+=== designchat_scripts\files URLs (297) ===
+http://.
+http://jspdf.default.namespaceuri/
+http://opensource.org/licenses/mit-license
+http://stuartk.com/jszip
+http://www.fpdf.org/en/script/script37.php
+http://www.myersdaily.org/joseph/javascript/md5.js
+http://www.phpied.com/rgb-color-parser-in-javascript/
+http://www.w3.org/1998/Math/MathML
+http://www.w3.org/1999/02/22-rdf-syntax-ns#
+http://www.w3.org/1999/xhtml
+http://www.w3.org/1999/xlink
+http://www.w3.org/2000/svg
+http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3ctitle%3e
+http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3ctitle%3egoogle%3c/title%3e%3cg%20id='
+http://www.w3.org/2000/svg'%3e%3cg%20xmlns='http://www.w3.org/2000/svg'%20id='Group%202147224874'%3e%3cg%20id='
+http://www.w3.org/XML/1998/namespace
+https://$
+https://[::1]
+https://accounts.google.com/gsi/client
+https://ad.doubleclick.net/activity;
+https://ade.googlesyndication.com
+https://adservice.google.com/pagead/regclk
+https://api.ipify.org?format=json
+https://api.pacdora.com/open/v1/user/projects
+https://api.pacdora.com/open/v1/user/projects/export/pdf
+https://api.pacdora.com/open/v1/user/projects/export/pdf?taskId=$
+https://api.pacdora.com/open/v1/user/projects/export/zip
+https://api.pacdora.com/open/v1/user/projects/export/zip?taskId=$
+https://api.pacdora.com/open/v1/user/projects?current=$
+https://aws.amazon.com/javascript/
+https://cct.google/taggy/agent.js
+https://cdn.pacdora.com/Pacdora-v1.1.7-beta14.10.js
+https://cdn.pacdora.com/font/3280b6fb-353d-40bb-804f-e553e615a7e8.woff2
+https://cdn.pacdora.com/font/min/bfe5dddc-cd78-4617-a270-5a511c63f024.woff2
+https://cdn.pacdora.com/font_v2/Abril_Fatface/AbrilFatface-Regular.woff2
+https://cdn.pacdora.com/font_v2/Alkatra/Alkatra-Bold.woff2
+https://cdn.pacdora.com/font_v2/Alkatra/Alkatra-Medium.woff2
+https://cdn.pacdora.com/font_v2/Alkatra/Alkatra-Regular.woff2
+https://cdn.pacdora.com/font_v2/Anton/Anton-Regular.woff2
+https://cdn.pacdora.com/font_v2/Archivo_Black/ArchivoBlack-Regular.woff2
+https://cdn.pacdora.com/font_v2/Arimo/Arimo-Bold.woff2
+https://cdn.pacdora.com/font_v2/Arimo/Arimo-Medium.woff2
+https://cdn.pacdora.com/font_v2/Arimo/Arimo-Regular.woff2
+https://cdn.pacdora.com/font_v2/Barlow/Barlow-Bold.woff2
+https://cdn.pacdora.com/font_v2/Barlow/Barlow-Medium.woff2
+https://cdn.pacdora.com/font_v2/Barlow/Barlow-Regular.woff2
+https://cdn.pacdora.com/font_v2/Bebas_Neue/BebasNeue-Regular.woff2
+https://cdn.pacdora.com/font_v2/Cabin/Cabin-Bold.woff2
+https://cdn.pacdora.com/font_v2/Cabin/Cabin-Medium.woff2
+https://cdn.pacdora.com/font_v2/Cabin/Cabin-Regular.woff2
+https://cdn.pacdora.com/font_v2/Calistoga/Calistoga-Regular.woff2
+https://cdn.pacdora.com/font_v2/DM_Sans/DMSans-Bold.woff2
+https://cdn.pacdora.com/font_v2/DM_Sans/DMSans-Medium.woff2
+https://cdn.pacdora.com/font_v2/DM_Sans/DMSans-Regular.woff2
+https://cdn.pacdora.com/font_v2/Gloock/Gloock-Regular.woff2
+https://cdn.pacdora.com/font_v2/Lato/Lato-Black.woff2
+https://cdn.pacdora.com/font_v2/Lato/Lato-Bold.woff2
+https://cdn.pacdora.com/font_v2/Lato/Lato-Regular.woff2
+https://cdn.pacdora.com/font_v2/League_Spartan/LeagueSpartan-Bold.woff2
+https://cdn.pacdora.com/font_v2/League_Spartan/LeagueSpartan-Medium.woff2
+https://cdn.pacdora.com/font_v2/League_Spartan/LeagueSpartan-Regular.woff2
+https://cdn.pacdora.com/font_v2/Lexend/Lexend-Bold.woff2
+https://cdn.pacdora.com/font_v2/Lexend/Lexend-Medium.woff2
+https://cdn.pacdora.com/font_v2/Lexend/Lexend-Regular.woff2
+https://cdn.pacdora.com/font_v2/Lora/Lora-Bold.woff2
+https://cdn.pacdora.com/font_v2/Lora/Lora-Medium.woff2
+https://cdn.pacdora.com/font_v2/Lora/Lora-Regular.woff2
+https://cdn.pacdora.com/font_v2/Manuale/Manuale-Bold.woff2
+https://cdn.pacdora.com/font_v2/Manuale/Manuale-Medium.woff2
+https://cdn.pacdora.com/font_v2/Manuale/Manuale-Regular.woff2
+https://cdn.pacdora.com/font_v2/Merriweather/Merriweather-Black.woff2
+https://cdn.pacdora.com/font_v2/Merriweather/Merriweather-Bold.woff2
+https://cdn.pacdora.com/font_v2/Merriweather/Merriweather-Regular.woff2
+https://cdn.pacdora.com/font_v2/Montserrat_Alternates/MontserratAlternates-Bold.woff2
+https://cdn.pacdora.com/font_v2/Montserrat_Alternates/MontserratAlternates-Medium.woff2
+https://cdn.pacdora.com/font_v2/Montserrat_Alternates/MontserratAlternates-Regular.woff2
+https://cdn.pacdora.com/font_v2/Noto_Sans/Manuale-Bold.woff2
+https://cdn.pacdora.com/font_v2/Noto_Sans/Manuale-Medium.woff2
+https://cdn.pacdora.com/font_v2/Noto_Sans/Manuale-Regular.woff2
+https://cdn.pacdora.com/font_v2/Open_Sans/OpenSans-Bold.woff2
+https://cdn.pacdora.com/font_v2/Open_Sans/OpenSans-Medium.woff2
+https://cdn.pacdora.com/font_v2/Open_Sans/OpenSans-Regular.woff2
+https://cdn.pacdora.com/font_v2/Oswald/Oswald-Bold.woff2
+https://cdn.pacdora.com/font_v2/Oswald/Oswald-Medium.woff2
+https://cdn.pacdora.com/font_v2/Oswald/Oswald-Regular.woff2
+https://cdn.pacdora.com/font_v2/Pacifico/Pacifico-Regular.woff2
+https://cdn.pacdora.com/font_v2/Pattaya/Pattaya-Regular.woff2
+https://cdn.pacdora.com/font_v2/Playfair_Display/PlayfairDisplay-Bold.woff2
+https://cdn.pacdora.com/font_v2/Playfair_Display/PlayfairDisplay-Medium.woff2
+https://cdn.pacdora.com/font_v2/Playfair_Display/PlayfairDisplay-Regular.woff2
+https://cdn.pacdora.com/font_v2/Poppins/Poppins-Bold.woff2
+https://cdn.pacdora.com/font_v2/Poppins/Poppins-Medium.woff2
+https://cdn.pacdora.com/font_v2/Poppins/Poppins-Regular.woff2
+https://cdn.pacdora.com/font_v2/Quicksand/Quicksand-Bold.woff2
+https://cdn.pacdora.com/font_v2/Quicksand/Quicksand-Medium.woff2
+https://cdn.pacdora.com/font_v2/Quicksand/Quicksand-Regular.woff2
+https://cdn.pacdora.com/font_v2/Raleway/Raleway-Bold.woff2
+https://cdn.pacdora.com/font_v2/Raleway/Raleway-Medium.woff2
+https://cdn.pacdora.com/font_v2/Raleway/Raleway-Regular.woff2
+https://cdn.pacdora.com/font_v2/Roboto_Condensed/RobotoCondensed-Bold.woff2
+https://cdn.pacdora.com/font_v2/Roboto_Condensed/RobotoCondensed-Medium.woff2
+https://cdn.pacdora.com/font_v2/Roboto_Condensed/RobotoCondensed-Regular.woff2
+https://cdn.pacdora.com/font_v2/Sansita_Swashed/SansitaSwashed-Bold.woff2
+https://cdn.pacdora.com/font_v2/Sansita_Swashed/SansitaSwashed-Medium.woff2
+https://cdn.pacdora.com/font_v2/Sansita_Swashed/SansitaSwashed-Regular.woff2
+https://cdn.pacdora.com/font_v2/Shrikhand/Shrikhand-Regular.woff2
+https://cdn.pacdora.com/materialSetting/FLUTE.png
+https://cdn.pacdora.com/materialSetting/GLASS_GLOSSY.png
+https://cdn.pacdora.com/materialSetting/GLASS_MATT.png
+https://cdn.pacdora.com/materialSetting/KRAFT.png
+https://cdn.pacdora.com/materialSetting/METAL_GLOSSY.png
+https://cdn.pacdora.com/materialSetting/METAL_MATT.png
+https://cdn.pacdora.com/materialSetting/PLASTIC_GLOSSY.png
+https://cdn.pacdora.com/materialSetting/PLASTIC_MATT.png
+https://cdn.pacdora.com/materialSetting/WHITE_BOARD.png
+https://cdn.packify.ai/$
+https://cdn.packify.ai/image-resize/300xauto_outside/edits/edit-5KLvsBDinHXTJWopc4ylP-1746769881589.png
+https://cdn.packify.ai/image-resize/400xauto_outside/image/0e7239e5-6106-4e76-ac82-311cdf264588.png
+https://cdn.packify.ai/image-resize/400xauto_outside/image/c71042ee-2ec4-45f1-b1ae-a2434e4113fb.png
+https://cdn.packify.ai/image/055db148-e811-4ad8-904c-04c6c49d6e8a.svg
+https://cdn.packify.ai/image/07b33483-c34a-4bc0-b7c1-d337494dcf4b.png
+https://cdn.packify.ai/image/07bff6f4-2c1a-4eb7-8def-8d25faec46fc.jpeg
+https://cdn.packify.ai/image/0a47be64-6d5d-4877-94c3-22eeb1661cda.svg
+https://cdn.packify.ai/image/0c7a60e9-7649-4acf-90a6-528e14373b1f.svg
+https://cdn.packify.ai/image/0ced4511-79ce-4071-818f-3637f4818878.svg
+https://cdn.packify.ai/image/0e6749c8-a836-4b3f-aef2-6317a8bcfd73.jpeg
+https://cdn.packify.ai/image/0eb82e92-5753-4339-a73d-92135a40db9e.svg
+https://cdn.packify.ai/image/0f86855a-a6cc-49ea-9b85-04127496e708.png
+https://cdn.packify.ai/image/1375dd65-accb-4e46-bd75-6bfad2fec55f.svg
+https://cdn.packify.ai/image/17e29ef6-3188-4649-b9f5-94934a4d4ad8.webp
+https://cdn.packify.ai/image/1af7815c-4a37-4c0f-9e36-5a71900ebe6e.webp
+https://cdn.packify.ai/image/1b32edde-4fbf-4c8d-9b68-743de043dce2.svg
+https://cdn.packify.ai/image/1bc6e819-9cc0-48ae-80eb-bd46c7031e2f.webp
+https://cdn.packify.ai/image/1e35f5ee-e8aa-4bf9-a775-233176b89e0c.webp
+https://cdn.packify.ai/image/1fc15e42-9b92-4309-8454-d5291f184953.webp
+https://cdn.packify.ai/image/27596012-7536-4968-b9c5-5d9d865b3f43.svg
+https://cdn.packify.ai/image/2870cb6e-9bb0-4981-9884-bfc2bd2393c3.png
+https://cdn.packify.ai/image/2ba46b73-ba54-4e25-bfa5-fcabdc27cb1b.svg
+https://cdn.packify.ai/image/362ab464-0c16-4a60-b2c5-56b63922399a.png
+https://cdn.packify.ai/image/38bc4306-ee62-40b1-bd95-da95e8dc7703.svg
+https://cdn.packify.ai/image/397dc2c8-ca51-488e-bd9a-21d2ff551079.svg
+https://cdn.packify.ai/image/40216c74-e0c2-40af-83a5-cf220e693ec2.svg
+https://cdn.packify.ai/image/40806d2e-8fcc-4856-8ddb-80b47a3dc97d.svg
+https://cdn.packify.ai/image/40a905a2-081d-4364-8974-dce251675bd0.svg
+https://cdn.packify.ai/image/4146c00a-8572-4821-b620-43f9abfea61b.png
+https://cdn.packify.ai/image/41a7493a-ef5a-4565-9ad3-5cf77b53b38f.svg
+https://cdn.packify.ai/image/4842c610-645e-4872-877d-c6c2ffc4ad0b.svg
+https://cdn.packify.ai/image/49e7bbe7-4198-44e5-800b-8a861e350de8.webp
+https://cdn.packify.ai/image/4d89343b-686e-454c-98e4-facba2714afc.svg
+https://cdn.packify.ai/image/51142210-453e-4a33-8404-b6c514696473.webp
+https://cdn.packify.ai/image/51aae5e0-e771-4f40-a146-25b50c13925e.png
+https://cdn.packify.ai/image/51eafed6-8723-42cd-8e6f-94519de96819.webp
+https://cdn.packify.ai/image/536660cd-634b-4590-b09a-101548c07a99.svg
+https://cdn.packify.ai/image/5bbf83e3-dfe4-42db-86bb-4cf684f46947.svg
+https://cdn.packify.ai/image/5c51eff3-87e9-468f-8bd0-b90cfd074f29.svg
+https://cdn.packify.ai/image/614ff1ed-1f85-4bfe-9db4-4971455fe2c8.webp
+https://cdn.packify.ai/image/634461ab-81e7-44dd-aae3-60e59e200ec1.svg
+https://cdn.packify.ai/image/67ddc7b9-a785-40ed-8f46-ace60838f9cf.svg
+https://cdn.packify.ai/image/692c5926-76a4-4691-b755-b32ba90cd6bc.png
+https://cdn.packify.ai/image/6a12d2ba-7e42-428f-915f-caf9f04db787.svg
+https://cdn.packify.ai/image/71af97bd-1343-4e90-be71-9694355e8c13.png
+https://cdn.packify.ai/image/730f05ef-b001-4b97-b86d-f113e482412a.webm
+https://cdn.packify.ai/image/733b76e1-d830-4007-bdbe-8c99e29e63e2.svg
+https://cdn.packify.ai/image/738778c6-1c4f-41d2-933c-cb3f27ca99ba.svg
+https://cdn.packify.ai/image/74f8b795-5ae8-4ab3-ba6b-1486b4ebdbef.svg
+https://cdn.packify.ai/image/79090581-1755-41be-8285-ba0c1121e655.png
+https://cdn.packify.ai/image/7bb1a8a2-20ad-409f-a273-7d206fdea0af.webp
+https://cdn.packify.ai/image/7caab1d4-8734-44c6-bab2-93feca7cc7e6.svg
+https://cdn.packify.ai/image/7e14d3c9-ea3c-4eec-bcd1-6bb860174cc9.svg
+https://cdn.packify.ai/image/7e2b1fe3-b7b6-4a7b-aba0-0a39a6ea3a75.png
+https://cdn.packify.ai/image/7e7065d7-a73f-41cb-aa50-31b00046c84a.svg
+https://cdn.packify.ai/image/7f258f2f-13ac-48a9-bdbb-0577da5221b2.png
+https://cdn.packify.ai/image/860daa96-7e85-45fd-8c95-99994cd7e2f3.webp
+https://cdn.packify.ai/image/8859041d-3a5e-4e50-a4c7-ff53b9ddfd6d.svg
+https://cdn.packify.ai/image/888cde69-c350-46eb-ac94-17f606d1fbb9.webp
+https://cdn.packify.ai/image/88bf83e7-0a39-4422-8093-cbea57f2d892.png
+https://cdn.packify.ai/image/8d1fcd26-c50c-4018-a19c-b158adb3566d.svg
+https://cdn.packify.ai/image/90b7bdcf-3d6d-4fb1-8430-0b36719d1042.svg
+https://cdn.packify.ai/image/90d2f726-c217-4d59-945d-eba8a7b20306.svg
+https://cdn.packify.ai/image/90e570ed-f008-46d8-9454-042d207e429c.svg
+https://cdn.packify.ai/image/93f0a334-b7b2-4370-8096-ead6b9650098.svg
+https://cdn.packify.ai/image/9457a082-5240-459d-95a6-2e26431013ee.svg
+https://cdn.packify.ai/image/97e08698-2d2a-4fcd-abc1-fdbe215e8254.svg
+https://cdn.packify.ai/image/9d0278ee-1228-4505-892e-8e02ba5ef7df.svg
+https://cdn.packify.ai/image/9e3011d1-444a-4174-9ce0-3a5328c51e4b.jpeg
+https://cdn.packify.ai/image/a1ccc7ed-d0b6-4106-803b-eb863b41d114.png
+https://cdn.packify.ai/image/a20e6486-5bad-4aec-beb8-87eb1ec990cd.webp
+https://cdn.packify.ai/image/a40d4d39-d239-43cf-ae7f-6bbf2c14d506.webp
+https://cdn.packify.ai/image/a5e27a02-4f6f-476e-a758-4b24db5f10bf.svg
+https://cdn.packify.ai/image/a828cfa3-05fa-4c2a-9533-0303dd94116e.webm
+https://cdn.packify.ai/image/a9569059-2fa9-42e0-9c17-378a86350c21.svg
+https://cdn.packify.ai/image/aa4eecc8-523b-4196-933a-fb97cf6d8b05.webp
+https://cdn.packify.ai/image/b7b87c83-542c-46b4-9ca1-e6f299cad3ef.webp
+https://cdn.packify.ai/image/bc06b5ed-0641-4989-9c60-c1abebf19d28.svg
+https://cdn.packify.ai/image/c20a37fa-5b50-4e24-b588-840796f18b9b.png
+https://cdn.packify.ai/image/c6525421-ad0d-4022-a66c-f4d877daddba.webp
+https://cdn.packify.ai/image/d02944e8-6680-4d2d-b830-d1252bee1ee3.svg
+https://cdn.packify.ai/image/d04cd497-4bf7-41a7-9c98-c343fba3a508.png
+https://cdn.packify.ai/image/d0887aea-1f5b-47c0-905b-b6fc5aa806ec.webp
+https://cdn.packify.ai/image/d09c1335-f589-4824-a6a6-3df92dccbd53.svg
+https://cdn.packify.ai/image/d4736ec1-80cd-4867-8379-62e70e48c619.png
+https://cdn.packify.ai/image/d9dca519-3482-4a75-b866-555d79418d50.svg
+https://cdn.packify.ai/image/da89088f-9bba-4c61-b913-f08609713158.svg
+https://cdn.packify.ai/image/dc291cd1-c8e6-49d2-9d63-09f6420ec539.webp
+https://cdn.packify.ai/image/dd8cd78f-d104-423d-a8e3-6c0573eb13d6.svg
+https://cdn.packify.ai/image/e0cb6011-7e31-40bf-a831-edd9a3cbc231.svg
+https://cdn.packify.ai/image/e1b1eefa-dab7-4641-acd9-30db703a21b4.jpeg
+https://cdn.packify.ai/image/ef90261e-5928-4e6d-aa59-f49eb07659bc.svg
+https://cdn.packify.ai/image/f56be883-3e56-4291-86d1-8123a93ad749.svg
+https://cdn.packify.ai/image/f59b9cf3-8797-448d-b994-30d8afc56f00.webp
+https://cdn.packify.ai/image/f86807d2-02f7-46d4-92a8-c9b941af1d40.svg
+https://cdn.packify.ai/image/fdf76edd-92f3-4988-bee4-fd3e14a5a35f.svg
+https://cdn.packify.ai/image/fe602ff0-10d6-46c7-8aee-abba3e17ca45.webp
+https://cdn.packify.ai/image/fea12514-fd34-4151-850d-db9d3e181f15.webp
+https://cdn.packify.ai/masked_images/1d00cf5f55ff418cb2d76d3465920c5c.png
+https://cdn.packify.ai/masked_images/4a916f1a0e63464196d683aa153198b9.png
+https://cdn.packify.ai/masked_images/7b85d96e816642b7b8457ae09a6ad8cb.png
+https://cdn.packify.ai/masked_images/bf1ce2cc3787472fb48591b8262ae664.png
+https://cdn.packify.ai/masked_images/cc84d6adc161462ca4066769e9218975.png
+https://cdn.packify.ai/template_images/6650d55a-ea79-4846-a8d6-de057a8d513e.webm
+https://cdn.packify.ai/template_images/ec3c44ff-f2fa-49c5-bb2e-12172e181cbc.webm
+https://cdn.packify.ai/video/189ef3a1-bd4e-4ba0-bd36-fd2ed0fe476c.webm
+https://cdn.packify.ai/video/376e3a9d-a960-4407-83b8-07738f909bf9.webm
+https://cdn.packify.ai/video/51ca883c-e6ae-48aa-9b9c-5b1ec0736506.webm
+https://cdn.packify.ai/video/62e36b78-0bcb-4fcb-971d-ca9619cd63b9.webm
+https://cdn.packify.ai/video/ace6b8c4-aa64-4aad-86bb-50ea3bb3d230.webm
+https://cdn.packify.ai/video/c242b166-09ff-4d75-86ee-7f1d9ba79e8a.webm
+https://cdn.packify.ai/video/cfc36e2d-f0ef-4385-b0c6-b4c8e0919a6a.webm
+https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js
+https://connect.facebook.net/en_US/fbevents.js');
+https://dev.packify.ai/chat
+https://feross.org
+https://feross.org/opensource
+https://github.com/Simonwep/pickr
+https://github.com/aws/aws-sdk-js-v3#functionality-requiring-aws-common-runtime-crt
+https://github.com/aws/aws-sdk-js-v3.git
+https://github.com/aws/aws-sdk-js-v3/tree/main/clients/client-s3
+https://github.com/foliojs/pdfkit/blob/master/lib/security.js
+https://github.com/lancedikson/bowser
+https://github.com/nodeca/pako
+https://github.com/nodeca/pako/blob/main/LICENSE
+https://github.com/uuidjs/uuid#getrandomvalues-not-supported
+https://js.stripe.com/v3
+https://localforage.github.io/localForage
+https://m.youtube.com
+https://mozilla.github.io/localForage/#definedriver
+https://mths.be/codepointat
+https://oss.baoxiaohe.com/op/scripts/bf410e0f2808f7621c4c49772842de0bdc8d2b08
+https://pagead2.googlesyndication.com
+https://pagead2.googlesyndication.com/pagead/gen_204?id=tcfe
+https://raw.github.com/Stuk/jszip/main/LICENSE.markdown.
+https://react-native.canny.io/feature-requests/p/fetch-streaming-body
+https://s3-fips.
+https://s3-fips.dualstack.
+https://s3-fips.dualstack.us-east-1.
+https://s3-fips.us-east-1.
+https://s3-object-lambda-fips.
+https://s3-object-lambda.
+https://s3.
+https://s3.dualstack.
+https://s3.dualstack.us-east-1.
+https://s3express-control-fips.
+https://s3express-control.
+https://socket.io/docs/v3/migrating-from-2-x-to-3-0/)
+https://stats.g.doubleclick.net/g/collect
+https://stats.g.doubleclick.net/g/collect?
+https://stuk.github.io/jszip/documentation/howto/read_zip.html
+https://twitter.com/intent/tweet?text=$
+https://vuejs.org/error-reference/#runtime-$
+https://www.%/ads/ga-audiences?v=1&t=sr&slf_rd=1&_r=4&
+https://www.clarity.ms/tag/'
+https://www.cs.cmu.edu/~dst/Adobe/Gallery/anon21jul01-pdf-encryption.txt
+https://www.facebook.com/sharer/sharer.php?u=$
+https://www.facebook.com/tr/
+https://www.google.com
+https://www.google.com/
+https://www.google.com/ccm/geo
+https://www.google.com/recaptcha/enterprise.js?render=6LfRLeksAAAAAHJmPL1eJA8Rr05oaNfJFq-WOwJJ
+https://www.googleadservices.com
+https://www.googletagmanager.com
+https://www.googletagmanager.com/
+https://www.googletagmanager.com/static/service_worker/
+https://www.instagram.com/
+https://www.merchant-center-analytics.goog
+https://www.pacdora.com/api/v2/models/ctree?mockup=true
+https://www.pacdora.com/api/v2/models/image_search?pageSize=60&current=$
+https://www.pacdora.com/api/v2/models?pageSize=$
+https://www.pacdora.com/api/v2/models?pageSize=60&current=$
+https://www.packify.ai
+https://www.packify.ai/mpa
+https://www.packify.ai/mpa/
+https://www.pinterest.com/pin/create/button/?url=$
+https://www.reddit.com/submit?url=$
+https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png
+https://www.tiktok.com/upload
+https://www.youtube.com
+https://www.youtube.com/iframe_api
+=== designchat_scripts\files API paths (112) ===
+/api/assets/upload  [index-2t_0hD9_.js]
+/api/aws/token  [index-2t_0hD9_.js]
+/api/brand_kit  [tools_api-BG5UGaY2.js]
+/api/brand_kit/apply  [tools_api-BG5UGaY2.js]
+/api/brand_kit/generate_content  [tools_api-BG5UGaY2.js]
+/api/cate/list  [index-2t_0hD9_.js]
+/api/chat  [index-2t_0hD9_.js]
+/api/chat/action  [index-2t_0hD9_.js]
+/api/chat/action/retry  [index-2t_0hD9_.js]
+/api/chat/analyze  [index-2t_0hD9_.js]
+/api/chat/hello  [index-2t_0hD9_.js]
+/api/chat/history  [index-2t_0hD9_.js]
+/api/chat/history/share  [index-2t_0hD9_.js]
+/api/chat/image/start  [index-2t_0hD9_.js]
+/api/chat/insert/message  [index-2t_0hD9_.js]
+/api/chat/message  [index-2t_0hD9_.js]
+/api/chat/package_data  [index-2t_0hD9_.js]
+/api/chat/social_post_copy  [index-2t_0hD9_.js]
+/api/chat/suggestions  [index-2t_0hD9_.js]
+/api/composite/material  [index-2t_0hD9_.js]
+/api/composite/material/list  [index-2t_0hD9_.js]
+/api/deep-agents/run  [index-2t_0hD9_.js]
+/api/deep-agents/run/layer  [index-2t_0hD9_.js]
+/api/deep-agents/run/pause  [index-2t_0hD9_.js]
+/api/deep-agents/run/regenerate  [index-2t_0hD9_.js]
+/api/deep-agents/run/retry  [index-2t_0hD9_.js]
+/api/design_request/intent  [index-2t_0hD9_.js]
+/api/factory/list  [index-2t_0hD9_.js]
+/api/factory/search/city  [index-2t_0hD9_.js]
+/api/font/list  [index-2t_0hD9_.js]
+/api/generate/composite/text/v2  [index-2t_0hD9_.js]
+/api/generate/edit/expand/process-text  [index-2t_0hD9_.js]
+/api/generate/edit/expand/v2  [index-2t_0hD9_.js]
+/api/generate/edit/retry  [index-2t_0hD9_.js]
+/api/generate/fill  [index-2t_0hD9_.js]
+/api/generate/image2image  [index-2t_0hD9_.js]
+/api/generate/mockup/removebg  [index-2t_0hD9_.js]
+/api/generate/project/images  [index-2t_0hD9_.js]
+/api/generate/prompt  [index-2t_0hD9_.js]
+/api/generate/record  [index-2t_0hD9_.js]
+/api/generate/text  [index-2t_0hD9_.js]
+/api/generate/text2image  [index-2t_0hD9_.js]
+/api/generate/tools/label  [tools_api-BG5UGaY2.js]
+/api/generate/tools/label/l31  [tools_api-BG5UGaY2.js]
+/api/generate/tools/logo  [tools_api-BG5UGaY2.js]
+/api/generate/upscale  [index-2t_0hD9_.js]
+/api/material  [index-2t_0hD9_.js]
+/api/mockup/erase  [index-2t_0hD9_.js]
+/api/mockup/result  [index-2t_0hD9_.js]
+/api/mockup/template/cate/list  [index-2t_0hD9_.js]
+/api/mockup/template/info  [index-2t_0hD9_.js]
+/api/mockup/template/list  [index-2t_0hD9_.js]
+/api/nutrition-table/edit  [index-2t_0hD9_.js]
+/api/oauth/google/auth_url  [index-2t_0hD9_.js]
+/api/pacdora/link  [index-2t_0hD9_.js]
+/api/pacdora/link/image  [index-2t_0hD9_.js]
+/api/paint/imagine  [index-2t_0hD9_.js]
+/api/paint/retry  [index-2t_0hD9_.js]
+/api/pay/cancelSubscribe  [index-2t_0hD9_.js]
+/api/pay/checkout/create  [index-2t_0hD9_.js]
+/api/pay/order/amount  [index-2t_0hD9_.js]
+/api/pay/portal/session  [index-2t_0hD9_.js]
+/api/pay/setup  [index-2t_0hD9_.js]
+/api/pay/subscribe  [index-2t_0hD9_.js]
+/api/pay/topup/checkout/create  [index-2t_0hD9_.js]
+/api/pay/upgrade  [index-2t_0hD9_.js]
+/api/pay/validPromotionCode  [index-2t_0hD9_.js]
+/api/photoshoot/background  [index-2t_0hD9_.js]
+/api/photoshoot/image/test  [index-2t_0hD9_.js]
+/api/photoshoot/landing/template/list  [index-2t_0hD9_.js]
+/api/photoshoot/public/list  [index-2t_0hD9_.js]
+/api/photoshoot/template/list  [index-2t_0hD9_.js]
+/api/project  [index-2t_0hD9_.js]
+/api/project/analyze  [index-2t_0hD9_.js]
+/api/project/cate_preview_list  [index-2t_0hD9_.js]
+/api/project/category  [index-2t_0hD9_.js]
+/api/project/child  [index-2t_0hD9_.js]
+/api/project/child/list  [index-2t_0hD9_.js]
+/api/project/detail  [index-2t_0hD9_.js]
+/api/project/info  [index-2t_0hD9_.js]
+/api/project/like/image  [index-2t_0hD9_.js]
+/api/project/name  [index-2t_0hD9_.js]
+/api/project/others  [index-2t_0hD9_.js]
+/api/project/share/status  [index-2t_0hD9_.js]
+/api/project/view  [index-2t_0hD9_.js]
+/api/quotation/hello  [index-2t_0hD9_.js]
+/api/quotation/message  [index-2t_0hD9_.js]
+/api/redeemCode/use  [index-2t_0hD9_.js]
+/api/segment/box  [index-2t_0hD9_.js]
+/api/team  [TeamManageModal-CRE3OLUX.js]
+/api/team/  [TeamManageModal-CRE3OLUX.js]
+/api/team/invitation  [TeamManageModal-CRE3OLUX.js]
+/api/team/invitation/accept  [TeamManageModal-CRE3OLUX.js]
+/api/team/invitation/resend  [TeamManageModal-CRE3OLUX.js]
+/api/team/invite  [TeamManageModal-CRE3OLUX.js]
+/api/team/leave  [TeamManageModal-CRE3OLUX.js]
+/api/team/member  [TeamManageModal-CRE3OLUX.js]
+/api/team/members  [TeamManageModal-CRE3OLUX.js]
+/api/team/name  [TeamManageModal-CRE3OLUX.js]
+/api/user/accountLogin  [index-2t_0hD9_.js]
+/api/user/accountRegisterWithVerify  [index-2t_0hD9_.js]
+/api/user/api_intention  [index-2t_0hD9_.js]
+/api/user/consume  [index-2t_0hD9_.js]
+/api/user/guest_login  [index-2t_0hD9_.js]
+/api/user/info  [index-2t_0hD9_.js]
+/api/user/me  [index-2t_0hD9_.js]
+/api/user/oauth/token  [index-2t_0hD9_.js]
+/api/user/upload/history  [index-2t_0hD9_.js]
+/api/user/verfiryEmail  [index-2t_0hD9_.js]
+/api/vector/search  [index-2t_0hD9_.js]
+/api/video/generate  [index-2t_0hD9_.js]
+/api/video/options  [index-2t_0hD9_.js]
+=== designchat_scripts\files providers (11) ===
+deepagents x2
+s3- x1
+amazonaws x1
+s3. x1
+segment. x1
+vertex x1
+deep-agents x1
+stripe x1
+cloudflare x1
+amplitude x1
+socket.io x1

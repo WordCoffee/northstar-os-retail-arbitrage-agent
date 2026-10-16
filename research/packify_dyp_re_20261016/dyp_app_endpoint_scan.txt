@@ -1,0 +1,81 @@
+=== dyp_app_scripts\files URLs (46) ===
+http://example.com/
+http://localhost:9999
+http://n
+http://www.example.com
+http://www.w3.org/1998/Math/MathML
+http://www.w3.org/1999/xlink
+http://www.w3.org/2000/svg
+http://www.w3.org/2000/svg'
+http://www.w3.org/XML/1998/namespace
+https://analytics.google.com/analytics/web/
+https://app.tolgee.io
+https://ba16acbb6c711c369e88c0f3002cb190@o512518.ingest.us.sentry.io/4509630542970880
+https://cdn.dyp.ai/save-points
+https://cdn.jsdelivr.net/gh/paulirish/lite-youtube-embed@master/src/lite-yt-embed.css
+https://cdn.jsdelivr.net/gh/paulirish/lite-youtube-embed@master/src/lite-yt-embed.js
+https://cdn.jsdelivr.net/npm
+https://developer.mozilla.org/en-US/docs/Web/API/LockManager/request
+https://developers.google.com/maps/documentation/embed/get-started
+https://docs.sentry.io/platforms/javascript/best-practices/browser-extensions/
+https://dyp.ai
+https://dyp.ai/dyp_og.png
+https://dzhaylihkmbwdsaradiy.supabase.co
+https://github.com/orgs/supabase/discussions/37217
+https://github.com/paulirish/lite-youtube-embed
+https://nextjs.org/docs/app/api-reference/functions/use-search-params#updating-searchparams
+https://nextjs.org/docs/messages/
+https://nextjs.org/docs/messages/404-get-initial-props
+https://nextjs.org/docs/messages/failed-to-find-server-action'),
+https://nextjs.org/docs/messages/gssp-component-member
+https://nextjs.org/docs/messages/gssp-export
+https://nextjs.org/docs/messages/invalid-images-config
+https://nextjs.org/docs/messages/invalid-multi-match
+https://nextjs.org/docs/messages/next-image-missing-loader'),
+https://nextjs.org/docs/messages/next-router-not-mounted
+https://nextjs.org/docs/messages/non-standard-node-env',Z=
+https://nextjs.org/docs/messages/public-next-folder-conflict
+https://nextjs.org/docs/messages/ssg-fallback-true-export
+https://radix-ui.com/primitives/docs/components/
+https://radix-ui.com/primitives/docs/components/alert-dialog
+https://react.dev/errors/
+https://supabase.com/dashboard/project/_/settings/api
+https://www.google.com/maps/embed/v1/place
+https://www.googleapis.com/webfonts/v1/webfonts
+https://www.googletagmanager.com/gtag/js
+https://www.googletagmanager.com/gtag/js?id=
+https://www.googletagmanager.com/gtm.js
+=== dyp_app_scripts\files API paths (27) ===
+/api/broadcast  [3684-713b6df9fbdf28bb.js]
+/api/credits  [6654-431faf7c9a95ce8b.js]
+/api/credits/balance  [7444-a1c625326352b1fc.js]
+/api/credits/cost  [7444-a1c625326352b1fc.js]
+/api/credits/use  [7444-a1c625326352b1fc.js]
+/api/dieline_generator/label  [5079-b986df6333d14a50.js]
+/api/favorites/toggle  [page-4e8d0a3f703331fb.js]
+/api/gallery/try-now  [5079-b986df6333d14a50.js]
+/api/generate  [main-app-9e6c11a9a559aec2.js]
+/api/llm/translate  [5169-78073fb7dbb0b9eb.js]
+/api/mockup/classification  [5079-b986df6333d14a50.js]
+/api/mockup/designs/  [5169-78073fb7dbb0b9eb.js]
+/api/mockup/designs/create  [5079-b986df6333d14a50.js]
+/api/mockup/designs/delete  [page-4e8d0a3f703331fb.js]
+/api/mockup/designs/update  [7936-912b7ed7caea9a51.js]
+/api/mockup/image-edit  [5169-78073fb7dbb0b9eb.js]
+/api/mockup/text2img  [5079-b986df6333d14a50.js]
+/api/mockup/upload-images  [5079-b986df6333d14a50.js]
+/api/polar/subscriptions  [7444-a1c625326352b1fc.js, layout-284228ce21eb7a84.js]
+/api/print/designs  [5079-b986df6333d14a50.js]
+/api/print/designs/delete  [page-4e8d0a3f703331fb.js]
+/api/print/designs/update  [page-4e8d0a3f703331fb.js]
+/api/print/save-designs  [5854-8c820f5e4cb0de38.js]
+/api/print/upload-images  [5854-8c820f5e4cb0de38.js]
+/api/print/work-history  [5854-8c820f5e4cb0de38.js]
+/api/projects  [page-4e8d0a3f703331fb.js]
+/api/upload  [main-app-9e6c11a9a559aec2.js]
+=== dyp_app_scripts\files providers (5) ===
+sentry x60
+supabase x4
+googleapis x2
+vercel x1
+segment. x1
