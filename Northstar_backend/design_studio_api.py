@@ -1860,7 +1860,7 @@ def studio_status(acct: str = Depends(studio_account)):
 class GenerateIn(BaseModel):
     kind: str = Field(default="image")            # image | video
     purpose: Optional[str] = None
-    brief: str = Field(..., min_length=3, max_length=2000)
+    brief: str = Field(..., min_length=3, max_length=20000)
     tier: str = Field(default="draft")            # draft | final
     width: Optional[int] = None
     height: Optional[int] = None

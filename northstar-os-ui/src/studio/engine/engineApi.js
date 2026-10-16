@@ -38,7 +38,15 @@ async function req(path, opts = {}) {
   try { body = await res.json() } catch { /* empty body */ }
   if (!res.ok) {
     const d = body && body.detail
-    const msg = (d && (d.message || d.code)) || `HTTP ${res.status}`
+    // Readable reason for every FastAPI detail shape (string / pydantic list /
+    // object) - never a bare "HTTP 422" when the server explained itself.
+    let msg = null
+    if (typeof d === 'string' && d) msg = d
+    else if (Array.isArray(d) && d.length && d[0] && d[0].msg) {
+      const loc = Array.isArray(d[0].loc) ? d[0].loc.slice(-1)[0] : ''
+      msg = loc ? `${loc}: ${d[0].msg}` : d[0].msg
+    } else if (d && typeof d === 'object' && (d.message || d.code)) msg = d.message || d.code
+    if (!msg) msg = `HTTP ${res.status}`
     const err = new Error(msg)
     err.status = res.status
     err.detail = d

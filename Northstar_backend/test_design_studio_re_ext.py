@@ -90,6 +90,15 @@ def test_agent_brief_roundtrip_without_enqueue():
         _clear()
 
 
+def test_generate_model_accepts_long_design_briefs():
+    """Regression (2026-10-16): MOGRA-style markdown briefs (>2000 chars) must
+    validate - the old 2000 cap surfaced as a bare HTTP 422 in the studio queue."""
+    from design_studio_api import GenerateIn
+    long_brief = "# DESIGN BRIEF\n" + ("x" * 5000)
+    m = GenerateIn(kind="image", brief=long_brief, tier="final")
+    assert len(m.brief) == len(long_brief)
+
+
 def test_generate_async_requires_session_before_engine_gate():
     r = TestClient(app).post("/api/design-studio/generate-async",
                              json={"brief": "a matte black box"})
