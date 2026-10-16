@@ -2472,7 +2472,14 @@ try:
     from foundation.authn import assert_startup_posture as _assert_auth_posture
 
     _assert_auth_posture()
-    app.state.foundation = _FoundationState.build()
+    # Local persistence: without an explicit path (or a DB_URL) FoundationState
+    # falls back to a throwaway SQLite DB per process - owner credentials,
+    # invites and sessions would not survive a restart. Locally the launcher
+    # pins FOUNDATION_DB_PATH to Northstar_backend/data/foundation.db; hosted
+    # environments keep using DB_URL (PostgreSQL) exactly as before.
+    app.state.foundation = _FoundationState.build(
+        os.environ.get("FOUNDATION_DB_PATH") or None
+    )
     app.include_router(_foundation_router)
 except Exception as _foundation_exc:  # pragma: no cover - defensive mount
     import logging as _logging

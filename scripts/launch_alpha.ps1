@@ -194,6 +194,26 @@ if ($Gate) { $env:NORTHSTAR_PRIVATE_ALPHA = "1" } else { Remove-Item Env:\NORTHS
 $env:NORTHSTAR_ALPHA_ALLOWLIST = $Email
 $env:NORTHSTAR_DISABLE_RATE_LIMIT = "0"
 $env:NORTHSTAR_ROOT_TO_APP = "1"   # tunnel/local root lands in the workspace
+$env:FOUNDATION_DB_PATH = Join-Path $BackendDir "data\foundation.db"   # persistent foundation store (owner sign-in, invites, sessions)
+
+# Signing key for the hosted/cookie login (the foundation auth fails closed 503
+# without it). Reuses the SAME out-of-repo store as tools/start-local.ps1:
+# generated once, owner-only ACL, survives restarts, never printed/committed.
+$secretsDir = Join-Path $env:LOCALAPPDATA "NorthstarOS"
+$secretFile = Join-Path $secretsDir "jwt-secret.txt"
+if (-not (Test-Path $secretsDir)) { New-Item -ItemType Directory -Force -Path $secretsDir | Out-Null }
+if (Test-Path $secretFile) {
+    $env:NORTHSTAR_JWT_SECRET = (Get-Content $secretFile -Raw).Trim()
+    Write-Host "Signing key: loaded from the stored local secret (not printed)." -ForegroundColor DarkGray
+} else {
+    $bytes = New-Object byte[] 48
+    [System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes)
+    $secret = -join ($bytes | ForEach-Object { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"[$_ % 62] })
+    Set-Content -Path $secretFile -Value $secret -NoNewline -Encoding ascii
+    try { icacls $secretFile /inheritance:r | Out-Null; icacls $secretFile /grant:r "$($env:USERNAME):(R,W)" | Out-Null } catch { }
+    $env:NORTHSTAR_JWT_SECRET = $secret
+    Write-Host "Signing key: generated + stored at $secretFile (owner-only; not printed)." -ForegroundColor DarkGray
+}
 if ($Cloud) { $env:CLOUD_MODEL_LIVE = "1" } else { Remove-Item Env:\CLOUD_MODEL_LIVE -ErrorAction SilentlyContinue }
 
 $launched = @()
