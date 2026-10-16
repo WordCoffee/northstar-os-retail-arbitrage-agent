@@ -627,7 +627,7 @@
       "latency": "14B Q4_K_M on RTX 5080 16GB; probe prompts 2.6-26.3s incl. cold load"
     }
   },
-  "last_updated": "2026-10-16T21:46:49Z",
+  "last_updated": "2026-10-16T21:57:24Z",
   "history": [
     {
       "ts": "2026-10-16T06:10:00Z",
@@ -1642,6 +1642,13 @@
       "batch": "MOGRA-MOCKUP",
       "summary": "Private-lane model upgrade executed after the operator relaxed the commercial constraint (own-brands use first). PULLED+VERIFIED: flux-2-klein-9b-Q8_0.gguf 9.29GB (leejet), qwen_3_8b_fp8mixed encoder 8.07GB (official Comfy-Org kit - the 4B encoder is the WRONG WIDTH for 9B: live crash 'mat1 512x7680 vs weight 12288x4096' diagnosed and fixed), refcontrol 4B-depth + 9B-pose LoRAs + official workflow JSONs (tools/comfy_workflows). SMOKE PASSED: 9B + qwen_3_8b through the studio's own generate_image lane, 1024x1024 draft, 33.3s, output renders/smoke_klein9b.png. Engine now honors STUDIO_IMAGE_MODEL + STUDIO_TEXT_ENCODER; generate_image reports the true model filename. KNOWN ISSUE (documented in MODEL_LANE_PRIVATE_20261016.md): ComfyUI-GGUF + comfy-aimdo crash the server (access violation in unpatch_model) during the POST-render unload with the 9B resident - output always saved first; 4B path unaffected and remains studio default; restart command documented; fix candidates: --disable-smart-memory / pin ComfyUI-GGUF / disable comfy-aimdo. Qwen-Image-Edit-2511 Q4 + qwen_2.5_vl encoder + qwen vae confirmed already on disk (ready for its own smoke). flux1-dev-fp8 on disk, blocked on t5xxl (~5GB pull, queued). Disk ~64GB free after pulls.",
       "test_counts": "9B smoke PASS 33.3s (draft 1024x1024); encoder-dim crash reproduced+fixed; 3 model files + 2 LoRAs + 2 workflow JSONs verified on disk"
+    },
+    {
+      "ts": "2026-10-16T21:57:24Z",
+      "activity": "klein9b_default_and_crash_fix",
+      "batch": "MOGRA-MOCKUP",
+      "summary": "Operator directive: klein 9B is the studio DEFAULT. Done + root-caused the unload crash: OUR release_models() posted /free -> ComfyUI queued unload_all_models -> ComfyUI-GGUF unpatch_model -> Windows access violation. Fix: release_models is now opt-in (STUDIO_RELEASE_MODELS=1, default OFF; dynamic VRAM covers eviction). Engine defaults now klein-9b-Q8 + qwen_3_8b_fp8mixed; 4B stays as env fallback. VERIFIED: fresh 9B render 27.7s then server UP (vram free 5.2GB resident); second consecutive render 3.1s (cache) server UP. generate_image reports the true model name.",
+      "test_counts": "2 consecutive 9B studio-lane renders, server survived both; crash previously reproduced deterministically"
     }
   ]
 }

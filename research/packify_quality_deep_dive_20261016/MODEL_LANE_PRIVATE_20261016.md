@@ -16,8 +16,8 @@ to a co-packer. Tagging now makes that cleanup cheap later.
 
 | Role | Pick | License class | Status |
 |---|---|---|---|
-| Base generation | FLUX.2 **klein 4B** Q8 GGUF | Apache-2.0 | installed (in production use) |
-| Base generation (upgrade) | FLUX.2 **klein 9B** Q8 GGUF (`flux-2-klein-9b-Q8_0.gguf`, leejet) | FLUX Non-Commercial | **pulling now** (~9.5 GB) |
+| Base generation | FLUX.2 **klein 4B** Q8 GGUF | Apache-2.0 | installed — **fallback** via `STUDIO_IMAGE_MODEL` env |
+| Base generation (upgrade) | FLUX.2 **klein 9B** Q8 GGUF (`flux-2-klein-9b-Q8_0.gguf`, leejet) | FLUX Non-Commercial | **DEFAULT** (verified: 27.7s warm fresh render; consecutive renders stable) |
 | Edit / refine | **Qwen-Image-Edit-2511** Q4_K_M GGUF (`qwen-image-edit-2511-Q4_K_M.gguf`) + `qwen_2.5_vl_7b_nvfp4` encoder | Apache-2.0 | **already on disk** (since 2026-10-06; verify VAE, then smoke) |
 | Layout / reference control | **refcontrol klein 4B depth** LoRA (`flux2_klein_4b_refcontrol_depth.safetensors` + official workflow JSON) | Apache-2.0 | **pulling now** |
 | Layout / reference control (9B) | **refcontrol 9B pose** LoRA (`refcontrol_v2_poses.safetensors` + workflow JSON) | see card | **pulling now** |
@@ -79,13 +79,13 @@ before they go on a product we sell."
   GGUF) + qwen_3_8b + flux2-vae through the studio's own lane: 1024×1024 draft,
   **33.3 s total** (4 steps; model load ~9.7 GB, encoder staged 8.3 GB of 12.3
   GB budget). Output: `renders/smoke_klein9b.png`.
-- **Known operational issue (documented, not fixed)**: ComfyUI-GGUF +
-  comfy-aimdo crash the server with a Windows access violation during the
-  POST-RENDER model unload when the 9B GGUF is resident (`unpatch_model` →
-  crash after "Prompt executed"). The render output is always saved BEFORE the
-  crash; the 4B path does not show it. Operational stance: 4B stays the studio
-  default; 9B renders are batch-style (render → server may exit → restart via
-  `C:\Users\T2Hol\ComfyUI\venv\Scripts\python.exe main.py --port 8199`).
-  Fix candidates for a later session: `--disable-smart-memory`, pin/upgrade
-  ComfyUI-GGUF, or disable comfy-aimdo.
+- **Known operational issue — FIXED same day (2026-10-16)**: the crash was OUR
+  `release_models()`: posting `/free` queues ComfyUI's `unload_all_models` →
+  ComfyUI-GGUF `unpatch_model` → Windows access violation. Fix: `release_models`
+  is now opt-in (`STUDIO_RELEASE_MODELS=1`, default OFF) — ComfyUI 0.40's
+  dynamic VRAM already handles eviction. Verified with two consecutive 9B runs:
+  server stayed up both times (VRAM free 5.2 GB with the 9B resident; second
+  run served in 3.1 s). The 4B path is likewise unaffected. 9B is the studio
+  default now; switch back with `STUDIO_IMAGE_MODEL=flux-2-klein-4b-Q8_0.gguf`
+  + `STUDIO_TEXT_ENCODER=qwen_3_4b_fp8_mixed.safetensors`.
 - Disk note: model pulls (9B 9.29 + encoder 8.07 + LoRAs 0.24 GB) → ~64 GB free.

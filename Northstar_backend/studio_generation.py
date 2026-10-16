@@ -24,8 +24,8 @@ import uuid
 
 DEFAULT_COMFYUI_URL = "http://127.0.0.1:8199"  # this box's ComfyUI (8188 is upstream default)
 
-IMAGE_MODEL_FILE = os.environ.get("STUDIO_IMAGE_MODEL") or "flux-2-klein-4b-Q8_0.gguf"
-TEXT_ENCODER_FILE = os.environ.get("STUDIO_TEXT_ENCODER") or "qwen_3_4b_fp8_mixed.safetensors"
+IMAGE_MODEL_FILE = os.environ.get("STUDIO_IMAGE_MODEL") or "flux-2-klein-9b-Q8_0.gguf"
+TEXT_ENCODER_FILE = os.environ.get("STUDIO_TEXT_ENCODER") or "qwen_3_8b_fp8mixed.safetensors"
 VIDEO_MODEL_FILE = "Wan2.2-TI2V-5B-Q5_K_M.gguf"
 
 _STYLE_SUFFIX = ", professional commercial product photography, clean composition, no text, no watermark, no logos"
@@ -138,12 +138,16 @@ def _run_graph_guarded(graph: dict, timeout_s: float) -> list:
 
 
 def release_models() -> None:
-    """Best-effort: unload ComfyUI's models and free VRAM after a render.
+    """Opt-in only (STUDIO_RELEASE_MODELS=1). DEFAULT OFF.
 
-    This box has one 16 GB GPU and the local brain (10.4 GB) is the primary
-    resident. ComfyUI reloads models on the next render (slower first render,
-    no VRAM war in between). Failures here are ignored by design.
+    History: posting /free queues ComfyUI's `unload_all_models`, and with GGUF
+    models resident (ComfyUI-GGUF + comfy-aimdo) that unload path crashes the
+    server with a Windows access violation AFTER the render is safely done.
+    ComfyUI 0.40's dynamic VRAM already evicts/reloads models on demand, so the
+    explicit free is unnecessary for correctness.
     """
+    if str(os.environ.get("STUDIO_RELEASE_MODELS", "") or "").strip() != "1":
+        return
     try:
         req = urllib.request.Request(
             comfyui_url() + "/free",
