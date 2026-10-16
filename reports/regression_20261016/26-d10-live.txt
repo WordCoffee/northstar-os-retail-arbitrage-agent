@@ -1,0 +1,34 @@
+PASS  signed in two distinct organizations (subscriber / other_tenant)
+PASS  tenant A created its own records through the strict routes
+PASS  tenant A lists and searches its own record
+PASS  tenant B LIST does not contain tenant A's project
+PASS  tenant B SEARCH returns nothing for A's probe
+PASS  tenant B READ by id -> 404 (indistinguishable from missing)
+PASS  tenant B EXPORT manifest -> 404
+PASS  tenant B DELETE -> 404
+PASS  tenant A's record survives B's attempted delete
+PASS  tenant B re-check LIST excludes A's entry
+PASS  tenant A migrated a listing record into the tenant store
+PASS  re-running the migration reports skipped, never a duplicate
+PASS  tenant A's master-brain context contains its own listing record (read_only: true)
+PASS  tenant B's master-brain context does NOT contain A's record
+PASS  the master-brain context carries the full section shape for tenant B too (scoped)
+PASS  tenant A uploaded a bulksheet (file-only workflow)
+PASS  tenant B LIST does not contain A's upload
+PASS  tenant B READ by id -> 404
+PASS  tenant B ROWS -> 404
+PASS  tenant B cannot propose against A's upload -> 404
+PASS  tenant B DELETE -> 404
+PASS  tenant B CHANGE LIST -> 404
+PASS  tenant B cannot match a report against A's data -> 422
+PASS  tenant B cannot correct a change file it does not own -> 404
+PASS  tenant B cannot compare against A's upload -> 404
+PASS  tenant A's upload survives B's attempts
+PASS  tenant A lists its own listing record
+PASS  tenant B LIST does not contain A's listing record
+PASS  tenant B READ by id -> 404
+PASS  tenant B DELETE -> 404
+PASS  anonymous -> 401 on all 19 design-studio routes
+PASS  probe records cleaned up by their owner
+
+D10 LIVE NEGATIVES: 32 passed, 0 failed, 0 FATAL

@@ -1,0 +1,43 @@
+fixture: temp DB C:\Users\T2Hol\AppData\Local\Temp\ns_isolation_6pw3uy4s.db
+tenant A = tenant-a-226b9509
+tenant B = tenant-b-7e3a99b6
+
+PASS  tenant A created a project
+PASS  tenant A can read its own project
+PASS  tenant B cannot read tenant A's project (returns None, not a 403/leak)
+PASS  tenant B cannot PATCH tenant A's project
+PASS  tenant A's project is unchanged after B's attempted patch
+PASS  account_id is not reassignable through an update patch
+PASS  tenant B cannot DELETE tenant A's project
+PASS  listing is tenant-scoped (A sees 1, B sees 1)
+PASS  tenant B cannot read tenant A's asset
+PASS  tenant B cannot delete tenant A's asset
+PASS  tenant A's asset survives B's attempted delete
+PASS  tenant B cannot read tenant A's job
+PASS  tenant B cannot PATCH tenant A's job
+PASS  tenant A's job status unchanged after B's attempted patch
+PASS  owner can still update its own project
+PASS  list projects: A sees 1, B sees 1, no mixing
+PASS  list assets: A sees 1, B sees 0, no mixing
+PASS  list jobs: A sees 1, B sees 0, no mixing
+PASS  an unscoped list sees every tenant (2) - which is exactly why callers must pass account_id
+PASS  search over a shared token returns exactly one hit per tenant
+PASS  export manifest source (get_by_id) refuses a foreign project, so the route answers 404
+PASS  tenant A created a re-check entry
+PASS  tenant A can read its own re-check (passed round-trips as a boolean)
+PASS  tenant B cannot READ tenant A's re-check
+PASS  tenant B cannot DELETE tenant A's re-check
+PASS  tenant A's re-check survives B's attempted delete
+PASS  re-check LIST is tenant-scoped (A sees 2, B sees 1)
+PASS  a FAILED re-check is stored as a failure, not smoothed to a pass
+PASS  an asset-scoped re-check read is still tenant-scoped
+PASS  a repeated legacy key does NOT duplicate (idempotent import)
+PASS  route /rechecks is account-scoped
+PASS  route /rechecks/migrate is account-scoped
+PASS  route /rechecks/{rid} is account-scoped
+PASS  route /search is account-scoped
+PASS  route /export-manifest is account-scoped
+PASS  owner can still delete its own project
+PASS  router: 74 scoped call sites, no unscoped DAO call remains
+
+CROSS-TENANT ISOLATION: 37 passed, 0 failed

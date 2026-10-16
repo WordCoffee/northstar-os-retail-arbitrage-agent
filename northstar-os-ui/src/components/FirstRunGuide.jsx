@@ -54,6 +54,7 @@ export default function FirstRunGuide() {
   return (
     <div
       data-testid="first-run-guide"
+      onClick={(e) => { if (e.target === e.currentTarget) finish(null) }}
       style={{
         position: 'fixed', inset: 0, zIndex: 60,
         background: 'rgba(24, 32, 24, 0.45)', display: 'flex',

@@ -1,0 +1,19 @@
+LOGIN THROTTLE TEST BYPASS ACTIVE: limit raised to 200 requests per window. This can only happen outside a hosted environment and only when NORTHSTAR_LOGIN_THROTTLE_TEST_BYPASS=1 is set explicitly.
+PASS  bypass refused in hosted environment 'production' even with the env var set
+PASS  bypass refused in hosted environment 'production_tenant' even with the env var set
+PASS  bypass refused in hosted environment 'staging' even with the env var set
+PASS  bypass refused in hosted environment 'PRODUCTION' even with the env var set
+PASS  bypass refused in hosted environment 'Staging' even with the env var set
+PASS  bypass off in development without the env var
+PASS  bypass off for non-exact value '0'
+PASS  bypass off for non-exact value ''
+PASS  bypass off for non-exact value 'no'
+PASS  bypass off for non-exact value 'true '
+PASS  bypass on in development with the exact env var
+PASS  bypass on for an unknown environment (local dev, env var set)
+PASS  bypass off when the environment is unknown and the var is unset
+PASS  bypass raises the ceiling to exactly 200 and still blocks after
+PASS  without the bypass the original 5-per-window limit is unchanged
+PASS  production keeps the 5-per-window limit even with the env var set
+
+LOGIN THROTTLE BYPASS: 16 passed, 0 failed

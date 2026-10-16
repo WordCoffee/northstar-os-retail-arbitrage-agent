@@ -1,0 +1,4 @@
+router is UNARMED: every case below is a mocked response
+
+
+GENERATION PATH (unarmed, mocked): 25 passed, 0 failed

@@ -1,0 +1,23 @@
+scanning PRODUCTION: 3 bundle file(s) in dist/assets
+
+PASS  prod: "__northstarStudioEngine" is ABSENT (the ?engine=1 test hook global)
+PASS  prod: "123abc" is ABSENT (the local dev-shim demo password)
+PASS  prod: "demo-t2" is ABSENT (the local dev-shim demo identity)
+PASS  prod: "X-User-Id" is ABSENT (the dev-shim header emitter)
+PASS  prod: "__NORTHSTAR_LOCAL_DEV__" is ABSENT (the removed runtime shim switch)
+PASS  prod: the hook query-parameter read is ABSENT (its body was eliminated)
+PASS  prod: positive control present (react/createElement), the scan is not vacuous
+
+scanning TEST BUILD: 3 bundle file(s) in dist-test/assets
+
+PASS  test: the engine hook global is PRESENT (index-Bg-HlX_t.js) - the pixel-path harness can run
+PASS  test: the hook query-parameter read is PRESENT
+PASS  test: "123abc" is ABSENT (served bundles sign in with real credentials)
+PASS  test: "demo-t2" is ABSENT (served bundles sign in with real credentials)
+PASS  test: "X-User-Id" is ABSENT (served bundles sign in with real credentials)
+PASS  test: "__NORTHSTAR_LOCAL_DEV__" is ABSENT (served bundles sign in with real credentials)
+PASS  test: positive control present, the scan is not vacuous
+
+scanned 979 KB (prod) + 991 KB (test) across 6 file(s)
+
+BUNDLE GUARD: 14 passed, 0 failed

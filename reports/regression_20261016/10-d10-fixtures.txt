@@ -1,0 +1,14 @@
+PASS  two orgs: the shared bucket is quarantined and NOT moved
+PASS  two orgs: fully_mapped is False (nothing may be applied)
+PASS  two orgs: apply changed nothing (quarantine is left in place)
+PASS  single org: the shared bucket moves; an unknown bucket quarantines (never stolen)
+PASS  the quarantine entry lists sample ids and states the reason
+PASS  single org: every shared bucket maps (9 moves), fully_mapped True
+PASS  apply preserves every record (nothing deleted, nothing duplicated)
+PASS  ds_projects: all 5 records now owned by the single org
+PASS  ds_rechecks: all 5 records now owned by the single org
+PASS  ds_variants: all 5 records now owned by the single org
+PASS  a second run has nothing left to move (idempotent)
+PASS  zero orgs: every record quarantines; there is no target
+
+D10 IDENTITY MIGRATION FIXTURES: 12 passed, 0 failed

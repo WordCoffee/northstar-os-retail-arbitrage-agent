@@ -1,0 +1,16 @@
+PASS  signed in
+PASS  the 3D Product Scene mounted with the render gate panel
+PASS  product artwork uploaded and attached to the scene
+PASS  an unanswered people classification blocks the export (disclosure: block)
+PASS  no download while the gate is blocked
+PASS  internal export downloads with the gate open (real download event)
+PASS  the open gate reports its steps honestly (actualPhoto: not-required, disclosure: pass)
+PASS  a listing-purpose render is blocked by the actual-photo rule, with its rule id and source id
+PASS  no listing-image export happened (actual-photo rule enforced)
+PASS  a locked reference runs the diff, which blocks a render that diverges from the photograph
+PASS  no download while fidelity blocks
+PASS  a compare sign-off satisfies product accuracy but does NOT lift the fidelity block
+PASS  unlocking the reference restores the open gate (download)
+PASS  no console/page errors (3 auth-boundary notices filtered)
+
+3D RENDER GATE: 14 passed, 0 failed, 0 FATAL

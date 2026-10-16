@@ -1,0 +1,3 @@
+organizations: 0; marked test tenants: 0
+
+DRY RUN - nothing was deleted. Re-run with --apply to remove ONLY the tenants listed above.

@@ -1,0 +1,33 @@
+PASS  signed in
+PASS  seeded a tenant listing record for the panel check
+PASS  AdPilot: the panel renders and states read-only + no provider calls
+PASS  AdPilot: the seeded tenant listing record appears in the panel
+PASS  AdPilot: at least one section states UNKNOWN rather than a blank or a zero
+PASS  ListingForge: the panel renders and states read-only + no provider calls
+PASS  ListingForge: the seeded tenant listing record appears in the panel
+PASS  ListingForge: at least one section states UNKNOWN rather than a blank or a zero
+PASS  SocialPulse: the panel renders and states read-only + no provider calls
+PASS  SocialPulse: the seeded tenant listing record appears in the panel
+PASS  SocialPulse: at least one section states UNKNOWN rather than a blank or a zero
+PASS  KeywordTracker: the panel renders and states read-only + no provider calls
+PASS  KeywordTracker: the seeded tenant listing record appears in the panel
+PASS  KeywordTracker: at least one section states UNKNOWN rather than a blank or a zero
+PASS  CompetitorMonitor: the panel renders and states read-only + no provider calls
+PASS  CompetitorMonitor: the seeded tenant listing record appears in the panel
+PASS  CompetitorMonitor: at least one section states UNKNOWN rather than a blank or a zero
+PASS  ListingGuardian: the panel renders and states read-only + no provider calls
+PASS  ListingGuardian: the seeded tenant listing record appears in the panel
+PASS  ListingGuardian: at least one section states UNKNOWN rather than a blank or a zero
+PASS  ProfitabilityDashboard: the panel renders and states read-only + no provider calls
+PASS  ProfitabilityDashboard: the seeded tenant listing record appears in the panel
+PASS  ProfitabilityDashboard: at least one section states UNKNOWN rather than a blank or a zero
+PASS  CommerceOps: the panel renders and states read-only + no provider calls
+PASS  CommerceOps: the seeded tenant listing record appears in the panel
+PASS  CommerceOps: at least one section states UNKNOWN rather than a blank or a zero
+PASS  Monitoring: the panel renders and states read-only + no provider calls
+PASS  Monitoring: the seeded tenant listing record appears in the panel
+PASS  Monitoring: at least one section states UNKNOWN rather than a blank or a zero
+PASS  seeded record cleaned up
+PASS  no console/page errors (4 boundary notices filtered: pre-auth 401s + the documented noncreative 503 on 1 request(s))
+
+MASTER-BRAIN PANELS: 31 passed, 0 failed, 0 FATAL

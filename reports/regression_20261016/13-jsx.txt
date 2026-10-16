@@ -1,0 +1,3 @@
+checked 101 .jsx files
+no undefined JSX component references found
+no unguarded length-then-map renders found

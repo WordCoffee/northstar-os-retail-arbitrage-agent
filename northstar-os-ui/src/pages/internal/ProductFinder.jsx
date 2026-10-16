@@ -1,7 +1,7 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const TABS = [
   { id: 'lookup', label: 'Lookup' },

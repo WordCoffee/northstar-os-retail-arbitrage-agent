@@ -1,0 +1,10 @@
+PASS  signed in
+PASS  the editor shows the title-rules / Item Highlights notice (UNKNOWN column, 75 chars, never invent)
+PASS  export produced a real download (B00HARNESS1-copy.csv)
+PASS  the CSV starts with the Item Highlights = UNKNOWN notice
+PASS  the CSV header carries an item_highlights column
+PASS  the item_highlights value is EMPTY (UNKNOWN), never a guessed value
+PASS  the CSV states the flat-file column is UNKNOWN
+PASS  no console/page errors (3 boundary notices filtered)
+
+TITLE CONTRACT: 8 passed, 0 failed, 0 FATAL

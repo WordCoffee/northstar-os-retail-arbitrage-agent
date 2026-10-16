@@ -1,0 +1,67 @@
+      ... signing in
+PASS  signed in with a real credential session
+      ... cleaning up this harness's fixtures from earlier runs
+PASS  fixture cleanup: 4 import(s), 1 variant(s) and 1 listing record(s) removed (the tenant store persists between runs)
+      ... seeding the local ListingForge record + brand profile
+PASS  local listing record + brand profile seeded (browser stores only)
+      ... proving the imported-evidence routes refuse an anonymous caller
+PASS  anonymous call to /imports -> 401 (tenant-scoped surface)
+      ... opening Ads › Search terms
+PASS  the Search terms sub-view mounted inside Ads
+PASS  the pre-import notes state "65-day"
+PASS  the pre-import notes state "31 days"
+PASS  the pre-import notes state "Click-only"
+PASS  Brand Analytics reads UNAVAILABLE before any file is imported
+      ... importing the Sponsored Products fixture
+PASS  the banner states the truth: "imported file, observed 2026-09-20 to 2026-09-21, not live"
+PASS  the result names the absent columns (their values are UNKNOWN)
+      ... re-importing the identical file
+PASS  re-importing the identical file reports duplicate, nothing duplicated
+      ... importing the Brand Analytics fixture
+PASS  Brand Analytics flips to IMPORTED only after the file arrives
+      ... importing the brand voice and keyword fixtures
+PASS  the brand-voice file imported and archived with its label
+PASS  the keyword list imported and archived
+PASS  the archive lists both new kinds with their dates and labels
+      ... checking the terms table honesty rules
+PASS  a term without an impressions column shows UNKNOWN; a real click count stays a number
+PASS  a literal 0 click/spend value in the file stays 0 (only absence becomes UNKNOWN)
+PASS  a BA row shows clicks UNKNOWN and is labelled BA SQP
+      ... checking the export CSV
+PASS  the export endpoint answers a signed-in session (200)
+PASS  the export carries the documented column order
+PASS  a NULL metric exports as an EMPTY cell, not 0
+      ... composing a brief from the shown terms
+PASS  the brief panel states nothing was generated
+PASS  every ranking that reads clicks carries the click-only caveat
+PASS  sample-size labels appear; UNKNOWN survives for missing data
+PASS  the brief notes state the no-generation rule
+PASS  the brief names the imported voice file as its provenance ("Voice provenance: imported brand-voice file — observed 2026-10-16T21:30:27.162757+00:00 (h…")
+PASS  the one-shot migration ran and is reported ("Tenant store: 1 record(s). Migration: migrated 1 listing record(s). The server copy is the primary s…")
+PASS  the tenant store holds the migrated record with its legacy key and observed date
+PASS  the listing context reads the TENANT record and names the server as the source
+PASS  the observed date and freshness are shown for the record
+PASS  a field no store provides reads UNKNOWN (not blank, not invented)
+PASS  a creative term absent from the listing copy is flagged for human review ("Mismatch check (checked): 8 ranked term(s) need a human look before the creative and the l…")
+      ... working the variant comparison
+PASS  variant created and listed
+PASS  a 5-click comparison warns about the small sample
+PASS  the comparison carries the shared confidence band and note
+PASS  the performance loop is labelled "imported results only" with sample size and the no-causation notice
+PASS  the comparison carries the no-causation and attribution-gap statements
+PASS  the variant results CSV answers a signed-in session (200)
+PASS  the results CSV carries the header and the no-causation caveat
+PASS  a NULL metric exports as an EMPTY cell in the results CSV
+      ... importing a metrics file with an unmatched row
+PASS  metrics file attached 1 row and reported the unmatched row
+PASS  an unmatched metrics row is never turned into a variant
+      ... opening the indexing register
+PASS  the Indexing claims register mounted inside A+
+PASS  the register states imagery has no recorded ranking source
+PASS  the folklore claims render as UNSOURCED/unofficial
+PASS  the register never tells the seller alt text improves ranking
+      ... checking the legacy redirect carries the sub-view
+PASS  creative-studio?view=briefs -> design-studio?section=projects&view=briefs
+PASS  no console/page errors beyond the pre-auth 401 noise (3 filtered)
+
+SEARCH TERMS / BRIEFS / VARIANTS / INDEXING: 49 passed, 0 failed, 0 FATAL

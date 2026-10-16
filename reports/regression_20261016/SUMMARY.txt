@@ -1,0 +1,29 @@
+FULL REGRESSION — 2026-10-16 (Phases 0–5 close-out)
+====================================================
+39 harnesses. Raw output: one file per harness in this folder.
+
+Result: 38 harnesses exit 0 on the first sweep; 1 (24-operator-smoke) failed
+and was diagnosed + fixed + re-run clean. Final: 39/39 exit 0.
+
+24-operator-smoke — first sweep attempt exited 2 (FATAL): the NEW first-run
+guide overlay blocked the harness's clicks on the home. Fix: the harness now
+dismisses the guide like a real user; the re-run also caught a real product bug
+(a missing useEffect import in ProductFinder introduced by the same-day REA
+adoption) which was fixed and re-verified. Clean re-run = the file of record
+(note appended inside).
+
+Key totals (files of record in this folder):
+  18-no-amazon-linkage      2136 / 0   (grew from 2127)
+  19-amazon-files-unit        68 / 0
+  22-design-studio            70 / 0   (now covers Dielines & Print)
+  31-master-brain-panels      31 / 0
+  35-amazon-files-api         44 / 0
+  36-amazon-files-ui          22 / 0
+  37-section-evidence         62 / 0   + 18 screenshots -> reports/screenshots_20261016/
+  38-section-packs            17 / 0
+  39-no-third-party            5 / 0
+  14-prod-bundle              14 / 0   (engineApi dev-shim compile-time gated)
+  15-compose                   8 / 0
+  plus 01–13, 16, 17, 20, 21, 23, 25–34, 26 all exit 0 (see files).
+
+Zero live or paid provider calls during the sweep; zero Amazon contact.

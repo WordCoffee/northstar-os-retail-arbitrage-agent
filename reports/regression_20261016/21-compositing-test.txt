@@ -1,0 +1,46 @@
+      ... navigating to sign-in
+      ... waiting for the sign-in form
+      ... submitting sign-in as "t2" (attempt 1)
+PASS  signed in
+      ... checking the compositing surface
+PASS  the compositing surface mounted in Listing Images
+PASS  the surface renders a real <canvas> element
+PASS  compositing surface renders left rail
+PASS  compositing surface renders inspector
+PASS  compositing surface renders bottom strip
+PASS  undo and redo controls are present
+PASS  engine hook present (test build)
+PASS  page generated 4 real PNG fixtures via canvas
+PASS  matching composite PASSES the fidelity diff (mean 0.00%)
+PASS  a redrawn product BLOCKS (mean 23.9% vs a 6% limit)
+PASS  locked fidelity with no reference is UNVERIFIED (and therefore blocks)
+PASS  a GENERATED product region blocks export
+PASS  renderDoc painted the shape layer over the background at its box (x 0-50%)
+PASS  renderDoc left the background visible outside the shape box (x 75%)
+      ... running the export pipeline
+PASS  the export pipeline BLOCKS on the missing compare sign-off and writes no bytes
+PASS  a sign-off that is NOT bound to the asset version/reference is refused (Phase 5 hardening holds)
+PASS  the full pipeline passes with the sign-off; the marker survives the real export (34263 bytes)
+PASS  marker-verify reported pass (render: pass | fidelity: pass | compare: pass | compliance: pass | marker-embed: pass | marker-verify: pass)
+PASS  an asset with no product does not require the compare step
+PASS  an asset that needs no marker reports not-required, never a false pass
+      ... generating upload fixtures
+PASS  the Library tab is present in the compositing surface
+PASS  the surface collects the people classification (asset-level, where the asset is made)
+PASS  ticking identifiability shows the block and explains it is a consent matter
+PASS  the re-check library panel renders
+PASS  upload check reads a tagged live image as marker-present
+PASS  upload check WARNS on a live image that lost the marker
+PASS  the warning tells the operator what to do
+PASS  the backend re-check log is readable (25 entry/entries)
+PASS  the upload check wrote to the tenant-scoped log
+PASS  every backend entry carries the date of the check
+PASS  the backend entry records which surface ran the check
+PASS  a failed check is stored as a failure in the backend
+PASS  the log persisted across a reload (25 entries, backend-backed)
+PASS  the notice-and-cure window renders (The 5-day cure window elapsed 3 day(s) ago.)
+PASS  a per-entry "re-check exported ad" action is present
+PASS  no console or page errors during the whole run
+
+MODE: test
+COMPOSITING + FIDELITY (browser): 37 passed, 0 failed, 0 FATAL

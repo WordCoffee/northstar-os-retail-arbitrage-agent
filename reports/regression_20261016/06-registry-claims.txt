@@ -1,0 +1,67 @@
+PASS  "title-length-75" cites resolvable source id(s): title-guide
+PASS  "title-length-75" carries its pulled-at date (2026-10-11)
+PASS  "title-length-75" carries a tier (FLAG)
+PASS  "title-length-75" carries a cadence (90d)
+PASS  "title-content-rules" cites resolvable source id(s): title-guide
+PASS  "title-content-rules" carries its pulled-at date (2026-10-11)
+PASS  "title-content-rules" carries a tier (FLAG)
+PASS  "title-content-rules" carries a cadence (90d)
+PASS  "title-rollout-2026-07-27" cites resolvable source id(s): title-guide
+PASS  "title-rollout-2026-07-27" carries its pulled-at date (2026-10-11)
+PASS  "title-rollout-2026-07-27" carries a tier (INFO)
+PASS  "title-rollout-2026-07-27" carries a cadence (30d)
+PASS  "item-highlights-field" cites resolvable source id(s): title-guide
+PASS  "item-highlights-field" carries its pulled-at date (2026-10-11)
+PASS  "item-highlights-field" carries a tier (INFO)
+PASS  "item-highlights-field" carries a cadence (90d)
+PASS  "ai-people-metadata-window" cites resolvable source id(s): ai-announce, ai-tag-ops, img-guide
+PASS  "ai-people-metadata-window" carries its pulled-at date (2026-10-10)
+PASS  "ai-people-metadata-window" carries a tier (BLOCK)
+PASS  "ai-people-metadata-window" carries a cadence (30d)
+PASS  "image-formats" cites resolvable source id(s): img-guide
+PASS  "image-formats" carries its pulled-at date (2026-10-10)
+PASS  "image-formats" carries a tier (BLOCK)
+PASS  "image-formats" carries a cadence (180d)
+PASS  "image-size-10mb-unconfirmed" carries no source and reports UNSOURCED/REPORTED (a negative record, never a fact claim)
+PASS  "image-size-10mb-unconfirmed" carries a tier (INFO)
+PASS  "image-size-10mb-unconfirmed" carries a cadence (180d)
+PASS  "aplus-eligibility" cites resolvable source id(s): aplus-guide
+PASS  "aplus-eligibility" carries its pulled-at date (2026-10-10)
+PASS  "aplus-eligibility" carries a tier (INFO)
+PASS  "aplus-eligibility" carries a cadence (90d)
+PASS  title length: 75 chars pass, 76 flags (date-sensitive FLAG)
+PASS  an over-limit title produces NO blocking rule (it is a listing FLAG, not an export block)
+PASS  the listing mismatch check renders the title-length FLAG without needing a brief
+PASS  a clean short title produces no title flag
+PASS  title rule "length": pass fixture clean, fail fixture flags (title-length-75)
+PASS  title rule "promotional": pass fixture clean, fail fixture flags (title-no-promotional)
+PASS  title rule "specialChars": pass fixture clean, fail fixture flags (title-special-chars)
+PASS  title rule "sameWord": pass fixture clean, fail fixture flags (title-same-word-twice)
+PASS  every emitted title flag names a recorded rule id (title-no-promotional,title-special-chars,title-same-word-twice)
+PASS  the title-length claim is VERIFIED via the captured title-guide source, with its jurisdiction exceptions
+PASS  the title content rules (promotional / characters / repeated word) are recorded VERIFIED
+PASS  the rollout (2026-07-27 kick-off, gradual, 14-day review) stays REPORTED and date-sensitive
+PASS  Item Highlights records 125 chars + comma-separated phrases with the flat-file column UNKNOWN
+PASS  the Item Highlights claim is VERIFIED and names its UNKNOWN field
+PASS  the title-export notice states the UNKNOWN column and forbids inventing one
+PASS  the AI-people metadata window records 2026-07-22 to 2026-07-27
+PASS  the Product image guide is recorded as the authoritative method
+PASS  the window claim stays REPORTED (assembled from dated, partly non-Amazon sources)
+PASS  fail fixture: an unknown authoritative source does not resolve
+PASS  format jpeg passes
+PASS  format jpg passes
+PASS  format tiff passes
+PASS  format png passes
+PASS  format gif passes
+PASS  format gif-animated fails (not in the accepted set)
+PASS  format webp fails (not in the accepted set)
+PASS  format avif fails (not in the accepted set)
+PASS  the formats claim is sourced to the Product image guide (VERIFIED via that source)
+PASS  compliance rule no-animated-gif: PNG passes, animated GIF blocks
+PASS  the register records the 10 MB limit as NOT enforced (unconfirmed)
+PASS  no compliance rule mentions a 10 MB block
+PASS  a 12 MB document does NOT block (nothing enforces an unconfirmed figure)
+PASS  A+ eligibility displays "confirm in A+ Content Manager"
+PASS  the A+ workspace states the same instruction
+
+REGISTRY CLAIMS: 65 passed, 0 failed

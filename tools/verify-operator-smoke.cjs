@@ -27,6 +27,14 @@ async function main() {
   await page.click('form button[type="submit"]')
   await page.waitForFunction(() => location.pathname === '/ui/home', null, { timeout: 15000 })
   ok('signed in -> /ui/home')
+  // 2026-10-16: a fresh browser gets the first-run guide over the home; dismiss
+  // it like a real user before driving the page.
+  try {
+    if (await page.$('[data-testid="first-run-guide"]')) {
+      await page.click('[data-testid="first-run-skip"]', { timeout: 5000 })
+      await page.waitForTimeout(300)
+    }
+  } catch { /* guide not present or already dismissed */ }
 
   // 1. The rail is populated and no longer shows the sign-in stub.
   await page.waitForTimeout(1200)

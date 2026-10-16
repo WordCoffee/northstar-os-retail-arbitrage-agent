@@ -1,0 +1,12 @@
+Compliance rule register: 50 rules
+
+
+Unsourced specs: 0 (the SP video block was removed once its source was recorded)
+Stricter-figure enforcement checks passed: 2
+
+Group coverage: 13 of 13 groups exposed
+
+Spec registry: 48 sourced, 0 broken
+
+RULE FIXTURES: 107 passed, 0 failed
+Rules covered: 50/50

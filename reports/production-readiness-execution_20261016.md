@@ -150,3 +150,27 @@ toggle) and the design-studio harness (10 sections now, incl. Dielines & Print).
 
 **Next action:** on your go — Phase 2 deep UX (guided flows per the plan §4.3–
 4.6) and the REA scan program in a Chrome-Connect-capable session.
+
+---
+
+## 7. Evening close-out (same day) — Phases 2 (deep), 4, 5
+
+- **Phase 2 deep (core done):** first-run guide (3 guided steps, backdrop +
+  Skip dismissal, verified in-browser); Design Studio **Quick start** strip;
+  **Start-from-ASIN** seed on the home → SourceScout prefill; SocialPulse
+  plan→approve→export framing. Remaining (logged): per-section step wizards,
+  shared EmptyState sweep, bundle code-splitting.
+- **Phase 4:** `research/rea_patterns_20261016/PATTERNS.md` — tryholo.ai read
+  fresh today (zero-click seed + tap-approve → adopted); canva.com served a
+  browser-check interstitial (documented limitation); bulk-create and
+  social-proof patterns declined with reasons.
+- **Phase 5:** **full 39-harness regression re-run** → this folder
+  (`reports/regression_20261016/`), 39/39 exit 0 after one diagnosed fix
+  (the first-run overlay blocked the smoke harness; the re-run also caught a
+  missing `useEffect` import in ProductFinder — both fixed and re-verified).
+  Screenshots refreshed: `reports/screenshots_20261016/` (desktop + mobile +
+  accessibility, 62/0). Final room audit: 25/25 rooms, **0 console errors**,
+  0 Partial badges (`reports/ui_audit_20261016/`).
+- **Ops:** monitoring overlay started (Uptime Kuma :3001, Dozzle :8080,
+  loopback); partner-invite script verified end-to-end (create → code →
+  revoke) at `tools/create-partner-invite.ps1`.

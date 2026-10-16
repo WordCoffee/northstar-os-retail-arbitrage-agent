@@ -1,0 +1,30 @@
+PASS  claim "text-indexed" carries its full record
+PASS  claim "backend-terms-indexed" carries its full record
+PASS  claim "alt-text-purpose" carries its full record
+PASS  claim "image-text-main" carries its full record
+PASS  claim "aplus-text-uniqueness" carries its full record
+PASS  claim "filename-folklore" carries its full record
+PASS  claim "image-text-folklore" carries its full record
+PASS  every source id resolves in the registry (5 sourced claims)
+PASS  "text-indexed" -> VERIFIED (official=true)
+PASS  "text-indexed" carries its pulled-at date (2026-10-10)
+PASS  "backend-terms-indexed" -> VERIFIED (official=true)
+PASS  "backend-terms-indexed" carries its pulled-at date (2026-10-10)
+PASS  "alt-text-purpose" -> VERIFIED (official=true)
+PASS  "alt-text-purpose" carries its pulled-at date (2026-10-10)
+PASS  "image-text-main" -> VERIFIED (official=true)
+PASS  "image-text-main" carries its pulled-at date (2026-10-10)
+PASS  "aplus-text-uniqueness" -> VERIFIED (official=true)
+PASS  "aplus-text-uniqueness" carries its pulled-at date (2026-10-10)
+PASS  "filename-folklore" with no source is UNSOURCED, not plausible
+PASS  "image-text-folklore" with no source is UNSOURCED, not plausible
+PASS  the "on-image text lifts ranking" folklore is UNSOURCED + unofficial (never advice)
+PASS  no imagery/alt-text claim claims a ranking effect (4 checked)
+PASS  rank-supporting claims are text-only (text-indexed, backend-terms-indexed)
+PASS  rankingAdviceFor(alt text) refuses with a stated reason
+PASS  rankingAdviceFor(on-image text) refuses with a stated reason
+PASS  text claims remain adviseable (they have a documented source)
+PASS  static scan: 135 source files, no positive imagery-ranking claim
+PASS  positive control: 29 negated mentions exist, so the scan is not vacuous
+
+INDEXING REGISTER: 28 passed, 0 failed

@@ -1,0 +1,17 @@
+thresholds: mean 6%, worst pixel 45%
+
+
+freshness on 2026-10-10: {"unregistered":1,"current":35}
+
+threshold calibration (mean limit 6%, worst-pixel tripwire 45%):
+  identical            mean   0.00%  worst   0.0%  -> PASS (within-threshold)
+  recolor-global       mean  43.63%  worst  78.4%  -> BLOCK (worst-pixel-exceeded)
+  relight              mean   8.89%  worst   9.4%  -> BLOCK (mean-exceeded)
+  warp-shift           mean   2.33%  worst  71.0%  -> BLOCK (worst-pixel-exceeded)
+  label-text-change    mean   0.67%  worst  86.3%  -> BLOCK (worst-pixel-exceeded)
+  logo-swap            mean   0.58%  worst  74.1%  -> BLOCK (worst-pixel-exceeded)
+  classes evading the average test: none (relight is expected to pass by design)
+  classes caught only by the worst-pixel tripwire: recolor-global, warp-shift, label-text-change, logo-swap
+  LIMIT: a small in-product edit that stays inside the worst-pixel tolerance is NOT detectable by this method.
+
+FIDELITY + FRESHNESS: 57 passed, 0 failed
