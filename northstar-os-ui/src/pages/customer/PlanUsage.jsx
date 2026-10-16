@@ -69,7 +69,7 @@ export default function PlanUsage() {
   return (
     <PageLayout title="Plan & Usage" subtitle="Track your usage against your entitlement.">
       <DataNotice tone="internal" title="Plan &amp; usage is a live foundation read">
-        The “Your plan &amp; usage” card is a live, organization-scoped read from the foundation service. The usage meter and billing history below are sample — no billing backend is connected yet.
+        The “Your plan &amp; usage” card is a live, organization-scoped read from the foundation service. No usage-metering or billing backend is connected, so no usage or invoice figure is shown below; — no billing backend is connected yet.
       </DataNotice>
 
       <FoundationPlanUsage />

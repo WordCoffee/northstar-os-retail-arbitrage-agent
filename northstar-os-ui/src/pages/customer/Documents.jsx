@@ -76,8 +76,8 @@ function FoundationLegal() {
 export default function DocumentsLib() {
   return (
     <PageLayout title="Documents" subtitle="Your contract, legal, and operational records.">
-      <DataNotice tone="internal" title="Legal documents are live; operational records are sample">
-        The legal document set and acceptance status are live foundation reads. The operational records table below is sample until the account backend is connected.
+      <DataNotice tone="internal" title="Legal documents are live; operational records have no backend yet">
+        The legal document set and acceptance status are live foundation reads. Operational records have no backend yet, so the table below is an honest empty state - nothing is fabricated.l the account backend is connected.
       </DataNotice>
 
       <FoundationLegal />
