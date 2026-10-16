@@ -8,9 +8,16 @@ Fail-closed: if private alpha is ON and the allowlist is EMPTY, every
 non-public ``/api/*`` request is blocked (a misconfiguration locks the door
 rather than opening it).
 
-Public (never gated): health, the plan catalog, legal docs, and all static
-assets / shells — so probes, the marketing catalog, and the SPA itself load.
-Everything else under ``/api/*`` requires an allowlisted identity.
+Public (never gated): health, the plan catalog, legal docs, all static
+assets / shells, and the auth entry points (legacy token auth plus the
+product UI's cookie session flow at /api/v1/foundation/auth, the
+invite-gated signup, the pre-auth UI-mode signal, and the public
+invite-code lookup) — so probes, the marketing catalog, the SPA and the
+sign-in page itself load. Everything else under ``/api/*`` requires an
+allowlisted identity, proven EITHER by a legacy Bearer token OR by the
+product UI's HttpOnly session cookie. Fail-closed: if private alpha is ON
+and the allowlist is EMPTY, every non-public ``/api/*`` request is blocked
+(a misconfiguration locks the door rather than opening it).
 """
 
 from __future__ import annotations
@@ -34,6 +41,13 @@ PUBLIC_PATH_PREFIXES = (
     "/api/v1/auth/register",
     "/api/v1/auth/login",
     "/api/v1/auth/refresh",
+    # Foundation (product UI) session flow: login is pre-auth by necessity;
+    # the invite-gated signup and the public invite-code lookup are safe by
+    # design (non-revealing, no secrets); ui-mode is a pre-auth UI signal.
+    "/api/v1/foundation/auth",
+    "/api/v1/foundation/signup",
+    "/api/v1/foundation/ui-mode",
+    "/api/v1/invites",
     "/legal",
     "/docs",
     "/redoc",
@@ -101,6 +115,45 @@ def identity_email_from_auth_header(auth_header: Optional[str]) -> Optional[str]
         return None
 
 
+def identity_email_from_session_cookie(request) -> Optional[str]:
+    """Best-effort email from the Foundation HttpOnly session cookie. Never raises.
+
+    The hosted UI authenticates with a cookie session minted by
+    ``/api/v1/foundation/auth/login`` (no Bearer token in JavaScript), so the
+    gate must apply the SAME email allowlist to that identity. The session JWT
+    carries no email claim, so the email is resolved from the shared foundation
+    user store. Presence/validity only — no credential value is ever logged.
+    """
+    try:
+        from auth_deps import (
+            _SESSION_COOKIE_NAME,
+            _resolve_foundation_cookie,
+            _app_foundation_state,
+        )
+    except Exception:
+        return None
+    try:
+        token = request.cookies.get(_SESSION_COOKIE_NAME)
+        if not token:
+            return None
+        user = _resolve_foundation_cookie(token)
+        if not user:
+            return None
+        email = user.get("email")
+        if email:
+            return str(email)
+        state = _app_foundation_state()
+        if state is None:
+            return None
+        uid = user.get("id")
+        for row in state.repos.users.list():
+            if row.get("id") == uid:
+                return row.get("email")
+    except Exception:
+        return None
+    return None
+
+
 def decide(method: str, path: str, email: Optional[str]) -> Tuple[bool, str]:
     """Return ``(blocked, reason)`` for a request under the gate policy.
 
@@ -124,6 +177,8 @@ class AlphaGateMiddleware(BaseHTTPMiddleware):
         global _warned_empty_allowlist
         path = request.url.path
         email = identity_email_from_auth_header(request.headers.get("authorization"))
+        if email is None:
+            email = identity_email_from_session_cookie(request)
         blocked, reason = decide(request.method, path, email)
 
         if blocked:
