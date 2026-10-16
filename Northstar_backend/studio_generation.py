@@ -260,7 +260,7 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
     release_models()
     return {
         "bytes": data, "ext": "png", "mime": "image/png",
-        "model": "flux-2-klein-4b-q8", "provider": "comfyui",
+        "model": os.path.splitext(IMAGE_MODEL_FILE)[0], "provider": "comfyui",
         "seed": seed, "width": w, "height": h, "duration_seconds": None,
     }
 

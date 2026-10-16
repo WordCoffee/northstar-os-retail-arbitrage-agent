@@ -627,7 +627,7 @@
       "latency": "14B Q4_K_M on RTX 5080 16GB; probe prompts 2.6-26.3s incl. cold load"
     }
   },
-  "last_updated": "2026-10-16T21:04:42Z",
+  "last_updated": "2026-10-16T21:46:49Z",
   "history": [
     {
       "ts": "2026-10-16T06:10:00Z",
@@ -1635,6 +1635,13 @@
       "batch": "MOGRA-MOCKUP",
       "summary": "Operator brief: scan GitHub/web for tools that bring generation quality to Packify.ai level; extreme deep dive 1000+ sources; plan; REA for the pieces that need reverse-engineering. DELIVERED research/packify_quality_deep_dive_20261016/: REPORT.md (master), PLAN.md (P0-P4 program), TOOLCHAIN_GENERATION.md (approx 200 itemized sources: keep klein 4B Apache; headline upgrade Qwen-Image-Edit-2511 Apache via Nunchaku; LayerStyle for type; BiRefNet matting; IC-Light owned; ai-toolkit LoRA on klein-base-4B; OCR-QC via PaddleOCR/RapidOCR; vtracer+ImageCms+Ghostscript print; license traps verified: Qwen-Image-2.1/FLUX.2-dev/klein-9B/RMBG-2.0/MatAnyone = non-commercial), COMPOSITOR_REALISM_AND_PACKIFY.md (126 sources; Packify photoshoot PROVEN as 2D crop/scale/rotate/place rectangle; mockup lumin/depth/UV vocabulary inferred; 9-step deterministic realism upgrade path), REA_RUNBOOK.md (passive capture program, exact PowerShell commands, operator protocol), SOURCES_GITHUB.csv (5,984 unique repos from a 90-query API sweep; 159 at 1k+ stars; 5 rate-limit gaps logged). Also: mockup logo upgraded to a direct-print lockup (real mark + Playfair wordmark; commit 7e0fab1). REA targets confirmed: photoshoot extracted_coordinates payload, mockup lumin/depth/UV formats, deep-agents event grammar - everything else = OSS build. Phases P0 (compositor v2: displacement/grain/soft-light/specular/AO) through P4 (print+LoRA) in PLAN.md.",
       "test_counts": "5,984 repos enumerated (metadata-verified); approx 460 deep-tier sources across 4 docs; all model picks license-verified this session"
+    },
+    {
+      "ts": "2026-10-16T21:46:49Z",
+      "activity": "klein9b_private_lane_verified",
+      "batch": "MOGRA-MOCKUP",
+      "summary": "Private-lane model upgrade executed after the operator relaxed the commercial constraint (own-brands use first). PULLED+VERIFIED: flux-2-klein-9b-Q8_0.gguf 9.29GB (leejet), qwen_3_8b_fp8mixed encoder 8.07GB (official Comfy-Org kit - the 4B encoder is the WRONG WIDTH for 9B: live crash 'mat1 512x7680 vs weight 12288x4096' diagnosed and fixed), refcontrol 4B-depth + 9B-pose LoRAs + official workflow JSONs (tools/comfy_workflows). SMOKE PASSED: 9B + qwen_3_8b through the studio's own generate_image lane, 1024x1024 draft, 33.3s, output renders/smoke_klein9b.png. Engine now honors STUDIO_IMAGE_MODEL + STUDIO_TEXT_ENCODER; generate_image reports the true model filename. KNOWN ISSUE (documented in MODEL_LANE_PRIVATE_20261016.md): ComfyUI-GGUF + comfy-aimdo crash the server (access violation in unpatch_model) during the POST-render unload with the 9B resident - output always saved first; 4B path unaffected and remains studio default; restart command documented; fix candidates: --disable-smart-memory / pin ComfyUI-GGUF / disable comfy-aimdo. Qwen-Image-Edit-2511 Q4 + qwen_2.5_vl encoder + qwen vae confirmed already on disk (ready for its own smoke). flux1-dev-fp8 on disk, blocked on t5xxl (~5GB pull, queued). Disk ~64GB free after pulls.",
+      "test_counts": "9B smoke PASS 33.3s (draft 1024x1024); encoder-dim crash reproduced+fixed; 3 model files + 2 LoRAs + 2 workflow JSONs verified on disk"
     }
   ]
 }

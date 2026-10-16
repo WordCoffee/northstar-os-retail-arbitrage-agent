@@ -67,3 +67,25 @@ next touched.
 Talk-track (one line, for the record — not a blocker): "NC-licensed models are
 fine while this is private R&D; their outputs get re-derived on Apache models
 before they go on a product we sell."
+
+## Verified 2026-10-16 (smoke results)
+
+- **klein 9B REQUIRES the qwen_3_8b text encoder** (the 4B's qwen_3_4b is the
+  wrong width — live crash: `mat1 512x7680 vs weight 12288x4096`). Official kit
+  pulled: `Comfy-Org/vae-text-encorder-for-flux-klein-9b` →
+  `text_encoders/qwen_3_8b_fp8mixed.safetensors` (8.07 GB). Engine now honors
+  `STUDIO_TEXT_ENCODER`; smoke script auto-pairs encoder with model.
+- **SMOKE PASSED**: `scripts/smoke_klein9b.py` — FLUX.2 klein 9B Q8 (leejet
+  GGUF) + qwen_3_8b + flux2-vae through the studio's own lane: 1024×1024 draft,
+  **33.3 s total** (4 steps; model load ~9.7 GB, encoder staged 8.3 GB of 12.3
+  GB budget). Output: `renders/smoke_klein9b.png`.
+- **Known operational issue (documented, not fixed)**: ComfyUI-GGUF +
+  comfy-aimdo crash the server with a Windows access violation during the
+  POST-RENDER model unload when the 9B GGUF is resident (`unpatch_model` →
+  crash after "Prompt executed"). The render output is always saved BEFORE the
+  crash; the 4B path does not show it. Operational stance: 4B stays the studio
+  default; 9B renders are batch-style (render → server may exit → restart via
+  `C:\Users\T2Hol\ComfyUI\venv\Scripts\python.exe main.py --port 8199`).
+  Fix candidates for a later session: `--disable-smart-memory`, pin/upgrade
+  ComfyUI-GGUF, or disable comfy-aimdo.
+- Disk note: model pulls (9B 9.29 + encoder 8.07 + LoRAs 0.24 GB) → ~64 GB free.
