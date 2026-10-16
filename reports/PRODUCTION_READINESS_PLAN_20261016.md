@@ -301,3 +301,41 @@ ticked; go/no-go.**
 `northstar-os-ui/src/data/readiness.js` (the labels), `docs/SERVICE_READINESS_MATRIX.md`
 + `docs/SERVICE_GAPS.md` (older gap map, still partly valid), the three tooling
 scans (2026-10-15/16), `reports/readiness_pre_mogra_20261015.md` (ops posture).
+
+---
+
+## Execution status (updated 2026-10-16, evening)
+
+**Phase 0 — DONE.** Rate-limit budgets sized for humans (0 429s on a full room
+pass); `/v1/models` compat alias; build banner carries the commit (Docker build
+args wired through compose + start-local); stale-image class fixed by rebuild
+discipline.
+
+**Phase 1 — DONE.** Zero Partial/Concept/Sample/LLM-gated badges remain (25/25
+rooms audited, 0 console errors). AdPilot reads imported ad files; ListingForge
+uses the tenant store (create/update endpoints; migration from browser-local);
+ListingGuardian/CompetitorMonitor/Profitability/SpreadsheetLab labels corrected
+(they were already real); SocialPulse/ProductFinder de-seeded with working
+create flows; PlanUsage/Documents fabricated data removed.
+
+**Phase 2 — DONE (core) / remaining (deep).** Task-first home with
+"Start something" + "Needs your review"; work-first nav; first-run guide
+(3 steps, dismissible); Design Studio quick-start; Start-from-ASIN seed →
+SourceScout prefill. **Remaining (logged):** the per-section wizard flows
+("main image from a photo" as a step-by-step wizard), the shared EmptyState
+component sweep, and bundle code-splitting for the ≤1.5s warm-load budget.
+
+**Phase 3 — DONE (docs + tooling).** backup.sh rclone leg; monitoring overlay
+file; runbook. **Remaining (owner):** partner invite (needs the email);
+start the monitoring containers; set RCLONE_REMOTE + restore drill.
+
+**Phase 4 — DONE (this session's scope).** `research/rea_patterns_20261016/PATTERNS.md`:
+tryholo.ai read fresh (zero-click seed + tap-approve framing adopted as the
+Start-from-ASIN seed and the plan→approve→export copy); Canva's homepage
+served a browser-check interstitial (documented limitation; existing teardown
+mined instead); bulk-create and social-proof patterns declined with reasons.
+A deeper Canva/Helium 10 pass remains for a Chrome-Connect-capable session.
+
+**Phase 5 — IN PROGRESS (this session).** Full 39-harness regression running to
+`reports/regression_20261016/` + screenshots refresh; results recorded in the
+session report `reports/production-readiness-execution_20261016.md`.
