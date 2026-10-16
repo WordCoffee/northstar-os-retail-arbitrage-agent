@@ -29,6 +29,7 @@ param(
     [switch]$Restart,
     [switch]$NoTunnel,
     [switch]$NoAutothink,
+    [switch]$NoComfy,
     [switch]$Check,
     [switch]$Stop
 )
@@ -234,6 +235,27 @@ if (Ollama-Up) {
     $o = Start-Process -FilePath "ollama" -ArgumentList "serve" -PassThru -WindowStyle Minimized
     $launched += @{ name = "ollama"; id = $o.Id }
     Start-Sleep -Seconds 2
+}
+
+# ------------------------------------------------------------- 1b. ComfyUI (local media engine)
+if ($NoComfy) {
+    Write-Host "ComfyUI: skipped (-NoComfy). Renders will report the engine as unreachable." -ForegroundColor DarkGray
+} else {
+    $comfyUp = $false
+    try { $r = Invoke-WebRequest -Uri "http://127.0.0.1:8199/system_stats" -TimeoutSec 2 -UseBasicParsing; $comfyUp = ($r.StatusCode -eq 200) } catch { $comfyUp = $false }
+    if ($comfyUp) {
+        Write-Host "ComfyUI: already running (local media engine ready)." -ForegroundColor Green
+    } else {
+        $comfyHome = if ($env:COMFYUI_HOME) { $env:COMFYUI_HOME } else { Join-Path $env:USERPROFILE "ComfyUI" }
+        $comfyPy = Join-Path $comfyHome "venv\Scripts\python.exe"
+        if (Test-Path $comfyPy) {
+            Write-Host "ComfyUI: starting on :8199..."
+            $cp = Start-Process -FilePath $comfyPy -ArgumentList "main.py", "--port", "8199", "--listen", "127.0.0.1" -WorkingDirectory $comfyHome -PassThru -WindowStyle Minimized
+            $launched += @{ name = "comfyui"; id = $cp.Id }
+        } else {
+            Write-Host "ComfyUI: not found at $comfyHome - renders will report the engine as unreachable." -ForegroundColor Yellow
+        }
+    }
 }
 
 # ------------------------------------------------------------- 2. Backend

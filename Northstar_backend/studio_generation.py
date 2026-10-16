@@ -134,6 +134,28 @@ def release_models() -> None:
         pass
 
 
+def unload_brain() -> None:
+    """Best-effort: evict the local brain from VRAM before a render.
+
+    One 16 GB GPU: the brain (~10 GB) and a klein render (~9.7 GB) cannot be
+    resident together. The brain auto-reloads on the next chat (~10-60 s).
+    Failures here are ignored by design.
+    """
+    try:
+        req = urllib.request.Request(
+            "http://127.0.0.1:11434/api/generate",
+            data=json.dumps({
+                "model": os.environ.get("NORTHSTAR_BRAIN_MODEL", "northstaros-qwen3.8:27b"),
+                "keep_alive": 0,
+            }).encode(),
+            headers={"Content-Type": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=30):
+            pass
+    except Exception:
+        pass
+
+
 def _clamp(v, lo: int, hi: int, mult: int = 16) -> int:
     v = int(v)
     v = max(lo, min(hi, v))
@@ -181,6 +203,7 @@ def _wan_graph(prompt: str, width: int, height: int, frames: int, steps: int, se
 def generate_image(prompt: str, width=None, height=None, tier: str = "draft", seed=None) -> dict:
     if not media_live_armed():
         raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
+    unload_brain()  # one 16 GB GPU: make room for the render (brain auto-reloads on next chat)
     w = _clamp(width or 1024, 512, 1216)
     h = _clamp(height or 1024, 512, 1216)
     steps = 8 if str(tier).lower() == "final" else 4
@@ -201,6 +224,7 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
 def generate_video(prompt: str, width=None, height=None, tier: str = "draft", seed=None) -> dict:
     if not media_live_armed():
         raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
+    unload_brain()  # one 16 GB GPU: make room for the render (brain auto-reloads on next chat)
     w = _clamp(width or 832, 512, 1280)
     h = _clamp(height or 480, 480, 736)
     frames = 97 if str(tier).lower() == "final" else 49   # 4n+1 for the Wan latent; ~2s / ~4s at 24fps
