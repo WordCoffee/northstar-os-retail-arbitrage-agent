@@ -606,6 +606,14 @@
   "last_updated": "2026-10-16T02:55:00Z",
   "history": [
     {
+      "ts": "2026-10-16T03:20:00Z",
+      "activity": "operator_password_reset_service_restart",
+      "batch": "Operator-requested: set a new service password for the Northstar OS account (northstarosllc@gmail.com) and restart the service",
+      "summary": "Old password was NOT recoverable by design (only a bcrypt hash exists in the local SQLite users row; nothing readable to print). Operator-directed reset performed via the app's own path (auth.hash_password -> UPDATE users.password_hash) with the backend stopped first; the plaintext was never written to any file, report, state or commit - the temporary script and env var were deleted. Backend + AutothinK restarted via launch_alpha.ps1 -Gate -NoTunnel -Restart; the cloudflared tunnel process was left untouched so the public URL is unchanged. Verified end-to-end: local /health 200, local /api/v1/models 403 private_alpha_locked, public /health 200 (same URL), real POST /api/v1/auth/login 200 with an access token issued, and authenticated /api/v1/auth/me 200 through the allowlist gate.",
+      "test_counts": "bcrypt hash-change True + verify True; login 200 token_present=True; /auth/me 200; probes 3/3 (local health 200, gate 403, public health 200); cloudflared alive, URL unchanged.",
+      "next_action": "None. Any future reset repeats the same operator-action flow; no value is ever recorded."
+    },
+    {
       "ts": "2026-10-16T02:55:00Z",
       "activity": "tier1_tooling_install_and_alpha_relaunch",
       "batch": "Operator-requested: install all Tier-1 safe items from reports/tooling_deep_dive_20261015.md, start the service fully, print the Cloudflare link for operator+partner testing on Mogra Organics",
