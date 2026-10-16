@@ -1,21 +1,29 @@
-# NorthstarOS — gitleaks configuration (Phase 1, Secure Control-Layer).
-#
-# STATUS: the gitleaks binary is NOT installed yet — its download is pending
-# owner approval (see reports/audit.md D3). This file is the intended pinned
-# configuration. At install time: pin the exact gitleaks version and verify
-# the allowlist syntax against that version (gitleaks >= v8.19 uses
-# [[allowlists]]; older v8.x used [allowlist]).
-title = "NorthstarOS gitleaks config"
+# Northstar OS secret-scanning config (Tier-1 security pass, 2026-10-15).
+# Extends the default gitleaks rules; adds ONLY reviewed false positives.
+# Credential-shaped hits in chat transcripts are intentionally NOT allowlisted
+# (see reports/tier1_install_and_launch_20261015.md).
 
 [extend]
 useDefault = true
 
 [[allowlists]]
-description = "Phase 1 harness + known placeholder fixtures (fake values by design)"
-paths = [
-  '''tests/security/.*''',
-  '''Northstar_backend/foundation/tests/.*''',
-]
-regexes = [
-  '''test-foundation-jwt-secret-not-real''',
-]
+description = "FP: security-test fixtures (fake secrets used to prove the redactor works)"
+paths = ['''tests[\\/]security[\\/]''']
+[[allowlists]]
+description = "FP: test-module synthetic adapters/payloads"
+paths = ['''Northstar_backend[\\/]test_proof_batch_run\.py$''', '''Northstar_backend[\\/]test_normalized_snapshot\.py$''']
+[[allowlists]]
+description = "FP: scraped third-party HTML fixtures (page JS tokens)"
+paths = ['''Northstar_backend[\\/]fixtures[\\/]brightdata_costco[\\/]''']
+[[allowlists]]
+description = "FP: Faire product-data JSON (product ids)"
+paths = ['''Northstar_backend[\\/]data[\\/]faire[\\/]''']
+[[allowlists]]
+description = "FP: budget-ledger sha256 values"
+paths = ['''budget-ledger\.jsonl$''']
+[[allowlists]]
+description = "FP: docs sample auth header"
+paths = ['''docs[\\/]API_REFERENCE\.md$''']
+[[allowlists]]
+description = "FP: retired creative_pipeline.py model-registry keys (e.g. \"key\": \"<model-id>\")"
+paths = ['''creative_pipeline\.py$''']

@@ -1,0 +1,39 @@
+#!/bin/sh
+# Northstar OS pre-commit secret gate.
+# Source of truth: tools/git-hooks/pre-commit - installed by tools/install-git-hooks.ps1.
+# Blocks the commit when gitleaks finds potential secrets in staged changes.
+# Output is redacted; raw secret values are never printed.
+
+find_gitleaks() {
+  if command -v gitleaks >/dev/null 2>&1; then
+    echo "gitleaks"
+    return 0
+  fi
+  if command -v cygpath >/dev/null 2>&1 && [ -n "$USERPROFILE" ]; then
+    LINK="$(cygpath "$USERPROFILE")/AppData/Local/Microsoft/WinGet/Links/gitleaks.exe"
+    if [ -x "$LINK" ]; then
+      echo "$LINK"
+      return 0
+    fi
+  fi
+  for p in /usr/local/bin/gitleaks /usr/bin/gitleaks; do
+    if [ -x "$p" ]; then
+      echo "$p"
+      return 0
+    fi
+  done
+  return 1
+}
+
+GL_BIN="$(find_gitleaks)" || {
+  echo "pre-commit: gitleaks not found - secret scan SKIPPED (install: winget install gitleaks)" >&2
+  exit 0
+}
+
+"$GL_BIN" git --pre-commit --staged --redact --no-banner || {
+  echo "" >&2
+  echo "pre-commit BLOCKED: gitleaks found potential secrets in staged changes." >&2
+  echo "Fix or remove them; for reviewed false positives add an allowlist entry to .gitleaks.toml." >&2
+  exit 1
+}
+exit 0
