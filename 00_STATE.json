@@ -606,6 +606,14 @@
   "last_updated": "2026-10-16T02:55:00Z",
   "history": [
     {
+      "ts": "2026-10-16T03:30:00Z",
+      "activity": "alpha_signin_repair_foundation_auth",
+      "batch": "Operator: 'its not working, invalid email or password' - make the product UI sign-in actually work on the tunnel",
+      "summary": "TRIPLE ROOT CAUSE, all fixed + verified. (1) The product UI authenticates at POST /api/v1/foundation/auth/login (cookie session), NOT the legacy /api/v1/auth/login that was reset earlier - and no owner credential existed there because FoundationState.build() with no path/URL uses a throwaway per-process SQLite DB; the UI's catch-all renders every login failure (401/403/503) as 'Invalid email or password.'. (2) With -Gate, the private-alpha gate recognized only Bearer tokens, so it 403'd the foundation login POST and every cookie-authenticated UI call. (3) Foundation auth fails closed 503 without NORTHSTAR_JWT_SECRET, which the local alpha launcher never provided. FIXES: alpha_gate resolves the ns_session cookie as an allowlisted identity (email via the shared foundation user store) and publishes only pre-auth entry points (/api/v1/foundation/auth, /signup, /ui-mode, /api/v1/invites - safe by design; legacy surface stays locked); main.py honors FOUNDATION_DB_PATH; launch_alpha.ps1 pins FOUNDATION_DB_PATH=Northstar_backend/data/foundation.db and wires NORTHSTAR_JWT_SECRET from the existing out-of-repo store %LOCALAPPDATA%\\NorthstarOS\\jwt-secret.txt (owner-only ACL; same as tools/start-local.ps1); owner credential seeded via the app's own foundation_seed_owner (bcrypt, single internal_platform_admin, org 'T2 Holdings LLC', persistent foundation.db 639KB). Two foundation session tests were stale (pre-P0-04 cookie path expectation) and were synced to the documented '/' decision. VERIFIED: foundation login 200 + ns_session cookie (local AND through the tunnel), /api/v1/foundation/me 200 both, cookie-gate reasoning/models 200, models no-creds 403, legacy login 200, /ui/sign-in 200.",
+      "test_counts": "foundation login 200 (local+public), /me 200 (local+public), reasoning/models via cookie 200, models no-creds 403, legacy login 200, ui sign-in 200; pytest test_alpha_gate 15 passed; test_auth_session + test_auth_guard 25 passed.",
+      "next_action": "Operator: sign in at https://thoroughly-pursuant-sensor-contain.trycloudflare.com/ui/sign-in with northstarosllc@gmail.com. Partner (OA-10): send the email - the partner credential is seeded the same way into the persistent store. Report: reports/alpha_signin_repair_20261016.md"
+    },
+    {
       "ts": "2026-10-16T03:20:00Z",
       "activity": "operator_password_reset_service_restart",
       "batch": "Operator-requested: set a new service password for the Northstar OS account (northstarosllc@gmail.com) and restart the service",
@@ -1312,7 +1320,7 @@
     {
       "id": "OA-10",
       "card": "ALPHA-1",
-      "need": "Partner email for the private-alpha allowlist (registration is allowlist-restricted while -Gate is ON)",
+      "need": "Partner email for the private-alpha allowlist + partner credential seed (registration is allowlist-restricted while -Gate is ON; creds are seeded into the persistent foundation store the same way as the owner's - sign-in path is /ui/sign-in)",
       "when": "before partner tests on the tunnel",
       "blocks": "partner access",
       "safe_default": "operator-only access",

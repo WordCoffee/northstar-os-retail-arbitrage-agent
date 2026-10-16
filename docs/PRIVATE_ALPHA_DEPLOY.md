@@ -116,6 +116,24 @@ AutothinK (:8100) and the Cloudflare tunnel, then prints the public URL.
 > `-Stop` only stops processes the launcher started (it never touches a
 > backend that was already running).
 
+### Owner sign-in, signing key, persistence (local)
+
+- The product UI signs in through `POST /api/v1/foundation/auth/login`
+  (HttpOnly `ns_session` cookie). The owner credential is seeded once into the
+  persistent local store `Northstar_backend/data/foundation.db`
+  (`python -m Northstar_backend.foundation_seed_owner --email <owner>` plus
+  `--db-path Northstar_backend\data\foundation.db`; `--rotate` replaces it).
+- The launcher pins `FOUNDATION_DB_PATH`, so owner credentials, invites and
+  sessions survive restarts (without it, FoundationState falls back to a
+  throwaway per-process SQLite DB and sign-in can never survive).
+- The signing key (`NORTHSTAR_JWT_SECRET`) is generated once by the launcher
+  and stored OUT of the repo at `%LOCALAPPDATA%\NorthstarOS\jwt-secret.txt`
+  (owner-only ACL, never printed; the same store `tools/start-local.ps1`
+  uses). Foundation auth fails closed (503) without it.
+- The in-app gate accepts BOTH identities for the same email allowlist: a
+  legacy Bearer token, or the UI's session cookie (email resolved from the
+  foundation user store). Only the pre-auth entry points stay public.
+
 ### Manual (if you prefer)
 
 ```powershell
@@ -166,6 +184,7 @@ no re-pointing).
 |---|---|
 | `GET /health` | 200 `{status: ok}` (public, never gated) |
 | `GET /api/v1/models` (no token) | **403 `private_alpha_locked`** (in-app lock) |
+| `POST /api/v1/foundation/auth/login` (valid owner credential) | 200 + `ns_session` cookie (the UI sign-in path) |
 | `GET /ui/` | the suite shell loads |
 | Brain selector in ribbon | `local · T2 · northstaros-qwen3.8:27b` |
 | AutothinK view | iframe mounts (same-origin) |
