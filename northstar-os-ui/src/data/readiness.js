@@ -48,7 +48,7 @@ export const ROOM_READINESS = {
   // Phase 0 (2026-10-09): Product Designer + Creative Studio merged into
   // Design Studio. The old routes still redirect but are not primary nav rooms.
   'design-studio': 'ready', // 2026-10-16: local ComfyUI engine armed - real image (klein) + video (Wan 2.2) renders on this machine
-  'socialpulse': 'concept', // local workspace state; no channel is connected
+  'socialpulse': 'ready', // 2026-10-16: local planning workspace (campaigns/posts/assets you create); no channel is connected and none is claimed
   'adpilot': 'ready', // 2026-10-16: reads your imported ad files; honest empty states until you import
   'listingforge': 'ready', // 2026-10-16: tenant-store listings with editor, health checks and revisions
 }

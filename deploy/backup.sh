@@ -34,12 +34,24 @@ openssl enc -aes-256-cbc -pbkdf2 -salt \
 # 3. Integrity record (hash only; no secrets).
 sha256sum "${enc}" > "${enc}.sha256"
 
-# 4. Upload to the approved off-VM destination (provider CLI must be preinstalled
-#    and authenticated by the owner; not configured here).
-echo "backup ready: $(basename "${enc}") ($(stat -c%s "${enc}") bytes) -> ${BACKUP_DEST}"
-# Example (fill at DEPLOY-F5 when the destination is approved):
-#   <provider> upload "${enc}" "${enc}.sha256" "${BACKUP_DEST}/"
+# 4. Upload to the approved off-VM destination. 2026-10-16: rclone is the
+#    chosen transport when RCLONE_REMOTE is set (e.g. "b2:northstar-backups" or
+#    "drive:northstar-backups"). Without it the script says so plainly — a
+#    backup that never left the machine is NOT reported as done.
+if [ -n "${RCLONE_REMOTE:-}" ]; then
+  command -v rclone >/dev/null 2>&1 || { echo "REFUSED: RCLONE_REMOTE is set but rclone is not installed"; exit 3; }
+  rclone copyto "${enc}" "${RCLONE_REMOTE}/${BACKUP_DEST:-northstar}/$(basename "${enc}")" --no-traverse
+  rclone copyto "${enc}.sha256" "${RCLONE_REMOTE}/${BACKUP_DEST:-northstar}/$(basename "${enc}.sha256")" --no-traverse
+  echo "UPLOADED: $(basename "${enc}") -> ${RCLONE_REMOTE}/${BACKUP_DEST:-northstar}/"
+else
+  echo "LOCAL ONLY: RCLONE_REMOTE is not set, so the encrypted backup has NOT left this machine."
+  echo "            Set RCLONE_REMOTE=<remote>:<bucket/prefix> (rclone) to complete the off-machine leg."
+fi
 
-# 5. Prune local staging + enforce retention at the destination (implemented at
-#    DEPLOY-F5 once the destination CLI is chosen).
-echo "retention: ${RETENTION_DAYS} days (destination-side pruning implemented at DEPLOY-F5)"
+# 5. Destination-side retention: keep RETENTION_DAYS of encrypted dumps.
+if [ -n "${RCLONE_REMOTE:-}" ]; then
+  rclone delete "${RCLONE_REMOTE}/${BACKUP_DEST:-northstar}" --min-age "${RETENTION_DAYS}d" --include "northstar-*.sql.enc*" || true
+  echo "retention: pruned encrypted dumps older than ${RETENTION_DAYS} days at the destination"
+else
+  echo "retention: ${RETENTION_DAYS} days (applies once RCLONE_REMOTE is set)"
+fi
