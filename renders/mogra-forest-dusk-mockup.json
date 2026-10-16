@@ -1,0 +1,32 @@
+{
+  "file": "mogra-forest-dusk-mockup.png",
+  "generated_at": "2026-10-16T14:30:29",
+  "provider": "comfyui",
+  "model": "flux-2-klein-4b-q8",
+  "seed": 20261016,
+  "width": 1216,
+  "height": 832,
+  "seconds": 20.2,
+  "text_safe": true,
+  "verdict": "text_free",
+  "matched_terms": [],
+  "ocr": {
+    "engine": "rapidocr",
+    "status": "ok",
+    "contains_text": false,
+    "boxes": 0,
+    "words": [],
+    "error": null
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "contains_text": false,
+      "words": []
+    }
+  ],
+  "retried": false,
+  "suppressed_count": 1,
+  "kept_count": 18,
+  "expected_terms": []
+}

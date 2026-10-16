@@ -619,7 +619,7 @@
       "latency": "14B Q4_K_M on RTX 5080 16GB; probe prompts 2.6-26.3s incl. cold load"
     }
   },
-  "last_updated": "2026-10-16T02:55:00Z",
+  "last_updated": "2026-10-16T19:31:16Z",
   "history": [
     {
       "ts": "2026-10-16T06:10:00Z",
@@ -1606,6 +1606,13 @@
       "batch": "RAINFOREST-ROUTING-VERIFY",
       "summary": "Local-only verification (no external calls; no credential validation; no secret values read/printed; no config changes). FINDING: there is NO Rainforest adapter/client anywhere in the repo - repo-wide case-insensitive 'rainforest' search returned only one irrelevant hit (a Clorox product title 'rainforest rush' in a Bright Data data snapshot) and zero code/config/doc references; the provider registry (docs/northstar-discovery/provider-registry.json) has no Rainforest entry. Existing Amazon/Costco providers: bright_data_client.py (Web Unlocker, PRIMARY), chocodata (in amazon_search.py/offer_enrichment.py), scavio_client.py, offer_enrichment.py (Unwrangle), easyparser_client.py, dataforseo_adapter.py, firecrawl_*, browserbase_amazon.py, scrapedo_amazon.py, rapidapi_client.py/rapidapi_router.py, canopy_client.py; adapter contract foundation/providers.py ProviderAdapter(+ProviderRegistry,FixtureAdapter), proof_batch_contracts.py ProviderAdapter, costco_non_kirkland/providers.py SellerAmpProvider. ROUTING CHAIN: caller (POST /api/kirkland/refresh or npm pipeline) -> amazon_search.search_products() -> live_gate.live_enabled() [SCANNER_LIVE_ALLOWED] -> if SCANNER_SEARCH_SOURCE=='BRIGHTDATA': _search_brightdata() -> bright_data_client.search_products()/_fetch(); fallback to CHOCODATA/SCAVIO only when primary fails AND SCANNER_SEARCH_FALLBACK set. No Rainforest node. Env names (existing, names only): SCANNER_SEARCH_SOURCE/FALLBACK, SCANNER_LIVE_ALLOWED, BRIGHTDATA_UNLOCKER_API_KEY/ZONE/REQUEST_URL/TIMEOUT, CHOCODATA_API_KEY, SCAVIO_API_KEY/URL, UNWRANGLE_API_KEY. Rainforest variable = none (NOT_CONFIGURED/N-A). Rainforest operations = none. Mock-only tests (no network): pytest test_universal_search.py -> 7 passed; unittest test_bright_data_client -> 44 OK (incl. dispatcher routing/fallback). No Rainforest test added (impossible without an adapter; would need prod/config changes). RISK: Amazon lookups can fall back to Chocodata/Scavio by design and offer enrichment can route to Chocodata/Unwrangle/Easyparser, but CANNOT resolve to Rainforest; browser path (tools/browser_agent.py) is separate from the search dispatch; SCANNER_LIVE_ALLOWED default-off prevents accidental live calls. Report: reports/rainforest_routing_verification_no_call_20261001.md.",
       "next_action": "STOP after report + mock-only tests. No Rainforest routing exists; no action required unless the operator intends to ADD a Rainforest provider (new work, not present)."
+    },
+    {
+      "ts": "2026-10-16T19:31:16Z",
+      "activity": "mogra_forest_dusk_mockup_text_safe_render",
+      "batch": "MOGRA-MOCKUP",
+      "summary": "Delivered renders/mogra-forest-dusk-mockup.png via the design studio's own text-safe lane (text_fidelity.render_with_text_guard -> studio_generation.generate_image, ComfyUI FLUX.2 klein 4B on :8199, MEDIA_GEN_LIVE=1 mirror of the launcher): two matte doypacks side-by-side on warm oak against blurred greenhouse bokeh, deep forest green + warm charcoal, gold engraved mushroom line art, cream badge emblems, rows of tiny cream dots, zero lettering. OCR verdict text_free (rapidocr, 0 boxes, 1 attempt, no retry). FOUND+FIXED a pipeline bug on the way: render_with_text_guard raised UnboundLocalError on every CLEAN FIRST render (used_brief only bound on the retry path) - fixed, regression test added, test_text_fidelity 12/12 green (commit f16e2b0). Also committed a production-tooling research scan: none of OpenDesign / Open Builder / CopilotKit OpenIntelligentUI / Awesome-GenUI lists will production-harden Northstar OS; resolution stack = OpenAPI->TS contract sync, Schemathesis route fuzzing, OpenHands repo agent, Onlook visual edits, CI gates (research/ui_production_tooling_scan_20261016/REPORT.md, commit cf80b36). Repro: python scripts/render_mogra_forest_dusk.py (seed 20261016, 1216x832, ~20s warm). Next: vector text layer compositor for full print fidelity.",
+      "test_counts": "text_fidelity 12/12 passed; render OCR text_free 0 boxes"
     }
   ]
 }
