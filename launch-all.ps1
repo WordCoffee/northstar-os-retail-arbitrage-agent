@@ -39,14 +39,14 @@ if (-not $SkipOllamaCheck) {
     if (-not $ollama) {
         Write-Warn "Ollama not installed. AutothinK chat will show 'offline' lamp."
         Write-Host "  Install: winget install Ollama.Ollama"
-        Write-Host "  Then:    ollama pull llama3.2:3b"
+        Write-Host "  Then restore the Master Brain: rebuild from Modelfile.northstaros-qwen3.8 (see docs/MEDIA_STACK_2026-10.md for the GGUF source)"
     } else {
         Write-Ok "Ollama found: $ollama"
         # Quick check with timeout - don't hang
         try {
             $models = ollama list 2>&1 | Select-Object -First 5
-            if ($models -match "llama3.2:3b") { Write-Ok "Model llama3.2:3b present" }
-            else { Write-Warn "llama3.2:3b not pulled. Run: ollama pull llama3.2:3b" }
+            if ($models -match "northstaros-qwen3.8:27b") { Write-Ok "Master Brain northstaros-qwen3.8:27b present" }
+            else { Write-Warn "Master Brain northstaros-qwen3.8:27b not found. Rebuild: ollama create northstaros-qwen3.8:27b -f Modelfile.northstaros-qwen3.8" }
         } catch { Write-Warn "Ollama not running or slow. Start: ollama serve" }
     }
 }
@@ -100,7 +100,7 @@ Write-Host ""
 Write-Host "================================================================="
 Write-Host "  NORTHSTAR OS -- ANALYST'S DESK (Shell SPA)"
 Write-Host "-----------------------------------------------------------------"
-Write-Host "  http://127.0.0.1:8000/static/northstar-os/index.html"
+Write-Host "  http://127.0.0.1:8000/ui/    (sign in at /ui/sign-in)"
 Write-Host "  6 tabs: SourceScout | ListingForge | AdPilot | SocialPulse"
 Write-Host "          AutothinK | Account"
 Write-Host "-----------------------------------------------------------------"
@@ -112,7 +112,7 @@ Write-Host "-----------------------------------------------------------------"
 Write-Host "  AUTOTHINK WORKSPACE (chat + local LLM)"
 Write-Host "-----------------------------------------------------------------"
 Write-Host "  http://127.0.0.1:8100/           (full chat, needs Ollama)"
-Write-Host "  http://127.0.0.1:8000/autothink/ui/index.html (iframe view)"
+Write-Host "  http://127.0.0.1:8000/ui/    (AutothinK tab in the app)"
 Write-Host "================================================================="
 Write-Host ""
 
