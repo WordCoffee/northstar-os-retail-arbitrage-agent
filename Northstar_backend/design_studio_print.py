@@ -453,6 +453,8 @@ def sanitize_params(template_id: str, params: Optional[Dict[str, Any]]) -> Dict[
     for key, raw in (params or {}).items():
         if key not in allowed:
             raise ValueError(f"param {key!r} is not editable for {template_id!r}; allowed: {sorted(allowed)}")
+        if raw is None or (isinstance(raw, str) and raw.strip() == ""):
+            continue  # cleared field: keep the template default, never error
         try:
             val = float(raw)
         except (TypeError, ValueError):

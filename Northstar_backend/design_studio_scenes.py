@@ -119,10 +119,15 @@ def mockup_plan(body: MockupPlanIn, acct: str = Depends(studio_account)):
             raise HTTPException(status_code=422, detail=f"unknown product_id {body.product_id!r}")
     if not (scene or product or body.custom_prompt or body.message):
         raise HTTPException(status_code=422,
-                            detail="provide scene_id, product_id, custom_prompt or message")
+                            detail="Nothing to plan: pick a product, pick a scene, or write a custom prompt.")
+    custom = (body.custom_prompt or "").strip()
+    msg = (body.message or "").strip()
+    if not (scene or product or custom or msg):
+        raise HTTPException(status_code=422,
+                            detail="Nothing to plan: pick a product, pick a scene, or write a custom prompt.")
 
     prompt = assemble_mockup_prompt(scene=scene, product=product,
-                                    custom_prompt=body.custom_prompt, message=body.message)
+                                    custom_prompt=custom, message=msg)
     out: Dict[str, Any] = {
         "prompt": prompt,
         "suggested_templates": (product or {}).get("templates", []),

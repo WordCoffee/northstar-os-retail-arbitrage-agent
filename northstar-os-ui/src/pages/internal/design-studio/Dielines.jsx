@@ -18,6 +18,13 @@ import { useToast } from '../../../components/ToastContext.jsx'
 
 const API = '/api/design-studio'
 
+function errText(d, r) {
+  if (d && typeof d.detail === 'string' && d.detail) return d.detail
+  if (d && Array.isArray(d.detail) && d.detail.length && d.detail[0] && d.detail[0].msg) return d.detail[0].msg
+  if (d && d.detail && typeof d.detail === 'object' && d.detail.message) return d.detail.message
+  return `HTTP ${r.status}`
+}
+
 function downloadBlob(blob, name) {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -47,6 +54,7 @@ export default function Dielines() {
   const [plan, setPlan] = useState(null)
 
   const template = useMemo(() => templates.find(t => t.id === templateId), [templates, templateId])
+  const hasPlanInput = !!(sceneId || productId || customPrompt.trim())
 
   useEffect(() => {
     let gone = false
@@ -101,7 +109,7 @@ export default function Dielines() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           template_id: templateId,
-          params,
+          params: Object.fromEntries(Object.entries(params).filter(([, v]) => v !== '' && v !== null && v !== undefined)),
           persist: !!opts.persist,
           include_svg: true,
           include_pdf: !!opts.pdf,
@@ -109,7 +117,7 @@ export default function Dielines() {
         }),
       })
       const d = await r.json()
-      if (!r.ok) throw new Error(typeof d.detail === 'string' ? d.detail : `HTTP ${r.status}`)
+      if (!r.ok) throw new Error(errText(d, r))
       setSvg(d.svg || '')
       setMeta(d)
       if (opts.persist) {
@@ -148,7 +156,7 @@ export default function Dielines() {
         }),
       })
       const d = await r.json()
-      if (!r.ok) throw new Error(typeof d.detail === 'string' ? d.detail : `HTTP ${r.status}`)
+      if (!r.ok) throw new Error(errText(d, r))
       setPlan(d)
       if (enqueue && d.enqueued && d.enqueued.job) {
         toast(`Queued job ${d.enqueued.job.id} on the local engine.`, 'success')
@@ -243,8 +251,11 @@ export default function Dielines() {
           </label>
         </div>
         <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
-          <button className="btn btn-sm btn-primary" disabled={busy} onClick={() => planMockup(false)}>Build prompt</button>
-          <button className="btn btn-sm" disabled={busy} onClick={() => planMockup(true)}>Build + queue generation</button>
+          <button className="btn btn-sm btn-primary" disabled={busy || !hasPlanInput} onClick={() => planMockup(false)}>Build prompt</button>
+          <button className="btn btn-sm" disabled={busy || !hasPlanInput} onClick={() => planMockup(true)}>Build + queue generation</button>
+          {!hasPlanInput && (
+            <span className="text-low" style={{ fontSize: 12, alignSelf: 'center' }}>Pick a product or scene, or write a custom prompt first.</span>
+          )}
           {plan && plan.prompt && (
             <button className="btn btn-sm" onClick={() => { if (navigator.clipboard) { navigator.clipboard.writeText(plan.prompt); toast('Prompt copied.', 'info') } }}>Copy prompt</button>
           )}

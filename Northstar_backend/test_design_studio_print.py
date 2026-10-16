@@ -75,6 +75,15 @@ def test_pdf_renders_real_bytes():
     assert len(pdf) > 800
 
 
+def test_sanitize_empty_values_keep_defaults():
+    """A cleared field must never 422 - it falls back to the template default."""
+    clean = dp.sanitize_params("rsc_box", {"height_mm": "", "width_mm": None, "length_mm": "  "})
+    defaults = dp._TEMPLATE_BY_ID["rsc_box"]["params"]
+    assert clean["height_mm"] == defaults["height_mm"]
+    assert clean["width_mm"] == defaults["width_mm"]
+    assert clean["length_mm"] == defaults["length_mm"]
+
+
 def test_sanitize_rejects_unknown_keys_and_ranges():
     with pytest.raises(ValueError):
         dp.sanitize_params("rsc_box", {"heigth_mm": 100})  # typo key
