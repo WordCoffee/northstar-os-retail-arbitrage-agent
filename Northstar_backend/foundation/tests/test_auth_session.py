@@ -41,7 +41,9 @@ def test_login_sets_httponly_cookie_and_no_token_in_body(monkeypatch):
     sc = _lower_headers(r).get("set-cookie", "").lower()
     assert "ns_session=" in sc
     assert "httponly" in sc
-    assert "path=/api/v1/foundation" in sc
+    # P0-04 (2026-10-09): the session cookie moved to path "/" for the
+    # single-origin suite (see foundation/auth_session.py); sync expectation.
+    assert "path=/;" in sc
     assert "samesite=strict" in sc
     assert "secure" not in sc  # development transport is http
     assert "token" not in r.json()
@@ -146,7 +148,8 @@ def test_secure_cookie_attributes_in_production_like(monkeypatch):
     s = session_cookie_kwargs("t")
     c = csrf_cookie_kwargs("t")
     assert s["secure"] is True and s["httponly"] is True and s["samesite"] == "strict"
-    assert s["path"] == "/api/v1/foundation"
+    # P0-04 (2026-10-09): single-origin suite -> session cookie path "/".
+    assert s["path"] == "/"
     assert c["secure"] is True and c["httponly"] is False and c["path"] == "/"
     monkeypatch.setenv("ENVIRONMENT", "development")
     assert session_cookie_kwargs("t")["secure"] is False
