@@ -1231,6 +1231,49 @@ def list_listing_records(acct: str = Depends(studio_account)):
     }
 
 
+class ListingRecordIn(BaseModel):
+    asin: Optional[str] = None
+    title: Optional[str] = None
+    bullets: Optional[List[str]] = None
+    backend_terms: Optional[str] = None
+    description: Optional[str] = None
+    images: Optional[List[Any]] = None
+    aplus_modules: Optional[List[str]] = None
+    source: Optional[str] = None
+    observed_at: Optional[str] = None
+    legacy_key: Optional[str] = None
+
+
+class ListingRecordPatch(BaseModel):
+    asin: Optional[str] = None
+    title: Optional[str] = None
+    bullets: Optional[List[str]] = None
+    backend_terms: Optional[str] = None
+    description: Optional[str] = None
+    images: Optional[List[Any]] = None
+    aplus_modules: Optional[List[str]] = None
+    source: Optional[str] = None
+    observed_at: Optional[str] = None
+
+
+@router.post("/listing-records")
+def create_listing_record(body: ListingRecordIn, acct: str = Depends(studio_account)):
+    """Create ONE tenant-scoped listing record (2026-10-16). The ListingForge
+    editor saves here; nothing leaves the machine."""
+    db = get_northstar_db()
+    rid = db.design_studio.listing_records.create({**body.model_dump(exclude_unset=True), "account_id": acct})
+    return {"id": rid, "record": db.design_studio.listing_records.get_by_id(rid, account_id=acct)}
+
+
+@router.patch("/listing-records/{rid}")
+def patch_listing_record(rid: str, body: ListingRecordPatch, acct: str = Depends(studio_account)):
+    """Patch ONE record (editor saves). 404 when the row is not the caller's."""
+    db = get_northstar_db()
+    if not db.design_studio.listing_records.update(rid, body.model_dump(exclude_unset=True), account_id=acct):
+        raise HTTPException(status_code=404, detail="Listing record not found")
+    return {"record": db.design_studio.listing_records.get_by_id(rid, account_id=acct)}
+
+
 @router.get("/listing-records/{rid}")
 def get_listing_record(rid: str, acct: str = Depends(studio_account)):
     db = get_northstar_db()

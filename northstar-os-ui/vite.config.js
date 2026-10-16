@@ -1,9 +1,25 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { execSync } from 'node:child_process'
+
+// Build banner (2026-10-16): the shell shows the commit + build time so a
+// stale image can never be mistaken for the current tree again.
+function buildInfo() {
+  let commit = 'unknown'
+  let time = new Date().toISOString()
+  try {
+    commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim()
+    time = execSync('git log -1 --format=%cI', { encoding: 'utf8' }).trim() || time
+  } catch { /* not a git checkout at build time */ }
+  return { commit, time }
+}
 
 export default defineConfig({
   base: '/ui/',  // canonical frontend is served under /ui/ by FastAPI
   plugins: [react()],
+  define: {
+    __BUILD_INFO__: JSON.stringify(buildInfo()),
+  },
   build: {
     // Split vendor code so the app chunk stays well under the 500 kB warning
     // threshold. Pure build-config change; no runtime behavior change.

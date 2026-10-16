@@ -35,29 +35,16 @@ import { useRoom, uid, nowIso, fmtTime, fmtBytes } from '../../studio/engine/sto
 // UNKNOWN until Amazon publishes it, and every export that includes titles
 // carries the notice.
 import { titleExportNotice, ITEM_HIGHLIGHTS } from '../../studio/engine/registryClaims.js'
+// 2026-10-16: the tenant store is the primary source for listings; the
+// browser-local records migrate in one shot (idempotent per ASIN).
+import { fetchListingRecords, migrateListingRecords } from '../../studio/engine/imports.js'
 
-// ── Seed listings (clearly sample; superseded once the operator edits one) ────
-const SEED_LISTINGS = [
-  {
-    asin: 'B08L5VJQ7T', title: 'Premium Water Filter', status: 'Revision v3.2', health: 82, updated: '2026-09-24T09:00:00Z',
-    copy: {
-      title: 'Premium Water Filter — 3-Stage Filtration, 10-Cup Capacity, BPA-Free',
-      bullets: [
-        '3-Stage Filtration: Removes 99.9% of contaminants',
-        '10-Cup Capacity: Ideal for families of 4+',
-        'BPA-Free Materials: FDA-certified safe',
-        'Easy-Change Filters: No tools required',
-        'Compact Design: Fits most standard cabinets',
-      ].join('\n'),
-      description: 'Experience clean, great-tasting water with the Premium Water Filter. Designed for modern kitchens, our 3-stage filtration system ensures your family has access to safe, great-tasting water every day.',
-      keywords: 'water filter, water purifier, countertop filter, BPA free',
-      brand: 'Demo Brand',
-    },
-  },
-  { asin: 'B09M8KJ4X2', title: 'LED Desk Lamp', status: 'Live', health: 88, updated: '2026-09-23T14:00:00Z', copy: { title: 'LED Desk Lamp — Dimmable, USB-C Charging, 5 Colour Temperatures', bullets: 'Flicker-free LED panel\nUSB-C passthrough charging\n5 colour temperatures\nMemory dial returns to your last setting', description: 'A calm, even desk light with a memory dial and USB-C charging.', keywords: 'desk lamp, led lamp, dimmable lamp', brand: 'Demo Brand' } },
-  { asin: 'B07XJ8C9F3', title: 'Car Phone Mount', status: 'Draft', health: 61, updated: '2026-09-21T10:00:00Z', copy: { title: 'Car Phone Mount — Magnetic, Vent-Clip, 360° Rotation', bullets: 'Strong magnetic hold\nVent clip, no adhesive\n360° rotation\nOne-hand operation', description: 'A vent-clip magnetic phone mount that installs in seconds.', keywords: 'phone mount, car mount, magnetic holder', brand: 'Demo Brand' } },
-  { asin: 'B08N5WRWNW', title: 'Bluetooth Speaker', status: 'Live', health: 79, updated: '2026-09-20T16:00:00Z', copy: { title: 'Bluetooth Speaker — 24H Playtime, IPX7 Waterproof, Stereo Pairing', bullets: '24-hour playtime\nIPX7 waterproof\nStereo pairing with a second unit\nUSB-C fast charge', description: 'A rugged portable speaker with long playtime and stereo pairing.', keywords: 'bluetooth speaker, portable speaker, waterproof speaker', brand: 'Demo Brand' } },
-]
+const EMPTY_COPY = { title: '', bullets: '', description: '', keywords: '', brand: '' }
+
+// ── Seed listings: REMOVED 2026-10-16 ────────────────────────────────────────
+// The room reads the tenant store (ds_listing_records); browser-local records
+// migrate in one shot on first open. With no records the room shows an honest
+// empty state — no Demo Brand rows exist anywhere in the product.
 
 const TEMPLATES = [
   {
@@ -249,28 +236,90 @@ export default function ListingForge() {
   const { toast } = useToast()
 
   const [mode, setMode] = useRoom('lf-mode', 'simple')
-  const [listings, setListings] = useRoom('lf-listings', SEED_LISTINGS)
-  const [revisions, setRevisions] = useRoom('lf-revisions', [
-    { id: 'REV-001', asin: 'B08L5VJQ7T', version: 'v3.2', summary: 'Title pack-count added; bullets reworded; description refreshed', saved: '2026-09-24T09:00:00Z', state: 'In progress' },
-    { id: 'REV-002', asin: 'B08L5VJQ7T', version: 'v3.1', summary: 'Keyword coverage pass', saved: '2026-09-23T09:00:00Z', state: 'Superseded' },
-    { id: 'REV-003', asin: 'B08L5VJQ7T', version: 'v3.0', summary: 'Launch copy — full rewrite', saved: '2026-09-18T09:00:00Z', state: 'Superseded' },
-    { id: 'REV-004', asin: 'B08L5VJQ7T', version: 'v2.9', summary: 'Compliance flag: unsupported claim removed', saved: '2026-09-12T09:00:00Z', state: 'Reverted' },
-  ])
-  const [assetMeta, setAssetMeta] = useRoom('lf-assets', [
-    { id: 'AM-01', name: 'hero-main.jpg', type: 'Image', state: 'Attached', used: 'Title / Bullets', tone: 'pill-muted' },
-    { id: 'AM-02', name: 'lifestyle-kitchen-01.jpg', type: 'Image', state: 'Attached', used: 'Description', tone: 'pill-muted' },
-    { id: 'AM-03', name: 'filter-exploded.png', type: 'Diagram', state: 'Draft', used: '—', tone: 'pill-warn' },
-    { id: 'AM-04', name: 'comparison-chart.png', type: 'Diagram', state: 'Missing alt text', used: 'Description', tone: 'pill-warn' },
-    { id: 'AM-05', name: 'brand-logo-pack.zip', type: 'Brand', state: 'Attached', used: 'A+ Content', tone: 'pill-muted' },
-  ])
+  const [listings, setListings] = useRoom('lf-listings', [])
+  const [revisions, setRevisions] = useRoom('lf-revisions', [])
+  const [assetMeta, setAssetMeta] = useRoom('lf-assets', [])
+
+  // 2026-10-16: tenant store is the source of truth. On mount: push any
+  // browser-local records up once (idempotent by ASIN), then read the server
+  // list. With no records anywhere the room shows an honest empty state.
+  useEffect(() => {
+    let alive = true
+    ;(async () => {
+      try {
+        if (listings.length) {
+          await migrateListingRecords(listings.map(l => ({
+            asin: l.asin,
+            title: l.copy?.title || l.title || l.asin,
+            bullets: (l.copy?.bullets || '').split('\n').map(s => s.trim()).filter(Boolean),
+            backend_terms: l.copy?.keywords || '',
+            description: l.copy?.description || '',
+            source: 'listingforge-local',
+            observed_at: l.updated || null,
+            legacy_key: `lf:${l.asin}`,
+          })))
+        }
+        const r = await fetchListingRecords()
+        if (!alive || r.state !== 'ready') return
+        if (r.records.length) {
+          setListings(r.records.map(rec => ({
+            id: rec.id,
+            asin: rec.asin || '(no asin)',
+            title: rec.title || rec.asin || 'Untitled listing',
+            status: 'Tenant record',
+            updated: rec.updated_at || rec.observed_at || '',
+            copy: {
+              title: rec.title || '',
+              bullets: Array.isArray(rec.bullets) ? rec.bullets.join('\n') : (rec.bullets || ''),
+              description: rec.description || '',
+              keywords: rec.backend_terms || '',
+              brand: '',
+            },
+          })))
+        }
+      } catch { /* the room stays on local state; nothing is fabricated */ }
+    })()
+    return () => { alive = false }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const store = useAssetStore()
   const { images } = useDecodedAssets(store.assets)
 
   const [activeAsin, setActiveAsin] = useState(listings[0]?.asin || '')
-  const [draft, setDraft] = useState(listings[0]?.copy || SEED_LISTINGS[0].copy)
+  const [draft, setDraft] = useState(listings[0]?.copy || EMPTY_COPY)
   const [dirty, setDirty] = useState(false)
   const [appliedTemplate, setAppliedTemplate] = useState('')
+  const [newAsin, setNewAsin] = useState('')
+  const [newTitle, setNewTitle] = useState('')
+
+  const createListing = useCallback(async () => {
+    if (!newAsin || !newTitle) return
+    try {
+      const res = await fetch('/api/design-studio/listing-records', {
+        method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          asin: newAsin, title: newTitle, bullets: [], backend_terms: '', description: '',
+          source: 'listingforge-local', legacy_key: `lf:${newAsin}`,
+        }),
+      })
+      if (!res.ok) throw new Error(`http-${res.status}`)
+      const saved = await res.json()
+      const rec = saved.record || {}
+      const row = {
+        id: rec.id || saved.id, asin: newAsin, title: newTitle, status: 'Draft', updated: nowIso(),
+        copy: { title: newTitle, bullets: '', description: '', keywords: '', brand: '' },
+      }
+      setListings(prev => [row, ...prev])
+      setActiveAsin(newAsin)
+      setDraft(row.copy)
+      setDirty(false)
+      setNewAsin('')
+      setNewTitle('')
+      t(`Listing ${newAsin} created in the tenant store.`, 'info')
+    } catch (e) {
+      t(`Could not create the listing: ${e.message}`, 'error')
+    }
+  }, [newAsin, newTitle, setListings, t])
 
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = ['listings', 'editor', 'templates', 'assets', 'revisions'].includes(requested) ? requested : 'listings'
@@ -315,7 +364,37 @@ export default function ListingForge() {
       ...prev.map(r => (r.asin === active.asin && r.state === 'In progress' ? { ...r, state: 'Superseded' } : r)),
     ])
     setDirty(false)
-    t(`Revision saved locally for ${active.asin}. Internal review state only — nothing was published to any marketplace.`, 'info')
+    // Persist to the tenant store (2026-10-16): update by id when the record
+    // came from the server, otherwise create/migrate it (idempotent per ASIN).
+    const payload = {
+      asin: active.asin,
+      title: draft.title || active.asin,
+      bullets: (draft.bullets || '').split('\n').map(s => s.trim()).filter(Boolean),
+      backend_terms: draft.keywords || '',
+      description: draft.description || '',
+      source: 'listingforge-local',
+      observed_at: nowIso(),
+    }
+    ;(async () => {
+      try {
+        const apiBase = '/api/design-studio'
+        const res = active.id
+          ? await fetch(`${apiBase}/listing-records/${encodeURIComponent(active.id)}`, {
+              method: 'PATCH', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
+            })
+          : await fetch(`${apiBase}/listing-records`, {
+              method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ ...payload, legacy_key: `lf:${active.asin}` }),
+            })
+        if (!res.ok) throw new Error(`http-${res.status}`)
+        const saved = await res.json()
+        const rid = saved.record?.id || saved.id
+        if (rid) setListings(prev => prev.map(l => (l.asin === active.asin ? { ...l, id: rid, status: 'Tenant record' } : l)))
+        t(`Revision saved to the tenant store for ${active.asin}. Internal review state only — nothing was published to any marketplace.`, 'info')
+      } catch (e) {
+        t(`Saved in the browser, but the tenant store did not accept the update (${e.message}). The copy is not lost; retry from this screen.`, 'warn')
+      }
+    })()
   }, [active, draft, listings, revisions, setListings, setRevisions, t])
 
   // ── Export the copy as CSV, WITH the flat-file contract notice ──
@@ -378,8 +457,8 @@ export default function ListingForge() {
         <button className="btn btn-sm btn-ghost" onClick={() => go('templates')}>Templates</button>
       </>}
     >
-      <DataNotice tone="sample" title="Listing copy and revision state are local records">
-        Listings, editor drafts, revisions and uploaded assets are real records you create here and are stored in this browser.
+      <DataNotice tone="internal" title="Listings live in your tenant store">
+        Listings, editor drafts and revisions are real records stored in the tenant store (server-backed, scoped to you).
         Nothing is published to any marketplace — revision states are internal review states only. Health and keyword
         coverage are deterministic rules applied to your own text, labelled as local heuristics.
       </DataNotice>
@@ -400,17 +479,41 @@ export default function ListingForge() {
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Listings</h3>
-              {/* The badge now states the truth: the number of rows actually shown. */}
+              {/* The badge states the number of rows actually shown. */}
               <span className="pill pill-muted">{listings.length} listings · {listings.filter(l => l.status === 'Draft').length} draft</span>
             </div>
-            <DataTable columns={[
-              { key: 'asin', label: 'ASIN' },
-              { key: 'title', label: 'Listing' },
-              { key: 'status', label: 'Status' },
-              { key: 'health', label: 'Local health', render: (v, row) => <span className={`pill ${row.status === 'Draft' ? 'pill-warn' : 'pill-muted'}`} title="Local heuristic from the stored copy — not a marketplace measurement">{listingHealth(row.copy).overall}/100</span> },
-              { key: 'updated', label: 'Updated', render: (v) => <span className="pill pill-muted" title="Local revision timestamp">{fmtTime(v)}</span> },
-              { key: 'open', label: '', render: (v, row) => <button className="btn btn-sm" onClick={() => { selectListing(row.asin); go('editor') }}>Edit</button> },
-            ]} rows={listings} />
+            {listings.length === 0 ? (
+              <div data-testid="lf-listings-empty" style={{ padding: '6px 0' }}>
+                <p style={{ fontSize: 13, marginBottom: 10 }}>
+                  No listings yet. Add your first listing (ASIN + a working title) and the editor, health checks and
+                  revision log all work against it. Nothing leaves this machine.
+                </p>
+                <div className="inline-flex" style={{ gap: 8, alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                  <label className="stack" style={{ gap: 4 }}>
+                    <span className="text-low" style={{ fontSize: 11 }}>ASIN</span>
+                    <input className="field" style={{ width: 150 }} placeholder="B0XXXXXXXX"
+                      value={newAsin} onChange={e => setNewAsin(e.target.value.toUpperCase())} />
+                  </label>
+                  <label className="stack" style={{ gap: 4 }}>
+                    <span className="text-low" style={{ fontSize: 11 }}>Working title</span>
+                    <input className="field" style={{ width: 260 }} placeholder="e.g. Turmeric Latte Blend 200g"
+                      value={newTitle} onChange={e => setNewTitle(e.target.value)} />
+                  </label>
+                  <button className="btn btn-sm btn-primary" disabled={!newAsin || !newTitle} onClick={createListing}>
+                    Create listing
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <DataTable columns={[
+                { key: 'asin', label: 'ASIN' },
+                { key: 'title', label: 'Listing' },
+                { key: 'status', label: 'Status' },
+                { key: 'health', label: 'Local health', render: (v, row) => <span className={`pill ${row.status === 'Draft' ? 'pill-warn' : 'pill-muted'}`} title="Local heuristic from the stored copy — not a marketplace measurement">{listingHealth(row.copy).overall}/100</span> },
+                { key: 'updated', label: 'Updated', render: (v) => <span className="pill pill-muted" title="Local revision timestamp">{fmtTime(v)}</span> },
+                { key: 'open', label: '', render: (v, row) => <button className="btn btn-sm" onClick={() => { selectListing(row.asin); go('editor') }}>Edit</button> },
+              ]} rows={listings} />
+            )}
           </div>
 
           <div className="card" style={{ marginTop: 20 }}>
@@ -440,6 +543,14 @@ export default function ListingForge() {
       )}
 
       {/* ══ EDITOR ══ */}
+      {view === 'editor' && !active && (
+        <div className="subview">
+          <div className="card" data-testid="lf-editor-empty">
+            <p style={{ fontSize: 13, marginBottom: 10 }}>Nothing to edit yet — create a listing first.</p>
+            <button className="btn btn-sm" onClick={() => go('listings')}>Go to listings</button>
+          </div>
+        </div>
+      )}
       {view === 'editor' && active && (
         <div className="subview">
           <div className="card" style={{ marginBottom: 16, padding: '10px 14px' }}>
@@ -604,7 +715,7 @@ export default function ListingForge() {
               { key: 'act', label: '', render: (v, row) => (
                 row.id.startsWith('AS-')
                   ? <button className="btn btn-sm btn-ghost" onClick={() => { setAssetMeta(prev => prev.filter(x => x.id !== row.id)); store.remove(row.id) }}>Remove</button>
-                  : <span className="text-low" style={{ fontSize: 11 }}>sample record</span>
+                  : <span className="text-low" style={{ fontSize: 11 }}>local record</span>
               ) },
             ]} rows={assetMeta} emptyText="No asset records yet." />
             <div className="inline-flex" style={{ gap: 8, marginTop: 12 }}>

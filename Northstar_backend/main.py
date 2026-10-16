@@ -797,6 +797,15 @@ async def list_models():
     }
 
 
+@app.get("/v1/models")
+async def list_models_compat():
+    """Compatibility alias (2026-10-16): host-side probes poll `/v1/models`
+    OpenAI-style. It answers with the same brain catalog as `/api/v1/models`
+    (presence-only flags; no credential values). No auth needed — it exposes
+    model NAMES only, never a credential or a generation path."""
+    return await list_models()
+
+
 # --- Memory Bank + Learning loop routes (Phase A / A0) ----------------------
 
 class MemoryIngestRequest(BaseModel):

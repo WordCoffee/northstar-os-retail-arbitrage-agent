@@ -2456,6 +2456,28 @@ class DesignStudioListingRecordsDB:
         row = cur.fetchone()
         return self._serialize(row) if row else None
 
+    def update(self, rid: str, patch: Dict[str, Any], account_id: Optional[str] = None) -> bool:
+        """Patch a record (2026-10-16). Only real columns; JSON columns are
+        serialized the same way as create(). Returns False when nothing changed
+        or the row is not the caller's."""
+        rec = {k: v for k, v in (patch or {}).items()
+               if k in self._COLS and k not in ("id", "account_id", "legacy_key")}
+        for k in self._JSON_COLS:
+            if k in rec and rec[k] is not None and not isinstance(rec[k], str):
+                rec[k] = json.dumps(rec[k])
+        if not rec:
+            return False
+        rec["updated_at"] = datetime.now(timezone.utc).isoformat()
+        sets = ", ".join(f"{k} = ?" for k in rec)
+        values = list(rec.values()) + [rid]
+        q = f"UPDATE ds_listing_records SET {sets} WHERE id = ?"
+        if account_id:
+            q += " AND account_id = ?"
+            values.append(account_id)
+        cur = self.db.execute(q, tuple(values))
+        self.db.commit()
+        return bool(getattr(cur, "rowcount", 0))
+
     def delete(self, rid: str, account_id: Optional[str] = None) -> bool:
         if account_id:
             self.db.execute("DELETE FROM ds_listing_records WHERE id = ? AND account_id = ?", (rid, account_id))

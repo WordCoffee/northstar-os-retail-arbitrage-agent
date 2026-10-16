@@ -24,13 +24,72 @@ const TABS = [
   { id: 'rules', label: 'Rules' },
 ]
 
-const CAMPAIGNS = [
-  { name: 'Brand Defense', budget: '$500', spend: '$420', acos: '12.3%', placement: '#2', status: 'Healthy' },
-  { name: 'Product Launch — Water Filter', budget: '$800', spend: '$760', acos: '24.1%', placement: '#5', status: 'Review' },
-  { name: 'Keyword Harvest', budget: '$400', spend: '$310', acos: '16.8%', placement: '#3', status: 'Healthy' },
-  { name: 'Competitor Conquest', budget: '$600', spend: '$590', acos: '31.2%', placement: '#8', status: 'Critical' },
-  { name: 'Sponsored Brands', budget: '$300', spend: '$250', acos: '14.5%', placement: '#1', status: 'Healthy' },
-]
+// ── Imported ad evidence (2026-10-16) ─────────────────────────────────────
+// Campaigns and terms come from the seller's OWN imported files (file-only
+// architecture: no Amazon API exists). A metric the file does not carry is
+// UNKNOWN, never 0. With no import the room shows an honest empty state.
+const EVIDENCE_API = '/api/design-studio'
+
+async function evidenceGet(path) {
+  const res = await fetch(`${EVIDENCE_API}${path}`, { credentials: 'include' })
+  if (!res.ok) throw new Error(`http-${res.status}`)
+  return res.json()
+}
+
+const asNum = (v) => {
+  if (v === null || v === undefined || v === '') return null
+  const n = Number(String(v).replace(/,/g, ''))
+  return Number.isFinite(n) ? n : null
+}
+
+function deriveCampaigns(rows) {
+  const by = new Map()
+  for (const r of rows) {
+    const key = r.campaign_id || r.campaign_name || '(unidentified)'
+    if (!by.has(key)) by.set(key, { id: key, name: r.campaign_name || r.campaign_id || 'UNKNOWN', spend: null, sales: null, clicks: null, impressions: null, rows: 0 })
+    const c = by.get(key)
+    c.rows += 1
+    for (const f of ['spend', 'sales', 'clicks', 'impressions']) {
+      const v = asNum(r[f])
+      if (v !== null) c[f] = (c[f] ?? 0) + v
+    }
+  }
+  const out = [...by.values()].map(c => ({
+    ...c,
+    spend: c.spend === null ? 'UNKNOWN' : c.spend,
+    acos: (c.spend !== null && c.sales) ? `${Math.round((c.spend / c.sales) * 1000) / 10}%` : 'UNKNOWN',
+  }))
+  out.sort((a, b) => (typeof b.spend === 'number' ? b.spend : -1) - (typeof a.spend === 'number' ? a.spend : -1))
+  return out
+}
+
+function useImportedAdEvidence() {
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    ;(async () => {
+      try {
+        const list = await evidenceGet('/amazon-files')
+        const bulks = (list.uploads || [])
+          .filter(u => u.kind === 'ads_bulksheet' || u.kind === 'ads_search_terms')
+          .sort((a, b) => String(b.uploaded_at || '').localeCompare(String(a.uploaded_at || '')))
+        if (!bulks.length) { if (alive) setSt({ phase: 'empty' }); return }
+        const newest = bulks[0]
+        const rows = await evidenceGet(`/amazon-files/${newest.id}/rows?limit=800`)
+        let terms = []
+        try {
+          const t = await evidenceGet('/terms?limit=200')
+          terms = t.rows || []
+        } catch { /* terms are optional evidence */ }
+        if (alive) setSt({ phase: 'ready', source: newest, rows: rows.rows || [], campaigns: deriveCampaigns(rows.rows || []), terms })
+      } catch (e) {
+        if (alive) setSt({ phase: 'error', message: e.message })
+      }
+    })()
+    return () => { alive = false }
+  }, [])
+  return st
+}
 
 const STATUS_PILL = { Healthy: 'pill-forest', Review: 'pill-warn', Critical: 'pill-ochre' }
 
@@ -253,10 +312,10 @@ function AdCreatives({ copy, setCopy, attachedAssetId, setAttachedAssetId, store
   )
 }
 
-function healthRollup() {
-  const c = { Healthy: 0, Review: 0, Critical: 0 }
-  CAMPAIGNS.forEach(x => { c[x.status] = (c[x.status] || 0) + 1 })
-  return `${c.Healthy} healthy · ${c.Review} review · ${c.Critical} critical`
+function healthRollup(campaigns) {
+  if (!campaigns || !campaigns.length) return 'no imported campaigns yet'
+  const withSpend = campaigns.filter(c => typeof c.spend === 'number').length
+  return `${campaigns.length} campaign(s) from the imported file · ${withSpend} with spend data`
 }
 
 export default function AdPilot() {
@@ -275,9 +334,12 @@ export default function AdPilot() {
   const [attachedAssetId, setAttachedAssetId] = useState('')
   const store = useAssetStore()
   const kit = kits.find(k => k.id === activeKitId) || kits[0] || DEFAULT_BRAND_KITS[0]
+  const evidence = useImportedAdEvidence()
+  const [selectedCampaign, setSelectedCampaign] = useState(null)
 
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : 'campaigns'
+  const campaigns = evidence.phase === 'ready' ? evidence.campaigns : []
 
   return (
     <PageLayout
@@ -289,10 +351,24 @@ export default function AdPilot() {
         <button className="btn btn-sm btn-ghost" onClick={() => toast('Bulk actions operate on the local campaign records below — nothing is sent to an ad platform.', 'info')}>Bulk Actions</button>
       </>}
     >
-      <DataNotice tone="sample" title="All performance data is sample/observed data">
-        Do not use for purchase authorization or budget spend decisions. Actual costs and conversions require verified tracking.
-        The Creatives tab renders your own copy and artwork locally — no ad is served.
-      </DataNotice>
+      {evidence.phase === 'empty' && (
+        <DataNotice tone="cached" title="No ad files imported yet">
+          Import an Ads bulksheet (or search-term report) in <strong>Design Studio → Ads → Amazon files</strong> and this
+          room reads it: campaigns, spend and terms come from your own files. Nothing here is live tracking and nothing
+          is sent to an ad platform.
+        </DataNotice>
+      )}
+      {evidence.phase === 'ready' && (
+        <DataNotice tone="cached" title={`Reading ${evidence.source.filename} (observed ${evidence.source.observed_from || 'UNKNOWN'} → ${evidence.source.observed_to || 'UNKNOWN'})`}>
+          Observed file data, not live tracking. A metric your file does not carry reads UNKNOWN, never 0.
+          Nothing is sent to an ad platform.
+        </DataNotice>
+      )}
+      {evidence.phase === 'error' && (
+        <DataNotice tone="sample" title="Could not read the imported files">
+          {evidence.message} — the room will not substitute sample numbers. Try again after the stack is healthy.
+        </DataNotice>
+      )}
 
       <RoomTabs tabs={TABS} base="/adpilot" />
 
@@ -303,133 +379,141 @@ export default function AdPilot() {
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Campaign Health</h3>
-              <span className="pill pill-muted" title="Rollup computed from the sample rows below — not live campaign data">{healthRollup()}</span>
+              <span className="pill pill-muted">{healthRollup(campaigns)}</span>
             </div>
-            <DataTable columns={[
-              { key: 'name', label: 'Campaign' },
-              { key: 'budget', label: 'Budget' },
-              { key: 'spend', label: 'Spend' },
-              { key: 'acos', label: 'ACoS' },
-              { key: 'placement', label: 'Top Placement' },
-              { key: 'status', label: 'Status', render: (v) => <span className={`pill ${STATUS_PILL[v] || 'pill-muted'}`}>{v}</span> },
-              { key: 'open', label: '', render: (v, row) => <button className="btn btn-sm" onClick={() => navigate('/adpilot?view=detail')}>Open</button> },
-            ]} rows={CAMPAIGNS} />
+            {evidence.phase === 'loading' && <p style={{ fontSize: 13 }}>Reading your imported files…</p>}
+            {evidence.phase === 'empty' && (
+              <div style={{ padding: '10px 0' }} data-testid="ap-campaigns-empty">
+                <p style={{ fontSize: 13, marginBottom: 10 }}>
+                  No campaigns yet — campaigns appear here after you import a bulksheet in Ads → Amazon files.
+                </p>
+                <button className="btn btn-sm btn-primary" onClick={() => navigate('/design-studio?section=ads&view=amazon-files')}>
+                  Import a bulksheet
+                </button>
+              </div>
+            )}
+            {evidence.phase === 'ready' && campaigns.length > 0 && (
+              <DataTable columns={[
+                { key: 'name', label: 'Campaign' },
+                { key: 'spend', label: 'Spend (observed)', render: (v) => typeof v === 'number' ? v.toFixed(2) : <span className="pill pill-unknown">UNKNOWN</span> },
+                { key: 'sales', label: 'Sales (observed)', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v.toFixed(2) },
+                { key: 'acos', label: 'ACoS (derived)', render: (v) => v === 'UNKNOWN' ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+                { key: 'clicks', label: 'Clicks', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+                { key: 'open', label: '', render: (v, row) => (
+                  <button className="btn btn-sm" onClick={() => { setSelectedCampaign(row); navigate('/adpilot?view=detail') }}>Open</button>
+                ) },
+              ]} rows={campaigns} />
+            )}
+            {evidence.phase === 'ready' && campaigns.length === 0 && (
+              <p style={{ fontSize: 13 }}>The imported file carries no campaign-level rows. Honest empty state.</p>
+            )}
           </div>
 
           <div className="card" style={{ marginTop: 20 }}>
             <div className="card-head">
-              <h3 className="card-title">Budget Watch</h3>
-              <span className="pill pill-muted">Basis: sample campaign data</span>
+              <h3 className="card-title">Observed range &amp; source</h3>
+              <span className="pill pill-muted">{evidence.phase === 'ready' ? 'file evidence' : 'no file'}</span>
             </div>
-            <div className="grid-3" style={{ gap: 16 }}>
-              {[
-                { campaign: 'Competitor Conquest', pace: '98% of budget', note: 'Spend pacing ahead of cycle — review before renewal', tone: 'var(--clay)', meter: 'meter-fill-ochre', w: 98 },
-                { campaign: 'Product Launch — Water Filter', pace: '95% of budget', note: 'High spend with ACoS above target', tone: 'var(--ochre)', meter: 'meter-fill-ochre', w: 95 },
-                { campaign: 'Brand Defense', pace: '84% of budget', note: 'Pacing within expected range', tone: 'var(--pine)', meter: 'meter-fill-forest', w: 84 },
-              ].map(b => (
-                <div key={b.campaign}>
-                  <div style={{ fontSize: 13, fontWeight: 500 }}>{b.campaign}</div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: b.tone, marginTop: 2 }}>{b.pace}</div>
-                  <div className="meter" style={{ marginTop: 4 }}><div className={`meter-fill ${b.meter}`} style={{ width: `${b.w}%` }}></div></div>
-                  <div className="text-low" style={{ fontSize: 11, marginTop: 4 }} title="Sample pacing estimate — not live spend data">{b.note}</div>
+            {evidence.phase === 'ready' ? (
+              <div className="grid-3" style={{ gap: 16 }}>
+                <div>
+                  <div className="text-low" style={{ fontSize: 11 }}>Source file</div>
+                  <div style={{ fontSize: 13, fontWeight: 500 }}>{evidence.source.filename}</div>
+                  <div className="text-low" style={{ fontSize: 11 }}>checksum {(evidence.source.checksum || '').slice(0, 10)}…</div>
                 </div>
-              ))}
-            </div>
+                <div>
+                  <div className="text-low" style={{ fontSize: 11 }}>Observed window</div>
+                  <div style={{ fontSize: 13, fontWeight: 500 }}>
+                    {evidence.source.observed_from || 'UNKNOWN'} → {evidence.source.observed_to || 'UNKNOWN'}
+                  </div>
+                  <div className="text-low" style={{ fontSize: 11 }}>as the file states it</div>
+                </div>
+                <div>
+                  <div className="text-low" style={{ fontSize: 11 }}>Rows read</div>
+                  <div style={{ fontSize: 13, fontWeight: 500 }}>{evidence.rows.length}</div>
+                  <div className="text-low" style={{ fontSize: 11 }}>never modified — the archive is read-only</div>
+                </div>
+              </div>
+            ) : (
+              <p style={{ fontSize: 13 }}>No imported file yet — this panel fills from your first Ads import.</p>
+            )}
           </div>
         </div>
       )}
 
       {view === 'detail' && (
         <div className="subview">
-          <div className="card" style={{ marginBottom: 20 }}>
-            <div className="card-head">
-              <h3 className="card-title">Product Launch — Water Filter</h3>
-              <span className="pill pill-warn">Review</span>
+          {!selectedCampaign && (
+            <div className="card">
+              <p style={{ fontSize: 13, marginBottom: 10 }}>Open a campaign from the Campaigns tab to see its observed detail here.</p>
+              <button className="btn btn-sm" onClick={() => navigate('/adpilot?view=campaigns')}>Back to campaigns</button>
             </div>
-            <div className="grid-4" style={{ gap: 12 }}>
-              {[
-                { label: 'Budget', v: '$800' },
-                { label: 'Spend', v: '$760' },
-                { label: 'ACoS', v: '24.1%' },
-                { label: 'Top Placement', v: '#5' },
-              ].map(d => (
-                <div key={d.label}>
-                  <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>{d.label}</div>
-                  <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--pine-deep)' }}>{d.v}</div>
-                  <div className="text-low" style={{ fontSize: 10, marginTop: 2 }} title="Sample campaign data — not verified tracking">Basis: sample data</div>
+          )}
+          {selectedCampaign && (
+            <>
+              <div className="card" style={{ marginBottom: 20 }}>
+                <div className="card-head">
+                  <h3 className="card-title">{selectedCampaign.name}</h3>
+                  <span className="pill pill-muted">observed file data</span>
                 </div>
-              ))}
-            </div>
-          </div>
+                <div className="grid-4" style={{ gap: 12 }}>
+                  {[
+                    { label: 'Spend (observed)', v: typeof selectedCampaign.spend === 'number' ? selectedCampaign.spend.toFixed(2) : 'UNKNOWN' },
+                    { label: 'Sales (observed)', v: selectedCampaign.sales == null ? 'UNKNOWN' : selectedCampaign.sales.toFixed(2) },
+                    { label: 'ACoS (derived)', v: selectedCampaign.acos },
+                    { label: 'Clicks', v: selectedCampaign.clicks == null ? 'UNKNOWN' : selectedCampaign.clicks },
+                  ].map(d => (
+                    <div key={d.label}>
+                      <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>{d.label}</div>
+                      <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--pine-deep)' }}>{d.v}</div>
+                      <div className="text-low" style={{ fontSize: 10, marginTop: 2 }}>from {evidence.phase === 'ready' ? evidence.source.filename : 'no file'}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-          <div className="card">
-            <div className="card-head">
-              <h3 className="card-title">Search Term Performance</h3>
-              <span className="pill pill-muted" title="Sample performance window — not verified tracking">Top 5 terms · sample</span>
-            </div>
-            <DataTable columns={[
-              { key: 'term', label: 'Search Term' },
-              { key: 'impressions', label: 'Impressions' },
-              { key: 'clicks', label: 'Clicks' },
-              { key: 'ctr', label: 'CTR' },
-              { key: 'acos', label: 'ACoS' },
-            ]} rows={[
-              { term: 'water filter', impressions: 24500, clicks: 1820, ctr: '7.4%', acos: '11.2%' },
-              { term: 'water purifier', impressions: 18200, clicks: 1340, ctr: '7.4%', acos: '19.8%' },
-              { term: 'countertop filter', impressions: 12100, clicks: 890, ctr: '7.4%', acos: '14.1%' },
-              { term: 'BPA free filter', impressions: 9800, clicks: 720, ctr: '7.3%', acos: '22.3%' },
-              { term: 'family water filter', impressions: 7600, clicks: 540, ctr: '7.1%', acos: '28.5%' },
-            ]} />
-          </div>
+              <div className="card">
+                <div className="card-head">
+                  <h3 className="card-title">Search Term Performance</h3>
+                  <span className="pill pill-muted">from your imported term evidence</span>
+                </div>
+                {evidence.phase === 'ready' && evidence.terms.length > 0 ? (
+                  <DataTable columns={[
+                    { key: 'term', label: 'Search Term' },
+                    { key: 'impressions', label: 'Impressions', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+                    { key: 'clicks', label: 'Clicks', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+                    { key: 'spend', label: 'Spend', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+                  ]} rows={[...evidence.terms].sort((a, b) => (b.clicks ?? -1) - (a.clicks ?? -1)).slice(0, 10)} />
+                ) : (
+                  <p style={{ fontSize: 13 }}>No search-term evidence imported yet — import a search-term report in Design Studio → Ads → Amazon files. Honest empty state.</p>
+                )}
+              </div>
+            </>
+          )}
         </div>
       )}
 
       {view === 'planner' && (
         <div className="subview">
-          <DataNotice tone="assumption" title="Planner uses assumed conversion and cost basis">
-            Bid and budget recommendations are assumptions for planning only. They do not authorize spend. Verify against connected tracking before action.
+          <DataNotice tone="assumption" title="Planning aid — nothing is applied automatically">
+            This planner works from your imported file evidence. It never generates fake recommendations and never
+            authorizes spend; every change is made by you in Amazon's console.
           </DataNotice>
           <div className="card">
             <div className="card-head">
-              <h3 className="card-title">Bid Recommendations</h3>
-              <span className="pill pill-ochre">2 recommendations</span>
+              <h3 className="card-title">Planning basis</h3>
+              <span className="pill pill-muted">{evidence.phase === 'ready' ? 'file evidence' : 'no file'}</span>
             </div>
-            <div className="stack" style={{ gap: 10 }}>
-              <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                <div><div style={{ fontSize: 13, fontWeight: 500 }}>Increase bid: "water filter"</div><div className="text-low" style={{ fontSize: 11 }}>Top 3 position achievable (+$0.15)</div></div>
-                <div className="inline-flex" style={{ gap: 6 }}>
-                  <span className="pill pill-unverified" style={{ fontSize: 10 }} title="Modeled suggestion — not verified tracking">assumption</span>
-                  <span className="pill pill-forest">High Priority</span>
-                </div>
-              </div>
-              <div className="list-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                <div><div style={{ fontSize: 13, fontWeight: 500 }}>Reduce bid: "family water filter"</div><div className="text-low" style={{ fontSize: 11 }}>ACoS exceeds target by 10pp (-$0.20)</div></div>
-                <div className="inline-flex" style={{ gap: 6 }}>
-                  <span className="pill pill-unverified" style={{ fontSize: 10 }} title="Modeled suggestion — not verified tracking">assumption</span>
-                  <span className="pill pill-warn">Medium Priority</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-head">
-              <h3 className="card-title">Proposed Allocation — Next Cycle</h3>
-            </div>
-            <DataTable columns={[
-              { key: 'campaign', label: 'Campaign' },
-              { key: 'current', label: 'Current Budget' },
-              { key: 'proposed', label: 'Proposed' },
-              { key: 'delta', label: 'Delta' },
-              { key: 'basis', label: 'Basis', render: (v) => v === 'Assumption'
-                ? <span className="pill pill-unverified" title="Modeled value — planning only, does not authorize spend">{v}</span>
-                : <span className="pill pill-muted" title="Observed in the sample window — not verified tracking">{v}</span> },
-            ]} rows={[
-              { campaign: 'Brand Defense', current: '$500', proposed: '$500', delta: '—', basis: 'Observed' },
-              { campaign: 'Product Launch', current: '$800', proposed: '$950', delta: '+$150', basis: 'Assumption' },
-              { campaign: 'Competitor Conquest', current: '$600', proposed: '$450', delta: '-$150', basis: 'Assumption' },
-              { campaign: 'Sponsored Brands', current: '$300', proposed: '$300', delta: '—', basis: 'Observed' },
-            ]} />
+            {evidence.phase === 'ready' && campaigns.length > 0 ? (
+              <DataTable columns={[
+                { key: 'name', label: 'Campaign' },
+                { key: 'spend', label: 'Observed spend', render: (v) => typeof v === 'number' ? v.toFixed(2) : <span className="pill pill-unknown">UNKNOWN</span> },
+                { key: 'acos', label: 'Observed ACoS (derived)', render: (v) => v === 'UNKNOWN' ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+                { key: 'proposed', label: 'Proposed change', render: () => <span className="pill pill-muted">you decide</span> },
+              ]} rows={campaigns} />
+            ) : (
+              <p style={{ fontSize: 13 }}>Import a bulksheet to plan against your own observed numbers. Honest empty state — no invented recommendations.</p>
+            )}
           </div>
 
           <AdCopyProposalPanel />
@@ -438,28 +522,24 @@ export default function AdPilot() {
 
       {view === 'terms' && (
         <div className="subview">
-          <DataNotice tone="sample" title="Search-term analytics are sample data">
-            Harvest and negative suggestions are planning aids only. No campaign changes are made automatically — apply actions require operator approval.
+          <DataNotice tone="cached" title="Search-term evidence from your imported files">
+            Harvest and negative suggestions are yours to make; the studio shows the evidence and never changes a campaign.
           </DataNotice>
           <div className="card">
             <div className="card-head">
-              <h3 className="card-title">Term Analysis — Product Launch</h3>
-              <span className="pill pill-muted" title="Sample performance window — not verified tracking">Sample window</span>
+              <h3 className="card-title">Term Analysis</h3>
+              <span className="pill pill-muted">{evidence.phase === 'ready' ? `${evidence.terms.length} imported term(s)` : 'no terms imported'}</span>
             </div>
-            <DataTable columns={[
-              { key: 'term', label: 'Search Term' },
-              { key: 'impressions', label: 'Impr.' },
-              { key: 'clicks', label: 'Clicks' },
-              { key: 'spend', label: 'Spend' },
-              { key: 'acos', label: 'ACoS' },
-              { key: 'suggestion', label: 'Suggestion', render: (v) => <span className={`pill ${v === 'Harvest' ? 'pill-forest' : v === 'Add Negative' ? 'pill-ochre' : 'pill-warn'}`}>{v}</span> },
-            ]} rows={[
-              { term: 'water filter', impressions: 24500, clicks: 1820, spend: '$54.10', acos: '11.2%', suggestion: 'Harvest' },
-              { term: 'water purifier', impressions: 18200, clicks: 1340, spend: '$68.70', acos: '19.8%', suggestion: 'Monitor' },
-              { term: 'countertop filter', impressions: 12100, clicks: 890, spend: '$32.40', acos: '14.1%', suggestion: 'Harvest' },
-              { term: 'BPA free filter', impressions: 9800, clicks: 720, spend: '$41.80', acos: '22.3%', suggestion: 'Add Negative' },
-              { term: 'family water filter', impressions: 7600, clicks: 540, spend: '$39.90', acos: '28.5%', suggestion: 'Reduce Bid' },
-            ]} />
+            {evidence.phase === 'ready' && evidence.terms.length > 0 ? (
+              <DataTable columns={[
+                { key: 'term', label: 'Search Term' },
+                { key: 'impressions', label: 'Impr.', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+                { key: 'clicks', label: 'Clicks', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+                { key: 'spend', label: 'Spend', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v },
+              ]} rows={[...evidence.terms].sort((a, b) => (b.clicks ?? -1) - (a.clicks ?? -1)).slice(0, 25)} />
+            ) : (
+              <p style={{ fontSize: 13 }}>No search-term evidence yet — import a search-term report in Design Studio → Ads → Amazon files. Honest empty state.</p>
+            )}
           </div>
         </div>
       )}
@@ -471,9 +551,9 @@ export default function AdPilot() {
 
       {view === 'placements' && (
         <div className="subview stack" style={{ gap: 14 }}>
-          <DataNotice tone="cached" title="Placement insights are cached sample snapshots">
-            Placement data reflects a stored sample window, not live ad-platform reporting. The creative sizes below are
-            the real pixel dimensions each placement expects.
+          <DataNotice tone="cached" title="Placement creative sizes">
+            The creative sizes below are the real pixel dimensions each placement expects (from the spec registry).
+            No live ad-platform reporting is connected; nothing here claims placement performance.
           </DataNotice>
           <div className="card">
             <div className="card-head">
@@ -515,13 +595,14 @@ export default function AdPilot() {
 
       {view === 'rules' && (
         <div className="subview">
-          <DataNotice tone="internal" title="Rules execute only after operator approval">
-            Rules shown here are sample definitions. No rule fires automatically; every execution requires explicit approval.
+          <DataNotice tone="internal" title="Rule definitions are templates — none fire">
+            These are example rule TEMPLATES to plan with. No rule evaluates automatically and nothing is ever applied;
+            a rule is a note for you, not an automation.
           </DataNotice>
           <div className="card">
             <div className="card-head">
-              <h3 className="card-title">Rule Management</h3>
-              <span className="pill pill-muted">3 rules</span>
+              <h3 className="card-title">Rule Templates</h3>
+              <span className="pill pill-muted">templates only</span>
             </div>
             <DataTable columns={[
               { key: 'rule', label: 'Rule' },
@@ -530,9 +611,9 @@ export default function AdPilot() {
               { key: 'evaluated', label: 'Last Evaluated' },
               { key: 'state', label: 'State', render: (v) => <span className={`pill ${v === 'Armed' ? 'pill-warn' : 'pill-muted'}`}>{v}</span> },
             ]} rows={[
-              { rule: 'Pause term if ACoS > 30%', scope: 'Product Launch', condition: 'ACoS 30% over 7d', evaluated: 'sample window', state: 'Draft' },
-              { rule: 'Raise budget if pacing < 80%', scope: 'All campaigns', condition: 'Pacing < 80% at day 14', evaluated: 'sample window', state: 'Draft' },
-              { rule: 'Flag placement ACoS drift', scope: 'Product Launch', condition: 'ACoS delta > +8pp week/week', evaluated: 'sample window', state: 'Armed' },
+              { rule: 'Pause term if ACoS > 30%', scope: 'Any campaign', condition: 'ACoS > 30% over 7d', evaluated: 'never — templates do not evaluate', state: 'Draft' },
+              { rule: 'Raise budget if pacing < 80%', scope: 'Any campaign', condition: 'Pacing < 80% at day 14', evaluated: 'never — templates do not evaluate', state: 'Draft' },
+              { rule: 'Flag placement ACoS drift', scope: 'Any campaign', condition: 'ACoS delta > +8pp week/week', evaluated: 'never — templates do not evaluate', state: 'Draft' },
             ]} />
           </div>
         </div>

@@ -53,11 +53,14 @@ def assert_prod_posture() -> None:
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """In-memory token bucket rate limiter."""
 
+    # 2026-10-16 (production-readiness Phase 0): a signed-in human browsing the
+    # suite fires 6-10 calls per room and the studio polls async jobs, so the
+    # authenticated budgets are sized for real use. Anonymous stays tight.
     PLAN_LIMITS = {
         "foundation": 30,
-        "scout": 60,
-        "mover": 120,
-        "autothink": 300,
+        "scout": 120,
+        "mover": 300,
+        "autothink": 600,
     }
 
     def __init__(self, app, window_seconds: int = 60):

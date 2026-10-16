@@ -86,7 +86,9 @@ export default function SuiteRail({ onNavigate }) {
       })}
 
       <div className="suite-rail-footer">
-        <span className="suite-rail-system">v2.0 — Internal Use</span>
+        <span className="suite-rail-system" title={`Build ${__BUILD_INFO__.commit} · ${__BUILD_INFO__.time}`}>
+          v2.0 · build {__BUILD_INFO__.commit}
+        </span>
       </div>
     </aside>
   )
