@@ -17,7 +17,7 @@ to a co-packer. Tagging now makes that cleanup cheap later.
 | Role | Pick | License class | Status |
 |---|---|---|---|
 | Base generation | FLUX.2 **klein 4B** Q8 GGUF | Apache-2.0 | installed — **fallback** via `STUDIO_IMAGE_MODEL` env |
-| Base generation (upgrade) | FLUX.2 **klein 9B** Q8 GGUF (`flux-2-klein-9b-Q8_0.gguf`, leejet) | FLUX Non-Commercial | **DEFAULT** (verified: 27.7s warm fresh render; consecutive renders stable) |
+| Base generation (upgrade) | FLUX.2 **klein 9B KV** Q8 GGUF (`Flux-2-Klein-9B-KV-Q8_0.gguf`, QuantStack — ComfyUI-native conversion) | FLUX Non-Commercial | **DEFAULT** (verified: 33.2s fresh / 6.1–6.2s warm; mixed + consecutive renders server-stable, no compat warnings) |
 | Edit / refine | **Qwen-Image-Edit-2511** Q4_K_M GGUF (`qwen-image-edit-2511-Q4_K_M.gguf`) + `qwen_2.5_vl_7b_nvfp4` encoder | Apache-2.0 | **already on disk** (since 2026-10-06; verify VAE, then smoke) |
 | Layout / reference control | **refcontrol klein 4B depth** LoRA (`flux2_klein_4b_refcontrol_depth.safetensors` + official workflow JSON) | Apache-2.0 | **pulling now** |
 | Layout / reference control (9B) | **refcontrol 9B pose** LoRA (`refcontrol_v2_poses.safetensors` + workflow JSON) | see card | **pulling now** |
@@ -88,4 +88,17 @@ before they go on a product we sell."
   run served in 3.1 s). The 4B path is likewise unaffected. 9B is the studio
   default now; switch back with `STUDIO_IMAGE_MODEL=flux-2-klein-4b-Q8_0.gguf`
   + `STUDIO_TEXT_ENCODER=qwen_3_4b_fp8_mixed.safetensors`.
+- **SECOND failure mode — RESOLVED (2026-10-16, same day)**: with mixed 4B/9B
+  traffic the server hit a *different* access violation — inside the
+  text-encoder **encode** (`comfy/text_encoders/flux.py:124`) under memory
+  pressure. Root cause: the leejet 9B GGUF is an **sd.cpp conversion** loaded
+  via ComfyUI-GGUF's compatibility mode (`compatibility mode 'sd.cpp'
+  [arch:flux]`) — a fragile path our stable 4B never uses. Fix: swapped to the
+  ComfyUI-native `QuantStack/FLUX.2-Klein-9B-KV-GGUF →
+  Flux-2-Klein-9B-KV-Q8_0.gguf`, now the engine default.
+  **Acceptance verified:** 4B fresh → 18.2 s; 9B-KV fresh → 33.2 s; 9B-KV
+  fresh again → **6.1 s warm**; server UP through all three runs; **zero
+  `compatibility mode` / `access violation` lines in the server log**. The
+  leejet file remains on disk but is DEPRECATED — do not select it (it is the
+  crash-prone conversion); remove during a later cleanup.
 - Disk note: model pulls (9B 9.29 + encoder 8.07 + LoRAs 0.24 GB) → ~64 GB free.

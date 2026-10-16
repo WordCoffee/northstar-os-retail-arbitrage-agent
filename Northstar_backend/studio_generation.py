@@ -24,7 +24,7 @@ import uuid
 
 DEFAULT_COMFYUI_URL = "http://127.0.0.1:8199"  # this box's ComfyUI (8188 is upstream default)
 
-IMAGE_MODEL_FILE = os.environ.get("STUDIO_IMAGE_MODEL") or "flux-2-klein-9b-Q8_0.gguf"
+IMAGE_MODEL_FILE = os.environ.get("STUDIO_IMAGE_MODEL") or "Flux-2-Klein-9B-KV-Q8_0.gguf"
 TEXT_ENCODER_FILE = os.environ.get("STUDIO_TEXT_ENCODER") or "qwen_3_8b_fp8mixed.safetensors"
 VIDEO_MODEL_FILE = "Wan2.2-TI2V-5B-Q5_K_M.gguf"
 

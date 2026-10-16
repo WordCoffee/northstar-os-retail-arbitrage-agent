@@ -17,9 +17,15 @@ sys.path.insert(0, str(ROOT / "Northstar_backend"))
 
 os.environ.setdefault("MEDIA_GEN_LIVE", "1")
 os.environ.setdefault("COMFYUI_URL", "http://127.0.0.1:8199")
-os.environ.setdefault("STUDIO_IMAGE_MODEL", "flux-2-klein-9b-Q8_0.gguf")
+if len(sys.argv) > 1:
+    os.environ["STUDIO_IMAGE_MODEL"] = sys.argv[1]
+else:
+    os.environ.setdefault("STUDIO_IMAGE_MODEL", "Flux-2-Klein-9B-KV-Q8_0.gguf")
+_SEED = int(sys.argv[2]) if len(sys.argv) > 2 else 20261016
 if "9b" in os.environ["STUDIO_IMAGE_MODEL"].lower():
     os.environ.setdefault("STUDIO_TEXT_ENCODER", "qwen_3_8b_fp8mixed.safetensors")
+elif "4b" in os.environ["STUDIO_IMAGE_MODEL"].lower():
+    os.environ.setdefault("STUDIO_TEXT_ENCODER", "qwen_3_4b_fp8_mixed.safetensors")
 
 
 def main() -> int:
@@ -34,7 +40,7 @@ def main() -> int:
     out = sg.generate_image(
         prompt=("premium stand-up pouch product mockup standing on a warm oak table, "
                 "soft blurred greenhouse background, late afternoon light, matte finish"),
-        width=1024, height=1024, tier="draft", seed=20261016)
+        width=1024, height=1024, tier="draft", seed=_SEED)
     png = ROOT / "renders" / "smoke_klein9b.png"
     png.write_bytes(out["bytes"])
     print(json.dumps({

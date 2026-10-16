@@ -627,7 +627,7 @@
       "latency": "14B Q4_K_M on RTX 5080 16GB; probe prompts 2.6-26.3s incl. cold load"
     }
   },
-  "last_updated": "2026-10-16T22:01:57Z",
+  "last_updated": "2026-10-16T22:44:16Z",
   "history": [
     {
       "ts": "2026-10-16T06:10:00Z",
@@ -1656,6 +1656,13 @@
       "batch": "MOGRA-MOCKUP",
       "summary": "P0 of the Packify-quality plan SHIPPED: compose_mogra_complete.py v2 - (1) luminance displacement so the print rides the material's folds (max 3 render px), (2) print-grain sync from the pouch's own high-pass surface grain keyed to ink alpha, (3) soft-light shading (0.9, floor 0.28) + capped specular screen (0.32) replacing the old global 0.55 multiply. Step 4 (patch AO rim/seam) deferred honestly: scattered print would get glyph outlines - rationale documented in the script. A/B evidence: renders/_ab_full.png, _ab_crop.png (art/type now sit in the lighting on both SKUs; charcoal print integrates), baseline kept as mogra-forest-dusk-mockup-complete-v1.png; params in the sidecar. PLAN.md P0 marked shipped.",
       "test_counts": "compose run 25.6s; A/B visual verification full-frame + 100% crop; no paid calls"
+    },
+    {
+      "ts": "2026-10-16T22:44:16Z",
+      "activity": "klein9b_kv_native_default_verified",
+      "batch": "MOGRA-MOCKUP",
+      "summary": "Second crash mode diagnosed + fixed same day: the leejet 9B GGUF was an sd.cpp conversion loaded via ComfyUI-GGUF compatibility mode - under mixed 4B/9B traffic it crashed the server inside the text-encoder encode (access violation). Swapped to the ComfyUI-native QuantStack Flux-2-Klein-9B-KV-Q8_0.gguf (9.29GB) and made it the engine default. ACCEPTANCE PASSED: 4B fresh 18.2s -> 9B-KV fresh 33.2s -> 9B-KV fresh again 6.1s warm -> default-path render 6.2s warm; server UP through all runs; ZERO 'compatibility mode' / 'access violation' lines in the server log. Leejet file stays on disk but DEPRECATED (documented; remove in later cleanup). Engine + smoke script defaults updated; MODEL_LANE_PRIVATE doc updated to RESOLVED.",
+      "test_counts": "3-run mixed-model acceptance sequence + default-path render, all PASS; server stable 5/5 checks"
     }
   ]
 }
