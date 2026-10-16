@@ -226,6 +226,30 @@
       "evidence": "probe-20260914T2043Z_unwrangle_amazon_detail_B00BH3HPZW.json (provider-probes/); 2026-09-14 history entry; prior quota evidence in confirmed_facts (2026-09-05 diagnostics)",
       "status": "open",
       "status_updated_at": "2026-09-14T20:43:00Z"
+    },
+    {
+      "id": "chat_transcript_credential_exposure_20261015",
+      "discovered_in": "Tier-1 security pass (gitleaks full-history scan, 2026-10-16)",
+      "discovered_at": "2026-10-16T02:55:00Z",
+      "description": "gitleaks flags 5 residual credential-shaped values in two committed chat-transcript files: 4x generic-api-key in FirstNorthstarautomationchat.md (SCAVIO_API_KEY=<redacted> style .env pastes at L1143/L1148/L1291/L1296) and 1x github-pat (ghp_<redacted> at L7852) in autothink-ui-chat-export.md - the transcript itself describes that one as a live token seen in a screenshot and advises revocation. Verified: both files are present with the same shape counts in pushed origin/main (last update 2026-09-20, commit 61a023c). Deliberately NOT added to .gitleaks.toml allowlists so scans and the pre-commit hook keep surfacing them.",
+      "requires_decision": "Operator: (a) confirm/rotate those credentials (GitHub PAT; SCAVIO key if real) in their dashboards; (b) decide whether to scrub the files from local history and/or force-push a cleaned origin/main (history rewrite + protected-branch push requires explicit approval); (c) decide whether the transcript files should be removed or redacted in-tree.",
+      "status": "open"
+    },
+    {
+      "id": "comfyui_controlnet_aux_missing_skimage",
+      "discovered_in": "Tier-1 ComfyUI boot verification (2026-10-16)",
+      "discovered_at": "2026-10-16T02:55:00Z",
+      "description": "Pre-existing, NOT caused by the Tier-1 installs: ComfyUI custom node comfyui_controlnet_aux raises ModuleNotFoundError: No module named 'skimage' at startup (DWPose hand module). IMPORT FAILED markers: none; the only traceback source across boot logs is custom_nodes\\comfyui_controlnet_aux. IC-Light/KJNodes/Manager all load clean.",
+      "requires_decision": "Optional: install scikit-image into the ComfyUI venv. Held back because that venv is dependency-pinned for the verified media stack (transformers 4.57.0 etc.) and an unprompted dependency add could disturb it.",
+      "status": "open"
+    },
+    {
+      "id": "agent_scan_analysis_token_pending",
+      "discovered_in": "Tier-1 install (snyk-agent-scan v0.6.8)",
+      "discovered_at": "2026-10-16T02:55:00Z",
+      "description": "snyk-agent-scan CLI installed and local inspection ran (discovered all agent configs on this machine, incl. OpenCode MCP servers and Codex plugins; MCP contact prompts declined). Full injection/vulnerability analysis requires a free Snyk account token (SNYK_TOKEN) and sends component metadata to Snyk's API - a cloud service, mildly against the local-first posture.",
+      "requires_decision": "Operator: provide a Snyk token to enable full analysis, or keep the tool for local inspection only, or skip.",
+      "status": "open"
     }
   ],
   "completed_batches": [
@@ -579,8 +603,16 @@
       "latency": "14B Q4_K_M on RTX 5080 16GB; probe prompts 2.6-26.3s incl. cold load"
     }
   },
-  "last_updated": "2026-10-15T04:12:16Z",
+  "last_updated": "2026-10-16T02:55:00Z",
   "history": [
+    {
+      "ts": "2026-10-16T02:55:00Z",
+      "activity": "tier1_tooling_install_and_alpha_relaunch",
+      "batch": "Operator-requested: install all Tier-1 safe items from reports/tooling_deep_dive_20261015.md, start the service fully, print the Cloudflare link for operator+partner testing on Mogra Organics",
+      "summary": "INSTALLED+VERIFIED: gitleaks 8.30.1 (winget; full-history scan 179MB/686 commits), trufflehog v3.99.2 (binary; production-scope filesystem scan 0 detections; .env-only hits are the app's own ignored config; .git hits = 40-hex-SHA false positives), snyk-agent-scan v0.6.8 (uv tool; local inspect ran across machine agent configs incl. OpenCode MCP + Codex plugins - full analysis pends a free Snyk token decision), llama-swap v265 (config.yaml with brain-CUDA + embedding lanes; boot-validated via /v1/models, stopped/on-demand), qwen3-embedding:0.6b pulled (639MB), ComfyUI-Manager + KJNodes + IC-Light-Native (boot-verified live: CreateShapeMask/ColorToMask/GetImageSizeAndCount/SplineEditor/FloatConstant + ICLightAppply/ICLightApplyMaskGrey; IC-Light fc+fbc unet_ldm + clip_l + vae-ft-mse downloaded), Docling 2.139.0 (uv tool). SECRET SCAN: 79 raw findings -> 74 reviewed-FP allowlisted in .gitleaks.toml (tests/security fixtures, scraped-HTML fixtures, Faire product JSONs, budget-ledger sha256 values, API_REFERENCE sample header, retired creative_pipeline registry keys); 5 remain in 2 chat-transcript files (4x FirstNorthstarautomationchat.md, 1x autothink-ui-chat-export.md ghp_-shaped) - both files confirmed present with same shape counts in pushed origin/main since 2026-09-20 (61a023c); deliberately NOT allowlisted; rotation+scrub decision added to owner_action_queue. Pre-commit hook installed (tools/git-hooks + tools/install-git-hooks.ps1) and block-tested (high-entropy fake -> commit rc=1, HEAD unchanged); both new commits passed the hook. LAUNCH: launcher+deploy doc fixed to current /ui/ routes; private-alpha relaunched with -Gate (in-app allowlist ON, rate limiter live, cloud engine disarmed): backend :8000 health ok, AutothinK :8100 ok, brain resident (northstaros-qwen3.8:27b + qwen3-embedding:0.6b), tunnel https://thoroughly-pursuant-sensor-contain.trycloudflare.com - verified through the public URL: /health 200, /ui/ 200, /autothink/ui/index.html 200, /api/v1/models 403 private_alpha_locked (lock confirmed on both local and public paths). Partner access = allowlist email required at registration while gate is ON. Commits 6d0ad01 (security) + a54ad22 (alpha paths).",
+      "test_counts": "gitleaks full history 179MB/686 commits scanned; trufflehog production-scope 0 detections; hook block-test rc=1 (blocked) + pass-tests rc=0 x2 (5.89KB + 490B staged diffs); ComfyUI boot 1359 node classes with all 3 new packs' marker classes present; probe matrix 10/10 (health 200, ui 200, autothink 200, models 403 - local + public).",
+      "next_action": "Owner: (a) rotate the GitHub PAT + SCAVIO key exposed in the two chat transcripts (in pushed origin/main since 2026-09-20) and decide on history scrub; (b) send partner email to add to NORTHSTAR_ALPHA_ALLOWLIST (relaunch with -Gate -Email 'owner,partner'); (c) decide on Snyk token for agent-scan full analysis; (d) optional: scikit-image install for pre-existing controlnet_aux traceback. Report: reports/tier1_install_and_launch_20261015.md"
+    },
     {
       "ts": "2026-10-15T18:10:00Z",
       "activity": "pre_reboot_readiness_audit_mogra",
@@ -1259,6 +1291,33 @@
       "blocks": "P5-T4 labels",
       "safe_default": "Resale Score / resale_score",
       "status": "OPEN"
+    },
+    {
+      "id": "OA-9",
+      "card": "SEC-T1",
+      "need": "Rotate credentials exposed in two chat transcripts (ghp_ PAT + SCAVIO key) - both files are in pushed origin/main since 2026-09-20 - and decide on history scrub",
+      "when": "now",
+      "blocks": "clean git history / safe sharing",
+      "safe_default": "rotate in dashboards; leave files flagged by scans",
+      "status": "OPEN"
+    },
+    {
+      "id": "OA-10",
+      "card": "ALPHA-1",
+      "need": "Partner email for the private-alpha allowlist (registration is allowlist-restricted while -Gate is ON)",
+      "when": "before partner tests on the tunnel",
+      "blocks": "partner access",
+      "safe_default": "operator-only access",
+      "status": "OPEN"
+    },
+    {
+      "id": "OA-11",
+      "card": "SEC-T2",
+      "need": "Provide SNYK_TOKEN or confirm local-inspect-only for snyk-agent-scan",
+      "when": "optional",
+      "blocks": "full agent-scan analysis",
+      "safe_default": "local inspect only",
+      "status": "DEFERRED"
     }
   ],
   "activity": [
