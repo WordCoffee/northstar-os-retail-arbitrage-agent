@@ -408,3 +408,15 @@ html[data-theme="light"] {
   --shadow-md: 0 4px 14px rgba(26, 46, 26, 0.07);
   --shadow-lg: 0 8px 28px rgba(26, 46, 26, 0.1);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EDITORIAL INK — shell modes (S0)
+   The single AI accent (--spark) + chat surface tokens. Distinct from the
+   media scope (styles/chat.css) which darkens only media subtrees.
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  --spark: #2f6fed;                 /* the ONE AI-state accent — cobalt */
+  --spark-soft: rgba(47, 111, 237, 0.12);
+  --spark-mid: rgba(47, 111, 237, 0.30);
+  --chat-col-max: 780px;
+}

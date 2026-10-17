@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from './Icon.jsx'
 import { useSession } from '../foundation/session.jsx'
+import ShellModeToggle from './ShellModeToggle.jsx'
 
 export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
   const navigate = useNavigate()
@@ -32,6 +33,8 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
             aria-label="Search"
           />
         </div>
+
+        <ShellModeToggle />
 
         <div className="top-nav-action">
           <button

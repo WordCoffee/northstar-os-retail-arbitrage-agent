@@ -8,6 +8,7 @@ import TopNav from './components/TopNav.jsx'
 import MobileBottomNav from './components/MobileBottomNav.jsx'
 import { SessionProvider, useSession } from './foundation/session.jsx'
 import { TOAST_PROVIDER, useToast } from './components/ToastContext.jsx'
+import { ModeProvider } from './context/ModeContext.jsx'
 
 import CommandCenter from './pages/internal/CommandCenter.jsx'
 import ProductFinder from './pages/internal/ProductFinder.jsx'
@@ -255,7 +256,9 @@ export default function App() {
     <BrowserRouter basename="/ui">
       <SessionProvider>
         <TOAST_PROVIDER>
-          <Shell />
+          <ModeProvider>
+            <Shell />
+          </ModeProvider>
         </TOAST_PROVIDER>
       </SessionProvider>
     </BrowserRouter>
