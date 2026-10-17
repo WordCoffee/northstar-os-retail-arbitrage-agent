@@ -1,0 +1,403 @@
+﻿[
+    {
+        "term":  "amazon product reviews",
+        "items":  [
+                      {
+                          "id":  "LoganKells/amazon_product_reviews_video_games",
+                          "downloads":  233,
+                          "likes":  9,
+                          "tags":  [
+                                       "size_categories:10K\u003cn\u003c100K",
+                                       "format:csv",
+                                       "modality:tabular",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:mlcroissant",
+                                       "library:polars",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "m-ric/amazon_product_reviews_datafiniti",
+                          "downloads":  69,
+                          "likes":  2,
+                          "tags":  [
+                                       "task_categories:text-classification",
+                                       "task_categories:question-answering",
+                                       "task_categories:feature-extraction",
+                                       "language:en",
+                                       "size_categories:1K\u003cn\u003c10K",
+                                       "format:parquet",
+                                       "modality:tabular",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:mlcroissant",
+                                       "library:polars",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "haoxianc/srinandanv_amazon-product-reviews",
+                          "downloads":  63,
+                          "likes":  0,
+                          "tags":  [
+                                       "source_datasets:https://www.kaggle.com/datasets/srinandanv/amazon-product-reviews",
+                                       "license:mit",
+                                       "size_categories:10K\u003cn\u003c100K",
+                                       "format:csv",
+                                       "modality:tabular",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:polars",
+                                       "library:mlcroissant",
+                                       "region:us",
+                                       "kaggle-mirror"
+                                   ]
+                      },
+                      {
+                          "id":  "Ankit22445/amazon-product-reviews",
+                          "downloads":  27,
+                          "likes":  0,
+                          "tags":  [
+                                       "size_categories:1K\u003cn\u003c10K",
+                                       "format:csv",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:polars",
+                                       "library:mlcroissant",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "XANJEEV/amazon-product-reviews",
+                          "downloads":  21,
+                          "likes":  1,
+                          "tags":  [
+                                       "size_categories:1K\u003cn\u003c10K",
+                                       "format:csv",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:mlcroissant",
+                                       "library:polars",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "ayyuce/amazon-product-review-sentiment-dataset",
+                          "downloads":  17,
+                          "likes":  0,
+                          "tags":  [
+                                       "size_categories:n\u003c1K",
+                                       "format:parquet",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:mlcroissant",
+                                       "library:polars",
+                                       "doi:10.57967/hf/4808",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "ajgazin/AmazonProductReviews",
+                          "downloads":  7,
+                          "likes":  0,
+                          "tags":  [
+                                       "size_categories:100K\u003cn\u003c1M",
+                                       "format:csv",
+                                       "modality:tabular",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:mlcroissant",
+                                       "library:polars",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "fatma255/amazon-product-reviews",
+                          "downloads":  7,
+                          "likes":  0,
+                          "tags":  [
+                                       "size_categories:1K\u003cn\u003c10K",
+                                       "format:csv",
+                                       "modality:image",
+                                       "modality:tabular",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:polars",
+                                       "library:mlcroissant",
+                                       "region:us"
+                                   ]
+                      }
+                  ]
+    },
+    {
+        "term":  "e-commerce product images",
+        "items":  [
+
+                  ]
+    },
+    {
+        "term":  "brand voice",
+        "items":  [
+                      {
+                          "id":  "manifesta/brandvoice-marketing-briefs",
+                          "downloads":  207,
+                          "likes":  1,
+                          "tags":  [
+                                       "task_categories:text-generation",
+                                       "language:en",
+                                       "license:cc0-1.0",
+                                       "size_categories:n\u003c1K",
+                                       "format:imagefolder",
+                                       "modality:image",
+                                       "library:datasets",
+                                       "library:mlcroissant",
+                                       "arxiv:2508.06374",
+                                       "arxiv:2502.04718",
+                                       "region:us",
+                                       "marketing",
+                                       "brand-voice",
+                                       "copywriting",
+                                       "advertising",
+                                       "style-transfer",
+                                       "real-data"
+                                   ]
+                      },
+                      {
+                          "id":  "thehonestape/brand-voice-spec",
+                          "downloads":  36,
+                          "likes":  0,
+                          "tags":  [
+                                       "task_categories:text-generation",
+                                       "language:en",
+                                       "license:cc-by-4.0",
+                                       "size_categories:n\u003c1K",
+                                       "format:json",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:polars",
+                                       "library:mlcroissant",
+                                       "region:us",
+                                       "brand-voice",
+                                       "style-transfer",
+                                       "preference-data",
+                                       "dpo",
+                                       "copywriting",
+                                       "controllable-generation"
+                                   ]
+                      },
+                      {
+                          "id":  "seandbales/adage-brand-voice",
+                          "downloads":  29,
+                          "likes":  0,
+                          "tags":  [
+                                       "size_categories:1K\u003cn\u003c10K",
+                                       "format:parquet",
+                                       "format:optimized-parquet",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:polars",
+                                       "library:mlcroissant",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "bikalpoudel/voiceforge-brand-voice-dpo",
+                          "downloads":  17,
+                          "likes":  0,
+                          "tags":  [
+                                       "size_categories:n\u003c1K",
+                                       "format:parquet",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:polars",
+                                       "library:mlcroissant",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "bikalpoudel/voiceforge-brand-voice-sft",
+                          "downloads":  13,
+                          "likes":  0,
+                          "tags":  [
+                                       "size_categories:n\u003c1K",
+                                       "format:parquet",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:polars",
+                                       "library:mlcroissant",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "Sam1208/acme-brand-voice-v1",
+                          "downloads":  10,
+                          "likes":  0,
+                          "tags":  [
+                                       "size_categories:n\u003c1K",
+                                       "format:parquet",
+                                       "format:optimized-parquet",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:polars",
+                                       "library:mlcroissant",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "Sam1208/lagoslog-brand-voice-v1",
+                          "downloads":  9,
+                          "likes":  0,
+                          "tags":  [
+                                       "size_categories:n\u003c1K",
+                                       "format:parquet",
+                                       "format:optimized-parquet",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:polars",
+                                       "library:mlcroissant",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "damBruh/skyyrose-brand-voice-training",
+                          "downloads":  5,
+                          "likes":  0,
+                          "tags":  [
+                                       "size_categories:n\u003c1K",
+                                       "format:parquet",
+                                       "format:optimized-parquet",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:polars",
+                                       "library:mlcroissant",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "Mannan7/Brandvoice",
+                          "downloads":  3,
+                          "likes":  0,
+                          "tags":  [
+                                       "license:mit",
+                                       "size_categories:n\u003c1K",
+                                       "format:json",
+                                       "modality:text",
+                                       "library:datasets",
+                                       "library:pandas",
+                                       "library:mlcroissant",
+                                       "library:polars",
+                                       "region:us"
+                                   ]
+                      }
+                  ]
+    },
+    {
+        "term":  "copywriting instructions",
+        "items":  [
+
+                  ]
+    },
+    {
+        "term":  "nutrition facts label",
+        "items":  [
+                      {
+                          "id":  "Data-Gouv-ML/open-food-facts-produits-alimentaires-ingredients-nutrition-labels",
+                          "downloads":  64,
+                          "likes":  0,
+                          "tags":  [
+                                       "language:fr",
+                                       "license:other",
+                                       "size_categories:1M\u003cn\u003c10M",
+                                       "modality:tabular",
+                                       "modality:text",
+                                       "region:us",
+                                       "data-gouv",
+                                       "donnees-publiques-francaises",
+                                       "parquet",
+                                       "csv",
+                                       "open-data"
+                                   ]
+                      },
+                      {
+                          "id":  "french-open-data/open-food-facts-produits-alimentaires-ingredients-nutrition-labels",
+                          "downloads":  11,
+                          "likes":  0,
+                          "tags":  [
+                                       "language:fra",
+                                       "region:us",
+                                       "agroalimentaire",
+                                       "alimentation",
+                                       "aliments",
+                                       "collecte-citoyenne",
+                                       "composition-nutritionnelle",
+                                       "consommation",
+                                       "crowdsourcing",
+                                       "ingredients",
+                                       "labels",
+                                       "openfoodfact",
+                                       "openfoodfacts",
+                                       "produits",
+                                       "produits-alimentaires",
+                                       "dataset_for_agent"
+                                   ]
+                      }
+                  ]
+    },
+    {
+        "term":  "social media advertising",
+        "items":  [
+                      {
+                          "id":  "Mobiusi/Social-Media-Advertising-Briefs-And-Structured-Creative-Generation-Dataset",
+                          "downloads":  34,
+                          "likes":  0,
+                          "tags":  [
+                                       "task_categories:text-classification",
+                                       "language:en",
+                                       "license:cc-by-nc-sa-4.0",
+                                       "region:us"
+                                   ]
+                      },
+                      {
+                          "id":  "Mobiusi/Social-Media-Comparative-Advertising-Fact-Checking-Dataset",
+                          "downloads":  32,
+                          "likes":  0,
+                          "tags":  [
+                                       "task_categories:text-classification",
+                                       "language:en",
+                                       "license:cc-by-nc-sa-4.0",
+                                       "size_categories:n\u003c1K",
+                                       "modality:text",
+                                       "region:us"
+                                   ]
+                      }
+                  ]
+    },
+    {
+        "term":  "english glossary translation",
+        "items":  [
+
+                  ]
+    },
+    {
+        "term":  "search terms keyword",
+        "items":  [
+
+                  ]
+    }
+]
