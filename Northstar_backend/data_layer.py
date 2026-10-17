@@ -28,6 +28,7 @@ from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional
 
 from env_flags import env_flag
+from chat_schema import CHAT_TABLES_SQL
 
 # ---------------------------------------------------------------------------
 # Database connection
@@ -726,7 +727,7 @@ class DataLayer:
             );
             CREATE INDEX IF NOT EXISTS idx_ds_change_files_account ON ds_change_files(account_id);
             CREATE INDEX IF NOT EXISTS idx_ds_change_files_upload ON ds_change_files(upload_id);
-        """)
+        """ + CHAT_TABLES_SQL)
 
     def _create_sqlite_tables(self):
         """Create all tables for SQLite mode (idempotent)."""
@@ -2689,6 +2690,264 @@ class DesignStudioAmazonFilesDB:
         return [self._serialize_change(r) for r in self.db.execute(sql, tuple(params)).fetchall()]
 
 
+class ChatSessionsDB:
+    """Chat sessions for the Simple-mode Master Brain (S1). Tenant-scoped."""
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _serialize(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        for k in ("focus_json",):
+            if d.get(k) and isinstance(d[k], str):
+                try:
+                    d[k] = json.loads(d[k])
+                except json.JSONDecodeError:
+                    pass
+        return d
+
+    def create(self, session: Dict[str, Any]) -> str:
+        sid = session.get("id") or str(uuid.uuid4())
+        session = dict(session)
+        session["id"] = sid
+        session.setdefault("account_id", "default")
+        session.setdefault("title", "New chat")
+        session.setdefault("mode", "simple")
+        now = datetime.now(timezone.utc).isoformat()
+        session.setdefault("created_at", now)
+        session.setdefault("updated_at", now)
+        if "focus_json" in session and isinstance(session["focus_json"], dict):
+            session["focus_json"] = json.dumps(session["focus_json"])
+        cols = [c for c in session.keys()]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO chat_sessions ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(session.values()),
+        )
+        self.db.commit()
+        return sid
+
+    def get_by_id(self, sid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        """Tenant-scoped read: a session owned by another account returns None."""
+        if account_id:
+            cur = self.db.execute(
+                "SELECT * FROM chat_sessions WHERE id = ? AND account_id = ?", (sid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM chat_sessions WHERE id = ?", (sid,))
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def list_by_account(self, account_id: str, limit: int = 100) -> List[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM chat_sessions WHERE account_id = ? ORDER BY updated_at DESC LIMIT ?",
+            (account_id, limit),
+        )
+        return [self._serialize(r) for r in cur.fetchall()]
+
+    def update(self, sid: str, patch: Dict[str, Any], account_id: Optional[str] = None) -> bool:
+        if not patch:
+            return False
+        patch = dict(patch)
+        patch.pop("id", None)
+        patch.pop("account_id", None)  # ownership is never reassignable by patch
+        patch.setdefault("updated_at", datetime.now(timezone.utc).isoformat())
+        if "focus_json" in patch and isinstance(patch["focus_json"], dict):
+            patch["focus_json"] = json.dumps(patch["focus_json"])
+        fields = ", ".join(f"{k} = ?" for k in patch.keys())
+        if account_id:
+            self.db.execute(
+                f"UPDATE chat_sessions SET {fields} WHERE id = ? AND account_id = ?",
+                tuple(patch.values()) + (sid, account_id))
+        else:
+            self.db.execute(
+                f"UPDATE chat_sessions SET {fields} WHERE id = ?",
+                tuple(patch.values()) + (sid,))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+    def delete(self, sid: str, account_id: Optional[str] = None) -> bool:
+        if account_id:
+            self.db.execute(
+                "DELETE FROM chat_messages WHERE session_id = ? AND account_id = ?",
+                (sid, account_id))
+            self.db.execute(
+                "DELETE FROM chat_sessions WHERE id = ? AND account_id = ?", (sid, account_id))
+        else:
+            self.db.execute("DELETE FROM chat_messages WHERE session_id = ?", (sid,))
+            self.db.execute("DELETE FROM chat_sessions WHERE id = ?", (sid,))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+
+class ChatMessagesDB:
+    """Chat messages with separated thinking + ordered parts (S1)."""
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _serialize(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        for k in ("parts_json", "usage_json"):
+            if d.get(k) and isinstance(d[k], str):
+                try:
+                    d[k] = json.loads(d[k])
+                except json.JSONDecodeError:
+                    pass
+        return d
+
+    def create(self, message: Dict[str, Any]) -> str:
+        mid = message.get("id") or str(uuid.uuid4())
+        message = dict(message)
+        message["id"] = mid
+        message.setdefault("account_id", "default")
+        message.setdefault("role", "user")
+        message.setdefault("content", "")
+        message.setdefault("thinking", "")
+        message.setdefault("created_at", datetime.now(timezone.utc).isoformat())
+        for k in ("parts_json", "usage_json"):
+            if k in message and isinstance(message[k], (dict, list)):
+                message[k] = json.dumps(message[k])
+        cols = [c for c in message.keys()]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO chat_messages ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(message.values()),
+        )
+        self.db.commit()
+        return mid
+
+    def get_by_id(self, mid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute(
+                "SELECT * FROM chat_messages WHERE id = ? AND account_id = ?", (mid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM chat_messages WHERE id = ?", (mid,))
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def list_by_session(self, sid: str, account_id: Optional[str] = None,
+                        limit: int = 200) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM chat_messages WHERE session_id = ?"
+        params: List[Any] = [sid]
+        if account_id:
+            sql += " AND account_id = ?"
+            params.append(account_id)
+        sql += " ORDER BY created_at ASC LIMIT ?"
+        params.append(limit)
+        cur = self.db.execute(sql, tuple(params))
+        return [self._serialize(r) for r in cur.fetchall()]
+
+
+class ChatToolCallsDB:
+    """Tool-call ledger for chat turns (wire-ready; populated from S2)."""
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _serialize(self, row: sqlite3.Row) -> Dict[str, Any]:
+        d = dict(row)
+        for k in ("args_json", "result_json"):
+            if d.get(k) and isinstance(d[k], str):
+                try:
+                    d[k] = json.loads(d[k])
+                except json.JSONDecodeError:
+                    pass
+        return d
+
+    def create(self, call: Dict[str, Any]) -> str:
+        cid = call.get("id") or str(uuid.uuid4())
+        call = dict(call)
+        call["id"] = cid
+        call.setdefault("account_id", "default")
+        call.setdefault("status", "queued")
+        call.setdefault("created_at", datetime.now(timezone.utc).isoformat())
+        for k in ("args_json", "result_json"):
+            if k in call and isinstance(call[k], (dict, list)):
+                call[k] = json.dumps(call[k])
+        cols = [c for c in call.keys()]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO chat_tool_calls ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(call.values()),
+        )
+        self.db.commit()
+        return cid
+
+    def update(self, cid: str, patch: Dict[str, Any], account_id: Optional[str] = None) -> bool:
+        if not patch:
+            return False
+        patch = dict(patch)
+        patch.pop("id", None)
+        patch.pop("account_id", None)
+        for k in ("args_json", "result_json"):
+            if k in patch and isinstance(patch[k], (dict, list)):
+                patch[k] = json.dumps(patch[k])
+        fields = ", ".join(f"{k} = ?" for k in patch.keys())
+        if account_id:
+            self.db.execute(
+                f"UPDATE chat_tool_calls SET {fields} WHERE id = ? AND account_id = ?",
+                tuple(patch.values()) + (cid, account_id))
+        else:
+            self.db.execute(
+                f"UPDATE chat_tool_calls SET {fields} WHERE id = ?",
+                tuple(patch.values()) + (cid,))
+        self.db.commit()
+        return self.db.execute("SELECT changes()").fetchone()[0] > 0
+
+    def list_by_session(self, sid: str, account_id: Optional[str] = None) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM chat_tool_calls WHERE session_id = ?"
+        params: List[Any] = [sid]
+        if account_id:
+            sql += " AND account_id = ?"
+            params.append(account_id)
+        sql += " ORDER BY created_at ASC"
+        cur = self.db.execute(sql, tuple(params))
+        return [self._serialize(r) for r in cur.fetchall()]
+
+
+class ChatAttachmentsDB:
+    """Links chat messages to ds_assets (provenance travels with the link)."""
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def create(self, attachment: Dict[str, Any]) -> str:
+        aid = attachment.get("id") or str(uuid.uuid4())
+        attachment = dict(attachment)
+        attachment["id"] = aid
+        attachment.setdefault("account_id", "default")
+        attachment.setdefault("created_at", datetime.now(timezone.utc).isoformat())
+        if "provenance_json" in attachment and isinstance(attachment["provenance_json"], dict):
+            attachment["provenance_json"] = json.dumps(attachment["provenance_json"])
+        cols = [c for c in attachment.keys()]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO chat_attachments ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(attachment.values()),
+        )
+        self.db.commit()
+        return aid
+
+    def list_by_message(self, mid: str, account_id: Optional[str] = None) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM chat_attachments WHERE message_id = ?"
+        params: List[Any] = [mid]
+        if account_id:
+            sql += " AND account_id = ?"
+            params.append(account_id)
+        sql += " ORDER BY created_at ASC"
+        cur = self.db.execute(sql, tuple(params))
+        out = []
+        for row in cur.fetchall():
+            d = dict(row)
+            if d.get("provenance_json") and isinstance(d["provenance_json"], str):
+                try:
+                    d["provenance_json"] = json.loads(d["provenance_json"])
+                except json.JSONDecodeError:
+                    pass
+            out.append(d)
+        return out
+
+
 class DesignStudioContainer:
     """Namespace for the Design Studio stores."""
 
@@ -2702,6 +2961,16 @@ class DesignStudioContainer:
         self.variants = DesignStudioVariantsDB(db)
         self.listing_records = DesignStudioListingRecordsDB(db)
         self.amazon_files = DesignStudioAmazonFilesDB(db)
+
+
+class ChatContainer:
+    """Namespace for the Simple-mode chat stores (S1). Additive."""
+
+    def __init__(self, db: DataLayer):
+        self.sessions = ChatSessionsDB(db)
+        self.messages = ChatMessagesDB(db)
+        self.tool_calls = ChatToolCallsDB(db)
+        self.attachments = ChatAttachmentsDB(db)
 
 
 class NorthstarDB:
@@ -2719,6 +2988,7 @@ class NorthstarDB:
         self.suppliers = SuppliersDB(self._layer)
         self.live_pulls = LivePullsDB(self._layer)
         self.design_studio = DesignStudioContainer(self._layer)
+        self.chat = ChatContainer(self._layer)
 
     @property
     def mode(self) -> str:

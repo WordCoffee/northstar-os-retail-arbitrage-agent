@@ -211,6 +211,59 @@ class UnifiedLLMAdapter:
         except requests.RequestException as exc:
             return self._local_fallback(query, model, reason=str(exc))
 
+    def stream_chat(self, messages: List[Dict], model: Optional[str] = None,
+                    think: bool = False,
+                    should_cancel: Optional[Callable[[], bool]] = None,
+                    num_ctx: Optional[int] = None,
+                    num_predict: Optional[int] = None):
+        """Stream a chat turn as events (S1, ADDITIVE — `generate()` unchanged).
+
+        Yields dicts: {"type": "thinking"|"content", "delta": str},
+        {"type": "notice", "code", "detail"}, {"type": "error", "reason"}, and
+        a terminal {"type": "done", "cancelled": bool, "usage": dict|None}.
+
+        `think=True` asks Ollama for the model's separated reasoning stream; a
+        model that rejects the flag answers with an error mentioning "think",
+        and this retries once WITHOUT it (bounded, never more).
+        """
+        model = model or self.local_model
+        body = {
+            "model": model,
+            "messages": messages,
+            "stream": True,
+            "options": {
+                "num_predict": num_predict or NUM_PREDICT,
+                "num_ctx": num_ctx or NUM_CTX,
+            },
+        }
+        if think:
+            body["think"] = True
+
+        def _open(payload):
+            return requests.post(OLLAMA_CHAT_ENDPOINT, json=payload,
+                                 stream=True, timeout=self.timeout_s)
+
+        try:
+            resp = _open(body)
+            if resp.status_code != 200 and think:
+                detail = ""
+                try:
+                    detail = (resp.text or "")[:400]
+                except Exception:  # noqa: BLE001 - body may be unreadable
+                    detail = ""
+                if "think" in detail.lower():
+                    body.pop("think", None)
+                    yield {"type": "notice", "code": "think_unsupported",
+                           "detail": "Model rejected think=true; retried without it."}
+                    resp = _open(body)
+            if resp.status_code != 200:
+                yield {"type": "error", "reason": "ollama http %s" % resp.status_code}
+                return
+            yield from iter_ollama_chat_events(resp.iter_lines(decode_unicode=True),
+                                               should_cancel)
+        except requests.RequestException as exc:
+            yield {"type": "error", "reason": str(exc)}
+
     def _generate_cloud(self, query: str, model: str,
                         system_prompt: Optional[str] = None) -> Dict:
         provider = self.cloud_provider()
@@ -325,3 +378,45 @@ def build_system_prompt_with_context(context: Optional[Dict]) -> str:
         if data_sources:
             prompt += "\n\nAvailable local data sources:\n- " + "\n- ".join(str(d) for d in data_sources)
     return prompt
+
+
+def iter_ollama_chat_events(lines, should_cancel: Optional[Callable[[], bool]] = None):
+    """Parse Ollama NDJSON chat lines into streaming events (S1, pure).
+
+    Separates `message.thinking` deltas from `message.content` deltas so the
+    Simple-mode chat can render a thinking block + answer; tolerates keep-alive
+    or non-JSON lines; honours a cancel poll between lines. Also tolerates
+    /api/generate-style `response` frames (additive surface).
+    """
+    usage = None
+    for line in lines:
+        if should_cancel is not None and should_cancel():
+            yield {"type": "done", "cancelled": True, "usage": usage}
+            return
+        if not line:
+            continue
+        try:
+            chunk = json.loads(line)
+        except ValueError:
+            continue
+        if not isinstance(chunk, dict):
+            continue
+        msg = chunk.get("message")
+        if isinstance(msg, dict):
+            thinking = msg.get("thinking")
+            if thinking:
+                yield {"type": "thinking", "delta": str(thinking)}
+            content = msg.get("content")
+            if content:
+                yield {"type": "content", "delta": str(content)}
+        elif chunk.get("response"):
+            yield {"type": "content", "delta": str(chunk["response"])}
+        if chunk.get("done"):
+            usage = {
+                "prompt_tokens": chunk.get("prompt_eval_count"),
+                "completion_tokens": chunk.get("eval_count"),
+                "total_duration_ns": chunk.get("total_duration"),
+            }
+            yield {"type": "done", "cancelled": False, "usage": usage}
+            return
+    yield {"type": "done", "cancelled": False, "usage": usage}

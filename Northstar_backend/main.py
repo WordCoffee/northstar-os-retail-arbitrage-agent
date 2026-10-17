@@ -61,6 +61,14 @@ try:
 except ImportError:
     _HAS_DESIGN_STUDIO_EXT = False
 
+# Chat core (S1) — Simple-mode Master Brain chat (SSE stream). Separate guard:
+# a chat import problem must never disable the rest of the design-studio surface.
+try:
+    from chat_router import router as chat_router
+    _HAS_CHAT = True
+except ImportError:  # pragma: no cover - chat needs the studio modules only
+    _HAS_CHAT = False
+
 # Phase 6: Production infrastructure
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
@@ -263,6 +271,10 @@ if _HAS_DESIGN_STUDIO_EXT:
     app.include_router(design_studio_openapi_router)
     app.include_router(design_studio_text_router)
     app.include_router(design_studio_compose_router)
+
+# Chat core (S1) — Simple-mode Master Brain chat (SSE)
+if _HAS_CHAT:
+    app.include_router(chat_router)
 
 # Golden Goose Finder UI panel (standalone page; fetches /api/golden-goose/*)
 _GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"

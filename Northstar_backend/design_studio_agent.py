@@ -152,13 +152,28 @@ def _maybe_llm_enhance(spec: Dict[str, Any], message: str) -> Dict[str, Any]:
         return spec
     try:
         import importlib
-        adapter = importlib.import_module("autothink.backend.llm_adapter")
-        gen = getattr(adapter, "generate", None) or getattr(adapter, "complete", None)
-        if not callable(gen):
+        import sys as _sys
+        from pathlib import Path as _Path
+        _repo_root = str(_Path(__file__).resolve().parent.parent)
+        if _repo_root not in _sys.path:
+            _sys.path.insert(0, _repo_root)  # the autothink package lives at repo root
+        adapter_mod = importlib.import_module("autothink.backend.llm_adapter")
+        adapter_cls = getattr(adapter_mod, "UnifiedLLMAdapter", None)
+        if adapter_cls is None:
             spec["llm_enhanced"] = False
             return spec
-        text = gen(f"List 3 short packaging design directives for: {message[:400]}. One per line.")
-        extra = [ln.strip("-*• \t") for ln in str(text).splitlines() if ln.strip()][:3]
+        # The module exposes a CLASS with .generate(query) -> dict; the old
+        # code asked the MODULE for a `generate` function that never existed,
+        # so this enhancement always fell through to the deterministic brief.
+        result = adapter_cls().generate(
+            f"List 3 short packaging design directives for: {message[:400]}. One per line.",
+            system_prompt="You write terse packaging design directives. One per line, no numbering.",
+        )
+        if not isinstance(result, dict) or not result.get("ok"):
+            spec["llm_enhanced"] = False
+            return spec
+        text = str(result.get("content") or "")
+        extra = [ln.strip("-*• \t") for ln in text.splitlines() if ln.strip()][:3]
         if extra:
             spec["directives"] = extra + spec["directives"]
             spec["prompt_text"] = assemble_prompt(spec)

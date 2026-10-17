@@ -57,6 +57,8 @@ import {
   GEN_PURPOSES, GEN_TIERS,
 } from '../../studio/engine/presets.js'
 import { engineApi } from '../../studio/engine/engineApi.js'
+import { useMode } from '../../context/ModeContext.jsx'
+import CreativeChat from '../../chat/CreativeChat.jsx'
 
 // ── Tools ────────────────────────────────────────────────────────────────────
 const TOOLS = [
@@ -106,6 +108,8 @@ export default function CreativeStudio() {
   const { toast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
+  // Global shell mode (S0): Simple hands this room to the Master Brain chat.
+  const { mode: shellMode } = useMode()
 
   const [mode, setMode] = useRoom('ds-mode', 'simple')
   const [briefs, setBriefs] = useRoom('ns-creative-briefs', SEED_BRIEFS)
@@ -724,6 +728,10 @@ export default function CreativeStudio() {
       )}
     </Section>
   )
+
+  if (shellMode === 'simple') {
+    return <CreativeChat />
+  }
 
   return (
     <>
