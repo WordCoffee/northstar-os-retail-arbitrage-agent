@@ -17,6 +17,7 @@ from __future__ import annotations
 import json
 import os
 import random
+import threading
 import time
 import urllib.parse
 import urllib.request
@@ -80,30 +81,86 @@ def _api(path: str, payload=None, timeout: float = 60.0):
         return json.loads(r.read().decode())
 
 
-def _run_graph(graph: dict, timeout_s: float) -> list:
-    res = _api("/prompt", {"prompt": graph, "client_id": f"ns-studio-{uuid.uuid4().hex[:10]}"}, timeout=30)
+def _ws_progress_listener(on_progress, stop_event, client_id: str = "ns-studio-progress") -> None:
+    """Best-effort ComfyUI /ws progress -> on_progress(pct|None, label).
+
+    Must connect with the SAME client_id that submitted the prompt: ComfyUI
+    targets per-execution progress frames to that socket. Failure is silent BY
+    DESIGN — the polling lane below remains the source of truth.
+    """
+    try:
+        from websockets.sync.client import connect as _ws_connect
+    except Exception:
+        return
+    url = comfyui_url().replace("http://", "ws://") + f"/ws?clientId={client_id}"
+    try:
+        with _ws_connect(url, open_timeout=5, close_timeout=2) as ws:
+            while not stop_event.is_set():
+                try:
+                    raw = ws.recv(timeout=1.0)
+                except TimeoutError:
+                    continue
+                except Exception:
+                    return
+                if isinstance(raw, (bytes, bytearray)):
+                    continue
+                try:
+                    msg = json.loads(raw)
+                except ValueError:
+                    continue
+                mtype = msg.get("type")
+                data = msg.get("data") or {}
+                if mtype == "progress":
+                    total = data.get("max") or 0
+                    value = data.get("value") or 0
+                    pct = int(round(100.0 * value / total)) if total else None
+                    on_progress(pct, f"sampling {value}/{total}")
+                elif mtype == "executing":
+                    if data.get("node") is None:
+                        on_progress(100, "finishing")
+                    else:
+                        on_progress(None, "running nodes")
+                elif mtype == "execution_start":
+                    on_progress(1, "graph accepted")
+    except Exception:
+        return
+
+
+def _run_graph(graph: dict, timeout_s: float, on_progress=None) -> list:
+    client_id = f"ns-studio-{uuid.uuid4().hex[:10]}"
+    res = _api("/prompt", {"prompt": graph, "client_id": client_id}, timeout=30)
     if res.get("node_errors"):
         raise RuntimeError(f"graph rejected: {json.dumps(res['node_errors'])[:400]}")
     pid = res["prompt_id"]
-    t0 = time.time()
-    while time.time() - t0 < timeout_s:
-        time.sleep(3)
-        try:
-            hist = _api(f"/history/{pid}", timeout=30)
-        except Exception:
-            continue
-        if pid in hist:
-            status = hist[pid].get("status", {}) or {}
-            if status.get("status_str") != "success":
-                raise RuntimeError(f"generation failed: {json.dumps(status)[:400]}")
-            files = []
-            for node_out in (hist[pid].get("outputs") or {}).values():
-                for key in ("images", "gifs", "videos"):
-                    for item in node_out.get(key) or []:
-                        if isinstance(item, dict) and item.get("filename"):
-                            files.append(item)
-            return files
-    raise TimeoutError("timed out waiting for the ComfyUI render")
+    stop_progress = None
+    if on_progress is not None:
+        stop_progress = threading.Event()
+        threading.Thread(target=_ws_progress_listener,
+                         args=(on_progress, stop_progress, client_id),
+                         daemon=True).start()
+    try:
+        t0 = time.time()
+        while time.time() - t0 < timeout_s:
+            time.sleep(3)
+            try:
+                hist = _api(f"/history/{pid}", timeout=30)
+            except Exception:
+                continue
+            if pid in hist:
+                status = hist[pid].get("status", {}) or {}
+                if status.get("status_str") != "success":
+                    raise RuntimeError(f"generation failed: {json.dumps(status)[:400]}")
+                files = []
+                for node_out in (hist[pid].get("outputs") or {}).values():
+                    for key in ("images", "gifs", "videos"):
+                        for item in node_out.get(key) or []:
+                            if isinstance(item, dict) and item.get("filename"):
+                                files.append(item)
+                return files
+        raise TimeoutError("timed out waiting for the ComfyUI render")
+    finally:
+        if stop_progress is not None:
+            stop_progress.set()
 
 
 def _fetch_output(item: dict) -> bytes:
@@ -116,7 +173,7 @@ def _fetch_output(item: dict) -> bytes:
         return r.read()
 
 
-def _run_graph_guarded(graph: dict, timeout_s: float) -> list:
+def _run_graph_guarded(graph: dict, timeout_s: float, on_progress=None) -> list:
     """Run a graph; on a CUDA OOM, re-evict the brain once and retry (bounded).
 
     Transient co-residency is real on this box: any other local caller (chat,
@@ -124,7 +181,7 @@ def _run_graph_guarded(graph: dict, timeout_s: float) -> list:
     rules: ONE retry, only for out-of-memory failures, then the error surfaces.
     """
     try:
-        return _run_graph(graph, timeout_s=timeout_s)
+        return _run_graph(graph, timeout_s=timeout_s, on_progress=on_progress)
     except Exception as exc:  # noqa: BLE001
         if "out of memory" not in str(exc).lower():
             raise
@@ -134,7 +191,7 @@ def _run_graph_guarded(graph: dict, timeout_s: float) -> list:
         release_models()
         unload_brain(wait_s=60.0)
         time.sleep(5)
-        return _run_graph(graph, timeout_s=timeout_s)
+        return _run_graph(graph, timeout_s=timeout_s, on_progress=on_progress)
 
 
 def release_models() -> None:
@@ -241,7 +298,8 @@ def _wan_graph(prompt: str, width: int, height: int, frames: int, steps: int, se
 
 # ── Public generation entries ──────────────────────────────────────────────
 
-def generate_image(prompt: str, width=None, height=None, tier: str = "draft", seed=None) -> dict:
+def generate_image(prompt: str, width=None, height=None, tier: str = "draft", seed=None,
+                   on_progress=None) -> dict:
     if not media_live_armed():
         raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
     if not unload_brain():  # one 16 GB GPU: make room, then VERIFY it actually freed
@@ -253,7 +311,10 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
     steps = 8 if str(tier).lower() == "final" else 4
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
     try:
-        files = _run_graph_guarded(_klein_graph(prompt, w, h, steps, seed), timeout_s=1800)
+        if on_progress is not None:
+            on_progress(0, "queued on the local engine")
+        files = _run_graph_guarded(_klein_graph(prompt, w, h, steps, seed), timeout_s=1800,
+                                   on_progress=on_progress)
     except Exception:
         release_models()  # never leave a crammed cache behind a failed render
         raise
@@ -269,7 +330,8 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
     }
 
 
-def generate_video(prompt: str, width=None, height=None, tier: str = "draft", seed=None) -> dict:
+def generate_video(prompt: str, width=None, height=None, tier: str = "draft", seed=None,
+                   on_progress=None) -> dict:
     if not media_live_armed():
         raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
     if not unload_brain():  # one 16 GB GPU: make room, then VERIFY it actually freed
@@ -282,7 +344,10 @@ def generate_video(prompt: str, width=None, height=None, tier: str = "draft", se
     steps = 20
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
     try:
-        files = _run_graph_guarded(_wan_graph(prompt, w, h, frames, steps, seed), timeout_s=5400)
+        if on_progress is not None:
+            on_progress(0, "queued on the local engine")
+        files = _run_graph_guarded(_wan_graph(prompt, w, h, frames, steps, seed), timeout_s=5400,
+                                   on_progress=on_progress)
     except Exception:
         release_models()  # never leave a crammed cache behind a failed render
         raise

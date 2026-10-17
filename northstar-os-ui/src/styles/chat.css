@@ -137,3 +137,29 @@
   background: var(--surface);
   color: var(--ink);
 }
+
+/* ── Tool progress chips + artifact cards (S2) ─────────────────────────── */
+.chat-tools { display: flex; flex-direction: column; gap: 6px; max-width: 720px; }
+.chat-tool {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  border: 1px solid var(--divider); border-radius: var(--radius);
+  background: var(--surface-raised); padding: 6px 10px; font-size: 12px;
+}
+.chat-tool .chat-tool-name { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; color: var(--ink); }
+.chat-tool .chat-tool-state { color: var(--ink-soft); }
+.chat-tool.error .chat-tool-state { color: var(--status-error); }
+.chat-tool .chat-tool-error { flex-basis: 100%; color: var(--status-error); font-size: 11.5px; }
+.chat-tool .chat-tool-bar { flex-basis: 100%; height: 3px; border-radius: 2px; background: var(--spark-soft); overflow: hidden; }
+.chat-tool .chat-tool-bar i { display: block; height: 100%; background: var(--spark); border-radius: 2px; transition: width 0.3s ease; }
+.chat-tool .chat-tool-bar i.indet { width: 35%; animation: chatIndet 1.2s ease-in-out infinite; }
+@keyframes chatIndet { 0% { margin-left: -35%; } 100% { margin-left: 100%; } }
+@media (prefers-reduced-motion: reduce) { .chat-tool .chat-tool-bar i.indet { animation: none; width: 100%; } }
+
+.chat-assets { display: flex; flex-wrap: wrap; gap: 10px; max-width: 720px; }
+.chat-asset-card {
+  display: block; border: 1px solid var(--divider-mid); border-radius: var(--radius-lg);
+  overflow: hidden; background: var(--surface); text-decoration: none; max-width: 340px;
+}
+.chat-asset-card img { display: block; width: 100%; height: auto; }
+.chat-asset-meta { display: block; padding: 6px 10px; font-size: 11.5px; color: var(--ink-mid); }
+.chat-voice-note { color: var(--status-warn); }

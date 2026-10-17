@@ -16,7 +16,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Icon from '../components/Icon.jsx'
-import { chatApi, streamTurn } from './api.js'
+import { chatApi, chatVoice, streamTurn, assetFileUrl } from './api.js'
 
 const SUGGESTIONS = [
   'Draft three directions for a Lion\u2019s Mane pouch \u2014 kraft, botanical, premium shelf.',
@@ -35,8 +35,13 @@ export default function CreativeChat() {
   const [turnId, setTurnId] = useState('')
   const [engine, setEngine] = useState(null)       // {ok, model} | {error}
   const [loadError, setLoadError] = useState('')
+  const [recording, setRecording] = useState(false)
+  const [transcribing, setTranscribing] = useState(false)
+  const [voiceNote, setVoiceNote] = useState('')
   const abortRef = useRef(null)
   const scrollRef = useRef(null)
+  const mediaRef = useRef(null)
+  const chunksRef = useRef([])
 
   // One-time load: engine health + session list.
   useEffect(() => {
@@ -74,13 +79,26 @@ export default function CreativeChat() {
     setQueue([])
     try {
       const r = await chatApi.messages(sid)
-      setMessages((r.messages || []).map((m) => ({
-        id: m.id,
-        role: m.role,
-        content: m.content || '',
-        thinking: m.thinking || '',
-        status: (m.usage_json && m.usage_json.status) || 'done',
-      })))
+      setMessages((r.messages || []).map((m) => {
+        const parts = Array.isArray(m.parts_json) ? m.parts_json : []
+        return {
+          id: m.id,
+          role: m.role,
+          content: m.content || '',
+          thinking: m.thinking || '',
+          status: (m.usage_json && m.usage_json.status) || 'done',
+          tools: parts.filter((p) => p.type === 'tool').map((p, i) => ({
+            call_id: p.call_id || `t-${i}`,
+            name: p.name,
+            status: p.ok ? 'done' : 'error',
+            ok: !!p.ok,
+            summary: p.summary,
+            error: p.error,
+          })),
+          assets: parts.filter((p) => p.type === 'tool')
+            .flatMap((p) => (p.assets || []).map((id) => ({ id, name: 'asset' }))),
+        }
+      }))
     } catch (e) {
       setLoadError(e.message)
     }
@@ -124,6 +142,34 @@ export default function CreativeChat() {
           patchBot((m) => ({ ...m, thinking: m.thinking + (data.delta || '') }))
         } else if (event === 'token') {
           patchBot((m) => ({ ...m, content: m.content + (data.delta || '') }))
+        } else if (event === 'tool-start') {
+          patchBot((m) => ({
+            ...m,
+            tools: [...(m.tools || []), {
+              call_id: data.call_id, name: data.name, args: data.args,
+              status: 'running', pct: null, label: 'queued', ok: null,
+            }],
+          }))
+        } else if (event === 'tool-progress') {
+          patchBot((m) => ({
+            ...m,
+            tools: (m.tools || []).map((tj) => (tj.call_id === data.call_id
+              ? { ...tj, pct: data.pct, label: data.label || tj.label }
+              : tj)),
+          }))
+        } else if (event === 'tool-end') {
+          patchBot((m) => ({
+            ...m,
+            tools: (m.tools || []).map((tj) => (tj.call_id === data.call_id
+              ? { ...tj, status: data.ok ? 'done' : 'error', ok: !!data.ok,
+                  summary: data.summary, error: data.error }
+              : tj)),
+          }))
+        } else if (event === 'asset') {
+          patchBot((m) => ({
+            ...m,
+            assets: [...(m.assets || []).filter((a) => a.id !== data.id), data],
+          }))
         } else if (event === 'notice') {
           patchBot((m) => ({ ...m, notices: [...(m.notices || []), data.code || 'notice'] }))
         } else if (event === 'error') {
@@ -136,7 +182,6 @@ export default function CreativeChat() {
             endedAt: Date.now(),
           }))
         }
-        // tool-start / tool-progress / tool-end / asset: wire-ready (S2)
       }, controller.signal)
     } catch (e) {
       if (e && e.name !== 'AbortError') {
@@ -172,6 +217,43 @@ export default function CreativeChat() {
       runTurn(next)
     }
   }, [streaming, queue, runTurn])
+
+  const startRecording = useCallback(async () => {
+    setVoiceNote('')
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const rec = new MediaRecorder(stream)
+      chunksRef.current = []
+      rec.ondataavailable = (e) => { if (e.data && e.data.size) chunksRef.current.push(e.data) }
+      rec.onstop = async () => {
+        stream.getTracks().forEach((t) => t.stop())
+        setRecording(false)
+        const blob = new Blob(chunksRef.current, { type: rec.mimeType || 'audio/webm' })
+        if (!blob.size) { setVoiceNote('Heard nothing — no audio captured.'); return }
+        setTranscribing(true)
+        try {
+          const r = await chatVoice.transcribe(blob)
+          const text = String((r && r.text) || '').trim()
+          if (text) setInput((prev) => (prev ? `${prev} ${text}` : text))
+          else setVoiceNote('Heard nothing — nothing was transcribed (local whisper).')
+        } catch (e) {
+          setVoiceNote(`Voice unavailable: ${e.message}`)
+        } finally {
+          setTranscribing(false)
+        }
+      }
+      mediaRef.current = rec
+      rec.start()
+      setRecording(true)
+    } catch (e) {
+      setVoiceNote(`Microphone unavailable: ${e.message}`)
+    }
+  }, [])
+
+  const stopRecording = useCallback(() => {
+    const rec = mediaRef.current
+    if (rec && rec.state !== 'inactive') rec.stop()
+  }, [])
 
   const stop = useCallback(() => {
     if (turnId) chatApi.cancelTurn(turnId).catch(() => {})
@@ -259,6 +341,45 @@ export default function CreativeChat() {
             return (
               <div key={m.id}
                 className={`chat-msg ${m.role} ${m.status === 'error' ? 'error' : ''}`}>
+                {m.role === 'assistant' && (m.tools || []).length > 0 && (
+                  <div className="chat-tools" data-testid="chat-tools">
+                    {m.tools.map((tj) => (
+                      <div key={tj.call_id} className={`chat-tool ${tj.status}`}>
+                        <span className="chat-tool-name">{tj.name}</span>
+                        <span className="chat-tool-state">
+                          {tj.status === 'running'
+                            ? (tj.pct != null ? `${tj.pct}%` : (tj.label || 'working\u2026'))
+                            : tj.status === 'done' ? '\u2713 done' : '\u2717 failed'}
+                        </span>
+                        {tj.status === 'running' && (
+                          <span className="chat-tool-bar">
+                            <i className={tj.pct != null ? '' : 'indet'}
+                              style={tj.pct != null ? { width: `${tj.pct}%` } : undefined} />
+                          </span>
+                        )}
+                        {tj.status === 'error' && tj.error && (
+                          <span className="chat-tool-error">{tj.error}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {m.role === 'assistant' && (m.assets || []).length > 0 && (
+                  <div className="chat-assets" data-testid="chat-assets">
+                    {m.assets.map((a, i) => (a.id ? (
+                      <a key={`${a.id}-${i}`} className="chat-asset-card"
+                        href={assetFileUrl(a.id)} target="_blank" rel="noreferrer">
+                        {(!a.kind || a.kind === 'image') && (
+                          <img src={assetFileUrl(a.id)} alt={a.name || 'generated asset'} loading="lazy" />
+                        )}
+                        <span className="chat-asset-meta">
+                          {a.name || 'asset'}
+                          {a.width && a.height ? ` \u00b7 ${a.width}\u00d7${a.height}` : ''}
+                        </span>
+                      </a>
+                    ) : null))}
+                  </div>
+                )}
                 {m.role === 'assistant' && m.thinking && (
                   <details className="chat-thinking" open={m.status === 'streaming'}>
                     <summary>
@@ -312,14 +433,28 @@ export default function CreativeChat() {
               aria-label="Chat message"
               data-testid="chat-input"
             />
+            {recording ? (
+              <button type="button" className="btn btn-sm btn-danger" onClick={stopRecording}
+                data-testid="chat-voice-stop" aria-label="Stop recording">
+                &#9632; Stop recording
+              </button>
+            ) : (
+              <button type="button" className="btn btn-sm" onClick={startRecording}
+                disabled={transcribing} data-testid="chat-voice"
+                aria-label="Record voice message" title="Push-to-talk (local whisper.cpp)">
+                {transcribing ? 'Transcribing\u2026' : '\u25CF Voice'}
+              </button>
+            )}
             <button type="button" className="btn btn-primary btn-sm" onClick={send}
               disabled={!input.trim()} data-testid="chat-send" aria-label="Send">
               Send
             </button>
           </div>
           <div className="chat-hint">
+            {voiceNote && <span className="chat-voice-note">{voiceNote} &middot; </span>}
             Enter sends &middot; Shift+Enter newline &middot; Stop saves the partial as
-            partial &middot; Focus rail lands in S2, voice in S3.
+            partial &middot; Voice records locally and transcribes with whisper.cpp
+            (no audio leaves this machine).
           </div>
         </div>
       </section>

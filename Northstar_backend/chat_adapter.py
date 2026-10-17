@@ -30,6 +30,10 @@ CHAT_HISTORY_MAX = int(os.environ.get("CHAT_HISTORY_MAX", "16"))
 # history to the store. Both values are env-overridable.
 CHAT_NUM_CTX = int(os.environ.get("CHAT_NUM_CTX", "16384"))
 CHAT_NUM_PREDICT = int(os.environ.get("CHAT_NUM_PREDICT", "4096"))
+# Optional GPU-layer cap (num_gpu). Unset -> Ollama decides. On this 16 GB box
+# a cap keeps the 27B loadable when the desktop/ComfyUI hold memory.
+_chat_num_gpu_raw = os.environ.get("CHAT_NUM_GPU", "").strip()
+CHAT_NUM_GPU = int(_chat_num_gpu_raw) if _chat_num_gpu_raw.isdigit() else None
 
 CHAT_SYSTEM_PROMPT = (
     "You are the Northstar OS Master Brain in the Creative Studio — the "
@@ -40,8 +44,10 @@ CHAT_SYSTEM_PROMPT = (
     "product facts, certifications, weights, prices, or legal copy — ask the "
     "operator instead. Packaging text is authored as structured layers, never "
     "painted into images; if asked, explain that and offer the layered "
-    "alternative. Mirror the operator's language. Live rendering tools arrive "
-    "in S2 — today you plan and answer in chat."
+    "alternative. Mirror the operator's language. You have local tools "
+    "(dieline templates, structured briefs, local image renders, engine "
+    "status): call them when the operator asks for a real artifact, and only "
+    "describe results the tool actually returned."
 )
 
 
@@ -65,7 +71,7 @@ def build_chat_messages(history: Iterable[Dict[str, Any]],
 
 
 def stream_turn(messages: List[Dict[str, str]], *, model: Optional[str] = None,
-                think: bool = True, should_cancel=None):
+                think: bool = True, should_cancel=None, tools=None):
     """Thin seam over UnifiedLLMAdapter.stream_chat (mockable in tests)."""
     adapter = UnifiedLLMAdapter()
     yield from adapter.stream_chat(
@@ -75,6 +81,8 @@ def stream_turn(messages: List[Dict[str, str]], *, model: Optional[str] = None,
         should_cancel=should_cancel,
         num_ctx=CHAT_NUM_CTX,
         num_predict=CHAT_NUM_PREDICT,
+        tools=tools,
+        num_gpu=CHAT_NUM_GPU,
     )
 
 

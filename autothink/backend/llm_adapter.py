@@ -215,7 +215,9 @@ class UnifiedLLMAdapter:
                     think: bool = False,
                     should_cancel: Optional[Callable[[], bool]] = None,
                     num_ctx: Optional[int] = None,
-                    num_predict: Optional[int] = None):
+                    num_predict: Optional[int] = None,
+                    tools: Optional[List[Dict]] = None,
+                    num_gpu: Optional[int] = None):
         """Stream a chat turn as events (S1, ADDITIVE — `generate()` unchanged).
 
         Yields dicts: {"type": "thinking"|"content", "delta": str},
@@ -227,17 +229,28 @@ class UnifiedLLMAdapter:
         and this retries once WITHOUT it (bounded, never more).
         """
         model = model or self.local_model
+        options: Dict = {
+            "num_predict": num_predict or NUM_PREDICT,
+            "num_ctx": num_ctx or NUM_CTX,
+        }
+        if num_gpu is not None:
+            # 16 GB card: full offload of the 27B can exceed free VRAM when the
+            # desktop + ComfyUI hold memory. num_gpu pins how many layers stay
+            # on the GPU; the rest run on CPU (slower but it LOADS).
+            options["num_gpu"] = int(num_gpu)
         body = {
             "model": model,
             "messages": messages,
             "stream": True,
-            "options": {
-                "num_predict": num_predict or NUM_PREDICT,
-                "num_ctx": num_ctx or NUM_CTX,
-            },
+            "options": options,
         }
-        if think:
-            body["think"] = True
+        if think is not None:
+            # Explicit on the wire: with think=False a model whose DEFAULT is
+            # thinking would otherwise burn the whole token budget inside its
+            # reasoning and never reach answer/tool frames.
+            body["think"] = bool(think)
+        if tools:
+            body["tools"] = tools
 
         def _open(payload):
             return requests.post(OLLAMA_CHAT_ENDPOINT, json=payload,
@@ -257,7 +270,14 @@ class UnifiedLLMAdapter:
                            "detail": "Model rejected think=true; retried without it."}
                     resp = _open(body)
             if resp.status_code != 200:
-                yield {"type": "error", "reason": "ollama http %s" % resp.status_code}
+                detail = ""
+                try:
+                    detail = " ".join((resp.text or "").split())[:300]
+                except Exception:  # noqa: BLE001 - body may be unreadable
+                    detail = ""
+                yield {"type": "error",
+                       "reason": (f"ollama http {resp.status_code}: {detail}"
+                                  if detail else f"ollama http {resp.status_code}")}
                 return
             yield from iter_ollama_chat_events(resp.iter_lines(decode_unicode=True),
                                                should_cancel)
@@ -409,6 +429,11 @@ def iter_ollama_chat_events(lines, should_cancel: Optional[Callable[[], bool]] =
             content = msg.get("content")
             if content:
                 yield {"type": "content", "delta": str(content)}
+            tool_calls = msg.get("tool_calls")
+            if isinstance(tool_calls, list):
+                for tc in tool_calls:
+                    if isinstance(tc, dict):
+                        yield {"type": "tool_call", "call": tc}
         elif chunk.get("response"):
             yield {"type": "content", "delta": str(chunk["response"])}
         if chunk.get("done"):

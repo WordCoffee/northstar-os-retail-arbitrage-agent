@@ -75,6 +75,32 @@ export function parseFrame(frame) {
   return { event, data: parsed }
 }
 
+/** Same-origin file URL for a persisted studio asset (image, dieline, PDF). */
+export function assetFileUrl(assetId) {
+  return `/api/design-studio/assets/${assetId}/file`
+}
+
+/** Voice lane (S3): local whisper.cpp transcription. */
+export const chatVoice = {
+  status: () => req('/voice/status'),
+  transcribe: async (blob) => {
+    const fd = new FormData()
+    fd.append('audio', blob, 'recording.webm')
+    const h = headers('POST')
+    delete h['Content-Type'] // multipart: the browser sets the boundary
+    const res = await fetch(`${BASE}/voice/transcribe`, {
+      method: 'POST', credentials: 'include', headers: h, body: fd,
+    })
+    let body = {}
+    try { body = await res.json() } catch { /* empty body */ }
+    if (!res.ok) {
+      const d = body && body.detail
+      throw new Error(typeof d === 'string' && d ? d : `HTTP ${res.status}`)
+    }
+    return body
+  },
+}
+
 /**
  * Stream one turn. Calls onEvent({event, data}) per SSE frame.
  * Resolves when the stream ends; rejects on transport/HTTP errors only.

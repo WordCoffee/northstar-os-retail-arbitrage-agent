@@ -1,30 +1,39 @@
-"""Design Studio — Simple-mode chat core (S1).
+"""Design Studio — Simple-mode chat core (S1/S2).
 
 The chat transport for the Master Brain shell: sessions, message history, and
-a streaming turn endpoint (SSE). Event vocabulary (fixed from day one so S2
-tools need no wire change):
+a streaming turn endpoint (SSE) with a bounded TOOL LOOP (S2). Event
+vocabulary (fixed, stable):
 
     start · notice · thinking · token · tool-start · tool-progress ·
     tool-end · asset · error · done
+
+S2 additions:
+  • tools are offered to the local model (Ollama `tools`) when enabled;
+    calls are validated (outputguard-style), executed in a worker thread and
+    streamed back as tool-start/progress/end frames + asset frames;
+  • ComfyUI render progress flows through studio_generation's /ws listener
+    into tool-progress frames (pct + label);
+  • tool calls + produced assets persist on chat_tool_calls / chat_attachments;
+  • the loop is bounded (MAX_TOOL_STEPS) and every failure is an honest
+    tool-end {ok:false, error} the model can react to.
 
 Honesty boundaries (house rules):
   • No fabricated replies — an offline engine persists the REAL fallback text
     plus an error event.
   • A cancelled, failed, or client-abandoned turn is persisted with its true
-    status (done | cancelled | error) in usage_json — partial answers are
-    stored as partial, never dressed up as complete.
-  • Every frame carries the turn id that produced it.
-  • Tool events are defined here but only emitted once the tool loop (S2)
-    exists; nothing pretends tools ran.
+    status (done | cancelled | error) in usage_json — partial stays partial.
+  • Tool events are only emitted when a tool actually ran.
 """
 
 from __future__ import annotations
 
 import json
+import os
+import queue
 import threading
 import uuid
 from datetime import datetime, timezone
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Callable, Dict, Iterable, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
@@ -33,6 +42,7 @@ from pydantic import BaseModel, Field
 from data_layer import get_northstar_db
 from design_studio_api import studio_account
 import chat_adapter
+import chat_tools
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
@@ -53,6 +63,10 @@ MAX_TURNS_TRACKED = 200
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+def tools_enabled_default() -> bool:
+    return os.environ.get("CHAT_TOOLS_ENABLED", "1").strip() != "0"
 
 
 def sse_frame(event_type: str, payload: Dict[str, Any]) -> str:
@@ -84,45 +98,61 @@ def _drain_turn(turn_id: str) -> None:
         _TURNS.pop(turn_id, None)
 
 
+def _args_for_model(call: Dict[str, Any]) -> Any:
+    if call.get("obj_args") is not None:
+        return call["obj_args"]
+    try:
+        return chat_tools.parse_arguments(call.get("raw_args"))
+    except chat_tools.ToolValidationError:
+        return {}
+
+
 def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content: str,
                       *, think: bool = True, model: Optional[str] = None,
-                      events: Optional[Iterable[Dict[str, Any]]] = None,
-                      cancel_event: Optional[threading.Event] = None):
-    """Sync generator of SSE frames for one turn.
+                      events: Optional[Any] = None,
+                      cancel_event: Optional[threading.Event] = None,
+                      tools_enabled: Optional[bool] = None):
+    """Sync generator of SSE frames for one turn (tool loop included).
 
-    `events` injects a scripted adapter stream (tests); production passes None
-    and the real UnifiedLLMAdapter stream is used. `cancel_event` is optional
-    for tests; production registers a turn-scoped event.
+    `events` injects scripted adapter streams: callable(round_idx, messages) ->
+    iterable, or a plain iterable used for round 0 (tests). Production passes
+    None and the real UnifiedLLMAdapter stream is used with the tool schemas.
 
-    Persistence guarantee: whatever text the turn produced is written exactly
-    once, on EVERY exit path — completion, cancel, adapter error, or client
-    disconnect mid-stream — with the true status recorded in usage_json.
-    (No yields in `finally`; a generator cannot yield while closing.)
+    Persistence guarantee: whatever text/tools the turn produced is written
+    exactly once on EVERY exit path — completion, cancel, adapter error, or
+    client disconnect — with the true status recorded in usage_json.
     """
     turn_id = uuid.uuid4().hex
     own_event = cancel_event is None
     if own_event:
         cancel_event = register_turn(turn_id)
+    if tools_enabled is None:
+        tools_enabled = tools_enabled_default()
 
     thinking_parts: List[str] = []
     content_parts: List[str] = []
+    tool_parts: List[Dict[str, Any]] = []
+    tool_records: List[Dict[str, Any]] = []
+    attachment_records: List[Dict[str, Any]] = []
     status = "done"
     cancelled = False
     usage = None
     error_reason = None
-    saw_done = False
     persisted = False
+
+    available_tools = chat_tools.ollama_tool_schemas() if tools_enabled else None
 
     def _persist(final_status: str) -> Optional[str]:
         thinking_text = "".join(thinking_parts)
         content_text = "".join(content_parts)
         if final_status == "error" and not content_text:
             content_text = chat_adapter.offline_notice(error_reason or "unknown")
-        if not (thinking_text or content_text):
+        if not (thinking_text or content_text or tool_parts):
             return None  # a cut turn that produced nothing is not a message
         parts: List[Dict[str, Any]] = []
         if thinking_text:
             parts.append({"type": "thinking", "text": thinking_text})
+        parts.extend(tool_parts)
         if content_text:
             parts.append({"type": "text", "text": content_text})
         mid = db.chat.messages.create({
@@ -136,6 +166,30 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
             "usage_json": {"status": final_status, "cancelled": cancelled,
                            **(usage or {})},
         })
+        for rec in tool_records:
+            try:
+                db.chat.tool_calls.create({
+                    "account_id": account_id,
+                    "session_id": session.get("id"),
+                    "message_id": mid,
+                    "name": rec["name"],
+                    "args_json": rec.get("args"),
+                    "result_json": rec.get("result"),
+                    "status": rec.get("status") or "done",
+                    "started_at": rec.get("started_at"),
+                    "ended_at": rec.get("ended_at"),
+                })
+            except Exception:  # noqa: BLE001 - ledger must never break the turn
+                pass
+        for att in attachment_records:
+            try:
+                db.chat.attachments.create({
+                    "account_id": account_id,
+                    "message_id": mid,
+                    **att,
+                })
+            except Exception:  # noqa: BLE001
+                pass
         patch: Dict[str, Any] = {"updated_at": _now()}
         if (session.get("title") or "") in ("", "New chat") and user_content.strip():
             patch["title"] = user_content.strip().splitlines()[0][:60]
@@ -148,47 +202,186 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
             "session_id": session.get("id"),
             "model": model or chat_adapter.CHAT_MODEL,
             "think": bool(think),
+            "tools": chat_tools.tool_names() if tools_enabled else [],
         })
 
         history = db.chat.messages.list_by_session(
             session.get("id"), account_id=account_id, limit=200)
         messages = chat_adapter.build_chat_messages(history, session.get("focus_json"))
-        events_iter = events if events is not None else chat_adapter.stream_turn(
-            messages, model=model, think=think,
-            should_cancel=cancel_event.is_set,
-        )
 
-        for ev in events_iter:
-            etype = ev.get("type") if isinstance(ev, dict) else None
-            if etype == "thinking":
-                delta = str(ev.get("delta") or "")
-                thinking_parts.append(delta)
-                yield sse_frame("thinking", {"turn_id": turn_id, "delta": delta})
-            elif etype == "content":
-                delta = str(ev.get("delta") or "")
-                content_parts.append(delta)
-                yield sse_frame("token", {"turn_id": turn_id, "delta": delta})
-            elif etype == "notice":
+        if events is None:
+            def _provider(round_idx: int, msgs: List[Dict[str, Any]]):
+                return chat_adapter.stream_turn(
+                    msgs, model=model, think=think,
+                    should_cancel=cancel_event.is_set, tools=available_tools)
+        elif callable(events):
+            _provider = events
+        else:
+            round0 = events
+            def _provider(round_idx: int, msgs: List[Dict[str, Any]]):
+                return round0 if round_idx == 0 else iter(())
+
+        rounds = 0
+        while True:
+            raw_calls: List[Dict[str, Any]] = []
+            saw_done = False
+            round_events = _provider(rounds, messages)
+            for ev in round_events:
+                etype = ev.get("type") if isinstance(ev, dict) else None
+                if etype == "thinking":
+                    delta = str(ev.get("delta") or "")
+                    thinking_parts.append(delta)
+                    yield sse_frame("thinking", {"turn_id": turn_id, "delta": delta})
+                elif etype == "content":
+                    delta = str(ev.get("delta") or "")
+                    content_parts.append(delta)
+                    yield sse_frame("token", {"turn_id": turn_id, "delta": delta})
+                elif etype == "tool_call":
+                    raw_calls.append(ev.get("call"))
+                elif etype == "notice":
+                    yield sse_frame("notice", {
+                        "turn_id": turn_id,
+                        "code": ev.get("code"),
+                        "detail": ev.get("detail"),
+                    })
+                elif etype == "error":
+                    status = "error"
+                    error_reason = str(ev.get("reason") or "unknown")
+                    yield sse_frame("error", {"turn_id": turn_id, "reason": error_reason})
+                    break
+                elif etype == "done":
+                    saw_done = True
+                    cancelled = bool(ev.get("cancelled"))
+                    usage = ev.get("usage") if isinstance(ev.get("usage"), dict) else None
+                    status = "cancelled" if cancelled else "done"
+                    break
+
+            if status == "error" or cancelled:
+                break
+            if not tools_enabled or not raw_calls:
+                break
+            if rounds >= chat_tools.MAX_TOOL_STEPS:
                 yield sse_frame("notice", {
-                    "turn_id": turn_id,
-                    "code": ev.get("code"),
-                    "detail": ev.get("detail"),
+                    "turn_id": turn_id, "code": "max_tool_steps",
+                    "detail": f"Stopped after {rounds} tool rounds (bounded).",
                 })
-            elif etype == "error":
-                status = "error"
-                error_reason = str(ev.get("reason") or "unknown")
-                yield sse_frame("error", {"turn_id": turn_id, "reason": error_reason})
                 break
-            elif etype == "done":
-                saw_done = True
-                cancelled = bool(ev.get("cancelled"))
-                usage = ev.get("usage") if isinstance(ev.get("usage"), dict) else None
-                status = "cancelled" if cancelled else "done"
-                break
+            rounds += 1
+
+            normalized = chat_tools.normalize_tool_calls(raw_calls)
+            executed: List[Dict[str, Any]] = []
+            for call in normalized:
+                call_id = uuid.uuid4().hex[:12]
+                started_at = _now()
+                yield sse_frame("tool-start", {
+                    "turn_id": turn_id, "call_id": call_id,
+                    "name": call["name"],
+                    "args": (call.get("raw_args") or "")[:2000] or call.get("obj_args"),
+                })
+                progress_q: "queue.Queue[Dict[str, Any]]" = queue.Queue()
+
+                def _progress(pct, label, _q=progress_q, _cid=call_id):
+                    _q.put({"type": "tool-progress", "call_id": _cid, "phase": "running",
+                            "pct": pct, "label": label})
+
+                worker_ctx = {
+                    "db": db, "account_id": account_id,
+                    "session_id": session.get("id"),
+                    "project_id": session.get("ds_project_id"),
+                    "progress": _progress, "cancel": cancel_event,
+                }
+                box: Dict[str, Any] = {}
+                args_payload = call.get("obj_args") if call.get("obj_args") is not None else call.get("raw_args")
+
+                def _work(_box=box, _call=call, _ctx=worker_ctx, _args=args_payload):
+                    try:
+                        _box["r"] = chat_tools.run_tool(_call["name"], _args, _ctx)
+                    except Exception as exc:  # noqa: BLE001
+                        _box["r"] = {"ok": False, "summary": "tool crashed",
+                                     "error": str(exc)[:300], "assets": []}
+
+                worker = threading.Thread(target=_work, daemon=True)
+                worker.start()
+                yield sse_frame("tool-progress", {
+                    "turn_id": turn_id, "call_id": call_id,
+                    "phase": "running", "pct": None, "label": "queued",
+                })
+                while True:
+                    try:
+                        item = progress_q.get(timeout=0.4)
+                        yield sse_frame("tool-progress", {
+                            "turn_id": turn_id,
+                            "call_id": item.get("call_id", call_id),
+                            "phase": item.get("phase", "running"),
+                            "pct": item.get("pct"),
+                            "label": item.get("label"),
+                        })
+                        continue
+                    except queue.Empty:
+                        pass
+                    if not worker.is_alive():
+                        break
+                worker.join(timeout=5)
+                result = box.get("r") or {"ok": False, "summary": "tool produced no result",
+                                          "error": "worker exited without a result", "assets": []}
+                yield sse_frame("tool-end", {
+                    "turn_id": turn_id, "call_id": call_id, "name": call["name"],
+                    "ok": bool(result.get("ok")),
+                    "summary": result.get("summary"),
+                    "error": result.get("error"),
+                    "assets": result.get("assets") or [],
+                })
+                for a in result.get("assets") or []:
+                    if not isinstance(a, dict):
+                        continue
+                    yield sse_frame("asset", {"turn_id": turn_id, "call_id": call_id, **a})
+                    if a.get("id"):
+                        attachment_records.append({
+                            "asset_id": a["id"],
+                            "kind": a.get("kind"),
+                            "url": a.get("url"),
+                            "provenance_json": {"tool": call["name"]},
+                        })
+                tool_records.append({
+                    "name": call["name"],
+                    "args": call.get("obj_args") if call.get("obj_args") is not None else call.get("raw_args"),
+                    "result": result,
+                    "status": "done" if result.get("ok") else "error",
+                    "started_at": started_at,
+                    "ended_at": _now(),
+                })
+                tool_parts.append({
+                    "type": "tool", "call_id": call_id, "name": call["name"],
+                    "ok": bool(result.get("ok")), "summary": result.get("summary"),
+                    "error": result.get("error"),
+                    "assets": [a.get("id") for a in (result.get("assets") or [])
+                               if isinstance(a, dict) and a.get("id")],
+                })
+                executed.append({"call": call, "result": result})
+
+            if executed:
+                messages.append({
+                    "role": "assistant", "content": "",
+                    "tool_calls": [{"function": {"name": e["call"]["name"],
+                                                 "arguments": _args_for_model(e["call"])}}
+                                   for e in executed],
+                })
+                for e in executed:
+                    payload = json.dumps({
+                        "ok": e["result"].get("ok"),
+                        "summary": e["result"].get("summary"),
+                        "error": e["result"].get("error"),
+                        "assets": e["result"].get("assets") or [],
+                        "data": e["result"].get("data"),
+                    }, default=str)
+                    messages.append({
+                        "role": "tool", "tool_name": e["call"]["name"],
+                        "content": payload[:8000],
+                    })
+            # loop continues to the next round
 
         if not saw_done and status == "done":
-            # The event stream ended without a done frame — the turn was cut
-            # (adapter vanished, client cancel raced the socket). Honest status.
+            # The event stream ended without a done frame — the turn was cut.
             status = "cancelled"
 
         mid = _persist(status)
@@ -212,7 +405,7 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
             persisted = True
         yield sse_frame("done", {
             "turn_id": turn_id,
-            "message_id": mid,
+            "message_id": mid if persisted else None,
             "status": status,
             "cancelled": cancelled,
             "usage": usage,
@@ -258,7 +451,9 @@ def chat_health(acct: str = Depends(studio_account)):
         "model": chat_adapter.CHAT_MODEL,
         "think_default": True,
         "events": list(SSE_EVENT_TYPES),
-        "tools": "S2",
+        "tools": chat_tools.tool_names(),
+        "tools_enabled": tools_enabled_default(),
+        "max_tool_steps": chat_tools.MAX_TOOL_STEPS,
     }
 
 
