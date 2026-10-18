@@ -34,7 +34,17 @@ async function stubSession(page, role, userId) {
     window.__NORTHSTAR_LOCAL_DEV__ = true
     window.__stubCalls = []
     const FOUND = '/api/v1/foundation'
+    localStorage.setItem('ns-shell-mode', 'advanced')
     window.fetch = (input, init) => {
+      if (String(typeof input === 'string' ? input : input.url).includes('/api/shell/')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          contract: 'shell/v1',
+          capabilities: { advanced_view: true, autothink_workspace: true },
+          focuses: [],
+          identity: { role: 'operator', plan: 'autothink', plan_name: 'AutothinK', source: 'stub' },
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } }))
+      }
+      
       const url = typeof input === 'string' ? input : input.url
       if (!url.includes(FOUND)) return Promise.reject(new Error('unexpected fetch ' + url))
       const route = url.split(FOUND)[1].split('?')[0]
@@ -46,7 +56,7 @@ async function stubSession(page, role, userId) {
       if (route === '/ui-mode') return json({ ui_mode: 'full' })
       if (route === '/me') return json({
         user_id: userId, organizations: [], active_organization_id: null,
-        role, permissions: role === 'platform_admin' ? ['platform_admin'] : [],
+        role, permissions: role === 'internal_platform_admin' ? ['platform_admin'] : [],
       })
       if (route === '/environment') return json({
         environment: 'production', view_context: 'normal', ui_mode: 'full', is_preview: false,
@@ -98,7 +108,7 @@ async function checkNoticeInnerText(page, ctx) {
   const page = await context.newPage()
 
   console.log('--- platform_admin reaches all /beta-ops pages ---')
-  await stubSession(page, 'platform_admin', 'u-admin-1')
+  await stubSession(page, 'internal_platform_admin', 'u-admin-1')
   const adminPages = [
     ['/beta-ops', 'Beta Operations'],
     ['/beta-ops/orgs', 'Organizations'],

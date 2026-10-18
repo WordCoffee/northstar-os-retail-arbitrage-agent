@@ -18,14 +18,24 @@ async function stub(page, role, userId) {
     window.__NORTHSTAR_LOCAL_DEV__ = true
     window.__stubCalls = []
     const FOUND = '/api/v1/foundation'
+    localStorage.setItem('ns-shell-mode', 'advanced')
     window.fetch = (input, init) => {
+      if (String(typeof input === 'string' ? input : input.url).includes('/api/shell/')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          contract: 'shell/v1',
+          capabilities: { advanced_view: true, autothink_workspace: true },
+          focuses: [],
+          identity: { role: 'operator', plan: 'autothink', plan_name: 'AutothinK', source: 'stub' },
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } }))
+      }
+      
       const url = typeof input === 'string' ? input : input.url
       if (!url.includes(FOUND)) return Promise.reject(new Error('unexpected fetch ' + url))
       const route = url.split(FOUND)[1].split('?')[0]
       window.__stubCalls.push(route)
       const json = (body, status = 200) => Promise.resolve(new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } }))
       if (route === '/ui-mode') return json({ ui_mode: 'full' })
-      if (route === '/me') return json({ user_id: userId, organizations: [], active_organization_id: null, role, permissions: role === 'platform_admin' ? ['platform_admin'] : [] })
+      if (route === '/me') return json({ user_id: userId, organizations: [], active_organization_id: null, role, permissions: role === 'internal_platform_admin' ? ['platform_admin'] : [] })
       if (route === '/environment') return json({ environment: 'production', view_context: 'normal', ui_mode: 'full', is_preview: false })
       if (route === '/preview/active') return json({ active: false, preview: null })
       // Golden Goose persisted round-trip (P5-T4): org-scoped item + decision
@@ -71,9 +81,9 @@ async function run() {
   // ---------- Role guards (running UI) ----------
   const roles = [
     { role: 'signedout', userId: '' },
-    { role: 'customer', userId: 'u-cust' },
+    { role: 'organization_owner', userId: 'u-cust' },
     { role: 'operator', userId: 'u-op' },
-    { role: 'platform_admin', userId: 'u-admin' },
+    { role: 'internal_platform_admin', userId: 'u-admin' },
   ]
   const matrix = {}
   for (const r of roles) {
@@ -100,7 +110,7 @@ async function run() {
     ? ok('signedout: /admin redirected to /ui/sign-in')
     : no('signedout: /admin guard', 'got ' + matrix['signedout']['/admin'])
   // Authenticated non-admins: admin paths redirect to /ui/home.
-  for (const role of ['customer', 'operator']) {
+  for (const role of ['organization_owner', 'operator']) {
     (matrix[role]['/beta-ops'] === '/ui/home')
       ? ok(`${role}: /beta-ops redirected to /ui/home`)
       : no(`${role}: /beta-ops guard`, 'got ' + matrix[role]['/beta-ops'])
@@ -108,18 +118,18 @@ async function run() {
       ? ok(`${role}: /admin redirected to /ui/home`)
       : no(`${role}: /admin guard`, 'got ' + matrix[role]['/admin'])
   }
-  ;(matrix['platform_admin']['/beta-ops'] === '/ui/beta-ops') ? ok('platform_admin: /beta-ops loads') : no('platform_admin /beta-ops', matrix['platform_admin']['/beta-ops'])
-  ;(matrix['platform_admin']['/admin'] === '/ui/admin') ? ok('platform_admin: /admin loads') : no('platform_admin /admin', matrix['platform_admin']['/admin'])
+  ;(matrix['internal_platform_admin']['/beta-ops'] === '/ui/beta-ops') ? ok('platform_admin: /beta-ops loads') : no('platform_admin /beta-ops', matrix['internal_platform_admin']['/beta-ops'])
+  ;(matrix['internal_platform_admin']['/admin'] === '/ui/admin') ? ok('platform_admin: /admin loads') : no('platform_admin /admin', matrix['internal_platform_admin']['/admin'])
 
   // Invitee/customer reaching internal operator room via deep link (report actual, flag if open)
   const inviteeInternal = matrix['signedout']['/product-finder']
-  const custInternal = matrix['customer']['/product-finder']
+  const custInternal = matrix['organization_owner']['/product-finder']
   console.log(`NOTE  invitee /product-finder -> ${inviteeInternal}; customer /product-finder -> ${custInternal}`)
 
   // ---------- Deep links (platform_admin) ----------
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
   const page = await ctx.newPage()
-  await stub(page, 'platform_admin', 'u-admin')
+  await stub(page, 'internal_platform_admin', 'u-admin')
   await settle(page)
 
   const deep = [

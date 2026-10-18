@@ -17,7 +17,17 @@ async function stub(page) {
     const FOUND = '/api/v1/foundation'
     window.__NORTHSTAR_LOCAL_DEV__ = true
     window.__stubCalls = []
+    localStorage.setItem('ns-shell-mode', 'advanced')
     window.fetch = (input) => {
+      if (String(typeof input === 'string' ? input : input.url).includes('/api/shell/')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          contract: 'shell/v1',
+          capabilities: { advanced_view: true, autothink_workspace: true },
+          focuses: [],
+          identity: { role: 'operator', plan: 'autothink', plan_name: 'AutothinK', source: 'stub' },
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } }))
+      }
+      
       const url = typeof input === 'string' ? input : input.url
       if (!url.includes(FOUND)) return Promise.reject(new Error('unexpected fetch ' + url))
       const route = url.split(FOUND)[1].split('?')[0]

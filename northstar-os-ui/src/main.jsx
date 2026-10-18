@@ -6,6 +6,7 @@ import './styles/app.css'
 import './styles/studio.css'
 import './foundation/foundation.css'
 import './styles/chat.css'
+import './styles/shell.css'
 
 const root = createRoot(document.getElementById('root'))
 root.render(createElement(App))

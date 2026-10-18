@@ -21,7 +21,8 @@
   background: var(--pine); color: var(--paper);
 }
 .shell-mode-toggle:focus-visible { outline: 2px solid var(--spark); outline-offset: 2px; }
-@media (max-width: 900px) { .shell-mode-toggle { display: none; } }
+/* Mobile visibility is handled in styles/shell.css (V3) so the Simple view
+   can always be entered and left on small screens. */
 
 /* ── Creative Chat shell ───────────────────────────────────────────────── */
 .chat-shell {

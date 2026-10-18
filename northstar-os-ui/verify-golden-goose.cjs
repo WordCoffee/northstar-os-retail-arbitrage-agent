@@ -33,7 +33,17 @@ async function stub(page, cfg) {
     const queue = cfg.queue || { items: [], basis: 'UNKNOWN' }
     const denied = cfg.deniedIds || []
     const DKEY = 'gg-decisions'
+    localStorage.setItem('ns-shell-mode', 'advanced')
     window.fetch = (input, init) => {
+      if (String(typeof input === 'string' ? input : input.url).includes('/api/shell/')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          contract: 'shell/v1',
+          capabilities: { advanced_view: true, autothink_workspace: true },
+          focuses: [],
+          identity: { role: 'operator', plan: 'autothink', plan_name: 'AutothinK', source: 'stub' },
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } }))
+      }
+      
       const url = typeof input === 'string' ? input : input.url
       const method = ((init && init.method) || 'GET').toUpperCase()
       if (!url.includes(FOUND)) return Promise.reject(new Error('unexpected fetch ' + url))

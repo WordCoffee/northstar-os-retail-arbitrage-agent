@@ -16,7 +16,17 @@ async function stubSession(page, role, userId) {
     window.__NORTHSTAR_LOCAL_DEV__ = true
     window.__stubCalls = []
     const FOUND = '/api/v1/foundation'
+    localStorage.setItem('ns-shell-mode', 'advanced')
     window.fetch = (input, init) => {
+      if (String(typeof input === 'string' ? input : input.url).includes('/api/shell/')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          contract: 'shell/v1',
+          capabilities: { advanced_view: true, autothink_workspace: true },
+          focuses: [],
+          identity: { role: 'operator', plan: 'autothink', plan_name: 'AutothinK', source: 'stub' },
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } }))
+      }
+      
       const url = typeof input === 'string' ? input : input.url
       if (!url.includes(FOUND)) {
         return Promise.reject(new Error('unexpected fetch ' + url))
@@ -33,7 +43,7 @@ async function stubSession(page, role, userId) {
         organizations: [],
         active_organization_id: null,
         role,
-        permissions: role === 'platform_admin' ? ['platform_admin'] : [],
+        permissions: role === 'internal_platform_admin' ? ['platform_admin'] : [],
       })
       if (route === '/environment') return json({
         environment: 'production', view_context: 'normal', ui_mode: 'full', is_preview: false,
@@ -94,7 +104,7 @@ async function run() {
 
   // --- Case B: authenticated customer -------------------------------------
   // full page load required so the fetch stub + dev session apply on a fresh document
-  await stubSession(page, 'customer', 'u-cust-1')
+  await stubSession(page, 'organization_owner', 'u-cust-1')
   await page.goto(urlFor('/home'))
   await page.waitForFunction(() => (window.__stubCalls || []).includes('/me'), null, { timeout: 8000 })
   await page.goto(urlFor('/beta-ops'))
@@ -126,7 +136,7 @@ async function run() {
 
   // --- Case C: platform_admin (control group) ------------------------------
   await page.setViewportSize({ width: 1280, height: 800 })
-  await stubSession(page, 'platform_admin', 'u-admin-1')
+  await stubSession(page, 'internal_platform_admin', 'u-admin-1')
   await page.goto(urlFor('/home'))
   await page.waitForFunction(() => (window.__stubCalls || []).includes('/me'), null, { timeout: 8000 })
   await page.goto(urlFor('/beta-ops'))

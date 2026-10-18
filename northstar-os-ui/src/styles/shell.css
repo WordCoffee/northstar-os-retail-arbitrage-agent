@@ -1,0 +1,200 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   V3 SHELL — cosmic canvas, focus rail, upgraded chat surface (S4/S6)
+   Loaded AFTER tokens/app/studio/foundation/chat so it wins where they overlap.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Cosmic canvas + Master Brain shell ────────────────────────────────── */
+.cosmic-canvas {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  display: block; z-index: 0; background: #05060c;
+}
+.cosmic-canvas[data-cosmic-fallback="1"] {
+  background:
+    radial-gradient(1200px 800px at 28% 22%, rgba(76, 42, 122, 0.55), transparent 60%),
+    radial-gradient(900px 700px at 78% 70%, rgba(47, 111, 237, 0.22), transparent 60%),
+    #05060c;
+}
+.mb-shell { position: relative; min-height: 60vh; }
+.mb-scrim {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(5, 6, 12, 0.28), rgba(5, 6, 12, 0.55));
+}
+.mb-content { position: relative; z-index: 1; }
+
+.mb-header {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 4px 2px 12px;
+}
+.mb-focus { display: flex; gap: 6px; flex-wrap: wrap; }
+.mb-focus-chip {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+  padding: 5px 13px; border-radius: 999px; cursor: pointer;
+  color: rgba(242, 237, 229, 0.88);
+  border: 1px solid rgba(242, 237, 229, 0.24);
+  background: rgba(12, 15, 22, 0.55);
+  transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+}
+.mb-focus-chip:hover { border-color: rgba(242, 237, 229, 0.5); }
+.mb-focus-chip.active {
+  background: var(--spark); border-color: var(--spark-mid); color: #fff;
+}
+.mb-focus-chip.locked {
+  border-style: dashed; opacity: 0.55; cursor: not-allowed;
+}
+.mb-status { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+.mb-chip {
+  font-size: 11px; padding: 3px 10px; border-radius: 999px;
+  color: rgba(242, 237, 229, 0.85);
+  border: 1px solid rgba(242, 237, 229, 0.2);
+  background: rgba(12, 15, 22, 0.55);
+  font-family: var(--font-mono);
+}
+.mb-chip.warn { color: #ffd9a8; border-color: rgba(217, 164, 65, 0.55); }
+
+/* The chat sheet floats over the cosmic canvas (contrast comes from the paper
+   surface itself, which is why the canvas has a scrim above it). */
+.mb-shell .chat-shell {
+  background: var(--paper);
+  border: 1px solid var(--divider-mid);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.4);
+  padding: 14px 16px;
+  height: calc(100dvh - 218px);
+  position: relative;
+}
+
+/* ── Shell mode toggle: mobile reachable, honest when advanced is not granted */
+@media (max-width: 900px) {
+  .shell-mode-toggle { display: inline-flex; }
+  .top-nav-search { display: none; }
+}
+
+/* ── Chat surface upgrades (V3) ────────────────────────────────────────── */
+.chat-rail-row { display: flex; align-items: stretch; gap: 2px; }
+.chat-rail-row .chat-rail-item { flex: 1; min-width: 0; }
+.chat-rail-row.active .chat-rail-edit { opacity: 1; }
+.chat-rail-edit {
+  border: none; background: transparent; color: var(--ink-faint); cursor: pointer;
+  font-size: 12px; padding: 0 4px; opacity: 0; transition: opacity var(--t-fast);
+}
+.chat-rail-row:hover .chat-rail-edit { opacity: 1; }
+.chat-rail-search {
+  border: 1px solid var(--divider); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--ink);
+  font-size: 12px; padding: 6px 8px; outline: none;
+}
+.chat-rail-search:focus { border-color: var(--spark-mid); }
+.chat-rail-rename {
+  flex: 1; border: 1px solid var(--spark-mid); border-radius: var(--radius-sm);
+  padding: 6px 8px; font-size: 12.5px; background: var(--surface); color: var(--ink);
+}
+.chat-rail-row.active .chat-rail-item { background: var(--surface-active); border-color: var(--divider-mid); color: var(--ink); }
+
+.chat-bubble h4 { margin: 6px 0 4px; font-size: 13.5px; }
+.chat-bubble p { margin: 0 0 6px; }
+.chat-bubble p:last-child { margin-bottom: 0; }
+.chat-bubble ul { margin: 4px 0 6px; padding-left: 18px; }
+.chat-bubble a { color: var(--spark); }
+.chat-bubble code {
+  font-family: var(--font-mono); font-size: 12px;
+  background: var(--bone-light); padding: 1px 4px; border-radius: 4px;
+}
+.chat-code {
+  margin: 6px 0; padding: 10px 12px; border-radius: var(--radius);
+  background: #12161a; color: #e8e4da; overflow-x: auto;
+  font-family: var(--font-mono); font-size: 11.5px; line-height: 1.5;
+}
+.chat-code code { background: transparent; padding: 0; color: inherit; }
+
+.chat-receipt {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  font-size: 10.5px; color: var(--ink-faint);
+}
+.chat-receipt .chip {
+  border: 1px solid var(--divider); border-radius: 999px; padding: 1px 8px;
+  color: var(--ink-soft);
+}
+.chat-msg-copy {
+  border: none; background: transparent; color: var(--ink-faint);
+  font-size: 10.5px; cursor: pointer; text-decoration: underline;
+  padding: 0 2px;
+}
+.chat-msg-tools { display: flex; gap: 8px; opacity: 0; transition: opacity var(--t-fast); }
+.chat-msg:hover .chat-msg-tools { opacity: 1; }
+
+.chat-tool .chat-tool-icon { color: var(--spark); font-size: 11px; }
+.chat-tool .chat-tool-machine {
+  font-size: 10px; color: var(--ink-faint); font-family: var(--font-mono);
+  margin-left: auto;
+}
+.chat-tool-detail { flex-basis: 100%; font-size: 11.5px; color: var(--ink-mid); }
+.chat-tool-detail summary { cursor: pointer; color: var(--ink-soft); }
+.chat-tool-args {
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-soft);
+  background: var(--bone-light); border-radius: var(--radius-sm);
+  padding: 6px 8px; margin: 4px 0; white-space: pre-wrap; overflow-wrap: anywhere;
+}
+
+.chat-asset-actions {
+  display: flex; gap: 8px; flex-wrap: wrap; padding: 0 10px 8px;
+  font-size: 11px;
+}
+.chat-asset-actions button, .chat-asset-actions a {
+  border: none; background: transparent; color: var(--spark);
+  cursor: pointer; text-decoration: underline; font-size: 11px; padding: 0;
+}
+.chat-asset-dieline { width: 100%; height: 180px; border: none; background: #fff; }
+
+.chat-queue-list { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; padding: 0 4px; }
+.chat-queue-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--divider-mid); border-radius: 999px;
+  background: var(--surface-raised); color: var(--ink-mid);
+  font-size: 11px; padding: 3px 8px 3px 10px;
+}
+.chat-queue-chip button {
+  border: none; background: transparent; color: var(--ink-faint);
+  cursor: pointer; font-size: 12px; padding: 0;
+}
+.chat-jump {
+  align-self: center; margin: -6px auto 0; border-radius: 999px;
+  border: 1px solid var(--divider-mid); background: var(--surface);
+  color: var(--spark); font-size: 11.5px; padding: 4px 12px; cursor: pointer;
+}
+.chat-edit-box { display: flex; flex-direction: column; gap: 6px; width: min(640px, 100%); }
+.chat-edit-box textarea {
+  width: 100%; min-height: 64px; border: 1px solid var(--spark-mid);
+  border-radius: var(--radius); padding: 8px 10px; font-size: 13px;
+  font-family: var(--font-ui); background: var(--surface); color: var(--ink); resize: vertical;
+}
+.chat-edit-actions { display: flex; gap: 6px; justify-content: flex-end; }
+
+.chat-lightbox {
+  position: fixed; inset: 0; z-index: 60; background: rgba(8, 10, 14, 0.86);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.chat-lightbox-body { max-width: min(1100px, 94vw); max-height: 92vh; display: flex; flex-direction: column; gap: 10px; }
+.chat-lightbox-body img {
+  max-width: 100%; max-height: 78vh; object-fit: contain;
+  border-radius: var(--radius-lg); border: 1px solid var(--divider-mid);
+}
+.chat-lightbox-bar { display: flex; gap: 14px; align-items: center; color: #e8e4da; font-size: 12px; }
+.chat-lightbox-bar a, .chat-lightbox-bar button {
+  border: none; background: transparent; color: #9fc0ff; cursor: pointer;
+  text-decoration: underline; font-size: 12px; padding: 0;
+}
+
+/* ── Mobile: rail becomes an overlay drawer ────────────────────────────── */
+@media (max-width: 900px) {
+  .mb-header { align-items: flex-start; }
+  .mb-status { margin-left: 0; }
+  .mb-shell .chat-shell { height: calc(100dvh - 280px); padding: 10px; }
+  .chat-shell { grid-template-columns: minmax(0, 1fr); position: relative; }
+  .chat-shell .chat-rail { display: none; }
+  .chat-shell.rail-open .chat-rail {
+    display: flex; position: absolute; z-index: 6;
+    inset: 44px auto 0 0; width: min(280px, 82vw);
+    background: var(--paper); border-right: 1px solid var(--divider-mid);
+    padding: 10px; box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  }
+}

@@ -8,7 +8,9 @@ import TopNav from './components/TopNav.jsx'
 import MobileBottomNav from './components/MobileBottomNav.jsx'
 import { SessionProvider, useSession } from './foundation/session.jsx'
 import { TOAST_PROVIDER, useToast } from './components/ToastContext.jsx'
-import { ModeProvider } from './context/ModeContext.jsx'
+import { ModeProvider, useMode } from './context/ModeContext.jsx'
+import { ShellProvider, useShell } from './shell/ShellContext.jsx'
+import MasterBrainShell from './shell/MasterBrainShell.jsx'
 
 import CommandCenter from './pages/internal/CommandCenter.jsx'
 import ProductFinder from './pages/internal/ProductFinder.jsx'
@@ -162,9 +164,46 @@ const MOBILE_ACTIVE = [
   { path: '/profitability', tab: 'profitability' },
 ]
 
+// In Simple mode these surfaces keep their real pages: account/legal/admin
+// surfaces are not rooms, and the public entry points must never be replaced
+// by the chat shell. Everything else becomes a focus inside the shell.
+const SIMPLE_KEEP_ADVANCED = [
+  /^\/beta-ops(\/|$)/, /^\/admin(\/|$)/, /^\/account(\/|$)/, /^\/plan(\/|$)/,
+  /^\/support(\/|$)/, /^\/documents(\/|$)/, /^\/setup(\/|$)/, /^\/legal(\/|$)/,
+  /^\/sign-in(\/|$)/, /^\/recovery(\/|$)/, /^\/beta(\/|$)/, /^\/suspended(\/|$)/,
+  /^\/downgraded(\/|$)/, /^\/reaccept(\/|$)/,
+]
+
+function ModeGate({ children }) {
+  const shell = useShell()
+  // null while the shell context is still loading — the gate is enforced the
+  // moment the real answer lands, never against an unknown.
+  const advancedAllowed = shell.ready ? shell.advancedAllowed : null
+  return <ModeProvider advancedAllowed={advancedAllowed}>{children}</ModeProvider>
+}
+
+// The Simple view replaces the internal rooms, so it must carry the SAME auth
+// gate GuardedRoutes enforces — a signed-out visitor hitting /golden-goose is
+// redirected to sign-in, never shown the shell.
+function SimpleShellRoutes({ role, authenticated, loaded }) {
+  const location = useLocation()
+  const path = location.pathname
+  const isPublic = PUBLIC_PATHS.some(p => path === p || path.startsWith(p + '/'))
+  if (!loaded) return null
+  if (!authenticated && !isPublic) {
+    return <Navigate to="/sign-in" replace />
+  }
+  const adminOnly = path === '/beta-ops' || path.startsWith('/beta-ops/') || path === '/admin'
+  if (adminOnly && role !== 'platform_admin') {
+    return <Navigate to="/home" replace />
+  }
+  return <MasterBrainShell />
+}
+
 function Shell() {
   const session = useSession()
   const { toast } = useToast()
+  const { mode } = useMode()
   const navigate = useNavigate()
   const location = useLocation()
   const [paletteOpen, setPaletteOpen] = useState(false)
@@ -176,9 +215,12 @@ function Shell() {
   const path = location.pathname
   const mobileTab = MOBILE_ACTIVE.find(m => path === m.path || path.startsWith(m.path + '/'))
   const mobileActive = toolsOpen ? 'tools' : (mobileTab ? mobileTab.tab : '')
+  // V3: Simple is the main view; Advanced is the room shell (tier-gated).
+  const simpleMode = mode !== 'advanced'
+  const keepAdvanced = SIMPLE_KEEP_ADVANCED.some(re => re.test(path))
 
   return (
-    <div className="app">
+    <div className={`app ${simpleMode ? 'shell-simple' : 'shell-advanced'}`}>
       {session.ownerTestMode && (
         <div
           className="owner-test-mode-banner"
@@ -195,11 +237,13 @@ function Shell() {
         setPaletteOpen={setPaletteOpen}
       />
       <div className="body-layout">
-        <SuiteRail onNavigate={() => setToolsOpen(false)} />
+        {!simpleMode && <SuiteRail onNavigate={() => setToolsOpen(false)} />}
         <main className="main-content">
           {session.suspended
             ? <AccountSuspended />
-            : <GuardedRoutes role={role} authenticated={authenticated} loaded={loaded} />}
+            : simpleMode && !keepAdvanced
+              ? <SimpleShellRoutes role={role} authenticated={authenticated} loaded={loaded} />
+              : <GuardedRoutes role={role} authenticated={authenticated} loaded={loaded} />}
         </main>
       </div>
       <MobileBottomNav active={mobileActive} onToolsClick={() => setToolsOpen(true)} />
@@ -256,9 +300,11 @@ export default function App() {
     <BrowserRouter basename="/ui">
       <SessionProvider>
         <TOAST_PROVIDER>
-          <ModeProvider>
-            <Shell />
-          </ModeProvider>
+          <ShellProvider>
+            <ModeGate>
+              <Shell />
+            </ModeGate>
+          </ShellProvider>
         </TOAST_PROVIDER>
       </SessionProvider>
     </BrowserRouter>
