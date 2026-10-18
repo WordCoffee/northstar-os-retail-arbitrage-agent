@@ -629,46 +629,66 @@ def paste_w(canvas, img, cx, cy, w):
     return r
 
 
-def etch_logo(logo, *, tone, hi=None, lo=None, offset_mm=0.4, softness=0.2,
-              mode="deboss"):
-    """The real logo rendered as an etched stamp cut into/onto a surface.
+def etch_logo(logo, *, base, rim_hi, rim_lo, tint=0.3, offset_mm=0.5,
+              softness=0.2, inner=0.55):
+    """The real logo as an EMBOSSED stamp — all of its artwork stays visible.
 
-    tone = the mark's surface tone; bevel highlight/shadow come from the logo's
-    own silhouette offset by ~0.4 mm (deboss: shadow upper-left, light lower-
-    right — an engraved groove; emboss: reversed — a raised foil stamp).
+    base    = (dark_tone, light_tone): the logo's own artwork is remapped into
+              this tone ramp (its internal detail — letters, mortar, tagline —
+              keeps its luminance structure instead of flattening to one fill);
+    tint    = how much of the logo's original colour bleeds into the ramp
+              (e.g. the leaf greens);
+    rim_*   = bevel highlight/shadow tones: top-left rim lit, bottom-right rim
+              shaded (raised stamp), plus inner-edge shading so it reads 3D.
     """
     src = logo.convert("RGBA")
-    # the operator's logo file is flat (no alpha): key the ink from darkness,
-    # and respect an existing alpha channel when the source has one.
     arr = np.asarray(src.convert("RGB"), dtype=np.float32)
     mn = arr.min(axis=2)
     keyed = np.clip((196.0 - mn) * 2.4, 0.0, 255.0)
     existing = np.asarray(src.split()[3], dtype=np.float32)
-    mask = Image.fromarray((keyed * (existing / 255.0)).astype(np.uint8), "L")
+    alpha = keyed * (existing / 255.0)
+    mask = Image.fromarray(alpha.astype(np.uint8), "L")
     W, H = src.size
-    if hi is None:
-        hi = tuple(min(255, int(c) + 30) for c in tone)
-    if lo is None:
-        lo = tuple(max(0, int(c) - 34) for c in tone)
+    m = alpha / 255.0
 
-    def layer(color, dx=0, dy=0):
+    # artwork -> tone ramp (dark ink stays dark; detail preserved)
+    ink_lum = arr.mean(axis=2)
+    sel = alpha > 180
+    if sel.any():
+        lo = float(np.percentile(ink_lum[sel], 8))
+        hi = float(np.percentile(ink_lum[sel], 92))
+    else:
+        lo, hi = 0.0, 255.0
+    norm = np.clip((ink_lum - lo) / max(8.0, hi - lo), 0.0, 1.0)
+    b_lo = np.array(base[0], np.float32)
+    b_hi = np.array(base[1], np.float32)
+    art = b_lo[None, None, :] + (b_hi - b_lo)[None, None, :] * norm[..., None]
+    if tint:
+        art = art * (1.0 - tint) + arr * tint
+    art_img = Image.fromarray(np.clip(art, 0, 255).astype(np.uint8), "RGB").convert("RGBA")
+    art_img.putalpha(mask)
+
+    o = P(offset_mm)
+
+    def shift_m(dx, dy):
+        return np.roll(np.roll(m, dy, axis=0), dx, axis=1) if (dx or dy) else m
+
+    def layer(color, a):
         im = Image.new("RGBA", (W, H), tuple(int(c) for c in color) + (255,))
-        m = ImageChops.offset(mask, dx, dy) if (dx or dy) else mask
-        if softness:
-            m = m.filter(ImageFilter.GaussianBlur(max(1, P(softness))))
-        im.putalpha(m)
+        a8 = Image.fromarray((np.clip(a, 0.0, 1.0) * 255).astype(np.uint8), "L")
+        a8 = a8.filter(ImageFilter.GaussianBlur(max(1, P(softness))))
+        im.putalpha(a8)
         return im
 
     out = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    o = P(offset_mm)
-    if o:
-        if mode == "deboss":
-            out.alpha_composite(layer(lo, -o, -o))
-            out.alpha_composite(layer(hi, o, o))
-        else:
-            out.alpha_composite(layer(hi, -o, -o))
-            out.alpha_composite(layer(lo, o, o))
-    out.alpha_composite(layer(tone))
+    # raised stamp: outer rims (shadow lower-right, light upper-left)...
+    out.alpha_composite(layer(rim_lo, shift_m(o, o) * 0.85))
+    out.alpha_composite(layer(rim_hi, shift_m(-o, -o) * 0.9))
+    # ...the artwork itself (all detail visible)...
+    out.alpha_composite(art_img)
+    # ...inner-edge shading (band where the shape is but its shifted copy is not)
+    out.alpha_composite(layer(rim_hi, m * (1.0 - shift_m(o, o)) * inner))
+    out.alpha_composite(layer(rim_lo, m * (1.0 - shift_m(-o, -o)) * inner))
     return out
 
 
@@ -677,8 +697,9 @@ def bag_b06_etched_heritage(logo, motif) -> Image.Image:
     img = Image.new("RGB", (P(BAG_W), P(BAG_H)), IVORY)
     d = ImageDraw.Draw(img)
     frame(d, BAG_W, BAG_H, GOLD_A, inset_mm=6.0, width_mm=0.5, inset2_mm=8.0)
-    et = etch_logo(logo, tone=(222, 208, 186), hi=(255, 253, 246), lo=(186, 170, 146),
-                   offset_mm=0.45, softness=0.22)
+    et = etch_logo(logo, base=((166, 157, 142), (214, 205, 188)),
+                   rim_hi=(255, 253, 246), rim_lo=(178, 162, 140), tint=0.32,
+                   offset_mm=0.5, softness=0.22)
     paste_w(img, et, 65, 64, 78)
     headline(d, 65, 120, ["ORGANIC LION'S MANE"], size_mm=8.4, color=FOREST,
              line_gap_mm=10.0, max_w_mm=110, tracking_mm=0.4)
@@ -696,8 +717,9 @@ def bag_b07_etched_noir(logo, motif) -> Image.Image:
     """Near-black matte ground: the real lockup ghost-etched into the surface."""
     img = Image.new("RGB", (P(BAG_W), P(BAG_H)), INK)
     d = ImageDraw.Draw(img)
-    et = etch_logo(logo, tone=(48, 60, 51), hi=(84, 100, 86), lo=(12, 16, 13),
-                   offset_mm=0.5, softness=0.28)
+    et = etch_logo(logo, base=((56, 68, 58), (112, 128, 108)),
+                   rim_hi=(146, 164, 144), rim_lo=(10, 14, 11), tint=0.25,
+                   offset_mm=0.55, softness=0.26)
     paste_w(img, et, 65, 96, 116)
     paste_w(img, recolor(wordmark(logo), CREAM), 65, 17, 40)
     rule(d, 24, 24, 106, GOLD_A, 0.5)
@@ -714,8 +736,9 @@ def bag_b08_foil_monogram(logo, motif) -> Image.Image:
     """Cream apothecary: the real mortar-and-pestle mark as a raised gold foil."""
     img = Image.new("RGB", (P(BAG_W), P(BAG_H)), CREAM)
     d = ImageDraw.Draw(img)
-    foil = etch_logo(monogram(logo), tone=GOLD_A, hi=(238, 208, 130), lo=(146, 112, 40),
-                     offset_mm=0.5, softness=0.25, mode="emboss")
+    foil = etch_logo(monogram(logo), base=((148, 114, 38), (232, 200, 124)),
+                     rim_hi=(255, 240, 180), rim_lo=(102, 76, 24), tint=0.0,
+                     offset_mm=0.5, softness=0.22)
     paste_w(img, foil, 65, 74, 62)
     paste_w(img, recolor(wordmark(logo), FOREST), 65, 128, 54)
     ctext(d, 65, 144, "ORGANIC LION'S MANE", F("Inter.ttf", 3.0, [14, 700]), FOREST,
@@ -736,8 +759,9 @@ def bag_b09_kraft_plate(logo, motif) -> Image.Image:
     d = ImageDraw.Draw(img)
     d.rounded_rectangle([P(14), P(12), P(116), P(198)], radius=P(8), fill=CREAM,
                         outline=GOLD_B, width=max(2, P(0.4)))
-    et = etch_logo(logo, tone=(221, 207, 185), hi=(252, 249, 242), lo=(186, 170, 146),
-                   offset_mm=0.4, softness=0.22)
+    et = etch_logo(logo, base=((164, 155, 140), (212, 203, 186)),
+                   rim_hi=(255, 253, 246), rim_lo=(178, 162, 140), tint=0.32,
+                   offset_mm=0.45, softness=0.22)
     paste_w(img, et, 65, 48, 56)
     headline(d, 65, 86, ["ORGANIC LION'S MANE"], size_mm=7.8, color=FOREST,
              line_gap_mm=9.4, max_w_mm=92, tracking_mm=0.3)
@@ -763,8 +787,9 @@ def bag_b10_botanical_spine(logo, motif) -> Image.Image:
           block_w_mm=64, block_h_mm=3.8)
     vtext(img, 118, 24, "EST. MMXXVI", F("Inter.ttf", 2.4, [14, 700]), FOREST,
           block_w_mm=44, block_h_mm=3.8)
-    et = etch_logo(logo, tone=(128, 156, 112), hi=(178, 202, 160), lo=(96, 124, 84),
-                   offset_mm=0.45, softness=0.22)
+    et = etch_logo(logo, base=((112, 138, 96), (172, 196, 154)),
+                   rim_hi=(210, 226, 194), rim_lo=(86, 110, 74), tint=0.3,
+                   offset_mm=0.5, softness=0.22)
     paste_w(img, et, 65, 58, 66)
     rule(d, 32, 102, 98, FOREST, 0.4)
     headline(d, 65, 116, ["ORGANIC LION'S MANE"], size_mm=9.6, color=FOREST,

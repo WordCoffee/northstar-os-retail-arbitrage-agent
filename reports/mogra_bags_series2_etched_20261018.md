@@ -23,10 +23,14 @@ seal, big headline, Supplement Facts, free-of, suggested use, warning, lot/best,
 QR + real UPC-A on the white code panel. Placeholder register unchanged.
 
 ## Implementation
-- `package_designs.etch_logo(logo, tone, hi, lo, offset_mm, softness, mode)` —
-  keys the ink mask from the flat logo file's darkness (and respects existing
-  alpha), stacks shadow/highlight copies of the silhouette offset ~0.45 mm
-  (deboss) or reversed (emboss), then the base tone on top.
+- `package_designs.etch_logo(logo, base, rim_hi, rim_lo, tint, offset_mm, softness)` —
+  a real **embossed stamp**: the logo's own artwork is remapped into a tone ramp
+  (`base` = dark/light tones) so every internal detail — the mortar line work,
+  the wordmark letterforms, the tagline, the leaf greens (via `tint`) — stays
+  visible; the silhouette mask then drives an outer bevel (lit upper-left rim,
+  shaded lower-right rim) plus inner-edge shading, so the mark reads raised.
+  The ink mask is keyed from the flat logo file's darkness (and respects an
+  existing alpha channel), so the operator file works as-is.
 - `package_designs.paste_w()` — scale-and-centre helper for RGBA blocks.
 - Both runners gained subset flags: `--only <keys>` + `--pack <name>`
   (mockups also `--designs <folder>`), so series can be exported alone.
