@@ -716,6 +716,99 @@ def _t_corpus_search(args, ctx) -> dict:
     }
 
 
+def _t_corpus_vector_search(args, ctx) -> dict:
+    """Semantic (embedding) search over the curated corpus (V4.1 §5.4). Read-only.
+
+    Uses the local qwen3-embedding:0.6b lane + sqlite-vec cosine index. Honest when
+    the lane or the vector store is unavailable — never fabricates a match."""
+    import corpus_drift
+    query = " ".join(str(args.get("query") or "").split())
+    if not query:
+        return {"ok": False, "summary": "Give me something to search for.",
+                "error": "query is required", "assets": []}
+    source = str(args.get("source") or "").strip() or None
+    try:
+        out = corpus_drift.vector_search(
+            query, limit=int(args.get("limit") or 8), source=source,
+            store=ctx.get("vector_store"), lane=ctx.get("embed_lane"))
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "summary": "The semantic corpus search failed.",
+                "error": str(exc)[:200], "assets": []}
+
+    caveats = out.get("caveats", [])
+    if not out.get("available"):
+        reason = str(out.get("reason") or "embedding lane unavailable")[:160]
+        return {
+            "ok": True,
+            "summary": f"Semantic search is unavailable: {reason}",
+            "assets": [],
+            "data": {"card": {"title": "Corpus (semantic)",
+                              "rows": [{"label": "unavailable", "value": reason}]},
+                     "matches": [], "caveats": caveats},
+        }
+    matches = out.get("matches", [])
+    if not matches:
+        return {
+            "ok": True, "summary": f"No semantic corpus matches for '{query}'.", "assets": [],
+            "data": {"card": {"title": "Corpus (semantic)",
+                              "rows": [{"label": "no matches", "value": query}]},
+                     "matches": [], "caveats": caveats},
+        }
+    card_rows = []
+    for m in matches[:8]:
+        bits = [b for b in (m.get("source"), m.get("kind"), m.get("license")) if b]
+        label = str(m.get("title") or m.get("source_id") or "")[:80]
+        card_rows.append({"label": label, "value": " · ".join(str(b) for b in bits)})
+    return {
+        "ok": True,
+        "summary": f"{len(matches)} semantic corpus match(es) for '{query}'.",
+        "assets": [],
+        "data": {
+            "card": {"title": "Corpus (semantic)", "rows": card_rows,
+                     "action": {"label": "Open the top source",
+                                "message": "Show provenance for the top semantic match."}},
+            "matches": matches, "caveats": caveats,
+        },
+    }
+
+
+def _t_corpus_drift(args, ctx) -> dict:
+    """Report MEASURED embedding drift: current corpus vectors vs historical SQP
+    query vectors (V4.1 §5.4). Read-only; it never predicts a trend or a cause."""
+    import corpus_drift
+    try:
+        rep = corpus_drift.drift_report(store=ctx.get("vector_store"), persist=False)
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "summary": "The drift report failed.",
+                "error": str(exc)[:200], "assets": []}
+
+    caveats = rep.get("caveats", [])
+    if not rep.get("available"):
+        reason = str(rep.get("reason") or "insufficient data")[:160]
+        return {
+            "ok": True,
+            "summary": f"Drift is not measurable yet: {reason}",
+            "assets": [],
+            "data": {"card": {"title": "Embedding drift",
+                              "rows": [{"label": "insufficient data", "value": reason}]},
+                     "drift": rep, "caveats": caveats},
+        }
+    rows = [
+        {"label": "cosine drift", "value": f"{rep['drift']:.4f}"},
+        {"label": "similarity", "value": f"{rep['similarity']:.4f}"},
+        {"label": "corpus vectors", "value": str(rep["n_current"])},
+        {"label": "SQP vectors", "value": str(rep["n_historical"])},
+    ]
+    return {
+        "ok": True,
+        "summary": (f"Drift {rep['drift']:.4f} (similarity {rep['similarity']:.4f}) "
+                    f"across {rep['n_current']} corpus / {rep['n_historical']} SQP vectors."),
+        "assets": [],
+        "data": {"card": {"title": "Embedding drift", "rows": rows},
+                 "drift": rep, "caveats": caveats},
+    }
+
+
 def _t_voice_list(args, ctx) -> dict:
     from voicestudio_adapter import get_adapter
     out = _run_async(get_adapter().list_voices())
@@ -954,6 +1047,29 @@ TOOLS: Dict[str, dict] = {
             "required": ["query"],
         },
         "handler": _t_corpus_search,
+    },
+    "corpus_vector_search": {
+        "description": ("Semantic search over the local curated corpus using the local "
+                        "qwen3-embedding:0.6b lane + sqlite-vec cosine index (V4.1 §5.4). "
+                        "An ADDITIONAL mode beside keyword search. Read-only; honest when "
+                        "the embedding lane is unavailable."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "What to look for.", "minLength": 1, "maxLength": 300},
+                "limit": {"type": "integer", "description": "Max matches (default 8, max 25).", "minimum": 1, "maximum": 25},
+                "source": {"type": "string", "description": "Restrict to one corpus source (github | hf | registry | doc).", "maxLength": 20},
+            },
+            "required": ["query"],
+        },
+        "handler": _t_corpus_vector_search,
+    },
+    "corpus_drift": {
+        "description": ("Report MEASURED embedding drift between the current corpus vectors "
+                        "and historical Search-Query-Performance query vectors (V4.1 §5.4). "
+                        "A cosine distance — never a trend, forecast or cause. Read-only."),
+        "parameters": {"type": "object", "properties": {}, "required": []},
+        "handler": _t_corpus_drift,
     },
     "voice_list": {
         "description": ("List voice profiles on the local VoiceStudio service for ad "

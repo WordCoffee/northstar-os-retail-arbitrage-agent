@@ -54,7 +54,8 @@ FOCUS_MODES: List[Dict[str, Any]] = [
         "label": "Grow",
         "blurb": "Listings, keywords, ads and search visibility.",
         "tools": ["system_status", "design_brief", "seo_check", "seo_propose", "seo_profile",
-                  "seo_negatives", "seo_retitle", "corpus_search"],
+                  "seo_negatives", "seo_retitle", "corpus_search", "corpus_vector_search",
+                  "corpus_drift"],
         "requires": None,
         "suggestions": [
             "SEO-check my latest listing revision and flag the gaps.",
@@ -66,7 +67,8 @@ FOCUS_MODES: List[Dict[str, Any]] = [
         "id": "research",
         "label": "Research",
         "blurb": "Sourcing, competitors, market and provider reads.",
-        "tools": ["system_status", "list_templates", "corpus_search"],
+        "tools": ["system_status", "list_templates", "corpus_search",
+                  "corpus_vector_search", "corpus_drift"],
         "requires": None,
         "suggestions": [
             "Summarize the state of my sourcing pipeline and what needs data.",

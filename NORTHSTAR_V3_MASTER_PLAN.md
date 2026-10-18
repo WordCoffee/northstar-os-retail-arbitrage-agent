@@ -295,7 +295,7 @@ stays readable; editing a profile is never a silent rewrite.
   write nothing, and claim no performance. SocialPulse framing is served by the
   surface check above (`seo_check` with `surface=social`).
 
-### 5.4 Measurement + learning (honest) — **BUILT (deterministic part)**
+### 5.4 Measurement + learning (honest) — **BUILT (deterministic + embeddings drift)**
 File-import first (SQP / search-term exports; the `search_query_performance`
 schema already exists and is fed by `importers/brand_analytics_importer.py`).
 The learning step reads those **measured** rows and proposes profile keyword
@@ -310,8 +310,26 @@ additions — candidates only, never an automatic edit.
 
 Approving a proposal is an **operator action** that appends a new profile version
 via the existing append-only `POST /profiles/{id}/versions` — nothing is rewritten
-silently. Embedding drift (`qwen3-embedding:0.6b` + sqlite-vec) remains the next
-step; no rank-change claims are ever manufactured.
+silently.
+
+**Embeddings drift — BUILT (V4.1).** The local semantic lane is live: `corpus_drift.py`
+embeds text with `qwen3-embedding:0.6b` (1024-d) via the local Ollama runner and stores
+vectors in a `sqlite-vec` `vec0` table (float32, cosine). `compute_drift` reports the
+**measured** cosine distance between the current corpus centroid and the historical
+SQP-query centroid — never a trend, forecast or cause — and records snapshots. Vector
+search is an **additional** mode; the deterministic keyword path is unchanged, and if
+the lane is down every surface degrades to an honest `available: false` (no fabricated
+vector).
+
+| Piece | Where | Notes |
+|---|---|---|
+| Embedding lane | `corpus_drift.py` `EmbeddingLane` | Ollama `qwen3-embedding:0.6b`, 1024-d, localhost-only; `EmbeddingUnavailable` on every failure mode. |
+| Vector store | `corpus_drift.py` `VectorStore` | `sqlite-vec` `vec0` (cosine) + `corpus_vector_meta` rowid→record map + `corpus_drift_snapshots` history. |
+| Drift math | `corpus_drift.py` `compute_drift` | Pure cosine-centroid distance; `available:false` when either side is empty. |
+| Service | `corpus_router.py` `/api/corpus/{search/vector,drift,embed}` | Read + bounded local embed; nothing leaves the machine. |
+| Shell hooks | `chat_tools.py` `corpus_vector_search`, `corpus_drift` (Grow + Research foci) | AG-UI cards; honest when the lane is unavailable. |
+
+No rank-change claims are ever manufactured.
 
 ---
 
@@ -333,8 +351,10 @@ engine's competitive context. *(20,000 is a target, not a gate.)*
 
 **Honesty boundaries:** every record carries its `license` **as reported by the
 source sweep** — the engine never asserts a licence is safe to use. Search is
-deterministic keyword matching (**not** semantic/vector); a vector index
-(`qwen3-embedding` + sqlite-vec) is the documented upgrade, not a claimed feature.
+deterministic keyword matching; **semantic vector search is now also available** as
+an *additional* mode (V4.1 §5.4: `qwen3-embedding:0.6b` + `sqlite-vec`, cosine, via
+`/api/corpus/search/vector` and the `corpus_vector_search` tool) while the keyword
+path stays unchanged.
 There is no local MCP-registry file in the repo (MCP data exists only as rows in
 the sweeps); the ingest reports that honestly rather than inventing an index.
 Feed counts are the raw pre-aggregated records — the 20,000 figure is aspirational
@@ -390,9 +410,9 @@ false failures.
 6. S7 Brand SEO Engine — ~~§5.1 versioned Brand SEO Profile~~ ·
    ~~§5.2 listing revisions~~ · ~~§5.3 cross-service scoring hook (all
    surfaces) + AdPilot negatives/harvest + SourceScout retitle~~ ·
-   ~~§5.4 file-import learning (deterministic proposals)~~ **BUILT**;
-   remaining §5.4 embeddings drift (sqlite-vec) next
-7. ~~S8 curated corpus + learning loop~~ **BUILT** (local index + deterministic retrieval; vector index is the documented upgrade)
+   ~~§5.4 file-import learning (deterministic proposals)~~ ·
+   ~~§5.4 embeddings drift (qwen3-embedding:0.6b + sqlite-vec)~~ **BUILT (all of S7)**
+7. ~~S8 curated corpus + learning loop~~ **BUILT** (local index + deterministic retrieval + semantic vector search via §5.4)
 8. Operator-window REA captures (Packify first) when the operator is present
 
 Every live/paid action remains gated per action; nothing in V3 alters that.

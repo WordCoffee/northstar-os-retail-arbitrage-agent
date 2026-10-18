@@ -26,6 +26,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
 
+import corpus_drift  # noqa: E402
 import corpus_ingest  # noqa: E402
 from data_layer import get_northstar_db  # noqa: E402
 from design_studio_api import studio_account  # noqa: E402
@@ -50,6 +51,29 @@ def search(q: str, limit: int = 20, source: Optional[str] = None,
         return {"query": q, "count": 0, "matches": [], "caveats": _SEARCH_CAVEATS}
     rows = db.corpus.search(q, limit=min(max(int(limit), 1), 100), source=source)
     return {"query": q, "count": len(rows), "matches": rows, "caveats": _SEARCH_CAVEATS}
+
+
+@router.get("/search/vector")
+def search_vector(q: str, limit: int = 10, threshold: Optional[float] = None,
+                  source: Optional[str] = None, acct: str = Depends(studio_account)):
+    """Semantic (sqlite-vec cosine) search over the corpus. Honest when the lane is down."""
+    out = corpus_drift.vector_search(
+        q, limit=min(max(int(limit), 1), 50), threshold=threshold, source=source)
+    out["query"] = q
+    return out
+
+
+@router.get("/drift")
+def drift(persist: bool = True, acct: str = Depends(studio_account)):
+    """Measured embedding drift vs historical SQP query vectors. Never a forecast."""
+    return corpus_drift.drift_report(persist=persist)
+
+
+@router.post("/embed")
+def embed(limit: int = 50, include_sqp: bool = True, acct: str = Depends(studio_account)):
+    """Embed pending corpus (+SQP) records into the local vector store. Bounded, local-only."""
+    return corpus_drift.embed_now(
+        limit=min(max(int(limit), 1), 200), include_sqp=bool(include_sqp))
 
 
 @router.get("/stats")

@@ -12,3 +12,7 @@ cryptography
 psycopg[binary]
 python-multipart
 websockets
+
+# V4.1 §5.4 — local semantic vector lane for the curated corpus (SQLite-only).
+# Used by corpus_drift.py (vec0 cosine index); the corpus keyword path needs nothing here.
+sqlite-vec>=0.1.9
