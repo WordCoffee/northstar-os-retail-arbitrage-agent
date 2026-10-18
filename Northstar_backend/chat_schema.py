@@ -46,6 +46,7 @@ CHAT_TABLES_SQL = """
                 args_json TEXT,
                 result_json TEXT,
                 status TEXT DEFAULT 'queued',    -- queued | running | done | error | cancelled
+                step_index INTEGER,              -- V3 S5: 0-based order within the turn (plan/DAG)
                 started_at TEXT,
                 ended_at TEXT,
                 created_at TEXT DEFAULT (datetime('now'))
@@ -89,4 +90,27 @@ CHAT_TABLES_SQL = """
                 created_at TEXT DEFAULT (datetime('now'))
             );
             CREATE INDEX IF NOT EXISTS idx_chat_session_forks_child ON chat_session_forks(session_id);
+
+            -- Run registry (V3 S5 AutothinK surface): bounded, tenant-scoped
+            -- runs an operator can watch and cancel. This is NOT an arbitrary
+            -- code sandbox — the tool gateway's deny-list (shell/exec/eval/...)
+            -- is the enforceable boundary; runs here are chat turns and tool
+            -- executions. In-process liveness lives in the turn registry; this
+            -- table is the honest ledger of what ran. Additive.
+            CREATE TABLE IF NOT EXISTS chat_runs (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                session_id TEXT,
+                kind TEXT DEFAULT 'chat_turn',   -- chat_turn | tool
+                label TEXT,
+                status TEXT DEFAULT 'running',    -- running | done | error | cancelled
+                progress REAL,
+                ref TEXT,                         -- live handle (e.g. turn_id) for cancel
+                detail_json TEXT,
+                started_at TEXT,
+                ended_at TEXT,
+                created_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_chat_runs_account ON chat_runs(account_id);
+            CREATE INDEX IF NOT EXISTS idx_chat_runs_session ON chat_runs(session_id);
         """

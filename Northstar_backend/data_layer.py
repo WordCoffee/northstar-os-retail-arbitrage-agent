@@ -815,6 +815,23 @@ class DataLayer:
                     pass
         self._conn.commit()
         self._migrate_ds_columns()
+        self._migrate_chat_columns()
+
+    def _migrate_chat_columns(self):
+        """Idempotently add V3 S5 columns to an existing chat_tool_calls table."""
+        try:
+            cur = self._conn.execute("PRAGMA table_info(chat_tool_calls)")
+            existing = {row[1] for row in cur.fetchall()}
+        except sqlite3.Error:
+            return
+        if not existing:
+            return  # table not present; CREATE above already made it right
+        if "step_index" not in existing:
+            try:
+                self._conn.execute("ALTER TABLE chat_tool_calls ADD COLUMN step_index INTEGER")
+            except sqlite3.Error:
+                pass
+        self._conn.commit()
 
     def _migrate_ds_columns(self):
         """Idempotently bring an EXISTING ds_* table up to the current shape.
@@ -3001,6 +3018,31 @@ class ChatAttachmentsDB:
             out.append(d)
         return out
 
+    def list_by_session(self, sid: str, account_id: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Every artifact attached to any message in a session (V3 S5 browser).
+
+        Joins chat_messages so the session filter is authoritative, not inferred
+        from a possibly-missing message row."""
+        sql = ("SELECT a.* FROM chat_attachments a "
+               "JOIN chat_messages m ON m.id = a.message_id "
+               "WHERE m.session_id = ?")
+        params: List[Any] = [sid]
+        if account_id:
+            sql += " AND a.account_id = ?"
+            params.append(account_id)
+        sql += " ORDER BY a.created_at ASC"
+        cur = self.db.execute(sql, tuple(params))
+        out = []
+        for row in cur.fetchall():
+            d = dict(row)
+            if d.get("provenance_json") and isinstance(d["provenance_json"], str):
+                try:
+                    d["provenance_json"] = json.loads(d["provenance_json"])
+                except json.JSONDecodeError:
+                    pass
+            out.append(d)
+        return out
+
 
 class DesignStudioContainer:
     """Namespace for the Design Studio stores."""
@@ -3089,6 +3131,91 @@ class ChatContainer:
         self.attachments = ChatAttachmentsDB(db)
         self.tool_audit = ToolAuditDB(db)
         self.forks = ChatForksDB(db)
+        self.runs = RunRegistryDB(db)
+
+
+class RunRegistryDB:
+    """Bounded run ledger for the V3 S5 AutothinK run panel. Tenant-scoped.
+
+    NOT an arbitrary-code sandbox: the tool gateway's deny-list is the boundary.
+    A run records something that actually ran (a chat turn or a tool execution)
+    so the operator can watch status and cancel. `ref` carries the live handle
+    (e.g. a turn_id) used to cancel an in-flight run.
+    """
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _serialize(self, row) -> Dict[str, Any]:
+        d = dict(row)
+        if d.get("detail_json") and isinstance(d["detail_json"], str):
+            try:
+                d["detail_json"] = json.loads(d["detail_json"])
+            except json.JSONDecodeError:
+                pass
+        return d
+
+    def create(self, entry: Dict[str, Any]) -> str:
+        rid = entry.get("id") or str(uuid.uuid4())
+        entry = dict(entry)
+        entry["id"] = rid
+        entry.setdefault("account_id", "default")
+        entry.setdefault("kind", "chat_turn")
+        entry.setdefault("status", "running")
+        entry.setdefault("created_at", datetime.now(timezone.utc).isoformat())
+        if "detail_json" in entry and isinstance(entry["detail_json"], (dict, list)):
+            entry["detail_json"] = json.dumps(entry["detail_json"])
+        cols = list(entry.keys())
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO chat_runs ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(entry.values()),
+        )
+        self.db.commit()
+        return rid
+
+    def finish(self, rid: str, status: str, *, progress: Optional[float] = None,
+               detail: Optional[Dict[str, Any]] = None,
+               account_id: Optional[str] = None) -> bool:
+        patch: Dict[str, Any] = {"status": status, "ended_at": datetime.now(timezone.utc).isoformat()}
+        if progress is not None:
+            patch["progress"] = float(progress)
+        if detail is not None:
+            patch["detail_json"] = json.dumps(detail)
+        fields = ", ".join(f"{k} = ?" for k in patch)
+        params: List[Any] = list(patch.values())
+        sql = f"UPDATE chat_runs SET {fields} WHERE id = ?"
+        params.append(rid)
+        if account_id:
+            sql += " AND account_id = ?"
+            params.append(account_id)
+        self.db.execute(sql, tuple(params))
+        self.db.commit()
+        return True
+
+    def get(self, rid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute("SELECT * FROM chat_runs WHERE id = ? AND account_id = ?",
+                                  (rid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM chat_runs WHERE id = ?", (rid,))
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def list_by_account(self, account_id: str, *, status: Optional[str] = None,
+                        session_id: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
+        sql = "SELECT * FROM chat_runs WHERE account_id = ?"
+        params: List[Any] = [account_id]
+        if status:
+            sql += " AND status = ?"
+            params.append(status)
+        if session_id:
+            sql += " AND session_id = ?"
+            params.append(session_id)
+        sql += " ORDER BY created_at DESC LIMIT ?"
+        params.append(max(int(limit), 1))
+        cur = self.db.execute(sql, tuple(params))
+        return [self._serialize(r) for r in cur.fetchall()]
 
 
 class SeoProfilesDB:

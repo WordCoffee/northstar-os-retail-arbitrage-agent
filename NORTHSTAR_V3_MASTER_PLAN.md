@@ -157,8 +157,36 @@ currently reuses the universal chat surface with the full tool set.
 | Lineage | `chat_schema.py` `chat_session_forks` + `ChatForksDB` | Each child records its parent + fork point. Append-only, additive. |
 | UI | `src/chat/ChatSurface.jsx` `chat-fork` | A **Fork** control on any persisted message branches and opens the child; a just-streamed (un-persisted) turn is not forkable. |
 
-**PLANNED:** multi-step plan/DAG visualiser, sandbox runner panel, build-artifact
-browser.
+**BUILT — plan/DAG visualiser (reconstructed, honest):**
+
+| Piece | Where | Notes |
+|---|---|---|
+| Step order | `chat_schema.py` `chat_tool_calls.step_index` (+ `data_layer._migrate_chat_columns`) | 0-based order within a turn; additive column + idempotent ALTER for existing DBs. The turn loop writes it. |
+| Plan builder | `chat_plan.py` `build_plan` | Pure: rebuilds `prompt → step 0 → step 1 → … → answer` from message parts + the tool-call ledger. **Linear on purpose** — the tool loop is bounded and sequential, so no hidden edges are invented; caveats say so. |
+| Endpoint | `chat_router.py` `GET /api/chat/sessions/{sid}/plan` | Returns nodes / edges / per-turn grouping. Tenant-scoped. |
+
+**BUILT — artifact browser:**
+
+| Piece | Where | Notes |
+|---|---|---|
+| Read store | `data_layer.py` `ChatAttachmentsDB.list_by_session` | Joins `chat_messages` so the session filter is authoritative. |
+| Endpoint | `chat_router.py` `GET /api/chat/sessions/{sid}/artifacts` | Each artifact with `ds_assets` metadata; a missing asset is reported `present:false`, never hidden. |
+
+**BUILT — run panel (bounded run registry, NOT a code sandbox):**
+
+| Piece | Where | Notes |
+|---|---|---|
+| Registry | `chat_schema.py` `chat_runs` + `data_layer.RunRegistryDB` | Tenant-scoped ledger of what actually ran (chat turns / tool executions): status, progress, `ref` (live handle), timestamps. |
+| Wiring | `chat_router.py` `turn_event_stream` | Registers a run at turn start, finalises it on **every** exit path (done / cancelled / error). Best-effort; never breaks a turn. |
+| Endpoints | `chat_router.py` `GET /api/chat/runs`, `POST /api/chat/runs/{id}/cancel` | Cancel only stops a genuinely live chat turn; anything else reports `cancelled:false` honestly. |
+
+**Honesty boundary:** this is *not* an arbitrary-code sandbox. The tool gateway's
+deny-list (`shell/exec/eval/…`, `tool_gateway.py`) is the enforceable boundary; a
+run here is a bounded chat turn or tool execution, exactly as the loop performs.
+
+**Next (UI):** the Simple-shell side panels for the plan graph, artifact browser
+and run panel (the visual treatment is the deep-visual part of the plan).
+
 
 ---
 

@@ -109,6 +109,11 @@ def _args_for_model(call: Dict[str, Any]) -> Any:
         return {}
 
 
+def _label_turn(text: str, limit: int = 80) -> str:
+    s = " ".join((text or "").split())
+    return s[:limit] or "chat turn"
+
+
 def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content: str,
                       *, think: bool = True, model: Optional[str] = None,
                       events: Optional[Any] = None,
@@ -130,6 +135,22 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
         cancel_event = register_turn(turn_id)
     if tools_enabled is None:
         tools_enabled = tools_enabled_default()
+
+    # V3 S5 run ledger: record this turn as a bounded, cancellable run so the
+    # AutothinK run panel has honest status. Best-effort; never breaks a turn.
+    run_id: Optional[str] = None
+    try:
+        run_id = db.chat.runs.create({
+            "account_id": account_id,
+            "session_id": session.get("id"),
+            "kind": "chat_turn",
+            "label": _label_turn(user_content),
+            "status": "running",
+            "ref": turn_id,
+            "started_at": _now(),
+        })
+    except Exception:  # noqa: BLE001
+        run_id = None
 
     thinking_parts: List[str] = []
     content_parts: List[str] = []
@@ -174,7 +195,7 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
             "usage_json": {"status": final_status, "cancelled": cancelled,
                            **(usage or {})},
         })
-        for rec in tool_records:
+        for idx, rec in enumerate(tool_records):
             try:
                 db.chat.tool_calls.create({
                     "account_id": account_id,
@@ -184,6 +205,7 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                     "args_json": rec.get("args"),
                     "result_json": rec.get("result"),
                     "status": rec.get("status") or "done",
+                    "step_index": rec.get("step_index", idx),
                     "started_at": rec.get("started_at"),
                     "ended_at": rec.get("ended_at"),
                 })
@@ -355,6 +377,7 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                     "args": call.get("obj_args") if call.get("obj_args") is not None else call.get("raw_args"),
                     "result": result,
                     "status": "done" if result.get("ok") else "error",
+                    "step_index": len(tool_records),
                     "started_at": started_at,
                     "ended_at": _now(),
                 })
@@ -437,6 +460,11 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
             try:
                 _persist("cancelled" if status == "done" else status)
             except Exception:  # noqa: BLE001 - persistence must never mask the exit
+                pass
+        if run_id:
+            try:
+                db.chat.runs.finish(run_id, status, account_id=account_id)
+            except Exception:  # noqa: BLE001
                 pass
         if own_event:
             _drain_turn(turn_id)
@@ -603,3 +631,82 @@ def cancel(turn_id: str, acct: str = Depends(studio_account)):
     # stream only. Unknown ids are reported honestly, never pretended.
     ok = cancel_turn(turn_id)
     return {"ok": ok, "turn_id": turn_id}
+
+
+# ── V3 S5 — AutothinK premium surface ───────────────────────────────────────
+
+@router.get("/sessions/{sid}/plan")
+def session_plan(sid: str, acct: str = Depends(studio_account)):
+    """The session's plan graph (prompt → tool steps → answer), reconstructed.
+
+    Built from the recorded tool-call ledger + message parts. Linear and honest:
+    nothing is invented beyond what ran."""
+    import chat_plan
+    db = get_northstar_db()
+    session = db.chat.sessions.get_by_id(sid, account_id=acct)
+    if not session:
+        raise HTTPException(status_code=404, detail="Chat session not found")
+    messages = db.chat.messages.list_by_session(sid, account_id=acct, limit=1000)
+    calls = db.chat.tool_calls.list_by_session(sid, account_id=acct)
+    plan = chat_plan.build_plan(messages, calls)
+    plan["session_id"] = sid
+    return plan
+
+
+@router.get("/sessions/{sid}/artifacts")
+def session_artifacts(sid: str, acct: str = Depends(studio_account)):
+    """Every build artifact attached to a session, with ds_assets metadata."""
+    db = get_northstar_db()
+    session = db.chat.sessions.get_by_id(sid, account_id=acct)
+    if not session:
+        raise HTTPException(status_code=404, detail="Chat session not found")
+    items = []
+    for att in db.chat.attachments.list_by_session(sid, account_id=acct):
+        asset = None
+        aid = att.get("asset_id")
+        if aid:
+            try:
+                asset = db.design_studio.assets.get_by_id(aid, account_id=acct)
+            except Exception:  # noqa: BLE001 - a missing asset is not a crash
+                asset = None
+        items.append({
+            "asset_id": aid,
+            "name": (asset or {}).get("name") or att.get("kind") or "artifact",
+            "asset_type": (asset or {}).get("asset_type"),
+            "mime_type": (asset or {}).get("mime_type"),
+            "size_bytes": (asset or {}).get("size_bytes"),
+            "width": (asset or {}).get("width"),
+            "height": (asset or {}).get("height"),
+            "url": att.get("url"),
+            "kind": att.get("kind"),
+            "message_id": att.get("message_id"),
+            "provenance": att.get("provenance_json"),
+            "created_at": att.get("created_at"),
+            "present": asset is not None,
+        })
+    return {"session_id": sid, "artifacts": items}
+
+
+@router.get("/runs")
+def list_runs(status: Optional[str] = None, session_id: Optional[str] = None,
+              limit: int = 100, acct: str = Depends(studio_account)):
+    """Bounded run ledger (chat turns / tool executions) for the run panel."""
+    db = get_northstar_db()
+    return {"runs": db.chat.runs.list_by_account(
+        acct, status=status, session_id=session_id, limit=min(max(int(limit), 1), 500))}
+
+
+@router.post("/runs/{run_id}/cancel")
+def cancel_run(run_id: str, acct: str = Depends(studio_account)):
+    """Cancel an in-flight run. Only a live chat turn can actually be stopped;
+    anything else is reported honestly (cancelled=false), never pretended."""
+    db = get_northstar_db()
+    run = db.chat.runs.get(run_id, account_id=acct)
+    if not run:
+        raise HTTPException(status_code=404, detail="Run not found")
+    stopped = False
+    if run.get("status") == "running" and run.get("kind") == "chat_turn" and run.get("ref"):
+        stopped = cancel_turn(run["ref"])
+        if stopped:
+            db.chat.runs.finish(run_id, "cancelled", account_id=acct)
+    return {"ok": True, "cancelled": stopped, "run_id": run_id}
