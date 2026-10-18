@@ -281,9 +281,14 @@ stays readable; editing a profile is never a silent rewrite.
   so every service can score its own copy from the Simple shell. Deterministic
   keyword coverage only — no rank/volume claims.
 
-  Still open (real features, not scoring): AdPilot search-terms → negatives/
-  harvest; SocialPulse external-traffic framing; SourceScout title/pack
-  normalisation (rewriting, not just checking).
+  **BUILT (pipeline ops) for AdPilot and SourceScout:**
+  `seo_ops.py` — `classify_search_terms` splits search terms into **negatives**
+  (match the profile's negative cluster or a competitor) and **harvest**
+  candidates (match a head/body cluster), reachable as the Grow tool
+  `seo_negatives`; `retitle` normalises a raw title toward the head clusters
+  within a length budget, reachable as `seo_retitle`. Both are deterministic,
+  write nothing, and claim no performance. SocialPulse framing is served by the
+  surface check above (`seo_check` with `surface=social`).
 
 ### 5.4 Measurement + learning (honest) — **BUILT (deterministic part)**
 File-import first (SQP / search-term exports; the `search_query_performance`
@@ -337,8 +342,8 @@ During the hosted beta, orgs whose materialised entitlements carry
 
 | Layer | Evidence |
 |---|---|
-| Backend unit/integration | `python -m pytest test_shell_modes.py` (33) + `test_tool_gateway.py` (5) + `test_voicestudio_adapter.py` (9) + `test_chat_fork.py` (10) + `test_seo_profiles.py` (17) + `test_chat_core`/`test_chat_tools`/`test_subscription_catalog_smoke`/`test_plans_route` (combined run) |
-| Shell gate end-to-end | `node verify-shell-v3.cjs` — 22/22 (denied tier: shell only, no Advanced, `?shell=advanced` degrades; granted tier: Advanced renders rooms and returns; mobile toggle reachable at 390px; **AG-UI card renders as a component**; **pause → paused → resume handover**; **fork opens a new branched session**) |
+| Backend unit/integration | `python -m pytest` — S4/S5/S7 suites: `test_shell_modes` (33) · `test_tool_gateway` (5) · `test_voicestudio_adapter` (9) · `test_chat_fork` (10) · `test_chat_plan` (16) · `test_seo_profiles` (17) · `test_seo_listing` (23) · `test_seo_learning` (12) · `test_seo_ops` (15) + `test_chat_core`/`test_chat_tools`/`test_subscription_catalog_smoke`/`test_plans_route` (combined run: 168 passed) |
+| Shell gate end-to-end | `node verify-shell-v3.cjs` — 28/28 (denied tier: shell only, no Advanced, `?shell=advanced` degrades; granted tier: Advanced renders rooms and returns; mobile toggle reachable at 390px; AG-UI card as a component; pause → paused → resume handover; fork opens a new branched session; **S5 workbench: plan chain, artifacts list, runs with cancel**) |
 | Existing harnesses | `verify-guards.cjs` 11/0, `verify-admin.cjs` 33/0, `verify-acceptance.cjs` 2 fails (both pre-existing; baseline had 8 — 6 fixed by the harness role-vocabulary correction) |
 | Build | `npm run build` — 0 errors |
 | Live E2E (operator) | Start the stack, open `/ui/home` → Simple shell; switch focus; run one turn; open a render in the lightbox; flip to Advanced (if entitled) |
@@ -361,12 +366,11 @@ false failures.
 5. S5 AutothinK premium surface — ~~session fork/rewind~~ · ~~plan/artifact/run
    backends~~ · ~~workbench UI~~ **BUILT**; the immersive plan-graph visual
    (deep-visual) is pending a stronger visual model pass
-6. S7 Brand SEO Engine — ~~§5.1 versioned Brand SEO Profile~~ **BUILT**;
+6. S7 Brand SEO Engine — ~~§5.1 versioned Brand SEO Profile~~ ·
    ~~§5.2 listing revisions~~ · ~~§5.3 cross-service scoring hook (all
-   surfaces)~~ **BUILT**; remaining §5.3 pipeline features (AdPilot
-   negatives/harvest, SocialPulse external-traffic framing, SourceScout
-   normalisation) · ~~§5.4 file-import learning (deterministic proposals)~~
-   **BUILT**; remaining §5.4 embeddings drift (sqlite-vec) next
+   surfaces) + AdPilot negatives/harvest + SourceScout retitle~~ ·
+   ~~§5.4 file-import learning (deterministic proposals)~~ **BUILT**;
+   remaining §5.4 embeddings drift (sqlite-vec) next
 7. S8 curated corpus + learning loop
 8. Operator-window REA captures (Packify first) when the operator is present
 

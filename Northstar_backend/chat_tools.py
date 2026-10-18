@@ -572,6 +572,102 @@ def _t_seo_propose(args, ctx) -> dict:
     }
 
 
+def _seo_profile_or_error(ctx, brand_key):
+    """Resolve the account's brand SEO profile, or return an honest error dict.
+
+    Returns (profile, None) on success, or (None, error_result) otherwise. Shared
+    by the S7 §5.3 pipeline tools so their absence handling cannot drift."""
+    db = ctx.get("db")
+    acct = ctx.get("account_id")
+    profiles = getattr(getattr(db, "seo", None), "profiles", None)
+    if profiles is None:
+        return None, {"ok": False, "summary": "The SEO profile store is unavailable.",
+                      "error": "no SEO store in this context", "assets": []}
+    bk = str(brand_key or "").strip().lower()
+    if bk:
+        head = profiles.get_by_brand_key(acct, bk)
+        if not head:
+            return None, {"ok": False, "summary": f"No brand SEO profile for '{bk}'.",
+                          "error": f"no profile with brand_key '{bk}'", "assets": []}
+        return profiles.get_profile(head["id"], account_id=acct), None
+    items = profiles.list_profiles(acct, limit=2)
+    if not items:
+        return None, {"ok": False, "summary": "No brand SEO profile yet — create one first.",
+                      "error": "no profiles for this account", "assets": []}
+    if len(items) > 1:
+        return None, {"ok": False, "summary": "More than one brand profile — pass brand_key.",
+                      "error": "ambiguous brand; pass brand_key", "assets": []}
+    return profiles.get_profile(items[0]["id"], account_id=acct), None
+
+
+def _t_seo_negatives(args, ctx) -> dict:
+    """AdPilot hook (S7 §5.3): split search terms into negatives / harvest.
+
+    Deterministic matching against the operator's own profile. Writes nothing."""
+    from seo_ops import classify_search_terms
+    profile, err = _seo_profile_or_error(ctx, args.get("brand_key"))
+    if err:
+        return err
+    out = classify_search_terms(profile.get("body") or {}, args.get("terms"))
+    rows = [
+        {"label": "negatives", "value": str(out["negative_count"])},
+        {"label": "harvest candidates", "value": str(out["harvest_count"])},
+        {"label": "ignored", "value": str(len(out["ignored"]))},
+    ]
+    if out["negatives"]:
+        rows.append({"label": "negative list",
+                     "value": ", ".join(n["term"] for n in out["negatives"][:12])})
+    if out["harvest"]:
+        rows.append({"label": "harvest list",
+                     "value": ", ".join(h["term"] for h in out["harvest"][:12])})
+    return {
+        "ok": True,
+        "summary": (f"{out['negative_count']} negative(s), {out['harvest_count']} harvest "
+                    f"candidate(s) against {profile['brand_key']} v{profile['current_version']}."),
+        "assets": [],
+        "data": {
+            "card": {"title": "AdPilot term triage", "rows": rows,
+                     "action": {"label": "Explain the split",
+                                "message": "Why are these terms negatives vs harvest candidates?"}},
+            "negatives": out["negatives"], "harvest": out["harvest"],
+            "ignored": out["ignored"], "caveats": out["caveats"],
+        },
+    }
+
+
+def _t_seo_retitle(args, ctx) -> dict:
+    """SourceScout / ListingForge hook (S7 §5.3): normalise a title to the profile.
+
+    Deterministic rewrite toward the operator's own head terms, within a budget.
+    Returns a suggestion; it never writes a listing."""
+    from seo_ops import retitle
+    profile, err = _seo_profile_or_error(ctx, args.get("brand_key"))
+    if err:
+        return err
+    out = retitle(profile.get("body") or {}, args.get("title"),
+                  max_len=int(args.get("max_len") or 200))
+    rows = [
+        {"label": "suggested", "value": out["title"]},
+        {"label": "length", "value": f"{out['length']} / {out['max_len']}"},
+    ]
+    if out["missing_head"]:
+        rows.append({"label": "missing head", "value": ", ".join(out["missing_head"][:8])})
+    if out["changes"]:
+        rows.append({"label": "changes", "value": "; ".join(out["changes"])})
+    return {
+        "ok": True,
+        "summary": f"Retitled toward {profile['brand_key']} v{profile['current_version']}.",
+        "assets": [],
+        "data": {
+            "card": {"title": "Suggested title", "rows": rows,
+                     "action": {"label": "Why these changes?",
+                                "message": "Explain this retitle against the brand profile."}},
+            "title": out["title"], "original": out["original"],
+            "changes": out["changes"], "caveats": out["caveats"],
+        },
+    }
+
+
 def _t_voice_list(args, ctx) -> dict:
     from voicestudio_adapter import get_adapter
     out = _run_async(get_adapter().list_voices())
@@ -764,6 +860,36 @@ TOOLS: Dict[str, dict] = {
             "required": [],
         },
         "handler": _t_seo_profile,
+    },
+    "seo_negatives": {
+        "description": ("AdPilot hook (S7): split search terms into negatives "
+                        "(match the profile's negative cluster or a competitor) and "
+                        "harvest candidates (match a head/body cluster). Deterministic; "
+                        "writes nothing."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "brand_key": {"type": "string", "description": "Brand slug (optional if the account has one profile).", "maxLength": 80},
+                "terms": {"type": "string", "description": "Search terms to triage (newline- or comma-separated).", "maxLength": 4000},
+            },
+            "required": [],
+        },
+        "handler": _t_seo_negatives,
+    },
+    "seo_retitle": {
+        "description": ("SourceScout / ListingForge hook (S7): normalise a raw title "
+                        "toward the profile's head clusters within a length budget. "
+                        "Deterministic suggestion; writes nothing."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "brand_key": {"type": "string", "description": "Brand slug (optional if the account has one profile).", "maxLength": 80},
+                "title": {"type": "string", "description": "The raw title to normalise.", "minLength": 1, "maxLength": 500},
+                "max_len": {"type": "integer", "description": "Title length budget (default 200).", "minimum": 20, "maximum": 500},
+            },
+            "required": ["title"],
+        },
+        "handler": _t_seo_retitle,
     },
     "voice_list": {
         "description": ("List voice profiles on the local VoiceStudio service for ad "
