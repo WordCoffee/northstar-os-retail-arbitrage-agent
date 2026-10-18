@@ -310,6 +310,45 @@ def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
     return Image.fromarray(base.astype("uint8"), "RGB")
 
 
+def warp_cylinder(photo: Image.Image, panel: Image.Image, rect: Sequence,
+                  shading: float = 0.5) -> Image.Image:
+    """Wrap a flat panel around a vertical cylinder seen frontally (front half).
+
+    rect = (x0, y0, x1, y1) of the tube's visible face. Panel width maps across
+    the visible arc (180deg) with horizontal foreshortening toward the edges and
+    a cylindrical luminance falloff, multiplied with the plate's own shading so
+    the print follows the tube's light.
+    """
+    x0, y0, x1, y1 = [int(v) for v in rect]
+    cx = (x0 + x1) / 2.0
+    R = max(1.0, (x1 - x0) / 2.0)
+    PW, PH = panel.size
+    gx, gy = np.meshgrid(np.arange(x0, x1 + 1), np.arange(y0, y1 + 1))
+    d = (gx - cx) / R
+    valid = np.abs(d) < 1.0
+    theta = np.arcsin(np.clip(d, -1.0, 1.0))
+    u = (theta / np.pi + 0.5) * (PW - 1)
+    v = (gy - y0) / max(1, (y1 - y0)) * (PH - 1)
+    pa = np.asarray(panel, dtype=np.float32)
+    u0 = np.floor(np.clip(u, 0, PW - 1)).astype(int)
+    v0 = np.floor(np.clip(v, 0, PH - 1)).astype(int)
+    u1 = np.minimum(u0 + 1, PW - 1)
+    v1 = np.minimum(v0 + 1, PH - 1)
+    wu = np.clip(u - u0, 0, 1)[..., None]
+    wv = np.clip(v - v0, 0, 1)[..., None]
+    samp = (pa[v0, u0] * (1 - wu) * (1 - wv) + pa[v0, u1] * wu * (1 - wv)
+            + pa[v1, u0] * (1 - wu) * wv + pa[v1, u1] * wu * wv)
+    out = np.array(photo, dtype=np.float32)
+    region = out[y0:y1 + 1, x0:x1 + 1]
+    cyl = np.cos(theta) ** 0.45
+    cyl = 1.0 + shading * (cyl - 1.0)
+    plate_luma = region.mean(axis=2, keepdims=True) / 255.0
+    ink = samp[..., :3] * cyl[..., None] * (0.65 + 0.55 * plate_luma)
+    alpha = (samp[..., 3:4] / 255.0) * valid[..., None]
+    region[:] = np.clip(ink * alpha + region * (1 - alpha), 0, 255)
+    return Image.fromarray(out.astype("uint8"), "RGB")
+
+
 # ── presets ─────────────────────────────────────────────────────────────────
 
 DEFAULT_TEMPLATES: Dict[str, Dict[str, Any]] = {

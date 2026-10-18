@@ -401,24 +401,24 @@ def can_06_kraft_catalogue(logo, motif) -> Image.Image:
     """Stone & Grove-homage: kraft tube, big stacked display type + icon grid."""
     img = Image.new("RGB", (P(CAN_HALF), P(CAN_H)), KRAFT)
     d = ImageDraw.Draw(img)
-    ltext(d, 14, 20, "MOGRA ORGANICS", F("Inter.ttf", 3.0, [14, 600]), INK)
-    f1 = F("PlayfairDisplay.ttf", 8.0, [700])
-    ltext(d, 14, 34, "ORGANIC", f1, INK)
-    f2 = F("PlayfairDisplay.ttf", 11.0, [700])
-    ltext(d, 14, 48, "LION'S MANE", f2, INK)
-    ltext(d, 14, 60, "MUSHROOM POWDER - 6 OZ (170 G)", F("Inter.ttf", 2.6, [14, 500]), INK)
+    ltext(d, 24, 20, "MOGRA ORGANICS", F("Inter.ttf", 3.0, [14, 600]), INK)
+    f1 = F("PlayfairDisplay.ttf", 7.6, [700])
+    ltext(d, 24, 34, "ORGANIC", f1, INK)
+    f2 = F("PlayfairDisplay.ttf", 10.5, [700])
+    ltext(d, 24, 48, "LION'S MANE", f2, INK)
+    ltext(d, 24, 60, "MUSHROOM POWDER - 6 OZ (170 G)", F("Inter.ttf", 2.5, [14, 500]), INK)
     f_p = F("Inter.ttf", 2.3, [14, 400])
     for i, line in enumerate(("A richly earthy mushroom powder,", "gently dried and milled for a", "smooth daily ritual cup.")):
-        ltext(d, 14, 70 + i * 4.0, line, f_p, INK)
-    icon_grid(d, 88, 78, 4.2, 16, 16, INK, disc=KRAFT)
-    # olive sticker badge (reference homage): sprout icon + name inside
-    sd = 26
+        ltext(d, 24, 70 + i * 4.0, line, f_p, INK)
+    icon_grid(d, 78, 78, 4.0, 15, 15, INK, disc=KRAFT)
+    # olive sticker badge (reference homage) inside the safe arc
+    sd = 24
     sticker = Image.new("RGBA", (P(sd), P(sd)), (0, 0, 0, 0))
     sdc = ImageDraw.Draw(sticker)
     sdc.ellipse([0, 0, P(sd) - 1, P(sd) - 1], fill=OLIVE + (255,))
-    draw_cert_icon(sdc, "organic_sprout", P(sd / 2), P(sd / 2) - P(3), P(5.4), ink=CREAM, width=max(2, P(0.5)))
-    sdc.text((P(sd / 2), P(17.5)), "LION'S MANE", font=F("Inter.ttf", 1.9, [14, 700]), fill=CREAM, anchor="mm")
-    img.paste(sticker, (P(86), P(13)), sticker)
+    draw_cert_icon(sdc, "organic_sprout", P(sd / 2), P(sd / 2) - P(3), P(5.0), ink=CREAM, width=max(2, P(0.5)))
+    sdc.text((P(sd / 2), P(16.5)), "LION'S MANE", font=F("Inter.ttf", 1.8, [14, 700]), fill=CREAM, anchor="mm")
+    img.paste(sticker, (P(66), P(13)), sticker)
     ctext(d, CAN_HALF / 2, 112, "6 oz (170 g) - MOGRA ORGANICS", F("Inter.ttf", 2.4, [14, 500]), INK)
     return img
 
@@ -427,9 +427,9 @@ def can_07_roundel_band(logo, motif) -> Image.Image:
     img = Image.new("RGB", (P(CAN_HALF), P(CAN_H)), KRAFT)
     d = ImageDraw.Draw(img)
     roundel(img, logo, CAN_HALF / 2, 30, 22, field=WHITE, ring=GOLD_A, ring_w=0.6)
-    ctext(d, CAN_HALF / 2, 60, "ORGANIC LION'S MANE", fit_size("PlayfairDisplay.ttf", 6.4, [700], "ORGANIC LION'S MANE", 100), FOREST)
+    ctext(d, CAN_HALF / 2, 60, "ORGANIC LION'S MANE", fit_size("PlayfairDisplay.ttf", 6.4, [700], "ORGANIC LION'S MANE", 64), FOREST)
     ctext(d, CAN_HALF / 2, 70, "MUSHROOM POWDER", F("Inter.ttf", 2.6, [14, 600]), FOREST, tracking_mm=1.2)
-    place_motif(img, motif, CAN_HALF / 2, 95, 40, 34)
+    place_motif(img, motif, CAN_HALF / 2, 95, 38, 32)
     icon_row(d, CAN_HALF / 2, 114, 2.2, 7.0, INK, disc=KRAFT)
     return img
 
@@ -437,14 +437,14 @@ def can_07_roundel_band(logo, motif) -> Image.Image:
 def can_08_vertical_spine(logo, motif) -> Image.Image:
     img = Image.new("RGB", (P(CAN_HALF), P(CAN_H)), KRAFT)
     d = ImageDraw.Draw(img)
-    rule(d, 24, 10, 24, FOREST, 0.4)
-    vtext(img, 10, 6, "MOGRA ORGANICS", F("Inter.ttf", 3.0, [14, 600]), FOREST)
-    f1 = fit_size("PlayfairDisplay.ttf", 8.6, [700], "ORGANIC LION'S", 58)
-    ltext(d, 33, 26, "ORGANIC", f1, FOREST)
-    ltext(d, 33, 38, "LION'S MANE", f1, FOREST)
-    ltext(d, 33, 50, "MUSHROOM POWDER", F("Inter.ttf", 2.4, [14, 520]), FOREST)
-    place_motif(img, motif, 76, 78, 42, 44)
-    icon_row(d, 56, 110, 2.2, 7.2, INK, disc=KRAFT)
+    rule(d, 41, 10, 41, FOREST, 0.4)
+    vtext(img, 24, 6, "MOGRA ORGANICS", F("Inter.ttf", 2.8, [14, 600]), FOREST)
+    f1 = fit_size("PlayfairDisplay.ttf", 7.2, [700], "LION'S MANE", 40)
+    ltext(d, 48, 26, "ORGANIC", f1, FOREST)
+    ltext(d, 48, 38, "LION'S MANE", f1, FOREST)
+    ltext(d, 48, 50, "MUSHROOM POWDER", F("Inter.ttf", 2.3, [14, 520]), FOREST)
+    place_motif(img, motif, 70, 78, 36, 40)
+    icon_row(d, 64, 110, 2.0, 6.4, INK, disc=KRAFT)
     return img
 
 
@@ -452,7 +452,7 @@ def can_09_bottom_band(logo, motif) -> Image.Image:
     img = Image.new("RGB", (P(CAN_HALF), P(CAN_H)), KRAFT)
     d = ImageDraw.Draw(img)
     roundel(img, logo, CAN_HALF / 2, 16, 9, field=WHITE, ring=None)
-    ctext(d, CAN_HALF / 2, 34, "ORGANIC LION'S MANE", fit_size("PlayfairDisplay.ttf", 7.2, [700], "ORGANIC LION'S MANE", 100), FOREST)
+    ctext(d, CAN_HALF / 2, 34, "ORGANIC LION'S MANE", fit_size("PlayfairDisplay.ttf", 7.2, [700], "ORGANIC LION'S MANE", 64), FOREST)
     ctext(d, CAN_HALF / 2, 44, "MUSHROOM POWDER", F("Inter.ttf", 2.6, [14, 600]), FOREST, tracking_mm=1.4)
     place_motif(img, motif, CAN_HALF / 2, 68, 44, 34)
     d.rectangle([0, P(86), P(CAN_HALF), P(CAN_H)], fill=FOREST)
@@ -464,13 +464,13 @@ def can_09_bottom_band(logo, motif) -> Image.Image:
 def can_10_ivory_patch(logo, motif) -> Image.Image:
     img = Image.new("RGB", (P(CAN_HALF), P(CAN_H)), KRAFT)
     d = ImageDraw.Draw(img)
-    d.rounded_rectangle([P(10), P(12), P(CAN_HALF - 10), P(104)], radius=P(10), fill=IVORY,
+    d.rounded_rectangle([P(22), P(12), P(92), P(104)], radius=P(10), fill=IVORY,
                         outline=SAGE, width=max(1, P(0.3)))
-    roundel(img, logo, CAN_HALF / 2, 34, 17, field=WHITE, ring=None)
-    ctext(d, CAN_HALF / 2, 56, "ORGANIC LION'S MANE", fit_size("PlayfairDisplay.ttf", 5.8, [700], "ORGANIC LION'S MANE", 80), FOREST)
-    ctext(d, CAN_HALF / 2, 65, "MUSHROOM POWDER", F("Inter.ttf", 2.2, [14, 560]), FOREST, tracking_mm=1.2)
-    place_motif(img, motif, CAN_HALF / 2, 85, 34, 26)
-    icon_row(d, CAN_HALF / 2, 98, 1.9, 6.2, FOREST, disc=IVORY)
+    roundel(img, logo, CAN_HALF / 2, 36, 17, field=WHITE, ring=None)
+    ctext(d, CAN_HALF / 2, 58, "ORGANIC LION'S MANE", fit_size("PlayfairDisplay.ttf", 5.6, [700], "ORGANIC LION'S MANE", 56), FOREST)
+    ctext(d, CAN_HALF / 2, 67, "MUSHROOM POWDER", F("Inter.ttf", 2.1, [14, 560]), FOREST, tracking_mm=1.0)
+    place_motif(img, motif, CAN_HALF / 2, 86, 30, 24)
+    icon_row(d, CAN_HALF / 2, 98, 1.8, 5.8, FOREST, disc=IVORY)
     ctext(d, CAN_HALF / 2, 111, "6 oz (170 g)", F("Inter.ttf", 2.4, [14, 500]), INK)
     return img
 
