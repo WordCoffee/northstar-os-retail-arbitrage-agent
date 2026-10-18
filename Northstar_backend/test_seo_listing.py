@@ -181,6 +181,34 @@ def test_seo_check_registered_and_in_grow_focus():
     assert "seo_check" in shell_focus.tools_for_focus("grow")
 
 
+# ── Cross-service surfaces (§5.3) ───────────────────────────────────────────
+
+def test_score_text_is_deterministic_coverage():
+    out = seo_score.score_text(PROFILE, "Organic Turmeric Powder with curcumin")
+    assert out["score"] == round(100 * (3 + 3 + 1.5) / (3 + 3 + 1.5 + 1.5 + 1.5))
+    assert {m["term"] for m in out["matched"]} == {"organic turmeric", "turmeric powder", "curcumin"}
+
+
+def test_surfaces_catalogue_covers_the_services():
+    assert set(seo_score.SURFACES) == {"listing", "creative", "ad", "social", "source"}
+    assert all({"label", "field"} <= set(v) for v in seo_score.SURFACES.values())
+
+
+def test_seo_check_scores_a_content_surface(db):
+    db.seo.profiles.create_profile({"account_id": "acct-1", "brand_key": "mogra", "body": PROFILE})
+    out = chat_tools.run_tool(
+        "seo_check", {"content": "Golden milk with curcumin", "surface": "social"}, _ctx(db))
+    assert out["ok"] is True
+    assert 0 < out["data"]["score"] < 100
+    assert any(r["label"] == "checked" and "SocialPulse" in r["value"] for r in out["data"]["card"]["rows"])
+
+
+def test_seo_check_rejects_unknown_surface(db):
+    db.seo.profiles.create_profile({"account_id": "acct-1", "brand_key": "mogra", "body": PROFILE})
+    out = chat_tools.run_tool("seo_check", {"content": "x", "surface": "podcast"}, _ctx(db))
+    assert out["ok"] is False and "Unknown surface" in out["summary"]
+
+
 # ── Router (revisions are usable through the API) ───────────────────────────
 
 def test_router_appends_and_reads_revisions(db):

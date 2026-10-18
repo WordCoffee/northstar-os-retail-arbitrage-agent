@@ -1,15 +1,19 @@
-"""Deterministic listing↔profile SEO scoring (V3 S7 §5.3).
+"""Deterministic content↔profile SEO scoring (V3 S7 §5.3).
 
-This is the ListingForge hook: score a listing revision against the brand's
-canonical SEO profile. It is deliberately DETERMINISTIC and keyword-based — no
-modelled "rank", no fabricated search volumes. What it reports is exactly what
-it can prove from the two inputs:
+This is the shared hook every service uses: score a piece of content against the
+brand's canonical SEO profile. It is deliberately DETERMINISTIC and keyword-based
+— no modelled "rank", no fabricated search volumes. What it reports is exactly
+what it can prove from the two inputs:
 
-  • coverage  — which profile keyword clusters appear in the listing copy, and
-                where (title / bullets / backend terms / description);
+  • coverage  — which profile keyword clusters appear in the copy, and where;
   • violations — prohibited claims present in the copy;
   • competitor mentions — competitor names appearing in the copy;
   • caveats   — honest notes about what this score is and is NOT.
+
+Surfaces (`SURFACES`) name the service whose copy is being checked — ListingForge
+(listing), Creative Studio, AdPilot, SocialPulse, SourceScout. The scoring engine
+is identical for all of them; the surface is a label so the operator knows which
+content was checked.
 
 Nothing here calls a network or a paid service. Nothing is invented: with no
 profile keywords there is no denominator, so the score is None (not zero).
@@ -22,7 +26,18 @@ from typing import Any, Dict, List, Tuple
 HEAD_WEIGHT = 3.0
 BODY_WEIGHT = 1.5
 
+#: Canonical listing fields, in display order.
 FIELDS = ("title", "bullets", "backend_terms", "description")
+
+#: The cross-service surfaces the profile is served to. The engine is the same
+#: for every surface; the label is what the operator sees on the result.
+SURFACES: Dict[str, Dict[str, str]] = {
+    "listing": {"label": "Listing", "field": "title / bullets / backend terms / description"},
+    "creative": {"label": "Creative Studio", "field": "alt text / A+ copy / dieline copy"},
+    "ad": {"label": "AdPilot", "field": "ad copy"},
+    "social": {"label": "SocialPulse", "field": "hooks / hashtags"},
+    "source": {"label": "SourceScout", "field": "pack / title"},
+}
 
 
 def _norm_terms(value: Any) -> List[str]:
@@ -66,9 +81,8 @@ def _listing_fields(listing: Dict[str, Any]) -> Dict[str, str]:
     }
 
 
-def score_listing(profile: Dict[str, Any], listing: Dict[str, Any]) -> Dict[str, Any]:
-    """Score one listing against a profile body. Deterministic; never fabricates."""
-    fields = _listing_fields(listing)
+def _score(profile: Dict[str, Any], fields: Dict[str, str]) -> Dict[str, Any]:
+    """Core engine: weighted keyword coverage over named fields. Deterministic."""
     full = " ".join(fields.values())
     head, body, negative = keyword_clusters(profile)
 
@@ -79,7 +93,7 @@ def score_listing(profile: Dict[str, Any], listing: Dict[str, Any]) -> Dict[str,
     matched: List[Dict[str, str]] = []
     missing: List[Dict[str, str]] = []
     for term, weight, section in weighted:
-        where = [f for f in FIELDS if term in fields[f]]
+        where = [name for name, text in fields.items() if term in text]
         if where:
             got_w += weight
             matched.append({"term": term, "section": section, "where": ",".join(where)})
@@ -111,3 +125,13 @@ def score_listing(profile: Dict[str, Any], listing: Dict[str, Any]) -> Dict[str,
         "competitor_mentions": competitors,
         "caveats": caveats,
     }
+
+
+def score_listing(profile: Dict[str, Any], listing: Dict[str, Any]) -> Dict[str, Any]:
+    """Score one listing (title/bullets/backend/description) against a profile body."""
+    return _score(profile, _listing_fields(listing))
+
+
+def score_text(profile: Dict[str, Any], text: Any) -> Dict[str, Any]:
+    """Score a single block of content (any surface) against a profile body."""
+    return _score(profile, {"content": str(text or "").lower()})

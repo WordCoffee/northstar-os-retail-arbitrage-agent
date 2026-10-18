@@ -229,10 +229,21 @@ stays readable; editing a profile is never a silent rewrite.
   revision (`listing_key`/`asin`) or inline copy against the brand profile and
   returns an AG-UI card (score, matched/total, missing head terms, prohibited
   claims, competitor mentions). Honest errors when there is no profile/listing.
-- **Creative Studio** — alt text, A+ copy, image-text policy, dieline copy.
-- **AdPilot** — search terms → negatives/harvest; ad copy angles.
-- **SocialPulse** — hooks/hashtags; external-traffic framing.
-- **SourceScout** — pack/title normalisation toward the brand's cluster.
+- **Creative Studio** — alt text, A+ copy, dieline copy.
+- **AdPilot** — ad copy angles.
+- **SocialPulse** — hooks/hashtags.
+- **SourceScout** — pack/title.
+
+  **BUILT (scoring hook) for all five surfaces.** The engine is shared:
+  `seo_score.score_text` scores any single block against the profile, and
+  `SURFACES` names each service (`listing` / `creative` / `ad` / `social` /
+  `source`). `seo_check` takes `content` + `surface` and returns the same card,
+  so every service can score its own copy from the Simple shell. Deterministic
+  keyword coverage only — no rank/volume claims.
+
+  Still open (real features, not scoring): AdPilot search-terms → negatives/
+  harvest; SocialPulse external-traffic framing; SourceScout title/pack
+  normalisation (rewriting, not just checking).
 
 ### 5.4 Measurement + learning (honest)
 File-import first (SQP / search-term exports; the `search_query_performance`
@@ -298,9 +309,10 @@ false failures.
 5. S5 AutothinK premium surface — ~~session fork/rewind~~ **BUILT**; plan
    visualiser / sandbox / artifact browser next
 6. S7 Brand SEO Engine — ~~§5.1 versioned Brand SEO Profile~~ **BUILT**;
-   ~~§5.2 listing revisions~~ · ~~§5.3 ListingForge hook (`seo_check`)~~ **BUILT**;
-   remaining cross-service hooks (Creative Studio / AdPilot / SocialPulse /
-   SourceScout) + §5.4 file imports/learning next
+   ~~§5.2 listing revisions~~ · ~~§5.3 cross-service scoring hook (all
+   surfaces)~~ **BUILT**; remaining §5.3 pipeline features (AdPilot
+   negatives/harvest, SocialPulse external-traffic framing, SourceScout
+   normalisation) + §5.4 file imports/learning next
 7. S8 curated corpus + learning loop
 8. Operator-window REA captures (Packify first) when the operator is present
 

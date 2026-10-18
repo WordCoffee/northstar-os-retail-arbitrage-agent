@@ -400,12 +400,14 @@ def _t_seo_profile(args, ctx) -> dict:
 
 
 def _t_seo_check(args, ctx) -> dict:
-    """Score a listing against the brand SEO profile (V3 S7 §5.3).
+    """Score content against the brand SEO profile (V3 S7 §5.3).
 
-    Source of the copy: the LATEST stored revision (listing_key/asin) or inline
-    title/bullets/backend_terms/description. Deterministic keyword coverage —
-    never a rank or volume prediction. Honest when there is nothing to score."""
-    from seo_score import score_listing
+    Sources of copy, in order: a content surface (`content` + `surface`, used by
+    Creative Studio / AdPilot / SocialPulse / SourceScout), a listing's LATEST
+    stored revision (`listing_key`/`asin`), or inline title/bullets/backend_
+    terms/description. Deterministic keyword coverage — never a rank or volume
+    prediction. Honest when there is nothing to score."""
+    from seo_score import SURFACES, score_listing, score_text
     db = ctx.get("db")
     acct = ctx.get("account_id")
     profiles = getattr(getattr(db, "seo", None), "profiles", None)
@@ -431,34 +433,44 @@ def _t_seo_check(args, ctx) -> dict:
                     "error": "ambiguous brand; pass brand_key", "assets": []}
         profile = profiles.get_profile(items[0]["id"], account_id=acct)
 
-    inline = any(args.get(k) for k in ("title", "bullets", "backend_terms", "description"))
-    if inline:
-        listing = {"title": args.get("title"), "bullets": args.get("bullets"),
-                   "backend_terms": args.get("backend_terms"),
-                   "description": args.get("description")}
-        source = "inline copy"
+    surface = str(args.get("surface") or "").strip().lower()
+    content = args.get("content")
+    if content is not None and str(content).strip():
+        if surface and surface not in SURFACES:
+            return {"ok": False, "summary": f"Unknown surface '{surface}'.",
+                    "error": f"surface must be one of {sorted(SURFACES)}", "assets": []}
+        label = SURFACES.get(surface or "creative", SURFACES["creative"])["label"]
+        result = score_text(profile.get("body") or {}, content)
+        source = f"{label} copy"
     else:
-        key = str(args.get("listing_key") or args.get("asin") or "").strip().lower()
-        if not key:
-            return {"ok": False, "summary": "Give me a listing to check.",
-                    "error": "provide listing_key/asin or inline copy", "assets": []}
-        if revisions is None:
-            return {"ok": False, "summary": "Listing revisions are unavailable.",
-                    "error": "no revisions store", "assets": []}
-        latest = revisions.get_latest(acct, key)
-        if not latest:
-            return {"ok": False, "summary": f"No listing revisions for '{key}'.",
-                    "error": f"no revisions for listing_key '{key}'", "assets": []}
-        listing = latest
-        source = f"{key} revision {latest['revision']}"
+        inline = any(args.get(k) for k in ("title", "bullets", "backend_terms", "description"))
+        if inline:
+            listing = {"title": args.get("title"), "bullets": args.get("bullets"),
+                       "backend_terms": args.get("backend_terms"),
+                       "description": args.get("description")}
+            source = "inline listing copy"
+        else:
+            key = str(args.get("listing_key") or args.get("asin") or "").strip().lower()
+            if not key:
+                return {"ok": False, "summary": "Give me a listing or content to check.",
+                        "error": "provide content, listing_key/asin, or inline copy", "assets": []}
+            if revisions is None:
+                return {"ok": False, "summary": "Listing revisions are unavailable.",
+                        "error": "no revisions store", "assets": []}
+            latest = revisions.get_latest(acct, key)
+            if not latest:
+                return {"ok": False, "summary": f"No listing revisions for '{key}'.",
+                        "error": f"no revisions for listing_key '{key}'", "assets": []}
+            listing = latest
+            source = f"{key} revision {latest['revision']}"
+        result = score_listing(profile.get("body") or {}, listing)
 
-    result = score_listing(profile.get("body") or {}, listing)
     score = result["score"]
     total = result["head_total"] + result["body_total"]
     rows = [
         {"label": "score", "value": "—" if score is None else f"{score}/100"},
         {"label": "profile", "value": f"{profile['brand_key']} v{profile['current_version']}"},
-        {"label": "listing", "value": source},
+        {"label": "checked", "value": source},
         {"label": "matched", "value": f"{result['matched_count']} of {total} terms"},
     ]
     head_missing = [m["term"] for m in result["missing"] if m["section"] == "head"]
@@ -479,7 +491,7 @@ def _t_seo_check(args, ctx) -> dict:
         "data": {
             "card": {"title": "SEO check", "rows": rows,
                      "action": {"label": "List missing terms",
-                                "message": "List every profile keyword missing from the listing copy."}},
+                                "message": "List every profile keyword missing from this copy."}},
             "score": score,
             "matched": result["matched"],
             "missing": result["missing"],
@@ -630,14 +642,17 @@ TOOLS: Dict[str, dict] = {
         "handler": _t_generate_image,
     },
     "seo_check": {
-        "description": ("Score a listing against the brand SEO profile (S7). Uses "
-                        "the latest stored revision (listing_key/asin) or inline "
+        "description": ("Score content against the brand SEO profile (S7). Copy "
+                        "source: a content surface (`content`+`surface`), a listing's "
+                        "latest stored revision (listing_key/asin), or inline "
                         "title/bullets/backend_terms. Deterministic keyword "
                         "coverage — never predicts rank or volume."),
         "parameters": {
             "type": "object",
             "properties": {
                 "brand_key": {"type": "string", "description": "Brand slug (optional if the account has one profile).", "maxLength": 80},
+                "content": {"type": "string", "description": "Free copy to score (any surface: alt text, ad copy, hook, pack title).", "maxLength": 4000},
+                "surface": {"type": "string", "description": "Which service's copy: listing | creative | ad | social | source.", "maxLength": 20},
                 "listing_key": {"type": "string", "description": "Listing key / ASIN of a stored revision.", "maxLength": 80},
                 "asin": {"type": "string", "description": "Alias for listing_key.", "maxLength": 40},
                 "title": {"type": "string", "description": "Inline title to score (optional).", "maxLength": 500},
