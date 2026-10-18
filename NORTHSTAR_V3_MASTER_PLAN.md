@@ -245,11 +245,23 @@ stays readable; editing a profile is never a silent rewrite.
   harvest; SocialPulse external-traffic framing; SourceScout title/pack
   normalisation (rewriting, not just checking).
 
-### 5.4 Measurement + learning (honest)
+### 5.4 Measurement + learning (honest) — **BUILT (deterministic part)**
 File-import first (SQP / search-term exports; the `search_query_performance`
-schema already exists and is empty). Embeddings drift via
-`qwen3-embedding:0.6b` + sqlite-vec; the Master Brain proposes profile updates
-that the operator approves. **No rank-change claims** are ever manufactured.
+schema already exists and is fed by `importers/brand_analytics_importer.py`).
+The learning step reads those **measured** rows and proposes profile keyword
+additions — candidates only, never an automatic edit.
+
+| Piece | Where | Notes |
+|---|---|---|
+| Read store | `data_layer.py` `SqpPerformanceDB` (on `SeoContainer.sqp`) | Read-only access to imported SQP rows; scoped by ASIN (the import table has no account column, so callers must scope explicitly). |
+| Proposal engine | `seo_learn.py` `propose_from_sqp` | Deterministic candidate terms: excludes terms already in the profile, ranks by measured `search_frequency_rank` then impressions. **No rank/volume claims**; empty rows → empty proposals + caveat. |
+| Service | `seo_router.py` `GET /api/seo/proposals` | Read-only. Resolves the brand profile, reads scoped SQP rows, returns proposals. Writes nothing. |
+| Shell hook | `chat_tools.py` `seo_propose` (Grow focus) | Candidate terms as an AG-UI card, reachable from the Simple shell. |
+
+Approving a proposal is an **operator action** that appends a new profile version
+via the existing append-only `POST /profiles/{id}/versions` — nothing is rewritten
+silently. Embedding drift (`qwen3-embedding:0.6b` + sqlite-vec) remains the next
+step; no rank-change claims are ever manufactured.
 
 ---
 
@@ -312,7 +324,8 @@ false failures.
    ~~§5.2 listing revisions~~ · ~~§5.3 cross-service scoring hook (all
    surfaces)~~ **BUILT**; remaining §5.3 pipeline features (AdPilot
    negatives/harvest, SocialPulse external-traffic framing, SourceScout
-   normalisation) + §5.4 file imports/learning next
+   normalisation) · ~~§5.4 file-import learning (deterministic proposals)~~
+   **BUILT**; remaining §5.4 embeddings drift (sqlite-vec) next
 7. S8 curated corpus + learning loop
 8. Operator-window REA captures (Packify first) when the operator is present
 

@@ -53,7 +53,7 @@ FOCUS_MODES: List[Dict[str, Any]] = [
         "id": "grow",
         "label": "Grow",
         "blurb": "Listings, keywords, ads and search visibility.",
-        "tools": ["system_status", "design_brief", "seo_check", "seo_profile"],
+        "tools": ["system_status", "design_brief", "seo_check", "seo_propose", "seo_profile"],
         "requires": None,
         "suggestions": [
             "SEO-check my latest listing revision and flag the gaps.",

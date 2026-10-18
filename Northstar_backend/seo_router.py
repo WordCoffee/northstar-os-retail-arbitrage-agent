@@ -176,3 +176,35 @@ def add_listing_revision(listing_key: str, body: ListingRevisionIn,
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
     return rev
+
+
+# ── Learning (S7 §5.4): proposals only, never an automatic edit ─────────────
+
+@router.get("/proposals")
+def list_proposals(brand_key: Optional[str] = None, asin: Optional[str] = None,
+                   limit: int = 12, acct: str = Depends(studio_account)):
+    """Candidate profile terms derived from imported SQP rows. READ-ONLY.
+
+    Proposals never edit the profile. Approving is an operator action that
+    appends a new version via `POST /profiles/{id}/versions`."""
+    from seo_learn import propose_from_sqp
+
+    db = get_northstar_db()
+    if brand_key:
+        head = db.seo.profiles.get_by_brand_key(acct, (brand_key or "").strip().lower())
+        if not head:
+            raise HTTPException(status_code=404, detail="SEO profile not found")
+        profile = db.seo.profiles.get_profile(head["id"], account_id=acct)
+    else:
+        items = db.seo.profiles.list_profiles(acct, limit=2)
+        if not items:
+            raise HTTPException(status_code=404, detail="No brand SEO profile for this account")
+        if len(items) > 1:
+            raise HTTPException(status_code=400, detail="More than one brand profile; pass brand_key")
+        profile = db.seo.profiles.get_profile(items[0]["id"], account_id=acct)
+
+    if not asin:
+        raise HTTPException(status_code=400, detail="Provide asin to scope the imported search-query data")
+    rows = db.seo.sqp.rows(asins=[asin], limit=500)
+    return propose_from_sqp(profile.get("body") or {}, rows,
+                            limit=min(max(int(limit), 1), 50))

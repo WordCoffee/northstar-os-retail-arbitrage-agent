@@ -501,6 +501,77 @@ def _t_seo_check(args, ctx) -> dict:
     }
 
 
+def _t_seo_propose(args, ctx) -> dict:
+    """Propose profile keyword additions from imported SQP rows (V3 S7 §5.4).
+
+    Read-only: returns candidates derived from measured Search Query Performance
+    rows the operator already imported. It never edits the profile; approving is
+    an operator action that appends a new version. Scope the data with `asin`(s)
+    — the SQP table has no account column."""
+    from seo_learn import propose_from_sqp
+    db = ctx.get("db")
+    acct = ctx.get("account_id")
+    seo = getattr(db, "seo", None)
+    profiles = getattr(seo, "profiles", None)
+    sqp = getattr(seo, "sqp", None)
+    if profiles is None or sqp is None:
+        return {"ok": False, "summary": "The SEO store is unavailable.",
+                "error": "no SEO store in this context", "assets": []}
+
+    brand_key = str(args.get("brand_key") or "").strip().lower()
+    if brand_key:
+        head = profiles.get_by_brand_key(acct, brand_key)
+        if not head:
+            return {"ok": False, "summary": f"No brand SEO profile for '{brand_key}'.",
+                    "error": f"no profile with brand_key '{brand_key}'", "assets": []}
+        profile = profiles.get_profile(head["id"], account_id=acct)
+    else:
+        items = profiles.list_profiles(acct, limit=2)
+        if not items:
+            return {"ok": False, "summary": "No brand SEO profile yet — create one first.",
+                    "error": "no profiles for this account", "assets": []}
+        if len(items) > 1:
+            return {"ok": False, "summary": "More than one brand profile — pass brand_key.",
+                    "error": "ambiguous brand; pass brand_key", "assets": []}
+        profile = profiles.get_profile(items[0]["id"], account_id=acct)
+
+    asins = args.get("asins") or ([args["asin"]] if args.get("asin") else [])
+    asins = [str(a).strip() for a in asins if str(a).strip()]
+    if not asins:
+        return {"ok": False, "summary": "Name the ASIN(s) the imported data covers.",
+                "error": "provide asin or asins to scope the search-query data", "assets": []}
+
+    rows = sqp.rows(asins=asins, limit=int(args.get("row_limit") or 500))
+    out = propose_from_sqp(profile.get("body") or {}, rows, limit=int(args.get("limit") or 12))
+
+    rows_card = []
+    for p in out["proposals"]:
+        bits = []
+        if p["search_frequency_rank"] is not None:
+            bits.append(f"SFR {p['search_frequency_rank']}")
+        bits.append(f"{p['impressions']} impressions")
+        if p["clicks"]:
+            bits.append(f"{p['clicks']} clicks")
+        rows_card.append({"label": p["term"], "value": ", ".join(bits)})
+    if not rows_card:
+        rows_card.append({"label": "no new terms",
+                          "value": "imported queries are already covered by the profile"})
+
+    return {
+        "ok": True,
+        "summary": (f"{out['proposal_count']} candidate term(s) from {out['considered_query_count']} "
+                    f"imported queries (proposals only — nothing was changed)."),
+        "assets": [],
+        "data": {
+            "card": {"title": "SEO proposals", "rows": rows_card,
+                     "action": {"label": "Apply a proposal",
+                                "message": "Append these terms to the brand SEO profile as a new version."}},
+            "proposals": out["proposals"],
+            "caveats": out["caveats"],
+        },
+    }
+
+
 def _t_voice_list(args, ctx) -> dict:
     from voicestudio_adapter import get_adapter
     out = _run_async(get_adapter().list_voices())
@@ -663,6 +734,23 @@ TOOLS: Dict[str, dict] = {
             "required": [],
         },
         "handler": _t_seo_check,
+    },
+    "seo_propose": {
+        "description": ("Propose brand SEO profile keyword additions from the "
+                        "Search Query Performance rows the operator already "
+                        "imported (S7 §5.4). Read-only: candidates only, never an "
+                        "edit. Scope with asin/asins. No rank or volume claims."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "brand_key": {"type": "string", "description": "Brand slug (optional if the account has one profile).", "maxLength": 80},
+                "asin": {"type": "string", "description": "ASIN whose imported SQP rows to use.", "maxLength": 40},
+                "asins": {"type": "array", "items": {"type": "string", "maxLength": 40}, "description": "ASINs to scope the imported data (alternative to asin)."},
+                "limit": {"type": "integer", "description": "Max proposals to return (default 12).", "minimum": 1, "maximum": 50},
+            },
+            "required": [],
+        },
+        "handler": _t_seo_propose,
     },
     "seo_profile": {
         "description": ("Show the account's canonical, versioned Brand SEO Profile "

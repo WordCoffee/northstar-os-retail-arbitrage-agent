@@ -3318,6 +3318,35 @@ class SeoContainer:
     def __init__(self, db: DataLayer):
         self.profiles = SeoProfilesDB(db)
         self.revisions = DsListingRevisionsDB(db)
+        self.sqp = SqpPerformanceDB(db)
+
+
+class SqpPerformanceDB:
+    """Read-only access to imported Search Query Performance rows (V3 S7 §5.4).
+
+    The Brand Analytics importer (`importers/brand_analytics_importer.py`) owns
+    writes; this is the read side the learning step consumes. `search_query_
+    performance` is a local import table with no account column, so callers MUST
+    scope it explicitly (pass `asins`) — otherwise the rows are operator-global
+    import data and not tenant-scoped.
+    """
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def rows(self, *, asins: Optional[List[str]] = None, limit: int = 500) -> List[Dict[str, Any]]:
+        sql = ("SELECT query, asin, impressions, clicks, purchases, "
+               "search_frequency_rank, date_start FROM search_query_performance")
+        params: List[Any] = []
+        clean = [a for a in (asins or []) if a]
+        if clean:
+            sql += " WHERE asin IN (" + ",".join("?" for _ in clean) + ")"
+            params.extend(clean)
+        sql += (" ORDER BY COALESCE(search_frequency_rank, 999999999) ASC, "
+                "COALESCE(impressions, 0) DESC LIMIT ?")
+        params.append(max(int(limit), 1))
+        cur = self.db.execute(sql, tuple(params))
+        return [dict(r) for r in cur.fetchall()]
 
 
 class NorthstarDB:
