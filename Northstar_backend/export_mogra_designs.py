@@ -29,7 +29,7 @@ from mockup_compositor import prepare_logo  # noqa: E402
 
 STUDIO = ROOT / "data" / "studio_generated"
 EXPORTS = ROOT.parent / "exports"
-PACK = EXPORTS / "mogra-designs-20261017"
+PACK = EXPORTS / "mogra-designs-20261018-bold"
 LOGO_PATH = Path(r"C:\Users\T2Hol\Downloads\png")
 RAW_CANDIDATES = ["8070727f49a5401eae13a7f6a373ee5b_raw.png"]
 MOTIF_BOX = [198, 400, 438, 668]  # lion's mane cluster in the raw render
@@ -58,17 +58,23 @@ each one with your certified data:
 | Element on label | Placeholder currently printed | You must provide |
 |---|---|---|
 | Supplement Facts values | Serving 1 scoop (5 g) · 34 servings · Lion's Mane 5 g (DV not established) · Other Ingredients: None | Certified panel values + actual serving size |
+| Latin / part name | "(Hericium erinaceus) (Sporocarp)" | Confirm Latin binomial + plant part (mycelium vs fruiting body) |
 | Statement of identity | "ORGANIC LION'S MANE / MUSHROOM POWDER" | Confirm "Dietary Supplement" vs "Mushroom Powder" (changes panel type) |
 | Net quantity | 6 oz (170 g) | Confirm exact net weight as printed |
 | Ingredient list | single ingredient, no additives | Confirm exact ingredient statement |
+| Free-of line | "Free of: Added Sugar, Soy, Dairy, Yeast, Gluten, Additives" | Confirm which free-from claims you can substantiate |
+| Suggested use | "one scoop (about 1 tsp) once daily, or as directed by a physician" + milligram-scale / sold-by-weight / settling note | Confirm final direction wording |
+| Storage / color | "Store in a cool, dry place. Color May Vary" | Confirm wording with co-packer |
 | Allergen statement | "Produced in a facility that also handles tree nuts, soy and gluten." | Confirm actual facility allergens |
-| Manufacturer / distributor | "T2 Holdings LLC, 1234 Sample Ave, Suite 100, Springfield, MO 65801" | Full legal address |
+| Manufacturer / distributor | "Distributed Exclusively by: T2 Holdings LLC, 1234 Sample Ave, Suite 100, Springfield, MO 65801, USA" | Full legal address |
+| Organic certification | "Certified Organic by: Example Certifiers, Inc." + roundel seal | Your actual certifier name + cert number (seal is a placeholder mark) |
 | Country of origin | "Product of China. Packed in the USA." | Actual origin(s) |
 | UPC barcode | GTIN 012345678905 (real, scannable UPC-A) | Your GTIN(s) per SKU |
+| Item code | "X00MOGRA-LM" | Your SKU / item code |
 | QR code | https://mograorganics.com/organic-lions-mane (real, scannable) | Final QR target URL |
 | Lot / best-by | "LOT MO-LM-2601 · BEST BY 01-2028" (styled sample) | Keep as print-at-fill sample or set your own |
 | USDA Organic / Non-GMO / Gluten-Free / Fruiting Body claims | icon row shown | Certifier name + cert number if claims are used |
-| FDA disclaimer | already compliant text typeset | — (no data needed) |
+| FDA disclaimer + warning block | already compliant text typeset (WARNING: ... KEEP OUT OF REACH OF CHILDREN) | — (no data needed) |
 
 ## Additional market notes
 - Target market(s)? Canada/EU/UK need bilingual labels and additional statements.
@@ -122,10 +128,10 @@ def main() -> None:
         folder.mkdir(parents=True, exist_ok=True)
         if spec["kind"] == "bag":
             front = pd.BAG_FRONTS[key](logo, motif)
-            back = pd.render_back(spec, pd.BAG_W, pd.BAG_H)
+            back = pd.render_back(spec, pd.BAG_W, pd.BAG_H, logo)
         else:
             front = pd.CAN_FRONTS[key](logo, motif)
-            back = pd.render_back(spec, pd.CAN_HALF, pd.CAN_H)
+            back = pd.render_back(spec, pd.CAN_HALF, pd.CAN_H, logo)
             wrap = Image.new("RGB", (pd.P(pd.CAN_C + pd.CAN_GLUE), pd.P(pd.CAN_H)), spec["ground"])
             wrap.paste(front, (0, 0))
             wrap.paste(back, (pd.P(pd.CAN_HALF), 0))

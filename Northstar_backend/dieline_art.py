@@ -130,8 +130,14 @@ def build_ops(build: Dict[str, Any], sku: Dict[str, Any], logo: Image.Image,
                 "axes": [14, 640], "size_mm": 3.4, "tracking_mm": 1.1,
                 "color": tuple(sku["subtitle_color"])})
     if sku.get("motif") is not None:
-        ops.append({"kind": "motif", "img_pil": sku["motif"], "cx": cx,
-                    "y": fy + fh * 0.585, "w_mm": fw * (sku.get("motif_width_frac", 0.40))})
+        m = sku["motif"]
+        band0, band1 = fy + fh * 0.475, fy + fh * 0.755
+        w_cap = fw * sku.get("motif_width_frac", 0.40)
+        h_cap = band1 - band0
+        aspect = m.width / m.height
+        w_mm = min(w_cap, h_cap * aspect)
+        ops.append({"kind": "motif", "img_pil": m, "cx": cx,
+                    "y": (band0 + band1) / 2, "w_mm": w_mm})
     ops.append({"kind": "icons", "cx": cx, "y": fy + fh * 0.770,
                 "r_mm": 3.4, "gap_mm": 9.5, "ink": gold})
     ops.append({"kind": "text_centered", "cx": cx, "y": fy + fh * 0.92,

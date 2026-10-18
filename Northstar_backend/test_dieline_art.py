@@ -85,7 +85,7 @@ def test_motif_extraction_and_placement():
     a = np.array(img)
     mm = 25 / 25.4
     fx, fy, fw, fh = b["meta"]["panels"]["front"]
-    my = int((fy + fh * 0.585) * mm)
+    my = int((fy + fh * 0.615) * mm)
     mx = int((fx + fw / 2) * mm)
     patch = a[my - 4:my + 4, mx - 4:mx + 4].astype(int)
     assert patch.mean() < KRAFT[0] - 8, "motif ink not visible on the sheet"

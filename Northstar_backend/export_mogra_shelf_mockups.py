@@ -1,6 +1,6 @@
 """MOGRA shelf mockups — wrap all 10 designs onto the photoreal plates.
 
-Output: exports/mogra-shelf-mockups-20261018/<design>/{front_shelf.png,back_shelf.png}
+Output: exports/mogra-shelf-mockups-20261018-bold/<design>/{front_shelf.png,back_shelf.png}
 plus a contact sheet and README. Bags: exact 4-point homography onto the pouch
 silhouette (shading-blended). Canisters: cylindrical wrap (foreshortening +
 cylindrical luminance falloff) onto the tube body.
@@ -22,19 +22,21 @@ sys.path.insert(0, str(ROOT))
 from mockup_compositor import warp_cylinder, warp_panel  # noqa: E402
 
 STUDIO = ROOT / "data" / "studio_generated"
-DESIGNS = ROOT.parent / "exports" / "mogra-designs-20261017" / "designs"
-PACK = ROOT.parent / "exports" / "mogra-shelf-mockups-20261018"
+DESIGNS = ROOT.parent / "exports" / "mogra-designs-20261018-bold" / "designs"
+PACK = ROOT.parent / "exports" / "mogra-shelf-mockups-20261018-bold"
 
-# geometry picked from grid overlays (1024x1024 plates)
-QUAD_POUCH_FRONT = [(270, 88), (763, 88), (738, 842), (300, 846)]     # TL TR BR BL
-QUAD_POUCH_BACK = [(265, 90), (768, 88), (740, 842), (300, 848)]
+# geometry picked from grid overlays (1024x1024 plates); quads follow the
+# pouch's bowed silhouette (top 264->bottom 298 left; 774->747 right) with a
+# small outward bleed so printed art reaches every edge.
+QUAD_POUCH_FRONT = [(263, 84), (774, 84), (747, 849), (299, 852)]     # TL TR BR BL
+QUAD_POUCH_BACK = [(258, 86), (778, 84), (749, 849), (300, 853)]
 RECT_TUBE_FRONT = (317, 268, 700, 848)                                 # x0 y0 x1 y1
 RECT_TUBE_BACK = (308, 272, 705, 855)
 
-BAG_DESIGNS = ["01_kraft_classic", "02_ivory_minimal", "03_forest_apothecary",
-               "04_split_band", "05_arch_crest"]
-CAN_DESIGNS = ["06_kraft_catalogue", "07_roundel_band", "08_vertical_spine",
-               "09_bottom_band", "10_ivory_patch"]
+BAG_DESIGNS = ["01_forest_bold", "02_sticker_fun", "03_midnight_luxe",
+               "04_kilim_arch", "05_split_duo"]
+CAN_DESIGNS = ["06_wall_of_type", "07_dome_gold", "08_stamp_roll",
+               "09_edge_stripe", "10_concentric"]
 
 
 def main() -> None:
@@ -110,7 +112,7 @@ def main() -> None:
         "",
         "Backs are COMPLETE labels (Supplement Facts with values, real UPC-A + QR,",
         "lot/best-by, full fine print). Placeholder values to certify before print are",
-        "listed in ../mogra-designs-20261017/BACK_LABEL_REQUIREMENTS.md.",
+        "listed in ../mogra-designs-20261018-bold/BACK_LABEL_REQUIREMENTS.md.",
         "",
         "## Files",
     ]
