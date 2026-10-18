@@ -59,9 +59,36 @@ def test_art_ops_grounds_and_content():
     top = int((fy + 4) * mm)
     assert abs(int(a[top, cx, 0]) - KRAFT[0]) < 12, f"front ground wrong: {a[top, cx]}"
     # title row has lighter-than-ground pixels at title height
-    ty = int((fy + fh * 0.44) * mm)
+    ty = int((fy + fh * 0.40) * mm)
     row = a[ty - 2:ty + 2, int((fx + fw * 0.2) * mm):int((fx + fw * 0.8) * mm)]
     assert (row[..., 0].astype(int) - KRAFT[0] > 18).sum() > 5, "title ink missing"
+
+
+def test_motif_extraction_and_placement():
+    # synthetic LINE ART (thin strokes, like an engraving) on light ground
+    base = Image.new("RGB", (300, 220), (235, 230, 220))
+    dr = ImageDraw.Draw(base)
+    for x0 in (110, 130, 150, 170):
+        dr.line([(x0, 60), (x0, 160)], fill=(40, 30, 25), width=6)
+    motif = da.extract_ink_motif(base, [60, 30, 240, 190])
+    m = np.array(motif)
+    # stroke at original x=130 -> crop x=70; y centre 110 -> crop y=80
+    assert m[80, 70, 3] > 128, "stroke ink missing from alpha"
+    assert m[155, 5, 3] == 0 and m[10, 175, 3] == 0, "ground leaked into alpha"
+
+    b = _build()
+    sku = {"title": "X", "weight": "y", "ground": KRAFT, "motif": motif,
+           "title_color": (245, 238, 226), "subtitle_color": (245, 238, 226)}
+    ops = da.build_ops(b, sku, _logo(), (255, 255, 255))
+    assert any(o["kind"] == "motif" for o in ops)
+    img = da.render_png(b, ops, _logo(), (255, 255, 255), dpi=25)
+    a = np.array(img)
+    mm = 25 / 25.4
+    fx, fy, fw, fh = b["meta"]["panels"]["front"]
+    my = int((fy + fh * 0.585) * mm)
+    mx = int((fx + fw / 2) * mm)
+    patch = a[my - 4:my + 4, mx - 4:mx + 4].astype(int)
+    assert patch.mean() < KRAFT[0] - 8, "motif ink not visible on the sheet"
 
 
 def test_reserved_zones_do_not_overlap():

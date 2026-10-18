@@ -55,6 +55,49 @@ def _clear_text(d: ImageDraw.ImageDraw, cx: float, y: float, text: str, f, fill,
         x += w_ + tracking
 
 
+def extract_ink_motif(image: Any, box: Sequence[int], *, tint: Optional[Tuple[int, int, int]] = None,
+                      min_alpha: int = 18) -> Image.Image:
+    """Pull engraved line art off a rendered pouch into a reusable RGBA motif.
+
+    Ground luminance comes from the crop's border ring; ink alpha rises as
+    pixels darken away from it. Optional tint recolours the ink (e.g. gold);
+    without a tint the original ink colour is kept, so a light-ground motif can
+    also be placed on a light sheet.
+    """
+    if isinstance(image, (bytes, bytearray)):
+        im = Image.open(io.BytesIO(image))
+    elif isinstance(image, (str, Path)):
+        im = Image.open(image)
+    else:
+        im = image
+    crop = im.convert("RGB").crop(tuple(int(v) for v in box))
+    a = np.array(crop).astype(np.float32)
+    lum = a.mean(axis=2)
+    # local ground estimate: median filter (ignores ink strokes) then blur.
+    # A noise-floor margin keeps lighting/highlight variation from fogging the
+    # whole crop - only genuinely darker ink survives.
+    from PIL import ImageFilter as IF  # noqa: PLC0415
+    size = 31 if min(crop.size) > 40 else 9
+    med = crop.convert("L").filter(IF.MedianFilter(size)).filter(IF.GaussianBlur(12))
+    bref = np.array(med).astype(np.float32)
+    delta = bref - lum
+    alpha = np.clip((delta - 16.0) / (bref * 0.32 + 22.0), 0.0, 1.0)
+    alpha = np.power(alpha, 1.3)
+    h, w = alpha.shape
+    fade = 14
+    ramp = np.linspace(0.0, 1.0, fade)
+    alpha[:fade, :] *= ramp[:, None]
+    alpha[-fade:, :] *= ramp[::-1, None]
+    alpha[:, :fade] *= ramp[None, :]
+    alpha[:, -fade:] *= ramp[::-1][None, :]
+    alpha[alpha < (min_alpha / 255.0)] = 0.0
+    out = np.array(crop.convert("RGBA"))
+    if tint is not None:
+        out[..., 0], out[..., 1], out[..., 2] = tint
+    out[..., 3] = (alpha * 255).astype(np.uint8)
+    return Image.fromarray(out, "RGBA")
+
+
 def build_ops(build: Dict[str, Any], sku: Dict[str, Any], logo: Image.Image,
               field_color: Tuple[int, int, int]) -> List[Dict[str, Any]]:
     """All drawing operations in MM space for one SKU sheet."""
@@ -79,21 +122,24 @@ def build_ops(build: Dict[str, Any], sku: Dict[str, Any], logo: Image.Image,
     cx, cy = fx + fw / 2, fy + fh * 0.20
     ops.append({"kind": "image", "img": "logo_badge", "cx": cx, "cy": cy,
                 "r": r_mm, "field": field_color, "gold": gold})
-    ops.append({"kind": "text_centered", "cx": cx, "y": fy + fh * 0.44,
+    ops.append({"kind": "text_centered", "cx": cx, "y": fy + fh * 0.40,
                 "text": sku["title"], "font": "PlayfairDisplay.ttf", "axes": [700],
                 "size_mm": 8.2, "max_w_mm": fw * 0.86, "color": tuple(sku["title_color"])})
-    ops.append({"kind": "text_centered", "cx": cx, "y": fy + fh * 0.50,
+    ops.append({"kind": "text_centered", "cx": cx, "y": fy + fh * 0.455,
                 "text": sku.get("subtitle", "MUSHROOM POWDER"), "font": "Inter.ttf",
                 "axes": [14, 640], "size_mm": 3.4, "tracking_mm": 1.1,
                 "color": tuple(sku["subtitle_color"])})
-    ops.append({"kind": "icons", "cx": cx, "y": fy + fh * 0.66,
+    if sku.get("motif") is not None:
+        ops.append({"kind": "motif", "img_pil": sku["motif"], "cx": cx,
+                    "y": fy + fh * 0.585, "w_mm": fw * (sku.get("motif_width_frac", 0.40))})
+    ops.append({"kind": "icons", "cx": cx, "y": fy + fh * 0.770,
                 "r_mm": 3.4, "gap_mm": 9.5, "ink": gold})
-    ops.append({"kind": "text_centered", "cx": cx, "y": fy + fh * 0.90,
+    ops.append({"kind": "text_centered", "cx": cx, "y": fy + fh * 0.92,
                 "text": sku["weight"], "font": "Inter.ttf", "axes": [14, 560],
                 "size_mm": 3.2, "color": tuple(sku["subtitle_color"])})
-    ops.append({"kind": "rule", "y": fy + fh * 0.90, "x0": cx - 26, "x1": cx - 13,
+    ops.append({"kind": "rule", "y": fy + fh * 0.92, "x0": cx - 26, "x1": cx - 13,
                 "color": gold})
-    ops.append({"kind": "rule", "y": fy + fh * 0.90, "x0": cx + 13, "x1": cx + 26,
+    ops.append({"kind": "rule", "y": fy + fh * 0.92, "x0": cx + 13, "x1": cx + 26,
                 "color": gold})
 
     # ── BACK ───────────────────────────────────────────────────────────────
@@ -199,6 +245,10 @@ def render_png(build: Dict[str, Any], ops: List[Dict[str, Any]], logo: Image.Ima
                 x = op["cx"] + (i - (n - 1) / 2) * op["gap_mm"]
                 draw_cert_icon(d, kind, px(x), px(op["y"]), px(op["r_mm"]),
                                ink=op["ink"], ring=op["ink"], disc=CREAM, width=max(2, px(0.5)))
+        elif k == "motif":
+            m = op["img_pil"].resize((px(op["w_mm"]), int(px(op["w_mm"]) * op["img_pil"].height / op["img_pil"].width)),
+                                     Image.LANCZOS)
+            img.paste(m, (int(px(op["cx"]) - m.width / 2), int(px(op["y"]) - m.height / 2)), m)
         elif k == "panel_fill":
             d.rectangle([px(op["x0"]), px(op["y0"]), px(op["x1"]), px(op["y1"])],
                         fill=tuple(op["color"]))
@@ -247,7 +297,13 @@ def render_pdf(build: Dict[str, Any], ops: List[Dict[str, Any]], logo: Image.Ima
 
     for op in ops:
         k = op["kind"]
-        if k == "panel_fill":
+        if k == "motif":
+            m = op["img_pil"]
+            w_mm = op["w_mm"]
+            h_mm = w_mm * m.height / m.width
+            c.drawImage(ImageReader(m), (op["cx"] - w_mm / 2) * M, yp(op["y"] + h_mm / 2),
+                        width=w_mm * M, height=h_mm * M, mask="auto")
+        elif k == "panel_fill":
             c.setFillColorRGB(*(v / 255 for v in op["color"]))
             c.rect(op["x0"] * M, yp(op["y1"]), (op["x1"] - op["x0"]) * M,
                    (op["y1"] - op["y0"]) * M, stroke=0, fill=1)
