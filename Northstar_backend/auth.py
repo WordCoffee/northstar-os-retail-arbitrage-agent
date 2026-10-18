@@ -103,6 +103,9 @@ def _load_plan_catalog() -> Dict[str, Dict[str, Any]]:
             "name": p["name"],
             "price": p.get("price_usd_month", 0),
             "gates": list(p.get("entitled_gates", [])),
+            # V4 (2026-10-18): UI-surface capabilities (presentation/routing only;
+            # never live-action gates — gates_always_off still governs those).
+            "ui_gates": list(p.get("ui_gates", [])),
             "description": p.get("description", ""),
         }
     if not plans:
@@ -453,6 +456,17 @@ def user_has_entitlement(user_id: str, gate: str) -> bool:
     plan = user.get("plan", "foundation")
     entitlements = PLAN_ENTITLEMENTS.get(plan, {})
     return gate in entitlements.get("gates", [])
+
+
+def user_ui_gates(user_id: str) -> list:
+    """UI-surface capabilities for a user's plan (V4). Presentation/routing
+    only — never a live-action gate. Unknown users fail closed to no ui gates."""
+    user = get_user(user_id)
+    if not user:
+        return []
+    plan = user.get("plan", "foundation")
+    info = PLAN_ENTITLEMENTS.get(plan, {})
+    return list(info.get("ui_gates", []))
 
 
 def get_plan_info(plan: str) -> Dict[str, Any]:

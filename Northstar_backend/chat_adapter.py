@@ -57,9 +57,14 @@ def build_chat_messages(history: Iterable[Dict[str, Any]],
     """System prompt (with focus) + the most recent non-empty turns."""
     system = CHAT_SYSTEM_PROMPT
     if focus:
-        bits = [f"{k}: {v}" for k, v in sorted(focus.items()) if v]
+        from shell_focus import FOCUS_PROMPTS
+        mode = str(focus.get("mode") or "")
+        if mode in FOCUS_PROMPTS:
+            system += "\nActive focus — " + FOCUS_PROMPTS[mode]
+        bits = [f"{k}: {v}" for k, v in sorted(focus.items())
+                if v and k != "mode"]
         if bits:
-            system += "\nActive focus — " + "; ".join(bits)
+            system += "\nContext — " + "; ".join(bits)
     messages: List[Dict[str, str]] = [{"role": "system", "content": system}]
     rows = [m for m in (history or []) if str(m.get("content") or "").strip()]
     for row in rows[-max(0, int(limit)):]:

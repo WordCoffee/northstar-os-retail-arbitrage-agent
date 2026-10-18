@@ -43,6 +43,7 @@ from data_layer import get_northstar_db
 from design_studio_api import studio_account
 import chat_adapter
 import chat_tools
+from shell_focus import VALID_FOCUS_IDS, tools_for_focus
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
@@ -140,7 +141,13 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
     error_reason = None
     persisted = False
 
-    available_tools = chat_tools.ollama_tool_schemas() if tools_enabled else None
+    available_tools = None
+    if tools_enabled:
+        # The session's focus restricts which tools are offered to the model.
+        # The catalogue is server-owned (shell_focus); the UI can only pick an
+        # id, never widen the set.
+        _focus = session.get("focus_json") if isinstance(session.get("focus_json"), dict) else {}
+        available_tools = chat_tools.ollama_tool_schemas(tools_for_focus(_focus.get("mode")))
 
     def _persist(final_status: str) -> Optional[str]:
         thinking_text = "".join(thinking_parts)
@@ -202,7 +209,7 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
             "session_id": session.get("id"),
             "model": model or chat_adapter.CHAT_MODEL,
             "think": bool(think),
-            "tools": chat_tools.tool_names() if tools_enabled else [],
+            "tools": [t["function"]["name"] for t in (available_tools or [])],
         })
 
         history = db.chat.messages.list_by_session(
@@ -437,6 +444,11 @@ class TurnIn(BaseModel):
     model: Optional[str] = Field(None, max_length=90)
 
 
+class SessionPatch(BaseModel):
+    title: Optional[str] = Field(None, max_length=120)
+    focus: Optional[Dict[str, Any]] = None
+
+
 @router.get("")
 def chat_root(acct: str = Depends(studio_account)):
     """Bare-prefix info route so the base path itself resolves (the UI contract
@@ -489,6 +501,35 @@ def list_messages(sid: str, limit: int = 500, acct: str = Depends(studio_account
         "messages": db.chat.messages.list_by_session(
             sid, account_id=acct, limit=min(max(int(limit), 1), 1000)),
     }
+
+
+@router.patch("/sessions/{sid}")
+def patch_session(sid: str, body: SessionPatch, acct: str = Depends(studio_account)):
+    """Rename a session and/or set its focus (V3 focus rail).
+
+    The focus id is validated against the server-owned catalogue; an unknown id
+    is rejected instead of stored. The stored focus_json is injected into the
+    system prompt on the next turn and restricts the tool set offered to the
+    model (see turn_event_stream)."""
+    db = get_northstar_db()
+    session = db.chat.sessions.get_by_id(sid, account_id=acct)
+    if not session:
+        raise HTTPException(status_code=404, detail="Chat session not found")
+    patch: Dict[str, Any] = {}
+    if body.title is not None:
+        title = body.title.strip()
+        if not title:
+            raise HTTPException(status_code=400, detail="title cannot be empty")
+        patch["title"] = title[:120]
+    if body.focus is not None:
+        mode = body.focus.get("mode")
+        if mode and mode not in VALID_FOCUS_IDS:
+            raise HTTPException(status_code=400, detail=f"unknown focus '{mode}'")
+        patch["focus_json"] = body.focus
+    if not patch:
+        raise HTTPException(status_code=400, detail="nothing to patch")
+    db.chat.sessions.update(sid, patch, account_id=acct)
+    return db.chat.sessions.get_by_id(sid, account_id=acct)
 
 
 @router.post("/sessions/{sid}/turns")

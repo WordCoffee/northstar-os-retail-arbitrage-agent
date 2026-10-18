@@ -70,6 +70,14 @@ try:
 except ImportError:  # pragma: no cover - chat needs the studio modules only
     _HAS_CHAT = False
 
+# V3 shell context (2026-10-18) — capability gate (advanced_view), focus modes,
+# hardware telemetry. Own guard: a shell problem must never disable chat.
+try:
+    from shell_router import router as shell_router
+    _HAS_SHELL = True
+except ImportError:  # pragma: no cover
+    _HAS_SHELL = False
+
 # Phase 6: Production infrastructure
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
@@ -277,6 +285,10 @@ if _HAS_DESIGN_STUDIO_EXT:
 if _HAS_CHAT:
     app.include_router(chat_router)
     app.include_router(chat_voice_router)
+
+# V3 shell context — Simple/Advanced gate, focus modes, hardware telemetry
+if _HAS_SHELL:
+    app.include_router(shell_router)
 
 # Golden Goose Finder UI panel (standalone page; fetches /api/golden-goose/*)
 _GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"
