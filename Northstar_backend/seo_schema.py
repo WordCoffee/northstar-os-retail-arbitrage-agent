@@ -42,4 +42,28 @@ SEO_TABLES_SQL = """
                 ON brand_seo_profile_versions(profile_id, version);
             CREATE INDEX IF NOT EXISTS idx_brand_seo_versions_profile
                 ON brand_seo_profile_versions(profile_id);
+
+            -- Listing revisions (V3 S7 §5.2). Additive: does NOT touch
+            -- ds_listing_records. A listing build/update APPENDS a revision; the
+            -- newest revision is the only object SEO work targets, and prior
+            -- revisions stay read-only (history, diffs, rollback).
+            CREATE TABLE IF NOT EXISTS ds_listing_revisions (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                listing_key TEXT NOT NULL,       -- asin | legacy_key | slug
+                asin TEXT,
+                revision INTEGER NOT NULL,       -- 1-based, monotonic per (account, listing_key)
+                title TEXT,
+                bullets TEXT,                    -- JSON array
+                backend_terms TEXT,
+                description TEXT,
+                source TEXT DEFAULT 'operator',
+                note TEXT,
+                created_by TEXT,
+                created_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_ds_listing_revisions_unique
+                ON ds_listing_revisions(account_id, listing_key, revision);
+            CREATE INDEX IF NOT EXISTS idx_ds_listing_revisions_key
+                ON ds_listing_revisions(account_id, listing_key);
         """

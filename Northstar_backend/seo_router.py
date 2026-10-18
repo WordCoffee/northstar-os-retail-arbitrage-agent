@@ -45,6 +45,16 @@ class VersionIn(BaseModel):
     created_by: Optional[str] = Field(None, max_length=80)
 
 
+class ListingRevisionIn(BaseModel):
+    title: Optional[str] = Field(None, max_length=500)
+    bullets: Optional[Any] = None      # list[str] or newline-separated string
+    backend_terms: Optional[str] = Field(None, max_length=2000)
+    description: Optional[str] = Field(None, max_length=5000)
+    asin: Optional[str] = Field(None, max_length=40)
+    source: Optional[str] = Field(None, max_length=80)
+    note: Optional[str] = Field(None, max_length=500)
+
+
 @router.get("/profiles")
 def list_profiles(limit: int = 100, acct: str = Depends(studio_account)):
     db = get_northstar_db()
@@ -107,3 +117,62 @@ def add_version(pid: str, body: VersionIn, acct: str = Depends(studio_account)):
     if not profile:
         raise HTTPException(status_code=404, detail="SEO profile not found")
     return profile
+
+
+# ── Listing revisions (S7 §5.2): the newest revision is the SEO target ──────
+
+@router.get("/listings")
+def list_listings(limit: int = 100, acct: str = Depends(studio_account)):
+    """One row per listing key — its LATEST revision."""
+    db = get_northstar_db()
+    return {"listings": db.seo.revisions.list_latest(acct, limit=min(max(int(limit), 1), 500))}
+
+
+@router.get("/listings/{listing_key}")
+def get_latest_listing(listing_key: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    latest = db.seo.revisions.get_latest(acct, listing_key)
+    if not latest:
+        raise HTTPException(status_code=404, detail="No revisions for this listing")
+    return latest
+
+
+@router.get("/listings/{listing_key}/revisions")
+def list_listing_revisions(listing_key: str, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    return {"revisions": db.seo.revisions.list_revisions(acct, listing_key)}
+
+
+@router.get("/listings/{listing_key}/revisions/{revision}")
+def get_listing_revision(listing_key: str, revision: int, acct: str = Depends(studio_account)):
+    db = get_northstar_db()
+    rev = db.seo.revisions.get(acct, listing_key, revision)
+    if not rev:
+        raise HTTPException(status_code=404, detail="Listing revision not found")
+    return rev
+
+
+@router.post("/listings/{listing_key}/revisions")
+def add_listing_revision(listing_key: str, body: ListingRevisionIn,
+                         acct: str = Depends(studio_account)):
+    """Append a listing revision. Prior revisions are never mutated."""
+    db = get_northstar_db()
+    bullets = body.bullets
+    if isinstance(bullets, str):
+        bullets = [ln for ln in bullets.split("\n") if ln.strip()]
+    try:
+        rev = db.seo.revisions.add_revision({
+            "account_id": acct,
+            "listing_key": listing_key,
+            "asin": body.asin,
+            "title": body.title,
+            "bullets": bullets,
+            "backend_terms": body.backend_terms,
+            "description": body.description,
+            "source": body.source or "operator",
+            "note": body.note,
+            "created_by": acct,
+        })
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return rev

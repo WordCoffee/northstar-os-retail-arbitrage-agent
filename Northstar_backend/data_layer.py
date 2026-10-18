@@ -3230,11 +3230,94 @@ class SeoProfilesDB:
         return self._version(row) if row else None
 
 
-class SeoContainer:
-    """Namespace for the V3 S7 SEO stores. Additive."""
+class DsListingRevisionsDB:
+    """Immutable listing revisions (V3 S7 §5.2). Append-only; tenant-scoped.
+
+    A listing build/update APPENDS a revision (monotonic per listing_key); the
+    newest is the only object SEO work targets, and prior revisions stay
+    read-only. Does not touch ds_listing_records.
+    """
 
     def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _now(self) -> str:
+        return datetime.now(timezone.utc).isoformat()
+
+    def _serialize(self, row) -> Dict[str, Any]:
+        d = dict(row)
+        if isinstance(d.get("bullets"), str):
+            try:
+                d["bullets"] = json.loads(d["bullets"])
+            except json.JSONDecodeError:
+                pass
+        return d
+
+    def add_revision(self, entry: Dict[str, Any]) -> Dict[str, Any]:
+        account_id = entry.get("account_id") or "default"
+        listing_key = (entry.get("listing_key") or entry.get("asin") or "").strip().lower()
+        if not listing_key:
+            raise ValueError("listing_key is required")
+        cur = self.db.execute(
+            "SELECT COALESCE(MAX(revision), 0) AS m FROM ds_listing_revisions "
+            "WHERE account_id = ? AND listing_key = ?",
+            (account_id, listing_key))
+        rev = int(cur.fetchone()["m"]) + 1
+        rid = entry.get("id") or str(uuid.uuid4())
+        bullets = entry.get("bullets")
+        if isinstance(bullets, (list, dict)):
+            bullets = json.dumps(bullets)
+        self.db.execute(
+            "INSERT INTO ds_listing_revisions "
+            "(id, account_id, listing_key, asin, revision, title, bullets, backend_terms, "
+            "description, source, note, created_by, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (rid, account_id, listing_key, entry.get("asin"), rev, entry.get("title"), bullets,
+             entry.get("backend_terms"), entry.get("description"),
+             entry.get("source") or "operator", entry.get("note"),
+             entry.get("created_by"), self._now()))
+        self.db.commit()
+        return self.get(account_id, listing_key, rev)
+
+    def get(self, account_id: str, listing_key: str, revision: int) -> Optional[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM ds_listing_revisions "
+            "WHERE account_id = ? AND listing_key = ? AND revision = ?",
+            (account_id, (listing_key or "").strip().lower(), int(revision)))
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def get_latest(self, account_id: str, listing_key: str) -> Optional[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM ds_listing_revisions WHERE account_id = ? AND listing_key = ? "
+            "ORDER BY revision DESC LIMIT 1",
+            (account_id, (listing_key or "").strip().lower()))
+        row = cur.fetchone()
+        return self._serialize(row) if row else None
+
+    def list_revisions(self, account_id: str, listing_key: str) -> List[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM ds_listing_revisions WHERE account_id = ? AND listing_key = ? "
+            "ORDER BY revision DESC",
+            (account_id, (listing_key or "").strip().lower()))
+        return [self._serialize(r) for r in cur.fetchall()]
+
+    def list_latest(self, account_id: str, limit: int = 100) -> List[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT r.* FROM ds_listing_revisions r "
+            "JOIN (SELECT listing_key, MAX(revision) AS m FROM ds_listing_revisions "
+            "      WHERE account_id = ? GROUP BY listing_key) x "
+            "ON r.listing_key = x.listing_key AND r.revision = x.m "
+            "WHERE r.account_id = ? ORDER BY r.created_at DESC LIMIT ?",
+            (account_id, account_id, limit))
+        return [self._serialize(r) for r in cur.fetchall()]
+
+
+class SeoContainer:
+    """Namespace for the V3 S7 SEO stores. Additive."""
+    def __init__(self, db: DataLayer):
         self.profiles = SeoProfilesDB(db)
+        self.revisions = DsListingRevisionsDB(db)
 
 
 class NorthstarDB:

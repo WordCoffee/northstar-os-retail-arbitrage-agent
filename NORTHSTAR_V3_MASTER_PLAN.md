@@ -208,7 +208,7 @@ never silently rewritten.
 Versions are append-only, so a rollback is always possible and an old version
 stays readable; editing a profile is never a silent rewrite.
 
-### 5.2 Listing revisions — latest is the SEO beneficiary — PLANNED
+### 5.2 Listing revisions — latest is the SEO beneficiary — **BUILT**
 - A new listing build or update creates a **revision**; the newest revision is
   the only object SEO work targets.
 - Prior revisions are archived **read-only** (history, diffs, rollback); SEO
@@ -216,8 +216,19 @@ stays readable; editing a profile is never a silent rewrite.
 - `ds_listing_records` gains revision linkage (new additive table rather than
   rewriting the existing one).
 
+| Piece | Where | Notes |
+|---|---|---|
+| Schema | `seo_schema.py` (`SEO_TABLES_SQL`) | Additive `ds_listing_revisions`: monotonic `revision` per `(account_id, listing_key)`, unique index; `ds_listing_records` is **not touched**. |
+| Store | `data_layer.py` `DsListingRevisionsDB` (on `SeoContainer.revisions`) | `add_revision` (append-only; computes the next revision), `get`, `get_latest`, `list_revisions` (newest first), `list_latest` (one row per key). Tenant-scoped. |
+| Service | `seo_router.py` `/api/seo/listings*` | `GET /listings`, `GET/POST /listings/{key}/revisions`, `GET /listings/{key}/revisions/{v}`, `GET /listings/{key}` (latest). |
+| Scoring | `seo_score.py` `score_listing` | Deterministic keyword coverage of the profile clusters across title/bullets/backend/description; reports matched/missing/violations/competitor mentions. **No rank or volume claims**; `score=None` when the profile has no clusters. |
+
 ### 5.3 Cross-service hooks
 - **ListingForge** — title/bullets/backend terms scored against the profile.
+  **BUILT** as the `seo_check` tool (Grow focus): scores the latest stored
+  revision (`listing_key`/`asin`) or inline copy against the brand profile and
+  returns an AG-UI card (score, matched/total, missing head terms, prohibited
+  claims, competitor mentions). Honest errors when there is no profile/listing.
 - **Creative Studio** — alt text, A+ copy, image-text policy, dieline copy.
 - **AdPilot** — search terms → negatives/harvest; ad copy angles.
 - **SocialPulse** — hooks/hashtags; external-traffic framing.
@@ -287,7 +298,9 @@ false failures.
 5. S5 AutothinK premium surface — ~~session fork/rewind~~ **BUILT**; plan
    visualiser / sandbox / artifact browser next
 6. S7 Brand SEO Engine — ~~§5.1 versioned Brand SEO Profile~~ **BUILT**;
-   listing revisions + cross-service hooks + imports next
+   ~~§5.2 listing revisions~~ · ~~§5.3 ListingForge hook (`seo_check`)~~ **BUILT**;
+   remaining cross-service hooks (Creative Studio / AdPilot / SocialPulse /
+   SourceScout) + §5.4 file imports/learning next
 7. S8 curated corpus + learning loop
 8. Operator-window REA captures (Packify first) when the operator is present
 

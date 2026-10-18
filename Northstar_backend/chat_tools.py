@@ -399,6 +399,96 @@ def _t_seo_profile(args, ctx) -> dict:
     }
 
 
+def _t_seo_check(args, ctx) -> dict:
+    """Score a listing against the brand SEO profile (V3 S7 §5.3).
+
+    Source of the copy: the LATEST stored revision (listing_key/asin) or inline
+    title/bullets/backend_terms/description. Deterministic keyword coverage —
+    never a rank or volume prediction. Honest when there is nothing to score."""
+    from seo_score import score_listing
+    db = ctx.get("db")
+    acct = ctx.get("account_id")
+    profiles = getattr(getattr(db, "seo", None), "profiles", None)
+    revisions = getattr(getattr(db, "seo", None), "revisions", None)
+    if profiles is None:
+        return {"ok": False, "summary": "The SEO profile store is unavailable.",
+                "error": "no SEO store in this context", "assets": []}
+
+    brand_key = str(args.get("brand_key") or "").strip().lower()
+    if brand_key:
+        head = profiles.get_by_brand_key(acct, brand_key)
+        if not head:
+            return {"ok": False, "summary": f"No brand SEO profile for '{brand_key}'.",
+                    "error": f"no profile with brand_key '{brand_key}'", "assets": []}
+        profile = profiles.get_profile(head["id"], account_id=acct)
+    else:
+        items = profiles.list_profiles(acct, limit=2)
+        if not items:
+            return {"ok": False, "summary": "No brand SEO profile yet — create one first.",
+                    "error": "no profiles for this account", "assets": []}
+        if len(items) > 1:
+            return {"ok": False, "summary": "More than one brand profile — pass brand_key.",
+                    "error": "ambiguous brand; pass brand_key", "assets": []}
+        profile = profiles.get_profile(items[0]["id"], account_id=acct)
+
+    inline = any(args.get(k) for k in ("title", "bullets", "backend_terms", "description"))
+    if inline:
+        listing = {"title": args.get("title"), "bullets": args.get("bullets"),
+                   "backend_terms": args.get("backend_terms"),
+                   "description": args.get("description")}
+        source = "inline copy"
+    else:
+        key = str(args.get("listing_key") or args.get("asin") or "").strip().lower()
+        if not key:
+            return {"ok": False, "summary": "Give me a listing to check.",
+                    "error": "provide listing_key/asin or inline copy", "assets": []}
+        if revisions is None:
+            return {"ok": False, "summary": "Listing revisions are unavailable.",
+                    "error": "no revisions store", "assets": []}
+        latest = revisions.get_latest(acct, key)
+        if not latest:
+            return {"ok": False, "summary": f"No listing revisions for '{key}'.",
+                    "error": f"no revisions for listing_key '{key}'", "assets": []}
+        listing = latest
+        source = f"{key} revision {latest['revision']}"
+
+    result = score_listing(profile.get("body") or {}, listing)
+    score = result["score"]
+    total = result["head_total"] + result["body_total"]
+    rows = [
+        {"label": "score", "value": "—" if score is None else f"{score}/100"},
+        {"label": "profile", "value": f"{profile['brand_key']} v{profile['current_version']}"},
+        {"label": "listing", "value": source},
+        {"label": "matched", "value": f"{result['matched_count']} of {total} terms"},
+    ]
+    head_missing = [m["term"] for m in result["missing"] if m["section"] == "head"]
+    if head_missing:
+        rows.append({"label": "missing head", "value": ", ".join(head_missing[:8])})
+    if result["violations"]:
+        rows.append({"label": "prohibited", "value": ", ".join(result["violations"][:8])})
+    if result["competitor_mentions"]:
+        rows.append({"label": "competitor names", "value": ", ".join(result["competitor_mentions"][:8])})
+
+    summary = ("No keyword clusters to score against in the profile." if score is None else
+               f"SEO coverage {score}/100 against {profile['brand_key']} "
+               f"v{profile['current_version']}.")
+    return {
+        "ok": True,
+        "summary": summary,
+        "assets": [],
+        "data": {
+            "card": {"title": "SEO check", "rows": rows,
+                     "action": {"label": "List missing terms",
+                                "message": "List every profile keyword missing from the listing copy."}},
+            "score": score,
+            "matched": result["matched"],
+            "missing": result["missing"],
+            "violations": result["violations"],
+            "caveats": result["caveats"],
+        },
+    }
+
+
 def _t_voice_list(args, ctx) -> dict:
     from voicestudio_adapter import get_adapter
     out = _run_async(get_adapter().list_voices())
@@ -538,6 +628,26 @@ TOOLS: Dict[str, dict] = {
             "required": ["prompt"],
         },
         "handler": _t_generate_image,
+    },
+    "seo_check": {
+        "description": ("Score a listing against the brand SEO profile (S7). Uses "
+                        "the latest stored revision (listing_key/asin) or inline "
+                        "title/bullets/backend_terms. Deterministic keyword "
+                        "coverage — never predicts rank or volume."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "brand_key": {"type": "string", "description": "Brand slug (optional if the account has one profile).", "maxLength": 80},
+                "listing_key": {"type": "string", "description": "Listing key / ASIN of a stored revision.", "maxLength": 80},
+                "asin": {"type": "string", "description": "Alias for listing_key.", "maxLength": 40},
+                "title": {"type": "string", "description": "Inline title to score (optional).", "maxLength": 500},
+                "bullets": {"type": "string", "description": "Inline bullets to score (optional; newline-separated).", "maxLength": 4000},
+                "backend_terms": {"type": "string", "description": "Inline backend search terms (optional).", "maxLength": 2000},
+                "description": {"type": "string", "description": "Inline description (optional).", "maxLength": 4000},
+            },
+            "required": [],
+        },
+        "handler": _t_seo_check,
     },
     "seo_profile": {
         "description": ("Show the account's canonical, versioned Brand SEO Profile "
