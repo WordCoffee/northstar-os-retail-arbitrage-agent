@@ -78,6 +78,14 @@ try:
 except ImportError:  # pragma: no cover
     _HAS_SHELL = False
 
+# V3 S7 SEO engine (2026-10-18) — canonical, versioned Brand SEO Profiles.
+# Own guard: an SEO problem must never disable the rest of the app.
+try:
+    from seo_router import router as seo_router
+    _HAS_SEO = True
+except ImportError:  # pragma: no cover
+    _HAS_SEO = False
+
 # Phase 6: Production infrastructure
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
@@ -297,6 +305,10 @@ if _HAS_SHELL:
                     else "shell hardware daemon already running")
     except Exception as _hw_exc:  # pragma: no cover - telemetry must never boot-fail the app
         logger.warning("shell hardware daemon failed to start: %s", _hw_exc)
+
+# V3 S7 SEO engine — canonical, versioned Brand SEO Profiles
+if _HAS_SEO:
+    app.include_router(seo_router)
 
 # Golden Goose Finder UI panel (standalone page; fetches /api/golden-goose/*)
 _GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"

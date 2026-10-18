@@ -186,18 +186,29 @@ cards, and wiring the same adapter into Creative Studio's video lanes.
 
 ---
 
-## 5. S7 — Brand SEO Engine (across every service) — **PLANNED**
+## 5. S7 — Brand SEO Engine (across every service) — **PARTIAL**
 
 **Principle:** SEO is not a listings feature; it is a property of the brand that
 every service must serve. One canonical, versioned profile drives them all.
 
-### 5.1 Brand SEO Profile (per brand, versioned)
+### 5.1 Brand SEO Profile (per brand, versioned) — **BUILT**
 Entities & associations · keyword clusters (head/body/negative) · voice rules ·
 prohibited claims · competitor set · measurement provenance (which numbers are
 measured vs inferred). Written only by operator action or approved proposal —
 never silently rewritten.
 
-### 5.2 Listing revisions — latest is the SEO beneficiary
+| Piece | Where | Notes |
+|---|---|---|
+| Schema | `seo_schema.py` (`SEO_TABLES_SQL`) | `brand_seo_profiles` (identity + `current_version` pointer) + immutable `brand_seo_profile_versions`. Additive; one source of truth for the shared DDL and the offline tests. |
+| Store | `data_layer.py` `SeoProfilesDB` / `SeoContainer` | Create, get (with current body + version count), list, **append version** (never rewrites history), list/get versions. Tenant-scoped on every read and write. |
+| Body rule | `seo_profile.py` `normalize_body` | A profile body is a JSON object; known sections must have the right container shape; **unknown keys are preserved, never dropped or coerced**; nothing is invented for the operator. |
+| Service | `seo_router.py` `/api/seo/*` | `GET/POST /profiles`, `GET /profiles/{id}`, `GET/POST /profiles/{id}/versions`, `GET /profiles/{id}/versions/{v}`. Registered in `main.py` behind its own import guard. |
+| Shell hook | `chat_tools.py` `seo_profile` (Grow focus) | Shows the current profile (or the account's profile list) as an **AG-UI card** — S7 is reachable from the Simple shell. Read-only; never invents a profile. |
+
+Versions are append-only, so a rollback is always possible and an old version
+stays readable; editing a profile is never a silent rewrite.
+
+### 5.2 Listing revisions — latest is the SEO beneficiary — PLANNED
 - A new listing build or update creates a **revision**; the newest revision is
   the only object SEO work targets.
 - Prior revisions are archived **read-only** (history, diffs, rollback); SEO
@@ -252,7 +263,7 @@ During the hosted beta, orgs whose materialised entitlements carry
 
 | Layer | Evidence |
 |---|---|
-| Backend unit/integration | `python -m pytest test_shell_modes.py` (33) + `test_tool_gateway.py` (5) + `test_voicestudio_adapter.py` (9) + `test_chat_fork.py` (10) + `test_chat_core`/`test_chat_tools`/`test_subscription_catalog_smoke`/`test_plans_route` (combined run) |
+| Backend unit/integration | `python -m pytest test_shell_modes.py` (33) + `test_tool_gateway.py` (5) + `test_voicestudio_adapter.py` (9) + `test_chat_fork.py` (10) + `test_seo_profiles.py` (17) + `test_chat_core`/`test_chat_tools`/`test_subscription_catalog_smoke`/`test_plans_route` (combined run) |
 | Shell gate end-to-end | `node verify-shell-v3.cjs` — 22/22 (denied tier: shell only, no Advanced, `?shell=advanced` degrades; granted tier: Advanced renders rooms and returns; mobile toggle reachable at 390px; **AG-UI card renders as a component**; **pause → paused → resume handover**; **fork opens a new branched session**) |
 | Existing harnesses | `verify-guards.cjs` 11/0, `verify-admin.cjs` 33/0, `verify-acceptance.cjs` 2 fails (both pre-existing; baseline had 8 — 6 fixed by the harness role-vocabulary correction) |
 | Build | `npm run build` — 0 errors |
@@ -275,7 +286,8 @@ false failures.
 4. ~~Create focus — VoiceStudio UGC media pipeline~~ **BUILT + verified**
 5. S5 AutothinK premium surface — ~~session fork/rewind~~ **BUILT**; plan
    visualiser / sandbox / artifact browser next
-6. S7 Brand SEO Engine (profile, revisions, cross-service hooks, imports)
+6. S7 Brand SEO Engine — ~~§5.1 versioned Brand SEO Profile~~ **BUILT**;
+   listing revisions + cross-service hooks + imports next
 7. S8 curated corpus + learning loop
 8. Operator-window REA captures (Packify first) when the operator is present
 

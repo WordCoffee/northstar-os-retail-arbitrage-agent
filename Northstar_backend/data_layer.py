@@ -29,6 +29,8 @@ from typing import Any, Dict, List, Optional
 
 from env_flags import env_flag
 from chat_schema import CHAT_TABLES_SQL
+from seo_schema import SEO_TABLES_SQL
+from seo_profile import normalize_body as normalize_seo_body
 
 # ---------------------------------------------------------------------------
 # Database connection
@@ -727,7 +729,7 @@ class DataLayer:
             );
             CREATE INDEX IF NOT EXISTS idx_ds_change_files_account ON ds_change_files(account_id);
             CREATE INDEX IF NOT EXISTS idx_ds_change_files_upload ON ds_change_files(upload_id);
-        """ + CHAT_TABLES_SQL)
+        """ + CHAT_TABLES_SQL + SEO_TABLES_SQL)
 
     def _create_sqlite_tables(self):
         """Create all tables for SQLite mode (idempotent)."""
@@ -3089,6 +3091,152 @@ class ChatContainer:
         self.forks = ChatForksDB(db)
 
 
+class SeoProfilesDB:
+    """Brand SEO Profiles (V3 S7) — one canonical, versioned profile per brand.
+
+    Versions are immutable and append-only: editing a profile appends a new
+    version and repoints `current_version`. History is never rewritten, so a
+    rollback is always possible. Tenant-scoped on every read and write.
+    """
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def _now(self) -> str:
+        return datetime.now(timezone.utc).isoformat()
+
+    def _version(self, row) -> Dict[str, Any]:
+        d = dict(row)
+        if isinstance(d.get("body_json"), str):
+            try:
+                d["body_json"] = json.loads(d["body_json"])
+            except json.JSONDecodeError:
+                pass
+        return d
+
+    def _row(self, pid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute(
+                "SELECT * FROM brand_seo_profiles WHERE id = ? AND account_id = ?",
+                (pid, account_id))
+        else:
+            cur = self.db.execute("SELECT * FROM brand_seo_profiles WHERE id = ?", (pid,))
+        row = cur.fetchone()
+        return dict(row) if row else None
+
+    def get_by_brand_key(self, account_id: str, brand_key: str) -> Optional[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM brand_seo_profiles WHERE account_id = ? AND brand_key = ?",
+            (account_id, brand_key))
+        row = cur.fetchone()
+        return dict(row) if row else None
+
+    def create_profile(self, entry: Dict[str, Any]) -> Dict[str, Any]:
+        account_id = entry.get("account_id") or "default"
+        brand_key = (entry.get("brand_key") or "").strip().lower()
+        if not brand_key:
+            raise ValueError("brand_key is required")
+        name = (entry.get("name") or brand_key).strip() or brand_key
+        ok, norm = normalize_seo_body(entry.get("body") or {})
+        if not ok:
+            raise ValueError(norm)
+        if self.get_by_brand_key(account_id, brand_key):
+            raise ValueError(f"a profile for brand '{brand_key}' already exists")
+        pid = entry.get("id") or str(uuid.uuid4())
+        now = self._now()
+        self.db.execute(
+            "INSERT INTO brand_seo_profiles "
+            "(id, account_id, brand_key, name, current_version, created_at, updated_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (pid, account_id, brand_key, name, 1, now, now))
+        self.db.execute(
+            "INSERT INTO brand_seo_profile_versions "
+            "(id, account_id, profile_id, version, body_json, note, created_by, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (str(uuid.uuid4()), account_id, pid, 1, json.dumps(norm),
+             entry.get("note"), entry.get("created_by"), now))
+        self.db.commit()
+        return self.get_profile(pid, account_id=account_id)
+
+    def get_profile(self, pid: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        prof = self._row(pid, account_id)
+        if not prof:
+            return None
+        v = int(prof.get("current_version") or 1)
+        cur = self.db.execute(
+            "SELECT * FROM brand_seo_profile_versions WHERE profile_id = ? AND version = ?",
+            (pid, v))
+        row = cur.fetchone()
+        prof["body"] = self._version(row)["body_json"] if row else {}
+        cur = self.db.execute(
+            "SELECT COUNT(*) AS n FROM brand_seo_profile_versions WHERE profile_id = ?", (pid,))
+        prof["version_count"] = int(cur.fetchone()["n"])
+        return prof
+
+    def list_profiles(self, account_id: str, limit: int = 100) -> List[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM brand_seo_profiles WHERE account_id = ? "
+            "ORDER BY updated_at DESC LIMIT ?",
+            (account_id, limit))
+        return [dict(r) for r in cur.fetchall()]
+
+    def add_version(self, pid: str, account_id: str, body: Any,
+                    note: Optional[str] = None,
+                    created_by: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        prof = self._row(pid, account_id)
+        if not prof:
+            return None
+        ok, norm = normalize_seo_body(body)
+        if not ok:
+            raise ValueError(norm)
+        v = int(prof.get("current_version") or 1) + 1
+        now = self._now()
+        self.db.execute(
+            "INSERT INTO brand_seo_profile_versions "
+            "(id, account_id, profile_id, version, body_json, note, created_by, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (str(uuid.uuid4()), account_id, pid, v, json.dumps(norm), note, created_by, now))
+        self.db.execute(
+            "UPDATE brand_seo_profiles SET current_version = ?, updated_at = ? "
+            "WHERE id = ? AND account_id = ?",
+            (v, now, pid, account_id))
+        self.db.commit()
+        return self.get_profile(pid, account_id=account_id)
+
+    def list_versions(self, pid: str, account_id: Optional[str] = None) -> List[Dict[str, Any]]:
+        sql = ("SELECT id, account_id, profile_id, version, note, created_by, created_at "
+               "FROM brand_seo_profile_versions WHERE profile_id = ?")
+        params: List[Any] = [pid]
+        if account_id:
+            sql += " AND account_id = ?"
+            params.append(account_id)
+        sql += " ORDER BY version DESC"
+        cur = self.db.execute(sql, tuple(params))
+        return [dict(r) for r in cur.fetchall()]
+
+    def get_version(self, pid: str, version: int,
+                    account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute(
+                "SELECT * FROM brand_seo_profile_versions "
+                "WHERE profile_id = ? AND version = ? AND account_id = ?",
+                (pid, version, account_id))
+        else:
+            cur = self.db.execute(
+                "SELECT * FROM brand_seo_profile_versions "
+                "WHERE profile_id = ? AND version = ?",
+                (pid, version))
+        row = cur.fetchone()
+        return self._version(row) if row else None
+
+
+class SeoContainer:
+    """Namespace for the V3 S7 SEO stores. Additive."""
+
+    def __init__(self, db: DataLayer):
+        self.profiles = SeoProfilesDB(db)
+
+
 class NorthstarDB:
     """Unified data access — one object to reach every table."""
 
@@ -3105,6 +3253,7 @@ class NorthstarDB:
         self.live_pulls = LivePullsDB(self._layer)
         self.design_studio = DesignStudioContainer(self._layer)
         self.chat = ChatContainer(self._layer)
+        self.seo = SeoContainer(self._layer)
 
     @property
     def mode(self) -> str:

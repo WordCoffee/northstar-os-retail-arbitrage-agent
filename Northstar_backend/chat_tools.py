@@ -338,6 +338,67 @@ def _t_generate_image(args, ctx) -> dict:
     }
 
 
+def _t_seo_profile(args, ctx) -> dict:
+    """Show the account's canonical Brand SEO Profile (V3 S7) as an AG-UI card.
+
+    With `brand_key`, show that brand's current profile; without it, list the
+    account's profiles. Honest when nothing exists yet — it never invents a
+    profile."""
+    db = ctx.get("db")
+    acct = ctx.get("account_id")
+    profiles = getattr(getattr(db, "seo", None), "profiles", None)
+    if profiles is None:
+        return {"ok": False, "summary": "The SEO profile store is unavailable.",
+                "error": "no SEO store in this context", "assets": []}
+    key = str(args.get("brand_key") or "").strip().lower()
+    if key:
+        head = profiles.get_by_brand_key(acct, key)
+        if not head:
+            return {"ok": False, "summary": f"No brand SEO profile for '{key}'.",
+                    "error": f"no profile with brand_key '{key}'", "assets": []}
+        full = profiles.get_profile(head["id"], account_id=acct)
+        body = full.get("body") or {}
+        rows = [
+            {"label": "brand", "value": full["brand_key"]},
+            {"label": "version", "value": f"v{full['current_version']} of {full['version_count']}"},
+        ]
+        kc = body.get("keyword_clusters")
+        if isinstance(kc, dict):
+            terms = kc.get("head") or kc.get("heads") or []
+            rows.append({"label": "head terms", "value": ", ".join(str(t) for t in terms[:8]) or "—"})
+        comps = body.get("competitors") or []
+        rows.append({"label": "competitors", "value": ", ".join(str(c) for c in comps[:8]) or "—"})
+        return {
+            "ok": True,
+            "summary": f"Brand SEO profile '{full['brand_key']}' (v{full['current_version']}).",
+            "assets": [],
+            "data": {
+                "card": {
+                    "title": "Brand SEO profile",
+                    "rows": rows,
+                    "action": {"label": "Score a listing",
+                               "message": f"Score our latest listing against the {full['brand_key']} SEO profile."},
+                },
+                "brand_key": full["brand_key"], "version": full["current_version"],
+            },
+        }
+    items = profiles.list_profiles(acct, limit=20)
+    rows = [{"label": p["brand_key"], "value": f"v{p['current_version']}"} for p in items] \
+        or [{"label": "no profiles yet", "value": "—"}]
+    return {
+        "ok": True,
+        "summary": f"{len(items)} brand SEO profile(s).",
+        "assets": [],
+        "data": {
+            "card": {"title": "Brand SEO profiles", "rows": rows[:12],
+                     "action": {"label": "Create a profile",
+                                "message": "Create a brand SEO profile for our brand."}},
+            "profiles": [{"brand_key": p["brand_key"], "current_version": p["current_version"]}
+                         for p in items],
+        },
+    }
+
+
 def _t_voice_list(args, ctx) -> dict:
     from voicestudio_adapter import get_adapter
     out = _run_async(get_adapter().list_voices())
@@ -419,7 +480,6 @@ def _t_voice_dub(args, ctx) -> dict:
 
 
 # ── Registry ─────────────────────────────────────────────────────────────────
-
 TOOLS: Dict[str, dict] = {
     "system_status": {
         "description": "Report the local media engine + chat model status. Read-only.",
@@ -478,6 +538,19 @@ TOOLS: Dict[str, dict] = {
             "required": ["prompt"],
         },
         "handler": _t_generate_image,
+    },
+    "seo_profile": {
+        "description": ("Show the account's canonical, versioned Brand SEO Profile "
+                        "(S7). Pass brand_key to narrow to one brand; omit to list "
+                        "all. Read-only; never invents a profile."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "brand_key": {"type": "string", "description": "Brand slug (optional).", "maxLength": 80},
+            },
+            "required": [],
+        },
+        "handler": _t_seo_profile,
     },
     "voice_list": {
         "description": ("List voice profiles on the local VoiceStudio service for ad "
