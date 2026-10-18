@@ -52,18 +52,29 @@ def _feather(mask: np.ndarray, r: float) -> np.ndarray:
 
 
 def _bilinear(pa: np.ndarray, u: np.ndarray, v: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """Row-chunked float32 bilinear sampling (caps peak memory on 2x plates)."""
     PH, PW = pa.shape[:2]
+    u = np.asarray(u, dtype=np.float32)
+    v = np.asarray(v, dtype=np.float32)
     valid = (u >= 0) & (u <= PW - 1.0001) & (v >= 0) & (v <= PH - 1.0001)
     uc = np.clip(u, 0, PW - 1.0001)
     vc = np.clip(v, 0, PH - 1.0001)
-    u0 = np.floor(uc).astype(int)
-    v0 = np.floor(vc).astype(int)
+    u0 = np.floor(uc).astype(np.int32)
+    v0 = np.floor(vc).astype(np.int32)
     u1 = np.minimum(u0 + 1, PW - 1)
     v1 = np.minimum(v0 + 1, PH - 1)
     wu = (uc - u0)[..., None]
     wv = (vc - v0)[..., None]
-    samp = (pa[v0, u0] * (1 - wu) * (1 - wv) + pa[v0, u1] * wu * (1 - wv)
-            + pa[v1, u0] * (1 - wu) * wv + pa[v1, u1] * wu * wv)
+    samp = np.empty(u.shape + (pa.shape[2],), dtype=np.float32)
+    H = u.shape[0]
+    for y0 in range(0, H, 160):
+        y1 = min(H, y0 + 160)
+        wuy = wu[y0:y1]
+        wvy = wv[y0:y1]
+        samp[y0:y1] = (pa[v0[y0:y1], u0[y0:y1]] * ((1.0 - wuy) * (1.0 - wvy))
+                       + pa[v0[y0:y1], u1[y0:y1]] * (wuy * (1.0 - wvy))
+                       + pa[v1[y0:y1], u0[y0:y1]] * ((1.0 - wuy) * wvy)
+                       + pa[v1[y0:y1], u1[y0:y1]] * (wuy * wvy))
     return samp, valid
 
 
@@ -223,13 +234,15 @@ def _composite(plate: Image.Image, mask: np.ndarray, ink: np.ndarray, valid: np.
     a = np.asarray(plate.convert("RGB"), dtype=np.float32)
     h = ink.shape[0]
     y1 = y_off + h
-    base = a[y_off:y1]
-    mslice = mask[y_off:y1]
-    factor = (shade[y_off:y1] ** bake) * (1.0 + emboss * dn[y_off:y1])
-    lit = ink * factor[..., None]
-    alpha = _feather(mslice.astype(np.float32), feather) * valid.astype(np.float32)
-    out = lit * alpha[..., None] + base * (1.0 - alpha[..., None])
-    a[y_off:y1] = out
+    alpha_full = (_feather(mask[y_off:y1].astype(np.float32), feather)
+                  * valid.astype(np.float32))
+    for r0 in range(0, h, 160):
+        r1 = min(h, r0 + 160)
+        base = a[y_off + r0:y_off + r1]
+        fac = (shade[y_off + r0:y_off + r1] ** bake) * (1.0 + emboss * dn[y_off + r0:y_off + r1])
+        lit = ink[r0:r1] * fac[..., None]
+        al = alpha_full[r0:r1][..., None]
+        base[:] = lit * al + base * (1.0 - al)
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGB")
 
 
@@ -255,10 +268,10 @@ def print_pouch(plate: Image.Image, art: Image.Image, cfg: Dict, *, bake: float 
     PW, PH = art.size
 
     yy, xx = np.mgrid[y0:y1 + 1, 0:W]
-    Ly = l[y0:y1 + 1][:, None]
-    Ry = r[y0:y1 + 1][:, None]
-    u = (xx - Ly) / np.maximum(1.0, Ry - Ly) * (PW - 1)
-    v = (yy - y0) / max(1.0, (y1 - y0)) * (PH - 1)
+    Ly = l[y0:y1 + 1].astype(np.float32)[:, None]
+    Ry = r[y0:y1 + 1].astype(np.float32)[:, None]
+    u = (xx.astype(np.float32) - Ly) / np.maximum(1.0, Ry - Ly) * (PW - 1)
+    v = (yy.astype(np.float32) - y0) / max(1.0, (y1 - y0)) * (PH - 1)
 
     # wrinkle displacement: gentle, smoothed, damped toward the gusset/base
     lum = a.mean(axis=2)
@@ -266,7 +279,7 @@ def print_pouch(plate: Image.Image, art: Image.Image, cfg: Dict, *, bake: float 
     gx = _smooth(np.gradient(gxs, axis=1)[y0:y1 + 1], 9 * k)
     gy = _smooth(np.gradient(gxs, axis=0)[y0:y1 + 1], 9 * k)
     hh = max(1.0, float(y1 - y0))
-    yy_rel = (yy - y0) / hh
+    yy_rel = (yy.astype(np.float32) - y0) / hh
     damp = np.clip(1.0 - (np.clip(yy_rel - 0.70, 0.0, None) / 0.30) * 0.9, 0.10, 1.0)
     damp = damp * np.clip(yy_rel / 0.05, 0.25, 1.0)
     dm = disp * pratio * damp
@@ -300,11 +313,11 @@ def print_tube(plate: Image.Image, art: Image.Image, cfg: Dict, *, bake: float =
     PW, PH = art.size
 
     yy, xx = np.mgrid[top:bot + 1, 0:W]
-    Ly = l[top:bot + 1][:, None]
-    Ry = r[top:bot + 1][:, None]
+    Ly = l[top:bot + 1].astype(np.float32)[:, None]
+    Ry = r[top:bot + 1].astype(np.float32)[:, None]
     cx = (Ly + Ry) / 2.0
     Rr = np.maximum(1.0, (Ry - Ly) / 2.0)
-    d = np.clip((xx - cx) / Rr, -1.0, 1.0)
+    d = np.clip((xx.astype(np.float32) - cx) / Rr, -1.0, 1.0)
     theta = np.arcsin(d)
     u = (theta / np.pi + 0.5) * (PW - 1)
     v = (yy - top) / max(1.0, (bot - top)) * (PH - 1)

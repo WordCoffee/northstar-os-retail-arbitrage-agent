@@ -33,7 +33,10 @@ BAG_DESIGNS = ["01_forest_bold", "02_sticker_fun", "03_midnight_luxe",
                "b10_botanical_spine", "e01_stone_heritage", "e02_moss_arc",
                "e03_clay_bands", "e04_sand_hero", "e05_bark_editorial",
                "e06_olive_badge", "e07_oat_split", "e08_slate_formal",
-               "e09_taupe_watermark", "e10_kelp_luxe"]
+               "e09_taupe_watermark", "e10_kelp_luxe", "f01_porcelain_type",
+               "f02_cedar_seal", "f03_linen_ledger", "f04_wheat_minimal",
+               "f05_pistachio_contour", "f06_porcelain_tile", "f07_rose_wreath",
+               "f08_granite_stack", "f09_plum_prescription", "f10_ice_botanical"]
 CAN_DESIGNS = ["06_wall_of_type", "07_dome_gold", "08_stamp_roll",
                "09_edge_stripe", "10_concentric"]
 

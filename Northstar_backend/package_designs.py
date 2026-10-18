@@ -462,12 +462,12 @@ def render_back(spec: Dict, W: float, H: float, logo: Optional[Image.Image] = No
         ltext(d, tx, yy, "Lot Number: MO-LM-2601", f_n, ink)
         yy += 4.0
         ltext(d, tx, yy, "Best Before: 01-2028", f_n, ink)
-        # About Us + the real logo (tinted to the back's ink so it reads on any ground)
+        # About Lion's Mane + the real logo (tinted to the back's ink)
         yy += 5.0
-        ltext(d, tx, yy, "ABOUT US", f_b, ink)
+        ltext(d, tx, yy, "ABOUT LION'S MANE", f_b, ink)
         yy += 3.9
-        for line in ("Mogra Organics makes everyday wellness", "simple: single-ingredient lion's mane,",
-                     "dried and milled, nothing added."):
+        for line in ("Hericium erinaceus is a woodland mushroom", "with a delicate, seafood-like flavour,",
+                     "enjoyed in broths and daily rituals."):
             ltext(d, tx, yy, line, f_s, ink)
             yy += 3.3
         if logo is not None:
@@ -1098,6 +1098,278 @@ BAG_FRONTS.update({
 })
 
 
+# ── bag series 4: LION'S MANE 6 oz (130x210 + 40 gusset, mfr size #2) ───────
+# Completely new design language: Cormorant Garamond + Jost, new devices
+# (arc-text seal, spec ledger, contour field, wreath, tile, type stack).
+# Only the brand LOGO carries over from earlier sets.
+
+ICE = (244, 241, 234)
+NAVY = (32, 44, 58)
+CEDAR = (74, 44, 34)
+PIST = (205, 214, 180)
+WHEAT2 = (222, 205, 172)
+GRANITE = (108, 108, 104)
+ROSE = (223, 197, 184)
+SAGE2 = (176, 190, 168)
+OAT2 = (238, 231, 216)
+PLUM = (74, 52, 60)
+FOREST2 = (36, 52, 44)
+
+
+def brand_line(d, x_mm, y_mm, text, ink, accent, *, align="left", size=3.1):
+    """Jost tracked brand/utility line (new series' brand voice)."""
+    f = F("Jost.ttf", size, [500])
+    if align == "left":
+        ltext(d, x_mm, y_mm, text, f, ink)
+    else:
+        ctext(d, x_mm, y_mm, text, f, ink, tracking_mm=size * 0.62)
+
+
+def brand_sprig(d, cx, y, ink, accent, w_mm=9.0):
+    _sprig(d, cx, y, w_mm, accent, max(2, P(0.34)))
+
+
+def contour_lines(d, x0, x1, y0, y1, n, color, *, amp_mm=2.2, width_mm=0.25, phase=0.0):
+    """Topographic contour field (new-series ornament)."""
+    import math
+    step = 2.5
+    xs = [x0 + i * step for i in range(int((x1 - x0) / step) + 1)]
+    for k in range(n):
+        yb = y0 + (y1 - y0) * (k / max(1, n - 1))
+        pts = [(P(x), P(yb + amp_mm * math.sin((x - x0) / 14.0 * math.pi + phase + k * 0.9)))
+               for x in xs]
+        for i in range(len(pts) - 1):
+            d.line([pts[i], pts[i + 1]], fill=tuple(color), width=max(1, P(width_mm)))
+
+
+def factsline(d, cx, y_mm, text, ink, accent, *, w_mm=66.0):
+    """Hairline colophon with a centred interpunct line (replaces the capsule)."""
+    rule(d, cx - w_mm / 2, y_mm, cx + w_mm / 2, accent, 0.3)
+    ctext(d, cx, y_mm + 4.8, text, F("Jost.ttf", 2.5, [500]), ink, tracking_mm=1.6)
+    rule(d, cx - w_mm / 2, y_mm + 8.6, cx + w_mm / 2, accent, 0.3)
+
+
+def arc_text(canvas, cx, cy, r, text, f, fill, *, total_deg=210.0, flip=False):
+    """Text set along a circle (seal device): each glyph rotated to the path."""
+    import math
+    d = ImageDraw.Draw(canvas)
+    widths = [d.textlength(ch, font=f) for ch in text]
+    gap = P(0.4)
+    total_px = sum(widths) + gap * max(0, len(text) - 1)
+    rpx = max(2.0, float(P(r)))
+    beta_total = math.degrees(total_px / rpx)
+    pos = -total_px / 2.0
+    for ch, w in zip(text, widths):
+        beta = (pos + w / 2.0) / rpx          # radians along the arc
+        bpos = (math.pi - beta) if flip else beta
+        px = P(cx) + P(r) * math.sin(bpos)
+        py = P(cy) - P(r) * math.cos(bpos)
+        rot = math.degrees(bpos) - (180.0 if flip else 0.0)
+        sw, sh = int(max(8, w + P(2))), int(P(f.size * 2.2 / (DPI / 25.4)))
+        glyph = Image.new("RGBA", (sw, sh), (0, 0, 0, 0))
+        ImageDraw.Draw(glyph).text((sw // 2, sh // 2), ch, font=f, fill=tuple(fill) + (255,),
+                                   anchor="mm")
+        g = glyph.rotate(-rot, expand=True, resample=Image.BICUBIC)
+        canvas.paste(g, (int(px - g.width / 2), int(py - g.height / 2)), g)
+        pos += w + gap
+
+
+def sprig_block(w_mm, color, stroke_mm=0.36):
+    img = Image.new("RGBA", (P(w_mm), P(w_mm * 0.85)), (0, 0, 0, 0))
+    _sprig(ImageDraw.Draw(img), w_mm / 2, w_mm * 0.52, w_mm * 0.8, color, max(2, P(stroke_mm)))
+    return img
+
+
+def f01_porcelain_type(logo, motif) -> Image.Image:
+    """Porcelain ground; Cormorant title-case type + one small engraving."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), ICE)
+    d = ImageDraw.Draw(img)
+    brand_sprig(d, 65, 20, FOREST, FOREST, 10.0)
+    brand_line(d, 65, 34, "MOGRA ORGANICS", FOREST, FOREST, align="center", size=3.0)
+    ctext(d, 65, 78, "Organic Lion's Mane", F("CormorantGaramond.ttf", 15.5, [600]), FOREST)
+    ctext(d, 65, 94, "Mushroom Powder", F("CormorantGaramond-Italic.ttf", 6.4, [500]), COPPER)
+    place_motif(img, motif, 65, 140, 58, 44)
+    factsline(d, 65, 180, "170 G  ·  34 SERVINGS  ·  5 G PER SCOOP", FOREST, COPPER)
+    return img
+
+
+def f02_cedar_seal(logo, motif) -> Image.Image:
+    """Deep cedar ground; the hero is an arc-text seal."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), CEDAR)
+    d = ImageDraw.Draw(img)
+    ctext(d, 65, 84.5, "170 g", F("CormorantGaramond.ttf", 11.0, [600]), LINEN2)
+    arc_text(img, 65, 84.5, 30.0, "MOGRA ORGANICS · ORGANIC LION'S MANE",
+             F("Jost.ttf", 2.9, [500]), LINEN2, total_deg=250.0)
+    arc_text(img, 65, 84.5, 24.5, "SINGLE INGREDIENT · GENTLY MILLED",
+             F("Jost.ttf", 1.9, [400]), COPPER, total_deg=170.0, flip=True)
+    for rr, wdt in ((33.5, 0.5), (22.0, 0.3)):
+        d.ellipse([P(65 - rr), P(84.5 - rr), P(65 + rr), P(84.5 + rr)],
+                  outline=tuple(COPPER), width=max(2, P(wdt)))
+    ctext(d, 65, 132, "Organic Lion's Mane", F("CormorantGaramond.ttf", 10.5, [600]), LINEN2)
+    brand_line(d, 65, 146, "MUSHROOM POWDER", LINEN2, COPPER, align="center", size=2.8)
+    place_motif(img, recolor(motif, LINEN2), 65, 172, 44, 26)
+    return img
+
+
+def f03_linen_ledger(logo, motif) -> Image.Image:
+    """Oat ground; a spec ledger of hairline rows."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), OAT2)
+    d = ImageDraw.Draw(img)
+    brand_line(d, 65, 20, "MOGRA ORGANICS", ESPRESSO, COPPER, align="center", size=3.0)
+    rows = (("INGREDIENT", "Hericium erinaceus"), ("PART", "Sporocarp"),
+            ("TEXTURE", "Fine stone mill"), ("SERVING", "One scoop · 5 g"),
+            ("ORIGIN", "Packed in the USA"))
+    y = 48.0
+    for i, (lab, val) in enumerate(rows):
+        rule(d, 22, y - 6.4, 108, COPPER, 0.22)
+        ltext(d, 26, y, lab, F("Jost.ttf", 2.6, [500]), WALNUT)
+        rtext(d, 104, y, val, F("CormorantGaramond.ttf", 4.6, [500]), ESPRESSO)
+        y += 13.0
+    rule(d, 22, y - 6.4, 108, COPPER, 0.22)
+    ctext(d, 65, 148, "Lion's Mane", F("CormorantGaramond.ttf", 16.0, [600]), ESPRESSO)
+    ctext(d, 65, 164, "Organic Mushroom Powder", F("CormorantGaramond-Italic.ttf", 5.0, [500]),
+          WALNUT)
+    factsline(d, 65, 182, "170 G  ·  34 SERVINGS", ESPRESSO, COPPER)
+    return img
+
+
+def f04_wheat_minimal(logo, motif) -> Image.Image:
+    """Wheat ground; one enormous italic line and negative space."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), WHEAT2)
+    d = ImageDraw.Draw(img)
+    brand_sprig(d, 65, 24, WALNUT, WALNUT, 8.0)
+    brand_line(d, 65, 36, "MOGRA ORGANICS", WALNUT, WALNUT, align="center", size=2.4)
+    f_it = fit_size("CormorantGaramond-Italic.ttf", 24.0, [500], "Lion's Mane", 112)
+    ctext(d, 65, 104, "Lion's Mane", f_it, ESPRESSO)
+    rule(d, 40, 118, 90, WALNUT, 0.3)
+    ctext(d, 65, 126, "ORGANIC MUSHROOM POWDER · 170 G", F("Jost.ttf", 2.7, [500]),
+          ESPRESSO, tracking_mm=2.2)
+    ctext(d, 65, 190, "5 g per scoop  ·  34 servings  ·  reseal after use",
+          F("Jost.ttf", 2.2, [400]), WALNUT, tracking_mm=0.8)
+    return img
+
+
+def f05_pistachio_contour(logo, motif) -> Image.Image:
+    """Pistachio ground with a topographic contour field."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), PIST)
+    d = ImageDraw.Draw(img)
+    contour_lines(d, -4, 134, 26, 150, 12, (176, 190, 148), amp_mm=3.0, phase=0.7)
+    brand_line(d, 65, 20, "MOGRA ORGANICS", FOREST2, (120, 140, 96), align="center", size=3.0)
+    headline(d, 65, 176, ["ORGANIC LION'S MANE"], size_mm=8.6, color=FOREST2,
+             line_gap_mm=10.0, max_w_mm=110, tracking_mm=2.6)
+    ctext(d, 65, 190, "MUSHROOM POWDER · 170 G · 34 SERVINGS", F("Jost.ttf", 2.5, [500]),
+          (96, 116, 84), tracking_mm=1.4)
+    place_motif(img, recolor(motif, FOREST2), 65, 160, 40, 24)
+    return img
+
+
+def f06_porcelain_tile(logo, motif) -> Image.Image:
+    """Porcelain ground with a single deep tile block carrying the content."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), ICE)
+    d = ImageDraw.Draw(img)
+    brand_line(d, 65, 24, "MOGRA ORGANICS", FOREST2, COPPER, align="center", size=3.0)
+    ctext(d, 65, 40, "Organic Mushroom Powder", F("CormorantGaramond-Italic.ttf", 5.4, [500]),
+          WALNUT)
+    d.rounded_rectangle([P(16), P(92), P(114), P(190)], radius=P(7), fill=FOREST2)
+    ctext(d, 65, 124, "Lion's Mane", F("CormorantGaramond.ttf", 15.0, [600]), LINEN2)
+    ctext(d, 65, 140, "HERICIUM ERINACEUS · SPOROCARP", F("Jost.ttf", 2.4, [500]), PIST,
+          tracking_mm=1.3)
+    place_motif(img, recolor(motif, PIST), 65, 166, 42, 26)
+    ctext(d, 65, 203, "170 g  ·  34 servings  ·  5 g per scoop", F("Jost.ttf", 2.3, [400]),
+          ESPRESSO, tracking_mm=0.8)
+    return img
+
+
+def f07_rose_wreath(logo, motif) -> Image.Image:
+    """Dusty rose ground; a broken wreath ring with sprigs at the gaps."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), ROSE)
+    d = ImageDraw.Draw(img)
+    r = 52.0
+    d.arc([P(65 - r), P(96 - r), P(65 + r), P(96 + r)], 205, 335, fill=tuple(PLUM),
+          width=max(2, P(0.45)))
+    d.arc([P(65 - r), P(96 - r), P(65 + r), P(96 + r)], 25, 155, fill=tuple(PLUM),
+          width=max(2, P(0.45)))
+    rot_paste(img, sprig_block(13.0, PLUM), 65, 43, 0)
+    rot_paste(img, sprig_block(13.0, PLUM), 65, 149, 180)
+    ctext(d, 65, 84, "Lion's Mane", F("CormorantGaramond.ttf", 13.0, [600]), PLUM)
+    ctext(d, 65, 98, "ORGANIC · 170 G", F("Jost.ttf", 2.5, [500]), WALNUT, tracking_mm=2.0)
+    ctext(d, 65, 112, "MUSHROOM POWDER", F("Jost.ttf", 2.2, [400]), WALNUT, tracking_mm=1.6)
+    brand_line(d, 65, 176, "MOGRA ORGANICS", PLUM, PLUM, align="center", size=2.6)
+    factsline(d, 65, 190, "34 SERVINGS  ·  5 G PER SCOOP", PLUM, WALNUT, w_mm=62.0)
+    return img
+
+
+def f08_granite_stack(logo, motif) -> Image.Image:
+    """Granite ground; a huge three-line displayed name."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), GRANITE)
+    d = ImageDraw.Draw(img)
+    brand_line(d, 65, 22, "MOGRA ORGANICS", (236, 233, 224), (236, 233, 224),
+               align="center", size=2.8)
+    headline(d, 65, 62, ["ORGANIC"], size_mm=13.0, color=(238, 235, 226),
+             line_gap_mm=15.5, max_w_mm=112, tracking_mm=1.2)
+    rule(d, 30, 76, 100, (238, 235, 226), 0.3)
+    headline(d, 65, 92, ["LION'S MANE"], size_mm=16.0, color=(238, 235, 226),
+             line_gap_mm=18.5, max_w_mm=112)
+    ctext(d, 65, 112, "MUSHROOM POWDER · 170 G", F("Jost.ttf", 2.6, [500]), (206, 204, 196),
+          tracking_mm=2.4)
+    place_motif(img, recolor(motif, (238, 235, 226)), 65, 150, 52, 34)
+    ctext(d, 65, 186, "34 servings · 5 g per scoop · single ingredient",
+          F("Jost.ttf", 2.3, [400]), (206, 204, 196), tracking_mm=0.8)
+    return img
+
+
+def f09_plum_prescription(logo, motif) -> Image.Image:
+    """Deep plum ground; a single-hairline label box + ruled utility rows."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), PLUM)
+    d = ImageDraw.Draw(img)
+    d.rectangle([P(18), P(24), P(112), P(116)], outline=tuple((212, 186, 172)),
+                width=max(2, P(0.4)))
+    ctext(d, 65, 42, "Organic", F("CormorantGaramond-Italic.ttf", 5.6, [500]), (212, 186, 172))
+    ctext(d, 65, 62, "Lion's Mane", F("CormorantGaramond.ttf", 14.0, [600]), LINEN2)
+    ctext(d, 65, 78, "MUSHROOM POWDER", F("Jost.ttf", 2.6, [500]), COPPER, tracking_mm=2.4)
+    ctext(d, 65, 92, "170 G · 34 SERVINGS · 5 G PER SCOOP", F("Jost.ttf", 2.3, [400]),
+          (206, 184, 172), tracking_mm=1.2)
+    ctext(d, 65, 106, "MOGRA ORGANICS", F("Jost.ttf", 2.8, [600]), LINEN2, tracking_mm=3.0)
+    y = 134.0
+    for label, val in (("GENTLY DRIED", "low temperature"), ("STONE MILLED", "fine & even"),
+                       ("NOTHING ADDED", "single ingredient")):
+        rule(d, 22, y - 5.6, 108, (150, 116, 108), 0.22)
+        ltext(d, 26, y, label, F("Jost.ttf", 2.4, [500]), (206, 184, 172))
+        rtext(d, 104, y, val, F("CormorantGaramond-Italic.ttf", 4.2, [500]), LINEN2)
+        y += 12.5
+    rule(d, 22, y - 5.6, 108, (150, 116, 108), 0.22)
+    place_motif(img, recolor(motif, (212, 186, 172)), 65, 190, 40, 24)
+    return img
+
+
+def f10_ice_botanical(logo, motif) -> Image.Image:
+    """Porcelain ground; the engraved botanical at hero scale."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), ICE)
+    d = ImageDraw.Draw(img)
+    place_motif(img, recolor(motif, (206, 196, 176)), 65, 132, 122, 116)
+    brand_line(d, 65, 20, "MOGRA ORGANICS", FOREST2, COPPER, align="center", size=3.0)
+    ctext(d, 65, 52, "Lion's Mane", F("CormorantGaramond.ttf", 16.5, [600]), FOREST2)
+    ctext(d, 65, 68, "ORGANIC MUSHROOM POWDER", F("Jost.ttf", 2.7, [500]), WALNUT,
+          tracking_mm=2.6)
+    place_motif(img, motif, 65, 132, 58, 52)
+    factsline(d, 65, 186, "170 G  ·  34 SERVINGS  ·  5 G PER SCOOP", FOREST2, COPPER)
+    return img
+
+
+BAG_FRONTS.update({
+    "f01_porcelain_type": f01_porcelain_type,
+    "f02_cedar_seal": f02_cedar_seal,
+    "f03_linen_ledger": f03_linen_ledger,
+    "f04_wheat_minimal": f04_wheat_minimal,
+    "f05_pistachio_contour": f05_pistachio_contour,
+    "f06_porcelain_tile": f06_porcelain_tile,
+    "f07_rose_wreath": f07_rose_wreath,
+    "f08_granite_stack": f08_granite_stack,
+    "f09_plum_prescription": f09_plum_prescription,
+    "f10_ice_botanical": f10_ice_botanical,
+})
+
+
 # ── CANISTER wrap fronts (5) — half wrap 114.65 x 120 mm, safe arc x24..91 ──
 
 def can_06_wall_of_type(logo, motif) -> Image.Image:
@@ -1276,6 +1548,16 @@ def design_specs() -> List[Dict]:
         "e08_slate_formal": dict(kind="bag", ground=SLATE, ground_b=SLATE, ink_b=LINEN2),
         "e09_taupe_watermark": dict(kind="bag", ground=TAUPE, ground_b=TAUPE, ink_b=ESPRESSO),
         "e10_kelp_luxe": dict(kind="bag", ground=KELP, ground_b=KELP, ink_b=LINEN2),
+        "f01_porcelain_type": dict(kind="bag", ground=ICE, ground_b=ICE, ink_b=FOREST2),
+        "f02_cedar_seal": dict(kind="bag", ground=CEDAR, ground_b=CEDAR, ink_b=LINEN2),
+        "f03_linen_ledger": dict(kind="bag", ground=OAT2, ground_b=OAT2, ink_b=ESPRESSO),
+        "f04_wheat_minimal": dict(kind="bag", ground=WHEAT2, ground_b=WHEAT2, ink_b=ESPRESSO),
+        "f05_pistachio_contour": dict(kind="bag", ground=PIST, ground_b=PIST, ink_b=FOREST2),
+        "f06_porcelain_tile": dict(kind="bag", ground=ICE, ground_b=ICE, ink_b=FOREST2),
+        "f07_rose_wreath": dict(kind="bag", ground=ROSE, ground_b=ROSE, ink_b=PLUM),
+        "f08_granite_stack": dict(kind="bag", ground=GRANITE, ground_b=GRANITE, ink_b=(238, 235, 226)),
+        "f09_plum_prescription": dict(kind="bag", ground=PLUM, ground_b=PLUM, ink_b=LINEN2),
+        "f10_ice_botanical": dict(kind="bag", ground=ICE, ground_b=ICE, ink_b=FOREST2),
         "06_wall_of_type": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),
         "07_dome_gold": dict(kind="canister", ground=FOREST, ground_b=FOREST, ink_b=CREAM),
         "08_stamp_roll": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),
