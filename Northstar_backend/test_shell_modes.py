@@ -373,3 +373,60 @@ def test_collect_hardware_raises_are_caught():
     payload = shell_router.collect_hardware(gpu_runner=_boom)
     assert payload["gpu"]["ok"] is False
     assert payload["gpu"]["reason"] == "nvidia-smi not on PATH"
+
+
+# ── Governor + daemon (V3 S6) ───────────────────────────────────────────────
+
+def test_governor_full_dpr_when_reserve_ok():
+    gpu = {"ok": True, "gpus": [{"name": "RTX 5080", "vram_total_mb": 16376,
+                                  "vram_used_mb": 1126, "util_pct": 7, "temp_c": 52}]}
+    gov = shell_router._governor(gpu)
+    assert gov["reserve_ok"] is True
+    assert gov["recommended_dpr"] == 1.5
+    assert gov["free_mb"] == 16376 - 1126
+    assert gov["reserve_target_mb"] == 1800
+
+
+def test_governor_lowers_dpr_when_reserve_breached():
+    gpu = {"ok": True, "gpus": [{"name": "RTX 5080", "vram_total_mb": 16376,
+                                  "vram_used_mb": 15200, "util_pct": 95, "temp_c": 70}]}
+    gov = shell_router._governor(gpu)
+    assert gov["reserve_ok"] is False
+    assert gov["recommended_dpr"] == 1.0
+
+
+def test_governor_unknown_without_readings():
+    gov = shell_router._governor({"ok": False, "gpus": []})
+    assert gov["reserve_ok"] is None
+    assert gov["recommended_dpr"] is None
+
+
+def test_collect_hardware_includes_governor():
+    payload = shell_router.collect_hardware(gpu_runner=lambda: _Proc(
+        returncode=0, stdout="NVIDIA GeForce RTX 5080 Laptop GPU, 16376, 1126, 7, 52\n"))
+    assert payload["governor"]["reserve_ok"] is True
+    assert payload["governor"]["recommended_dpr"] == 1.5
+
+
+def test_daemon_loop_updates_cache_and_breaks_cleanly():
+    class _Stop(Exception):
+        pass
+    calls = {"n": 0}
+
+    def fake_collect():
+        return {"sampled_at": "x", "gpu": {"ok": True, "gpus": []},
+                "ram": {"ok": True}, "governor": {}}
+
+    def fake_sleep(_):
+        calls["n"] += 1
+        if calls["n"] >= 2:
+            raise _Stop()
+
+    with pytest.raises(_Stop):
+        shell_router._hardware_daemon_loop(collect=fake_collect, sleep=fake_sleep)
+    assert shell_router._HW_CACHE["payload"]["gpu"]["ok"] is True
+
+
+def test_daemon_start_is_idempotent():
+    shell_router.start_hardware_daemon()
+    assert shell_router.start_hardware_daemon() is False

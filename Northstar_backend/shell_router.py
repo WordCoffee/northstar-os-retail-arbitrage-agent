@@ -171,6 +171,9 @@ _GPU_FIELDS = "name,memory.total,memory.used,utilization.gpu,temperature.gpu"
 _HW_CACHE: Dict[str, Any] = {"at": 0.0, "payload": None}
 _HW_LOCK = threading.Lock()
 HW_TTL_SECONDS = 3.0
+# V3 guard: 1.8 GB stays free for the WebGL canvas + compositor; local model
+# weights target ≤ 14.2 GB on the 16 GB card.
+RESERVE_TARGET_MB = 1800
 
 
 def _default_gpu_runner() -> subprocess.CompletedProcess:
@@ -251,6 +254,30 @@ def read_ram() -> Dict[str, Any]:
         return {"ok": False, "reason": f"ram read failed: {exc}"}
 
 
+def _governor(gpu: Dict[str, Any]) -> Dict[str, Any]:
+    """VRAM-reserve governor (14.2 GB model / 1.8 GB canvas rule, RTX 5080 16 GB).
+
+    recommend DPR for the WebGL canvas: full (1.5) when the 1.8 GB reserve is
+    intact, lowered (1.0) when it is not. UNKNOWN when there are no readings —
+    the governor never invents a decision on fabricated numbers."""
+    gov: Dict[str, Any] = {
+        "reserve_target_mb": RESERVE_TARGET_MB,
+        "reserve_ok": None,
+        "free_mb": None,
+        "recommended_dpr": None,
+    }
+    if gpu.get("ok") and gpu.get("gpus"):
+        g0 = gpu["gpus"][0]
+        total = g0.get("vram_total_mb")
+        used = g0.get("vram_used_mb")
+        if total and used is not None:
+            free = int(total - used)
+            gov["free_mb"] = free
+            gov["reserve_ok"] = free >= RESERVE_TARGET_MB
+            gov["recommended_dpr"] = 1.5 if free >= RESERVE_TARGET_MB else 1.0
+    return gov
+
+
 def collect_hardware(gpu_runner=None) -> Dict[str, Any]:
     runner = gpu_runner or _default_gpu_runner
     gpu: Dict[str, Any]
@@ -274,7 +301,43 @@ def collect_hardware(gpu_runner=None) -> Dict[str, Any]:
         "sampled_at": datetime.now(timezone.utc).isoformat(),
         "gpu": gpu,
         "ram": read_ram(),
+        "governor": _governor(gpu),
     }
+
+
+_HW_DAEMON: Optional[threading.Thread] = None
+_HW_DAEMON_LOCK = threading.Lock()
+
+
+def _hardware_daemon_loop(collect=None, sleep=None) -> None:
+    collect = collect or collect_hardware
+    sleep = sleep or time.sleep
+    while True:
+        try:
+            payload = collect()
+            with _HW_LOCK:
+                _HW_CACHE["at"] = time.monotonic()
+                _HW_CACHE["payload"] = payload
+        except Exception:  # noqa: BLE001 - the daemon degrades, never crashes the app
+            pass
+        sleep(HW_TTL_SECONDS)
+
+
+def start_hardware_daemon() -> bool:
+    """Start the hardware-telemetry daemon (idempotent).
+
+    A daemon thread keeps the 3 s cache warm so the shell chip + monitor modal
+    always read fresh real values without a request paying the nvidia-smi cost.
+    Returns True when this call actually started the thread."""
+    global _HW_DAEMON
+    with _HW_DAEMON_LOCK:
+        if _HW_DAEMON is not None and _HW_DAEMON.is_alive():
+            return False
+        thread = threading.Thread(
+            target=_hardware_daemon_loop, daemon=True, name="hw-telemetry")
+        thread.start()
+        _HW_DAEMON = thread
+        return True
 
 
 @router.get("/hardware")

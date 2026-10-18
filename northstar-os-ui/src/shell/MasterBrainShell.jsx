@@ -13,6 +13,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ChatSurface from '../chat/ChatSurface.jsx'
 import CosmicCanvas from './CosmicCanvas.jsx'
+import HardwareModal from './HardwareModal.jsx'
 import { useShell } from './ShellContext.jsx'
 import { useMode } from '../context/ModeContext.jsx'
 
@@ -57,6 +58,7 @@ export default function MasterBrainShell() {
   const navigate = useNavigate()
   const location = useLocation()
   const [busy, setBusy] = useState(false)
+  const [hwOpen, setHwOpen] = useState(false)
 
   // Deep links select the matching focus (rooms are focuses in Simple mode).
   useEffect(() => {
@@ -69,12 +71,14 @@ export default function MasterBrainShell() {
 
   const hw = useMemo(() => hardwareLine(shell.hardware), [shell.hardware])
   const planLabel = shell.planName || (shell.plan ? String(shell.plan) : 'Foundation')
+  const canvasDpr = shell.hardware?.governor?.recommended_dpr ?? 1.5
+  const reserveOk = shell.hardware?.governor?.reserve_ok
 
   return (
     <div className="mb-shell" data-testid="mb-shell">
-      <CosmicCanvas active={busy} />
+      <CosmicCanvas active={busy} maxDpr={canvasDpr} />
       <div className="mb-scrim" aria-hidden="true" />
-      <div className="mb-content">
+      <div className="mb-content" data-theme-scope="media">
         <div className="mb-header">
           <div className="mb-focus" role="tablist" aria-label="Master Brain focus"
             data-testid="mb-focus">
@@ -96,7 +100,15 @@ export default function MasterBrainShell() {
             ))}
           </div>
           <div className="mb-status">
-            <span className="mb-chip" title={hw.title} data-testid="mb-hardware">{hw.text}</span>
+            <button
+              type="button"
+              className={`mb-chip mb-chip-btn ${reserveOk === false ? 'warn' : ''}`}
+              title={`${hw.title} — open the hardware monitor`}
+              onClick={() => setHwOpen(true)}
+              data-testid="mb-hardware"
+            >
+              {hw.text}
+            </button>
             <span className="mb-chip" title={`Plan: ${planLabel}`}>{planLabel}</span>
             {shell.offline && <span className="mb-chip warn" title={shell.offlineReason}>Shell context offline</span>}
             {advancedAllowed && (
@@ -117,6 +129,7 @@ export default function MasterBrainShell() {
             : null}
         />
       </div>
+      {hwOpen && <HardwareModal onClose={() => setHwOpen(false)} />}
     </div>
   )
 }

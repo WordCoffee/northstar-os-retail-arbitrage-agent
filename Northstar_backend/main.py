@@ -289,6 +289,14 @@ if _HAS_CHAT:
 # V3 shell context — Simple/Advanced gate, focus modes, hardware telemetry
 if _HAS_SHELL:
     app.include_router(shell_router)
+    try:
+        # Hardware telemetry daemon: keeps the 3 s sample cache warm so the
+        # shell chip/monitor always read fresh real values (V3 S6).
+        _started = shell_router.start_hardware_daemon()
+        logger.info("shell hardware daemon started" if _started
+                    else "shell hardware daemon already running")
+    except Exception as _hw_exc:  # pragma: no cover - telemetry must never boot-fail the app
+        logger.warning("shell hardware daemon failed to start: %s", _hw_exc)
 
 # Golden Goose Finder UI panel (standalone page; fetches /api/golden-goose/*)
 _GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"

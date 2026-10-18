@@ -52,6 +52,7 @@ subscription tiers. On top of that, V3 adds the cosmic presentation layer
 | Capability gate (fail-closed, async-safe) | `shell_router.py` + `App.jsx::ModeGate` | Tri-state: the gate is enforced the moment `/api/shell/context` resolves; never against an unknown, never fail-open |
 | Focus rail (6 foci) | `src/shell/MasterBrainShell.jsx` + `shell_focus.py` | Auto · Create · Grow · Research · Operate · AutothinK; **server-owned** catalogue |
 | Focus restricts tools | `chat_router.turn_event_stream` | The model is offered only the focus's registered tools; the UI cannot widen the set |
+| Room → focus mapping | `MasterBrainShell.PATH_FOCUS` | Suite routes map 1:1 onto the rail groups in `nav-config.js`: `/autothink`→AutothinK, `/design-studio|creative-studio|product-designer`→Create, `/listings|listingforge|keyword-tracker|adpilot|socialpulse`→Grow, `/product-finder|golden-goose|competitor-monitor`→Research, `/profitability|commerce-ops|monitoring|...`→Operate |
 | Focus injects brain context | `chat_adapter.build_chat_messages` | Focus prompt + context bits (`brand`, etc.) ride the system prompt |
 | Focus persists per session | `PATCH /api/chat/sessions/{sid}` | Rename + focus; focus id validated against the catalogue |
 | Universal chat surface | `src/chat/ChatSurface.jsx` | Markdown-lite, tool args/summaries/pct+phase, scroll respect + jump pill, edit & resend, retry, copy, queue chips, auto-grow composer, per-focus resume, rename + search rail, artifact lightbox + download, context receipts, voice meter/status |
@@ -89,16 +90,28 @@ Chrome profile, operator drives, agent observes, `[PAUSE-AUTH]` respected.
 ## 3. S6 — Cosmic shell, Master Brain planet, hardware guard — **BUILT**
 
 - **Procedural WebGL canvas** (`src/shell/CosmicCanvas.jsx`): one full-screen
-  fragment shader — drifting nebulae (fbm), twinkling star field, the deep
-  purple **Master Brain planet** with rim light, an energy ring that fires while
-  the brain works, and two orbiting moons that brighten with the pulse. The
-  planet echoes the idle→thinking zoom behaviour through the pulse ring.
+  fragment shader — drifting nebulae (fbm), pixel-space star fields with
+  opposing micro-parallax, a Milky Way band with dark dust lanes, a distant
+  Gargantua-style accretion disc (upper-left: glowing tilted ring, black
+  sphere, photon ring, top-half lensing), and the deep-purple **Master Brain
+  planet** parked in the upper sky with rim light, cloud banding, night-side
+  sparkle and atmosphere glow. The planet pulses an energy ring while the brain
+  works; its two orbiting moons **scale up and brighten** with the pulse.
 - **Honest fallback:** no WebGL / shader failure → `data-cosmic-fallback="1"`
   leaves the CSS nebula gradient; nothing pretends.
 - **Real telemetry:** `GET /api/shell/hardware` reads `nvidia-smi`
   (util/VRAM/temp) + RAM (Windows `GlobalMemoryStatusEx`, else `/proc/meminfo`),
-  cached 3 s, `ok:false` + reason when unavailable. The shell status chip shows
-  `GPU % · used/total GB VRAM · °C`.
+  cached 3 s, `ok:false` + reason when unavailable. A **daemon thread** started
+  from `main.py` keeps the 3 s cache warm so the shell chip and monitor modal
+  always read fresh real values without a request paying the sampling cost.
+- **VRAM governor (the 14.2 GB rule in software):** each sample carries
+  `reserve_ok` + `recommended_dpr`. When free VRAM drops below the **1.8 GB
+  reserve** the shell automatically lowers the canvas DPR (1.5 → 1.0) and the
+  status chip warns. Renders already evict the local brain (`unload_brain`)
+  before using the card.
+- **Glass sheet:** the chat surface is a translucent dark-glass panel over the
+  scene (media-scope tokens) so the cosmos is visible through it; the Advanced
+  rooms keep the paper theme.
 
 **RTX 5080 16 GB VRAM guard (the 14.2 GB rule)**
 
