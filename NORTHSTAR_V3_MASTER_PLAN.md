@@ -310,13 +310,30 @@ step; no rank-change claims are ever manufactured.
 
 ---
 
-## 6. S8 — Curated corpus + continuous learning — **PLANNED**
+## 6. S8 — Curated corpus + continuous learning — **BUILT (local index + retrieval)**
 
 Ingest pre-aggregated indices (local `research/**` including the v2 sweep's
-`github_sweep.jsonl`, MCP registries, docs, dataset cards) into a local SQLite
-index with license + provenance per record. Resumable, honest counts, no
+`github_sweep.jsonl`, source registries, docs, HF dataset cards) into a local
+SQLite index with license + provenance per record. Resumable, honest counts, no
 scraping, no paid services. Feeds retrieval for the Master Brain and the SEO
 engine's competitive context. *(20,000 is a target, not a gate.)*
+
+| Piece | Where | Notes |
+|---|---|---|
+| Schema | `corpus_schema.py` (`CORPUS_TABLES_SQL`) | Additive `corpus_records` (shared/global, `account_id` NULL) + `corpus_ingest_runs`. Unique `(source, source_id)`. |
+| Store | `data_layer.py` `CorpusDB` (on `NorthstarDB.corpus`) | `upsert` idempotent by `(source, source_id)` + content hash (inserted/updated/skipped), `search` (deterministic LIKE + relevance rank), `stats`, `list_records`, run lifecycle. |
+| Ingest | `corpus_ingest.py` | Tolerant loaders (UTF-8 BOM, mojibake, malformed lines skipped + counted) for `github_sweep.jsonl`, `SOURCES_GITHUB.csv`, `hf_datasets.json`, `SOURCES.csv` registries, and the `research/**` markdown docs. `ingest_source` resolves a **known source name** to a local path (never a raw path); `ingest_records` records honest counts + capped per-record errors. |
+| Service | `corpus_router.py` `/api/corpus/*` | `GET /search`, `GET /stats`, `GET /runs`, `POST /ingest` (known source name, or `all`). Read/write local SQLite only. |
+| Shell hook | `chat_tools.py` `corpus_search` (Research + Grow foci) | Top matches with source + licence as reported, honest when empty. |
+
+**Honesty boundaries:** every record carries its `license` **as reported by the
+source sweep** — the engine never asserts a licence is safe to use. Search is
+deterministic keyword matching (**not** semantic/vector); a vector index
+(`qwen3-embedding` + sqlite-vec) is the documented upgrade, not a claimed feature.
+There is no local MCP-registry file in the repo (MCP data exists only as rows in
+the sweeps); the ingest reports that honestly rather than inventing an index.
+Feed counts are the raw pre-aggregated records — the 20,000 figure is aspirational
+and gains from doc chunking, not from scraping.
 
 ---
 
@@ -342,7 +359,7 @@ During the hosted beta, orgs whose materialised entitlements carry
 
 | Layer | Evidence |
 |---|---|
-| Backend unit/integration | `python -m pytest` — S4/S5/S7 suites: `test_shell_modes` (33) · `test_tool_gateway` (5) · `test_voicestudio_adapter` (9) · `test_chat_fork` (10) · `test_chat_plan` (16) · `test_seo_profiles` (17) · `test_seo_listing` (23) · `test_seo_learning` (12) · `test_seo_ops` (15) + `test_chat_core`/`test_chat_tools`/`test_subscription_catalog_smoke`/`test_plans_route` (combined run: 168 passed) |
+| Backend unit/integration | `python -m pytest` — S4/S5/S7/S8 suites: `test_shell_modes` (33) · `test_tool_gateway` (5) · `test_voicestudio_adapter` (9) · `test_chat_fork` (10) · `test_chat_plan` (16) · `test_seo_profiles` (17) · `test_seo_listing` (23) · `test_seo_learning` (12) · `test_seo_ops` (15) · `test_corpus` (21) + `test_chat_core`/`test_chat_tools`/`test_subscription_catalog_smoke`/`test_plans_route` (combined run: 189 passed) |
 | Shell gate end-to-end | `node verify-shell-v3.cjs` — 28/28 (denied tier: shell only, no Advanced, `?shell=advanced` degrades; granted tier: Advanced renders rooms and returns; mobile toggle reachable at 390px; AG-UI card as a component; pause → paused → resume handover; fork opens a new branched session; **S5 workbench: plan chain, artifacts list, runs with cancel**) |
 | Existing harnesses | `verify-guards.cjs` 11/0, `verify-admin.cjs` 33/0, `verify-acceptance.cjs` 2 fails (both pre-existing; baseline had 8 — 6 fixed by the harness role-vocabulary correction) |
 | Build | `npm run build` — 0 errors |
@@ -371,7 +388,7 @@ false failures.
    surfaces) + AdPilot negatives/harvest + SourceScout retitle~~ ·
    ~~§5.4 file-import learning (deterministic proposals)~~ **BUILT**;
    remaining §5.4 embeddings drift (sqlite-vec) next
-7. S8 curated corpus + learning loop
+7. ~~S8 curated corpus + learning loop~~ **BUILT** (local index + deterministic retrieval; vector index is the documented upgrade)
 8. Operator-window REA captures (Packify first) when the operator is present
 
 Every live/paid action remains gated per action; nothing in V3 alters that.

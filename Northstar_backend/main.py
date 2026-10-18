@@ -86,6 +86,14 @@ try:
 except ImportError:  # pragma: no cover
     _HAS_SEO = False
 
+# V3 S8 curated corpus (2026-10-18) — local, provenance-labelled research index.
+# Own guard: a corpus problem must never disable the rest of the app.
+try:
+    from corpus_router import router as corpus_router
+    _HAS_CORPUS = True
+except ImportError:  # pragma: no cover
+    _HAS_CORPUS = False
+
 # Phase 6: Production infrastructure
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
@@ -309,6 +317,10 @@ if _HAS_SHELL:
 # V3 S7 SEO engine — canonical, versioned Brand SEO Profiles
 if _HAS_SEO:
     app.include_router(seo_router)
+
+# V3 S8 curated corpus — local, provenance-labelled research index (read/ingest)
+if _HAS_CORPUS:
+    app.include_router(corpus_router)
 
 # Golden Goose Finder UI panel (standalone page; fetches /api/golden-goose/*)
 _GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"

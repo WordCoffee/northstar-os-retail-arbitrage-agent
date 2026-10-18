@@ -668,6 +668,54 @@ def _t_seo_retitle(args, ctx) -> dict:
     }
 
 
+def _t_corpus_search(args, ctx) -> dict:
+    """Retrieve from the local curated corpus (S8). Read-only.
+
+    Returns the top matches from the operator's own local index, each with its
+    source and licence AS REPORTED. Honest when empty or unavailable."""
+    db = ctx.get("db")
+    corpus = getattr(db, "corpus", None)
+    if corpus is None:
+        return {"ok": False, "summary": "The corpus index is unavailable.",
+                "error": "no corpus store in this context", "assets": []}
+    query = " ".join(str(args.get("query") or "").split())
+    if not query:
+        return {"ok": False, "summary": "Give me something to search for.",
+                "error": "query is required", "assets": []}
+    source = str(args.get("source") or "").strip() or None
+    caveats = ["Third-party metadata from local index files; licence is as reported.",
+               "Deterministic keyword search — not a semantic/vector lookup."]
+    try:
+        rows = corpus.search(query, limit=int(args.get("limit") or 8), source=source)
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "summary": "The corpus search failed.",
+                "error": str(exc)[:200], "assets": []}
+
+    if not rows:
+        return {"ok": True, "summary": f"No corpus matches for '{query}'.",
+                "assets": [],
+                "data": {"card": {"title": "Corpus search",
+                                  "rows": [{"label": "no matches", "value": query}]},
+                         "matches": [], "caveats": caveats}}
+
+    card_rows = []
+    for r in rows[:8]:
+        bits = [b for b in (r.get("source"), r.get("kind"), r.get("license")) if b]
+        card_rows.append({"label": str(r.get("title") or r.get("source_id") or "")[:80],
+                          "value": " · ".join(str(b) for b in bits)})
+    return {
+        "ok": True,
+        "summary": f"{len(rows)} corpus match(es) for '{query}'.",
+        "assets": [],
+        "data": {
+            "card": {"title": "Corpus search", "rows": card_rows,
+                     "action": {"label": "Open the top source",
+                                "message": "Show the provenance for the top corpus match."}},
+            "matches": rows, "caveats": caveats,
+        },
+    }
+
+
 def _t_voice_list(args, ctx) -> dict:
     from voicestudio_adapter import get_adapter
     out = _run_async(get_adapter().list_voices())
@@ -890,6 +938,22 @@ TOOLS: Dict[str, dict] = {
             "required": ["title"],
         },
         "handler": _t_seo_retitle,
+    },
+    "corpus_search": {
+        "description": ("Search the local curated corpus (S8) — the operator's own "
+                        "pre-aggregated research index (GitHub/HF sweeps, source "
+                        "registries, research docs), each with source + licence as "
+                        "reported. Read-only; deterministic keyword search."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "What to look for.", "minLength": 1, "maxLength": 200},
+                "limit": {"type": "integer", "description": "Max matches (default 8, max 25).", "minimum": 1, "maximum": 25},
+                "source": {"type": "string", "description": "Restrict to one corpus source (github | hf | registry | doc).", "maxLength": 20},
+            },
+            "required": ["query"],
+        },
+        "handler": _t_corpus_search,
     },
     "voice_list": {
         "description": ("List voice profiles on the local VoiceStudio service for ad "

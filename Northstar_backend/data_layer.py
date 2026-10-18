@@ -20,6 +20,8 @@ Usage:
 
 import os
 import json
+import re
+import hashlib
 import sqlite3
 import threading
 import uuid
@@ -30,6 +32,7 @@ from typing import Any, Dict, List, Optional
 from env_flags import env_flag
 from chat_schema import CHAT_TABLES_SQL
 from seo_schema import SEO_TABLES_SQL
+from corpus_schema import CORPUS_TABLES_SQL
 from seo_profile import normalize_body as normalize_seo_body
 
 # ---------------------------------------------------------------------------
@@ -729,7 +732,7 @@ class DataLayer:
             );
             CREATE INDEX IF NOT EXISTS idx_ds_change_files_account ON ds_change_files(account_id);
             CREATE INDEX IF NOT EXISTS idx_ds_change_files_upload ON ds_change_files(upload_id);
-        """ + CHAT_TABLES_SQL + SEO_TABLES_SQL)
+        """ + CHAT_TABLES_SQL + SEO_TABLES_SQL + CORPUS_TABLES_SQL)
 
     def _create_sqlite_tables(self):
         """Create all tables for SQLite mode (idempotent)."""
@@ -3476,6 +3479,160 @@ class SqpPerformanceDB:
         return [dict(r) for r in cur.fetchall()]
 
 
+class CorpusDB:
+    """Local curated corpus index (V3 S8). Provenance + license per record.
+
+    Curated records are shared/global (`account_id` is NULL). Writes are
+    idempotent by `(source, source_id)` with a content hash, so a re-run of an
+    ingest skips unchanged rows (resumable, honest counts). Search is deterministic
+    LIKE + a light relevance rank — portable and dependency-free; a vector/FTS
+    index is the documented upgrade, not a hard requirement.
+    """
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    # -- helpers ------------------------------------------------------------
+    @staticmethod
+    def _content_hash(record: Dict[str, Any]) -> str:
+        tags = record.get("tags") or []
+        if isinstance(tags, str):
+            tags = [tags]
+        blob = "|".join(str(record.get(k) or "") for k in ("title", "summary", "content"))
+        blob += "|" + "|".join(sorted(str(t) for t in tags))
+        return hashlib.sha256(blob.encode("utf-8", "replace")).hexdigest()
+
+    def get(self, source: str, source_id: str) -> Optional[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM corpus_records WHERE source = ? AND source_id = ?",
+            (source, source_id))
+        row = cur.fetchone()
+        return dict(row) if row else None
+
+    # -- writes -------------------------------------------------------------
+    def upsert(self, record: Dict[str, Any]) -> str:
+        """Insert or update one curated record. Returns inserted|updated|skipped."""
+        rec = dict(record)
+        source = str(rec.get("source") or "").strip()
+        source_id = str(rec.get("source_id") or "").strip()
+        if not source or not source_id:
+            raise ValueError("corpus record needs source and source_id")
+        rec["source"] = source
+        rec["source_id"] = source_id
+        rec["content_hash"] = self._content_hash(rec)
+
+        existing = self.get(source, source_id)
+        if existing and existing.get("content_hash") == rec["content_hash"]:
+            return "skipped"
+
+        if isinstance(rec.get("tags"), (list, dict)):
+            rec["tags_json"] = json.dumps(rec.pop("tags"))
+        if isinstance(rec.get("provenance"), (dict, list)):
+            rec["provenance_json"] = json.dumps(rec.pop("provenance"))
+
+        cols = [c for c in ("id", "account_id", "source", "source_id", "kind", "title",
+                            "url", "license", "summary", "content", "tags_json",
+                            "provenance_json", "content_hash") if c in rec]
+
+        if existing:
+            setcols = [c for c in cols if c != "id"]
+            self.db.execute(
+                f"UPDATE corpus_records SET {', '.join(c + ' = ?' for c in setcols)} "
+                "WHERE source = ? AND source_id = ?",
+                tuple([rec[c] for c in setcols] + [source, source_id]))
+            self.db.commit()
+            return "updated"
+
+        rec.setdefault("id", str(uuid.uuid4()))
+        if "id" not in cols:
+            cols = ["id"] + cols
+        self.db.execute(
+            f"INSERT INTO corpus_records ({', '.join(cols)}) "
+            f"VALUES ({', '.join('?' for _ in cols)})",
+            tuple(rec.get(c) for c in cols))
+        self.db.commit()
+        return "inserted"
+
+    # -- reads --------------------------------------------------------------
+    def search(self, query: str, *, limit: int = 20, source: Optional[str] = None) -> List[Dict[str, Any]]:
+        terms = [t for t in re.split(r"\s+", str(query or "").strip().lower()) if t]
+        if not terms:
+            return []
+        where = " OR ".join(
+            "(lower(title) LIKE ? OR lower(summary) LIKE ? OR lower(content) LIKE ?)"
+            for _ in terms)
+        params: List[Any] = []
+        for t in terms:
+            params += [f"%{t}%"] * 3
+        sql = f"SELECT * FROM corpus_records WHERE ({where})"
+        if source:
+            sql += " AND source = ?"
+            params.append(source)
+        sql += " LIMIT ?"
+        params.append(max(int(limit) * 10, 50))
+        rows = [dict(r) for r in self.db.execute(sql, tuple(params)).fetchall()]
+        for r in rows:
+            title = (r.get("title") or "").lower()
+            hay = title + " " + (r.get("summary") or "").lower() + " " + (r.get("content") or "").lower()
+            r["_score"] = sum((3 if t in title else 1) for t in terms if t in hay)
+        rows = [r for r in rows if r["_score"] > 0]
+        rows.sort(key=lambda r: (-r["_score"], str(r.get("title") or "")))
+        return rows[:limit]
+
+    def stats(self) -> Dict[str, Any]:
+        total = self.db.execute("SELECT COUNT(*) FROM corpus_records").fetchone()[0]
+        by_source = {r[0]: r[1] for r in self.db.execute(
+            "SELECT source, COUNT(*) FROM corpus_records GROUP BY source").fetchall()}
+        by_kind = {r[0]: r[1] for r in self.db.execute(
+            "SELECT kind, COUNT(*) FROM corpus_records GROUP BY kind").fetchall()}
+        return {"total": total, "by_source": by_source, "by_kind": by_kind}
+
+    def list_records(self, source: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
+        if source:
+            cur = self.db.execute(
+                "SELECT * FROM corpus_records WHERE source = ? ORDER BY title LIMIT ?",
+                (source, max(int(limit), 1)))
+        else:
+            cur = self.db.execute(
+                "SELECT * FROM corpus_records ORDER BY title LIMIT ?", (max(int(limit), 1),))
+        return [dict(r) for r in cur.fetchall()]
+
+    # -- ingest runs --------------------------------------------------------
+    def start_run(self, source: str, source_path: str) -> str:
+        rid = str(uuid.uuid4())
+        self.db.execute(
+            "INSERT INTO corpus_ingest_runs (id, source, source_path, status, started_at) "
+            "VALUES (?, ?, ?, 'running', ?)",
+            (rid, source, source_path, datetime.now(timezone.utc).isoformat()))
+        self.db.commit()
+        return rid
+
+    def finish_run(self, rid: str, status: str, *, counts: Optional[Dict[str, Any]] = None,
+                   errors: Optional[List[str]] = None) -> None:
+        self.db.execute(
+            "UPDATE corpus_ingest_runs SET status = ?, counts_json = ?, errors_json = ?, "
+            "finished_at = ? WHERE id = ?",
+            (status, json.dumps(counts or {}), json.dumps(errors or []),
+             datetime.now(timezone.utc).isoformat(), rid))
+        self.db.commit()
+
+    def list_runs(self, limit: int = 20) -> List[Dict[str, Any]]:
+        cur = self.db.execute(
+            "SELECT * FROM corpus_ingest_runs ORDER BY created_at DESC LIMIT ?",
+            (max(int(limit), 1),))
+        out = []
+        for row in cur.fetchall():
+            d = dict(row)
+            for k in ("counts_json", "errors_json"):
+                if d.get(k) and isinstance(d[k], str):
+                    try:
+                        d[k] = json.loads(d[k])
+                    except json.JSONDecodeError:
+                        pass
+            out.append(d)
+        return out
+
+
 class NorthstarDB:
     """Unified data access — one object to reach every table."""
 
@@ -3493,6 +3650,7 @@ class NorthstarDB:
         self.design_studio = DesignStudioContainer(self._layer)
         self.chat = ChatContainer(self._layer)
         self.seo = SeoContainer(self._layer)
+        self.corpus = CorpusDB(self._layer)
 
     @property
     def mode(self) -> str:
