@@ -89,25 +89,28 @@ line, plus 3mm bleed + weld/fold/zipper marks (bags) / seam + glue tab (canister
 
 
 def _cli() -> tuple:
-    """Optional --only k1,k2  --pack <folder-name> for subset exports."""
+    """Optional --only k1,k2  --pack <folder-name>  --flat (one folder, no
+    per-design subfolders) for subset exports."""
     argv = sys.argv[1:]
     only = None
     pack_name = None
+    flat = "--flat" in argv
     if "--only" in argv:
         only = {k for k in argv[argv.index("--only") + 1].split(",") if k}
     if "--pack" in argv:
         pack_name = argv[argv.index("--pack") + 1]
-    return only, pack_name
+    return only, pack_name, flat
 
 
 def main() -> None:
     global PACK
-    only, pack_name = _cli()
+    only, pack_name, flat = _cli()
     if pack_name:
         PACK = PACK.parent / pack_name
     PACK.mkdir(parents=True, exist_ok=True)
     (PACK / "logo").mkdir(exist_ok=True)
-    (PACK / "designs").mkdir(exist_ok=True)
+    if not flat:
+        (PACK / "designs").mkdir(exist_ok=True)
 
     logo, field = refine_logo()
     logo.save(PACK / "logo" / "mogra_logo_master.png")
@@ -143,7 +146,8 @@ def main() -> None:
 
     for key, spec in specs.items():
         folder = PACK / "designs" / key
-        folder.mkdir(parents=True, exist_ok=True)
+        if not flat:
+            folder.mkdir(parents=True, exist_ok=True)
         if spec["kind"] == "bag":
             front = pd.BAG_FRONTS[key](logo, motif)
             back = pd.render_back(spec, pd.BAG_W, pd.BAG_H, logo)
@@ -160,14 +164,18 @@ def main() -> None:
             for x_mm in (pd.CAN_HALF, pd.CAN_C):
                 d.line([(pd.P(x_mm), 0), (pd.P(x_mm), pd.P(pd.CAN_H))],
                        fill=(90, 90, 90), width=2)
-            wrap.save(folder / "wrap_full.png")
-        front.save(folder / "front.png")
-        back.save(folder / "back.png")
+            wrap.save(PACK / f"{key}_wrap.png" if flat else folder / "wrap_full.png")
+        f_name = f"{key}_front.png" if flat else "front.png"
+        b_name = f"{key}_back.png" if flat else "back.png"
+        front.save((PACK if flat else folder) / f_name)
+        back.save((PACK if flat else folder) / b_name)
         thumbs_front.append(front)
         thumbs_back.append(back)
         registry.append({"key": key, "kind": spec["kind"],
-                         "front": f"designs/{key}/front.png", "back": f"designs/{key}/back.png",
-                         "wrap": f"designs/{key}/wrap_full.png" if spec["kind"] == "canister" else None,
+                         "front": f_name if flat else f"designs/{key}/front.png",
+                         "back": b_name if flat else f"designs/{key}/back.png",
+                         "wrap": (f"{key}_wrap.png" if flat else f"designs/{key}/wrap_full.png")
+                         if spec["kind"] == "canister" else None,
                          "front_mm": [pd.BAG_W, pd.BAG_H] if spec["kind"] == "bag" else [pd.CAN_HALF, pd.CAN_H],
                          })
         print("built", key)

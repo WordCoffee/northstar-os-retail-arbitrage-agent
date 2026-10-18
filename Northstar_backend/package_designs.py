@@ -160,6 +160,68 @@ def apply_paper(img: Image.Image, seed: int = 1) -> Image.Image:
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGB")
 
 
+def _sprig(d, cx, cy, w_mm, color, width):
+    """Minimal two-leaf botanical sprig (drawn) for the front lockup."""
+    u = P(w_mm) / 12.0
+    cxp, cyp = P(cx), P(cy)
+    d.line([(cxp, cyp + 5.2 * u), (cxp, cyp - 4.4 * u)], fill=tuple(color), width=width)
+    d.arc([cxp - 6.4 * u, cyp - 6.2 * u, cxp + 0.6 * u, cyp + 0.8 * u], 90, 268,
+          fill=tuple(color), width=width)
+    d.arc([cxp - 0.6 * u, cyp - 6.2 * u, cxp + 6.4 * u, cyp + 0.8 * u], 272, 90,
+          fill=tuple(color), width=width)
+
+
+def front_lockup(*, variant="stack", ink=FOREST, accent=None, track_org=3.4):
+    """NEW MOGRA ORGANICS front logo/print (drawn, sharp): serif MOGRA +
+    tracked ORGANICS + botanical sprig. Variants: stack / line / badge.
+    Returns an RGBA block (scaled by the caller with paste_w)."""
+    if accent is None:
+        accent = ink
+    W, H = 160.0, 92.0
+    img = Image.new("RGBA", (P(W), P(H)), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    cx = W / 2.0
+    w_stroke = max(2, P(0.36))
+
+    if variant == "stack":
+        _sprig(d, cx, 16, 10.5, accent, w_stroke)
+        ctext(d, cx, 38, "MOGRA", F("PlayfairDisplay.ttf", 17.0, [700]), ink,
+              tracking_mm=1.8)
+        rule(d, cx - 20, 48.5, cx - 4.2, accent, 0.35)
+        rule(d, cx + 4.2, 48.5, cx + 20, accent, 0.35)
+        d.ellipse([P(cx - 1.0), P(47.6), P(cx + 1.0), P(49.4)], fill=tuple(accent))
+        ctext(d, cx, 57.5, "ORGANICS", F("Inter.ttf", 4.4, [14, 600]), ink,
+              tracking_mm=track_org)
+        return img.crop((0, 0, P(W), P(66)))
+
+    if variant == "line":
+        f1 = F("PlayfairDisplay.ttf", 13.0, [700])
+        f2 = F("Inter.ttf", 3.9, [14, 600])
+        t1, t2 = "MOGRA", "ORGANICS"
+        w1 = d.textlength(t1, font=f1)
+        w2 = d.textlength(t2, font=f2) + P(track_org) * (len(t2) - 1)
+        sprig_mm = 9.0
+        spr = P(sprig_mm)
+        gap = P(4.0)
+        total = spr + gap + w1 + gap + w2
+        x = P(cx) - total / 2
+        _sprig(d, (x + spr * 0.5) / (DPI / 25.4), 26, sprig_mm, accent, w_stroke)
+        d.text((x + spr + gap, P(26)), t1, font=f1, fill=ink, anchor="lm")
+        d.text((x + spr + 2 * gap + w1, P(26)), t2, font=f2, fill=ink, anchor="lm")
+        return img.crop((0, 0, P(W), P(46)))
+
+    # badge: ring + sprig + stacked type inside
+    r = 26.0
+    d.ellipse([P(cx - r), P(30 - r), P(cx + r), P(30 + r)], outline=tuple(accent),
+              width=max(2, P(0.5)))
+    d.ellipse([P(cx - r + 1.6), P(30 - r + 1.6), P(cx + r - 1.6), P(30 + r - 1.6)],
+              outline=tuple(accent), width=max(2, P(0.22)))
+    _sprig(d, cx, 17.5, 8.5, accent, max(2, P(0.3)))
+    ctext(d, cx, 31.5, "MOGRA", F("PlayfairDisplay.ttf", 8.6, [700]), ink, tracking_mm=0.9)
+    ctext(d, cx, 40.5, "ORGANICS", F("Inter.ttf", 2.7, [14, 600]), ink, tracking_mm=2.1)
+    return img.crop((0, 0, P(W), P(62)))
+
+
 def frame(d, W, H, color, inset_mm=5.0, width_mm=0.8, inset2_mm: Optional[float] = None):
     d.rectangle([P(inset_mm), P(inset_mm), P(W - inset_mm), P(H - inset_mm)],
                 outline=tuple(color), width=max(2, P(width_mm)))
@@ -336,7 +398,7 @@ def render_back(spec: Dict, W: float, H: float, logo: Optional[Image.Image] = No
 
     # header: wordmark + organic seal
     if logo is not None:
-        wm = wordmark(logo)
+        wm = recolor(wordmark(logo), ink)
         wm_w = min(42.0 * sc, col_w * 0.5)
         wm_r = wm.resize((P(wm_w), max(2, int(P(wm_w) * wm.height / wm.width))), Image.LANCZOS)
         img.paste(wm_r, (int(P(W / 2 - wm_w / 2)), P(8 * sx)), wm_r)
@@ -400,6 +462,18 @@ def render_back(spec: Dict, W: float, H: float, logo: Optional[Image.Image] = No
         ltext(d, tx, yy, "Lot Number: MO-LM-2601", f_n, ink)
         yy += 4.0
         ltext(d, tx, yy, "Best Before: 01-2028", f_n, ink)
+        # About Us + the real logo (tinted to the back's ink so it reads on any ground)
+        yy += 5.0
+        ltext(d, tx, yy, "ABOUT US", f_b, ink)
+        yy += 3.9
+        for line in ("Mogra Organics makes everyday wellness", "simple: single-ingredient lion's mane,",
+                     "dried and milled, nothing added."):
+            ltext(d, tx, yy, line, f_s, ink)
+            yy += 3.3
+        if logo is not None:
+            wmr = recolor(wordmark(logo), ink)
+            wm2 = wmr.resize((P(24.0), max(2, int(P(24.0) * wmr.height / wmr.width))), Image.LANCZOS)
+            img.paste(wm2, (P(tx), P(yy + 1.2)), wm2)
         # RIGHT column
         yy = cy
         ltext(d, rx, yy, "Free of: Added Sugar, Soy, Dairy, Yeast,", f_b, ink)
@@ -813,6 +887,217 @@ BAG_FRONTS.update({
 })
 
 
+# ── bag series 3: EARTH TONES (bags only, 10 styles, NEW front lockup) ──────
+
+STONE = (231, 225, 214)
+MOSS = (46, 64, 52)
+CLAY = (176, 106, 84)
+SAND = (233, 223, 200)
+OLIVE_D = (63, 74, 44)
+BARK = (43, 43, 40)
+OAT = (242, 234, 219)
+WALNUT = (74, 59, 46)
+SLATE = (74, 85, 96)
+TAUPE = (201, 187, 169)
+ESPRESSO = (58, 46, 38)
+KELP = (31, 58, 52)
+COPPER = (176, 118, 74)
+LINEN2 = (243, 238, 228)
+
+
+def e01_stone_heritage(logo, motif) -> Image.Image:
+    """Warm stone + hairline double frame; the new lockup leads."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), STONE)
+    d = ImageDraw.Draw(img)
+    frame(d, BAG_W, BAG_H, MOSS, inset_mm=6.5, width_mm=0.4, inset2_mm=8.2)
+    paste_w(img, front_lockup(variant="stack", ink=MOSS, accent=COPPER), 65, 46, 74)
+    headline(d, 65, 96, ["ORGANIC LION'S MANE"], size_mm=8.6, color=MOSS,
+             line_gap_mm=10.0, max_w_mm=108, tracking_mm=0.3)
+    ctext(d, 65, 107, "MUSHROOM POWDER", F("Inter.ttf", 3.0, [14, 600]), WALNUT,
+          tracking_mm=3.0)
+    rule(d, 44, 113, 86, COPPER, 0.4)
+    place_motif(img, recolor(motif, MOSS), 65, 146, 62, 44)
+    icon_row(d, 65, 174, 3.2, 9.6, MOSS, disc=STONE)
+    value_capsule(img, BAG_W, 65, 192, 104, 13, FACTS, bg=MOSS, fg=STONE,
+                  sep=(96, 112, 104))
+    return img
+
+
+def e02_moss_arc(logo, motif) -> Image.Image:
+    """Deep moss ground, linen half-moon carrying the lockup."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), MOSS)
+    d = ImageDraw.Draw(img)
+    dome(d, 65, 152, 54, LINEN2)
+    paste_w(img, front_lockup(variant="stack", ink=MOSS, accent=COPPER), 65, 66, 74)
+    headline(d, 65, 120, ["ORGANIC LION'S MANE"], size_mm=9.2, color=LINEN2,
+             line_gap_mm=10.6, max_w_mm=110, tracking_mm=0.3)
+    ctext(d, 65, 132, "MUSHROOM POWDER", F("Inter.ttf", 3.0, [14, 600]), COPPER,
+          tracking_mm=3.2)
+    place_motif(img, recolor(motif, LINEN2), 65, 158, 58, 38)
+    value_capsule(img, BAG_W, 65, 190, 104, 13, FACTS, bg=LINEN2, fg=MOSS,
+                  sep=(160, 170, 160))
+    return img
+
+
+def e03_clay_bands(logo, motif) -> Image.Image:
+    """Soft clay with linen top band + deep moss footer band."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), CLAY)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, P(BAG_W), P(48)], fill=LINEN2)
+    d.rectangle([0, P(168), P(BAG_W), P(BAG_H)], fill=MOSS)
+    paste_w(img, front_lockup(variant="stack", ink=CLAY, accent=WALNUT), 65, 26, 68)
+    headline(d, 65, 76, ["ORGANIC LION'S MANE"], size_mm=9.0, color=LINEN2,
+             line_gap_mm=10.4, max_w_mm=112, tracking_mm=0.3)
+    ctext(d, 65, 88, "MUSHROOM POWDER", F("Inter.ttf", 3.0, [14, 600]), LINEN2,
+          tracking_mm=3.2)
+    place_motif(img, recolor(motif, LINEN2), 65, 126, 58, 40)
+    value_capsule(img, BAG_W, 65, 154, 104, 13, FACTS, bg=LINEN2, fg=MOSS,
+                  sep=(160, 170, 160))
+    icon_row(d, 65, 180, 3.2, 9.6, LINEN2, disc=MOSS)
+    ctext(d, 65, 196, "6 OZ (170 G) - 34 SERVINGS", F("Inter.ttf", 2.4, [14, 600]),
+          LINEN2, tracking_mm=1.4)
+    return img
+
+
+def e04_sand_hero(logo, motif) -> Image.Image:
+    """Pale sand, oversized lockup as the whole hero."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), SAND)
+    d = ImageDraw.Draw(img)
+    paste_w(img, front_lockup(variant="stack", ink=OLIVE_D, accent=COPPER), 65, 84, 104)
+    headline(d, 65, 132, ["ORGANIC LION'S MANE"], size_mm=10.2, color=OLIVE_D,
+             line_gap_mm=11.8, max_w_mm=110, tracking_mm=0.3)
+    ctext(d, 65, 148, "MUSHROOM POWDER", F("Inter.ttf", 3.2, [14, 600]), WALNUT,
+          tracking_mm=3.6)
+    rule(d, 44, 154, 86, COPPER, 0.4)
+    place_motif(img, recolor(motif, OLIVE_D), 65, 178, 46, 32)
+    value_capsule(img, BAG_W, 65, 197, 104, 13, FACTS, bg=OLIVE_D, fg=SAND,
+                  sep=(96, 108, 78))
+    return img
+
+
+def e05_bark_editorial(logo, motif) -> Image.Image:
+    """Soft charcoal, left-aligned editorial grid with copper rules."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), BARK)
+    d = ImageDraw.Draw(img)
+    paste_w(img, front_lockup(variant="line", ink=LINEN2, accent=COPPER), 38, 24, 56)
+    rule(d, 10, 42, 120, COPPER, 0.4)
+    f1 = fit_size("Anton.ttf", 12.0, None, "ORGANIC", 104)
+    ltext(d, 10, 66, "ORGANIC", f1, LINEN2)
+    f2 = fit_size("Anton.ttf", 16.5, None, "LION'S MANE", 112)
+    ltext(d, 10, 84, "LION'S MANE", f2, LINEN2)
+    ltext(d, 10, 98, "MUSHROOM POWDER", F("Inter.ttf", 3.2, [14, 600]), COPPER)
+    d.line([(52, 112), (52, 150)], fill=tuple(COPPER), width=max(2, P(0.35)))
+    place_motif(img, recolor(motif, LINEN2), 91, 131, 52, 38)
+    value_capsule(img, BAG_W, 65, 172, 100, 13, FACTS, bg=LINEN2, fg=BARK,
+                  sep=(170, 170, 160))
+    ctext(d, 65, 192, "6 OZ (170 G) - STORE COOL & DRY", F("Inter.ttf", 2.4, [14, 600]),
+          LINEN2, tracking_mm=1.2)
+    return img
+
+
+def e06_olive_badge(logo, motif) -> Image.Image:
+    """Deep olive with the ringed badge lockup."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), OLIVE_D)
+    d = ImageDraw.Draw(img)
+    paste_w(img, front_lockup(variant="badge", ink=LINEN2, accent=COPPER), 65, 50, 141)
+    headline(d, 65, 100, ["ORGANIC LION'S MANE"], size_mm=9.0, color=LINEN2,
+             line_gap_mm=10.4, max_w_mm=108, tracking_mm=0.3)
+    ctext(d, 65, 112, "MUSHROOM POWDER", F("Inter.ttf", 3.0, [14, 600]), COPPER,
+          tracking_mm=3.2)
+    place_motif(img, recolor(motif, LINEN2), 65, 142, 56, 38)
+    value_capsule(img, BAG_W, 65, 176, 104, 13, FACTS, bg=LINEN2, fg=OLIVE_D,
+                  sep=(160, 170, 150))
+    ctext(d, 65, 196, "6 OZ (170 G) - 34 SERVINGS", F("Inter.ttf", 2.4, [14, 600]),
+          LINEN2, tracking_mm=1.4)
+    return img
+
+
+def e07_oat_split(logo, motif) -> Image.Image:
+    """Creamy oat with a deep moss footer block."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), OAT)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, P(150), P(BAG_W), P(BAG_H)], fill=MOSS)
+    paste_w(img, front_lockup(variant="stack", ink=ESPRESSO, accent=COPPER), 65, 44, 72)
+    headline(d, 65, 88, ["ORGANIC LION'S MANE"], size_mm=9.0, color=ESPRESSO,
+             line_gap_mm=10.4, max_w_mm=110, tracking_mm=0.3)
+    ctext(d, 65, 100, "MUSHROOM POWDER", F("Inter.ttf", 3.0, [14, 600]), WALNUT,
+          tracking_mm=3.2)
+    rule(d, 44, 106, 86, COPPER, 0.4)
+    place_motif(img, recolor(motif, ESPRESSO), 65, 130, 54, 36)
+    value_capsule(img, BAG_W, 65, 168, 104, 13, FACTS, bg=OAT, fg=MOSS,
+                  sep=(170, 160, 140))
+    ctext(d, 65, 190, "6 OZ (170 G) - 34 SERVINGS", F("Inter.ttf", 2.4, [14, 600]),
+          OAT, tracking_mm=1.4)
+    return img
+
+
+def e08_slate_formal(logo, motif) -> Image.Image:
+    """Blue-slate with a fine cream frame and copper accents."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), SLATE)
+    d = ImageDraw.Draw(img)
+    frame(d, BAG_W, BAG_H, LINEN2, inset_mm=6.8, width_mm=0.35, inset2_mm=8.4)
+    paste_w(img, front_lockup(variant="line", ink=LINEN2, accent=COPPER), 65, 44, 84)
+    headline(d, 65, 94, ["ORGANIC LION'S MANE"], size_mm=8.8, color=LINEN2,
+             line_gap_mm=10.2, max_w_mm=106, tracking_mm=0.3)
+    ctext(d, 65, 106, "MUSHROOM POWDER", F("Inter.ttf", 3.0, [14, 600]), COPPER,
+          tracking_mm=3.2)
+    place_motif(img, recolor(motif, LINEN2), 65, 140, 56, 40)
+    value_capsule(img, BAG_W, 65, 180, 104, 13, FACTS, bg=COPPER, fg=SLATE,
+                  sep=(150, 106, 76))
+    ctext(d, 65, 199, "6 OZ (170 G) - 34 SERVINGS", F("Inter.ttf", 2.4, [14, 600]),
+          LINEN2, tracking_mm=1.4)
+    return img
+
+
+def e09_taupe_watermark(logo, motif) -> Image.Image:
+    """Mushroom taupe with a tonal engraved motif watermark behind the type."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), TAUPE)
+    d = ImageDraw.Draw(img)
+    place_motif(img, recolor(motif, (214, 201, 184)), 65, 128, 104, 92)
+    paste_w(img, front_lockup(variant="stack", ink=ESPRESSO, accent=WALNUT), 65, 46, 74)
+    headline(d, 65, 98, ["ORGANIC LION'S MANE"], size_mm=8.8, color=ESPRESSO,
+             line_gap_mm=10.2, max_w_mm=108, tracking_mm=0.3)
+    ctext(d, 65, 110, "MUSHROOM POWDER", F("Inter.ttf", 3.0, [14, 600]), WALNUT,
+          tracking_mm=3.2)
+    rule(d, 44, 116, 86, WALNUT, 0.4)
+    value_capsule(img, BAG_W, 65, 184, 104, 13, FACTS, bg=ESPRESSO, fg=TAUPE,
+                  sep=(140, 124, 108))
+    ctext(d, 65, 201, "MOGRA ORGANICS - EST. MMXXVI", F("Inter.ttf", 2.4, [14, 600]),
+          ESPRESSO, tracking_mm=1.4)
+    return img
+
+
+def e10_kelp_luxe(logo, motif) -> Image.Image:
+    """Deep kelp green, copper hairline frame, generous whitespace."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), KELP)
+    d = ImageDraw.Draw(img)
+    frame(d, BAG_W, BAG_H, COPPER, inset_mm=6.0, width_mm=0.4)
+    paste_w(img, front_lockup(variant="line", ink=LINEN2, accent=COPPER), 65, 36, 80)
+    headline(d, 65, 92, ["ORGANIC LION'S MANE"], size_mm=10.6, color=LINEN2,
+             line_gap_mm=12.2, max_w_mm=110, tracking_mm=0.3)
+    ctext(d, 65, 110, "MUSHROOM POWDER", F("Inter.ttf", 3.2, [14, 600]), COPPER,
+          tracking_mm=3.6)
+    rule(d, 44, 117, 86, COPPER, 0.4)
+    place_motif(img, recolor(motif, LINEN2), 65, 150, 60, 40)
+    value_capsule(img, BAG_W, 65, 188, 104, 13, FACTS, bg=COPPER, fg=KELP,
+                  sep=(150, 100, 64))
+    return img
+
+
+BAG_FRONTS.update({
+    "e01_stone_heritage": e01_stone_heritage,
+    "e02_moss_arc": e02_moss_arc,
+    "e03_clay_bands": e03_clay_bands,
+    "e04_sand_hero": e04_sand_hero,
+    "e05_bark_editorial": e05_bark_editorial,
+    "e06_olive_badge": e06_olive_badge,
+    "e07_oat_split": e07_oat_split,
+    "e08_slate_formal": e08_slate_formal,
+    "e09_taupe_watermark": e09_taupe_watermark,
+    "e10_kelp_luxe": e10_kelp_luxe,
+})
+
+
 # ── CANISTER wrap fronts (5) — half wrap 114.65 x 120 mm, safe arc x24..91 ──
 
 def can_06_wall_of_type(logo, motif) -> Image.Image:
@@ -981,6 +1266,16 @@ def design_specs() -> List[Dict]:
         "b08_foil_monogram": dict(kind="bag", ground=CREAM, ground_b=CREAM, ink_b=FOREST),
         "b09_kraft_plate": dict(kind="bag", ground=KRAFT, ground_b=KRAFT, ink_b=INK),
         "b10_botanical_spine": dict(kind="bag", ground=(146, 172, 128), ground_b=(146, 172, 128), ink_b=FOREST),
+        "e01_stone_heritage": dict(kind="bag", ground=STONE, ground_b=STONE, ink_b=MOSS),
+        "e02_moss_arc": dict(kind="bag", ground=MOSS, ground_b=MOSS, ink_b=LINEN2),
+        "e03_clay_bands": dict(kind="bag", ground=CLAY, ground_b=CLAY, ink_b=LINEN2),
+        "e04_sand_hero": dict(kind="bag", ground=SAND, ground_b=SAND, ink_b=OLIVE_D),
+        "e05_bark_editorial": dict(kind="bag", ground=BARK, ground_b=BARK, ink_b=LINEN2),
+        "e06_olive_badge": dict(kind="bag", ground=OLIVE_D, ground_b=OLIVE_D, ink_b=LINEN2),
+        "e07_oat_split": dict(kind="bag", ground=OAT, ground_b=OAT, ink_b=ESPRESSO),
+        "e08_slate_formal": dict(kind="bag", ground=SLATE, ground_b=SLATE, ink_b=LINEN2),
+        "e09_taupe_watermark": dict(kind="bag", ground=TAUPE, ground_b=TAUPE, ink_b=ESPRESSO),
+        "e10_kelp_luxe": dict(kind="bag", ground=KELP, ground_b=KELP, ink_b=LINEN2),
         "06_wall_of_type": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),
         "07_dome_gold": dict(kind="canister", ground=FOREST, ground_b=FOREST, ink_b=CREAM),
         "08_stamp_roll": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),

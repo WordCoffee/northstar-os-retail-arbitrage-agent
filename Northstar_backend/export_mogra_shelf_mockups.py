@@ -30,7 +30,10 @@ PACK = ROOT.parent / "exports" / "mogra-shelf-mockups-20261018-v3-studio"
 BAG_DESIGNS = ["01_forest_bold", "02_sticker_fun", "03_midnight_luxe",
                "04_kilim_arch", "05_split_duo", "b06_etched_heritage",
                "b07_etched_noir", "b08_foil_monogram", "b09_kraft_plate",
-               "b10_botanical_spine"]
+               "b10_botanical_spine", "e01_stone_heritage", "e02_moss_arc",
+               "e03_clay_bands", "e04_sand_hero", "e05_bark_editorial",
+               "e06_olive_badge", "e07_oat_split", "e08_slate_formal",
+               "e09_taupe_watermark", "e10_kelp_luxe"]
 CAN_DESIGNS = ["06_wall_of_type", "07_dome_gold", "08_stamp_roll",
                "09_edge_stripe", "10_concentric"]
 
@@ -39,12 +42,14 @@ PLATES = {"bag": ("plate2_pouch_front", "plate2_pouch_back"),
 
 
 def _cli() -> tuple:
-    """Optional --only k1,k2  --pack <folder>  --designs <folder>  --scale <n>."""
+    """Optional --only k1,k2  --pack <folder>  --designs <folder>  --scale <n>
+    --flat (one folder, no per-design subfolders)."""
     argv = sys.argv[1:]
     only = None
     pack_name = None
     designs_dir = None
     scale = 2.0
+    flat = "--flat" in argv
     if "--only" in argv:
         only = {k for k in argv[argv.index("--only") + 1].split(",") if k}
     if "--pack" in argv:
@@ -53,11 +58,11 @@ def _cli() -> tuple:
         designs_dir = Path(argv[argv.index("--designs") + 1])
     if "--scale" in argv:
         scale = float(argv[argv.index("--scale") + 1])
-    return only, pack_name, designs_dir, scale
+    return only, pack_name, designs_dir, scale, flat
 
 
 def main() -> None:
-    only, pack_name, designs_dir, scale = _cli()
+    only, pack_name, designs_dir, scale, flat = _cli()
     pack = (PACK.parent / pack_name) if pack_name else PACK
     pack.mkdir(parents=True, exist_ok=True)
     designs = designs_dir or DESIGNS
@@ -70,23 +75,32 @@ def main() -> None:
         kind = "bag" if key in BAG_DESIGNS else "canister"
         pf_name, pb_name = PLATES[kind]
         d_folder = designs / key
-        front_art = Image.open(d_folder / "front.png").convert("RGB")
-        back_art = Image.open(d_folder / "back.png").convert("RGB")
+        f_flat, b_flat = designs / f"{key}_front.png", designs / f"{key}_back.png"
+        if f_flat.is_file():
+            front_art = Image.open(f_flat).convert("RGB")
+            back_art = Image.open(b_flat).convert("RGB")
+        else:
+            front_art = Image.open(d_folder / "front.png").convert("RGB")
+            back_art = Image.open(d_folder / "back.png").convert("RGB")
         out = pack / key
-        out.mkdir(parents=True, exist_ok=True)
+        if not flat:
+            out.mkdir(parents=True, exist_ok=True)
 
         plate_f, cfg_f = me.load_plate(STUDIO / f"{pf_name}.png", cfg[pf_name], scale=scale)
         plate_b, cfg_b = me.load_plate(STUDIO / f"{pb_name}.png", cfg[pb_name], scale=scale)
         mf = me.print_package(plate_f, front_art, cfg_f["kind"], cfg_f)
         mb = me.print_package(plate_b, back_art, cfg_b["kind"], cfg_b)
 
-        mf.save(out / "front_shelf.png")
-        mb.save(out / "back_shelf.png")
+        mf_name = f"{key}_shelf_front.png" if flat else "front_shelf.png"
+        mb_name = f"{key}_shelf_back.png" if flat else "back_shelf.png"
+        mf.save((pack if flat else out) / mf_name)
+        mb.save((pack if flat else out) / mb_name)
         rows_front.append(mf)
         rows_back.append(mb)
         labels.append(key)
-        registry.append({"design": key, "front": f"{key}/front_shelf.png",
-                         "back": f"{key}/back_shelf.png"})
+        registry.append({"design": key,
+                         "front": mf_name if flat else f"{key}/{mf_name}",
+                         "back": mb_name if flat else f"{key}/{mb_name}"})
         print("mockup", key, flush=True)
 
     # contact sheet — 10 fronts, then 10 backs
@@ -119,7 +133,7 @@ def main() -> None:
         sheet.paste(t, (x, y2))
         x += t.width + gap
     sheet = sheet.resize((sheet.width // 2, sheet.height // 2), Image.LANCZOS)
-    sheet.save(pack / "contact_sheet.png")
+    sheet.save(pack / ("contact_sheet_mockups.png" if flat else "contact_sheet.png"))
 
     readme = [
         f"# MOGRA ORGANICS — shelf mockups v2 ({len(registry)} designs, front + back)",
@@ -144,7 +158,7 @@ def main() -> None:
     ]
     for r in registry:
         readme.append(f"- {r['design']}: `{r['front']}` · `{r['back']}`")
-    (pack / "README.md").write_text("\n".join(readme), encoding="utf-8")
+    (pack / ("README_mockups.md" if flat else "README.md")).write_text("\n".join(readme), encoding="utf-8")
     print("PACK:", pack, "| designs:", len(registry))
 
 
