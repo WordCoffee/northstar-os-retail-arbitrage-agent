@@ -49,47 +49,36 @@ def refine_logo() -> tuple[Image.Image, tuple]:
     return out, field
 
 
-BACK_REQUIREMENTS = """# MOGRA back-label — regulatory requirements & data we need from you
+BACK_REQUIREMENTS = """# MOGRA back-label — placeholder values used in the artwork (replace before print)
 
-Our back panels currently carry labelled PLACEHOLDER zones for everything that
-must be filled with certified data. To finish the labels for print we need the
-following from you (each maps to a visible zone on the sheet):
+The back labels are now FULLY DRESSED (no outline zones): every element below is
+populated with a realistic placeholder value. Before plate production, replace
+each one with your certified data:
 
-## Must be provided (legal requirements, US supplements)
-1. **Supplement Facts panel** (the white 65x110mm block) — complete values:
-   serving size, servings per container, amounts per serving + %DV for every
-   Dietary Ingredient (Lion's Mane extract/powder mg, etc.), "Other Ingredients".
-2. **Statement of identity** — confirm "Dietary Supplement" vs "Mushroom Powder"
-   (affects whether Supplement Facts or Nutrition Facts is required).
-3. **Net quantity** — confirm 6 oz (170 g) exact weight on the printed label.
-4. **Ingredient list** with allergen statement (e.g. "Produced in a facility that
-   also processes tree nuts") if applicable.
-5. **Manufacturer / distributor name + street address** (we have
-   "T2 Holdings LLC" — need full city/state/zip).
-6. **Country of origin** statement ("Product of ___", "Packed in the USA").
-7. **FDA disclaimer** (already typeset): "*These statements have not been
-   evaluated by the FDA. This product is not intended to diagnose, treat, cure
-   or prevent any disease."
-8. **Lot number + BEST BY** — printed at fill time; placeholder print zone is on
-   the sheet (no data needed now, just confirm your co-packer stamps it).
-9. **UPC / GS1 barcode** — your GTIN numbers per SKU (reserved box on sheet).
-10. **QR code target** — URL for the QR (reserved box; we generate the code when
-    the URL is confirmed).
+| Element on label | Placeholder currently printed | You must provide |
+|---|---|---|
+| Supplement Facts values | Serving 1 scoop (5 g) · 34 servings · Lion's Mane 5 g (DV not established) · Other Ingredients: None | Certified panel values + actual serving size |
+| Statement of identity | "ORGANIC LION'S MANE / MUSHROOM POWDER" | Confirm "Dietary Supplement" vs "Mushroom Powder" (changes panel type) |
+| Net quantity | 6 oz (170 g) | Confirm exact net weight as printed |
+| Ingredient list | single ingredient, no additives | Confirm exact ingredient statement |
+| Allergen statement | "Produced in a facility that also handles tree nuts, soy and gluten." | Confirm actual facility allergens |
+| Manufacturer / distributor | "T2 Holdings LLC, 1234 Sample Ave, Suite 100, Springfield, MO 65801" | Full legal address |
+| Country of origin | "Product of China. Packed in the USA." | Actual origin(s) |
+| UPC barcode | GTIN 012345678905 (real, scannable UPC-A) | Your GTIN(s) per SKU |
+| QR code | https://mograorganics.com/organic-lions-mane (real, scannable) | Final QR target URL |
+| Lot / best-by | "LOT MO-LM-2601 · BEST BY 01-2028" (styled sample) | Keep as print-at-fill sample or set your own |
+| USDA Organic / Non-GMO / Gluten-Free / Fruiting Body claims | icon row shown | Certifier name + cert number if claims are used |
+| FDA disclaimer | already compliant text typeset | — (no data needed) |
 
-## Required only if you make the claim
-- **USDA Organic** — certifier name + certificate number must appear when the
-  organic seal/claims are used (icon row currently shows generic marks).
-- **Non-GMO / Gluten-Free / Fruiting Body** — claim substantiation notes.
-- **California Prop 65** warning if applicable.
-- **Canada / EU / UK** market variants have additional bilingual requirements —
-  tell us the target markets.
-- Powder safety line ("keep out of reach of children") if required by your
-  co-packer / insurer.
+## Additional market notes
+- Target market(s)? Canada/EU/UK need bilingual labels and additional statements.
+- Propositions 65 (California) warning if applicable.
+- Any powder-specific safety line required by your co-packer/insurer.
 
 ## What is already real on the sheets
-- Statement block, storage line, suggested use, distributed-by line, reseal
-  note, FDA disclaimer, reserved Supplement Facts / QR / UPC / LOT zones,
-  3mm bleed + weld/fold/zipper marks (bags) / seam + glue tab (canisters).
+Complete fine print (use, storage, keep out of reach, origin line, distributor,
+reseal note), FDA disclaimer typeset, real UPC-A and QR graphics, lot/best-by
+line, plus 3mm bleed + weld/fold/zipper marks (bags) / seam + glue tab (canisters).
 """
 
 

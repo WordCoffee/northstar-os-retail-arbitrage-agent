@@ -21,6 +21,8 @@ from typing import Dict, List, Optional, Tuple
 
 from PIL import Image, ImageChops, ImageDraw, ImageFont
 
+import numpy as np
+
 import dieline_art as da
 from mockup_compositor import draw_cert_icon
 
@@ -129,6 +131,91 @@ def fit_size(name, base_mm, axes, text, max_w_mm):
     return F(name, size, axes)
 
 
+# ── barcode + QR helpers (real-looking, deterministic) ─────────────────────
+
+_UPC_L = ["0001101", "0011001", "0010011", "0111101", "0100011", "0110001",
+          "0101111", "0111011", "0110111", "0001011"]
+_UPC_R = ["".join("1" if c == "0" else "0" for c in p) for p in _UPC_L]
+
+
+def _upc_bits(digits12: str) -> str:
+    d = [int(c) for c in digits12]
+    bits = "101"
+    for i in range(6):
+        bits += _UPC_L[d[i]]
+    bits += "01010"
+    for i in range(6, 12):
+        bits += _UPC_R[d[i]]
+    bits += "101"
+    return bits
+
+
+def upc_a_placeholder(base11: str = "01234567890") -> str:
+    d = [int(c) for c in base11]
+    s = sum(v * (3 if i % 2 == 0 else 1) for i, v in enumerate(d))
+    return base11 + str((10 - s % 10) % 10)
+
+
+def draw_upc(d, x_mm, y_mm, w_mm, h_mm, digits12) -> None:
+    bits = _upc_bits(digits12)
+    n = len(bits)
+    module = P(w_mm) / n
+    x = P(x_mm)
+    i = 0
+    while i < n:
+        j = i
+        while j < n and bits[j] == bits[i]:
+            j += 1
+        if bits[i] == "1":
+            guard = i < 3 or (i >= 45 and i < 50) or i >= n - 3
+            top = P(y_mm) + (P(h_mm) * 0.12 if guard else 0)
+            d.rectangle([int(x), int(top), int(x + module * (j - i)), P(y_mm + h_mm)],
+                        fill=(0, 0, 0))
+        x += module * (j - i)
+        i = j
+    f = F("Inter.ttf", 2.1, [14, 400])
+    spaced = " ".join(digits12[:1]) + "  " + " ".join(digits12[1:6]) + "  " + \
+             " ".join(digits12[6:11]) + "  " + digits12[11]
+    d.text((P(x_mm) + P(w_mm) / 2, P(y_mm + h_mm + 2.4)), spaced, font=f, fill=(0, 0, 0), anchor="mm")
+
+
+def draw_qr(canvas, d, x_mm, y_mm, size_mm, payload, seed=7) -> None:
+    """Real QR when the qrcode lib is present; deterministic pattern otherwise."""
+    x0, y0, size = P(x_mm), P(y_mm), P(size_mm)
+    d.rectangle([x0, y0, x0 + size, y0 + size], fill=(255, 255, 255))
+    try:
+        import qrcode  # noqa: PLC0415
+        img = qrcode.make(payload).convert("L")
+        inner = size - 2 * P(1)
+        img = img.resize((inner, inner), Image.NEAREST)
+        inv = img.point(lambda v: 255 - v)
+        canvas.paste(Image.new("RGB", (inner, inner), (0, 0, 0)),
+                     (x0 + P(1), y0 + P(1)), inv)
+        return
+    except Exception:
+        pass
+    rng = np.random.default_rng(seed)
+    n = 25
+    module = size / n
+    grid = (rng.random((n, n)) < 0.45).astype(int)
+
+    def finder(r0, c0):
+        for r in range(7):
+            for c in range(7):
+                edge = r in (0, 6) or c in (0, 6)
+                core = 2 <= r <= 4 and 2 <= c <= 4
+                grid[r0 + r, c0 + c] = 1 if (edge or core) else 0
+    finder(0, 0)
+    finder(0, n - 7)
+    finder(n - 7, 0)
+    for r in range(n):
+        for c in range(n):
+            if grid[r, c]:
+                d.rectangle([int(x0 + c * module), int(y0 + r * module),
+                             int(x0 + (c + 1) * module), int(y0 + (r + 1) * module)],
+                            fill=(0, 0, 0))
+
+
 # ── shared BACK template (regulatory layout; colours vary per design) ───────
 
 def render_back(spec: Dict, W: float, H: float) -> Image.Image:
@@ -144,41 +231,76 @@ def render_back(spec: Dict, W: float, H: float) -> Image.Image:
     for i, line in enumerate(spec["desc"]):
         ltext(d, tx, 22 * sx + i * 4.4 * sx, line, f_sm, ink)
 
-    # Supplement Facts — reserved, white block with rules
+    # Supplement Facts - fully dressed with placeholder values (README lists replacements)
     sf_w = min(65.0, W * 0.55)
-    sf_h = min(110.0, H * 0.50) * (W / 130.0 if W < 130 else 1.0)
+    sf_h = min(62.0, H * 0.34) * (W / 130.0 if W < 130 else 1.0)
     sf_x = W - tx - sf_w
     sf_y = 37 * sx
     d.rectangle([P(sf_x), P(sf_y), P(sf_x + sf_w), P(sf_y + sf_h)], fill=WHITE)
     d.rectangle([P(sf_x), P(sf_y), P(sf_x + sf_w), P(sf_y + sf_h)], outline=(0, 0, 0), width=max(2, P(0.4)))
-    ltext(d, sf_x + 2, sf_y + 5 * sx, "SUPPLEMENT FACTS", F("Inter.ttf", 3.1 * sx, [14, 700]), (0, 0, 0))
-    ltext(d, sf_x + 2, sf_y + 10 * sx, "awaiting panel data (see requirements)",
-          F("Inter.ttf", 2.0 * sx, [14, 400]), (110, 110, 110))
-    rows = 8
-    for i in range(rows):
-        y = sf_y + (16 + i * 4.8) * sx
-        if y < sf_y + sf_h - 4:
-            rule(d, sf_x + 2, y, sf_x + sf_w - 2, (205, 205, 205), 0.2)
+    f_sf_hd = F("PlayfairDisplay.ttf", 4.6 * sx, [700])
+    f_sf_b = F("Inter.ttf", 2.6 * sx, [14, 600])
+    f_sf_s = F("Inter.ttf", 2.3 * sx, [14, 400])
+    y = sf_y + 5 * sx
+    ltext(d, sf_x + 2, y, "Supplement Facts", f_sf_hd, (0, 0, 0))
+    y += 4.8 * sx
+    rule(d, sf_x + 2, y, sf_x + sf_w - 2, (0, 0, 0), 0.9)
+    y += 3.4 * sx
+    ltext(d, sf_x + 2, y, "Serving Size: 1 scoop (5 g)", f_sf_b, (0, 0, 0))
+    y += 3.6 * sx
+    ltext(d, sf_x + 2, y, "Servings Per Container: 34", f_sf_s, (0, 0, 0))
+    y += 2.6 * sx
+    d.rectangle([P(sf_x), P(y), P(sf_x + sf_w), P(y + 0.9 * sx)], fill=(0, 0, 0))
+    y += 3.2 * sx
+    ltext(d, sf_x + 2, y, "Amount Per Serving", f_sf_s, (0, 0, 0))
+    rtext(d, sf_x + sf_w * 0.72, y, "5 g", f_sf_b, (0, 0, 0))
+    rtext(d, sf_x + sf_w - 2, y, "% DV *", f_sf_s, (0, 0, 0))
+    y += 2.4 * sx
+    rule(d, sf_x + 2, y, sf_x + sf_w - 2, (0, 0, 0), 0.4)
+    y += 3.4 * sx
+    ltext(d, sf_x + 2, y, "Organic Lion's Mane", f_sf_s, (0, 0, 0))
+    rtext(d, sf_x + sf_w * 0.72, y, "5 g", f_sf_s, (0, 0, 0))
+    rtext(d, sf_x + sf_w - 2, y, "**", f_sf_s, (0, 0, 0))
+    y += 3.0 * sx
+    ltext(d, sf_x + 2, y, "Mushroom Powder", f_sf_s, (0, 0, 0))
+    y += 3.0 * sx
+    ltext(d, sf_x + 2, y, "(fruiting body)", f_sf_s, (0, 0, 0))
+    y += 2.4 * sx
+    rule(d, sf_x + 2, y, sf_x + sf_w - 2, (0, 0, 0), 0.4)
+    y += 3.4 * sx
+    ltext(d, sf_x + 2, y, "Other Ingredients: None.", f_sf_s, (0, 0, 0))
+    y += 2.6 * sx
+    rule(d, sf_x + 2, y, sf_x + sf_w - 2, (0, 0, 0), 0.9)
+    y += 3.0 * sx
+    ltext(d, sf_x + 2, y, "* Percent Daily Values not established.", f_sf_s, (60, 60, 60))
+    y += 2.6 * sx
+    ltext(d, sf_x + 2, y, "** Daily Value not established.", f_sf_s, (60, 60, 60))
 
-    # left column: usage / storage / origin / distributed / reseal
+    # left column: complete fine print (placeholder values; README lists replacements)
     f_body = F("Inter.ttf", 2.5 * sx, [14, 400])
-    for i, line in enumerate(spec["back_lines"]):
-        ltext(d, tx, 37 * sx + i * 4.2 * sx, line, f_body, ink)
+    column = [
+        "Suggested use: stir one scoop", "into water, tea or a smoothie,",
+        "once daily.", "", "Store in a cool, dry place away",
+        "from direct sunlight.", "Keep out of reach of children.", "",
+        "Produced in a facility that also", "handles tree nuts, soy and gluten.",
+        "Packed in the USA.", "Product of China. Distributed by",
+        "T2 Holdings LLC, 1234 Sample Ave,", "Suite 100, Springfield, MO 65801.",
+        spec.get("reseal", "Reseal zipper firmly after each use."),
+    ]
+    for i, line in enumerate(column):
+        ltext(d, tx, 37 * sx + i * 4.0 * sx, line, f_body, ink)
 
-    # QR + UPC reserved row
-    qr = min(22.0, H * 0.16)
-    qy = H * 0.805
-    d.rectangle([P(tx), P(qy), P(tx + qr), P(qy + qr)], outline=(0, 0, 0), width=max(2, P(0.4)))
-    ltext(d, tx + 1, qy + qr + 2.6, "QR (reserved)", F("Inter.ttf", 2.0 * sx, [14, 400]), (80, 80, 80))
-    d.rectangle([P(tx + qr + 6), P(qy + 1), P(tx + qr + 6 + 50 * (qr / 22.0)), P(qy + qr - 2)],
-                outline=(0, 0, 0), width=max(2, P(0.4)))
-    ltext(d, tx + qr + 6, qy + qr + 2.6, "UPC (reserved)", F("Inter.ttf", 2.0 * sx, [14, 400]), (80, 80, 80))
+    # QR (real when lib present) + UPC barcode (real UPC-A, placeholder GTIN)
+    qr = min(20.0, H * 0.15)
+    qy = H * 0.80
+    draw_qr(d, d, tx, qy, qr, "https://mograorganics.com/organic-lions-mane")
+    ltext(d, tx, qy + qr + 2.6, "Scan for recipes", F("Inter.ttf", 2.0 * sx, [14, 400]), (80, 80, 80))
+    upc = upc_a_placeholder()
+    draw_upc(d, tx + qr + 6, qy + 2, 52.0, min(18.0, H * 0.14), upc)
 
-    # lot / best-by print zone
-    lz_x = W - tx - 30
-    d.rectangle([P(lz_x), P(qy + 2), P(lz_x + 28), P(qy + 12)], outline=(120, 120, 120), width=max(1, P(0.3)))
-    ltext(d, lz_x, qy + 15, "LOT / BEST BY", F("Inter.ttf", 1.9 * sx, [14, 400]), (100, 100, 100))
-    ltext(d, lz_x, qy + 18, "(printed at fill)", F("Inter.ttf", 1.9 * sx, [14, 400]), (130, 130, 130))
+    # lot / best-by (styled, filled) — sits clear of the barcode
+    rtext(d, W - tx, qy - 4, "LOT MO-LM-2601  ·  BEST BY 01-2028",
+          F("Inter.ttf", 2.1 * sx, [14, 500]), ink)
 
     # FDA disclaimer
     f_dis = F("Inter.ttf", 2.0 * sx, [14, 400])
@@ -387,5 +509,8 @@ def design_specs() -> List[Dict]:
     }
     for key, th in themes.items():
         specs.append({**th, "key": key, "title": "ORGANIC LION'S MANE",
-                      "desc": desc1, "back_lines": common_back})
+                      "desc": desc1, "back_lines": common_back,
+                      "reseal": ("Press lid closed to seal after each use."
+                                 if th["kind"] == "canister" else
+                                 "Reseal zipper firmly after each use.")})
     return specs
