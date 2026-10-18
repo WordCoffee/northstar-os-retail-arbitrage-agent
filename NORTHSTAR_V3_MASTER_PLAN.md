@@ -193,11 +193,16 @@ run here is a bounded chat turn or tool execution, exactly as the loop performs.
 | Mount | `src/chat/ChatSurface.jsx` `chat-workbench-toggle` | Available in the chat head on every Simple surface (labelled the AutothinK workbench when the focus is `autothink`). |
 | Harness | `verify-shell-v3.cjs` scenario F | Drawer opens; plan chain renders the tool steps; artifacts list; runs list with cancel. |
 
-**Remaining (deep-visual upgrade):** the plan graph is drawn as a functional
-linear chain. The immersive treatment — an animated node-link graph integrated
-with the cosmic shell — is the deep-visual part of the plan and is deliberately
-left for a stronger visual model pass.
+**BUILT — immersive plan graph (deep-visual pass — complete):**
 
+| Piece | Where | Notes |
+|---|---|---|
+| Graph component | `src/chat/ImmersivePlanGraph.jsx` | Animated node-link constellation over a deep-space background: glowing nodes (forest = prompt, cobalt spark = AI step, pine = answer), self-drawing edges, sequential reveal matching the turn loop, pulse on the active step. SVG + CSS, dependency-free. |
+| Styles | `src/styles/chat.css` `.ipg-*` | Dark-glass panel, radial-gradient space bg, animated starfield, glow filters, `prefers-reduced-motion` static fallback. |
+| Mount | `src/chat/WorkbenchPanel.jsx` | The Plan tab now renders `ImmersivePlanGraph` instead of the linear chain. |
+| Harness | `verify-shell-v3.cjs` scenario F | Verifies the graph renders (SVG + nodes) and shows the tool steps from the stubbed `/api/chat/sessions/{sid}/plan`. |
+
+**Honesty note:** the graph is the *same* honest linear chain reconstructed by `build_plan` — only the visual treatment changed. No edges or dependencies are invented; the sequential reveal mirrors how the tool loop actually ran.
 
 
 ---
@@ -381,8 +386,7 @@ false failures.
 3. ~~REA inject — tool gateway · AG-UI cards · human handover~~ **BUILT + verified**
 4. ~~Create focus — VoiceStudio UGC media pipeline~~ **BUILT + verified**
 5. S5 AutothinK premium surface — ~~session fork/rewind~~ · ~~plan/artifact/run
-   backends~~ · ~~workbench UI~~ **BUILT**; the immersive plan-graph visual
-   (deep-visual) is pending a stronger visual model pass
+   backends~~ · ~~workbench UI~~ · ~~immersive plan-graph visual (deep-visual)~~ **BUILT**
 6. S7 Brand SEO Engine — ~~§5.1 versioned Brand SEO Profile~~ ·
    ~~§5.2 listing revisions~~ · ~~§5.3 cross-service scoring hook (all
    surfaces) + AdPilot negatives/harvest + SourceScout retitle~~ ·

@@ -278,10 +278,11 @@ async function main() {
       await toggle.click()
       const panel = await page.waitForSelector('[data-testid="chat-workbench"]', { timeout: 6000 }).catch(() => null)
       panel ? ok('F: workbench drawer opens') : no('F: workbench panel did not open')
-      const plan = await page.waitForSelector('[data-testid="wb-plan"]', { timeout: 6000 }).catch(() => null)
-      plan ? ok('F: plan view renders the reconstructed chain') : no('F: plan view missing')
-      const stepName = plan ? await page.$eval('[data-testid="wb-plan"]', (el) => el.innerText).catch(() => '') : ''
-      stepName.includes('seo_check') ? ok('F: plan shows the tool steps') : no('F: tool step missing', stepName.slice(0, 60))
+      const planPanel = await page.waitForSelector('[data-testid="chat-workbench-plan"]', { timeout: 6000 }).catch(() => null)
+      const svg = planPanel ? await page.waitForSelector('svg.ipg-svg', { timeout: 6000 }).catch(() => null) : null
+      svg ? ok('F: immersive plan graph renders (node-link constellation)') : no('F: plan graph missing')
+      const graphText = svg ? await page.$eval('svg.ipg-svg', (el) => el.textContent || el.innerText || '').catch(() => '') : ''
+      graphText.includes('seo_check') ? ok('F: plan graph shows the tool steps') : no('F: tool step missing in graph', graphText.slice(0, 60))
 
       await page.click('[data-testid="wb-tab-artifacts"]')
       const arts = await page.waitForSelector('[data-testid="wb-artifacts"]', { timeout: 6000 }).catch(() => null)

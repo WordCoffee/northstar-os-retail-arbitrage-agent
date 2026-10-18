@@ -15,6 +15,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { chatApi, assetFileUrl } from './api.js'
+import ImmersivePlanGraph from './ImmersivePlanGraph.jsx'
 
 const TABS = [
   { id: 'plan', label: 'Plan' },
@@ -40,35 +41,6 @@ function relTime(ts) {
     const h = Math.round(mins / 60)
     return h < 24 ? `${h}h ago` : String(ts).slice(0, 10)
   } catch { return '' }
-}
-
-function PlanView({ plan }) {
-  if (!plan) return <div className="wb-empty">No plan yet — send a message first.</div>
-  const nodes = plan.nodes || []
-  if (!nodes.length) return <div className="wb-empty">This session has no steps recorded yet.</div>
-  return (
-    <div className="wb-plan" data-testid="wb-plan">
-      {nodes.map((n, i) => (
-        <div key={n.id} className="wb-plan-row">
-          {i > 0 && <span className="wb-edge" aria-hidden="true" />}
-          <div className={`wb-node wb-node-${n.kind}`}>
-            <div className="wb-node-head">
-              <span className="wb-node-kind">{kindLabel(n.kind)}</span>
-              {n.kind === 'tool' && <span className="wb-node-name">{n.name}</span>}
-              {n.kind === 'tool' && n.status && <StatusBadge status={n.status} />}
-              {n.kind === 'tool' && n.elapsed_ms != null && (
-                <span className="wb-node-ms">{n.elapsed_ms} ms</span>
-              )}
-            </div>
-            <div className="wb-node-label">{n.label || n.name}</div>
-          </div>
-        </div>
-      ))}
-      <div className="wb-caveats">
-        {(plan.caveats || []).map((c) => <div key={c} className="wb-caveat">· {c}</div>)}
-      </div>
-    </div>
-  )
 }
 
 function ArtifactsView({ artifacts }) {
@@ -188,7 +160,7 @@ export default function WorkbenchPanel({ open, onClose, sessionId, focusId }) {
       <div className="wb-sub">{focusId === 'autothink' ? 'AutothinK workbench' : 'Session workbench'}</div>
       {error && <div className="wb-error" data-testid="wb-error">{error}</div>}
       <div className="wb-body">
-        {tab === 'plan' && <PlanView plan={plan} />}
+        {tab === 'plan' && <ImmersivePlanGraph plan={plan} />}
         {tab === 'artifacts' && <ArtifactsView artifacts={artifacts} />}
         {tab === 'runs' && <RunsView runs={runs} sessionId={sessionId} onCancel={cancelRun} />}
       </div>
