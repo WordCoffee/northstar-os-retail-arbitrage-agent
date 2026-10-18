@@ -25,6 +25,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Icon from '../components/Icon.jsx'
+import WorkbenchPanel from './WorkbenchPanel.jsx'
 import { chatApi, chatVoice, streamTurn, assetFileUrl } from './api.js'
 
 const DEFAULT_SUGGESTIONS = [
@@ -188,6 +189,7 @@ export default function ChatSurface({
   const [lightbox, setLightbox] = useState(null)   // {id, name, kind}
   const [editing, setEditing] = useState(null)     // {id, text}
   const [paused, setPaused] = useState(false)     // human-in-the-loop handover
+  const [workbenchOpen, setWorkbenchOpen] = useState(false)  // V3 S5 AutothinK panel
   const abortRef = useRef(null)
   const scrollRef = useRef(null)
   const mediaRef = useRef(null)
@@ -602,6 +604,12 @@ export default function ChatSurface({
             {sub} &middot; <span className="chat-head-spark">{focus?.label || 'Auto'}</span>
           </span>
           <span style={{ flex: 1 }} />
+          <button type="button" className="btn btn-sm btn-ghost"
+            onClick={() => setWorkbenchOpen((v) => !v)}
+            title="Plan, artifacts and runs for this session"
+            aria-pressed={workbenchOpen} data-testid="chat-workbench-toggle">
+            ⌥ Workbench
+          </button>
           {onOpenAdvanced && (
             <button type="button" className="btn btn-sm btn-ghost"
               onClick={() => onOpenAdvanced('/home')}
@@ -918,6 +926,13 @@ export default function ChatSurface({
           </div>
         </div>
       </section>
+
+      <WorkbenchPanel
+        open={workbenchOpen}
+        onClose={() => setWorkbenchOpen(false)}
+        sessionId={activeId}
+        focusId={focusId}
+      />
 
       {lightbox && (
         <div className="chat-lightbox" onClick={() => setLightbox(null)}

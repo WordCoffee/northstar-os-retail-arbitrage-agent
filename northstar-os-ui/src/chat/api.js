@@ -60,6 +60,11 @@ export const chatApi = {
   forkSession: (sid, body = {}) => req(`/sessions/${sid}/fork`, { method: 'POST', body: JSON.stringify(body) }),
   messages: (sid, limit = 500) => req(`/sessions/${sid}/messages?limit=${limit}`),
   cancelTurn: (turnId) => req(`/turns/${turnId}/cancel`, { method: 'POST', body: '{}' }),
+  // V3 S5 AutothinK surface
+  plan: (sid) => req(`/sessions/${sid}/plan`),
+  artifacts: (sid) => req(`/sessions/${sid}/artifacts`),
+  runs: (limit = 100) => req(`/runs?limit=${limit}`),
+  cancelRun: (runId) => req(`/runs/${runId}/cancel`, { method: 'POST', body: '{}' }),
 }
 
 /** Parse one SSE frame ("event: X\ndata: {...}") into {event, data} | null. */

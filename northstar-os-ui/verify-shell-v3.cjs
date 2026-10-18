@@ -71,6 +71,38 @@ async function stub(page, { advanced, card = false }) {
           messages: [{ id: 'f1', role: 'assistant', content: 'Forked branch loaded.', model: 'stub', parts_json: [] }],
         })
       }
+      if (String(url).includes('/api/chat/sessions/s-card/plan')) {
+        return json({
+          session_id: 's-card', step_count: 2,
+          nodes: [
+            { id: 'm:m1', kind: 'prompt', label: 'SEO-check my listing' },
+            { id: 't:c1', kind: 'tool', name: 'seo_check', status: 'done', ok: true, elapsed_ms: 120, label: 'coverage 82' },
+            { id: 't:c2', kind: 'tool', name: 'seo_profile', status: 'done', ok: true, elapsed_ms: 40, label: 'profile shown' },
+            { id: 'm:m2', kind: 'answer', label: 'Here is the result.' },
+          ],
+          edges: [['m:m1', 't:c1'], ['t:c1', 't:c2'], ['t:c2', 'm:m2']],
+          caveats: ['Reconstructed from recorded tool calls; the agent’s tool loop is sequential.'],
+        })
+      }
+      if (String(url).includes('/api/chat/sessions/s-card/artifacts')) {
+        return json({
+          session_id: 's-card',
+          artifacts: [{
+            asset_id: 'asset-1', name: 'Dieline', asset_type: 'image',
+            mime_type: 'image/svg+xml', present: true,
+            url: '/api/design-studio/assets/asset-1/file', kind: 'image',
+          }],
+        })
+      }
+      if (String(url).includes('/api/chat/runs')) {
+        return json({
+          runs: [{
+            id: 'r1', session_id: 's-card', kind: 'chat_turn',
+            label: 'SEO-check my listing', status: 'running',
+            created_at: '2026-10-18T00:00:00Z',
+          }],
+        })
+      }
       if (String(url).includes('/api/chat/sessions/s-card/messages')) {
         return json({
           session: { id: 's-card', focus_json: { mode: 'auto', label: 'Auto' } },
@@ -228,6 +260,38 @@ async function main() {
         () => document.body.innerText.includes('Forked branch loaded.'), null, { timeout: 6000 },
       ).then(() => true).catch(() => false)
       loaded ? ok('E: fork opens a NEW branched session (parent untouched)') : no('E: forked session did not load')
+    }
+    await ctx.close()
+  }
+
+  // ── Scenario F: workbench panel (S5 — plan / artifacts / runs) ────────────
+  {
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } })
+    const page = await ctx.newPage()
+    await stub(page, { advanced: false, card: true })
+    await page.goto(BASE + 'home')
+    await page.waitForSelector('[data-testid="mb-shell"]', { timeout: 8000 }).catch(() => {})
+
+    const toggle = await page.waitForSelector('[data-testid="chat-workbench-toggle"]', { timeout: 6000 }).catch(() => null)
+    toggle ? ok('F: Workbench control offered in the chat head') : no('F: workbench toggle missing')
+    if (toggle) {
+      await toggle.click()
+      const panel = await page.waitForSelector('[data-testid="chat-workbench"]', { timeout: 6000 }).catch(() => null)
+      panel ? ok('F: workbench drawer opens') : no('F: workbench panel did not open')
+      const plan = await page.waitForSelector('[data-testid="wb-plan"]', { timeout: 6000 }).catch(() => null)
+      plan ? ok('F: plan view renders the reconstructed chain') : no('F: plan view missing')
+      const stepName = plan ? await page.$eval('[data-testid="wb-plan"]', (el) => el.innerText).catch(() => '') : ''
+      stepName.includes('seo_check') ? ok('F: plan shows the tool steps') : no('F: tool step missing', stepName.slice(0, 60))
+
+      await page.click('[data-testid="wb-tab-artifacts"]')
+      const arts = await page.waitForSelector('[data-testid="wb-artifacts"]', { timeout: 6000 }).catch(() => null)
+      const artText = arts ? await page.$eval('[data-testid="wb-artifacts"]', (el) => el.innerText).catch(() => '') : ''
+      arts && artText.includes('Dieline') ? ok('F: artifact browser lists session artifacts') : no('F: artifacts view empty')
+
+      await page.click('[data-testid="wb-tab-runs"]')
+      const runs = await page.waitForSelector('[data-testid="wb-runs"]', { timeout: 6000 }).catch(() => null)
+      const cancel = await page.$('[data-testid="wb-run-cancel"]')
+      runs && cancel ? ok('F: run panel lists runs with a cancel control') : no('F: run panel missing')
     }
     await ctx.close()
   }

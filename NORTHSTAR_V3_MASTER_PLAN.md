@@ -142,7 +142,7 @@ registers no tools, and every tool an agent reaches is now gated and logged.
 
 ---
 
-## 4. S5 — AutothinK premium surface — **PARTIAL**
+## 4. S5 — AutothinK premium surface — **BUILT** (deep-visual plan graph pending)
 
 Focus "AutothinK" exists in the rail and is **locked** unless the account holds
 the `autothink_workspace` capability (plan gate or hosted pro/team org). It
@@ -184,8 +184,20 @@ currently reuses the universal chat surface with the full tool set.
 deny-list (`shell/exec/eval/…`, `tool_gateway.py`) is the enforceable boundary; a
 run here is a bounded chat turn or tool execution, exactly as the loop performs.
 
-**Next (UI):** the Simple-shell side panels for the plan graph, artifact browser
-and run panel (the visual treatment is the deep-visual part of the plan).
+**BUILT — workbench UI (Simple shell):**
+
+| Piece | Where | Notes |
+|---|---|---|
+| Client | `src/chat/api.js` | `plan / artifacts / runs / cancelRun`. |
+| Panel | `src/chat/WorkbenchPanel.jsx` | A right-hand drawer with a **Plan · Artifacts · Runs** tablist; honest empty/error states; a missing asset is marked; a non-stoppable run is not pretend-stopped. |
+| Mount | `src/chat/ChatSurface.jsx` `chat-workbench-toggle` | Available in the chat head on every Simple surface (labelled the AutothinK workbench when the focus is `autothink`). |
+| Harness | `verify-shell-v3.cjs` scenario F | Drawer opens; plan chain renders the tool steps; artifacts list; runs list with cancel. |
+
+**Remaining (deep-visual upgrade):** the plan graph is drawn as a functional
+linear chain. The immersive treatment — an animated node-link graph integrated
+with the cosmic shell — is the deep-visual part of the plan and is deliberately
+left for a stronger visual model pass.
+
 
 
 ---
@@ -346,8 +358,9 @@ false failures.
    continues under the UI/model phase)
 3. ~~REA inject — tool gateway · AG-UI cards · human handover~~ **BUILT + verified**
 4. ~~Create focus — VoiceStudio UGC media pipeline~~ **BUILT + verified**
-5. S5 AutothinK premium surface — ~~session fork/rewind~~ **BUILT**; plan
-   visualiser / sandbox / artifact browser next
+5. S5 AutothinK premium surface — ~~session fork/rewind~~ · ~~plan/artifact/run
+   backends~~ · ~~workbench UI~~ **BUILT**; the immersive plan-graph visual
+   (deep-visual) is pending a stronger visual model pass
 6. S7 Brand SEO Engine — ~~§5.1 versioned Brand SEO Profile~~ **BUILT**;
    ~~§5.2 listing revisions~~ · ~~§5.3 cross-service scoring hook (all
    surfaces)~~ **BUILT**; remaining §5.3 pipeline features (AdPilot

@@ -150,6 +150,80 @@
 .chat-tool .chat-tool-state { color: var(--ink-soft); }
 .chat-tool.error .chat-tool-state { color: var(--status-error); }
 .chat-tool .chat-tool-error { flex-basis: 100%; color: var(--status-error); font-size: 11.5px; }
+
+/* ── Workbench panel (V3 S5 — AutothinK surface) ───────────────────────── */
+.wb-panel {
+  position: fixed; top: 96px; bottom: 24px; right: 24px; width: 372px; z-index: 40;
+  display: flex; flex-direction: column; gap: 8px; overflow: hidden;
+  border: 1px solid var(--divider-mid); border-radius: var(--radius-lg);
+  background: var(--surface-raised); box-shadow: 0 18px 50px rgba(20, 28, 24, 0.22);
+  padding: var(--gap-sm);
+}
+.wb-head { display: flex; align-items: center; gap: 6px; }
+.wb-rail { display: inline-flex; gap: 2px; flex: 1; padding: 2px;
+  border: 1px solid var(--divider-mid); border-radius: 999px; background: var(--surface); }
+.wb-tab { font-size: 11.5px; font-weight: 600; letter-spacing: 0.03em; padding: 4px 12px;
+  border-radius: 999px; color: var(--ink-soft); background: transparent; cursor: pointer; }
+.wb-tab.active { background: var(--pine); color: var(--paper); }
+.wb-tab:focus-visible { outline: 2px solid var(--spark); outline-offset: 2px; }
+.wb-sub { font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+.wb-error { font-size: 12px; color: var(--status-error); }
+.wb-body { flex: 1; overflow-y: auto; padding-right: 2px; }
+.wb-empty { font-size: 12.5px; color: var(--ink-soft); padding: 12px 2px; }
+
+.wb-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 1px 6px; border-radius: 999px; border: 1px solid var(--divider-mid); color: var(--ink-soft); }
+.wb-badge-done { color: var(--pine); border-color: var(--pine); }
+.wb-badge-running { color: var(--spark); border-color: var(--spark); }
+.wb-badge-error, .wb-badge-cancelled { color: var(--status-error); border-color: var(--status-error); }
+
+/* Plan — a vertical chain (the honest shape of the bounded tool loop) */
+.wb-plan { display: flex; flex-direction: column; }
+.wb-plan-row { display: flex; flex-direction: column; align-items: stretch; }
+.wb-edge { width: 2px; height: 14px; margin-left: 18px; background: var(--divider-strong); }
+.wb-node { border: 1px solid var(--divider); border-radius: var(--radius); background: var(--surface);
+  padding: 7px 10px; margin: 2px 0; }
+.wb-node-tool { border-left: 3px solid var(--spark); }
+.wb-node-prompt { border-left: 3px solid var(--ink-faint); }
+.wb-node-answer { border-left: 3px solid var(--pine); }
+.wb-node-head { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.wb-node-kind { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); }
+.wb-node-name { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; color: var(--ink); }
+.wb-node-ms { font-size: 10.5px; color: var(--ink-faint); }
+.wb-node-label { font-size: 12px; color: var(--ink-mid); margin-top: 2px; }
+.wb-caveats { margin-top: 10px; border-top: 1px dashed var(--divider); padding-top: 8px; }
+.wb-caveat { font-size: 10.5px; color: var(--ink-faint); line-height: 1.5; }
+
+/* Artifacts */
+.wb-artifacts { display: flex; flex-direction: column; gap: 6px; }
+.wb-artifact { display: flex; align-items: center; gap: 10px; border: 1px solid var(--divider);
+  border-radius: var(--radius); background: var(--surface); padding: 6px 8px; }
+.wb-artifact-thumb { width: 42px; height: 42px; flex: none; border-radius: var(--radius-sm);
+  background: var(--surface-active); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.wb-artifact-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.wb-artifact-glyph { font-size: 18px; color: var(--ink-faint); }
+.wb-artifact-meta { flex: 1; min-width: 0; }
+.wb-artifact-name { font-size: 12.5px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-artifact-sub { font-size: 10.5px; color: var(--ink-faint); }
+.wb-artifact-dl { font-size: 11px; color: var(--spark); text-decoration: none; }
+.wb-artifact-dl:hover { text-decoration: underline; }
+
+/* Runs */
+.wb-runs { display: flex; flex-direction: column; gap: 6px; }
+.wb-run { border: 1px solid var(--divider); border-radius: var(--radius); background: var(--surface); padding: 7px 9px; }
+.wb-run-here { border-color: var(--divider-strong); }
+.wb-run-head { display: flex; align-items: center; gap: 6px; }
+.wb-run-label { flex: 1; min-width: 0; font-size: 12.5px; color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-run-time { font-size: 10.5px; color: var(--ink-faint); }
+.wb-run-sub { font-size: 10.5px; color: var(--ink-faint); margin-top: 2px; display: flex; align-items: center; gap: 8px; }
+.wb-run-bar { display: inline-block; width: 90px; height: 4px; border-radius: 999px; background: var(--surface-active); overflow: hidden; }
+.wb-run-bar > span { display: block; height: 100%; background: var(--spark); }
+
+@media (max-width: 900px) {
+  .wb-panel { top: auto; left: 12px; right: 12px; bottom: 12px; width: auto;
+    max-height: 60dvh; }
+}
 .chat-tool .chat-tool-bar { flex-basis: 100%; height: 3px; border-radius: 2px; background: var(--spark-soft); overflow: hidden; }
 .chat-tool .chat-tool-bar i { display: block; height: 100%; background: var(--spark); border-radius: 2px; transition: width 0.3s ease; }
 .chat-tool .chat-tool-bar i.indet { width: 35%; animation: chatIndet 1.2s ease-in-out infinite; }
