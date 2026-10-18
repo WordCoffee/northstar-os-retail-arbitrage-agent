@@ -413,6 +413,11 @@ false failures.
    ~~§5.4 file-import learning (deterministic proposals)~~ ·
    ~~§5.4 embeddings drift (qwen3-embedding:0.6b + sqlite-vec)~~ **BUILT (all of S7)**
 7. ~~S8 curated corpus + learning loop~~ **BUILT** (local index + deterministic retrieval + semantic vector search via §5.4)
-8. Operator-window REA captures (Packify first) when the operator is present
+8. Operator-window REA captures (Packify first) — **harness BUILT**
+   (`operator_rea_capture.py`: read-only, operator-gated, Chrome-Connect-only,
+   memory-ingesting; see `docs/operator-rea-capture.md`). **Live capture remains
+   operator-gated** on (a) a `www.packify.ai` entry in the operator-owned allowlist
+   and (b) an operator window with Chrome Connect live. The harness never edits the
+   allowlist and never drives a browser itself.
 
 Every live/paid action remains gated per action; nothing in V3 alters that.
