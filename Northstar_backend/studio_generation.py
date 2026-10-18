@@ -29,7 +29,9 @@ IMAGE_MODEL_FILE = os.environ.get("STUDIO_IMAGE_MODEL") or "Flux-2-Klein-9B-KV-Q
 TEXT_ENCODER_FILE = os.environ.get("STUDIO_TEXT_ENCODER") or "qwen_3_8b_fp8mixed.safetensors"
 VIDEO_MODEL_FILE = "Wan2.2-TI2V-5B-Q5_K_M.gguf"
 
-_STYLE_SUFFIX = ", professional commercial product photography, clean composition, no text, no watermark, no logos"
+_STYLE_SUFFIX = ", professional commercial product photography, clean composition"
+# Rich renders keep the operator's full art direction (lettering demands included).
+# Text-safe mode appends its own suppression phrase in text_fidelity.sanitize_brief_for_render.
 
 
 def comfyui_url() -> str:

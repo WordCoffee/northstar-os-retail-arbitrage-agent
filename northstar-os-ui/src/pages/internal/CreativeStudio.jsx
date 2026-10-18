@@ -145,7 +145,7 @@ export default function CreativeStudio() {
   const [genPurpose, setGenPurpose] = useState('product-scene')
   const [genTier, setGenTier] = useState('draft')
   const [genPrompt, setGenPrompt] = useState('')
-  const [textSafe, setTextSafe] = useState(true) // blueprint #5: never let the model draw letters
+  const [textSafe, setTextSafe] = useState(false) // OFF = rich renders (full art direction); ON = strip lettering for Type-pass plates
   const [composePresets, setComposePresets] = useState([]) // installed typography-pass presets
   const [vPurpose, setVPurpose] = useState('UGC / testimonial')
   const [vDuration, setVDuration] = useState('15s (Short / TikTok)')
@@ -937,9 +937,9 @@ export default function CreativeStudio() {
                   <label className="inline-flex" style={{ gap: 8, alignItems: 'flex-start', cursor: 'pointer' }}>
                     <input type="checkbox" checked={textSafe} onChange={(e) => setTextSafe(e.target.checked)} style={{ marginTop: 2 }} />
                     <span className="text-low" style={{ fontSize: 12 }}>
-                      <strong>Text-safe render:</strong> typographic demands are stripped from the brief and the model is asked for
-                      materials + illustration only — the render is then OCR-checked for stray lettering. Real letters belong on the
-                      vector text layer (never the model).
+                      <strong>Text-safe plate</strong> (leave OFF for rich renders): strips lettering demands out of the brief, then
+                      OCR-checks and erases any stray glyphs — use it when you're preparing a clean plate to run a <strong>Type pass</strong> on.
+                      OFF means the model gets your full art direction, including whatever text styling you describe.
                     </span>
                   </label>
                 </div>
