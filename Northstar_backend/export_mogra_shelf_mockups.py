@@ -39,22 +39,25 @@ PLATES = {"bag": ("plate2_pouch_front", "plate2_pouch_back"),
 
 
 def _cli() -> tuple:
-    """Optional --only k1,k2  --pack <folder>  --designs <folder> for subsets."""
+    """Optional --only k1,k2  --pack <folder>  --designs <folder>  --scale <n>."""
     argv = sys.argv[1:]
     only = None
     pack_name = None
     designs_dir = None
+    scale = 2.0
     if "--only" in argv:
         only = {k for k in argv[argv.index("--only") + 1].split(",") if k}
     if "--pack" in argv:
         pack_name = argv[argv.index("--pack") + 1]
     if "--designs" in argv:
         designs_dir = Path(argv[argv.index("--designs") + 1])
-    return only, pack_name, designs_dir
+    if "--scale" in argv:
+        scale = float(argv[argv.index("--scale") + 1])
+    return only, pack_name, designs_dir, scale
 
 
 def main() -> None:
-    only, pack_name, designs_dir = _cli()
+    only, pack_name, designs_dir, scale = _cli()
     pack = (PACK.parent / pack_name) if pack_name else PACK
     pack.mkdir(parents=True, exist_ok=True)
     designs = designs_dir or DESIGNS
@@ -72,10 +75,10 @@ def main() -> None:
         out = pack / key
         out.mkdir(parents=True, exist_ok=True)
 
-        plate_f = Image.open(STUDIO / f"{pf_name}.png").convert("RGB")
-        plate_b = Image.open(STUDIO / f"{pb_name}.png").convert("RGB")
-        mf = me.print_package(plate_f, front_art, cfg[pf_name]["kind"], cfg[pf_name])
-        mb = me.print_package(plate_b, back_art, cfg[pb_name]["kind"], cfg[pb_name])
+        plate_f, cfg_f = me.load_plate(STUDIO / f"{pf_name}.png", cfg[pf_name], scale=scale)
+        plate_b, cfg_b = me.load_plate(STUDIO / f"{pb_name}.png", cfg[pb_name], scale=scale)
+        mf = me.print_package(plate_f, front_art, cfg_f["kind"], cfg_f)
+        mb = me.print_package(plate_b, back_art, cfg_b["kind"], cfg_b)
 
         mf.save(out / "front_shelf.png")
         mb.save(out / "back_shelf.png")

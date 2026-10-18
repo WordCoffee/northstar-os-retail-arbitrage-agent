@@ -35,9 +35,25 @@ QR + real UPC-A on the white code panel. Placeholder register unchanged.
 - Both runners gained subset flags: `--only <keys>` + `--pack <name>`
   (mockups also `--designs <folder>`), so series can be exported alone.
 
+## Sharpness pass (v2)
+Reported as "blurry and grainy" on the first emboss renders — fixed at the
+source:
+- **2× compositing**: plates load through `mockup_engine.load_plate(scale=2)`
+  (Lanczos + anchors scaled), so the printed artwork is drawn at 2048 and the
+  mockups export at 2048 — print/typography crispness doubles.
+- **Filtered art pre-scale** (`_prescale`): artwork is Lanczos-resized to ~the
+  on-screen size before sampling, removing the softening of point-sampled
+  bilinear downscaling (displacement stays physically constant).
+- **Grain removed**: `apply_paper` noise cut to a barely-there 0.7/255 (was
+  1.9) + mottle 0.05 (was 0.14).
+- **Tighter bevels**: emboss softness 0.22-0.28 mm → 0.13-0.15 mm, with darker
+  base ramps so the logo reads as a real, defined brand mark on the pack.
+
+Run with sharpness: append `--scale 2` to the mockup runner.
+
 ## Outputs
 - Flat art 300 dpi (+ paper grain): `exports/mogra-bags2-designs-20261018/designs/b06..b10/{front,back}.png`
-- Shelf mockups (printed-into-the-bag engine): `exports/mogra-bags2-shelf-mockups-20261018/`
+- Shelf mockups 2048² (printed-into-the-bag engine): `exports/mogra-bags2-shelf-mockups-20261018/`
   (`contact_sheet.png` = all 5 × front + back)
 
 ## Commands

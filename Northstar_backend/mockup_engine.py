@@ -76,6 +76,42 @@ def load_plate_config() -> Dict[str, Dict]:
     return {}
 
 
+def scale_cfg(cfg: Dict, k: float) -> Dict:
+    """Scale a plate's calibrated silhouette anchors to a new plate size."""
+    return {
+        **cfg,
+        "y0": cfg["y0"] * k,
+        "y1": cfg["y1"] * k,
+        "L": [[y * k, x * k] for y, x in cfg["L"]],
+        "R": [[y * k, x * k] for y, x in cfg["R"]],
+    }
+
+
+def load_plate(path, cfg: Dict, scale: float = 1.0):
+    """Load a plate at `scale`× (Lanczos) with its anchors scaled to match —
+    hi-res compositing keeps the printed artwork crisp."""
+    plate = Image.open(path).convert("RGB")
+    if scale and scale != 1.0:
+        plate = plate.resize((int(round(plate.width * scale)),
+                              int(round(plate.height * scale))), Image.LANCZOS)
+        cfg = scale_cfg(cfg, scale)
+    return plate, cfg
+
+
+def _prescale(art: Image.Image, target_w: float) -> Tuple[Image.Image, float]:
+    """Filtered pre-scale of the artwork to ~the on-screen size (avoids the
+    softening/aliasing of point-sampled bilinear downscaling). Returns
+    (art, ratio) where ratio = original / new width (displacement stays
+    physically constant when multiplied by it)."""
+    target_w = max(24.0, float(target_w))
+    if art.width > target_w * 1.2:
+        s = target_w / art.width
+        new = art.resize((max(24, int(art.width * s)), max(24, int(art.height * s))),
+                         Image.LANCZOS)
+        return new, art.width / new.width
+    return art, 1.0
+
+
 # ── segmentation: calibrated box + gradient edge-snap ───────────────────────
 
 def segment_package(plate: Image.Image, cfg: Dict, *, v_span: int = 14,
@@ -206,10 +242,15 @@ def print_pouch(plate: Image.Image, art: Image.Image, cfg: Dict, *, bake: float 
     displaced by the plate's folds, lit by the plate's light."""
     a = np.asarray(plate.convert("RGB"), dtype=np.float32)
     H, W = a.shape[:2]
-    seg = segment_package(plate, cfg)
+    k = W / 1024.0
+    seg = segment_package(plate, cfg, v_span=int(round(14 * k)),
+                          snap_span=max(4, int(round(7 * k))))
     mask = seg["mask"]
     l, r = seg["l"], seg["r"]
-    y0, y1 = seg["y0"] + top_inset, seg["y1"] - bot_inset
+    y0 = seg["y0"] + int(round(top_inset * k))
+    y1 = seg["y1"] - int(round(bot_inset * k))
+    on_w = float(np.percentile(r[y0:y1 + 1] - l[y0:y1 + 1], 90))
+    art, pratio = _prescale(art, on_w * 1.35)
     pa = np.asarray(art.convert("RGB"), dtype=np.float32)
     PW, PH = art.size
 
@@ -221,20 +262,21 @@ def print_pouch(plate: Image.Image, art: Image.Image, cfg: Dict, *, bake: float 
 
     # wrinkle displacement: gentle, smoothed, damped toward the gusset/base
     lum = a.mean(axis=2)
-    gxs = _smooth(lum, 22)
-    gx = _smooth(np.gradient(gxs, axis=1)[y0:y1 + 1], 9)
-    gy = _smooth(np.gradient(gxs, axis=0)[y0:y1 + 1], 9)
+    gxs = _smooth(lum, 22 * k)
+    gx = _smooth(np.gradient(gxs, axis=1)[y0:y1 + 1], 9 * k)
+    gy = _smooth(np.gradient(gxs, axis=0)[y0:y1 + 1], 9 * k)
     hh = max(1.0, float(y1 - y0))
     yy_rel = (yy - y0) / hh
     damp = np.clip(1.0 - (np.clip(yy_rel - 0.70, 0.0, None) / 0.30) * 0.9, 0.10, 1.0)
     damp = damp * np.clip(yy_rel / 0.05, 0.25, 1.0)
-    u = u + damp * np.clip(gx / 12.0, -disp, disp)
-    v = v + damp * np.clip(gy / 18.0, -disp * 0.5, disp * 0.5)
+    dm = disp * pratio * damp
+    u = u + np.clip(gx * k / 12.0, -dm, dm)
+    v = v + np.clip(gy * k / 18.0, -dm * 0.5, dm * 0.5)
 
     ink, valid = _bilinear(pa, u, v)
     shade, dn = surface_fields(plate, mask)
     return _composite(plate, mask, ink, valid, shade, dn, y0,
-                      bake=bake, emboss=emboss, feather=feather)
+                      bake=bake, emboss=emboss, feather=feather * k)
 
 
 def print_tube(plate: Image.Image, art: Image.Image, cfg: Dict, *, bake: float = 0.9,
@@ -244,12 +286,16 @@ def print_tube(plate: Image.Image, art: Image.Image, cfg: Dict, *, bake: float =
     visible 180° arc (arcsin compression at the silhouette), lit + embossed."""
     a = np.asarray(plate.convert("RGB"), dtype=np.float32)
     H, W = a.shape[:2]
-    seg = segment_package(plate, cfg)
+    k = W / 1024.0
+    seg = segment_package(plate, cfg, v_span=int(round(14 * k)),
+                          snap_span=max(4, int(round(7 * k))))
     mask = seg["mask"]
     l, r = seg["l"], seg["r"]
     top = detect_lid_bottom(plate, seg) if lid_skip else seg["y0"] + 2
     top = max(top, seg["y0"] + 2)
-    bot = seg["y1"] - 2
+    bot = seg["y1"] - int(round(2 * k))
+    on_w = float(np.percentile(r[top:bot + 1] - l[top:bot + 1], 90))
+    art, _ = _prescale(art, on_w * 1.35)
     pa = np.asarray(art.convert("RGB"), dtype=np.float32)
     PW, PH = art.size
 
@@ -266,7 +312,7 @@ def print_tube(plate: Image.Image, art: Image.Image, cfg: Dict, *, bake: float =
     ink, valid = _bilinear(pa, u, v)
     shade, dn = surface_fields(plate, mask)
     return _composite(plate, mask, ink, valid, shade, dn, top,
-                      bake=bake, emboss=emboss, feather=feather)
+                      bake=bake, emboss=emboss, feather=feather * k)
 
 
 def print_package(plate: Image.Image, art: Image.Image, kind: str, cfg: Dict, **kw) -> Image.Image:

@@ -156,7 +156,7 @@ def apply_paper(img: Image.Image, seed: int = 1) -> Image.Image:
     m = Image.fromarray(np.clip(128 + n * 22, 0, 255).astype(np.uint8), "L")
     m = m.resize((max(1, a.shape[1] // 26), max(1, a.shape[0] // 26)), Image.BILINEAR)
     mot = np.asarray(m.resize((a.shape[1], a.shape[0]), Image.BICUBIC), dtype=np.float32) - 128.0
-    a = a + n[..., None] * 1.9 + mot[..., None] * 0.14
+    a = a + n[..., None] * 0.7 + mot[..., None] * 0.05
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGB")
 
 
@@ -697,9 +697,9 @@ def bag_b06_etched_heritage(logo, motif) -> Image.Image:
     img = Image.new("RGB", (P(BAG_W), P(BAG_H)), IVORY)
     d = ImageDraw.Draw(img)
     frame(d, BAG_W, BAG_H, GOLD_A, inset_mm=6.0, width_mm=0.5, inset2_mm=8.0)
-    et = etch_logo(logo, base=((166, 157, 142), (214, 205, 188)),
-                   rim_hi=(255, 253, 246), rim_lo=(178, 162, 140), tint=0.32,
-                   offset_mm=0.5, softness=0.22)
+    et = etch_logo(logo, base=((152, 142, 126), (212, 203, 186)),
+                   rim_hi=(255, 253, 246), rim_lo=(172, 156, 134), tint=0.32,
+                   offset_mm=0.5, softness=0.13)
     paste_w(img, et, 65, 64, 78)
     headline(d, 65, 120, ["ORGANIC LION'S MANE"], size_mm=8.4, color=FOREST,
              line_gap_mm=10.0, max_w_mm=110, tracking_mm=0.4)
@@ -717,9 +717,9 @@ def bag_b07_etched_noir(logo, motif) -> Image.Image:
     """Near-black matte ground: the real lockup ghost-etched into the surface."""
     img = Image.new("RGB", (P(BAG_W), P(BAG_H)), INK)
     d = ImageDraw.Draw(img)
-    et = etch_logo(logo, base=((56, 68, 58), (112, 128, 108)),
-                   rim_hi=(146, 164, 144), rim_lo=(10, 14, 11), tint=0.25,
-                   offset_mm=0.55, softness=0.26)
+    et = etch_logo(logo, base=((52, 64, 54), (118, 134, 114)),
+                   rim_hi=(150, 168, 148), rim_lo=(10, 14, 11), tint=0.25,
+                   offset_mm=0.55, softness=0.15)
     paste_w(img, et, 65, 96, 116)
     paste_w(img, recolor(wordmark(logo), CREAM), 65, 17, 40)
     rule(d, 24, 24, 106, GOLD_A, 0.5)
@@ -736,9 +736,9 @@ def bag_b08_foil_monogram(logo, motif) -> Image.Image:
     """Cream apothecary: the real mortar-and-pestle mark as a raised gold foil."""
     img = Image.new("RGB", (P(BAG_W), P(BAG_H)), CREAM)
     d = ImageDraw.Draw(img)
-    foil = etch_logo(monogram(logo), base=((148, 114, 38), (232, 200, 124)),
-                     rim_hi=(255, 240, 180), rim_lo=(102, 76, 24), tint=0.0,
-                     offset_mm=0.5, softness=0.22)
+    foil = etch_logo(monogram(logo), base=((140, 106, 32), (236, 206, 130)),
+                     rim_hi=(255, 244, 190), rim_lo=(98, 72, 22), tint=0.0,
+                     offset_mm=0.5, softness=0.13)
     paste_w(img, foil, 65, 74, 62)
     paste_w(img, recolor(wordmark(logo), FOREST), 65, 128, 54)
     ctext(d, 65, 144, "ORGANIC LION'S MANE", F("Inter.ttf", 3.0, [14, 700]), FOREST,
@@ -759,9 +759,9 @@ def bag_b09_kraft_plate(logo, motif) -> Image.Image:
     d = ImageDraw.Draw(img)
     d.rounded_rectangle([P(14), P(12), P(116), P(198)], radius=P(8), fill=CREAM,
                         outline=GOLD_B, width=max(2, P(0.4)))
-    et = etch_logo(logo, base=((164, 155, 140), (212, 203, 186)),
-                   rim_hi=(255, 253, 246), rim_lo=(178, 162, 140), tint=0.32,
-                   offset_mm=0.45, softness=0.22)
+    et = etch_logo(logo, base=((152, 142, 126), (212, 203, 186)),
+                   rim_hi=(255, 253, 246), rim_lo=(172, 156, 134), tint=0.32,
+                   offset_mm=0.45, softness=0.13)
     paste_w(img, et, 65, 48, 56)
     headline(d, 65, 86, ["ORGANIC LION'S MANE"], size_mm=7.8, color=FOREST,
              line_gap_mm=9.4, max_w_mm=92, tracking_mm=0.3)
@@ -787,9 +787,9 @@ def bag_b10_botanical_spine(logo, motif) -> Image.Image:
           block_w_mm=64, block_h_mm=3.8)
     vtext(img, 118, 24, "EST. MMXXVI", F("Inter.ttf", 2.4, [14, 700]), FOREST,
           block_w_mm=44, block_h_mm=3.8)
-    et = etch_logo(logo, base=((112, 138, 96), (172, 196, 154)),
-                   rim_hi=(210, 226, 194), rim_lo=(86, 110, 74), tint=0.3,
-                   offset_mm=0.5, softness=0.22)
+    et = etch_logo(logo, base=((106, 132, 90), (176, 200, 158)),
+                   rim_hi=(214, 230, 198), rim_lo=(80, 104, 68), tint=0.3,
+                   offset_mm=0.5, softness=0.13)
     paste_w(img, et, 65, 58, 66)
     rule(d, 32, 102, 98, FOREST, 0.4)
     headline(d, 65, 116, ["ORGANIC LION'S MANE"], size_mm=9.6, color=FOREST,
