@@ -18,4 +18,5 @@ dependencies = [
     "croniter",
     "cryptography",
     "psycopg[binary]",
+    "sqlite-vec",
 ]
