@@ -17,8 +17,8 @@ let fail = 0
 const ok = (m) => { pass++; console.log('PASS  ' + m) }
 const no = (m, d) => { fail++; console.log('FAIL  ' + m + (d ? ' :: ' + d : '')) }
 
-async function stub(page, { advanced }) {
-  await page.addInitScript(({ advanced }) => {
+async function stub(page, { advanced, card = false }) {
+  await page.addInitScript(({ advanced, card }) => {
     localStorage.setItem('ns-dev-session', JSON.stringify({
       userId: 'u-v3', orgId: 'org-v3', role: 'operator', env: 'production', previewId: '',
     }))
@@ -50,7 +50,28 @@ async function stub(page, { advanced }) {
         return json({ sampled_at: '2026-10-18T00:00:00Z', gpu: { ok: false, gpus: [], reason: 'stub' }, ram: { ok: true, total_mb: 16384, used_mb: 8192, percent: 50 } })
       }
       if (String(url).includes('/api/chat/health')) return json({ ok: true, model: 'stub-model', tools: [], max_tool_steps: 4 })
-      if (String(url).includes('/api/chat/sessions')) return json({ sessions: [] })
+      // In-flight turn (Scenario D): emit a start frame and hold the stream open.
+      if (String(url).includes('/turns') && init && init.method === 'POST') {
+        const enc = new TextEncoder()
+        const stream = new ReadableStream({
+          start(ctrl) { ctrl.enqueue(enc.encode('event: start\ndata: {"turn_id":"t1","model":"stub"}\n\n')) },
+        })
+        return Promise.resolve(new Response(stream, { status: 200, headers: { 'Content-Type': 'text/event-stream' } }))
+      }
+      if (String(url).includes('/api/chat/sessions/s-card/messages')) {
+        return json({
+          session: { id: 's-card', focus_json: { mode: 'auto', label: 'Auto' } },
+          messages: [{
+            id: 'm1', role: 'assistant', content: 'Here are your voices.', model: 'stub',
+            parts_json: [{
+              type: 'card', title: 'Voice profiles', ok: true,
+              rows: [{ label: 'Creator', value: 'v1' }],
+              action: { label: 'Clone a voice', message: 'Clone a creator voice.' },
+            }],
+          }],
+        })
+      }
+      if (String(url).includes('/api/chat/sessions')) return json({ sessions: card ? [{ id: 's-card', title: 'Voice test', focus_json: { mode: 'auto', label: 'Auto' } }] : [] })
       if (!url.includes(FOUND)) return json({ detail: { code: 'not_stubbed' } }, 404)
       const route = url.split(FOUND)[1].split('?')[0]
       if (route === '/ui-mode') return json({ ui_mode: 'full' })
@@ -59,7 +80,7 @@ async function stub(page, { advanced }) {
       if (route === '/preview/active') return json({ active: false, preview: null })
       return json({ detail: { code: 'not_stubbed' } }, 404)
     }
-  }, { advanced })
+  }, { advanced, card })
 }
 
 async function main() {
@@ -145,6 +166,37 @@ async function main() {
     visible ? ok('C: mode toggle reachable at 390px') : no('C: mode toggle hidden on mobile')
     const chips = await page.$$('[data-testid^="mb-focus-"]')
     chips.length > 0 ? ok('C: focus chips render on mobile') : no('C: no focus chips on mobile')
+    await ctx.close()
+  }
+
+  // ── Scenario D: AG-UI cards + human-in-the-loop handover ──────────────────
+  {
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } })
+    const page = await ctx.newPage()
+    await stub(page, { advanced: false, card: true })
+    await page.goto(BASE + 'home')
+    await page.waitForSelector('[data-testid="mb-shell"]', { timeout: 8000 }).catch(() => {})
+
+    const cards = await page.waitForSelector('[data-testid="chat-cards"]', { timeout: 8000 }).catch(() => null)
+    cards ? ok('D: AG-UI card part renders as a component (not plain text)') : no('D: card part did not render')
+    const title = cards ? await page.$eval('[data-testid="chat-cards"] .chat-card-title', (el) => el.innerText).catch(() => '') : ''
+    title.includes('Voice profiles') ? ok('D: card title + rows rendered') : no('D: wrong card title', title)
+    const action = await page.$('[data-testid="chat-card-action"]')
+    action ? ok('D: card carries an interactive action control') : no('D: card action missing')
+
+    // Trigger a turn via the card action, then take over (pause) mid-stream.
+    if (action) {
+      await action.click()
+      const pause = await page.waitForSelector('[data-testid="chat-pause"]', { timeout: 8000 }).catch(() => null)
+      pause ? ok('D: Pause control appears while the agent streams') : no('D: Pause control missing during a turn')
+      if (pause) {
+        await pause.click()
+        const paused = await page.waitForSelector('[data-testid="chat-paused"]', { timeout: 5000 }).catch(() => null)
+        paused ? ok('D: human handover — agent paused, operator is driving') : no('D: paused banner did not appear')
+        const resume = await page.$('[data-testid="chat-resume"]')
+        resume ? ok('D: Resume control offered to hand control back') : no('D: resume control missing')
+      }
+    }
     await ctx.close()
   }
 

@@ -38,13 +38,15 @@ FOCUS_MODES: List[Dict[str, Any]] = [
     {
         "id": "create",
         "label": "Create",
-        "blurb": "Packaging, product photos, listing images, ad creative.",
-        "tools": ["list_templates", "design_brief", "create_dieline", "generate_image"],
+        "blurb": "Packaging, product photos, listing images, ad creative, voiceovers.",
+        "tools": ["list_templates", "design_brief", "create_dieline", "generate_image",
+                  "voice_list", "voice_tts", "voice_dub"],
         "requires": None,
         "suggestions": [
             "Draft three directions for a Lion's Mane pouch — kraft, botanical, premium shelf.",
             "Build a stand-up pouch dieline for a 6 oz powder.",
             "Give me a shot list for a warm-linen product photo of a stand-up pouch.",
+            "List the voice profiles available for ad voiceovers.",
         ],
     },
     {

@@ -63,4 +63,17 @@ CHAT_TABLES_SQL = """
                 created_at TEXT DEFAULT (datetime('now'))
             );
             CREATE INDEX IF NOT EXISTS idx_chat_attachments_message ON chat_attachments(message_id);
+
+            -- Tool Execution Gateway audit (V3 REA inject): every tool attempt an
+            -- agent makes is logged here, allowed AND denied. Append-only.
+            CREATE TABLE IF NOT EXISTS tool_audit (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                tool TEXT NOT NULL,
+                decision TEXT NOT NULL,         -- allowed | executed | denied
+                reason TEXT,
+                detail TEXT,
+                created_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_tool_audit_account ON tool_audit(account_id);
         """

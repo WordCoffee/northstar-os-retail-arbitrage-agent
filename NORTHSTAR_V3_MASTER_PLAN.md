@@ -85,6 +85,21 @@ browser control; REA attaches passively (no clicks, no input, no eval).
 ready to run; Perplexity/Claude/Gemini windows follow the same shape: dedicated
 Chrome profile, operator drives, agent observes, `[PAUSE-AUTH]` respected.
 
+### 2.1 REA inject — OpenBot concepts — **BUILT**
+
+Three OpenBot patterns, adapted to this stack's guardrails (each one is a
+boundary addition, not a permission addition).
+
+| Concept | Northstar translation | Where | Status |
+|---|---|---|---|
+| **Tool Execution Gateway** | One interception point for every agent tool call: a **deny-list** (exec/eval/shell/credential/network/file tools) that no future registration can silently widen, an **append-only `tool_audit`** row for every attempt (`allowed`/`denied`/`executed` + reason + latency), then delegation to `chat_tools.run_tool`. Denials return the normal tool-failure shape, so the model reacts instead of crashing. | `tool_gateway.py`, `chat_schema.py` (`tool_audit`), `data_layer.py` (`ToolAuditDB`), `chat_router.py` (turn loop) | BUILT |
+| **AG-UI generative UI** | A tool may declare a **card** in its result (`title` + `rows` + `action`); the turn loop appends it as a `card` part and the shell renders an **interactive component** — not a wall of text. First consumers are the VoiceStudio tools; the pattern is generic. | `chat_router.py` (card part), `src/chat/ChatSurface.jsx` (`.chat-card*`), `src/styles/shell.css` | BUILT |
+| **Human-in-the-Loop handover** | A **Pause** control stops the agent mid-stream and flips the shell to "you're driving"; the turn queue is suppressed while paused, and the operator's next message hands control back. No state is lost — persistence continues on the existing session. | `src/chat/ChatSurface.jsx` (`chat-pause`/`chat-paused`/`chat-resume`) | BUILT |
+
+The gateway is what makes the hardware telemetry daemon's "read-only by
+construction" guarantee enforceable for **agent-initiated** actions: the daemon
+registers no tools, and every tool an agent reaches is now gated and logged.
+
 ---
 
 ## 3. S6 — Cosmic shell, Master Brain planet, hardware guard — **BUILT**
@@ -134,6 +149,30 @@ the `autothink_workspace` capability (plan gate or hosted pro/team org). It
 currently reuses the universal chat surface with the full tool set.
 **PLANNED:** session snapshots/rewind (fork a session from any turn),
 multi-step plan/DAG visualiser, sandbox runner panel, build-artifact browser.
+
+---
+
+## 4A. Create focus — VoiceStudio UGC media pipeline — **BUILT**
+
+**What it is:** VoiceStudio is integrated as a **modular local API service**
+(not a vendored dependency), powering automated UGC ad voiceovers, product
+video localization, and hook testing inside the Create workspace.
+
+| Piece | Where | Notes |
+|---|---|---|
+| Async API client | `voicestudio_adapter.py` | `VoiceStudioAdapter`: voice **cloning / profile management** (`list_voices`, `clone_voice`), **TTS generation** (`tts`), **multi-language dubbing** (`dub`). Config via `VOICESTUDIO_URL` (+ optional `VOICESTUDIO_API_KEY`, `VOICESTUDIO_PATHS`); no new deps (small `requests` core run on a worker thread, `asyncio.to_thread`). |
+| Create-focus tool hooks | `chat_tools.py` + `shell_focus.py` | `voice_list`, `voice_tts`, `voice_dub` are registered tools and are offered **only** in the Create focus's tool set — the same server-owned restriction the other foci use. |
+| Interactive results | `chat_router.py` card parts | Each voice tool returns an AG-UI **card** (voice/char count/lang) with a follow-up action, so an operator triggers and iterates on audio assets from the shell. |
+| Gate | `tool_gateway.py` | Voice calls go through the gateway too: if the service is **unarmed/unreachable** the tool returns `ok:false` with the real reason — never a pretend voiceover. |
+
+**Honesty contract:** no fabricated audio; unreachable service ⇒ honest failure;
+every response reports the service's own latency, and the endpoints are the
+operator's deployed routes. The adapter's default base URL is a **local
+self-hosted instance** the operator runs — it is a configurable default, not a
+claim that a service is present.
+
+**Next (PARTIAL hooks):** a render-jobs panel for long dubs, hook-A/B comparison
+cards, and wiring the same adapter into Creative Studio's video lanes.
 
 ---
 
@@ -203,8 +242,8 @@ During the hosted beta, orgs whose materialised entitlements carry
 
 | Layer | Evidence |
 |---|---|
-| Backend unit/integration | `python -m pytest test_shell_modes.py` (27) + `test_chat_core`/`test_chat_tools`/`test_subscription_catalog_smoke`/`test_plans_route` (65 total in the combined run) |
-| Shell gate end-to-end | `node verify-shell-v3.cjs` — 14/14 (denied tier: shell only, no Advanced, `?shell=advanced` degrades; granted tier: Advanced renders rooms and returns; mobile toggle reachable at 390px) |
+| Backend unit/integration | `python -m pytest test_shell_modes.py` (33) + `test_tool_gateway.py` (5) + `test_voicestudio_adapter.py` (9) + `test_chat_core`/`test_chat_tools`/`test_subscription_catalog_smoke`/`test_plans_route` (combined run) |
+| Shell gate end-to-end | `node verify-shell-v3.cjs` — 20/20 (denied tier: shell only, no Advanced, `?shell=advanced` degrades; granted tier: Advanced renders rooms and returns; mobile toggle reachable at 390px; **AG-UI card renders as a component**; **pause → paused → resume handover**) |
 | Existing harnesses | `verify-guards.cjs` 11/0, `verify-admin.cjs` 33/0, `verify-acceptance.cjs` 2 fails (both pre-existing; baseline had 8 — 6 fixed by the harness role-vocabulary correction) |
 | Build | `npm run build` — 0 errors |
 | Live E2E (operator) | Start the stack, open `/ui/home` → Simple shell; switch focus; run one turn; open a render in the lightbox; flip to Advanced (if entitled) |
@@ -222,9 +261,11 @@ false failures.
 1. ~~S4 shell foundation~~ **BUILT + verified**
 2. ~~S6 canvas / planet / telemetry~~ **BUILT + verified** (presentation polish
    continues under the UI/model phase)
-3. S5 AutothinK premium surface (snapshots/rewind, plan visualiser) — next UI phase
-4. S7 Brand SEO Engine (profile, revisions, cross-service hooks, imports)
-5. S8 curated corpus + learning loop
-6. Operator-window REA captures (Packify first) when the operator is present
+3. ~~REA inject — tool gateway · AG-UI cards · human handover~~ **BUILT + verified**
+4. ~~Create focus — VoiceStudio UGC media pipeline~~ **BUILT + verified**
+5. S5 AutothinK premium surface (snapshots/rewind, plan visualiser) — next UI phase
+6. S7 Brand SEO Engine (profile, revisions, cross-service hooks, imports)
+7. S8 curated corpus + learning loop
+8. Operator-window REA captures (Packify first) when the operator is present
 
 Every live/paid action remains gated per action; nothing in V3 alters that.

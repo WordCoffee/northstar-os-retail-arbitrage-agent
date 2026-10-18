@@ -187,6 +187,7 @@ export default function ChatSurface({
   const [pinned, setPinned] = useState(true)
   const [lightbox, setLightbox] = useState(null)   // {id, name, kind}
   const [editing, setEditing] = useState(null)     // {id, text}
+  const [paused, setPaused] = useState(false)     // human-in-the-loop handover
   const abortRef = useRef(null)
   const scrollRef = useRef(null)
   const mediaRef = useRef(null)
@@ -259,6 +260,13 @@ export default function ChatSurface({
           })),
           assets: parts.filter((p) => p.type === 'tool')
             .flatMap((p) => (p.assets || []).map((id) => ({ id, name: 'asset' }))),
+          cards: parts.filter((p) => p.type === 'card').map((p, i) => ({
+            id: `card-${i}`,
+            title: p.title || 'Card',
+            rows: Array.isArray(p.rows) ? p.rows : [],
+            action: p.action || null,
+            ok: !!p.ok,
+          })),
         }
       }))
     } catch (e) {
@@ -409,21 +417,23 @@ export default function ChatSurface({
     if (!content) return
     setInput('')
     setEditing(null)
+    if (paused) setPaused(false)   // a human message hands control back to the agent
     if (streaming) {
       setQueue((q) => [...q, content])
       return
     }
     runTurn(content)
-  }, [input, streaming, runTurn])
+  }, [input, streaming, runTurn, paused])
 
-  // Drain the queue at the next safe pause point (turn finished).
+  // Drain the queue at the next safe pause point (turn finished). While the
+  // human has taken over (paused), nothing drains — the agent waits.
   useEffect(() => {
-    if (!streaming && queue.length) {
+    if (!streaming && queue.length && !paused) {
       const [next, ...rest] = queue
       setQueue(rest)
       runTurn(next)
     }
-  }, [streaming, queue, runTurn])
+  }, [streaming, queue, runTurn, paused])
 
   const stop = useCallback(() => {
     if (turnId) chatApi.cancelTurn(turnId).catch(() => {})
@@ -584,6 +594,23 @@ export default function ChatSurface({
               Advanced view
             </button>
           )}
+          {streaming && !paused && (
+            <button type="button" className="btn btn-sm" onClick={() => { stop(); setPaused(true) }}
+              data-testid="chat-pause" title="Pause the agent and take over">
+              ⏸ Pause
+            </button>
+          )}
+          {paused && (
+            <span className="chip mb-chip" data-testid="chat-paused" title="The agent is waiting for you">
+              You&rsquo;re driving — agent paused
+            </span>
+          )}
+          {paused && (
+            <button type="button" className="btn btn-sm btn-ghost"
+              onClick={() => setPaused(false)} data-testid="chat-resume">
+              ▶ Resume agent
+            </button>
+          )}
           {streaming && (
             <button type="button" className="btn btn-sm" onClick={stop} data-testid="chat-stop">
               Stop
@@ -690,6 +717,28 @@ export default function ChatSurface({
                         </span>
                       </div>
                     ) : null))}
+                  </div>
+                )}
+                {m.role === 'assistant' && (m.cards || []).length > 0 && (
+                  <div className="chat-cards" data-testid="chat-cards">
+                    {m.cards.map((c) => (
+                      <div key={c.id} className={`chat-card ${c.ok ? '' : 'error'}`}>
+                        <div className="chat-card-title">{c.title}</div>
+                        {(c.rows || []).map((r, i) => (
+                          <div key={i} className="chat-card-row">
+                            <span className="chat-card-label">{r.label}</span>
+                            <span className="chat-card-value">{r.value}</span>
+                          </div>
+                        ))}
+                        {c.action && (
+                          <button type="button" className="btn btn-sm"
+                            onClick={() => send(c.action.message)}
+                            data-testid="chat-card-action">
+                            {c.action.label || 'Open'}
+                          </button>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
                 {m.role === 'assistant' && m.thinking && (

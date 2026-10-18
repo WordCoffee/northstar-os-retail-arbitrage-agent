@@ -2963,6 +2963,35 @@ class DesignStudioContainer:
         self.amazon_files = DesignStudioAmazonFilesDB(db)
 
 
+class ToolAuditDB:
+    """Audit log for the Tool Execution Gateway (V3 REA inject). Append-only."""
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def create(self, entry: Dict[str, Any]) -> str:
+        import uuid
+        tid = entry.get("id") or str(uuid.uuid4())
+        entry = dict(entry)
+        entry["id"] = tid
+        entry.setdefault("created_at", datetime.now(timezone.utc).isoformat())
+        cols = [c for c in entry.keys()]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO tool_audit ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(entry.values()),
+        )
+        self.db.commit()
+        return tid
+
+    def list_by_account(self, account_id: str, limit: int = 100) -> list:
+        cur = self.db.execute(
+            "SELECT * FROM tool_audit WHERE account_id = ? ORDER BY created_at DESC LIMIT ?",
+            (account_id, limit),
+        )
+        return [dict(r) for r in cur.fetchall()]
+
+
 class ChatContainer:
     """Namespace for the Simple-mode chat stores (S1). Additive."""
 
@@ -2971,6 +3000,7 @@ class ChatContainer:
         self.messages = ChatMessagesDB(db)
         self.tool_calls = ChatToolCallsDB(db)
         self.attachments = ChatAttachmentsDB(db)
+        self.tool_audit = ToolAuditDB(db)
 
 
 class NorthstarDB:

@@ -43,6 +43,7 @@ from data_layer import get_northstar_db
 from design_studio_api import studio_account
 import chat_adapter
 import chat_tools
+import tool_gateway
 from shell_focus import VALID_FOCUS_IDS, tools_for_focus
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
@@ -302,7 +303,7 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
 
                 def _work(_box=box, _call=call, _ctx=worker_ctx, _args=args_payload):
                     try:
-                        _box["r"] = chat_tools.run_tool(_call["name"], _args, _ctx)
+                        _box["r"] = tool_gateway.run_tool_gated(db.chat, account_id, _call["name"], _args, _ctx)
                     except Exception as exc:  # noqa: BLE001
                         _box["r"] = {"ok": False, "summary": "tool crashed",
                                      "error": str(exc)[:300], "assets": []}
@@ -357,6 +358,18 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                     "started_at": started_at,
                     "ended_at": _now(),
                 })
+                # AG-UI: a tool may declare an interactive card (title, rows,
+                # action). It is appended as a card part so the UI renders an
+                # actionable component, not plain text.
+                card = (result.get("data") or {}).get("card")
+                if isinstance(card, dict) and card.get("title"):
+                    tool_parts.append({
+                        "type": "card",
+                        "title": str(card.get("title"))[:120],
+                        "rows": card.get("rows") or [],
+                        "action": card.get("action") or None,
+                        "ok": bool(result.get("ok")),
+                    })
                 tool_parts.append({
                     "type": "tool", "call_id": call_id, "name": call["name"],
                     "ok": bool(result.get("ok")), "summary": result.get("summary"),

@@ -18,13 +18,39 @@ Honesty boundaries:
 
 from __future__ import annotations
 
+import asyncio
 import json
 import re
+import threading
 import uuid
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
 MAX_TOOL_STEPS = 4  # bounded tool rounds per chat turn
+
+
+def _run_async(coro):
+    """Run one coroutine to completion from a sync tool handler.
+
+    Tool handlers execute in worker threads (chat_router) — usually no event
+    loop is running, so asyncio.run works. If a loop IS running on this
+    thread, the coroutine runs on a fresh thread to avoid "already running".
+    """
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+    if loop is not None and loop.is_running():
+        box: Dict[str, Any] = {}
+
+        def _worker():
+            box["r"] = asyncio.run(coro)
+
+        t = threading.Thread(target=_worker, daemon=True)
+        t.start()
+        t.join()
+        return box.get("r") or {"ok": False, "error": "async call failed", "assets": []}
+    return asyncio.run(coro)
 
 
 # ── Argument parsing + validation (outputguard-style) ───────────────────────
@@ -312,6 +338,86 @@ def _t_generate_image(args, ctx) -> dict:
     }
 
 
+def _t_voice_list(args, ctx) -> dict:
+    from voicestudio_adapter import get_adapter
+    out = _run_async(get_adapter().list_voices())
+    if not out.get("ok"):
+        return {"ok": False, "summary": "The local voice service is not reachable.",
+                "error": out.get("error", "unreachable"), "assets": []}
+    data = out.get("data") or {}
+    voices = data.get("voices") or []
+    rows = [{"id": v.get("id"), "name": v.get("name")}
+            for v in voices if isinstance(v, dict)]
+    return {
+        "ok": True,
+        "summary": f"{len(rows)} voice profile(s) available for ad voiceovers.",
+        "assets": [],
+        "data": {
+            "card": {
+                "title": "Voice profiles",
+                "rows": [{"label": r["name"] or r["id"], "value": r["id"]} for r in rows[:12]] or
+                        [{"label": "no voices yet", "value": "—"}],
+                "action": {"label": "Clone a voice",
+                           "message": "Clone a creator voice for ad consistency."},
+            },
+            "voices": rows,
+        },
+    }
+
+
+def _t_voice_tts(args, ctx) -> dict:
+    from voicestudio_adapter import get_adapter
+    voice_id = args.get("voice_id") or ""
+    if not voice_id:
+        return {"ok": False, "summary": "No voice selected.",
+                "error": "voice_id is required (see voice_list).", "assets": []}
+    text = str(args.get("text") or "").strip()
+    if not text:
+        return {"ok": False, "summary": "No script to speak.",
+                "error": "text is required.", "assets": []}
+    out = _run_async(get_adapter().tts(text, voice_id, lang=args.get("lang") or "en"))
+    if not out.get("ok"):
+        return {"ok": False, "summary": "TTS failed.",
+                "error": out.get("error", "unreachable"), "assets": []}
+    data = out.get("data") or {}
+    return {
+        "ok": True,
+        "summary": f"Generated a {len(text)}-char voiceover ({out.get('elapsed_ms')} ms).",
+        "assets": [],
+        "data": {"card": {"title": "Voiceover ready",
+                           "rows": [{"label": "voice", "value": voice_id},
+                                    {"label": "lang", "value": args.get("lang") or "en"},
+                                    {"label": "chars", "value": str(len(text))}],
+                           "action": {"label": "Make a variant", "message": "Regenerate that voiceover with a different tone."}},
+                "audio_url": data.get("audio_url"), "voice_id": voice_id},
+    }
+
+
+def _t_voice_dub(args, ctx) -> dict:
+    from voicestudio_adapter import get_adapter
+    text = str(args.get("text") or "").strip()
+    target = str(args.get("target_lang") or "").strip()
+    if not text or not target:
+        return {"ok": False, "summary": "Dubbing needs text + target_lang.",
+                "error": "text and target_lang are required.", "assets": []}
+    out = _run_async(get_adapter().dub(text, target, voice_id=args.get("voice_id")))
+    if not out.get("ok"):
+        return {"ok": False, "summary": "Dubbing failed.",
+                "error": out.get("error", "unreachable"), "assets": []}
+    data = out.get("data") or {}
+    return {
+        "ok": True,
+        "summary": f"Dubbed {len(text)} chars into {target} ({out.get('elapsed_ms')} ms).",
+        "assets": [],
+        "data": {"card": {"title": f"Dub · {target}",
+                           "rows": [{"label": "source chars", "value": str(len(text))},
+                                    {"label": "target", "value": target},
+                                    {"label": "voice", "value": args.get("voice_id") or "auto"}],
+                           "action": {"label": "Dub another", "message": f"Dub that script into another language."}},
+                "audio_url": data.get("audio_url"), "target_lang": target},
+    }
+
+
 # ── Registry ─────────────────────────────────────────────────────────────────
 
 TOOLS: Dict[str, dict] = {
@@ -372,6 +478,40 @@ TOOLS: Dict[str, dict] = {
             "required": ["prompt"],
         },
         "handler": _t_generate_image,
+    },
+    "voice_list": {
+        "description": ("List voice profiles on the local VoiceStudio service for ad "
+                        "voiceovers (id + name). Requires VoiceStudio running (VOICESTUDIO_URL)."),
+        "parameters": {"type": "object", "properties": {}, "required": []},
+        "handler": _t_voice_list,
+    },
+    "voice_tts": {
+        "description": ("Generate a voiceover from an ad script using a VoiceStudio "
+                        "voice (see voice_list). Requires VoiceStudio running."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "text": {"type": "string", "description": "The ad script / voiceover text.", "minLength": 3, "maxLength": 2000},
+                "voice_id": {"type": "string", "description": "Voice id from voice_list."},
+                "lang": {"type": "string", "description": "Language code (default en).", "default": "en"},
+            },
+            "required": ["text", "voice_id"],
+        },
+        "handler": _t_voice_tts,
+    },
+    "voice_dub": {
+        "description": ("Dub an ad script into another language via VoiceStudio "
+                        "(translate + synthesize) for marketplace expansion."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "text": {"type": "string", "description": "The script to dub.", "minLength": 3, "maxLength": 2000},
+                "target_lang": {"type": "string", "description": "Target language code (e.g. es, de, ja)."},
+                "voice_id": {"type": "string", "description": "Optional voice id (auto if omitted)."},
+            },
+            "required": ["text", "target_lang"],
+        },
+        "handler": _t_voice_dub,
     },
 }
 

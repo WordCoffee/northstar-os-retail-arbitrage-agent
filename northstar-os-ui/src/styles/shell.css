@@ -104,6 +104,22 @@
   position: relative;
   backdrop-filter: blur(16px) saturate(1.25);
 }
+/* ── AG-UI cards (V3 REA inject) ─────────────────────────────────────────── */
+.chat-cards { display: flex; flex-direction: column; gap: 8px; max-width: 720px; }
+.chat-card {
+  border: 1px solid rgba(242, 237, 229, 0.16); border-radius: var(--radius);
+  background: rgba(242, 237, 229, 0.05); padding: 10px 12px; font-size: 12px;
+}
+.chat-card.error { border-color: var(--status-error); }
+.chat-card-title { font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.chat-card-row { display: flex; gap: 10px; padding: 2px 0; }
+.chat-card-label { color: var(--ink-soft); min-width: 110px; }
+.chat-card-value { color: var(--ink); font-family: var(--font-mono); font-size: 11px; }
+.chat-card .btn { margin-top: 8px; }
+
+/* ── Human-in-the-loop handover (V3 REA inject) ─────────────────────────── */
+.mb-shell .chat-head .chip { border: 1px solid rgba(242, 237, 229, 0.2); color: #ffd9a8; }
+
 /* Media-scope override: user bubbles stay light (intentional iMessage-style
    contrast), assistant bubbles + tool chips ride the dark surface tokens. */
 [data-theme-scope="media"] .chat-bubble { background: rgba(242, 237, 229, 0.06); border-color: rgba(242, 237, 229, 0.14); }
