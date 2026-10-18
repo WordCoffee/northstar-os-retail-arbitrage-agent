@@ -88,7 +88,23 @@ line, plus 3mm bleed + weld/fold/zipper marks (bags) / seam + glue tab (canister
 """
 
 
+def _cli() -> tuple:
+    """Optional --only k1,k2  --pack <folder-name> for subset exports."""
+    argv = sys.argv[1:]
+    only = None
+    pack_name = None
+    if "--only" in argv:
+        only = {k for k in argv[argv.index("--only") + 1].split(",") if k}
+    if "--pack" in argv:
+        pack_name = argv[argv.index("--pack") + 1]
+    return only, pack_name
+
+
 def main() -> None:
+    global PACK
+    only, pack_name = _cli()
+    if pack_name:
+        PACK = PACK.parent / pack_name
     PACK.mkdir(parents=True, exist_ok=True)
     (PACK / "logo").mkdir(exist_ok=True)
     (PACK / "designs").mkdir(exist_ok=True)
@@ -120,6 +136,8 @@ def main() -> None:
     motif.save(PACK / "logo" / "motif_lionsmane.png")
 
     specs = {s["key"]: s for s in pd.design_specs()}
+    if only:
+        specs = {k: v for k, v in specs.items() if k in only}
     registry = []
     thumbs_front, thumbs_back = [], []
 

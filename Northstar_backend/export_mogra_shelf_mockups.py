@@ -28,7 +28,9 @@ DESIGNS = ROOT.parent / "exports" / "mogra-designs-20261018-bold" / "designs"
 PACK = ROOT.parent / "exports" / "mogra-shelf-mockups-20261018-v3-studio"
 
 BAG_DESIGNS = ["01_forest_bold", "02_sticker_fun", "03_midnight_luxe",
-               "04_kilim_arch", "05_split_duo"]
+               "04_kilim_arch", "05_split_duo", "b06_etched_heritage",
+               "b07_etched_noir", "b08_foil_monogram", "b09_kraft_plate",
+               "b10_botanical_spine"]
 CAN_DESIGNS = ["06_wall_of_type", "07_dome_gold", "08_stamp_roll",
                "09_edge_stripe", "10_concentric"]
 
@@ -36,19 +38,38 @@ PLATES = {"bag": ("plate2_pouch_front", "plate2_pouch_back"),
           "canister": ("plate2_tube_front", "plate2_tube_back")}
 
 
+def _cli() -> tuple:
+    """Optional --only k1,k2  --pack <folder>  --designs <folder> for subsets."""
+    argv = sys.argv[1:]
+    only = None
+    pack_name = None
+    designs_dir = None
+    if "--only" in argv:
+        only = {k for k in argv[argv.index("--only") + 1].split(",") if k}
+    if "--pack" in argv:
+        pack_name = argv[argv.index("--pack") + 1]
+    if "--designs" in argv:
+        designs_dir = Path(argv[argv.index("--designs") + 1])
+    return only, pack_name, designs_dir
+
+
 def main() -> None:
-    PACK.mkdir(parents=True, exist_ok=True)
+    only, pack_name, designs_dir = _cli()
+    pack = (PACK.parent / pack_name) if pack_name else PACK
+    pack.mkdir(parents=True, exist_ok=True)
+    designs = designs_dir or DESIGNS
     cfg = me.load_plate_config()
     registry = []
     rows_front, rows_back, labels = [], [], []
 
-    for key in BAG_DESIGNS + CAN_DESIGNS:
+    keys = [k for k in BAG_DESIGNS + CAN_DESIGNS if (not only or k in only)]
+    for key in keys:
         kind = "bag" if key in BAG_DESIGNS else "canister"
         pf_name, pb_name = PLATES[kind]
-        d_folder = DESIGNS / key
+        d_folder = designs / key
         front_art = Image.open(d_folder / "front.png").convert("RGB")
         back_art = Image.open(d_folder / "back.png").convert("RGB")
-        out = PACK / key
+        out = pack / key
         out.mkdir(parents=True, exist_ok=True)
 
         plate_f = Image.open(STUDIO / f"{pf_name}.png").convert("RGB")
@@ -81,7 +102,7 @@ def main() -> None:
     d = ImageDraw.Draw(sheet)
     f_cap = ImageFont.truetype(str(ROOT / "assets" / "fonts" / "PlayfairDisplay.ttf"), 54)
     f_lab = ImageFont.truetype(str(ROOT / "assets" / "fonts" / "Inter.ttf"), 26)
-    d.text((margin, 26), "MOGRA ORGANICS — shelf mockups · 10 designs × front + back",
+    d.text((margin, 26), f"MOGRA ORGANICS — shelf mockups · {len(labels)} designs × front + back",
            fill=(28, 28, 28), font=f_cap)
     x = margin
     for t, lab in zip(tf, labels):
@@ -95,10 +116,10 @@ def main() -> None:
         sheet.paste(t, (x, y2))
         x += t.width + gap
     sheet = sheet.resize((sheet.width // 2, sheet.height // 2), Image.LANCZOS)
-    sheet.save(PACK / "contact_sheet.png")
+    sheet.save(pack / "contact_sheet.png")
 
     readme = [
-        "# MOGRA ORGANICS — shelf mockups v2 (10 designs, front + back)",
+        f"# MOGRA ORGANICS — shelf mockups v2 ({len(registry)} designs, front + back)",
         "",
         f"Generated {datetime.now(timezone.utc).isoformat()} by the Northstar creative system.",
         "",
@@ -120,8 +141,8 @@ def main() -> None:
     ]
     for r in registry:
         readme.append(f"- {r['design']}: `{r['front']}` · `{r['back']}`")
-    (PACK / "README.md").write_text("\n".join(readme), encoding="utf-8")
-    print("PACK:", PACK, "| designs:", len(registry))
+    (pack / "README.md").write_text("\n".join(readme), encoding="utf-8")
+    print("PACK:", pack, "| designs:", len(registry))
 
 
 if __name__ == "__main__":

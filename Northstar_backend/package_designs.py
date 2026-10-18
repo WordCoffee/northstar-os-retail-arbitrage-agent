@@ -19,7 +19,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from PIL import Image, ImageChops, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 import numpy as np
 
@@ -620,6 +620,174 @@ BAG_FRONTS = {
 }
 
 
+# ── bag series 2 (bags only) — the REAL logo, ETCHED into the material ──────
+
+def paste_w(canvas, img, cx, cy, w):
+    """Paste an RGBA block scaled to width w mm, centred on (cx, cy)."""
+    r = img.resize((P(w), max(2, int(P(w) * img.height / img.width))), Image.LANCZOS)
+    canvas.paste(r, (int(P(cx) - r.width / 2), int(P(cy) - r.height / 2)), r)
+    return r
+
+
+def etch_logo(logo, *, tone, hi=None, lo=None, offset_mm=0.4, softness=0.2,
+              mode="deboss"):
+    """The real logo rendered as an etched stamp cut into/onto a surface.
+
+    tone = the mark's surface tone; bevel highlight/shadow come from the logo's
+    own silhouette offset by ~0.4 mm (deboss: shadow upper-left, light lower-
+    right — an engraved groove; emboss: reversed — a raised foil stamp).
+    """
+    src = logo.convert("RGBA")
+    # the operator's logo file is flat (no alpha): key the ink from darkness,
+    # and respect an existing alpha channel when the source has one.
+    arr = np.asarray(src.convert("RGB"), dtype=np.float32)
+    mn = arr.min(axis=2)
+    keyed = np.clip((196.0 - mn) * 2.4, 0.0, 255.0)
+    existing = np.asarray(src.split()[3], dtype=np.float32)
+    mask = Image.fromarray((keyed * (existing / 255.0)).astype(np.uint8), "L")
+    W, H = src.size
+    if hi is None:
+        hi = tuple(min(255, int(c) + 30) for c in tone)
+    if lo is None:
+        lo = tuple(max(0, int(c) - 34) for c in tone)
+
+    def layer(color, dx=0, dy=0):
+        im = Image.new("RGBA", (W, H), tuple(int(c) for c in color) + (255,))
+        m = ImageChops.offset(mask, dx, dy) if (dx or dy) else mask
+        if softness:
+            m = m.filter(ImageFilter.GaussianBlur(max(1, P(softness))))
+        im.putalpha(m)
+        return im
+
+    out = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    o = P(offset_mm)
+    if o:
+        if mode == "deboss":
+            out.alpha_composite(layer(lo, -o, -o))
+            out.alpha_composite(layer(hi, o, o))
+        else:
+            out.alpha_composite(layer(hi, -o, -o))
+            out.alpha_composite(layer(lo, o, o))
+    out.alpha_composite(layer(tone))
+    return out
+
+
+def bag_b06_etched_heritage(logo, motif) -> Image.Image:
+    """Ivory heritage: the real lockup etched into the paper, framed foil rules."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), IVORY)
+    d = ImageDraw.Draw(img)
+    frame(d, BAG_W, BAG_H, GOLD_A, inset_mm=6.0, width_mm=0.5, inset2_mm=8.0)
+    et = etch_logo(logo, tone=(222, 208, 186), hi=(255, 253, 246), lo=(186, 170, 146),
+                   offset_mm=0.45, softness=0.22)
+    paste_w(img, et, 65, 64, 78)
+    headline(d, 65, 120, ["ORGANIC LION'S MANE"], size_mm=8.4, color=FOREST,
+             line_gap_mm=10.0, max_w_mm=110, tracking_mm=0.4)
+    ctext(d, 65, 131, "MUSHROOM POWDER", F("Inter.ttf", 3.0, [14, 700]), FOREST,
+          tracking_mm=3.0)
+    rule(d, 42, 137, 88, GOLD_A, 0.5)
+    place_motif(img, motif, 65, 162, 64, 38)
+    icon_row(d, 65, 185, 3.2, 9.6, FOREST, disc=IVORY)
+    value_capsule(img, BAG_W, 65, 198, 108, 12.5, FACTS, bg=FOREST, fg=CREAM,
+                  sep=(96, 116, 96))
+    return img
+
+
+def bag_b07_etched_noir(logo, motif) -> Image.Image:
+    """Near-black matte ground: the real lockup ghost-etched into the surface."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), INK)
+    d = ImageDraw.Draw(img)
+    et = etch_logo(logo, tone=(48, 60, 51), hi=(84, 100, 86), lo=(12, 16, 13),
+                   offset_mm=0.5, softness=0.28)
+    paste_w(img, et, 65, 96, 116)
+    paste_w(img, recolor(wordmark(logo), CREAM), 65, 17, 40)
+    rule(d, 24, 24, 106, GOLD_A, 0.5)
+    headline(d, 65, 158, ["ORGANIC LION'S MANE"], size_mm=9.4, color=CREAM,
+             line_gap_mm=11.0, max_w_mm=110, tracking_mm=0.3)
+    ctext(d, 65, 173, "MUSHROOM POWDER", F("Inter.ttf", 3.0, [14, 700]), GOLD_A,
+          tracking_mm=3.2)
+    value_capsule(img, BAG_W, 65, 189, 108, 12.5, FACTS, bg=GOLD_A, fg=INK,
+                  sep=(150, 118, 44))
+    return img
+
+
+def bag_b08_foil_monogram(logo, motif) -> Image.Image:
+    """Cream apothecary: the real mortar-and-pestle mark as a raised gold foil."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), CREAM)
+    d = ImageDraw.Draw(img)
+    foil = etch_logo(monogram(logo), tone=GOLD_A, hi=(238, 208, 130), lo=(146, 112, 40),
+                     offset_mm=0.5, softness=0.25, mode="emboss")
+    paste_w(img, foil, 65, 74, 62)
+    paste_w(img, recolor(wordmark(logo), FOREST), 65, 128, 54)
+    ctext(d, 65, 144, "ORGANIC LION'S MANE", F("Inter.ttf", 3.0, [14, 700]), FOREST,
+          tracking_mm=3.4)
+    ctext(d, 65, 152, "MUSHROOM POWDER", F("Inter.ttf", 2.6, [14, 600]), FOREST,
+          tracking_mm=2.6)
+    icon_row(d, 65, 170, 3.2, 9.8, FOREST, disc=CREAM)
+    value_capsule(img, BAG_W, 65, 190, 106, 13, FACTS, bg=FOREST, fg=CREAM,
+                  sep=(96, 116, 96))
+    ctext(d, 65, 202, "MOGRA ORGANICS - EST. MMXXVI", F("Inter.ttf", 2.3, [14, 600]),
+          FOREST, tracking_mm=1.4)
+    return img
+
+
+def bag_b09_kraft_plate(logo, motif) -> Image.Image:
+    """Kraft bag with a printed cream 'label plate' carrying the etched lockup."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), KRAFT)
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([P(14), P(12), P(116), P(198)], radius=P(8), fill=CREAM,
+                        outline=GOLD_B, width=max(2, P(0.4)))
+    et = etch_logo(logo, tone=(221, 207, 185), hi=(252, 249, 242), lo=(186, 170, 146),
+                   offset_mm=0.4, softness=0.22)
+    paste_w(img, et, 65, 48, 56)
+    headline(d, 65, 86, ["ORGANIC LION'S MANE"], size_mm=7.8, color=FOREST,
+             line_gap_mm=9.4, max_w_mm=92, tracking_mm=0.3)
+    ctext(d, 65, 96, "MUSHROOM POWDER", F("Inter.ttf", 2.7, [14, 700]), FOREST,
+          tracking_mm=2.6)
+    rule(d, 42, 102, 88, GOLD_A, 0.4)
+    place_motif(img, motif, 65, 129, 56, 36)
+    icon_row(d, 65, 154, 3.0, 9.2, FOREST, disc=CREAM)
+    value_capsule(img, BAG_W, 65, 176, 88, 12, FACTS, bg=FOREST, fg=CREAM,
+                  sep=(96, 116, 96))
+    ctext(d, 65, 190, "6 OZ (170 G) - STORE COOL & DRY", F("Inter.ttf", 2.3, [14, 600]),
+          FOREST, tracking_mm=1.0)
+    ctext(d, 65, 204, "T2 HOLDINGS LLC - MOGRA ORGANICS", F("Inter.ttf", 2.2, [14, 600]),
+          INK, tracking_mm=0.8)
+    return img
+
+
+def bag_b10_botanical_spine(logo, motif) -> Image.Image:
+    """Sage botanical: etched lockup at the head, vertical spine lettering."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), (146, 172, 128))
+    d = ImageDraw.Draw(img)
+    vtext(img, 8, 24, "MOGRA ORGANICS", F("Inter.ttf", 2.4, [14, 700]), FOREST,
+          block_w_mm=64, block_h_mm=3.8)
+    vtext(img, 118, 24, "EST. MMXXVI", F("Inter.ttf", 2.4, [14, 700]), FOREST,
+          block_w_mm=44, block_h_mm=3.8)
+    et = etch_logo(logo, tone=(128, 156, 112), hi=(178, 202, 160), lo=(96, 124, 84),
+                   offset_mm=0.45, softness=0.22)
+    paste_w(img, et, 65, 58, 66)
+    rule(d, 32, 102, 98, FOREST, 0.4)
+    headline(d, 65, 116, ["ORGANIC LION'S MANE"], size_mm=9.6, color=FOREST,
+             line_gap_mm=11.2, max_w_mm=104, tracking_mm=0.3)
+    ctext(d, 65, 130, "MUSHROOM POWDER", F("Inter.ttf", 2.9, [14, 700]), FOREST,
+          tracking_mm=2.8)
+    place_motif(img, motif, 65, 158, 60, 38)
+    value_capsule(img, BAG_W, 65, 188, 100, 12.5, FACTS, bg=FOREST, fg=CREAM,
+                  sep=(96, 116, 96))
+    ctext(d, 65, 201, "6 OZ (170 G) - 34 SERVINGS", F("Inter.ttf", 2.3, [14, 600]),
+          FOREST, tracking_mm=1.0)
+    return img
+
+
+BAG_FRONTS.update({
+    "b06_etched_heritage": bag_b06_etched_heritage,
+    "b07_etched_noir": bag_b07_etched_noir,
+    "b08_foil_monogram": bag_b08_foil_monogram,
+    "b09_kraft_plate": bag_b09_kraft_plate,
+    "b10_botanical_spine": bag_b10_botanical_spine,
+})
+
+
 # ── CANISTER wrap fronts (5) — half wrap 114.65 x 120 mm, safe arc x24..91 ──
 
 def can_06_wall_of_type(logo, motif) -> Image.Image:
@@ -783,6 +951,11 @@ def design_specs() -> List[Dict]:
         "03_midnight_luxe": dict(kind="bag", ground=INK, ground_b=INK, ink_b=CREAM),
         "04_kilim_arch": dict(kind="bag", ground=CREAM, ground_b=CREAM, ink_b=FOREST),
         "05_split_duo": dict(kind="bag", ground=CREAM, ground_b=FOREST, ink_b=CREAM),
+        "b06_etched_heritage": dict(kind="bag", ground=IVORY, ground_b=IVORY, ink_b=FOREST),
+        "b07_etched_noir": dict(kind="bag", ground=INK, ground_b=INK, ink_b=CREAM),
+        "b08_foil_monogram": dict(kind="bag", ground=CREAM, ground_b=CREAM, ink_b=FOREST),
+        "b09_kraft_plate": dict(kind="bag", ground=KRAFT, ground_b=KRAFT, ink_b=INK),
+        "b10_botanical_spine": dict(kind="bag", ground=(146, 172, 128), ground_b=(146, 172, 128), ink_b=FOREST),
         "06_wall_of_type": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),
         "07_dome_gold": dict(kind="canister", ground=FOREST, ground_b=FOREST, ink_b=CREAM),
         "08_stamp_roll": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),
