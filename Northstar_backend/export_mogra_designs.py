@@ -132,6 +132,9 @@ def main() -> None:
         else:
             front = pd.CAN_FRONTS[key](logo, motif)
             back = pd.render_back(spec, pd.CAN_HALF, pd.CAN_H, logo)
+        front = pd.apply_paper(front, seed=(sum(key.encode()) % 9001))
+        back = pd.apply_paper(back, seed=(sum(key.encode()) % 9001) + 3)
+        if spec["kind"] != "bag":
             wrap = Image.new("RGB", (pd.P(pd.CAN_C + pd.CAN_GLUE), pd.P(pd.CAN_H)), spec["ground"])
             wrap.paste(front, (0, 0))
             wrap.paste(back, (pd.P(pd.CAN_HALF), 0))

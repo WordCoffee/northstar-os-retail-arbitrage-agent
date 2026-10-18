@@ -147,6 +147,19 @@ def wordmark(logo: Image.Image) -> Image.Image:
     return crop
 
 
+def apply_paper(img: Image.Image, seed: int = 1) -> Image.Image:
+    """Subtle paper grain + mottle so flat art reads as printed stock (the
+    mockup engine's lighting bake then carries it into the print)."""
+    a = np.asarray(img.convert("RGB"), dtype=np.float32)
+    rng = np.random.default_rng(seed)
+    n = rng.normal(0.0, 1.0, (a.shape[0], a.shape[1])).astype(np.float32)
+    m = Image.fromarray(np.clip(128 + n * 22, 0, 255).astype(np.uint8), "L")
+    m = m.resize((max(1, a.shape[1] // 26), max(1, a.shape[0] // 26)), Image.BILINEAR)
+    mot = np.asarray(m.resize((a.shape[1], a.shape[0]), Image.BICUBIC), dtype=np.float32) - 128.0
+    a = a + n[..., None] * 1.9 + mot[..., None] * 0.14
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGB")
+
+
 def frame(d, W, H, color, inset_mm=5.0, width_mm=0.8, inset2_mm: Optional[float] = None):
     d.rectangle([P(inset_mm), P(inset_mm), P(W - inset_mm), P(H - inset_mm)],
                 outline=tuple(color), width=max(2, P(width_mm)))
