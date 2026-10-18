@@ -76,4 +76,17 @@ CHAT_TABLES_SQL = """
                 created_at TEXT DEFAULT (datetime('now'))
             );
             CREATE INDEX IF NOT EXISTS idx_tool_audit_account ON tool_audit(account_id);
+
+            -- Session lineage (V3 S5 fork/rewind): a child session records the
+            -- parent it was branched from and the message it branched at. The
+            -- parent is never mutated — rewind is non-destructive. Additive.
+            CREATE TABLE IF NOT EXISTS chat_session_forks (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
+                session_id TEXT NOT NULL,        -- the new (child) session
+                parent_session_id TEXT NOT NULL,
+                forked_from_message_id TEXT,
+                created_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE INDEX IF NOT EXISTS idx_chat_session_forks_child ON chat_session_forks(session_id);
         """

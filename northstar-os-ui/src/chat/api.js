@@ -57,6 +57,7 @@ export const chatApi = {
   sessions: (limit = 50) => req(`/sessions?limit=${limit}`),
   createSession: (body = {}) => req('/sessions', { method: 'POST', body: JSON.stringify(body) }),
   patchSession: (sid, body) => req(`/sessions/${sid}`, { method: 'PATCH', body: JSON.stringify(body) }),
+  forkSession: (sid, body = {}) => req(`/sessions/${sid}/fork`, { method: 'POST', body: JSON.stringify(body) }),
   messages: (sid, limit = 500) => req(`/sessions/${sid}/messages?limit=${limit}`),
   cancelTurn: (turnId) => req(`/turns/${turnId}/cancel`, { method: 'POST', body: '{}' }),
 }

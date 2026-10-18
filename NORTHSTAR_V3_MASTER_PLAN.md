@@ -147,8 +147,18 @@ registers no tools, and every tool an agent reaches is now gated and logged.
 Focus "AutothinK" exists in the rail and is **locked** unless the account holds
 the `autothink_workspace` capability (plan gate or hosted pro/team org). It
 currently reuses the universal chat surface with the full tool set.
-**PLANNED:** session snapshots/rewind (fork a session from any turn),
-multi-step plan/DAG visualiser, sandbox runner panel, build-artifact browser.
+
+**BUILT — session fork / rewind (non-destructive):**
+
+| Piece | Where | Notes |
+|---|---|---|
+| Fork endpoint | `chat_router.py` `POST /sessions/{sid}/fork` | Body `{upto_message_id?, title?}`. Copies the session up to and including that message into a **NEW** session; the parent is never mutated. Unknown message → 400; unknown/foreign session → 404. |
+| Fork store | `data_layer.py` `ChatSessionsDB.fork` | Copies mode / model / focus_json and the message prefix (new ids); tenant-scoped so a fork only ever copies the caller's messages. |
+| Lineage | `chat_schema.py` `chat_session_forks` + `ChatForksDB` | Each child records its parent + fork point. Append-only, additive. |
+| UI | `src/chat/ChatSurface.jsx` `chat-fork` | A **Fork** control on any persisted message branches and opens the child; a just-streamed (un-persisted) turn is not forkable. |
+
+**PLANNED:** multi-step plan/DAG visualiser, sandbox runner panel, build-artifact
+browser.
 
 ---
 
@@ -242,8 +252,8 @@ During the hosted beta, orgs whose materialised entitlements carry
 
 | Layer | Evidence |
 |---|---|
-| Backend unit/integration | `python -m pytest test_shell_modes.py` (33) + `test_tool_gateway.py` (5) + `test_voicestudio_adapter.py` (9) + `test_chat_core`/`test_chat_tools`/`test_subscription_catalog_smoke`/`test_plans_route` (combined run) |
-| Shell gate end-to-end | `node verify-shell-v3.cjs` — 20/20 (denied tier: shell only, no Advanced, `?shell=advanced` degrades; granted tier: Advanced renders rooms and returns; mobile toggle reachable at 390px; **AG-UI card renders as a component**; **pause → paused → resume handover**) |
+| Backend unit/integration | `python -m pytest test_shell_modes.py` (33) + `test_tool_gateway.py` (5) + `test_voicestudio_adapter.py` (9) + `test_chat_fork.py` (10) + `test_chat_core`/`test_chat_tools`/`test_subscription_catalog_smoke`/`test_plans_route` (combined run) |
+| Shell gate end-to-end | `node verify-shell-v3.cjs` — 22/22 (denied tier: shell only, no Advanced, `?shell=advanced` degrades; granted tier: Advanced renders rooms and returns; mobile toggle reachable at 390px; **AG-UI card renders as a component**; **pause → paused → resume handover**; **fork opens a new branched session**) |
 | Existing harnesses | `verify-guards.cjs` 11/0, `verify-admin.cjs` 33/0, `verify-acceptance.cjs` 2 fails (both pre-existing; baseline had 8 — 6 fixed by the harness role-vocabulary correction) |
 | Build | `npm run build` — 0 errors |
 | Live E2E (operator) | Start the stack, open `/ui/home` → Simple shell; switch focus; run one turn; open a render in the lightbox; flip to Advanced (if entitled) |
@@ -263,7 +273,8 @@ false failures.
    continues under the UI/model phase)
 3. ~~REA inject — tool gateway · AG-UI cards · human handover~~ **BUILT + verified**
 4. ~~Create focus — VoiceStudio UGC media pipeline~~ **BUILT + verified**
-5. S5 AutothinK premium surface (snapshots/rewind, plan visualiser) — next UI phase
+5. S5 AutothinK premium surface — ~~session fork/rewind~~ **BUILT**; plan
+   visualiser / sandbox / artifact browser next
 6. S7 Brand SEO Engine (profile, revisions, cross-service hooks, imports)
 7. S8 curated corpus + learning loop
 8. Operator-window REA captures (Packify first) when the operator is present

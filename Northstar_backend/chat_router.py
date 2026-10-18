@@ -462,6 +462,11 @@ class SessionPatch(BaseModel):
     focus: Optional[Dict[str, Any]] = None
 
 
+class ForkIn(BaseModel):
+    upto_message_id: Optional[str] = None
+    title: Optional[str] = Field(None, max_length=120)
+
+
 @router.get("")
 def chat_root(acct: str = Depends(studio_account)):
     """Bare-prefix info route so the base path itself resolves (the UI contract
@@ -543,6 +548,31 @@ def patch_session(sid: str, body: SessionPatch, acct: str = Depends(studio_accou
         raise HTTPException(status_code=400, detail="nothing to patch")
     db.chat.sessions.update(sid, patch, account_id=acct)
     return db.chat.sessions.get_by_id(sid, account_id=acct)
+
+
+@router.post("/sessions/{sid}/fork")
+def fork_session(sid: str, body: ForkIn, acct: str = Depends(studio_account)):
+    """Fork (rewind) a session — the Claude-Code snapshot pattern, made honest.
+
+    A NEW session copies every message up to and including `upto_message_id`
+    (or all messages when omitted). The parent session is NEVER mutated, so a
+    rewind can never lose work; the child records its lineage in
+    `chat_session_forks`."""
+    db = get_northstar_db()
+    try:
+        out = db.chat.sessions.fork(
+            sid, acct, upto_message_id=body.upto_message_id, title=body.title)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    if not out:
+        raise HTTPException(status_code=404, detail="Chat session not found")
+    db.chat.forks.create({
+        "account_id": acct,
+        "session_id": out["session"]["id"],
+        "parent_session_id": sid,
+        "forked_from_message_id": body.upto_message_id,
+    })
+    return out
 
 
 @router.post("/sessions/{sid}/turns")

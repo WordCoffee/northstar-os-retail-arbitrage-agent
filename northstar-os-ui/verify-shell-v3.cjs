@@ -58,6 +58,19 @@ async function stub(page, { advanced, card = false }) {
         })
         return Promise.resolve(new Response(stream, { status: 200, headers: { 'Content-Type': 'text/event-stream' } }))
       }
+      if (String(url).includes('/api/chat/sessions/s-card/fork')) {
+        return json({
+          session: { id: 's-fork', title: '\u2937 Voice test', focus_json: { mode: 'auto', label: 'Auto' } },
+          copied_messages: 1,
+          forked_from: { session_id: 's-card', message_id: 'm1' },
+        })
+      }
+      if (String(url).includes('/api/chat/sessions/s-fork/messages')) {
+        return json({
+          session: { id: 's-fork', focus_json: { mode: 'auto', label: 'Auto' } },
+          messages: [{ id: 'f1', role: 'assistant', content: 'Forked branch loaded.', model: 'stub', parts_json: [] }],
+        })
+      }
       if (String(url).includes('/api/chat/sessions/s-card/messages')) {
         return json({
           session: { id: 's-card', focus_json: { mode: 'auto', label: 'Auto' } },
@@ -196,6 +209,25 @@ async function main() {
         const resume = await page.$('[data-testid="chat-resume"]')
         resume ? ok('D: Resume control offered to hand control back') : no('D: resume control missing')
       }
+    }
+    await ctx.close()
+  }
+
+  // ── Scenario E: session fork / rewind (S5 AutothinK premium) ───────────────
+  {
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } })
+    const page = await ctx.newPage()
+    await stub(page, { advanced: false, card: true })
+    await page.goto(BASE + 'home')
+    await page.waitForSelector('[data-testid="chat-cards"]', { timeout: 8000 }).catch(() => {})
+    const fork = await page.$('[data-testid="chat-fork"]')
+    fork ? ok('E: Fork (rewind) control offered on a message') : no('E: fork control missing')
+    if (fork) {
+      await fork.click()
+      const loaded = await page.waitForFunction(
+        () => document.body.innerText.includes('Forked branch loaded.'), null, { timeout: 6000 },
+      ).then(() => true).catch(() => false)
+      loaded ? ok('E: fork opens a NEW branched session (parent untouched)') : no('E: forked session did not load')
     }
     await ctx.close()
   }

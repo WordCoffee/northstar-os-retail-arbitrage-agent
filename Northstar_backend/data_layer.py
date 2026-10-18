@@ -2778,6 +2778,58 @@ class ChatSessionsDB:
         self.db.commit()
         return self.db.execute("SELECT changes()").fetchone()[0] > 0
 
+    def fork(self, sid: str, account_id: str, upto_message_id: Optional[str] = None,
+             title: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        """Branch a NEW session from `sid` (V3 S5 fork/rewind).
+
+        Copies every message up to and including `upto_message_id` (or all
+        messages when omitted). The parent is NEVER mutated — rewind is
+        non-destructive. Returns {session, copied_messages, forked_from}, or None
+        when the parent is not visible to this account. Raises ValueError when
+        `upto_message_id` is not a message of the parent session.
+        """
+        parent = self.get_by_id(sid, account_id=account_id)
+        if not parent:
+            return None
+        cur = self.db.execute(
+            "SELECT * FROM chat_messages WHERE session_id = ? AND account_id = ? "
+            "ORDER BY created_at ASC",
+            (sid, account_id))
+        rows = [dict(r) for r in cur.fetchall()]
+        cut = len(rows)
+        if upto_message_id:
+            idx = next((i for i, r in enumerate(rows) if r.get("id") == upto_message_id), None)
+            if idx is None:
+                raise ValueError("message not found in this session")
+            cut = idx + 1
+        now = datetime.now(timezone.utc).isoformat()
+        child_id = str(uuid.uuid4())
+        self.create({
+            "id": child_id,
+            "account_id": account_id,
+            "title": (title or f"\u2937 {parent.get('title') or 'New chat'}")[:120],
+            "ds_project_id": parent.get("ds_project_id"),
+            "mode": parent.get("mode") or "simple",
+            "model": parent.get("model"),
+            "focus_json": parent.get("focus_json"),
+            "created_at": now,
+            "updated_at": now,
+        })
+        for r in rows[:cut]:
+            self.db.execute(
+                "INSERT INTO chat_messages (id, account_id, session_id, role, content, "
+                "thinking, parts_json, model, usage_json, created_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (str(uuid.uuid4()), account_id, child_id, r.get("role") or "user",
+                 r.get("content") or "", r.get("thinking") or "", r.get("parts_json"),
+                 r.get("model"), r.get("usage_json"), r.get("created_at") or now))
+        self.db.commit()
+        return {
+            "session": self.get_by_id(child_id, account_id=account_id),
+            "copied_messages": cut,
+            "forked_from": {"session_id": sid, "message_id": upto_message_id},
+        }
+
 
 class ChatMessagesDB:
     """Chat messages with separated thinking + ordered parts (S1)."""
@@ -2992,6 +3044,39 @@ class ToolAuditDB:
         return [dict(r) for r in cur.fetchall()]
 
 
+class ChatForksDB:
+    """Session lineage for V3 S5 fork/rewind. Append-only."""
+
+    def __init__(self, db: DataLayer):
+        self.db = db
+
+    def create(self, entry: Dict[str, Any]) -> str:
+        import uuid
+        fid = entry.get("id") or str(uuid.uuid4())
+        entry = dict(entry)
+        entry["id"] = fid
+        entry.setdefault("created_at", datetime.now(timezone.utc).isoformat())
+        cols = [c for c in entry.keys()]
+        placeholders = ", ".join(["?"] * len(cols))
+        self.db.execute(
+            f"INSERT INTO chat_session_forks ({', '.join(cols)}) VALUES ({placeholders})",
+            tuple(entry.values()),
+        )
+        self.db.commit()
+        return fid
+
+    def get_by_child(self, session_id: str, account_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        if account_id:
+            cur = self.db.execute(
+                "SELECT * FROM chat_session_forks WHERE session_id = ? AND account_id = ?",
+                (session_id, account_id))
+        else:
+            cur = self.db.execute(
+                "SELECT * FROM chat_session_forks WHERE session_id = ?", (session_id,))
+        row = cur.fetchone()
+        return dict(row) if row else None
+
+
 class ChatContainer:
     """Namespace for the Simple-mode chat stores (S1). Additive."""
 
@@ -3001,6 +3086,7 @@ class ChatContainer:
         self.tool_calls = ChatToolCallsDB(db)
         self.attachments = ChatAttachmentsDB(db)
         self.tool_audit = ToolAuditDB(db)
+        self.forks = ChatForksDB(db)
 
 
 class NorthstarDB:

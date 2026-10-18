@@ -307,6 +307,21 @@ export default function ChatSurface({
     inputRef.current?.focus()
   }, [focusId])
 
+  // Fork (rewind): branch a NEW session from any persisted message. The parent
+  // is never touched — a non-destructive rewind, not a destructive edit.
+  const forkFrom = useCallback(async (messageId) => {
+    if (!activeId || !messageId || String(messageId).startsWith('local-')) return
+    try {
+      const out = await chatApi.forkSession(activeId, { upto_message_id: messageId })
+      if (out && out.session) {
+        setSessions((prev) => [out.session, ...prev])
+        loadSession(out.session.id)
+      }
+    } catch (e) {
+      setLoadError(e.message)
+    }
+  }, [activeId, loadSession])
+
   const ensureSession = useCallback(async () => {
     if (activeId) return activeId
     const f = focusRef.current
@@ -813,6 +828,9 @@ export default function ChatSurface({
                     {m.model && <span className="chip">{m.model}</span>}
                     {toolCount > 0 && <span className="chip">{toolCount} tool run{toolCount > 1 ? 's' : ''}</span>}
                     {seconds && <span className="chip">{seconds}s</span>}
+                    <button type="button" className="chat-msg-copy" data-testid="chat-fork"
+                      title="Branch a new chat from this point — the original is untouched"
+                      onClick={() => forkFrom(m.id)}>Fork</button>
                     <button type="button" className="chat-msg-copy"
                       onClick={() => copyText(m.content)}>Copy</button>
                   </div>
@@ -821,6 +839,9 @@ export default function ChatSurface({
                   <div className="chat-msg-tools">
                     <button type="button" className="chat-msg-copy"
                       onClick={() => setEditing({ id: m.id, text: m.content })}>Edit & resend</button>
+                    <button type="button" className="chat-msg-copy" data-testid="chat-fork"
+                      title="Branch a new chat from this point — the original is untouched"
+                      onClick={() => forkFrom(m.id)}>Fork</button>
                     <button type="button" className="chat-msg-copy"
                       onClick={() => copyText(m.content)}>Copy</button>
                   </div>
