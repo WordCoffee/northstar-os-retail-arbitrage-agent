@@ -462,19 +462,7 @@ def render_back(spec: Dict, W: float, H: float, logo: Optional[Image.Image] = No
         ltext(d, tx, yy, "Lot Number: MO-LM-2601", f_n, ink)
         yy += 4.0
         ltext(d, tx, yy, "Best Before: 01-2028", f_n, ink)
-        # About Lion's Mane + the real logo (tinted to the back's ink)
-        yy += 5.0
-        ltext(d, tx, yy, "ABOUT LION'S MANE", f_b, ink)
-        yy += 3.9
-        for line in ("Hericium erinaceus is a woodland mushroom", "with a delicate, seafood-like flavour,",
-                     "enjoyed in broths and daily rituals."):
-            ltext(d, tx, yy, line, f_s, ink)
-            yy += 3.3
-        if logo is not None:
-            wmr = recolor(wordmark(logo), ink)
-            wm2 = wmr.resize((P(24.0), max(2, int(P(24.0) * wmr.height / wmr.width))), Image.LANCZOS)
-            img.paste(wm2, (P(tx), P(yy + 1.2)), wm2)
-        # RIGHT column
+        # RIGHT column: real logo + ABOUT LION'S MANE (grouped), then codes
         yy = cy
         ltext(d, rx, yy, "Free of: Added Sugar, Soy, Dairy, Yeast,", f_b, ink)
         yy += 3.8
@@ -493,22 +481,39 @@ def render_back(spec: Dict, W: float, H: float, logo: Optional[Image.Image] = No
             yy += 3.4
         yy += 1.0
         ltext(d, rx, yy, "Store in a cool, dry place.", f_n, ink)
-        yy += 6.4
+        yy += 6.2
         ltext(d, rx, yy, "Distributed Exclusively by:", f_b, ink)
         yy += 4.2
         for line in ("T2 Holdings LLC", "1234 Sample Ave, Suite 100", "Springfield, MO 65801, USA",
                      "Certified Organic by: Example Certifiers, Inc."):
             ltext(d, rx, yy, line, f_s, ink)
             yy += 3.4
+        # the REAL logo, prominent and visible — grouped with About Lion's Mane
+        yy += 1.6
+        rule(d, rx, yy, right, ink, 0.25)
+        yy += 3.0
+        ltext(d, rx, yy, "MOGRA ORGANICS", f_b, ink)
+        yy += 3.6
+        if logo is not None:
+            lk = recolor(wordmark(logo), ink)
+            lkw = 36.0
+            lkr = lk.resize((P(lkw), max(2, int(P(lkw) * lk.height / lk.width))), Image.LANCZOS)
+            img.paste(lkr, (int(P(rx)), P(yy)), lkr)
+            yy += lkr.height / (DPI / 25.4) + 3.0
+        ltext(d, rx, yy, "ABOUT LION'S MANE", f_b, ink)
+        yy += 3.9
+        for line in ("Hericium erinaceus is a woodland mushroom with", "a delicate flavour, enjoyed in daily rituals."):
+            ltext(d, rx, yy, line, f_s, ink)
+            yy += 3.3
         # codes row (white panel on dark grounds)
-        qy = H - 40 * sx
+        qy = H - 36 * sx
         if dark:
-            d.rounded_rectangle([P(rx - 3), P(qy - 3), P(right + 3), P(qy + 34)], radius=P(2),
+            d.rounded_rectangle([P(rx - 3), P(qy - 3), P(right + 3), P(qy + 25 * sx)], radius=P(2),
                                 fill=WHITE)
-        draw_qr(d, d, rx, qy, 17.0, "https://mograorganics.com/organic-lions-mane")
+        draw_qr(d, d, rx, qy, 15.0, "https://mograorganics.com/organic-lions-mane")
         upc = upc_a_placeholder()
-        draw_upc(d, rx + 21, qy + 1, rw - 21, 15.0, upc)
-        d.text((P(rx + 21 + (rw - 21) / 2), P(qy + 19.5)), "X00MOGRA-LM",
+        draw_upc(d, rx + 19, qy + 0.5, rw - 19, 13.0, upc)
+        d.text((P(rx + 19 + (rw - 19) / 2), P(qy + 22.5)), "X00MOGRA-LM",
                font=F("Inter.ttf", 1.9 * sx, [14, 500]), fill=ink, anchor="mm")
     else:
         # ── single-column body (canister half-wrap, tall-tube safe arc) ─────
@@ -1370,6 +1375,575 @@ BAG_FRONTS.update({
 })
 
 
+# ── bag series 5: BOLD IDENTITY (real logo on the front, high contrast) ─────
+
+BONE = (240, 235, 224)
+TERRA = (170, 88, 60)
+TEAL = (30, 62, 62)
+OLIVE2 = (86, 96, 56)
+CHAR = (44, 44, 46)
+SLATE2 = (62, 74, 88)
+BLUSH = (226, 205, 196)
+
+
+def logo_block(canvas, logo, cx, cy, w_mm, ink):
+    """The real MOGRA logo (full lockup, leaves kept green) at size w_mm."""
+    paste_w(canvas, recolor(logo, ink), cx, cy, w_mm)
+
+
+def legend(d, cx, y, ink, *, text="170 G   ·   34 SERVINGS   ·   5 G PER SCOOP", size=2.7):
+    """Letterspaced single-line fact legend (no rules, no capsule)."""
+    ctext(d, cx, y, text, F("Jost.ttf", size, [500]), ink, tracking_mm=size * 0.9)
+
+
+def g01_ink_sash(logo, motif) -> Image.Image:
+    """Ink ground, full-height bone sash carrying the identity."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), INK)
+    d = ImageDraw.Draw(img)
+    d.rectangle([P(76), 0, P(BAG_W), P(BAG_H)], fill=BONE)
+    place_motif(img, recolor(motif, BONE), 38, 104, 62, 74)
+    logo_block(img, logo, 103, 40, 36, INK)
+    rule(d, 84, 66, 122, INK, 0.4)
+    headline(d, 103, 84, ["ORGANIC"], size_mm=7.2, color=INK, line_gap_mm=8.6,
+             max_w_mm=40, tracking_mm=2.0)
+    headline(d, 103, 99, ["LION'S", "MANE"], size_mm=10.4, color=INK, line_gap_mm=11.8,
+             max_w_mm=40)
+    ctext(d, 103, 128, "MUSHROOM POWDER", F("Jost.ttf", 2.4, [500]), TERRA, tracking_mm=1.6)
+    rule(d, 84, 140, 122, INK, 0.4)
+    legend(d, 103, 152, INK, text="170 G", size=2.6)
+    legend(d, 103, 160, INK, text="34 SERVINGS", size=2.6)
+    legend(d, 103, 168, INK, text="5 G PER SCOOP", size=2.6)
+    return img
+
+
+def g02_bone_spill(logo, motif) -> Image.Image:
+    """Bone ground, terracotta label panel the botanical spills over."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), BONE)
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([P(14), P(46), P(116), P(198)], radius=P(8), fill=TERRA)
+    place_motif(img, recolor(motif, TERRA), 65, 48, 74, 54)
+    logo_block(img, logo, 65, 96, 36, BONE)
+    rule(d, 34, 122, 96, BONE, 0.4)
+    ctext(d, 65, 138, "Lion's Mane", F("CormorantGaramond.ttf", 16.5, [600]), BONE)
+    ctext(d, 65, 152, "ORGANIC MUSHROOM POWDER", F("Jost.ttf", 2.6, [500]), BONE,
+          tracking_mm=2.4)
+    legend(d, 65, 182, BONE)
+    return img
+
+
+def g03_terra_sun(logo, motif) -> Image.Image:
+    """Terracotta ground, bone sun disc holding the logo."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), TERRA)
+    d = ImageDraw.Draw(img)
+    d.ellipse([P(25), P(34), P(105), P(114)], fill=BONE)
+    logo_block(img, logo, 65, 74, 34, TERRA)
+    ctext(d, 65, 140, "Lion's Mane", F("CormorantGaramond.ttf", 17.0, [600]), BONE)
+    ctext(d, 65, 154, "ORGANIC MUSHROOM POWDER", F("Jost.ttf", 2.7, [500]), BONE,
+          tracking_mm=2.6)
+    place_motif(img, recolor(motif, BONE), 65, 178, 52, 30)
+    legend(d, 65, 198, BONE)
+    return img
+
+
+def g04_teal_horizon(logo, motif) -> Image.Image:
+    """Deep teal, full-bleed bone horizon band with the reversed title."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), TEAL)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, P(112), P(BAG_W), P(148)], fill=BONE)
+    logo_block(img, logo, 65, 58, 42, BONE)
+    ctext(d, 65, 106, "ORGANIC", F("Jost.ttf", 2.8, [500]), BONE, tracking_mm=3.0)
+    ctext(d, 65, 131, "Lion's Mane", F("CormorantGaramond.ttf", 17.0, [600]), TEAL)
+    legend(d, 65, 142, TEAL, text="170 G   ·   34 SERVINGS", size=2.5)
+    place_motif(img, recolor(motif, BONE), 65, 176, 56, 34)
+    legend(d, 65, 198, BONE, text="MUSHROOM POWDER   ·   5 G PER SCOOP", size=2.4)
+    return img
+
+
+def g05_olive_identity(logo, motif) -> Image.Image:
+    """Olive ground, identity-first: the real logo at hero scale."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), OLIVE2)
+    d = ImageDraw.Draw(img)
+    logo_block(img, logo, 65, 56, 52, BONE)
+    rule(d, 40, 92, 90, BONE, 0.4)
+    ctext(d, 65, 112, "Lion's Mane", F("CormorantGaramond.ttf", 19.0, [600]), BONE)
+    ctext(d, 65, 130, "ORGANIC MUSHROOM POWDER", F("Jost.ttf", 2.8, [500]), BONE,
+          tracking_mm=2.8)
+    place_motif(img, recolor(motif, BONE), 65, 166, 54, 34)
+    legend(d, 65, 194, BONE)
+    return img
+
+
+def g06_charcoal_banner(logo, motif) -> Image.Image:
+    """Charcoal ground, bone banner with reversed title, botanical above."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), CHAR)
+    d = ImageDraw.Draw(img)
+    place_motif(img, recolor(motif, BONE), 65, 70, 70, 56)
+    d.rectangle([0, P(138), P(BAG_W), P(168)], fill=BONE)
+    ctext(d, 65, 153, "Lion's Mane", F("CormorantGaramond.ttf", 16.0, [600]), CHAR)
+    logo_block(img, logo, 65, 186, 34, BONE)
+    legend(d, 65, 204, BONE, text="ORGANIC   ·   170 G   ·   34 SERVINGS", size=2.4)
+    return img
+
+
+def g07_slate_halo(logo, motif) -> Image.Image:
+    """Slate ground, halo rings around the real logo."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), SLATE2)
+    d = ImageDraw.Draw(img)
+    for rr, wdt in ((30.0, 0.35), (34.5, 0.22)):
+        d.ellipse([P(65 - rr), P(62 - rr), P(65 + rr), P(62 + rr)], outline=tuple(BONE),
+                  width=max(2, P(wdt)))
+    logo_block(img, logo, 65, 62, 36, BONE)
+    ctext(d, 65, 124, "Lion's Mane", F("CormorantGaramond.ttf", 17.0, [600]), BONE)
+    ctext(d, 65, 138, "ORGANIC MUSHROOM POWDER", F("Jost.ttf", 2.7, [500]), BONE,
+          tracking_mm=2.6)
+    place_motif(img, recolor(motif, BONE), 65, 170, 52, 32)
+    legend(d, 65, 198, BONE)
+    return img
+
+
+def g08_blush_column(logo, motif) -> Image.Image:
+    """Blush ground, full-height plum column on the left."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), BLUSH)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, P(44), P(BAG_H)], fill=PLUM)
+    logo_block(img, logo, 22, 48, 26, BLUSH)
+    rule(d, 8, 76, 36, BLUSH, 0.35)
+    headline(d, 22, 96, ["LION'S", "MANE"], size_mm=9.0, color=BLUSH, line_gap_mm=10.4,
+             max_w_mm=30)
+    ctext(d, 22, 124, "POWDER", F("Jost.ttf", 2.5, [500]), BLUSH, tracking_mm=2.2)
+    place_motif(img, recolor(motif, PLUM), 87, 92, 58, 50)
+    ctext(d, 87, 148, "Organic", F("CormorantGaramond-Italic.ttf", 6.4, [500]), PLUM)
+    ctext(d, 87, 164, "Lion's Mane", F("CormorantGaramond.ttf", 12.0, [600]), PLUM)
+    legend(d, 87, 186, PLUM, text="170 G   ·   34 SERVINGS", size=2.4)
+    ctext(d, 87, 198, "MUSHROOM POWDER", F("Jost.ttf", 2.2, [500]), WALNUT, tracking_mm=1.8)
+    return img
+
+
+def g09_bone_stamp(logo, motif) -> Image.Image:
+    """Bone ground, a big ink stamp disc cropped by the top-right edge."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), BONE)
+    d = ImageDraw.Draw(img)
+    d.ellipse([P(30), P(8), P(134), P(112)], fill=INK)
+    logo_block(img, logo, 79, 58, 34, BONE)
+    ctext(d, 65, 142, "Lion's Mane", F("CormorantGaramond.ttf", 17.0, [600]), INK)
+    ctext(d, 65, 156, "ORGANIC MUSHROOM POWDER", F("Jost.ttf", 2.7, [500]), WALNUT,
+          tracking_mm=2.6)
+    place_motif(img, recolor(motif, INK), 65, 182, 50, 30)
+    legend(d, 65, 200, INK, text="170 G   ·   34 SERVINGS   ·   5 G PER SCOOP", size=2.4)
+    return img
+
+
+def g10_forest_duo(logo, motif) -> Image.Image:
+    """Forest ground, bone label panel top and bottom botanicals."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), FOREST2)
+    d = ImageDraw.Draw(img)
+    logo_block(img, logo, 65, 46, 38, BONE)
+    place_motif(img, recolor(motif, BONE), 65, 26, 34, 20)
+    d.rounded_rectangle([P(22), P(72), P(108), P(158)], radius=P(4), fill=BONE)
+    ctext(d, 65, 96, "Organic Lion's Mane", F("CormorantGaramond.ttf", 12.6, [600]), FOREST2)
+    rule(d, 36, 110, 94, FOREST2, 0.35)
+    ctext(d, 65, 122, "MUSHROOM POWDER", F("Jost.ttf", 2.7, [500]), WALNUT, tracking_mm=2.4)
+    legend(d, 65, 140, WALNUT, text="170 G   ·   34 SERVINGS", size=2.4)
+    ctext(d, 65, 150, "5 G PER SCOOP", F("Jost.ttf", 2.2, [400]), WALNUT, tracking_mm=1.4)
+    place_motif(img, recolor(motif, BONE), 65, 180, 48, 30)
+    legend(d, 65, 199, BONE, text="MOGRA ORGANICS", size=2.5)
+    return img
+
+
+BAG_FRONTS.update({
+    "g01_ink_sash": g01_ink_sash,
+    "g02_bone_spill": g02_bone_spill,
+    "g03_terra_sun": g03_terra_sun,
+    "g04_teal_horizon": g04_teal_horizon,
+    "g05_olive_identity": g05_olive_identity,
+    "g06_charcoal_banner": g06_charcoal_banner,
+    "g07_slate_halo": g07_slate_halo,
+    "g08_blush_column": g08_blush_column,
+    "g09_bone_stamp": g09_bone_stamp,
+    "g10_forest_duo": g10_forest_duo,
+})
+
+
+# ── bag series H: HERO (10 designs, 100% unique, no shared composition) ─────
+
+INK2 = (20, 20, 22)
+PARCHMENT = (246, 240, 228)
+CEDAR2 = (156, 82, 62)
+TEAL2 = (34, 78, 86)
+SLATE3 = (90, 104, 116)
+FOREST3 = (44, 70, 56)
+ROSE2 = (198, 158, 142)
+OCHRE = (186, 130, 74)
+SAGE3 = (136, 148, 132)
+VIOLET = (82, 64, 92)
+
+
+def logo_ink(logo, ink):
+    """The real logo as clean ink on transparency — wordmark + monogram,
+    leaves kept green — for stamping directly onto bag color."""
+    return recolor(wordmark(logo), ink)
+
+
+def stamp_logo(canvas, logo_img, cx, cy, w_mm, ink):
+    paste_w(canvas, recolor(logo_img, ink), cx, cy, w_mm)
+
+
+def big_name(d, cx, y, lines, ink, *, size_mm=16, gap_mm=2.0, max_w=112,
+             font="CormorantGaramond.ttf", axes=[600]):
+    yy = y
+    for line in lines:
+        f = fit_size(font, size_mm, axes, line, max_w)
+        ctext(d, cx, yy, line, f, ink, tracking_mm=0.4)
+        yy += f.size / (DPI / 25.4) + gap_mm
+    return yy
+
+
+def fact_ledge(d, cx, y, ink, *, lines=("170 G", "34 SERVINGS", "5 G PER SCOOP"),
+               gap_mm=3.6):
+    for i, line in enumerate(lines):
+        ctext(d, cx, y + i * gap_mm, line, F("Jost.ttf", 2.5, [500]), ink,
+              tracking_mm=0.8)
+
+
+def h01_porcelain_monument(logo, motif) -> Image.Image:
+    """Porcelain: monument. Giant centered logo wordmark, small text below."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), PARCHMENT)
+    d = ImageDraw.Draw(img)
+    stamp_logo(img, logo_ink(logo, FOREST3), 65, 30, 78, FOREST3)
+    big_name(d, 65, 110, ["ORGANIC", "LION'S MANE"], FOREST3, size_mm=15.5,
+             gap_mm=1.5, max_w=112)
+    ctext(d, 65, 148, "MUSHROOM POWDER", F("Jost.ttf", 3.0, [500]), CEDAR2,
+          tracking_mm=3.4)
+    rule(d, 36, 156, 94, CEDAR2, 0.4)
+    fact_ledge(d, 65, 170, FOREST3)
+    place_motif(img, recolor(motif, FOREST3), 65, 196, 60, 32)
+    return img
+
+
+def h02_cedar_tower(logo, motif) -> Image.Image:
+    """Cedar: full-height reversed type tower on the right edge."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), CEDAR2)
+    d = ImageDraw.Draw(img)
+    d.rectangle([P(44), 0, P(BAG_W), P(BAG_H)], fill=PARCHMENT)
+    stamp_logo(img, logo_ink(logo, CEDAR2), 24, 40, 30, CEDAR2)
+    ctext(d, 24, 80, "LION'S", F("Jost.ttf", 3.6, [800]), PARCHMENT,
+          tracking_mm=2.0)
+    ctext(d, 24, 98, "MANE", F("Jost.ttf", 3.6, [800]), PARCHMENT, tracking_mm=2.0)
+    ctext(d, 24, 116, "ORGANIC POWDER", F("Jost.ttf", 2.2, [500]), PARCHMENT,
+          tracking_mm=1.8)
+    rule(d, 8, 132, 40, CEDAR2, 0.3)
+    big_name(d, 86, 66, ["ORGANIC LION'S MANE"], CEDAR2, size_mm=10.5, max_w=44)
+    fact_ledge(d, 86, 112, CEDAR2)
+    place_motif(img, recolor(motif, CEDAR2), 86, 160, 40, 30)
+    return img
+
+
+def h03_teal_arc(logo, motif) -> Image.Image:
+    """Teal: wordmark inside a shallow arc, botanical hero below."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), TEAL2)
+    d = ImageDraw.Draw(img)
+    for rr in (36.0, 31.0):
+        d.arc([P(65 - rr), P(108 - rr), P(65 + rr), P(108 + rr)], 200, 340,
+              fill=tuple(PARCHMENT), width=max(2, P(0.35)))
+    stamp_logo(img, logo_ink(logo, PARCHMENT), 65, 116, 40, PARCHMENT)
+    big_name(d, 65, 146, ["ORGANIC", "LION'S MANE"], PARCHMENT, size_mm=13.5,
+             gap_mm=1.0, max_w=96)
+    fact_ledge(d, 65, 186, PARCHMENT, lines=("170 G", "34 SERVINGS"))
+    place_motif(img, recolor(motif, PARCHMENT), 65, 198, 70, 40)
+    return img
+
+
+def h04_slate_ticket(logo, motif) -> Image.Image:
+    """Slate: ticket-strip layout, left edge runs full height."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), SLATE3)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, P(12), P(BAG_H)], fill=PARCHMENT)
+    stamp_logo(img, logo_ink(logo, SLATE3), 6, 46, 20, SLATE3)
+    vtext(img, 8, 104, "MOGRA ORGANICS · ORGANIC LION'S MANE · 170 G",
+          F("Jost.ttf", 2.2, [500]), PARCHMENT, block_w_mm=88, block_h_mm=3.2)
+    big_name(d, 84, 78, ["ORGANIC", "LION'S MANE"], PARCHMENT, size_mm=14.0,
+             gap_mm=1.2, max_w=48)
+    fact_ledge(d, 84, 120, PARCHMENT)
+    place_motif(img, recolor(motif, PARCHMENT), 84, 152, 50, 34)
+    return img
+
+
+def h05_forest_crest(logo, motif) -> Image.Image:
+    """Forest: crest container, logo sits inside crest top."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), FOREST3)
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([P(16), P(10), P(114), P(96)], radius=P(14), fill=PARCHMENT)
+    stamp_logo(img, logo_ink(logo, FOREST3), 65, 46, 60, FOREST3)
+    big_name(d, 65, 114, ["ORGANIC", "LION'S MANE"], PARCHMENT, size_mm=14.0,
+             gap_mm=1.2, max_w=94)
+    ctext(d, 65, 148, "MUSHROOM POWDER", F("Jost.ttf", 3.0, [500]), OCHRE,
+          tracking_mm=3.0)
+    rule(d, 42, 156, 88, PARCHMENT, 0.4)
+    fact_ledge(d, 65, 172, PARCHMENT)
+    place_motif(img, recolor(motif, PARCHMENT), 65, 194, 56, 30)
+    return img
+
+
+def h06_rose_slab(logo, motif) -> Image.Image:
+    """Rose: huge single slab of type, logo at bottom center."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), ROSE2)
+    d = ImageDraw.Draw(img)
+    big_name(d, 65, 60, ["LION'S", "MANE"], PARCHMENT, size_mm=19.0, gap_mm=0.0,
+             max_w=112)
+    ctext(d, 65, 104, "ORGANIC", F("Jost.ttf", 3.2, [800]), PARCHMENT,
+          tracking_mm=4.0)
+    ctext(d, 65, 118, "MUSHROOM POWDER", F("Jost.ttf", 2.6, [500]), OCHRE,
+          tracking_mm=2.6)
+    rule(d, 44, 130, 86, PARCHMENT, 0.4)
+    stamp_logo(img, logo_ink(logo, PARCHMENT), 65, 150, 34, PARCHMENT)
+    fact_ledge(d, 65, 180, PARCHMENT)
+    place_motif(img, recolor(motif, PARCHMENT), 65, 196, 52, 28)
+    return img
+
+
+def h07_ochre_fold(logo, motif) -> Image.Image:
+    """Ochre: diagonal fold illusion with logo on the flap."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), OCHRE)
+    d = ImageDraw.Draw(img)
+    d.polygon([(P(0), P(0)), (P(130), P(40)), (P(130), P(210)), (P(0), P(170))],
+              fill=PARCHMENT)
+    stamp_logo(img, logo_ink(logo, PARCHMENT), 66, 56, 44, PARCHMENT)
+    big_name(d, 66, 110, ["ORGANIC LION'S MANE"], PARCHMENT, size_mm=12.0,
+             gap_mm=1.4, max_w=100)
+    fact_ledge(d, 66, 146, PARCHMENT)
+    place_motif(img, recolor(motif, PARCHMENT), 66, 172, 60, 40)
+    return img
+
+
+def h08_sage_wash(logo, motif) -> Image.Image:
+    """Sage: soft wash, logo set in a hand-drawn circle."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), SAGE3)
+    d = ImageDraw.Draw(img)
+    d.ellipse([P(18), P(14), P(112), P(108)], outline=tuple(FOREST3),
+              width=max(2, P(0.5)))
+    d.ellipse([P(24), P(20), P(106), P(102)], outline=tuple(FOREST3),
+              width=max(2, P(0.2)))
+    stamp_logo(img, logo_ink(logo, FOREST3), 65, 62, 52, FOREST3)
+    big_name(d, 65, 120, ["ORGANIC", "LION'S MANE"], FOREST3, size_mm=13.0,
+             gap_mm=1.0, max_w=92)
+    fact_ledge(d, 65, 160, FOREST3)
+    place_motif(img, recolor(motif, FOREST3), 65, 182, 54, 34)
+    return img
+
+
+def h09_violet_block(logo, motif) -> Image.Image:
+    """Violet: single deep block top third, reversed logo + type."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), PARCHMENT)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, P(BAG_W), P(86)], fill=VIOLET)
+    d.rectangle([P(14), P(14), P(116), P(78)], fill=VIOLET)
+    stamp_logo(img, logo_ink(logo, PARCHMENT), 65, 34, 60, PARCHMENT)
+    big_name(d, 65, 96, ["LION'S", "MANE"], PARCHMENT, size_mm=14.0, gap_mm=0.8,
+             max_w=100)
+    fact_ledge(d, 65, 130, PARCHMENT)
+    place_motif(img, recolor(motif, PARCHMENT), 65, 156, 70, 42)
+    ctext(d, 65, 200, "ORGANIC MUSHROOM POWDER · 170 G",
+          F("Jost.ttf", 2.6, [500]), VIOLET, tracking_mm=2.2)
+    return img
+
+
+def h10_monogram_only(logo, motif) -> Image.Image:
+    """Bone: nothing but the real logo mark and one line of type."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), BONE)
+    d = ImageDraw.Draw(img)
+    stamp_logo(img, logo_ink(logo, CEDAR2), 65, 70, 84, CEDAR2)
+    rule(d, 44, 146, 86, CEDAR2, 0.4)
+    big_name(d, 65, 160, ["ORGANIC LION'S MANE"], CEDAR2, size_mm=13.0,
+             gap_mm=1.4, max_w=112)
+    fact_ledge(d, 65, 196, CEDAR2, lines=("170 G", "34 SERVINGS"))
+    place_motif(img, recolor(motif, CEDAR2), 65, 194, 30, 18)
+    return img
+
+
+BAG_FRONTS.update({
+    "h01_porcelain_monument": h01_porcelain_monument,
+    "h02_cedar_tower": h02_cedar_tower,
+    "h03_teal_arc": h03_teal_arc,
+    "h04_slate_ticket": h04_slate_ticket,
+    "h05_forest_crest": h05_forest_crest,
+    "h06_rose_slab": h06_rose_slab,
+    "h07_ochre_fold": h07_ochre_fold,
+    "h08_sage_wash": h08_sage_wash,
+    "h09_violet_block": h09_violet_block,
+    "h10_monogram_only": h10_monogram_only,
+})
+
+
+# ── bag series I: IDENTITY (10 designs, 100% unique, no shared composition) ─
+
+IIVORY = (247, 243, 236)
+DARK = (24, 24, 26)
+SEA = (48, 86, 94)
+BRICK = (164, 74, 62)
+MOON = (218, 204, 188)
+IVY = (64, 82, 68)
+CLAY2 = (190, 134, 98)
+PLUM2 = (94, 72, 86)
+MIST = (168, 178, 174)
+OBSIDIAN = (38, 38, 40)
+
+
+def i01_logo_monument(logo, motif) -> Image.Image:
+    """Logo is the hero: giant wordmark across the top half."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), IIVORY)
+    d = ImageDraw.Draw(img)
+    stamp_logo(img, logo_ink(logo, DARK), 65, 52, 80, DARK)
+    rule(d, 44, 92, 86, DARK, 0.4)
+    big_name(d, 65, 116, ["ORGANIC LION'S MANE"], DARK, size_mm=15.0, gap_mm=1.6,
+             max_w=112)
+    fact_ledge(d, 65, 156, DARK, lines=("170 G", "34 SERVINGS", "5 G PER SCOOP"))
+    place_motif(img, recolor(motif, DARK), 65, 190, 56, 30)
+    return img
+
+
+def i02_vertical_spine(logo, motif) -> Image.Image:
+    """Type runs vertically down the left edge; logo centered on right."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), DARK)
+    d = ImageDraw.Draw(img)
+    vtext(img, 14, 30, "MOGRA ORGANICS · ORGANIC LION'S MANE MUSHROOM POWDER",
+          F("Jost.ttf", 2.4, [500]), IIVORY, block_w_mm=100, block_h_mm=3.2)
+    big_name(d, 84, 60, ["ORGANIC", "LION'S MANE"], IIVORY, size_mm=15.0,
+             gap_mm=1.4, max_w=44)
+    stamp_logo(img, logo_ink(logo, IIVORY), 84, 130, 34, IIVORY)
+    fact_ledge(d, 84, 172, IIVORY, lines=("170 G", "34 SERVINGS"))
+    place_motif(img, recolor(motif, IIVORY), 84, 194, 44, 26)
+    return img
+
+
+def i03_center_seal(logo, motif) -> Image.Image:
+    """Logo inside a circular seal at center; type wrapped around."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), MOON)
+    d = ImageDraw.Draw(img)
+    for rr in (42.0, 37.0, 32.0):
+        d.arc([P(65 - rr), P(94 - rr), P(65 + rr), P(94 + rr)], 180, 360,
+              fill=tuple(CLAY2), width=max(2, P(0.3)))
+    stamp_logo(img, logo_ink(logo, CLAY2), 65, 94, 44, CLAY2)
+    big_name(d, 65, 152, ["ORGANIC LION'S MANE"], CLAY2, size_mm=13.0, gap_mm=1.4,
+             max_w=100)
+    fact_ledge(d, 65, 190, CLAY2, lines=("170 G", "34 SERVINGS"))
+    return img
+
+
+def i04_off_edge_type(logo, motif) -> Image.Image:
+    """Type runs off left and right edges; logo bottom center."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), SEA)
+    d = ImageDraw.Draw(img)
+    big_name(d, 65, 50, ["ORGANIC LION'S MANE"], MOON, size_mm=17.0, gap_mm=1.6,
+             max_w=126)
+    ctext(d, 65, 86, "MUSHROOM POWDER", F("Jost.ttf", 3.2, [500]), MOON,
+          tracking_mm=4.0)
+    rule(d, 22, 100, 108, MOON, 0.4)
+    stamp_logo(img, logo_ink(logo, MOON), 65, 130, 38, MOON)
+    fact_ledge(d, 65, 156, MOON)
+    place_motif(img, recolor(motif, MOON), 65, 190, 60, 34)
+    return img
+
+
+def i05_diagonal_split(logo, motif) -> Image.Image:
+    """Diagonal split corner-to-corner; logo on the dark half."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), CLAY2)
+    d = ImageDraw.Draw(img)
+    d.polygon([(P(0), P(0)), (P(130), P(0)), (P(130), P(210)), (P(0), P(70))],
+              fill=BRICK)
+    stamp_logo(img, logo_ink(logo, CLAY2), 70, 130, 34, CLAY2)
+    big_name(d, 70, 162, ["ORGANIC LION'S MANE"], CLAY2, size_mm=11.0, gap_mm=1.4,
+             max_w=60)
+    fact_ledge(d, 70, 194, CLAY2, lines=("170 G", "34 SERVINGS"))
+    place_motif(img, recolor(motif, CLAY2), 70, 188, 30, 18)
+    return img
+
+
+def i06_drawn_circle(logo, motif) -> Image.Image:
+    """Hand-drawn circle around logo; type inside."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), IVY)
+    d = ImageDraw.Draw(img)
+    d.ellipse([P(22), P(30), P(108), P(116)], outline=tuple(IIVORY),
+              width=max(2, P(0.5)))
+    d.ellipse([P(28), P(36), P(102), P(110)], outline=tuple(IIVORY),
+              width=max(2, P(0.2)))
+    stamp_logo(img, logo_ink(logo, IIVORY), 65, 72, 50, IIVORY)
+    big_name(d, 65, 126, ["ORGANIC", "LION'S MANE"], IIVORY, size_mm=13.0,
+             gap_mm=1.2, max_w=92)
+    fact_ledge(d, 65, 164, IIVORY)
+    place_motif(img, recolor(motif, IIVORY), 65, 190, 52, 30)
+    return img
+
+
+def i07_asymmetric_corner(logo, motif) -> Image.Image:
+    """Logo top-left small; type justified right, large."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), PLUM2)
+    d = ImageDraw.Draw(img)
+    stamp_logo(img, logo_ink(logo, PLUM2), 30, 34, 28, PLUM2)
+    rule(d, 10, 64, 50, PLUM2, 0.3)
+    big_name(d, 88, 56, ["ORGANIC", "LION'S MANE"], PLUM2, size_mm=16.0,
+             gap_mm=1.8, max_w=80)
+    ctext(d, 88, 98, "MUSHROOM POWDER", F("Jost.ttf", 3.0, [500]), MOON,
+          tracking_mm=3.2)
+    fact_ledge(d, 88, 122, MOON, lines=("170 G", "34 SERVINGS", "5 G PER SCOOP"))
+    place_motif(img, recolor(motif, MOON), 88, 158, 48, 28)
+    return img
+
+
+def i08_logo_in_shape(logo, motif) -> Image.Image:
+    """Logo reversed out of a dark rounded rect in center."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), MIST)
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([P(26), P(62), P(104), P(130)], radius=P(10), fill=IVY)
+    stamp_logo(img, logo_ink(logo, IVY), 65, 96, 44, IVY)
+    big_name(d, 65, 146, ["ORGANIC LION'S MANE"], IVY, size_mm=14.0, gap_mm=1.6,
+             max_w=92)
+    fact_ledge(d, 65, 184, IVY, lines=("170 G", "34 SERVINGS", "5 G PER SCOOP"))
+    place_motif(img, recolor(motif, IVY), 65, 194, 40, 24)
+    return img
+
+
+def i09_curved_arcs(logo, motif) -> Image.Image:
+    """Type on top and bottom arcs; logo center."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), OBSIDIAN)
+    d = ImageDraw.Draw(img)
+    for rr in (28.0, 24.0):
+        d.arc([P(65 - rr), P(44 - rr), P(65 + rr), P(44 + rr)], 190, 350,
+              fill=tuple(IIVORY), width=max(2, P(0.3)))
+        d.arc([P(65 - rr), P(166 - rr), P(65 + rr), P(166 + rr)], 10, 170,
+              fill=tuple(IIVORY), width=max(2, P(0.3)))
+    stamp_logo(img, logo_ink(logo, IIVORY), 65, 104, 42, IIVORY)
+    big_name(d, 65, 158, ["ORGANIC LION'S MANE"], IIVORY, size_mm=12.0,
+             gap_mm=1.4, max_w=100)
+    fact_ledge(d, 65, 196, IIVORY, lines=("170 G", "34 SERVINGS"))
+    return img
+
+
+def i10_logo_hero(logo, motif) -> Image.Image:
+    """Logo center-right, large; type left-aligned bottom."""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), OCHRE)
+    d = ImageDraw.Draw(img)
+    stamp_logo(img, logo_ink(logo, CEDAR2), 92, 70, 52, CEDAR2)
+    big_name(d, 42, 126, ["ORGANIC LION'S MANE"], CEDAR2, size_mm=12.0,
+             gap_mm=1.6, max_w=60)
+    fact_ledge(d, 42, 164, CEDAR2, lines=("170 G", "34 SERVINGS", "5 G PER SCOOP"))
+    place_motif(img, recolor(motif, CEDAR2), 92, 190, 44, 28)
+    return img
+
+
+BAG_FRONTS.update({
+    "i01_logo_monument": i01_logo_monument,
+    "i02_vertical_spine": i02_vertical_spine,
+    "i03_center_seal": i03_center_seal,
+    "i04_off_edge_type": i04_off_edge_type,
+    "i05_diagonal_split": i05_diagonal_split,
+    "i06_drawn_circle": i06_drawn_circle,
+    "i07_asymmetric_corner": i07_asymmetric_corner,
+    "i08_logo_in_shape": i08_logo_in_shape,
+    "i09_curved_arcs": i09_curved_arcs,
+    "i10_logo_hero": i10_logo_hero,
+})
+
+
 # ── CANISTER wrap fronts (5) — half wrap 114.65 x 120 mm, safe arc x24..91 ──
 
 def can_06_wall_of_type(logo, motif) -> Image.Image:
@@ -1558,6 +2132,36 @@ def design_specs() -> List[Dict]:
         "f08_granite_stack": dict(kind="bag", ground=GRANITE, ground_b=GRANITE, ink_b=(238, 235, 226)),
         "f09_plum_prescription": dict(kind="bag", ground=PLUM, ground_b=PLUM, ink_b=LINEN2),
         "f10_ice_botanical": dict(kind="bag", ground=ICE, ground_b=ICE, ink_b=FOREST2),
+        "g01_ink_sash": dict(kind="bag", ground=INK, ground_b=INK, ink_b=BONE),
+        "g02_bone_spill": dict(kind="bag", ground=BONE, ground_b=BONE, ink_b=FOREST2),
+        "g03_terra_sun": dict(kind="bag", ground=TERRA, ground_b=TERRA, ink_b=BONE),
+        "g04_teal_horizon": dict(kind="bag", ground=TEAL, ground_b=TEAL, ink_b=BONE),
+        "g05_olive_identity": dict(kind="bag", ground=OLIVE2, ground_b=OLIVE2, ink_b=BONE),
+        "g06_charcoal_banner": dict(kind="bag", ground=CHAR, ground_b=CHAR, ink_b=BONE),
+        "g07_slate_halo": dict(kind="bag", ground=SLATE2, ground_b=SLATE2, ink_b=BONE),
+        "g08_blush_column": dict(kind="bag", ground=BLUSH, ground_b=BLUSH, ink_b=PLUM),
+        "g09_bone_stamp": dict(kind="bag", ground=BONE, ground_b=BONE, ink_b=INK),
+        "g10_forest_duo": dict(kind="bag", ground=FOREST2, ground_b=FOREST2, ink_b=BONE),
+        "h01_porcelain_monument": dict(kind="bag", ground=PARCHMENT, ground_b=PARCHMENT, ink_b=FOREST3),
+        "h02_cedar_tower": dict(kind="bag", ground=CEDAR2, ground_b=CEDAR2, ink_b=PARCHMENT),
+        "h03_teal_arc": dict(kind="bag", ground=TEAL2, ground_b=TEAL2, ink_b=PARCHMENT),
+        "h04_slate_ticket": dict(kind="bag", ground=SLATE3, ground_b=SLATE3, ink_b=PARCHMENT),
+        "h05_forest_crest": dict(kind="bag", ground=FOREST3, ground_b=FOREST3, ink_b=PARCHMENT),
+        "h06_rose_slab": dict(kind="bag", ground=ROSE2, ground_b=ROSE2, ink_b=PARCHMENT),
+        "h07_ochre_fold": dict(kind="bag", ground=OCHRE, ground_b=OCHRE, ink_b=PARCHMENT),
+        "h08_sage_wash": dict(kind="bag", ground=SAGE3, ground_b=SAGE3, ink_b=FOREST3),
+        "h09_violet_block": dict(kind="bag", ground=PARCHMENT, ground_b=PARCHMENT, ink_b=VIOLET),
+        "h10_monogram_only": dict(kind="bag", ground=BONE, ground_b=BONE, ink_b=CEDAR2),
+        "i01_logo_monument": dict(kind="bag", ground=IIVORY, ground_b=IIVORY, ink_b=DARK),
+        "i02_vertical_spine": dict(kind="bag", ground=DARK, ground_b=DARK, ink_b=IIVORY),
+        "i03_center_seal": dict(kind="bag", ground=MOON, ground_b=MOON, ink_b=CLAY2),
+        "i04_off_edge_type": dict(kind="bag", ground=SEA, ground_b=SEA, ink_b=MOON),
+        "i05_diagonal_split": dict(kind="bag", ground=CLAY2, ground_b=CLAY2, ink_b=BRICK),
+        "i06_drawn_circle": dict(kind="bag", ground=IVY, ground_b=IVY, ink_b=IIVORY),
+        "i07_asymmetric_corner": dict(kind="bag", ground=PLUM2, ground_b=PLUM2, ink_b=MOON),
+        "i08_logo_in_shape": dict(kind="bag", ground=MIST, ground_b=MIST, ink_b=IVY),
+        "i09_curved_arcs": dict(kind="bag", ground=OBSIDIAN, ground_b=OBSIDIAN, ink_b=IIVORY),
+        "i10_logo_hero": dict(kind="bag", ground=OCHRE, ground_b=OCHRE, ink_b=CEDAR2),
         "06_wall_of_type": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),
         "07_dome_gold": dict(kind="canister", ground=FOREST, ground_b=FOREST, ink_b=CREAM),
         "08_stamp_roll": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),

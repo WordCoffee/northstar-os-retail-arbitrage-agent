@@ -36,7 +36,18 @@ BAG_DESIGNS = ["01_forest_bold", "02_sticker_fun", "03_midnight_luxe",
                "e09_taupe_watermark", "e10_kelp_luxe", "f01_porcelain_type",
                "f02_cedar_seal", "f03_linen_ledger", "f04_wheat_minimal",
                "f05_pistachio_contour", "f06_porcelain_tile", "f07_rose_wreath",
-               "f08_granite_stack", "f09_plum_prescription", "f10_ice_botanical"]
+               "f08_granite_stack", "f09_plum_prescription", "f10_ice_botanical",
+               "g01_ink_sash", "g02_bone_spill", "g03_terra_sun",
+               "g04_teal_horizon", "g05_olive_identity", "g06_charcoal_banner",
+               "g07_slate_halo", "g08_blush_column", "g09_bone_stamp",
+               "g10_forest_duo", "h01_porcelain_monument", "h02_cedar_tower",
+               "h03_teal_arc", "h04_slate_ticket", "h05_forest_crest",
+               "h06_rose_slab", "h07_ochre_fold", "h08_sage_wash",
+               "h09_violet_block", "h10_monogram_only",
+               "i01_logo_monument", "i02_vertical_spine", "i03_center_seal",
+               "i04_off_edge_type", "i05_diagonal_split", "i06_drawn_circle",
+               "i07_asymmetric_corner", "i08_logo_in_shape", "i09_curved_arcs",
+               "i10_logo_hero"]
 CAN_DESIGNS = ["06_wall_of_type", "07_dome_gold", "08_stamp_roll",
                "09_edge_stripe", "10_concentric"]
 
@@ -46,13 +57,15 @@ PLATES = {"bag": ("plate2_pouch_front", "plate2_pouch_back"),
 
 def _cli() -> tuple:
     """Optional --only k1,k2  --pack <folder>  --designs <folder>  --scale <n>
-    --flat (one folder, no per-design subfolders)."""
+    --flat (one folder)  --packages-only (only <key>_front/_back full-package
+    images; no sheets, no readme)."""
     argv = sys.argv[1:]
     only = None
     pack_name = None
     designs_dir = None
     scale = 2.0
     flat = "--flat" in argv
+    packages_only = "--packages-only" in argv
     if "--only" in argv:
         only = {k for k in argv[argv.index("--only") + 1].split(",") if k}
     if "--pack" in argv:
@@ -61,11 +74,12 @@ def _cli() -> tuple:
         designs_dir = Path(argv[argv.index("--designs") + 1])
     if "--scale" in argv:
         scale = float(argv[argv.index("--scale") + 1])
-    return only, pack_name, designs_dir, scale, flat
+    return only, pack_name, designs_dir, scale, flat, packages_only
 
 
 def main() -> None:
-    only, pack_name, designs_dir, scale, flat = _cli()
+    only, pack_name, designs_dir, scale, flat, packages_only = _cli()
+    flat = flat or packages_only
     pack = (PACK.parent / pack_name) if pack_name else PACK
     pack.mkdir(parents=True, exist_ok=True)
     designs = designs_dir or DESIGNS
@@ -94,10 +108,15 @@ def main() -> None:
         mf = me.print_package(plate_f, front_art, cfg_f["kind"], cfg_f)
         mb = me.print_package(plate_b, back_art, cfg_b["kind"], cfg_b)
 
-        mf_name = f"{key}_shelf_front.png" if flat else "front_shelf.png"
-        mb_name = f"{key}_shelf_back.png" if flat else "back_shelf.png"
-        mf.save((pack if flat else out) / mf_name)
-        mb.save((pack if flat else out) / mb_name)
+        if packages_only:
+            mf_name, mb_name = f"{key}_front.png", f"{key}_back.png"
+        elif flat:
+            mf_name, mb_name = f"{key}_shelf_front.png", f"{key}_shelf_back.png"
+        else:
+            mf_name, mb_name = "front_shelf.png", "back_shelf.png"
+        dest = pack if flat else out
+        mf.save(dest / mf_name)
+        mb.save(dest / mb_name)
         rows_front.append(mf)
         rows_back.append(mb)
         labels.append(key)
@@ -105,6 +124,10 @@ def main() -> None:
                          "front": mf_name if flat else f"{key}/{mf_name}",
                          "back": mb_name if flat else f"{key}/{mb_name}"})
         print("mockup", key, flush=True)
+
+    if packages_only:
+        print("PACK:", pack, "| packages:", len(registry))
+        return
 
     # contact sheet — 10 fronts, then 10 backs
     TH = 780
