@@ -90,21 +90,25 @@ line, plus 3mm bleed + weld/fold/zipper marks (bags) / seam + glue tab (canister
 
 def _cli() -> tuple:
     """Optional --only k1,k2  --pack <folder-name>  --flat (one folder, no
-    per-design subfolders) for subset exports."""
+    per-design subfolders)  --logo-master <file.png> (pre-built sharp master,
+    e.g. exports/mogra_logo_master_v2.png from refine_mogra_logo.py)."""
     argv = sys.argv[1:]
     only = None
     pack_name = None
+    logo_master = None
     flat = "--flat" in argv
     if "--only" in argv:
         only = {k for k in argv[argv.index("--only") + 1].split(",") if k}
     if "--pack" in argv:
         pack_name = argv[argv.index("--pack") + 1]
-    return only, pack_name, flat
+    if "--logo-master" in argv:
+        logo_master = Path(argv[argv.index("--logo-master") + 1])
+    return only, pack_name, flat, logo_master
 
 
 def main() -> None:
     global PACK
-    only, pack_name, flat = _cli()
+    only, pack_name, flat, logo_master = _cli()
     if pack_name:
         PACK = PACK.parent / pack_name
     PACK.mkdir(parents=True, exist_ok=True)
@@ -112,9 +116,20 @@ def main() -> None:
     if not flat:
         (PACK / "designs").mkdir(exist_ok=True)
 
-    logo, field = refine_logo()
-    logo.save(PACK / "logo" / "mogra_logo_master.png")
     notes = []
+    if logo_master is not None:
+        logo = Image.open(logo_master).convert("RGBA")
+        notes.append("logo master v2 (8x refined, field-keyed) from "
+                     "refine_mogra_logo.py - identity series stamps the FULL "
+                     "lockup (emblem + EST 2023 + wordmark + tagline)")
+    else:
+        import refine_mogra_logo as rl  # auto-build the sharp master
+        logo, _qa = rl.build_master()
+        notes.append("logo master v2 auto-built (8x refined, field-keyed) by "
+                     "refine_mogra_logo.build_master() - identity series stamps "
+                     "the FULL lockup (emblem + EST 2023 + wordmark + tagline)")
+    pd.set_logo_assets(lockup=logo)
+    logo.save(PACK / "logo" / "mogra_logo_master.png")
     try:  # optional true vector master (auto-trace; stylised, verify before print)
         import vtracer  # type: ignore
         rgb = Image.new("RGB", logo.size, (255, 255, 255))
@@ -125,7 +140,8 @@ def main() -> None:
         (PACK / "logo" / "mogra_logo_master_traced.svg").write_text(svg, encoding="utf-8")
         notes.append("vector auto-trace included (stylised; verify before production)")
     except Exception:
-        notes.append("vector auto-trace unavailable (vtracer not installed) - raster master is 4x refined")
+        notes.append("vector auto-trace unavailable (vtracer not installed) - "
+                     "raster master is the 8x v2 refinement")
 
     raw = None
     for name in RAW_CANDIDATES:
@@ -212,7 +228,9 @@ def main() -> None:
     manifest = {
         "pack": "MOGRA ORGANICS - 10 package concepts (5 bags + 5 canisters), front + back each",
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "logo": "logo/mogra_logo_master.png (refined 4x from supplied artwork)",
+        "logo": ("logo/mogra_logo_master.png (8x refined + field-keyed, exact same "
+                 "artwork - refine_mogra_logo.py)" if logo_master is not None
+                 else "logo/mogra_logo_master.png (refined 4x from supplied artwork)"),
         "notes": notes,
         "designs": registry,
         "regulatory": "BACK_LABEL_REQUIREMENTS.md - placeholder zones await certified data",

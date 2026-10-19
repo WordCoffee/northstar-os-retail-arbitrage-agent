@@ -396,8 +396,10 @@ def render_back(spec: Dict, W: float, H: float, logo: Optional[Image.Image] = No
     f_n = F("Inter.ttf", 2.4 * sx, [14, 400])
     f_s = F("Inter.ttf", 2.1 * sx, [14, 400])
 
-    # header: wordmark + organic seal
-    if logo is not None:
+    # header: brand lockup (identity series) or wordmark + organic seal
+    if spec.get("logo_lockup") and LOCKUP is not None:
+        lockup_stamp(img, W / 2, 8 * sx + 10.0, 27.0 * sc, ink)
+    elif logo is not None:
         wm = recolor(wordmark(logo), ink)
         wm_w = min(42.0 * sc, col_w * 0.5)
         wm_r = wm.resize((P(wm_w), max(2, int(P(wm_w) * wm.height / wm.width))), Image.LANCZOS)
@@ -1588,6 +1590,39 @@ def stamp_logo(canvas, logo_img, cx, cy, w_mm, ink):
     paste_w(canvas, recolor(logo_img, ink), cx, cy, w_mm)
 
 
+# ── full-lockup stamp (v2 sharp master) ──────────────────────────────────────
+
+LOCKUP: Optional[Image.Image] = None
+_LOCKUP_BBOX: Optional[Tuple[int, int, int, int]] = None
+
+
+def set_logo_assets(lockup: Optional[Image.Image] = None) -> None:
+    """Register the high-res lockup RGBA (emblem + EST 2023 + wordmark +
+    tagline) used by the identity series. Built by refine_mogra_logo.py."""
+    global LOCKUP, _LOCKUP_BBOX
+    LOCKUP = lockup
+    _LOCKUP_BBOX = None
+    if lockup is not None:
+        a = np.array(lockup)[..., 3]
+        ys, xs = np.where(a > 40)
+        if len(xs):
+            _LOCKUP_BBOX = (int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1)
+
+
+def lockup_stamp(canvas, cx, cy, visible_w_mm, ink):
+    """Paste the full MOGRA lockup so its VISIBLE ink is `visible_w_mm` wide,
+    ink-centred on (cx, cy); green leaves keep their colour (recolor rule)."""
+    if LOCKUP is None or _LOCKUP_BBOX is None:
+        raise RuntimeError("lockup asset not set - call set_logo_assets() first")
+    lx0, ly0, lx1, ly1 = _LOCKUP_BBOX
+    s = P(visible_w_mm) / (lx1 - lx0)
+    r = LOCKUP.resize((max(2, int(LOCKUP.width * s)), max(2, int(LOCKUP.height * s))), Image.LANCZOS)
+    r = recolor(r, ink)
+    bx, by = (lx0 + lx1) / 2 * s, (ly0 + ly1) / 2 * s
+    canvas.paste(r, (int(P(cx) - bx), int(P(cy) - by)), r)
+    return r
+
+
 def big_name(d, cx, y, lines, ink, *, size_mm=16, gap_mm=2.0, max_w=112,
              font="CormorantGaramond.ttf", axes=[600]):
     yy = y
@@ -1789,10 +1824,10 @@ OBSIDIAN = (38, 38, 40)
 
 
 def i01_logo_monument(logo, motif) -> Image.Image:
-    """Logo is the hero: giant wordmark across the top half."""
+    """Logo is the hero: the full lockup across the top half."""
     img = Image.new("RGB", (P(BAG_W), P(BAG_H)), IIVORY)
     d = ImageDraw.Draw(img)
-    stamp_logo(img, logo_ink(logo, DARK), 65, 52, 80, DARK)
+    lockup_stamp(img, 65, 52, 58, DARK)
     rule(d, 44, 92, 86, DARK, 0.4)
     big_name(d, 65, 116, ["ORGANIC LION'S MANE"], DARK, size_mm=15.0, gap_mm=1.6,
              max_w=112)
@@ -1809,7 +1844,7 @@ def i02_vertical_spine(logo, motif) -> Image.Image:
           F("Jost.ttf", 2.4, [500]), IIVORY, block_w_mm=100, block_h_mm=3.2)
     big_name(d, 84, 60, ["ORGANIC", "LION'S MANE"], IIVORY, size_mm=15.0,
              gap_mm=1.4, max_w=44)
-    stamp_logo(img, logo_ink(logo, IIVORY), 84, 130, 34, IIVORY)
+    lockup_stamp(img, 84, 130, 25, IIVORY)
     fact_ledge(d, 84, 172, IIVORY, lines=("170 G", "34 SERVINGS"))
     place_motif(img, recolor(motif, IIVORY), 84, 194, 44, 26)
     return img
@@ -1822,7 +1857,7 @@ def i03_center_seal(logo, motif) -> Image.Image:
     for rr in (42.0, 37.0, 32.0):
         d.arc([P(65 - rr), P(94 - rr), P(65 + rr), P(94 + rr)], 180, 360,
               fill=tuple(CLAY2), width=max(2, P(0.3)))
-    stamp_logo(img, logo_ink(logo, CLAY2), 65, 94, 44, CLAY2)
+    lockup_stamp(img, 65, 94, 32, CLAY2)
     big_name(d, 65, 152, ["ORGANIC LION'S MANE"], CLAY2, size_mm=13.0, gap_mm=1.4,
              max_w=100)
     fact_ledge(d, 65, 190, CLAY2, lines=("170 G", "34 SERVINGS"))
@@ -1838,7 +1873,7 @@ def i04_off_edge_type(logo, motif) -> Image.Image:
     ctext(d, 65, 86, "MUSHROOM POWDER", F("Jost.ttf", 3.2, [500]), MOON,
           tracking_mm=4.0)
     rule(d, 22, 100, 108, MOON, 0.4)
-    stamp_logo(img, logo_ink(logo, MOON), 65, 130, 38, MOON)
+    lockup_stamp(img, 65, 130, 28, MOON)
     fact_ledge(d, 65, 156, MOON)
     place_motif(img, recolor(motif, MOON), 65, 190, 60, 34)
     return img
@@ -1850,7 +1885,7 @@ def i05_diagonal_split(logo, motif) -> Image.Image:
     d = ImageDraw.Draw(img)
     d.polygon([(P(0), P(0)), (P(130), P(0)), (P(130), P(210)), (P(0), P(70))],
               fill=BRICK)
-    stamp_logo(img, logo_ink(logo, CLAY2), 70, 130, 34, CLAY2)
+    lockup_stamp(img, 76, 125, 22, CLAY2)
     big_name(d, 70, 162, ["ORGANIC LION'S MANE"], CLAY2, size_mm=11.0, gap_mm=1.4,
              max_w=60)
     fact_ledge(d, 70, 194, CLAY2, lines=("170 G", "34 SERVINGS"))
@@ -1866,7 +1901,7 @@ def i06_drawn_circle(logo, motif) -> Image.Image:
               width=max(2, P(0.5)))
     d.ellipse([P(28), P(36), P(102), P(110)], outline=tuple(IIVORY),
               width=max(2, P(0.2)))
-    stamp_logo(img, logo_ink(logo, IIVORY), 65, 72, 50, IIVORY)
+    lockup_stamp(img, 65, 72, 36, IIVORY)
     big_name(d, 65, 126, ["ORGANIC", "LION'S MANE"], IIVORY, size_mm=13.0,
              gap_mm=1.2, max_w=92)
     fact_ledge(d, 65, 164, IIVORY)
@@ -1875,12 +1910,13 @@ def i06_drawn_circle(logo, motif) -> Image.Image:
 
 
 def i07_asymmetric_corner(logo, motif) -> Image.Image:
-    """Logo top-left small; type justified right, large."""
+    """Logo top-left small; type justified right, large. (Ink was the ground
+    colour before - the logo and headline were invisible; now MOON on PLUM2.)"""
     img = Image.new("RGB", (P(BAG_W), P(BAG_H)), PLUM2)
     d = ImageDraw.Draw(img)
-    stamp_logo(img, logo_ink(logo, PLUM2), 30, 34, 28, PLUM2)
-    rule(d, 10, 64, 50, PLUM2, 0.3)
-    big_name(d, 88, 56, ["ORGANIC", "LION'S MANE"], PLUM2, size_mm=16.0,
+    lockup_stamp(img, 30, 34, 20, MOON)
+    rule(d, 10, 64, 50, MOON, 0.3)
+    big_name(d, 88, 56, ["ORGANIC", "LION'S MANE"], MOON, size_mm=16.0,
              gap_mm=1.8, max_w=80)
     ctext(d, 88, 98, "MUSHROOM POWDER", F("Jost.ttf", 3.0, [500]), MOON,
           tracking_mm=3.2)
@@ -1890,11 +1926,12 @@ def i07_asymmetric_corner(logo, motif) -> Image.Image:
 
 
 def i08_logo_in_shape(logo, motif) -> Image.Image:
-    """Logo reversed out of a dark rounded rect in center."""
+    """Logo reversed out of a dark rounded rect in center. (Reverse-out means
+    the ground colour on IVY - the previous IVY-on-IVY stamp was invisible.)"""
     img = Image.new("RGB", (P(BAG_W), P(BAG_H)), MIST)
     d = ImageDraw.Draw(img)
     d.rounded_rectangle([P(26), P(62), P(104), P(130)], radius=P(10), fill=IVY)
-    stamp_logo(img, logo_ink(logo, IVY), 65, 96, 44, IVY)
+    lockup_stamp(img, 65, 96, 32, MIST)
     big_name(d, 65, 146, ["ORGANIC LION'S MANE"], IVY, size_mm=14.0, gap_mm=1.6,
              max_w=92)
     fact_ledge(d, 65, 184, IVY, lines=("170 G", "34 SERVINGS", "5 G PER SCOOP"))
@@ -1911,7 +1948,7 @@ def i09_curved_arcs(logo, motif) -> Image.Image:
               fill=tuple(IIVORY), width=max(2, P(0.3)))
         d.arc([P(65 - rr), P(166 - rr), P(65 + rr), P(166 + rr)], 10, 170,
               fill=tuple(IIVORY), width=max(2, P(0.3)))
-    stamp_logo(img, logo_ink(logo, IIVORY), 65, 104, 42, IIVORY)
+    lockup_stamp(img, 65, 104, 31, IIVORY)
     big_name(d, 65, 158, ["ORGANIC LION'S MANE"], IIVORY, size_mm=12.0,
              gap_mm=1.4, max_w=100)
     fact_ledge(d, 65, 196, IIVORY, lines=("170 G", "34 SERVINGS"))
@@ -1922,7 +1959,7 @@ def i10_logo_hero(logo, motif) -> Image.Image:
     """Logo center-right, large; type left-aligned bottom."""
     img = Image.new("RGB", (P(BAG_W), P(BAG_H)), OCHRE)
     d = ImageDraw.Draw(img)
-    stamp_logo(img, logo_ink(logo, CEDAR2), 92, 70, 52, CEDAR2)
+    lockup_stamp(img, 92, 70, 38, CEDAR2)
     big_name(d, 42, 126, ["ORGANIC LION'S MANE"], CEDAR2, size_mm=12.0,
              gap_mm=1.6, max_w=60)
     fact_ledge(d, 42, 164, CEDAR2, lines=("170 G", "34 SERVINGS", "5 G PER SCOOP"))
@@ -2152,16 +2189,26 @@ def design_specs() -> List[Dict]:
         "h08_sage_wash": dict(kind="bag", ground=SAGE3, ground_b=SAGE3, ink_b=FOREST3),
         "h09_violet_block": dict(kind="bag", ground=PARCHMENT, ground_b=PARCHMENT, ink_b=VIOLET),
         "h10_monogram_only": dict(kind="bag", ground=BONE, ground_b=BONE, ink_b=CEDAR2),
-        "i01_logo_monument": dict(kind="bag", ground=IIVORY, ground_b=IIVORY, ink_b=DARK),
-        "i02_vertical_spine": dict(kind="bag", ground=DARK, ground_b=DARK, ink_b=IIVORY),
-        "i03_center_seal": dict(kind="bag", ground=MOON, ground_b=MOON, ink_b=CLAY2),
-        "i04_off_edge_type": dict(kind="bag", ground=SEA, ground_b=SEA, ink_b=MOON),
-        "i05_diagonal_split": dict(kind="bag", ground=CLAY2, ground_b=CLAY2, ink_b=BRICK),
-        "i06_drawn_circle": dict(kind="bag", ground=IVY, ground_b=IVY, ink_b=IIVORY),
-        "i07_asymmetric_corner": dict(kind="bag", ground=PLUM2, ground_b=PLUM2, ink_b=MOON),
-        "i08_logo_in_shape": dict(kind="bag", ground=MIST, ground_b=MIST, ink_b=IVY),
-        "i09_curved_arcs": dict(kind="bag", ground=OBSIDIAN, ground_b=OBSIDIAN, ink_b=IIVORY),
-        "i10_logo_hero": dict(kind="bag", ground=OCHRE, ground_b=OCHRE, ink_b=CEDAR2),
+        "i01_logo_monument": dict(kind="bag", ground=IIVORY, ground_b=IIVORY, ink_b=DARK,
+                                  logo_lockup=True),
+        "i02_vertical_spine": dict(kind="bag", ground=DARK, ground_b=DARK, ink_b=IIVORY,
+                                   logo_lockup=True),
+        "i03_center_seal": dict(kind="bag", ground=MOON, ground_b=MOON, ink_b=CLAY2,
+                                logo_lockup=True),
+        "i04_off_edge_type": dict(kind="bag", ground=SEA, ground_b=SEA, ink_b=MOON,
+                                  logo_lockup=True),
+        "i05_diagonal_split": dict(kind="bag", ground=CLAY2, ground_b=CLAY2, ink_b=BRICK,
+                                   logo_lockup=True),
+        "i06_drawn_circle": dict(kind="bag", ground=IVY, ground_b=IVY, ink_b=IIVORY,
+                                 logo_lockup=True),
+        "i07_asymmetric_corner": dict(kind="bag", ground=PLUM2, ground_b=PLUM2, ink_b=MOON,
+                                      logo_lockup=True),
+        "i08_logo_in_shape": dict(kind="bag", ground=MIST, ground_b=MIST, ink_b=IVY,
+                                  logo_lockup=True),
+        "i09_curved_arcs": dict(kind="bag", ground=OBSIDIAN, ground_b=OBSIDIAN, ink_b=IIVORY,
+                                logo_lockup=True),
+        "i10_logo_hero": dict(kind="bag", ground=OCHRE, ground_b=OCHRE, ink_b=CEDAR2,
+                              logo_lockup=True),
         "06_wall_of_type": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),
         "07_dome_gold": dict(kind="canister", ground=FOREST, ground_b=FOREST, ink_b=CREAM),
         "08_stamp_roll": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),
