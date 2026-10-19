@@ -925,6 +925,38 @@ def _t_purpose_command(args, ctx) -> dict:
     }
 
 
+def _t_build_preset(args, ctx) -> dict:
+    """Read-only BUILD preset resolution (Thorn v5.0 §User Work Presets).
+
+    BUILD presets shape the brain's work on its own materials — design system,
+    code, architecture. They are separate from the six WORK focus modes and never
+    replace them."""
+    import build_presets  # local import keeps the chat-tool import surface light
+
+    preset_id = args.get("preset")
+    track = args.get("track")
+    if preset_id:
+        out = build_presets.resolve(str(preset_id))
+    elif track:
+        out = build_presets.for_track(str(track))
+    else:
+        out = build_presets.catalogue()
+
+    if out.get("ok") is False:
+        return {"ok": False, "summary": out.get("error") or "Unknown BUILD preset.",
+                "error": out.get("error") or "", "assets": []}
+    if "presets" in out:
+        return {"ok": True,
+                "summary": (f"{len(out['presets'])} BUILD preset(s): "
+                            + ", ".join(p["label"] for p in out["presets"])
+                            + " — separate from the six work foci."),
+                "catalogue": out, "assets": []}
+    return {"ok": True,
+            "summary": (f"BUILD preset '{out['label']}': {len(out['tools'])} tool(s), "
+                        f"memory={out['memory_retention']}, model={out['model_family']}."),
+            "preset": out, "assets": []}
+
+
 # ── Registry ─────────────────────────────────────────────────────────────────
 TOOLS: Dict[str, dict] = {    "system_status": {
         "description": "Report the local media engine + chat model status. Read-only.",
@@ -1165,6 +1197,28 @@ TOOLS: Dict[str, dict] = {    "system_status": {
             "required": ["command"],
         },
         "handler": _t_purpose_command,
+    },
+    "build_preset": {
+        "description": ("Resolve a BUILD preset (Thorn v5.0): product_design, coding, "
+                        "system_architecture, general_chat. Each carries a system addendum, "
+                        "a registered tool subset, a memory-retention depth and a model "
+                        "family. Read-only: adopting a preset is the caller's decision, and "
+                        "these never replace the six work focus modes. Omit both arguments "
+                        "for the whole catalogue."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "preset": {"type": "string",
+                           "enum": ["product_design", "coding", "system_architecture",
+                                    "general_chat"],
+                           "description": "Which BUILD preset to resolve."},
+                "track": {"type": "string",
+                          "description": "Alternatively, map an AutothinK router track "
+                                         "(build / research / design) onto a preset."},
+            },
+            "required": [],
+        },
+        "handler": _t_build_preset,
     },
 }
 
