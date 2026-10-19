@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "input": "renders/ab_realism_real.png",
+  "out": "renders/smoke_qwen_edit_2511.png",
+  "model": "qwen-image-edit-2511-Q4_K_M",
+  "seed": 1099625595,
+  "steps": 8,
+  "cfg": 3.0,
+  "bytes": 1037059,
+  "seconds": 94.5,
+  "prompt": "Replace the background with a warm terracotta studio backdrop and add soft natural contact shadows beneath the two stand-up pouches. Keep the pouches, their matte texture, and every printed word and icon exactly unchanged.",
+  "accept": "the pouches and every printed word must be unchanged; only the background and grounding shadows should differ from the input."
+}

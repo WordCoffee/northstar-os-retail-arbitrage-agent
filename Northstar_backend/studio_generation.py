@@ -36,6 +36,9 @@ EDIT_TEXT_ENCODER_FILE = (os.environ.get("STUDIO_EDIT_TEXT_ENCODER")
                           or "qwen_2.5_vl_7b_nvfp4.safetensors")
 EDIT_VAE_FILE = "qwen_image_vae.safetensors"
 
+# Cutout lane (Packify-parity P1): BiRefNet matting, MIT, already on disk.
+CUTOUT_MODEL_FILE = os.environ.get("STUDIO_CUTOUT_MODEL") or "birefnet.safetensors"
+
 _STYLE_SUFFIX = ", professional commercial product photography, clean composition"
 # Rich renders keep the operator's full art direction (lettering demands included).
 # Text-safe mode appends its own suppression phrase in text_fidelity.sanitize_brief_for_render.
@@ -446,6 +449,56 @@ def generate_edit(image_bytes: bytes, prompt: str, *, tier: str = "draft", seed=
         "model": os.path.splitext(EDIT_MODEL_FILE)[0], "provider": "comfyui",
         "seed": seed, "steps": st, "cfg": float(cfg), "duration_seconds": None,
     }
+
+
+def _cutout_graph(image_name: str) -> dict:
+    """BiRefNet cutout → RGBA (core nodes; the model is already on disk).
+
+    Verified live 2026-10-19: `RemoveBackground`'s MASK marks the BACKGROUND
+    (corners came back opaque), so the mask is inverted before it becomes the
+    image's alpha.
+    """
+    return {
+        "1": {"class_type": "LoadBackgroundRemovalModel",
+              "inputs": {"bg_removal_name": CUTOUT_MODEL_FILE}},
+        "2": {"class_type": "LoadImage", "inputs": {"image": image_name}},
+        "3": {"class_type": "RemoveBackground",
+              "inputs": {"bg_removal_model": ["1", 0], "image": ["2", 0]}},
+        "4": {"class_type": "InvertMask", "inputs": {"mask": ["3", 0]}},
+        "5": {"class_type": "JoinImageWithAlpha",
+              "inputs": {"image": ["2", 0], "alpha": ["4", 0]}},
+        "6": {"class_type": "SaveImage",
+              "inputs": {"images": ["5", 0], "filename_prefix": "ns-cutout"}},
+    }
+
+
+def generate_cutout(image_bytes: bytes, *, filename: Optional[str] = None) -> dict:
+    """Transparent-background cutout of a product image (BiRefNet, local).
+
+    Feeds the listing-image lane (MAIN white background) and scene compositing.
+    Returns PNG bytes WITH alpha; framing/compliance lives in image_prep.
+    """
+    if not media_live_armed():
+        raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
+    if not unload_brain():
+        raise RuntimeError(
+            "vram_busy: the local brain is still resident on the GPU (Ollama /api/ps) "
+            "after waiting; refusing a render that would run out of memory. Retry shortly.")
+    name = upload_image(image_bytes, filename=filename or
+                        f"ns-cutout-src-{uuid.uuid4().hex[:8]}.png")
+    try:
+        files = _run_graph_guarded(_cutout_graph(name), timeout_s=1800)
+    except Exception:
+        release_models()
+        raise
+    img = next((f for f in files
+                if str(f.get("filename", "")).lower().endswith((".png", ".jpg", ".webp"))), None)
+    if not img:
+        raise RuntimeError("the cutout finished but produced no image output")
+    data = _fetch_output(img)
+    release_models()
+    return {"bytes": data, "ext": "png", "mime": "image/png",
+            "model": CUTOUT_MODEL_FILE, "provider": "comfyui", "duration_seconds": None}
 
 
 def generate_video(prompt: str, width=None, height=None, tier: str = "draft", seed=None,

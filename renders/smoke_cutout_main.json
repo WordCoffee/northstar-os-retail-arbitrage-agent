@@ -1,0 +1,49 @@
+{
+  "ok": true,
+  "input": "renders/ab_realism_real.png",
+  "cutout": {
+    "file": "smoke_cutout_alpha.png",
+    "model": "birefnet.safetensors",
+    "bytes": 2440325
+  },
+  "framed": {
+    "size": [
+      2000,
+      2000
+    ],
+    "background": "white",
+    "fill_target": 0.88,
+    "source_bbox": [
+      100,
+      334,
+      1125,
+      1063
+    ],
+    "scale_applied": 1.7171,
+    "upscaled": true,
+    "note": "Cutout trimmed to its alpha box and centred on white; fill is measured on the product's longest side."
+  },
+  "framed_file": "smoke_main_2000.png",
+  "compliance": {
+    "status": "ok",
+    "pixels": [
+      2000,
+      2000
+    ],
+    "had_alpha": false,
+    "background_white_frac": 1.0,
+    "product_bbox": [
+      121,
+      374,
+      1880,
+      1626
+    ],
+    "fill_longest_side": 0.8795,
+    "fill_area": 0.5506,
+    "verdict": "compliant",
+    "blockers": [],
+    "note": "Fill is reported both ways: longest side (the conservative reading, used for the verdict) and area. Amazon's own policy page is the authority."
+  },
+  "seconds": 3.8,
+  "how_to_judge": "Open smoke_cutout_alpha.png on a dark background: edges must be clean, no halo. smoke_main_2000.png is what a listing slot gets; compliance.blockers says whether it would pass."
+}

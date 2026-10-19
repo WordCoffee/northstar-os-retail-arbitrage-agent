@@ -1,0 +1,61 @@
+{
+  "ok": true,
+  "plate": "44318b36606f4c859487c250d5a0a671.png",
+  "logo": "Northstar_backend/assets/brand/mogra_logo.png",
+  "flat": {
+    "file": "ab_realism_flat.png",
+    "shading": 0.0,
+    "face_metrics": [
+      {},
+      {}
+    ]
+  },
+  "realism": {
+    "file": "ab_realism_real.png",
+    "shading": 0.5,
+    "params": {
+      "displacement_k": 3.0,
+      "displacement_v_ratio": 0.35,
+      "ink_soften_px": 0.25,
+      "softlight_strength": 0.9,
+      "shade_clip_lo": 0.28,
+      "specular_cap": 0.32,
+      "specular_threshold": 1.35,
+      "fold_shadow": 0.0,
+      "fold_threshold": 0.06,
+      "print_showthrough": 0.0,
+      "dot_gain": 0.0,
+      "grain_sync": 1.0,
+      "ao_rim_px": 0,
+      "ao_strength": 0.05,
+      "seam_px": 0,
+      "seam_strength": 0.1,
+      "tonal_match": 1.0
+    },
+    "face_metrics": [
+      {
+        "displacement_max_px": 2.5397,
+        "ink_soften_px": 0.25,
+        "softlight_strength": 0.9,
+        "specular_coverage": 0.2313,
+        "grain_sync": 1.0,
+        "tonal_match": 0.94
+      },
+      {
+        "displacement_max_px": 2.4146,
+        "ink_soften_px": 0.25,
+        "softlight_strength": 0.9,
+        "specular_coverage": 0.1241,
+        "grain_sync": 1.0,
+        "tonal_match": 0.94
+      }
+    ]
+  },
+  "delta": {
+    "mean_abs": 2.646,
+    "p99_abs": 78,
+    "changed_gt8_pct": 7.14
+  },
+  "seconds": 1.4,
+  "how_to_judge": "Open ab_realism_crop.png at 100%: the right half must show the print following the pouch folds and taking its shading; no text wobble; cream ink keeps its read."
+}
