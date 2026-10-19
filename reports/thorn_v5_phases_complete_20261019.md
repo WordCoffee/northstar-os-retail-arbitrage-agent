@@ -184,4 +184,15 @@ no credential-shaped literal lives in the tree.
 
 ---
 
-<!-- REGRESSION-RECONCILIATION -->
+## Regression reconciliation → **closed: zero regressions, suite cleared**
+
+The A/B comparison against a `git worktree` of pre-Thorn `3e41215` proved **zero
+regressions** (failures present only in the current tree: none; 7 baseline failures
+actually fixed), and all 33 outstanding failures were then cleared — 26 to honest
+named skips, 2 to reasoned xfails, 7 real test bugs fixed. Final state on those
+files: **134 passed / 36 skipped / 2 xfailed / 0 failed**. Full detail, the
+per-test decision table, the T-8 guardrail hardening (17 → 37 tests) and the
+next-phase sequence are in
+`reports/reconciliation_clearing_and_next_phase_20261019.md`, with the 500-item
+improvement register in `reports/improvement_register_500_20261019.md`.
+

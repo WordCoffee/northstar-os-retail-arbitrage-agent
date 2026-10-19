@@ -19,10 +19,17 @@ owner decision D3 rather than a guarantee this module pretends to provide.
 """
 from __future__ import annotations
 
+import os
 import re
+import sys
 from typing import Any, Dict, List, Optional
 
-import memory_bank
+# Sibling-module import must resolve whether imported as a package or run directly.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+
+import memory_bank  # noqa: E402
 
 TIER_TAG_PREFIX = "tier:"
 TIERS = ("transient", "project", "global")
