@@ -49,6 +49,13 @@ varying vec2 v_uv;
 uniform vec2 u_res;
 uniform float u_time;
 uniform float u_pulse;
+// T2 (Thorn v5.0 "preset-driven visual shifts"). The active Master Brain focus
+// biases the ATMOSPHERE only — nebula warmth, a horizon band, a distant planet
+// limb. The accretion disc and photon ring stay film-gold in every mode: the
+// moment a preset tints the hero object it stops reading as Interstellar.
+uniform vec3 u_tint;
+uniform float u_horizon;
+uniform float u_planet;
 
 // ── hashes / noise ──────────────────────────────────────────────────────────
 float hash21(vec2 p) {
@@ -115,6 +122,28 @@ void main() {
   float dust = smoothstep(0.44, 0.82, fbm(p * 5.4 + vec2(9.0, 1.0)));
   col += band * vec3(0.082, 0.085, 0.112) * (0.50 + 0.70 * lanes);
   col *= 1.0 - dust * band * 0.60;
+
+  // ── 1b. focus-driven atmosphere (T2 "preset-driven visual shifts") ────────
+  // Restrained on purpose: the research is unambiguous that background luminance
+  // belongs in the 2-8% band and that chroma belongs in small accents, or the
+  // scenery starts competing with the prose sitting on the glass panel.
+  col += vec3(0.026, 0.032, 0.054) * u_tint * smoothstep(0.30, 0.95, neb)
+         * (0.55 + 0.9 * u_horizon);
+
+  // horizon band — a broad, low glow the presets fade in and out
+  float horizonY = p.y + 0.30;
+  float horizon = exp(-abs(horizonY) * 8.0) * (1.0 - smoothstep(0.0, 0.95, abs(p.x)));
+  col += u_tint * horizon * 0.050 * u_horizon;
+
+  // distant planet limb, mostly cropped by the right edge: depth, not a hero
+  vec2 pl = vec2(0.78, -0.12);
+  float pr = length(p - pl);
+  float body = smoothstep(0.30, 0.285, pr);
+  float rim = exp(-abs(pr - 0.296) * 70.0);
+  float bands = fbm(vec2(atan(p.y - pl.y, p.x - pl.x) * 1.4, (pr - 0.29) * 9.0)
+                       + vec2(u_time * 0.02, 0.0));
+  col = mix(col, col * 0.84 + u_tint * (0.030 + 0.022 * bands), body * u_planet);
+  col += u_tint * rim * 0.26 * u_planet;
 
   // ── 2. black hole frame: distant, massive, OUT of the reading column ──────
   // The bright disc must never sit under the text. The hole lives in the left
@@ -205,6 +234,25 @@ void main() {
 }
 `
 
+// Focus → atmosphere ("preset-driven visual shifts", Thorn v5.0).
+// The values are deliberately close to neutral: this shifts the MOOD of the
+// scenery, it never repaints it. `tint` biases the nebula, the horizon band and
+// the distant planet limb — the accretion disc stays film-gold in every mode.
+const THEMES = {
+  auto: { tint: [1.00, 0.95, 0.86], horizon: 0.22, planet: 0.00 },
+  create: { tint: [1.00, 0.86, 0.66], horizon: 0.34, planet: 0.55 },
+  grow: { tint: [0.80, 1.00, 0.86], horizon: 0.28, planet: 0.00 },
+  research: { tint: [0.74, 0.86, 1.00], horizon: 0.26, planet: 0.45 },
+  operate: { tint: [0.92, 0.95, 1.00], horizon: 0.18, planet: 0.00 },
+  autothink: { tint: [0.84, 0.80, 1.00], horizon: 0.38, planet: 0.65 },
+}
+export const COSMIC_THEME_IDS = Object.keys(THEMES)
+const EASE = 0.022                      // ~2s settle at 60fps; never a hard cut
+
+function themeFor(id) {
+  return THEMES[id] || THEMES.auto
+}
+
 function compile(gl, type, src) {
   const sh = gl.createShader(type)
   gl.shaderSource(sh, src)
@@ -216,13 +264,20 @@ function compile(gl, type, src) {
   return sh
 }
 
-export default function CosmicCanvas({ active = false, maxDpr = 1.5 }) {
+export default function CosmicCanvas({ active = false, maxDpr = 1.5, themeId = 'auto' }) {
   const canvasRef = useRef(null)
   const pulseRef = useRef(0)
   const dprRef = useRef(maxDpr)
   const activeRef = useRef(active)
+  const themeRef = useRef(themeId)
+  const curRef = useRef({
+    tint: [...themeFor(themeId).tint],
+    horizon: themeFor(themeId).horizon,
+    planet: themeFor(themeId).planet,
+  })
   activeRef.current = active
   dprRef.current = maxDpr
+  themeRef.current = themeId
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -260,6 +315,10 @@ export default function CosmicCanvas({ active = false, maxDpr = 1.5 }) {
     const uRes = gl.getUniformLocation(prog, 'u_res')
     const uTime = gl.getUniformLocation(prog, 'u_time')
     const uPulse = gl.getUniformLocation(prog, 'u_pulse')
+    const uTint = gl.getUniformLocation(prog, 'u_tint')
+    const uHorizon = gl.getUniformLocation(prog, 'u_horizon')
+    const uPlanet = gl.getUniformLocation(prog, 'u_planet')
+    let lastTint = ''
 
     const reduced = typeof window.matchMedia === 'function'
       && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -283,9 +342,28 @@ export default function CosmicCanvas({ active = false, maxDpr = 1.5 }) {
       const t = (now - start) / 1000
       const target = activeRef.current ? 1 : 0
       pulseRef.current += (target - pulseRef.current) * 0.05
+      // Ease the atmosphere toward the active focus's theme. Every value is
+      // observable on the element (data-cosmic-theme / data-cosmic-tint) so the
+      // shift is verifiable, not just asserted in a comment.
+      const want = themeFor(themeRef.current)
+      const cur = curRef.current
+      for (let i = 0; i < 3; i += 1) cur.tint[i] += (want.tint[i] - cur.tint[i]) * EASE
+      cur.horizon += (want.horizon - cur.horizon) * EASE
+      cur.planet += (want.planet - cur.planet) * EASE
       gl.uniform1f(uTime, t)
       gl.uniform1f(uPulse, pulseRef.current)
+      gl.uniform3f(uTint, cur.tint[0], cur.tint[1], cur.tint[2])
+      gl.uniform1f(uHorizon, cur.horizon)
+      gl.uniform1f(uPlanet, cur.planet)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
+      if (canvas.dataset.cosmicTheme !== themeRef.current) {
+        canvas.dataset.cosmicTheme = themeRef.current
+      }
+      const tintStr = cur.tint.map((v) => v.toFixed(3)).join(',')
+      if (tintStr !== lastTint) {
+        canvas.dataset.cosmicTint = tintStr
+        lastTint = tintStr
+      }
       if (!reduced && !hidden) raf = requestAnimationFrame(draw)
     }
 

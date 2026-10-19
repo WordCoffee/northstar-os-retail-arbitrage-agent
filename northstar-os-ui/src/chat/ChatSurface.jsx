@@ -67,7 +67,10 @@ function relTime(ts) {
 
 function Inline({ text, keyPrefix }) {
   const out = []
-  const re = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\((https?:\/\/[^\s)]+)\)|https?:\/\/[^\s<>)]+)/g
+  // Local models emit `*emphasis*` as well as `**strong**`; without the single
+  // asterisk branch the prompt's own italics leak into the prose as literal
+  // punctuation. Bold is matched first so `**x**` never parses as `*` + `*x*`.
+  const re = /(\*\*[^*]+\*\*|\*[^*\n]+\*|`[^`]+`|\[[^\]]+\]\((https?:\/\/[^\s)]+)\)|https?:\/\/[^\s<>)]+)/g
   let last = 0
   let m
   let i = 0
@@ -76,6 +79,8 @@ function Inline({ text, keyPrefix }) {
     const tok = m[0]
     if (tok.startsWith('**')) {
       out.push(<strong key={`${keyPrefix}-b${i}`}>{tok.slice(2, -2)}</strong>)
+    } else if (tok.startsWith('*')) {
+      out.push(<em key={`${keyPrefix}-i${i}`}>{tok.slice(1, -1)}</em>)
     } else if (tok.startsWith('`')) {
       out.push(<code key={`${keyPrefix}-c${i}`}>{tok.slice(1, -1)}</code>)
     } else if (tok.startsWith('[')) {

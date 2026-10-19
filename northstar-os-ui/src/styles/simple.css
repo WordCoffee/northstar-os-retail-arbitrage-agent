@@ -167,6 +167,7 @@
 .mb-shell .chat-bubble ul, .mb-shell .chat-bubble ol { margin: 6px 0 12px; padding-left: 22px; }
 .mb-shell .chat-bubble li { margin-bottom: 7px; }
 .mb-shell .chat-bubble strong { color: #fff; font-weight: 650; }
+.mb-shell .chat-bubble em { font-style: italic; color: #fff; }
 .mb-shell .chat-bubble a { color: #9dc0ff; text-decoration: underline; text-underline-offset: 2px; }
 .mb-shell .chat-bubble code {
   font-family: var(--font-mono); font-size: 14.5px;

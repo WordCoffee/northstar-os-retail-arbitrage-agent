@@ -84,7 +84,7 @@ export default function MasterBrainShell() {
 
   return (
     <div className="mb-shell" data-testid="mb-shell">
-      <CosmicCanvas active={busy} maxDpr={canvasDpr} />
+      <CosmicCanvas active={busy} maxDpr={canvasDpr} themeId={shell.focusId} />
       <div className="mb-scrim" aria-hidden="true" />
       <div className="mb-content" data-theme-scope="media">
         <div className="mb-header">
