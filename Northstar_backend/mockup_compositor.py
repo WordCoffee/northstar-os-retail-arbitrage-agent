@@ -25,6 +25,8 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 import numpy as np
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
+import compositor_realism as cr
+
 FONTS_DIR = Path(__file__).resolve().parent / "assets" / "fonts"
 PRESETS_PATH = Path(__file__).resolve().parent / "data" / "compose_presets.json"
 
@@ -270,8 +272,18 @@ def _homography(src, dst) -> np.ndarray:
 
 
 def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
-               shading: float = 0.5) -> Image.Image:
-    """Exact 4-point homography (panel -> quad), bilinear, shading-blended."""
+               shading: float = 0.5, realism: Optional[Dict[str, Any]] = None,
+               maps: Optional[Any] = None,
+               metrics_out: Optional[Dict[str, Any]] = None) -> Image.Image:
+    """Exact 4-point homography (panel -> quad), bilinear, realism-integrated.
+
+    With ``maps`` (a compositor_realism.SurfaceMaps built from the plate) the
+    print takes the full surface-realism recipe: luminance displacement,
+    soft-light shading, capped specular, grain sync, opt-in fold/AO/print-sim
+    and a scene tonal match. ``shading`` is the master dial (0 = flat paste,
+    0.5 = research default). Without ``maps`` it falls back to the legacy
+    shading-only blend (kept for callers that have no plate access).
+    """
     PW, PH = panel.size
     H = _homography([(0, 0), (PW, 0), (PW, PH), (0, PH)], list(quad))
     Hinv = np.linalg.inv(H)
@@ -286,6 +298,21 @@ def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
     uv = pts @ Hinv.T
     u = uv[..., 0] / uv[..., 2]
     v = uv[..., 1] / uv[..., 2]
+
+    # reality pass 1: luminance displacement (ink rides the surface's folds)
+    if maps is not None and shading > 0:
+        params = {**cr.DEFAULTS, **(realism or {})}
+        if params.get("displacement_k", 0) > 0:
+            sm = maps.slice(x0, x1, y0, y1)
+            scale_u = PW / max(1.0, float(x1 - x0))
+            scale_v = PH / max(1.0, float(y1 - y0))
+            du, dv = cr.displacement_shift(sm, scale_u, scale_v, params)
+            u = u + du
+            v = v + dv
+            if metrics_out is not None:
+                metrics_out["displacement_max_px"] = float(
+                    max(np.abs(du).max(), np.abs(dv).max()) / max(scale_u, scale_v))
+
     pa = np.asarray(panel, dtype=np.float32)
     valid = (u >= 0) & (u <= PW - 1) & (v >= 0) & (v <= PH - 1)
     uc = np.clip(u, 0, PW - 1)
@@ -299,14 +326,23 @@ def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
     samp = (pa[v0, u0] * (1 - wu) * (1 - wv) + pa[v0, u1] * wu * (1 - wv)
             + pa[v1, u0] * (1 - wu) * wv + pa[v1, u1] * wu * wv)
     samp[~valid] = 0
-    alpha = samp[..., 3:4] / 255.0
     base = np.array(photo, dtype=np.float32)
     region = base[y0:y1, x0:x1]
-    luma = region.mean(axis=2, keepdims=True)
-    ref = np.median(luma) + 1e-6
-    mod = 1.0 + shading * (np.clip(luma / ref, 0.85, 1.15) - 1.0)
-    ink = samp[..., :3] * mod
-    region[:] = np.clip(ink * alpha + region * (1 - alpha), 0, 255)
+
+    if maps is not None and shading > 0:
+        sm = maps.slice(x0, x1, y0, y1)
+        params = {**cr.DEFAULTS, **(realism or {})}
+        region, metrics = cr.composite_panel(region, samp, sm, params, shading=shading)
+        if metrics_out is not None:
+            metrics_out.update(metrics)
+    else:
+        # legacy path: flat shading blend (no plate maps available)
+        alpha = samp[..., 3:4] / 255.0
+        luma = region.mean(axis=2, keepdims=True)
+        ref = np.median(luma) + 1e-6
+        mod = 1.0 + shading * (np.clip(luma / ref, 0.85, 1.15) - 1.0)
+        ink = samp[..., :3] * mod
+        region[:] = np.clip(ink * alpha + region * (1 - alpha), 0, 255)
     return Image.fromarray(base.astype("uint8"), "RGB")
 
 
@@ -386,7 +422,8 @@ def compose_mockup(*, template_id: str, plate_path: Path, logo_path: Path,
                    quads: Optional[List[List]] = None,
                    erases: Optional[List[Dict[str, Any]]] = None,
                    glyph_box: Optional[Sequence[int]] = None,
-                   shading: float = 0.5) -> Dict[str, Any]:
+                   shading: float = 0.5,
+                   realism: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Full typography pass: erase badges on the plate, compose panels, warp them."""
     if template_id not in DEFAULT_TEMPLATES:
         raise ValueError(f"unknown template {template_id!r}")
@@ -410,7 +447,10 @@ def compose_mockup(*, template_id: str, plate_path: Path, logo_path: Path,
         else:
             plate = erase_circle(plate, e["center"], float(e["r"]))
 
-    plate0 = plate.copy()
+    # surface maps measured once from the (erased) plate; both faces share them
+    maps = cr.build_surface_maps(plate)
+    params = {**cr.DEFAULTS, **(realism or {})}
+    face_metrics: List[Dict[str, Any]] = []
     for i, (quad, sku) in enumerate(zip(quads, skus)):
         glyph_here = glyph_img if sku.get("glyph", True) else None
         panel = render_panel(
@@ -424,7 +464,11 @@ def compose_mockup(*, template_id: str, plate_path: Path, logo_path: Path,
             logo=logo, glyph_img=glyph_here,
             gold=tuple(sku.get("gold", (196, 160, 74))), field_color=field_color,
         )
-        plate = warp_panel(plate, panel, quad, shading=shading)
+        fm: Dict[str, Any] = {}
+        plate = warp_panel(plate, panel, quad, shading=shading,
+                           realism=params, maps=maps, metrics_out=fm)
+        face_metrics.append({k: (round(v, 4) if isinstance(v, float) else v)
+                             for k, v in fm.items()})
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     plate.save(out_path, quality=95)
@@ -432,6 +476,10 @@ def compose_mockup(*, template_id: str, plate_path: Path, logo_path: Path,
         "template_id": template_id, "out_path": str(out_path),
         "size": list(plate.size), "skus": [s.get("title") for s in skus],
         "quads": len(quads), "erases": len(erases),
+        "realism": {k: v for k, v in params.items()},
+        "face_metrics": face_metrics,
         "note": "Deterministic compositing: real logo + real fonts warped onto the "
-                "plate's pouch faces. Text is composited, never generated.",
+                "plate's pouch faces with surface-realism passes (displacement, "
+                "soft-light, specular, grain, tonal match). Text is composited, "
+                "never generated.",
     }

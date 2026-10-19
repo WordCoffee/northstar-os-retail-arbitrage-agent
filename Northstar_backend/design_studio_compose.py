@@ -51,6 +51,7 @@ class ComposeIn(BaseModel):
     erases: Optional[List[Dict[str, Any]]] = None
     glyph_box: Optional[List[int]] = None
     shading: float = Field(0.5, ge=0.0, le=1.0)
+    realism: Optional[Dict[str, Any]] = None
     logo_data_url: Optional[str] = Field(None, max_length=3_000_000)
 
 
@@ -119,7 +120,7 @@ def compose_mockup_endpoint(body: ComposeIn, acct: str = Depends(studio_account)
         result = mc.compose_mockup(
             template_id=body.template_id, plate_path=plate_path, logo_path=logo_path,
             out_path=out_path, skus=body.skus, quads=body.quads, erases=body.erases,
-            glyph_box=body.glyph_box, shading=body.shading,
+            glyph_box=body.glyph_box, shading=body.shading, realism=body.realism,
         )
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
@@ -143,7 +144,9 @@ def compose_mockup_endpoint(body: ComposeIn, acct: str = Depends(studio_account)
             "compositor": {"template_id": body.template_id,
                            "plate_asset_id": body.plate_asset_id,
                            "faces": result["quads"], "erases": result["erases"],
-                           "skus": result["skus"], "shading": body.shading},
+                           "skus": result["skus"], "shading": body.shading,
+                           "realism": result.get("realism"),
+                           "face_metrics": result.get("face_metrics")},
             "note": result["note"],
         },
     })
