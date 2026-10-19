@@ -69,6 +69,14 @@ export default function MasterBrainShell() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname])
 
+  // Mark the document while the Simple shell is mounted so the shared chrome
+  // (the top bar) can follow it into the dark without touching Advanced rooms.
+  useEffect(() => {
+    const root = document.documentElement
+    root.dataset.shellMode = 'simple'
+    return () => { delete root.dataset.shellMode }
+  }, [])
+
   const hw = useMemo(() => hardwareLine(shell.hardware), [shell.hardware])
   const planLabel = shell.planName || (shell.plan ? String(shell.plan) : 'Foundation')
   const canvasDpr = shell.hardware?.governor?.recommended_dpr ?? 1.5

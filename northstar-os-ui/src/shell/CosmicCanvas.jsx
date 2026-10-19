@@ -1,24 +1,35 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// COSMIC CANVAS (V3 S6 · cinematic grade pass) — "watching Interstellar"
+// COSMIC CANVAS (V4.2 · Film-faithful Gargantua)
 //
-// One full-screen WebGL fragment shader. No textures, no video files — every
-// pixel is procedural, which is why the whole environment costs one quad:
+// One full-screen WebGL fragment shader — no textures, no video, one quad.
+// Rebuilt from the ground up after the operator's note that the previous
+// purple-planet scene "looks really fake and not like Interstellar at all".
 //
-//   • deep-space base with a faint fbm nebula wash
-//   • a Milky Way band with dark dust lanes
-//   • two parallax star fields (sharp twinkle)
-//   • a distant Gargantua-style accretion disc (upper-left): glowing tilted
-//     ring, black sphere occlusion, photon ring, fake top-half lensing
-//   • the deep-purple Master Brain planet: day/night terminator, cloud
-//     banding, night-side sparkle, atmosphere rim
-//   • two orbiting moons that SCALE UP while the brain works (pulse)
-//   • expanding energy halo rings while the brain works
-//   • film grain, vignette, filmic tone curve, slow camera drift + breathing
+// What actually makes the film's black hole read as real, and what this does:
+//   • VIEWING ANGLE — the disc is seen almost exactly edge-on (we sit a few
+//     degrees above its plane), so it collapses into a thin sweeping band
+//     instead of a fat cartoon ring.                       (ky = vertical squash)
+//   • LENSING — the disc's far side is bent up and OVER the shadow, forming the
+//     arch above it, with a fainter counterpart beneath.   (arch + arch2 terms)
+//   • PHOTON RING — a razor-thin, almost-white ring hugging the shadow edge.
+//   • SHADOW — the hole itself is pure black and slightly larger than the
+//     photon ring; it occludes the disc except where the near side crosses in
+//     front of it.                                         (sphere + frontMask)
+//   • DOPPLER BEAMING — the side rotating toward us is dramatically brighter
+//     and hotter; the receding side falls off.             (beam, archBeam)
+//   • COLOUR TEMPERATURE — white-hot inner edge → amber → deep ember outward.
+//     Not purple.                                          (hot/mid/cold ramp)
+//   • STAR LENSING — background stars are dragged tangentially as they approach
+//     the hole (the Einstein-ring smear).                  (defl warp)
+//   • GRADE — restrained nebula, dust-laned Milky Way, fine film grain, gentle
+//     vignette, ACES-style shoulder. No saturated blobs behind the text.
+//
+// The brain-working pulse (u_pulse) now flares the inner disc and tightens the
+// photon ring instead of enlarging cartoon moons.
 //
 // Perf contract (RTX 5080 16 GB, shared with Ollama + ComfyUI): single quad,
-// DPR capped (default 1.5, governor may lower it), animation pauses on hidden
-// tab, prefers-reduced-motion renders one static frame, honest CSS fallback
-// when WebGL is unavailable.
+// DPR capped, paused on hidden tab, one static frame under
+// prefers-reduced-motion, honest CSS fallback when WebGL is unavailable.
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { useEffect, useRef } from 'react'
@@ -58,135 +69,138 @@ float fbm(vec2 p) {
   float v = 0.0; float a = 0.5;
   for (int i = 0; i < 5; i++) {
     v += a * noise(p);
-    p = p * 2.04 + vec2(11.3, -7.9);
+    p = p * 2.03 + vec2(11.3, -7.9);
     a *= 0.5;
   }
   return v;
 }
 
-// ── stars: pixel-space fields with independent twinkle ──────────────────────
-// (px = pixel coords so cell size survives any DPR; sizes are cell fractions)
+// Stars live in pixel space so a cell keeps its true size at any DPR.
+// Magnitude is cubed: many faint stars, a few bright ones — like a real sky.
+// Each layer drifts at its own rate so the sky has real depth parallax.
 float starField(vec2 px, float cellPx, float density, float drift) {
-  vec2 g = (px + vec2(u_time * drift * 18.0, -u_time * drift * 7.0)) / cellPx;
+  vec2 g = (px + vec2(drift * u_time * 7.0, -drift * u_time * 2.6)) / cellPx;
   vec2 id = floor(g);
   vec2 f = fract(g);
   float h = hash21(id);
   if (h > density) return 0.0;
   vec2 pos = vec2(hash21(id + 13.1), hash21(id + 27.7));
   float d = length(f - pos);
-  float size = mix(0.055, 0.17, hash21(id + 7.31));
-  float tw = 0.5 + 0.5 * sin(u_time * (1.3 + h * 2.2) + h * 41.0);
-  return tw * smoothstep(size, 0.0, d);
+  float size = mix(0.045, 0.150, hash21(id + 7.31));
+  float mag = pow(hash21(id + 3.17), 3.0);
+  return mag * smoothstep(size, 0.0, d);
 }
 
 void main() {
   vec2 uv = v_uv;
-  vec2 p = (uv - 0.5) * vec2(u_res.x / max(u_res.y, 1.0), 1.0);
+  float aspect = u_res.x / max(u_res.y, 1.0);
+  vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
 
-  // slow camera drift + gentle breathing (Interstellar push-in)
-  float t = u_time * 0.02;
-  p += vec2(sin(u_time * 0.031), cos(u_time * 0.027)) * 0.008;
-  p *= 1.0 + 0.018 * sin(t * 1.7);
+  // The film's camera is patient: a slow push-in and a barely-there drift.
+  float t = u_time * 0.010;
+  p += vec2(sin(u_time * 0.013), cos(u_time * 0.011)) * 0.0055;
+  p *= 1.0 + 0.011 * sin(u_time * 0.020);
 
-  // ── 1. deep space base + nebula wash ──────────────────────────────────────
-  vec3 col = vec3(0.010, 0.013, 0.034);
-  float neb = fbm(p * 1.8 + vec2(t * 0.6, -t * 0.4));
-  col += vec3(0.075, 0.034, 0.150) * smoothstep(0.32, 0.95, neb);
-  col += vec3(0.034, 0.016, 0.085) * smoothstep(0.42, 0.98, fbm(p * 3.6 - vec2(t * 0.5)));
+  // ── 1. deep space: desaturated nebula + a dust-laned Milky Way ────────────
+  vec3 col = vec3(0.011, 0.013, 0.022);
+  float neb = fbm(p * 1.55 + vec2(t * 0.5, -t * 0.3));
+  col += vec3(0.038, 0.050, 0.082) * smoothstep(0.36, 0.95, neb);
+  float neb2 = fbm(p * 3.2 - vec2(t * 0.4, t * 0.2));
+  col += vec3(0.052, 0.030, 0.066) * smoothstep(0.52, 0.98, neb2) * 0.65;
 
-  // ── 2. Milky Way band with dust lanes ─────────────────────────────────────
-  vec2 bandDir = normalize(vec2(0.55, -0.835));
-  float bd = dot(p - vec2(-0.05, 0.10), bandDir);
-  float band = exp(-bd * bd * 5.5);
-  float core = exp(-bd * bd * 26.0);
-  float lanes = fbm(p * 3.1 + vec2(2.0, 5.0));
-  float dust = smoothstep(0.42, 0.80, fbm(p * 6.3 + vec2(9.0, 1.0)));
-  col += band * vec3(0.16, 0.145, 0.24) * (0.55 + 0.65 * lanes);
-  col += core * vec3(0.22, 0.195, 0.31) * (0.45 + 0.85 * lanes);
-  col *= 1.0 - dust * band * 0.55;
+  vec2 bandDir = normalize(vec2(0.72, -0.69));
+  float bd = dot(p - vec2(-0.10, 0.06), bandDir);
+  float band = exp(-bd * bd * 7.0);
+  float lanes = fbm(p * 2.6 + vec2(2.0, 5.0));
+  float dust = smoothstep(0.44, 0.82, fbm(p * 5.4 + vec2(9.0, 1.0)));
+  col += band * vec3(0.082, 0.085, 0.112) * (0.50 + 0.70 * lanes);
+  col *= 1.0 - dust * band * 0.60;
 
-  // ── 3. star fields (pixel-space, two densities, opposing parallax) ────────
+  // ── 2. black hole frame: distant, massive, OUT of the reading column ──────
+  // The bright disc must never sit under the text. The hole lives in the left
+  // gutter; the band sweeps across the full frame behind the panel and re-emerges
+  // on the right, which is also how the film frames it.
+  vec2 bh = vec2(-0.660, 0.030);
+  vec2 d = p - bh;
+  float r = length(d);
+  vec2 dir = d / max(r, 1e-5);
+  float Rs = 0.095;                 // shadow radius
+  float ky = 0.090;                 // vertical squash ⇒ near edge-on disc
+
+  // ── 3. stars, dragged tangentially as they near the hole ─────────────────
+  float defl = clamp((Rs * Rs) / max(r * r, Rs * Rs * 0.30), 0.0, 2.4);
   vec2 px = v_uv * u_res;
-  float s1 = starField(px, 7.0, 0.045, 0.55);
-  float s2 = starField(px, 4.2, 0.028, -0.25);
-  col += s1 * vec3(0.85, 0.88, 1.00) * 0.85 + s2 * vec3(0.66, 0.70, 0.92) * 0.55;
-  float s3 = starField(px, 12.0, 0.020, 0.35);
-  col += s3 * vec3(0.95, 0.95, 1.0) * 1.35;
+  vec2 pxw = px + dir * defl * u_res.y * 0.085;
 
-  // ── 4. distant Gargantua (upper-left, kept off the hero planet) ───────────
-  vec2 gc = vec2(-0.680, 0.315);
-  vec2 g = p - gc;
-  float gd = length(g);
-  vec2 q = g;
-  q = mat2(0.92, -0.39, 0.39, 0.92) * q;
-  q.y /= 0.30;
-  float dd = length(q);
-  float ringCore = smoothstep(0.010, 0.0, abs(dd - 0.118));
-  float ringGlow = exp(-abs(dd - 0.118) * 14.0);
-  float topHalf = smoothstep(-0.012, 0.018, g.y);
-  float behind = smoothstep(0.044, 0.054, gd);          // front half occluded
-  vec3 discCol = mix(vec3(1.0, 0.82, 0.55), vec3(1.0, 0.55, 0.30), fbm(q * 18.0));
-  col += (ringCore * 1.7 + ringGlow * 0.55) * discCol
-         * (topHalf * 1.20 + (1.0 - topHalf) * behind * 0.80);
-  // black sphere + photon ring
-  float sphere = smoothstep(0.0495, 0.0475, gd);
-  col = mix(col, vec3(0.0), sphere);
-  col += smoothstep(0.0016, 0.0, abs(gd - 0.0515)) * vec3(0.98, 0.82, 0.55) * 1.25;
+  float fine   = starField(pxw, 3.4, 0.024, 0.34);
+  float mid    = starField(pxw * 0.62, 6.2, 0.050, 0.18);
+  float bright = starField(pxw * 0.40, 11.0, 0.028, 0.07);
+  col += fine   * mix(vec3(0.70, 0.78, 1.00), vec3(1.00, 0.93, 0.82), fract(fine * 11.7))   * 0.38;
+  col += mid    * mix(vec3(0.66, 0.74, 1.00), vec3(1.00, 0.90, 0.78), fract(mid * 7.3))     * 0.70;
+  col += bright * mix(vec3(0.80, 0.86, 1.00), vec3(1.00, 0.94, 0.86), fract(bright * 5.1))  * 1.10;
 
-  // ── 5. the Master Brain planet (deep purple, hero of the frame) ───────────
-  // A MASSIVE body looming behind the glass — the Interstellar composition.
-  vec2 pc = vec2(0.030 + 0.020 * sin(t * 1.6), 0.030 + 0.012 * cos(t * 1.1));
-  float R = 0.300;
-  float pd = length(p - pc);
-  float disc = 1.0 - smoothstep(R - 0.0028, R, pd);
-  vec2 pn = normalize(p - pc + 1e-6);
-  vec3 L = normalize(vec3(-0.55, 0.70, 0.30));
-  float day = dot(vec3(pn, 0.0), L) * 0.5 + 0.5;
-  float limb = smoothstep(1.0, 0.55, length(pn));   // darken toward the limb
-  float clouds = fbm((p - pc) * 3.5 + vec2(t * 0.8, t * 0.3)) * limb;
-  vec3 dayCol = mix(vec3(0.160, 0.060, 0.340), vec3(0.550, 0.260, 0.850), clouds);
-  vec3 nightCol = vec3(0.030, 0.012, 0.055);
-  vec3 planet = mix(nightCol, dayCol, smoothstep(0.18, 0.62, day));
-  // night-side city-light sparkle (pixel-space pinpricks)
-  float sparks = starField((p - pc) * u_res, 3.2, 0.16, 0.0) * limb;
-  planet += sparks * (1.0 - smoothstep(0.0, 0.50, day)) * vec3(0.85, 0.78, 0.55) * 0.30;
-  col = mix(col, planet, disc);
-  // atmosphere rim + outer halo (thin so the body reads as a 3D sphere)
-  float atmo = 1.0 - smoothstep(0.0, 0.10, abs(pd - R));
-  col += atmo * vec3(0.50, 0.34, 1.00) * (0.35 + 0.65 * day) * 0.55;
-  col += exp(-max(pd - R, 0.0) * 4.0) * vec3(0.08, 0.05, 0.18) * (0.40 + 0.60 * day) * 0.50;
+  // ── 4. the accretion disc: a thin band through the hole's plane ──────────
+  // We look from a few degrees above the plane, so the near side sits slightly
+  // BELOW the hole's centre and crosses in front of the shadow.
+  vec2 dq = vec2(d.x, (d.y - 0.020) / ky);
+  float R = length(dq);
+  float Rin = 0.115, Rout = 1.05;
 
-  // ── 6. energy halo rings while the brain works ────────────────────────────
-  for (int i = 0; i < 2; i++) {
-    float fi = float(i);
-    float phase = fract(u_time * 0.14 + fi * 0.5);
-    float ringPos = R + 0.025 + 0.115 * phase;
-    float ring = smoothstep(0.045, 0.0, abs(pd - ringPos)) * (1.0 - phase);
-    col += ring * vec3(0.30, 0.42, 1.0) * 0.55 * u_pulse;
-  }
+  float edgeIn  = smoothstep(Rin - 0.02, Rin + 0.05, R);
+  float edgeOut = 1.0 - smoothstep(Rout - 0.55, Rout, R);
+  float diskA = edgeIn * edgeOut;
 
-  // ── 7. orbiting moons — SCALE and brighten with the pulse ────────────────
-  for (int i = 0; i < 2; i++) {
-    float fi = float(i);
-    float ang = u_time * (0.20 + fi * 0.10) + fi * 2.1;
-    float mr = (R + 0.135 + fi * 0.075) * (1.0 + 0.20 * u_pulse);
-    vec2 mp = pc + vec2(cos(ang), sin(ang) * 0.55) * mr;
-    float md = length(p - mp);
-    float moonR = 0.0125 * (1.0 + 0.35 * u_pulse);
-    float moon = smoothstep(moonR, moonR * 0.55, md);
-    col = mix(col, vec3(0.74, 0.72, 0.64) * (0.85 + 0.55 * u_pulse),
-              moon * (0.72 + 0.28 * fi));
-    // faint glow under the moon so the scale-up reads as "attention"
-    col += smoothstep(moonR * 3.2, 0.0, md) * vec3(0.30, 0.30, 0.50) * 0.12 * u_pulse;
-  }
+  // Turbulence. The basis is deliberately only lightly squashed: sampling the
+  // /already/ 11x-compressed disc frame produced scanline stripes rather than
+  // flowing plasma.
+  vec2 sw = vec2(dq.x * 2.6, d.y * 8.0) + vec2(R * 2.1, -R * 1.4) + t * 0.10;
+  float turb = fbm(sw * 1.4);
+  diskA *= 0.40 + 0.95 * smoothstep(0.26, 0.86, turb);
 
-  // ── 8. grade: vignette, film grain, ACES-ish curve ─────────────────────────
-  col *= 1.0 - 0.42 * length(uv - 0.5);
-  col += (hash21(v_uv * u_res + vec2(u_time * 61.7, u_time * 23.3)) - 0.5) * 0.018;
-  // ACES approximation (keeps mid-tones luminous; only hot highlights roll off)
-  vec3 x = col * 1.15;
+  // Depth split: the far half of the disc is occluded by the shadow, the near
+  // half crosses IN FRONT of it. Two soft ramps — a single hard y-cut drew a
+  // visible seam straight across the black disc.
+  float frontSide = smoothstep(0.055, -0.030, d.y);
+  float aBack  = diskA * (1.0 - frontSide);
+  float aFront = diskA * frontSide;
+
+  // Doppler beaming: the film's disk is famously SYMMETRIC — Double Negative
+  // deliberately left the relativistic shift out to keep it golden. So this is
+  // a whisper of asymmetry (≤1.35x), not a physics-paper render.
+  float beam = clamp(1.0 + 0.34 * (-dq.x / max(R, 0.05)), 0.72, 1.36);
+  float archBeam = clamp(1.0 + 0.26 * (-d.x / max(r, 0.05)), 0.80, 1.28);
+
+  // Temperature ramp: white-hot inner edge → amber → deep ember.
+  float rr = clamp((R - Rin) / max(Rout - Rin, 0.001), 0.0, 1.0);
+  vec3 discCol = mix(vec3(1.00, 0.97, 0.93), vec3(1.00, 0.83, 0.58), smoothstep(0.0, 0.55, rr));
+  discCol = mix(discCol, vec3(0.92, 0.45, 0.17), smoothstep(0.55, 1.0, rr));
+
+  float flare = 1.0 + 0.40 * u_pulse;
+  col += discCol * aBack * beam * 1.05 * flare;
+
+  // ── 5. the lensed far side: an arch bent up over the shadow ──────────────
+  float arch  = exp(-abs(r - Rs * 1.17) * 24.0) * smoothstep(-0.02, 0.10, d.y);
+  float arch2 = exp(-abs(r - Rs * 1.05) * 38.0) * smoothstep(0.02, -0.10, d.y);
+  col += discCol * arch  * archBeam * 0.85 * flare;
+  col += discCol * arch2 * archBeam * 0.32;
+
+  // ── 6. shadow, then the near disc in front of it, then the photon ring ───
+  col *= 1.0 - smoothstep(Rs, Rs * 0.985, r);
+  col += discCol * aFront * beam * 1.05 * flare;
+
+  col += vec3(1.00, 0.90, 0.76) * exp(-abs(r - Rs * 1.022) * 520.0) * (1.55 + 0.35 * u_pulse);
+  col += vec3(1.00, 0.72, 0.42) * exp(-abs(r - Rs * 1.06) * 30.0) * 0.30
+         * (1.0 - smoothstep(Rs, Rs * 0.985, r));
+
+  // ── 7. grade: vignette, film grain (stepped, never flickering), ACES ─────
+  col *= 1.0 - 0.36 * length(uv - 0.5) * 1.15;
+  // Grain advances at ~12fps like real film stock; a per-frame hash reads as
+  // video noise, and DNGR's whole point was a flicker-free image.
+  float gt = floor(u_time * 12.0) / 12.0;
+  col += (hash21(v_uv * u_res + vec2(gt * 61.7, gt * 23.3)) - 0.5) * 0.013;
+  vec3 x = col * 1.12;
   col = clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0);
-  col = pow(col, vec3(0.92));
+  col = pow(col, vec3(0.93));
   gl_FragColor = vec4(col, 1.0);
 }
 `

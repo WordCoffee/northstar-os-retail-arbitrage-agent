@@ -1,0 +1,430 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   SIMPLE MODE — V4.2 interface rebuild (loaded LAST, wins where it overlaps)
+
+   Operator brief: "the user interface is too small, the words are hard to read
+   everywhere, the galactic background looks fake". So this file does three
+   things and nothing else:
+
+     1. LIFTS THE READING SYSTEM — a real chat type scale (16.5px body, 1.72
+        line-height, ~75-character measure), and a contrast ramp that is actually
+        legible on dark glass (the old ramp bottomed out at #8a8a7a on a 0.62
+        alpha panel over a bright background — that is the "hard to read").
+     2. CENTRES A READING COLUMN — 880px, the shape every serious chat product
+        uses, instead of an 780px block pinned to the left edge of a wide panel.
+     3. GIVES THE GLASS SOMETHING TO SIT ON — a denser panel, a stronger scrim
+        and a vignette so a bright accretion disc behind the text can never eat
+        the contrast.
+
+   EVERYTHING is scoped to .mb-shell (the Simple view). Advanced rooms, the
+   studio, the foundation pages and the invite/auth shells are untouched.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Contrast ramp for the dark simple shell ──────────────────────────── */
+.mb-shell .mb-content {
+  /* Legibility floor raised: nothing load-bearing is allowed below 4.5:1. */
+  --ink: #f7f3ec;
+  --ink-mid: #d2ccbf;
+  --ink-soft: #a8a196;
+  --ink-faint: #8d867a;
+  --divider: rgba(247, 243, 236, 0.13);
+  --divider-mid: rgba(247, 243, 236, 0.22);
+  --divider-strong: rgba(247, 243, 236, 0.34);
+  --surface: rgba(247, 243, 236, 0.06);
+  --surface-raised: rgba(247, 243, 236, 0.045);
+  --surface-hover: rgba(247, 243, 236, 0.10);
+  --surface-active: rgba(247, 243, 236, 0.15);
+  /* Reading rhythm — 16px is the floor for body copy, and the column is capped
+     near 820px (≈45–75 characters), the measure every serious chat product
+     settles on. */
+  --simple-col: 820px;
+  --simple-msg: 16.5px;
+  --simple-meta: 13px;
+  --simple-ui: 14.5px;
+}
+
+/* ── 2. Stage: scrim + panel shell ───────────────────────────────────────── */
+.mb-shell { min-height: 100dvh; }
+.mb-scrim {
+  background:
+    radial-gradient(120% 90% at 50% 45%, rgba(4, 6, 10, 0.30) 0%, rgba(4, 6, 10, 0.62) 55%, rgba(4, 6, 10, 0.80) 100%),
+    linear-gradient(180deg, rgba(4, 6, 10, 0.28), rgba(4, 6, 10, 0.46));
+}
+.mb-shell .chat-shell {
+  /* 95.5% opaque + 22px blur. The disc behind is nearly white at its brightest,
+     so 85-92% (the usual glass range) still let it bleed through as a grey wash
+     behind the prose. At this opacity the composite under the text is ~0.04
+     luminance and body copy clears 7:1 with room to spare. */
+  background: rgba(9, 12, 17, 0.955);
+  border: 1px solid rgba(247, 243, 236, 0.14);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.62),
+    0 0 0 1px rgba(247, 243, 236, 0.05) inset,
+    0 1px 0 rgba(247, 243, 236, 0.10) inset;
+  backdrop-filter: blur(22px) saturate(1.12);
+  padding: 18px 20px 16px;
+  height: calc(100dvh - 206px);
+}
+
+/* ── 3. Shell chrome: focus rail, status, hardware chip ──────────────────── */
+.mb-header { padding: 2px 2px 16px; gap: 14px; }
+.mb-focus { gap: 8px; }
+.mb-focus-chip {
+  font-size: 14.5px; font-weight: 600; letter-spacing: 0.01em;
+  padding: 9px 18px; border-radius: 999px;
+  color: rgba(247, 243, 236, 0.90);
+  border: 1px solid rgba(247, 243, 236, 0.22);
+  background: rgba(9, 12, 17, 0.62);
+}
+.mb-focus-chip:hover { border-color: rgba(247, 243, 236, 0.46); color: #fff; }
+.mb-focus-chip.active {
+  background: var(--spark); border-color: rgba(255, 255, 255, 0.30); color: #fff;
+  box-shadow: 0 2px 14px rgba(47, 111, 237, 0.45);
+}
+.mb-chip {
+  font-size: 12.5px; padding: 5px 12px;
+  color: rgba(247, 243, 236, 0.88);
+  border: 1px solid rgba(247, 243, 236, 0.18);
+  background: rgba(9, 12, 17, 0.62);
+}
+.mb-shell .mb-status .btn { font-size: 13.5px; padding: 7px 14px; }
+
+/* ── 4. Chat frame: rail + column ────────────────────────────────────────── */
+.mb-shell .chat-shell { grid-template-columns: 264px minmax(0, 1fr); gap: 18px; grid-template-rows: minmax(0, 1fr); }
+.mb-shell .chat-shell.rail-hidden { grid-template-columns: 0 minmax(0, 1fr); }
+
+.mb-shell .chat-rail { gap: 10px; padding-right: 16px; }
+.mb-shell .chat-rail-head .btn { font-size: 13.5px; padding: 8px 12px; }
+.mb-shell .chat-rail-search {
+  font-size: 14px; padding: 9px 11px; border-radius: 10px;
+  background: rgba(247, 243, 236, 0.06);
+  border-color: rgba(247, 243, 236, 0.18);
+  color: var(--ink);
+}
+.mb-shell .chat-rail-search::placeholder { color: var(--ink-faint); }
+.mb-shell .chat-rail-list { gap: 6px; }
+.mb-shell .chat-rail-item {
+  font-size: 14.5px; line-height: 1.45; padding: 11px 12px; border-radius: 10px;
+  color: var(--ink-mid);
+}
+.mb-shell .chat-rail-item:hover { background: rgba(247, 243, 236, 0.08); color: var(--ink); }
+.mb-shell .chat-rail-row.active .chat-rail-item {
+  background: rgba(47, 111, 237, 0.20);
+  border-color: rgba(47, 111, 237, 0.55);
+  color: #fff;
+}
+.mb-shell .chat-rail-item .chat-rail-meta { font-size: 12.5px; color: var(--ink-faint); margin-top: 4px; }
+.mb-shell .chat-rail-empty { font-size: 14px; color: var(--ink-soft); }
+.mb-shell .chat-rail-edit { font-size: 15px; padding: 0 6px; }
+.mb-shell .chat-hint { font-size: 12.5px; color: var(--ink-faint); line-height: 1.6; }
+
+/* ── 5. Head: one line, big, aligned to the reading column ───────────────── */
+.mb-shell .chat-head,
+.mb-shell .chat-stream,
+.mb-shell .chat-composer,
+.mb-shell .chat-jump {
+  width: 100%; max-width: var(--simple-col); margin-left: auto; margin-right: auto;
+}
+.mb-shell .chat-head {
+  gap: 12px; padding: 0 2px 14px; align-items: center;
+  border-bottom: 1px solid rgba(247, 243, 236, 0.10);
+}
+.mb-shell .chat-head h2 { font-size: 26px; line-height: 1.15; color: var(--ink); }
+.mb-shell .chat-head .chat-head-sub { font-size: 14px; color: var(--ink-soft); }
+.mb-shell .chat-head .btn { font-size: 13.5px; padding: 7px 13px; }
+.mb-shell .chat-head .chip { font-size: 13px; padding: 6px 12px; }
+
+/* ── 6. The stream + reading column ──────────────────────────────────────── */
+/* A flex child defaults to min-height:auto, so a long transcript refused to
+   shrink and pushed the composer out of the panel entirely (the built sheet
+   kept the frame but the input fell below the fold). */
+.mb-shell .chat-col { min-height: 0; }
+.mb-shell .chat-stream { min-height: 0; gap: 26px; padding: 26px 2px 8px; }
+.mb-shell .chat-msg { max-width: 100%; gap: 9px; }
+.mb-shell .chat-msg.assistant { max-width: 100%; }
+
+.mb-shell .chat-bubble {
+  font-size: var(--simple-msg); line-height: 1.72;
+  padding: 18px 22px; border-radius: 18px;
+  background: rgba(247, 243, 236, 0.055);
+  border: 1px solid rgba(247, 243, 236, 0.11);
+  color: var(--ink);
+}
+.mb-shell .chat-msg.user { max-width: 78%; }
+.mb-shell .chat-msg.user .chat-bubble {
+  background: rgba(247, 243, 236, 0.94); color: #14181c; border-color: transparent;
+  font-size: 16px; padding: 14px 18px; border-radius: 18px 18px 6px 18px;
+}
+.mb-shell .chat-msg.error .chat-bubble { border-color: var(--status-error); }
+
+/* Long-form reading inside a bubble */
+.mb-shell .chat-bubble h4 {
+  font-family: var(--font-serif); font-size: 18px; color: #fff;
+  margin: 14px 0 8px; letter-spacing: -0.01em;
+}
+.mb-shell .chat-bubble h4:first-child { margin-top: 0; }
+.mb-shell .chat-bubble p { margin: 0 0 12px; color: var(--ink); }
+.mb-shell .chat-bubble p:last-child { margin-bottom: 0; }
+.mb-shell .chat-bubble ul, .mb-shell .chat-bubble ol { margin: 6px 0 12px; padding-left: 22px; }
+.mb-shell .chat-bubble li { margin-bottom: 7px; }
+.mb-shell .chat-bubble strong { color: #fff; font-weight: 650; }
+.mb-shell .chat-bubble a { color: #9dc0ff; text-decoration: underline; text-underline-offset: 2px; }
+.mb-shell .chat-bubble code {
+  font-family: var(--font-mono); font-size: 14.5px;
+  background: rgba(247, 243, 236, 0.10); border: 1px solid rgba(247, 243, 236, 0.08);
+  padding: 2px 6px; border-radius: 6px; color: #ffe6bd;
+}
+.mb-shell .chat-code {
+  margin: 12px 0; padding: 14px 16px; border-radius: 12px;
+  background: rgba(4, 6, 10, 0.72); border: 1px solid rgba(247, 243, 236, 0.12);
+  color: #e9e4da; font-size: 14px; line-height: 1.6;
+}
+.mb-shell .chat-code code { background: transparent; border: none; padding: 0; font-size: 14px; color: inherit; }
+
+/* ── 7. Thinking (collapsible reasoning) ─────────────────────────────────── */
+.mb-shell .chat-thinking {
+  border: 1px solid rgba(247, 243, 236, 0.14);
+  background: rgba(247, 243, 236, 0.035);
+  border-radius: 14px; font-size: 14.5px;
+}
+.mb-shell .chat-thinking summary {
+  font-size: 14px; font-weight: 600; color: var(--ink-mid);
+  padding: 12px 16px; letter-spacing: 0.01em;
+}
+.mb-shell .chat-thinking summary .chat-spark {
+  width: 9px; height: 9px; background: var(--spark);
+  box-shadow: 0 0 10px var(--spark);
+}
+.mb-shell .chat-thinking .chat-thinking-body {
+  font-size: 15px; line-height: 1.7; color: var(--ink-mid);
+  padding: 4px 18px 16px; max-height: 340px;
+}
+
+/* ── 8. Tool runs — legible, statusful, scannable ────────────────────────── */
+.mb-shell .chat-tools { gap: 8px; max-width: 100%; }
+.mb-shell .chat-tool {
+  gap: 11px; padding: 11px 14px; border-radius: 12px;
+  font-size: 14.5px;
+  background: rgba(247, 243, 236, 0.045);
+  border: 1px solid rgba(247, 243, 236, 0.12);
+  border-left: 3px solid rgba(47, 111, 237, 0.75);
+}
+.mb-shell .chat-tool.done { border-left-color: rgba(95, 191, 143, 0.85); }
+.mb-shell .chat-tool.error { border-left-color: var(--status-error); }
+.mb-shell .chat-tool-icon { font-size: 14px; }
+.mb-shell .chat-tool-name { font-size: 14.5px; color: var(--ink); font-weight: 500; }
+.mb-shell .chat-tool-state { font-size: 13.5px; color: var(--ink-mid); }
+.mb-shell .chat-tool-machine { font-size: 12px; color: var(--ink-faint); }
+.mb-shell .chat-tool-error { font-size: 13.5px; }
+.mb-shell .chat-tool-bar { height: 4px; border-radius: 3px; }
+.mb-shell .chat-tool-detail { font-size: 14px; }
+.mb-shell .chat-tool-detail summary { font-size: 13.5px; color: var(--ink-soft); }
+.mb-shell .chat-tool-args {
+  font-size: 13px; padding: 10px 12px; border-radius: 10px;
+  background: rgba(4, 6, 10, 0.55);
+}
+.mb-shell .chat-tool-detail > div { color: var(--ink-mid); line-height: 1.65; }
+
+/* ── 9. AG-UI cards ──────────────────────────────────────────────────────── */
+.mb-shell .chat-cards { gap: 12px; max-width: 100%; }
+.mb-shell .chat-card {
+  padding: 16px 18px; border-radius: 14px; font-size: 14.5px;
+  background: rgba(247, 243, 236, 0.05);
+  border: 1px solid rgba(247, 243, 236, 0.14);
+}
+.mb-shell .chat-card-title { font-size: 16px; margin-bottom: 10px; color: #fff; }
+.mb-shell .chat-card-row { gap: 14px; padding: 5px 0; align-items: baseline; }
+.mb-shell .chat-card-label { min-width: 140px; font-size: 13.5px; color: var(--ink-soft); }
+.mb-shell .chat-card-value { font-size: 14px; color: var(--ink); }
+
+/* ── 10. Assets ──────────────────────────────────────────────────────────── */
+.mb-shell .chat-assets { gap: 14px; max-width: 100%; }
+.mb-shell .chat-asset-card {
+  border-radius: 14px; max-width: 380px;
+  border-color: rgba(247, 243, 236, 0.16);
+  background: rgba(247, 243, 236, 0.05);
+}
+.mb-shell .chat-asset-meta { font-size: 13px; padding: 9px 13px; color: var(--ink-mid); }
+.mb-shell .chat-asset-actions { font-size: 13.5px; gap: 14px; padding: 0 13px 11px; }
+.mb-shell .chat-asset-actions button,
+.mb-shell .chat-asset-actions a { font-size: 13.5px; color: #9dc0ff; }
+
+/* ── 11. Receipts + message actions ──────────────────────────────────────── */
+.mb-shell .chat-receipt { font-size: 12.5px; gap: 8px; color: var(--ink-faint); }
+.mb-shell .chat-receipt .chip {
+  border-color: rgba(247, 243, 236, 0.20); padding: 3px 10px;
+  color: var(--ink-soft); font-size: 12.5px;
+}
+.mb-shell .chat-msg-copy {
+  font-size: 13px; color: var(--ink-soft); padding: 0 4px;
+  text-decoration-color: rgba(247, 243, 236, 0.30);
+}
+.mb-shell .chat-msg-copy:hover { color: #fff; }
+.mb-shell .chat-msg-tools { gap: 14px; opacity: 0.55; }
+.mb-shell .chat-msg:hover .chat-msg-tools { opacity: 1; }
+@media (hover: none) { .mb-shell .chat-msg-tools { opacity: 1; } }
+.mb-shell .chat-queue-note { font-size: 13.5px; }
+
+/* ── 12. Empty state: a real greeting + real suggestion cards ────────────── */
+.mb-shell .chat-empty {
+  max-width: 100%; margin: 7vh auto 0; gap: 18px;
+}
+.mb-shell .chat-empty .chat-empty-rule { width: 96px; height: 4px; border-radius: 3px; }
+.mb-shell .chat-empty h3 {
+  font-size: 40px; line-height: 1.12; letter-spacing: -0.02em; color: var(--ink);
+}
+.mb-shell .chat-empty p { font-size: 16.5px; line-height: 1.7; color: var(--ink-mid); max-width: 660px; }
+.mb-shell .chat-suggestions {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px; width: 100%; margin-top: 10px; justify-content: stretch;
+}
+.mb-shell .chat-suggestion {
+  text-align: left; border-radius: 14px; padding: 16px 18px;
+  font-size: 15.5px; line-height: 1.5; color: var(--ink-mid);
+  background: rgba(247, 243, 236, 0.05);
+  border: 1px solid rgba(247, 243, 236, 0.14);
+}
+.mb-shell .chat-suggestion:hover {
+  border-color: rgba(47, 111, 237, 0.65); color: #fff;
+  background: rgba(47, 111, 237, 0.14);
+}
+
+/* ── 13. Composer — the control you actually type in ─────────────────────── */
+.mb-shell .chat-composer { gap: 12px; padding: 16px 2px 2px; border-top: 1px solid rgba(247, 243, 236, 0.10); }
+.mb-shell .chat-composer-box {
+  gap: 12px; padding: 12px 12px 12px 18px; border-radius: 18px;
+  background: rgba(4, 6, 10, 0.55);
+  border: 1px solid rgba(247, 243, 236, 0.20);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+.mb-shell .chat-composer-box:focus-within {
+  border-color: rgba(47, 111, 237, 0.75);
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.20), 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+.mb-shell .chat-composer-box textarea {
+  font-size: 16.5px; line-height: 1.6; min-height: 28px; max-height: 220px;
+  color: var(--ink);
+}
+.mb-shell .chat-composer-box textarea::placeholder { color: var(--ink-faint); }
+.mb-shell .chat-composer-box .btn { font-size: 14.5px; padding: 10px 18px; border-radius: 12px; }
+/* The light-theme primary is forest green, which fights the cosmic accent on
+   the glass. In Simple mode the primary action uses the ONE AI accent. */
+.mb-shell .chat-composer-box .btn-primary {
+  background: var(--spark); border-color: var(--spark); color: #fff;
+  box-shadow: 0 4px 18px rgba(47, 111, 237, 0.35);
+}
+.mb-shell .chat-composer-box .btn-primary:hover { background: #2a63d6; border-color: #2a63d6; }
+.mb-shell .chat-composer-box .btn-primary:disabled { opacity: 0.45; box-shadow: none; }
+.mb-shell .chat-composer .chat-hint { font-size: 12.5px; padding: 0 4px; }
+
+/* ── 14. Workbench (the AutothinK surface in Simple mode) ────────────────── */
+.mb-shell .wb-panel,
+.wb-panel.wb-panel-v42 {
+  width: 420px; padding: 16px; gap: 12px;
+  background: rgba(9, 12, 17, 0.92);
+  border: 1px solid rgba(247, 243, 236, 0.16);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+}
+.wb-panel { --ink: #f7f3ec; --ink-mid: #d2ccbf; --ink-soft: #a8a196; --ink-faint: #877f74;
+  --divider: rgba(247,243,236,0.13); --divider-mid: rgba(247,243,236,0.22); --divider-strong: rgba(247,243,236,0.34);
+  --surface: rgba(247,243,236,0.06); --surface-raised: rgba(247,243,236,0.05);
+  --surface-active: rgba(247,243,236,0.14); }
+.wb-panel .wb-tab { font-size: 13px; padding: 6px 16px; }
+.wb-panel .wb-sub { font-size: 11.5px; color: var(--ink-faint); }
+.wb-panel .wb-badge { font-size: 11px; padding: 2px 8px; }
+.wb-panel .wb-node { padding: 11px 13px; border-radius: 10px; }
+.wb-panel .wb-node-name { font-size: 14px; }
+.wb-panel .wb-node-kind { font-size: 11px; }
+.wb-panel .wb-node-label { font-size: 14px; line-height: 1.6; }
+.wb-panel .wb-node-ms { font-size: 11.5px; }
+.wb-panel .wb-caveat { font-size: 12.5px; line-height: 1.6; }
+.wb-panel .wb-artifact-name, .wb-panel .wb-run-label { font-size: 14px; }
+.wb-panel .wb-artifact-sub, .wb-panel .wb-run-sub, .wb-panel .wb-run-time { font-size: 12px; }
+.wb-panel .wb-artifact-dl { font-size: 12.5px; }
+.wb-panel .wb-empty, .wb-panel .wb-error { font-size: 14px; }
+.wb-panel .wb-artifact-thumb { width: 52px; height: 52px; }
+
+/* Plan graph text (S5) — small print was the worst offender */
+.ipg-legend { font-size: 11.5px; }
+.ipg-caveat { font-size: 12px; line-height: 1.6; }
+
+/* ── 15. Chrome outside the shell (shared with Advanced — small lift only) ─ */
+.top-nav-brand-name { font-size: 16.5px; }
+.top-nav-search input, .top-nav-search .field { font-size: 14px; }
+.top-nav-role { font-size: 13px; }
+.top-nav-avatar { width: 34px; height: 34px; font-size: 13px; }
+.shell-mode-toggle .shell-mode-opt { font-size: 12.5px; padding: 5px 13px; }
+
+/* ── 15b. The top bar follows the Simple shell into the dark ─────────────── */
+/* MasterBrainShell sets html[data-shell-mode="simple"] on mount, so the paper
+   bar only turns to cosmic glass while the Simple view is actually mounted —
+   Advanced rooms keep the light editorial chrome they were designed for. */
+html[data-shell-mode="simple"] .top-nav {
+  background: rgba(9, 12, 17, 0.93);
+  border-bottom-color: rgba(247, 243, 236, 0.12);
+  backdrop-filter: blur(18px);
+  color: #f7f3ec;
+}
+/* A bare <button> with no background rule gets the UA's light-grey fill — the
+   one element in the bar that stayed stubbornly white. */
+html[data-shell-mode="simple"] .top-nav-account-btn {
+  background: rgba(247, 243, 236, 0.06);
+  border: 1px solid rgba(247, 243, 236, 0.18);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+html[data-shell-mode="simple"] .top-nav-account-btn:hover {
+  background: rgba(247, 243, 236, 0.12); color: #fff;
+}
+html[data-shell-mode="simple"] .top-nav-brand { color: #f7f3ec; }
+html[data-shell-mode="simple"] .top-nav-brand svg { color: #8faeff; }
+html[data-shell-mode="simple"] .top-nav .btn-ghost { color: #d2ccbf; }
+html[data-shell-mode="simple"] .top-nav .btn-ghost:hover { color: #fff; background: rgba(247, 243, 236, 0.10); }
+html[data-shell-mode="simple"] .top-nav-search input {
+  background: rgba(247, 243, 236, 0.06);
+  border-color: rgba(247, 243, 236, 0.18);
+  color: #f7f3ec;
+}
+html[data-shell-mode="simple"] .top-nav-search input::placeholder,
+html[data-shell-mode="simple"] .top-nav-search svg { color: #8d867a; }
+html[data-shell-mode="simple"] .top-nav-search input:focus { border-color: var(--spark); box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.22); }
+html[data-shell-mode="simple"] .top-nav-role { color: #d2ccbf; }
+html[data-shell-mode="simple"] .top-nav-avatar { background: #2f6fed; }
+html[data-shell-mode="simple"] .top-nav-menu {
+  background: rgba(13, 17, 23, 0.98);
+  border-color: rgba(247, 243, 236, 0.16);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6);
+}
+html[data-shell-mode="simple"] .top-nav-menu-item { color: #d2ccbf; }
+html[data-shell-mode="simple"] .top-nav-menu-item:hover { background: rgba(247, 243, 236, 0.08); color: #fff; }
+html[data-shell-mode="simple"] .top-nav-menu-empty { color: #8d867a; }
+html[data-shell-mode="simple"] .shell-mode-toggle {
+  background: rgba(247, 243, 236, 0.06);
+  border-color: rgba(247, 243, 236, 0.18);
+}
+html[data-shell-mode="simple"] .shell-mode-toggle .shell-mode-opt { color: #a8a196; }
+html[data-shell-mode="simple"] .shell-mode-toggle[data-mode="simple"] .shell-mode-opt:nth-child(1),
+html[data-shell-mode="simple"] .shell-mode-toggle[data-mode="advanced"] .shell-mode-opt:nth-child(2) {
+  background: var(--spark); color: #fff;
+}
+
+/* ── 16. Responsive + motion ─────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .mb-shell .chat-shell { grid-template-columns: 232px minmax(0, 1fr); }
+  .mb-shell .selected, .mb-shell .chat-empty h3 { font-size: 34px; }
+}
+@media (max-width: 900px) {
+  .mb-shell .chat-shell { height: calc(100dvh - 258px); padding: 12px; grid-template-columns: minmax(0, 1fr); }
+  .mb-shell .chat-empty h3 { font-size: 30px; }
+  .mb-shell .chat-empty p { font-size: 15.5px; }
+  .mb-shell .chat-bubble { font-size: 16px; padding: 15px 17px; }
+  .mb-shell .chat-msg.user { max-width: 92%; }
+  .mb-shell .chat-stream { gap: 22px; padding: 18px 0 6px; }
+  .mb-shell .chat-suggestions { grid-template-columns: 1fr; }
+  .wb-panel { width: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mb-shell .chat-suggestion, .mb-shell .chat-bubble { transition: none; }
+}
