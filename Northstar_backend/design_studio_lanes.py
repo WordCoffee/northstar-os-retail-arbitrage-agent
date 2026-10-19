@@ -164,6 +164,46 @@ class MainCheckIn(BaseModel):
     require_square: bool = False
 
 
+class ReadinessIn(BaseModel):
+    asset_id: Optional[str] = Field(None, max_length=80)
+    main_asset_id: Optional[str] = Field(None, max_length=80)
+    expected_terms: Optional[list] = None
+    template_id: Optional[str] = Field(None, max_length=60)
+    params: Optional[Dict[str, Any]] = None
+    profile: Optional[str] = Field(None, max_length=120)
+    tac_limit: float = Field(300.0, ge=50.0, le=400.0)
+    min_fill: float = Field(0.85, ge=0.1, le=1.0)
+    min_side: int = Field(2000, ge=256, le=10000)
+
+
+@router.post("/readiness")
+def lane_readiness(body: ReadinessIn, acct: str = Depends(studio_account)):
+    """One verdict for "is this package retail-ready?" across every check we own."""
+    import design_studio_print as dp
+    import package_readiness as pr
+
+    artwork = main_image = None
+    db = get_northstar_db()
+    if body.asset_id:
+        _db, _asset, path = _load_asset(body.asset_id, acct)
+        artwork = path.read_bytes()
+    if body.main_asset_id:
+        _db2, _asset2, path2 = _load_asset(body.main_asset_id, acct)
+        main_image = path2.read_bytes()
+
+    dieline = None
+    if body.template_id:
+        try:
+            dieline = dp.build_from_template(body.template_id, body.params)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc))
+
+    return pr.assess_package(artwork=artwork, main_image=main_image, dieline=dieline,
+                             expected_terms=body.expected_terms, profile=body.profile,
+                             tac_limit=body.tac_limit, min_fill=body.min_fill,
+                             min_side=body.min_side)
+
+
 @router.post("/main-check")
 def lane_main_check(body: MainCheckIn, acct: str = Depends(studio_account)):
     """Measure a stored image against the mechanical Amazon MAIN rules."""

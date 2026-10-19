@@ -1,0 +1,215 @@
+{
+  "verdict": "needs_work",
+  "blockers": [
+    "prepress: 18.09% of pixels move more than 8.0 dE through the press profile"
+  ],
+  "warnings": [
+    "copy: copy 'MOGRA ORGANICS' matched only fuzzily (OCR ratio 0.96) - eyeball the render before shipping",
+    "copy: copy 'ORGANIC LION'S MANE' matched only fuzzily (OCR ratio 0.938) - eyeball the render before shipping",
+    "dieline: proportion: gusset 40mm is far below the published 80mm for a 250g pouch (ladder row 140x200+80) - measure a competitor pouch and confirm before plates",
+    "dieline: dieline confidence: planning dieline - not a die"
+  ],
+  "not_assessed": [],
+  "evidence": {
+    "prepress": {
+      "assessed": true,
+      "status": "ok",
+      "profiles_available": [
+        "RSWOP.icm"
+      ],
+      "profile": "RSWOP.icm",
+      "gamut": {
+        "status": "ok",
+        "profile": "RSWOP.icm",
+        "intent": "relative_colorimetric",
+        "tolerance_dE76": 8.0,
+        "pixels": 199809,
+        "out_of_gamut": 36151,
+        "out_of_gamut_pct": 18.09,
+        "max_dE76": 27.22,
+        "mean_dE76": 5.61,
+        "worst_colors": [
+          {
+            "srgb": [
+              33,
+              56,
+              0
+            ],
+            "hex": "#213800",
+            "dE76": 27.22
+          },
+          {
+            "srgb": [
+              35,
+              57,
+              0
+            ],
+            "hex": "#233900",
+            "dE76": 26.93
+          },
+          {
+            "srgb": [
+              35,
+              57,
+              0
+            ],
+            "hex": "#233900",
+            "dE76": 26.93
+          },
+          {
+            "srgb": [
+              34,
+              60,
+              2
+            ],
+            "hex": "#223C02",
+            "dE76": 26.91
+          },
+          {
+            "srgb": [
+              35,
+              63,
+              1
+            ],
+            "hex": "#233F01",
+            "dE76": 26.7
+          },
+          {
+            "srgb": [
+              37,
+              64,
+              2
+            ],
+            "hex": "#254002",
+            "dE76": 26.68
+          },
+          {
+            "srgb": [
+              33,
+              54,
+              0
+            ],
+            "hex": "#213600",
+            "dE76": 26.64
+          },
+          {
+            "srgb": [
+              40,
+              61,
+              0
+            ],
+            "hex": "#283D00",
+            "dE76": 26.64
+          }
+        ],
+        "note": "dE76 measured on the sRGB->CMYK->sRGB round trip through the press profile, computed in exact CIE Lab (D65). A relative colorimetric round trip carries a ~4-5 dE floor even for in-gamut neutrals because the source white/black points map onto the medium's; the tolerance is set above that floor so only genuine gamut failures (10-60 dE) are reported."
+      },
+      "ink": {
+        "status": "ok",
+        "profile": "RSWOP.icm",
+        "limit_pct": 300.0,
+        "max_tac_pct": 262.0,
+        "mean_tac_pct": 116.3,
+        "pixels_over_limit": 0,
+        "pixels_over_limit_pct": 0.0,
+        "verdict": "within_limit",
+        "note": "Coated sheet-fed work is commonly capped at 300-330% TAC; the co-packer's spec is the authority."
+      },
+      "verdict": "blocked",
+      "blockers": [
+        "18.09% of pixels move more than 8.0 dE through the press profile"
+      ],
+      "note": "A pass here means the file converts cleanly through the named profile - it is not a substitute for the co-packer's own preflight."
+    },
+    "copy": {
+      "assessed": true,
+      "contains_text": true,
+      "boxes": 10,
+      "words": [
+        "MOGRA ORGANCS",
+        "Ilealthy & Organie",
+        "MOGRA ORGANCS",
+        "Healthy & Organic",
+        "ORGANISLION'SMANE",
+        "ORGANIC SHIITAKE",
+        "MUSHROOM POWDER",
+        "MUSHROOM POWDER",
+        "6 oz (170 g)",
+        "8oz (227g)"
+      ],
+      "expected_terms": [
+        "MOGRA ORGANICS",
+        "ORGANIC LION'S MANE",
+        "MUSHROOM POWDER",
+        "6 oz (170 g)"
+      ],
+      "matched": [
+        "MUSHROOM POWDER",
+        "6 oz (170 g)"
+      ],
+      "matched_fuzzy": [
+        {
+          "term": "MOGRA ORGANICS",
+          "ratio": 0.96
+        },
+        {
+          "term": "ORGANIC LION'S MANE",
+          "ratio": 0.938
+        }
+      ],
+      "missing": [],
+      "blockers": [],
+      "warnings": [
+        "copy 'MOGRA ORGANICS' matched only fuzzily (OCR ratio 0.96) - eyeball the render before shipping",
+        "copy 'ORGANIC LION'S MANE' matched only fuzzily (OCR ratio 0.938) - eyeball the render before shipping"
+      ],
+      "note": "Fuzzy matching exists because a stylised serif wordmark is often OCR'd one character off; fuzzy hits are reported, never silently accepted."
+    },
+    "main": {
+      "assessed": true,
+      "status": "ok",
+      "pixels": [
+        2000,
+        2000
+      ],
+      "had_alpha": false,
+      "background_white_frac": 1.0,
+      "product_bbox": [
+        121,
+        374,
+        1880,
+        1626
+      ],
+      "fill_longest_side": 0.8795,
+      "fill_area": 0.5506,
+      "fill_measurable": true,
+      "verdict": "compliant",
+      "blockers": [],
+      "note": "Fill is reported both ways: longest side (the conservative reading, used for the verdict) and area. Amazon's own policy page is the authority."
+    },
+    "dieline": {
+      "assessed": true,
+      "template": "doypack",
+      "size_mm": [
+        168.0,
+        486.0
+      ],
+      "bleed_mm": 3.0,
+      "layers_present": [
+        "bleed",
+        "fold",
+        "info",
+        "marks",
+        "safe",
+        "trim"
+      ],
+      "proportion_status": "warnings",
+      "blockers": [],
+      "warnings": [
+        "proportion: gusset 40mm is far below the published 80mm for a 250g pouch (ladder row 140x200+80) - measure a competitor pouch and confirm before plates",
+        "dieline confidence: planning dieline - not a die"
+      ]
+    }
+  },
+  "note": "Mechanical checks only: ICC conversion, OCR copy match, MAIN framing, dieline structure. A 'retail_ready' here still needs the co-packer's die drawing and their own preflight - this report narrows what to ask them about, it does not replace them."
+}
