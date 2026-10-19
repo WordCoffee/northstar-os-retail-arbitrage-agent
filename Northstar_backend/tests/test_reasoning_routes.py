@@ -14,15 +14,32 @@ from fastapi.testclient import TestClient
 
 
 class ReasoningRouteTests(unittest.TestCase):
+    _SAVED_ENV: dict = {}
+
     @classmethod
     def setUpClass(cls):
+        # FORCE, don't setdefault: an earlier test in a full-suite run can leave
+        # OPENCODE_GO_ENABLED at "0", and setdefault would then silently keep it -
+        # which made these two tests fail only in a full run (2026-10-19). The
+        # previous values are restored in tearDownClass so this class cannot leak
+        # in the other direction.
+        cls._SAVED_ENV = {k: os.environ.get(k) for k in
+                          ("OPENCODE_GO_ENABLED", "OPENCODE_GO_API_KEY")}
+        os.environ["OPENCODE_GO_ENABLED"] = "1"
+        os.environ["OPENCODE_GO_API_KEY"] = "test-key"
         # Import main lazily so environment can be patched first.
-        os.environ.setdefault("OPENCODE_GO_ENABLED", "1")
-        os.environ.setdefault("OPENCODE_GO_API_KEY", "test-key")
         import main
         cls.app = main.app
         cls.client = TestClient(cls.app)
         cls._import_reasoning_tasks = __import__("reasoning_tasks")
+
+    @classmethod
+    def tearDownClass(cls):
+        for key, value in cls._SAVED_ENV.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
 
     def _patch_provider(self, response_text):
         from adapters.reasoning_provider import MockReasoningProvider
