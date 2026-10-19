@@ -113,21 +113,38 @@ def test_tenant_isolation_holds_for_non_owner(monkeypatch, tmp_path):
     assert r.json()["detail"]["code"] == "cross_organization_access_denied"
 
 
+def _repo_root() -> str:
+    """Repo root found by walking up to the 00_STATE.json marker.
+
+    The frozen paths below are repo-root relative, and this test used to assume
+    pytest was launched from the root - so running the suite from
+    Northstar_backend/ looked for Northstar_backend/Northstar_backend/... and
+    failed on a file that exists (2026-10-19). Resolve from __file__ instead.
+    """
+    p = os.path.dirname(os.path.abspath(__file__))
+    for _ in range(6):
+        if os.path.isfile(os.path.join(p, "00_STATE.json")):
+            return p
+        p = os.path.dirname(p)
+    return p
+
+
 def test_frozen_file_boundary_is_a_static_rule():
     # Process/repo rule, NOT a runtime-tested control: the frozen files must exist
     # and must not be imported by Owner Test Mode code paths.
+    root = _repo_root()
     frozen = [
         "Northstar_backend/costco_non_kirkland/brightdata_costco_live.py",
         "Northstar_backend/costco_non_kirkland/brightdata_costco_enrichment.py",
         "Northstar_backend/costco_non_kirkland/enrichment.py",
     ]
     for f in frozen:
-        assert os.path.exists(os.path.join(os.getcwd(), f)) or os.path.exists(f), f
+        assert os.path.exists(os.path.join(root, f)), f
     otm_modules = ["Northstar_backend/foundation/owner_test_mode.py",
                    "Northstar_backend/foundation/permissions.py",
                    "Northstar_backend/foundation/approvals.py"]
     for m in otm_modules:
-        with open(m, encoding="utf-8") as fh:
+        with open(os.path.join(root, m), encoding="utf-8") as fh:
             body = fh.read()
         assert "brightdata_costco_live" not in body
         assert "brightdata_costco_enrichment" not in body
