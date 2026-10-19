@@ -2620,6 +2620,22 @@ except Exception as _noncreative_exc:  # pragma: no cover - defensive mount
         "noncreative reads router not mounted: %s", _noncreative_exc
     )
 
+# =============================================================================
+# N-2 trust surface: measured operational status (disk, DB integrity, lanes,
+# resident models). Read-only and authenticated. Mounted defensively so it can
+# never take the API down.
+# =============================================================================
+try:
+    from ops_router import router as _ops_router
+
+    app.include_router(_ops_router)
+except Exception as _ops_exc:  # pragma: no cover - defensive mount
+    import logging as _logging3
+
+    _logging3.getLogger("northstar.ops").warning(
+        "ops status router not mounted: %s", _ops_exc
+    )
+
 
 
 
