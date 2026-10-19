@@ -16,6 +16,7 @@ command was run and its output is in `renders/` or the commit history.
 | Ask "is this package retail-ready?" | `python scripts/package_readiness_live.py` |
 | Check a file for print (CMYK, gamut, ink limit) | `python -m Northstar_backend.prepress --in <png> --cmyk-out out.tif` |
 | Learn from public pages / PDFs into the local corpus | `python Northstar_backend/corpus_learner.py --seed <url> --max 20` |
+| Record a measured pouch against the spec | `python Northstar_backend/pouch_calibration.py --spec 150x210+40 --measured 148x205+78 --fill 227 --source "BrandX 8 oz"` |
 | Search the 57k-source research index | `python -c "…corpus search…"` or the corpus API |
 
 ---
@@ -87,6 +88,15 @@ Verdict `compliant` means white background, ≥85 % fill, ≥2000 px.
 ```powershell
 python -m Northstar_backend.prepress --in renders/composed.png --cmyk-out renders/composed_cmyk.tif --proof-out renders/composed_proof.png
 ```
+
+**The tape-measure step** (the only thing that settles the gusset):
+```powershell
+python Northstar_backend/pouch_calibration.py --spec 150x210+40 --measured 148x205+78 --fill 227 --source "BrandX 8 oz"
+```
+It prints a per-dimension delta and appends the record to
+`Northstar_backend/data/pouch_calibrations.json`. Exit code `2` means
+`spec_adjust`, so a script can gate on it. A missing measurement is reported as
+incomplete, never guessed.
 
 ---
 
