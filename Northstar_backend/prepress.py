@@ -283,6 +283,63 @@ def prepress_report(png: bytes, *, profile: Optional[str] = None,
     }
 
 
+def map_colors(colors: Sequence[Sequence[int]], *, profile: Optional[str] = None,
+               de_tolerance: float = DEFAULT_DE_TOLERANCE) -> Dict[str, Any]:
+    """Show what each colour will print as, and name replacements that hold.
+
+    For every input sRGB colour: the colour the press will actually produce (the
+    CMYK round trip) and the CIE76 shift. Out-of-gamut colours come back with
+    ``suggested_srgb`` - adopting that value as the DESIGN colour is what makes
+    the press match the screen, because the suggested value is the one the
+    profile already renders faithfully.
+
+    This turns the gamut blocker into an instruction instead of a warning.
+    """
+    import numpy as np
+
+    info = _resolve_cmyk(profile)
+    src = _srgb_profile()
+    dst = ImageCms.ImageCmsProfile(info.path)
+    to_press = ImageCms.buildTransformFromOpenProfiles(
+        src, dst, "RGB", "CMYK", renderingIntent=ImageCms.Intent.RELATIVE_COLORIMETRIC)
+    back = ImageCms.buildTransformFromOpenProfiles(
+        dst, src, "CMYK", "RGB", renderingIntent=ImageCms.Intent.RELATIVE_COLORIMETRIC)
+    to_lab = ImageCms.buildTransform(src, ImageCms.createProfile("LAB"), "RGB", "LAB")
+
+    def _lab(rgb: Sequence[int]):
+        img = Image.new("RGB", (1, 1), tuple(int(c) for c in rgb))
+        a = np.asarray(ImageCms.applyTransform(img, to_lab), dtype=np.float64).reshape(3)
+        return np.array([a[0] / 255.0 * 100.0, a[1] - 128.0, a[2] - 128.0])
+
+    out: List[Dict[str, Any]] = []
+    for rgb in colors:
+        rgb_t = tuple(int(c) for c in rgb[:3])
+        chip = Image.new("RGB", (1, 1), rgb_t)
+        printed = ImageCms.applyTransform(ImageCms.applyTransform(chip, to_press), back)
+        printed_rgb = tuple(int(c) for c in np.asarray(printed, dtype=np.uint8).reshape(3))
+        de = float(np.linalg.norm(_lab(rgb_t) - _lab(printed_rgb)))
+        row = {
+            "hex": "#%02X%02X%02X" % rgb_t,
+            "prints_as_hex": "#%02X%02X%02X" % printed_rgb,
+            "prints_as_rgb": list(printed_rgb),
+            "dE76": round(de, 2),
+            "in_gamut": de <= de_tolerance,
+        }
+        if de > de_tolerance:
+            row["suggested_srgb"] = list(printed_rgb)
+            row["suggested_hex"] = row["prints_as_hex"]
+            row["why"] = ("this value already prints faithfully through the press "
+                          "profile; adopting it removes the shift")
+        out.append(row)
+    return {"status": "ok", "profile": info.name, "tolerance_dE76": de_tolerance,
+            "colors": out,
+            "out_of_gamut": sum(1 for r in out if not r["in_gamut"]),
+            "note": ("Measurements are an sRGB->CMYK->sRGB round trip through the "
+                     "named profile. A suggested value is the press rendering of "
+                     "the original - a starting point for the designer, not a "
+                     "forced colour.")}
+
+
 def _main() -> int:
     import argparse
     import json

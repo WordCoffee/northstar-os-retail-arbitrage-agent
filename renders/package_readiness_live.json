@@ -119,7 +119,117 @@
       "blockers": [
         "18.09% of pixels move more than 8.0 dE through the press profile"
       ],
-      "note": "A pass here means the file converts cleanly through the named profile - it is not a substitute for the co-packer's own preflight."
+      "note": "A pass here means the file converts cleanly through the named profile - it is not a substitute for the co-packer's own preflight.",
+      "suggested_colors": [
+        {
+          "hex": "#213800",
+          "prints_as_hex": "#38392E",
+          "prints_as_rgb": [
+            56,
+            57,
+            46
+          ],
+          "dE76": 25.95,
+          "in_gamut": false,
+          "suggested_srgb": [
+            56,
+            57,
+            46
+          ],
+          "suggested_hex": "#38392E",
+          "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+        },
+        {
+          "hex": "#233900",
+          "prints_as_hex": "#3A3B2F",
+          "prints_as_rgb": [
+            58,
+            59,
+            47
+          ],
+          "dE76": 26.26,
+          "in_gamut": false,
+          "suggested_srgb": [
+            58,
+            59,
+            47
+          ],
+          "suggested_hex": "#3A3B2F",
+          "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+        },
+        {
+          "hex": "#233900",
+          "prints_as_hex": "#3A3B2F",
+          "prints_as_rgb": [
+            58,
+            59,
+            47
+          ],
+          "dE76": 26.26,
+          "in_gamut": false,
+          "suggested_srgb": [
+            58,
+            59,
+            47
+          ],
+          "suggested_hex": "#3A3B2F",
+          "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+        },
+        {
+          "hex": "#223C02",
+          "prints_as_hex": "#3B3D2F",
+          "prints_as_rgb": [
+            59,
+            61,
+            47
+          ],
+          "dE76": 25.95,
+          "in_gamut": false,
+          "suggested_srgb": [
+            59,
+            61,
+            47
+          ],
+          "suggested_hex": "#3B3D2F",
+          "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+        },
+        {
+          "hex": "#233F01",
+          "prints_as_hex": "#3A3E2D",
+          "prints_as_rgb": [
+            58,
+            62,
+            45
+          ],
+          "dE76": 25.08,
+          "in_gamut": false,
+          "suggested_srgb": [
+            58,
+            62,
+            45
+          ],
+          "suggested_hex": "#3A3E2D",
+          "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+        },
+        {
+          "hex": "#254002",
+          "prints_as_hex": "#3B3E2D",
+          "prints_as_rgb": [
+            59,
+            62,
+            45
+          ],
+          "dE76": 25.85,
+          "in_gamut": false,
+          "suggested_srgb": [
+            59,
+            62,
+            45
+          ],
+          "suggested_hex": "#3B3E2D",
+          "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+        }
+      ]
     },
     "copy": {
       "assessed": true,

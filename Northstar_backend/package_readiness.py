@@ -160,6 +160,20 @@ def assess_prepress(image: Optional[bytes], *, profile: Optional[str] = None,
         rep = prepress.prepress_report(image, profile=profile, limit_pct=tac_limit)
     except RuntimeError as exc:
         return {"assessed": False, "reason": str(exc)}
+    # Turn the blocker into an instruction: for the worst offenders, give the
+    # colour that DOES print faithfully through the same profile.
+    worst = [c.get("srgb") for c in (rep.get("gamut", {}).get("worst_colors") or [])
+             if c.get("srgb")]
+    if worst:
+        try:
+            mapped = prepress.map_colors(worst, profile=rep.get("profile"),
+                                         de_tolerance=rep.get("gamut", {}).get(
+                                             "tolerance_dE76", 8.0))
+            out_of_gamut = [c for c in mapped.get("colors", []) if not c["in_gamut"]]
+            if out_of_gamut:
+                rep["suggested_colors"] = out_of_gamut[:6]
+        except Exception:  # noqa: BLE001 - a suggestion is a bonus, never a failure
+            pass
     return {"assessed": True, **rep}
 
 

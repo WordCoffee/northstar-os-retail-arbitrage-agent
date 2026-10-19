@@ -127,3 +127,38 @@ def test_report_handles_a_multi_colour_dieline_sheet():
     assert rep["gamut"]["out_of_gamut_pct"] > 0
     assert rep["gamut"]["worst_colors"], "worst offenders must be named"
     assert rep["gamut"]["worst_colors"][0]["hex"].startswith("#")
+
+
+# -- gamut mapping assistant: the blocker comes with a fix ---------------------
+
+@needs_profile
+def test_map_colors_passes_in_gamut_and_suggests_for_out_of_gamut():
+    out = pp.map_colors([(243, 234, 214), (0, 255, 0), (196, 160, 74)])
+    assert out["status"] == "ok" and out["profile"]
+    by_hex = {c["hex"]: c for c in out["colors"]}
+    cream = by_hex["#F3EAD6"]
+    assert cream["in_gamut"] is True
+    assert "suggested_hex" not in cream, "an in-gamut colour needs no suggestion"
+
+    green = by_hex["#00FF00"]
+    assert green["in_gamut"] is False
+    assert green["dE76"] > 20
+    assert green["suggested_hex"] and green["suggested_srgb"]
+    assert green["suggested_hex"] != green["hex"]
+    assert out["out_of_gamut"] == 1
+
+
+@needs_profile
+def test_map_colors_suggestion_is_itself_in_gamut():
+    """The suggested value must survive a second trip, or it is not a fix."""
+    first = pp.map_colors([(0, 255, 0)])
+    suggested = tuple(first["colors"][0]["suggested_srgb"])
+    second = pp.map_colors([suggested])
+    assert second["colors"][0]["in_gamut"] is True, second["colors"][0]
+    assert second["colors"][0]["dE76"] <= first["colors"][0]["dE76"]
+
+
+@needs_profile
+def test_map_colors_handles_an_empty_palette():
+    out = pp.map_colors([])
+    assert out["colors"] == [] and out["out_of_gamut"] == 0
