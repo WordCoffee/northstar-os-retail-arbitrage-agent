@@ -26,6 +26,15 @@
   ],
   "known_issues": [
     {
+      "id": "realesrgan_upscale_aborts_comfyui_20261019",
+      "discovered_in": "Canvas v2 session: first live upscale attempt (RealESRGAN_x4plus.pth via KJNodes ImageUpscaleWithModelBatched, 1216x1216 input)",
+      "discovered_at": "2026-10-19T08:20:00Z",
+      "description": "RealESRGAN x4 upscaling of a 1216x1216 render aborted the ComfyUI process with a fatal Python error inside spandrel's RRDB conv forward (Fatal Python error: Aborted). The request never returned (the smoke command hung past 30 minutes). Root cause not isolated: plausibly VRAM pressure on the 16 GB box (dynamic VRAM, 13.1 GB usable with the Qwen edit model resident) or a spandrel/torch container issue. The SeedVR2 weights on disk are NOT a substitute: this ComfyUI exposes only SeedVR2 component nodes (SeedVR2Preprocess / SeedVR2Conditioning / SeedVR2PostProcessing / SeedVR2TemporalChunk / SeedVR2TemporalMerge), no single-node SeedVR2 upscaler.",
+      "resolution": "CIRCUIT BREAKER HONOURED: one attempt, no auto-retry, no silent substitution. The ComfyUI server was restarted. Deterministic upscaling now lives in image_prep.upscale_lanczos (pure PIL LANCZOS + unsharp, no GPU, capped at 4x) and the model-based graph is kept in studio_generation as a documented DEPRECATED function that is never called. Revisiting requires either a tiled/low-VRAM upscale graph proved on a small input first, or the upstream numz/ComfyUI-SeedVR2_VideoUpscaler node pack.",
+      "requires_decision": "Operator: decide whether model-based upscaling is worth another attempt (needs a careful tile-size experiment on a small input, and a ComfyUI restart budget), or keep the deterministic LANCZOS path for print sizes.",
+      "status": "open"
+    },
+    {
       "id": "mockup_compositor_typography_pass_20261016",
       "discovered_in": "Operator comparison vs a Canva mockup: generated renders had no readable words and never used the operator's real logo",
       "discovered_at": "2026-10-16T12:00:00Z",

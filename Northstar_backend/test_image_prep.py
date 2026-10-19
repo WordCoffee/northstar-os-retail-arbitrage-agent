@@ -10,6 +10,7 @@ import os
 import sys
 
 import numpy as np
+import pytest
 from PIL import Image, ImageDraw
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -112,3 +113,21 @@ def test_check_main_compliance_handles_a_flat_white_image():
     rep = ip.check_main_compliance(_png(Image.new("RGB", (100, 100), (255, 255, 255))))
     assert rep["verdict"] == "blocked"
     assert any("no product detected" in b for b in rep["blockers"]), rep["blockers"]
+
+
+# -- deterministic upscale (no GPU) --------------------------------------------
+
+def test_upscale_lanczos_scales_and_sharpens_without_a_model():
+    src = _png(_cutout(200, 200, box=(50, 50, 150, 150)))
+    out = ip.upscale_lanczos(src, factor=2.0)
+    assert out["size"] == [400, 400] and out["source_size"] == [200, 200]
+    assert out["method"] == "lanczos+unsharp" and out["gpu"] is False
+    assert len(out["bytes"]) > 0
+
+
+def test_upscale_lanczos_rejects_a_no_op_factor_and_caps_at_four():
+    src = _png(_cutout(50, 50))
+    with pytest.raises(ValueError):
+        ip.upscale_lanczos(src, factor=1.0)
+    out = ip.upscale_lanczos(src, factor=9.0)
+    assert out["factor"] == 4.0 and out["size"] == [200, 200]

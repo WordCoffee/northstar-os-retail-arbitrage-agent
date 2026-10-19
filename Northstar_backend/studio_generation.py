@@ -39,6 +39,12 @@ EDIT_VAE_FILE = "qwen_image_vae.safetensors"
 # Cutout lane (Packify-parity P1): BiRefNet matting, MIT, already on disk.
 CUTOUT_MODEL_FILE = os.environ.get("STUDIO_CUTOUT_MODEL") or "birefnet.safetensors"
 
+# Upscale lane: RealESRGAN x4 is the upscale model actually installed here.
+# (SeedVR2's weights are on disk but this ComfyUI exposes only component nodes -
+# preprocess/conditioning/postprocess - so there is no single-node SeedVR2
+# upscaler to call. Recorded rather than guessed at.)
+UPSCALE_MODEL_FILE = os.environ.get("STUDIO_UPSCALE_MODEL") or "RealESRGAN_x4plus.pth"
+
 _STYLE_SUFFIX = ", professional commercial product photography, clean composition"
 # Rich renders keep the operator's full art direction (lettering demands included).
 # Text-safe mode appends its own suppression phrase in text_fidelity.sanitize_brief_for_render.
@@ -469,6 +475,30 @@ def _cutout_graph(image_name: str) -> dict:
               "inputs": {"image": ["2", 0], "alpha": ["4", 0]}},
         "6": {"class_type": "SaveImage",
               "inputs": {"images": ["5", 0], "filename_prefix": "ns-cutout"}},
+    }
+
+
+def _upscale_graph(image_name: str, downscale_ratio: float) -> dict:  # noqa: D401
+    """DEPRECATED (2026-10-19) - kept for the record, not called.
+
+    RealESRGAN x4 via ImageUpscaleWithModelBatched aborted the ComfyUI process
+    (fatal Python error inside the RRDB conv) on a 1216x1216 input on this 16 GB
+    box. Circuit breaker honoured: no auto-retry. Deterministic upscaling now
+    lives in image_prep.upscale_lanczos (pure PIL, no GPU). SeedVR2's weights are
+    on disk but this ComfyUI exposes only its component nodes
+    (preprocess/conditioning/postprocess/temporal), so there is no single-node
+    SeedVR2 upscaler to call either.
+    """
+    return {
+        "1": {"class_type": "UpscaleModelLoader",
+              "inputs": {"model_name": UPSCALE_MODEL_FILE}},
+        "2": {"class_type": "LoadImage", "inputs": {"image": image_name}},
+        "3": {"class_type": "ImageUpscaleWithModelBatched",
+              "inputs": {"upscale_model": ["1", 0], "images": ["2", 0],
+                         "per_batch": 16, "downscale_ratio": downscale_ratio,
+                         "downscale_method": "lanczos"}},
+        "4": {"class_type": "SaveImage",
+              "inputs": {"images": ["3", 0], "filename_prefix": "ns-upscale"}},
     }
 
 

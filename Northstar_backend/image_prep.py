@@ -194,3 +194,35 @@ def check_main_compliance(png: bytes, *, min_fill: float = MAIN_MIN_FILL,
                  "reading, used for the verdict) and area. Amazon's own policy "
                  "page is the authority."),
     }
+
+
+def upscale_lanczos(png: bytes, *, factor: float = 2.0,
+                    sharpen: bool = True) -> Dict[str, Any]:
+    """Deterministic upscale for print / listing sizes — no GPU, no model.
+
+    Model upscaling is deliberately NOT on this path: RealESRGAN x4 aborted the
+    ComfyUI server on a 1216x1216 input on this 16 GB box (2026-10-19, fatal
+    error inside the RRDB conv; circuit breaker honoured, no auto-retry), and the
+    SeedVR2 weights ship only as component nodes in this ComfyUI. LANCZOS plus a
+    light unsharp keeps edges honest and cannot take the pipeline down.
+
+    ``factor`` is capped at 4. Upscale a CLEAN PLATE before compositing text:
+    any upscaler softens hairlines.
+    """
+    f = float(factor)
+    if f <= 1.0:
+        raise ValueError(f"factor must be >1, got {f}")
+    f = min(f, 4.0)
+    img = Image.open(io.BytesIO(png)).convert("RGB")
+    new = (max(1, int(round(img.width * f))), max(1, int(round(img.height * f))))
+    big = img.resize(new, Image.LANCZOS)
+    if sharpen:
+        from PIL import ImageFilter
+        big = big.filter(ImageFilter.UnsharpMask(radius=1.6, percent=55, threshold=3))
+    buf = io.BytesIO()
+    big.save(buf, format="PNG")
+    return {"bytes": buf.getvalue(), "size": [big.width, big.height],
+            "source_size": [img.width, img.height], "factor": f,
+            "method": "lanczos+unsharp", "gpu": False,
+            "note": ("Deterministic upscale. Upscale a CLEAN PLATE before the text "
+                     "composite: any upscaler softens hairlines.")}
