@@ -21,7 +21,7 @@ def test_oom_triggers_exactly_one_reeviction_and_retry(monkeypatch):
     calls = {"graph": 0, "unload": 0, "release": 0}
     sleeps = []
 
-    def flaky_graph(graph, timeout_s):
+    def flaky_graph(graph, timeout_s, **kwargs):
         calls["graph"] += 1
         if calls["graph"] == 1:
             raise RuntimeError('execution failed: {"status_str": "error"} CUDA error: out of memory')
@@ -60,7 +60,7 @@ def test_generate_image_releases_models_on_failure(monkeypatch):
 def test_non_oom_failures_propagate_without_retry(monkeypatch):
     calls = {"graph": 0}
 
-    def bad_graph(graph, timeout_s):
+    def bad_graph(graph, timeout_s, **kwargs):
         calls["graph"] += 1
         raise RuntimeError("prompt validation failed")
 

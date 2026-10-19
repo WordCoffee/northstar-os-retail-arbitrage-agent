@@ -181,3 +181,105 @@ def test_loop_without_runners_reports_the_gap_honestly(db):
     assert out["steps"]["1_collect"]
     assert out["proposals"] == [] or all(p["verification"] is not None for p in out["proposals"])
     assert out["verification"]["status"] == "not_run"
+
+
+# ── GUARDRAILS: the proposal-only contract, made hard to break ──────────────
+# These are the assertions that matter most: they are what stops this module from
+# ever becoming an applier. They are deliberately paranoid.
+
+_NO_APPLY_ATTRIBUTES = (
+    "apply", "apply_all", "apply_proposal", "mutate", "write", "save", "install",
+    "commit_change", "patch", "train", "fine_tune", "finetune", "deploy", "enable",
+)
+
+
+@pytest.mark.parametrize("attr", _NO_APPLY_ATTRIBUTES)
+def test_module_exposes_no_apply_style_entry_point(attr):
+    assert not hasattr(se, attr), (
+        f"self_evolution.{attr} must not exist: this module records proposals, it never "
+        "applies them")
+
+
+def _strip(src: str) -> str:
+    import re
+    src = re.sub(r'"""[\s\S]*?"""', "", src)
+    return re.sub(r"(?m)^\s*#.*$", "", src)
+
+
+def test_the_proposal_pipeline_contains_no_side_effecting_operations():
+    """The pipeline itself must be inert.
+
+    Scope: collect / analyse / propose / verify / loop / weight_updates. The CLI
+    below them may RUN declared gates (verification), which is a different thing
+    from changing the system — that boundary is asserted separately.
+    """
+    import inspect
+
+    code = "".join(inspect.getsource(fn) for fn in (
+        se.collect, se.analyse, se.propose, se.verify, se.loop,
+        se.weight_updates, se.declared_gates))
+    for banned in ("subprocess", "os.system", "shutil", "os.remove", "os.rename",
+                   "write_text", "write_bytes", "open("):
+        assert banned not in _strip(code), (
+            f"the proposal pipeline contains {banned!r}; it must have no way to write, "
+            "move or spawn anything")
+
+
+def test_the_only_subprocess_is_the_opt_in_gate_runner():
+    """Running the declared gates is verification, and it is explicitly opt-in."""
+    import inspect
+
+    module_src = inspect.getsource(se)
+    assert "subprocess" in module_src, "the gate runner should exist for --run-gates"
+    main_src = inspect.getsource(se.main)
+    assert "--run-gates" in main_src, "gate execution must be opt-in on the CLI"
+    assert "_subprocess_gate" in main_src, "main must be the only caller"
+    # It can only execute a command that came from the DECLARED catalogue.
+    runner = inspect.getsource(se._subprocess_gate)
+    assert 'gate["command"]' in runner
+    # And the catalogue is a fixed module constant, not caller-supplied.
+    assert all(isinstance(g.get("command"), str) for g in se.declared_gates())
+    assert len(se.declared_gates()) >= 5
+
+
+def test_no_call_ever_reports_an_applied_change(db):
+    """Whatever the runners do, the loop reports applied=False."""
+    for runners in (
+        {},
+        {"purpose_runner": purpose},
+        {"gate_runner": lambda g: {"status": "pass"}},
+        {"purpose_runner": purpose, "gate_runner": lambda g: {"status": "pass"}},
+        {"gate_runner": lambda g: {"status": "fail"}},
+    ):
+        out = se.loop(db, **runners)
+        assert out["applied"] is False
+        assert "no apply" in out["note"].lower() or "proposal-only" in out["note"].lower()
+
+
+def test_every_proposal_is_complete_and_verifiable():
+    analysis = {"finding_kinds": {"x:long_function": 5},
+                "hotspots": [{"target": "m.py", "findings": 4}],
+                "weak_lanes": [{"lane": "cloud", "success_rate": 0.5, "samples": 40}],
+                "thin_lanes": ["local"]}
+    props = se.propose(analysis)
+    assert len(props) >= 4
+    for p in props:
+        assert set(p) >= {"id", "area", "change", "rationale", "evidence", "risk",
+                          "risk_note", "verification"}
+        assert isinstance(p["verification"], list)
+        assert p["risk"] in ("none", "low", "medium", "high")
+        assert "applied" not in p          # a proposal never carries an applied flag
+
+
+def test_weight_updates_stays_blocked_until_the_owner_decides():
+    for _ in range(3):
+        wu = se.weight_updates()
+        assert wu["status"] == "blocked"
+        assert wu["blocked_on"] == "D2"
+        assert wu["what_would_be_needed"]
+
+
+def test_verification_never_claims_a_pass_without_a_runner():
+    out = se.verify([{"verification": ["python-tests", "ui-build"]}])
+    assert out["status"] == "not_run"
+    assert all("status" not in g for g in out["gates"])   # nothing was asserted about them

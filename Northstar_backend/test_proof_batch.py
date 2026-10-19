@@ -19,6 +19,22 @@ from unittest import mock
 import intel_schema
 import proof_batch as pb
 
+# These tests read benchmark/scanner fixture data that has never been committed and
+# is absent from a clean checkout. Skip with the missing paths named, rather than
+# failing for an environment reason that is not a code defect.
+_REQUIRED_FIXTURES = (
+    "data/benchmarks/asin_benchmark_reference.json",
+    "data/benchmarks/raw/Rank-Product-ASIN-Reviews-Price-BSR.csv",
+    "data/scanner-search-cache.json",
+)
+_MISSING_FIXTURES = [p for p in _REQUIRED_FIXTURES if not os.path.exists(p)]
+if _MISSING_FIXTURES:
+    import pytest
+
+    pytestmark = pytest.mark.skip(
+        reason="benchmark/scanner fixture data absent from this checkout (never "
+               "committed): " + ", ".join(_MISSING_FIXTURES))
+
 from benchmark_validation import INTERNAL_ONLY_LABEL, DEMAND_LABEL
 
 REAL_REFERENCE = "data/benchmarks/asin_benchmark_reference.json"

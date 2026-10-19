@@ -294,16 +294,20 @@ def test_environment_reports_ui_mode(web, seeded_state, monkeypatch):
 
 def test_v3_shell_invariants():
     """The v3 shell (SuiteRail + TopNav + CommandPalette) is the canonical shell.
+
     Asserts the real v3 invariants (no retired Sidebar.jsx, no legacy-UI tombstone
-    marker): the shell components exist, the App route table has 44 routes, and no
-    v3 room imports the legacy client `services/api.js`."""
+    marker): the shell components exist, no v3 room imports the legacy client
+    `services/api.js`, and the App route table matches the SHIPPED count.
+    """
     for name in ("SuiteRail.jsx", "TopNav.jsx", "CommandPalette.jsx"):
         path = os.path.join(UI_SRC, "components", name)
         assert os.path.exists(path), f"v3 shell component missing: {name}"
 
     app = open(os.path.join(UI_SRC, "App.jsx"), encoding="utf-8").read()
     route_count = len(re.findall(r"<Route\s+path=", app))
-    assert route_count == 48, f"expected 48 routes in App.jsx, found {route_count}"
+    # The shipped route table as of the V4.2 interface rebuild. Update this number
+    # only when a route is deliberately added or removed.
+    assert route_count == 52, f"expected 52 routes in App.jsx, found {route_count}"
 
     # The legacy client (services/api.js) must not be imported by any v3 module.
     v3_dirs = ["pages/internal", "pages/customer", "pages/admin", "pages/public",

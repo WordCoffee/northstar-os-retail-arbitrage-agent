@@ -86,7 +86,14 @@ def test_live_armed_requires_exact_gate(policy_file, monkeypatch):
     monkeypatch.setenv(RECHECK_GATE, "true")
     assert updater.live_armed() is False
     monkeypatch.setenv(RECHECK_GATE, "1")
+    # The exact gate value alone is NOT enough: the file-only architecture
+    # (2026-10-11) added a second, independent condition — the Amazon-linkage gate.
+    # Assert the documented two-condition contract instead of weakening the code
+    # to satisfy a stale expectation.
+    monkeypatch.setattr("amazon_linkage_gate.linkage_enabled", lambda: True)
     assert updater.live_armed() is True
+    monkeypatch.setattr("amazon_linkage_gate.linkage_enabled", lambda: False)
+    assert updater.live_armed() is False, "the gate value alone must never arm a live run"
 
 
 def test_ungated_brand_surfaces_for_operator_review(policy_file, monkeypatch):

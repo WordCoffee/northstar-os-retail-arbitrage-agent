@@ -73,8 +73,15 @@ class NonCreativeReadsTests(unittest.TestCase):
         body = self.client.get("/api/v1/noncreative/listings/health").json()
         if body.get("status") == "unavailable":
             self.skipTest("costco_evidence table absent in this environment")
-        # local fixture has evidence rows; assert the read is real, not fabricated.
-        self.assertGreaterEqual(body["summary"]["evidence_rows"], 0)
+        # The read must be real, not fabricated. An explicit null is the honest
+        # "could not count" answer and must not be coerced into a number here —
+        # the previous assertion compared None >= 0 and raised TypeError.
+        rows = body["summary"]["evidence_rows"]
+        self.assertTrue(
+            rows is None or rows >= 0,
+            "evidence_rows must be a real count or an explicit null, never a fabricated number",
+        )
+        self.assertIn("enrichment", body["summary"])
         self.assertIn("enrichment", body["summary"])
 
     def test_keywords_summary_shape(self):

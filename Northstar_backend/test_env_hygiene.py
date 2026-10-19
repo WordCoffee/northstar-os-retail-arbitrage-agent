@@ -129,9 +129,32 @@ def test_dotenv_values_never_present_after_scrub(tmp_path: Path) -> None:
 
 def test_env_example_tracked_but_is_placeholder() -> None:
     """The committed .env.example must exist and hold no real values."""
+    import re
+
     example = _BACKEND.parent / ".env.example"
     assert example.exists(), ".env.example missing from repo"
     text = example.read_text(encoding="utf-8", errors="replace")
-    for marker in ("sk-", "Bearer ", "past", "secret"):
-        # placeholders should only appear inside obviously-fake positions
-        assert text.count(marker) == 0 or "example" in text.lower()
+
+    # Real token SHAPES must never appear. A documented placeholder such as
+    # `Authorization: Bearer <OPENCODE_GO_API_KEY>` is legitimate documentation.
+    assert not re.search(r"sk-[A-Za-z0-9]{8,}", text), \
+        ".env.example carries a real-looking sk- token"
+    assert not re.search(r"Bearer\s+(?!<)\S{8,}", text), \
+        ".env.example carries a real-looking Bearer token"
+
+    # Every secret-bearing assignment must hold a placeholder. The previous check
+    # merely counted the word "secret" and required the literal word "example"
+    # somewhere in the file, so a variable NAME such as NORTHSTAR_JWT_SECRET (a
+    # name, not a value) made a clean file fail.
+    placeholder = re.compile(r"^(|your[_-].*|.*_here|<.*>|xxx+|changeme|placeholder|none)$", re.I)
+    # A credential-shaped NAME only when the secret word is the FINAL segment:
+    # SEARCH_KEYWORDS is a keyword list, not a key.
+    credential_name = re.compile(
+        r"^\s*([A-Z0-9_]*_(?:KEY|SECRET|TOKEN|PASSWORD|CREDENTIAL|PASSWD))\s*=\s*(.*?)\s*$"
+    )
+    offenders = []
+    for line in text.splitlines():
+        m = credential_name.match(line)
+        if m and m.group(2) and not placeholder.match(m.group(2)):
+            offenders.append(m.group(1))        # name only: a value is never echoed
+    assert offenders == [], f".env.example has non-placeholder values for: {offenders}"

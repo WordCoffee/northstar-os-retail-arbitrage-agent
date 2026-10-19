@@ -89,6 +89,11 @@ def _extract_api_paths(text: str):
         literal = match.group(2)
         if any(marker in literal for marker in _PROSE_MARKERS):
             continue
+        # A placeholder glued straight onto a path segment (`/api/x${name}`) makes
+        # the extractor fabricate `/api/xsample` — an endpoint that exists nowhere
+        # in the source. Drop it rather than assert against an invented path.
+        if re.search(r"[^/]\$\{", literal):
+            continue
         candidate = _fill(literal)
         if candidate in _NON_ENDPOINTS:
             continue
@@ -97,6 +102,10 @@ def _extract_api_paths(text: str):
     for match in re.finditer(r"`(/api/[^`]*)`", text):
         literal = match.group(1)
         if any(marker in literal for marker in _PROSE_MARKERS):
+            continue
+        # Same glue rule as above: the filler would turn `/api/x${name}` into
+        # `/api/xsample`, an endpoint that exists nowhere in the source.
+        if re.search(r"[^/]\$\{", literal):
             continue
         candidate = _fill(literal)
         if candidate in _NON_ENDPOINTS:
@@ -187,6 +196,12 @@ class UiRouteContractTests(unittest.TestCase):
                 if path in cls.routes:
                     continue
                 if any(pattern.match(path) for pattern in cls.patterns):
+                    continue
+                # A base-URL constant such as `const API = '/api/design-studio'` is
+                # served as the PREFIX of many routes and the UI composes full paths
+                # from it, so it is not a missing endpoint.
+                base = path.rstrip("/")
+                if any(route == base or route.startswith(base + "/") for route in cls.routes):
                     continue
                 cls.missing.append((source.name, path))
 
