@@ -7,6 +7,10 @@ records into the local corpus index. It never drives a browser, never logs in,
 never enters a credential, never solves a CAPTCHA, and never touches a page a
 site's robots.txt disallows.
 
+Supported content: HTML (trafilatura) and PDF (pypdf — a scanned PDF with no
+text layer is reported as a failure with the reason, never stored as an empty
+document).
+
 Compliance posture (non-negotiable, enforced here):
   • robots.txt is fetched per host and honoured (cached); on a fetch error the
     RFC-9309 "unavailable" convention applies (allow) but the error is recorded
@@ -88,6 +92,53 @@ def normalize_url(url: str, base: Optional[str] = None) -> Optional[str]:
 def is_probably_html(url: str) -> bool:
     path = urllib.parse.urlsplit(url).path.lower()
     return not path.endswith(_SKIP_EXT)
+
+
+def is_probably_pdf(url: str) -> bool:
+    return urllib.parse.urlsplit(url).path.lower().endswith(".pdf")
+
+
+def extract_pdf_text(data: bytes, *, max_pages: int = 80) -> Dict[str, Any]:
+    """Text + metadata of a PDF via pypdf (already a dependency). Local only.
+
+    Returns an honest record: ``ok`` False with a reason when the text layer is
+    missing (a scanned PDF has no extractable text - that is reported, not
+    silently recorded as an empty document).
+    """
+    try:
+        import io as _io
+
+        from pypdf import PdfReader
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "error": f"pypdf unavailable: {str(exc)[:120]}",
+                "title": "", "text": "", "pages": 0, "pages_read": 0}
+    try:
+        reader = PdfReader(_io.BytesIO(data))
+        if getattr(reader, "is_encrypted", False):
+            try:
+                reader.decrypt("")     # an empty owner password is common
+            except Exception:  # noqa: BLE001
+                return {"ok": False, "error": "pdf is encrypted", "title": "",
+                        "text": "", "pages": len(reader.pages), "pages_read": 0}
+        meta = (reader.metadata or {})
+        title = str(meta.get("/Title") or "").strip()
+        author = str(meta.get("/Author") or "").strip()
+        total = len(reader.pages)
+        parts: List[str] = []
+        read = 0
+        for page in reader.pages[:max_pages]:
+            try:
+                parts.append(page.extract_text() or "")
+            except Exception:  # noqa: BLE001 - one bad page must not kill the doc
+                parts.append("")
+            read += 1
+        text = "\n".join(parts).strip()
+        return {"ok": bool(text), "title": title[:300], "author": author[:200],
+                "text": text, "pages": total, "pages_read": read,
+                "error": None if text else "no extractable text layer (scanned PDF?)"}
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "error": str(exc)[:200], "title": "", "text": "",
+                "pages": 0, "pages_read": 0}
 
 
 def content_hash(text: str) -> str:
@@ -197,7 +248,7 @@ def _http_get(url: str, *, timeout: float = DEFAULT_TIMEOUT,
             text = raw.decode("utf-8", errors="replace")
         return {"ok": 200 <= status < 300, "status": status,
                 "final_url": str(resp.url), "content_type": ctype,
-                "text": text, "bytes": len(raw)}
+                "text": text, "bytes": len(raw), "raw": raw}
     except Exception as exc:  # noqa: BLE001 - a fetch failure is data, not a crash
         return {"ok": False, "status": 0, "final_url": url, "content_type": "",
                 "text": "", "bytes": 0, "error": str(exc)[:200]}
@@ -257,8 +308,8 @@ def fetch_page(url: str, *, robots: Optional[RobotsCache] = None,
     if not canon:
         return {"url": url, "ok": False, "status": 0, "error": "invalid or non-http url",
                 "fetched_at": fetched_at}
-    if not is_probably_html(canon):
-        return {"url": canon, "ok": False, "status": 0, "error": "non-html content type",
+    if not is_probably_html(canon) and not is_probably_pdf(canon):
+        return {"url": canon, "ok": False, "status": 0, "error": "unsupported content type",
                 "fetched_at": fetched_at}
     if robots is not None and not robots.allowed(canon):
         return {"url": canon, "ok": False, "status": 0, "error": "disallowed by robots.txt",
@@ -275,12 +326,30 @@ def fetch_page(url: str, *, robots: Optional[RobotsCache] = None,
     if not resp.get("ok"):
         page.setdefault("error", f"http {resp.get('status')}")
         return page
-    if resp.get("content_type") and "html" not in resp["content_type"] \
-            and "xml" not in resp["content_type"] and "text" not in resp["content_type"]:
+    ctype = resp.get("content_type") or ""
+    if "pdf" in ctype or is_probably_pdf(canon):
+        # PDF lane: extract with the dependency already present (pypdf). A
+        # scanned PDF has no text layer - that is recorded as a failure with the
+        # reason, never stored as an empty document.
+        pdf = extract_pdf_text(resp.get("raw") or b"")
+        page["content_kind"] = "pdf"
+        page["title"] = pdf.get("title") or urllib.parse.urlsplit(canon).path.rsplit("/", 1)[-1]
+        page["text"] = pdf.get("text") or ""
+        page["author"] = pdf.get("author") or ""
+        page["links"] = []
+        page["pages"] = pdf.get("pages")
+        page["pages_read"] = pdf.get("pages_read")
+        page["content_hash"] = content_hash(page["text"])
+        if not pdf.get("ok"):
+            page["ok"] = False
+            page["error"] = f"pdf: {pdf.get('error')}"
+        return page
+    if ctype and "html" not in ctype and "xml" not in ctype and "text" not in ctype:
         page["ok"] = False
-        page["error"] = f"unsupported content-type {resp['content_type']}"
+        page["error"] = f"unsupported content-type {ctype}"
         return page
     ex = extract_page(resp.get("text") or "", page["final_url"])
+    page["content_kind"] = "html"
     page.update(ex)
     page["content_hash"] = content_hash(ex["text"])
     return page
@@ -297,7 +366,7 @@ def page_record(page: Dict[str, Any], *, tags: Optional[Sequence[str]] = None,
     return {
         "source": source,
         "source_id": page.get("url") or page.get("final_url") or "",
-        "kind": "web_page",
+        "kind": ("pdf_document" if page.get("content_kind") == "pdf" else "web_page"),
         "title": title[:300],
         "url": page.get("url"),
         "license": None,          # a crawled page's license is UNKNOWN until read
@@ -309,9 +378,13 @@ def page_record(page: Dict[str, Any], *, tags: Optional[Sequence[str]] = None,
             "host": urllib.parse.urlsplit(page.get("url") or "").hostname,
             "status": page.get("status"),
             "content_type": page.get("content_type"),
+            "content_kind": page.get("content_kind") or "html",
+            "pages": page.get("pages"),
+            "pages_read": page.get("pages_read"),
             "bytes": page.get("bytes"),
             "fetched_at": page.get("fetched_at"),
-            "extractor": "trafilatura/2.3.1",
+            "extractor": ("pypdf" if page.get("content_kind") == "pdf"
+                          else "trafilatura/2.3.1"),
             "user_agent": DEFAULT_UA,
             "author": page.get("author") or None,
             "published": page.get("date") or None,

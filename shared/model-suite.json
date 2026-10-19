@@ -1,11 +1,24 @@
 {
   "$schema": "model-suite-v1",
   "description": "Northstar OS model suite — single source of truth for tiered model selection. Text tiers T1/T2/T3 (DeepSeek cloud lane + Qwen local fleet), vision tiers V1/V2/V3 (understanding + generation), and the video lane. model_router.py loads this; services route through shared/service-model-map.json. All prices are Sept-2026 list rates and are planning values — the ledger records actual usage.cost per call.",
-  "providers": ["local", "cloud"],
+  "providers": [
+    "local",
+    "cloud"
+  ],
   "cloud_providers": {
-    "openrouter": { "role": "text + vision understanding + GPT Image 2", "base_url_env": "OPENROUTER_URL", "key_env": "OPENROUTER_API_KEY" },
-    "fal": { "role": "image generation (primary) + video", "key_env": "FAL_KEY" },
-    "replicate": { "role": "FLUX.2 pro/edit mirror (optional fallback)", "key_env": "REPLICATE_API_TOKEN" }
+    "openrouter": {
+      "role": "text + vision understanding + GPT Image 2",
+      "base_url_env": "OPENROUTER_URL",
+      "key_env": "OPENROUTER_API_KEY"
+    },
+    "fal": {
+      "role": "image generation (primary) + video",
+      "key_env": "FAL_KEY"
+    },
+    "replicate": {
+      "role": "FLUX.2 pro/edit mirror (optional fallback)",
+      "key_env": "REPLICATE_API_TOKEN"
+    }
   },
   "text": {
     "tiers": {
@@ -38,44 +51,168 @@
     "tiers": {
       "V1": {
         "label": "V1 Lite — screenshots, OCR, browser-control, volume drafts",
-        "understand": { "local": "northstaros-qwen3.8:27b", "cloud": "qwen/qwen3.7-flash", "cloud_provider": "openrouter", "cost_per_1m_in": 0.03, "cost_per_1m_out": 0.13 },
+        "understand": {
+          "local": "northstaros-qwen3.8:27b",
+          "cloud": "qwen/qwen3.7-flash",
+          "cloud_provider": "openrouter",
+          "cost_per_1m_in": 0.03,
+          "cost_per_1m_out": 0.13
+        },
         "generate": {
           "local": "comfyui:flux2-klein-4b",
-          "draft": { "model": "flux.2-klein-9b", "provider": "fal", "cost_per_img": 0.015 },
-          "final": { "model": "flux.2-pro", "provider": "fal", "cost_per_img": 0.03 }
+          "draft": {
+            "model": "flux.2-klein-9b",
+            "provider": "fal",
+            "cost_per_img": 0.015
+          },
+          "final": {
+            "model": "flux.2-pro",
+            "provider": "fal",
+            "cost_per_img": 0.03
+          }
         }
       },
       "V2": {
         "label": "V2 Standard — presentations, brand decks, product stills",
-        "understand": { "local": "northstaros-qwen3.8:27b", "cloud": "qwen/qwen3-vl-235b-a22b-instruct", "cloud_provider": "openrouter", "cost_per_1m_in": 0.21, "cost_per_1m_out": 1.90 },
+        "understand": {
+          "local": "northstaros-qwen3.8:27b",
+          "cloud": "qwen/qwen3-vl-235b-a22b-instruct",
+          "cloud_provider": "openrouter",
+          "cost_per_1m_in": 0.21,
+          "cost_per_1m_out": 1.9
+        },
         "generate": {
           "local": "comfyui:flux2-klein-4b",
-          "draft": { "model": "flux.2-klein-9b", "provider": "fal", "cost_per_img": 0.015 },
-          "final": { "model": "flux.2-pro", "provider": "fal", "cost_per_img": 0.03 },
-          "edit": { "model": "flux.2-pro-edit", "provider": "replicate", "cost_per_img": 0.055 }
+          "draft": {
+            "model": "flux.2-klein-9b",
+            "provider": "fal",
+            "cost_per_img": 0.015
+          },
+          "final": {
+            "model": "flux.2-pro",
+            "provider": "fal",
+            "cost_per_img": 0.03
+          },
+          "edit": {
+            "model": "flux.2-pro-edit",
+            "provider": "replicate",
+            "cost_per_img": 0.055
+          }
         }
       },
       "V3": {
         "label": "V3 Premium — ad visuals, A+ content, UGC, text-heavy graphics",
-        "understand": { "local": "northstaros-qwen3.8:27b", "cloud": "xiaomi/mimo-v2.6-pro", "cloud_provider": "openrouter", "cost_per_1m_in": 0.435, "cost_per_1m_out": 0.87 },
+        "understand": {
+          "local": "northstaros-qwen3.8:27b",
+          "cloud": "xiaomi/mimo-v2.6-pro",
+          "cloud_provider": "openrouter",
+          "cost_per_1m_in": 0.435,
+          "cost_per_1m_out": 0.87
+        },
         "generate": {
           "local": "comfyui:flux2-klein-4b",
-          "draft": { "model": "gpt-image-2-low", "provider": "openrouter", "cost_per_img": 0.03 },
-          "final": { "model": "gpt-image-2-high", "provider": "openrouter", "cost_per_img": 0.18 },
-          "flat": { "model": "nano-banana-2", "provider": "fal", "cost_per_img": 0.08, "watermarked": true }
+          "draft": {
+            "model": "gpt-image-2-low",
+            "provider": "openrouter",
+            "cost_per_img": 0.03
+          },
+          "final": {
+            "model": "gpt-image-2-high",
+            "provider": "openrouter",
+            "cost_per_img": 0.18
+          },
+          "flat": {
+            "model": "nano-banana-2",
+            "provider": "fal",
+            "cost_per_img": 0.08,
+            "watermarked": true
+          }
         }
       }
     },
     "video": {
-      "understand": { "cloud": "qwen/qwen3.8-omni-flash", "cloud_provider": "openrouter", "cost_per_1m_in": 0.15, "cost_per_1m_out": 0.47 },
-      "generate": {
-        "draft": { "model": "flux-3-draft", "provider": "fal", "cost_per_s": 0.06, "note": "free 5/day in fal sandbox" },
-        "capped": { "model": "wan-2.5", "provider": "fal", "cost_per_15s": 0.75, "in_caps": true },
-        "final": { "model": "kling-2.6-pro", "provider": "fal", "cost_per_15s": 2.10, "add_on": true, "watermarked": false },
-        "hero": { "model": "veo-3.1", "provider": "fal", "cost_per_s": 0.10, "add_on": true, "watermarked": true }
+      "understand": {
+        "cloud": "qwen/qwen3.8-omni-flash",
+        "cloud_provider": "openrouter",
+        "cost_per_1m_in": 0.15,
+        "cost_per_1m_out": 0.47
       },
-      "voiceover": { "ugc": "elevenlabs-v3", "budget": "deepgram-aura-2" }
+      "generate": {
+        "draft": {
+          "model": "flux-3-draft",
+          "provider": "fal",
+          "cost_per_s": 0.06,
+          "note": "free 5/day in fal sandbox"
+        },
+        "capped": {
+          "model": "wan-2.5",
+          "provider": "fal",
+          "cost_per_15s": 0.75,
+          "in_caps": true
+        },
+        "final": {
+          "model": "kling-2.6-pro",
+          "provider": "fal",
+          "cost_per_15s": 2.1,
+          "add_on": true,
+          "watermarked": false
+        },
+        "hero": {
+          "model": "veo-3.1",
+          "provider": "fal",
+          "cost_per_s": 0.1,
+          "add_on": true,
+          "watermarked": true
+        }
+      },
+      "voiceover": {
+        "ugc": "elevenlabs-v3",
+        "budget": "deepgram-aura-2"
+      }
     }
   },
-  "cost_recording": "Every generation call records the provider's returned usage cost (OpenRouter usage.cost, fal usage.price) into the credit ledger; config costs are planning values only."
+  "cost_recording": "Every generation call records the provider's returned usage cost (OpenRouter usage.cost, fal usage.price) into the credit ledger; config costs are planning values only.",
+  "local_media_lanes": {
+    "description": "Local media lanes actually wired in the Design Studio. Every one runs on this machine; no provider key is read.",
+    "generate": {
+      "engine": "comfyui",
+      "default_model": "Flux-2-Klein-9B-KV-Q8_0.gguf",
+      "env": "STUDIO_IMAGE_MODEL / STUDIO_TEXT_ENCODER",
+      "gate": "MEDIA_GEN_LIVE=1 + ComfyUI reachable"
+    },
+    "edit": {
+      "engine": "comfyui",
+      "model": "qwen-image-edit-2511-Q4_K_M.gguf",
+      "license": "Apache-2.0",
+      "env": "STUDIO_EDIT_MODEL",
+      "note": "Text-faithful edit/refine of a REAL image. Diffusion must never own final copy - the OCR drift gate (text_fidelity.verify_edit_preserves_copy) blocks an edit that rewrites the label."
+    },
+    "cutout": {
+      "engine": "comfyui",
+      "model": "birefnet.safetensors",
+      "license": "MIT",
+      "env": "STUDIO_CUTOUT_MODEL",
+      "note": "RemoveBackground MASK marks the BACKGROUND in this build; the graph inverts it before it becomes alpha."
+    },
+    "upscale": {
+      "engine": "pil",
+      "method": "lanczos+unsharp",
+      "gpu": false,
+      "max_factor": 4,
+      "note": "Model upscaling is disabled: RealESRGAN x4 aborted the ComfyUI process on a 1216px input (00_STATE known_issues). Upscale a CLEAN PLATE before the text composite."
+    },
+    "video": {
+      "engine": "comfyui",
+      "model": "Wan2.2-TI2V-5B-Q5_K_M.gguf"
+    },
+    "prepress": {
+      "engine": "littlecms via Pillow ImageCms",
+      "profiles": "auto-detected on this machine (Windows ships RSWOP.icm)",
+      "note": "CMYK + soft proof + CIE76 gamut + total area coverage"
+    },
+    "readiness": {
+      "module": "package_readiness.assess_package",
+      "note": "one verdict across prepress, copy (OCR-diff), MAIN framing and dieline structure"
+    }
+  }
 }

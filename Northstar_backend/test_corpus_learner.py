@@ -283,3 +283,65 @@ def test_sitemap_urls_parses_and_filters(monkeypatch):
     assert "https://site.example/a" in urls
     assert "https://site.example/b" in urls
     assert all(not u.endswith(".xml") for u in urls)
+
+
+# -- PDF lane (pypdf) ----------------------------------------------------------
+
+def _tiny_pdf(text: str = "Packaging dielines: bleed is 3mm and the fold line is a crease.") -> bytes:
+    import io as _io
+
+    from reportlab.pdfgen import canvas as _canvas
+    buf = _io.BytesIO()
+    c = _canvas.Canvas(buf)
+    c.setTitle("Packaging notes")
+    c.drawString(72, 720, text)
+    c.showPage()
+    c.save()
+    return buf.getvalue()
+
+
+def test_extract_pdf_text_reads_a_real_pdf():
+    pdf = _tiny_pdf()
+    out = cl.extract_pdf_text(pdf)
+    assert out["ok"] is True, out
+    assert "bleed" in out["text"].lower()
+    assert out["pages"] == 1 and out["pages_read"] == 1
+    assert out["title"] == "Packaging notes"
+
+
+def test_extract_pdf_text_reports_a_non_pdf_honestly():
+    out = cl.extract_pdf_text(b"this is not a pdf")
+    assert out["ok"] is False
+    assert out["error"], "a failed extraction must name a reason"
+
+
+def test_fetch_page_uses_the_pdf_lane(monkeypatch):
+    pdf = _tiny_pdf()
+    def fake(url, *, timeout=25.0, max_bytes=4_000_000, client=None):
+        return {"ok": True, "status": 200, "final_url": url,
+                "content_type": "application/pdf", "text": "", "bytes": len(pdf),
+                "raw": pdf}
+    monkeypatch.setattr(cl, "_http_get", fake)
+    page = cl.fetch_page("https://site.example/notes.pdf")
+    assert page["ok"] is True and page["content_kind"] == "pdf"
+    assert "bleed" in page["text"].lower()
+    rec = cl.page_record(page, tags=["packaging"])
+    assert rec["kind"] == "pdf_document"
+    assert rec["provenance"]["extractor"] == "pypdf"
+    assert rec["provenance"]["content_kind"] == "pdf"
+
+
+def test_fetch_page_flags_a_pdf_with_no_text_layer(monkeypatch):
+    def fake(url, *, timeout=25.0, max_bytes=4_000_000, client=None):
+        return {"ok": True, "status": 200, "final_url": url,
+                "content_type": "application/pdf", "text": "", "bytes": 10, "raw": b"junk"}
+    monkeypatch.setattr(cl, "_http_get", fake)
+    page = cl.fetch_page("https://site.example/scan.pdf")
+    assert page["ok"] is False
+    assert "pdf:" in page["error"]
+
+
+def test_is_probably_pdf():
+    assert cl.is_probably_pdf("https://x.example/a.pdf")
+    assert cl.is_probably_pdf("https://x.example/a.PDF")
+    assert not cl.is_probably_pdf("https://x.example/a.html")
