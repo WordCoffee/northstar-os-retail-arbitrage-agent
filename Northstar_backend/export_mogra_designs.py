@@ -119,15 +119,15 @@ def main() -> None:
     notes = []
     if logo_master is not None:
         logo = Image.open(logo_master).convert("RGBA")
-        notes.append("logo master v2 (8x refined, field-keyed) from "
-                     "refine_mogra_logo.py - identity series stamps the FULL "
-                     "lockup (emblem + EST 2023 + wordmark + tagline)")
+        notes.append(f"logo master supplied via --logo-master ({logo_master.name}) "
+                     "- identity series stamps the FULL lockup "
+                     "(emblem + EST 2023 + wordmark + tagline)")
     else:
-        import refine_mogra_logo as rl  # auto-build the sharp master
-        logo, _qa = rl.build_master()
-        notes.append("logo master v2 auto-built (8x refined, field-keyed) by "
-                     "refine_mogra_logo.build_master() - identity series stamps "
-                     "the FULL lockup (emblem + EST 2023 + wordmark + tagline)")
+        import rebuild_mogra_logo_hd as rb  # auto-build the ultra-2K master
+        logo, _white, _qa = rb.build_master_hd()
+        notes.append("logo master v3 auto-built (ultra-2K palette reconstruction) "
+                     "by rebuild_mogra_logo_hd.build_master_hd() - identity series "
+                     "stamps the FULL lockup (emblem + EST 2023 + wordmark + tagline)")
     pd.set_logo_assets(lockup=logo)
     logo.save(PACK / "logo" / "mogra_logo_master.png")
     try:  # optional true vector master (auto-trace; stylised, verify before print)
@@ -141,7 +141,7 @@ def main() -> None:
         notes.append("vector auto-trace included (stylised; verify before production)")
     except Exception:
         notes.append("vector auto-trace unavailable (vtracer not installed) - "
-                     "raster master is the 8x v2 refinement")
+                     "raster master is the ultra-2K v3 reconstruction")
 
     raw = None
     for name in RAW_CANDIDATES:

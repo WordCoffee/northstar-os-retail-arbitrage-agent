@@ -1,0 +1,268 @@
+{
+  "generated_at": "2026-10-19T03:35:18.604389+00:00",
+  "logo": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\exports\\mogra_logo_master_v2.png",
+  "panels": {
+    "i01_logo_monument": {
+      "front": {
+        "ink_px": 70084,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          425,
+          371,
+          1110,
+          857
+        ],
+        "flagged": false
+      },
+      "back": {
+        "ink_px": 15724,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          608,
+          99,
+          927,
+          326
+        ],
+        "flagged": false
+      }
+    },
+    "i02_vertical_spine": {
+      "front": {
+        "ink_px": 13660,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          843,
+          1430,
+          1139,
+          1639
+        ],
+        "flagged": false
+      },
+      "back": {
+        "ink_px": 15774,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          608,
+          99,
+          927,
+          326
+        ],
+        "flagged": false
+      }
+    },
+    "i03_center_seal": {
+      "front": {
+        "ink_px": 20766,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          578,
+          975,
+          955,
+          1243
+        ],
+        "flagged": false
+      },
+      "back": {
+        "ink_px": 14962,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          608,
+          100,
+          927,
+          326
+        ],
+        "flagged": false
+      }
+    },
+    "i04_off_edge_type": {
+      "front": {
+        "ink_px": 16802,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          602,
+          1417,
+          933,
+          1652
+        ],
+        "flagged": false
+      },
+      "back": {
+        "ink_px": 15589,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          608,
+          99,
+          927,
+          326
+        ],
+        "flagged": false
+      }
+    },
+    "i05_diagonal_split": {
+      "front": {
+        "ink_px": 9749,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          768,
+          1383,
+          1028,
+          1567
+        ],
+        "flagged": false
+      },
+      "back": {
+        "ink_px": 14506,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          608,
+          100,
+          927,
+          326
+        ],
+        "flagged": false
+      }
+    },
+    "i06_drawn_circle": {
+      "front": {
+        "ink_px": 27140,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          554,
+          699,
+          979,
+          1000
+        ],
+        "flagged": false
+      },
+      "back": {
+        "ink_px": 15635,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          608,
+          99,
+          927,
+          326
+        ],
+        "flagged": false
+      }
+    },
+    "i07_asymmetric_corner": {
+      "front": {
+        "ink_px": 8674,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          236,
+          318,
+          471,
+          485
+        ],
+        "flagged": false
+      },
+      "back": {
+        "ink_px": 15337,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          608,
+          100,
+          927,
+          326
+        ],
+        "flagged": false
+      }
+    },
+    "i08_logo_in_shape": {
+      "front": {
+        "ink_px": 21031,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          578,
+          999,
+          955,
+          1267
+        ],
+        "flagged": false
+      },
+      "back": {
+        "ink_px": 15134,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          608,
+          100,
+          927,
+          326
+        ],
+        "flagged": false
+      }
+    },
+    "i09_curved_arcs": {
+      "front": {
+        "ink_px": 20446,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          585,
+          1098,
+          951,
+          1357
+        ],
+        "flagged": false
+      },
+      "back": {
+        "ink_px": 15723,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          608,
+          99,
+          927,
+          326
+        ],
+        "flagged": false
+      }
+    },
+    "i10_logo_hero": {
+      "front": {
+        "ink_px": 27711,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          863,
+          668,
+          1311,
+          986
+        ],
+        "flagged": false
+      },
+      "back": {
+        "ink_px": 14219,
+        "collision_px": 0,
+        "collision_pct": 0.0,
+        "box": [
+          609,
+          100,
+          927,
+          326
+        ],
+        "flagged": false
+      }
+    }
+  },
+  "flags": [],
+  "empty_stamps": []
+}
