@@ -189,6 +189,14 @@ def main(argv: Optional[list[str]] = None) -> int:
     db_path = _resolve_db_path(args)
     # Read once; never echoed, never stored anywhere but the bcrypt hash.
     password = os.environ.get(PASSWORD_ENV) or None
+    if password is not None and len(password) < 12:
+        # Honest, non-blocking: the owner bootstrap (foundation_seed_owner.py)
+        # enforces MIN_PASSWORD_LEN=12. This local operator account has no such
+        # floor, but a short password is a deliberate operator choice and is
+        # recorded here so it can never pass unnoticed.
+        print("WARNING: password is shorter than the 12-character floor the owner "
+              "bootstrap enforces; proceeding because this is a local, "
+              "loopback-only account provisioned at the operator's request.")
     return seed(db_path=db_path, email=args.email, org_name=args.org,
                 role=args.role, password=password, rotate=args.rotate)
 

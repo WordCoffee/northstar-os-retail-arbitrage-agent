@@ -14,9 +14,11 @@ Design rules:
 """
 from __future__ import annotations
 
+import functools
 import json
 import sqlite3
 import tempfile
+import threading
 from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
@@ -610,6 +612,84 @@ def _ser(value: Any) -> Any:
     return value
 
 
+class _SerializedConnection:
+    """Thread-safe facade over ONE ``sqlite3.Connection``.
+
+    FastAPI runs synchronous endpoints in a worker threadpool, so several
+    requests reach the same connection at once. CPython's sqlite3 keeps a
+    per-connection statement cache, and concurrent statement creation on one
+    connection raises ``InterfaceError: bad parameter or other API misuse``
+    (observed live as 500s on ``/api/v1/foundation/me`` and ``/environment``
+    whenever the SPA issued its parallel context calls). Every statement
+    therefore takes one re-entrant lock.
+
+    Callers that need a whole transaction serialized (more than one statement)
+    hold ``FoundationDB.lock`` explicitly - see ``atomic_claim_job``.
+    """
+
+    def __init__(self, conn: sqlite3.Connection, lock) -> None:
+        self._conn = conn
+        self._lock = lock
+
+    @property
+    def row_factory(self):
+        return self._conn.row_factory
+
+    @row_factory.setter
+    def row_factory(self, value) -> None:
+        self._conn.row_factory = value
+
+    def execute(self, *args, **kwargs):
+        with self._lock:
+            return self._conn.execute(*args, **kwargs)
+
+    def executemany(self, *args, **kwargs):
+        with self._lock:
+            return self._conn.executemany(*args, **kwargs)
+
+    def executescript(self, *args, **kwargs):
+        with self._lock:
+            return self._conn.executescript(*args, **kwargs)
+
+    def cursor(self, *args, **kwargs):
+        with self._lock:
+            return self._conn.cursor(*args, **kwargs)
+
+    def commit(self):
+        with self._lock:
+            return self._conn.commit()
+
+    def rollback(self):
+        with self._lock:
+            return self._conn.rollback()
+
+    def close(self):
+        with self._lock:
+            return self._conn.close()
+
+    def __getattr__(self, name):
+        # Anything else (isolation_level, total_changes, ...) passes through.
+        return getattr(self._conn, name)
+
+
+def _serialized(fn):
+    """Run a whole ``FoundationDB`` operation under the shared connection lock.
+
+    Statement-level locking (``_SerializedConnection``) stops the sqlite3
+    statement-cache corruption, but a concurrent ``commit()`` also RESETS any
+    cursor that is mid-read on the same connection - a SELECT could then return
+    an empty result set for rows that are committed. Repository reads/writes are
+    therefore atomic end to end (execute + fetch + commit) under one re-entrant
+    lock. Nesting is expected and safe (e.g. ``upsert`` -> ``get``/``insert``,
+    ``table_counts`` -> ``count``).
+    """
+    @functools.wraps(fn)
+    def wrapper(self, *args, **kwargs):
+        with self.lock:
+            return fn(self, *args, **kwargs)
+    return wrapper
+
+
 class FoundationDB:
     """SQLite-backed foundation store. Disposable by default."""
 
@@ -620,13 +700,18 @@ class FoundationDB:
             os.close(fd)
             path = tmp
         self.path = path
-        self.conn = sqlite3.connect(path, check_same_thread=False)
+        # One connection, one lock: every statement is serialized (see
+        # _SerializedConnection); multi-statement transactions hold this lock.
+        self.lock = threading.RLock()
+        self.conn = _SerializedConnection(
+            sqlite3.connect(path, check_same_thread=False), self.lock)
         self.conn.row_factory = sqlite3.Row
         self.conn.execute("PRAGMA foreign_keys=ON")
         self.conn.execute("PRAGMA busy_timeout=5000")
         if schema:
             self.ensure_schema()
 
+    @_serialized
     def ensure_schema(self) -> None:
         for stmt in SQLITE_DDL:
             self.conn.execute(stmt)
@@ -634,6 +719,7 @@ class FoundationDB:
 
     # -- generic helpers -------------------------------------------------------
 
+    @_serialized
     def insert(self, table: str, row: dict) -> None:
         cols = list(row.keys())
         placeholders = ",".join("?" for _ in cols)
@@ -644,6 +730,7 @@ class FoundationDB:
         )
         self.conn.commit()
 
+    @_serialized
     def insert_ignore(self, table: str, row: dict, conflict_cols=("id",)) -> bool:
         """Idempotent insert: no-op on PK conflict (INSERT OR IGNORE)."""
         cols = list(row.keys())
@@ -656,6 +743,7 @@ class FoundationDB:
         self.conn.commit()
         return cur.rowcount > 0
 
+    @_serialized
     def insert_no_commit(self, table: str, row: dict) -> None:
         """INSERT inside the caller's transaction (no commit). The caller owns
         commit/rollback — used for atomic multi-write operations."""
@@ -666,6 +754,7 @@ class FoundationDB:
         self.conn.execute(
             f"INSERT INTO {table} ({col_sql}) VALUES ({placeholders})", values)
 
+    @_serialized
     def upsert(self, table: str, row: dict, pk_cols: Iterable[str]) -> None:
         pk = list(pk_cols)
         for p in pk:
@@ -686,6 +775,7 @@ class FoundationDB:
         else:
             self.insert(table, row)
 
+    @_serialized
     def get(self, table: str, where: dict) -> Optional[dict]:
         clause = " AND ".join(f"{k}=?" for k in where)
         cur = self.conn.execute(
@@ -694,6 +784,7 @@ class FoundationDB:
         r = cur.fetchone()
         return dict(r) if r else None
 
+    @_serialized
     def list(self, table: str, where: Optional[dict] = None, order_by: Optional[str] = None,
              limit: Optional[int] = None, offset: int = 0) -> list[dict]:
         sql = f"SELECT * FROM {table}"
@@ -709,10 +800,12 @@ class FoundationDB:
         cur = self.conn.execute(sql, params)
         return [dict(r) for r in cur.fetchall()]
 
+    @_serialized
     def count(self, table: str) -> int:
         cur = self.conn.execute(f"SELECT COUNT(*) FROM {table}")
         return int(cur.fetchone()[0])
 
+    @_serialized
     def table_counts(self) -> dict:
         return {t: self.count(t) for t in _TABLE_ORDER}
 
@@ -721,6 +814,7 @@ class FoundationDB:
     # + conditional UPDATE is demonstrably equivalent to PostgreSQL's
     # FOR UPDATE SKIP LOCKED for the local/dev path. The row's state change
     # is the lock: exactly one worker observes the queued->leased transition.
+    @_serialized
     def atomic_claim_job(self, *, worker_id: str, organization_id: str,
                          lease_seconds: int, now_iso: str, limit: int = 1) -> list[dict]:
         sql = (
@@ -730,28 +824,33 @@ class FoundationDB:
             "AND (jr.scheduled_time IS NULL OR jr.scheduled_time <= ?) "
             "ORDER BY jr.priority ASC, jr.created_at ASC LIMIT ?"
         )
-        self.conn.execute("BEGIN IMMEDIATE")
-        try:
-            cur = self.conn.execute(sql, [organization_id, now_iso, limit])
-            rows = [dict(r) for r in cur.fetchall()]
-            claimed = []
-            from datetime import datetime, timedelta, timezone
-            exp = (datetime.now(timezone.utc) + timedelta(seconds=lease_seconds)).isoformat()
-            for row in rows:
-                self.conn.execute(
-                    "UPDATE job_runs SET state='leased', lease_owner=?, "
-                    "lease_expiration=? WHERE id=? AND state='queued'",
-                    [worker_id, exp, row["id"]])
-                row["state"] = "leased"
-                row["lease_owner"] = worker_id
-                row["lease_expiration"] = exp
-                claimed.append(row)
-            self.conn.commit()
-            return claimed
-        except Exception:
-            self.conn.rollback()
-            raise
+        # Hold the lock for the WHOLE transaction: BEGIN IMMEDIATE is
+        # connection-scoped, so an interleaved second thread would otherwise
+        # join (and commit) this transaction.
+        with self.lock:
+            self.conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self.conn.execute(sql, [organization_id, now_iso, limit])
+                rows = [dict(r) for r in cur.fetchall()]
+                claimed = []
+                from datetime import datetime, timedelta, timezone
+                exp = (datetime.now(timezone.utc) + timedelta(seconds=lease_seconds)).isoformat()
+                for row in rows:
+                    self.conn.execute(
+                        "UPDATE job_runs SET state='leased', lease_owner=?, "
+                        "lease_expiration=? WHERE id=? AND state='queued'",
+                        [worker_id, exp, row["id"]])
+                    row["state"] = "leased"
+                    row["lease_owner"] = worker_id
+                    row["lease_expiration"] = exp
+                    claimed.append(row)
+                self.conn.commit()
+                return claimed
+            except Exception:
+                self.conn.rollback()
+                raise
 
+    @_serialized
     def release_lease(self, run_id: str, worker_id: str,
                       new_state: str = "queued", now_iso: Optional[str] = None) -> int:
         """Release a claimed run back to the queue (owner must match)."""
@@ -762,6 +861,7 @@ class FoundationDB:
         self.conn.commit()
         return cur.rowcount
 
+    @_serialized
     def expire_stale_leases(self, now_iso: str) -> int:
         """Mark runs whose lease expired as EXPIRED (recovery can re-queue)."""
         cur = self.conn.execute(
@@ -771,6 +871,7 @@ class FoundationDB:
         self.conn.commit()
         return cur.rowcount
 
+    @_serialized
     def close(self) -> None:
         self.conn.close()
 

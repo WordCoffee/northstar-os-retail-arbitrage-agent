@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useSession } from '../../foundation/session.jsx'
-import foundationApi from '../../foundation/api.js'
+import foundationApi, { setDevSession } from '../../foundation/api.js'
 import { LOCAL_DEV } from '../../foundation/dev.js'
 
 // Local private-beta demo identity.
@@ -58,7 +58,7 @@ export default function SignIn() {
         navigate('/home')
         return
       }
-      setError('The local dev shim could not authenticate against this backend. The shim works only when the connected API runs in development posture on loopback; a containerized API never sees a loopback client. Nothing was sent to the credential endpoint.')
+      setError('The local dev shim could not authenticate against this backend. This prefilled pair is the local demo identity, not an account: it authenticates only when the connected API runs in development posture on loopback AND the demo identity exists in the local store. Nothing was sent to the credential endpoint - clear this form and type your real local account (identifier and password) instead.')
       return
     }
 
@@ -67,6 +67,14 @@ export default function SignIn() {
     // production build.
     setBusy(true)
     try {
+      // Drop any persisted dev-shim identity FIRST. A shim attempt leaves
+      // ns-dev-session in localStorage, and foundation/api.js attaches its
+      // X-User-Id/X-Org-Id headers to EVERY foundation request - so a real,
+      // cookie-authenticated session would keep requesting the demo
+      // organization and fail closed with 403 cross_organization_access_denied
+      // (foundation/api/deps.py resolves requested_org from X-Org-Id). After a
+      // real credential login the cookie is the sole identity.
+      setDevSession({ userId: '', orgId: '', role: '', env: 'production', previewId: '' })
       await foundationApi.login(identifier.toLowerCase(), form.password)
       await session.refresh()
       navigate('/home')
