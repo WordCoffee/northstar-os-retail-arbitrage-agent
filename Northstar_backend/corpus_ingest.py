@@ -38,6 +38,22 @@ SOURCES: Dict[str, Dict[str, str]] = {
                        "loader": "sources_csv"},
     "stack_sources": {"path": "research/production_stack_scan_20261016/SOURCES.csv",
                       "loader": "sources_csv"},
+    # Research Wave 2 (2026-10-19): the deep sweep outputs. Enumerated and
+    # metadata-verified rows; transcripts carry full extracted text.
+    "wave2_repos": {"path": "research/research_wave2_20261019/repos.csv",
+                    "loader": "github_csv"},
+    "wave2_hf_models": {"path": "research/research_wave2_20261019/hf_models.csv",
+                        "loader": "hf_csv"},
+    "wave2_hf_models_by_tag": {"path": "research/research_wave2_20261019/hf_models_by_tag.csv",
+                               "loader": "hf_csv"},
+    "wave2_hf_datasets": {"path": "research/research_wave2_20261019/hf_datasets.csv",
+                          "loader": "hf_csv"},
+    "wave2_hf_spaces": {"path": "research/research_wave2_20261019/hf_spaces.csv",
+                        "loader": "hf_csv"},
+    "wave2_videos": {"path": "research/research_wave2_20261019/videos_index.csv",
+                     "loader": "youtube_csv"},
+    "wave2_transcripts": {"path": "research/research_wave2_20261019/transcripts",
+                          "loader": "transcripts"},
 }
 
 
@@ -100,6 +116,7 @@ def load_github_sweep(path: str) -> List[Dict[str, Any]]:
 
 def load_github_csv(path: str) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
+    origin = os.path.basename(path)
     with open(path, "r", encoding="utf-8-sig", errors="replace", newline="") as fh:
         for row in csv.DictReader(fh):
             full = str(row.get("full_name") or "").strip()
@@ -108,12 +125,103 @@ def load_github_csv(path: str) -> List[Dict[str, Any]]:
             out.append({
                 "source": "github", "source_id": full, "kind": "repo",
                 "title": full, "url": row.get("url") or f"https://github.com/{full}",
-                "license": None, "summary": _clean(row.get("description")),
+                "license": row.get("license") or None,
+                "summary": _clean(row.get("description")),
                 "tags": _split_topics(row.get("topics")),
                 "provenance": {"stars": row.get("stars"), "lang": row.get("language"),
                                "pushed": row.get("pushed_at"), "query": row.get("query"),
-                               "origin": "packify_quality_deep_dive_20261016/SOURCES_GITHUB.csv"},
+                               "origin": origin},
             })
+    return out
+
+
+def load_hf_csv(path: str) -> List[Dict[str, Any]]:
+    """Hugging Face sweep rows (models / datasets / spaces)."""
+    out: List[Dict[str, Any]] = []
+    origin = os.path.basename(path)
+    with open(path, "r", encoding="utf-8-sig", errors="replace", newline="") as fh:
+        for row in csv.DictReader(fh):
+            hid = str(row.get("id") or "").strip()
+            if not hid:
+                continue
+            kind = str(row.get("kind") or "model").strip().lower()
+            base = {"models": "https://huggingface.co/",
+                    "datasets": "https://huggingface.co/datasets/",
+                    "spaces": "https://huggingface.co/spaces/"}.get(kind, "https://huggingface.co/")
+            tags = _split_topics(row.get("tags"))
+            out.append({
+                "source": "hf", "source_id": hid, "kind": kind, "title": hid,
+                "url": base + hid,
+                "license": (row.get("license") or None),
+                "summary": ", ".join(tags) or (row.get("pipeline_tag") or ""),
+                "tags": tags[:24],
+                "provenance": {"query": row.get("query"),
+                               "downloads": row.get("downloads"),
+                               "likes": row.get("likes"),
+                               "pipeline_tag": row.get("pipeline_tag"),
+                               "last_modified": row.get("last_modified"),
+                               "origin": origin},
+            })
+    return out
+
+
+def load_youtube_csv(path: str) -> List[Dict[str, Any]]:
+    """YouTube enumeration rows (metadata-verified; transcripts held separately)."""
+    out: List[Dict[str, Any]] = []
+    origin = os.path.basename(path)
+    with open(path, "r", encoding="utf-8-sig", errors="replace", newline="") as fh:
+        for row in csv.DictReader(fh):
+            vid = str(row.get("id") or "").strip()
+            if not vid:
+                continue
+            out.append({
+                "source": "youtube", "source_id": vid, "kind": "video",
+                "title": _clean(row.get("title"), 200) or vid,
+                "url": row.get("url") or f"https://www.youtube.com/watch?v={vid}",
+                "license": None,               # a video's licence is UNKNOWN here
+                "summary": _clean(row.get("channel"), 120),
+                "tags": [row.get("query")] if row.get("query") else [],
+                "provenance": {"channel": row.get("channel"),
+                               "duration_s": row.get("duration"),
+                               "views": row.get("view_count"),
+                               "upload_date": row.get("upload_date"),
+                               "query": row.get("query"), "origin": origin},
+            })
+    return out
+
+
+def load_transcripts(root: str) -> List[Dict[str, Any]]:
+    """Whisper transcript sidecars -> one record per video, full text as content."""
+    out: List[Dict[str, Any]] = []
+    if not os.path.isdir(root):
+        return out
+    for fn in sorted(os.listdir(root)):
+        if not fn.endswith(".whisper.json"):
+            continue
+        full = os.path.join(root, fn)
+        try:
+            with open(full, "r", encoding="utf-8", errors="replace") as fh:
+                doc = json.load(fh)
+        except (OSError, json.JSONDecodeError):
+            continue
+        text = "\n".join(str(s.get("text") or "") for s in (doc.get("segments") or [])).strip()
+        vid = str(doc.get("id") or fn.split(".")[0])
+        title = _clean(doc.get("title"), 200) or vid
+        out.append({
+            "source": "youtube", "source_id": f"{vid}#transcript", "kind": "transcript",
+            "title": f"{title} (transcript)",
+            "url": doc.get("url"),
+            "license": None,
+            "summary": _clean(text[:400]),
+            "content": text[:200000],
+            "tags": ["transcript", doc.get("query") or ""],
+            "provenance": {"video_id": vid, "channel": doc.get("channel"),
+                           "model": doc.get("model"), "device": doc.get("device"),
+                           "detected_language": doc.get("detected_language"),
+                           "duration_s": doc.get("duration_s"),
+                           "transcribed_at": doc.get("transcribed_at"),
+                           "origin": "research_wave2_20261019/transcripts"},
+        })
     return out
 
 
@@ -188,6 +296,9 @@ LOADERS = {
     "github_sweep": load_github_sweep,
     "github_csv": load_github_csv,
     "hf_datasets": load_hf_datasets,
+    "hf_csv": load_hf_csv,
+    "youtube_csv": load_youtube_csv,
+    "transcripts": load_transcripts,
     "sources_csv": load_sources_csv,
     "docs": load_docs,
 }

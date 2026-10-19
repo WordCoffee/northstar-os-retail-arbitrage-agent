@@ -239,3 +239,65 @@ def test_router_ingest_unknown_source_is_400(db):
         with pytest.raises(Exception) as ei:
             corpus_router.ingest(corpus_router.IngestIn(source="nope"), acct="acct-1")
     assert "400" in str(getattr(ei.value, "status_code", "")) + str(ei.value)
+
+# -- Research Wave 2 loaders (2026-10-19) --------------------------------------
+
+def test_load_hf_csv_models_and_spaces(tmp_path):
+    p = tmp_path / "hf_models.csv"
+    p.write_text("id,kind,downloads,likes,pipeline_tag,license,last_modified,tags,query\n"
+                 "Qwen/Qwen-Image-Edit-2511,models,1000,50,image-to-image,apache-2.0,"
+                 "2026-10-01T00:00:00,\"image-to-image,license:apache-2.0\",qwen image edit\n",
+                 encoding="utf-8")
+    recs = corpus_ingest.load_hf_csv(str(p))
+    assert len(recs) == 1
+    r = recs[0]
+    assert r["source"] == "hf" and r["kind"] == "models"
+    assert r["url"] == "https://huggingface.co/Qwen/Qwen-Image-Edit-2511"
+    assert r["license"] == "apache-2.0"
+    assert r["provenance"]["downloads"] == "1000"
+    assert r["provenance"]["origin"] == "hf_models.csv"
+
+    q = tmp_path / "hf_spaces.csv"
+    q.write_text("id,kind,downloads,likes,pipeline_tag,license,last_modified,tags,query\n"
+                 "org/demo-space,spaces,,,,,,demo\n", encoding="utf-8")
+    s = corpus_ingest.load_hf_csv(str(q))
+    assert s[0]["url"] == "https://huggingface.co/spaces/org/demo-space"
+
+
+def test_load_youtube_csv_uses_unknown_license(tmp_path):
+    p = tmp_path / "videos_index.csv"
+    p.write_text("id,title,channel,duration,view_count,upload_date,query,url\n"
+                 "abc123,How to design a dieline,Some Channel,600,12345,20260101,"
+                 "dieline design,https://www.youtube.com/watch?v=abc123\n", encoding="utf-8")
+    recs = corpus_ingest.load_youtube_csv(str(p))
+    assert len(recs) == 1 and recs[0]["kind"] == "video"
+    assert recs[0]["license"] is None, "a video licence must stay UNKNOWN"
+    assert recs[0]["provenance"]["views"] == "12345"
+
+
+def test_load_transcripts_reads_whisper_sidecars(tmp_path):
+    (tmp_path / "vid1.whisper.json").write_text(json.dumps({
+        "id": "vid1", "title": "Packaging 101", "channel": "Ch", "url": "https://y/vid1",
+        "model": "small", "device": "cuda", "detected_language": "en",
+        "segments": [{"start": 0, "end": 2, "text": "Dielines are the cut lines."},
+                     {"start": 2, "end": 4, "text": "Creases are the fold lines."}],
+        "transcribed_at": "2026-10-19T00:00:00Z",
+    }), encoding="utf-8")
+    (tmp_path / "ignore.txt").write_text("not a transcript", encoding="utf-8")
+    recs = corpus_ingest.load_transcripts(str(tmp_path))
+    assert len(recs) == 1
+    r = recs[0]
+    assert r["source_id"] == "vid1#transcript" and r["kind"] == "transcript"
+    assert "cut lines" in r["content"] and "fold lines" in r["content"]
+    assert r["provenance"]["model"] == "small"
+
+
+def test_load_transcripts_missing_dir_is_empty_not_an_error(tmp_path):
+    assert corpus_ingest.load_transcripts(str(tmp_path / "nope")) == []
+
+
+def test_wave2_sources_are_registered():
+    for name in ("wave2_repos", "wave2_hf_models", "wave2_hf_datasets",
+                 "wave2_hf_spaces", "wave2_videos", "wave2_transcripts"):
+        assert name in corpus_ingest.SOURCES, name
+        assert corpus_ingest.SOURCES[name]["loader"] in corpus_ingest.LOADERS
