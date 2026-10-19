@@ -257,64 +257,152 @@ def _panel_blank(panels: List[float], body_h: float, top_depths: List[float],
 
 CARTON_TEMPLATES = ("rsc_box", "tuck_end", "sleeve", "doypack")
 
+#: Published stand-up-pouch ladder (fill weight -> width, height, gusset in mm).
+#: Source: the packaging blueprint's calibration table (Sparal's published 6-size
+#: ladder, cross-checked against PackagingBest templates and real mylar dielines).
+#: Used ONLY to flag specs that look wrong; the converter's die is the authority.
+DOYPACK_LADDER = (
+    (50, 100.0, 150.0, 60.0),
+    (100, 120.0, 180.0, 70.0),
+    (250, 140.0, 200.0, 80.0),
+    (500, 160.0, 240.0, 90.0),
+    (1000, 200.0, 300.0, 100.0),
+)
+
 
 def build_doypack(width_mm: float, height_mm: float, gusset_mm: float = 40.0, *,
                   weld_mm: float = 6.0, top_weld_mm: float = 8.0,
-                  zip_offset_mm: float = 25.0, bleed_mm: float = 3.0) -> dict:
-    """Stand-up pouch (doypack) flat dieline: front panel + bottom gusset +
-    back panel stacked, side welds, zipper line marked near the front top.
+                  zip_offset_mm: float = 25.0, bleed_mm: float = 3.0,
+                  safe_mm: float = 5.0, fill_g: Optional[float] = None) -> dict:
+    """Stand-up pouch (doypack) flat planning dieline in true millimetres.
 
-    Draft geometry for quoting/layout. Confirm weld widths, gusset folds and
-    zipper placement with the co-packer/printer before plate production.
-    Sheet order (top -> bottom): top weld (zip strip) / FRONT / gusset / BACK.
+    Structure, top -> bottom on the flat sheet: TOP SEAL (zipper strip + zipper
+    keep-out band) / FRONT / BOTTOM SEAL / GUSSET upper half / gusset centre
+    crease / GUSSET lower half / BOTTOM SEAL / BACK, with SIDE SEAL zones down
+    both edges and a print-safe boundary inside the seals.
+
+    Honesty (unchanged from the blueprint): this is a CALIBRATED PLANNING
+    DIELINE, not a die. Seal widths, the bottom seal style (K-seal vs pillow),
+    dart/crease positions and the zipper model are converter-specific; the
+    proportion check below flags specs that sit outside the published
+    fill-weight ladder so a wrong gusset is caught BEFORE plates are cut.
     """
     W, H, G = float(width_mm), float(height_mm), float(gusset_mm)
     w, t = float(weld_mm), float(top_weld_mm)
     z = float(zip_offset_mm)
-    b = float(bleed_mm)
-    if min(W, H, G, w, t, z) <= 0:
+    b, s = float(bleed_mm), float(safe_mm)
+    if min(W, H, G, w, t, z, b, s) <= 0:
         raise ValueError("doypack params must be positive")
+    if G >= H:
+        raise ValueError("gusset_mm must be smaller than height_mm for a stand-up pouch")
 
     sheet_w = W + 2 * w + 2 * b
-    sheet_h = H + G + H + t + w + 2 * b
+    sheet_h = (t + H + w + G + w + H) + 2 * b   # top seal + front + 2 seals + gusset + back
     layers: List[dict] = []
     layers.append(_rect(0, 0, sheet_w, sheet_h, "bleed"))
     layers.append(_rect(b, b, sheet_w - 2 * b, sheet_h - 2 * b, "trim"))
 
     x_l, x_r = b + w, b + w + W
+    y_top_seal = b
     y_front_top = b + t
-    y_gusset = y_front_top + H
-    y_back = y_gusset + G
-    y_bottom = y_back + H
+    y_front_bot = y_front_top + H
+    y_seal_1 = y_front_bot + w
+    y_gusset_mid = y_seal_1 + G / 2.0
+    y_gusset_end = y_seal_1 + G
+    y_seal_2 = y_gusset_end + w
+    y_back = y_seal_2 + w                  # back panel runs to the sheet trim
+    y_back_end = y_back + H
 
-    layers.append(_line(x_l, b, x_l, sheet_h - b, "fold"))  # side welds
-    layers.append(_line(x_r, b, x_r, sheet_h - b, "fold"))
-    layers.append(_line(x_l, y_front_top, x_r, y_front_top, "fold"))  # front top fold
-    layers.append(_line(x_l, y_gusset, x_r, y_gusset, "fold"))        # gusset fold F/B
-    layers.append(_line(x_l, y_back, x_r, y_back, "fold"))            # back top fold
-    # zipper line on the front panel (dashed via fold style) + note
+    # side weld zones (the film edges that become the pouch's side seams)
+    layers.append(_rect(b, b, w, sheet_h - 2 * b, "marks"))
+    layers.append(_rect(x_r, b, w, sheet_h - 2 * b, "marks"))
+
+    # panel + seal boundaries
+    for yy, label in ((y_front_top, "front top"), (y_front_bot, "front/gusset seal"),
+                      (y_seal_1, "seal top"), (y_gusset_end, "gusset/seal"),
+                      (y_seal_2, "seal top"), (y_back, "back top")):
+        layers.append(_line(x_l, yy, x_r, yy, "fold"))
+
+    # the gusset's own centre crease (the fold that lets the pouch stand)
+    layers.append(_line(x_l, y_gusset_mid, x_r, y_gusset_mid, "fold"))
+    layers.append(_text(x_l + 2, y_gusset_mid + 2, "gusset centre crease", size=2.6))
+
+    # zipper line + its keep-out band (no print inside the weld/zip zone)
     y_zip = y_front_top + z
+    keep = 6.0
+    layers.append(_rect(x_l, max(b, y_zip - keep), W, keep * 2, "safe"))
     layers.append(_line(x_l, y_zip, x_r, y_zip, "fold"))
-    layers.append(_text(x_l + 2, y_zip - 4, "zipper line", layer="info", size=3))
+    layers.append(_text(x_l + 2, y_zip - 4.5, "zipper line (keep-out band shaded)", size=2.6))
 
+    # print-safe boundary: seals + margin are no-print zones
+    layers.append(_rect(x_l + s, y_front_top + s, W - 2 * s, H - 2 * s, "safe"))
+    layers.append(_rect(x_l + s, y_back + s, W - 2 * s, H - 2 * s, "safe"))
+
+    checks = check_doypack_proportions(W, H, G, fill_g=fill_g)
     layers += _info_block(x_l, sheet_h - b - 1.0, [
-        f"Doypack dieline {_round(W)}x{_round(H)}mm + {_round(G)}mm gusset "
+        f"Doypack planning dieline {_round(W)}x{_round(H)}mm + {_round(G)}mm gusset "
         f"(sheet {_round(sheet_w)}x{_round(sheet_h)}mm, bleed {_round(b)}mm)",
-        f"welds: sides {_round(w)}mm / top {_round(t)}mm - confirm with co-packer",
+        f"seals: sides {_round(w)}mm / top {_round(t)}mm / bottom {_round(w)}mm - confirm "
+        "with the converter",
+        f"proportion check: {checks['status']}",
     ], size=2.4)
+    for i, warning in enumerate(checks["warnings"][:3]):
+        layers.append(_text(x_l + 2, sheet_h - b - 12.0 - i * 4.0, warning, size=2.2))
 
     build = {"width_mm": _round(sheet_w), "height_mm": _round(sheet_h),
              "layers": layers,
              "meta": {"template": "doypack", "width_mm": _round(W), "height_mm": _round(H),
                       "gusset_mm": _round(G), "weld_mm": _round(w), "top_weld_mm": _round(t),
                       "zip_offset_mm": _round(z), "bleed_mm": _round(b),
+                      "safe_mm": _round(s),
+                      "seal_style": "assumed K-seal (confirm with converter)",
+                      "confidence": "planning dieline - not a die",
+                      "proportion_check": checks,
                       "panels": {
                           "front": [_round(x_l), _round(y_front_top), _round(W), _round(H)],
-                          "gusset": [_round(x_l), _round(y_gusset), _round(W), _round(G)],
+                          "gusset": [_round(x_l), _round(y_seal_1), _round(W), _round(G)],
+                          "gusset_centre_y": _round(y_gusset_mid),
                           "back": [_round(x_l), _round(y_back), _round(W), _round(H)],
                           "zip_y": _round(y_zip),
                       }}}
     return _stamp(build, f"Doypack {_round(W)}x{_round(H)}mm + {_round(G)}mm gusset")
+
+
+def check_doypack_proportions(width_mm: float, height_mm: float, gusset_mm: float, *,
+                              fill_g: Optional[float] = None) -> Dict[str, Any]:
+    """Flag pouch specs that sit outside published fill-weight proportions.
+
+    Ladder source: the published stand-up-pouch sizing table used by the
+    packaging blueprint (Sparal 6-size standard ladder, cross-checked against
+    PackagingBest templates and real mylar dielines). Warnings only - the
+    operator's numbers are never silently reshaped.
+    """
+    W, H, G = float(width_mm), float(height_mm), float(gusset_mm)
+    warnings: List[str] = []
+    row = None
+    if fill_g:
+        row = min(DOYPACK_LADDER, key=lambda r: abs(r[0] - float(fill_g)))
+        f, lw, lh, lg = row
+        if G < lg * 0.75:
+            warnings.append(
+                f"gusset {G:g}mm is far below the published {lg:g}mm for a {f:g}g pouch "
+                f"(ladder row {lw:g}x{lh:g}+{lg:g}) - measure a competitor pouch and "
+                "confirm before plates")
+        if abs(W - lw) / lw > 0.25 or abs(H - lh) / lh > 0.25:
+            warnings.append(
+                f"panel {W:g}x{H:g}mm sits >25% off the {f:g}g ladder row "
+                f"{lw:g}x{lh:g}mm - confirm the fill actually fits")
+    ratio = H / W if W else 0.0
+    if not 1.2 <= ratio <= 1.8:
+        warnings.append(f"height/width ratio {ratio:.2f} is outside the usual 1.2-1.8 "
+                        "stand-up-pouch band (heuristic)")
+    status = "ok" if not warnings else "warnings"
+    return {"status": status, "warnings": warnings,
+            "ladder_row": ({"fill_g": row[0], "width_mm": row[1], "height_mm": row[2],
+                            "gusset_mm": row[3]} if row else None),
+            "ladder_source": "Sparal published stand-up-pouch ladder (6 sizes), "
+                             "cross-checked vs PackagingBest templates",
+            "note": "Heuristics flag risk; a converter's die drawing is the authority."}
 
 
 def build_carton(template: str, length_mm: float, width_mm: float, height_mm: float, *,
@@ -494,9 +582,10 @@ TEMPLATES: List[dict] = [
      "editable": ["length_mm", "width_mm", "height_mm", "glue_mm", "bleed_mm"]},
     {"id": "doypack", "name": "Stand-up pouch (doypack)", "kind": "carton",
      "params": {"width_mm": 130, "height_mm": 210, "gusset_mm": 40, "weld_mm": 6,
-                "top_weld_mm": 8, "zip_offset_mm": 25, "bleed_mm": 3},
+                "top_weld_mm": 8, "zip_offset_mm": 25, "bleed_mm": 3, "safe_mm": 5,
+                "fill_g": 0},
      "editable": ["width_mm", "height_mm", "gusset_mm", "weld_mm", "top_weld_mm",
-                  "zip_offset_mm", "bleed_mm"]},
+                  "zip_offset_mm", "bleed_mm", "safe_mm", "fill_g"]},
 ]
 
 _TEMPLATE_BY_ID = {t["id"]: t for t in TEMPLATES}
@@ -507,7 +596,7 @@ _BOUNDS = {
     "radius_mm": (0, 500), "bleed_mm": (0, 20), "safe_mm": (0, 40),
     "flap_mm": (5, 1000), "glue_mm": (5, 40), "tuck_mm": (5, 1000), "dust_mm": (5, 1000),
     "gusset_mm": (10, 150), "weld_mm": (3, 20), "top_weld_mm": (4, 30),
-    "zip_offset_mm": (5, 80),
+    "zip_offset_mm": (5, 80), "fill_g": (0, 5000),
 }
 
 
@@ -546,7 +635,8 @@ def build_from_template(template_id: str, params: Optional[Dict[str, Any]]) -> d
             clean["width_mm"], clean["height_mm"], clean.get("gusset_mm", 40.0),
             weld_mm=clean.get("weld_mm", 6.0), top_weld_mm=clean.get("top_weld_mm", 8.0),
             zip_offset_mm=clean.get("zip_offset_mm", 25.0),
-            bleed_mm=clean.get("bleed_mm", 3.0))
+            bleed_mm=clean.get("bleed_mm", 3.0), safe_mm=clean.get("safe_mm", 5.0),
+            fill_g=(clean.get("fill_g") or None))
     return build_carton(
         template_id, clean["length_mm"], clean["width_mm"], clean["height_mm"],
         flap_mm=clean.get("flap_mm"), glue_mm=clean.get("glue_mm", 15.0),

@@ -89,19 +89,45 @@ def test_doypack_dieline_geometry():
                          zip_offset_mm=25, bleed_mm=3)
     m = b["meta"]
     assert m["template"] == "doypack"
-    # sheet 130+12+6 = 148 wide; 210*2 + 40 + 8 + 6 + 6 = 480 tall
+    # sheet 130 + 2*6 weld + 2*3 bleed = 148 wide
     assert abs(b["width_mm"] - (130 + 12 + 6)) < 0.5
-    assert abs(b["height_mm"] - (210 * 2 + 40 + 8 + 6 + 6)) < 0.5
+    # sheet height = 2*bleed + top seal + front + bottom seal + gusset + bottom
+    # seal + back  (2026-10-19: two bottom seal bands now drawn, matching the
+    # real film run: the gusset is welded to BOTH the front and the back)
+    assert abs(b["height_mm"] - (2 * 3 + 8 + 210 + 6 + 40 + 6 + 210)) < 0.5
     folds = [it for it in b["layers"] if it["layer"] == "fold"]
-    assert len(folds) >= 6, "side welds + 3 structure folds + zipper line expected"
+    assert len(folds) >= 8, "6 structure folds + gusset centre crease + zipper line expected"
     texts = [it["text"] for it in b["layers"] if it["kind"] == "text"]
     assert any("zipper" in t for t in texts)
+    # the planning dieline now marks the no-print zones and the seal zones
+    safe = [it for it in b["layers"] if it["layer"] == "safe"]
+    marks = [it for it in b["layers"] if it["layer"] == "marks"]
+    assert len(safe) >= 3, "zipper keep-out + front and back print-safe areas"
+    assert len(marks) >= 2, "both side weld zones"
+    assert "planning dieline" in m["confidence"]
+    assert m["seal_style"].startswith("assumed")
     svg = dp.render_svg(b)
     assert 'xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"' in svg, \
         "standalone SVG must declare the inkscape namespace or browsers refuse to render it"
     assert 'id="layer-fold"' in svg and 'width="148mm"' in svg
     pdf = dp.render_pdf(b)
     assert pdf[:4] == b"%PDF"
+
+
+def test_doypack_proportion_check_flags_the_half_gusset_case():
+    """The blueprint's §2.5 finding, encoded as a check: Mogra's 8 oz pouch spec
+    (150x210+40) is roughly HALF the published gusset for that fill weight."""
+    chk = dp.check_doypack_proportions(150, 210, 40, fill_g=227)
+    assert chk["status"] == "warnings"
+    assert any("gusset" in w for w in chk["warnings"])
+    assert chk["ladder_row"]["fill_g"] == 250
+    assert chk["ladder_row"]["gusset_mm"] == 80
+    # a spec on the ladder is clean
+    ok = dp.check_doypack_proportions(140, 200, 80, fill_g=250)
+    assert ok["status"] == "ok", ok["warnings"]
+    # the warning text never silently reshapes the operator's numbers
+    built = dp.build_doypack(150, 210, gusset_mm=40, fill_g=227)
+    assert built["meta"]["gusset_mm"] == 40
 
 
 def test_doypack_in_catalog_and_buildable_from_template():
