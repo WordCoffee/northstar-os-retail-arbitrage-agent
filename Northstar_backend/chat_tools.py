@@ -889,9 +889,44 @@ def _t_voice_dub(args, ctx) -> dict:
     }
 
 
+def _t_purpose_command(args, ctx) -> dict:
+    """Read-only self-analysis of this repository (Project Thorn v5.0 purpose commands).
+
+    Proposal-only by construction: `purpose_commands` parses source with `ast` and
+    never writes, imports or executes the analysed code."""
+    import purpose_commands  # local import keeps the chat-tool import surface light
+
+    report = purpose_commands.run_purpose_command(
+        args.get("command"), path=args.get("path"), limit=args.get("limit"))
+    if not report.get("ok"):
+        return {"ok": False, "summary": report.get("summary") or "The purpose command failed.",
+                "error": report.get("error") or "", "assets": []}
+
+    counts = report.get("counts") or {}
+    scanned = report.get("scanned") or {}
+    findings = report.get("findings") or []
+    units = scanned.get("modules", scanned.get("files", 0))
+    lines = [f"/{report['command']}: {sum(counts.values())} finding(s) across {units} scanned unit(s)."]
+    for kind, n in counts.items():
+        lines.append(f"  - {kind}: {n}")
+    for f in findings[:8]:
+        lines.append(f"  [{f['severity']}] {f['kind']} :: {f['target']} — {f['detail']}")
+    if len(findings) > 8:
+        lines.append(f"  … {len(findings) - 8} more not shown.")
+    return {
+        "ok": True,
+        "summary": "\n".join(lines),
+        "command": report["command"],
+        "counts": counts,
+        "scanned": scanned,
+        "caveats": report.get("caveats", []),
+        "findings": findings[:10],
+        "assets": [],
+    }
+
+
 # ── Registry ─────────────────────────────────────────────────────────────────
-TOOLS: Dict[str, dict] = {
-    "system_status": {
+TOOLS: Dict[str, dict] = {    "system_status": {
         "description": "Report the local media engine + chat model status. Read-only.",
         "parameters": {"type": "object", "properties": {}, "required": []},
         "handler": _t_system_status,
@@ -1104,6 +1139,32 @@ TOOLS: Dict[str, dict] = {
             "required": ["text", "target_lang"],
         },
         "handler": _t_voice_dub,
+    },
+    "purpose_command": {
+        "description": ("Evaluate THIS system's own codebase and return a read-only, "
+                        "proposal-only report. optimize-architecture = import cycles, "
+                        "wide interfaces, most-depended-on modules; refactor-performance "
+                        "= long functions, deep nesting, nested loops, blocking calls "
+                        "inside async defs, unbounded reads, in-loop string growth, "
+                        "missing timeouts; expand-vectors = modules with no test "
+                        "reference plus suggested expansion scenarios. It writes nothing "
+                        "and never executes the analysed code."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "command": {"type": "string",
+                            "enum": ["optimize-architecture", "refactor-performance",
+                                     "expand-vectors"],
+                            "description": "Which purpose command to run."},
+                "path": {"type": "string",
+                         "description": "Optional sub-path under the repository root "
+                                        "(default: the whole repo)."},
+                "limit": {"type": "integer", "minimum": 1, "maximum": 60,
+                          "description": "Max findings returned by expand-vectors."},
+            },
+            "required": ["command"],
+        },
+        "handler": _t_purpose_command,
     },
 }
 
