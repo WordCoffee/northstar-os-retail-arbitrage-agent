@@ -332,6 +332,86 @@ def verify_asset_text(image_bytes: bytes, brief: Optional[str] = None,
     }
 
 
+# ── Edit-drift gate: did an edit change the copy it was told not to touch? ──
+
+_TOKEN = re.compile(r"[A-Za-z0-9][A-Za-z0-9'&.\-]*")
+
+
+def _tokens(words: List[str]) -> List[str]:
+    out: List[str] = []
+    for w in words:
+        for t in _TOKEN.findall(str(w)):
+            t = t.strip(".'&-").upper()
+            # keep multi-char tokens and ANY token carrying a digit: a net
+            # weight of "6 oz" must not lose its "6"
+            if len(t) >= 2 or any(ch.isdigit() for ch in t):
+                out.append(t)
+    return out
+
+
+def _numerics(tokens: List[str]) -> List[str]:
+    return sorted({t for t in tokens if any(ch.isdigit() for ch in t)})
+
+
+def compare_text_between_images(before_bytes: bytes, after_bytes: bytes,
+                                *, min_score: float = 0.5) -> Dict[str, Any]:
+    """OCR-diff two images: the packaging-accuracy gate for the edit lane.
+
+    A text-faithful edit (scene / lighting / material only) must return the
+    SAME copy. Diffusion editors are known to re-render glyphs, so this gate
+    names the drift instead of trusting the prompt. Numeric drift (weights,
+    volumes, net contents) is called out separately — it is the failure that
+    reaches a customer.
+
+    Never raises; ``status`` is "ok" | "unavailable" | "error", and an
+    unavailable engine yields verdict "unverified" (never a fake pass).
+    """
+    pb, err_b = _ocr_boxes(before_bytes, min_score=min_score, min_len=2)
+    pa, err_a = _ocr_boxes(after_bytes, min_score=min_score, min_len=2)
+    if pb is None or pa is None:
+        status = "unavailable" if (err_b == "unavailable" or err_a == "unavailable") else "error"
+        return {"status": status, "verdict": "unverified",
+                "error": err_b if pb is None else err_a,
+                "before_words": [], "after_words": [], "added": [], "removed": [],
+                "numeric_before": [], "numeric_after": [], "numeric_drift": None}
+    tb = _tokens([b[4] for b in pb[1]])
+    ta = _tokens([b[4] for b in pa[1]])
+    sb, sa = set(tb), set(ta)
+    added = sorted(sa - sb)
+    removed = sorted(sb - sa)
+    nb, na = _numerics(tb), _numerics(ta)
+    numeric_drift = None if nb == na else {"before": nb, "after": na}
+    if not sb and not sa:
+        verdict = "no_text"
+    elif not added and not removed:
+        verdict = "identical"
+    elif numeric_drift is not None:
+        verdict = "drift_numeric"
+    else:
+        verdict = "drift"
+    return {
+        "status": "ok", "verdict": verdict,
+        "before_words": [b[4] for b in pb[1]][:20],
+        "after_words": [b[4] for b in pa[1]][:20],
+        "added": added[:20], "removed": removed[:20],
+        "numeric_before": nb, "numeric_after": na, "numeric_drift": numeric_drift,
+        "error": None,
+    }
+
+
+def verify_edit_preserves_copy(before_bytes: bytes, after_bytes: bytes) -> Dict[str, Any]:
+    """Lane helper: True when the edit left the copy untouched (or unverified)."""
+    diff = compare_text_between_images(before_bytes, after_bytes)
+    diff["preserves_copy"] = (None if diff["verdict"] == "unverified"
+                              else diff["verdict"] in ("identical", "no_text"))
+    diff["note"] = (
+        "Edit preserved the printed copy." if diff["preserves_copy"] is True else
+        "Edit CHANGED the printed copy - re-compose the deterministic text layer "
+        "before this render ships." if diff["preserves_copy"] is False else
+        "OCR unavailable: copy preservation is UNVERIFIED (never assumed).")
+    return diff
+
+
 # ── Render guard: sanitize → render → OCR-check → bounded auto-rerun ────────
 
 def render_with_text_guard(*, render_fn, brief: str, text_safe: bool,

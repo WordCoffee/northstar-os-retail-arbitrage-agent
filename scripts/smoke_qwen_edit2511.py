@@ -25,6 +25,7 @@ os.environ.setdefault("COMFYUI_URL", "http://127.0.0.1:8199")
 os.environ["MEDIA_GEN_LIVE"] = "1"  # local GPU render: no spend, operator-requested
 
 import studio_generation as sg  # noqa: E402
+import text_fidelity as tf  # noqa: E402
 
 DEFAULT_INPUT = ROOT / "renders" / "ab_realism_real.png"
 OUT_PNG = ROOT / "renders" / "smoke_qwen_edit_2511.png"
@@ -67,14 +68,23 @@ def main() -> int:
         return 2
 
     OUT_PNG.write_bytes(res["bytes"])
+    # packaging-accuracy gate: did the edit rewrite the copy it was told to keep?
+    drift = tf.verify_edit_preserves_copy(src.read_bytes(), res["bytes"])
     sidecar = {
         "ok": True, "input": str(src.relative_to(ROOT)).replace("\\", "/"),
         "out": str(OUT_PNG.relative_to(ROOT)).replace("\\", "/"),
         "model": res["model"], "seed": res["seed"], "steps": res["steps"],
         "cfg": res["cfg"], "bytes": len(res["bytes"]),
         "seconds": round(time.time() - t0, 1), "prompt": args.prompt,
+        "copy_preservation": {
+            "verdict": drift["verdict"], "preserves_copy": drift["preserves_copy"],
+            "added": drift["added"], "removed": drift["removed"],
+            "numeric_drift": drift["numeric_drift"], "note": drift["note"],
+        },
         "accept": "the pouches and every printed word must be unchanged; only the "
-                  "background and grounding shadows should differ from the input.",
+                  "background and grounding shadows should differ from the input. "
+                  "If copy_preservation is false, this output is NOT shippable "
+                  "without re-composing the deterministic text layer.",
     }
     OUT_JSON.write_text(json.dumps(sidecar, indent=2), encoding="utf-8")
     print(json.dumps({"ok": True, "out": str(OUT_PNG), "seconds": sidecar["seconds"],

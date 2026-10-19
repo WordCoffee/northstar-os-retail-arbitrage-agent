@@ -260,3 +260,61 @@ def test_text_check_endpoint_auth_and_404():
         assert r.status_code == 404
     finally:
         app.dependency_overrides = {}
+
+# -- edit-drift gate: the edit lane must not rewrite the copy -------------------
+
+def test_token_and_numeric_helpers():
+    toks = tf._tokens(["6 oz (170 g)", "ORGANIC  LION'S MANE", "a"])
+    assert "170" in toks and "OZ" in toks and "ORGANIC" in toks
+    assert "A" not in toks, "single characters are noise, not copy"
+    assert tf._numerics(toks) == ["170", "6"]
+
+
+def test_compare_text_identical_when_nothing_changed():
+    img = _img_with_text("MOGRA ORGANICS 6 OZ")
+    out = tf.compare_text_between_images(img, img)
+    if out["status"] != "ok":
+        pytest.skip("OCR unavailable")
+    assert out["verdict"] == "identical"
+    assert out["added"] == [] and out["removed"] == []
+    assert out["numeric_drift"] is None
+
+
+def test_compare_text_flags_numeric_drift():
+    before = _img_with_text("MOGRA ORGANICS 6 OZ")
+    after = _img_with_text("MOGRA ORGANICS 8 OZ")
+    out = tf.verify_edit_preserves_copy(before, after)
+    if out["status"] != "ok":
+        pytest.skip("OCR unavailable")
+    assert out["verdict"] == "drift_numeric", out
+    assert out["preserves_copy"] is False
+    assert "6" in out["numeric_drift"]["before"]
+    assert "8" in out["numeric_drift"]["after"]
+    assert "re-compose" in out["note"].lower() or "CHANGED" in out["note"]
+
+
+def test_compare_text_flags_added_words():
+    before = _img_with_text("MOGRA ORGANICS")
+    after = _img_with_text("MOGRA ORGANICS PROMO")
+    out = tf.verify_edit_preserves_copy(before, after)
+    if out["status"] != "ok":
+        pytest.skip("OCR unavailable")
+    assert out["verdict"] in ("drift", "drift_numeric")
+    assert out["preserves_copy"] is False
+
+
+def test_compare_text_no_text_on_both_is_clean_plate_safe():
+    out = tf.verify_edit_preserves_copy(_img_plain(), _img_plain())
+    if out["status"] != "ok":
+        pytest.skip("OCR unavailable")
+    assert out["verdict"] == "no_text"
+    assert out["preserves_copy"] is True
+
+
+def test_compare_text_unavailable_never_fakes_a_pass(monkeypatch):
+    monkeypatch.setattr(tf, "_get_ocr", lambda: (None, "unavailable"))
+    out = tf.verify_edit_preserves_copy(_img_with_text("X 1"), _img_with_text("Y 2"))
+    assert out["status"] == "unavailable"
+    assert out["verdict"] == "unverified"
+    assert out["preserves_copy"] is None
+    assert "UNVERIFIED" in out["note"]
