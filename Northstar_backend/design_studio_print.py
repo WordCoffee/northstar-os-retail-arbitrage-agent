@@ -789,6 +789,83 @@ def print_health(acct: str = Depends(studio_account)):
             "units": "mm", "renderers": ["svg", "pdf"]}
 
 
+# ── Prepress — ICC gamut + ink limit (2026-10-19) ───────────────────────────
+# A screen render is not a print file. These endpoints run a REAL ICC transform
+# (littleCMS) over a stored studio image and report the two numbers a printer
+# asks for: colour shift through the press profile (CIE76 dE) and total area
+# coverage. Local, deterministic, no network, no provider.
+
+class PrepressIn(BaseModel):
+    asset_id: str = Field(..., min_length=3, max_length=80)
+    profile: Optional[str] = Field(None, max_length=120)
+    limit_pct: float = Field(300.0, ge=50.0, le=400.0)
+    tolerance_dE76: float = Field(8.0, ge=1.0, le=40.0)
+    persist_cmyk: bool = False      # write a CMYK TIFF (+ soft proof PNG) asset
+
+
+@router.get("/prepress/profiles")
+def prepress_profiles(acct: str = Depends(studio_account)):
+    import prepress as pp
+    return {"profiles": [{"name": p.name, "description": p.description}
+                         for p in pp.available_cmyk_profiles()],
+            "note": ("Profiles present on this machine (Windows ships a SWOP "
+                     "CMYK profile). Drop the co-packer's profile in and select "
+                     "it by name; nothing is substituted silently.")}
+
+
+@router.post("/prepress/check")
+def prepress_check(body: PrepressIn, acct: str = Depends(studio_account)):
+    import prepress as pp
+    db = get_northstar_db()
+    asset = db.design_studio.assets.get_by_id(body.asset_id, account_id=acct)
+    if not asset or not asset.get("storage_key"):
+        raise HTTPException(status_code=404, detail="Asset not found")
+    path = _out_dir() / Path(str(asset["storage_key"])).name
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Asset file not found on disk")
+    try:
+        report = pp.prepress_report(path.read_bytes(), profile=body.profile,
+                                    limit_pct=body.limit_pct,
+                                    de_tolerance=body.tolerance_dE76)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    resp = {"asset_id": body.asset_id, "name": asset.get("name"), **report}
+    if body.persist_cmyk:
+        conv = pp.to_cmyk(path.read_bytes(), profile=body.profile)
+        proof = pp.soft_proof(path.read_bytes(), profile=body.profile)
+        out_dir = _out_dir()
+        cmyk_name = f"cmyk_{uuid.uuid4().hex}.tif"
+        proof_name = f"proof_{uuid.uuid4().hex}.png"
+        (out_dir / cmyk_name).write_bytes(conv["bytes"])
+        (out_dir / proof_name).write_bytes(proof["bytes"])
+        base = asset.get("name") or "artwork"
+        cmyk_id = db.design_studio.assets.create({
+            "account_id": acct, "project_id": asset.get("project_id"),
+            "name": f"{base} (CMYK)", "asset_type": "print_file",
+            "mime_type": "image/tiff", "storage_key": cmyk_name,
+            "size_bytes": len(conv["bytes"]),
+            "metadata": {"prepress": {"role": "cmyk", "profile": conv["profile"],
+                                      "profile_description": conv["profile_description"],
+                                      "intent": conv["intent"], "engine": conv["engine"],
+                                      "source_asset_id": body.asset_id},
+                         "report": report},
+        })
+        proof_id = db.design_studio.assets.create({
+            "account_id": acct, "project_id": asset.get("project_id"),
+            "name": f"{base} (soft proof)", "asset_type": "print_file",
+            "mime_type": "image/png", "storage_key": proof_name,
+            "size_bytes": len(proof["bytes"]),
+            "metadata": {"prepress": {"role": "soft_proof", "profile": proof["profile"],
+                                      "source_asset_id": body.asset_id}},
+        })
+        resp["cmyk_asset"] = {"asset_id": cmyk_id,
+                              "file_url": f"/api/design-studio/assets/{cmyk_id}/file",
+                              "profile": conv["profile"]}
+        resp["proof_asset"] = {"asset_id": proof_id,
+                               "file_url": f"/api/design-studio/assets/{proof_id}/file"}
+    return resp
+
+
 # ── Box library — external Boxes.py bridge (2026-10-16) ──────────────────
 # The structures come from Boxes.py (GPL-3.0), run as a SEPARATE PROCESS on
 # this machine; we consume its SVG output and never embed its code.

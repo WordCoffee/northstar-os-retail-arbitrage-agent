@@ -153,3 +153,104 @@ def test_sanitize_rejects_unknown_keys_and_ranges():
         dp.build_label("hexagon", 60, 40)
     with pytest.raises(ValueError):
         dp.build_carton("mailer", 100, 100, 100)
+
+
+# -- prepress endpoints: ICC check + CMYK conversion (2026-10-19) --------------
+
+class _Assets:
+    def __init__(self, plate_name):
+        self.plate_name = plate_name
+        self.created = []
+
+    def get_by_id(self, aid, account_id=None):
+        if aid == "plate-dev":
+            return {"id": aid, "storage_key": self.plate_name,
+                    "project_id": None, "name": "dev plate"}
+        return None
+
+    def create(self, data):
+        self.created.append(data)
+        return f"aid-{len(self.created)}"
+
+
+def _plate_name() -> str | None:
+    """Resolve the dev plate filename from the compositor preset (no literal)."""
+    import json
+    from pathlib import Path
+    p = Path(__file__).resolve().parent / "data" / "compose_presets.json"
+    if not p.is_file():
+        return None
+    try:
+        preset = json.loads(p.read_text(encoding="utf-8")).get("mogra-forest-dusk") or {}
+    except Exception:
+        return None
+    return preset.get("plate_file")
+
+
+class _DB:
+    def __init__(self, plate_name=None):
+        class _DS:
+            def __init__(self):
+                self.assets = _Assets(plate_name)
+        self.design_studio = _DS()
+
+
+def _client():
+    from fastapi.testclient import TestClient
+    from main import app
+    return app, TestClient(app)
+
+
+def test_prepress_check_requires_auth_and_404s_on_unknown_asset(monkeypatch):
+    app, client = _client()
+    r = client.post("/api/design-studio/print/prepress/check", json={"asset_id": "x"})
+    assert r.status_code == 401
+
+    import design_studio_api
+    app.dependency_overrides[design_studio_api.studio_account] = lambda: "org-pp"
+    try:
+        monkeypatch.setattr(dp, "get_northstar_db", lambda: _DB())
+        r = client.post("/api/design-studio/print/prepress/check",
+                        json={"asset_id": "no-such"})
+        assert r.status_code == 404
+        r = client.get("/api/design-studio/print/prepress/profiles")
+        assert r.status_code == 200
+        assert "profiles" in r.json()
+    finally:
+        app.dependency_overrides = {}
+
+
+def test_prepress_check_runs_on_the_real_dev_plate(monkeypatch):
+    import prepress as pp
+    plate_name = _plate_name()
+    if not pp.available_cmyk_profiles():
+        pytest.skip("no CMYK ICC profile on this machine")
+    if not plate_name:
+        pytest.skip("no compositor preset on disk")
+    plate = dp._out_dir() / plate_name
+    if not plate.is_file():
+        pytest.skip("dev plate not on disk")
+
+    app, client = _client()
+    import design_studio_api
+    app.dependency_overrides[design_studio_api.studio_account] = lambda: "org-pp"
+    db = _DB(plate_name)
+    try:
+        monkeypatch.setattr(dp, "get_northstar_db", lambda: db)
+        r = client.post("/api/design-studio/print/prepress/check",
+                        json={"asset_id": "plate-dev", "persist_cmyk": True})
+        assert r.status_code == 200, r.text
+        body = r.json()
+        assert body["verdict"] in ("printable", "blocked")
+        assert body["gamut"]["profile"]
+        assert body["ink"]["max_tac_pct"] > 0
+        assert body["cmyk_asset"]["asset_id"] and body["proof_asset"]["asset_id"]
+        roles = [a["metadata"]["prepress"]["role"] for a in db.design_studio.assets.created]
+        assert roles == ["cmyk", "soft_proof"]
+        # the created CMYK file really is a TIFF on disk
+        for a in db.design_studio.assets.created:
+            p = dp._out_dir() / a["storage_key"]
+            assert p.is_file() and p.stat().st_size > 0
+            p.unlink()
+    finally:
+        app.dependency_overrides = {}
