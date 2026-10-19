@@ -184,7 +184,39 @@ eb8d79d  Research Wave 2 complete + credential scrub
 2. **3D mockup lane** — Blender is not installed. Candidates from the wave:
    Hunyuan3D-2, img2threejs, Blender headless.
 3. **Doypack die accuracy** — still a planning dieline until the co-packer's die
-   drawing or a measured competitor pouch calibrates the gusset.
-4. **LayerStyle / ComfyUI-RMBG** — not installed; deterministic type already owns
-   copy, so the remaining value is edge-halo refinement.
-5. **PDF ingestion for the corpus learner** — MinerU identified, not wired.
+   drawing or a measured competitor pouch calibrates the gusset. Use
+   `pouch_calibration.py` to record the measurement.
+4. **LayerStyle** — not installed; deterministic type already owns copy, so the
+   remaining value is grain/shadow node conveniences.
+5. **ComfyUI-RMBG** — removed after a three-hop dependency chase (recorded in
+   `00_STATE` known_issues); revisit only if a halo is observed on a real cutout.
+
+---
+
+## 9. Addendum — work completed after the first report pass
+
+- **Research Wave 2 finished**: 47,323 GitHub repos (256 queries, 1 error),
+  committed with a report and a credential scrub (third-party tokens found in
+  repo descriptions were redacted in place, and the sweep now scrubs before
+  writing).
+- **Package readiness** (`package_readiness.py`): one verdict across prepress,
+  copy, MAIN and dieline. Live on the real artifacts → `needs_work` with two
+  real findings (18.09 % of pixels shift >8 dE through SWOP; gusset 40 mm vs the
+  published 80 mm). Copy matching is fuzzy-but-honest so a stylised wordmark read
+  one character off is a warning, not a false blocker.
+- **Gamut mapper** (`prepress.map_colors`): the prepress blocker now names the
+  colour that DOES print faithfully. Live: the dark green film `#213800` prints
+  as `#38392E` — a 26 dE shift to muddy olive.
+- **PDF lane** for the corpus learner (pypdf; a scan with no text layer is
+  reported, never stored as an empty document).
+- **Pouch calibration** (`pouch_calibration.py`): records a measured pouch
+  against the spec and the published ladder; live `148x205+78` vs `150x210+40`
+  → gusset +38 mm (+95 %), "the shelf pouch is materially bigger".
+- **Test isolation fix**: two `tests/test_reasoning_routes.py` failures in the
+  full-tree run were caused by `setdefault` keeping an earlier test's
+  `OPENCODE_GO_ENABLED=0`. Reproduced deliberately, fixed by forcing + restoring
+  the env. Full tree then shows only the documented pre-existing protected-hash
+  drift.
+- **End-to-end chain test** (`test_creative_pipeline_chain.py`) guards the
+  compose → MAIN → prepress → readiness interfaces.
+
