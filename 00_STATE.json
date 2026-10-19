@@ -26,6 +26,15 @@
   ],
   "known_issues": [
     {
+      "id": "canonical_runner_red_from_untracked_costco_files_20261019",
+      "discovered_in": "Creative pipeline v2 session: scripts/run_all_tests.ps1 returned RED with 'could not parse backend summary (pytest exit code 2)'",
+      "discovered_at": "2026-10-19T07:05:00Z",
+      "description": "The canonical runner's backend suite exits 2 (collection interrupted) because FOUR UNTRACKED files under Northstar_backend/costco_non_kirkland/ import symbols that do not exist in the tracked module: brightdata_costco_live.py (untracked, 2026-09-27) plus tests/test_brightdata_campaign.py, tests/test_brightdata_manifest.py and tests/test_brightdata_schema_test.py (all untracked, 2026-09-27). They import build_campaign_manifest / build_enrichment_manifest / is_costco_product_url from brightdata_costco_enrichment.py, which defines plan_enrichment_manifest etc. instead. Git status shows them as '??' and git log shows nothing for them, so they are three-week-old leftovers from an older session, not this session's work. The other four suites are green: Golden Goose 511/0, SPA UI 1122/0, Shell 307/0, Functions 31/0.",
+      "resolution": "NOT DELETED - they may be the operator's unfinished work, and the constitution says to investigate unfamiliar files rather than remove them. The backend suite was instead run with --ignore=costco_non_kirkland (and --ignore=autothink): 3928 passed / 1 failed / 65 skipped, and that single failure (test_frozen_file_boundary_is_a_static_rule) was a cwd-relative path bug in the test itself, now fixed (commit 0130625b -> 9/9 from the repo root). So the tracked backend tree is GREEN; only the untracked leftovers keep the canonical runner RED.",
+      "requires_decision": "Operator: for those four untracked files, either finish them (implement the three missing symbols), commit them with corrected imports, or delete them. Until then scripts/run_all_tests.ps1 will report RED on the backend suite with a parse error rather than a count.",
+      "status": "open"
+    },
+    {
       "id": "comfyui_rmbg_dependency_chain_removed_20261019",
       "discovered_in": "Creative pipeline v2 session: attempting the P1 edge-halo improvement (ComfyUI-RMBG pack)",
       "discovered_at": "2026-10-19T06:20:00Z",
