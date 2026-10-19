@@ -26,6 +26,15 @@
   ],
   "known_issues": [
     {
+      "id": "comfyui_rmbg_dependency_chain_removed_20261019",
+      "discovered_in": "Creative pipeline v2 session: attempting the P1 edge-halo improvement (ComfyUI-RMBG pack)",
+      "discovered_at": "2026-10-19T06:20:00Z",
+      "description": "ComfyUI-RMBG (1038lab) failed to import three times, each time on a different transitive dependency of its BUNDLED SAM3 node: first `triton` (fixed by installing triton-windows 3.8.0.post29 - kept, because it also fixed KJNodes' PatchTritonVAE and raised the node count 1366 -> 1367), then hydra-core/omegaconf/iopath (already satisfied; ftfy added), then `decord` (its train/data/sam3_image_dataset.py). The pack's own error handler then raised NameError: name 'module_name' is not defined, masking the real cause. Every restart of ComfyUI costs 1-2 minutes and the pack is a third-party tree we do not control.",
+      "resolution": "CIRCUIT BREAKER after three attempts: the pack directory was REMOVED so ComfyUI starts clean with no failing import. Value judgement recorded: the pack's only wanted feature was RefineForeground (edge-halo refinement); the core-node BiRefNet lane already produces clean edges (the live MAIN image was verified visually and measured compliant), so the marginal gain did not justify a decord-class dependency tree on Python 3.14. triton-windows STAYS installed (it fixed KJNodes). Revisit only if a halo problem is actually observed on a real cutout, and then install the full requirements list in one pass rather than one dep at a time.",
+      "requires_decision": "None - recorded as a measured scope decision, not a blocker.",
+      "status": "resolved"
+    },
+    {
       "id": "realesrgan_upscale_aborts_comfyui_20261019",
       "discovered_in": "Canvas v2 session: first live upscale attempt (RealESRGAN_x4plus.pth via KJNodes ImageUpscaleWithModelBatched, 1216x1216 input)",
       "discovered_at": "2026-10-19T08:20:00Z",
