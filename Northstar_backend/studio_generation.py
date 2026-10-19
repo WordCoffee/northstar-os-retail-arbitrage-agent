@@ -29,6 +29,13 @@ IMAGE_MODEL_FILE = os.environ.get("STUDIO_IMAGE_MODEL") or "Flux-2-Klein-9B-KV-Q
 TEXT_ENCODER_FILE = os.environ.get("STUDIO_TEXT_ENCODER") or "qwen_3_8b_fp8mixed.safetensors"
 VIDEO_MODEL_FILE = "Wan2.2-TI2V-5B-Q5_K_M.gguf"
 
+# Edit/refine lane (Packify-parity P1): the text-faithful editor. Qwen-Image-Edit
+# 2511 is Apache-2.0 and already on disk (Q4_K_M GGUF + its own VL encoder + VAE).
+EDIT_MODEL_FILE = os.environ.get("STUDIO_EDIT_MODEL") or "qwen-image-edit-2511-Q4_K_M.gguf"
+EDIT_TEXT_ENCODER_FILE = (os.environ.get("STUDIO_EDIT_TEXT_ENCODER")
+                          or "qwen_2.5_vl_7b_nvfp4.safetensors")
+EDIT_VAE_FILE = "qwen_image_vae.safetensors"
+
 _STYLE_SUFFIX = ", professional commercial product photography, clean composition"
 # Rich renders keep the operator's full art direction (lettering demands included).
 # Text-safe mode appends its own suppression phrase in text_fidelity.sanitize_brief_for_render.
@@ -62,7 +69,8 @@ def engine_status() -> dict:
         "gate": live,             # MEDIA_GEN_LIVE=1
         "reachable": up,
         "armed": bool(live and up),
-        "models": {"image": IMAGE_MODEL_FILE, "video": VIDEO_MODEL_FILE},
+        "models": {"image": IMAGE_MODEL_FILE, "video": VIDEO_MODEL_FILE,
+                   "edit": EDIT_MODEL_FILE},
         "note": (
             "The local engine is armed: renders run on this machine's GPU (ComfyUI)."
             if (live and up) else
@@ -282,6 +290,50 @@ def _klein_graph(prompt: str, width: int, height: int, steps: int, seed: int) ->
     }
 
 
+def _qwen_edit_graph(prompt: str, image_name: str, *, steps: int, cfg: float, seed: int,
+                     negative: str = "") -> dict:
+    """Qwen-Image-Edit-2511 edit graph (official 2511 template, GGUF-adapted).
+
+    Mirrors Comfy-Org/workflow_templates image_qwen_image_edit_2511.json:
+    FluxKontextImageScale -> VAEEncode -> KSampler(denoise 1.0) with the source
+    image supplied to the edit-encode node, plus the 2511 reference-latent
+    method and CFGNorm. The Lightning 4-step LoRA is optional and not on this
+    box, so the researched default step count is used.
+    """
+    return {
+        "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": EDIT_MODEL_FILE}},
+        "2": {"class_type": "CLIPLoader",
+              "inputs": {"clip_name": EDIT_TEXT_ENCODER_FILE, "type": "qwen_image",
+                         "device": "default"}},
+        "3": {"class_type": "VAELoader", "inputs": {"vae_name": EDIT_VAE_FILE}},
+        "4": {"class_type": "LoadImage", "inputs": {"image": image_name}},
+        "5": {"class_type": "FluxKontextImageScale", "inputs": {"image": ["4", 0]}},
+        "6": {"class_type": "VAEEncode", "inputs": {"pixels": ["5", 0], "vae": ["3", 0]}},
+        "7": {"class_type": "TextEncodeQwenImageEditPlus",
+              "inputs": {"clip": ["2", 0], "prompt": prompt + _STYLE_SUFFIX,
+                         "vae": ["3", 0], "image1": ["5", 0]}},
+        "8": {"class_type": "TextEncodeQwenImageEditPlus",
+              "inputs": {"clip": ["2", 0], "prompt": negative}},
+        "9": {"class_type": "FluxKontextMultiReferenceLatentMethod",
+              "inputs": {"conditioning": ["7", 0],
+                         "reference_latents_method": "index_timestep_zero"}},
+        "10": {"class_type": "FluxKontextMultiReferenceLatentMethod",
+               "inputs": {"conditioning": ["8", 0],
+                          "reference_latents_method": "index_timestep_zero"}},
+        "11": {"class_type": "ModelSamplingAuraFlow",
+               "inputs": {"model": ["1", 0], "shift": 3.1}},
+        "12": {"class_type": "CFGNorm", "inputs": {"model": ["11", 0], "strength": 1.0}},
+        "13": {"class_type": "KSampler",
+               "inputs": {"model": ["12", 0], "positive": ["9", 0], "negative": ["10", 0],
+                          "latent_image": ["6", 0], "seed": seed, "steps": steps,
+                          "cfg": cfg, "sampler_name": "euler", "scheduler": "simple",
+                          "denoise": 1.0}},
+        "14": {"class_type": "VAEDecode", "inputs": {"samples": ["13", 0], "vae": ["3", 0]}},
+        "15": {"class_type": "SaveImage",
+               "inputs": {"images": ["14", 0], "filename_prefix": "ns-qwen-edit"}},
+    }
+
+
 def _wan_graph(prompt: str, width: int, height: int, frames: int, steps: int, seed: int) -> dict:
     return {
         "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": VIDEO_MODEL_FILE}},
@@ -329,6 +381,70 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
         "bytes": data, "ext": "png", "mime": "image/png",
         "model": os.path.splitext(IMAGE_MODEL_FILE)[0], "provider": "comfyui",
         "seed": seed, "width": w, "height": h, "duration_seconds": None,
+    }
+
+
+def upload_image(image_bytes: bytes, filename: str = "upload.png",
+                 mime: str = "image/png") -> str:
+    """Upload a source image to ComfyUI's input dir; returns the server-side name.
+
+    Local only: the bytes travel to this machine's ComfyUI on 127.0.0.1.
+    """
+    try:
+        import httpx
+    except Exception as exc:  # pragma: no cover
+        raise RuntimeError(f"the upload lane needs httpx: {exc}")
+    with httpx.Client(timeout=180.0) as c:
+        r = c.post(comfyui_url() + "/upload/image",
+                   files={"image": (filename, image_bytes, mime)},
+                   data={"overwrite": "true", "type": "input"})
+    if r.status_code >= 400:
+        raise RuntimeError(f"image upload failed: HTTP {r.status_code} {r.text[:200]}")
+    info = r.json() if r.headers.get("content-type", "").startswith("application/json") else {}
+    name = info.get("name") or filename
+    sub = (info.get("subfolder") or "").strip("/")
+    return f"{sub}/{name}" if sub else name
+
+
+def generate_edit(image_bytes: bytes, prompt: str, *, tier: str = "draft", seed=None,
+                  cfg: float = 3.0, steps=None, negative: str = "",
+                  on_progress=None) -> dict:
+    """Text-faithful edit/refine of a REAL image — Qwen-Image-Edit-2511, local.
+
+    This is the Packify-parity edit lane: keep the product pixels, change the
+    scene/lighting/material, and get layout-stable output (the model's
+    typography competence is not relied on — the deterministic compositor still
+    owns final copy; this lane harmonises what surrounds it).
+    """
+    if not media_live_armed():
+        raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
+    if not unload_brain():
+        raise RuntimeError(
+            "vram_busy: the local brain is still resident on the GPU (Ollama /api/ps) "
+            "after waiting; refusing a render that would run out of memory. Retry shortly.")
+    seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
+    st = int(steps) if steps else (8 if str(tier).lower() == "fast" else 20)
+    name = upload_image(image_bytes, filename=f"ns-edit-{seed}.png")
+    try:
+        if on_progress is not None:
+            on_progress(0, "queued on the local engine")
+        files = _run_graph_guarded(
+            _qwen_edit_graph(prompt, name, steps=st, cfg=float(cfg), seed=seed,
+                             negative=negative),
+            timeout_s=7200, on_progress=on_progress)
+    except Exception:
+        release_models()  # never leave a crammed cache behind a failed render
+        raise
+    img = next((f for f in files
+                if str(f.get("filename", "")).lower().endswith((".png", ".jpg", ".webp"))), None)
+    if not img:
+        raise RuntimeError("the edit finished but produced no image output")
+    data = _fetch_output(img)
+    release_models()
+    return {
+        "bytes": data, "ext": "png", "mime": "image/png",
+        "model": os.path.splitext(EDIT_MODEL_FILE)[0], "provider": "comfyui",
+        "seed": seed, "steps": st, "cfg": float(cfg), "duration_seconds": None,
     }
 
 
